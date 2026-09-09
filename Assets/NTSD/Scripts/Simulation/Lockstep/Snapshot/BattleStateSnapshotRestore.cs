@@ -65,6 +65,7 @@ namespace NTSD.Simulation
             world.RuntimeDataCatalog;
         private BattleRuntimeState Runtime => world.Runtime;
         private DeterministicRng Rng => world.Rng;
+        private NTSD28NativeRandom NativeRandom => world.NativeRandom;
         private int ObjectCount => world.ObjectCount;
 
         internal bool TryRestoreBattleStateSnapshot(
@@ -560,7 +561,9 @@ namespace NTSD.Simulation
                 Runtime.Stage == null ||
                 Runtime.StageProgression == null ||
                 Runtime.Flow == null ||
-                Rng == null)
+                Runtime.FunctionKeys == null ||
+                Rng == null ||
+                NativeRandom == null)
             {
                 return false;
             }
@@ -622,8 +625,54 @@ namespace NTSD.Simulation
             Runtime.Flow.HumanInputPolledExternally =
                 flow.HumanInputPolledExternally;
             Runtime.Flow.NeedClearInput = flow.NeedClearInput;
+            Runtime.NativeWorldClock ??= new NTSD28NativeWorldClockState();
+            Runtime.NativeWorldClock.ResourcePhase12 =
+                core.NativeClock.ResourcePhase12;
+            Runtime.NativeWorldClock.ResourcePhase3 =
+                core.NativeClock.ResourcePhase3;
+            Runtime.NativeWorldClock.FrameSequence =
+                core.NativeClock.FrameSequence;
+            BattleWorldFunctionKeyScalarSnapshot functionKeys = core.FunctionKeys;
+            Runtime.FunctionKeys.RestoreForSnapshot(
+                functionKeys.LockState,
+                functionKeys.HitResourceEnabled,
+                functionKeys.F6EventCount,
+                functionKeys.F7EventCount,
+                functionKeys.F8EventCount,
+                functionKeys.F9EventCount,
+                functionKeys.PendingFullMp,
+                functionKeys.PendingObjectCommand,
+                functionKeys.QueuedEventByte,
+                functionKeys.LastAcceptedEventByte);
+            Runtime.NativeHitResourceRules ??=
+                new NTSD28HitResourceRulesRuntimeState();
+            BattleWorldHitResourceRulesScalarSnapshot hitResourceRules =
+                core.HitResourceRules;
+            Runtime.NativeHitResourceRules.RestoreForSnapshot(
+                hitResourceRules.ActiveModeHitGroupGate18,
+                hitResourceRules.ActiveModeAttackingPercent1C,
+                hitResourceRules.AttackerInjuryMpPercent34,
+                hitResourceRules.TargetInjuryMpPercent38,
+                hitResourceRules.NegativeEnvironmentDamage90);
+            Runtime.NativeCombo ??= new NTSD28NativeComboRuntimeState();
+            BattleWorldNativeComboScalarSnapshot nativeCombo = core.NativeCombo;
+            Runtime.NativeCombo.RestoreForSnapshot(
+                nativeCombo.RecordPresent,
+                nativeCombo.Bound,
+                nativeCombo.Facing,
+                nativeCombo.Respond,
+                nativeCombo.CaughtAct);
+            Runtime.NativeStandardHitRest ??=
+                new NTSD28StandardHitRestRuntimeState();
+            Runtime.NativeStandardHitRest.RestoreForSnapshot(
+                core.StandardHitRest.TimingReduction4A9FF4);
+            world.SetOneTuInputForBattle(core.OneTuInput);
 
             Rng.RestoreState(core.RngState, core.RngCallCount);
+            if (!NativeRandom.TryRestoreScalarState(core.NativeRandomState))
+            {
+                return false;
+            }
             world.RestoreSnapshotOwnerScalars(
                 core.ReleaseCameraX,
                 core.ReleaseCameraVelocity,

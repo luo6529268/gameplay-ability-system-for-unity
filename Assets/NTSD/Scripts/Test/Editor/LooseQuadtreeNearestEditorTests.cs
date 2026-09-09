@@ -509,7 +509,7 @@ namespace NTSD.Test
             LF2Entity self,
             LF2Entity candidate,
             int inputPhase,
-            int candidateY)
+            int candidateRenderPhase)
         {
             MethodInfo method = typeof(SimulationWorld).GetMethod(
                 "AiAirRoleMutationMatchesBruteForSelfCheck",
@@ -517,7 +517,7 @@ namespace NTSD.Test
             Assert.That(method, Is.Not.Null);
             return (bool)method.Invoke(
                 world,
-                new object[] { self, candidate, inputPhase, candidateY });
+                new object[] { self, candidate, inputPhase, candidateRenderPhase });
         }
 
         private sealed class NearestSelfCheckController : ILF2Controller

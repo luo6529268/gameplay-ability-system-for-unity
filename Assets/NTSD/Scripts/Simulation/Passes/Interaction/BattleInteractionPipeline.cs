@@ -16,6 +16,8 @@ namespace NTSD.Simulation
         private readonly SimulationWorld world;
         private readonly List<LF2Entity> participantScratch =
             new List<LF2Entity>(16);
+        private readonly List<BattleHeldInjuryEvent> heldInjuryEvents =
+            new List<BattleHeldInjuryEvent>(16);
 
         internal BattleInteractionPipeline(SimulationWorld world)
         {
@@ -71,6 +73,8 @@ namespace NTSD.Simulation
         {
             if (participantScratch.Capacity < entityCapacity)
                 participantScratch.Capacity = entityCapacity;
+            if (heldInjuryEvents.Capacity < entityCapacity)
+                heldInjuryEvents.Capacity = entityCapacity;
         }
 
         internal void EndCollisionCandidateConsumption()
@@ -240,6 +244,7 @@ namespace NTSD.Simulation
             LastPreInteractionWholePassProofSucceededForDiagnostics = false;
             LastPreInteractionWholePassParticipantCountForDiagnostics = 0;
             LastPreInteractionCrossPassProofUsedForDiagnostics = false;
+            heldInjuryEvents.Clear();
 
             world.BeginDeferredEntityMutationPass();
             try
@@ -253,73 +258,9 @@ namespace NTSD.Simulation
                     return;
                 }
 
-                world.GetActiveEntitiesByRuntimeSlotForModule(participantScratch);
-                if (participantScratch.Count == 0)
-                    return;
-
-                for (int i = 0; i < participantScratch.Count; i++)
-                {
-                    LF2Entity entity = participantScratch[i];
-                    if (entity?.Runtime != null &&
-                        tickIndex <
-                            entity.Runtime.SuppressPreInteractionUntilTick)
-                    {
-                        continue;
-                    }
-                    if (!world.IsActiveForCurrentPassInternal(entity))
-                        continue;
-
-                    if (!ForceLegacyPreInteractionParticipantFilteringForDiagnostics &&
-                        CanSkipCpointCheckParticipant(entity))
-                    {
-                        LastPreInteractionProofSkipCountForDiagnostics++;
-                        LastPreInteractionSnapshotSkipCountForDiagnostics++;
-                        LastPreInteractionCpointCheckProofSkipCountForDiagnostics++;
-                        continue;
-                    }
-
-                    LastPreInteractionScannedCountForDiagnostics++;
-                    LastPreInteractionExecutedCountForDiagnostics++;
-                    entity.RunCpointCheckStep10();
-                    if (!world.IsActiveForCurrentPassInternal(entity))
-                        continue;
-                    world.RefreshRuntimeSnapshotForModule(entity);
-                }
-
-                for (int i = 0; i < participantScratch.Count; i++)
-                {
-                    LF2Entity entity = participantScratch[i];
-                    if (entity?.Runtime != null &&
-                        tickIndex <
-                            entity.Runtime.SuppressPreInteractionUntilTick)
-                    {
-                        continue;
-                    }
-                    if (!world.IsActiveForCurrentPassInternal(entity))
-                        continue;
-
-                    if (!ForceLegacyPreInteractionParticipantFilteringForDiagnostics &&
-                        CanSkipCpointMismatchTailParticipant(entity))
-                    {
-                        LastPreInteractionProofSkipCountForDiagnostics++;
-                        LastPreInteractionSnapshotSkipCountForDiagnostics++;
-                        LastPreInteractionMismatchTailProofSkipCountForDiagnostics++;
-                        continue;
-                    }
-
-                    LastPreInteractionScannedCountForDiagnostics++;
-                    LastPreInteractionExecutedCountForDiagnostics++;
-                    entity.RunCpointMismatchTailStep10();
-                    if (!world.IsActiveForCurrentPassInternal(entity))
-                        continue;
-                    world.RefreshRuntimeSnapshotForModule(entity);
-                }
-
-                participantScratch.Clear();
-
-                // Keep the authority live ascending scan without allocating a
-                // tick-capturing delegate. Newborns above the cursor join this
-                // pass, while a recycled lower slot waits for the next pass.
+                // Alignment contract:
+                // NTSD28-B6-CATCH-EXACT-CONSUMER-AND-ADVANCE-ORDER-PRODUCTION-001.
+                // Advance is one live ascending mixed kind1/else-kind2 scan.
                 for (int runtimeSlot = 0;
                      runtimeSlot <
                          world.PreInteractionRuntimeSlotLogicalCapacityForModule;
@@ -330,7 +271,7 @@ namespace NTSD.Simulation
                             runtimeSlot);
                     if (entity == null)
                         continue;
-                    if (entity.Runtime != null &&
+                    if (entity?.Runtime != null &&
                         tickIndex <
                             entity.Runtime.SuppressPreInteractionUntilTick)
                     {
@@ -340,26 +281,94 @@ namespace NTSD.Simulation
                         continue;
 
                     if (!ForceLegacyPreInteractionParticipantFilteringForDiagnostics &&
-                        CanSkipWeaponSyncHeldParticipant(entity))
+                        CanSkipCatchAdvanceParticipant(entity))
                     {
                         LastPreInteractionProofSkipCountForDiagnostics++;
                         LastPreInteractionSnapshotSkipCountForDiagnostics++;
-                        LastPreInteractionHeldSyncProofSkipCountForDiagnostics++;
+                        LastPreInteractionCpointCheckProofSkipCountForDiagnostics++;
                         continue;
                     }
 
                     LastPreInteractionScannedCountForDiagnostics++;
                     LastPreInteractionExecutedCountForDiagnostics++;
-                    entity.RunWeaponSyncHeldStep10();
+                    entity.RunCpointAdvanceStep10();
                     if (!world.IsActiveForCurrentPassInternal(entity))
                         continue;
                     world.RefreshRuntimeSnapshotForModule(entity);
                 }
+
+                // Settlement remains a second, separate live ascending pass.
+                BattleCpointWriter cpointWriter = world.CpointWriter;
+                cpointWriter.BeginHeldInjuryEventCollection(heldInjuryEvents);
+                try
+                {
+                    for (int runtimeSlot = 0;
+                         runtimeSlot <
+                             world.PreInteractionRuntimeSlotLogicalCapacityForModule;
+                         runtimeSlot++)
+                    {
+                        LF2Entity entity =
+                            world.GetCurrentRuntimeSlotOccupantForInteractionModule(
+                                runtimeSlot);
+                        if (entity == null)
+                            continue;
+                        if (entity.Runtime != null &&
+                            tickIndex <
+                                entity.Runtime.SuppressPreInteractionUntilTick)
+                        {
+                            continue;
+                        }
+                        if (!world.IsActiveForCurrentPassInternal(entity))
+                            continue;
+
+                        if (!ForceLegacyPreInteractionParticipantFilteringForDiagnostics &&
+                            CanSkipWeaponSyncHeldParticipant(entity))
+                        {
+                            LastPreInteractionProofSkipCountForDiagnostics++;
+                            LastPreInteractionSnapshotSkipCountForDiagnostics++;
+                            LastPreInteractionHeldSyncProofSkipCountForDiagnostics++;
+                            continue;
+                        }
+
+                        LastPreInteractionScannedCountForDiagnostics++;
+                        LastPreInteractionExecutedCountForDiagnostics++;
+                        entity.RunWeaponSyncHeldStep10();
+                        if (!world.IsActiveForCurrentPassInternal(entity))
+                            continue;
+                        world.RefreshRuntimeSnapshotForModule(entity);
+                    }
+                }
+                finally
+                {
+                    cpointWriter.EndHeldInjuryEventCollection();
+                }
+
+                ProduceCaughtActComboHits();
             }
             finally
             {
+                heldInjuryEvents.Clear();
                 participantScratch.Clear();
                 world.EndDeferredEntityMutationPass();
+            }
+        }
+
+        private void ProduceCaughtActComboHits()
+        {
+            NTSD28NativeComboRuntimeState combo = world.Runtime?.NativeCombo;
+            if (combo == null || !combo.RecordPresent ||
+                combo.Bound != 1 || combo.CaughtAct != 1)
+            {
+                return;
+            }
+
+            for (int index = 0; index < heldInjuryEvents.Count; index++)
+            {
+                BattleHeldInjuryEvent heldInjury = heldInjuryEvents[index];
+                BattleNativeComboOrdinaryProducer.TryApply(
+                    world,
+                    heldInjury.CatcherSlot,
+                    heldInjury.CaughtSlot);
             }
         }
 
@@ -532,17 +541,17 @@ namespace NTSD.Simulation
             LastPreInteractionWholePassParticipantCountForDiagnostics =
                 participantCount;
             LastPreInteractionScannedCountForDiagnostics = participantCount;
-            LastPreInteractionProofSkipCountForDiagnostics = participantCount * 3;
-            LastPreInteractionSnapshotSkipCountForDiagnostics = participantCount * 3;
+            LastPreInteractionProofSkipCountForDiagnostics = participantCount * 2;
+            LastPreInteractionSnapshotSkipCountForDiagnostics = participantCount * 2;
             LastPreInteractionCpointCheckProofSkipCountForDiagnostics =
                 participantCount;
             LastPreInteractionMismatchTailProofSkipCountForDiagnostics =
-                participantCount;
+                0;
             LastPreInteractionHeldSyncProofSkipCountForDiagnostics =
                 participantCount;
         }
 
-        private static bool CanSkipCpointCheckParticipant(LF2Entity entity)
+        private static bool CanSkipCatchAdvanceParticipant(LF2Entity entity)
         {
             if (entity == null ||
                 entity.GetType() != typeof(LF2Character) ||
@@ -552,28 +561,21 @@ namespace NTSD.Simulation
             }
 
             LF2FrameData frame = entity.GetCollisionFrameData();
-            return frame == null ||
-                   !frame.TryGetPrimaryCatchPoint(
-                       out BattleCatchPointValue cpoint) ||
-                   cpoint.Kind != 1 ||
-                   entity.FrameDelay < 0;
-        }
-
-        private static bool CanSkipCpointMismatchTailParticipant(
-            LF2Entity entity)
-        {
-            if (entity == null ||
-                entity.GetType() != typeof(LF2Character) ||
-                !entity.IsBaseRuntimeSnapshotCurrentForPreInteractionNoOp())
+            bool snapshotKind1Eligible = frame != null &&
+                frame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue snapshotCpoint) &&
+                snapshotCpoint.Kind == 1 &&
+                entity.FrameDelay >= 0;
+            if (snapshotKind1Eligible)
             {
                 return false;
             }
 
-            LF2FrameData frame = entity.Frame?.D;
-            return frame == null ||
-                   !frame.TryGetPrimaryCatchPoint(
-                       out BattleCatchPointValue cpoint) ||
-                   cpoint.Kind != 2;
+            LF2FrameData currentFrame = entity.Frame?.D;
+            return currentFrame == null ||
+                   !currentFrame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue currentCpoint) ||
+                   currentCpoint.Kind != 2;
         }
 
         private static bool CanSkipWeaponSyncHeldParticipant(LF2Entity entity)

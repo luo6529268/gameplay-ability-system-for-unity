@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Spatial;
 
 namespace NTSD.Animation
@@ -1249,7 +1250,12 @@ namespace NTSD.Animation
                     if (!HitsTarget(vol, target, targetFrame, out int bodyX))
                         continue;
 
-                    _tmpHitResult.Add(new SceneQueryHit(target, bodyX, hit.ItrIndex, hit.RuntimeItr));
+                    _tmpHitResult.Add(new SceneQueryHit(
+                        target,
+                        bodyX,
+                        hit.ItrIndex,
+                        hit.RuntimeItr,
+                        pairSnapshot: hit.PairSnapshot));
                 }
 
                 return _tmpHitResult;
@@ -1344,7 +1350,12 @@ namespace NTSD.Animation
                         // 旧 candidate 仍沿着缓存链继续漏进后面的命中消费。
                         if (IsReleaseConsumerPairBlocked(attacker, target))
                             continue;
-                        if (!RuntimeConsumeItrAllowed(attacker, runtimeItr, target))
+                        if (!RuntimeConsumeItrAllowed(
+                                attacker,
+                                runtimeItr,
+                                target,
+                                in hit.PairSnapshot,
+                                itr.kind))
                             continue;
 
                         _tmpHitResult.Add(new SceneQueryHit(
@@ -1353,7 +1364,8 @@ namespace NTSD.Animation
                             hit.ItrIndex,
                             runtimeItr,
                             zeroAttackerHpOnConsume,
-                            releaseHeavyHeldTargetOnConsume));
+                            releaseHeavyHeldTargetOnConsume,
+                            hit.PairSnapshot));
                     }
                 }
 
@@ -1426,7 +1438,12 @@ namespace NTSD.Animation
                         out bool releaseHeavyHeldTargetOnConsume);
                     if (runtimeItr == null ||
                         IsReleaseConsumerPairBlocked(attacker, target) ||
-                        !RuntimeConsumeItrAllowed(attacker, runtimeItr, target))
+                        !RuntimeConsumeItrAllowed(
+                            attacker,
+                            runtimeItr,
+                            target,
+                            in hit.PairSnapshot,
+                            itr.kind))
                     {
                         continue;
                     }
@@ -1437,7 +1454,8 @@ namespace NTSD.Animation
                         hit.ItrIndex,
                         runtimeItr,
                         zeroAttackerHpOnConsume,
-                        releaseHeavyHeldTargetOnConsume));
+                        releaseHeavyHeldTargetOnConsume,
+                        hit.PairSnapshot));
                 }
 
                 return _tmpHitResult;
@@ -2033,6 +2051,12 @@ namespace NTSD.Animation
                     {
                         _candidateStoreShadow.RecordMismatch(
                             CollisionCandidateStoreMismatchReason.ReleaseHeavyHeldTargetOnConsumeMismatch);
+                        matches = false;
+                    }
+                    if (entry.PairSnapshot != hit.PairSnapshot)
+                    {
+                        _candidateStoreShadow.RecordMismatch(
+                            CollisionCandidateStoreMismatchReason.PairSnapshotMismatch);
                         matches = false;
                     }
                 }
@@ -5121,7 +5145,8 @@ namespace NTSD.Animation
                 entry.ItrIndex,
                 entry.RuntimeItr,
                 entry.ZeroAttackerHpOnConsume,
-                entry.ReleaseHeavyHeldTargetOnConsume);
+                entry.ReleaseHeavyHeldTargetOnConsume,
+                entry.PairSnapshot);
             if (_world.ShouldObserveBattleHitExecutionPlanLegacyCandidateRead)
             {
                 _world.ObserveBattleHitExecutionPlanLegacyCandidateRead(
@@ -5303,19 +5328,23 @@ namespace NTSD.Animation
                 if (itr == null) continue;
                 // C++ release step6 collect 对 kind=5 的过滤与几何检测都基于原始 itr，
                 // 不能提前套消费侧的 runtime 替换结果。
-                if (!ItrAllowed(attacker, attackerCurrentFrame, itr, target, targetCurrentFrame))
-                    continue;
-                if (HitsTarget(attacker, attackerCollisionFrame, itr, target, targetCollisionFrame, out int bodyX) &&
-                    CandidateAccepts(attacker, attackerCurrentFrame, itr, target, targetCurrentFrame, bodyX))
-                {
-                    TryRecordReleaseCandidate(
+                if (!ItrAllowedForFormalCollection(
                         attacker,
-                        target,
+                        attackerCurrentFrame,
+                        attackerCollisionFrame,
                         itr,
-                        targetCurrentFrame,
-                        bodyX,
-                        itrIndex);
-                }
+                        target,
+                        targetCurrentFrame))
+                    continue;
+                RecordOverlappingBodyCandidates(
+                    attacker,
+                    attackerCurrentFrame,
+                    attackerCollisionFrame,
+                    itr,
+                    target,
+                    targetCurrentFrame,
+                    targetCollisionFrame,
+                    itrIndex);
             }
         }
 
@@ -5393,7 +5422,7 @@ namespace NTSD.Animation
                     _roleFormalExactItrRects[itrRectIndex];
                 InteractionArea itr = itrEntry.Itr;
                 _lastRoleAwareExactItrVisitCount++;
-                if (!ItrAllowedCached(
+                if (!ItrAllowedForFormalCollection(
                         attacker,
                         attackerCurrentFrame,
                         attackerCollisionFrame,
@@ -5404,21 +5433,130 @@ namespace NTSD.Animation
                     continue;
                 }
 
-                if (HitsTargetCached(
-                        in attackerParticipant,
-                        in itrEntry,
-                        in targetParticipant,
-                        out int bodyX))
-                {
-                    TryRecordReleaseCandidate(
+                RecordOverlappingBodyCandidatesCached(
+                    in attackerParticipant,
+                    in itrEntry,
+                    in targetParticipant,
+                    targetCurrentFrame);
+            }
+        }
+
+        private void RecordOverlappingBodyCandidates(
+            LF2Entity attacker,
+            LF2FrameData attackerCurrentFrame,
+            LF2FrameData attackerCollisionFrame,
+            InteractionArea itr,
+            LF2Entity target,
+            LF2FrameData targetCurrentFrame,
+            LF2FrameData targetCollisionFrame,
+            int itrIndex)
+        {
+            if (attacker?.PS == null || attackerCollisionFrame == null || itr == null ||
+                target?.PS == null || targetCurrentFrame == null ||
+                targetCollisionFrame?.bodies == null || !IsReleaseItrGeometry(itr))
+            {
+                return;
+            }
+
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            int zDelta = CollisionZInt(target, targetCollisionFrame) -
+                         CollisionZInt(attacker, attackerCollisionFrame);
+            if (zDelta >= zHalf || zDelta <= -zHalf)
+                return;
+
+            WorldRect itrRect = ItrWorldRect(attacker, attackerCollisionFrame, itr);
+            // Alignment contract: NTSD28-B5-MULTI-BODY-CANDIDATE-PRODUCTION-001.
+            // The release emits one candidate for every overlapping BDY in source
+            // order; each overlap independently enters selection, capacity and RNG.
+            for (int bodyIndex = 0; bodyIndex < targetCollisionFrame.bodies.Count; bodyIndex++)
+            {
+                BattleBodyBoxValue body = targetCollisionFrame.bodies[bodyIndex];
+                if (!IsReleaseBody(body))
+                    continue;
+                WorldRect bodyRect = BodyWorldRect(
+                    target,
+                    targetCollisionFrame,
+                    body,
+                    collectSemantics: true);
+                if (!Overlap(itrRect, bodyRect))
+                    continue;
+
+                int bodyX = body.X;
+                if (!CandidateAccepts(
                         attacker,
-                        target,
+                        attackerCurrentFrame,
                         itr,
+                        target,
                         targetCurrentFrame,
-                        bodyX,
-                        itrEntry.ItrIndex,
-                        attackerParticipant.Handle);
+                        bodyX))
+                {
+                    continue;
                 }
+
+                TryRecordReleaseCandidate(
+                    attacker,
+                    target,
+                    itr,
+                    targetCurrentFrame,
+                    bodyX,
+                    itrIndex);
+            }
+        }
+
+        private void RecordOverlappingBodyCandidatesCached(
+            in RoleAwareFormalParticipant attackerParticipant,
+            in RoleAwareFormalExactItrRectEntry itrEntry,
+            in RoleAwareFormalParticipant targetParticipant,
+            LF2FrameData targetCurrentFrame)
+        {
+            LF2Entity attacker = attackerParticipant.Entity;
+            LF2Entity target = targetParticipant.Entity;
+            InteractionArea itr = itrEntry.Itr;
+            if (attacker?.PS == null || attackerParticipant.CollisionFrame == null || itr == null ||
+                target?.PS == null || targetCurrentFrame == null ||
+                targetParticipant.CollisionFrame?.bodies == null ||
+                !targetParticipant.HasCollisionReleaseBody || !IsReleaseItrGeometry(itr))
+            {
+                return;
+            }
+
+            int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            int zDelta = targetParticipant.CollisionZ - attackerParticipant.CollisionZ;
+            if (zDelta >= zHalf || zDelta <= -zHalf)
+                return;
+
+            int bodyRectEnd = targetParticipant.ExactBodyRectOffset +
+                              targetParticipant.ExactBodyRectCount;
+            for (int bodyRectIndex = targetParticipant.ExactBodyRectOffset;
+                 bodyRectIndex < bodyRectEnd;
+                 bodyRectIndex++)
+            {
+                RoleAwareFormalExactBodyRectEntry bodyEntry =
+                    _roleFormalExactBodyRects[bodyRectIndex];
+                _lastRoleAwareExactBodyOverlapCheckCount++;
+                if (!Overlap(itrEntry.WorldRect, bodyEntry.WorldRect))
+                    continue;
+
+                int bodyX = bodyEntry.BodyX;
+                if (!CandidateAccepts(
+                        attacker,
+                        attackerParticipant.CurrentFrame,
+                        itr,
+                        target,
+                        targetCurrentFrame,
+                        bodyX))
+                {
+                    continue;
+                }
+
+                TryRecordReleaseCandidate(
+                    attacker,
+                    target,
+                    itr,
+                    targetCurrentFrame,
+                    bodyX,
+                    itrEntry.ItrIndex,
+                    attackerParticipant.Handle);
             }
         }
 
@@ -5522,8 +5660,6 @@ namespace NTSD.Animation
                 return true;
             }
 
-            int targetType = targetParticipant.DataObjectType;
-            int targetState = targetCurrentFrame?.state ?? 0;
             int itrRectEnd = attackerParticipant.ExactItrRectOffset +
                              attackerParticipant.ExactItrRectCount;
             for (int itrRectIndex = attackerParticipant.ExactItrRectOffset;
@@ -5533,8 +5669,7 @@ namespace NTSD.Animation
                 RoleAwareFormalExactItrRectEntry itrEntry =
                     _roleFormalExactItrRects[itrRectIndex];
                 InteractionArea itr = itrEntry.Itr;
-                if (itr.kind != 5 ||
-                    !Kind5Allowed(attacker, target, targetState, targetType))
+                if (itr.kind != 5)
                 {
                     continue;
                 }
@@ -5608,6 +5743,38 @@ namespace NTSD.Animation
                 return;
             }
 
+            // Alignment contract: NTSD28-B5-HIT-GROUP-ELIGIBILITY-ATOMIC-PRODUCTION-INTEGRATION-001.
+            // Freeze the complete pair after geometry and reject it before
+            // nearest/capacity/RNG can observe the candidate.
+            BattleHitCandidatePairSnapshot pairSnapshot =
+                BattleHitCandidatePairSnapshotFactory.Capture(
+                    attacker,
+                    target,
+                    _world);
+            int activeModeHitGroupGate18 =
+                _world.Runtime?.NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState.DefaultActiveModeHitGroupGate18;
+            if (!BattleHitGroupEligibilityResolver.Resolve(
+                    itr.kind,
+                    itr.effect,
+                    in pairSnapshot,
+                    activeModeHitGroupGate18).Accepted)
+            {
+                return;
+            }
+
+            // Alignment contract: NTSD28-B5-KIND4-ATOMIC-PRODUCTION-INTEGRATION-001.
+            // Native candidate production consumes one low-16-bit source-count
+            // increment for every geometrically overlapping body before its
+            // low-fall/select rejection branches run.
+            if (itr.kind == 4 &&
+                attacker.Runtime != null &&
+                attacker.Runtime.EnvironmentState320 > 0)
+            {
+                attacker.Runtime.Kind4SourceCount92 =
+                    (attacker.Runtime.Kind4SourceCount92 + 1) & 0xFFFF;
+            }
+
             int rejectFlag = ResolveReleaseRejectFlag(attacker, itr, target, targetFrame, bodyX);
             if (rejectFlag == 2)
                 return;
@@ -5620,6 +5787,7 @@ namespace NTSD.Animation
                     bodyX,
                     itrIndex,
                     rejectFlag,
+                    in pairSnapshot,
                     validatedAttackerHandle))
                 return;
 
@@ -5636,7 +5804,12 @@ namespace NTSD.Animation
             if (!AcceptReleaseSelectFlagCandidate(attacker, target, itr, targetFrame, rejectFlag))
                 return;
 
-            SceneQueryHit candidate = new SceneQueryHit(target, bodyX, itrIndex, itr);
+            SceneQueryHit candidate = new SceneQueryHit(
+                target,
+                bodyX,
+                itrIndex,
+                itr,
+                pairSnapshot: pairSnapshot);
             WriteCollisionCandidateStoreFirst(
                 attacker,
                 validatedAttackerHandle,
@@ -5667,6 +5840,7 @@ namespace NTSD.Animation
             int bodyX,
             int itrIndex,
             int rejectFlag,
+            in BattleHitCandidatePairSnapshot pairSnapshot,
             RuntimeEntityHandle validatedAttackerHandle)
         {
             if (attacker == null || target == null || itr == null ||
@@ -5704,7 +5878,12 @@ namespace NTSD.Animation
             attacker.Runtime.HitCandidateNearestDistance = distance;
             // C++ release 在 nearest path 接管并替换更近目标时，
             // 会把 cand0 写成当前目标并把 candidate_count 直接重置为 1。
-            var candidate = new SceneQueryHit(target, bodyX, itrIndex, itr);
+            var candidate = new SceneQueryHit(
+                target,
+                bodyX,
+                itrIndex,
+                itr,
+                pairSnapshot: pairSnapshot);
             WriteCollisionCandidateStoreFirst(
                 attacker,
                 validatedAttackerHandle,
@@ -5855,7 +6034,8 @@ namespace NTSD.Animation
                     hit.ItrIndex,
                     hit.RuntimeItr,
                     hit.ZeroAttackerHpOnConsume,
-                    hit.ReleaseHeavyHeldTargetOnConsume);
+                    hit.ReleaseHeavyHeldTargetOnConsume,
+                    hit.PairSnapshot);
                 bool wrote = replaceSingle
                     ? _candidateStoreShadow.TryReplaceSingle(attackerHandle, in entry)
                     : _candidateStoreShadow.TryWriteAt(
@@ -5978,7 +6158,9 @@ namespace NTSD.Animation
                 }
             }
 
-            if (itr.kind == 4 && attacker.WeaponCount > 0)
+            if (itr.kind == 4 &&
+                attacker.Runtime != null &&
+                attacker.Runtime.EnvironmentState320 > 0)
             {
                 if (!copied)
                 {
@@ -5995,7 +6177,9 @@ namespace NTSD.Animation
 
             bool kindAllowsHeavyHeldRelease =
                 sourceItr.kind == 0 ||
-                (sourceItr.kind == 4 && attacker.WeaponCount > 0);
+                (sourceItr.kind == 4 &&
+                 attacker.Runtime != null &&
+                 attacker.Runtime.EnvironmentState320 > 0);
             if (target.Runtime != null &&
                 target.Runtime.LinkState == 2 &&
                 kindAllowsHeavyHeldRelease)
@@ -6073,9 +6257,6 @@ namespace NTSD.Animation
             if (rejectFlag == 0 && kind == 1 && !AcceptReleaseKind1Nearest(attacker, target))
                 selectFlag = 2;
 
-            if (kind == 4 && attacker.WeaponCount != 0 && selectFlag != 2)
-                selectFlag = 1;
-
             if (kind != 1 && kind != 2 && kind != 7 && selectFlag != 2)
                 selectFlag = 1;
 
@@ -6128,16 +6309,11 @@ namespace NTSD.Animation
             // kind=5 uses its own pair filters. Keep it out of the ordinary union so its
             // authored probe rectangle cannot inflate unrelated coarse bounds, but still
             // allow a frame containing only kind=5 to reach the per-itr candidate pass.
-            int targetType = GetCurrentDataObjectType(target);
-            int targetState = targetCurrentFrame?.state ?? 0;
             for (int i = 0; i < attackerCollisionFrame.itrs.Count; i++)
             {
                 InteractionArea itr = attackerCollisionFrame.itrs[i];
                 if (itr == null || itr.kind != 5 || !IsReleaseItrGeometry(itr))
                     continue;
-                if (!Kind5Allowed(attacker, target, targetState, targetType))
-                    continue;
-
                 WorldRect kind5World = ItrWorldRect(attacker, attackerCollisionFrame, itr);
                 if (Overlap(kind5World, bodyWorld))
                     return true;
@@ -6261,6 +6437,37 @@ namespace NTSD.Animation
 
         internal static bool RuntimeConsumeItrAllowed(LF2Entity attacker, InteractionArea itr, LF2Entity target)
         {
+            BattleHitCandidatePairSnapshot pairSnapshot =
+                BattleHitCandidatePairSnapshotFactory.Capture(attacker, target);
+            return RuntimeConsumeItrAllowed(
+                attacker,
+                itr,
+                target,
+                in pairSnapshot,
+                itr?.kind ?? 0);
+        }
+
+        internal static bool RuntimeConsumeItrAllowed(
+            LF2Entity attacker,
+            InteractionArea itr,
+            LF2Entity target,
+            in BattleHitCandidatePairSnapshot pairSnapshot)
+        {
+            return RuntimeConsumeItrAllowed(
+                attacker,
+                itr,
+                target,
+                in pairSnapshot,
+                itr?.kind ?? 0);
+        }
+
+        internal static bool RuntimeConsumeItrAllowed(
+            LF2Entity attacker,
+            InteractionArea itr,
+            LF2Entity target,
+            in BattleHitCandidatePairSnapshot pairSnapshot,
+            int originalKind)
+        {
             if (attacker == null || itr == null || target == null)
                 return false;
             if (IsReleaseConsumerPairBlocked(attacker, target))
@@ -6271,7 +6478,19 @@ namespace NTSD.Animation
             if (attackerCollisionFrame == null || targetCurrentFrame == null)
                 return false;
 
-            return ItrAllowed(attacker, attackerCollisionFrame, itr, target, targetCurrentFrame);
+            BattleHitCandidatePairSnapshot resolvedPair = pairSnapshot.Valid
+                ? pairSnapshot
+                : BattleHitCandidatePairSnapshotFactory.Capture(attacker, target);
+            return ItrAllowedCore(
+                attacker,
+                GetAuthoredCurrentFrame(attacker) ?? attackerCollisionFrame,
+                attackerCollisionFrame,
+                itr,
+                target,
+                targetCurrentFrame,
+                applyConsumerGroupFilter: true,
+                in resolvedPair,
+                originalKind);
         }
 
         private static bool CandidateCollectionPairAllowed(LF2Entity attacker, LF2Entity target)
@@ -6477,16 +6696,21 @@ namespace NTSD.Animation
                 GetAuthoredCurrentFrame(attacker) ?? attackerFrame;
             LF2FrameData attackerCollisionFrame =
                 attacker?.GetCollisionFrameData() ?? attackerFrame;
+            BattleHitCandidatePairSnapshot pairSnapshot =
+                BattleHitCandidatePairSnapshotFactory.Capture(attacker, target);
             return ItrAllowedCore(
                 attacker,
                 attackerCurrentFrame,
                 attackerCollisionFrame,
                 itr,
                 target,
-                targetFrame);
+                targetFrame,
+                applyConsumerGroupFilter: true,
+                in pairSnapshot,
+                itr?.kind ?? 0);
         }
 
-        private static bool ItrAllowedCached(
+        private static bool ItrAllowedForFormalCollection(
             LF2Entity attacker,
             LF2FrameData attackerCurrentFrame,
             LF2FrameData attackerCollisionFrame,
@@ -6494,13 +6718,17 @@ namespace NTSD.Animation
             LF2Entity target,
             LF2FrameData targetFrame)
         {
+            BattleHitCandidatePairSnapshot noPairSnapshot = default;
             return ItrAllowedCore(
                 attacker,
                 attackerCurrentFrame,
                 attackerCollisionFrame,
                 itr,
                 target,
-                targetFrame);
+                targetFrame,
+                applyConsumerGroupFilter: false,
+                in noPairSnapshot,
+                itr?.kind ?? 0);
         }
 
         private static bool ItrAllowedCore(
@@ -6509,7 +6737,10 @@ namespace NTSD.Animation
             LF2FrameData attackerCollisionFrame,
             InteractionArea itr,
             LF2Entity target,
-            LF2FrameData targetFrame)
+            LF2FrameData targetFrame,
+            bool applyConsumerGroupFilter,
+            in BattleHitCandidatePairSnapshot pairSnapshot,
+            int originalKind)
         {
             if (attacker == null || itr == null || target == null || targetFrame == null)
                 return false;
@@ -6524,8 +6755,23 @@ namespace NTSD.Animation
 
             if (IsBlockedReleaseOidInteraction(attackerOid, targetOid, kind))
                 return false;
-            if ((kind == 3 || kind == 8) && targetType != (int)LF2ObjectType.Character)
+            if (kind == 3 && targetType != (int)LF2ObjectType.Character)
                 return false;
+            if (!BattleHitCandidateEffectTypeResolver.Accepts(itr.effect, targetType))
+                return false;
+            if (kind == 8 &&
+                !BattleKind8EligibilityResolver.Resolve(
+                    itr.bdefend,
+                    itr.respond,
+                    targetType,
+                    attacker.RelationTeam,
+                    target.RelationTeam,
+                    attacker.Runtime?.OwnerSlotIndex ?? -1,
+                    target.Runtime?.OwnerSlotIndex ?? -1,
+                    attacker.Match?.BattleGameModeId ?? 0).Accepted)
+            {
+                return false;
+            }
             // C++ collect path uses the active frame for the kind=8 lead-in gate,
             // the collision (prev2) frame for same-team state checks, and prev for
             // the kind=0 effect filters.
@@ -6534,57 +6780,32 @@ namespace NTSD.Animation
             if (target.HitStun != 0 && kind != 8 && kind != 14)
                 return false;
 
-            int attackerState = attackerCollisionFrame?.state ?? 0;
-
-            if (RunsKindGroupFilters(kind, targetType))
+            if (applyConsumerGroupFilter)
             {
-                bool skipGroup = targetState == LF2States.Frozen || targetState == LF2States.BeingCaught;
-                if (!skipGroup)
+                SimulationWorld groupWorld =
+                    attacker.RegisteredWorldForSimulation ?? attacker.Match;
+                int activeModeHitGroupGate18 =
+                    groupWorld?.Runtime?
+                        .NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultActiveModeHitGroupGate18;
+                if (!BattleHitGroupEligibilityResolver.Resolve(
+                        originalKind,
+                        itr.effect,
+                        in pairSnapshot,
+                        activeModeHitGroupGate18).Accepted)
                 {
-                    if (targetOid == 0xD4)
-                    {
-                        if (attackerOid != 0xD4)
-                            skipGroup = true;
-                        else if ((target.Frame?.N ?? 0) % 10 == 5 && (attacker.Frame?.N ?? 0) % 10 == 0)
-                            skipGroup = true;
-                    }
+                    return false;
+                }
 
-                    if (!skipGroup && HasSameNonZeroRelationTeam(attacker, target) && kind != 8)
-                    {
-                        // 中文注释：
-                        // 这里严格按当前 C++ release 的 collision_collect/collision 正式筛选链：
-                        // 1. 只有 same-team(unk_364 相同且非 0，kind!=8) 时，才会进入这一段；
-                        // 2. attacker.state==18 且 effect!=21/22 不是“额外拦截”，而是 same-team 的放行例外；
-                        // 3. 若不满足这个放行例外，则：
-                        //    - attacker 是角色且 target 是 type=3，朝向不同 -> 跳过；
-                        //    - target.obj_type 不属于 {1,2,4,6} -> 跳过；
-                        //
-                        // Unity 之前把这段误写成了若干无条件 return false，
-                        // 会把 C++ 正式版允许保留的 pair 直接挡掉，也会把真正的 same-team 过滤
-                        // 和 weapon/type3 例外关系打乱，进而放大 205 / opoint / 烟雾链漂移。
-                        bool sameTeamPassThrough =
-                            attackerState == LF2States.Burning &&
-                            itr.effect != 21 &&
-                            itr.effect != 22;
-
-                        if (!sameTeamPassThrough)
-                        {
-                            if (GetCurrentDataObjectType(attacker) == (int)LF2ObjectType.Character &&
-                                targetType == (int)LF2ObjectType.SpecialAttack &&
-                                !SameFacing(attacker, target))
-                            {
-                                return false;
-                            }
-
-                            if (!IsReleaseWeaponType(targetType))
-                                return false;
-                        }
-                    }
+                if (originalKind == 5 &&
+                    targetType == (int)LF2ObjectType.Character &&
+                    !BattleHitGroupEligibilityResolver
+                        .AcceptsSubstitutedKind5Character(in pairSnapshot))
+                {
+                    return false;
                 }
             }
-
-            if (kind == 5 && !Kind5Allowed(attacker, target, targetState, targetType))
-                return false;
 
             if (kind == 0 && !Kind0EffectAllowed(attacker, itr, target))
                 return false;
@@ -6625,35 +6846,6 @@ namespace NTSD.Animation
                    ((frame.opoints != null && frame.opoints.Count > 0) || frame.opoint.HasValue);
         }
 
-        private static bool RunsKindGroupFilters(int kind, int targetType)
-        {
-            return kind < 4 ||
-                   kind == 6 ||
-                   (kind == 9 && targetType == (int)LF2ObjectType.Character) ||
-                   kind == 10 ||
-                   kind == 11 ||
-                   kind == 15 ||
-                   kind == 16;
-        }
-
-        private static bool Kind5Allowed(LF2Entity attacker, LF2Entity target, int targetState, int targetType)
-        {
-            int holderSlot = ResolveKind5HolderRuntimeSlot(attacker);
-            LF2Entity holder = holderSlot >= 0
-                ? attacker?.Match?.FindEntityByRuntimeSlotForQuery(holderSlot)
-                : null;
-            int holderTeam = holder != null ? holder.RelationTeam : 0;
-            if (holderTeam == 0 || holderTeam != target.RelationTeam)
-                return true;
-            if (targetState == LF2States.Frozen || IsReleaseWeaponType(targetType))
-                return true;
-            if (LF2Entity.ResolveCurrentDataObjectId(target) != 0xD4)
-                return false;
-            if (LF2Entity.ResolveCurrentDataObjectId(attacker) != 0xD4)
-                return true;
-            return (target.Frame?.N ?? 0) % 10 == 5 && (attacker.Frame?.N ?? 0) % 10 == 0;
-        }
-
         private static bool Kind0EffectAllowed(
             LF2Entity attacker,
             InteractionArea itr,
@@ -6687,26 +6879,6 @@ namespace NTSD.Animation
                 return -1;
 
             return attacker.ResolveReleaseNeutralHolderSlotOrImplicitZero();
-        }
-
-        private static bool HasSameNonZeroRelationTeam(LF2Entity a, LF2Entity b)
-        {
-            return a != null && b != null && a.RelationTeam == b.RelationTeam && a.RelationTeam != 0;
-        }
-
-        private static bool SameFacing(LF2Entity a, LF2Entity b)
-        {
-            return a?.PS != null &&
-                   b?.PS != null &&
-                   IsEntityFacingLeft(a) == IsEntityFacingLeft(b);
-        }
-
-        private static bool IsReleaseWeaponType(int type)
-        {
-            return type == (int)LF2ObjectType.LightWeapon ||
-                   type == (int)LF2ObjectType.HeavyWeapon ||
-                   type == (int)LF2ObjectType.ThrowWeapon ||
-                   type == (int)LF2ObjectType.Drink;
         }
 
         private bool HitsTarget(

@@ -118,7 +118,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void State501OwnerChildrenDeadAndMissingReplacement_MatchLegacy()
+        public void State501SelfAndChildren_AreInertAcrossFastAndForcedLegacy()
         {
             using var logging = new DisabledLoggingScope();
             const int replacementOid = 9000;
@@ -136,18 +136,39 @@ namespace NTSD.Test
                     replacementOid,
                     forceLegacy: true,
                     runtimeCharacterConfigs);
+            NTSDEntityRuntime[] fastRuntimeBefore =
+                CaptureRuntimeSnapshots(fast.Entities);
+            NTSDEntityRuntime[] legacyRuntimeBefore =
+                CaptureRuntimeSnapshots(legacy.Entities);
+            LF2CharacterDataWrapper[] fastWrappersBefore =
+                fast.Entities.Select(entity => entity.FrameCache.Wrapper).ToArray();
+            LF2CharacterDataWrapper[] legacyWrappersBefore =
+                legacy.Entities.Select(entity => entity.FrameCache.Wrapper).ToArray();
+            int[] fastObjectIdsBefore =
+                fast.Entities.Select(entity => entity.ObjectId).ToArray();
+            int[] legacyObjectIdsBefore =
+                legacy.Entities.Select(entity => entity.ObjectId).ToArray();
+            int[] fastFrameIdsBefore =
+                fast.Entities.Select(entity => entity.Frame.N).ToArray();
+            int[] legacyFrameIdsBefore =
+                legacy.Entities.Select(entity => entity.Frame.N).ToArray();
 
             fast.World.EarlyFrameAdvanceSpecialsAll(4);
             legacy.World.EarlyFrameAdvanceSpecialsAll(4);
 
             AssertEquivalent(fast, legacy, 4);
-            Assert.That(fast.Entities[1].ObjectId, Is.EqualTo(replacementOid));
-            Assert.That(fast.Entities[0].ObjectId, Is.EqualTo(replacementOid));
-            Assert.That(fast.Entities[2].ObjectId, Is.EqualTo(replacementOid));
-            Assert.That(fast.Entities[0].Frame.N, Is.EqualTo(212));
-            Assert.That(fast.Entities[2].Frame.N, Is.Zero);
-            Assert.That(fast.Entities[3].ObjectId, Is.Not.EqualTo(replacementOid));
-            Assert.That(fast.Entities[4].Frame.D.state, Is.EqualTo(501));
+            AssertScenarioUnchanged(
+                fast,
+                fastRuntimeBefore,
+                fastWrappersBefore,
+                fastObjectIdsBefore,
+                fastFrameIdsBefore);
+            AssertScenarioUnchanged(
+                legacy,
+                legacyRuntimeBefore,
+                legacyWrappersBefore,
+                legacyObjectIdsBefore,
+                legacyFrameIdsBefore);
         }
 
         [Test]
@@ -482,6 +503,40 @@ namespace NTSD.Test
                         .OverallChecksum));
         }
 
+        private static NTSDEntityRuntime[] CaptureRuntimeSnapshots(
+            List<LF2Character> entities)
+        {
+            var snapshots = new NTSDEntityRuntime[entities.Count];
+            for (int index = 0; index < entities.Count; index++)
+            {
+                snapshots[index] = new NTSDEntityRuntime();
+                Assert.That(
+                    entities[index].Runtime.TryCopyCanonicalStateTo(
+                        snapshots[index]),
+                    Is.True);
+            }
+            return snapshots;
+        }
+
+        private static void AssertScenarioUnchanged(
+            Scenario scenario,
+            IReadOnlyList<NTSDEntityRuntime> runtimeBefore,
+            IReadOnlyList<LF2CharacterDataWrapper> wrappersBefore,
+            IReadOnlyList<int> objectIdsBefore,
+            IReadOnlyList<int> frameIdsBefore)
+        {
+            for (int index = 0; index < scenario.Entities.Count; index++)
+            {
+                LF2Character entity = scenario.Entities[index];
+                Assert.That(entity.ObjectId, Is.EqualTo(objectIdsBefore[index]));
+                Assert.That(entity.Frame.N, Is.EqualTo(frameIdsBefore[index]));
+                Assert.That(
+                    entity.FrameCache.Wrapper,
+                    Is.SameAs(wrappersBefore[index]));
+                AssertRuntimeEquivalent(entity.Runtime, runtimeBefore[index]);
+            }
+        }
+
         private static void AssertRuntimeEquivalent(
             NTSDEntityRuntime fast,
             NTSDEntityRuntime legacy)
@@ -490,6 +545,21 @@ namespace NTSD.Test
             {
                 object fastValue = field.GetValue(fast);
                 object legacyValue = field.GetValue(legacy);
+                if (fastValue is NTSD28InputProxyBlock fastProxy &&
+                    legacyValue is NTSD28InputProxyBlock legacyProxy)
+                {
+                    var fastBytes =
+                        new byte[NTSD28InputProxyBlock.SerializedByteCount];
+                    var legacyBytes =
+                        new byte[NTSD28InputProxyBlock.SerializedByteCount];
+                    fastProxy.WriteSerialized(fastBytes);
+                    legacyProxy.WriteSerialized(legacyBytes);
+                    CollectionAssert.AreEqual(
+                        fastBytes,
+                        legacyBytes,
+                        $"runtime field {field.Name}");
+                    continue;
+                }
                 if (fastValue is IEnumerable fastEnumerable &&
                     fastValue is not string &&
                     legacyValue is IEnumerable legacyEnumerable)

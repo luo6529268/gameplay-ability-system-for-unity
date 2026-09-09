@@ -15,10 +15,40 @@ namespace NTSD.Simulation
         private readonly SimulationWorld world;
         private readonly SimulationRandomWeaponDropBuffer candidates =
             new SimulationRandomWeaponDropBuffer();
+        private int activeWeaponObjectCountBeforeHits;
+        private int activeWeaponObjectCountCapturedTick = int.MinValue;
 
         internal BattleRandomWeaponDropModule(SimulationWorld world)
         {
             this.world = world;
+        }
+
+        internal int ActiveWeaponObjectCountBeforeHits =>
+            activeWeaponObjectCountBeforeHits;
+
+        internal int ActiveWeaponObjectCountCapturedTick =>
+            activeWeaponObjectCountCapturedTick;
+
+        // Alignment contract: NTSD28-B3-C13-ACTIVE-WEAPON-COUNT-PLACEMENT-001.
+        internal void CaptureActiveWeaponObjectCountBeforeHits(int tickIndex)
+        {
+            int count = 0;
+            foreach (LF2Entity entity in
+                     world.ActiveEntitiesByRuntimeSlotForModule)
+            {
+                int objectType =
+                    entity.GetCurrentDataObjectTypeForSimulation();
+                if (objectType == (int)LF2ObjectType.LightWeapon ||
+                    objectType == (int)LF2ObjectType.HeavyWeapon ||
+                    objectType == (int)LF2ObjectType.ThrowWeapon ||
+                    objectType == (int)LF2ObjectType.Drink)
+                {
+                    count++;
+                }
+            }
+
+            activeWeaponObjectCountBeforeHits = count;
+            activeWeaponObjectCountCapturedTick = tickIndex;
         }
 
         internal void RunNormalDrop(int tickIndex)
@@ -299,6 +329,8 @@ namespace NTSD.Simulation
                 spawnTask.dir = "right";
                 spawnTask.dvz = 0f;
                 spawnTask.targetWorld = world;
+                // Alignment contract: NTSD28-B0-F8-OWNER99-PRODUCTION-001.
+                spawnTask.ownerEntityIndex = 99;
                 try
                 {
                     factory.CreateObjectImmediate(spawnTask);

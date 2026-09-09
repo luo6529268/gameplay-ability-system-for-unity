@@ -511,7 +511,7 @@ namespace NTSD.Test
             for (int slot = 0; slot < capacity; slot++)
             {
                 snapshot.Rows.CoordinateTargetX[slot] = -1000;
-                snapshot.Rows.KillCount[slot] = -1;
+                snapshot.Rows.OwnerSlot[slot] = -1;
             }
             return snapshot;
         }
@@ -541,7 +541,7 @@ namespace NTSD.Test
             rows.HpMax[slot] = 500;
             rows.Pp[slot] = 500;
             rows.CoordinateTargetX[slot] = -1000;
-            rows.KillCount[slot] = -1;
+            rows.OwnerSlot[slot] = -1;
         }
 
         private static ulong HashDraw(ulong hash, int modulus, int raw, int value)

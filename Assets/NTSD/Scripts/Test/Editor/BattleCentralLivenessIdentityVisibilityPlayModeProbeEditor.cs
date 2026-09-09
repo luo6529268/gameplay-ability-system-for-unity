@@ -104,6 +104,13 @@ namespace NTSD.Test.Editor
                 return;
             }
 
+            string requestPath = Path.GetFullPath(Path.Combine(
+                Application.dataPath,
+                "..",
+                RequestRelativePath));
+            if (!File.Exists(requestPath))
+                return;
+
             if (EditorApplication.isPaused)
             {
                 EditorApplication.isPaused = false;
@@ -120,13 +127,6 @@ namespace NTSD.Test.Editor
                 return;
             }
             if (currentDriver.CurrentTickIndex < 5)
-                return;
-
-            string requestPath = Path.GetFullPath(Path.Combine(
-                Application.dataPath,
-                "..",
-                RequestRelativePath));
-            if (!File.Exists(requestPath))
                 return;
 
             File.Delete(requestPath);

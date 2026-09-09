@@ -90,8 +90,7 @@ namespace NTSD.Animation.LF2Objects
                 case 14:
                     return BattleHitCandidateDisposition.Kind14;
                 case 15:
-                case 16:
-                    return BattleHitCandidateDisposition.Kind15Or16;
+                    return BattleHitCandidateDisposition.Kind15;
                 case 10:
                 case 11:
                     return BattleHitCandidateDisposition.Kind10Or11;
@@ -114,7 +113,7 @@ namespace NTSD.Animation.LF2Objects
                    disposition == BattleHitCandidateDisposition.Damage ||
                    disposition == BattleHitCandidateDisposition.Kind8 ||
                    disposition == BattleHitCandidateDisposition.Kind14 ||
-                   disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                   disposition == BattleHitCandidateDisposition.Kind15 ||
                    disposition == BattleHitCandidateDisposition.Kind10Or11;
         }
 
@@ -350,47 +349,20 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            int victimOid = victimData.type_sub;
-            int attackerOid = attackerData.type_sub;
-            int victimState = victim.Frame?.D?.state ?? 0;
-            int victimPrev2Frame = victim.Runtime?.PrevFrame2 ?? 0;
-            int victimPrev2State = victim.GetFrameDataById(victimPrev2Frame)?.state ?? 0;
-            bool heavyEffect =
-                (itr.effect / 3 == 2) ||
-                (itr.effect / 3 == 3) ||
-                itr.effect == 2 ||
-                itr.effect == 3 ||
-                attackerOid == 214 ||
-                attackerOid == 208;
-
-            if (victimOid == 37 && victim.HitStateCount <= 15 && !heavyEffect)
-                return true;
-
-            if (victimOid == 6 && victim.HitStateCount <= 1 && !heavyEffect)
-            {
-                if ((victim.Frame?.N ?? 0) < 20)
-                    return true;
-
-                if (victimState == 5 || victimState == 4 || victimState == 7)
-                    return true;
-            }
-
-            if (victimOid == 52 &&
-                victim.HitStateCount <= 15 &&
-                attackerOid != 214 &&
-                attackerOid != 208)
-            {
-                return true;
-            }
-
-            if (victimPrev2State == LF2States.Defending && itr.bdefend <= 60 && victim.Health.HP > 0)
-            {
-                return attacker.Dirh() != victim.Dirh() ||
-                       itr.dvx < 0 ||
-                       LF2HitResolveRuntimeData.IsSpecialDefendAttacker(attackerOid);
-            }
-
-            return false;
+            BattleOrdinaryDefenseResult result =
+                BattleOrdinaryDefenseResolver.Resolve(
+                    itr.kind,
+                    itr.effect,
+                    itr.spark,
+                    itr.dbdefend,
+                    itr.dvx,
+                    attacker.Dirh(),
+                    victim.Dirh(),
+                    victim.Frame?.D?.state ?? 0,
+                    victim.Health.HP,
+                    attackerData.type_sub);
+            return result.Decision ==
+                BattleOrdinaryDefenseDecisionKind.Applies;
         }
 
     }
@@ -434,7 +406,8 @@ namespace NTSD.Animation.LF2Objects
 
             if (itr.kind == 4)
             {
-                if (attacker.WeaponCount <= 0)
+                if (attacker.Runtime == null ||
+                    attacker.Runtime.EnvironmentState320 <= 0)
                     return false;
 
                 _runtimeItr.CopyFrom(itr);
@@ -504,19 +477,6 @@ namespace NTSD.Animation.LF2Objects
                 effectDvy = itr.dvy != 0 ? itr.dvy : 0f;
 
                 effectNum = itr.effect;
-
-                if (itr.kind != 9 && LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, _victim, itr))
-                {
-                    SimulationWorld world = _victim.Match ?? attacker.Match;
-                    world.DamageWriter.ApplyAlternateDamage(
-                        world,
-                        attacker,
-                        _victim,
-                        _hitCounters,
-                        itr);
-                    _victim.RecordKind0Hit(attacker, itr);
-                    return true;
-                }
 
                 int currentVictimOid = _victim.FrameCache?.Wrapper?.characterId ?? _victim.ObjectId;
                 if (currentVictimOid == 300)
@@ -604,23 +564,6 @@ namespace NTSD.Animation.LF2Objects
                     return false;
 
                 ApplyFluteCharacterForce();
-                if (_victim.KillCount == -1 &&
-                    (_victim.Match?.CurrentTickIndex ?? 0) % 12 == 0 &&
-                    !LF2HitResolveRuntimeData.IsStepWaitGate(_victim))
-                {
-                    LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(attacker);
-                    if (holder != null)
-                        holder.ComboCountAtk += 11;
-                }
-
-                SimulationWorld world = _victim.Match ?? attacker?.Match;
-                int damageStatIndex = _victim.Unk344;
-                if (world?.DamageStats != null &&
-                    damageStatIndex > 0 &&
-                    damageStatIndex < world.DamageStats.Length)
-                {
-                    world.DamageStats[damageStatIndex] += 11;
-                }
                 return true;
             }
             else if (itr.kind == 15)
@@ -629,16 +572,6 @@ namespace NTSD.Animation.LF2Objects
                     ApplyWhirlwindCharacterForce(attacker);
                 return true;
             }
-            else if (itr.kind == 16)
-            {
-                SimulationWorld world = _victim.Match ?? attacker?.Match;
-                return world?.DamageWriter.ApplyKind16(
-                    world,
-                    attacker,
-                    _victim,
-                    itr) == true;
-            }
-
             if (acceptHit)
             {
                 LF2LivingObject attackerLiving = attacker as LF2LivingObject;

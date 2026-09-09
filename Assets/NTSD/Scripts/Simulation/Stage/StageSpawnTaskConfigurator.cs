@@ -94,6 +94,7 @@ namespace NTSD.Simulation
             task.parent = null;
             task.team = 2;
             task.requiredRuntimeSlot = requiredRuntimeSlot;
+            task.ownerEntityIndex = requiredRuntimeSlot;
             task.relationTeam = 2;
             task.holderCopySlot = -1;
             task.useExplicitRelationIdentity = true;

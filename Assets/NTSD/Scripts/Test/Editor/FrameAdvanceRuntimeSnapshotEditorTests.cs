@@ -324,6 +324,9 @@ namespace NTSD.Test
             Assert.That(
                 dataCharacter.ComboCountVic,
                 Is.EqualTo(legacyCharacter.ComboCountVic));
+            Assert.That(dataCharacter.Health.HP, Is.EqualTo(401));
+            Assert.That(dataCharacter.ComboCountVic, Is.Zero);
+            Assert.That(dataCharacter.WeaponCount, Is.EqualTo(-1));
             Assert.That(
                 dataWorld.BattleEcsCharacterRecoveryPassDiagnosticsForDiagnostics
                     .ExactCharacterCount,
@@ -362,7 +365,10 @@ namespace NTSD.Test
 
             world.LateEntityUpdateAll(12);
 
-            Assert.That(character.Health.HP, Is.EqualTo(392));
+            Assert.That(character.Health.HP, Is.EqualTo(401));
+            Assert.That(character.Health.HPBound, Is.EqualTo(500));
+            Assert.That(character.ComboCountVic, Is.Zero);
+            Assert.That(character.WeaponCount, Is.EqualTo(-1));
             Assert.That(
                 world.BattleEcsCharacterRecoveryPassDiagnosticsForDiagnostics
                     .ExactCharacterCount,

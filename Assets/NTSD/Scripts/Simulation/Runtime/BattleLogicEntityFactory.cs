@@ -114,6 +114,8 @@ namespace NTSD.Simulation
                 entity.AttackExempt = task.attackExempt;
             if (task.ownerEntityIndex >= 0)
                 entity.OwnerEntityIndex = task.ownerEntityIndex;
+            if (task.trackedTargetSlot >= 0)
+                entity.ObjectAiTargetSlot3F8 = task.trackedTargetSlot;
 
             return entity;
         }
@@ -209,7 +211,8 @@ namespace NTSD.Simulation
                 character.ModuleBind(
                     characterConfig,
                     state.CurrentDataObjectId,
-                    world);
+                    world,
+                    initializeNativeArmorRuntime: false);
                 character.Initialize(
                     NTSDGlobal.Default.Health.HpFull,
                     NTSDGlobal.Default.Health.MpFull);
@@ -274,17 +277,13 @@ namespace NTSD.Simulation
 
                 if (objectType == 0)
                 {
-                    living.KillCount = parent.KillCount > -1
-                        ? parent.KillCount
-                        : GetRuntimeSlotOrStableId(parent);
+                    // Alignment contract: NTSD28-B5-ORDINARY-CREDIT-GATE-2F4-PRODUCER-CONSUMER-CORRECTION-001.
+                    living.Runtime.OrdinaryCreditGate2F4 =
+                        parent.Runtime.OrdinaryCreditGate2F4 > -1
+                            ? parent.Runtime.OrdinaryCreditGate2F4
+                            : GetRuntimeSlotOrStableId(parent);
                     living.HitStun = parent.HitStun;
                     living.AiControlled = releaseOpointSpawn;
-                }
-                else if (!releaseOpointSpawn)
-                {
-                    living.KillCount = parent.KillCount > -1
-                        ? parent.KillCount
-                        : parent.StableId;
                 }
             }
 

@@ -24,11 +24,20 @@ namespace NTSD.Test.Editor
         private const string ForwardAttackMenuPath = "NTSD/验证/运行组合键PlayMode探针-防前攻";
         private const string DownJumpResultPath = "Temp/NTSD_R3_COMBO_PLAY.result.json";
         private const string ForwardAttackResultPath = "Temp/NTSD_R3_COMBO_PLAY.forward-attack.result.json";
+        private const string DownJumpRequestPath =
+            "Temp/NTSD_R3_COMBO_PLAY.request";
+        private const string ForwardAttackRequestPath =
+            "Temp/NTSD_R3_COMBO_PLAY.forward-attack.request";
         private const int ObservationTailTicks = 18;
         private const int TimeoutTicks = 90;
         private const int MaximumPressAttemptsPerStep = 8;
+        private const int MinimumQueuedStateHoldTicks = 2;
 
         private static readonly List<TraceRow> Trace = new List<TraceRow>(128);
+        private static readonly FieldInfo FirstPlayerField =
+            typeof(BattleTestBootstrap).GetField(
+                "firstPlayerLf2",
+                BindingFlags.Instance | BindingFlags.NonPublic);
         private static LF2Character character;
         private static SimulationTickDriver driver;
         private static Keyboard keyboard;
@@ -50,11 +59,54 @@ namespace NTSD.Test.Editor
         private static bool targetFrameSeen;
         private static bool retryReleaseQueued;
         private static bool running;
+        private static bool requestBatchActive;
         private static ProbeKind activeKind;
         private static Key secondPhysicalKey;
         private static Key thirdPhysicalKey;
         private static string comboLabel;
         private static string resultRelativePath;
+
+        [InitializeOnLoadMethod]
+        private static void RegisterRequestPoller()
+        {
+            EditorApplication.update -= PollRequest;
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (!EditorApplication.isPlaying || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating || running)
+            {
+                return;
+            }
+
+            if (!HasPendingRequest() || !IsLiveBattleReady())
+                return;
+
+            string downJump = ProjectPath(DownJumpRequestPath);
+            if (File.Exists(downJump))
+            {
+                if (!CanStartProbe(ProbeKind.DownJump))
+                    return;
+                requestBatchActive = true;
+                File.Delete(downJump);
+                DeletePriorResult(DownJumpResultPath);
+                RunProbe(ProbeKind.DownJump);
+                return;
+            }
+
+            string forwardAttack = ProjectPath(ForwardAttackRequestPath);
+            if (File.Exists(forwardAttack))
+            {
+                if (!CanStartProbe(ProbeKind.ForwardAttack))
+                    return;
+                requestBatchActive = true;
+                File.Delete(forwardAttack);
+                DeletePriorResult(ForwardAttackResultPath);
+                RunProbe(ProbeKind.ForwardAttack);
+            }
+        }
 
         [MenuItem(DownJumpMenuPath)]
         public static void RunFromMenu()
@@ -82,10 +134,7 @@ namespace NTSD.Test.Editor
             }
 
             BattleTestBootstrap bootstrap = UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
-            FieldInfo firstPlayerField = typeof(BattleTestBootstrap).GetField(
-                "firstPlayerLf2",
-                BindingFlags.Instance | BindingFlags.NonPublic);
-            character = firstPlayerField?.GetValue(bootstrap) as LF2Character;
+            character = FirstPlayerField?.GetValue(bootstrap) as LF2Character;
             driver = SimulationTickDriver.Instance;
             if (bootstrap == null || character == null || driver?.World == null ||
                 character.Controller?.InputBuffer == null || character.Runtime == null ||
@@ -183,6 +232,8 @@ namespace NTSD.Test.Editor
                 comboDdj = character.Runtime.ComboDdj,
                 comboDra = character.Runtime.ComboDra,
                 comboDla = character.Runtime.ComboDla,
+                exactDdj = character.Runtime.NativeInputProxy.ComboState[5],
+                exactHorizontal = character.Runtime.NativeInputProxy.ComboState[0],
                 cdDefend = character.Runtime.CdDefend,
                 cdDown = character.Runtime.CdDown,
                 cdJump = character.Runtime.CdJump,
@@ -201,7 +252,7 @@ namespace NTSD.Test.Editor
                 lastInputPulseTick = tick;
                 retryReleaseQueued = false;
             }
-            else if (step1Seen && !step2Seen && combo == 2)
+            else if (step1Seen && !step2Seen && IsDirectionStep(combo))
             {
                 step2Seen = true;
                 step2Tick = tick;
@@ -249,11 +300,15 @@ namespace NTSD.Test.Editor
 
         private static byte ResolveComboValue()
         {
-            if (activeKind == ProbeKind.DownJump)
-                return character.Runtime.ComboDdj;
-            return comboLabel == "DLA"
-                ? character.Runtime.ComboDla
-                : character.Runtime.ComboDra;
+            byte[] exact = character.Runtime.NativeInputProxy.ComboState;
+            return activeKind == ProbeKind.DownJump ? exact[5] : exact[0];
+        }
+
+        private static bool IsDirectionStep(byte combo)
+        {
+            if (activeKind == ProbeKind.DownJump || comboLabel != "DLA")
+                return combo == 2;
+            return combo == 3;
         }
 
         private static bool RetryPendingPhysicalInput(int tick, byte combo)
@@ -274,7 +329,7 @@ namespace NTSD.Test.Editor
                     ref step2PressAttempts);
             }
 
-            if (!targetFrameSeen && combo == 2)
+            if (!targetFrameSeen && IsDirectionStep(combo))
             {
                 return PulsePhysicalState(
                     tick,
@@ -290,7 +345,9 @@ namespace NTSD.Test.Editor
             Key pressedKey,
             ref int pressAttempts)
         {
-            if (tick <= lastInputPulseTick)
+            // NTSD 2.8 2tu polls human input every other logic tick. Keep both
+            // pressed and released device states alive long enough to cross a poll.
+            if (tick - lastInputPulseTick < MinimumQueuedStateHoldTicks)
                 return true;
 
             if (!retryReleaseQueued)
@@ -344,6 +401,7 @@ namespace NTSD.Test.Editor
             File.WriteAllText(ResultPath(), JsonUtility.ToJson(result, true));
             Debug.Log($"[BattleComboPlayModeProbe] {result.status}: {message}");
             StopObservation();
+            CompleteRequestBatchIfFinished();
         }
 
         private static void WriteFailure(string message)
@@ -358,11 +416,77 @@ namespace NTSD.Test.Editor
             };
             File.WriteAllText(ResultPath(), JsonUtility.ToJson(result, true));
             Debug.LogError($"[BattleComboPlayModeProbe] FAIL: {message}");
+            StopObservation();
+            CompleteRequestBatchIfFinished();
         }
 
         private static string ResultPath()
         {
-            return Path.GetFullPath(Path.Combine(Application.dataPath, "..", resultRelativePath));
+            return ProjectPath(resultRelativePath);
+        }
+
+        private static string ProjectPath(string relativePath)
+        {
+            return Path.GetFullPath(
+                Path.Combine(Application.dataPath, "..", relativePath));
+        }
+
+        private static void CompleteRequestBatchIfFinished()
+        {
+            if (!requestBatchActive || HasPendingRequest())
+                return;
+
+            EditorApplication.delayCall += ExitPlayModeAfterRequestBatch;
+        }
+
+        private static void ExitPlayModeAfterRequestBatch()
+        {
+            if (!requestBatchActive || running || HasPendingRequest())
+                return;
+
+            requestBatchActive = false;
+            if (EditorApplication.isPlaying)
+                EditorApplication.isPlaying = false;
+        }
+
+        private static bool HasPendingRequest()
+        {
+            return File.Exists(ProjectPath(DownJumpRequestPath)) ||
+                File.Exists(ProjectPath(ForwardAttackRequestPath));
+        }
+
+        private static bool IsLiveBattleReady()
+        {
+            BattleTestBootstrap bootstrap =
+                UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
+            LF2Character player =
+                FirstPlayerField?.GetValue(bootstrap) as LF2Character;
+            SimulationTickDriver liveDriver = SimulationTickDriver.Instance;
+            return bootstrap != null && player != null &&
+                liveDriver?.World != null &&
+                player.Controller?.InputBuffer != null &&
+                player.Runtime != null && player.Frame?.D != null;
+        }
+
+        private static bool CanStartProbe(ProbeKind kind)
+        {
+            BattleTestBootstrap bootstrap =
+                UnityEngine.Object.FindObjectOfType<BattleTestBootstrap>();
+            LF2Character player =
+                FirstPlayerField?.GetValue(bootstrap) as LF2Character;
+            if (player?.Frame?.D == null)
+                return false;
+
+            return kind == ProbeKind.DownJump
+                ? player.Frame.D.hit_Dj != 0
+                : player.Frame.D.hit_Fa != 0;
+        }
+
+        private static void DeletePriorResult(string relativePath)
+        {
+            string path = ProjectPath(relativePath);
+            if (File.Exists(path))
+                File.Delete(path);
         }
 
         private static void StopObservation()
@@ -407,6 +531,8 @@ namespace NTSD.Test.Editor
             public int comboDdj;
             public int comboDra;
             public int comboDla;
+            public int exactDdj;
+            public int exactHorizontal;
             public int cdDefend;
             public int cdDown;
             public int cdJump;

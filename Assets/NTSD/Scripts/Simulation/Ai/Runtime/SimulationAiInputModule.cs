@@ -84,6 +84,7 @@ namespace NTSD.Simulation
             internal int Slot;
             internal int X;
             internal int Y;
+            internal int HitStop;
             internal int Z;
             internal int Hp;
             internal int Team;
@@ -753,7 +754,8 @@ namespace NTSD.Simulation
             int state = world.GetAiStateForInputModule(entity);
             int dataObjectType = entity.GetCurrentDataObjectTypeForSimulation();
             int y = runtime.YInt;
-            bool airRole = state == 14 || System.Math.Abs(y) > 2;
+            int hitStop = runtime.HitStop;
+            bool airRole = state == 14 || System.Math.Abs(hitStop) > 2;
             facts = new AiNearestSlotFacts
             {
                 Entity = entity,
@@ -763,6 +765,7 @@ namespace NTSD.Simulation
                 Slot = slot,
                 X = runtime.XInt,
                 Y = y,
+                HitStop = hitStop,
                 Z = runtime.ZInt,
                 Hp = runtime.HP,
                 Team = runtime.RelationTeam,
@@ -1554,7 +1557,7 @@ namespace NTSD.Simulation
                        inputPhase) &&
                    world.GetAiHpForInputModule(candidate) > 0 &&
                    state != 14 &&
-                   System.Math.Abs(world.GetAiYForInputModule(candidate)) <= 2;
+                   System.Math.Abs(world.GetAiHitStopForInputModule(candidate)) <= 2;
         }
 
         internal static bool IsGroundTargetCandidate(
@@ -1597,7 +1600,7 @@ namespace NTSD.Simulation
             return TeamCandidateAllowed(selfTeam, candidate.Team, inputPhase) &&
                    candidate.Hp > 0 &&
                    candidate.State != 14 &&
-                   System.Math.Abs(candidate.Y) <= 2;
+                   System.Math.Abs(candidate.HitStop) <= 2;
         }
 
         internal bool IsAirTargetCandidate(
@@ -1614,7 +1617,7 @@ namespace NTSD.Simulation
                        inputPhase) &&
                    world.GetAiHpForInputModule(candidate) > 0 &&
                    (world.GetAiStateForInputModule(candidate) == 14 ||
-                    System.Math.Abs(world.GetAiYForInputModule(candidate)) > 2);
+                    System.Math.Abs(world.GetAiHitStopForInputModule(candidate)) > 2);
         }
 
         internal static bool IsAirTargetCandidate(
@@ -1638,7 +1641,7 @@ namespace NTSD.Simulation
         {
             return candidate != null &&
                    (world.GetAiStateForInputModule(candidate) == 14 ||
-                    System.Math.Abs(world.GetAiYForInputModule(candidate)) > 2);
+                    System.Math.Abs(world.GetAiHitStopForInputModule(candidate)) > 2);
         }
 
         internal bool IsGroundSpatialRole(
@@ -1647,7 +1650,7 @@ namespace NTSD.Simulation
         {
             if (candidate == null ||
                 world.GetAiStateForInputModule(candidate) == 14 ||
-                System.Math.Abs(world.GetAiYForInputModule(candidate)) > 2)
+                System.Math.Abs(world.GetAiHitStopForInputModule(candidate)) > 2)
             {
                 return false;
             }
@@ -3120,13 +3123,12 @@ namespace NTSD.Simulation
             LF2Entity self,
             LF2Entity candidate,
             int inputPhase,
-            int candidateY)
+            int candidateRenderPhase)
         {
             BuildAiInputSlotSnapshot();
             try
             {
-                candidate.Runtime.Y = candidateY;
-                candidate.Runtime.YInt = candidateY;
+                candidate.Runtime.HitStop = candidateRenderPhase;
                 ObserveAiGroundSpatialRoleMutation(candidate);
                 ObserveAiAirSpatialRoleMutation(candidate);
                 if (!aiInputAirSpatialReady)
@@ -3158,9 +3160,9 @@ namespace NTSD.Simulation
         internal bool AiAirRoleCountMutationForSelfCheck(
             LF2Entity candidate,
             int airState,
-            int airY,
+            int airRenderPhase,
             int groundState,
-            int groundY,
+            int groundRenderPhase,
             out int initialCount,
             out int airCount,
             out int groundCount)
@@ -3175,8 +3177,7 @@ namespace NTSD.Simulation
                 if (!aiInputAirRoleCountValid)
                     return false;
 
-                candidate.Runtime.Y = airY;
-                candidate.Runtime.YInt = airY;
+                candidate.Runtime.HitStop = airRenderPhase;
                 if (candidate.Frame?.D != null)
                     candidate.Frame.D.state = airState;
                 ObserveAiAirSpatialRoleMutation(candidate);
@@ -3184,8 +3185,7 @@ namespace NTSD.Simulation
                 if (!aiInputAirRoleCountValid)
                     return false;
 
-                candidate.Runtime.Y = groundY;
-                candidate.Runtime.YInt = groundY;
+                candidate.Runtime.HitStop = groundRenderPhase;
                 if (candidate.Frame?.D != null)
                     candidate.Frame.D.state = groundState;
                 ObserveAiAirSpatialRoleMutation(candidate);

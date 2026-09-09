@@ -47,7 +47,7 @@ namespace NTSD.Simulation
             Frame = new int[capacity];
             HitJ = new int[capacity];
             LinkState = new int[capacity];
-            KillCount = new int[capacity];
+            OwnerSlot = new int[capacity];
             CachedTargetSlot = new int[capacity];
             CoordinateTargetX = new int[capacity];
             Vx = new double[capacity];
@@ -93,7 +93,7 @@ namespace NTSD.Simulation
         public readonly int[] Frame;
         public readonly int[] HitJ;
         public readonly int[] LinkState;
-        public readonly int[] KillCount;
+        public readonly int[] OwnerSlot;
         public readonly int[] CachedTargetSlot;
         public readonly int[] CoordinateTargetX;
         public readonly double[] Vx;
@@ -157,7 +157,7 @@ namespace NTSD.Simulation
             Array.Copy(Frame, grown.Frame, count);
             Array.Copy(HitJ, grown.HitJ, count);
             Array.Copy(LinkState, grown.LinkState, count);
-            Array.Copy(KillCount, grown.KillCount, count);
+            Array.Copy(OwnerSlot, grown.OwnerSlot, count);
             Array.Copy(CachedTargetSlot, grown.CachedTargetSlot, count);
             Array.Copy(CoordinateTargetX, grown.CoordinateTargetX, count);
             Array.Copy(Vx, grown.Vx, count);

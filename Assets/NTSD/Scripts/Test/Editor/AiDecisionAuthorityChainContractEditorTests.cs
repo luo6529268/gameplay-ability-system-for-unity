@@ -185,7 +185,7 @@ namespace NTSD.Test
             rows.HpMax[slot] = 500;
             rows.Pp[slot] = 500;
             rows.CoordinateTargetX[slot] = -1000;
-            rows.KillCount[slot] = -1;
+            rows.OwnerSlot[slot] = -1;
         }
     }
 }

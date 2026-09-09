@@ -204,28 +204,6 @@ namespace NTSD.Animation.Rendering.Editor
             ProductionEntityStressRequestProcessor.WriteRequest(request);
         }
 
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Positive Link Index Candidate")]
-        public static void RunCombatU6PositiveLinkIndexCandidateFromMenu()
-        {
-            ProductionEntityStressRequest request =
-                CreateCombatCapacityPressureSmokeRequest(
-                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-positive-link-index-candidate.json",
-                    "data-oriented-canonical");
-            request.positiveLinkValidationMode = "data-oriented";
-            ProductionEntityStressRequestProcessor.WriteRequest(request);
-        }
-
-        [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI U6 Positive Link Index Legacy A-B")]
-        public static void RunCombatU6PositiveLinkIndexLegacyFromMenu()
-        {
-            ProductionEntityStressRequest request =
-                CreateCombatCapacityPressureSmokeRequest(
-                    "Temp/NTSD_ProductionEntityStress.combat1000.u6-positive-link-index-legacy.json",
-                    "data-oriented-canonical");
-            request.positiveLinkValidationMode = "legacy";
-            ProductionEntityStressRequestProcessor.WriteRequest(request);
-        }
-
         [MenuItem("NTSD/Battle Diagnostics/Production Entity Stress/Run 1000 AI Completed Frame Timing Diagnostic")]
         public static void RunCombatCompletedFrameTimingDiagnosticFromMenu()
         {

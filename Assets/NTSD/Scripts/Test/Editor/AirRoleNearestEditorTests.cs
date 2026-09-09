@@ -266,6 +266,9 @@ namespace NTSD.Test
             character.RelationTeam = team;
             character.Runtime.SetPosition(x, y, z);
             character.Runtime.SyncIntegerPosition();
+            // This historical fixture parameter represented native render_phase_008,
+            // not the physical Y coordinate used to place the test entity.
+            character.Runtime.HitStop = y;
             return character;
         }
 

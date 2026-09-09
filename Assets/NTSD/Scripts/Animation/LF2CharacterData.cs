@@ -15,6 +15,29 @@ namespace NTSD.Animation
         public string small = "";
         public List<SpriteFileInfo> files = new List<SpriteFileInfo>();
 
+        [Header("2.8 原生输入动作参数")]
+        public int use_ai = 0;
+        public int property = 0;
+        public int definition_effect = 0;
+        public int definition_attacking = 0;
+        public int recmp = 0;
+        public int caughtact = 0;
+        public int normal_attack1 = 0;
+        public int normal_attack2 = 0;
+        public int light_throw = 0;
+        public int weapon_drink = 0;
+        public int heavy_throw = 0;
+        public int run_heavy_throw = 0;
+        public int run_attack = 0;
+        public int jump_attack = 0;
+        public int sky_light_throw = 0;
+
+        [Header("2.8 原生移动动作序列")]
+        public List<int> walking_frames = new List<int>();
+        public List<int> running_frames = new List<int>();
+        public List<int> heavy_walking_frames = new List<int>();
+        public List<int> heavy_running_frames = new List<int>();
+
         [Header("行走参数")]
         public int walking_frame_rate = 3;
         public float walking_speed = 4.0f;
@@ -49,6 +72,9 @@ namespace NTSD.Animation
 
         [Header("帧数据")]
         public List<LF2FrameData> frames = new List<LF2FrameData>();
+
+        [Header("2.8 原生护甲定义")]
+        public List<LF2ArmorData> armors = new List<LF2ArmorData>();
 
         [Header("武器参数（仅武器 DAT 有效）")]
         public int weapon_hp = 0;

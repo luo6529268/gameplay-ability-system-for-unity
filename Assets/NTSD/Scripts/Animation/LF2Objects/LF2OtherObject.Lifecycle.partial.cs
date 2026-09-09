@@ -99,7 +99,7 @@ namespace NTSD.Animation.LF2Objects
             owner.HolderCopySlot = -1;
             owner.OwnerId = -1;
             owner.RelationOwnerSlot = -1;
-            owner.OwnerEntityIndex = -1;
+            owner.OwnerEntityIndex = task.ownerEntityIndex;
             owner.SpawnerEntityIndex = -1;
         }
 

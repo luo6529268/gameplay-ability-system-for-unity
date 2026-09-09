@@ -172,6 +172,11 @@ namespace NTSD.Animation.LF2Objects
             // 基类不做任何清零——所有 type 分支由 LF2Weapon.OnLanded() 完整覆盖并 return。
         }
 
+        protected virtual void OnLanded(int landingY)
+        {
+            OnLanded();
+        }
+
         /// <summary>
         /// 飞行武器每帧的特化物理（在 Dynamics 之前执行）
         /// C++ release 对齐 Entity_FrameAdvance 0x416240-0x416577（在空中时的 type 分流）
@@ -565,21 +570,26 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimTU(int tickIndex)
         {
+            RunNativePhysicsForWorldPass(tickIndex);
+        }
+
+        internal override bool RunNativePhysicsForWorldPass(int tickIndex)
+        {
             int currentDataType = GetCurrentDataObjectTypeForSimulation();
             if (currentDataType == (int)LF2ObjectType.Character)
             {
                 RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
-                return;
+                return true;
             }
             if (!UsesNativeWeaponFrameAdvanceForCurrentData(currentDataType))
             {
-                RunSharedNonCharacterDatFrameAdvance();
-                return;
+                return RunSharedNonCharacterDatFrameAdvance();
             }
 
-            RunFrameAdvancePhysics();
+            RunFrameAdvancePhysics(currentDataType);
             Runtime.SyncIntegerPosition();
             RefreshRuntimeSnapshot();
+            return true;
         }
 
         protected abstract bool UsesNativeWeaponFrameAdvanceForCurrentData(int currentDataType);
@@ -834,7 +844,7 @@ namespace NTSD.Animation.LF2Objects
 
             Runtime.OwnerStableId = -1;
             RelationOwnerSlot = -1;
-            OwnerEntityIndex = -1;
+            OwnerEntityIndex = task.ownerEntityIndex;
             SpawnerEntityIndex = -1;
         }
 
@@ -941,13 +951,17 @@ namespace NTSD.Animation.LF2Objects
 
         // 这里是真正的武器飞行动力学入口：
         // 先看是否允许推进，再做速度应用、飞行物理、空中更新和落地分流。
-        private void RunFrameAdvancePhysics()
+        private void RunFrameAdvancePhysics(int currentDataType)
         {
             if (!TryEnterReleaseFrameAdvanceAfterDelay())
                 return;
             if (GetRuntimeHolderEntity() != null)
                 return;
             if (IsBlockedByReleaseLinkOrCaughtCpoint())
+                return;
+            if (Frame?.D != null &&
+                Frame.D.HasPrimaryCatchPoint &&
+                Frame.D.PrimaryCatchPoint.Kind == 2)
                 return;
 
             ApplyNonCharacterFrameVelocityForFrameAdvance();
@@ -961,14 +975,57 @@ namespace NTSD.Animation.LF2Objects
                 default:
                     _gravityToAdd = 0f;
                     WeaponFlightPhysics();
-                    bool landed = CharacterMechanics.WeaponDynamics(Runtime, _gravityToAdd, out _lastLandingVyBeforeClamp);
-                    RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
+                    bool usesReferenceAwareObjectLanding =
+                        currentDataType != (int)LF2ObjectType.Character;
+                    if (usesReferenceAwareObjectLanding)
+                    {
+                        BattleNonCharacterMechanicsStepResult step =
+                            CharacterMechanics.StepNonCharacterBattleLogic(
+                                Runtime,
+                                _gravityToAdd);
+                        _lastLandingVyBeforeClamp =
+                            step.VerticalVelocityBeforeMove;
+                        RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
 
-                    if (Runtime.Y < -0.0001)
-                        OnInFlightFrameUpdate();
+                        if (step.Airborne)
+                            OnInFlightFrameUpdate();
 
-                    if (landed)
-                        OnLanded();
+                        if (currentDataType == (int)LF2ObjectType.LightWeapon ||
+                            currentDataType == (int)LF2ObjectType.HeavyWeapon ||
+                            currentDataType == (int)LF2ObjectType.ThrowWeapon ||
+                            currentDataType == (int)LF2ObjectType.Drink)
+                        {
+                            bool resolvesLanding =
+                                currentDataType == (int)LF2ObjectType.LightWeapon
+                                    ? step.Type1LandingPredicate
+                                    : currentDataType == (int)LF2ObjectType.HeavyWeapon
+                                        ? step.PenetratedEffectiveFloor
+                                        : step.Type4Or6LandingPredicate;
+                            if (resolvesLanding)
+                                OnLanded(step.CollisionYReference);
+                        }
+                        else
+                        {
+                            ApplyCurrentDatType3AndOid999Landing(
+                                currentDataType,
+                                Frame?.D,
+                                step);
+                        }
+                    }
+                    else
+                    {
+                        bool landed = CharacterMechanics.WeaponDynamics(
+                            Runtime,
+                            _gravityToAdd,
+                            out _lastLandingVyBeforeClamp);
+                        RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
+
+                        if (Runtime.Y < -0.0001)
+                            OnInFlightFrameUpdate();
+
+                        if (landed)
+                            OnLanded();
+                    }
                     break;
             }
 
@@ -1018,6 +1075,9 @@ namespace NTSD.Animation.LF2Objects
     {
         public bool Thrown;
         public bool ForceDrop;
+        public bool RefillExhausted;
+        public bool TerminalDespawnRequested;
+        public bool UnsupportedWeaponAction;
         public bool NeedsKind3Drop;
         public WeaponAttackResult AttackResult;
     }

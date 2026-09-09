@@ -304,6 +304,7 @@ namespace NTSD.Test
             character.Runtime.RelationTeam = 1;
             character.Runtime.SetPosition(100, 0, 220);
             character.Runtime.SyncIntegerPosition();
+
             Assert.That(character.Runtime.SlotIndex, Is.EqualTo(runtimeSlot));
             Assert.That(character.Renderer, Is.Null);
             Assert.That(character.ShadowRenderer, Is.Null);
@@ -606,6 +607,9 @@ namespace NTSD.Test
             rosterSlot.RuntimeSlotIndex = runtimeSlot;
             rosterSlot.StableId = character.Runtime.StableId;
             world.Runtime.Roster.ActiveSlotCount = 1;
+            // Default 2tu advances before the human poll. Start from phase 1 so
+            // this isolated tick-2 fixture reaches the native phase-0 sample.
+            world.Runtime.Flow.InputPhase = 1;
 
             var input = new Simulation.FrameInputSet(
                 2,
@@ -654,8 +658,14 @@ namespace NTSD.Test
             Assert.That(publication.InputHash, Is.EqualTo(input.GetCanonicalHash64()));
             // C++ poll preserves this tick's held keys; only the previous held state
             // moves into Prev*. Cooldowns/history prove that the new press was consumed.
-            Assert.That(character.Runtime.KeyLeft, Is.EqualTo(1));
-            Assert.That(character.Runtime.KeyAttack, Is.EqualTo(1));
+            string inputState =
+                $"keys={character.Runtime.KeyLeft}/{character.Runtime.KeyAttack};" +
+                $"prev={character.Runtime.PrevLeft}/{character.Runtime.PrevAttack};" +
+                $"cd={character.Runtime.CdLeft}/{character.Runtime.CdDefend};" +
+                $"history={character.Runtime.InputHistory[4]}/{character.Runtime.InputHistory[5]};" +
+                $"freeze={world.LastNTSD28InputProducerFreezeCountForDiagnostics}";
+            Assert.That(character.Runtime.KeyLeft, Is.EqualTo(1), inputState);
+            Assert.That(character.Runtime.KeyAttack, Is.EqualTo(1), inputState);
             Assert.That(character.Runtime.PrevLeft, Is.Zero);
             Assert.That(character.Runtime.PrevAttack, Is.Zero);
             Assert.That(character.Runtime.CdLeft, Is.EqualTo(5));

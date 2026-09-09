@@ -249,10 +249,16 @@ namespace NTSD.App
 
                 lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"Player_{inputId}");
                 lf2.ModuleInitialize();
+                BattleMatchConfigRuntimeAdapter.PrepareDirectParticipantRegistration(lf2, i);
 
                 EntityModel.SetLogicObject(lf2, null);
 
                 lf2.ModuleBind(frameData, slot.characterId);
+                if (lf2.Runtime.SlotIndex != i)
+                {
+                    LF2ObjectPointFactory.ReleaseRejectedSpawn(EntityModel, lf2);
+                    continue;
+                }
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = team;
                 lf2.RelationTeam = team;

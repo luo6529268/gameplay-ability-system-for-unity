@@ -14,7 +14,7 @@ namespace NTSD.Test
     {
         [Test]
         [Category("NTSD_W06")]
-        public void InteractionPhase_OrdersCharacterHitRandomDropThenObjectHit()
+        public void InteractionPhase_DoesNotRepeatC14AndKeepsRandomDropBeforeObjectHit()
         {
             var world = new SimulationWorld();
             world.Rng.Seed(0x5EEDu);
@@ -36,9 +36,13 @@ namespace NTSD.Test
 
             InvokeInteractionPhase(world, 11);
 
-            Assert.That(observations, Is.EqualTo(new[] { "character", "object" }));
+            Assert.That(observations, Is.EqualTo(new[] { "object" }));
             Assert.That(characterProbe.ObservedRngCalls, Is.EqualTo(0),
-                "character hit consume must run before the natural random-drop RNG gate");
+                "C14 character hit consume must not run again inside the later interaction phase");
+            Assert.That(
+                world.LastCharacterHitConsumeExecutedCountForDiagnostics,
+                Is.Zero,
+                "The later interaction phase must not own a second type-zero hit caller");
             Assert.That(objectProbe.ObservedRngCalls, Is.EqualTo(1),
                 "object hit consume must observe the random-drop gate side effect");
             Assert.That(world.Rng.CallCount, Is.EqualTo(1));

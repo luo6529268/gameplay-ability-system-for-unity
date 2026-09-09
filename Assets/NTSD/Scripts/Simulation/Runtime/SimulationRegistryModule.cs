@@ -175,6 +175,27 @@ namespace NTSD.Simulation
             return RuntimeSlots.GetRawRuntime(runtimeSlot);
         }
 
+        internal void ProjectNativeHitResourceGateToActiveEntities(bool enabled)
+        {
+            for (int runtimeSlot = 0;
+                 runtimeSlot < RuntimeSlots.LogicalCapacity;
+                 runtimeSlot++)
+            {
+                LF2Entity entity = RuntimeSlots.GetCurrentOccupant(runtimeSlot);
+                if (entity?.Runtime == null)
+                    continue;
+
+                entity.Runtime.InputLocalResourceEnabled49D034 = enabled;
+                NTSDEntityRuntime rawRuntime =
+                    RuntimeSlots.GetRawRuntime(runtimeSlot);
+                if (rawRuntime != null &&
+                    !ReferenceEquals(rawRuntime, entity.Runtime))
+                {
+                    rawRuntime.InputLocalResourceEnabled49D034 = enabled;
+                }
+            }
+        }
+
         internal bool TryGetCurrentRuntimeHandle(
             int runtimeSlot,
             LF2Entity expectedEntity,
@@ -668,6 +689,9 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            Ecs.BattleEntityLinkLifecycleWriter
+                .ClearReferencesToReleasedSlot(RuntimeSlots, slot);
+
             world.AiUnifiedRowPublisherForServices
                 .InvalidateAfterOccupancyChange();
             world.IdentityWriter.Release(releasedHandle);
@@ -876,6 +900,19 @@ namespace NTSD.Simulation
                     return;
                 }
 
+                bool hitResourceEnabled =
+                    world.Runtime?.FunctionKeys?.HitResourceEnabled ?? true;
+                registeredEntity.Runtime.InputLocalResourceEnabled49D034 =
+                    hitResourceEnabled;
+                NTSDEntityRuntime rawRuntime =
+                    RuntimeSlots.GetRawRuntime(runtimeSlot);
+                if (rawRuntime != null &&
+                    !ReferenceEquals(rawRuntime, registeredEntity.Runtime))
+                {
+                    rawRuntime.InputLocalResourceEnabled49D034 =
+                        hitResourceEnabled;
+                }
+
                 if (StructuralEventSink != null)
                 {
                     EmitStructuralEvent(
@@ -898,6 +935,14 @@ namespace NTSD.Simulation
                     addedEntity,
                     out RuntimeEntityHandle runtimeHandle))
             {
+                // Alignment contract: NTSD28-B2-AI-NATIVE-HISTORY-BIND-ORDER-001.
+                // The generation-owned input row must capture the native -1x5
+                // history initialized for this successful registration.
+                if (world.UsesNTSD28NativeInputPipeline)
+                {
+                    NTSD28NativeComboStateMachine
+                        .InitializeNativeHistory(addedEntity.Runtime);
+                }
                 world.CharacterInputWriter.Bind(
                     addedEntity.Runtime,
                     runtimeHandle);

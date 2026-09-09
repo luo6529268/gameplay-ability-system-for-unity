@@ -13,30 +13,34 @@ namespace NTSD.Simulation
         RuntimeMaintenance = 3,
         InputClear = 4,
         CharacterInput = 5,
-        EarlyFrameAdvance = 6,
-        FrameLogic = 7,
+        NativeTeleport = 6,
+        FrameMotion = 7,
         FrameAdvance = 8,
-        DeathCleanup = 9,
+        Revival = 9,
         StageBounds = 10,
         PreInteraction = 11,
-        HeldLinkValidation = 12,
-        HeldProcess = 13,
-        CollisionSnapshot = 14,
-        PairVRest = 15,
-        CandidateCollect = 16,
-        CharacterHitConsumePostInteraction = 17,
-        RandomWeaponDrop = 18,
-        ObjectHitConsume = 19,
-        CandidateConsumptionEnd = 20,
-        PreFrameBounds = 21,
-        Stage = 22,
-        RenderDispatch = 23,
-        FramePostProcess = 24,
-        LateEntityUpdate = 25,
-        RandomWeaponDropTail = 26,
-        EntityPostFrameTail = 27,
-        BattleResults = 28,
-        Count = 29,
+        HeldProcess = 12,
+        CollisionSnapshot = 13,
+        PairVRest = 14,
+        CandidateCollect = 15,
+        CharacterHitConsumePostInteraction = 16,
+        RandomWeaponDrop = 17,
+        ObjectHitConsume = 18,
+        CandidateConsumptionEnd = 19,
+        PreFrameBounds = 20,
+        Stage = 21,
+        RenderDispatch = 22,
+        FramePostProcess = 23,
+        LateEntityUpdate = 24,
+        RandomWeaponDropTail = 25,
+        EntityPostFrameTail = 26,
+        BattleResults = 27,
+        NativeSparkAdvance = 28,
+        NestedPhysics = 29,
+        ActiveWeaponCount = 30,
+        NativeResourceTick = 31,
+        NativeFrameTick = 32,
+        Count = 33,
     }
 
     internal enum BattleTickCompletion : byte
@@ -47,6 +51,8 @@ namespace NTSD.Simulation
 
     public sealed class BattleTickPhaseDiagnostics
     {
+        private const int PhaseSequenceCapacity = 64;
+
         private static class PhaseProfilerMarkers
         {
             internal static readonly ProfilerMarker[] All = Create();
@@ -65,8 +71,12 @@ namespace NTSD.Simulation
         }
 
         private readonly long[] elapsedTimestampTicks = new long[(int)BattleTickPhase.Count];
+        private readonly BattleTickPhase[] phaseSequence =
+            new BattleTickPhase[PhaseSequenceCapacity];
         private BattleTickPhase activePhase = BattleTickPhase.Count;
         private long activePhaseTimestamp;
+        private int phaseSequenceCount;
+        private bool phaseSequenceOverflowed;
 
         public static int PhaseCount => (int)BattleTickPhase.Count;
         public static long TimestampFrequency => Stopwatch.Frequency;
@@ -75,6 +85,8 @@ namespace NTSD.Simulation
         public bool HasActivePhaseForDiagnostics =>
             activePhase != BattleTickPhase.Count;
         public BattleTickPhase ActivePhaseForDiagnostics => activePhase;
+        public int LastPhaseSequenceCount => phaseSequenceCount;
+        public bool LastPhaseSequenceOverflowed => phaseSequenceOverflowed;
 
         internal static void PrepareProfilerMarkers()
         {
@@ -89,6 +101,8 @@ namespace NTSD.Simulation
             activePhase = BattleTickPhase.Count;
             activePhaseTimestamp = 0;
             LastTickIndex = -1;
+            phaseSequenceCount = 0;
+            phaseSequenceOverflowed = false;
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
         }
 
@@ -100,6 +114,8 @@ namespace NTSD.Simulation
             EndActivePhase();
             Array.Clear(elapsedTimestampTicks, 0, elapsedTimestampTicks.Length);
             LastTickIndex = tickIndex;
+            phaseSequenceCount = 0;
+            phaseSequenceOverflowed = false;
         }
 
         public void BeginPhase(BattleTickPhase phase)
@@ -108,6 +124,14 @@ namespace NTSD.Simulation
                 return;
 
             EndActivePhase();
+            if (phaseSequenceCount < phaseSequence.Length)
+            {
+                phaseSequence[phaseSequenceCount++] = phase;
+            }
+            else
+            {
+                phaseSequenceOverflowed = true;
+            }
             activePhase = phase;
             activePhaseTimestamp = Stopwatch.GetTimestamp();
             PhaseProfilerMarkers.All[(int)phase].Begin();
@@ -144,6 +168,20 @@ namespace NTSD.Simulation
             return sum;
         }
 
+        public bool TryGetLastPhaseAt(
+            int index,
+            out BattleTickPhase phase)
+        {
+            if ((uint)index >= (uint)phaseSequenceCount)
+            {
+                phase = BattleTickPhase.Count;
+                return false;
+            }
+
+            phase = phaseSequence[index];
+            return true;
+        }
+
         public static string GetPhaseName(BattleTickPhase phase)
         {
             switch (phase)
@@ -154,13 +192,12 @@ namespace NTSD.Simulation
                 case BattleTickPhase.RuntimeMaintenance: return "RuntimeMaintenance";
                 case BattleTickPhase.InputClear: return "InputClear";
                 case BattleTickPhase.CharacterInput: return "CharacterInput";
-                case BattleTickPhase.EarlyFrameAdvance: return "EarlyFrameAdvance";
-                case BattleTickPhase.FrameLogic: return "FrameLogic";
+                case BattleTickPhase.NativeTeleport: return "NativeTeleport";
+                case BattleTickPhase.FrameMotion: return "FrameMotion";
                 case BattleTickPhase.FrameAdvance: return "FrameAdvance";
-                case BattleTickPhase.DeathCleanup: return "DeathCleanup";
+                case BattleTickPhase.Revival: return "Revival";
                 case BattleTickPhase.StageBounds: return "StageBounds";
                 case BattleTickPhase.PreInteraction: return "PreInteraction";
-                case BattleTickPhase.HeldLinkValidation: return "HeldLinkValidation";
                 case BattleTickPhase.HeldProcess: return "HeldProcess";
                 case BattleTickPhase.CollisionSnapshot: return "CollisionSnapshot";
                 case BattleTickPhase.PairVRest: return "PairVRest";
@@ -178,6 +215,11 @@ namespace NTSD.Simulation
                 case BattleTickPhase.RandomWeaponDropTail: return "RandomWeaponDropTail";
                 case BattleTickPhase.EntityPostFrameTail: return "EntityPostFrameTail";
                 case BattleTickPhase.BattleResults: return "BattleResults";
+                case BattleTickPhase.NativeSparkAdvance: return "NativeSparkAdvance";
+                case BattleTickPhase.NestedPhysics: return "NestedPhysics";
+                case BattleTickPhase.ActiveWeaponCount: return "ActiveWeaponCount";
+                case BattleTickPhase.NativeResourceTick: return "NativeResourceTick";
+                case BattleTickPhase.NativeFrameTick: return "NativeFrameTick";
                 default: return string.Empty;
             }
         }
@@ -198,8 +240,9 @@ namespace NTSD.Simulation
 
     /// <summary>
     /// Unity NTSD 战斗 tick 调度器。
-    /// pass 顺序以 C++ Release live game_tick(...) 为 authority；实体专属行为保留在
-    /// LF2Entity 子类中，本类只负责集中维护这些 pass 的执行时机。
+    /// 目标顺序以 NTSD 2.8-Logan playable 的 GameSession28::step() 和
+    /// SimulationTickDriver28::step(...) 为 authority。当前生产调度仍在 B3 迁移中；
+    /// <see cref="NTSD28BattlePassOrder"/> 只定义 expected contract，不表示本类已经对齐。
     /// </summary>
     public sealed class NTSDBattleTickSystem
     {
@@ -270,26 +313,31 @@ namespace NTSD.Simulation
                 world.PendingSounds.Clear();
                 world.AdvanceBattleFlowTick(tickIndex);
                 diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
+                diagnostics?.BeginPhase(BattleTickPhase.NativeSparkAdvance);
+                AdvanceNativeSparks();
+                diagnostics?.EndPhase(BattleTickPhase.NativeSparkAdvance);
                 // Alignment contract: CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001.
                 // C++ runs the complete world tick before processing Results host input.
                 bool resultsActiveAtTickStart =
                     world.Runtime?.Results?.IsActive == true;
 
-                diagnostics?.BeginPhase(BattleTickPhase.Cooldown);
-                TickCooldowns(tickIndex);
-                diagnostics?.EndPhase(BattleTickPhase.Cooldown);
                 bool stepWaitGate = PrepareBattleStepGateForTick();
                 if (!resultsActiveAtTickStart &&
                     (!stepWaitGate || world.NeedClearInput))
                 {
                     diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
-                    PostCooldownHumanInput(tickIndex);
+                    PollHumanInput(tickIndex);
                     diagnostics?.EndPhase(BattleTickPhase.HumanInput);
                 }
-
+                if (!stepWaitGate &&
+                    (resultsActiveAtTickStart || !world.NeedClearInput))
+                {
+                    diagnostics?.BeginPhase(BattleTickPhase.CharacterInput);
+                    NativeProducerSampleAndInputRoute(tickIndex);
+                    diagnostics?.EndPhase(BattleTickPhase.CharacterInput);
+                }
                 if (!RunFrameAdvancePhase(
                         tickIndex,
-                        stepWaitGate,
                         diagnostics,
                         allowBattleEntryInputClear: !resultsActiveAtTickStart))
                 {
@@ -320,15 +368,11 @@ namespace NTSD.Simulation
 
         private bool RunFrameAdvancePhase(
             int tickIndex,
-            bool stepWaitGate,
             BattleTickPhaseDiagnostics diagnostics,
             bool allowBattleEntryInputClear)
         {
             if (allowBattleEntryInputClear && world.NeedClearInput)
             {
-                diagnostics?.BeginPhase(BattleTickPhase.RuntimeMaintenance);
-                Oid5152RuntimeMaintenance(tickIndex);
-                diagnostics?.EndPhase(BattleTickPhase.RuntimeMaintenance);
                 diagnostics?.BeginPhase(BattleTickPhase.InputClear);
                 world.SetNeedClearInput(false);
                 world.ClearBattleEntryInputAll();
@@ -336,29 +380,18 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            if (!stepWaitGate)
-            {
-                diagnostics?.BeginPhase(BattleTickPhase.CharacterInput);
-                CharacterInput(tickIndex);
-                diagnostics?.EndPhase(BattleTickPhase.CharacterInput);
-            }
-
-            diagnostics?.BeginPhase(BattleTickPhase.RuntimeMaintenance);
-            Oid5152RuntimeMaintenance(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.RuntimeMaintenance);
-
-            diagnostics?.BeginPhase(BattleTickPhase.EarlyFrameAdvance);
-            EarlyFrameAdvanceSpecials(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.EarlyFrameAdvance);
-            diagnostics?.BeginPhase(BattleTickPhase.FrameLogic);
-            FrameLogicBeforeAdvance(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.FrameLogic);
-            diagnostics?.BeginPhase(BattleTickPhase.FrameAdvance);
-            FrameAdvanceAll(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.FrameAdvance);
-            diagnostics?.BeginPhase(BattleTickPhase.DeathCleanup);
-            PostFrameAdvanceDeathCleanup(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.DeathCleanup);
+            diagnostics?.BeginPhase(BattleTickPhase.FrameMotion);
+            NativeFrameMotion();
+            diagnostics?.EndPhase(BattleTickPhase.FrameMotion);
+            diagnostics?.BeginPhase(BattleTickPhase.NativeTeleport);
+            NativeTeleport();
+            diagnostics?.EndPhase(BattleTickPhase.NativeTeleport);
+            diagnostics?.BeginPhase(BattleTickPhase.NestedPhysics);
+            NativePhysicsAndDeadCharacterResourceNormalize(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.NestedPhysics);
+            diagnostics?.BeginPhase(BattleTickPhase.Revival);
+            RunRevival(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.Revival);
             diagnostics?.BeginPhase(BattleTickPhase.StageBounds);
             ClampCharacterZToStageBounds();
             diagnostics?.EndPhase(BattleTickPhase.StageBounds);
@@ -368,16 +401,27 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleTickPhase.HeldProcess);
             ProcessNegativeHeldObjectsFirstPass(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.HeldProcess);
-
             diagnostics?.BeginPhase(BattleTickPhase.CollisionSnapshot);
-            CaptureCollisionFrameSnapshots();
+            CaptureCollisionActionSnapshotsOnly();
             diagnostics?.EndPhase(BattleTickPhase.CollisionSnapshot);
+            PrepareAttackerRestForCandidate();
             diagnostics?.BeginPhase(BattleTickPhase.PairVRest);
             TickCollisionPairVRest();
             diagnostics?.EndPhase(BattleTickPhase.PairVRest);
             diagnostics?.BeginPhase(BattleTickPhase.CandidateCollect);
             CollectCollisionCandidates();
             diagnostics?.EndPhase(BattleTickPhase.CandidateCollect);
+            diagnostics?.BeginPhase(BattleTickPhase.RuntimeMaintenance);
+            Oid5152FusionScan(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.RuntimeMaintenance);
+            diagnostics?.BeginPhase(BattleTickPhase.ActiveWeaponCount);
+            CaptureActiveWeaponObjectCountBeforeHits(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.ActiveWeaponCount);
+            diagnostics?.BeginPhase(
+                BattleTickPhase.CharacterHitConsumePostInteraction);
+            ResolvePostInteractions(tickIndex);
+            diagnostics?.EndPhase(
+                BattleTickPhase.CharacterHitConsumePostInteraction);
             return true;
         }
 
@@ -385,9 +429,6 @@ namespace NTSD.Simulation
             int tickIndex,
             BattleTickPhaseDiagnostics diagnostics)
         {
-            diagnostics?.BeginPhase(BattleTickPhase.CharacterHitConsumePostInteraction);
-            ResolvePostInteractions(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.CharacterHitConsumePostInteraction);
             diagnostics?.BeginPhase(BattleTickPhase.RandomWeaponDrop);
             RandomWeaponDrop(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.RandomWeaponDrop);
@@ -403,15 +444,31 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleTickPhase.PreInteraction);
             ResolveCpointAndWeaponSync(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.PreInteraction);
-            diagnostics?.BeginPhase(BattleTickPhase.HeldLinkValidation);
-            ValidatePositiveHeldLinks(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.HeldLinkValidation);
             diagnostics?.BeginPhase(BattleTickPhase.StageBounds);
             ClampCharacterZToStageBounds();
             diagnostics?.EndPhase(BattleTickPhase.StageBounds);
             diagnostics?.BeginPhase(BattleTickPhase.HeldProcess);
             ProcessNegativeHeldObjectsSecondPass(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.HeldProcess);
+
+            // Alignment contract: NTSD28-B3-C21-C22-PLACEMENT-001.
+            // Keep the existing boundary and impulse algorithms intact while restoring
+            // their authority order before C23/C24 and the C25 production entry.
+            diagnostics?.BeginPhase(BattleTickPhase.PreFrameBounds);
+            PreFrameBounds();
+            diagnostics?.EndPhase(BattleTickPhase.PreFrameBounds);
+            diagnostics?.BeginPhase(BattleTickPhase.FramePostProcess);
+            FramePostProcess();
+            diagnostics?.EndPhase(BattleTickPhase.FramePostProcess);
+
+            // Alignment contract: NTSD28-B3-C23-C24-WORLD-CLOCK-001.
+            diagnostics?.BeginPhase(BattleTickPhase.NativeResourceTick);
+            world.BeginNativeResourceTick();
+            diagnostics?.EndPhase(BattleTickPhase.NativeResourceTick);
+            diagnostics?.BeginPhase(BattleTickPhase.NativeFrameTick);
+            world.BeginNativeFrameTick();
+            diagnostics?.EndPhase(BattleTickPhase.NativeFrameTick);
+
         }
 
         private bool RunPresentationAndCleanupPhase(
@@ -423,23 +480,40 @@ namespace NTSD.Simulation
             bool resultsActiveAtTickStart,
             FrameInputSet frameInput)
         {
-            diagnostics?.BeginPhase(BattleTickPhase.PreFrameBounds);
-            PreFrameBounds();
-            diagnostics?.EndPhase(BattleTickPhase.PreFrameBounds);
-            diagnostics?.BeginPhase(BattleTickPhase.Stage);
-            CurrentWaveStage(tickIndex);
-            diagnostics?.EndPhase(BattleTickPhase.Stage);
-            diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
-            RenderDispatch(tickIndex, buildPresentation, simulationWorker);
-            diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
             if (stepWaitGate)
+            {
+                // This legacy step-wait route is intentionally preserved by the C25
+                // placement package. Its native Host ownership remains a later audit.
+                diagnostics?.BeginPhase(BattleTickPhase.FrameAdvance);
+                FrameAdvanceAll(tickIndex);
+                diagnostics?.EndPhase(BattleTickPhase.FrameAdvance);
+                diagnostics?.BeginPhase(BattleTickPhase.Stage);
+                CurrentWaveStage(tickIndex);
+                diagnostics?.EndPhase(BattleTickPhase.Stage);
+                diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
+                RenderDispatch(tickIndex, buildPresentation, simulationWorker);
+                diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
                 return false;
-            diagnostics?.BeginPhase(BattleTickPhase.FramePostProcess);
-            FramePostProcess();
-            diagnostics?.EndPhase(BattleTickPhase.FramePostProcess);
+            }
+
+            // Alignment contract: NTSD28-B3-C25-NESTED-TAIL-SKELETON-001.
+            // C25 is the first normal-path phase after C24. The existing live-slot
+            // loop is now its only production entry; C25a-p behavior is migrated by
+            // subsequent packages rather than by retaining split global scans here.
             diagnostics?.BeginPhase(BattleTickPhase.LateEntityUpdate);
             LateEntityUpdate(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.LateEntityUpdate);
+            ExpireNativeComboEntries();
+
+            // The surviving old type-3/state9998 serial body has no proven C25 slot
+            // owner yet. Keep it visible and strictly after the C25 skeleton until its
+            // current-authority behavior is either rehomed or removed.
+            diagnostics?.BeginPhase(BattleTickPhase.FrameAdvance);
+            FrameAdvanceAll(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.FrameAdvance);
+            diagnostics?.BeginPhase(BattleTickPhase.Stage);
+            CurrentWaveStage(tickIndex);
+            diagnostics?.EndPhase(BattleTickPhase.Stage);
             diagnostics?.BeginPhase(BattleTickPhase.RandomWeaponDropTail);
             Mode2RandomWeaponDropTail(tickIndex);
             diagnostics?.EndPhase(BattleTickPhase.RandomWeaponDropTail);
@@ -452,12 +526,21 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
             BattleResultsFlow(resultsActiveAtTickStart, frameInput);
             diagnostics?.EndPhase(BattleTickPhase.BattleResults);
+            diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
+            RenderDispatch(tickIndex, buildPresentation, simulationWorker);
+            diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
             return true;
         }
 
-        private void TickCooldowns(int tickIndex)
+        private void AdvanceNativeSparks()
         {
-            world.RunBattleEcsCooldownPass(tickIndex);
+            world.AdvanceNativeSparkLifecycleAll();
+        }
+
+        private void ExpireNativeComboEntries()
+        {
+            // Alignment contract: NTSD28-B5-NATIVE-COMBO-EXPIRY-001.
+            BattleNativeComboExpiryModule.Expire(world);
         }
 
         private bool PrepareBattleStepGateForTick()
@@ -476,16 +559,16 @@ namespace NTSD.Simulation
             return flow.BattleStepMode == 1 && flow.BattleStepGate != 1;
         }
 
-        private void PostCooldownHumanInput(int tickIndex)
+        private void PollHumanInput(int tickIndex)
         {
             world.PostCooldownHumanInputAll(tickIndex);
             if (world.Runtime?.Flow != null)
                 world.Runtime.Flow.HumanInputPolledExternally = true;
         }
 
-        private void CharacterInput(int tickIndex)
+        private void NativeProducerSampleAndInputRoute(int tickIndex)
         {
-            world.CharacterInputAll(tickIndex);
+            world.NativeProducerSampleAndInputRouteAll(tickIndex);
         }
 
         private void ProcessNegativeHeldObjectsFirstPass(int tickIndex)
@@ -498,14 +581,19 @@ namespace NTSD.Simulation
             world.HeldObjectProcessAll(tickIndex);
         }
 
-        private void Oid5152RuntimeMaintenance(int tickIndex)
+        private void Oid5152FusionScan(int tickIndex)
         {
-            world.Oid5152RuntimeMaintenanceAll(tickIndex);
+            world.Oid5152FusionScanAll(tickIndex);
         }
 
-        private void CaptureCollisionFrameSnapshots()
+        private void CaptureCollisionActionSnapshotsOnly()
         {
-            world.CaptureCollisionFrameSnapshotsAll();
+            world.CaptureCollisionActionSnapshotsOnlyAll();
+        }
+
+        private void PrepareAttackerRestForCandidate()
+        {
+            world.PrepareAttackerRestForCandidateAll();
         }
 
         private void CollectCollisionCandidates()
@@ -523,14 +611,9 @@ namespace NTSD.Simulation
             world.EndCollisionCandidateConsumption();
         }
 
-        private void FrameLogicBeforeAdvance(int tickIndex)
+        private void NativeTeleport()
         {
-            world.FrameLogicBeforeAdvanceAll(tickIndex);
-        }
-
-        private void EarlyFrameAdvanceSpecials(int tickIndex)
-        {
-            world.EarlyFrameAdvanceSpecialsAll(tickIndex);
+            world.NativeTeleportAll();
         }
 
         private void ResolveCpointAndWeaponSync(int tickIndex)
@@ -540,10 +623,23 @@ namespace NTSD.Simulation
 
         private void FrameAdvanceAll(int tickIndex)
         {
-            world.SerialTickAll(tickIndex);
+            world.SerialTickAll(
+                tickIndex,
+                nativeFrameMotionAlreadyApplied: true,
+                nativePhysicsAlreadyApplied: true);
         }
 
-        private void PostFrameAdvanceDeathCleanup(int tickIndex)
+        private void NativeFrameMotion()
+        {
+            world.NativeFrameMotionAll();
+        }
+
+        private void NativePhysicsAndDeadCharacterResourceNormalize(int tickIndex)
+        {
+            world.NativePhysicsAndDeadCharacterResourceNormalizeAll(tickIndex);
+        }
+
+        private void RunRevival(int tickIndex)
         {
             world.PostFrameAdvanceDeathCleanupAll(tickIndex);
         }
@@ -551,6 +647,11 @@ namespace NTSD.Simulation
         private void RandomWeaponDrop(int tickIndex)
         {
             world.RandomWeaponDropTickAll(tickIndex);
+        }
+
+        private void CaptureActiveWeaponObjectCountBeforeHits(int tickIndex)
+        {
+            world.CaptureActiveWeaponObjectCountBeforeHits(tickIndex);
         }
 
         private void ResolvePostInteractions(int tickIndex)
@@ -561,11 +662,6 @@ namespace NTSD.Simulation
         private void ResolveObjectInteractions(int tickIndex)
         {
             world.ObjectInteractionTickAll(tickIndex);
-        }
-
-        private void ValidatePositiveHeldLinks(int tickIndex)
-        {
-            world.ValidateHeldLinksAll(tickIndex);
         }
 
         private void ClampCharacterZToStageBounds()
@@ -591,29 +687,14 @@ namespace NTSD.Simulation
             if (simulationWorker)
             {
                 if (buildPresentation)
-                {
                     world.CaptureSimulationWorkerPresentationFrame(tickIndex);
-                    world.BattlePresentation.FinalizePublishedHitRecordCycle(world);
-                }
-                else
-                {
-                    world.BattlePresentation.AdvanceHitRecordsWithoutPublication(
-                        world,
-                        tickIndex);
-                }
                 return;
             }
 
-            bool publishesPresentation =
-                buildPresentation ||
-                world.BattlePresentation.Mode != BattlePresentationBackendMode.CentralOnly;
             world.RenderDispatchAll(tickIndex, buildPresentation);
-            // Alignment contract: R6-PRES-005. C++ applies spark age/tail
-            // writeback inside the render pass before FramePostProcess.
-            if (publishesPresentation)
-                world.BattlePresentation.FinalizePublishedHitRecordCycle(world);
-            else
-                world.BattlePresentation.AdvanceHitRecordsWithoutPublication(world, tickIndex);
+            // Alignment contract: NTSD28-B3-NATIVE-SPARK-C01-INTEGRATION-001.
+            // RenderDispatch only freezes/publishes. Logical native spark age and
+            // tail ownership now runs once at C01, before any current-tick hit.
         }
 
         private void PreFrameBounds()

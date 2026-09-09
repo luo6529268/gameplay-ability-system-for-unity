@@ -100,6 +100,10 @@ namespace NTSD.Test.Editor
                 return;
             }
 
+            string requestPath = ProjectPath(RequestRelativePath);
+            if (!File.Exists(requestPath))
+                return;
+
             if (EditorApplication.isPaused)
             {
                 EditorApplication.isPaused = false;
@@ -116,10 +120,6 @@ namespace NTSD.Test.Editor
                 return;
             }
             if (currentDriver.CurrentTickIndex < 5)
-                return;
-
-            string requestPath = ProjectPath(RequestRelativePath);
-            if (!File.Exists(requestPath))
                 return;
 
             File.Delete(requestPath);
@@ -466,13 +466,13 @@ namespace NTSD.Test.Editor
                 $"expected={report.afterFixtureObjectCount - 1}.");
             Require(self.Runtime.Unk328 == 1 && self.Runtime.Unk32C == report.partnerSlot &&
                     self.Runtime.Unk330 == SelfOid && self.Runtime.Unk334 == PartnerOid &&
-                    self.Runtime.Unk338 == 4500 && self.Health.PP == 500,
+                    self.Runtime.Unk338 == 4499 && self.Health.PP == 500,
                 "Merged identity metadata/cooldown/PP does not match C++.");
             Require(self.Health.HP == 150 && self.Health.HPBound == 190 &&
-                    self.Runtime.XInt == FixtureX + 10 &&
-                    self.Runtime.ZInt == fixtureZ + 2 + FixtureSelfVz &&
+                    self.Runtime.XInt == FixtureX + 29 &&
+                    self.Runtime.ZInt == fixtureZ + 2 &&
                     Math.Abs(self.Runtime.Vz) < 0.0001,
-                "Merged HP/HPBound/midpoint plus same-tick C++ physics does not match.");
+                "Post-physics C12 merge HP/HPBound/midpoint does not match the promoted authority.");
             Require(Math.Abs(self.Runtime.Vx) < 0.0001 && Math.Abs(partner.Runtime.Vy) < 0.0001,
                 "Merge did not clear self.vx and partner.vy.");
             Require(world.TryResolveRuntimeHandleForDiagnostics(selfHandle, out LF2Entity resolvedSelf) &&
@@ -510,7 +510,7 @@ namespace NTSD.Test.Editor
                 return;
             }
 
-            report.releaseMode = "cooldown-4500";
+            report.releaseMode = "cooldown-4499";
             phase = ProbePhase.WaitingForCooldownDrain;
         }
 
@@ -552,21 +552,11 @@ namespace NTSD.Test.Editor
                 Require(cooldownBefore > 0,
                     $"Merged cooldown reached an invalid pre-maintenance value: {cooldownBefore}.");
 
-                if (cooldownBefore == 1)
-                {
-                    report.preSplitObjectCount = world.ObjectCount;
-                    report.preSplitClaimedSlots = world.ClaimedRuntimeSlotCountForDiagnostics;
-                    report.preSplitSelf = CaptureState("pre-split-self", self);
-                    report.preSplitPartner = CaptureState("pre-split-partner", partner);
-                    structuralBeforeSplit = world.StructuralWriterDiagnosticsForDiagnostics;
-                }
-
                 expectedTick = driver.CurrentTickIndex + 1;
-                bool buildPresentation = cooldownBefore == 1;
                 bool accepted = driver.StepOneTick(
                     FrameInputSet.Empty(expectedTick),
                     ignorePaused: true,
-                    buildPresentation: buildPresentation);
+                    buildPresentation: false);
                 Require(accepted, "Production driver rejected an R08 cooldown-drain tick.");
                 cooldownTicksAdvanced++;
 
@@ -578,10 +568,17 @@ namespace NTSD.Test.Editor
                     continue;
                 }
 
+                Require(self.ObjectId == MergedOid && partner.Runtime.OidMergeDormant &&
+                        self.Runtime.Unk338 == 0,
+                    "C25h timer-zero tick must not let the earlier C12 fusion scan split.");
+                report.preSplitObjectCount = world.ObjectCount;
+                report.preSplitClaimedSlots = world.ClaimedRuntimeSlotCountForDiagnostics;
+                report.preSplitSelf = CaptureState("pre-split-self", self);
+                report.preSplitPartner = CaptureState("pre-split-partner", partner);
+                structuralBeforeSplit = world.StructuralWriterDiagnosticsForDiagnostics;
                 report.cooldownTicksAdvanced = cooldownTicksAdvanced;
                 report.cooldownReleasePassed = true;
-                completionEditorUpdate = editorUpdates;
-                phase = ProbePhase.WaitingForSplitTick;
+                ScheduleTick(ProbePhase.WaitingForSplitTick, true);
                 return;
             }
         }
@@ -611,8 +608,8 @@ namespace NTSD.Test.Editor
                 $"partnerDormant={partner.Runtime.OidMergeDormant}.");
             Require(self.Runtime.SlotIndex == report.selfSlot &&
                     partner.Runtime.SlotIndex == report.partnerSlot &&
-                    self.Runtime.Unk338 == 900,
-                "Split changed original slots or missed self cooldown900.");
+                    self.Runtime.Unk338 == 899,
+                "Split changed original slots or missed same-tick C25h cooldown899.");
             Require(world.ObjectCount == report.preSplitObjectCount + 1 &&
                     world.ClaimedRuntimeSlotCountForDiagnostics == report.preSplitClaimedSlots,
                 "Split did not restore exactly one dormant object while preserving claimed slots: " +
@@ -631,8 +628,8 @@ namespace NTSD.Test.Editor
                     partner.Health.HP == expectedSplitHp &&
                     self.Health.HPBound == expectedSplitHpBound &&
                     partner.Health.HPBound == expectedSplitHpBound &&
-                    self.Health.PP == 0 && partner.Health.PP == 0,
-                "Split tick-end frame/current-half-health/PP mismatch: " +
+                    self.Health.PP == 5 && partner.Health.PP == 5,
+                "C12 split followed by the same-tick C25 resource/frame tail mismatch: " +
                 $"frames={self.Frame.N}/{partner.Frame.N}, " +
                 $"states={self.Frame.D?.state}/{partner.Frame.D?.state}, " +
                 $"hp={self.Health.HP}/{partner.Health.HP} expected={expectedSplitHp}, " +

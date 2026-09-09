@@ -119,6 +119,25 @@ namespace NTSD.Simulation.Ecs
             return true;
         }
 
+        internal bool SynchronizeCanonicalStateFromRuntime(
+            NTSDEntityRuntime runtime)
+        {
+            if (!TryResolve(runtime, out int slot))
+                return false;
+
+            ref AiDecisionInputState current = ref inputs[slot];
+            bool previousHistoryGate = current.History0 != 0;
+            int previousCachedTargetSlot = current.Unk360;
+            int previousCoordinateTargetX = current.Unk3FC;
+            inputs[slot] = Capture(runtime);
+            PublishAiProjectionIfChanged(
+                slot,
+                previousHistoryGate,
+                previousCachedTargetSlot,
+                previousCoordinateTargetX);
+            return true;
+        }
+
         internal bool CanEvaluateCanonicalDecision(NTSDEntityRuntime runtime)
         {
             return TryResolve(runtime, out _);

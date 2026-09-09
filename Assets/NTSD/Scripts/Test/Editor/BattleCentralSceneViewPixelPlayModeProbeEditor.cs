@@ -12,8 +12,9 @@ using UnityEngine.Rendering.Universal;
 namespace NTSD.Test.Editor
 {
     /// <summary>
-    /// Captures isolated central pixels through Unity's real Play Mode SceneView camera.
-    /// Alignment contract: R8-SPRITEMAP-007.
+    /// Verifies that Unity's real Play Mode SceneView camera cannot receive central pixels
+    /// which have no per-object Hierarchy representation.
+    /// Alignment contract: BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001.
     /// </summary>
     public static class BattleCentralSceneViewPixelPlayModeProbeEditor
     {
@@ -35,7 +36,7 @@ namespace NTSD.Test.Editor
         private static bool previousPaused;
         private static bool running;
 
-        [MenuItem("NTSD/Battle Diagnostics/R8/Run SceneView Central Pixel Play Probe")]
+        [MenuItem("NTSD/Battle Diagnostics/R8/Run SceneView Central Isolation Play Probe")]
         public static void RunFromMenu()
         {
             StopObservation();
@@ -96,7 +97,7 @@ namespace NTSD.Test.Editor
             editorUpdates++;
             if (editorUpdates > ReadyTimeoutEditorUpdates)
             {
-                FinishFailure("Timed out waiting for a current central SceneView submission.");
+                FinishFailure("Timed out waiting for a current central world-camera submission.");
                 return;
             }
             if (driver.DedicatedSimulationWorkerFailureForDiagnostics != null)
@@ -182,7 +183,7 @@ namespace NTSD.Test.Editor
             report.firstDifference = ClassifyFirstDifference();
             report.status = report.firstDifference == "NO_DIAGNOSTIC_DIFFERENCE" ? "PASS" : "FAIL";
             report.message =
-                $"SceneView central pixels={report.nonClearPixelCount}; " +
+                $"SceneView isolated non-clear pixels={report.nonClearPixelCount}; " +
                 $"gate={report.sceneCameraGateAccepted}; lease={report.sceneSubmissionLeaseAccepted}; " +
                 $"firstDifference={report.firstDifference}.";
             CleanupAndFinish();
@@ -278,17 +279,17 @@ namespace NTSD.Test.Editor
             {
                 return "CENTRAL_PLAN_NOT_CURRENT";
             }
-            if (!report.sceneCameraGateAccepted)
-                return "SCENEVIEW_CAMERA_GATE_REJECTED";
-            if (!report.sceneSubmissionLeaseAccepted)
-                return "SCENEVIEW_SUBMISSION_LEASE_REJECTED";
+            if (report.sceneCameraGateAccepted)
+                return "SCENEVIEW_CAMERA_GATE_ACCEPTED";
+            if (report.sceneSubmissionLeaseAccepted)
+                return "SCENEVIEW_SUBMISSION_LEASE_ACCEPTED";
             if (report.sourceCommandCount <= 0 || report.resolvedCommandCount <= 0 ||
-                report.segmentCount <= 0 || report.leaseSegmentCount <= 0)
+                report.segmentCount <= 0)
             {
                 return "CENTRAL_SUBMISSION_EMPTY";
             }
-            if (report.nonClearPixelCount <= 0)
-                return "SCENEVIEW_CENTRAL_PIXELS_EMPTY";
+            if (report.nonClearPixelCount != 0)
+                return "SCENEVIEW_UNOWNED_PIXELS_VISIBLE";
             return "NO_DIAGNOSTIC_DIFFERENCE";
         }
 
@@ -313,8 +314,8 @@ namespace NTSD.Test.Editor
             if (report.status == "PASS")
             {
                 Debug.Log(
-                    $"[BattleCentralSceneViewPixelProbe] PASS: pixels={report.nonClearPixelCount}, " +
-                    $"commands={report.resolvedCommandCount}, segments={report.segmentCount}.");
+                    $"[BattleCentralSceneViewPixelProbe] PASS: SceneView isolated; " +
+                    $"world commands={report.resolvedCommandCount}, segments={report.segmentCount}.");
             }
             else
             {

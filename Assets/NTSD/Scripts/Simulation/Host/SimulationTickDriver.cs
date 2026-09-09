@@ -10,6 +10,7 @@ using NTSD.Simulation.Presentation;
 using NTSD.Tools;
 using Unity.Profiling;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace NTSD.Simulation
 {
@@ -22,7 +23,7 @@ namespace NTSD.Simulation
 
     /// <summary>
     /// 战斗逻辑帧配置。
-    /// 逻辑帧长度固定使用 SimulationConstants.SIM_DT；这里的配置只决定外层驱动、追帧和联机预留策略。
+    /// LocalFreeRun普通Host使用精确33ms；Manual/Lockstep只由显式frame推进。
     /// </summary>
     [System.Serializable]
     public sealed class LockstepSimulationSettings
@@ -35,10 +36,10 @@ namespace NTSD.Simulation
         [Tooltip("使用 unscaledDeltaTime 驱动外层逻辑时钟，避免 Time.timeScale 影响帧同步规则。")]
         public bool useUnscaledTime = true;
 
-        [Tooltip("显式追帧或吞吐诊断的单帧逻辑预算。普通 LocalFreeRun 始终每个 Unity Update 最多自动执行 1 tick。")]
+        [Tooltip("显式追帧或吞吐诊断的单帧逻辑预算。普通LocalFreeRun每个Unity Update最多排空2个active intervals。")]
         public int maxCatchUpTicksPerFrame = DefaultMaxTicksPerFrame;
 
-        [Tooltip("最多保留多少个逻辑帧的时间积压，超过后丢弃外层积压但不改变单个逻辑帧步长。")]
+        [Tooltip("显式追帧/worker诊断积压预算。普通LocalFreeRun wall-clock debt固定最多2个当前cadence interval，且每Update最多执行2tick。")]
         public int maxBacklogTicks = 8;
 
         [Tooltip("联机帧同步预留：本地输入写入未来第 N 帧。当前单机可保持 0。")]
@@ -170,7 +171,7 @@ namespace NTSD.Simulation
 
     /// <summary>
     /// 战斗场景模拟时钟。
-    /// 负责固定 30Hz 逻辑 tick，并把 C# 权威工程的 pass 顺序交给 NTSDBattleTickSystem。
+    /// 负责NTSD 2.8 Host cadence逻辑tick，并把pass顺序交给NTSDBattleTickSystem。
     /// Unity 的 Update/LateUpdate 只作为外层驱动和表现刷新；战斗逻辑内部不能依赖 deltaTime。
     /// </summary>
     public class SimulationTickDriver : SingletonBehaviour<SimulationTickDriver>
@@ -183,8 +184,8 @@ namespace NTSD.Simulation
             new ProfilerMarker("NTSD.BattlePresentation.DispatchSounds");
         private static readonly ProfilerMarker LegacySparkMarker =
             new ProfilerMarker("NTSD.BattlePresentation.LegacySparkMaterializer");
-        private static readonly ProfilerMarker FinalizeHitRecordMarker =
-            new ProfilerMarker("NTSD.BattlePresentation.FinalizeHitRecordCycle");
+        private static readonly ProfilerMarker AcknowledgeHitRecordMarker =
+            new ProfilerMarker("NTSD.BattlePresentation.AcknowledgeHitRecordCycle");
 
         [Tooltip("记录每个模拟 tick 的开始和结束。")]
         [SerializeField] private bool debugLogPerTick = false;
@@ -210,6 +211,8 @@ namespace NTSD.Simulation
             BattleRuntimeShutdownStage.None;
         [SerializeField][MMReadOnly] private float renderAlpha = 0f;
         [SerializeField][MMReadOnly] private int backlogTickCount = 0;
+        [SerializeField][MMReadOnly] private bool fastMode = false;
+        [SerializeField][MMReadOnly] private bool hostSingleStepPending = false;
         [SerializeField][MMReadOnly] private string lastFrameChecksum = string.Empty;
         [SerializeField][MMReadOnly] private string effectiveAiExecutionProfile =
             nameof(BattleAiExecutionProfile.LegacyCanonical);
@@ -247,6 +250,13 @@ namespace NTSD.Simulation
             FrameInputSetPreallocation.CreateReusable();
         private readonly BattleFunctionKeyInputLatch _battleFunctionKeyInputLatch =
             new BattleFunctionKeyInputLatch();
+        private readonly NTSD28NativeFunctionKeyPhysicalLatch
+            _nativeFunctionKeyPhysicalLatch =
+                new NTSD28NativeFunctionKeyPhysicalLatch();
+        private readonly SimulationHostControlPhysicalEdgeLatch
+            _hostControlPhysicalEdgeLatch =
+                new SimulationHostControlPhysicalEdgeLatch();
+        private SimulationHostControlCommand _pendingHostControlCommands;
         private ISimulationFrameInputProvider _frameInputProvider;
         private FrameInputSet _lastAppliedFrameInput;
         private BattleParityFrameSnapshot _lastFrameSnapshot;
@@ -290,6 +300,26 @@ namespace NTSD.Simulation
         private bool _simulationWorkerFailureReported;
         private string _dedicatedSimulationWorkerIneligibilityReason = string.Empty;
         private string _dedicatedSimulationWorkerLastSubmissionFailureReason = string.Empty;
+        private string _hostControlLastFailureReason = string.Empty;
+        private long _hostControlPhysicalSampleCount;
+        private int _hostControlPhysicalKeyboardDeviceId = -1;
+        private bool _hostControlPhysicalF1Pressed;
+        private bool _hostControlPhysicalF2Pressed;
+        private bool _hostControlPhysicalF5Pressed;
+        private SimulationHostControlCommand _hostControlLastPhysicalEdges;
+        private long _hostControlPhysicalEdgeCount;
+        private long _hostControlAppliedCommandCount;
+        private SimulationHostControlCommand _hostControlLastAppliedCommands;
+        private bool _hostControlLastAppliedPausedBefore;
+        private bool _hostControlLastAppliedPausedAfter;
+        private byte _pendingNativeFunctionKeySessionEventByte;
+        private bool _nativeFunctionKeyLeaveBattleRequested;
+        private NTSD28NativeFunctionKeyMaintenanceCommand
+            _nativeFunctionKeyMaintenanceCommand;
+        private NTSD28NativeFunctionKeyHostCommand
+            _nativeFunctionKeyContinuousHostCommand;
+        private long _setPausedCallCount;
+        private bool _setPausedLastValue;
         private long _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks;
 
         protected override void OnSingletonAwake()
@@ -326,13 +356,20 @@ namespace NTSD.Simulation
                     return;
                 }
 
+                CaptureHostControlEdges();
+                CaptureBattleFunctionKeyEdges();
+                ApplyPendingHostControlCommands();
+
                 if (paused || _world == null)
                 {
+                    if (paused)
+                    {
+                        ResetLocalHostDebt();
+                        TryAdvancePendingPausedHostSingleStep();
+                    }
                     RefreshInspectorState();
                     return;
                 }
-
-                CaptureBattleFunctionKeyEdges();
 
                 SimulationTickHostPolicy policy = SelectTickHostPolicy(
                     resetSelectedPolicy: false);
@@ -417,8 +454,8 @@ namespace NTSD.Simulation
                     _sparkRenderer.RenderAll(_world);
                 if (_simulationWorker == null)
                 {
-                    using (FinalizeHitRecordMarker.Auto())
-                        _world?.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                    using (AcknowledgeHitRecordMarker.Auto())
+                        _world?.BattlePresentation.AcknowledgePublishedHitRecordCycle();
                 }
             }
             finally
@@ -466,9 +503,11 @@ namespace NTSD.Simulation
                 return false;
 
             provider.BeforeSimTick(tickIndex);
-            ApplyPendingBattleFunctionKeyCommandsForTick();
+            bool functionKeysDispatched = false;
             if (ShouldSubmitToDedicatedSimulationWorker())
             {
+                ApplyPendingBattleFunctionKeyCommandsForTick();
+                functionKeysDispatched = true;
                 if (TrySubmitDedicatedSimulationWorkerTick(
                         frameInput,
                         buildPresentation,
@@ -481,19 +520,26 @@ namespace NTSD.Simulation
                     return false;
             }
 
-            bool stepped = StepOneTickInternal(frameInput, buildPresentation);
+            bool stepped = StepOneTickInternal(
+                frameInput,
+                buildPresentation,
+                !functionKeysDispatched);
             if (stepped)
                 provider.AfterSimTick(tickIndex);
             return stepped;
         }
 
-        private bool StepOneTickInternal(FrameInputSet frameInput, bool buildPresentation)
+        private bool StepOneTickInternal(
+            FrameInputSet frameInput,
+            bool buildPresentation,
+            bool applyPendingFunctionKeys = true)
         {
             if (_world == null || frameInput == null || frameInput.TickIndex != _tickIndex + 1)
                 return false;
 
             int tickIndex = frameInput.TickIndex;
-            ApplyPendingBattleFunctionKeyCommandsForTick();
+            if (applyPendingFunctionKeys)
+                ApplyPendingBattleFunctionKeyCommandsForTick();
             _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
             _managedMemoryBoundary.BeginTick();
             try
@@ -860,8 +906,14 @@ namespace NTSD.Simulation
             currentTickIndex = _tickIndex;
             timeAccumulator = _timeAccumulator;
             objectCount = _world?.ObjectCount ?? 0;
-            renderAlpha = Mathf.Clamp01(_timeAccumulator / SimulationConstants.SIM_DT);
-            backlogTickCount = Mathf.FloorToInt(_timeAccumulator / SimulationConstants.SIM_DT);
+            float activeInterval = ActiveHostIntervalSeconds;
+            renderAlpha = Mathf.Clamp01(_timeAccumulator / activeInterval);
+            backlogTickCount = Mathf.FloorToInt(_timeAccumulator / activeInterval);
+            fastMode = _offlineLocalTickPolicy.CadenceMode ==
+                SimulationHostCadenceMode.Fast;
+            hostSingleStepPending =
+                (_pendingHostControlCommands &
+                 SimulationHostControlCommand.SingleStep) != 0;
         }
 
         public SimulationWorld World => _world;
@@ -909,6 +961,48 @@ namespace NTSD.Simulation
 
         public float RemainingAccumulatorTime => _timeAccumulator;
         public float RenderAlpha => renderAlpha;
+        public bool IsFastMode =>
+            _offlineLocalTickPolicy.CadenceMode == SimulationHostCadenceMode.Fast;
+        public float ActiveHostIntervalSeconds =>
+            lockstepSettings?.driveMode == SimulationDriveMode.LocalFreeRun
+                ? _offlineLocalTickPolicy.ActiveIntervalSeconds
+                : SimulationConstants.SIM_DT;
+        public string HostControlLastFailureReasonForDiagnostics =>
+            _hostControlLastFailureReason;
+        public long HostControlPhysicalSampleCountForDiagnostics =>
+            _hostControlPhysicalSampleCount;
+        public int HostControlPhysicalKeyboardDeviceIdForDiagnostics =>
+            _hostControlPhysicalKeyboardDeviceId;
+        public bool HostControlPhysicalF1PressedForDiagnostics =>
+            _hostControlPhysicalF1Pressed;
+        public bool HostControlPhysicalF2PressedForDiagnostics =>
+            _hostControlPhysicalF2Pressed;
+        public bool HostControlPhysicalF5PressedForDiagnostics =>
+            _hostControlPhysicalF5Pressed;
+        internal SimulationHostControlCommand
+            HostControlLastPhysicalEdgesForDiagnostics =>
+                _hostControlLastPhysicalEdges;
+        public long HostControlPhysicalEdgeCountForDiagnostics =>
+            _hostControlPhysicalEdgeCount;
+        public long HostControlAppliedCommandCountForDiagnostics =>
+            _hostControlAppliedCommandCount;
+        internal SimulationHostControlCommand
+            HostControlLastAppliedCommandsForDiagnostics =>
+                _hostControlLastAppliedCommands;
+        public bool HostControlLastAppliedPausedBeforeForDiagnostics =>
+            _hostControlLastAppliedPausedBefore;
+        public bool HostControlLastAppliedPausedAfterForDiagnostics =>
+            _hostControlLastAppliedPausedAfter;
+        internal bool NativeFunctionKeyLeaveBattleRequestedForDiagnostics =>
+            _nativeFunctionKeyLeaveBattleRequested;
+        internal NTSD28NativeFunctionKeyMaintenanceCommand
+            NativeFunctionKeyMaintenanceCommandForDiagnostics =>
+                _nativeFunctionKeyMaintenanceCommand;
+        internal NTSD28NativeFunctionKeyHostCommand
+            NativeFunctionKeyContinuousHostCommandForDiagnostics =>
+                _nativeFunctionKeyContinuousHostCommand;
+        public long SetPausedCallCountForDiagnostics => _setPausedCallCount;
+        public bool SetPausedLastValueForDiagnostics => _setPausedLastValue;
         public LockstepSimulationSettings Settings => lockstepSettings;
 
         public bool IsPaused => paused;
@@ -927,7 +1021,15 @@ namespace NTSD.Simulation
                 return;
             }
 
+            _setPausedCallCount++;
+            _setPausedLastValue = value;
             paused = value;
+            if (value)
+            {
+                _pendingHostControlCommands &=
+                    ~SimulationHostControlCommand.SingleStep;
+                ResetLocalHostDebt();
+            }
             if (!value && lifecycleState == BattleRuntimeLifecycleState.Preparing)
                 lifecycleState = BattleRuntimeLifecycleState.Running;
         }
@@ -986,6 +1088,7 @@ namespace NTSD.Simulation
             }
 
             provider.BeforeSimTick(tickIndex);
+            ApplyPendingBattleFunctionKeyCommandsForTick();
             bool submitted = TrySubmitDedicatedSimulationWorkerTick(
                 frameInput,
                 buildPresentation,
@@ -1149,7 +1252,7 @@ namespace NTSD.Simulation
             if (resetLogicOnlyMaterialization && !_allocationGate.IsSealed)
                 _world?.SetLogicOnlyEntityMaterialization(false);
             if (_world != null)
-                _world.BattlePresentation.FinalizePublishedHitRecordCycle(_world);
+                _world.BattlePresentation.AcknowledgePublishedHitRecordCycle();
             RefreshDedicatedSimulationWorkerInspectorState();
         }
 
@@ -1245,6 +1348,10 @@ namespace NTSD.Simulation
             lifecycleState = BattleRuntimeLifecycleState.Stopping;
             paused = true;
             _battleFunctionKeyInputLatch.Clear();
+            ClearNativeFunctionKeyRoutingState();
+            _hostControlPhysicalEdgeLatch.Clear();
+            _pendingHostControlCommands = SimulationHostControlCommand.None;
+            ResetLocalHostDebt();
             _frameInputProvider?.Reset();
             _localFrameInputProvider.Reset();
             _shutdownDiagnostics.Reset();
@@ -1395,7 +1502,12 @@ namespace NTSD.Simulation
             lockstepSettings = settings;
             lockstepSettings.Normalize();
             if (lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+            {
                 _battleFunctionKeyInputLatch.Clear();
+                ClearNativeFunctionKeyRoutingState();
+                _hostControlPhysicalEdgeLatch.Clear();
+                _pendingHostControlCommands = SimulationHostControlCommand.None;
+            }
             SelectTickHostPolicy(resetSelectedPolicy: true);
             _timeAccumulator = _tickHostPolicy.Accumulator;
             RefreshInspectorState();
@@ -1409,6 +1521,10 @@ namespace NTSD.Simulation
 
             EnterPreparingState();
             _battleFunctionKeyInputLatch.Clear();
+            ClearNativeFunctionKeyRoutingState();
+            _hostControlPhysicalEdgeLatch.Clear();
+            _pendingHostControlCommands = SimulationHostControlCommand.None;
+            ResetLocalHostDebt();
             EndBattleAllocationSeal();
             _publishedSoundEvents.Clear();
             if (!EnsureProductionConfigurationFromSources())
@@ -1438,6 +1554,9 @@ namespace NTSD.Simulation
             }
 
             _world.Rng?.Seed((uint)(config?.seed ?? 0));
+            _world.NativeRandom?.ResetForDirectBattle(
+                (uint)(config?.seed ?? 0));
+            _world.SetOneTuInputForBattle(config?.oneTuInput ?? false);
             _world.Runtime?.Roster?.ApplyMatchConfig(config);
             _world.Runtime?.ApplyBootstrapFromMatchConfig(config);
             _world.SetNeedClearInput(true);
@@ -1457,26 +1576,361 @@ namespace NTSD.Simulation
             _world.SetAiPhaseGate(matchState != null && matchState.BattleGameModeId == 2 ? 1 : 0);
         }
 
+        private SimulationHostControlCommand RouteNativeHostControlEdges(
+            SimulationHostControlCommand physicalEdges)
+        {
+            SimulationHostControlCommand routed = SimulationHostControlCommand.None;
+            NTSD28NativeFunctionKeyRouteContext context =
+                BuildNativeFunctionKeyRouteContext();
+            if ((physicalEdges & SimulationHostControlCommand.TogglePause) != 0)
+            {
+                routed |= MapNativeHostCommand(
+                    NTSD28NativeFunctionKeyRouter.Route(
+                        NTSD28NativeFunctionKey.F1,
+                        false,
+                        NTSD28NativeFunctionKeyModifiers.None,
+                        context));
+            }
+            if ((physicalEdges & SimulationHostControlCommand.SingleStep) != 0)
+            {
+                routed |= MapNativeHostCommand(
+                    NTSD28NativeFunctionKeyRouter.Route(
+                        NTSD28NativeFunctionKey.F2,
+                        false,
+                        NTSD28NativeFunctionKeyModifiers.None,
+                        context));
+            }
+            if ((physicalEdges & SimulationHostControlCommand.ToggleFastMode) != 0)
+            {
+                routed |= MapNativeHostCommand(
+                    NTSD28NativeFunctionKeyRouter.Route(
+                        NTSD28NativeFunctionKey.F5,
+                        false,
+                        NTSD28NativeFunctionKeyModifiers.None,
+                        context));
+            }
+            return routed;
+        }
+
+        private static SimulationHostControlCommand MapNativeHostCommand(
+            NTSD28NativeFunctionKeyRouteResult route)
+        {
+            if (route.Disposition !=
+                NTSD28NativeFunctionKeyDisposition.HostCommand)
+            {
+                return SimulationHostControlCommand.None;
+            }
+
+            switch (route.HostCommand)
+            {
+                case NTSD28NativeFunctionKeyHostCommand.TogglePause:
+                    return SimulationHostControlCommand.TogglePause;
+                case NTSD28NativeFunctionKeyHostCommand.SingleStep:
+                    return SimulationHostControlCommand.SingleStep;
+                case NTSD28NativeFunctionKeyHostCommand.ToggleFastMode:
+                    return SimulationHostControlCommand.ToggleFastMode;
+                default:
+                    return SimulationHostControlCommand.None;
+            }
+        }
+
+        private NTSD28NativeFunctionKeyRouteContext
+            BuildNativeFunctionKeyRouteContext()
+        {
+            bool battleActive =
+                lifecycleState == BattleRuntimeLifecycleState.Running &&
+                _world != null;
+            bool f6F9Locked =
+                _world?.Runtime?.FunctionKeys?.LockState == 2;
+            return new NTSD28NativeFunctionKeyRouteContext(
+                battleActive,
+                true,
+                f6F9Locked,
+                true);
+        }
+
+        private NTSD28NativeFunctionKeySessionContext
+            BuildNativeFunctionKeySessionContext()
+        {
+            BattleRuntimeState runtime = _world?.Runtime;
+            bool battleActive =
+                lifecycleState == BattleRuntimeLifecycleState.Running &&
+                runtime != null;
+            bool mainStateAllows = battleActive &&
+                (runtime.Match?.LocalGameModeId ?? 0) == 0 &&
+                runtime.Results?.IsActive != true;
+            return new NTSD28NativeFunctionKeySessionContext(
+                battleActive,
+                mainStateAllows,
+                true);
+        }
+
+        private void CollectNativeFunctionKeyRoute(
+            NTSD28NativeFunctionKeyRouteResult route)
+        {
+            switch (route.Disposition)
+            {
+                case NTSD28NativeFunctionKeyDisposition.HostCommand:
+                    if (route.HostCommand ==
+                        NTSD28NativeFunctionKeyHostCommand.LeaveBattle)
+                    {
+                        _nativeFunctionKeyLeaveBattleRequested = true;
+                    }
+                    else
+                    {
+                        _pendingHostControlCommands |=
+                            MapNativeHostCommand(route);
+                    }
+                    break;
+                case NTSD28NativeFunctionKeyDisposition.SessionCommand:
+                    _pendingNativeFunctionKeySessionEventByte = (byte)(
+                        _pendingNativeFunctionKeySessionEventByte |
+                        NTSD28NativeFunctionKeySessionState.EventMask(
+                            route.SessionCommand));
+                    break;
+                case NTSD28NativeFunctionKeyDisposition.MaintenanceCommand:
+                    _nativeFunctionKeyMaintenanceCommand =
+                        route.MaintenanceCommand;
+                    break;
+                case NTSD28NativeFunctionKeyDisposition.ContinuousHostCommand:
+                    _nativeFunctionKeyContinuousHostCommand = route.HostCommand;
+                    break;
+            }
+        }
+
+        private void ClearNativeFunctionKeyRoutingState()
+        {
+            _nativeFunctionKeyPhysicalLatch.Clear();
+            _pendingNativeFunctionKeySessionEventByte = 0;
+            _nativeFunctionKeyLeaveBattleRequested = false;
+            _nativeFunctionKeyMaintenanceCommand =
+                NTSD28NativeFunctionKeyMaintenanceCommand.None;
+            _nativeFunctionKeyContinuousHostCommand =
+                NTSD28NativeFunctionKeyHostCommand.None;
+        }
+
+        private void CaptureHostControlEdges()
+        {
+            if (lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+            {
+                _pendingHostControlCommands = SimulationHostControlCommand.None;
+                _hostControlPhysicalEdgeLatch.Clear();
+                return;
+            }
+
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null)
+            {
+                _hostControlPhysicalEdgeLatch.Clear();
+                _hostControlPhysicalKeyboardDeviceId = -1;
+                _hostControlPhysicalF1Pressed = false;
+                _hostControlPhysicalF2Pressed = false;
+                _hostControlPhysicalF5Pressed = false;
+                _hostControlLastPhysicalEdges =
+                    SimulationHostControlCommand.None;
+                return;
+            }
+
+            _hostControlPhysicalSampleCount++;
+            _hostControlPhysicalKeyboardDeviceId = keyboard.deviceId;
+            _hostControlPhysicalF1Pressed = keyboard.f1Key.isPressed;
+            _hostControlPhysicalF2Pressed = keyboard.f2Key.isPressed;
+            _hostControlPhysicalF5Pressed = keyboard.f5Key.isPressed;
+            SimulationHostControlCommand physicalEdges =
+                _hostControlPhysicalEdgeLatch.Capture(
+                    _hostControlPhysicalF1Pressed,
+                    _hostControlPhysicalF2Pressed,
+                    _hostControlPhysicalF5Pressed);
+            _hostControlLastPhysicalEdges =
+                RouteNativeHostControlEdges(physicalEdges);
+            if (_hostControlLastPhysicalEdges !=
+                SimulationHostControlCommand.None)
+            {
+                _hostControlPhysicalEdgeCount++;
+            }
+            _pendingHostControlCommands |= _hostControlLastPhysicalEdges;
+        }
+
+        private void ApplyPendingHostControlCommands()
+        {
+            if (_pendingHostControlCommands == SimulationHostControlCommand.None ||
+                lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+            {
+                return;
+            }
+
+            SimulationHostControlCommand commands = _pendingHostControlCommands;
+            _pendingHostControlCommands = SimulationHostControlCommand.None;
+            _hostControlAppliedCommandCount++;
+            _hostControlLastAppliedCommands = commands;
+            _hostControlLastAppliedPausedBefore = paused;
+            SimulationHostControlTransition transition =
+                SimulationHostControl.Apply(
+                    commands,
+                    new SimulationHostControlState(
+                        paused,
+                        _offlineLocalTickPolicy.CadenceMode));
+            paused = transition.State.Paused;
+            _hostControlLastAppliedPausedAfter = paused;
+            if (transition.CadenceChanged)
+            {
+                _offlineLocalTickPolicy.SetCadenceMode(
+                    transition.State.CadenceMode);
+                _timeAccumulator = _offlineLocalTickPolicy.Accumulator;
+            }
+
+            if (transition.RequestSingleStep)
+            {
+                _pendingHostControlCommands |=
+                    SimulationHostControlCommand.SingleStep;
+            }
+            if (!paused)
+            {
+                _pendingHostControlCommands &=
+                    ~SimulationHostControlCommand.SingleStep;
+            }
+            else
+            {
+                ResetLocalHostDebt();
+            }
+        }
+
+        private bool TryAdvancePendingPausedHostSingleStep()
+        {
+            if ((_pendingHostControlCommands &
+                 SimulationHostControlCommand.SingleStep) == 0)
+            {
+                _hostControlLastFailureReason = "no-pending-single-step";
+                return false;
+            }
+            if (!paused || lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun ||
+                lifecycleState != BattleRuntimeLifecycleState.Running)
+            {
+                _hostControlLastFailureReason =
+                    "host-state-does-not-admit-single-step";
+                _pendingHostControlCommands &=
+                    ~SimulationHostControlCommand.SingleStep;
+                return false;
+            }
+
+            int nextTick = _tickIndex + 1;
+            if (_world == null)
+            {
+                _hostControlLastFailureReason = "world-is-null";
+                return false;
+            }
+            if (_frameInputProvider == null)
+            {
+                _hostControlLastFailureReason = "frame-input-provider-is-null";
+                return false;
+            }
+            if (!CanAdvanceTick(nextTick))
+            {
+                _hostControlLastFailureReason = "next-tick-is-not-advanceable";
+                return false;
+            }
+
+            bool advanced = StepOneTickInternal(
+                nextTick,
+                buildPresentation: true);
+            if (advanced)
+            {
+                _hostControlLastFailureReason = string.Empty;
+                _pendingHostControlCommands &=
+                    ~SimulationHostControlCommand.SingleStep;
+            }
+            else
+            {
+                _hostControlLastFailureReason =
+                    "production-tick-entry-rejected-single-step";
+            }
+            ResetLocalHostDebt();
+            return advanced;
+        }
+
+        private void ResetLocalHostDebt()
+        {
+            _offlineLocalTickPolicy.Reset();
+            _timeAccumulator = 0f;
+        }
+
+        internal void QueueHostControlCommandsForDiagnostics(
+            SimulationHostControlCommand commands)
+        {
+            if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped ||
+                lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun)
+            {
+                return;
+            }
+
+            _pendingHostControlCommands |= commands;
+        }
+
+        internal bool ProcessHostControlCommandsForDiagnostics()
+        {
+            ApplyPendingHostControlCommands();
+            bool advanced = false;
+            if (paused)
+            {
+                ResetLocalHostDebt();
+                advanced = TryAdvancePendingPausedHostSingleStep();
+            }
+            RefreshInspectorState();
+            return advanced;
+        }
+
         private void CaptureBattleFunctionKeyEdges()
         {
-            BattleMatchRuntimeState match = _world?.Runtime?.Match;
-            _battleFunctionKeyInputLatch.CapturePhysicalEdges(
-                GameConfig.Instance,
-                match?.LocalGameModeId ?? 0,
-                match?.BattleGameModeId ?? 1,
-                lockstepSettings.driveMode);
+            _nativeFunctionKeyPhysicalLatch.CapturePhysicalEdges(
+                lockstepSettings.driveMode,
+                BuildNativeFunctionKeyRouteContext());
+            _nativeFunctionKeyContinuousHostCommand =
+                _nativeFunctionKeyPhysicalLatch.CurrentContinuousHostCommand;
+            if (!_nativeFunctionKeyPhysicalLatch.TryConsumeOneShotHandoff(
+                    out byte sessionEventByte,
+                    out bool leaveBattle,
+                    out NTSD28NativeFunctionKeyMaintenanceCommand maintenanceCommand))
+            {
+                return;
+            }
+
+            _pendingNativeFunctionKeySessionEventByte = (byte)(
+                _pendingNativeFunctionKeySessionEventByte | sessionEventByte);
+            _nativeFunctionKeyLeaveBattleRequested |= leaveBattle;
+            if (maintenanceCommand !=
+                NTSD28NativeFunctionKeyMaintenanceCommand.None)
+            {
+                _nativeFunctionKeyMaintenanceCommand = maintenanceCommand;
+            }
         }
 
         private void ApplyPendingBattleFunctionKeyCommandsForTick()
         {
-            if (_world == null ||
-                !_battleFunctionKeyInputLatch.TryConsume(
+            if (_world?.Runtime?.FunctionKeys == null)
+                return;
+
+            NTSD28NativeFunctionKeySessionState nativeState =
+                _world.Runtime.FunctionKeys;
+            bool previousHitResourceEnabled = nativeState.HitResourceEnabled;
+            nativeState.QueueEventByte(_pendingNativeFunctionKeySessionEventByte);
+            _pendingNativeFunctionKeySessionEventByte = 0;
+            nativeState.Dispatch(BuildNativeFunctionKeySessionContext());
+            if (nativeState.HitResourceEnabled != previousHitResourceEnabled)
+            {
+                _world.ProjectNativeHitResourceGateToActiveEntities(
+                    nativeState.HitResourceEnabled);
+            }
+
+            // The R8 path remains explicit diagnostics only until B8 removes its
+            // historical all-stats/mode2 effects. Production physical keys never
+            // enter this latch after NTSD28-B2-FUNCTION-KEY-PRODUCTION-INTEGRATION-001.
+            if (!_battleFunctionKeyInputLatch.TryConsume(
                     out bool toggleInitializeStats,
                     out int mode2Request))
             {
                 return;
             }
-
             if (toggleInitializeStats)
                 _world.ToggleInitStatsRequest();
             if (mode2Request != 0)
@@ -1489,6 +1943,39 @@ namespace NTSD.Simulation
             if (lifecycleState != BattleRuntimeLifecycleState.Running)
                 return;
             _battleFunctionKeyInputLatch.QueueForDiagnostics(commands);
+        }
+
+        internal NTSD28NativeFunctionKeyRouteResult
+            QueueNativeFunctionKeyForDiagnostics(
+                NTSD28NativeFunctionKey key,
+                bool repeated = false,
+                bool control = false)
+        {
+            NTSD28NativeFunctionKeyRouteResult route =
+                NTSD28NativeFunctionKeyRouter.Route(
+                    key,
+                    repeated,
+                    new NTSD28NativeFunctionKeyModifiers(control),
+                    BuildNativeFunctionKeyRouteContext());
+            CollectNativeFunctionKeyRoute(route);
+            return route;
+        }
+
+        internal bool ConsumeNativeFunctionKeyLeaveBattleRequestForDiagnostics()
+        {
+            bool requested = _nativeFunctionKeyLeaveBattleRequested;
+            _nativeFunctionKeyLeaveBattleRequested = false;
+            return requested;
+        }
+
+        internal NTSD28NativeFunctionKeyMaintenanceCommand
+            ConsumeNativeFunctionKeyMaintenanceCommandForDiagnostics()
+        {
+            NTSD28NativeFunctionKeyMaintenanceCommand command =
+                _nativeFunctionKeyMaintenanceCommand;
+            _nativeFunctionKeyMaintenanceCommand =
+                NTSD28NativeFunctionKeyMaintenanceCommand.None;
+            return command;
         }
 
         public void SetFrameInputProvider(ISimulationFrameInputProvider provider)

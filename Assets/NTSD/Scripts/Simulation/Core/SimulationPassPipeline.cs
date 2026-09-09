@@ -30,6 +30,12 @@ namespace NTSD.Simulation
             lateEntityLifecycleModule;
         internal BattleInteractionPipeline Interaction => interactionPipeline;
 
+        internal int ActiveWeaponObjectCountBeforeHits =>
+            randomWeaponDropModule.ActiveWeaponObjectCountBeforeHits;
+
+        internal int ActiveWeaponObjectCountCapturedTick =>
+            randomWeaponDropModule.ActiveWeaponObjectCountCapturedTick;
+
         internal void PrepareCapacity(int entityCapacity)
         {
             earlyFrameAdvanceModule.PrepareCapacity(entityCapacity);
@@ -42,6 +48,17 @@ namespace NTSD.Simulation
             oid5152RuntimeModule.RunMaintenance(tickIndex);
         }
 
+        internal void RunOid5152FusionScan(int tickIndex)
+        {
+            oid5152RuntimeModule.RunFusionScan(tickIndex);
+        }
+
+        internal void AdvanceOid5152ReactionTimer(
+            NTSD.Animation.LF2Objects.LF2Entity entity)
+        {
+            oid5152RuntimeModule.AdvanceReactionTimer(entity);
+        }
+
         internal void RunRespawn(int tickIndex)
         {
             respawnModule.RunPostFrameAdvanceDeathCleanup(tickIndex);
@@ -50,6 +67,11 @@ namespace NTSD.Simulation
         internal void RunEarlyFrameAdvance(int tickIndex)
         {
             earlyFrameAdvanceModule.Run(tickIndex);
+        }
+
+        internal void RunNativeTeleport()
+        {
+            earlyFrameAdvanceModule.RunNativeTeleport();
         }
 
         internal void RunLateEntityLifecycle(int tickIndex)
@@ -93,6 +115,12 @@ namespace NTSD.Simulation
         internal void RunRandomWeaponDrop(int tickIndex)
         {
             randomWeaponDropModule.RunNormalDrop(tickIndex);
+        }
+
+        internal void CaptureActiveWeaponObjectCountBeforeHits(int tickIndex)
+        {
+            randomWeaponDropModule
+                .CaptureActiveWeaponObjectCountBeforeHits(tickIndex);
         }
 
         internal void RunMode2RandomWeaponDropTail(int tickIndex)

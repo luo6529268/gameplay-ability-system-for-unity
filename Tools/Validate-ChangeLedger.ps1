@@ -46,7 +46,13 @@ $ScriptExtensions = @(
     '.js',
     '.ts',
     '.tsx',
-    '.jsx'
+    '.jsx',
+    '.c',
+    '.cc',
+    '.cpp',
+    '.cxx',
+    '.h',
+    '.hpp'
 )
 
 $GovernedRoots = @(
@@ -149,6 +155,7 @@ function Get-RecordMetadata
     $metadata = @{
         File = $RecordFile
         CodePaths = [System.Collections.Generic.List[string]]::new()
+        NoCodePathCount = 0
     }
 
     foreach ($line in ($match.Groups['body'].Value -split '\r?\n'))
@@ -168,7 +175,14 @@ function Get-RecordMetadata
         {
             if (-not [string]::IsNullOrWhiteSpace($value))
             {
-                $metadata.CodePaths.Add((Normalize-RepoPath $value))
+                if ($value.Equals('NONE', [System.StringComparison]::OrdinalIgnoreCase))
+                {
+                    $metadata.NoCodePathCount++
+                }
+                else
+                {
+                    $metadata.CodePaths.Add((Normalize-RepoPath $value))
+                }
             }
 
             continue
@@ -240,9 +254,33 @@ if ($errors.Count -eq 0)
             }
         }
 
-        if ($metadata.CodePaths.Count -eq 0)
+        if ($metadata.CodePaths.Count -eq 0 -and $metadata.NoCodePathCount -eq 0)
         {
             $errors.Add(('Missing code-path metadata in {0}.' -f $recordFile.Name))
+        }
+
+        if ($metadata.NoCodePathCount -gt 0)
+        {
+            if ($metadata.NoCodePathCount -ne 1)
+            {
+                $errors.Add(('Record {0} must declare code-path NONE exactly once.' -f
+                    $recordFile.Name))
+            }
+
+            if ($metadata.CodePaths.Count -gt 0)
+            {
+                $errors.Add(('Record {0} cannot combine code-path NONE with governed code paths.' -f
+                    $recordFile.Name))
+            }
+
+            if (-not $metadata.ContainsKey('change-kind') -or
+                -not $metadata['change-kind'].Equals(
+                    'GOVERNANCE_ONLY',
+                    [System.StringComparison]::OrdinalIgnoreCase))
+            {
+                $errors.Add(('Record {0} may use code-path NONE only with change-kind GOVERNANCE_ONLY.' -f
+                    $recordFile.Name))
+            }
         }
 
         if ($metadata.ContainsKey('id'))

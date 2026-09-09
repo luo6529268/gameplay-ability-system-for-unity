@@ -50,35 +50,17 @@ namespace NTSD.Tests.Editor
         }
 
         [Test]
-        public void W07_RealPositiveLinkValidationClearsOnlyLinkStateAndPreservesRelationFields()
+        public void W07_RetiredValidationEmitsNoEventAndLifecycleOwnsCleanup()
         {
             BattleParityStructuralEventBuffer buffer =
                 BattleParityTraceEditor.RunStructuralWitnessFixture("W07");
 
-            BattleParityStructuralEvent kept = buffer.CaptureTick(2).Single(value =>
-                value.Action == "link-validation");
-            Assert.That(kept.Outcome, Is.EqualTo("kept"));
-            Assert.That(kept.Reason, Is.EqualTo("reciprocal"));
-            Assert.That(kept.BeforeLinkState, Is.EqualTo(1));
-            Assert.That(kept.BeforeTargetSlot, Is.EqualTo(1));
-            Assert.That(kept.BeforeHeldWeaponSlot, Is.EqualTo(1));
-            Assert.That(kept.AfterLinkState, Is.EqualTo(1));
-            Assert.That(kept.AfterTargetSlot, Is.EqualTo(1));
-            Assert.That(kept.AfterHeldWeaponSlot, Is.EqualTo(1));
-            Assert.That(kept.TargetActive, Is.True);
-            Assert.That(kept.ObservedHolderSlot, Is.EqualTo(0));
-
-            BattleParityStructuralEvent cleared = buffer.CaptureTick(3).Single(value =>
-                value.Action == "link-validation");
-            Assert.That(cleared.Outcome, Is.EqualTo("cleared"));
-            Assert.That(cleared.Reason, Is.EqualTo("holder-mismatch"));
-            Assert.That(cleared.AfterLinkState, Is.EqualTo(0));
-            Assert.That(cleared.AfterTargetSlot, Is.EqualTo(1));
-            Assert.That(cleared.AfterHeldWeaponSlot, Is.EqualTo(1));
-            Assert.That(cleared.TargetBeforeHolderSlot, Is.EqualTo(2));
-            Assert.That(cleared.TargetAfterHolderSlot, Is.EqualTo(2));
-            Assert.That(cleared.TargetBeforeLinkState, Is.EqualTo(0));
-            Assert.That(cleared.TargetAfterLinkState, Is.EqualTo(0));
+            Assert.That(
+                buffer.Events.Any(value => value.Action == "link-validation"),
+                Is.False);
+            Assert.That(
+                buffer.Events.Count(value => value.Action == "allocate"),
+                Is.EqualTo(2));
         }
 
         [Test]
@@ -100,7 +82,9 @@ namespace NTSD.Tests.Editor
             holder.Runtime.TargetSlotIndex = 1;
             holder.Runtime.HeldWeaponStableId = 1;
             target.Runtime.HolderStableId = 0;
+#pragma warning disable CS0618
             world.ValidateHeldLinksAll(1);
+#pragma warning restore CS0618
 
             Assert.That(detachedSink.Events, Is.Empty);
             Assert.That(holder.Runtime.LinkState, Is.EqualTo(1));

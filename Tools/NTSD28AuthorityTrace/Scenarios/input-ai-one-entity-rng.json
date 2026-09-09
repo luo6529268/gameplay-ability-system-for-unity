@@ -1,0 +1,46 @@
+{
+  "schema": "ntsd28-scenario/1.0",
+  "referenceExeSha256": "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B",
+  "dataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "mode": "versus",
+  "seed": 682973786,
+  "ticks": 3,
+  "emitInitial": false,
+  "battleMode": 0,
+  "stageId": 23,
+  "difficultyLevel4A0C30": 1,
+  "combatants": [
+    {
+      "slot": 0,
+      "oid": 2,
+      "team": 1,
+      "x": 560,
+      "y": 0,
+      "z": 650,
+      "hp": 500,
+      "baseHp": 500,
+      "mp": 200,
+      "reviveLives30c": 1,
+      "reviveNextLives310": 0,
+      "reviveNextHp314": 0,
+      "facing": 0
+    },
+    {
+      "slot": 1,
+      "oid": 7,
+      "team": 2,
+      "x": 760,
+      "y": 0,
+      "z": 650,
+      "hp": 500,
+      "baseHp": 500,
+      "mp": 200,
+      "reviveLives30c": 1,
+      "reviveNextLives310": 0,
+      "reviveNextHp314": 0,
+      "nativeComputerState1b8": 3,
+      "facing": 1
+    }
+  ],
+  "inputs": []
+}

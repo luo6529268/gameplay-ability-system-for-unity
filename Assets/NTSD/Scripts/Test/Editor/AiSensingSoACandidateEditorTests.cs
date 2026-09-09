@@ -1505,7 +1505,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void Candidate_EarlierCurrentCharacterDatNonCharacterShell_RefreshesItsRow()
+        public void Candidate_EarlierCharacterDatShellRouting_DoesNotLeakToLaterProducer()
         {
             var candidate = new SimulationWorld();
             candidate.Runtime.Flow.InputPhase = 2;
@@ -1526,7 +1526,8 @@ namespace NTSD.Test
             Assert.That(shell, Is.Not.InstanceOf<LF2Character>());
             Assert.That(shell.Runtime.Frame, Is.EqualTo(6));
             Assert.That(shell.GetState(), Is.EqualTo(14));
-            Assert.That(self.Runtime.Unk360, Is.EqualTo(2));
+            Assert.That(self.Runtime.Unk360, Is.EqualTo(0),
+                "all producers run before shell routing changes frame/state, so the later producer retains the pre-routing cached shell");
             Assert.That(candidate.AiSoADecisionRemainderFallbackCountForDiagnostics,
                 Is.Zero);
             AssertNoLegacyCandidateScans(candidate);
@@ -1801,6 +1802,7 @@ namespace NTSD.Test
                     break;
                 case "y":
                     SetPosition(target, target.Runtime.XInt, 0, target.Runtime.ZInt);
+                    target.Runtime.HitStop = 0;
                     break;
                 case "data_type":
                     ((MutableDatShell)target).CurrentDataObjectType =
@@ -1812,6 +1814,7 @@ namespace NTSD.Test
                     break;
                 case "ground_to_air":
                     SetPosition(target, target.Runtime.XInt, 3, target.Runtime.ZInt);
+                    target.Runtime.HitStop = 3;
                     break;
                 case "death":
                     target.Runtime.HP = 0;
@@ -2057,6 +2060,10 @@ namespace NTSD.Test
             entity.Runtime.Unk3FC = -1001;
             entity.Runtime.Unk360 = -1;
             entity.Runtime.SetPosition(x, y, z);
+            // These sensing fixtures historically used Y as the render-phase
+            // discriminator. Preserve their intended role while the production
+            // consumer now reads the verified HitStop binding.
+            entity.Runtime.HitStop = y;
             entity.Runtime.SyncIntegerPosition();
         }
 

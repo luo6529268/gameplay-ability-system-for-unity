@@ -25,6 +25,7 @@ namespace NTSD.Simulation.Ecs
                 holderWPoint ?? holderFrame.PrimaryWeaponPoint;
 
             Vector3 holdpoint = CalculateHoldPoint(holder, resolvedHolderWPoint);
+            held.DirectWriteHeldFramePreserveWaitCounter(resolvedHolderWPoint.WeaponAct);
             SyncHeldFrameAndPosition(holder, held, resolvedHolderWPoint, holdpoint);
             return held.Frame?.D != null;
         }
@@ -45,14 +46,28 @@ namespace NTSD.Simulation.Ecs
             if (held is LF2WeaponBase weapon)
             {
                 result = weapon.Act(holder, holderWPoint, holdpoint);
-                if (result.Thrown)
+                if (result.TerminalDespawnRequested || result.RefillExhausted || result.UnsupportedWeaponAction ||
+                    (result.Thrown && holderWPoint.Kind != 3))
                     return true;
 
                 if (holderWPoint.Kind == 3)
-                    DropRandomly(holder, held);
+                    DropRandomly(holder, held, holderWPoint);
                 return true;
             }
 
+            if (holderWPoint.WeaponAct >= 1000)
+            {
+                result.TerminalDespawnRequested = true;
+                return true;
+            }
+
+            // Alignment contract: NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001.
+            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);
+            if (held.FrameCache?.HasFrame(holderWPoint.WeaponAct) != true)
+            {
+                result.UnsupportedWeaponAction = true;
+                return true;
+            }
             SyncHeldFrameAndPosition(holder, held, holderWPoint, holdpoint);
 
             int heldState = held.Frame?.D?.state ?? -1;
@@ -72,20 +87,24 @@ namespace NTSD.Simulation.Ecs
                     held.DirectWriteHeldFramePreserveWaitCounter(40);
                     ThrowHeldObject(holder, held, holderWPoint);
                     result.Thrown = true;
-                    return true;
+                    if (holderWPoint.Kind != 3)
+                        return true;
                 }
 
                 if (heldType == (int)LF2ObjectType.HeavyWeapon)
                 {
-                    held.DirectWriteHeldFramePreserveWaitCounter(holder.BattleRandInt(0, 6));
+                    held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.Kind == 3
+                        ? holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6)
+                        : holder.BattleRandInt(0, 6));
                     ThrowHeldObject(holder, held, holderWPoint);
                     result.Thrown = true;
-                    return true;
+                    if (holderWPoint.Kind != 3)
+                        return true;
                 }
             }
 
             if (holderWPoint.Kind == 3)
-                DropRandomly(holder, held);
+                DropRandomly(holder, held, holderWPoint);
 
             return true;
         }
@@ -113,7 +132,6 @@ namespace NTSD.Simulation.Ecs
             BattleWeaponPointValue holderWPoint,
             Vector3 holdpoint)
         {
-            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);
             held.SwitchDir(holder.Runtime.Dir);
             held.FrameDelay = holder.FrameDelay;
 
@@ -184,17 +202,25 @@ namespace NTSD.Simulation.Ecs
             ClearLinks(holder, held, stampReleaseTick: true);
         }
 
-        private void DropRandomly(LF2Entity holder, LF2Entity held)
+        private void DropRandomly(
+            LF2Entity holder,
+            LF2Entity held,
+            BattleWeaponPointValue wpoint)
         {
             if (held is LF2WeaponBase weapon)
                 weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
             else
                 ClearLinks(holder, held, stampReleaseTick: true);
 
-            held.DirectWriteHeldFramePreserveWaitCounter(holder.BattleRandInt(0, 6));
-            held.Runtime.Vx = holder.BattleRandInt(0, 7) - 3;
-            held.Runtime.Vy = -holder.BattleRandInt(0, 4);
-            held.Runtime.Vz = (holder.BattleRandInt(0, 5) - 2) * 0.2;
+            // Alignment contract: NTSD28-B6-WPOINT-KIND3-RELEASE-PRODUCTION-001.
+            var random = holder.Match.NativeRandom;
+            held.DirectWriteHeldFramePreserveWaitCounter(random.SynchronizedNext(0x00418726, 6));
+            int randomX = random.SynchronizedNext(0x0041873A, 7) - 3;
+            int randomY = -random.SynchronizedNext(0x00418756, 4);
+            int randomZ = random.SynchronizedNext(0x00418772, 5) - 2;
+            held.Runtime.Vx = wpoint.Dvx != 0 ? wpoint.Dvx : randomX;
+            held.Runtime.Vy = wpoint.Dvy != 0 ? wpoint.Dvy : randomY;
+            held.Runtime.Vz = wpoint.Dvz != 0 ? wpoint.Dvz : randomZ;
             held.Runtime.Zz = 0f;
         }
 

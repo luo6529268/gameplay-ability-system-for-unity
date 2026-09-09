@@ -12,6 +12,8 @@ namespace NTSD.Simulation
     [Serializable]
     public sealed class NTSDEntityRuntime
     {
+        public const int NativeInputRemapCount = 7;
+
         private int pendingFlushDestroy;
         private long pendingFlushDestroyMutationEpoch;
         [NonSerialized] private SimulationWorldMutationTracker worldMutationTracker;
@@ -160,9 +162,79 @@ namespace NTSD.Simulation
         public byte KeyAttack;
         public byte KeyJump;
         public byte KeyDefend;
+        public NTSD28InputProxyBlock NativeInputProxy { get; } =
+            new NTSD28InputProxyBlock();
+        public int InputProxyCounter14C;
+        public int InputProxySourceSlot178 = -1;
+        public int InputProxyEnabled17C;
+        public int InputActionLock130;
+        public int InputLastAction144;
+        public int InputRemapState138;
+        public byte[] InputRemapIndices13C = CreateIdentityInputRemap();
+        public int BoundState198;
+        public int InputGlobalRecordState20;
+        public int InputModeCostMultiplier30;
+        public int InputDoubleCost19C;
+        public int InputCostWaived1B4;
+        public int InputSpecialGate194;
+        public int InputModeFallbackActionB8;
+        public bool InputLocalResourceEnabled49D034 = true;
+        public int InputHpConsumedTotal34C;
+        public int InputMpConsumedTotal350;
+        public bool FeatureGate4A8428;
+        public int InputLinkedDefinitionId324 = -1;
+        public int EnvironmentState320;
+        public int CollisionYReference;
+        public int StatusDx1C0;
+        public int StatusDy1C4;
+        public int StatusDz1C8;
+        public int StatusGain1CC;
+        public int StatusHitFacing1D0;
+        public int StatusPickedAction1D4 = 191;
+        public int StatusPickingAction1D8 = 185;
+        public int WeakTimer12C;
+        public int MpRegenBonusTimer1A4;
+        public int EffectiveMaxRegenDouble1A8;
+        public int HpRegenDouble1AC;
+        public int FullRestoreTimer1B0;
+        public int OrdinaryCreditGate2F4 = -1;
+        public int IncomingDamageScale340;
+        public int ModeDamageScalePercent = 100;
+        public int InputScoreTotal348;
+        public int KnockoutCount358;
+        public int CatchSourceSlot90 = -1;
+        public int Kind4SourceCount92;
+        public int EnvironmentSourceSlot160 = -1;
+        public int ImpactSourceSlot164 = -1;
+        public int DisplayScore1F0;
+        public int DisplayScoreStep1F4;
+        public int DisplayDamageTotal1F8;
+        public int DisplayDamageStep1FC;
+        public int DisplayCurrentHp200;
+        public int DisplayCurrentHpStep204;
+        public int DisplayEffectiveMaxHp208;
+        public int DisplayEffectiveMaxHpStep20C;
+        public int HitResourceSuppression15C;
+        public int HitResourceInjuryDouble1A0;
+        public int DelayTimer134;
+        public int JoinTimer148;
+        public int PoisonTimer120;
+        public int PoisonType124;
+        public int PoisonStrength128;
+        public int JoinOverrideActive170;
+        public int JoinOriginalBattleGroup174;
+        public int NativeComputerState1B8;
+        public int NativeTimer1BC;
+        public int RuntimeArmorHp118;
+        public int ArmorRecoveryTimer11C = -1;
         public int HolderStableId = -1;
         public int HolderCopySlotIndex = 99;
         public int PickerStableId = -1;
+        public int ObjectAiTargetSlot3F8
+        {
+            get => PickerStableId;
+            set => PickerStableId = value;
+        }
         public int TrackerFlag;
         public bool AiControlled;
 
@@ -258,6 +330,8 @@ namespace NTSD.Simulation
         public int SuppressObjectInteractionUntilTick;
         public int SuppressPreInteractionUntilTick;
         public int SuppressCollisionCandidateUntilTick;
+        public int ReviveVisualRuntime180;
+        public int ReviveVisualId184;
         public int RenderPicOffset;
         public int WaitCounter;
         public int FrameWaitCounter;
@@ -284,11 +358,14 @@ namespace NTSD.Simulation
         public int HitCount;
         public int HitConfirmEa;
         public int HitConfirm2;
+        public bool SpecialHitLatch0EB;
         public int HealTimer;
         public int CatchTimer;
         private int killCount = -1;
         public int ComboCountVic;
         public int ComboCountAtk;
+        public int NativeComboHitCount1E0;
+        public ulong NativeComboHitLastTick1E4;
         public int KillStat;
         public int Unk328 = -1;
         public int Unk32C = -1;
@@ -565,6 +642,7 @@ namespace NTSD.Simulation
             PrevUp = PrevDown = PrevLeft = PrevRight = PrevJump = PrevDefend = PrevAttack = 0;
             ClearDirectionalInputKeys();
             ClearActionInputKeys();
+            NativeInputProxy.Clear();
         }
 
         public void ApplyInputEdges()
@@ -618,8 +696,95 @@ namespace NTSD.Simulation
                 InputHistory = new int[6];
         }
 
+        private static byte[] CreateIdentityInputRemap()
+        {
+            var remap = new byte[NativeInputRemapCount];
+            for (int index = 0; index < remap.Length; index++)
+                remap[index] = (byte)index;
+            return remap;
+        }
+
+        private void ResetNativeActionCarriers()
+        {
+            InputActionLock130 = 0;
+            InputLastAction144 = 0;
+            InputRemapState138 = 0;
+            if (InputRemapIndices13C == null ||
+                InputRemapIndices13C.Length != NativeInputRemapCount)
+            {
+                InputRemapIndices13C = new byte[NativeInputRemapCount];
+            }
+            for (int index = 0; index < InputRemapIndices13C.Length; index++)
+                InputRemapIndices13C[index] = (byte)index;
+            BoundState198 = 0;
+            InputGlobalRecordState20 = 0;
+            InputModeCostMultiplier30 = 0;
+            InputDoubleCost19C = 0;
+            InputCostWaived1B4 = 0;
+            InputSpecialGate194 = 0;
+            InputModeFallbackActionB8 = 0;
+            InputLocalResourceEnabled49D034 = true;
+            InputHpConsumedTotal34C = 0;
+            InputMpConsumedTotal350 = 0;
+            FeatureGate4A8428 = false;
+            InputLinkedDefinitionId324 = -1;
+        }
+
+        private void ResetNativeResourceDisplayCarriers()
+        {
+            WeakTimer12C = 0;
+            MpRegenBonusTimer1A4 = 0;
+            EffectiveMaxRegenDouble1A8 = 0;
+            HpRegenDouble1AC = 0;
+            FullRestoreTimer1B0 = 0;
+            OrdinaryCreditGate2F4 = -1;
+            IncomingDamageScale340 = 0;
+            ModeDamageScalePercent = 100;
+            InputScoreTotal348 = 0;
+            KnockoutCount358 = 0;
+            CatchSourceSlot90 = -1;
+            Kind4SourceCount92 = 0;
+            EnvironmentSourceSlot160 = -1;
+            ImpactSourceSlot164 = -1;
+            DisplayScore1F0 = 0;
+            DisplayScoreStep1F4 = 0;
+            DisplayDamageTotal1F8 = 0;
+            DisplayDamageStep1FC = 0;
+            DisplayCurrentHp200 = 0;
+            DisplayCurrentHpStep204 = 0;
+            DisplayEffectiveMaxHp208 = 0;
+            DisplayEffectiveMaxHpStep20C = 0;
+        }
+
+        private void ResetNativeReactionStatusCarriers()
+        {
+            StatusDx1C0 = 0;
+            StatusDy1C4 = 0;
+            StatusDz1C8 = 0;
+            StatusGain1CC = 0;
+            StatusHitFacing1D0 = 0;
+            StatusPickedAction1D4 = 191;
+            StatusPickingAction1D8 = 185;
+            HitResourceSuppression15C = 0;
+            HitResourceInjuryDouble1A0 = 0;
+            DelayTimer134 = 0;
+            JoinTimer148 = 0;
+            PoisonTimer120 = 0;
+            PoisonType124 = 0;
+            PoisonStrength128 = 0;
+            JoinOverrideActive170 = 0;
+            JoinOriginalBattleGroup174 = 0;
+            NativeComputerState1B8 = 0;
+            NativeTimer1BC = 0;
+            RuntimeArmorHp118 = 0;
+            ArmorRecoveryTimer11C = -1;
+        }
+
         internal bool HasCanonicalSnapshotStorage =>
-            InputHistory != null && InputHistory.Length == 6;
+            InputHistory != null && InputHistory.Length == 6 &&
+            NativeInputProxy != null && NativeInputProxy.HasCanonicalStorage &&
+            InputRemapIndices13C != null &&
+            InputRemapIndices13C.Length == NativeInputRemapCount;
 
         internal bool TryCopyCanonicalStateTo(NTSDEntityRuntime destination)
         {
@@ -696,6 +861,74 @@ namespace NTSD.Simulation
             destination.KeyAttack = KeyAttack;
             destination.KeyJump = KeyJump;
             destination.KeyDefend = KeyDefend;
+            destination.NativeInputProxy.CopyFrom(NativeInputProxy);
+            destination.InputProxyCounter14C = InputProxyCounter14C;
+            destination.InputProxySourceSlot178 = InputProxySourceSlot178;
+            destination.InputProxyEnabled17C = InputProxyEnabled17C;
+            destination.InputActionLock130 = InputActionLock130;
+            destination.InputLastAction144 = InputLastAction144;
+            destination.InputRemapState138 = InputRemapState138;
+            Array.Copy(
+                InputRemapIndices13C,
+                destination.InputRemapIndices13C,
+                NativeInputRemapCount);
+            destination.BoundState198 = BoundState198;
+            destination.InputGlobalRecordState20 = InputGlobalRecordState20;
+            destination.InputModeCostMultiplier30 = InputModeCostMultiplier30;
+            destination.InputDoubleCost19C = InputDoubleCost19C;
+            destination.InputCostWaived1B4 = InputCostWaived1B4;
+            destination.InputSpecialGate194 = InputSpecialGate194;
+            destination.InputModeFallbackActionB8 = InputModeFallbackActionB8;
+            destination.InputLocalResourceEnabled49D034 =
+                InputLocalResourceEnabled49D034;
+            destination.InputHpConsumedTotal34C = InputHpConsumedTotal34C;
+            destination.InputMpConsumedTotal350 = InputMpConsumedTotal350;
+            destination.FeatureGate4A8428 = FeatureGate4A8428;
+            destination.InputLinkedDefinitionId324 = InputLinkedDefinitionId324;
+            destination.EnvironmentState320 = EnvironmentState320;
+            destination.CollisionYReference = CollisionYReference;
+            destination.StatusDx1C0 = StatusDx1C0;
+            destination.StatusDy1C4 = StatusDy1C4;
+            destination.StatusDz1C8 = StatusDz1C8;
+            destination.StatusGain1CC = StatusGain1CC;
+            destination.StatusHitFacing1D0 = StatusHitFacing1D0;
+            destination.StatusPickedAction1D4 = StatusPickedAction1D4;
+            destination.StatusPickingAction1D8 = StatusPickingAction1D8;
+            destination.WeakTimer12C = WeakTimer12C;
+            destination.MpRegenBonusTimer1A4 = MpRegenBonusTimer1A4;
+            destination.EffectiveMaxRegenDouble1A8 = EffectiveMaxRegenDouble1A8;
+            destination.HpRegenDouble1AC = HpRegenDouble1AC;
+            destination.FullRestoreTimer1B0 = FullRestoreTimer1B0;
+            destination.OrdinaryCreditGate2F4 = OrdinaryCreditGate2F4;
+            destination.IncomingDamageScale340 = IncomingDamageScale340;
+            destination.ModeDamageScalePercent = ModeDamageScalePercent;
+            destination.InputScoreTotal348 = InputScoreTotal348;
+            destination.KnockoutCount358 = KnockoutCount358;
+            destination.CatchSourceSlot90 = CatchSourceSlot90;
+            destination.Kind4SourceCount92 = Kind4SourceCount92;
+            destination.EnvironmentSourceSlot160 = EnvironmentSourceSlot160;
+            destination.ImpactSourceSlot164 = ImpactSourceSlot164;
+            destination.DisplayScore1F0 = DisplayScore1F0;
+            destination.DisplayScoreStep1F4 = DisplayScoreStep1F4;
+            destination.DisplayDamageTotal1F8 = DisplayDamageTotal1F8;
+            destination.DisplayDamageStep1FC = DisplayDamageStep1FC;
+            destination.DisplayCurrentHp200 = DisplayCurrentHp200;
+            destination.DisplayCurrentHpStep204 = DisplayCurrentHpStep204;
+            destination.DisplayEffectiveMaxHp208 = DisplayEffectiveMaxHp208;
+            destination.DisplayEffectiveMaxHpStep20C = DisplayEffectiveMaxHpStep20C;
+            destination.HitResourceSuppression15C = HitResourceSuppression15C;
+            destination.HitResourceInjuryDouble1A0 = HitResourceInjuryDouble1A0;
+            destination.DelayTimer134 = DelayTimer134;
+            destination.JoinTimer148 = JoinTimer148;
+            destination.PoisonTimer120 = PoisonTimer120;
+            destination.PoisonType124 = PoisonType124;
+            destination.PoisonStrength128 = PoisonStrength128;
+            destination.JoinOverrideActive170 = JoinOverrideActive170;
+            destination.JoinOriginalBattleGroup174 = JoinOriginalBattleGroup174;
+            destination.NativeComputerState1B8 = NativeComputerState1B8;
+            destination.NativeTimer1BC = NativeTimer1BC;
+            destination.RuntimeArmorHp118 = RuntimeArmorHp118;
+            destination.ArmorRecoveryTimer11C = ArmorRecoveryTimer11C;
             destination.HolderStableId = HolderStableId;
             destination.HolderCopySlotIndex = HolderCopySlotIndex;
             destination.PickerStableId = PickerStableId;
@@ -733,6 +966,8 @@ namespace NTSD.Simulation
             destination.SuppressObjectInteractionUntilTick = SuppressObjectInteractionUntilTick;
             destination.SuppressPreInteractionUntilTick = SuppressPreInteractionUntilTick;
             destination.SuppressCollisionCandidateUntilTick = SuppressCollisionCandidateUntilTick;
+            destination.ReviveVisualRuntime180 = ReviveVisualRuntime180;
+            destination.ReviveVisualId184 = ReviveVisualId184;
             destination.RenderPicOffset = RenderPicOffset;
             destination.WaitCounter = WaitCounter;
             destination.FrameWaitCounter = FrameWaitCounter;
@@ -750,11 +985,14 @@ namespace NTSD.Simulation
             destination.HitCount = HitCount;
             destination.HitConfirmEa = HitConfirmEa;
             destination.HitConfirm2 = HitConfirm2;
+            destination.SpecialHitLatch0EB = SpecialHitLatch0EB;
             destination.HealTimer = HealTimer;
             destination.CatchTimer = CatchTimer;
             destination.killCount = killCount;
             destination.ComboCountVic = ComboCountVic;
             destination.ComboCountAtk = ComboCountAtk;
+            destination.NativeComboHitCount1E0 = NativeComboHitCount1E0;
+            destination.NativeComboHitLastTick1E4 = NativeComboHitLastTick1E4;
             destination.KillStat = KillStat;
             destination.Unk328 = Unk328;
             destination.Unk32C = Unk32C;
@@ -862,6 +1100,15 @@ namespace NTSD.Simulation
             KeyAttack = 0;
             KeyJump = 0;
             KeyDefend = 0;
+            NativeInputProxy.Clear();
+            InputProxyCounter14C = 0;
+            InputProxySourceSlot178 = -1;
+            InputProxyEnabled17C = 0;
+            ResetNativeActionCarriers();
+            EnvironmentState320 = 0;
+            CollisionYReference = 0;
+            ResetNativeResourceDisplayCarriers();
+            ResetNativeReactionStatusCarriers();
             HolderStableId = -1;
             HolderCopySlotIndex = 99;
             PickerStableId = -1;
@@ -895,6 +1142,8 @@ namespace NTSD.Simulation
             SuppressObjectInteractionUntilTick = 0;
             SuppressPreInteractionUntilTick = 0;
             SuppressCollisionCandidateUntilTick = 0;
+            ReviveVisualRuntime180 = 0;
+            ReviveVisualId184 = 0;
             RenderPicOffset = 0;
             WaitCounter = 0;
             FrameWaitCounter = 0;
@@ -913,11 +1162,14 @@ namespace NTSD.Simulation
             HitCount = 0;
             HitConfirmEa = 0;
             HitConfirm2 = 0;
+            SpecialHitLatch0EB = false;
             HealTimer = 0;
             CatchTimer = 0;
             KillCount = -1;
             ComboCountVic = 0;
             ComboCountAtk = 0;
+            NativeComboHitCount1E0 = 0;
+            NativeComboHitLastTick1E4 = 0UL;
             KillStat = 0;
             Unk328 = -1;
             Unk32C = -1;

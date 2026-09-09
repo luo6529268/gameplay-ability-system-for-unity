@@ -8,8 +8,8 @@
 - Unity 实现目录：`Assets/NTSD/Scripts/`
 - 当前工作范围：战斗场景与战斗 runtime
 - 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`；任何上下文压缩、交接或历史检索后必须先读该文件
-- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `1277B70BA030A1F33B625EEA20B43834325B280CEC555650BF43CD90A64DAF75` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码
-- 唯一正式内容数值权威：Git 恢复并经 138-DAT manifest/normalized projection 冻结的 Unity `Assets/NTSD/Config` 现状
+- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码；该身份由用户于 2026-09-04 确认是其修复 Bug 后的新版，旧 `1277B70B...DAF75` 只保留为历史基线
+- 当前正式内容数值权威：仍为 Git 恢复并经 138-DAT manifest/normalized projection 冻结的 Unity `Assets/NTSD/Config` 现状；但用户已将 Unity 与 NTSD 2.8-Logan 的内容/资源差异列为必须处理项，具体整体切换、只补缺失或分类权威策略尚待用户决定
 - Unity 是实现目标；NTSD 2.8-Logan 正式 release runtime 用于判定规则、顺序、字段和可观察行为；NTSD 2.4 release、`ntsd_release_C#` 及其旧对齐结论仅保留为历史迁移辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
@@ -32,6 +32,12 @@
 ### 2.2 Direction B 内容数值权威
 
 自 `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 起，正式内容值以 Git 恢复后的 Unity `Assets/NTSD/Config` 现状为准，并通过 138-DAT raw manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。NTSD 2.4/2.8 release DAT、193 行矩阵、Appendix A～F、0do/0do-c 审计只保留为历史或新权威行为诊断证据，不得在用户未改变内容权威前驱动 DAT token、结构、sound、WPoint 或 topology 修正。内容权威变化不放宽当前 NTSD 2.8-Logan battle rule、pass order、33 ms 正常逻辑间隔、state/lifecycle 或 observable behavior 对齐。
+
+用户于 2026-09-02 进一步明确：Unity 与 NTSD 2.8-Logan 的内容、数值和资源差异必须处理；
+Direction B 只是实施策略确定前的当前保护状态，不再是永久排除项。在用户选择“整体切换、只补缺失、
+分类权威”之一并同步更新治理合同前，只允许只读 catalog/引用图/normalized projection 审计，禁止
+直接覆盖 `Assets/NTSD/Config`、PNG、WAV、Prefab、Scene 或 importer。完整边界见
+`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 的 H 项专项。
 
 无法在当前权威 release live path 中确认的行为必须标为“待确认”，不得凭经验补写成正式战斗规则。若 Unity 框架限制导致实现方式不能逐行对应，允许采用 Unity 适配，但逻辑时序、状态变化和最终可观察结果必须与 NTSD 2.8-Logan 正式发行行为一致。
 
@@ -124,13 +130,13 @@ Unity 适配层不得改变当前 NTSD 2.8-Logan release live path 的战斗结�
 当前底层原则：
 
 - `SimulationTickDriver` 是 Unity 侧逻辑帧入口。
-- 当前 NTSD 2.8-Logan 权威的正常逻辑间隔为 `33 ms`（`system.dat` 的 `fps_value: 33`），F5 快速模式为 `3 ms`（`fps_value_f5: 3`）。Unity 当前 `SimulationConstants.SIM_DT = 1f / 30f` 是待重新基线化的旧实现事实，不得再报告为已与新权威对齐；修改它必须另建独立 Change 并完成时序验收。
+- 当前 NTSD 2.8-Logan 权威的正常逻辑间隔为精确 `33 ms`，F5快速模式为精确 `3 ms`。自 `NTSD28-B1-CADENCE-CONTRACT-001` 起，Unity `SimulationConstants.SIM_DT=0.033f`、`FAST_SIM_DT=0.003f`，wall-clock debt最多2个当前cadence interval。自`NTSD28-B1-UNITY-HOST-LOOP-BRIDGE-001`起，必须区分native Host loop与Unity Present/Update：LocalFreeRun可在单次Unity Update内最多排空2个active intervals，不得恢复旧8tick或无界追帧。`SIM_TICK_RATE=30`暂只保留为既有每tick像素换算常量，不得反向解释为Host权威频率。自 `NTSD28-B1-HOST-CONTROL-001` 起，LocalFreeRun 的 F1 pause、paused-only F2 one-step、F5 cadence toggle 已写入生产入口并通过 focused test；在后续真实 Play cadence/物理按键验收完成前仍只能报告 `RUNTIME_PENDING`，不得写成完整对齐。
 - Unity 的 `Update`、`LateUpdate` 和 `FixedUpdate` 只是外层引擎回调，不定义战斗规则。
 - 本地自由运行可由 `Time.unscaledDeltaTime` 累积驱动，但单个逻辑 tick 内不得使用 `Time.deltaTime` 或 `Time.fixedDeltaTime` 决定规则结果。
 - `FixedUpdate()` 不直接推进战斗逻辑。
 - `LateUpdate()` 只做表现刷新或插值，不写回逻辑真相。
 - `SparkRenderFrame` 等战斗表现计数若参与规则，必须跟随逻辑 tick，而不是渲染帧。
-- 卡顿时保持固定步长，通过最大追帧数和积压上限处理过载，不改变单 tick 的 dt。
+- 卡顿时保持当前cadence的固定步长；LocalFreeRun丢弃超过2个active intervals的wall-clock debt，并在同一Unity Update内最多排空这2个interval。该上限是native Host loop与Unity Present边界的适配，不授权更大catch-up。Manual/Lockstep仍由显式frame推进，不消费LocalFreeRun wall-clock。
 
 处理烟雾、武器、分身、opoint、hit spark 或命中时序问题时，优先检查 `GameTick.cs` 对应 pass 在 Unity 的映射与生成可见边界。处理输入响应、回放或联机预留时，再检查 `SimulationTickDriver` 与输入提供者。
 
@@ -334,13 +340,16 @@ USER_HOLD
 当前战斗对齐恢复入口：
 
 - `docs/ai/CURRENT-AUTHORITY.md`
+- `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md`
 - `Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md`
 - `docs/ai/STATE.md`
 - `docs/ai/DECISIONS.md`
 
 旧 C# authority、NTSD 2.4 C++ release 和 R0～R8/U0～U9 对齐 campaign 文档已经用户要求审计
 并由用户从工作树删除，不再是当前恢复入口。不得从 Git 历史恢复旧任务或旧对齐状态。新的
-NTSD 2.8-Logan 对齐计划应在用户给出新要求后另建，不得重新创建或继续旧计划正文。
+NTSD 2.8-Logan 新对齐总表已经建立为
+`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md`；后续新发现差异、用户例外、
+实施状态和关闭证据必须先写入或回链该文档，不得重新创建或继续旧计划正文。
 
 记录差异时至少写明：
 

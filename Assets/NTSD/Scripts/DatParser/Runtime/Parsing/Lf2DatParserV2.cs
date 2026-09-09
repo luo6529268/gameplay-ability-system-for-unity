@@ -33,13 +33,23 @@ namespace NTSD.DatParser
                 "rowing_distance",
             };
 
-        private static readonly HashSet<string> ItrTwoValuePropertyNames =
+        private static readonly HashSet<string> TwoValuePropertyNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
                 "catchingact",
                 "caughtact",
                 "catchingact2",
                 "caughtact2",
+                "frame",
+            };
+
+        private static readonly HashSet<string> BmpFrameSequenceNames =
+            new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+            {
+                "walking_frame",
+                "running_frame",
+                "heavy_walking_frame",
+                "heavy_running_frame",
             };
 
         /// <summary>
@@ -219,6 +229,41 @@ namespace NTSD.DatParser
                         continue;
                     }
 
+                    if (stack.Peek() is Lf2BmpSection sequenceBmp &&
+                        BmpFrameSequenceNames.Contains(name))
+                    {
+                        int declaredCount = 0;
+                        string declaredCountToken = "0";
+                        if (i + 1 < tokens.Length)
+                        {
+                            declaredCountToken = tokens[++i];
+                            if (!int.TryParse(declaredCountToken, out declaredCount) ||
+                                declaredCount < 0)
+                            {
+                                declaredCount = 0;
+                            }
+                        }
+
+                        var sequence = new Lf2BmpFrameSequence
+                        {
+                            Name = name,
+                        };
+                        for (int actionIndex = 0;
+                             actionIndex < declaredCount && i + 1 < tokens.Length;
+                             actionIndex++)
+                        {
+                            if (!int.TryParse(tokens[i + 1], out int action))
+                                break;
+
+                            i++;
+                            sequence.Actions.Add(action);
+                        }
+                        sequenceBmp.AddProperty(
+                            new Lf2DatProperty(name, declaredCountToken));
+                        sequenceBmp.AddFrameSequence(sequence);
+                        continue;
+                    }
+
                     // 判断是子块还是键值对
                     // 子块：opoint, bpoint, cpoint, wpoint, itr, bdy
                     bool isSubBlock = string.Equals(name, "opoint", StringComparison.OrdinalIgnoreCase) ||
@@ -244,7 +289,7 @@ namespace NTSD.DatParser
                             string key = name;
                             i++;
                             string value = tokens[i];
-                            if (ItrTwoValuePropertyNames.Contains(key) &&
+                            if (TwoValuePropertyNames.Contains(key) &&
                                 i + 1 < tokens.Length &&
                                 IsSignedDecimalToken(tokens[i + 1]))
                             {

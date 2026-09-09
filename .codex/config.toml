@@ -1,3 +1,8 @@
+# Project-scoped Codex config: NTSD 2.8-Logan battle alignment sessions only.
+# Model guidance: https://developers.openai.com/api/docs/guides/latest-model
+# gpt-6-astra: reasoning effort `none` unsupported; temperature/top_p not used here.
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
 model_verbosity = "high"
 [mcp_servers.unityMCP]
 enabled = true

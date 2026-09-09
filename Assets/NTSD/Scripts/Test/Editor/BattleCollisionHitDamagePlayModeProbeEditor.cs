@@ -168,10 +168,14 @@ namespace NTSD.Test.Editor
             totalCandidates += RequireCandidateOrder(
                 fixtures.specialAttacker,
                 fixtures.specialTarget);
-            Require(totalCandidates == 10,
-                "The source-derived matrix did not freeze exactly ten candidates.");
+            totalCandidates += RequireCandidateOrder(
+                fixtures.firstBodyAttacker,
+                fixtures.formalCriminalTarget);
+            Require(totalCandidates == 11,
+                "The source-derived matrix did not freeze exactly eleven candidates.");
 
-            fixtures.hitConfirmAttacker.HitConfirm2 = 1;
+            fixtures.hitConfirmAttacker.Runtime.SpecialHitLatch0EB = true;
+            fixtures.hitConfirmAttacker.HitConfirm2 = 0;
             fixtures.effectFirst.DirectWriteRawFramePreserveWaitCounter(18);
             Require(
                 fixtures.effectFirst.Frame.Prev == 0 &&
@@ -198,8 +202,10 @@ namespace NTSD.Test.Editor
                 "character damage vrest mismatch");
 
             Require(fixtures.hitConfirmFirst.Health.HP == 100 &&
-                    fixtures.hitConfirmSecond.Health.HP == 100,
-                "HitConfirm2 did not abort the entire attacker before writers");
+                    fixtures.hitConfirmSecond.Health.HP == 100 &&
+                    fixtures.hitConfirmAttacker.Runtime.SpecialHitLatch0EB &&
+                    fixtures.hitConfirmAttacker.HitConfirm2 == 0,
+                "SpecialHitLatch0EB did not abort the entire attacker before writers");
             Require(fixtures.caughtFirst.Health.HP == 100 &&
                     fixtures.caughtSecond.Health.HP < 100,
                 "caught/hurtable gate did not skip only the first candidate");
@@ -214,6 +220,19 @@ namespace NTSD.Test.Editor
             Require(fixtures.effectFirst.Health.HP == 100 &&
                     fixtures.effectSecond.Health.HP == 100,
                 "effect21 state18 did not abort the entire attacker before writers");
+            Require(fixtures.formalCriminalTarget.Frame.N == 33 &&
+                    fixtures.formalCriminalTarget.Runtime.Frame == 33 &&
+                    fixtures.formalCriminalTarget.Runtime.FrameWaitCounter == 77 &&
+                    fixtures.formalCriminalTarget.RelationTeam == 1 &&
+                    fixtures.firstBodyAttacker.FrameDelay == 3 &&
+                    fixtures.formalCriminalTarget.FrameDelay == -3 &&
+                    fixtures.formalCriminalTarget.Health.HP == 100,
+                "formal criminal frame30 first-BDY 1033 response mismatch");
+            Require(
+                world.GetRawRestVrest(
+                    fixtures.formalCriminalTarget.Runtime.SlotIndex,
+                    fixtures.firstBodyAttacker.Runtime.SlotIndex) == 0,
+                "formal criminal response incorrectly entered ordinary consume effects");
             Require(fixtures.rawTarget.Frame.N == 182 &&
                     fixtures.rawTarget.Runtime.Frame == 182 &&
                     fixtures.rawTarget.Frame.PN == 41 &&
@@ -238,27 +257,34 @@ namespace NTSD.Test.Editor
 
             Require(fixtures.weaponTarget.Health.HP == 80 &&
                     fixtures.weaponTarget.Health.HPBound == 94 &&
-                    fixtures.weaponTarget.ComboCountVic == 20 &&
+                    fixtures.weaponTarget.ComboCountVic == 0 &&
                     fixtures.weaponTarget.Runtime.WeaponFlightCounter == 90,
-                "weapon victim scaled vital/raw durability mismatch");
-            Require(world.DamageStats[2] == baselineDamageStats[2] + 20 &&
+                $"weapon victim scaled vital/raw durability mismatch: " +
+                $"hp={fixtures.weaponTarget.Health.HP}, " +
+                $"hpBound={fixtures.weaponTarget.Health.HPBound}, " +
+                $"combo={fixtures.weaponTarget.ComboCountVic}, " +
+                $"durability={fixtures.weaponTarget.Runtime.WeaponFlightCounter}, " +
+                $"latch={fixtures.weaponTarget.Runtime.SpecialHitLatch0EB}, " +
+                $"hitConfirm2={fixtures.weaponTarget.HitConfirm2}");
+            Require(world.DamageStats[2] == baselineDamageStats[2] &&
                     world.GetRawRestVrest(
                         fixtures.weaponTarget.Runtime.SlotIndex,
                         fixtures.weaponAttacker.Runtime.SlotIndex) == 3 &&
                     fixtures.weaponTarget.HitConfirm2 == 1,
-                "weapon tail damage-stat/vrest/HitConfirm2 mismatch");
+                "weapon tail legacy-stat preservation/vrest/HitConfirm2 mismatch");
 
             Require(fixtures.specialTarget.Health.HP == 90 &&
                     fixtures.specialTarget.Health.HPBound == 97 &&
-                    fixtures.specialTarget.ComboCountVic == 10,
+                    fixtures.specialTarget.ComboCountVic == 0,
                 "special target vital/combo mismatch");
-            Require(world.DamageStats[1] == baselineDamageStats[1] + 20 &&
+            Require(world.DamageStats[1] == baselineDamageStats[1] + 10 &&
                     world.KillStats[1] == baselineKillStats[1] + 1 &&
-                    world.GetRawRestVrest(
-                        fixtures.specialTarget.Runtime.SlotIndex,
-                        fixtures.specialAttacker.Runtime.SlotIndex) == 3 &&
-                    fixtures.specialTarget.HitConfirm2 == 1,
-                "special target stat/vrest/HitConfirm2 or type0-only kill exclusion mismatch");
+                     world.GetRawRestVrest(
+                         fixtures.specialTarget.Runtime.SlotIndex,
+                         fixtures.specialAttacker.Runtime.SlotIndex) == 3 &&
+                    fixtures.specialTarget.HitConfirm2 == 0 &&
+                    fixtures.specialTarget.Runtime.SpecialHitLatch0EB,
+                "special target stat/vrest/SpecialHitLatch0EB or type0-only kill exclusion mismatch");
 
             BattleHitExecutionPlanDiagnostics diagnostics =
                 world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
@@ -316,6 +342,25 @@ namespace NTSD.Test.Editor
                         fixtures.specialAttacker.Runtime.SlotIndex),
                     frame = fixtures.specialTarget.Frame.N,
                     hitConfirm2 = fixtures.specialTarget.HitConfirm2,
+                    specialHitLatch0eb = fixtures.specialTarget.Runtime.SpecialHitLatch0EB,
+                },
+                formalCriminalFirstBody = new FirstBodyResponseEvidence
+                {
+                    attackerSlot = fixtures.firstBodyAttacker.Runtime.SlotIndex,
+                    targetSlot = fixtures.formalCriminalTarget.Runtime.SlotIndex,
+                    objectId = 300,
+                    sourceFrame = 30,
+                    firstBodyKind = 1033,
+                    resultingFrame = fixtures.formalCriminalTarget.Frame.N,
+                    resultingGroup = fixtures.formalCriminalTarget.RelationTeam,
+                    attackerHold = fixtures.firstBodyAttacker.FrameDelay,
+                    targetHold = fixtures.formalCriminalTarget.FrameDelay,
+                    frameCounter =
+                        fixtures.formalCriminalTarget.Runtime.FrameWaitCounter,
+                    hp = fixtures.formalCriminalTarget.Health.HP,
+                    vrest = world.GetRawRestVrest(
+                        fixtures.formalCriminalTarget.Runtime.SlotIndex,
+                        fixtures.firstBodyAttacker.Runtime.SlotIndex),
                 },
                 hitConfirmAbort = new GateEvidence
                 {
@@ -325,6 +370,7 @@ namespace NTSD.Test.Editor
                     firstHp = fixtures.hitConfirmFirst.Health.HP,
                     secondHp = fixtures.hitConfirmSecond.Health.HP,
                     attackerAborted = true,
+                    specialHitLatch0eb = fixtures.hitConfirmAttacker.Runtime.SpecialHitLatch0EB,
                 },
                 caughtGate = new GateEvidence
                 {
@@ -486,7 +532,8 @@ namespace NTSD.Test.Editor
             fixtures.weaponTarget.Health.HP = 100;
             fixtures.weaponTarget.Health.HPBound = 100;
             fixtures.weaponTarget.Health.HP3 = 100;
-            fixtures.weaponTarget.FallDamageDiv = 50;
+            fixtures.weaponTarget.FallDamageDiv = 200;
+            fixtures.weaponTarget.Runtime.IncomingDamageScale340 = 50;
             fixtures.weaponTarget.Unk344 = 2;
             fixtures.weaponTarget.Runtime.WeaponFlightCounter = 100;
 
@@ -514,6 +561,31 @@ namespace NTSD.Test.Editor
             fixtures.specialTarget.Health.HPBound = 100;
             fixtures.specialTarget.Health.HP3 = 100;
             fixtures.specialTarget.Unk344 = 1;
+
+            LF2CharacterDataWrapper criminalConfig =
+                CharacterAnimtorManager.Instance?.GetCharacterConfig(300);
+            Require(criminalConfig?.characterData != null,
+                "formal criminal OID300 config is unavailable in the live manager");
+            LF2FrameData criminalFrame30 =
+                criminalConfig.characterData.frames?.Find(frame => frame.frameId == 30);
+            Require(criminalFrame30 != null &&
+                    criminalFrame30.PrimaryBodyKind == 1033 &&
+                    criminalFrame30.PrimaryBodyRespond == 0,
+                "formal criminal frame30 no longer carries first-BDY kind1033/respond0");
+            fixtures.firstBodyAttacker = RegisterOwned(new ProbeCharacter(
+                "R8C04_FirstBodyAttacker",
+                oid++,
+                AttackItr(0, 10, 3, 0),
+                false));
+            fixtures.formalCriminalTarget = RegisterOwned(new ProbeCriminal(
+                "R8C04_FormalCriminalTarget",
+                criminalConfig,
+                30));
+            ConfigurePair(
+                fixtures.firstBodyAttacker,
+                fixtures.formalCriminalTarget,
+                180000);
+            fixtures.formalCriminalTarget.Runtime.FrameWaitCounter = 77;
 
             return fixtures;
         }
@@ -1047,6 +1119,32 @@ namespace NTSD.Test.Editor
             }
         }
 
+        private sealed class ProbeCriminal : LF2Character
+        {
+            public ProbeCriminal(
+                string name,
+                LF2CharacterDataWrapper config,
+                int frameId)
+            {
+                Name = name;
+                ObjectId = 300;
+                FrameCache.Load(config);
+                ImmediateFrame(frameId);
+                Runtime.SetPosition(0, 0, 0);
+                Runtime.SyncIntegerPosition();
+                SwitchDir("right");
+                Health.HP = 100;
+                Health.HPBound = 100;
+                Health.HP3 = 100;
+                KillCount = -1;
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation()
+            {
+                return (int)LF2ObjectType.Other;
+            }
+        }
+
         private static LF2CharacterData BuildCharacterData(
             string name,
             InteractionArea itr,
@@ -1183,6 +1281,8 @@ namespace NTSD.Test.Editor
             public ProbeWeapon weaponDummyB;
             public ProbeSpecialAttack specialAttacker;
             public ProbeSpecialAttack specialTarget;
+            public ProbeCharacter firstBodyAttacker;
+            public ProbeCriminal formalCriminalTarget;
         }
 
         [Serializable]
@@ -1221,6 +1321,7 @@ namespace NTSD.Test.Editor
             public HitEvidence character;
             public HitEvidence weapon;
             public HitEvidence special;
+            public FirstBodyResponseEvidence formalCriminalFirstBody;
             public GateEvidence hitConfirmAbort;
             public GateEvidence caughtGate;
             public GateEvidence effect21Abort;
@@ -1247,6 +1348,24 @@ namespace NTSD.Test.Editor
             public int frame;
             public int durability;
             public int hitConfirm2;
+            public bool specialHitLatch0eb;
+        }
+
+        [Serializable]
+        private sealed class FirstBodyResponseEvidence
+        {
+            public int attackerSlot;
+            public int targetSlot;
+            public int objectId;
+            public int sourceFrame;
+            public int firstBodyKind;
+            public int resultingFrame;
+            public int resultingGroup;
+            public int attackerHold;
+            public int targetHold;
+            public int frameCounter;
+            public int hp;
+            public int vrest;
         }
 
         [Serializable]
@@ -1259,6 +1378,7 @@ namespace NTSD.Test.Editor
             public int secondHp;
             public bool attackerAborted;
             public bool firstSkippedOnly;
+            public bool specialHitLatch0eb;
         }
 
         [Serializable]

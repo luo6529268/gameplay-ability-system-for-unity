@@ -30,10 +30,23 @@ namespace NTSD.Simulation
                 if (!PassesRespawnGate(entity))
                     continue;
 
-                if (entity.RespawnCount <= 0)
-                    ApplyRespawnWithoutStoredCount(entity);
+                // Alignment contract:
+                // NTSD28-B4-REVIVAL-PARTICIPANT-GATE-KILLCOUNT-CORRECTION-001.
+                if (entity.HP2Orig < 2)
+                {
+                    if (entity.RespawnCount > 0)
+                    {
+                        ApplyRespawnFromStoredCount(entity);
+                    }
+                    else if ((entity.Runtime?.SlotIndex ?? -1) > 19)
+                    {
+                        entity.FreeEntityLikeExe();
+                    }
+                }
                 else
-                    ApplyRespawnFromStoredCount(entity);
+                {
+                    ApplyRespawnWithoutStoredCount(entity);
+                }
 
                 if (world.IsActiveForCurrentPassInternal(entity))
                     world.RefreshRuntimeSnapshotForModule(entity);
@@ -58,14 +71,6 @@ namespace NTSD.Simulation
                 return false;
             }
 
-            int slotIndex = entity.Runtime?.SlotIndex ?? -1;
-            if (slotIndex < 20 &&
-                entity.KillCount < 0 &&
-                entity.RelationTeam != 5)
-            {
-                return false;
-            }
-
             int hitStop = entity.HitStun;
             return hitStop > 0 && hitStop < 5;
         }
@@ -73,12 +78,6 @@ namespace NTSD.Simulation
         private void ApplyRespawnWithoutStoredCount(LF2Entity entity)
         {
             int hp2 = entity.HP2Orig;
-            if (hp2 < 2)
-            {
-                entity.FreeEntityLikeExe();
-                return;
-            }
-
             entity.HP2Orig = hp2 - 1;
 
             int relationTeam = entity.RelationTeam;
@@ -108,33 +107,38 @@ namespace NTSD.Simulation
                 count++;
             }
 
-            if (count > 0)
+            if (sumX != 0 && count > 0)
             {
                 int avgX = sumX / count;
                 int avgZ = sumZ / count;
-                entity.Runtime.X = avgX + entity.BattleRandInt(0, 51) - 26.0;
-                entity.Runtime.XInt = (int)entity.Runtime.X;
-                entity.Runtime.Z = avgZ + entity.BattleRandInt(0, 31) - 16.0;
-                entity.Runtime.ZInt = (int)entity.Runtime.Z;
+                entity.Runtime.X = avgX +
+                    world.NativeRandom.SynchronizedNext(0x90u, 0x33) - 25.0;
+                entity.Runtime.Z = avgZ +
+                    world.NativeRandom.SynchronizedNext(0x91u, 0x1f) - 15.0;
                 entity.PS.x = entity.Runtime.X;
                 entity.PS.z = entity.Runtime.Z;
             }
 
             entity.Health.PP = 500;
-            entity.Health.PPBound = entity.Health.MaxPP;
             entity.Health.HPBound = entity.Health.HP3;
             entity.Health.HP = entity.Health.HPBound;
             entity.HitStun = 20;
             entity.DirectWriteFramePreserveWaitCounter(212);
-            entity.PS.y = -300.0;
+            int floorY = entity.Runtime.CollisionYReference < 0
+                ? entity.Runtime.CollisionYReference
+                : 0;
+            entity.PS.y = floorY;
             entity.PS.vy = 0.0;
-            entity.Runtime.Y = -300.0;
+            entity.Runtime.Y = floorY;
+            entity.Runtime.YInt = floorY;
             entity.Runtime.Vy = 0.0;
-            entity.Runtime.SyncIntegerPosition();
         }
 
         private void ApplyRespawnFromStoredCount(LF2Entity entity)
         {
+            if (!TryResolveQueuedControllerGroup(entity, out int battleGroup))
+                return;
+
             entity.HP2Orig = entity.HPOrig;
             entity.Health.PP = 0;
             entity.Health.HPBound = entity.RespawnCount;
@@ -142,15 +146,50 @@ namespace NTSD.Simulation
             entity.Health.HP = entity.Health.HP3;
             entity.RespawnCount = 0;
             entity.HPOrig = 0;
-            entity.RelationTeam = 1;
+            entity.RelationTeam = battleGroup;
 
-            if (entity.ObjectId >= 0x1E && entity.ObjectId <= 0x24)
-                entity.Runtime.RenderPicOffset = 0x8C;
+            int visual = entity.Runtime.ReviveVisualId184;
+            if (visual < 1)
+            {
+                if ((entity.ObjectId >= 30 && entity.ObjectId <= 36) ||
+                    entity.ObjectId == 39)
+                {
+                    visual = 140;
+                }
+                else if (entity.ObjectId == 37)
+                {
+                    visual = 114;
+                }
+            }
+            if (visual > 0)
+            {
+                entity.Runtime.RenderPicOffset = visual;
+                entity.Runtime.ReviveVisualRuntime180 = visual;
+            }
 
             entity.DirectWriteFramePreserveWaitCounter(0xDB);
             entity.AttackingCounter = 0;
             entity.FrameDelay = 0xA;
             TrySpawnRespawnEffect(entity);
+        }
+
+        private bool TryResolveQueuedControllerGroup(
+            LF2Entity entity,
+            out int battleGroup)
+        {
+            battleGroup = 0;
+            int nativeControllerSlot = entity?.Runtime?.Unk360 ?? -1;
+            bool inactiveSlotOneFallback = nativeControllerSlot == -1;
+            int controllerSlot = inactiveSlotOneFallback
+                ? 1
+                : nativeControllerSlot;
+            LF2Entity controller =
+                world.FindEntityByRuntimeSlotForQuery(controllerSlot);
+            if (controller == null)
+                return inactiveSlotOneFallback;
+
+            battleGroup = controller.RelationTeam;
+            return true;
         }
 
         private LF2Entity TrySpawnRespawnEffect(LF2Entity entity)

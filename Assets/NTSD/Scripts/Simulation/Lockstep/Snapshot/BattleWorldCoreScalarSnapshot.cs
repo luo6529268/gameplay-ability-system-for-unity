@@ -135,6 +135,122 @@ namespace NTSD.Simulation
         public bool NeedClearInput { get; }
     }
 
+    public readonly struct BattleWorldFunctionKeyScalarSnapshot
+    {
+        internal BattleWorldFunctionKeyScalarSnapshot(
+            NTSD28NativeFunctionKeySessionState state)
+        {
+            LockState = state?.LockState ?? 0;
+            HitResourceEnabled = state?.HitResourceEnabled ?? true;
+            F6EventCount = state?.F6EventCount ?? 0;
+            F7EventCount = state?.F7EventCount ?? 0;
+            F8EventCount = state?.F8EventCount ?? 0;
+            F9EventCount = state?.F9EventCount ?? 0;
+            PendingFullMp = state?.PendingFullMp ?? false;
+            PendingObjectCommand = state?.PendingObjectCommand ??
+                NTSD28NativeFunctionKeyPendingObjectCommand.None;
+            QueuedEventByte = state?.QueuedEventByte ?? 0;
+            LastAcceptedEventByte = state?.LastAcceptedEventByte ?? 0;
+        }
+
+        public int LockState { get; }
+        public bool HitResourceEnabled { get; }
+        public uint F6EventCount { get; }
+        public uint F7EventCount { get; }
+        public uint F8EventCount { get; }
+        public uint F9EventCount { get; }
+        public bool PendingFullMp { get; }
+        public NTSD28NativeFunctionKeyPendingObjectCommand PendingObjectCommand
+        {
+            get;
+        }
+        public byte QueuedEventByte { get; }
+        public byte LastAcceptedEventByte { get; }
+    }
+
+    public readonly struct BattleWorldHitResourceRulesScalarSnapshot
+    {
+        internal BattleWorldHitResourceRulesScalarSnapshot(
+            NTSD28HitResourceRulesRuntimeState state)
+        {
+            ActiveModeHitGroupGate18 =
+                state?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeHitGroupGate18;
+            ActiveModeAttackingPercent1C =
+                state?.ActiveModeAttackingPercent1C ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeAttackingPercent1C;
+            AttackerInjuryMpPercent34 =
+                state?.AttackerInjuryMpPercent34 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultAttackerInjuryMpPercent34;
+            TargetInjuryMpPercent38 =
+                state?.TargetInjuryMpPercent38 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultTargetInjuryMpPercent38;
+            NegativeEnvironmentDamage90 =
+                state?.NegativeEnvironmentDamage90 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultNegativeEnvironmentDamage90;
+        }
+
+        public int ActiveModeHitGroupGate18 { get; }
+        public int ActiveModeAttackingPercent1C { get; }
+        public int AttackerInjuryMpPercent34 { get; }
+        public int TargetInjuryMpPercent38 { get; }
+        public int NegativeEnvironmentDamage90 { get; }
+    }
+
+    public readonly struct BattleWorldStandardHitRestScalarSnapshot
+    {
+        internal BattleWorldStandardHitRestScalarSnapshot(
+            NTSD28StandardHitRestRuntimeState state)
+        {
+            TimingReduction4A9FF4 = state?.TimingReduction4A9FF4 ??
+                NTSD28StandardHitRestRuntimeState
+                    .DefaultTimingReduction4A9FF4;
+        }
+
+        public int TimingReduction4A9FF4 { get; }
+    }
+
+    public readonly struct BattleWorldNativeComboScalarSnapshot
+    {
+        internal BattleWorldNativeComboScalarSnapshot(
+            NTSD28NativeComboRuntimeState state)
+        {
+            RecordPresent = state?.RecordPresent ??
+                NTSD28NativeComboRuntimeState.DefaultRecordPresent;
+            Bound = state?.Bound ?? NTSD28NativeComboRuntimeState.DefaultBound;
+            Facing = state?.Facing ?? NTSD28NativeComboRuntimeState.DefaultFacing;
+            Respond = state?.Respond ?? NTSD28NativeComboRuntimeState.DefaultRespond;
+            CaughtAct = state?.CaughtAct ??
+                NTSD28NativeComboRuntimeState.DefaultCaughtAct;
+        }
+
+        public bool RecordPresent { get; }
+        public int Bound { get; }
+        public int Facing { get; }
+        public int Respond { get; }
+        public int CaughtAct { get; }
+    }
+
+    public readonly struct BattleWorldNativeClockScalarSnapshot
+    {
+        internal BattleWorldNativeClockScalarSnapshot(
+            NTSD28NativeWorldClockState state)
+        {
+            ResourcePhase12 = state?.ResourcePhase12 ?? 0;
+            ResourcePhase3 = state?.ResourcePhase3 ?? 0;
+            FrameSequence = state?.FrameSequence ?? 0UL;
+        }
+
+        public int ResourcePhase12 { get; }
+        public int ResourcePhase3 { get; }
+        public ulong FrameSequence { get; }
+    }
+
     /// <summary>
     /// Immutable allocation-free capture of the scalar world domains. This is an
     /// incremental U7 schema product, not a complete restorable battle snapshot.
@@ -143,7 +259,7 @@ namespace NTSD.Simulation
     /// </summary>
     public readonly struct BattleWorldCoreScalarSnapshot
     {
-        public const int CurrentSchemaVersion = 2;
+        public const int CurrentSchemaVersion = 11;
 
         internal BattleWorldCoreScalarSnapshot(
             SimulationWorld world,
@@ -166,8 +282,20 @@ namespace NTSD.Simulation
             Stage = new BattleWorldStageScalarSnapshot(world.Runtime?.Stage);
             Progression = new BattleWorldProgressionScalarSnapshot(world.Runtime);
             Flow = new BattleWorldFlowScalarSnapshot(world.Runtime?.Flow);
+            NativeClock = new BattleWorldNativeClockScalarSnapshot(
+                world.Runtime?.NativeWorldClock);
+            FunctionKeys = new BattleWorldFunctionKeyScalarSnapshot(
+                world.Runtime?.FunctionKeys);
+            HitResourceRules = new BattleWorldHitResourceRulesScalarSnapshot(
+                world.Runtime?.NativeHitResourceRules);
+            NativeCombo = new BattleWorldNativeComboScalarSnapshot(
+                world.Runtime?.NativeCombo);
+            StandardHitRest = new BattleWorldStandardHitRestScalarSnapshot(
+                world.Runtime?.NativeStandardHitRest);
+            OneTuInput = world.OneTuInput;
             RngState = world.Rng?.State ?? 0U;
             RngCallCount = world.Rng?.CallCount ?? 0UL;
+            NativeRandomState = world.NativeRandom?.CaptureScalarState() ?? default;
             ReleaseCameraX = world.ReleaseCameraX;
             ReleaseCameraVelocity = world.ReleaseCameraVelocityForServices;
             NextAutoStableId = world.NextAutoStableIdForServices;
@@ -185,8 +313,15 @@ namespace NTSD.Simulation
         public BattleWorldStageScalarSnapshot Stage { get; }
         public BattleWorldProgressionScalarSnapshot Progression { get; }
         public BattleWorldFlowScalarSnapshot Flow { get; }
+        public BattleWorldNativeClockScalarSnapshot NativeClock { get; }
+        public BattleWorldFunctionKeyScalarSnapshot FunctionKeys { get; }
+        public BattleWorldHitResourceRulesScalarSnapshot HitResourceRules { get; }
+        public BattleWorldNativeComboScalarSnapshot NativeCombo { get; }
+        public BattleWorldStandardHitRestScalarSnapshot StandardHitRest { get; }
+        public bool OneTuInput { get; }
         public uint RngState { get; }
         public ulong RngCallCount { get; }
+        public NTSD28NativeRandomScalarState NativeRandomState { get; }
         public int ReleaseCameraX { get; }
         public int ReleaseCameraVelocity { get; }
         public int NextAutoStableId { get; }

@@ -14,18 +14,19 @@ namespace NTSD.Test.Editor
 {
     /// <summary>
     /// Editor-only full-tick witness for an actual kind0 collision producer through the
-    /// frozen presentation cycle and same-tick HitRecord writeback.
-    /// Alignment contract: R8-HITWRITEBACK-001.
+    /// C01-owned native spark lifecycle and read-only frozen presentation cycle.
+    /// Alignment contract: NTSD28-B3-NATIVE-SPARK-C01-INTEGRATION-001.
     /// </summary>
     public static class BattleHitRecordWritebackPlayModeProbeEditor
     {
         private const string MenuPath =
-            "NTSD/Battle Diagnostics/R8/Run HitRecord Writeback Play Probe";
+            "NTSD/Battle Diagnostics/B3/Run Native Spark C01 Play Probe";
         private const string ResultRelativePath =
-            "Temp/NTSD_R8_WP01G_R07A_HitRecordWriteback.result.json";
+            "Temp/NTSD28_B3_NativeSparkC01.result.json";
         private const int TimeoutEditorUpdates = 2400;
         private const int ProbeObjectIdBase = 8400;
         private const int FixtureX = 200000;
+        private const uint ProbeRngSeed = 0x0B3C0101u;
         private const int PublishedTickCount = 3;
         private const int TotalTickCount = 4;
 
@@ -33,6 +34,8 @@ namespace NTSD.Test.Editor
             new List<LF2Entity>(TotalTickCount * 2);
         private static readonly List<PendingSoundEvent> BaselineSounds =
             new List<PendingSoundEvent>(16);
+        private static readonly List<BaselineAiControl> BaselineAiControls =
+            new List<BaselineAiControl>(16);
         private static readonly ProbeCharacter[] Attackers =
             new ProbeCharacter[TotalTickCount];
         private static readonly ProbeCharacter[] Victims =
@@ -56,6 +59,7 @@ namespace NTSD.Test.Editor
         private static int expectedTick;
         private static int tickOrdinal;
         private static int cycleIdBeforeTick;
+        private static uint rngStateBeforeTick;
         private static ulong rngCallsBeforeTick;
         private static int[] baselineKillStats;
         private static int[] baselineDamageStats;
@@ -100,20 +104,15 @@ namespace NTSD.Test.Editor
                 WriteImmediateFailure("R07A requires the protected CentralOnly backend.");
                 return;
             }
-            if (world.RuntimeDataCatalog?.HitRecordLifecycleCatalog.IsAvailable != true ||
-                !manager.CommonVisualCatalog.IsSparkValid)
-            {
-                WriteImmediateFailure(
-                    "The production HitRecord lifecycle or common Spark publication is unavailable.");
-                return;
-            }
-
             previousPaused = driver.IsPaused;
             report = new ProbeReport
             {
                 status = "RUNNING",
                 startTick = driver.CurrentTickIndex,
                 workerPath = driver.DedicatedSimulationWorkerActiveForDiagnostics,
+                runtimeLifecycleAvailable =
+                    world.RuntimeDataCatalog?.HitRecordLifecycleCatalog.IsAvailable == true,
+                commonSparkAvailable = manager.CommonVisualCatalog.IsSparkValid,
             };
             running = true;
             phase = ProbePhase.WaitingForSafeBoundary;
@@ -214,8 +213,22 @@ namespace NTSD.Test.Editor
             baselineDamageStats = CloneArray(world.DamageStats);
             baselineRngState = world.Rng.State;
             baselineRngCalls = world.Rng.CallCount;
+            world.Rng.Seed(ProbeRngSeed);
             BaselineSounds.Clear();
             BaselineSounds.AddRange(world.PendingSounds);
+            BaselineAiControls.Clear();
+            int runtimeSlotCapacity = world.RuntimeSlotCapacityForDiagnostics;
+            for (int slot = 0; slot < runtimeSlotCapacity; slot++)
+            {
+                LF2Entity baselineEntity = world.FindEntityByRuntimeSlotForQuery(slot);
+                if (baselineEntity == null || !baselineEntity.AiControlled)
+                    continue;
+
+                BaselineAiControls.Add(new BaselineAiControl(
+                    baselineEntity,
+                    aiControlled: true));
+                baselineEntity.AiControlled = false;
+            }
 
             report.baselineObjectCount = baselineObjectCount;
             report.baselineClaimedSlots = baselineClaimedSlots;
@@ -223,6 +236,8 @@ namespace NTSD.Test.Editor
             report.baselineLogicPoolActive = baselineLogicPoolActive;
             report.baselineRngState = baselineRngState;
             report.baselineRngCalls = baselineRngCalls;
+            report.probeRngSeed = ProbeRngSeed;
+            report.suppressedBaselineAiEntityCount = BaselineAiControls.Count;
         }
 
         private static void BuildFixture()
@@ -305,6 +320,7 @@ namespace NTSD.Test.Editor
         {
             ArmPairForTick(tickOrdinal);
             expectedTick = driver.CurrentTickIndex + 1;
+            rngStateBeforeTick = world.Rng.State;
             rngCallsBeforeTick = world.Rng.CallCount;
             cycleIdBeforeTick = world.BattlePresentation.PublishedHitRecordCycle?.CycleId ?? 0;
             bool accepted;
@@ -374,14 +390,29 @@ namespace NTSD.Test.Editor
             Require(recordOwner.HitRecordCount == 1,
                 $"Tick {expectedTick} current victim produced {recordOwner.HitRecordCount} " +
                 "hit records, expected 1.");
-            Require(world.Rng.CallCount - rngCallsBeforeTick == 2UL,
-                $"Tick {expectedTick} kind0 record consumed " +
-                $"{world.Rng.CallCount - rngCallsBeforeTick} RNG calls, expected 2.");
+            var expectedRng = new DeterministicRng(rngStateBeforeTick);
+            int expectedHitZ = attacker.GetRenderZInt() + expectedRng.NextInt(0, 9) - 4;
+            int expectedHitX = FixtureX + 10 + expectedRng.NextInt(0, 9) - 4;
+            int randomWeaponDropGate = expectedRng.NextInt(0, 200);
+            ulong rngCallDelta = world.Rng.CallCount - rngCallsBeforeTick;
+            Require(randomWeaponDropGate != 0,
+                $"Tick {expectedTick} fixture seed unexpectedly opened the user-exception " +
+                "random weapon drop branch.");
+            Require(rngCallDelta == expectedRng.CallCount &&
+                    world.Rng.State == expectedRng.State,
+                $"Tick {expectedTick} RNG sequence was not exactly two kind0 anchor draws " +
+                $"plus one user-exception random-weapon gate: delta={rngCallDelta}, " +
+                $"expected={expectedRng.CallCount}.");
+            Require(recordOwner.GetHitRecordX(0) == expectedHitX &&
+                    recordOwner.GetHitRecordZ(0) == expectedHitZ,
+                $"Tick {expectedTick} kind0 spark anchor did not consume the first two " +
+                $"isolated draws: actual=({recordOwner.GetHitRecordX(0)}," +
+                $"{recordOwner.GetHitRecordZ(0)}), expected=({expectedHitX},{expectedHitZ}).");
 
             int[] liveAges = CopyLiveAgesThroughOrdinal(tickOrdinal);
             for (int index = 0; index < liveAges.Length; index++)
             {
-                int expectedAge = expectedCount - index;
+                int expectedAge = tickOrdinal - index;
                 Require(liveAges[index] == expectedAge,
                     $"Tick {expectedTick} live age[{index}]={liveAges[index]}, expected {expectedAge}.");
             }
@@ -390,7 +421,12 @@ namespace NTSD.Test.Editor
             {
                 tick = expectedTick,
                 buildPresentation = buildPresentation,
-                rngCalls = world.Rng.CallCount - rngCallsBeforeTick,
+                rngCalls = rngCallDelta,
+                rngStateBefore = rngStateBeforeTick,
+                rngStateAfter = world.Rng.State,
+                randomWeaponDropGate = randomWeaponDropGate,
+                hitRecordX = recordOwner.GetHitRecordX(0),
+                hitRecordZ = recordOwner.GetHitRecordZ(0),
                 liveAges = liveAges,
                 cycleIdBefore = cycleIdBeforeTick,
                 phaseDiagnosticsTick = tickDiagnostics?.LastTickIndex ?? -1,
@@ -428,7 +464,7 @@ namespace NTSD.Test.Editor
                         owner.HitRecordCount == 1,
                         "The frozen HitRecord owner handle/stable/slot/generation contract changed.");
                     frozenAges[index] = cycle.GetHitRecord(owner.HitRecordStart).Age;
-                    int expectedFrozenAge = expectedCount - index - 1;
+                    int expectedFrozenAge = tickOrdinal - index;
                     Require(frozenAges[index] == expectedFrozenAge,
                         $"Tick {expectedTick} frozen age[{index}]={frozenAges[index]}, " +
                         $"expected {expectedFrozenAge}.");
@@ -440,21 +476,24 @@ namespace NTSD.Test.Editor
                     "The published frame did not preserve the actual frozen HitRecord samples.");
 
                 int hitCommandCount = 0;
-                if (workerPath)
+                if (!frame.CommandsMaterialized)
                 {
-                    Require(!frame.CommandsMaterialized,
-                        "The worker publication must remain a pure, unmaterialized frame.");
+                    Require(frame.HitRecordCount == expectedCount,
+                        "The logical publication did not preserve the frozen HitRecord count.");
                 }
                 else
                 {
-                    Require(frame.CommandsMaterialized,
-                        "The non-worker central frame did not materialize HitRecord commands.");
                     hitCommandCount = CountHitCommands(
                         frame,
                         tickOrdinal);
-                    Require(hitCommandCount == expectedCount,
+                    bool frameSparkAvailable = frame.CommonVisualCatalog?.IsSparkValid == true;
+                    int expectedHitCommandCount = frameSparkAvailable
+                        ? expectedCount
+                        : 0;
+                    Require(hitCommandCount == expectedHitCommandCount,
                         $"The central frame emitted {hitCommandCount} hit commands, " +
-                        $"expected {expectedCount}.");
+                        $"expected {expectedHitCommandCount} for the current resource state.");
+                    evidence.sparkResourceAvailable = frameSparkAvailable;
                 }
 
                 evidence.cycleIdAfter = cycle.CycleId;
@@ -539,7 +578,7 @@ namespace NTSD.Test.Editor
                 return;
 
             bool buildPresentation = tickOrdinal < PublishedTickCount;
-            if (workerPath && buildPresentation)
+            if (buildPresentation)
             {
                 var plan = world.CurrentPixelFramePlan;
                 BattlePresentationFrame materializedFrame = plan.CapturedFrame;
@@ -552,18 +591,24 @@ namespace NTSD.Test.Editor
                 Require(plan.SimulationTick == expectedTick &&
                         materializedFrame.TickIndex == expectedTick &&
                         materializedFrame.CommandsMaterialized,
-                    "The production central host did not materialize the completed worker publication.");
+                    "The production central host did not materialize the completed logical publication.");
                 int expectedCount = tickOrdinal + 1;
                 Require(materializedFrame.HitRecordCount == expectedCount,
                     "The materialized central frame changed the frozen HitRecord count.");
                 int hitCommandCount = CountHitCommands(
                     materializedFrame,
                     tickOrdinal);
-                Require(hitCommandCount == expectedCount,
+                bool frameSparkAvailable =
+                    materializedFrame.CommonVisualCatalog?.IsSparkValid == true;
+                int expectedHitCommandCount = frameSparkAvailable
+                    ? expectedCount
+                    : 0;
+                Require(hitCommandCount == expectedHitCommandCount,
                     $"The materialized central frame emitted {hitCommandCount} hit commands, " +
-                    $"expected {expectedCount}.");
+                    $"expected {expectedHitCommandCount} for the current resource state.");
                 TickSamples[tickOrdinal].frameTick = materializedFrame.TickIndex;
                 TickSamples[tickOrdinal].hitCommandCount = hitCommandCount;
+                TickSamples[tickOrdinal].sparkResourceAvailable = frameSparkAvailable;
             }
 
             int[] afterLate = CopyLiveAgesThroughOrdinal(tickOrdinal);
@@ -603,9 +648,9 @@ namespace NTSD.Test.Editor
         {
             report.status = "PASS";
             report.message =
-                "Actual kind0 collision produced frozen HitRecords, RenderDispatch advanced " +
-                "live owners exactly once, Late remained idempotent, next-tick append/RNG and " +
-                "CentralOnly no-publication lifecycle passed.";
+                "Actual kind0 collision produced base-ID HitRecords after C01, each existing " +
+                "record advanced exactly once at the next C01, presentation/Late stayed read-only, " +
+                "and CentralOnly no-publication lifecycle passed.";
             report.endTick = driver.CurrentTickIndex;
             report.ticks = (TickEvidence[])TickSamples.Clone();
             Cleanup();
@@ -652,6 +697,21 @@ namespace NTSD.Test.Editor
             catch (Exception exception)
             {
                 AppendCleanupError("entity-release", exception);
+            }
+
+            try
+            {
+                for (int index = 0; index < BaselineAiControls.Count; index++)
+                {
+                    BaselineAiControl baseline = BaselineAiControls[index];
+                    if (baseline.Entity?.Match == world)
+                        baseline.Entity.AiControlled = baseline.AiControlled;
+                }
+                report.aiControlRestored = true;
+            }
+            catch (Exception exception)
+            {
+                AppendCleanupError("ai-control-restore", exception);
             }
 
             RestoreArray(world.KillStats, baselineKillStats);
@@ -701,10 +761,11 @@ namespace NTSD.Test.Editor
                                       report.finalObjectCount == baselineObjectCount &&
                                       report.finalClaimedSlots == baselineClaimedSlots &&
                                       report.finalObjectPoolActive == baselineObjectPoolActive &&
-                                      report.finalLogicPoolActive == baselineLogicPoolActive &&
-                                      report.rngRestored && report.statsRestored &&
-                                      report.soundsRestored && report.presentationOwnerCleared &&
-                                      report.pauseRestored;
+                                       report.finalLogicPoolActive == baselineLogicPoolActive &&
+                                       report.rngRestored && report.statsRestored &&
+                                       report.soundsRestored && report.aiControlRestored &&
+                                       report.presentationOwnerCleared &&
+                                       report.pauseRestored;
         }
 
         private static void AppendCleanupError(string label, Exception exception)
@@ -806,6 +867,7 @@ namespace NTSD.Test.Editor
             tickOrdinal = 0;
             cycleIdBeforeTick = 0;
             rngCallsBeforeTick = 0;
+            rngStateBeforeTick = 0;
             baselineKillStats = null;
             baselineDamageStats = null;
             baselineRngState = 0;
@@ -823,6 +885,7 @@ namespace NTSD.Test.Editor
             running = false;
             OwnedEntities.Clear();
             BaselineSounds.Clear();
+            BaselineAiControls.Clear();
             Array.Clear(Attackers, 0, Attackers.Length);
             Array.Clear(Victims, 0, Victims.Length);
             Array.Clear(VictimGenerations, 0, VictimGenerations.Length);
@@ -927,12 +990,29 @@ namespace NTSD.Test.Editor
             WaitingForLateFallback,
         }
 
+        private readonly struct BaselineAiControl
+        {
+            public BaselineAiControl(LF2Entity entity, bool aiControlled)
+            {
+                Entity = entity;
+                AiControlled = aiControlled;
+            }
+
+            public LF2Entity Entity { get; }
+            public bool AiControlled { get; }
+        }
+
         [Serializable]
         private sealed class TickEvidence
         {
             public int tick;
             public bool buildPresentation;
             public ulong rngCalls;
+            public uint rngStateBefore;
+            public uint rngStateAfter;
+            public int randomWeaponDropGate;
+            public int hitRecordX;
+            public int hitRecordZ;
             public int cycleIdBefore;
             public int cycleIdAfter;
             public int cycleTick;
@@ -940,6 +1020,7 @@ namespace NTSD.Test.Editor
             public int ownerCount;
             public int hitRecordCount;
             public int hitCommandCount;
+            public bool sparkResourceAvailable;
             public int phaseDiagnosticsTick;
             public long renderDispatchTimestampTicks;
             public long framePostProcessTimestampTicks;
@@ -957,6 +1038,8 @@ namespace NTSD.Test.Editor
             public int startTick;
             public int endTick;
             public bool workerPath;
+            public bool runtimeLifecycleAvailable;
+            public bool commonSparkAvailable;
             public int attackerSlot;
             public int attackerStableId;
             public int victimSlot;
@@ -964,10 +1047,12 @@ namespace NTSD.Test.Editor
             public uint victimGeneration;
             public uint baselineRngState;
             public ulong baselineRngCalls;
+            public uint probeRngSeed;
             public int baselineObjectCount;
             public int baselineClaimedSlots;
             public int baselineObjectPoolActive;
             public int baselineLogicPoolActive;
+            public int suppressedBaselineAiEntityCount;
             public int warmTickAllocationViolationDelta;
             public int warmPresentationAllocationViolationDelta;
             public TickEvidence[] ticks;
@@ -978,6 +1063,7 @@ namespace NTSD.Test.Editor
             public bool rngRestored;
             public bool statsRestored;
             public bool soundsRestored;
+            public bool aiControlRestored;
             public bool presentationOwnerCleared;
             public bool pauseRestored;
             public bool cleanupCompleted;

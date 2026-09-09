@@ -147,18 +147,18 @@ namespace NTSD.Animation.LF2Objects
             _weapon.Runtime.SyncIntegerPosition();
         }
 
-        // 优先使用记录下来的持有者/投掷者运行槽位作为追踪目标。
+        // hit_Fa=4 直接消费 Authority +0x3F8 预分配目标，不重新索敌。
         private LF2Entity ResolveWeaponHitFa4Target()
         {
-            if (_weapon.PickerStableId < 0)
+            if (_weapon.ObjectAiTargetSlot3F8 < 0)
                 return null;
 
             SimulationWorld world = _weapon.Match;
             if (world == null)
                 return null;
 
-            return world.FindEntityByRuntimeSlotForQuery(_weapon.PickerStableId) ??
-                   world.FindEntityByRuntimeSlotIncludingPending(_weapon.PickerStableId);
+            return world.FindEntityByRuntimeSlotForQuery(_weapon.ObjectAiTargetSlot3F8) ??
+                   world.FindEntityByRuntimeSlotIncludingPending(_weapon.ObjectAiTargetSlot3F8);
         }
 
         // 失去目标后不再精确追踪，只保留一个继续回头飞的退化行为。
@@ -198,7 +198,7 @@ namespace NTSD.Animation.LF2Objects
             LF2Entity target = ResolveWeaponHitFa12Target();
             if (target == null)
             {
-                if (_weapon.Health != null)
+                if (_weapon.ObjectAiTargetSlot3F8 == -1 && _weapon.Health != null)
                     _weapon.Health.HP = 0;
                 return;
             }
@@ -238,7 +238,7 @@ namespace NTSD.Animation.LF2Objects
             if (world == null)
                 return null;
 
-            int currentTargetSlot = _weapon.PickerStableId;
+            int currentTargetSlot = _weapon.ObjectAiTargetSlot3F8;
             int selfTeam = ResolveHitFa12RelationIdentity(_weapon);
             int holderTeam = -1;
             if (_weapon.SpawnerEntityIndex >= 0)
@@ -270,7 +270,7 @@ namespace NTSD.Animation.LF2Objects
             world.GetAllEntities(_boomerangQueryCache);
 
             LF2Entity best = null;
-            int bestDist = int.MaxValue;
+            int bestDist = 10000;
             int bestSlot = -1;
             int selfX = _weapon.GetRuntimeXInt();
             int selfZ = _weapon.Runtime.ZInt;
@@ -290,9 +290,15 @@ namespace NTSD.Animation.LF2Objects
                     continue;
                 if (holderTeam >= 0 && candidateTeam == holderTeam)
                     continue;
-                if ((candidate.GetState() == LF2States.Lying || System.Math.Abs(candidate.HitStun) > 2) &&
-                    currentTargetSlot != -1)
+                if (candidate.GetState() == LF2States.Lying)
+                {
+                    if (currentTargetSlot != -1)
+                        continue;
+                }
+                else if (System.Math.Abs(candidate.HitStun) > 2)
+                {
                     continue;
+                }
 
                 int dist = Mathf.Abs(candidate.GetRuntimeXInt() - selfX) +
                            Mathf.Abs(candidate.Runtime.ZInt - selfZ);
@@ -304,7 +310,8 @@ namespace NTSD.Animation.LF2Objects
                 bestSlot = candidate.Runtime?.SlotIndex ?? -1;
             }
 
-            _weapon.PickerStableId = bestSlot;
+            if (bestSlot >= 0)
+                _weapon.ObjectAiTargetSlot3F8 = bestSlot;
 
             return best;
         }

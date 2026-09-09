@@ -51,15 +51,15 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void TransitionState_FailsClosedToAuthorityTail()
+        public void State18TransitionUsesDedicatedC25LInsteadOfMixedCompatibilityTail()
         {
             SimulationWorld world = CreateWorld(forceLegacy: false);
             CreateCharacter<LF2Character>(world, 201, previousState: 18);
 
             world.LateEntityUpdateAll(12);
 
-            Assert.That(world.LastLateTailNoOpSkipCountForDiagnostics, Is.Zero);
-            Assert.That(world.LastLateTailExecutedCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LastLateTailNoOpSkipCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.LastLateTailExecutedCountForDiagnostics, Is.Zero);
         }
 
         [Test]
@@ -190,7 +190,7 @@ namespace NTSD.Test
             stateWorld.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
             LF2Character stateCharacter =
                 CreateCharacter<LF2Character>(stateWorld, 803, previousState: 0);
-            stateCharacter.Frame.D.state = 4000;
+            stateCharacter.Frame.D.state = 8000;
             stateCharacter.RefreshRuntimeSnapshot();
 
             stateWorld.LateEntityUpdateAll(5);
@@ -226,7 +226,7 @@ namespace NTSD.Test
             Assert.That(world.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.Zero);
             Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.Zero);
             Assert.That(world.LastLateCleanupNoOpSkipCountForDiagnostics, Is.Zero);
-            Assert.That(character.StateSpecialCallCount, Is.EqualTo(1));
+            Assert.That(character.StateSpecialCallCount, Is.Zero);
             Assert.That(character.RecoveryCallCount, Is.EqualTo(1));
             Assert.That(character.DeathOpointCallCount, Is.EqualTo(1));
             Assert.That(character.CleanupCallCount, Is.EqualTo(1));

@@ -108,7 +108,6 @@ namespace NTSD.Animation.Rendering.Editor
         public bool forceLegacyLateTailNoOp = true;
         public bool forceLegacyLateCommonNoOpGates;
         public bool forceLegacyPostFrameRuntimeSnapshot;
-        public string positiveLinkValidationMode = "data-oriented";
         public string characterInputPassMode = "data-oriented";
         public string characterFrameTickMode = "data-oriented";
         public string characterPostFrameTailMode = "legacy";
@@ -171,8 +170,6 @@ namespace NTSD.Animation.Rendering.Editor
             bool forceLegacyPerPassStageRefresh = false,
             bool forceLegacyPreInteraction = false,
             bool forceLegacyLateTailNoOp = true,
-            BattleEcsPositiveLinkValidationPassMode positiveLinkValidationMode =
-                BattleEcsPositiveLinkValidationPassMode.DataOriented,
             bool forceLegacyCharacterRuntimeCandidateCountGate = false,
             bool forceLegacyPreInteractionParticipantFiltering = false,
             BattleHitExecutionPlanMode hitExecutionPlanMode =
@@ -286,7 +283,6 @@ namespace NTSD.Animation.Rendering.Editor
             ForceLegacyLateCommonNoOpGates = forceLegacyLateCommonNoOpGates;
             ForceLegacyPostFrameRuntimeSnapshot =
                 forceLegacyPostFrameRuntimeSnapshot;
-            PositiveLinkValidationMode = positiveLinkValidationMode;
             CharacterInputPassMode = characterInputPassMode;
             CharacterFrameTickMode = characterFrameTickMode;
             CharacterPostFrameTailMode = characterPostFrameTailMode;
@@ -446,8 +442,6 @@ namespace NTSD.Animation.Rendering.Editor
         internal bool ForceLegacyLateTailNoOp { get; }
         internal bool ForceLegacyLateCommonNoOpGates { get; }
         internal bool ForceLegacyPostFrameRuntimeSnapshot { get; }
-        internal BattleEcsPositiveLinkValidationPassMode
-            PositiveLinkValidationMode { get; }
         internal BattleEcsCharacterInputPassMode CharacterInputPassMode { get; }
         internal BattleEcsCharacterFrameTickPassMode CharacterFrameTickMode { get; }
         internal BattleEcsCharacterPostFrameTailPassMode
@@ -588,8 +582,6 @@ namespace NTSD.Animation.Rendering.Editor
                 request.forceLegacyPerPassStageRefresh,
                 request.forceLegacyPreInteraction,
                 request.forceLegacyLateTailNoOp,
-                ParsePositiveLinkValidationMode(
-                    request.positiveLinkValidationMode),
                 request.forceLegacyCharacterRuntimeCandidateCountGate,
                 request.forceLegacyPreInteractionParticipantFiltering,
                 ParseHitExecutionPlanMode(request.hitExecutionPlanMode),
@@ -666,45 +658,6 @@ namespace NTSD.Animation.Rendering.Editor
                     throw new ArgumentException(
                         $"Unknown AI decision execution mode '{value}'. Expected legacy or indexed-canonical.",
                         nameof(value));
-            }
-        }
-
-        internal static BattleEcsPositiveLinkValidationPassMode
-            ParsePositiveLinkValidationMode(string value)
-        {
-            string normalized = (value ?? string.Empty).Trim().ToLowerInvariant();
-            switch (normalized)
-            {
-                case "":
-                case "data":
-                case "data-oriented":
-                    return BattleEcsPositiveLinkValidationPassMode.DataOriented;
-                case "legacy":
-                    return BattleEcsPositiveLinkValidationPassMode.Legacy;
-                case "shadow":
-                case "shadow-compare":
-                    return BattleEcsPositiveLinkValidationPassMode.ShadowCompare;
-                default:
-                    throw new ArgumentException(
-                        $"Unknown positive-link validation mode '{value}'. " +
-                        "Expected legacy, shadow, or data-oriented.",
-                        nameof(value));
-            }
-        }
-
-        internal static string FormatPositiveLinkValidationMode(
-            BattleEcsPositiveLinkValidationPassMode mode)
-        {
-            switch (mode)
-            {
-                case BattleEcsPositiveLinkValidationPassMode.Legacy:
-                    return "legacy";
-                case BattleEcsPositiveLinkValidationPassMode.ShadowCompare:
-                    return "shadow";
-                case BattleEcsPositiveLinkValidationPassMode.DataOriented:
-                    return "data-oriented";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), mode, null);
             }
         }
 
@@ -1482,14 +1435,6 @@ namespace NTSD.Animation.Rendering.Editor
         public long entityPostFrameTailRuntimeSnapshotSkipCount;
         public long lateOpointFactoryResolveCount;
         public long lateOpointFlushCount;
-        public string positiveLinkValidationRequestedMode;
-        public string positiveLinkValidationEffectiveMode;
-        public bool positiveLinkValidationRestored;
-        public long positiveLinkValidationRunCount;
-        public long positiveLinkValidationSlotVisitCount;
-        public long positiveLinkValidationKeptCount;
-        public long positiveLinkValidationClearedCount;
-        public long positiveLinkValidationMismatchCount;
         public string characterFrameAdvanceMode;
         public long characterFrameAdvanceRunCount;
         public long characterFrameAdvanceExactCharacterCount;
@@ -4278,9 +4223,6 @@ namespace NTSD.Animation.Rendering.Editor
                 config.ForceLegacyPreInteractionParticipantFiltering
                     ? "pre-interaction-participant-filter-off"
                     : "pre-interaction-participant-filter-on",
-                "positive-link-validation-" +
-                ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
-                    config.PositiveLinkValidationMode),
                 "character-input-pass-" +
                 ProductionEntityStressConfig.FormatCharacterInputPassMode(
                     config.CharacterInputPassMode),
@@ -4900,8 +4842,6 @@ namespace NTSD.Animation.Rendering.Editor
         private bool previousForceLegacyLateTailNoOp;
         private bool previousForceLegacyLateCommonNoOpGates;
         private bool previousForceLegacyPostFrameRuntimeSnapshot;
-        private BattleEcsPositiveLinkValidationPassMode
-            previousPositiveLinkValidationMode;
         private BattleEcsCharacterInputPassMode previousCharacterInputPassMode;
         private BattleEcsCharacterFrameTickPassMode previousCharacterFrameTickMode;
         private BattleEcsCharacterPostFrameTailPassMode
@@ -5282,9 +5222,6 @@ namespace NTSD.Animation.Rendering.Editor
                     config.ForceLegacyLateCommonNoOpGates,
                 forceLegacyPostFrameRuntimeSnapshotRequested =
                     config.ForceLegacyPostFrameRuntimeSnapshot,
-                positiveLinkValidationRequestedMode =
-                    ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
-                        config.PositiveLinkValidationMode),
                 characterInputPassRequestedMode =
                     ProductionEntityStressConfig.FormatCharacterInputPassMode(
                         config.CharacterInputPassMode),
@@ -5603,13 +5540,6 @@ namespace NTSD.Animation.Rendering.Editor
                 config.ForceLegacyPostFrameRuntimeSnapshot;
             report.forceLegacyPostFrameRuntimeSnapshotApplied =
                 world.ForceLegacyPostFrameRuntimeSnapshotForDiagnostics;
-            previousPositiveLinkValidationMode =
-                world.BattleEcsPositiveLinkValidationPassModeForDiagnostics;
-            world.ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
-                config.PositiveLinkValidationMode);
-            report.positiveLinkValidationEffectiveMode =
-                ProductionEntityStressConfig.FormatPositiveLinkValidationMode(
-                    world.BattleEcsPositiveLinkValidationPassModeForDiagnostics);
             report.characterFrameAdvanceMode =
                 world.BattleEcsCharacterFrameAdvancePassModeForDiagnostics.ToString();
             report.characterRecoveryMode =
@@ -9725,30 +9655,6 @@ namespace NTSD.Animation.Rendering.Editor
                                 previousForceLegacyPostFrameRuntimeSnapshot;
                         });
                     journal.Attempt(
-                        "capture-positive-link-validation-diagnostics",
-                        () =>
-                        {
-                            BattleEcsPositiveLinkValidationPassDiagnostics diagnostics =
-                                world.BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics;
-                            report.positiveLinkValidationRunCount = diagnostics.RunCount;
-                            report.positiveLinkValidationSlotVisitCount =
-                                diagnostics.SlotVisitCount;
-                            report.positiveLinkValidationKeptCount = diagnostics.KeptCount;
-                            report.positiveLinkValidationClearedCount = diagnostics.ClearedCount;
-                            report.positiveLinkValidationMismatchCount =
-                                diagnostics.MismatchCount;
-                        });
-                    journal.Attempt(
-                        "restore-positive-link-validation-mode",
-                        () =>
-                        {
-                            world.RestoreBattleEcsPositiveLinkValidationPassForDiagnostics(
-                                previousPositiveLinkValidationMode);
-                            report.positiveLinkValidationRestored =
-                                world.BattleEcsPositiveLinkValidationPassModeForDiagnostics ==
-                                previousPositiveLinkValidationMode;
-                        });
-                    journal.Attempt(
                         "capture-character-frame-advance-diagnostics",
                         () =>
                         {
@@ -10350,10 +10256,9 @@ namespace NTSD.Animation.Rendering.Editor
                 return;
 
             // Cleanup runs from Update, before the synchronous path's LateUpdate
-            // presentation-consumption boundary. The dedicated worker cannot expose
-            // completion until that same boundary has finalized. Normalize both paths
-            // before capturing the diagnostic/full snapshot.
-            world.BattlePresentation.FinalizePublishedHitRecordCycle(world);
+            // presentation-consumption boundary. Normalize publication ownership for
+            // both host paths without mutating C01-owned logical spark lifetime.
+            world.BattlePresentation.AcknowledgePublishedHitRecordCycle();
 
             IBattleChecksumSnapshot snapshot;
             switch (world.RuntimeProfileForDiagnostics)
@@ -10639,8 +10544,6 @@ namespace NTSD.Animation.Rendering.Editor
                 world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics;
             BattleEcsCharacterInputPassDiagnostics input =
                 world.BattleEcsCharacterInputPassDiagnosticsForDiagnostics;
-            BattleEcsPositiveLinkValidationPassDiagnostics positiveLink =
-                world.BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics;
             BattleEcsFramePostProcessPassDiagnostics framePostProcess =
                 world.BattleEcsFramePostProcessPassDiagnosticsForDiagnostics;
             BattleEcsCharacterPostFrameTailPassDiagnostics postFrameTail =
@@ -10654,7 +10557,6 @@ namespace NTSD.Animation.Rendering.Editor
                 recovery.RunCount +
                 frameTick.RunCount +
                 input.RunCount +
-                positiveLink.RunCount +
                 world.AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics;
             report.u6ProductionRetainedLegacyPassRunCount =
                 framePostProcess.RunCount + postFrameTail.RunCount;
@@ -10670,8 +10572,7 @@ namespace NTSD.Animation.Rendering.Editor
                 input.UnexpectedFallbackCount;
             report.u6ProductionCanonicalMismatchCount =
                 cooldown.MismatchCount +
-                stageZ.MismatchCount +
-                positiveLink.MismatchCount;
+                stageZ.MismatchCount;
             report.u6ProductionReplacedLegacyAiActivityCount =
                 report.aiUnifiedSnapshotExecutionLegacyFusedSensingBuildCount +
                 report.aiUnifiedSnapshotExecutionLegacyDecisionSharedBuildCount +

@@ -18,6 +18,7 @@ namespace NTSD.Animation
         [Header("基本参数")]
         public int pic = 0;
         public int state = 0;
+        public int cover = 0;
         public int wait = 1;
         public int next = 0;
         public int dvx = 0;
@@ -26,18 +27,34 @@ namespace NTSD.Animation
         public int centerx = 0;
         public int centery = 0;
         public int mp = 0;
+        public int hp = 0;
 
         [Header("按键响应")]
         public int hit_a = 0;
         public int hit_d = 0;
         public int hit_j = 0;
+        public int hit_g = 0;
         public int hit_Fj = 0;
         public int hit_Fa = 0;
         public int hit_Da = 0;
         public int hit_Ua = 0;
         public int hit_ja = 0;
+        public int hit_aj = 0;
+        public int hit_ad = 0;
+        public int hit_jd = 0;
         public int hit_Dj = 0;
         public int hit_Uj = 0;
+        public int hit_f = 0;
+        public int hit_b = 0;
+        public int hit_uz = 0;
+        public int hit_dz = 0;
+        public int hold_a = 0;
+        public int hold_d = 0;
+        public int hold_j = 0;
+        public int hold_f = 0;
+        public int hold_b = 0;
+        public int hold_uz = 0;
+        public int hold_dz = 0;
 
         [Header("武器点")]
         public List<WeaponPoint> wpoints = new List<WeaponPoint>();
@@ -62,6 +79,14 @@ namespace NTSD.Animation
         [Header("碰撞盒")]
         public List<BattleBodyBoxValue> bodies =
             new List<BattleBodyBoxValue>();
+        public int primaryBodyKindForEffectSuppression = 0;
+        public int primaryBodyRespondForHitResponse = 0;
+
+        public int PrimaryBodyKind =>
+            primaryBodyKindForEffectSuppression;
+
+        public int PrimaryBodyRespond =>
+            primaryBodyRespondForHitResponse;
 
         [Header("交互区域")]
         public List<InteractionArea> itrs = new List<InteractionArea>();
@@ -178,6 +203,9 @@ namespace NTSD.Animation
         { "Uj", 0 },
         { "Fj", 0 },
         { "ja", 0 },
+        { "aj", 0 },
+        { "ad", 0 },
+        { "jd", 0 },
     };
 
         private bool IsInitHitValue = false;
@@ -208,6 +236,9 @@ namespace NTSD.Animation
                         case "Uj": hit_ja = value; break;
                         case "Fj": hit_Dj = value; break;
                         case "ja": hit_Uj = value; break;
+                        case "aj": hit_aj = value; break;
+                        case "ad": hit_ad = value; break;
+                        case "jd": hit_jd = value; break;
                     }
                 }
             }
@@ -228,6 +259,9 @@ namespace NTSD.Animation
             _hitValues["Uj"] = hit_Uj;
             _hitValues["Fj"] = hit_Fj;
             _hitValues["ja"] = hit_ja;
+            _hitValues["aj"] = hit_aj;
+            _hitValues["ad"] = hit_ad;
+            _hitValues["jd"] = hit_jd;
         }
         #endregion
 
@@ -316,6 +350,12 @@ namespace NTSD.Animation
         public int vrest = 0;
         //击中效果
         public int effect = 0;
+        // 原生 ITR 命中特效选择；普通防御同时读取其奇偶位。
+        public int spark = 0;
+        // 原生普通命中停顿恢复选择；缺失时为 0。
+        public int recover = 0;
+        // 原生 state-7 普通防御例外开关；缺失时为 0。
+        public int dbdefend = 0;
         // 死字段：kill: 从未出现在任何 dat 文件中，始终为 0，不影响任何逻辑
         public int kill = 0;
 
@@ -339,6 +379,19 @@ namespace NTSD.Animation
         public int respond = 0;
         public int pickingact = 0;
         public int pickedact = 0;
+        public int delay = 0;
+        public int poison = 0;
+        public int confus = 0;
+        public int weak = 0;
+        public int manacle = 0;
+        public int join = 0;
+        public int mimic = 0;
+        public int bound = 0;
+        public int facing = 0;
+        public int dx = 0;
+        public int dy = 0;
+        public int dz = 0;
+        public int gain = 0;
         public int throwvx = 0;
         public int throwvy = 0;
         public int throwinjury = 0;
@@ -363,6 +416,9 @@ namespace NTSD.Animation
             arest = source.arest;
             vrest = source.vrest;
             effect = source.effect;
+            spark = source.spark;
+            recover = source.recover;
+            dbdefend = source.dbdefend;
             kill = source.kill;
             bdefend = source.bdefend;
             rawProperties = source.rawProperties;
@@ -375,6 +431,19 @@ namespace NTSD.Animation
             respond = source.respond;
             pickingact = source.pickingact;
             pickedact = source.pickedact;
+            delay = source.delay;
+            poison = source.poison;
+            confus = source.confus;
+            weak = source.weak;
+            manacle = source.manacle;
+            join = source.join;
+            mimic = source.mimic;
+            bound = source.bound;
+            facing = source.facing;
+            dx = source.dx;
+            dy = source.dy;
+            dz = source.dz;
+            gain = source.gain;
             throwvx = source.throwvx;
             throwvy = source.throwvy;
             throwinjury = source.throwinjury;

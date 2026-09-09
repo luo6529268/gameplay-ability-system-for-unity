@@ -1729,6 +1729,20 @@ namespace NTSD.Simulation.Presentation
             return changed;
         }
 
+        // Alignment contract: NTSD28-B3-NATIVE-SPARK-C01-INTEGRATION-001.
+        // Production presentation consumption may release its publication resources,
+        // but logical spark lifetime is owned exclusively by the C01 battle pass.
+        internal bool AcknowledgePublishedHitRecordCycle()
+        {
+            BattleHitRecordPresentationCycle cycle = PublishedHitRecordCycle;
+            if (cycle == null || cycle.CycleId == finalizedHitRecordCycleId)
+                return false;
+
+            finalizedHitRecordCycleId = cycle.CycleId;
+            cycle.ReleasePublicationBinding();
+            return true;
+        }
+
         internal bool AdvanceHitRecordsWithoutPublication(
             SimulationWorld world,
             int tickIndex)

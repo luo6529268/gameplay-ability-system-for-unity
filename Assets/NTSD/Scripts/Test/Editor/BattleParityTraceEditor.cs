@@ -299,26 +299,33 @@ namespace NTSD.EditorTools
                 world.Register(holder);
                 world.Register(target);
 
-                world.ValidateHeldLinksAll(1);
-
                 holder.Runtime.LinkState = 1;
                 holder.Runtime.TargetSlotIndex = 1;
                 holder.Runtime.HeldWeaponStableId = 1;
                 target.Runtime.LinkState = 0;
                 target.Runtime.HolderStableId = 0;
+#pragma warning disable CS0618
                 world.ValidateHeldLinksAll(2);
+#pragma warning restore CS0618
 
-                target.Runtime.HolderStableId = 2;
-                world.ValidateHeldLinksAll(3);
-
-                if (holder.Runtime.LinkState != 0 ||
+                if (holder.Runtime.LinkState != 1 ||
                     holder.Runtime.TargetSlotIndex != 1 ||
                     holder.Runtime.HeldWeaponStableId != 1 ||
-                    target.Runtime.HolderStableId != 2 ||
-                    target.Runtime.LinkState != 0)
+                    events.Events.Any(value => value.Action == "link-validation"))
                 {
                     throw new InvalidOperationException(
-                        "Unity W07 structural fixture did not preserve forward/reverse relation fields while clearing only the mismatched holder link state.");
+                        "Unity W07 retired validation entry changed a relation or emitted a positive-link event.");
+                }
+
+                world.Unregister(target);
+
+                if (holder.Runtime.LinkState != 0 ||
+                    holder.Runtime.TargetSlotIndex != 0 ||
+                    holder.Runtime.HeldWeaponStableId != -1 ||
+                    events.Events.Any(value => value.Action == "link-validation"))
+                {
+                    throw new InvalidOperationException(
+                        "Unity W07 lifecycle release did not atomically clear the positive relation without a validation event.");
                 }
                 return events;
             }

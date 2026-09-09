@@ -39,7 +39,8 @@ namespace NTSD.Animation.LF2Objects
 
             if (itr.kind == 4)
             {
-                if (attacker.WeaponCount <= 0)
+                if (attacker.Runtime == null ||
+                    attacker.Runtime.EnvironmentState320 <= 0)
                     return false;
 
                 _runtimeItr.CopyFrom(itr);
@@ -189,20 +190,6 @@ namespace NTSD.Animation.LF2Objects
 
                 effectNum = itr.effect;
 
-                if (itr.kind != 9 &&
-                    LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, _character, itr))
-                {
-                    SimulationWorld world = _character.Match ?? attacker.Match;
-                    world.DamageWriter.ApplyAlternateDamage(
-                        world,
-                        attacker,
-                        _character,
-                        _character.HitCounters,
-                        itr);
-                    _character.RecordKind0Hit(attacker, itr);
-                    return true;
-                }
-
                 // C++ release collision.cpp:
                 // victim.oid==300 时走专属受击跳转，不进入普通受击/击飞结算。
                 // 当前帧 bdy.x>1000 时，将其解释为目标帧号并直接改写 frame，
@@ -301,24 +288,6 @@ namespace NTSD.Animation.LF2Objects
 
                 _character.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
                 ApplyFluteCharacterForce();
-
-                if (_character.KillCount == -1 &&
-                    (_character.Match?.CurrentTickIndex ?? 0) % 12 == 0 &&
-                    !LF2HitResolveRuntimeData.IsStepWaitGate(_character))
-                {
-                    LF2Entity holder = ResolveHolderCopyEntity(attacker);
-                    if (holder != null)
-                        holder.ComboCountAtk += 11;
-                }
-
-                SimulationWorld world = _character.Match ?? attacker?.Match;
-                int damageStatIndex = _character.Unk344;
-                if (world?.DamageStats != null &&
-                    damageStatIndex > 0 &&
-                    damageStatIndex < world.DamageStats.Length)
-                {
-                    world.DamageStats[damageStatIndex] += 11;
-                }
                 return true;
             }
 
@@ -328,17 +297,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 ApplyWhirlwindCharacterForce(attacker);
                 return true;
-            }
-
-            // Kind 16：冰冻/扣蓝效果。
-            else if (itr.kind == 16)
-            {
-                SimulationWorld world = _character.Match ?? attacker?.Match;
-                return world?.DamageWriter.ApplyKind16(
-                    world,
-                    attacker,
-                    _character,
-                    itr) == true;
             }
 
             // 命中结算。

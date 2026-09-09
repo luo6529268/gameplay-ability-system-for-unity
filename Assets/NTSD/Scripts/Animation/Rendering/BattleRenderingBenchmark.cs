@@ -14,6 +14,17 @@ using UnityEngine.Profiling;
 
 namespace NTSD.Animation.Rendering
 {
+    internal static class BattleBenchmarkTransientGameObjectPolicy
+    {
+        internal static GameObject Create(string name)
+        {
+            return new GameObject(name)
+            {
+                hideFlags = HideFlags.DontSave,
+            };
+        }
+    }
+
     public enum BattleRenderingBenchmarkComparison : byte
     {
         Single = 0,
@@ -3084,10 +3095,8 @@ namespace NTSD.Animation.Rendering
             string outputPath,
             Action<BattleRenderingBenchmarkRunner, string> completion = null)
         {
-            var host = new GameObject("NTSD Battle Rendering Benchmark Runner")
-            {
-                hideFlags = HideFlags.HideAndDontSave,
-            };
+            GameObject host = BattleBenchmarkTransientGameObjectPolicy.Create(
+                "NTSD Battle Rendering Benchmark Runner");
             DontDestroyOnLoad(host);
             BattleRenderingBenchmarkRunner runner = host.AddComponent<BattleRenderingBenchmarkRunner>();
             try
@@ -3952,20 +3961,16 @@ namespace NTSD.Animation.Rendering
         {
             this.workload = workload ?? throw new ArgumentNullException(nameof(workload));
             resources = new BattleBenchmarkResourceSet("Legacy");
-            root = new GameObject("NTSD Benchmark Legacy Presenter")
-            {
-                hideFlags = HideFlags.HideAndDontSave,
-                layer = BattleBenchmarkResourceSet.BenchmarkLayer,
-            };
+            root = BattleBenchmarkTransientGameObjectPolicy.Create(
+                "NTSD Benchmark Legacy Presenter");
+            root.layer = BattleBenchmarkResourceSet.BenchmarkLayer;
             transforms = new Transform[workload.CommandCount];
             renderers = new SpriteRenderer[workload.CommandCount];
             for (int index = 0; index < workload.CommandCount; index++)
             {
-                var child = new GameObject("LegacyCommand" + index)
-                {
-                    hideFlags = HideFlags.HideAndDontSave,
-                    layer = BattleBenchmarkResourceSet.BenchmarkLayer,
-                };
+                GameObject child = BattleBenchmarkTransientGameObjectPolicy.Create(
+                    "LegacyCommand" + index);
+                child.layer = BattleBenchmarkResourceSet.BenchmarkLayer;
                 child.transform.SetParent(root.transform, false);
                 child.transform.localScale = NTSDRenderSpace.RenderScale;
                 SpriteRenderer renderer = child.AddComponent<SpriteRenderer>();
@@ -4102,11 +4107,9 @@ namespace NTSD.Animation.Rendering
                 mainTexture = texture,
                 hideFlags = HideFlags.HideAndDontSave,
             };
-            cameraObject = new GameObject("NTSD Benchmark Camera " + suffix)
-            {
-                hideFlags = HideFlags.HideAndDontSave,
-                layer = BenchmarkLayer,
-            };
+            cameraObject = BattleBenchmarkTransientGameObjectPolicy.Create(
+                "NTSD Benchmark Camera " + suffix);
+            cameraObject.layer = BenchmarkLayer;
             camera = cameraObject.AddComponent<Camera>();
             camera.orthographic = true;
             camera.orthographicSize = 8f;

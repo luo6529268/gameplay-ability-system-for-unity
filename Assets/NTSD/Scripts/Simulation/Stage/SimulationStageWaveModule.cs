@@ -557,7 +557,7 @@ namespace NTSD.Simulation
             entity.DirectWriteFrameImmediateWaitReset(spawn.Act);
             entity.FrameDelay = 0;
             entity.OwnerId = -1;
-            entity.OwnerEntityIndex = -1;
+            entity.OwnerEntityIndex = requiredRuntimeSlot;
             entity.SpawnerEntityIndex = -1;
             entity.Health.PP = 500;
             entity.Health.MaxPP = 500;
@@ -650,7 +650,7 @@ namespace NTSD.Simulation
             entity.DirectWriteFrameImmediateWaitReset(0);
             entity.FrameDelay = 0;
             entity.OwnerId = -1;
-            entity.OwnerEntityIndex = -1;
+            entity.OwnerEntityIndex = requiredRuntimeSlot;
             entity.SpawnerEntityIndex = -1;
             entity.Team = 0;
             entity.Unk344 = side + 1;
@@ -792,4 +792,3 @@ namespace NTSD.Simulation
         }
     }
 }
-

@@ -73,7 +73,7 @@ namespace NTSD.Simulation
         State = 12,
         Frame = 13,
         LinkState = 14,
-        KillCount = 15,
+        OwnerSlot = 15,
         CachedTargetSlot = 16,
         CoordinateTargetX = 17,
         VxBits = 18,
@@ -198,5 +198,4 @@ namespace NTSD.Simulation
     }
 
 }
-
 

@@ -1,0 +1,416 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
+using NUnit.Framework;
+
+namespace NTSD.Test.Editor
+{
+    [Category("NTSD28")]
+    [Category("NTSD28_B6")]
+    public sealed class NTSD28B6WpointMissingActionContinueProductionEditorTests
+    {
+        private static IEnumerable<TestCaseData> MissingCases()
+        {
+            foreach (bool real in new[] { false, true })
+            foreach (int action in new[] { 777, -888 })
+            foreach (bool currentMissing in new[] { false, true })
+            foreach (int type in new[] { 1, 2, 4, 6 })
+            foreach (bool kind3 in new[] { false, true })
+                yield return new TestCaseData(real, action, currentMissing, type, kind3);
+        }
+
+        [TestCaseSource(nameof(MissingCases))]
+        public void Missing_WritesLiteralAndPreservesEverythingAfterIt(bool real, int action,
+            bool currentMissing, int type, bool kind3)
+        {
+            using (var scope = new Scope(real, type, action, kind3 ? 3 : 1, 70))
+            {
+                if (currentMissing)
+                    scope.Child.DirectWriteHeldFramePreserveWaitCounter(999);
+                string before = StateExceptAction(scope.Child);
+                ulong legacy = scope.World.Rng.CallCount;
+                ulong native = NativeCalls(scope.World);
+                var structural = scope.World.StructuralWriterDiagnosticsForDiagnostics;
+                scope.World.HeldObjectProcessAll(7);
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(action), "Literal action must survive unsupported continue.");
+                Assert.That(scope.Child.FrameCache.HasFrame(action), Is.False);
+                Assert.That(StateExceptAction(scope.Child), Is.EqualTo(before), "No facing/hold/pose/motion/relation/HP/release writes.");
+                Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacy));
+                Assert.That(NativeCalls(scope.World), Is.EqualTo(native));
+                Assert.That(scope.World.StructuralWriterDiagnosticsForDiagnostics.FreeCount, Is.EqualTo(structural.FreeCount));
+                Assert.That(scope.World.StructuralWriterDiagnosticsForDiagnostics.DestroyCount, Is.EqualTo(structural.DestroyCount));
+                Assert.That(scope.World.FindEntityByRuntimeSlotForQuery(50), Is.SameAs(scope.Child));
+                Assert.That(scope.Holder.Runtime.LinkState, Is.EqualTo(1));
+                Assert.That(scope.Holder.Runtime.TargetSlotIndex, Is.EqualTo(50));
+                Assert.That(scope.Events.Events.Count(e => e.Action == "held-unsupported-action"), Is.EqualTo(1));
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Missing_CanRecoverAndValidFrameWithoutTextWpointUsesZeroRecord(bool real)
+        {
+            using (var scope = new Scope(real, 1, -888, 1, 0))
+            {
+                scope.World.HeldObjectProcessAll(7);
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(-888));
+                scope.Holder.Frame.D.wpoints[0].weaponact = 20;
+                Assert.That(scope.Child.FrameCache.Wrapper.characterData.frames.First(f => f.frameId == 20).wpoints.Count, Is.Zero);
+                scope.World.HeldObjectProcessAll(7);
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(20));
+                Assert.That(scope.Child.Frame.D, Is.Not.Null);
+                Assert.That(scope.Child.Runtime.Dir, Is.EqualTo("left"));
+                Assert.That(scope.Child.FrameDelay, Is.EqualTo(scope.Holder.FrameDelay));
+                Assert.That(scope.Child.Runtime.X, Is.EqualTo(188));
+                Assert.That(scope.Child.Runtime.Y, Is.EqualTo(-1));
+                Assert.That(scope.Child.Runtime.Z, Is.EqualTo(41));
+                Assert.That(scope.Child.Runtime.LinkState, Is.EqualTo(-1));
+                Assert.That(scope.Events.Events.Count(e => e.Action == "held-unsupported-action"), Is.EqualTo(1));
+            }
+        }
+
+        [TestCase(122, false)]
+        [TestCase(122, true)]
+        [TestCase(123, false)]
+        [TestCase(123, true)]
+        public void MissingCurrentFrame_DoesNotBypassRefillOrExhaustion(int oid, bool exhausted)
+        {
+            using (var scope = new Scope(true, 6, -888, 3, 70, oid, 17))
+            {
+                scope.Child.DirectWriteHeldFramePreserveWaitCounter(999);
+                int decrement = oid == 122 ? 1 : 2;
+                scope.Child.Health.HP = exhausted ? decrement : 11;
+                ulong legacy = scope.World.Rng.CallCount;
+                ulong native = NativeCalls(scope.World);
+                scope.World.HeldObjectProcessAll(7);
+                Assert.That(scope.Child.Health.HP, Is.EqualTo(exhausted ? 0 : 11 - decrement));
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(exhausted ? 0 : -888));
+                Assert.That(scope.Child.Runtime.LinkState, Is.EqualTo(exhausted ? 0 : -1));
+                Assert.That(scope.World.Rng.CallCount - legacy, Is.EqualTo(exhausted ? 1UL : 0UL));
+                Assert.That(NativeCalls(scope.World), Is.EqualTo(native));
+                Assert.That(scope.Events.Events.Count(e => e.Action == "held-unsupported-action"), Is.EqualTo(exhausted ? 0 : 1));
+                Assert.That(scope.World.FindEntityByRuntimeSlotForQuery(50), Is.SameAs(scope.Child));
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Missing_ContinuesNextSlotAndDistinguishesC09C20(bool real)
+        {
+            using (var scope = new Scope(real, 1, 777, 3, 70))
+            {
+                LF2Character nextHolder = scope.AddHolder(1, 20, 1, 0, 0);
+                LF2Entity next = scope.AddChild(false, nextHolder, 51, 1);
+                next.Runtime.SetPosition(999, 999, 999);
+                scope.World.HeldObjectProcessAll(7);
+                Assert.That(next.Frame.N, Is.EqualTo(20));
+                Assert.That(next.Runtime.X, Is.EqualTo(188));
+                scope.World.HeldObjectProcessAll(7);
+                var events = scope.Events.Events.Where(e => e.Action == "held-unsupported-action").ToArray();
+                CollectionAssert.AreEqual(new[] { "held-refill:C09", "held-refill:C20" }, events.Select(e => e.Pass).ToArray());
+                Assert.That(events.All(e => e.Slot == 50 && e.CursorSlot == 50 && e.ActorSlot == 0 && e.Tick == 7), Is.True);
+                Assert.That(scope.Events.Events.Any(e => e.Action == "free"), Is.False);
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(777));
+                Assert.That(next.Runtime.LinkState, Is.EqualTo(-1));
+            }
+        }
+
+        private static ulong NativeCalls(SimulationWorld world) => world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+        private static string StateExceptAction(LF2Entity e) => FormattableString.Invariant(
+            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}");
+
+        private sealed class Generic : LF2Entity
+        {
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+            public override void Reset() { }
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.LightWeapon;
+        }
+
+        private sealed class Scope : IDisposable
+        {
+            internal readonly Dictionary<int, LF2CharacterDataWrapper> Definitions = new Dictionary<int, LF2CharacterDataWrapper>();
+            internal readonly SimulationWorld World;
+            internal readonly BattleParityStructuralEventBuffer Events = new BattleParityStructuralEventBuffer(400);
+            internal readonly LF2Character Holder;
+            internal readonly LF2Entity Child;
+            private readonly List<LF2Entity> owned = new List<LF2Entity>();
+            private readonly int oid;
+            internal Scope(bool real, int type, int action, int kind, int dvx, int oid = 9000, int state = 0)
+            {
+                this.oid = oid;
+                Definitions[oid] = Data(oid, oid == 122 || oid == 123 ? oid : type, 1001, null);
+                World = new SimulationWorld(new RuntimeCharacterConfigResolver(id => Definitions.TryGetValue(id, out var d) ? d : null));
+                World.SetLogicOnlyEntityMaterialization(true);
+                Holder = AddHolder(0, action, kind, dvx, state);
+                Child = AddChild(real, Holder, 50, type);
+                World.SetStructuralEventSinkForDiagnostics(Events, 7, "fixture");
+            }
+            internal LF2Character AddHolder(int slot, int action, int kind, int dvx, int state)
+            {
+                int id = 9200 + slot;
+                Definitions[id] = Data(id, 0, state, new WeaponPoint { weaponact = action, kind = kind, dvx = dvx, dvy = -7, dvz = 9, x = 12, y = 10 });
+                var holder = new LF2Character { ObjectId = id };
+                holder.FrameCache.Load(Definitions[id]);
+                holder.SetRequiredRuntimeSlot(slot);
+                World.Register(holder);
+                owned.Add(holder);
+                holder.ImmediateFrame(0);
+                holder.Initialize(500, 500);
+                holder.SwitchDir("left");
+                holder.FrameDelay = 100;
+                holder.Runtime.SetPosition(200, -10, 40);
+                holder.Runtime.SyncIntegerPosition();
+                return holder;
+            }
+            internal LF2Entity AddChild(bool real, LF2Character holder, int slot, int type)
+            {
+                LF2Entity child = real ? (LF2Entity)new LF2Weapon() : new Generic();
+                if (child is LF2Weapon weapon) weapon.SetWeaponType(type);
+                child.ObjectId = oid;
+                child.FrameCache.Load(Definitions[oid]);
+                child.SetRequiredRuntimeSlot(slot);
+                World.Register(child);
+                owned.Add(child);
+                child.DirectWriteHeldFramePreserveWaitCounter(20);
+                child.SwitchDir("right");
+                child.FrameDelay = 13;
+                child.Runtime.SetPosition(91, -17, 72);
+                child.Runtime.SyncIntegerPosition();
+                child.Runtime.SetVelocity(12, -8, 6.5);
+                child.Runtime.Zz = 3;
+                child.Runtime.WeaponFlightCounter = 19;
+                child.Runtime.ReleaseTick = 27;
+                if (child.Health != null) child.Health.HP = 100;
+                holder.Runtime.LinkState = 1;
+                holder.Runtime.TargetSlotIndex = slot;
+                holder.Runtime.HeldWeaponStableId = slot;
+                holder.HeldWeaponReferenceInternal = child;
+                child.Runtime.LinkState = -1;
+                child.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+                return child;
+            }
+            public void Dispose()
+            {
+                World.SetStructuralEventSinkForDiagnostics(null, 0, "end");
+                foreach (LF2Entity entity in owned) World.Unregister(entity);
+            }
+            private static LF2CharacterDataWrapper Data(int oid, int type, int state, WeaponPoint point)
+            {
+                var d = new LF2CharacterData { name = "MissingActionFixture", type_sub = type, weapon_hp = 31, frames = new List<LF2FrameData>() };
+                foreach (int frame in new[] { 0, 1, 2, 3, 4, 5, 20, 40 })
+                    d.frames.Add(new LF2FrameData { frameId = frame, state = state, wait = 100, next = frame,
+                        centerx = 35, centery = 79, wpoints = point == null ? new List<WeaponPoint>() : new List<WeaponPoint> { point } });
+                return new LF2CharacterDataWrapper(oid, d);
+            }
+        }
+    }
+}
+#endif
+
+#if UNITY_EDITOR
+namespace NTSD.Test.Editor
+{
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using NTSD.Animation;
+    using NTSD.Animation.LF2Objects;
+    using NTSD.Simulation;
+    using NTSD.Simulation.Ecs;
+    using UnityEditor;
+    using UnityEngine;
+
+    internal static class NTSD28B6MissingActionPlayProbe
+    {
+        private const string Request = "Temp/Goal13_Pkg1_Play.request";
+        private const string Result = "Temp/Goal13_Pkg1_Play.result.json";
+        private static bool pausing;
+        private static string consoleError;
+        [InitializeOnLoadMethod]
+        private static void Register()
+        {
+            EditorApplication.update -= Poll;
+            EditorApplication.update += Poll;
+            Application.logMessageReceived -= Log;
+            Application.logMessageReceived += Log;
+        }
+        private static void Log(string message, string stack, LogType type)
+        {
+            if (File.Exists(Request) && EditorApplication.isPlaying &&
+                (type == LogType.Error || type == LogType.Exception || type == LogType.Assert))
+                consoleError = message;
+        }
+        private static void Poll()
+        {
+            if (!File.Exists(Request) || !EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating)
+                return;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver?.World == null || driver.CurrentTickIndex < 5) return;
+            if (!pausing) { driver.SetPaused(true); pausing = true; return; }
+            if (driver.DedicatedSimulationWorkerTickInFlightForDiagnostics) return;
+            var report = new Report();
+            SimulationWorld world = driver.World;
+            var owned = new List<RuntimeEntityHandle>();
+            report.objectsBefore = world.ObjectCount;
+            report.logicBefore = world.LogicReferencePool.ActiveCount;
+            report.renderBefore = LF2ObjectPool.TryGetInstance()?.ActiveObjectCountForAcceptance ?? -1;
+            try
+            {
+                Require(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "NTSD_Battle", "Wrong scene.");
+                Require(world.StructuralEventSinkForServices == null, "Existing observer.");
+                Require(driver.DedicatedSimulationWorkerFailureForDiagnostics == null, "Worker failed.");
+                foreach (int oid in new[] { 1, 35 })
+                {
+                    int action = oid == 1 ? 51 : 235;
+                    int literal = oid == 1 ? 10 : -888;
+                    LF2CharacterDataWrapper definition = world.RuntimeCharacterConfigs.Resolve(oid);
+                    LF2FrameData frame = definition.characterData.frames.First(f => f.frameId == action);
+                    Require(frame.PrimaryWeaponPoint.WeaponAct == literal, "Current Sakura/Sakon witness drift.");
+                    var row = new Witness { oid = oid, action = action, literal = literal };
+                    report.witnesses.Add(row);
+                    int holderSlot = world.FindFirstFreeRuntimeSlotForDiagnostics(50, 1000);
+                    LF2Character holder = AddHolder(world, owned, oid, holderSlot, action);
+                    int childSlot = world.FindFirstFreeRuntimeSlotForDiagnostics(holderSlot + 1, 1000);
+                    LF2Weapon child = AddChild(world, owned, holder, childSlot);
+                    Require(!child.FrameCache.HasFrame(literal), "Current OID123 unexpectedly declares action.");
+                    int nextHolderSlot = world.FindFirstFreeRuntimeSlotForDiagnostics(childSlot + 1, 1000);
+                    LF2Character nextHolder = AddHolder(world, owned, 1, nextHolderSlot, 0);
+                    int nextSlot = world.FindFirstFreeRuntimeSlotForDiagnostics(nextHolderSlot + 1, 1000);
+                    LF2Weapon nextChild = AddChild(world, owned, nextHolder, nextSlot);
+                    Require(nextChild.FrameCache.HasFrame(nextHolder.Frame.D.PrimaryWeaponPoint.WeaponAct), "Next-child valid witness unavailable.");
+                    nextChild.Runtime.SetPosition(777, -31, 444);
+                    nextChild.Runtime.SyncIntegerPosition();
+                    row.childSlot = childSlot;
+                    row.nextSlot = nextSlot;
+                    row.nextAction = nextHolder.Frame.D.PrimaryWeaponPoint.WeaponAct;
+                    row.before = Snapshot(child);
+                    row.expectedAtC09 = Snapshot(child, child.FrameDelay - 1);
+                    var sink = new Trace(world, row, child, nextChild);
+                    world.SetStructuralEventSinkForDiagnostics(sink, driver.CurrentTickIndex, "missing-probe");
+                    Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false), "Driver rejected tick.");
+                    row.tick = driver.CurrentTickIndex;
+                    row.nextProcessed = nextChild.Frame.N == row.nextAction && nextChild.Runtime.X != 777;
+                    row.live = world.FindEntityByRuntimeSlotForQuery(childSlot) == child;
+                    row.linkPreserved = child.Runtime.LinkState < 0 && holder.Runtime.TargetSlotIndex == childSlot;
+                    Require(row.events.Count >= 1 && row.events[0].pass == "held-refill:C09", "No C09 missing continue.");
+                    Require(row.events.All(e => e.action == literal && e.link < 0), "Literal/relation lost at missing boundary.");
+                    Require(row.events.All(e => e.state == row.expectedAtC09), "Missing boundary changed state beyond the pre-C09 frame-delay decrement.");
+                    Require(row.nextProcessed && row.live && row.linkPreserved && row.freeEvents == 0, "Continue/free/next-slot mismatch.");
+                    world.SetStructuralEventSinkForDiagnostics(null, driver.CurrentTickIndex, "between-witnesses");
+                    Cleanup(world, owned);
+                }
+                Require(string.IsNullOrEmpty(consoleError), consoleError);
+                report.status = "PASS";
+            }
+            catch (Exception exception) { report.status = "FAIL"; report.message = exception.ToString(); }
+            finally
+            {
+                world.SetStructuralEventSinkForDiagnostics(null, driver.CurrentTickIndex, "missing-end");
+                Cleanup(world, owned);
+                report.objectsAfter = world.ObjectCount;
+                report.logicAfter = world.LogicReferencePool.ActiveCount;
+                report.renderAfter = LF2ObjectPool.TryGetInstance()?.ActiveObjectCountForAcceptance ?? -1;
+                report.cleanup = report.objectsBefore == report.objectsAfter && report.logicBefore == report.logicAfter && report.renderBefore == report.renderAfter;
+                if (!report.cleanup) report.status = "FAIL";
+                File.WriteAllText(Result, JsonUtility.ToJson(report, true));
+                File.Delete(Request);
+                EditorApplication.update -= Poll;
+                Application.logMessageReceived -= Log;
+                EditorApplication.delayCall += EditorApplication.ExitPlaymode;
+            }
+        }
+        private static LF2Character AddHolder(SimulationWorld world, List<RuntimeEntityHandle> owned, int oid, int slot, int action)
+        {
+            var holder = new LF2Character { ObjectId = oid, Name = "Goal13_MissingWitness" };
+            holder.ModuleInitialize();
+            holder.FrameCache.Load(world.RuntimeCharacterConfigs.Resolve(oid));
+            holder.SetRequiredRuntimeSlot(slot);
+            world.Register(holder);
+            Track(world, owned, holder);
+            holder.ImmediateFrame(action);
+            holder.FrameDelay = 1000;
+            holder.Initialize(500, 500);
+            holder.AiControlled = false;
+            holder.Team = 3;
+            holder.RelationTeam = 3;
+            holder.Runtime.SetPosition(200, 0, world.Runtime.Stage.ZMin + 50);
+            holder.Runtime.SyncIntegerPosition();
+            return holder;
+        }
+        private static LF2Weapon AddChild(SimulationWorld world, List<RuntimeEntityHandle> owned, LF2Character holder, int slot)
+        {
+            var child = new LF2Weapon { ObjectId = 123 };
+            child.SetWeaponType(6);
+            child.FrameCache.Load(world.RuntimeCharacterConfigs.Resolve(123));
+            child.SetRequiredRuntimeSlot(slot);
+            world.Register(child);
+            Track(world, owned, child);
+            child.DirectWriteHeldFramePreserveWaitCounter(20);
+            child.Health.HP = 100;
+            child.Runtime.WeaponFlightCounter = 19;
+            child.Runtime.SetPosition(91, -17, world.Runtime.Stage.ZMin + 50);
+            child.Runtime.SyncIntegerPosition();
+            holder.AttachOpointHeldObject(child);
+            child.FrameDelay = 31;
+            return child;
+        }
+        private static void Track(SimulationWorld world, List<RuntimeEntityHandle> owned, LF2Entity entity)
+        {
+            Require(world.TryGetCurrentRuntimeHandleForDiagnostics(entity.Runtime.SlotIndex, entity, out RuntimeEntityHandle handle), "No handle.");
+            owned.Add(handle);
+        }
+        private static void Cleanup(SimulationWorld world, List<RuntimeEntityHandle> owned)
+        {
+            foreach (RuntimeEntityHandle handle in owned)
+                if (world.TryResolveRuntimeHandleForDiagnostics(handle, out LF2Entity entity)) world.Unregister(entity);
+            owned.Clear();
+        }
+        private static string Snapshot(LF2Entity e, int? delay = null) => FormattableString.Invariant($"{e.Runtime.Dir}/{delay ?? e.FrameDelay}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.WeaponFlightCounter}");
+        private static void Require(bool ok, string message) { if (!ok) throw new InvalidOperationException(message); }
+        private sealed class Trace : IBattleParityStructuralEventSink
+        {
+            private readonly SimulationWorld world;
+            private readonly Witness row;
+            private readonly LF2Weapon child, next;
+            internal Trace(SimulationWorld world, Witness row, LF2Weapon child, LF2Weapon next)
+            { this.world = world; this.row = row; this.child = child; this.next = next; }
+            public void Record(BattleParityStructuralEvent item)
+            {
+                if (item.Slot == row.childSlot && item.Action == "free") row.freeEvents++;
+                if (item.Slot != row.childSlot || item.Action != "held-unsupported-action") return;
+                row.events.Add(new Event { tick = item.Tick, pass = item.Pass, action = child.Frame.N,
+                    link = child.Runtime.LinkState, state = Snapshot(child), nextAction = next.Frame.N,
+                    legacy = world.Rng.CallCount, native = world.NativeRandom.CaptureScalarState().SynchronizedCalls });
+            }
+        }
+        [Serializable] private sealed class Report
+        {
+            public string status, message;
+            public string trigger = "Current Sakura1/51 and Sakon35/235, explicit action with held timer fixture; production AttachOpointHeldObject current OID123, real driver full tick; no physical input claim.";
+            public int objectsBefore, objectsAfter, logicBefore, logicAfter, renderBefore, renderAfter;
+            public bool cleanup;
+            public List<Witness> witnesses = new List<Witness>();
+        }
+        [Serializable] private sealed class Witness
+        {
+            public int oid, action, literal, childSlot, nextSlot, nextAction, tick, freeEvents;
+            public string before, expectedAtC09;
+            public bool nextProcessed, live, linkPreserved;
+            public List<Event> events = new List<Event>();
+        }
+        [Serializable] private sealed class Event
+        {
+            public int tick, action, link, nextAction;
+            public string pass, state;
+            public ulong legacy, native;
+        }
+    }
+}
+#endif

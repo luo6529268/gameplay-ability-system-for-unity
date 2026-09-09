@@ -111,7 +111,8 @@ namespace NTSD.Test
             Assert.That(world.AiUnifiedSnapshotShadowBuildCountForDiagnostics, Is.EqualTo(1));
             Assert.That(world.AiUnifiedSnapshotShadowSlotVisitCountForDiagnostics,
                 Is.EqualTo(world.RuntimeSlotCapacityForDiagnostics));
-            Assert.That(world.AiUnifiedSnapshotShadowRefreshCountForDiagnostics, Is.EqualTo(2));
+            Assert.That(world.AiUnifiedSnapshotShadowRefreshCountForDiagnostics, Is.EqualTo(3),
+                "one AI producer publication plus both retained routing publications are expected");
             Assert.That(world.AiUnifiedSnapshotShadowSensingComparedCountForDiagnostics,
                 Is.GreaterThan(0));
             Assert.That(world.AiUnifiedSnapshotShadowDecisionComparedCountForDiagnostics,
@@ -443,7 +444,8 @@ namespace NTSD.Test
                 Is.Zero);
             Assert.That(
                 actualWorld.AiUnifiedSnapshotShadowMutationWitnessComparedCountForDiagnostics,
-                Is.EqualTo(4));
+                Is.EqualTo(6),
+                "three row publications are compared against both shadow consumers");
         }
 
         [Test]
@@ -481,7 +483,8 @@ namespace NTSD.Test
             Assert.That(world.AiDecisionShadowCloneRngCallCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionShadowRowVisitCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics, Is.EqualTo(2),
+                "the AI producer row and retained post-routing row are published separately");
             Assert.That(world.AiDecisionIndexedEligibleCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedAvailableCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionIndexedComparedCountForDiagnostics, Is.Zero);
@@ -496,28 +499,33 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void IndexedCanonical_CommitsSameInputWorldTargetAndRngAsLegacy()
+        public void IndexedCanonical_CommitsNativeSynchronizedRngWithoutMutatingLegacyRng()
         {
-            var legacy = new SimulationWorld();
             var indexed = new SimulationWorld();
-            LF2Character legacySelf = RegisterCharacter(legacy, 0, 7, 1, 0, 0, 0, 2, true);
             LF2Character indexedSelf = RegisterCharacter(indexed, 0, 7, 1, 0, 0, 0, 2, true);
-            RegisterCharacter(legacy, 1, 2, 2, 90, 0, 0, 9, false);
             RegisterCharacter(indexed, 1, 2, 2, 90, 0, 0, 9, false);
-            legacy.Runtime.Flow.InputPhase = 2;
             indexed.Runtime.Flow.InputPhase = 2;
-            legacy.Rng.Seed(0xC011u);
             indexed.Rng.Seed(0xC011u);
+            indexed.NativeRandom.ResetFromSeed(0xC011u);
             indexed.AiDecisionExecutionMode = AiDecisionExecutionMode.IndexedCanonical;
             indexed.ResetAiDecisionShadowDiagnostics();
+            uint legacyStateBefore = indexed.Rng.State;
+            ulong legacyCallsBefore = indexed.Rng.CallCount;
+            NTSD28NativeRandomScalarState nativeBefore =
+                indexed.NativeRandom.CaptureScalarState();
 
-            legacy.CharacterInputAll(2);
             indexed.CharacterInputAll(2);
 
-            AssertDecisionStateEqual(legacy, legacySelf, indexed, indexedSelf);
+            NTSD28NativeRandomScalarState nativeAfter =
+                indexed.NativeRandom.CaptureScalarState();
+            Assert.That(indexedSelf.Runtime.Unk360, Is.EqualTo(1));
+            Assert.That(nativeAfter.SynchronizedCalls,
+                Is.GreaterThan(nativeBefore.SynchronizedCalls));
+            Assert.That(indexed.Rng.State, Is.EqualTo(legacyStateBefore));
+            Assert.That(indexed.Rng.CallCount, Is.EqualTo(legacyCallsBefore));
             Assert.That(indexed.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
-            Assert.That(indexed.AiDecisionSharedRefreshCountForDiagnostics, Is.EqualTo(2),
-                "the shared pass refreshes both the AI writer row and the non-AI target row");
+            Assert.That(indexed.AiDecisionSharedRefreshCountForDiagnostics, Is.EqualTo(3),
+                "the shared pass publishes the AI producer row before routing, then both retained rows");
             Assert.That(indexed.AiDecisionIndexedCanonicalEligibleCountForDiagnostics, Is.EqualTo(1));
             Assert.That(indexed.AiDecisionIndexedCanonicalCommittedCountForDiagnostics, Is.EqualTo(1));
             Assert.That(indexed.AiDecisionIndexedCanonicalFallbackCountForDiagnostics, Is.Zero);
@@ -605,15 +613,26 @@ namespace NTSD.Test
             indexed.Runtime.Flow.AiRand3 = 6;
             legacy.Rng.Seed(0xFA11u);
             indexed.Rng.Seed(0xFA11u);
+            indexed.NativeRandom.ResetFromSeed(0xFA11u);
             indexed.AiDecisionExecutionMode = AiDecisionExecutionMode.IndexedCanonical;
             indexed.SetAiDecisionIndexedCanonicalPreCommitFailureForSelfCheck(
                 AiDecisionAvailability.EpochMismatch);
             indexed.ResetAiDecisionShadowDiagnostics();
+            NTSD28NativeRandomScalarState nativeBefore =
+                indexed.NativeRandom.CaptureScalarState();
 
             legacy.CharacterInputAll(2);
             indexed.CharacterInputAll(2);
 
             AssertDecisionStateEqual(legacy, legacySelf, indexed, indexedSelf);
+            NTSD28NativeRandomScalarState nativeAfter =
+                indexed.NativeRandom.CaptureScalarState();
+            Assert.That(nativeAfter.SynchronizedCounter,
+                Is.EqualTo(nativeBefore.SynchronizedCounter));
+            Assert.That(nativeAfter.SynchronizedIndex,
+                Is.EqualTo(nativeBefore.SynchronizedIndex));
+            Assert.That(nativeAfter.SynchronizedCalls,
+                Is.EqualTo(nativeBefore.SynchronizedCalls));
             Assert.That(indexed.AiDecisionIndexedCanonicalCommittedCountForDiagnostics, Is.Zero);
             Assert.That(indexed.AiDecisionIndexedCanonicalFallbackCountForDiagnostics, Is.EqualTo(1));
             Assert.That(indexed.AiDecisionIndexedCanonicalFirstFallbackReasonForDiagnostics,
@@ -621,7 +640,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void DataOrientedProfile_MatchesLegacyFullDispatcherForPosition38()
+        public void DataOrientedProfile_SynchronizedAuthoritySkipsLegacyPosition38Tree()
         {
             var legacy = new SimulationWorld();
             var dataOriented = new SimulationWorld();
@@ -640,19 +659,31 @@ namespace NTSD.Test
             dataSelf.Runtime.Unk360 = -1;
             legacy.Rng.Seed(27u);
             dataOriented.Rng.Seed(27u);
+            dataOriented.NativeRandom.ResetFromSeed(27u);
+            int legacyProducerComboDua = int.MinValue;
+            int dataProducerComboDua = int.MinValue;
+            legacy.SetCharacterInputProducerPassMutationOverrideForSelfCheck((_, entity) =>
+            {
+                if (ReferenceEquals(entity, legacySelf))
+                    legacyProducerComboDua = entity.Runtime.ComboDua;
+            });
+            dataOriented.SetCharacterInputProducerPassMutationOverrideForSelfCheck((_, entity) =>
+            {
+                if (ReferenceEquals(entity, dataSelf))
+                    dataProducerComboDua = entity.Runtime.ComboDua;
+            });
 
             legacy.CharacterInputAll(2);
             dataOriented.CharacterInputAll(2);
 
             Assert.That(legacySelf.Runtime.Unk360, Is.EqualTo(1));
             Assert.That(legacyTarget.GetState(), Is.EqualTo(3));
-            Assert.That(legacySelf.Runtime.ComboDua, Is.EqualTo(3),
-                "the fixture must reach source-derived position38 predicted-DUA branch");
-            AssertDecisionStateEqual(
-                legacy,
-                legacySelf,
-                dataOriented,
-                dataSelf);
+            Assert.That(legacyProducerComboDua, Is.EqualTo(3),
+                "the producer phase must reach source-derived position38 predicted-DUA branch");
+            Assert.That(dataProducerComboDua, Is.Zero,
+                "NTSD 2.8 synchronized authority must not execute the old 66-expression profile tree");
+            Assert.That(dataOriented.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                Is.GreaterThan(0UL));
             Assert.That(
                 dataOriented.AiDecisionIndexedCanonicalFallbackCountForDiagnostics,
                 Is.Zero);
@@ -665,15 +696,30 @@ namespace NTSD.Test
         public void IndexedCanonical_FullOracleUsesConfiguredLowFrequencySampling()
         {
             var world = new SimulationWorld();
+            var noOracle = new SimulationWorld();
             RegisterCharacter(world, 0, 1, 1, 0, 0, 0, 0, true);
             RegisterCharacter(world, 1, 2, 2, 90, 0, 0, 9, true);
+            RegisterCharacter(noOracle, 0, 1, 1, 0, 0, 0, 0, true);
+            RegisterCharacter(noOracle, 1, 2, 2, 90, 0, 0, 9, true);
             world.Runtime.Flow.InputPhase = 2;
+            noOracle.Runtime.Flow.InputPhase = 2;
             world.Rng.Seed(0x0A11u);
+            noOracle.Rng.Seed(0x0A11u);
+            world.NativeRandom.ResetFromSeed(0x0A11u);
+            noOracle.NativeRandom.ResetFromSeed(0x0A11u);
             world.AiDecisionExecutionMode = AiDecisionExecutionMode.IndexedCanonical;
+            noOracle.AiDecisionExecutionMode = AiDecisionExecutionMode.IndexedCanonical;
             world.AiDecisionIndexedCanonicalFullOracleSampleInterval = 2;
             world.ResetAiDecisionShadowDiagnostics();
+            noOracle.ResetAiDecisionShadowDiagnostics();
 
             world.CharacterInputAll(2);
+            noOracle.CharacterInputAll(2);
+
+            NTSD28NativeRandomScalarState sampled =
+                world.NativeRandom.CaptureScalarState();
+            NTSD28NativeRandomScalarState unsampled =
+                noOracle.NativeRandom.CaptureScalarState();
 
             Assert.That(world.AiDecisionIndexedCanonicalEligibleCountForDiagnostics, Is.EqualTo(2));
             Assert.That(world.AiDecisionIndexedCanonicalCommittedCountForDiagnostics, Is.EqualTo(2));
@@ -681,6 +727,51 @@ namespace NTSD.Test
                 Is.EqualTo(1));
             Assert.That(world.AiDecisionIndexedCanonicalFullOracleMismatchCountForDiagnostics,
                 Is.Zero);
+            Assert.That(sampled.SynchronizedCalls, Is.GreaterThan(0UL));
+            Assert.That(sampled.SynchronizedCounter,
+                Is.EqualTo(unsampled.SynchronizedCounter));
+            Assert.That(sampled.SynchronizedIndex,
+                Is.EqualTo(unsampled.SynchronizedIndex));
+            Assert.That(sampled.SynchronizedCalls,
+                Is.EqualTo(unsampled.SynchronizedCalls),
+                "the sampled Full oracle must not commit its candidate cursor");
+            Assert.That(sampled.LastSynchronizedCallSite,
+                Is.EqualTo(unsampled.LastSynchronizedCallSite));
+        }
+
+        [Test]
+        public void IndexedOracleComparison_DetectsCallSiteDifference()
+        {
+            var fullSnapshot = new AiDecisionSnapshot(1);
+            var indexedSnapshot = new AiDecisionSnapshot(1);
+            fullSnapshot.RngTraceCallSites[0] = 0x1Eu;
+            indexedSnapshot.RngTraceCallSites[0] = 0x21u;
+            fullSnapshot.RngTraceModuli[0] = 17;
+            indexedSnapshot.RngTraceModuli[0] = 17;
+            fullSnapshot.RngTraceRaw[0] = 9;
+            indexedSnapshot.RngTraceRaw[0] = 9;
+            fullSnapshot.RngTraceValues[0] = 9;
+            indexedSnapshot.RngTraceValues[0] = 9;
+            var full = new AiDecisionWitness
+            {
+                RngDrawCount = 1,
+                RngOrderHash = 123UL,
+            };
+            var indexed = new AiDecisionWitness
+            {
+                RngDrawCount = 1,
+                RngOrderHash = 123UL,
+            };
+
+            Assert.That(
+                SimulationAiDecisionModule.CompareIndexedWitnesses(
+                    fullSnapshot,
+                    full,
+                    true,
+                    indexedSnapshot,
+                    indexed,
+                    true),
+                Is.EqualTo(AiDecisionIndexedMismatchReason.RngTrace));
         }
 
         [Test]
@@ -691,11 +782,16 @@ namespace NTSD.Test
             RegisterCharacter(world, 1, 2, 2, 90, 0, 0, 9, true);
             world.Runtime.Flow.InputPhase = 2;
             world.Rng.Seed(0xB17Au);
+            world.NativeRandom.ResetFromSeed(0xB17Au);
             world.AiDecisionShadowMode = AiDecisionShadowMode.Shadow;
             world.ResetAiDecisionShadowDiagnostics();
+            NTSD28NativeRandomScalarState nativeBefore =
+                world.NativeRandom.CaptureScalarState();
 
             world.CharacterInputAll(2);
 
+            NTSD28NativeRandomScalarState nativeAfter =
+                world.NativeRandom.CaptureScalarState();
             Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
             Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics,
                 Is.GreaterThanOrEqualTo(2));
@@ -705,6 +801,8 @@ namespace NTSD.Test
             Assert.That(world.AiDecisionIndexedMismatchCountForDiagnostics, Is.Zero);
             Assert.That(world.AiDecisionShadowAvailableCountForDiagnostics, Is.EqualTo(2));
             Assert.That(world.AiDecisionShadowMismatchCountForDiagnostics, Is.Zero);
+            AssertNativeRandomScalarStateEqual(nativeBefore, nativeAfter,
+                "DeepShadow oracle evaluation must discard synchronized RNG candidates");
         }
 
         [Test]
@@ -718,19 +816,21 @@ namespace NTSD.Test
             low.Runtime.Unk360 = 1;
             high.Runtime.Unk360 = -1;
             world.Rng.Seed(0xB17Au);
+            world.NativeRandom.ResetFromSeed(0xB17Au);
             world.AiDecisionShadowMode = AiDecisionShadowMode.SharedShadow;
             world.SetAiDecisionSharedPostLegacyStateMutationForSelfCheck(0, 14);
             world.ResetAiDecisionShadowDiagnostics();
+            NTSD28NativeRandomScalarState nativeBefore =
+                world.NativeRandom.CaptureScalarState();
 
-            LF2FrameData sharedEmptyFrame = GetSharedEmptyFrameForIsolation();
-            int originalEmptyFrameState = sharedEmptyFrame.state;
+            LF2FrameData lowProducerFrame = low.Frame.D;
+            int originalLowProducerFrameState = lowProducerFrame.state;
             try
             {
                 world.CharacterInputAll(2);
 
-                Assert.That(low.Frame.D, Is.SameAs(sharedEmptyFrame),
-                    "the fixture must explicitly witness the shared missing-frame sentinel it mutates");
-                Assert.That(sharedEmptyFrame.state, Is.EqualTo(14));
+                Assert.That(lowProducerFrame.state, Is.EqualTo(14),
+                    "the producer-side mutation must precede later AI evaluation");
                 Assert.That(world.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
                 Assert.That(world.AiDecisionSharedRefreshCountForDiagnostics,
                     Is.GreaterThanOrEqualTo(2));
@@ -754,13 +854,17 @@ namespace NTSD.Test
                 Assert.That(world.AiDecisionShadowLastExpectedForDiagnostics.InitialSelectedSlot,
                     Is.EqualTo(2),
                     "the high slot must see the low slot's post-legacy state 14 row");
+                AssertNativeRandomScalarStateEqual(
+                    nativeBefore,
+                    world.NativeRandom.CaptureScalarState(),
+                    "SharedShadow oracle evaluation must discard synchronized RNG candidates");
             }
             finally
             {
-                sharedEmptyFrame.state = originalEmptyFrameState;
+                lowProducerFrame.state = originalLowProducerFrameState;
             }
 
-            Assert.That(sharedEmptyFrame.state, Is.EqualTo(originalEmptyFrameState));
+            Assert.That(lowProducerFrame.state, Is.EqualTo(originalLowProducerFrameState));
         }
 
         [TestCase(0, AiDecisionAvailability.EpochMismatch)]
@@ -1071,7 +1175,8 @@ namespace NTSD.Test
             Assert.That(unified.AiUnifiedSnapshotExecutionReadCountForDiagnostics,
                 Is.EqualTo(slots.Length));
             Assert.That(unified.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
-                Is.EqualTo(slots.Length));
+                Is.EqualTo(2 * slots.Length),
+                "each AI publishes once after producer freeze and once after retained routing");
             Assert.That(unified.AiSoACandidateFusedSnapshotBuildCountForDiagnostics,
                 Is.Zero);
             Assert.That(unified.AiDecisionSharedBuildCountForDiagnostics, Is.Zero);
@@ -1150,7 +1255,8 @@ namespace NTSD.Test
 
             Assert.That(
                 incremental.AiUnifiedSnapshotExecutionIncrementalValidationCountForDiagnostics,
-                Is.EqualTo(30L * slots.Length));
+                Is.EqualTo(60L * slots.Length),
+                "thirty ticks validate both producer and retained routing publications");
         }
 
         [Test]
@@ -1324,7 +1430,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void UnifiedAuthority_AscendingRefreshMakesLowVisibleToHighWithoutReverseEarlyVisibility()
+        public void UnifiedAuthority_AscendingProducerRefreshMakesLowVisibleToHighWithoutRoutingLeakage()
         {
             var world = new SimulationWorld();
             LF2Character low = RegisterCharacter(world, 0, 1, 1, 10, 0, 0, 2, true);
@@ -1332,38 +1438,35 @@ namespace NTSD.Test
             RegisterCharacter(world, 7, 3, 1, 180, 0, 0, 2, false);
             ConfigureGateBWorld(world, unifiedAuthority: true, 0xB17Au);
             world.AiDecisionShadowMode = AiDecisionShadowMode.SharedShadow;
-            world.SetCharacterInputPassMutationOverrideForSelfCheck((_, entity) =>
+            world.SetCharacterInputProducerPassMutationOverrideForSelfCheck((_, entity) =>
             {
                 if (entity?.Runtime?.SlotIndex == 0 && entity.Frame?.D != null)
                     entity.Frame.D.state = 14;
             });
             world.SetAiUnifiedSnapshotExecutionVisibilityProbeForSelfCheck(0, 3, 3, 0);
 
-            LF2FrameData sharedEmptyFrame = GetSharedEmptyFrameForIsolation();
-            int originalEmptyFrameState = sharedEmptyFrame.state;
+            LF2FrameData lowProducerFrame = low.Frame.D;
+            int originalLowProducerFrameState = lowProducerFrame.state;
             try
             {
                 world.CharacterInputAll(2);
 
-                Assert.That(low.Frame.D, Is.SameAs(sharedEmptyFrame),
-                    "the unified refresh fixture must own its shared missing-frame mutation");
-                Assert.That(sharedEmptyFrame.state, Is.EqualTo(14));
+                Assert.That(lowProducerFrame.state, Is.EqualTo(14));
                 Assert.That(world.AiUnifiedSnapshotExecutionProbeStateAForTests,
                     Is.EqualTo(9),
                     "the low slot must observe the high slot before the later high-slot input");
                 Assert.That(world.AiUnifiedSnapshotExecutionProbeStateBForTests,
                     Is.EqualTo(14),
-                    "the high slot must observe the low slot's post-input unified row refresh");
-                Assert.That(low.GetState(), Is.EqualTo(14));
+                    "the high slot must observe the low slot's producer-side unified row refresh");
                 Assert.That(high.GetState(), Is.EqualTo(9));
             }
             finally
             {
-                world.SetCharacterInputPassMutationOverrideForSelfCheck(null);
-                sharedEmptyFrame.state = originalEmptyFrameState;
+                world.SetCharacterInputProducerPassMutationOverrideForSelfCheck(null);
+                lowProducerFrame.state = originalLowProducerFrameState;
             }
 
-            Assert.That(sharedEmptyFrame.state, Is.EqualTo(originalEmptyFrameState));
+            Assert.That(lowProducerFrame.state, Is.EqualTo(originalLowProducerFrameState));
         }
 
         [TestCase(AiUnifiedSnapshotExceptionStage.Prepare)]
@@ -1420,9 +1523,9 @@ namespace NTSD.Test
                 Is.EqualTo(1));
             Assert.That(actual.AiDecisionSharedBuildCountForDiagnostics, Is.EqualTo(1));
             Assert.That(actual.AiSoACandidateSnapshotRefreshCountForDiagnostics,
-                Is.EqualTo(slots.Length));
+                Is.EqualTo(2 * slots.Length));
             Assert.That(actual.AiDecisionSharedRefreshCountForDiagnostics,
-                Is.EqualTo(slots.Length));
+                Is.EqualTo(2 * slots.Length));
         }
 
         [TestCase(AiUnifiedSnapshotExceptionStage.InitialSensingCompare, 0)]
@@ -1982,6 +2085,21 @@ namespace NTSD.Test
                 Is.EqualTo(expectedWorld.Runtime.Flow.AiStageTargetX));
             Assert.That(actualWorld.Rng.State, Is.EqualTo(expectedWorld.Rng.State));
             Assert.That(actualWorld.Rng.CallCount, Is.EqualTo(expectedWorld.Rng.CallCount));
+        }
+
+        private static void AssertNativeRandomScalarStateEqual(
+            NTSD28NativeRandomScalarState expected,
+            NTSD28NativeRandomScalarState actual,
+            string message)
+        {
+            Assert.That(actual.SynchronizedCounter,
+                Is.EqualTo(expected.SynchronizedCounter), message);
+            Assert.That(actual.SynchronizedIndex,
+                Is.EqualTo(expected.SynchronizedIndex), message);
+            Assert.That(actual.SynchronizedCalls,
+                Is.EqualTo(expected.SynchronizedCalls), message);
+            Assert.That(actual.LastSynchronizedCallSite,
+                Is.EqualTo(expected.LastSynchronizedCallSite), message);
         }
 
         private sealed class EmptyController : ILF2Controller

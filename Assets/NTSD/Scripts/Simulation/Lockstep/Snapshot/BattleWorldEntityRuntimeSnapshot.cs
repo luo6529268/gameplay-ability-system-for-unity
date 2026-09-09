@@ -10,7 +10,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleWorldEntityRuntimeSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 12;
 
         private readonly bool[] entityRuntimePresent;
         private readonly bool[] rawRuntimePresent;

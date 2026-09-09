@@ -2,12 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
 using UnityEditor;
+using UnityEngine;
 
 namespace NTSD.Animation.Rendering.Editor
 {
@@ -186,6 +188,33 @@ namespace NTSD.Animation.Rendering.Editor
             }
 
             Assert.That(session.IsDisposed, Is.True);
+        }
+
+        [Test]
+        public void TransientBenchmarkGameObjects_RemainVisibleInHierarchy()
+        {
+            BattleRenderingBenchmarkWorkload workload =
+                BattleRenderingBenchmarkWorkload.Create(
+                    BattleRenderingBenchmarkScenario.Parse("100"),
+                    null,
+                    0,
+                    1);
+            var presenter = new BattleBenchmarkLegacyPresenter(workload);
+            try
+            {
+                GameObject root = ReadPrivateField<GameObject>(presenter, "root");
+                AssertHierarchyVisible(root);
+                foreach (Transform child in root.transform)
+                    AssertHierarchyVisible(child.gameObject);
+
+                object resources = ReadPrivateField<object>(presenter, "resources");
+                GameObject cameraObject = ReadPrivateField<GameObject>(resources, "cameraObject");
+                AssertHierarchyVisible(cameraObject);
+            }
+            finally
+            {
+                presenter.Dispose();
+            }
         }
 
         [Test]
@@ -1305,6 +1334,24 @@ namespace NTSD.Animation.Rendering.Editor
                     string.Empty));
             }
             return metrics;
+        }
+
+        private static T ReadPrivateField<T>(object owner, string fieldName)
+        {
+            FieldInfo field = owner.GetType().GetField(
+                fieldName,
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(field, Is.Not.Null, $"Missing private field {fieldName}.");
+            return (T)field.GetValue(owner);
+        }
+
+        private static void AssertHierarchyVisible(GameObject gameObject)
+        {
+            Assert.That(gameObject, Is.Not.Null);
+            Assert.That(
+                (gameObject.hideFlags & HideFlags.HideInHierarchy) == 0,
+                Is.True,
+                $"{gameObject.name} must remain visible in Hierarchy while its Scene content exists.");
         }
 
         private static BattleBenchmarkCompletedFrameMetrics CreateAvailableCompletedFrame(

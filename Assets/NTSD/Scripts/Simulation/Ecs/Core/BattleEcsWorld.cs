@@ -92,6 +92,8 @@ namespace NTSD.Simulation.Ecs
             int state,
             int hp,
             int pp,
+            int nativeComboHitCount1E0,
+            ulong nativeComboHitLastTick1E4,
             int linkState,
             int targetSlot,
             BattleEcsMembership membership)
@@ -111,6 +113,8 @@ namespace NTSD.Simulation.Ecs
             State = state;
             Hp = hp;
             Pp = pp;
+            NativeComboHitCount1E0 = nativeComboHitCount1E0;
+            NativeComboHitLastTick1E4 = nativeComboHitLastTick1E4;
             LinkState = linkState;
             TargetSlot = targetSlot;
             Membership = membership;
@@ -131,6 +135,8 @@ namespace NTSD.Simulation.Ecs
         public int State { get; }
         public int Hp { get; }
         public int Pp { get; }
+        public int NativeComboHitCount1E0 { get; }
+        public ulong NativeComboHitLastTick1E4 { get; }
         public int LinkState { get; }
         public int TargetSlot { get; }
         public BattleEcsMembership Membership { get; }
@@ -279,6 +285,8 @@ namespace NTSD.Simulation.Ecs
             KillCount = new int[capacity];
             ComboCountVictim = new int[capacity];
             ComboCountAttacker = new int[capacity];
+            NativeComboHitCount1E0 = new int[capacity];
+            NativeComboHitLastTick1E4 = new ulong[capacity];
             KillStat = new int[capacity];
             DamageLost = new int[capacity];
         }
@@ -297,6 +305,8 @@ namespace NTSD.Simulation.Ecs
         internal readonly int[] KillCount;
         internal readonly int[] ComboCountVictim;
         internal readonly int[] ComboCountAttacker;
+        internal readonly int[] NativeComboHitCount1E0;
+        internal readonly ulong[] NativeComboHitLastTick1E4;
         internal readonly int[] KillStat;
         internal readonly int[] DamageLost;
     }
@@ -498,6 +508,8 @@ namespace NTSD.Simulation.Ecs
                 Frame.State[slot],
                 Vital.Hp[slot],
                 Vital.Pp[slot],
+                Vital.NativeComboHitCount1E0[slot],
+                Vital.NativeComboHitLastTick1E4[slot],
                 Links.LinkState[slot],
                 Links.TargetSlot[slot],
                 GetMembership(slot));
@@ -648,6 +660,9 @@ namespace NTSD.Simulation.Ecs
             Vital.KillCount[slot] = runtime.KillCount;
             Vital.ComboCountVictim[slot] = runtime.ComboCountVic;
             Vital.ComboCountAttacker[slot] = runtime.ComboCountAtk;
+            Vital.NativeComboHitCount1E0[slot] = runtime.NativeComboHitCount1E0;
+            Vital.NativeComboHitLastTick1E4[slot] =
+                runtime.NativeComboHitLastTick1E4;
             Vital.KillStat[slot] = runtime.KillStat;
             Vital.DamageLost[slot] = runtime.HPLost;
         }
@@ -746,6 +761,8 @@ namespace NTSD.Simulation.Ecs
             Vital.Fall[slot] = Vital.Bdefend[slot] = Vital.HitCount[slot] = 0;
             Vital.KillCount[slot] = Vital.ComboCountVictim[slot] = 0;
             Vital.ComboCountAttacker[slot] = Vital.KillStat[slot] = 0;
+            Vital.NativeComboHitCount1E0[slot] = 0;
+            Vital.NativeComboHitLastTick1E4[slot] = 0UL;
             Vital.DamageLost[slot] = 0;
             Input.Held[slot] = Input.Previous[slot] = 0;
             Input.Cooldown[slot] = Input.Combo[slot] = 0;
@@ -897,6 +914,10 @@ namespace NTSD.Simulation.Ecs
                    Vital.KillCount[slot] == runtime.KillCount &&
                    Vital.ComboCountVictim[slot] == runtime.ComboCountVic &&
                    Vital.ComboCountAttacker[slot] == runtime.ComboCountAtk &&
+                   Vital.NativeComboHitCount1E0[slot] ==
+                       runtime.NativeComboHitCount1E0 &&
+                   Vital.NativeComboHitLastTick1E4[slot] ==
+                       runtime.NativeComboHitLastTick1E4 &&
                    Vital.KillStat[slot] == runtime.KillStat &&
                    Vital.DamageLost[slot] == runtime.HPLost;
         }
@@ -1117,7 +1138,8 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.KnockbackVx); hash.Add(runtime.KnockbackVy); hash.Add(runtime.KnockbackVz);
             hash.Add(runtime.ShakeTimer); hash.Add(runtime.AttackExempt); hash.Add(runtime.HitStateCount);
             hash.Add(runtime.Fall); hash.Add(runtime.Bdefend); hash.Add(runtime.HitCount);
-            hash.Add(runtime.HitConfirmEa); hash.Add(runtime.HitConfirm2); hash.Add(runtime.HealTimer);
+            hash.Add(runtime.HitConfirmEa); hash.Add(runtime.HitConfirm2); hash.Add(runtime.SpecialHitLatch0EB);
+            hash.Add(runtime.HealTimer);
             hash.Add(runtime.CatchTimer); hash.Add(runtime.KillCount); hash.Add(runtime.ComboCountVic);
             hash.Add(runtime.ComboCountAtk); hash.Add(runtime.KillStat);
             hash.Add(runtime.Unk328); hash.Add(runtime.Unk32C); hash.Add(runtime.Unk330);

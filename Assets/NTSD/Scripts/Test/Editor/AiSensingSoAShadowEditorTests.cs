@@ -122,7 +122,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void EarlierSlotRefresh_UpdatesCurrentCharacterDatNonCharacterShellRow()
+        public void EarlierSlotRouting_PublishesRetainedShellRowWithoutAffectingLaterAiProducer()
         {
             var world = new SimulationWorld();
             world.Runtime.Flow.InputPhase = 2;
@@ -160,10 +160,10 @@ namespace NTSD.Test
                 "the retained shadow row must contain the post-input frame, not frame 0");
 
             AssertCleanPublishedComparison(world, 2);
-            AssertTrace(world, "InitialSelectedSlot", 2);
-            AssertTrace(world, "InitialBestDist", 50);
-            Assert.That(self.Runtime.Unk360, Is.EqualTo(2),
-                "the later-slot AI must reject the newly state-14 shell and select the live fallback target");
+            AssertTrace(world, "InitialSelectedSlot", 0);
+            AssertTrace(world, "InitialBestDist", 10);
+            Assert.That(self.Runtime.Unk360, Is.EqualTo(0),
+                "the later-slot AI runs before routing and must observe the shell's producer-time state 0");
         }
 
         [Test]
@@ -658,6 +658,8 @@ namespace NTSD.Test
             entity.Runtime.KillCount = -1;
             entity.Runtime.Unk3FC = -1001;
             entity.Runtime.SetPosition(x, y, z);
+            // The fixture's y argument encodes the normal/abnormal role.
+            entity.Runtime.HitStop = y;
             entity.Runtime.SyncIntegerPosition();
         }
 

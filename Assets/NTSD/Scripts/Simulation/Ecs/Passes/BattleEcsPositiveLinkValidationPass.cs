@@ -128,28 +128,8 @@ namespace NTSD.Simulation.Ecs
 
         public void Execute(int tickIndex)
         {
-            switch (mode)
-            {
-                case BattleEcsPositiveLinkValidationPassMode.Legacy:
-                    world.RunLegacyPositiveLinkValidation(tickIndex);
-                    break;
-
-                case BattleEcsPositiveLinkValidationPassMode.ShadowCompare:
-                    CaptureExpected();
-                    world.RunLegacyPositiveLinkValidation(tickIndex);
-                    ValidateExpected();
-                    break;
-
-                case BattleEcsPositiveLinkValidationPassMode.DataOriented:
-                    ExecuteDataOriented(tickIndex);
-                    break;
-
-                default:
-                    throw new InvalidOperationException(
-                        $"Unsupported positive-link validation pass mode: {mode}.");
-            }
-
-            runCount++;
+            // Alignment contract: NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-PRODUCTION-001.
+            // This retained source shell must never reactivate the retired Unity-only rule.
         }
 
         private void CaptureExpected()

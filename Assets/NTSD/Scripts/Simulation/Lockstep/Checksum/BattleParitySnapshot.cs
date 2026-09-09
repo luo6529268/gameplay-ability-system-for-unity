@@ -1008,6 +1008,7 @@ namespace NTSD.Simulation
 
             object transform = DictionaryOf(
                 ("facing", (object)(isDefault || runtime.Dir == "right" ? 0 : 1)),
+                ("collisionYReference", isDefault ? 0 : runtime.CollisionYReference),
                 ("renderOffsetX", isDefault ? 0 : (int)runtime.RenderOffsetX),
                 ("type3VisualZOffset", isDefault ? 0.0 : runtime.Type3VisualZOffset),
                 ("x", isDefault ? 0.0 : runtime.X),
@@ -1070,6 +1071,10 @@ namespace NTSD.Simulation
             object stats = DictionaryOf(
                 ("comboCountAtk", isDefault ? 0 : runtime.ComboCountAtk),
                 ("comboCountVic", isDefault ? 0 : runtime.ComboCountVic),
+                ("nativeComboHitCount1E0",
+                    isDefault ? 0 : runtime.NativeComboHitCount1E0),
+                ("nativeComboHitLastTick1E4",
+                    isDefault ? 0UL : runtime.NativeComboHitLastTick1E4),
                 ("fallDamageDiv", isDefault ? 0 : runtime.FallDamageDiv),
                 ("hp", isDefault ? 500 : runtime.HP),
                 ("hp3", isDefault ? 500 : runtime.HP3),
@@ -1116,6 +1121,52 @@ namespace NTSD.Simulation
                 ("prevRight", runtime?.PrevRight ?? 0),
                 ("prevUp", runtime?.PrevUp ?? 0));
 
+            object nativeResourceDisplay = DictionaryOf(
+                ("catchSourceSlot90", isDefault ? -1 : runtime.CatchSourceSlot90),
+                ("kind4SourceCount92", isDefault ? 0 : runtime.Kind4SourceCount92),
+                ("displayCurrentHp200", isDefault ? 0 : runtime.DisplayCurrentHp200),
+                ("displayCurrentHpStep204", isDefault ? 0 : runtime.DisplayCurrentHpStep204),
+                ("displayDamageStep1FC", isDefault ? 0 : runtime.DisplayDamageStep1FC),
+                ("displayDamageTotal1F8", isDefault ? 0 : runtime.DisplayDamageTotal1F8),
+                ("displayEffectiveMaxHp208", isDefault ? 0 : runtime.DisplayEffectiveMaxHp208),
+                ("displayEffectiveMaxHpStep20C", isDefault ? 0 : runtime.DisplayEffectiveMaxHpStep20C),
+                ("displayScore1F0", isDefault ? 0 : runtime.DisplayScore1F0),
+                ("displayScoreStep1F4", isDefault ? 0 : runtime.DisplayScoreStep1F4),
+                ("effectiveMaxRegenDouble1A8", isDefault ? 0 : runtime.EffectiveMaxRegenDouble1A8),
+                ("environmentSourceSlot160", isDefault ? -1 : runtime.EnvironmentSourceSlot160),
+                ("fullRestoreTimer1B0", isDefault ? 0 : runtime.FullRestoreTimer1B0),
+                ("hpRegenDouble1AC", isDefault ? 0 : runtime.HpRegenDouble1AC),
+                ("impactSourceSlot164", isDefault ? -1 : runtime.ImpactSourceSlot164),
+                ("incomingDamageScale340", isDefault ? 0 : runtime.IncomingDamageScale340),
+                ("inputScoreTotal348", isDefault ? 0 : runtime.InputScoreTotal348),
+                ("knockoutCount358", isDefault ? 0 : runtime.KnockoutCount358),
+                ("modeDamageScalePercent", isDefault ? 100 : runtime.ModeDamageScalePercent),
+                ("mpRegenBonusTimer1A4", isDefault ? 0 : runtime.MpRegenBonusTimer1A4),
+                ("ordinaryCreditGate2F4", isDefault ? -1 : runtime.OrdinaryCreditGate2F4),
+                ("weakTimer12C", isDefault ? 0 : runtime.WeakTimer12C));
+
+            object nativeReactionStatus = DictionaryOf(
+                ("armorRecoveryTimer11C", isDefault ? -1 : runtime.ArmorRecoveryTimer11C),
+                ("delayTimer134", isDefault ? 0 : runtime.DelayTimer134),
+                ("hitResourceSuppression15C", isDefault ? 0 : runtime.HitResourceSuppression15C),
+                ("hitResourceInjuryDouble1A0", isDefault ? 0 : runtime.HitResourceInjuryDouble1A0),
+                ("joinOriginalBattleGroup174", isDefault ? 0 : runtime.JoinOriginalBattleGroup174),
+                ("joinOverrideActive170", isDefault ? 0 : runtime.JoinOverrideActive170),
+                ("joinTimer148", isDefault ? 0 : runtime.JoinTimer148),
+                ("nativeComputerState1B8", isDefault ? 0 : runtime.NativeComputerState1B8),
+                ("nativeTimer1BC", isDefault ? 0 : runtime.NativeTimer1BC),
+                ("poisonStrength128", isDefault ? 0 : runtime.PoisonStrength128),
+                ("poisonTimer120", isDefault ? 0 : runtime.PoisonTimer120),
+                ("poisonType124", isDefault ? 0 : runtime.PoisonType124),
+                ("runtimeArmorHp118", isDefault ? 0 : runtime.RuntimeArmorHp118),
+                ("statusDx1C0", isDefault ? 0 : runtime.StatusDx1C0),
+                ("statusDy1C4", isDefault ? 0 : runtime.StatusDy1C4),
+                ("statusDz1C8", isDefault ? 0 : runtime.StatusDz1C8),
+                ("statusGain1CC", isDefault ? 0 : runtime.StatusGain1CC),
+                ("statusHitFacing1D0", isDefault ? 0 : runtime.StatusHitFacing1D0),
+                ("statusPickedAction1D4", isDefault ? 191 : runtime.StatusPickedAction1D4),
+                ("statusPickingAction1D8", isDefault ? 185 : runtime.StatusPickingAction1D8));
+
             SortedDictionary<string, object> presentation = DictionaryOf(
                 ("blink", isDefault ? 0 : runtime.Blink),
                 ("hp2Orig", isDefault ? 0 : runtime.HP2Orig),
@@ -1140,6 +1191,7 @@ namespace NTSD.Simulation
                 ("healTimer", isDefault ? 0 : runtime.HealTimer),
                 ("hitConfirm", isDefault ? 0 : runtime.HitConfirmEa),
                 ("hitConfirm2", isDefault ? 0 : runtime.HitConfirm2),
+                ("specialHitLatch0eb", !isDefault && runtime.SpecialHitLatch0EB),
                 ("unk318", runtime?.RenderPicOffset ?? 0),
                 ("unk31C", runtime?.WeaponFlightCounter ?? 0),
                 ("unk324", runtime?.TransformOriginalObjectId ?? -1),
@@ -1160,6 +1212,8 @@ namespace NTSD.Simulation
                 ("input", input),
                 ("links", links),
                 ("motion", motion),
+                ("nativeReactionStatus", nativeReactionStatus),
+                ("nativeResourceDisplay", nativeResourceDisplay),
                 ("presentation", presentation),
                 ("residual", residual),
                 ("stats", stats),
@@ -1173,6 +1227,16 @@ namespace NTSD.Simulation
             BattleMatchRuntimeState match = battle.Match ?? new BattleMatchRuntimeState();
             BattleStageRuntimeState stage = battle.Stage ?? new BattleStageRuntimeState();
             BattleFlowRuntimeState flow = battle.Flow ?? new BattleFlowRuntimeState();
+            NTSD28NativeWorldClockState nativeClock =
+                battle.NativeWorldClock ?? new NTSD28NativeWorldClockState();
+            NTSD28HitResourceRulesRuntimeState hitResourceRules =
+                battle.NativeHitResourceRules ??
+                new NTSD28HitResourceRulesRuntimeState();
+            NTSD28NativeComboRuntimeState nativeCombo =
+                battle.NativeCombo ?? new NTSD28NativeComboRuntimeState();
+            NTSD28StandardHitRestRuntimeState standardHitRest =
+                battle.NativeStandardHitRest ??
+                new NTSD28StandardHitRestRuntimeState();
             BattleResultsRuntimeState results = battle.Results ?? new BattleResultsRuntimeState();
             BattleRosterRuntimeState roster = battle.Roster ?? new BattleRosterRuntimeState();
             BattleStageProgressionState progression = battle.StageProgression ?? new BattleStageProgressionState();
@@ -1215,6 +1279,9 @@ namespace NTSD.Simulation
                     ("frameToggle", flow.FrameToggle),
                     ("gameTick", flow.CurrentTickIndex),
                     ("inputPhase", flow.InputPhase),
+                    ("nativeFrameSequence", nativeClock.FrameSequence),
+                    ("nativeResourcePhase12", nativeClock.ResourcePhase12),
+                    ("nativeResourcePhase3", nativeClock.ResourcePhase3),
                     ("needClearInput", flow.NeedClearInput),
                     ("paused", false))),
                 ("match", DictionaryOf(
@@ -1223,6 +1290,26 @@ namespace NTSD.Simulation
                     ("randomStage", match.RandomStage),
                     ("seed", match.Seed),
                     ("stageIdx", match.StageIdx))),
+                ("hitResourceRules", DictionaryOf(
+                    ("activeModeHitGroupGate18",
+                        (object)hitResourceRules.ActiveModeHitGroupGate18),
+                    ("activeModeAttackingPercent1C",
+                        (object)hitResourceRules.ActiveModeAttackingPercent1C),
+                    ("attackerInjuryMpPercent34",
+                        hitResourceRules.AttackerInjuryMpPercent34),
+                    ("targetInjuryMpPercent38",
+                        hitResourceRules.TargetInjuryMpPercent38),
+                    ("negativeEnvironmentDamage90",
+                        hitResourceRules.NegativeEnvironmentDamage90))),
+                ("nativeCombo", DictionaryOf(
+                    ("recordPresent", (object)nativeCombo.RecordPresent),
+                    ("bound", nativeCombo.Bound),
+                    ("facing", nativeCombo.Facing),
+                    ("respond", nativeCombo.Respond),
+                    ("caughtact", nativeCombo.CaughtAct))),
+                ("standardHitRest", DictionaryOf(
+                    ("timingReduction4A9FF4",
+                        (object)standardHitRest.TimingReduction4A9FF4))),
                 ("roster", DictionaryOf(
                     ("activeSlotCount", (object)roster.ActiveSlotCount),
                     ("slots", rosterSlots))),
@@ -1266,6 +1353,9 @@ namespace NTSD.Simulation
                 ("f8Pressed", false),
                 ("frameMod12", flow.FrameMod12),
                 ("frameToggle", flow.FrameToggle),
+                ("nativeFrameSequence", nativeClock.FrameSequence),
+                ("nativeResourcePhase12", nativeClock.ResourcePhase12),
+                ("nativeResourcePhase3", nativeClock.ResourcePhase3),
                 ("gameMode", match.BattleGameModeId),
                 ("gameMode2", flow.Mode2Request),
                 ("gameTick", flow.CurrentTickIndex),

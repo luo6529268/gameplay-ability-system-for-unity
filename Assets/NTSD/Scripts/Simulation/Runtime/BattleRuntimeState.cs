@@ -366,6 +366,144 @@ namespace NTSD.Simulation
         }
     }
 
+    [Serializable]
+    public sealed class NTSD28StandardHitRestRuntimeState
+    {
+        public const int DefaultTimingReduction4A9FF4 = 0;
+        public const int MaximumTimingReduction4A9FF4 = 5;
+
+        public int TimingReduction4A9FF4 { get; private set; } =
+            DefaultTimingReduction4A9FF4;
+
+        public void Reset()
+        {
+            TimingReduction4A9FF4 = DefaultTimingReduction4A9FF4;
+        }
+
+        public void SetTimingReduction4A9FF4(int value)
+        {
+            TimingReduction4A9FF4 = Math.Max(
+                DefaultTimingReduction4A9FF4,
+                Math.Min(MaximumTimingReduction4A9FF4, value));
+        }
+
+        internal void RestoreForSnapshot(int timingReduction4A9FF4)
+        {
+            SetTimingReduction4A9FF4(timingReduction4A9FF4);
+        }
+    }
+
+    [Serializable]
+    public sealed class NTSD28HitResourceRulesRuntimeState
+    {
+        public const int DefaultActiveModeHitGroupGate18 = 0;
+        public const int DefaultActiveModeAttackingPercent1C = 0;
+        public const int DefaultAttackerInjuryMpPercent34 = 75;
+        public const int DefaultTargetInjuryMpPercent38 = 75;
+        public const int DefaultNegativeEnvironmentDamage90 = 9;
+
+        public int ActiveModeHitGroupGate18 =
+            DefaultActiveModeHitGroupGate18;
+        public int ActiveModeAttackingPercent1C =
+            DefaultActiveModeAttackingPercent1C;
+        public int AttackerInjuryMpPercent34 =
+            DefaultAttackerInjuryMpPercent34;
+        public int TargetInjuryMpPercent38 =
+            DefaultTargetInjuryMpPercent38;
+        public int NegativeEnvironmentDamage90 =
+            DefaultNegativeEnvironmentDamage90;
+
+        public void Reset()
+        {
+            ActiveModeHitGroupGate18 = DefaultActiveModeHitGroupGate18;
+            ActiveModeAttackingPercent1C =
+                DefaultActiveModeAttackingPercent1C;
+            AttackerInjuryMpPercent34 = DefaultAttackerInjuryMpPercent34;
+            TargetInjuryMpPercent38 = DefaultTargetInjuryMpPercent38;
+            NegativeEnvironmentDamage90 = DefaultNegativeEnvironmentDamage90;
+        }
+
+        internal void RestoreForSnapshot(
+            int activeModeAttackingPercent1C,
+            int attackerInjuryMpPercent34,
+            int targetInjuryMpPercent38)
+        {
+            RestoreForSnapshot(
+                DefaultActiveModeHitGroupGate18,
+                activeModeAttackingPercent1C,
+                attackerInjuryMpPercent34,
+                targetInjuryMpPercent38,
+                DefaultNegativeEnvironmentDamage90);
+        }
+
+        internal void RestoreForSnapshot(
+            int activeModeHitGroupGate18,
+            int activeModeAttackingPercent1C,
+            int attackerInjuryMpPercent34,
+            int targetInjuryMpPercent38)
+        {
+            RestoreForSnapshot(
+                activeModeHitGroupGate18,
+                activeModeAttackingPercent1C,
+                attackerInjuryMpPercent34,
+                targetInjuryMpPercent38,
+                DefaultNegativeEnvironmentDamage90);
+        }
+
+        internal void RestoreForSnapshot(
+            int activeModeHitGroupGate18,
+            int activeModeAttackingPercent1C,
+            int attackerInjuryMpPercent34,
+            int targetInjuryMpPercent38,
+            int negativeEnvironmentDamage90)
+        {
+            ActiveModeHitGroupGate18 = activeModeHitGroupGate18;
+            ActiveModeAttackingPercent1C = activeModeAttackingPercent1C;
+            AttackerInjuryMpPercent34 = attackerInjuryMpPercent34;
+            TargetInjuryMpPercent38 = targetInjuryMpPercent38;
+            NegativeEnvironmentDamage90 = negativeEnvironmentDamage90;
+        }
+    }
+
+    [Serializable]
+    public sealed class NTSD28NativeComboRuntimeState
+    {
+        public const bool DefaultRecordPresent = false;
+        public const int DefaultBound = 0;
+        public const int DefaultFacing = 1;
+        public const int DefaultRespond = 50;
+        public const int DefaultCaughtAct = 0;
+
+        public bool RecordPresent = DefaultRecordPresent;
+        public int Bound = DefaultBound;
+        public int Facing = DefaultFacing;
+        public int Respond = DefaultRespond;
+        public int CaughtAct = DefaultCaughtAct;
+
+        public void Reset()
+        {
+            RecordPresent = DefaultRecordPresent;
+            Bound = DefaultBound;
+            Facing = DefaultFacing;
+            Respond = DefaultRespond;
+            CaughtAct = DefaultCaughtAct;
+        }
+
+        internal void RestoreForSnapshot(
+            bool recordPresent,
+            int bound,
+            int facing,
+            int respond,
+            int caughtAct)
+        {
+            RecordPresent = recordPresent;
+            Bound = bound;
+            Facing = facing;
+            Respond = respond;
+            CaughtAct = caughtAct;
+        }
+    }
+
     /// <summary>
     /// Unity 侧的战斗唯一运行态根节点。
     /// 让 SimulationWorld 对齐 C++ GameWorld 的“职责中心”，但避免重新长成一个巨型类。
@@ -393,6 +531,17 @@ namespace NTSD.Simulation
             new StageSpawnRuntimeBufferPool();
         public BattleRosterRuntimeState Roster = new BattleRosterRuntimeState();
         public BattleFlowRuntimeState Flow = new BattleFlowRuntimeState();
+        public NTSD28NativeWorldClockState NativeWorldClock =
+            new NTSD28NativeWorldClockState();
+        public NTSD28HitResourceRulesRuntimeState NativeHitResourceRules =
+            new NTSD28HitResourceRulesRuntimeState();
+        public NTSD28NativeComboRuntimeState NativeCombo =
+            new NTSD28NativeComboRuntimeState();
+        public NTSD28StandardHitRestRuntimeState NativeStandardHitRest =
+            new NTSD28StandardHitRestRuntimeState();
+        [NonSerialized]
+        internal NTSD28NativeFunctionKeySessionState FunctionKeys =
+            new NTSD28NativeFunctionKeySessionState();
         public BattleResultsRuntimeState Results = new BattleResultsRuntimeState();
         public BattleSlotLabelRuntimeState SlotLabels = new BattleSlotLabelRuntimeState();
         public int[] KillStats = new int[BattleStatSlotCount];
@@ -418,6 +567,16 @@ namespace NTSD.Simulation
             StageSpawnBuffers.Recycle(StageSpawnRuntimeSlots);
             Roster?.Reset();
             Flow?.Reset();
+            NativeWorldClock ??= new NTSD28NativeWorldClockState();
+            NativeWorldClock.Reset();
+            NativeHitResourceRules ??= new NTSD28HitResourceRulesRuntimeState();
+            NativeHitResourceRules.Reset();
+            NativeCombo ??= new NTSD28NativeComboRuntimeState();
+            NativeCombo.Reset();
+            NativeStandardHitRest ??= new NTSD28StandardHitRestRuntimeState();
+            NativeStandardHitRest.Reset();
+            FunctionKeys ??= new NTSD28NativeFunctionKeySessionState();
+            FunctionKeys.ResetForBattle();
             Results?.Reset();
             SlotLabels?.Reset();
             ResetStatArray(ref KillStats);

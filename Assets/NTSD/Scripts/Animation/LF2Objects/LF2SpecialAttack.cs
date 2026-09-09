@@ -287,15 +287,34 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public override void SimTU(int tickIndex)
         {
+            bool nativePhysicsCompleted = RunNativePhysicsForWorldPass(tickIndex);
+            RunPostNativePhysicsSerialForWorldPass(
+                tickIndex,
+                nativePhysicsCompleted);
+        }
+
+        internal override bool RunNativePhysicsForWorldPass(int tickIndex)
+        {
             int dataType = GetCurrentDataObjectTypeForSimulation();
             if (dataType == (int)LF2ObjectType.Character)
             {
                 RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
-                return;
+                return true;
             }
             if (!RunSharedNonCharacterDatFrameAdvance())
+                return false;
+
+            return true;
+        }
+
+        internal override void RunPostNativePhysicsSerialForWorldPass(
+            int tickIndex,
+            bool nativePhysicsCompleted)
+        {
+            if (!nativePhysicsCompleted)
                 return;
 
+            int dataType = GetCurrentDataObjectTypeForSimulation();
             if (dataType != (int)LF2ObjectType.SpecialAttack)
                 return;
 
@@ -536,6 +555,11 @@ namespace NTSD.Animation.LF2Objects
 
             SimulationWorld world = Match ?? target.Match;
             var attackerPos = new Vector3((float)PS.x, (float)PS.y, (float)PS.z);
+            bool releaseHenryArrowAfterTail =
+                ShouldReleaseNativeHenryArrowAfterHitTail(
+                    world,
+                    target,
+                    itr);
             bool applied = world?.DamageWriter.TryApplyCurrentDatTargetHit(
                 world,
                 this,
@@ -543,10 +567,32 @@ namespace NTSD.Animation.LF2Objects
                 itr,
                 attackerPos) == true;
 
-            if (applied && itr.kind == 0)
-                ApplyPostHitSelfDestruct(target);
+            // Alignment contract: NTSD28-B5-SYSTEM-TABLE-ATTACKER-TERMINAL-PRODUCTION-001.
+            if (applied && releaseHenryArrowAfterTail)
+                FreeEntityLikeExe();
 
             return applied;
+        }
+
+        private bool ShouldReleaseNativeHenryArrowAfterHitTail(
+            SimulationWorld world,
+            LF2Entity target,
+            InteractionArea itr)
+        {
+            if (world == null || target == null || itr?.kind != 0 ||
+                LF2Entity.ResolveCurrentDataObjectId(this) != 201 ||
+                target.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character)
+            {
+                return false;
+            }
+
+            return BattleOrdinaryCharacterDamageRouteResolver.Resolve(
+                    world,
+                    this,
+                    target,
+                    itr)
+                .UsesUnarmoredHit;
         }
 
         /// <summary>
@@ -609,23 +655,6 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.ZBoundPositive = true;
             else if (attackerZ < victimZ - 2 && (Runtime.Vz < 0.0 || KnockbackVz < 0.0))
                 Runtime.ZBoundNegative = true;
-        }
-
-        /// <summary>
-        /// entity_type==0 对应 attacker 是非武器（角色）目标
-        /// </summary>
-        private void ApplyPostHitSelfDestruct(LF2Entity victim)
-        {
-            // attacker 的 entity_type：武器类型为 1/2/3/4/6，角色为 0。
-            if (victim == null ||
-                victim.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                return;
-
-            int currentOid = FrameCache?.Wrapper?.characterId ?? ObjectId;
-            if (currentOid == 201)
-                FreeEntityLikeExe();
-            else if (currentOid == 214 && Health != null)
-                Health.HP = 0;
         }
 
         private bool Hit_State3000(LF2Entity attacker, InteractionArea itr)
@@ -853,6 +882,7 @@ namespace NTSD.Animation.LF2Objects
             _parent = task.parent as LF2LivingObject;
             ObjectId = task.opoint.oid;
             Team = task.team;
+            OwnerEntityIndex = task.ownerEntityIndex;
         }
 
         private void InitializeDirection(OPointCreateTask task)

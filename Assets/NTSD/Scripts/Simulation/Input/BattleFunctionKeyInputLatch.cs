@@ -4,8 +4,8 @@ using UnityEngine.InputSystem;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// Captures Unity render-frame key edges without mutating battle state.
-    /// The driver consumes the folded request once at a fixed simulation tick boundary.
+    /// Legacy R8 diagnostic latch retained until B8 replaces its historical
+    /// all-stats/mode2 probe. Formal physical F1-F12 routing no longer uses it.
     /// </summary>
     internal sealed class BattleFunctionKeyInputLatch
     {

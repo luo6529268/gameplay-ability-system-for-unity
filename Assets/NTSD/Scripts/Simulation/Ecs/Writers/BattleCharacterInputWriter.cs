@@ -139,6 +139,50 @@ namespace NTSD.Simulation.Ecs
             CommitFullRuntimeMirror(runtime, input);
         }
 
+        internal bool ApplyNativeAiHostPendingInput(
+            NTSDEntityRuntime runtime,
+            SimulationInputButtons buttons)
+        {
+            if (runtime == null ||
+                !store.TryCaptureCommon(runtime, out AiDecisionInputState input))
+            {
+                return false;
+            }
+
+            // Alignment contract: NTSD28-B2-AI-HOST-PENDING-PROJECTION-001.
+            // GameSession writes the host packet to pending before native AI
+            // samples it as the previous generation. Preserve every other
+            // canonical field while replacing only that seven-key packet.
+            input.KeyUp = ToInputByte(buttons, SimulationInputButtons.Up);
+            input.KeyDown = ToInputByte(buttons, SimulationInputButtons.Down);
+            input.KeyLeft = ToInputByte(buttons, SimulationInputButtons.Left);
+            input.KeyRight = ToInputByte(buttons, SimulationInputButtons.Right);
+            input.KeyAttack = ToInputByte(buttons, SimulationInputButtons.Attack);
+            input.KeyJump = ToInputByte(buttons, SimulationInputButtons.Jump);
+            input.KeyDefend = ToInputByte(buttons, SimulationInputButtons.Defend);
+            CommitFullState(runtime, input);
+            return true;
+        }
+
+        internal bool SynchronizeNativeExactAiStateFromRuntime(
+            NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return false;
+
+            // Alignment contract: NTSD28-B2-AI-EXACT-INPUT-STORE-ROUNDTRIP-001.
+            // Native routing mutates one persistent input state in the authority.
+            // Preserve that post-route generation for the next canonical AI read.
+            return store.SynchronizeCanonicalStateFromRuntime(runtime);
+        }
+
+        private static byte ToInputByte(
+            SimulationInputButtons buttons,
+            SimulationInputButtons flag)
+        {
+            return (buttons & flag) != 0 ? (byte)1 : (byte)0;
+        }
+
         internal void CommitAiDecisionState(
             NTSDEntityRuntime runtime,
             in AiDecisionInputState input)
@@ -371,7 +415,11 @@ namespace NTSD.Simulation.Ecs
         {
             store.SetDefendLock(runtime, value);
             if (runtime != null)
+            {
+                // Alignment contract: NTSD28-B2-DEFEND-REENTRY-EXACT-FRAME-REFRESH-001.
                 runtime.CdDefendLock = value;
+                runtime.NativeInputProxy.DefendReentryCooldown = value;
+            }
         }
 
         internal void ResetInputState(NTSDEntityRuntime runtime)

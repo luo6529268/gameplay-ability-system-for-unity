@@ -163,13 +163,28 @@ namespace NTSD.Simulation
             witness.Availability = AiDecisionAvailability.Available;
             AiDecisionInputState input = ownedInput;
             AiDecisionWorldState world = snapshot.World;
-            var rng = new AiDecisionRandomStream(
-                snapshot.RngState,
-                snapshot.RngCalls,
-                captureRngTrace,
-                snapshot.RngTraceModuli,
-                snapshot.RngTraceRaw,
-                snapshot.RngTraceValues);
+            AiDecisionRandomStream rng;
+            if (snapshot.TryGetSynchronizedRngCursor(
+                    out NTSD28SynchronizedRandomCursor synchronizedCursor))
+            {
+                rng = new AiDecisionRandomStream(
+                    synchronizedCursor,
+                    captureRngTrace,
+                    snapshot.RngTraceCallSites,
+                    snapshot.RngTraceModuli,
+                    snapshot.RngTraceRaw,
+                    snapshot.RngTraceValues);
+            }
+            else
+            {
+                rng = new AiDecisionRandomStream(
+                    snapshot.RngState,
+                    snapshot.RngCalls,
+                    captureRngTrace,
+                    snapshot.RngTraceModuli,
+                    snapshot.RngTraceRaw,
+                    snapshot.RngTraceValues);
+            }
 
             // Alignment contract R3-AI-LIFE-001: C++ prepare_ai_input has no
             // self-HP early return; later death/respawn passes own that lifecycle.
@@ -178,13 +193,18 @@ namespace NTSD.Simulation
                 Context coordinate = CreateCoordinateContext(world);
                 RollAndClear(ref input);
                 MoveTowardCoordinate(rows, self, coordinate, ref input, ref rng);
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.Coordinate;
                 Publish(ref witness, input, world, rng);
                 return true;
             }
 
-            Context ai = CreateContext(rows, self, ref world, ref witness);
+            Context ai = CreateContext(
+                rows,
+                self,
+                rng.UsesSynchronizedCursor,
+                ref world,
+                ref witness);
             AiSensingNearestResult nearest;
             bool measureIndexedSensing =
                 policy == AiDecisionEvaluationPolicy.Indexed &&
@@ -238,16 +258,40 @@ namespace NTSD.Simulation
 
             int savedTarget = input.Unk360;
             witness.RowVisits++;
-            if (IsLivingCharacter(rows, savedTarget))
+            if (rng.UsesSynchronizedCursor)
             {
-                if (rng.Rand(30) > 0)
-                    selected = savedTarget;
+                bool cachedActive = IsIncluded(rows, savedTarget) &&
+                                    rows.Hp[savedTarget] > 0;
+                if (cachedActive)
+                {
+                    if (RandAt(ref rng, 0x13u, 30) > 0 &&
+                        rows.DataObjectType[savedTarget] == 0)
+                    {
+                        selected = savedTarget;
+                    }
+                    else
+                    {
+                        input.Unk360 = selected;
+                    }
+                }
                 else
+                {
                     input.Unk360 = selected;
+                }
             }
             else
             {
-                input.Unk360 = selected;
+                if (IsLivingCharacter(rows, savedTarget))
+                {
+                    if (rng.Rand(30) > 0)
+                        selected = savedTarget;
+                    else
+                        input.Unk360 = selected;
+                }
+                else
+                {
+                    input.Unk360 = selected;
+                }
             }
             witness.CachedSelectedSlot = selected;
 
@@ -255,7 +299,7 @@ namespace NTSD.Simulation
             {
                 RollAndClear(ref input);
                 PostNoTargetFallback(rows, self, savedTarget, ai, ref input);
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.FinalSelectedSlot = selected;
                 witness.Exit = AiDecisionExit.NoTarget;
                 Publish(ref witness, input, world, rng);
@@ -284,6 +328,7 @@ namespace NTSD.Simulation
                         bestDistance,
                         sameZLane,
                         policy,
+                        rng.UsesSynchronizedCursor,
                         out special);
                 }
                 finally
@@ -306,6 +351,7 @@ namespace NTSD.Simulation
                     bestDistance,
                     sameZLane,
                     policy,
+                    rng.UsesSynchronizedCursor,
                     out special);
             }
             if (specialAvailable)
@@ -335,7 +381,7 @@ namespace NTSD.Simulation
             witness.RowVisits++;
             if (!IsIncluded(rows, selected))
             {
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.TargetMissing;
                 Publish(ref witness, input, world, rng);
                 return true;
@@ -358,7 +404,13 @@ namespace NTSD.Simulation
                     input.KeyLeft = 1;
             }
 
-            if (rng.Rand(ai.Rand5 + 8) == 0 && input.HasBoundaryBlock)
+            int commonPrefixRoll = RandAt(
+                ref rng,
+                0x14u,
+                ai.Rand5 + 8);
+            if (!rng.UsesSynchronizedCursor &&
+                commonPrefixRoll == 0 &&
+                input.HasBoundaryBlock)
             {
                 input.PrevJump = 0;
                 input.KeyJump = 1;
@@ -366,7 +418,7 @@ namespace NTSD.Simulation
 
             if (PreUpdateTarget3000(rows, self, target, selfState, targetState, ai, ref input, ref rng))
             {
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.TargetState3000;
                 Publish(ref witness, input, world, rng);
                 return true;
@@ -381,7 +433,7 @@ namespace NTSD.Simulation
                 {
                     input.PrevJump = 0;
                     input.KeyJump = 1;
-                    ApplyInputEdges(ref input);
+                    ApplyProducerInputEdges(ref input, in rng);
                     witness.Exit = AiDecisionExit.HeldSpecial;
                     Publish(ref witness, input, world, rng);
                     return true;
@@ -391,7 +443,10 @@ namespace NTSD.Simulation
             bool coordinateAllowsSpecial =
                 !input.HasInputHistoryGate ||
                 PostCacheCoordinateAllowsSpecial(rows, self, ref input);
-            if (coordinateAllowsSpecial && (targetState == 0x3EC || targetState == 0x7D4))
+            bool pickupTarget = rng.UsesSynchronizedCursor
+                ? targetState == 1000 || targetState == 2004
+                : targetState == 0x3EC || targetState == 0x7D4;
+            if (coordinateAllowsSpecial && pickupTarget)
             {
                 if (input.HasInputHistoryGate &&
                     (Abs(rows.Z[self] - rows.Z[target]) > 150 ||
@@ -399,7 +454,7 @@ namespace NTSD.Simulation
                     targetOid != 0x7A &&
                     targetOid != 0x7B)
                 {
-                    ApplyInputEdges(ref input);
+                    ApplyProducerInputEdges(ref input, in rng);
                     witness.Exit = AiDecisionExit.SpecialTarget;
                     Publish(ref witness, input, world, rng);
                     return true;
@@ -412,19 +467,19 @@ namespace NTSD.Simulation
                     input.PrevJump = 0;
                     input.KeyJump = 1;
                 }
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.SpecialTarget;
                 Publish(ref witness, input, world, rng);
                 return true;
             }
 
-            if (targetState == 14 || Abs(rows.Y[target]) > 2)
+            if (targetState == 14 || Abs(rows.HitStop[target]) > 2)
             {
                 if (rows.X[target] > ai.StageTargetX - 30)
                 {
                     input.KeyLeft = 1;
                     input.PrevLeft = 0;
-                    ApplyInputEdges(ref input);
+                    ApplyProducerInputEdges(ref input, in rng);
                     witness.Exit = AiDecisionExit.AirTarget;
                     Publish(ref witness, input, world, rng);
                     return true;
@@ -433,7 +488,7 @@ namespace NTSD.Simulation
                 {
                     input.KeyRight = 1;
                     input.PrevRight = 0;
-                    ApplyInputEdges(ref input);
+                    ApplyProducerInputEdges(ref input, in rng);
                     witness.Exit = AiDecisionExit.AirTarget;
                     Publish(ref witness, input, world, rng);
                     return true;
@@ -444,13 +499,13 @@ namespace NTSD.Simulation
                     if (rows.X[target] > rows.X[self])
                     {
                         input.KeyLeft = 1;
-                        if (rng.Rand(ai.Rand20 + 35) == 0)
+                        if (RandAt(ref rng, 0x18u, ai.Rand20 + 35) == 0)
                             input.PrevLeft = 0;
                     }
                     else
                     {
                         input.KeyRight = 1;
-                        if (rng.Rand(ai.Rand20 + 35) == 0)
+                        if (RandAt(ref rng, 0x19u, ai.Rand20 + 35) == 0)
                             input.PrevRight = 0;
                     }
                     if (rows.Z[target] < rows.Z[self] ||
@@ -459,7 +514,7 @@ namespace NTSD.Simulation
                     else
                         input.KeyUp = 1;
                 }
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.AirTarget;
                 Publish(ref witness, input, world, rng);
                 return true;
@@ -469,7 +524,7 @@ namespace NTSD.Simulation
                 (input.HasInputHistoryGate &&
                  (Abs(rows.Z[self] - rows.Z[target]) > 150 ||
                   Abs(rows.X[self] - rows.X[target]) > 240)) ||
-                (targetState != 14 && Abs(rows.Y[target]) <= 2);
+                (targetState != 14 && Abs(rows.HitStop[target]) <= 2);
             if (c8Allowed && targetOid == 0xC8)
             {
                 if (rows.X[target] > rows.X[self] + 7)
@@ -480,13 +535,29 @@ namespace NTSD.Simulation
                     input.KeyDown = 1;
                 else if (rows.Z[target] < rows.Z[self] - 2)
                     input.KeyUp = 1;
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.C8Target;
                 Publish(ref witness, input, world, rng);
                 return true;
             }
 
-            if (rng.Rand(ai.Rand5 + 1) == 0)
+            if (rng.UsesSynchronizedCursor)
+            {
+                if (TryApplyNativeSpecialProfile(
+                        rows,
+                        self,
+                        target,
+                        ai.Rand5,
+                        ref input,
+                        ref rng))
+                {
+                    ApplyProducerInputEdges(ref input, in rng);
+                    witness.Exit = AiDecisionExit.FirstDecision;
+                    Publish(ref witness, input, world, rng);
+                    return true;
+                }
+            }
+            else if (rng.Rand(ai.Rand5 + 1) == 0)
             {
                 int characterDecisionPosition = 0;
                 if (UpdateFirstDecision(
@@ -558,7 +629,7 @@ namespace NTSD.Simulation
                 if (characterDecisionPosition != 0)
                 {
                     witness.CharacterDecisionPosition = characterDecisionPosition;
-                    ApplyInputEdges(ref input);
+                    ApplyProducerInputEdges(ref input, in rng);
                     witness.Exit = AiDecisionExit.FirstDecision;
                     Publish(ref witness, input, world, rng);
                     return true;
@@ -570,61 +641,81 @@ namespace NTSD.Simulation
                 (Abs(rows.Z[self] - rows.Z[target]) <= 150 &&
                  Abs(rows.X[self] - rows.X[target]) <= 240);
             int selfOid = rows.ObjectId[self];
-            bool widePath = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
-            if (!widePath)
+            if (rng.UsesSynchronizedCursor)
             {
-                bool targetPressure =
-                    rows.Hp[target] > rows.Hp[self] * 2 ||
-                    (rows.Hp[self] <= 100 && rows.Hp3[self] > 100);
-                widePath = targetPressure &&
-                           ai.InputPhase == 1 &&
-                           rows.DataObjectType[target] == 0 &&
-                           self >= 20 &&
-                           rows.Team[self] != 5;
+                ProcessNativeOrdinaryMovement(
+                    rows,
+                    self,
+                    target,
+                    world.BattleMode,
+                    ai.Rand20,
+                    closeOrFree,
+                    specialRight,
+                    specialLeft,
+                    specialDown,
+                    specialUp,
+                    specialProximity,
+                    ref input,
+                    ref rng);
             }
-
-            if (closeOrFree)
+            else
             {
-                if ((specialRight || ai.MoveMode == 1) &&
-                    selfState == 2 &&
-                    rows.Facing[self] == 0)
-                    input.KeyLeft = 1;
-                if (specialLeft && selfState == 2 && rows.Facing[self] == 1)
-                    input.KeyRight = 1;
-                int threshold = widePath ? 170 : 60;
-                int near = widePath ? 150 : 0;
-                if (selfState != 19)
+                bool widePath = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
+                if (!widePath)
                 {
-                    if ((rows.X[target] > rows.X[self] + threshold ||
-                         ((rows.X[target] > rows.X[self] + near ||
-                           (selfState == 7 && rows.X[target] > rows.X[self])) &&
-                          rows.Facing[self] == 1)) &&
-                        !specialRight &&
-                        ((widePath && ai.MoveMode == 0) ||
-                         (!widePath && (ai.MoveMode == 0 || rows.Facing[self] == 1))))
-                    {
-                        input.KeyRight = 1;
-                        if (rng.Rand(ai.Rand20 + 35) == 0)
-                            input.PrevRight = 0;
-                    }
-                    if ((rows.X[target] < rows.X[self] - threshold ||
-                         ((rows.X[target] < rows.X[self] - near ||
-                           (selfState == 7 && rows.X[target] < rows.X[self])) &&
-                          rows.Facing[self] == 0)) &&
-                        !specialLeft)
-                    {
+                    bool targetPressure =
+                        rows.Hp[target] > rows.Hp[self] * 2 ||
+                        (rows.Hp[self] <= 100 && rows.Hp3[self] > 100);
+                    widePath = targetPressure &&
+                               ai.InputPhase == 1 &&
+                               rows.DataObjectType[target] == 0 &&
+                               self >= 20 &&
+                               rows.Team[self] != 5;
+                }
+
+                if (closeOrFree)
+                {
+                    if ((specialRight || ai.MoveMode == 1) &&
+                        selfState == 2 &&
+                        rows.Facing[self] == 0)
                         input.KeyLeft = 1;
-                        if (rng.Rand(ai.Rand20 + 35) == 0)
-                            input.PrevLeft = 0;
+                    if (specialLeft && selfState == 2 && rows.Facing[self] == 1)
+                        input.KeyRight = 1;
+                    int threshold = widePath ? 170 : 60;
+                    int near = widePath ? 150 : 0;
+                    if (selfState != 19)
+                    {
+                        if ((rows.X[target] > rows.X[self] + threshold ||
+                             ((rows.X[target] > rows.X[self] + near ||
+                               (selfState == 7 && rows.X[target] > rows.X[self])) &&
+                              rows.Facing[self] == 1)) &&
+                            !specialRight &&
+                            ((widePath && ai.MoveMode == 0) ||
+                             (!widePath && (ai.MoveMode == 0 || rows.Facing[self] == 1))))
+                        {
+                            input.KeyRight = 1;
+                            if (rng.Rand(ai.Rand20 + 35) == 0)
+                                input.PrevRight = 0;
+                        }
+                        if ((rows.X[target] < rows.X[self] - threshold ||
+                             ((rows.X[target] < rows.X[self] - near ||
+                               (selfState == 7 && rows.X[target] < rows.X[self])) &&
+                              rows.Facing[self] == 0)) &&
+                            !specialLeft)
+                        {
+                            input.KeyLeft = 1;
+                            if (rng.Rand(ai.Rand20 + 35) == 0)
+                                input.PrevLeft = 0;
+                        }
+                        if (((rows.Z[target] > rows.Z[self] + 3 && !specialProximity) ||
+                             ((specialRight || specialLeft) && specialUp)) &&
+                            !specialDown)
+                            input.KeyDown = 1;
+                        if (((rows.Z[target] < rows.Z[self] - 3 && !specialProximity) ||
+                             ((specialRight || specialLeft) && specialDown)) &&
+                            !specialUp)
+                            input.KeyUp = 1;
                     }
-                    if (((rows.Z[target] > rows.Z[self] + 3 && !specialProximity) ||
-                         ((specialRight || specialLeft) && specialUp)) &&
-                        !specialDown)
-                        input.KeyDown = 1;
-                    if (((rows.Z[target] < rows.Z[self] - 3 && !specialProximity) ||
-                         ((specialRight || specialLeft) && specialDown)) &&
-                        !specialUp)
-                        input.KeyUp = 1;
                 }
             }
 
@@ -632,40 +723,387 @@ namespace NTSD.Simulation
                 !ProcessHeld(rows, self, target, ai, selfState, targetState,
                     sameZLane, specialProximity, world, ref input, ref rng, ref witness))
             {
-                ApplyInputEdges(ref input);
+                ApplyProducerInputEdges(ref input, in rng);
                 witness.Exit = AiDecisionExit.HeldDecision;
                 Publish(ref witness, input, world, rng);
                 return true;
             }
 
-            if (rng.Rand(ai.Difficulty * 7 + 10) == 0 &&
-                (targetState == 3 || targetState / 100 == 3) &&
-                Abs(rows.Z[target] - rows.Z[self]) < 9 &&
-                ((rows.Facing[target] == 0 && rows.X[target] < rows.X[self]) ||
-                 (rows.Facing[target] == 1 && rows.X[target] > rows.X[self])))
-                input.KeyAttack = 1;
-            if (closeOrFree &&
-                rng.Rand(2 * (ai.Rand5 + 10)) < 3 &&
-                rng.Rand(20) < 3 &&
-                targetState != 14)
-                input.KeyDefend = 1;
-            bool selfGroup = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
-            if ((!selfGroup || targetState == 16) &&
-                Abs(rows.X[target] - 2 * (int)rows.Vx[self] - rows.X[self]) < 50 &&
-                Abs(rows.Z[target] - rows.Z[self]) < 5 &&
-                rng.Rand(ai.Rand3 + 3) == 0 &&
-                targetState != 14)
-                input.KeyJump = 1;
+            if (rng.UsesSynchronizedCursor)
+            {
+                ProcessNativeOrdinaryTail(
+                    rows,
+                    self,
+                    target,
+                    ai.Rand3,
+                    ai.Rand5,
+                    world.BattleMode,
+                    ai.StageTargetX,
+                    closeOrFree,
+                    specialRight,
+                    specialLeft,
+                    ref input,
+                    ref rng);
+            }
+            else
+            {
+                if (rng.Rand(ai.Difficulty * 7 + 10) == 0 &&
+                    (targetState == 3 || targetState / 100 == 3) &&
+                    Abs(rows.Z[target] - rows.Z[self]) < 9 &&
+                    ((rows.Facing[target] == 0 && rows.X[target] < rows.X[self]) ||
+                     (rows.Facing[target] == 1 && rows.X[target] > rows.X[self])))
+                    input.KeyAttack = 1;
+                if (closeOrFree &&
+                    rng.Rand(2 * (ai.Rand5 + 10)) < 3 &&
+                    rng.Rand(20) < 3 &&
+                    targetState != 14)
+                    input.KeyDefend = 1;
+                bool selfGroup = selfOid == 0x12 || selfOid == 5 || selfOid == 0x1F;
+                if ((!selfGroup || targetState == 16) &&
+                    Abs(rows.X[target] - 2 * (int)rows.Vx[self] - rows.X[self]) < 50 &&
+                    Abs(rows.Z[target] - rows.Z[self]) < 5 &&
+                    rng.Rand(ai.Rand3 + 3) == 0 &&
+                    targetState != 14)
+                    input.KeyJump = 1;
 
-            ProcessSubCallerPrewrite(rows, self, target, ai, selfState, targetState,
-                ref input, ref rng);
-            ProcessSubPressurePrewrite(rows, self, target, ai, selfState, targetState,
-                ref input, ref rng);
-            ProcessSubHelper(rows, self, target, ai, targetState, specialLeft, specialRight,
-                ref input, ref rng);
-            ApplyInputEdges(ref input);
+                ProcessSubCallerPrewrite(rows, self, target, ai, selfState, targetState,
+                    ref input, ref rng);
+                ProcessSubPressurePrewrite(rows, self, target, ai, selfState, targetState,
+                    ref input, ref rng);
+                ProcessSubHelper(rows, self, target, ai, targetState, specialLeft, specialRight,
+                    ref input, ref rng);
+            }
+            ApplyProducerInputEdges(ref input, in rng);
             witness.Exit = AiDecisionExit.Complete;
             Publish(ref witness, input, world, rng);
+            return true;
+        }
+
+        internal static void ProcessNativeOrdinaryMovement(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int battleMode,
+            int rand20,
+            bool behaviorRange,
+            bool threatOnRight,
+            bool threatOnLeft,
+            bool threatPositiveZ,
+            bool threatNegativeZ,
+            bool closeObstruction,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng)
+        {
+            RequireSynchronizedCursor(in rng, "ordinary movement");
+            if (!behaviorRange)
+                return;
+
+            int selfState = rows.State[self];
+            if (threatOnRight && selfState == 2 && rows.Facing[self] == 0)
+                input.KeyLeft = 1;
+            if (threatOnLeft && selfState == 2 && rows.Facing[self] == 1)
+                input.KeyRight = 1;
+
+            bool lowHpSpacing = IsNativeLowHpFleeEligible(
+                rows,
+                self,
+                target,
+                battleMode);
+            if (selfState == 19)
+                return;
+
+            int farSpacing = lowHpSpacing ? 170 : 60;
+            int facingSpacing = lowHpSpacing ? 150 : 0;
+            bool targetRight =
+                rows.X[target] > rows.X[self] + farSpacing ||
+                ((rows.X[target] > rows.X[self] + facingSpacing ||
+                  (lowHpSpacing && selfState == 7 &&
+                   rows.X[target] > rows.X[self])) &&
+                 rows.Facing[self] == 1);
+            if (targetRight && !threatOnRight)
+            {
+                input.KeyRight = 1;
+                uint site = lowHpSpacing ? 0x1Au : 0x1Cu;
+                if (RandAt(ref rng, site, rand20 + 35) == 0)
+                    input.PrevRight = 0;
+            }
+
+            bool targetLeft =
+                rows.X[target] < rows.X[self] - farSpacing ||
+                ((rows.X[target] < rows.X[self] - facingSpacing ||
+                  (lowHpSpacing && selfState == 7 &&
+                   rows.X[target] < rows.X[self])) &&
+                 rows.Facing[self] == 0);
+            if (targetLeft && !threatOnLeft)
+            {
+                input.KeyLeft = 1;
+                uint site = lowHpSpacing ? 0x1Bu : 0x1Du;
+                if (RandAt(ref rng, site, rand20 + 35) == 0)
+                    input.PrevLeft = 0;
+            }
+
+            bool movePositiveZ =
+                ((rows.Z[target] > rows.Z[self] + 3 && !closeObstruction) ||
+                 ((threatOnRight || threatOnLeft) && threatNegativeZ)) &&
+                !threatPositiveZ;
+            if (movePositiveZ)
+                input.KeyDown = 1;
+
+            bool moveNegativeZ =
+                ((rows.Z[target] < rows.Z[self] - 3 && !closeObstruction) ||
+                 ((threatOnRight || threatOnLeft) && threatPositiveZ)) &&
+                !threatNegativeZ;
+            if (moveNegativeZ)
+                input.KeyUp = 1;
+        }
+
+        internal static void ProcessNativeOrdinaryTail(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int rand3,
+            int rand5,
+            int battleMode,
+            int stageTargetX,
+            bool behaviorRange,
+            bool threatOnRight,
+            bool threatOnLeft,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng)
+        {
+            RequireSynchronizedCursor(in rng, "ordinary tail");
+            int targetState = rows.State[target];
+            int dz = Abs(rows.Z[target] - rows.Z[self]);
+
+            if (RandAt(ref rng, 0x1Eu, rand3 * 7 + 10) == 0 &&
+                (targetState == 3 || targetState / 100 == 3) &&
+                dz < 9 &&
+                ((rows.Facing[target] == 0 && rows.X[target] < rows.X[self]) ||
+                 (rows.Facing[target] == 1 && rows.X[target] > rows.X[self])))
+            {
+                input.KeyAttack = 1;
+            }
+
+            if (behaviorRange &&
+                RandAt(ref rng, 0x1Fu, (rand5 + 10) * 2) < 3 &&
+                RandAt(ref rng, 0x20u, 20) < 3 &&
+                targetState != 14)
+            {
+                input.KeyDefend = 1;
+            }
+
+            int predictedDx =
+                rows.X[target] - 2 * (int)rows.Vx[self] - rows.X[self];
+            if (Abs(predictedDx) < 80 &&
+                dz < 5 &&
+                RandAt(ref rng, 0x21u, rand3 + 3) == 0 &&
+                targetState != 14)
+            {
+                input.KeyJump = 1;
+            }
+
+            ProcessNativeLowHpContinuation(
+                rows,
+                self,
+                target,
+                battleMode,
+                rand3,
+                stageTargetX,
+                behaviorRange,
+                ref input,
+                ref rng);
+            ProcessNativeProfiledCombat(
+                rows,
+                self,
+                target,
+                rand3,
+                rand5,
+                threatOnRight,
+                threatOnLeft,
+                ref input,
+                ref rng);
+        }
+
+        internal static void ProcessNativeLowHpContinuation(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int battleMode,
+            int rand3,
+            int stageTargetX,
+            bool behaviorRange,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng)
+        {
+            RequireSynchronizedCursor(in rng, "low-HP continuation");
+            if (!IsNativeLowHpFleeEligible(rows, self, target, battleMode) ||
+                rows.X[target] - rows.X[self] >= 100 ||
+                Abs(rows.Z[target] - rows.Z[self]) >= 80)
+            {
+                return;
+            }
+
+            if (RandAt(ref rng, 0x26u, rand3 + 2) != 0 ||
+                rows.State[self] == 7)
+            {
+                return;
+            }
+
+            ApplyPressureRetreat(
+                rows,
+                self,
+                target,
+                new Context { StageTargetX = stageTargetX },
+                behaviorRange,
+                ref input);
+            if (behaviorRange && RandAt(ref rng, 0x27u, 17) == 0)
+                input.KeyDefend = 1;
+        }
+
+        internal static void ProcessNativeProfiledCombat(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int rand3,
+            int rand5,
+            bool threatOnRight,
+            bool threatOnLeft,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng)
+        {
+            RequireSynchronizedCursor(in rng, "profiled combat");
+            int targetState = rows.State[target];
+            int dz = Abs(rows.Z[target] - rows.Z[self]);
+            int genericPredictedDx =
+                rows.X[target] - 2 * (int)rows.Vx[self] - rows.X[self];
+            if (Abs(genericPredictedDx) < 80 &&
+                dz < 5 &&
+                RandAt(ref rng, 0x37u, rand3 + 3) == 0 &&
+                targetState != 14)
+            {
+                input.KeyJump = 1;
+            }
+
+            if ((threatOnRight && rows.X[target] > rows.X[self]) ||
+                (threatOnLeft && rows.X[target] < rows.X[self]))
+            {
+                return;
+            }
+
+            if (RandAt(ref rng, 0x38u, rand3 + 1) != 0)
+                return;
+
+            int oid = rows.ObjectId[self];
+            bool specialFamily = IsNativeProfileFamily(oid);
+            int predictedDx =
+                rows.X[target] + 2 * (int)rows.Vx[target] - rows.X[self];
+            int absPredictedDx = Abs(predictedDx);
+            if (specialFamily &&
+                absPredictedDx > 100 &&
+                absPredictedDx < 900 &&
+                dz < 5 &&
+                RandAt(ref rng, 0x39u, rand3 + 10) == 0 &&
+                targetState != 14)
+            {
+                input.KeyAttack = 1;
+            }
+
+            bool subjectFacingAway =
+                (rows.Facing[self] == 0 && rows.X[target] > rows.X[self]) ||
+                (rows.Facing[self] == 1 && rows.X[target] < rows.X[self]);
+            bool chaseAction = rows.Frame[self] == 110 || rows.Frame[self] >= 235;
+            if (specialFamily &&
+                absPredictedDx > 90 &&
+                subjectFacingAway &&
+                chaseAction &&
+                dz < 13 &&
+                targetState != 14)
+            {
+                input.PrevRight = 0;
+                input.PrevLeft = 0;
+                input.PrevJump = 0;
+                if (rows.X[target] > rows.X[self])
+                    input.KeyRight = 1;
+                else
+                    input.KeyLeft = 1;
+
+                if (oid == 34 && RandAt(ref rng, 0x3Au, 2) == 0)
+                    input.KeyDefend = 1;
+                else
+                    input.KeyJump = 1;
+            }
+
+            if (oid == 1 &&
+                absPredictedDx > 100 &&
+                absPredictedDx < 300 &&
+                dz < 5 &&
+                RandAt(ref rng, 0x3Bu, rand5 + 10) == 0 &&
+                targetState != 14)
+            {
+                input.KeyAttack = 1;
+            }
+
+            if (oid == 1 &&
+                absPredictedDx > 90 &&
+                subjectFacingAway &&
+                chaseAction &&
+                dz < 7 &&
+                targetState != 14)
+            {
+                input.PrevRight = 0;
+                input.PrevLeft = 0;
+                input.PrevJump = 0;
+                if (rows.X[target] > rows.X[self])
+                    input.KeyRight = 1;
+                else
+                    input.KeyLeft = 1;
+                input.KeyJump = 1;
+            }
+        }
+
+        internal static bool TryApplyNativeSpecialProfile(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int aiRand5,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng)
+        {
+            if (!rng.UsesSynchronizedCursor)
+            {
+                throw new InvalidOperationException(
+                    "NTSD 2.8 special-profile evaluation requires a synchronized RNG cursor.");
+            }
+
+            if (RandAt(ref rng, 0x3Cu, aiRand5 + 1) > 0)
+                return false;
+            if (!IsIncluded(rows, self) ||
+                !IsIncluded(rows, target) ||
+                rows.ObjectId[self] != 33 ||
+                rows.Hp[target] <= 0)
+            {
+                return false;
+            }
+
+            int rng6C = RandAt(ref rng, 0x6Cu, 5);
+            int targetState = rows.State[target];
+            bool gate = rng6C == 0 || targetState == 16 || targetState == 8;
+            int predictedDx = Abs(
+                rows.X[target] + (int)rows.Vx[self] - rows.X[self]);
+            int dz = Abs(rows.Z[target] - rows.Z[self]);
+            bool facesTarget =
+                (rows.Facing[self] == 0 && rows.X[self] < rows.X[target]) ||
+                (rows.Facing[self] == 1 && rows.X[self] > rows.X[target]);
+            if (!gate ||
+                predictedDx >= 60 ||
+                dz >= 7 ||
+                rows.Pp[self] <= 150 ||
+                !facesTarget)
+            {
+                return false;
+            }
+
+            input.ComboDua = 3;
             return true;
         }
 
@@ -708,6 +1146,14 @@ namespace NTSD.Simulation
             }
         }
 
+        private static void ApplyProducerInputEdges(
+            ref AiDecisionInputState input,
+            in AiDecisionRandomStream rng)
+        {
+            if (!rng.UsesSynchronizedCursor)
+                ApplyInputEdges(ref input);
+        }
+
         private static Context CreateCoordinateContext(in AiDecisionWorldState world)
         {
             return new Context
@@ -726,12 +1172,16 @@ namespace NTSD.Simulation
         private static Context CreateContext(
             AiSensingSnapshot rows,
             int self,
+            bool useNative28Context,
             ref AiDecisionWorldState world,
             ref AiDecisionWitness witness)
         {
             int difficulty = world.Difficulty;
             bool forceZero = world.AiPhaseGate == 1;
-            if (!forceZero && world.InputPhase == 1 && rows.Team[self] != 5)
+            int behaviorMode = useNative28Context
+                ? world.BattleMode
+                : world.InputPhase;
+            if (!forceZero && behaviorMode == 1 && rows.Team[self] != 5)
                 forceZero = self < 20 || rows.ObjectId[self] < 30;
             if (forceZero || difficulty < 0)
                 difficulty = 0;
@@ -742,7 +1192,7 @@ namespace NTSD.Simulation
                 Rand5 = difficulty * 5,
                 Rand15 = difficulty * 15,
                 Rand20 = difficulty * 20,
-                InputPhase = world.InputPhase,
+                InputPhase = behaviorMode,
                 StageTargetX = world.StageTargetX,
             };
             UpdateMoveMode(rows, self, ref ai, ref witness);
@@ -843,7 +1293,8 @@ namespace NTSD.Simulation
             if (rows.X[self] > input.Unk3FC + 6)
             {
                 input.KeyLeft = 1;
-                if (rows.X[self] > input.Unk3FC + 250 && rng.Rand(ai.Rand3 + 3) == 0)
+                if (rows.X[self] > input.Unk3FC + 250 &&
+                    RandAt(ref rng, 0x11u, ai.Rand3 + 3) == 0)
                     input.PrevLeft = 0;
                 if (rows.X[self] < input.Unk3FC + 100 && rows.State[self] == 2 && rows.Facing[self] == 1)
                     input.KeyRight = 1;
@@ -851,7 +1302,8 @@ namespace NTSD.Simulation
             else if (rows.X[self] < input.Unk3FC - 6)
             {
                 input.KeyRight = 1;
-                if (rows.X[self] < input.Unk3FC - 250 && rng.Rand(ai.Rand3 + 3) == 0)
+                if (rows.X[self] < input.Unk3FC - 250 &&
+                    RandAt(ref rng, 0x12u, ai.Rand3 + 3) == 0)
                     input.PrevRight = 0;
                 if (rows.X[self] > input.Unk3FC - 100 && rows.State[self] == 2 && rows.Facing[self] == 0)
                     input.KeyLeft = 1;
@@ -885,7 +1337,8 @@ namespace NTSD.Simulation
             if (rows.X[self] > rows.X[target] + 6)
             {
                 input.KeyLeft = 1;
-                if (rows.X[self] > rows.X[target] + 250 && rng.Rand(ai.Rand3 + 3) == 0)
+                if (rows.X[self] > rows.X[target] + 250 &&
+                    RandAt(ref rng, 0x16u, ai.Rand3 + 3) == 0)
                     input.PrevLeft = 0;
                 if (rows.X[self] < rows.X[target] + 100 && selfState == 2 && rows.Facing[self] == 1)
                     input.KeyRight = 1;
@@ -895,7 +1348,7 @@ namespace NTSD.Simulation
                 if (ai.MoveMode == 0)
                     input.KeyRight = 1;
                 if (rows.X[self] < rows.X[target] - 250 &&
-                    rng.Rand(ai.Rand3 + 3) == 0 &&
+                    RandAt(ref rng, 0x17u, ai.Rand3 + 3) == 0 &&
                     ai.MoveMode == 0)
                     input.PrevRight = 0;
                 if (rows.X[self] > rows.X[target] - 100 && selfState == 2 && rows.Facing[self] == 0)
@@ -934,7 +1387,16 @@ namespace NTSD.Simulation
         {
             if (targetState != 3000)
                 return false;
-            bool randomGate = ai.Rand3 <= 0 || rng.Rand(ai.Rand3) == 0;
+            bool randomGate;
+            if (rng.UsesSynchronizedCursor)
+            {
+                randomGate = selfState != 7 &&
+                             RandAt(ref rng, 0x15u, ai.Rand3) == 0;
+            }
+            else
+            {
+                randomGate = ai.Rand3 <= 0 || rng.Rand(ai.Rand3) == 0;
+            }
             if (selfState != 7 && randomGate &&
                 ((rows.X[target] > rows.X[self] && rows.X[target] < rows.X[self] + 200 && rows.Vx[target] < 0.0) ||
                  (rows.X[target] < rows.X[self] && rows.X[target] > rows.X[self] - 200 && rows.Vx[target] > 0.0)))
@@ -1224,6 +1686,23 @@ namespace NTSD.Simulation
             ref AiDecisionRandomStream rng,
             ref AiDecisionWitness witness)
         {
+            if (rng.UsesSynchronizedCursor)
+            {
+                return ProcessNativeHeld(
+                    rows,
+                    self,
+                    target,
+                    ai.Rand3,
+                    ai.Rand5,
+                    ai.Rand15,
+                    sameZLane,
+                    specialProximity,
+                    in world,
+                    ref input,
+                    ref rng,
+                    ref witness);
+            }
+
             if (rng.Rand(ai.Rand3 + 1) > 0)
                 return false;
             int heldSlot = rows.TargetSlot[self];
@@ -1366,6 +1845,214 @@ namespace NTSD.Simulation
             return true;
         }
 
+        internal static bool ProcessNativeHeld(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int rand3,
+            int rand5,
+            int rand15,
+            bool sameZLane,
+            bool closeObstruction,
+            in AiDecisionWorldState world,
+            ref AiDecisionInputState input,
+            ref AiDecisionRandomStream rng,
+            ref AiDecisionWitness witness)
+        {
+            RequireSynchronizedCursor(in rng, "held-object evaluation");
+            int heldSlot = rows.TargetSlot[self];
+            if (!IsIncluded(rows, heldSlot))
+                return true;
+
+            if (RandAt(ref rng, 0x28u, rand3 + 1) > 0)
+                return false;
+
+            int heldOid = rows.ObjectId[heldSlot];
+            bool lineCover = HasNativeHeldLineCover(
+                rows,
+                self,
+                target,
+                ref witness);
+            int selfState = rows.State[self];
+            int targetState = rows.State[target];
+            if (selfState == 2 &&
+                RandAt(ref rng, 0x29u, rand3 + 5) == 0)
+            {
+                if (lineCover)
+                    input.KeyDefend = 1;
+                else
+                    input.KeyJump = 1;
+            }
+
+            int predictedDx =
+                rows.X[target] - 2 * (int)rows.Vx[self] - rows.X[self];
+            int dz = Abs(rows.Z[target] - rows.Z[self]);
+            bool ordinaryWeapon =
+                heldOid == 100 ||
+                heldOid == 101 ||
+                heldOid == 120 ||
+                heldOid == 121 ||
+                heldOid == 124;
+            if (ordinaryWeapon)
+            {
+                if (Abs(predictedDx) < 115 &&
+                    dz < 6 &&
+                    RandAt(ref rng, 0x2Au, rand3 + 3) == 0 &&
+                    targetState != 14)
+                {
+                    input.KeyJump = 1;
+                }
+
+                if (heldOid == 124 &&
+                    RandAt(ref rng, 0x2Bu, rand15 + 30) == 0)
+                {
+                    input.KeyJump = 1;
+                }
+
+                if (RandAt(ref rng, 0x2Cu, rand3 + 5) == 0)
+                {
+                    int dx = Abs(rows.X[target] - rows.X[self]);
+                    bool behaviorRange =
+                        !input.HasInputHistoryGate ||
+                        (dz <= 150 && dx <= 240);
+                    if (behaviorRange && dx < 600 && dz < 20)
+                    {
+                        if (rows.X[target] > rows.X[self])
+                        {
+                            input.PrevRight = 0;
+                            input.KeyRight = 1;
+                        }
+                        else if (rows.X[target] < rows.X[self])
+                        {
+                            input.PrevLeft = 0;
+                            input.KeyLeft = 1;
+                        }
+                    }
+                }
+            }
+            else if ((heldOid == 150 || heldOid == 151) &&
+                     !lineCover &&
+                     Abs(predictedDx) < 300 &&
+                     dz < 6 &&
+                     RandAt(ref rng, 0x2Du, rand5 + 7) == 0 &&
+                     targetState != 14)
+            {
+                input.KeyJump = 1;
+            }
+
+            if (heldOid != 122 && heldOid != 123)
+                return true;
+
+            input.KeyAttack = 0;
+            input.KeyJump = 0;
+            input.KeyDefend = 0;
+            input.KeyUp = 0;
+            input.KeyDown = 0;
+            input.KeyLeft = 0;
+            input.KeyRight = 0;
+            if (selfState == 17 &&
+                sameZLane &&
+                !closeObstruction &&
+                rows.HitStop[self] != 0)
+            {
+                input.KeyAttack = 1;
+                return false;
+            }
+
+            int runDx = Abs(rows.X[target] - rows.X[self]);
+            int runDz = Abs(rows.Z[target] - rows.Z[self]);
+            if (input.HasInputHistoryGate &&
+                (runDz > 150 || runDx > 240))
+            {
+                return false;
+            }
+
+            if (rows.Z[target] < world.StageZMin + 30)
+                input.KeyDown = 1;
+            else if (rows.Z[target] < world.StageZMax - 30)
+                input.KeyUp = 1;
+            else if (rows.Z[target] > rows.Z[self])
+                input.KeyUp = 1;
+            else
+                input.KeyDown = 1;
+
+            if (rows.X[target] < 400 && rows.X[self] < 200)
+            {
+                input.KeyRight = 1;
+                if (RandAt(ref rng, 0x2Eu, rand3 + 7) == 0)
+                    input.PrevRight = 0;
+                if (RandAt(ref rng, 0x2Fu, rand3 + 5) == 0 &&
+                    selfState == 2)
+                {
+                    input.KeyDefend = 1;
+                }
+                return false;
+            }
+
+            if (rows.X[target] > world.StageTargetX - 400 &&
+                rows.X[self] > world.StageTargetX - 200)
+            {
+                input.KeyLeft = 1;
+                if (RandAt(ref rng, 0x30u, rand3 + 7) == 0)
+                    input.PrevLeft = 0;
+                if (RandAt(ref rng, 0x31u, rand3 + 5) == 0 &&
+                    selfState == 2)
+                {
+                    input.KeyDefend = 1;
+                }
+                return false;
+            }
+
+            if (runDx < 350 && runDz < 70)
+            {
+                if (rows.X[target] > rows.X[self])
+                {
+                    input.KeyLeft = 1;
+                    if (RandAt(ref rng, 0x32u, rand3 + 4) == 0)
+                        input.PrevLeft = 0;
+                }
+                else
+                {
+                    input.KeyRight = 1;
+                    if (RandAt(ref rng, 0x33u, rand3 + 4) == 0)
+                        input.PrevRight = 0;
+                }
+                return false;
+            }
+
+            if (selfState == 2)
+            {
+                if (rows.Facing[self] == 0)
+                    input.KeyLeft = 1;
+                else
+                    input.KeyRight = 1;
+                return false;
+            }
+
+            if (RandAt(ref rng, 0x34u, 5) != 0)
+                return false;
+
+            bool directAttack =
+                closeObstruction ||
+                (rows.ObjectId[self] != 2 && rows.ObjectId[self] != 34) ||
+                rows.Pp[self] <= 150;
+            if (!directAttack)
+                directAttack = RandAt(ref rng, 0x35u, rand3 + 3) <= 0;
+            if (directAttack)
+            {
+                input.KeyJump = 1;
+            }
+            else if (rows.X[target] > rows.X[self])
+            {
+                input.ComboDda = 3;
+            }
+            else
+            {
+                input.ComboDdj = 3;
+            }
+            return true;
+        }
+
         private static bool HasHeldLineCover(
             AiSensingSnapshot rows,
             int self,
@@ -1383,12 +2070,46 @@ namespace NTSD.Simulation
                     rows.Team[target] != rows.Team[self] ||
                     rows.Hp[slot] <= 0 ||
                     rows.State[slot] == 14 ||
-                    Abs(rows.Y[slot]) > 2)
+                    Abs(rows.HitStop[slot]) > 2)
                     continue;
                 if (Abs(rows.Z[slot] - rows.Z[self]) < 15 &&
                     ((rows.X[self] < rows.X[slot] && rows.X[slot] < rows.X[target]) ||
                      (rows.X[target] < rows.X[slot] && rows.X[slot] < rows.X[self])))
                     lineCover = true;
+            }
+            return lineCover;
+        }
+
+        private static bool HasNativeHeldLineCover(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            ref AiDecisionWitness witness)
+        {
+            bool lineCover = false;
+            int count = Math.Min(20, rows.Capacity);
+            for (int slot = 0; slot < count; slot++)
+            {
+                witness.RowVisits++;
+                if (!rows.Included[slot] ||
+                    slot == self ||
+                    rows.Team[slot] == 0 ||
+                    rows.Team[slot] != rows.Team[self] ||
+                    rows.Hp[slot] <= 0 ||
+                    rows.State[slot] == 14 ||
+                    Abs(rows.HitStop[slot]) > 2 ||
+                    Abs(rows.Z[slot] - rows.Z[self]) >= 15)
+                {
+                    continue;
+                }
+
+                if ((rows.X[self] < rows.X[slot] &&
+                     rows.X[slot] < rows.X[target]) ||
+                    (rows.X[target] < rows.X[slot] &&
+                     rows.X[slot] < rows.X[self]))
+                {
+                    lineCover = true;
+                }
             }
             return lineCover;
         }
@@ -1605,6 +2326,11 @@ namespace NTSD.Simulation
             witness.RngOrderHash = rng.OrderHash;
             witness.RngDrawCount = rng.DrawCount;
             witness.RngTraceOverflow = rng.TraceOverflow;
+            if (rng.UsesSynchronizedCursor)
+            {
+                witness.SetSynchronizedRngCursor(
+                    rng.CaptureSynchronizedCursor());
+            }
             // The snapshot owns the preallocated order trace scratch used by shadow comparison.
             // Publishing only advances primitive cursors; no per-decision arrays are created.
         }
@@ -1621,7 +2347,23 @@ namespace NTSD.Simulation
             witness.RngState = snapshot.RngState;
             witness.RngCalls = snapshot.RngCalls;
             witness.RngOrderHash = AiDecisionRandomStream.HashOffset;
+            if (snapshot.TryGetSynchronizedRngCursor(
+                    out NTSD28SynchronizedRandomCursor synchronizedCursor))
+            {
+                witness.SetSynchronizedRngCursor(synchronizedCursor);
+                witness.RngCalls = synchronizedCursor.Calls;
+            }
             return false;
+        }
+
+        private static int RandAt(
+            ref AiDecisionRandomStream rng,
+            uint callSite,
+            int modulus)
+        {
+            return rng.UsesSynchronizedCursor
+                ? rng.Rand(callSite, modulus)
+                : rng.Rand(modulus);
         }
 
         private static bool IsIncluded(AiSensingSnapshot rows, int slot)
@@ -1632,6 +2374,53 @@ namespace NTSD.Simulation
         private static bool IsLivingCharacter(AiSensingSnapshot rows, int slot)
         {
             return IsIncluded(rows, slot) && rows.Hp[slot] > 0 && rows.DataObjectType[slot] == 0;
+        }
+
+        private static void RequireSynchronizedCursor(
+            in AiDecisionRandomStream rng,
+            string operation)
+        {
+            if (!rng.UsesSynchronizedCursor)
+            {
+                throw new InvalidOperationException(
+                    $"NTSD 2.8 {operation} requires a synchronized RNG cursor.");
+            }
+        }
+
+        private static bool IsNativeLowHpFleeEligible(
+            AiSensingSnapshot rows,
+            int self,
+            int target,
+            int battleMode)
+        {
+            bool pressure =
+                rows.Hp[target] > rows.Hp[self] * 2 ||
+                (rows.Hp[self] < 101 && rows.Hp3[self] > 100);
+            return pressure &&
+                   battleMode == 1 &&
+                   rows.DataObjectType[target] == 0 &&
+                   self >= 20 &&
+                   rows.Team[self] != 5;
+        }
+
+        private static bool IsNativeProfileFamily(int oid)
+        {
+            switch (oid)
+            {
+                case 2:
+                case 4:
+                case 6:
+                case 7:
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                case 33:
+                case 34:
+                    return true;
+                default:
+                    return false;
+            }
         }
 
         private static bool IsProcessSubOidGroup(int oid)

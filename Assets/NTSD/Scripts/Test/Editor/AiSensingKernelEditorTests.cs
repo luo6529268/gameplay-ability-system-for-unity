@@ -54,7 +54,7 @@ namespace NTSD.Test
             snapshot.Hp[0] = 100;
             snapshot.Hp3[0] = 500;
             snapshot.HpMax[0] = 500;
-            snapshot.KillCount[0] = -1;
+            snapshot.OwnerSlot[0] = -1;
             SetCharacter(snapshot, 1, 1, 40, 30, 0);
             SetSpecial(snapshot, 20, 0x7A, 10);
             SetSpecial(snapshot, 21, 0x7A, 20);
@@ -134,6 +134,38 @@ namespace NTSD.Test
                 out AiSensingSpecialResult full), Is.True);
             Assert.That(full.SelectedSlot, Is.EqualTo(indexed.SelectedSlot));
             Assert.That(full.Flags, Is.EqualTo(indexed.Flags));
+        }
+
+        [Test]
+        public void Special_OwnerSlotAloneGuardsOid122And123()
+        {
+            AiSensingSnapshot snapshot = CreateSnapshot(21, 1237);
+            SetCharacter(snapshot, 0, 1, 0, 0, 0);
+            SetCharacter(snapshot, 1, 2, 80, 0, 0);
+            SetSpecial(snapshot, 20, 122, 10);
+
+            Assert.That(AiSensingKernel.TryScanSpecial(
+                snapshot, 0, 2, 1, 100, false, true, out AiSensingSpecialResult result), Is.True);
+            Assert.That(result.SelectedSlot, Is.EqualTo(20));
+
+            snapshot.OwnerSlot[0] = 0;
+            Assert.That(AiSensingKernel.TryScanSpecial(
+                snapshot, 0, 2, 1, 100, false, true, out result), Is.True);
+            Assert.That(result.SelectedSlot, Is.EqualTo(1));
+            Assert.That(result.Flags & AiSensingKernel.SpecialGuard7A, Is.Not.Zero);
+            Assert.That(result.Flags & AiSensingKernel.SpecialGuard7B, Is.Not.Zero);
+
+            snapshot.OwnerSlot[0] = -1;
+            snapshot.ObjectId[20] = 123;
+            Assert.That(AiSensingKernel.TryScanSpecial(
+                snapshot, 0, 2, 1, 100, false, true, out result), Is.True);
+            Assert.That(result.SelectedSlot, Is.EqualTo(20));
+
+            snapshot.OwnerSlot[0] = 37;
+            Assert.That(AiSensingKernel.TryScanSpecial(
+                snapshot, 0, 2, 1, 100, false, true, out result), Is.True);
+            Assert.That(result.SelectedSlot, Is.EqualTo(1));
+            Assert.That(result.Flags & AiSensingKernel.SpecialGuard7B, Is.Not.Zero);
         }
 
         [Test]
@@ -305,7 +337,7 @@ namespace NTSD.Test
             for (int slot = 0; slot < capacity; slot++)
             {
                 snapshot.CoordinateTargetX[slot] = -1000;
-                snapshot.KillCount[slot] = -1;
+                snapshot.OwnerSlot[slot] = -1;
             }
             return snapshot;
         }
@@ -330,7 +362,7 @@ namespace NTSD.Test
             snapshot.Hp3[slot] = 500;
             snapshot.HpMax[slot] = 500;
             snapshot.CoordinateTargetX[slot] = -1000;
-            snapshot.KillCount[slot] = -1;
+            snapshot.OwnerSlot[slot] = -1;
         }
 
         private static void SetSpecial(AiSensingSnapshot snapshot, int slot, int objectId, int x)
@@ -345,7 +377,7 @@ namespace NTSD.Test
             snapshot.Hp[slot] = 1;
             snapshot.Hp3[slot] = 1;
             snapshot.HpMax[slot] = 1;
-            snapshot.KillCount[slot] = -1;
+            snapshot.OwnerSlot[slot] = -1;
         }
     }
 }

@@ -22,7 +22,6 @@ namespace NTSD.Simulation.Ecs
         private const ulong StateBit = 1UL << 9;
         private const ulong FrameBit = 1UL << 10;
         private const ulong LinkStateBit = 1UL << 11;
-        private const ulong KillCountBit = 1UL << 12;
         private const ulong CachedTargetSlotBit = 1UL << 13;
         private const ulong CoordinateTargetXBit = 1UL << 14;
         private const ulong VxBit = 1UL << 15;
@@ -51,7 +50,6 @@ namespace NTSD.Simulation.Ecs
         private int[] frame;
         private int[] hitJ;
         private int[] linkState;
-        private int[] killCount;
         private int[] cachedTargetSlot;
         private int[] coordinateTargetX;
         private double[] vx;
@@ -77,7 +75,6 @@ namespace NTSD.Simulation.Ecs
         private int[] pendingFrame;
         private int[] pendingHitJ;
         private int[] pendingLinkState;
-        private int[] pendingKillCount;
         private int[] pendingCachedTargetSlot;
         private int[] pendingCoordinateTargetX;
         private double[] pendingVx;
@@ -120,7 +117,6 @@ namespace NTSD.Simulation.Ecs
             Array.Resize(ref pendingFrame, capacity);
             Array.Resize(ref pendingHitJ, capacity);
             Array.Resize(ref pendingLinkState, capacity);
-            Array.Resize(ref pendingKillCount, capacity);
             Array.Resize(ref pendingCachedTargetSlot, capacity);
             Array.Resize(ref pendingCoordinateTargetX, capacity);
             Array.Resize(ref pendingVx, capacity);
@@ -149,7 +145,6 @@ namespace NTSD.Simulation.Ecs
             int[] rowFrame,
             int[] rowHitJ,
             int[] rowLinkState,
-            int[] rowKillCount,
             int[] rowCachedTargetSlot,
             int[] rowCoordinateTargetX,
             double[] rowVx,
@@ -178,7 +173,6 @@ namespace NTSD.Simulation.Ecs
                 rowFrame?.Length != capacity ||
                 rowHitJ?.Length != capacity ||
                 rowLinkState?.Length != capacity ||
-                rowKillCount?.Length != capacity ||
                 rowCachedTargetSlot?.Length != capacity ||
                 rowCoordinateTargetX?.Length != capacity ||
                 rowVx?.Length != capacity ||
@@ -219,7 +213,6 @@ namespace NTSD.Simulation.Ecs
             frame = rowFrame;
             hitJ = rowHitJ;
             linkState = rowLinkState;
-            killCount = rowKillCount;
             cachedTargetSlot = rowCachedTargetSlot;
             coordinateTargetX = rowCoordinateTargetX;
             vx = rowVx;
@@ -380,10 +373,6 @@ namespace NTSD.Simulation.Ecs
                     pendingLinkState[slot] = value;
                     pendingMask[slot] |= LinkStateBit;
                     break;
-                case RuntimeRelationLinkField.KillCount:
-                    pendingKillCount[slot] = value;
-                    pendingMask[slot] |= KillCountBit;
-                    break;
                 case RuntimeRelationLinkField.TargetSlot:
                     pendingTargetSlot[slot] = value;
                     pendingMask[slot] |= TargetSlotBit;
@@ -493,7 +482,6 @@ namespace NTSD.Simulation.Ecs
             if ((mask & FrameBit) != 0) frame[slot] = pendingFrame[slot];
             if ((mask & HitJBit) != 0) hitJ[slot] = pendingHitJ[slot];
             if ((mask & LinkStateBit) != 0) linkState[slot] = pendingLinkState[slot];
-            if ((mask & KillCountBit) != 0) killCount[slot] = pendingKillCount[slot];
             if ((mask & CachedTargetSlotBit) != 0)
                 cachedTargetSlot[slot] = pendingCachedTargetSlot[slot];
             if ((mask & CoordinateTargetXBit) != 0)
@@ -617,7 +605,6 @@ namespace NTSD.Simulation.Ecs
             pendingFrame = new int[capacity];
             pendingHitJ = new int[capacity];
             pendingLinkState = new int[capacity];
-            pendingKillCount = new int[capacity];
             pendingCachedTargetSlot = new int[capacity];
             pendingCoordinateTargetX = new int[capacity];
             pendingVx = new double[capacity];

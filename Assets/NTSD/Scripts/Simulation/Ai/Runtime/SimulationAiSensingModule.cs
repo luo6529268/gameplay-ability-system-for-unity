@@ -1658,7 +1658,7 @@ namespace NTSD.Simulation
             rows.Frame[slot] = runtime.Frame;
             rows.HitJ[slot] = CaptureCurrentFrameHitJ(entity, runtime.Frame);
             rows.LinkState[slot] = runtime.LinkState;
-            rows.KillCount[slot] = runtime.KillCount;
+            rows.OwnerSlot[slot] = runtime.OwnerSlotIndex;
             rows.CachedTargetSlot[slot] = runtime.Unk360;
             rows.CoordinateTargetX[slot] = runtime.Unk3FC;
             rows.Vx[slot] = runtime.Vx;
@@ -1692,7 +1692,7 @@ namespace NTSD.Simulation
             int state = rows.State[slot];
             return rows.Hp[slot] > 0 &&
                    state != 14 &&
-                   Math.Abs(rows.Y[slot]) <= 2 &&
+                   Math.Abs(rows.HitStop[slot]) <= 2 &&
                    (rows.DataObjectType[slot] == 0 || state == 3000);
         }
 
@@ -1702,7 +1702,7 @@ namespace NTSD.Simulation
                    slot < rows.Capacity &&
                    rows.Included[slot] &&
                    rows.Hp[slot] > 0 &&
-                   (rows.State[slot] == 14 || Math.Abs(rows.Y[slot]) > 2);
+                   (rows.State[slot] == 14 || Math.Abs(rows.HitStop[slot]) > 2);
         }
 
         internal static bool IsLivingCharacterRow(AiSoASensingRows rows, int slot)

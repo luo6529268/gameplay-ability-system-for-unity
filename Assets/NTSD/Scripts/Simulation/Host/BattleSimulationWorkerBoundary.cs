@@ -436,7 +436,7 @@ namespace NTSD.Simulation
             in BattleSimulationTickPublication publication)
         {
             if (publication.HasPresentationFrame)
-                world.BattlePresentation.FinalizePublishedHitRecordCycle(world);
+                world.BattlePresentation.AcknowledgePublishedHitRecordCycle();
         }
     }
 

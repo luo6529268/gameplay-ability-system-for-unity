@@ -49,9 +49,6 @@ namespace NTSD.Animation.LF2Objects
             Vector3 holdpoint)
         {
             WeaponActResult result = default;
-            if (weapon.Frame.D == null)
-                return result;
-
             if (holder?.Frame?.D?.state == 17)
             {
                 ProcessDrinkConsumption(holder, ref result);
@@ -59,7 +56,20 @@ namespace NTSD.Animation.LF2Objects
                     return result;
             }
 
+            // Alignment contract: NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-PRODUCTION-001.
+            if (wpoint.WeaponAct >= 1000)
+            {
+                result.TerminalDespawnRequested = true;
+                return result;
+            }
+
             weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.WeaponAct);
+            // Alignment contract: NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001.
+            if (weapon.FrameCache?.HasFrame(wpoint.WeaponAct) != true)
+            {
+                result.UnsupportedWeaponAction = true;
+                return result;
+            }
             weapon.SwitchDir(holder.Runtime.Dir);
             weapon.FrameDelay = holder.FrameDelay;
             weapon.Runtime.WeaponState = LF2States.WeaponOnHand;
@@ -89,7 +99,9 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else if (isLightThrow)
                 {
-                    weapon.DirectWriteHeldFramePreserveWaitCounter(weapon.BattleRandInt(0, 6));
+                    weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.Kind == 3
+                        ? holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6)
+                        : weapon.BattleRandInt(0, 6));
                     ThrowHeldWeapon(holder, wpoint, stampSpawnerSlot: false);
                     result.Thrown = true;
                 }
@@ -126,7 +138,9 @@ namespace NTSD.Animation.LF2Objects
                 weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
             weapon.PS.zz = 0;
             weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
-            weapon.OnThrownInternal();
+            // Alignment contract: NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001.
+            if (wpoint.Kind == 3)
+                weapon.OnThrownInternal();
         }
 
         private void DropHeldWeaponFromDamagedFrame(
@@ -233,16 +247,16 @@ namespace NTSD.Animation.LF2Objects
             }
             else if (typeSub == 0x7B)
             {
-                if (weapon.Health.HP <= 0)
-                    return;
-
                 weapon.Health.HP -= 2;
                 holder.Health.PP += 3;
                 if (holder.Health.PP > NTSDGlobal.Gameplay.DrinkPPCap)
                     holder.Health.PP = NTSDGlobal.Gameplay.DrinkPPCap;
 
-                if (weapon.KillCount > -1 && weapon.Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit)
-                    holder.Health.PP = NTSDGlobal.Gameplay.PpRecoverLowLimit;
+                if (weapon.Runtime.OrdinaryCreditGate2F4 >= 0 &&
+                    weapon.Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit)
+                {
+                    weapon.Health.PP = NTSDGlobal.Gameplay.PpRecoverLowLimit;
+                }
             }
             else
             {
@@ -255,15 +269,18 @@ namespace NTSD.Animation.LF2Objects
             if (holder is LF2Character holderCharacter)
                 holderCharacter.GrabbedBy = 0;
 
+            // Alignment contract: NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001.
             weapon.DirectWriteHeldFramePreserveWaitCounter(0);
+            weapon.AttackingCounter = 0;
             weapon.Runtime.Vx = weapon.BattleRandInt(0, 7) - 3;
-            weapon.Runtime.Vy = -8.0;
-            weapon.Runtime.Vz = 0.0;
+            weapon.Runtime.Vy = 0.0;
             weapon.PS.zz = 0;
             holder.DirectWriteHeldFramePreserveWaitCounter(0);
+            holder.AttackingCounter = 0;
             weapon.OnDrinkConsumedInternal();
             weapon.ReleaseHeldWeaponForConsumeInternal(holder);
             result.ForceDrop = true;
+            result.RefillExhausted = true;
         }
     }
 

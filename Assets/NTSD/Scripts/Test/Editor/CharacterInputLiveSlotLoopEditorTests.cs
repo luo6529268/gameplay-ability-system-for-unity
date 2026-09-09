@@ -237,14 +237,15 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void DataOrientedAiActionResolver_CommitsChangedProgress()
+        public void DataOrientedAiActionResolver_LeavesDirectFieldToNativeSecondPass()
         {
             var world = new SimulationWorld();
             world.ConfigureAiExecutionProfile(
                 BattleAiExecutionProfile.DataOrientedCanonical);
             LF2Character character = CreateFrameJumpCharacter(0, 511);
-            character.AiControlled = true;
+            character.AiControlled = false;
             world.Register(character);
+            character.Frame.D.state = 3;
             world.CharacterInputWriter.CommitProgressState(
                 character.Runtime,
                 new AiDecisionInputState { CdAttack = 5 });
@@ -254,15 +255,21 @@ namespace NTSD.Test
                     character,
                     world.CharacterInputWriter);
 
-            Assert.That(resolved, Is.True);
-            Assert.That(character.Frame.N, Is.EqualTo(1));
-            Assert.That(character.Runtime.CdAttack, Is.Zero);
+            Assert.That(resolved, Is.False);
+            Assert.That(character.Frame.N, Is.Zero);
+            Assert.That(character.Runtime.CdAttack, Is.EqualTo(5));
             Assert.That(
                 world.LastCharacterInputProgressCommitCountForDiagnostics,
-                Is.EqualTo(1));
+                Is.Zero);
             Assert.That(
                 world.LastCharacterInputProgressCommitSkipCountForDiagnostics,
-                Is.Zero);
+                Is.EqualTo(1));
+
+            character.Runtime.NativeInputProxy.EdgeWindow[0] = 5;
+            world.CharacterInputAll(2);
+
+            Assert.That(character.Frame.N, Is.EqualTo(1));
+            Assert.That(character.Runtime.CdAttack, Is.Zero);
         }
 
         [Test]
@@ -748,7 +755,6 @@ namespace NTSD.Test
             var frame = new int[capacity];
             var hitJ = new int[capacity];
             var linkState = new int[capacity];
-            var killCount = new int[capacity];
             var cachedTargetSlot = new[] { -1 };
             var coordinateTargetX = new[] { -1000 };
             var vx = new double[capacity];
@@ -776,7 +782,6 @@ namespace NTSD.Test
                 frame,
                 hitJ,
                 linkState,
-                killCount,
                 cachedTargetSlot,
                 coordinateTargetX,
                 vx,

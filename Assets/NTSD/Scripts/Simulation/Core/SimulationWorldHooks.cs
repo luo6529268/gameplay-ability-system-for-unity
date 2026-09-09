@@ -14,6 +14,8 @@ namespace NTSD.Simulation
 
 #if UNITY_INCLUDE_TESTS
         internal Action<SimulationWorld, LF2Entity>
+            CharacterInputProducerPassMutationOverride { get; set; }
+        internal Action<SimulationWorld, LF2Entity>
             CharacterInputPassMutationOverride { get; set; }
 #endif
     }

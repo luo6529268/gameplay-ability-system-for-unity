@@ -222,7 +222,7 @@
 
 ## D-019 — NTSD 2.8-Logan 取代 NTSD 2.4 成为当前唯一战斗行为权威
 
-- **状态**：`USER_CONFIRMED / ACTIVE / DOCUMENT_MIGRATION`
+- **状态**：`IDENTITY_SUPERSEDED_BY_D-021 / DIRECTORY_AND_LEGACY-BOUNDARIES_STILL_ACTIVE`
 - **日期**：2026-09-02
 - **决定**：当前唯一战斗行为权威改为
   `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为
@@ -249,3 +249,42 @@
 - **旧文档处置**：经用户要求复核，旧 C# authority、NTSD 2.4 C++ release、R0～R8/U0～U9
   对齐 campaign 文档不再承担当前恢复或审计职责，并已由用户从工作树删除；Git 历史仅可用于
   按需历史查阅，不能恢复旧 authority 或继续旧 Change。
+
+## D-020 — NTSD 2.8 完整对齐范围、用户例外与 E/H 专项
+
+- **状态**：`USER_CONFIRMED / ACTIVE / STATIC_INVENTORY_COMPLETE / IMPLEMENTATION_NOT_STARTED`
+- **日期**：2026-09-02
+- **决定**：以 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 作为当前唯一差异总表。
+  非例外战斗规则、状态、顺序、生命周期和战斗表现的最终目标是与正式 NTSD 2.8-Logan 完全一致；
+  所有旧 2.4/C# 验证均需重新基线化。
+- **容量决定**：Slot 容量模型继续使用 Unity；容量不是待修差异，但 slot 扫描顺序、identity、复用、
+  birth visibility 和生命周期语义仍按新权威对齐。
+- **Unity 保留例外**：头顶血条、FootSelf、移动端底部黑区/平台取景、多边形战斗边界、当前随机掉武器
+  路径和固定世界相机不处理。这些例外会产生可观察差异，最终报告必须披露，不能声称逐像素无差异。
+- **用户排除项**：完整原生 HUD、结果页与战斗内结果信息表现、背景多层/cycle、完整原生选择流程
+  不处理，不作为当前完成门槛。
+- **E 项**：旧 `NTSDSpec` 必须处理；先用 2.8 正式证据替换生产调用者，引用清零后再决定是否删除。
+- **H 项**：内容、数值和资源差异必须处理；Direction B 当前仍有效，但只是策略决定前的保护状态。
+  整体切换、只补缺失或分类权威尚待用户决定，当前不授权覆盖 DAT/PNG/WAV、Prefab、Scene 或 importer。
+- **声明边界**：只允许声明“非例外战斗域完全对齐，并保留用户批准例外”；除非用户撤销全部例外并
+  恢复排除项，否则不得声明整个应用逐像素、全流程无差异。
+
+## D-021 — 修复 Bug 后的 NTSD 2.8-Logan 新版身份正式晋升
+
+- **状态**：`USER_CONFIRMED / ACTIVE / B0-B3_REBASELINE_IN_PROGRESS`
+- **日期**：2026-09-04
+- **用户决定**：用户说明其发现并修复了 NTSD 2.8-Logan Bug，指定目录中 EXE/source 的变化是有意更新，
+  并明确要求继续处理。
+- **新正式身份**：根 `NTSD2.8-Logan.exe` SHA-256
+  `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`；82-file playable
+  C++/header closure manifest `39DDDA154F5632C43089E2D5F1A5755ABBFBFD131A85D6B5ABF9AC00E6A46109`；
+  75-file source-capture子闭包manifest `07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F`。
+  最初漂移审计的`5F2E5B41...5FA9`只是旧workspace工具漏掉`kind_catalog.cpp`与
+  `minibar_catalog.cpp`的73-file子集。
+- **旧身份**：D-019中的 `1277B70B...DAF75` EXE与`C59BD8D3...2D75` source manifest降为历史基线，
+  不再裁决当前实现；D-019的目录、权威种类、旧2.4/C#废止和内容边界仍有效。
+- **重新基线**：新版 `simulation_tick_driver.cpp` 已观察到真实pass顺序变化，因此B0～当前B3中所有依赖
+  源码身份、pass placement或trace producer identity的证据必须分类复核。字段/算法未变的既有Unity实现可以
+  保留，但必须用新身份重新出证；受规则变化影响的pass contract必须修改后再继续。
+- **写入边界**：authority目录继续只读；只在Unity workspace更新治理、诊断工具和经独立Task/Change批准的
+  实现。此决定不改变用户批准例外、用户排除项或H项内容策略待定边界。

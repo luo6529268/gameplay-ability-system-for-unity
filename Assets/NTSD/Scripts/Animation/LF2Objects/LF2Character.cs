@@ -146,6 +146,11 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         public void ApplyDynamics()
         {
+            ApplyDynamics(0);
+        }
+
+        private void ApplyDynamics(int tickIndex)
+        {
             bool useCanonicalBattlePath =
                 RegisteredWorldForSimulation != null &&
                 GetType() == typeof(LF2Character);
@@ -166,21 +171,40 @@ namespace NTSD.Animation.LF2Objects
             if (!useCanonicalBattlePath && Frame?.D != null && spriteWidthPx > 0f)
                 Runtime.UpdateSpriteOrigin(Frame.D.centerx, Frame.D.centery, spriteWidthPx);
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
-            if (ShouldResolveCharacterLanding(stepResult))
+            ApplyCurrentDatType0State1218EnvironmentDamage(
+                Frame?.D,
+                stepResult);
+            bool state1218ContactResolved =
+                ApplyCurrentDatType0State1218ContactAction(
+                    Frame?.D,
+                    stepResult);
+            if (!state1218ContactResolved &&
+                ShouldResolveCharacterLanding(stepResult))
             {
-                HandleLandingEvent(stepResult.VerticalVelocityBeforeLanding);
-                if (!useCanonicalBattlePath)
+                if (!ApplyCurrentDatType0OrdinaryLanding(
+                        Frame?.D,
+                        stepResult))
                 {
-                    spriteWidthPx = GetSpriteWidthPxForCollision();
-                    if (Frame?.D != null && spriteWidthPx > 0f)
-                    {
-                        Runtime.UpdateSpriteOrigin(
-                            Frame.D.centerx,
-                            Frame.D.centery,
-                            spriteWidthPx);
-                    }
+                    HandleLandingEvent(stepResult.VerticalVelocityBeforeLanding);
                 }
             }
+            if ((state1218ContactResolved || stepResult.Landed) &&
+                !useCanonicalBattlePath)
+            {
+                spriteWidthPx = GetSpriteWidthPxForCollision();
+                if (Frame?.D != null && spriteWidthPx > 0f)
+                {
+                    Runtime.UpdateSpriteOrigin(
+                        Frame.D.centerx,
+                        Frame.D.centery,
+                        spriteWidthPx);
+                }
+            }
+
+            ApplyCurrentDatType0AirborneAction(
+                Frame?.D,
+                stepResult,
+                tickIndex);
 
             Runtime.SyncIntegerPosition();
         }
@@ -390,7 +414,13 @@ namespace NTSD.Animation.LF2Objects
             // tick. The next human poll or AI producer owns its own roll/clear boundary.
             // Cooldowns and combo progress may still be changed by later runtime passes.
             InputState?.SyncProgressFromRuntime(Runtime);
-            InputState?.PollFromBuffer(Controller?.InputBuffer, tickIndex, this);
+            bool updateCurrent = RegisteredWorldForSimulation == null ||
+                                 RegisteredWorldForSimulation.ShouldSampleHumanCurrentInput;
+            InputState?.PollFromBuffer(
+                Controller?.InputBuffer,
+                tickIndex,
+                this,
+                updateCurrent);
         }
 
         internal void ApplyFrameInputFromLocalState()
@@ -636,39 +666,7 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal bool TryInputFrameJump(int frameId)
         {
-            bool flipFacing = false;
-            if (frameId < 0)
-            {
-                frameId = -frameId;
-                flipFacing = true;
-            }
-
-            if (frameId == 999)
-                frameId = 0;
-
-            if (FrameCache?.HasFrame(frameId) != true || Health == null)
-                return false;
-
-            LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);
-            bool ppMode = IsPpModeEnabled();
-            if (ppMode)
-            {
-                int ppCost = targetFrame.mp % 1000;
-                int hpCost = (targetFrame.mp / 1000) * 10;
-                if (Health.PP < ppCost || Health.HP <= hpCost)
-                    return false;
-
-                Health.HP -= hpCost;
-                Health.PP -= ppCost;
-                ComboCountVic += hpCost;
-                SpendPpDisplay(ppCost);
-
-                if (flipFacing)
-                    SwitchDir(Runtime.Dir == "right" ? "left" : "right");
-            }
-
-            OnFrameTransit(frameId, false);
-            return true;
+            return TryCharacterDatInputFrameJump(frameId);
         }
 
         public int CurrentFrameId => Frame.N;
@@ -834,6 +832,16 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime == null)
                 return;
 
+            RunCharacterInputProducerPhaseForKnownCharacterDat(tickIndex);
+            RunCharacterInputRoutingPhaseForKnownCharacterDat(tickIndex);
+        }
+
+        internal override void RunCharacterInputProducerPhaseForKnownCharacterDat(
+            int tickIndex)
+        {
+            if (Runtime == null)
+                return;
+
             if (AiControlled)
             {
                 BattleAiInputDetailDiagnostics diagnostics =
@@ -855,12 +863,23 @@ namespace NTSD.Animation.LF2Objects
                     diagnostics?.EndPhase(BattleAiInputDetailPhase.InputStateSyncFromRuntime);
                 }
             }
+        }
+
+        internal override void RunCharacterInputRoutingPhaseForKnownCharacterDat(
+            int tickIndex,
+            bool applyFrameMotionTail = true)
+        {
+            if (Runtime == null)
+                return;
 
             BattleAiInputDetailDiagnostics comboDiagnostics =
                 Match?.ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
             comboDiagnostics?.BeginPhase(BattleAiInputDetailPhase.ComboUpdate);
             ComboUpdate();
             comboDiagnostics?.EndPhase(BattleAiInputDetailPhase.ComboUpdate);
+            if (!applyFrameMotionTail)
+                return;
+
             SimulationWorld world = RegisteredWorldForSimulation;
             if (world == null ||
                 !world.CharacterActionWriter.TryApplyExactCharacterFrameVelocityTail(this))
@@ -915,7 +934,7 @@ namespace NTSD.Animation.LF2Objects
 
             OwnerId = -1;
             RelationOwnerSlot = -1;
-            OwnerEntityIndex = -1;
+            OwnerEntityIndex = task.ownerEntityIndex;
             SpawnerEntityIndex = -1;
             KillCount = -1;
             HitStun = 0;
@@ -1066,9 +1085,12 @@ namespace NTSD.Animation.LF2Objects
         public void ModuleBind(
             LF2CharacterDataWrapper frameDataWrapper,
             int characterId,
-            SimulationWorld targetWorld = null)
+            SimulationWorld targetWorld = null,
+            bool initializeNativeArmorRuntime = true)
         {
             FrameCache.Load(frameDataWrapper);
+            if (initializeNativeArmorRuntime)
+                InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
 
             if (!_initializedFromOpoint)
             {
@@ -1145,6 +1167,14 @@ namespace NTSD.Animation.LF2Objects
                 RunSharedNonCharacterDatFrameAdvance();
         }
 
+        internal override bool RunNativePhysicsForWorldPass(int tickIndex)
+        {
+            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
+                return RunReleaseFrameAdvance(tickIndex);
+
+            return RunSharedNonCharacterDatFrameAdvance();
+        }
+
         private bool RunReleaseFrameAdvance(int tickIndex)
         {
             if (!TryEnterReleaseFrameAdvanceAfterDelay())
@@ -1158,9 +1188,7 @@ namespace NTSD.Animation.LF2Objects
                 Frame.D.PrimaryCatchPoint.Kind == 2)
                 return false;
 
-            ApplyDynamics();
-            PromoteState12AirborneFrameIfNeeded(tickIndex);
-            PromoteBurningAirborneFrame205IfNeeded();
+            ApplyDynamics(tickIndex);
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
             return true;
@@ -1308,22 +1336,10 @@ namespace NTSD.Animation.LF2Objects
                 Health != null &&
                 Health.HP <= 0)
             {
-                bool allowHitStopArm =
-                    KillCount >= 0 ||
-                    ResolveRespawnRelationIdentity() == 5 ||
-                    (Runtime != null && Runtime.SlotIndex >= 20);
-                if (allowHitStopArm && HitStun <= 0)
-                    HitStun = 30;
-
                 AttackingCounter = 0;
             }
 
             return true;
-        }
-
-        private int ResolveRespawnRelationIdentity()
-        {
-            return RelationTeam != 0 ? RelationTeam : Team;
         }
 
         /// <summary>

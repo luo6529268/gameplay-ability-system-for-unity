@@ -102,6 +102,7 @@ namespace NTSD.Simulation
     {
         public int Difficulty;
         public int AiPhaseGate;
+        public int BattleMode;
         public int InputPhase;
         public int StageTargetX;
         public int StageZMin;
@@ -131,6 +132,7 @@ namespace NTSD.Simulation
                 throw new ArgumentOutOfRangeException(nameof(rows));
             Rows = rows;
             CharacterDecisionModule = new AiCharacterDecisionModule();
+            RngTraceCallSites = new uint[256];
             RngTraceModuli = new int[256];
             RngTraceRaw = new int[256];
             RngTraceValues = new int[256];
@@ -146,11 +148,16 @@ namespace NTSD.Simulation
         public AiDecisionWorldState World;
         public uint RngState;
         public ulong RngCalls;
+        internal readonly uint[] RngTraceCallSites;
         public readonly int[] RngTraceModuli;
         public readonly int[] RngTraceRaw;
         public readonly int[] RngTraceValues;
         public int RngTraceCount;
         public bool RngTraceOverflow;
+
+        private NTSD28SynchronizedRandomCursor synchronizedRngCursor;
+
+        internal bool HasSynchronizedRngCursor { get; private set; }
 
         public void Reset(ulong occupancyEpoch)
         {
@@ -173,6 +180,8 @@ namespace NTSD.Simulation
             World = default;
             RngState = 0;
             RngCalls = 0;
+            synchronizedRngCursor = default;
+            HasSynchronizedRngCursor = false;
             RngTraceCount = 0;
             RngTraceOverflow = false;
         }
@@ -189,8 +198,30 @@ namespace NTSD.Simulation
             World = source.World;
             RngState = source.RngState;
             RngCalls = source.RngCalls;
+            synchronizedRngCursor = source.synchronizedRngCursor;
+            HasSynchronizedRngCursor = source.HasSynchronizedRngCursor;
             RngTraceCount = 0;
             RngTraceOverflow = false;
+        }
+
+        internal void SetSynchronizedRngCursor(
+            NTSD28SynchronizedRandomCursor cursor)
+        {
+            synchronizedRngCursor = cursor;
+            HasSynchronizedRngCursor = true;
+        }
+
+        internal void ClearSynchronizedRngCursor()
+        {
+            synchronizedRngCursor = default;
+            HasSynchronizedRngCursor = false;
+        }
+
+        internal bool TryGetSynchronizedRngCursor(
+            out NTSD28SynchronizedRandomCursor cursor)
+        {
+            cursor = synchronizedRngCursor;
+            return HasSynchronizedRngCursor;
         }
     }
 
@@ -218,5 +249,23 @@ namespace NTSD.Simulation
         public int RngDrawCount;
         public bool RngTraceOverflow;
         public int RowVisits;
+
+        private NTSD28SynchronizedRandomCursor synchronizedRngCursor;
+
+        internal bool HasSynchronizedRngCursor { get; private set; }
+
+        internal void SetSynchronizedRngCursor(
+            NTSD28SynchronizedRandomCursor cursor)
+        {
+            synchronizedRngCursor = cursor;
+            HasSynchronizedRngCursor = true;
+        }
+
+        internal bool TryGetSynchronizedRngCursor(
+            out NTSD28SynchronizedRandomCursor cursor)
+        {
+            cursor = synchronizedRngCursor;
+            return HasSynchronizedRngCursor;
+        }
     }
 }

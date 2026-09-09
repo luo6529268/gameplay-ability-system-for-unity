@@ -725,7 +725,7 @@ namespace NTSD.Test
                 Is.EqualTo(2));
             Assert.That(
                 query.LastRoleAwareExactBodyOverlapCheckCountForDiagnostics,
-                Is.EqualTo(2));
+                Is.EqualTo(3));
             Assert.That(query.LastRoleAwareDirectTickCountForDiagnostics, Is.Zero);
             Assert.That(query.LastRoleAwareTreeTickCountForDiagnostics, Is.EqualTo(1));
             Assert.That(query.TotalRoleAwareDirectTickCountForDiagnostics, Is.EqualTo(1));
@@ -1899,6 +1899,7 @@ namespace NTSD.Test
                 Assert.That(entry.BodyX, Is.EqualTo(expected.BodyX));
                 Assert.That(entry.ItrIndex, Is.EqualTo(expected.ItrIndex));
                 Assert.That(entry.RuntimeItr, Is.SameAs(expected.RuntimeItr));
+                Assert.That(entry.PairSnapshot, Is.EqualTo(expected.PairSnapshot));
                 Assert.That(
                     entry.ZeroAttackerHpOnConsume,
                     Is.EqualTo(expected.ZeroAttackerHpOnConsume));
@@ -1913,6 +1914,8 @@ namespace NTSD.Test
                 Assert.That(authorityHit.BodyX, Is.EqualTo(expected.BodyX));
                 Assert.That(authorityHit.ItrIndex, Is.EqualTo(expected.ItrIndex));
                 Assert.That(authorityHit.RuntimeItr, Is.SameAs(expected.RuntimeItr));
+                Assert.That(authorityHit.PairSnapshot,
+                    Is.EqualTo(expected.PairSnapshot));
                 Assert.That(
                     authorityHit.ZeroAttackerHpOnConsume,
                     Is.EqualTo(expected.ZeroAttackerHpOnConsume));

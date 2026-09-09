@@ -14,10 +14,24 @@ namespace NTSD.Simulation
     internal sealed class SimulationQueryAndLinkModule
     {
         private readonly SimulationWorld world;
+        private int heldTraceTick = int.MinValue;
+        private int heldTraceOccurrence;
 
         internal SimulationQueryAndLinkModule(SimulationWorld world)
         {
             this.world = world;
+        }
+
+        internal long HeldInvalidReciprocalFailureCountForDiagnostics
+        {
+            get;
+            private set;
+        }
+
+        internal int LastHeldInvalidReciprocalFailureCountForDiagnostics
+        {
+            get;
+            private set;
         }
 
         internal bool ResetCooldownsForRuntimeSlot(
@@ -55,6 +69,16 @@ namespace NTSD.Simulation
 
         internal void HeldObjectProcessAll(int tickIndex)
         {
+            LastHeldInvalidReciprocalFailureCountForDiagnostics = 0;
+            if (world.StructuralEventSinkForServices != null)
+            {
+                if (heldTraceTick != tickIndex)
+                {
+                    heldTraceTick = tickIndex;
+                    heldTraceOccurrence = 0;
+                }
+                heldTraceOccurrence++;
+            }
             RuntimeSlotTable runtimeSlots = world.RuntimeSlotsForServices;
             for (int runtimeSlot = 0;
                  runtimeSlot < runtimeSlots.LogicalCapacity;
@@ -67,13 +91,28 @@ namespace NTSD.Simulation
                     continue;
                 }
 
-                LF2Entity holder = FindEntityByRuntimeSlotCurrent(
-                    held.Runtime.HolderStableId);
+                int heldSlot = GetRuntimeSlotOrder(held);
+                int holderSlot = held.Runtime.HolderStableId;
+                bool holderSlotInRange =
+                    holderSlot >= 0 &&
+                    holderSlot < runtimeSlots.LogicalCapacity;
+                LF2Entity holder = holderSlotInRange
+                    ? FindEntityByRuntimeSlotCurrent(holderSlot)
+                    : null;
                 if (holder == null ||
-                    holder.Runtime.TargetSlotIndex != GetRuntimeSlotOrder(held))
+                    holder.Runtime.TargetSlotIndex != heldSlot)
                 {
-                    held.Runtime.LinkState = 0;
-                    held.RefreshRuntimeSnapshot();
+                    // Alignment contract:
+                    // NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001.
+                    HeldInvalidReciprocalFailureCountForDiagnostics++;
+                    LastHeldInvalidReciprocalFailureCountForDiagnostics++;
+                    RecordInvalidNegativeHeldRelation(
+                        tickIndex,
+                        heldSlot,
+                        holderSlot,
+                        holderSlotInRange,
+                        held,
+                        holder);
                     continue;
                 }
 
@@ -91,6 +130,67 @@ namespace NTSD.Simulation
                     continue;
                 }
 
+                if (actResult.TerminalDespawnRequested)
+                {
+                    IBattleParityStructuralEventSink sink = world.StructuralEventSinkForServices;
+                    if (sink != null)
+                    {
+                        string pass = heldTraceOccurrence == 1 ? "held-refill:C09" :
+                            heldTraceOccurrence == 2 ? "held-refill:C20" : "held-refill:additional";
+                        world.SetStructuralEventContextForDiagnostics(tickIndex, pass);
+                        sink.Record(new BattleParityStructuralEvent
+                        {
+                            Tick = tickIndex,
+                            Pass = pass,
+                            Action = "held-terminal",
+                            CursorSlot = heldSlot,
+                            ActorSlot = holderSlot,
+                            Slot = heldSlot,
+                            Before = "active",
+                            After = "terminal-requested",
+                            LifecycleEpoch = runtimeSlots.GetAllocationEpoch(heldSlot),
+                            SourceKind = "held-object",
+                            Reason = "weaponact>=1000",
+                        });
+                    }
+
+                    // Alignment contract: NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-PRODUCTION-001.
+                    world.TryGetCurrentRuntimeHandle(holderSlot, holder, out RuntimeEntityHandle holderHandle);
+                    world.StructuralWriter.Free(held);
+                    if (world.TryResolveRuntimeHandle(holderHandle, out LF2Entity liveHolder))
+                        liveHolder.RefreshRuntimeSnapshot();
+                    continue;
+                }
+
+                if (actResult.UnsupportedWeaponAction)
+                {
+                    IBattleParityStructuralEventSink sink = world.StructuralEventSinkForServices;
+                    if (sink != null)
+                    {
+                        string pass = heldTraceOccurrence == 1 ? "held-refill:C09" :
+                            heldTraceOccurrence == 2 ? "held-refill:C20" : "held-refill:additional";
+                        world.SetStructuralEventContextForDiagnostics(tickIndex, pass);
+                        sink.Record(new BattleParityStructuralEvent
+                        {
+                            Tick = tickIndex,
+                            Pass = pass,
+                            Action = "held-unsupported-action",
+                            CursorSlot = heldSlot,
+                            ActorSlot = holderSlot,
+                            Slot = heldSlot,
+                            Before = wpoint.WeaponAct.ToString(),
+                            After = held.Frame.N.ToString(),
+                            LifecycleEpoch = runtimeSlots.GetAllocationEpoch(heldSlot),
+                            SourceKind = "held-object",
+                            Reason = "child-frame-missing",
+                            Outcome = "preserved-continue",
+                        });
+                    }
+                    holder.RefreshRuntimeSnapshot();
+                    held.RefreshRuntimeSnapshot();
+                    continue;
+                }
+
                 WeaponAttackResult attackResult = actResult.AttackResult;
                 if (attackResult.HitUid != 0 && attackResult.ARest > 0 &&
                     holder.ItrRest != null)
@@ -101,6 +201,61 @@ namespace NTSD.Simulation
                 holder.RefreshRuntimeSnapshot();
                 held.RefreshRuntimeSnapshot();
             }
+        }
+
+        private void RecordInvalidNegativeHeldRelation(
+            int tickIndex,
+            int heldSlot,
+            int holderSlot,
+            bool holderSlotInRange,
+            LF2Entity held,
+            LF2Entity holder)
+        {
+            IBattleParityStructuralEventSink eventSink =
+                world.StructuralEventSinkForServices;
+            if (eventSink == null)
+                return;
+
+            world.SetStructuralEventContextForDiagnostics(
+                tickIndex,
+                "negative-held-validation");
+            int holderTargetSlot = holder?.Runtime?.TargetSlotIndex ?? -1;
+            int linkState = held.Runtime.LinkState;
+            int heldWeaponSlot = held.Runtime.HeldWeaponStableId;
+            string relation =
+                $"{linkState}/{holderSlot}/{holderTargetSlot}/{heldWeaponSlot}";
+            eventSink.Record(new BattleParityStructuralEvent
+            {
+                Tick = tickIndex,
+                Pass = "negative-held-validation",
+                Action = "link-validation",
+                CursorSlot = heldSlot,
+                ActorSlot = heldSlot,
+                Slot = heldSlot,
+                Before = relation,
+                After = relation,
+                LifecycleEpoch = world.RuntimeSlotsForServices
+                    .GetAllocationEpoch(heldSlot),
+                SourceKind = "negative-held",
+                BeforeLinkState = linkState,
+                BeforeTargetSlot = holderSlot,
+                BeforeHeldWeaponSlot = heldWeaponSlot,
+                AfterLinkState = linkState,
+                AfterTargetSlot = holderSlot,
+                AfterHeldWeaponSlot = heldWeaponSlot,
+                TargetActive = holder != null,
+                ObservedHolderSlot = holderTargetSlot,
+                Outcome = "preserved",
+                Reason = !holderSlotInRange
+                    ? "parent-out-of-range"
+                    : holder == null
+                        ? "parent-inactive"
+                        : "reciprocal-mismatch",
+                TargetBeforeHolderSlot = holderTargetSlot,
+                TargetBeforeLinkState = holder?.Runtime?.LinkState ?? 0,
+                TargetAfterHolderSlot = holderTargetSlot,
+                TargetAfterLinkState = holder?.Runtime?.LinkState ?? 0,
+            });
         }
 
         internal void RunLegacyPositiveLinkValidation(int tickIndex)

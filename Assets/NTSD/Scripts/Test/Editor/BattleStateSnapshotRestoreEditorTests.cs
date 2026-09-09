@@ -33,6 +33,27 @@ namespace NTSD.Test
             character.Runtime.PP = 207;
             character.Runtime.ComboCountAtk = 4;
             scope.Driver.World.Runtime.Flow.AiRand15 = 11;
+            scope.Driver.World.Runtime.NativeWorldClock.ResourcePhase12 = 7;
+            scope.Driver.World.Runtime.NativeWorldClock.ResourcePhase3 = 2;
+            scope.Driver.World.Runtime.NativeWorldClock.FrameSequence = 99UL;
+            scope.Driver.World.Runtime.FunctionKeys.RestoreForSnapshot(
+                1,
+                false,
+                3,
+                4,
+                5,
+                6,
+                true,
+                NTSD28NativeFunctionKeyPendingObjectCommand.DropObjects,
+                0x80,
+                0x74);
+            scope.Driver.World.Runtime.NativeHitResourceRules.RestoreForSnapshot(
+                3,
+                37,
+                61,
+                62);
+            scope.Driver.World.Runtime.NativeStandardHitRest
+                .SetTimingReduction4A9FF4(3);
             scope.Driver.World.Rng.Seed(917u);
             scope.Driver.World.Rng.NextInt(0, 97);
 
@@ -49,6 +70,10 @@ namespace NTSD.Test
             character.Runtime.PP = 2;
             character.Runtime.ComboCountAtk = 99;
             scope.Driver.World.Runtime.Flow.AiRand15 = 1;
+            scope.Driver.World.Runtime.NativeWorldClock.Reset();
+            scope.Driver.World.Runtime.FunctionKeys.ResetForBattle();
+            scope.Driver.World.Runtime.NativeHitResourceRules.Reset();
+            scope.Driver.World.Runtime.NativeStandardHitRest.Reset();
             scope.Driver.World.Rng.NextInt(0, 97);
 
             Assert.That(
@@ -66,6 +91,49 @@ namespace NTSD.Test
             Assert.That(character.Runtime.PP, Is.EqualTo(207));
             Assert.That(character.Runtime.ComboCountAtk, Is.EqualTo(4));
             Assert.That(scope.Driver.World.Runtime.Flow.AiRand15, Is.EqualTo(11));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeWorldClock.ResourcePhase12,
+                Is.EqualTo(7));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeWorldClock.ResourcePhase3,
+                Is.EqualTo(2));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeWorldClock.FrameSequence,
+                Is.EqualTo(99UL));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.LockState, Is.EqualTo(1));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.HitResourceEnabled, Is.False);
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.F6EventCount, Is.EqualTo(3U));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.F7EventCount, Is.EqualTo(4U));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.F8EventCount, Is.EqualTo(5U));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.F9EventCount, Is.EqualTo(6U));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.PendingFullMp, Is.True);
+            Assert.That(
+                scope.Driver.World.Runtime.FunctionKeys.PendingObjectCommand,
+                Is.EqualTo(NTSD28NativeFunctionKeyPendingObjectCommand.DropObjects));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.QueuedEventByte,
+                Is.EqualTo(0x80));
+            Assert.That(scope.Driver.World.Runtime.FunctionKeys.LastAcceptedEventByte,
+                Is.EqualTo(0x74));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeHitResourceRules
+                    .ActiveModeHitGroupGate18,
+                Is.EqualTo(3));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeHitResourceRules
+                    .ActiveModeAttackingPercent1C,
+                Is.EqualTo(37));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeHitResourceRules
+                    .AttackerInjuryMpPercent34,
+                Is.EqualTo(61));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeHitResourceRules
+                    .TargetInjuryMpPercent38,
+                Is.EqualTo(62));
+            Assert.That(
+                scope.Driver.World.Runtime.NativeStandardHitRest
+                    .TimingReduction4A9FF4,
+                Is.EqualTo(3));
             Assert.That(scope.Driver.World.Rng.State, Is.EqualTo(expectedRngState));
             Assert.That(scope.Driver.World.Rng.CallCount, Is.EqualTo(expectedRngCalls));
             Assert.That(character.ItrRest.IsBound, Is.True);

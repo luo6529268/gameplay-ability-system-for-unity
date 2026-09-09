@@ -41,12 +41,29 @@ namespace NTSD.Simulation
 
         public void ApplyFrameInputSet(FrameInputSet frameInput)
         {
-            if (frameInput?.Players == null || frameInput.Players.Count == 0)
+            if (frameInput?.Players == null)
+                return;
+
+            ApplyDefaultNativeAiHostPendingInput();
+            if (frameInput.Players.Count == 0)
                 return;
 
             for (int i = 0; i < frameInput.Players.Count; i++)
             {
                 SimulationPlayerInput playerInput = frameInput.Players[i];
+                if (world.UsesNTSD28NativeInputPipeline &&
+                    TryResolveRosterEntity(
+                        playerInput.PlayerSlot,
+                        requireHuman: false,
+                        out LF2Entity aiEntity) &&
+                    aiEntity.AiControlled)
+                {
+                    world.CharacterInputWriter.ApplyNativeAiHostPendingInput(
+                        aiEntity.Runtime,
+                        playerInput.Buttons);
+                    continue;
+                }
+
                 if (!TryResolveRosterInputEntity(playerInput.PlayerSlot, out LF2Entity entity) ||
                     entity.AiControlled ||
                     !entity.TryGetSharedInputControllerForSimulation(out ILF2Controller controller))
@@ -66,6 +83,32 @@ namespace NTSD.Simulation
                         mapping.Key,
                         down);
                 }
+            }
+        }
+
+        private void ApplyDefaultNativeAiHostPendingInput()
+        {
+            if (!world.UsesNTSD28NativeInputPipeline)
+                return;
+
+            BattleSlotRuntimeState[] rosterSlots = world.Runtime?.Roster?.Slots;
+            if (rosterSlots == null)
+                return;
+
+            for (int playerSlot = 0; playerSlot < rosterSlots.Length; playerSlot++)
+            {
+                if (!TryResolveRosterEntity(
+                        playerSlot,
+                        requireHuman: false,
+                        out LF2Entity entity) ||
+                    !entity.AiControlled)
+                {
+                    continue;
+                }
+
+                world.CharacterInputWriter.ApplyNativeAiHostPendingInput(
+                    entity.Runtime,
+                    SimulationInputButtons.None);
             }
         }
 

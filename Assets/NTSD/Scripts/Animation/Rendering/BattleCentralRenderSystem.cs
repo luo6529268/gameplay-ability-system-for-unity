@@ -1037,13 +1037,7 @@ namespace NTSD.Animation.Rendering
         {
             if (renderType != CameraRenderType.Base || camera == null || worldCamera == null)
                 return false;
-            if (camera == worldCamera)
-                return true;
-#if UNITY_EDITOR
-            return isPlaying && cameraType == CameraType.SceneView;
-#else
-            return false;
-#endif
+            return camera == worldCamera;
         }
 
         private static bool IsWorldRenderCamera(

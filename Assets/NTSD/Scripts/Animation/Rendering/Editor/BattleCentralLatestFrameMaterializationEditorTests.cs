@@ -403,11 +403,9 @@ namespace NTSD.Animation.Rendering.Editor
                         CameraRenderType.Base,
                         CameraType.SceneView,
                         true,
-                        out BattleCentralSubmission.BattleCentralSubmissionLease sceneViewLease),
-                    Is.True,
-                    "a Play Mode SceneView may acquire only after the world-camera materialization gate has accepted the latest publication");
-                Assert.That(sceneViewLease.TickIndex, Is.EqualTo(702));
-                sceneViewLease.Dispose();
+                        out _),
+                    Is.False,
+                    "a Play Mode SceneView must never acquire central pixels that have no per-object Hierarchy representation");
                 Assert.That(
                     BattleCentralRenderSystem.TryAcquireSubmissionForSelfCheck(
                         worldCamera,

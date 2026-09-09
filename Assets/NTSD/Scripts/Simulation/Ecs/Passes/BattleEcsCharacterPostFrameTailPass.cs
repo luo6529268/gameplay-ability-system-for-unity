@@ -78,53 +78,12 @@ namespace NTSD.Simulation.Ecs
             }
 
             exactCharacterCount++;
-            ApplyAuthorityTail(entity.Runtime, entity.Frame?.D);
+            ApplyAuthorityMaintenance(entity.Runtime);
             return true;
         }
 
-        private static void ApplyAuthorityTail(
-            NTSDEntityRuntime runtime,
-            LF2FrameData frame)
+        private static void ApplyAuthorityMaintenance(NTSDEntityRuntime runtime)
         {
-            if (runtime.HealTimer / 1000 == 1 && runtime.HP > 0)
-            {
-                runtime.HealTimer--;
-                if (runtime.HealTimer % 8 == 0)
-                {
-                    if (runtime.HP < runtime.HPBound)
-                    {
-                        runtime.HP += 8;
-                        if (runtime.HP > runtime.HPBound)
-                            runtime.HP = runtime.HPBound;
-                    }
-                    else
-                    {
-                        runtime.HealTimer = 0;
-                    }
-                }
-
-                if (runtime.HealTimer % 1000 == 0)
-                    runtime.HealTimer = 0;
-            }
-
-            if (runtime.CatchTimer > 0 && runtime.HP > 0)
-            {
-                runtime.CatchTimer--;
-                if (runtime.CatchTimer % 8 == 0 &&
-                    runtime.HP < runtime.HPBound)
-                {
-                    runtime.HP += 8;
-                    if (runtime.HP > runtime.HPBound)
-                    {
-                        runtime.HP = runtime.HPBound;
-                        runtime.CatchTimer = 0;
-                    }
-                }
-            }
-
-            if (frame != null && frame.state == 1700)
-                runtime.HealTimer = 1100;
-
             runtime.HitConfirm2 = 0;
             runtime.TransientMp = 0;
             runtime.TransientMp2 = 1000;

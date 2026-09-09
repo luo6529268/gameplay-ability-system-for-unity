@@ -627,7 +627,18 @@ namespace NTSD.Animation
             // 3. 提取移动参数（从根级别的 Properties 或 Blocks 中）
             ExtractMovementParameters(datFile, characterData);
 
-            // 4. 提取武器专用参数（weapon_hp, weapon_strength_list 等）
+            // 4. 保留2.8原生输入动作路由所需definition字段。
+            Lf2DatConverter.ApplyNativeInputDefinitionData(
+                datFile,
+                characterData);
+
+            // Armor blocks stay definition data here; activation/runtime HP
+            // remain owned by the battle simulation integration packages.
+            Lf2DatConverter.ApplyNativeArmorDefinitionData(
+                datFile,
+                characterData);
+
+            // 5. 提取武器专用参数（weapon_hp, weapon_strength_list 等）
             ExtractWeaponParameters(datFile, characterData);
 
             return characterData;

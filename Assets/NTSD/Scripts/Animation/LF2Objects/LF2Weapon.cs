@@ -175,10 +175,11 @@ namespace NTSD.Animation.LF2Objects
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
 
-            if (wt == 4 || typeSub == 0x78)
-                Runtime.X += Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
-            else if (typeSub == 0x65)
-                Runtime.X -= Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+            Runtime.X += BattleNativeIdentityXExtraKernel.ResolveExtra(
+                wt,
+                ObjectId,
+                typeSub,
+                Runtime.Vx);
 
             if (wt == 6)
             {
@@ -263,10 +264,20 @@ namespace NTSD.Animation.LF2Objects
         // 这里是理解轻武器、重武器、回旋类武器差异的关键入口。
         protected override void OnLanded()
         {
+            OnLanded(0);
+        }
+
+        protected override void OnLanded(int landingY)
+        {
             int wt = WeaponType;
             double oldVy = _lastLandingVyBeforeClamp; // P0-f-2b B1: float→double (landing Vy, baseline oldVy is double)
 
-            if (ApplyCurrentDatNonCharacterLanding(wt, Frame?.D, oldVy, crossedGround: true))
+            if (ApplyCurrentDatNonCharacterLanding(
+                wt,
+                Frame?.D,
+                oldVy,
+                crossedGround: true,
+                landingY))
                 return;
 
             LF2CharacterData cd = ResolveRuntimeCharacterData(ObjectId);
@@ -379,7 +390,7 @@ namespace NTSD.Animation.LF2Objects
                 return true;
             }
 
-            if (itr.kind == 15 || itr.kind == 16)
+            if (itr.kind == 15)
             {
                 WhirlwindForce(itr, attacker);
                 return true;

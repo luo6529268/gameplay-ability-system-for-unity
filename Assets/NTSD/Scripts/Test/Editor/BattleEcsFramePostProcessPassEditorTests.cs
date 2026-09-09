@@ -75,7 +75,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void EntityPostFrameTail_ExactCharacterSkipsOnlyRedundantWideSnapshot()
+        public void EntityPostFrameTail_ExactCharacterSkipsOnlyRedundantWideSnapshotAndDoesNotRepeatHealing()
         {
             var world = new SimulationWorld();
             LF2Character entity = RegisterCharacter(world, 50);
@@ -86,8 +86,8 @@ namespace NTSD.Test
 
             world.EntityPostFrameTailAll(1);
 
-            Assert.That(entity.HealTimer, Is.Zero);
-            Assert.That(entity.Runtime.HealTimer, Is.Zero);
+            Assert.That(entity.HealTimer, Is.EqualTo(1001));
+            Assert.That(entity.Runtime.HealTimer, Is.EqualTo(1001));
             Assert.That(entity.Runtime.TransientMp, Is.Zero);
             Assert.That(entity.Runtime.TransientMp2, Is.EqualTo(1000));
             Assert.That(entity.Runtime.TransientMp3, Is.EqualTo(1000));

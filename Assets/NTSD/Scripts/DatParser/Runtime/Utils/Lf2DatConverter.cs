@@ -37,6 +37,7 @@ namespace NTSD.DatParser
                 {
                     case "pic": frameData.pic = ParseInt(prop.Value); break;
                     case "state": frameData.state = ParseInt(prop.Value); break;
+                    case "cover": frameData.cover = ParseInt(prop.Value); break;
                     case "wait": frameData.wait = ParseInt(prop.Value); break;
                     case "next": frameData.next = ParseInt(prop.Value); break;
                     case "dvx": frameData.dvx = ParseInt(prop.Value); break;
@@ -45,16 +46,32 @@ namespace NTSD.DatParser
                     case "centerx": frameData.centerx = ParseInt(prop.Value); break;
                     case "centery": frameData.centery = ParseInt(prop.Value); break;
                     case "mp": frameData.mp = ParseInt(prop.Value); break;
+                    case "hp": frameData.hp = ParseInt(prop.Value); break;
                     case "hit_a": frameData.hit_a = ParseInt(prop.Value); break;
                     case "hit_d": frameData.hit_d = ParseInt(prop.Value); break;
                     case "hit_j": frameData.hit_j = ParseInt(prop.Value); break;
+                    case "hit_g": frameData.hit_g = ParseInt(prop.Value); break;
                     case "hit_fj": frameData.hit_Fj = ParseInt(prop.Value); break;
                     case "hit_fa": frameData.hit_Fa = ParseInt(prop.Value); break;
                     case "hit_da": frameData.hit_Da = ParseInt(prop.Value); break;
                     case "hit_ua": frameData.hit_Ua = ParseInt(prop.Value); break;
                     case "hit_ja": frameData.hit_ja = ParseInt(prop.Value); break;
+                    case "hit_aj": frameData.hit_aj = ParseInt(prop.Value); break;
+                    case "hit_ad": frameData.hit_ad = ParseInt(prop.Value); break;
+                    case "hit_jd": frameData.hit_jd = ParseInt(prop.Value); break;
                     case "hit_dj": frameData.hit_Dj = ParseInt(prop.Value); break;
                     case "hit_uj": frameData.hit_Uj = ParseInt(prop.Value); break;
+                    case "hit_f": frameData.hit_f = ParseInt(prop.Value); break;
+                    case "hit_b": frameData.hit_b = ParseInt(prop.Value); break;
+                    case "hit_uz": frameData.hit_uz = ParseInt(prop.Value); break;
+                    case "hit_dz": frameData.hit_dz = ParseInt(prop.Value); break;
+                    case "hold_a": frameData.hold_a = ParseInt(prop.Value); break;
+                    case "hold_d": frameData.hold_d = ParseInt(prop.Value); break;
+                    case "hold_j": frameData.hold_j = ParseInt(prop.Value); break;
+                    case "hold_f": frameData.hold_f = ParseInt(prop.Value); break;
+                    case "hold_b": frameData.hold_b = ParseInt(prop.Value); break;
+                    case "hold_uz": frameData.hold_uz = ParseInt(prop.Value); break;
+                    case "hold_dz": frameData.hold_dz = ParseInt(prop.Value); break;
                     case "sound": frameData.sound = prop.Value; break;
                 }
             }
@@ -98,6 +115,13 @@ namespace NTSD.DatParser
                         break;
 
                     case "bdy":
+                        if (frameData.bodies.Count == 0)
+                        {
+                            frameData.primaryBodyKindForEffectSuppression =
+                                ConvertBodyKind(subBlock);
+                            frameData.primaryBodyRespondForHitResponse =
+                                ConvertBodyRespond(subBlock);
+                        }
                         frameData.bodies.Add(ConvertToBodyBox(subBlock));
                         break;
 
@@ -291,6 +315,40 @@ namespace NTSD.DatParser
             return new BattleBodyBoxValue(x, y, w, h);
         }
 
+        private static int ConvertBodyKind(Lf2DatSubBlock subBlock)
+        {
+            int kind = 0;
+            foreach (var prop in subBlock.Properties)
+            {
+                if (string.Equals(
+                    prop.Key,
+                    "kind",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    kind = ParseInt(prop.Value);
+                }
+            }
+
+            return kind;
+        }
+
+        private static int ConvertBodyRespond(Lf2DatSubBlock subBlock)
+        {
+            int respond = 0;
+            foreach (var prop in subBlock.Properties)
+            {
+                if (string.Equals(
+                    prop.Key,
+                    "respond",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    respond = ParseInt(prop.Value);
+                }
+            }
+
+            return respond;
+        }
+
         /// <summary>
         /// 转换 InteractionArea
         /// </summary>
@@ -319,12 +377,28 @@ namespace NTSD.DatParser
                     case "arest": itr.arest = ParseInt(prop.Value); break;
                     case "vrest": itr.vrest = ParseInt(prop.Value); break;
                     case "effect": itr.effect = ParseInt(prop.Value); break;
+                    case "spark": itr.spark = ParseInt(prop.Value); break;
+                    case "recover": itr.recover = ParseInt(prop.Value); break;
+                    case "dbdefend": itr.dbdefend = ParseInt(prop.Value); break;
                     case "kill": itr.kill = ParseInt(prop.Value); break;
                     case "bdefend": itr.bdefend = ParseInt(prop.Value); break;
                     case "attacking": itr.attacking = ParseInt(prop.Value); break;
                     case "respond": itr.respond = ParseInt(prop.Value); break;
                     case "pickingact": itr.pickingact = ParseInt(prop.Value); break;
                     case "pickedact": itr.pickedact = ParseInt(prop.Value); break;
+                    case "delay": itr.delay = ParseInt(prop.Value); break;
+                    case "poison": itr.poison = ParseInt(prop.Value); break;
+                    case "confus": itr.confus = ParseInt(prop.Value); break;
+                    case "weak": itr.weak = ParseInt(prop.Value); break;
+                    case "manacle": itr.manacle = ParseInt(prop.Value); break;
+                    case "join": itr.join = ParseInt(prop.Value); break;
+                    case "mimic": itr.mimic = ParseInt(prop.Value); break;
+                    case "bound": itr.bound = ParseInt(prop.Value); break;
+                    case "facing": itr.facing = ParseInt(prop.Value); break;
+                    case "dx": itr.dx = ParseInt(prop.Value); break;
+                    case "dy": itr.dy = ParseInt(prop.Value); break;
+                    case "dz": itr.dz = ParseInt(prop.Value); break;
+                    case "gain": itr.gain = ParseInt(prop.Value); break;
                     case "throwvx": itr.throwvx = ParseInt(prop.Value); break;
                     case "throwvy": itr.throwvy = ParseInt(prop.Value); break;
                     case "throwinjury": itr.throwinjury = ParseInt(prop.Value); break;
@@ -415,6 +489,313 @@ namespace NTSD.DatParser
             }
 
             return frames;
+        }
+
+        public static void ApplyNativeInputDefinitionData(
+            Lf2DatFile datFile,
+            LF2CharacterData characterData)
+        {
+            if (datFile == null)
+                throw new ArgumentNullException(nameof(datFile));
+            if (characterData == null)
+                throw new ArgumentNullException(nameof(characterData));
+
+            if (datFile.Bmp != null)
+            {
+                foreach (Lf2DatProperty property in datFile.Bmp.Properties)
+                {
+                    if (string.Equals(
+                        property?.Key,
+                        "use_ai",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.use_ai = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "property",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.property = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "effect",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.definition_effect = ParseInt(property.Value);
+                    }
+                }
+
+            }
+
+            characterData.walking_frames ??= new List<int>();
+            characterData.running_frames ??= new List<int>();
+            characterData.heavy_walking_frames ??= new List<int>();
+            characterData.heavy_running_frames ??= new List<int>();
+            CopyNativeMovementSequence(
+                datFile.Bmp,
+                "walking_frame",
+                characterData.walking_frames);
+            CopyNativeMovementSequence(
+                datFile.Bmp,
+                "running_frame",
+                characterData.running_frames);
+            CopyNativeMovementSequence(
+                datFile.Bmp,
+                "heavy_walking_frame",
+                characterData.heavy_walking_frames);
+            CopyNativeMovementSequence(
+                datFile.Bmp,
+                "heavy_running_frame",
+                characterData.heavy_running_frames);
+
+            characterData.normal_attack1 = 0;
+            characterData.normal_attack2 = 0;
+            characterData.definition_attacking = 0;
+            characterData.light_throw = 0;
+            characterData.weapon_drink = 0;
+            characterData.heavy_throw = 0;
+            characterData.run_heavy_throw = 0;
+            characterData.run_attack = 0;
+            characterData.jump_attack = 0;
+            characterData.sky_light_throw = 0;
+
+            foreach (Lf2DatBlock block in datFile.Blocks)
+            {
+                if (!string.Equals(
+                    block?.Name,
+                    "stats",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                foreach (Lf2DatProperty property in block.Properties)
+                {
+                    if (string.Equals(
+                        property?.Key,
+                        "attacking",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.definition_attacking =
+                            ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "recmp",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.recmp = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "caughtact",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.caughtact = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "normal_attack1",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.normal_attack1 = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "normal_attack2",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.normal_attack2 = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "light_throw",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.light_throw = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "weapon_drink",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.weapon_drink = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "heavy_throw",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.heavy_throw = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "run_heavy_throw",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.run_heavy_throw = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "run_attack",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.run_attack = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "jump_attack",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.jump_attack = ParseInt(property.Value);
+                    }
+                    else if (string.Equals(
+                        property?.Key,
+                        "sky_light_throw",
+                        StringComparison.OrdinalIgnoreCase))
+                    {
+                        characterData.sky_light_throw = ParseInt(property.Value);
+                    }
+                }
+            }
+        }
+
+        public static void ApplyNativeArmorDefinitionData(
+            Lf2DatFile datFile,
+            LF2CharacterData characterData)
+        {
+            if (datFile == null)
+                throw new ArgumentNullException(nameof(datFile));
+            if (characterData == null)
+                throw new ArgumentNullException(nameof(characterData));
+
+            characterData.armors ??= new List<LF2ArmorData>();
+            characterData.armors.Clear();
+            foreach (Lf2DatBlock block in datFile.Blocks)
+            {
+                if (string.Equals(
+                    block?.Name,
+                    "armor",
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    characterData.armors.Add(ConvertToArmorData(block));
+                }
+            }
+        }
+
+        private static LF2ArmorData ConvertToArmorData(Lf2DatBlock block)
+        {
+            var result = new LF2ArmorData();
+            int ptype = 0;
+            bool hasType = false;
+            foreach (Lf2DatProperty property in block.Properties)
+            {
+                string key = property?.Key?.ToLowerInvariant();
+                string value = property?.Value;
+                switch (key)
+                {
+                    case "type":
+                        result.type = ParseInt(value);
+                        hasType = true;
+                        break;
+                    case "ptype": ptype = ParseInt(value); break;
+                    case "ratio": result.ratio = ParseInt(value); break;
+                    case "decrease": result.decrease = ParseInt(value); break;
+                    case "mp": result.mp = ParseInt(value); break;
+                    case "fall": result.fall = ParseInt(value); break;
+                    case "bdefend": result.bdefend = ParseInt(value); break;
+                    case "injury": result.injury = ParseInt(value); break;
+                    case "spark": result.spark = ParseInt(value); break;
+                    case "hp": result.hp = ParseInt(value); break;
+                    case "recover": result.recover = ParseInt(value); break;
+                    case "facing": result.facing = ParseInt(value); break;
+                    case "action": result.action = ParseInt(value); break;
+                    case "reserve": result.reserve = ParseInt(value); break;
+                    case "delay": result.delay = ParseInt(value); break;
+                    case "sound1": result.sound1 = value; break;
+                    case "sound2": result.sound2 = value; break;
+                    case "frame":
+                        if (TryParseFirstTwoIntegers(
+                            value,
+                            out int first,
+                            out int last))
+                        {
+                            result.frame_ranges.Add(new LF2ArmorFrameRange
+                            {
+                                first = first,
+                                last = last,
+                            });
+                        }
+                        break;
+                    case "state": AddFirstInteger(value, result.states); break;
+                    case "kind": AddFirstInteger(value, result.kinds); break;
+                    case "id": AddFirstInteger(value, result.ids); break;
+                    case "effect": AddFirstInteger(value, result.effects); break;
+                }
+            }
+
+            if (!hasType)
+                result.type = ptype;
+            return result;
+        }
+
+        private static void AddFirstInteger(string value, List<int> target)
+        {
+            if (TryParseFirstInteger(value, out int parsed))
+                target.Add(parsed);
+        }
+
+        private static bool TryParseFirstTwoIntegers(
+            string value,
+            out int first,
+            out int second)
+        {
+            first = 0;
+            second = 0;
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+            string[] tokens = value.Split((char[])null,
+                StringSplitOptions.RemoveEmptyEntries);
+            return tokens.Length >= 2 &&
+                   int.TryParse(tokens[0], out first) &&
+                   int.TryParse(tokens[1], out second);
+        }
+
+        private static bool TryParseFirstInteger(string value, out int parsed)
+        {
+            parsed = 0;
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+            string[] tokens = value.Split((char[])null,
+                StringSplitOptions.RemoveEmptyEntries);
+            return tokens.Length > 0 && int.TryParse(tokens[0], out parsed);
+        }
+
+        private static void CopyNativeMovementSequence(
+            Lf2BmpSection bmp,
+            string name,
+            List<int> destination)
+        {
+            destination.Clear();
+            if (bmp?.FrameSequences == null)
+                return;
+
+            foreach (Lf2BmpFrameSequence sequence in bmp.FrameSequences)
+            {
+                if (!string.Equals(
+                    sequence?.Name,
+                    name,
+                    StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (sequence.Actions != null)
+                    destination.AddRange(sequence.Actions);
+                return;
+            }
         }
     }
 }

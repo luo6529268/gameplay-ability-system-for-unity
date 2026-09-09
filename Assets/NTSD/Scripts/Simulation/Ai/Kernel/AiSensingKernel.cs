@@ -143,6 +143,29 @@ namespace NTSD.Simulation
             AiDecisionEvaluationPolicy policy,
             out AiSensingSpecialResult result)
         {
+            return TryScanSpecial(
+                rows,
+                selfSlot,
+                inputPhase,
+                initialSelectedSlot,
+                nearestBestDist,
+                sameZLane,
+                policy,
+                false,
+                out result);
+        }
+
+        internal static bool TryScanSpecial(
+            AiSensingSnapshot rows,
+            int selfSlot,
+            int inputPhase,
+            int initialSelectedSlot,
+            int nearestBestDist,
+            bool sameZLane,
+            AiDecisionEvaluationPolicy policy,
+            bool useNative28PickupState,
+            out AiSensingSpecialResult result)
+        {
             result = default;
             bool useIndexed = policy == AiDecisionEvaluationPolicy.Indexed;
             if (useIndexed &&
@@ -211,7 +234,7 @@ namespace NTSD.Simulation
                 }
             }
 
-            if (rows.KillCount[selfSlot] > -1) { guard7A = true; guard7B = true; }
+            if (rows.OwnerSlot[selfSlot] > -1) { guard7A = true; guard7B = true; }
             if (rows.Pp[selfSlot] > 250) guard7B = true;
             if (inputPhase == 1 && selfTeam == 1) guard7B = true;
             if (selfSlot >= 20 && inputPhase == 4) guard7B = true;
@@ -280,9 +303,12 @@ namespace NTSD.Simulation
                     bool guarded = (objectId == 0x7A && guard7A) ||
                                    (objectId == 0x7B && guard7B) ||
                                    (rows.InputHistoryGate[selfSlot] && objectId != 0x7A);
+                    bool pickupState = useNative28PickupState
+                        ? state == 1000 || state == 2004
+                        : state == 0x3EC || state == 0x7D4;
                     if (distance < 2 * nearestBestDist && distance < specialBestDist &&
                         objectIdCandidate && !guarded && rows.LinkState[slot] == 0 &&
-                        (state == 0x3EC || state == 0x7D4))
+                        pickupState)
                     {
                         selectedSlot = slot;
                         specialBestDist = distance;
@@ -497,14 +523,14 @@ namespace NTSD.Simulation
                 else return false;
             }
             return TeamAllowed(rows.Team[self], rows.Team[slot], phase) &&
-                   rows.Hp[slot] > 0 && state != 14 && Abs(rows.Y[slot]) <= 2;
+                   rows.Hp[slot] > 0 && state != 14 && Abs(rows.HitStop[slot]) <= 2;
         }
 
         private static bool IsAirTarget(AiSensingSnapshot rows, int self, int slot, int phase)
         {
             return slot != self && IsIncluded(rows, slot) &&
                    TeamAllowed(rows.Team[self], rows.Team[slot], phase) && rows.Hp[slot] > 0 &&
-                   (rows.State[slot] == 14 || Abs(rows.Y[slot]) > 2);
+                   (rows.State[slot] == 14 || Abs(rows.HitStop[slot]) > 2);
         }
 
         private static bool TeamAllowed(int selfTeam, int candidateTeam, int phase)
@@ -752,14 +778,14 @@ namespace NTSD.Simulation
             if (!IsIncluded(rows, slot))
                 return false;
             int state = rows.State[slot];
-            return rows.Hp[slot] > 0 && state != 14 && Abs(rows.Y[slot]) <= 2 &&
+            return rows.Hp[slot] > 0 && state != 14 && Abs(rows.HitStop[slot]) <= 2 &&
                    (rows.DataObjectType[slot] == 0 || state == 3000);
         }
 
         private static bool IsAirRoleMember(AiSensingSnapshot rows, int slot)
         {
             return IsIncluded(rows, slot) && rows.Hp[slot] > 0 &&
-                   (rows.State[slot] == 14 || Abs(rows.Y[slot]) > 2);
+                   (rows.State[slot] == 14 || Abs(rows.HitStop[slot]) > 2);
         }
 
         private static bool IsSpecialScanObjectId(int objectId)

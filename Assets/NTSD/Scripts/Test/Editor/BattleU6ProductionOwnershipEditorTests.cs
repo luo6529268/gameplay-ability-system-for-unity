@@ -50,10 +50,6 @@ namespace NTSD.Test
                 world.BattleEcsCharacterInputPassModeForDiagnostics,
                 Is.EqualTo(BattleEcsCharacterInputPassMode.DataOriented));
             Assert.That(
-                world.BattleEcsPositiveLinkValidationPassModeForDiagnostics,
-                Is.EqualTo(BattleEcsPositiveLinkValidationPassMode.DataOriented));
-
-            Assert.That(
                 world.BattleEcsFramePostProcessPassModeForDiagnostics,
                 Is.EqualTo(BattleEcsFramePostProcessPassMode.Legacy),
                 "The measured DataOriented candidate regressed P95 and remains an oracle.");

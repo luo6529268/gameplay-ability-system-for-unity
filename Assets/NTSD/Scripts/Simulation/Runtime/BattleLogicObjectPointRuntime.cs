@@ -279,6 +279,8 @@ namespace NTSD.Simulation
                 task.parent = spawner;
                 task.targetWorld = world;
                 task.team = spawner.Team;
+                // Alignment contract: NTSD28-B0-OPOINT-OWNER-PROPAGATION-PRODUCTION-001.
+                task.ownerEntityIndex = spawner.OwnerEntityIndex;
                 ConfigureLateOpointPosition(task, spawner, frame, opoint);
                 task.dir = spawner.PS.dir;
                 task.dvz = 0f;

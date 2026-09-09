@@ -19,14 +19,13 @@ namespace NTSD.Simulation.Ecs
         CharacterRecovery = 6,
         CharacterFrameTick = 7,
         CharacterInput = 8,
-        PositiveLinkValidation = 9,
-        FramePostProcess = 10,
-        CharacterPostFrameTail = 11,
-        HitExecutionPlan = 12,
-        HumanOrDerivedCharacterShell = 13,
-        DerivedWeaponShell = 14,
-        DerivedSpecialAttackShell = 15,
-        DerivedOtherObjectShell = 16,
+        FramePostProcess = 9,
+        CharacterPostFrameTail = 10,
+        HitExecutionPlan = 11,
+        HumanOrDerivedCharacterShell = 12,
+        DerivedWeaponShell = 13,
+        DerivedSpecialAttackShell = 14,
+        DerivedOtherObjectShell = 15,
     }
 
     public enum BattleProductionOwnershipReason : byte
@@ -52,10 +51,9 @@ namespace NTSD.Simulation.Ecs
         CharacterRecovery = 10,
         CharacterFrameTick = 11,
         CharacterInput = 12,
-        PositiveLinkValidation = 13,
-        FramePostProcessOracle = 14,
-        CharacterPostFrameTailOracle = 15,
-        HitExecutionPlanOracle = 16,
+        FramePostProcessOracle = 13,
+        CharacterPostFrameTailOracle = 14,
+        HitExecutionPlanOracle = 15,
     }
 
     public readonly struct BattleProductionOwnershipEntry
@@ -103,7 +101,7 @@ namespace NTSD.Simulation.Ecs
     public sealed class BattleProductionOwnershipInventory
     {
         public const string Schema = "ntsd-battle-production-ownership/v1";
-        public const int ExpectedCanonicalOwnerCount = 9;
+        public const int ExpectedCanonicalOwnerCount = 8;
         public const int ExpectedRetainedMeasuredOracleCount = 3;
         public const int ExpectedUnityCompatibilityShellCount = 4;
 
@@ -117,7 +115,6 @@ namespace NTSD.Simulation.Ecs
             Canonical(BattleProductionOwnershipDomain.CharacterRecovery),
             Canonical(BattleProductionOwnershipDomain.CharacterFrameTick),
             Canonical(BattleProductionOwnershipDomain.CharacterInput),
-            Canonical(BattleProductionOwnershipDomain.PositiveLinkValidation),
             MeasuredOracle(
                 BattleProductionOwnershipDomain.FramePostProcess,
                 BattleProductionOwnershipReason.PerformanceGateRejectedCandidate),
@@ -202,11 +199,6 @@ namespace NTSD.Simulation.Ecs
                 BattleEcsCharacterInputPassMode.DataOriented)
             {
                 return BattleProductionOwnershipFailure.CharacterInput;
-            }
-            if (world.BattleEcsPositiveLinkValidationPassModeForDiagnostics !=
-                BattleEcsPositiveLinkValidationPassMode.DataOriented)
-            {
-                return BattleProductionOwnershipFailure.PositiveLinkValidation;
             }
             if (world.BattleEcsFramePostProcessPassModeForDiagnostics !=
                 BattleEcsFramePostProcessPassMode.Legacy)

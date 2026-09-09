@@ -4,6 +4,95 @@ using NTSD.Tools;
 
 namespace NTSD.Animation
 {
+    internal static class BattleNativeHardLandingMotionKernel
+    {
+        internal static void Consume(NTSDEntityRuntime runtime)
+        {
+            if (runtime == null)
+                return;
+
+            double dx = runtime.StatusDx1C0;
+            if (dx != 0.0)
+            {
+                if (dx > 500.0)
+                {
+                    runtime.Vx = dx - 550.0;
+                }
+                else
+                {
+                    bool facing = runtime.StatusHitFacing1D0 != 0;
+                    double facingAdjusted = facing ? -runtime.Vx : runtime.Vx;
+                    bool shouldClamp =
+                        (dx >= 0.0 && facingAdjusted < dx) ||
+                        (dx < 0.0 && facingAdjusted > dx);
+                    if (shouldClamp)
+                        runtime.Vx = facing ? -dx : dx;
+                }
+            }
+
+            double dy = runtime.StatusDy1C4;
+            if (dy != 0.0)
+                runtime.Vy = dy > 500.0 ? dy - 550.0 : runtime.Vy + dy;
+
+            double dz = runtime.StatusDz1C8;
+            if (dz != 0.0)
+                runtime.Vz = dz > 500.0 ? dz - 550.0 : runtime.Vz + dz;
+
+            runtime.StatusDx1C0 = 0;
+            runtime.StatusDy1C4 = 0;
+            runtime.StatusDz1C8 = 0;
+            runtime.StatusGain1CC = 0;
+        }
+    }
+
+    internal static class BattleNativeType0AirborneActionKernel
+    {
+        internal static int Resolve(
+            int frameState,
+            int currentAction,
+            double postGravityVy,
+            int environmentState320,
+            int upcomingPhase12)
+        {
+            if (frameState == LF2States.Falling)
+            {
+                int baseAction = currentAction < LF2StandardFrames.FallingFront5
+                    ? LF2StandardFrames.FallingFront
+                    : currentAction > LF2StandardFrames.FallingFront5 &&
+                      currentAction < LF2StandardFrames.FallingBack5
+                        ? LF2StandardFrames.FallingBack
+                        : -1;
+                if (baseAction < 0)
+                    return -1;
+
+                if (baseAction == LF2StandardFrames.FallingFront &&
+                    environmentState320 < 0)
+                {
+                    return postGravityVy < 12.0 && upcomingPhase12 >= 6
+                        ? LF2StandardFrames.FallingFront2
+                        : LF2StandardFrames.FallingFront1;
+                }
+
+                if (postGravityVy < -8.0)
+                    return baseAction;
+                if (postGravityVy < 1.0)
+                    return baseAction + 1;
+                if (postGravityVy < 8.0)
+                    return baseAction + 2;
+                return baseAction + 3;
+            }
+
+            if (frameState == LF2States.Burning &&
+                currentAction < LF2StandardFrames.Fire2 &&
+                postGravityVy > 1.0)
+            {
+                return LF2StandardFrames.Fire2;
+            }
+
+            return -1;
+        }
+    }
+
     /// <summary>本 tick 的移动是如何被边界锁或 Unity 边界约束处理的。</summary>
     /// <summary>
     /// 本 tick 的移动最终被哪一类边界规则拦住。
@@ -93,16 +182,66 @@ namespace NTSD.Animation
         internal BattleMechanicsStepResult(
             BoundaryResolveMode boundaryMode,
             bool landed,
-            double verticalVelocityBeforeLanding)
+            double verticalVelocityBeforeLanding,
+            double effectiveFloorY,
+            bool airborne,
+            bool effectiveFloorContact)
         {
             BoundaryMode = boundaryMode;
             Landed = landed;
             VerticalVelocityBeforeLanding = verticalVelocityBeforeLanding;
+            EffectiveFloorY = effectiveFloorY;
+            Airborne = airborne;
+            EffectiveFloorContact = effectiveFloorContact;
         }
 
         internal BoundaryResolveMode BoundaryMode { get; }
         internal bool Landed { get; }
         internal double VerticalVelocityBeforeLanding { get; }
+        internal double EffectiveFloorY { get; }
+        internal bool Airborne { get; }
+        internal bool EffectiveFloorContact { get; }
+    }
+
+    internal readonly struct BattleNonCharacterMechanicsStepResult
+    {
+        internal BattleNonCharacterMechanicsStepResult(
+            double previousPreciseY,
+            double contactY,
+            double effectiveFloorY,
+            int collisionYReference,
+            double verticalVelocityBeforeMove,
+            bool airborne)
+        {
+            PreviousPreciseY = previousPreciseY;
+            ContactY = contactY;
+            EffectiveFloorY = effectiveFloorY;
+            CollisionYReference = collisionYReference;
+            VerticalVelocityBeforeMove = verticalVelocityBeforeMove;
+            Airborne = airborne;
+        }
+
+        internal double PreviousPreciseY { get; }
+        internal double ContactY { get; }
+        internal double EffectiveFloorY { get; }
+        internal int CollisionYReference { get; }
+        internal double VerticalVelocityBeforeMove { get; }
+        internal bool Airborne { get; }
+
+        internal bool PenetratedEffectiveFloor =>
+            ContactY > EffectiveFloorY;
+
+        internal bool PositiveDownwardMotion =>
+            VerticalVelocityBeforeMove > 0.0001;
+
+        internal bool Type1LandingPredicate =>
+            ContactY > (CollisionYReference < 0
+                ? CollisionYReference
+                : 0.0001) &&
+            PositiveDownwardMotion;
+
+        internal bool Type4Or6LandingPredicate =>
+            PenetratedEffectiveFloor && PositiveDownwardMotion;
     }
 
     /// <summary>
@@ -204,12 +343,19 @@ namespace NTSD.Animation
                 return new BattleMechanicsStepResult(
                     BoundaryResolveMode.None,
                     false,
-                    0.0);
+                    0.0,
+                    0.0,
+                    false,
+                    false);
             }
 
             BoundaryResolveMode boundaryMode = BoundaryResolveMode.None;
             int groundedSnapshotY = runtime.YInt;
-            bool startedGrounded = groundedSnapshotY >= 0;
+            int collisionYReference = runtime.CollisionYReference;
+            double effectiveFloorY = collisionYReference < 0
+                ? collisionYReference
+                : 0.0;
+            bool startedGrounded = groundedSnapshotY >= collisionYReference;
 
             // C# 权威实现保留速度，只在本 tick 跳过被阻挡轴的位移。
             bool blockedX = (runtime.Vx > 0f && runtime.XBoundPositive) || (runtime.Vx < 0f && runtime.XBoundNegative);
@@ -231,20 +377,23 @@ namespace NTSD.Animation
             }
 
             double vyBeforeVerticalMove = runtime.Vy; // P0-f-2b B2-1: no (float) truncation — double landing Vy snapshot
+            double previousPreciseY = runtime.Y;
             runtime.Y += runtime.Vy;
 
-            bool caughtGroundResolve = runtime.Y >= -0.0001 &&
+            bool reachedFloor = runtime.Y >= effectiveFloorY;
+            bool caughtGroundResolve = reachedFloor &&
                                        ctx.frameData != null &&
                                        ctx.frameData.HasPrimaryCatchPoint &&
                                        ctx.frameData.PrimaryCatchPoint.Kind == 2;
             bool landed = !caughtGroundResolve &&
-                          runtime.Y > 0.0001 &&
-                          vyBeforeVerticalMove > 0.0001;
+                          previousPreciseY < effectiveFloorY &&
+                          reachedFloor;
 
-            if (landed)
-                runtime.Y = 0.0;
+            if (reachedFloor && !caughtGroundResolve)
+                runtime.Y = effectiveFloorY;
 
-            if (runtime.Y < -0.0001)
+            bool airborne = runtime.Y < effectiveFloorY;
+            if (airborne)
             {
                 runtime.Vy += ctx.gravity;
             }
@@ -254,7 +403,10 @@ namespace NTSD.Animation
             return new BattleMechanicsStepResult(
                 boundaryMode,
                 landed,
-                vyBeforeVerticalMove
+                vyBeforeVerticalMove,
+                effectiveFloorY,
+                airborne,
+                reachedFloor && !caughtGroundResolve
             );
         }
 
@@ -298,6 +450,50 @@ namespace NTSD.Animation
                 runtime.Vy += gravityToAdd;
 
             return crossedGround;
+        }
+
+        internal static BattleNonCharacterMechanicsStepResult
+            StepNonCharacterBattleLogic(
+                NTSDEntityRuntime runtime,
+                double gravityToAdd)
+        {
+            if (runtime == null)
+                return default;
+
+            if (runtime.Vx > 0 && !runtime.XBoundPositive)
+                runtime.X += runtime.Vx;
+            else if (runtime.Vx < 0 && !runtime.XBoundNegative)
+                runtime.X += runtime.Vx;
+
+            if (runtime.Vz > 0 && !runtime.ZBoundPositive)
+                runtime.Z += runtime.Vz;
+            else if (runtime.Vz < 0 && !runtime.ZBoundNegative)
+                runtime.Z += runtime.Vz;
+
+            runtime.ClearBounds();
+
+            int collisionYReference = runtime.CollisionYReference;
+            if (runtime.YInt >= collisionYReference)
+                UnitFriction(runtime);
+
+            double previousPreciseY = runtime.Y;
+            double verticalVelocityBeforeMove = runtime.Vy;
+            runtime.Y += runtime.Vy;
+            double contactY = runtime.Y;
+            double effectiveFloorY = collisionYReference < 0
+                ? collisionYReference
+                : 0.0;
+            bool airborne = contactY < effectiveFloorY;
+            if (airborne)
+                runtime.Vy += gravityToAdd;
+
+            return new BattleNonCharacterMechanicsStepResult(
+                previousPreciseY,
+                contactY,
+                effectiveFloorY,
+                collisionYReference,
+                verticalVelocityBeforeMove,
+                airborne);
         }
     }
 }

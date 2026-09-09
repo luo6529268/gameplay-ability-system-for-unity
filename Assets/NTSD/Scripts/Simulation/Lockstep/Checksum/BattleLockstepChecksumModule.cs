@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 4;
+        internal const int CurrentSchemaVersion = 23;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -261,8 +261,19 @@ namespace NTSD.Simulation
             builder.AddInt32(world.MaxRuntimeSlotsForServices);
             builder.AddInt32(world.ClaimedRuntimeSlotCountForServices);
             builder.AddInt32(world.ObjectCount);
+            builder.AddBoolean(world.OneTuInput);
             builder.AddUInt32(world.Rng?.State ?? 0U);
             builder.AddUInt64(world.Rng?.CallCount ?? 0UL);
+            NTSD28NativeRandomScalarState nativeRandom =
+                world.NativeRandom?.CaptureScalarState() ?? default;
+            builder.AddUInt32(nativeRandom.CrtState);
+            builder.AddUInt64(nativeRandom.CrtCalls);
+            builder.AddUInt32(nativeRandom.TableSeed);
+            builder.AddInt32(nativeRandom.SynchronizedCounter);
+            builder.AddInt32(nativeRandom.SynchronizedIndex);
+            builder.AddUInt64(nativeRandom.SynchronizedCalls);
+            builder.AddUInt32(nativeRandom.LastSynchronizedCallSite);
+            builder.AddUInt64(nativeRandom.SynchronizedTableHash);
         }
 
         private void AppendWorld(SimulationWorld world)
@@ -299,6 +310,9 @@ namespace NTSD.Simulation
             builder.AddInt32(flow?.InputPhase ?? 0);
             builder.AddInt32(flow?.FrameMod12 ?? 0);
             builder.AddInt32(flow?.FrameToggle ?? 0);
+            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase12 ?? 0);
+            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase3 ?? 0);
+            builder.AddUInt64(battle?.NativeWorldClock?.FrameSequence ?? 0UL);
             builder.AddInt32(flow?.AiDifficulty ?? 0);
             builder.AddInt32(flow?.AiRand3 ?? 0);
             builder.AddInt32(flow?.AiRand5 ?? 0);
@@ -315,6 +329,53 @@ namespace NTSD.Simulation
             builder.AddInt32(flow?.DjaGuardGlobal44F224 ?? 0);
             builder.AddBoolean(flow?.HumanInputPolledExternally ?? false);
             builder.AddBoolean(flow?.NeedClearInput ?? false);
+
+            NTSD28NativeFunctionKeySessionState functionKeys = battle?.FunctionKeys;
+            builder.AddInt32(functionKeys?.LockState ?? 0);
+            builder.AddBoolean(functionKeys?.HitResourceEnabled ?? true);
+            builder.AddUInt32(functionKeys?.F6EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F7EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F8EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F9EventCount ?? 0);
+            builder.AddBoolean(functionKeys?.PendingFullMp ?? false);
+            builder.AddByte((byte)(functionKeys?.PendingObjectCommand ??
+                NTSD28NativeFunctionKeyPendingObjectCommand.None));
+            builder.AddByte(functionKeys?.QueuedEventByte ?? 0);
+            builder.AddByte(functionKeys?.LastAcceptedEventByte ?? 0);
+
+            NTSD28HitResourceRulesRuntimeState hitResourceRules =
+                battle?.NativeHitResourceRules;
+            builder.AddInt32(hitResourceRules?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeHitGroupGate18);
+            builder.AddInt32(hitResourceRules?.ActiveModeAttackingPercent1C ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeAttackingPercent1C);
+            builder.AddInt32(hitResourceRules?.AttackerInjuryMpPercent34 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultAttackerInjuryMpPercent34);
+            builder.AddInt32(hitResourceRules?.TargetInjuryMpPercent38 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultTargetInjuryMpPercent38);
+            builder.AddInt32(hitResourceRules?.NegativeEnvironmentDamage90 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultNegativeEnvironmentDamage90);
+            NTSD28NativeComboRuntimeState nativeCombo = battle?.NativeCombo;
+            builder.AddBoolean(nativeCombo?.RecordPresent ??
+                NTSD28NativeComboRuntimeState.DefaultRecordPresent);
+            builder.AddInt32(nativeCombo?.Bound ??
+                NTSD28NativeComboRuntimeState.DefaultBound);
+            builder.AddInt32(nativeCombo?.Facing ??
+                NTSD28NativeComboRuntimeState.DefaultFacing);
+            builder.AddInt32(nativeCombo?.Respond ??
+                NTSD28NativeComboRuntimeState.DefaultRespond);
+            builder.AddInt32(nativeCombo?.CaughtAct ??
+                NTSD28NativeComboRuntimeState.DefaultCaughtAct);
+            NTSD28StandardHitRestRuntimeState standardHitRest =
+                battle?.NativeStandardHitRest;
+            builder.AddInt32(standardHitRest?.TimingReduction4A9FF4 ??
+                NTSD28StandardHitRestRuntimeState
+                    .DefaultTimingReduction4A9FF4);
 
             BattleSlotRuntimeState[] rosterSlots = roster?.Slots;
             builder.AddInt32(roster?.ActiveSlotCount ?? 0);
@@ -489,6 +550,8 @@ namespace NTSD.Simulation
 
             builder.AddInt32(isDefault ? 0 : runtime.ComboCountAtk);
             builder.AddInt32(isDefault ? 0 : runtime.ComboCountVic);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeComboHitCount1E0);
+            builder.AddUInt64(isDefault ? 0UL : runtime.NativeComboHitLastTick1E4);
             builder.AddInt32(isDefault ? 0 : runtime.FallDamageDiv);
             builder.AddInt32(isDefault ? 500 : runtime.HP);
             builder.AddInt32(isDefault ? 500 : runtime.HP3);
@@ -533,6 +596,13 @@ namespace NTSD.Simulation
             builder.AddByte(runtime?.PrevLeft ?? 0);
             builder.AddByte(runtime?.PrevRight ?? 0);
             builder.AddByte(runtime?.PrevUp ?? 0);
+            builder.AddInt32(runtime?.InputProxyCounter14C ?? 0);
+            builder.AddInt32(runtime?.InputProxySourceSlot178 ?? -1);
+            builder.AddInt32(runtime?.InputProxyEnabled17C ?? 0);
+            AppendNativeInputProxy(runtime?.NativeInputProxy);
+            AppendNativeActionCarriers(runtime, isDefault);
+            AppendNativeResourceDisplayCarriers(runtime, isDefault);
+            AppendNativeReactionStatusCarriers(runtime, isDefault);
 
             builder.AddInt32(isDefault ? 0 : runtime.Blink);
             builder.AddInt32(isDefault ? 0 : runtime.HP2Orig);
@@ -548,6 +618,7 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? 0 : runtime.HealTimer);
             builder.AddInt32(isDefault ? 0 : runtime.HitConfirmEa);
             builder.AddInt32(isDefault ? 0 : runtime.HitConfirm2);
+            builder.AddBoolean(!isDefault && runtime.SpecialHitLatch0EB);
             builder.AddInt32(runtime?.RenderPicOffset ?? 0);
             builder.AddInt32(runtime?.WeaponFlightCounter ?? 0);
             builder.AddInt32(runtime?.TransformOriginalObjectId ?? -1);
@@ -561,6 +632,111 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? -1000 : runtime.Unk3FC);
             builder.AddInt32(isDefault ? -1000 : runtime.Unk400);
             builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
+        }
+
+        private void AppendNativeInputProxy(NTSD28InputProxyBlock proxy)
+        {
+            for (int index = 0; index < 3; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.EdgeWindow[index]);
+            builder.AddByte(proxy?.DefendReentryCooldown ?? 0);
+            for (int index = 3; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.EdgeWindow[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.Previous[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.Current[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.ComboStateCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.ComboState[index]);
+            builder.AddByte(proxy?.ProxyTail ?? 0);
+        }
+
+        private void AppendNativeActionCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.InputActionLock130);
+            builder.AddInt32(isDefault ? 0 : runtime.InputLastAction144);
+            builder.AddInt32(isDefault ? 0 : runtime.InputRemapState138);
+            byte[] remap = isDefault ? null : runtime.InputRemapIndices13C;
+            bool hasCanonicalRemap =
+                remap != null &&
+                remap.Length == NTSDEntityRuntime.NativeInputRemapCount;
+            for (int index = 0;
+                 index < NTSDEntityRuntime.NativeInputRemapCount;
+                 index++)
+            {
+                builder.AddByte(hasCanonicalRemap
+                    ? remap[index]
+                    : (byte)index);
+            }
+            builder.AddInt32(isDefault ? 0 : runtime.BoundState198);
+            builder.AddInt32(isDefault ? 0 : runtime.InputGlobalRecordState20);
+            builder.AddInt32(isDefault ? 0 : runtime.InputModeCostMultiplier30);
+            builder.AddInt32(isDefault ? 0 : runtime.InputDoubleCost19C);
+            builder.AddInt32(isDefault ? 0 : runtime.InputCostWaived1B4);
+            builder.AddInt32(isDefault ? 0 : runtime.InputSpecialGate194);
+            builder.AddInt32(isDefault ? 0 : runtime.InputModeFallbackActionB8);
+            builder.AddBoolean(isDefault || runtime.InputLocalResourceEnabled49D034);
+            builder.AddInt32(isDefault ? 0 : runtime.InputHpConsumedTotal34C);
+            builder.AddInt32(isDefault ? 0 : runtime.InputMpConsumedTotal350);
+            builder.AddBoolean(!isDefault && runtime.FeatureGate4A8428);
+            builder.AddInt32(isDefault ? -1 : runtime.InputLinkedDefinitionId324);
+            builder.AddInt32(isDefault ? 0 : runtime.EnvironmentState320);
+            builder.AddInt32(isDefault ? 0 : runtime.CollisionYReference);
+        }
+
+        private void AppendNativeResourceDisplayCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.WeakTimer12C);
+            builder.AddInt32(isDefault ? 0 : runtime.MpRegenBonusTimer1A4);
+            builder.AddInt32(isDefault ? 0 : runtime.EffectiveMaxRegenDouble1A8);
+            builder.AddInt32(isDefault ? 0 : runtime.HpRegenDouble1AC);
+            builder.AddInt32(isDefault ? 0 : runtime.FullRestoreTimer1B0);
+            builder.AddInt32(isDefault ? -1 : runtime.OrdinaryCreditGate2F4);
+            builder.AddInt32(isDefault ? 0 : runtime.IncomingDamageScale340);
+            builder.AddInt32(isDefault ? 100 : runtime.ModeDamageScalePercent);
+            builder.AddInt32(isDefault ? 0 : runtime.InputScoreTotal348);
+            builder.AddInt32(isDefault ? 0 : runtime.KnockoutCount358);
+            builder.AddInt32(isDefault ? -1 : runtime.CatchSourceSlot90);
+            builder.AddInt32(isDefault ? 0 : runtime.Kind4SourceCount92);
+            builder.AddInt32(isDefault ? -1 : runtime.EnvironmentSourceSlot160);
+            builder.AddInt32(isDefault ? -1 : runtime.ImpactSourceSlot164);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayScore1F0);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayScoreStep1F4);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageTotal1F8);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageStep1FC);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHp200);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHpStep204);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHp208);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHpStep20C);
+        }
+
+        private void AppendNativeReactionStatusCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDx1C0);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDy1C4);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDz1C8);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusGain1CC);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusHitFacing1D0);
+            builder.AddInt32(isDefault ? 191 : runtime.StatusPickedAction1D4);
+            builder.AddInt32(isDefault ? 185 : runtime.StatusPickingAction1D8);
+            builder.AddInt32(isDefault ? 0 : runtime.HitResourceSuppression15C);
+            builder.AddInt32(isDefault ? 0 : runtime.HitResourceInjuryDouble1A0);
+            builder.AddInt32(isDefault ? 0 : runtime.DelayTimer134);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinTimer148);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonTimer120);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonType124);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonStrength128);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinOverrideActive170);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinOriginalBattleGroup174);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeComputerState1B8);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeTimer1BC);
+            builder.AddInt32(isDefault ? 0 : runtime.RuntimeArmorHp118);
+            builder.AddInt32(isDefault ? -1 : runtime.ArmorRecoveryTimer11C);
         }
 
         private void AppendStats(SimulationWorld world)

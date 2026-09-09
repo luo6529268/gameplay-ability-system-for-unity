@@ -160,6 +160,11 @@ namespace NTSD.Simulation
         internal AiUnifiedSnapshotShadowMode UnifiedShadowMode { get; set; }
         internal AiUnifiedSnapshotExecutionMode UnifiedExecutionMode { get; set; }
         internal int IndexedCanonicalFullOracleSampleInterval { get; set; }
+        internal INTSD28NativeRandomCallObserver AcceptedRandomTraceObserver
+        {
+            get;
+            set;
+        }
         internal AiDecisionSnapshot LegacyFallbackSnapshot { get; set; }
         internal AiDecisionSnapshot ShadowSnapshot { get; set; }
         internal AiDecisionSnapshot SharedSnapshot { get; set; }
@@ -1298,7 +1303,6 @@ namespace NTSD.Simulation
                 rows.Frame,
                 rows.HitJ,
                 rows.LinkState,
-                rows.KillCount,
                 rows.CachedTargetSlot,
                 rows.CoordinateTargetX,
                 rows.Vx,
@@ -1474,7 +1478,7 @@ namespace NTSD.Simulation
             rows.Frame[slot] = frameMotion.Frame;
             rows.HitJ[slot] = frameMotion.HitJ;
             rows.LinkState[slot] = relationLink.LinkState;
-            rows.KillCount[slot] = relationLink.KillCount;
+            rows.OwnerSlot[slot] = runtime.OwnerSlotIndex;
             rows.CachedTargetSlot[slot] = inputProjection.CachedTargetSlot;
             rows.CoordinateTargetX[slot] = inputProjection.CoordinateTargetX;
             rows.Vx[slot] = frameMotion.Vx;
@@ -1892,7 +1896,7 @@ namespace NTSD.Simulation
                    rows.Frame[slot] == frameMotion.Frame &&
                    rows.HitJ[slot] == frameMotion.HitJ &&
                    rows.LinkState[slot] == relationLink.LinkState &&
-                   rows.KillCount[slot] == relationLink.KillCount &&
+                   rows.OwnerSlot[slot] == runtime.OwnerSlotIndex &&
                    rows.CachedTargetSlot[slot] == inputProjection.CachedTargetSlot &&
                    rows.CoordinateTargetX[slot] == inputProjection.CoordinateTargetX &&
                    rows.Vx[slot].Equals(frameMotion.Vx) &&
@@ -2553,7 +2557,7 @@ namespace NTSD.Simulation
                         entity,
                         runtime.Frame);
                 rows.LinkState[slot] = runtime.LinkState;
-                rows.KillCount[slot] = runtime.KillCount;
+                rows.OwnerSlot[slot] = runtime.OwnerSlotIndex;
                 rows.CachedTargetSlot[slot] = runtime.Unk360;
                 rows.CoordinateTargetX[slot] = runtime.Unk3FC;
                 rows.Vx[slot] = runtime.Vx;
@@ -2598,6 +2602,7 @@ namespace NTSD.Simulation
             if (!inputCaptured)
                 return AiDecisionAvailability.SnapshotMissing;
 
+            snapshot.ClearSynchronizedRngCursor();
             snapshot.SelfSlot = selfSlot;
             snapshot.SelfGeneration = selfHandle.Generation;
             snapshot.SelfStableId = self.Runtime.StableId;
@@ -3010,6 +3015,8 @@ namespace NTSD.Simulation
             in AiDecisionWorldState worldState,
             uint rngState,
             ulong rngCalls,
+            NTSD28SynchronizedRandomCursor synchronizedCursor,
+            bool hasSynchronizedRandom,
             bool hasRuntimeFlow)
         {
             IndexedCanonicalEligibleCount++;
@@ -3020,6 +3027,13 @@ namespace NTSD.Simulation
                     SharedPassUnavailableReason == AiDecisionAvailability.None
                         ? AiDecisionAvailability.SnapshotMissing
                         : SharedPassUnavailableReason);
+                return false;
+            }
+            if (!hasSynchronizedRandom)
+            {
+                RecordIndexedCanonicalFallback(
+                    world,
+                    AiDecisionAvailability.SnapshotMissing);
                 return false;
             }
 
@@ -3046,12 +3060,15 @@ namespace NTSD.Simulation
                 RecordIndexedCanonicalFallback(world, captureAvailability);
                 return false;
             }
+            IndexedSnapshot.SetSynchronizedRngCursor(synchronizedCursor);
 
             AiDecisionWitness indexedWitness = default;
             bool indexedAvailable;
             long ordinal = IndexedCanonicalEligibleCount - 1L;
             int sampleInterval = IndexedCanonicalFullOracleSampleInterval;
-            bool captureOracleTrace = sampleInterval > 0 && ordinal % sampleInterval == 0;
+            bool captureOracleTrace =
+                AcceptedRandomTraceObserver != null ||
+                (sampleInterval > 0 && ordinal % sampleInterval == 0);
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalKernel);
             try
             {
@@ -3146,6 +3163,7 @@ namespace NTSD.Simulation
                     self,
                     IndexedSnapshot,
                     indexedWitness,
+                    world.NativeRandom,
                     hasRuntimeFlow);
             }
             finally
@@ -3162,20 +3180,66 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.IndexedCanonicalCommitApply);
             try
             {
-                aiInputWriter.CommitIndexedCanonicalDecision(self.Runtime, indexedWitness);
+                if (!aiInputWriter.CommitIndexedCanonicalDecision(
+                        self.Runtime,
+                        indexedWitness))
+                {
+                    throw new InvalidOperationException(
+                        "IndexedCanonical synchronized RNG commit became stale after validation.");
+                }
             }
             finally
             {
                 diagnostics?.EndPhase(BattleAiInputDetailPhase.IndexedCanonicalCommitApply);
             }
+            if (AcceptedRandomTraceObserver != null)
+            {
+                PublishAcceptedSynchronizedRandomTrace(
+                    synchronizedCursor,
+                    IndexedSnapshot,
+                    indexedWitness);
+            }
             IndexedCanonicalCommittedCount++;
             return true;
+        }
+
+        private void PublishAcceptedSynchronizedRandomTrace(
+            NTSD28SynchronizedRandomCursor origin,
+            AiDecisionSnapshot snapshot,
+            in AiDecisionWitness witness)
+        {
+            if (witness.RngTraceOverflow)
+            {
+                throw new InvalidOperationException(
+                    "Accepted AI RNG trace overflowed its preallocated diagnostic storage.");
+            }
+
+            int counter = origin.Counter;
+            int index = origin.Index;
+            ulong calls = origin.Calls;
+            int count = witness.RngDrawCount;
+            for (int traceIndex = 0; traceIndex < count; traceIndex++)
+            {
+                counter = (counter + 1) % 1234;
+                index =
+                    (index + 1) % NTSD28SynchronizedRandomState.TableSize;
+                calls++;
+                AcceptedRandomTraceObserver.OnSynchronizedNext(
+                    new NTSD28NativeSynchronizedCall(
+                        snapshot.RngTraceCallSites[traceIndex],
+                        snapshot.RngTraceModuli[traceIndex],
+                        snapshot.RngTraceValues[traceIndex],
+                        counter,
+                        index,
+                        calls));
+            }
         }
 
         private AiDecisionAvailability ValidateIndexedCanonicalCommit(
             LF2Entity self,
             AiDecisionSnapshot snapshot,
             in AiDecisionWitness witness,
+            NTSD28NativeRandom nativeRandom,
             bool hasRuntimeFlow)
         {
 #if UNITY_INCLUDE_TESTS
@@ -3243,6 +3307,14 @@ namespace NTSD.Simulation
             if (!hasRuntimeFlow)
                 return AiDecisionAvailability.SnapshotMissing;
 
+            if (nativeRandom == null ||
+                !witness.TryGetSynchronizedRngCursor(
+                    out NTSD28SynchronizedRandomCursor candidateCursor) ||
+                !nativeRandom.CanCommitSynchronizedCursor(candidateCursor))
+            {
+                return AiDecisionAvailability.SnapshotMissing;
+            }
+
             int selectedSlot = witness.FinalSelectedSlot;
             if (selectedSlot >= 0 &&
                 selectedSlot < rows.Capacity &&
@@ -3302,6 +3374,7 @@ namespace NTSD.Simulation
             uint rngState,
             ulong rngCalls)
         {
+            snapshot.ClearSynchronizedRngCursor();
             snapshot.SelfSlot = selfSlot;
             snapshot.SelfGeneration = selfGeneration;
             snapshot.SelfStableId = selfStableId;
@@ -3505,7 +3578,7 @@ namespace NTSD.Simulation
                     !MatchUnifiedSnapshotValue(production.Frame[slot], unified.Frame[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Frame, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.HitJ[slot], unified.HitJ[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.HitJ, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.LinkState[slot], unified.LinkState[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.LinkState, slot, ref mismatch) ||
-                    !MatchUnifiedSnapshotValue(production.KillCount[slot], unified.KillCount[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.KillCount, slot, ref mismatch) ||
+                    !MatchUnifiedSnapshotValue(production.OwnerSlot[slot], unified.OwnerSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.OwnerSlot, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.CachedTargetSlot[slot], unified.CachedTargetSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CachedTargetSlot, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.CoordinateTargetX[slot], unified.CoordinateTargetX[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CoordinateTargetX, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(BitConverter.DoubleToInt64Bits(production.Vx[slot]), BitConverter.DoubleToInt64Bits(unified.Vx[slot]), consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.VxBits, slot, ref mismatch) ||
@@ -3645,7 +3718,7 @@ namespace NTSD.Simulation
                    MatchUnifiedSnapshotValue(production.Frame[slot], unified.Frame[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Frame, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.HitJ[slot], unified.HitJ[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.HitJ, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.LinkState[slot], unified.LinkState[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.LinkState, slot, ref mismatch) &&
-                   MatchUnifiedSnapshotValue(production.KillCount[slot], unified.KillCount[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.KillCount, slot, ref mismatch) &&
+                   MatchUnifiedSnapshotValue(production.OwnerSlot[slot], unified.OwnerSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.OwnerSlot, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.CachedTargetSlot[slot], unified.CachedTargetSlot[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CachedTargetSlot, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.CoordinateTargetX[slot], unified.CoordinateTargetX[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.CoordinateTargetX, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(BitConverter.DoubleToInt64Bits(production.Vx[slot]), BitConverter.DoubleToInt64Bits(unified.Vx[slot]), consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.VxBits, slot, ref mismatch) &&
@@ -4597,7 +4670,7 @@ namespace NTSD.Simulation
                     }
                 }
 
-                if (self.Runtime.KillCount > -1) { specialGuard7A = true; specialGuard7B = true; }
+                if (self.Runtime.OwnerSlotIndex > -1) { specialGuard7A = true; specialGuard7B = true; }
                 if (world.Pp(self) > 250) specialGuard7B = true;
                 if (ai.InputPhase == 1 && world.Team(self) == 1) specialGuard7B = true;
                 if (world.Slot(self) >= 20 && ai.InputPhase == 4) specialGuard7B = true;
@@ -4795,7 +4868,7 @@ namespace NTSD.Simulation
                 return;
             }
 
-            if (targetState == 14 || Math.Abs(world.Y(target)) > 2)
+            if (targetState == 14 || Math.Abs(world.HitStop(target)) > 2)
             {
                 if (world.X(target) > ai.StageTargetX - 30)
                 {
@@ -4834,7 +4907,7 @@ namespace NTSD.Simulation
             }
 
             bool c8Allowed = (world.HasInputHistoryGate(self) && (Math.Abs(world.Z(self) - world.Z(target)) > 150 || Math.Abs(world.X(self) - world.X(target)) > 240)) ||
-                             (targetState != 14 && Math.Abs(world.Y(target)) <= 2);
+                             (targetState != 14 && Math.Abs(world.HitStop(target)) <= 2);
             if (c8Allowed && targetOid == 0xC8)
             {
                 if (world.X(target) > world.X(self) + 7) input.KeyRight = 1; else if (world.X(target) < world.X(self) - 7) input.KeyLeft = 1;
@@ -5673,7 +5746,7 @@ namespace NTSD.Simulation
                     targetTeam != selfTeam ||
                     rows.Hp[slot] <= 0 ||
                     rows.State[slot] == 14 ||
-                    Math.Abs(rows.Y[slot]) > 2)
+                    Math.Abs(rows.HitStop[slot]) > 2)
                 {
                     continue;
                 }
@@ -5709,7 +5782,7 @@ namespace NTSD.Simulation
                     world.Team(target) != world.Team(self) ||
                     world.Hp(candidate) <= 0 ||
                     world.State(candidate) == 14 ||
-                    Math.Abs(world.Y(candidate)) > 2)
+                    Math.Abs(world.HitStop(candidate)) > 2)
                 {
                     continue;
                 }
@@ -6151,7 +6224,9 @@ namespace NTSD.Simulation
                 fullSnapshot.RngTraceModuli.Length);
             for (int index = 0; index < traceCount; index++)
             {
-                if (fullSnapshot.RngTraceModuli[index] !=
+                if (fullSnapshot.RngTraceCallSites[index] !=
+                        indexedSnapshot.RngTraceCallSites[index] ||
+                    fullSnapshot.RngTraceModuli[index] !=
                         indexedSnapshot.RngTraceModuli[index] ||
                     fullSnapshot.RngTraceRaw[index] !=
                         indexedSnapshot.RngTraceRaw[index] ||
@@ -6170,6 +6245,7 @@ namespace NTSD.Simulation
         {
             return expected.Difficulty == actual.Difficulty &&
                    expected.AiPhaseGate == actual.AiPhaseGate &&
+                   expected.BattleMode == actual.BattleMode &&
                    expected.InputPhase == actual.InputPhase &&
                    expected.StageTargetX == actual.StageTargetX &&
                    expected.StageZMin == actual.StageZMin &&

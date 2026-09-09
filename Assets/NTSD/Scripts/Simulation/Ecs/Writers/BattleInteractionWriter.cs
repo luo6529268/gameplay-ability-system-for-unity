@@ -31,6 +31,9 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
+            if (kind == 3)
+                return TryApplyKind3Grab(attacker, victim, itr);
+
             int catchingFrame = itr.catchingact != null && itr.catchingact.Length > 0
                 ? itr.catchingact[0]
                 : LF2StandardFrames.Catching;
@@ -51,16 +54,8 @@ namespace NTSD.Simulation.Ecs
             attacker.SetCpointRawFramePreserveWait(catchingFrame);
             victim.SetCpointRawFramePreserveWait(caughtFrame);
 
-            if (kind == 1)
-            {
-                victim.Runtime.X = victimXInt;
-                victim.Runtime.Y = victim.Runtime.YInt;
-            }
-            else
-            {
-                attacker.Runtime.X = attackerXInt;
-                attacker.Runtime.Y = attackerYInt;
-            }
+            victim.Runtime.X = victimXInt;
+            victim.Runtime.Y = victim.Runtime.YInt;
 
             AlignGrabPair(
                 attacker,
@@ -76,6 +71,77 @@ namespace NTSD.Simulation.Ecs
             attacker.RefreshRuntimeSnapshot();
             victim.RefreshRuntimeSnapshot();
             return true;
+        }
+
+        private bool TryApplyKind3Grab(
+            LF2Entity attacker,
+            LF2Entity victim,
+            InteractionArea itr)
+        {
+            int attackerSlot = attacker.Runtime.SlotIndex;
+            int victimSlot = victim.Runtime.SlotIndex;
+            if (attackerSlot < 0 || victimSlot < 0)
+                return false;
+
+            int attackerXInt = attacker.Runtime.XInt;
+            int attackerYInt = attacker.Runtime.YInt;
+            int victimXInt = victim.Runtime.XInt;
+            bool attackerFacesLeft = attackerXInt > victimXInt;
+            bool victimFacesLeft = !attackerFacesLeft;
+            int catchingFrame = ResolveRelationAction(
+                itr.catchingact,
+                ref attackerFacesLeft);
+            int caughtFrame = ResolveRelationAction(
+                itr.caughtact,
+                ref victimFacesLeft);
+
+            // Alignment contract: NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001.
+            // Both authored frames are preflighted before any paired state is written.
+            if (attacker.FrameCache == null || victim.FrameCache == null ||
+                !attacker.FrameCache.HasFrame(catchingFrame) ||
+                !victim.FrameCache.HasFrame(caughtFrame))
+            {
+                return false;
+            }
+
+            attacker.Runtime.Vx = 0.0;
+            victim.Runtime.Vx = 0.0;
+            attacker.SwitchDir(attackerFacesLeft ? "left" : "right");
+            victim.SwitchDir(victimFacesLeft ? "left" : "right");
+            attacker.SetCpointRawFramePreserveWait(catchingFrame);
+            victim.SetCpointRawFramePreserveWait(caughtFrame);
+            attacker.Runtime.X = attackerXInt;
+            attacker.Runtime.Y = attackerYInt;
+
+            AlignGrabPair(
+                attacker,
+                victim,
+                attackerXInt,
+                attackerYInt,
+                victimXInt);
+
+            attacker.CaughtSlotIndex = victimSlot;
+            victim.Runtime.CatchSourceSlot90 = attackerSlot;
+            victim.CatcherSlotIndex = attackerSlot;
+            attacker.Runtime.CaughtDuration = itr.respond == 0 ? 300 : itr.respond;
+            victim.FallCounter = 0;
+            attacker.RefreshRuntimeSnapshot();
+            victim.RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        private static int ResolveRelationAction(
+            int[] encodedActions,
+            ref bool facesLeft)
+        {
+            int action = encodedActions != null && encodedActions.Length > 0
+                ? encodedActions[0]
+                : 0;
+            if (action >= 0)
+                return action;
+
+            facesLeft = !facesLeft;
+            return -action;
         }
 
         internal bool TryApplyPickup(

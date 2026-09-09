@@ -78,7 +78,10 @@ namespace NTSD.Simulation.Ecs
             ResetDiagnostics();
         }
 
-        internal bool TryExecute(LF2Entity entity, int tickIndex)
+        internal bool TryExecute(
+            LF2Entity entity,
+            int tickIndex,
+            bool applyFrameMotionTail = true)
         {
             runCount++;
             if (mode == BattleEcsCharacterInputPassMode.Legacy ||
@@ -107,20 +110,6 @@ namespace NTSD.Simulation.Ecs
 
             BattleAiInputDetailDiagnostics diagnostics =
                 world.ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
-            if (character.AiControlled)
-            {
-                diagnostics?.RecordAi();
-                diagnostics?.BeginPhase(BattleAiInputDetailPhase.RemainingAiDecision);
-                try
-                {
-                    world.PrepareAiInputBasic(character, tickIndex);
-                }
-                finally
-                {
-                    diagnostics?.EndPhase(BattleAiInputDetailPhase.RemainingAiDecision);
-                }
-            }
-
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.ComboUpdate);
             try
             {
@@ -134,7 +123,11 @@ namespace NTSD.Simulation.Ecs
                 diagnostics?.EndPhase(BattleAiInputDetailPhase.ComboUpdate);
             }
 
-            world.CharacterActionWriter.TryApplyExactCharacterFrameVelocityTail(character);
+            if (applyFrameMotionTail)
+            {
+                world.CharacterActionWriter
+                    .TryApplyExactCharacterFrameVelocityTail(character);
+            }
             return true;
         }
 

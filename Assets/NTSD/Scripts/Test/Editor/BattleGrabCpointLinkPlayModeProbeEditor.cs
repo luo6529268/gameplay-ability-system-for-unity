@@ -132,6 +132,12 @@ namespace NTSD.Test.Editor
             ProbeCharacter victim = null;
             int[] killBefore = CloneStats(world.KillStats);
             int[] damageBefore = CloneStats(world.DamageStats);
+            NTSD28NativeComboRuntimeState combo = world.Runtime.NativeCombo;
+            bool comboRecordBefore = combo.RecordPresent;
+            int comboBoundBefore = combo.Bound;
+            int comboFacingBefore = combo.Facing;
+            int comboRespondBefore = combo.Respond;
+            int comboCaughtActBefore = combo.CaughtAct;
             try
             {
                 statHolder = new ProbeCharacter(
@@ -192,11 +198,20 @@ namespace NTSD.Test.Editor
                 victim.Health.HP = 20;
                 victim.Health.HPBound = 100;
                 victim.Health.HP3 = 100;
-                victim.KillCount = -1;
+                victim.KillCount = 99;
                 victim.Unk344 = 1;
-                victim.FallDamageDiv = 100;
-                statHolder.KillStat = 0;
-                statHolder.ComboCountAtk = 0;
+                victim.FallDamageDiv = 200;
+                victim.Runtime.IncomingDamageScale340 = 0;
+                victim.Runtime.OrdinaryCreditGate2F4 = -1;
+                victim.Runtime.InputHpConsumedTotal34C = 17;
+                victim.Health.HPLost = 31;
+                victim.ComboCountVic = 29;
+                catcher.Runtime.OwnerSlotIndex = -1;
+                catcher.Runtime.InputScoreTotal348 = 11;
+                catcher.Runtime.KnockoutCount358 = 13;
+                combo.RestoreForSnapshot(true, 1, 1, 50, 1);
+                statHolder.KillStat = 19;
+                statHolder.ComboCountAtk = 23;
                 catcher.RefreshRuntimeSnapshot();
                 victim.RefreshRuntimeSnapshot();
                 statHolder.RefreshRuntimeSnapshot();
@@ -224,16 +239,24 @@ namespace NTSD.Test.Editor
                 Require(catcher.Runtime.CaughtDuration == 299,
                     "valid CPoint decrease did not run exactly once");
                 Require(victim.Health.HP == -10 && victim.Health.HPBound == 90 &&
-                        victim.ComboCountVic == 30,
-                    "held injury HP/HPBound/combo mismatch");
+                        victim.Runtime.InputHpConsumedTotal34C == 47 &&
+                        catcher.Runtime.InputScoreTotal348 == 41 &&
+                        catcher.Runtime.KnockoutCount358 == 14 &&
+                        catcher.Runtime.NativeComboHitCount1E0 == 1 &&
+                        catcher.Runtime.NativeComboHitLastTick1E4 ==
+                            world.NativeFrameSequence + 1UL,
+                    "held injury canonical HP/HPBound/consumed/score/KO mismatch");
                 Require(catcher.AttackingCounter == 1 && catcher.FrameDelay == 2 &&
                         victim.FrameDelay == -3,
                     "weapon-sync injury phase fields mismatch");
-                Require(statHolder.KillStat == 1 && statHolder.ComboCountAtk == 30,
-                    "holder-local held injury statistics mismatch");
-                Require(world.KillStats[1] == killBefore[1] + 1 &&
-                        world.DamageStats[1] == damageBefore[1] + 30,
-                    "world held injury statistics mismatch");
+                Require(statHolder.KillStat == 19 &&
+                        statHolder.ComboCountAtk == 23 &&
+                        victim.ComboCountVic == 29 &&
+                        victim.Health.HPLost == 31,
+                    "held injury changed legacy holder/combo/HPLost sentinels");
+                Require(world.KillStats[1] == killBefore[1] &&
+                        world.DamageStats[1] == damageBefore[1],
+                    "held injury changed legacy world statistic arrays");
                 Require(victim.Runtime.XInt == expectedX &&
                         victim.Runtime.YInt == expectedY &&
                         victim.Runtime.ZInt == expectedZ,
@@ -244,15 +267,18 @@ namespace NTSD.Test.Editor
                         victim.Runtime.FrameWaitCounter == 73,
                     "CPoint raw frame writer changed FrameWaitCounter");
 
-                world.ValidateHeldLinksAll(passTick);
-                rows.Add(CapturePass("positive-link-validation", catcher, victim, statHolder));
                 world.HeldObjectProcessAll(passTick);
                 rows.Add(CapturePass("second-held", catcher, victim, statHolder));
-                Require(victim.Health.HP == -10 && victim.ComboCountVic == 30 &&
-                        statHolder.KillStat == 1 && statHolder.ComboCountAtk == 30 &&
-                        world.KillStats[1] == killBefore[1] + 1 &&
-                        world.DamageStats[1] == damageBefore[1] + 30,
-                    "post-CPoint link/second-held duplicated held injury or stats");
+                Require(victim.Health.HP == -10 &&
+                        victim.Runtime.InputHpConsumedTotal34C == 47 &&
+                        catcher.Runtime.InputScoreTotal348 == 41 &&
+                        catcher.Runtime.KnockoutCount358 == 14 &&
+                        catcher.Runtime.NativeComboHitCount1E0 == 1 &&
+                        victim.ComboCountVic == 29 &&
+                        statHolder.KillStat == 19 && statHolder.ComboCountAtk == 23 &&
+                        world.KillStats[1] == killBefore[1] &&
+                        world.DamageStats[1] == damageBefore[1],
+                    "post-CPoint link/second-held duplicated canonical injury or changed legacy stats");
 
                 return new ValidGrabEvidence
                 {
@@ -271,6 +297,16 @@ namespace NTSD.Test.Editor
                     holderComboAfter = statHolder.ComboCountAtk,
                     killStatDelta = world.KillStats[1] - killBefore[1],
                     damageStatDelta = world.DamageStats[1] - damageBefore[1],
+                    victimInputHpConsumedAfter =
+                        victim.Runtime.InputHpConsumedTotal34C,
+                    catcherInputScoreAfter =
+                        catcher.Runtime.InputScoreTotal348,
+                    catcherKnockoutAfter =
+                        catcher.Runtime.KnockoutCount358,
+                    catcherNativeComboCountAfter =
+                        catcher.Runtime.NativeComboHitCount1E0,
+                    catcherNativeComboLastTickAfter =
+                        catcher.Runtime.NativeComboHitLastTick1E4,
                     expectedX = expectedX,
                     expectedY = expectedY,
                     expectedZ = expectedZ,
@@ -284,6 +320,12 @@ namespace NTSD.Test.Editor
             }
             finally
             {
+                combo.RestoreForSnapshot(
+                    comboRecordBefore,
+                    comboBoundBefore,
+                    comboFacingBefore,
+                    comboRespondBefore,
+                    comboCaughtActBefore);
                 RestoreStats(world.KillStats, killBefore);
                 RestoreStats(world.DamageStats, damageBefore);
                 UnregisterOwned(victim, "valid-victim");
@@ -332,6 +374,7 @@ namespace NTSD.Test.Editor
                 catcher.Runtime.CdAttack = 1;
                 catcher.Runtime.KeyUp = 1;
                 catcher.AttackingCounter = 2;
+                victim.WeaponCount = 71;
                 catcher.Runtime.FrameWaitCounter = 81;
                 victim.Runtime.FrameWaitCounter = 83;
                 catcher.RefreshRuntimeSnapshot();
@@ -339,22 +382,29 @@ namespace NTSD.Test.Editor
 
                 int passTick = driver.CurrentTickIndex + 200;
                 world.PreInteractionTickAll(passTick);
-                Require(catcher.Frame.N == 110 && catcher.Frame.Prev2 == 110,
-                    $"mismatch fallback throw source/next mismatch: " +
+                Require(catcher.Frame.N == 0 && catcher.Frame.Prev2 == 100,
+                    $"mismatch terminal action/history mismatch: " +
                     $"frame={catcher.Frame.N}, prev2={catcher.Frame.Prev2}");
-                Require(victim.Frame.N == 132 && victim.Frame.Prev2 == 132,
-                    "mismatch throw victim action/prev2 mismatch");
+                Require(victim.Frame.N == 212 && victim.Frame.Prev2 == 130,
+                    $"mismatch low-catcher/high-victim mixed advance must fall orphan; " +
+                    $"frame={victim.Frame.N}, prev2={victim.Frame.Prev2}");
                 Require(catcher.Runtime.CaughtDuration == 9,
                     "mismatch branch incorrectly ran decrease");
-                Require(Nearly(victim.Runtime.Vx, 8.0) &&
-                        Nearly(victim.Runtime.Vy, -4.0) &&
-                        Nearly(victim.Runtime.Vz, -3.0),
-                    "mismatch throw velocity mismatch");
-                Require(victim.Runtime.XInt == 140 && victim.Runtime.YInt == 30,
-                    $"mismatch fallback frame0 geometry mismatch: " +
-                    $"{victim.Runtime.XInt}/{victim.Runtime.YInt}");
-                Require(catcher.AttackingCounter == 0 && victim.WeaponCount == 7,
-                    "mismatch throw tail side-effect mismatch");
+                Require(Nearly(victim.Runtime.Vx, 0.0) &&
+                        Nearly(victim.Runtime.Vy, -3.0) &&
+                        Nearly(victim.Runtime.Vz, 0.0),
+                    "mismatch mixed advance orphan velocity mismatch");
+                Require(victim.Runtime.XInt == 160 &&
+                        Nearly(victim.Runtime.Y, -2.0) &&
+                        victim.Runtime.YInt == 0,
+                    $"mismatch mixed advance orphan position mismatch: " +
+                    $"xInt={victim.Runtime.XInt},y={victim.Runtime.Y}," +
+                    $"yInt={victim.Runtime.YInt}");
+                Require(catcher.AttackingCounter == 2 &&
+                        victim.Runtime.EnvironmentState320 == 0 &&
+                        victim.Runtime.EnvironmentSourceSlot160 == -1 &&
+                        victim.WeaponCount == 71,
+                    "mismatch terminal branch ran throw/environment tail");
                 Require(catcher.Runtime.FrameWaitCounter == 81 &&
                         victim.Runtime.FrameWaitCounter == 83,
                     "mismatch throw changed FrameWaitCounter");
@@ -375,7 +425,7 @@ namespace NTSD.Test.Editor
                     victimVy = victim.Runtime.Vy,
                     victimVz = victim.Runtime.Vz,
                     actionSkipped = catcher.Frame.N != 120,
-                    throwTailRan = catcher.Frame.N == 110 && victim.Frame.N == 132,
+                    throwTailRan = false,
                     frameWaitPreserved = catcher.Runtime.FrameWaitCounter == 81 &&
                                          victim.Runtime.FrameWaitCounter == 83,
                 };
@@ -420,6 +470,7 @@ namespace NTSD.Test.Editor
                 int catcherSlot = RequireSlot(catcher, "escape catcher");
                 int victimSlot = RequireSlot(victim, "escape victim");
                 catcher.CaughtSlotIndex = victimSlot;
+                victim.Runtime.CatchSourceSlot90 = catcherSlot;
                 victim.CatcherSlotIndex = catcherSlot;
                 catcher.Runtime.CaughtDuration = 2;
                 catcher.AttackingCounter = 2;
@@ -438,12 +489,14 @@ namespace NTSD.Test.Editor
                 Require(catcher.Frame.N == 0 && victim.Frame.N == 181,
                     "negative-duration escape frame mismatch");
                 Require(catcher.Runtime.CaughtDuration == -3 &&
-                        catcher.Runtime.Dir == "right",
-                    "negative-duration escape/dircontrol tail mismatch");
-                Require(catcher.HitCount == 1 && victim.HitCount == 1 &&
+                        catcher.Runtime.Dir == "left",
+                    "negative-duration escape must stop before dircontrol tail");
+                Require(catcher.HitCount == 0 && victim.HitCount == 0 &&
+                        catcher.AttackingCounter == 1 &&
+                        victim.AttackingCounter == 1 &&
                         Nearly(victim.KnockbackVx, 4.0) &&
                         Nearly(victim.KnockbackVy, -3.0),
-                    "negative-duration escape hit/knockback mismatch");
+                    "negative-duration escape counter/knockback mismatch");
                 Require(catcher.Frame.N != 120,
                     "negative-duration escape incorrectly ran action selection");
                 Require(catcher.Runtime.FrameWaitCounter == 91 &&
@@ -457,7 +510,7 @@ namespace NTSD.Test.Editor
                 Require(catcher.HitCount == 0 && victim.HitCount == 0 &&
                         Nearly(victim.Runtime.Vx, 4.0) &&
                         Nearly(victim.Runtime.Vy, -3.0),
-                    "FramePostProcess did not consume escape hit/knockback state");
+                    "FramePostProcess changed terminal escape motion");
 
                 return new EscapeDirControlEvidence
                 {
@@ -513,13 +566,15 @@ namespace NTSD.Test.Editor
                 positiveTarget.RefreshRuntimeSnapshot();
 
                 int passTick = driver.CurrentTickIndex + 400;
+#pragma warning disable CS0618
                 world.ValidateHeldLinksAll(passTick);
-                Require(positiveHolder.Runtime.LinkState == 0 &&
+#pragma warning restore CS0618
+                Require(positiveHolder.Runtime.LinkState == 5 &&
                         positiveHolder.Runtime.TargetSlotIndex == positiveTargetSlot &&
                         positiveHolder.Runtime.HeldWeaponStableId == positiveTargetSlot &&
                         positiveTarget.Runtime.HolderStableId == -1 &&
                         positiveTarget.Runtime.LinkState == -5,
-                    "invalid positive link did not preserve forward/reverse residue");
+                    "retired positive-link entry changed synthetic forward/reverse residue");
                 int positiveLinkAfter = positiveHolder.Runtime.LinkState;
                 int positiveTargetSlotAfter = positiveHolder.Runtime.TargetSlotIndex;
                 int positiveHeldSlotAfter = positiveHolder.Runtime.HeldWeaponStableId;
@@ -534,13 +589,15 @@ namespace NTSD.Test.Editor
                 negativeHolder.RefreshRuntimeSnapshot();
                 negativeChild.RefreshRuntimeSnapshot();
                 world.HeldObjectProcessAll(passTick);
+                int linkAfterFirst = negativeChild.Runtime.LinkState;
                 int holderAfterFirst = negativeChild.Runtime.HolderStableId;
                 world.HeldObjectProcessAll(passTick);
-                Require(negativeChild.Runtime.LinkState == 0 &&
+                Require(linkAfterFirst == -4 &&
+                        negativeChild.Runtime.LinkState == -4 &&
                         holderAfterFirst == negativeHolderSlot &&
                         negativeChild.Runtime.HolderStableId == negativeHolderSlot &&
                         negativeHolder.Runtime.TargetSlotIndex == -1,
-                    "invalid negative link did not preserve HolderStableId across both held scans");
+                    "invalid negative link was not fully preserved across both diagnostic scans");
 
                 return new LinkResidueEvidence
                 {
@@ -553,7 +610,7 @@ namespace NTSD.Test.Editor
                     positiveTargetLinkAfter = positiveTargetLinkAfter,
                     negativeHolderSlot = negativeHolderSlot,
                     negativeChildSlot = negativeChildSlot,
-                    negativeLinkAfterFirst = 0,
+                    negativeLinkAfterFirst = linkAfterFirst,
                     negativeHolderAfterFirst = holderAfterFirst,
                     negativeLinkAfterSecond = negativeChild.Runtime.LinkState,
                     negativeHolderAfterSecond = negativeChild.Runtime.HolderStableId,
@@ -588,6 +645,12 @@ namespace NTSD.Test.Editor
                 holderCombo = holder.ComboCountAtk,
                 worldKillStat1 = world.KillStats[1],
                 worldDamageStat1 = world.DamageStats[1],
+                victimInputHpConsumed =
+                    victim.Runtime.InputHpConsumedTotal34C,
+                catcherInputScore =
+                    catcher.Runtime.InputScoreTotal348,
+                catcherKnockout =
+                    catcher.Runtime.KnockoutCount358,
             };
         }
 
@@ -834,7 +897,7 @@ namespace NTSD.Test.Editor
         {
             result.status = "PASS";
             result.message =
-                "Live grab, CPoint/weapon-sync, escape/throw tails and link residue passed.";
+                "Live grab, canonical held accounting/cover, CPoint tails and link residue passed.";
             result.endTick = driver.CurrentTickIndex;
             CleanupOwnedEntities();
             RestoreStats(world.KillStats, baselineKillStats);
@@ -1033,6 +1096,9 @@ namespace NTSD.Test.Editor
             public int holderCombo;
             public int worldKillStat1;
             public int worldDamageStat1;
+            public int victimInputHpConsumed;
+            public int catcherInputScore;
+            public int catcherKnockout;
         }
 
         [Serializable]
@@ -1053,6 +1119,11 @@ namespace NTSD.Test.Editor
             public int holderComboAfter;
             public int killStatDelta;
             public int damageStatDelta;
+            public int victimInputHpConsumedAfter;
+            public int catcherInputScoreAfter;
+            public int catcherKnockoutAfter;
+            public int catcherNativeComboCountAfter;
+            public ulong catcherNativeComboLastTickAfter;
             public int expectedX;
             public int expectedY;
             public int expectedZ;

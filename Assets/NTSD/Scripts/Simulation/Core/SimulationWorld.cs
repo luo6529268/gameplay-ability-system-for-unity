@@ -119,16 +119,16 @@ namespace NTSD.Simulation
         private readonly BattleEcsCharacterPreFrameBoundsPass
             battleEcsCharacterPreFrameBoundsPass;
         private readonly BattleEcsFramePostProcessPass battleEcsFramePostProcessPass;
-        private readonly BattleEcsPositiveLinkValidationPass
-            battleEcsPositiveLinkValidationPass;
         private readonly BattleEcsCharacterFrameAdvancePass
             battleEcsCharacterFrameAdvancePass;
         private readonly BattleEcsCharacterRecoveryPass
             battleEcsCharacterRecoveryPass;
         private readonly BattleEcsCharacterFrameTickPass
             battleEcsCharacterFrameTickPass;
+        private bool suppressLegacyFrameMotionForSerialPass;
         private readonly BattleEcsCharacterInputPass
             battleEcsCharacterInputPass;
+        private readonly NTSD28InputTwoPassModule ntsd28InputTwoPassModule;
         private readonly BattleEcsCharacterPostFrameTailPass
             battleEcsCharacterPostFrameTailPass;
         private readonly BattleEcsHitExecutionPlan battleEcsHitExecutionPlan;
@@ -140,6 +140,7 @@ namespace NTSD.Simulation
         private readonly BattleRelationLinkWriter battleRelationLinkWriter;
         private readonly BattleVitalWriter battleVitalWriter;
         private readonly BattleCharacterActionWriter battleCharacterActionWriter;
+        private bool oneTuInput;
         private readonly BattleAiInputWriter battleAiInputWriter;
         private readonly BattleBoundaryWriter battleBoundaryWriter;
         private readonly BattleInteractionWriter battleInteractionWriter;
@@ -162,6 +163,7 @@ namespace NTSD.Simulation
         public ILF2SceneQuery SceneQuery { get; private set; }
         public INTSDItrKindService ItrKindService { get; private set; }
         public DeterministicRng Rng { get; private set; }
+        public NTSD28NativeRandom NativeRandom { get; private set; }
         public BattleRuntimeState Runtime { get; private set; }
         public int[] KillStats => Runtime.KillStats;
         public int[] DamageStats => Runtime.DamageStats;
@@ -282,11 +284,6 @@ namespace NTSD.Simulation
                 this,
                 _runtimeSlots,
                 runtimeSlotCapacity);
-            battleEcsPositiveLinkValidationPass =
-                new BattleEcsPositiveLinkValidationPass(
-                    this,
-                    _runtimeSlots,
-                    runtimeSlotCapacity);
             battleEcsCharacterFrameAdvancePass =
                 new BattleEcsCharacterFrameAdvancePass(this);
             battleEcsCharacterRecoveryPass =
@@ -295,6 +292,8 @@ namespace NTSD.Simulation
                 new BattleEcsCharacterFrameTickPass();
             battleEcsCharacterInputPass =
                 new BattleEcsCharacterInputPass(this);
+            ntsd28InputTwoPassModule =
+                new NTSD28InputTwoPassModule(this, _runtimeSlots);
             battleEcsCharacterPostFrameTailPass =
                 new BattleEcsCharacterPostFrameTailPass();
             battleEcsHitExecutionPlan = new BattleEcsHitExecutionPlan(
@@ -343,6 +342,7 @@ namespace NTSD.Simulation
             ItrKindService = new NTSDItrKindService();
             SceneQuery = new BruteForceSceneQuery(this, collisionBroadphase);
             Rng = new DeterministicRng(0x4E545344u);
+            NativeRandom = new NTSD28NativeRandom(0x4E545344u);
             Runtime = new BattleRuntimeState();
             Runtime.Reset();
         }
@@ -359,8 +359,18 @@ namespace NTSD.Simulation
         public int MatchSeed => Runtime?.Match?.Seed ?? 0;
         public int AiPhaseGate => Runtime?.Flow?.AiPhaseGate ?? 0;
         public int InputPhase => Runtime?.Flow?.InputPhase ?? 0;
+        public bool OneTuInput => oneTuInput;
+        internal bool ShouldSampleHumanCurrentInput => oneTuInput || InputPhase == 0;
+        internal bool UsesNTSD28NativeInputPipeline =>
+            aiExecutionProfile == BattleAiExecutionProfile.DataOrientedCanonical;
         public int FrameMod12 => Runtime?.Flow?.FrameMod12 ?? 0;
         public int FrameToggle => Runtime?.Flow?.FrameToggle ?? 0;
+        public int NativeResourcePhase12 =>
+            Runtime?.NativeWorldClock?.ResourcePhase12 ?? 0;
+        public int NativeResourcePhase3 =>
+            Runtime?.NativeWorldClock?.ResourcePhase3 ?? 0;
+        public ulong NativeFrameSequence =>
+            Runtime?.NativeWorldClock?.FrameSequence ?? 0UL;
         public int BattleExitCountdown => Runtime?.Flow?.BattleExitCountdown ?? 0;
         public int RouteOutRequest => Runtime?.Flow?.RouteOutRequest ?? 0;
         public int Mode2Request => Runtime?.Flow?.Mode2Request ?? 0;
@@ -433,9 +443,30 @@ namespace NTSD.Simulation
                 return;
 
             Runtime.Flow.CurrentTickIndex = tickIndex;
-            Runtime.Flow.InputPhase = (Runtime.Flow.InputPhase + 1) & 1;
+            Runtime.Flow.InputPhase = oneTuInput
+                ? 0
+                : (Runtime.Flow.InputPhase + 1) & 1;
             Runtime.Flow.FrameMod12 = tickIndex % 12;
             Runtime.Flow.FrameToggle = 1 - Runtime.Flow.FrameToggle;
+        }
+
+        internal void BeginNativeResourceTick()
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.NativeWorldClock ??= new NTSD28NativeWorldClockState();
+            Runtime.NativeWorldClock.AdvanceResourcePhases();
+        }
+
+        internal void BeginNativeFrameTick()
+        {
+            Runtime ??= new BattleRuntimeState();
+            Runtime.NativeWorldClock ??= new NTSD28NativeWorldClockState();
+            Runtime.NativeWorldClock.AdvanceFrameSequence();
+        }
+
+        public void SetOneTuInputForBattle(bool value)
+        {
+            oneTuInput = value;
         }
 
         public void SetStageProgressionValid(bool value)
@@ -498,12 +529,6 @@ namespace NTSD.Simulation
                 battleEcsCharacterPreFrameBoundsPass.Diagnostics;
         public BattleEcsFramePostProcessPassMode BattleEcsFramePostProcessPassModeForDiagnostics => battleEcsFramePostProcessPass.Mode;
         public BattleEcsFramePostProcessPassDiagnostics BattleEcsFramePostProcessPassDiagnosticsForDiagnostics => battleEcsFramePostProcessPass.Diagnostics;
-        public BattleEcsPositiveLinkValidationPassMode
-            BattleEcsPositiveLinkValidationPassModeForDiagnostics =>
-                battleEcsPositiveLinkValidationPass.Mode;
-        public BattleEcsPositiveLinkValidationPassDiagnostics
-            BattleEcsPositiveLinkValidationPassDiagnosticsForDiagnostics =>
-                battleEcsPositiveLinkValidationPass.Diagnostics;
         public BattleEcsCharacterFrameAdvancePassMode
             BattleEcsCharacterFrameAdvancePassModeForDiagnostics =>
                 battleEcsCharacterFrameAdvancePass.Mode;
@@ -528,6 +553,12 @@ namespace NTSD.Simulation
         public BattleEcsCharacterInputPassDiagnostics
             BattleEcsCharacterInputPassDiagnosticsForDiagnostics =>
                 battleEcsCharacterInputPass.Diagnostics;
+        public int LastNTSD28InputProducerFreezeCountForDiagnostics =>
+            ntsd28InputTwoPassModule.LastProducerFreezeCount;
+        public int LastNTSD28InputProxyCopyCountForDiagnostics =>
+            ntsd28InputTwoPassModule.LastProxyCopyCount;
+        public int LastNTSD28InputProxyRejectCountForDiagnostics =>
+            ntsd28InputTwoPassModule.LastProxyRejectCount;
         public BattleEcsCharacterPostFrameTailPassMode
             BattleEcsCharacterPostFrameTailPassModeForDiagnostics =>
                 battleEcsCharacterPostFrameTailPass.Mode;
@@ -951,7 +982,6 @@ namespace NTSD.Simulation
             battleEcsCharacterStageZPass.Reset();
             battleEcsCharacterPreFrameBoundsPass.Reset();
             battleEcsFramePostProcessPass.Reset();
-            battleEcsPositiveLinkValidationPass.Reset();
             battleEcsCharacterFrameAdvancePass.Reset();
             battleEcsCharacterRecoveryPass.Reset();
             battleEcsCharacterFrameTickPass.Reset();
@@ -1113,18 +1143,6 @@ namespace NTSD.Simulation
 
         internal void RunBattleEcsFramePostProcessPass() => battleEcsFramePostProcessPass.Execute();
 
-        public void ConfigureBattleEcsPositiveLinkValidationPassForDiagnostics(
-            BattleEcsPositiveLinkValidationPassMode mode)
-        {
-            if (_ticking || CurrentTickIndex != 0)
-            {
-                throw new System.InvalidOperationException(
-                    "The positive-link canonical writer can only change at a reset boundary.");
-            }
-
-            battleEcsPositiveLinkValidationPass.SetMode(mode);
-        }
-
         public void ConfigureBattleEcsCharacterFrameAdvancePassForDiagnostics(
             BattleEcsCharacterFrameAdvancePassMode mode)
         {
@@ -1221,18 +1239,6 @@ namespace NTSD.Simulation
             battleEcsCharacterPostFrameTailPass.SetMode(mode);
         }
 
-        internal void RestoreBattleEcsPositiveLinkValidationPassForDiagnostics(
-            BattleEcsPositiveLinkValidationPassMode mode)
-        {
-            if (_ticking || ClaimedRuntimeSlotCountForDiagnostics != 0)
-            {
-                throw new System.InvalidOperationException(
-                    "The positive-link canonical writer can only be restored after all runtime slots are released.");
-            }
-
-            battleEcsPositiveLinkValidationPass.SetMode(mode);
-        }
-
         public void ConfigureBattleHitExecutionPlanForDiagnostics(
             BattleHitExecutionPlanMode mode)
         {
@@ -1293,6 +1299,9 @@ namespace NTSD.Simulation
         internal bool ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects => battleEcsHitExecutionPlan.ShouldObserveLegacyConsumeEffects;
 
         internal bool ShouldObserveBattleHitExecutionPlanLegacyDisposition => battleEcsHitExecutionPlan.ShouldObserveLegacyDisposition;
+
+        internal bool ShouldObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt =>
+            battleEcsHitExecutionPlan.ShouldObserveLegacyFirstBodyResponseAttempt;
 
         internal bool ShouldObserveBattleHitExecutionPlanLegacyDispatch => battleEcsHitExecutionPlan.ShouldObserveLegacyDispatch;
 
@@ -1365,6 +1374,32 @@ namespace NTSD.Simulation
                 target,
                 resolvedItr,
                 disposition);
+        }
+
+        internal void PrepareBattleHitExecutionPlanLegacyFirstBodyResponseAttemptObservation(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea resolvedItr,
+            BattleHitCandidateDisposition disposition)
+        {
+            battleEcsHitExecutionPlan
+                .PrepareLegacyFirstBodyResponseAttemptObservation(
+                    attacker,
+                    target,
+                    resolvedItr,
+                    disposition);
+        }
+
+        internal void ObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt(
+            LF2Entity attacker,
+            LF2Entity target,
+            in BattleFirstBodyResponseAttemptResult attempt)
+        {
+            battleEcsHitExecutionPlan
+                .ObserveLegacyFirstBodyResponseAttempt(
+                    attacker,
+                    target,
+                    in attempt);
         }
 
         internal void PrepareBattleHitExecutionPlanLegacyConsumeEffectsObservation(
@@ -1553,6 +1588,12 @@ namespace NTSD.Simulation
         public void RenderDispatchAll(int tickIndex) => stageRenderModule.RenderDispatchAll(tickIndex);
 
         public void RenderDispatchAll(int tickIndex, bool buildPresentation) => stageRenderModule.RenderDispatchAll(tickIndex, buildPresentation);
+
+        internal void AdvanceNativeSparkLifecycleAll()
+        {
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                entity.AdvanceNativeSparkLifecycle();
+        }
 
         internal void CaptureSimulationWorkerPresentationFrame(int tickIndex) => stageRenderModule.CaptureSimulationWorkerPresentationFrame(tickIndex);
 
@@ -1788,6 +1829,13 @@ namespace NTSD.Simulation
         }
 
 #if UNITY_INCLUDE_TESTS
+        public void SetCharacterInputProducerPassMutationOverrideForSelfCheck(
+            System.Action<SimulationWorld, LF2Entity> mutationOverride)
+        {
+            runtimeHooks.CharacterInputProducerPassMutationOverride =
+                mutationOverride;
+        }
+
         public void SetCharacterInputPassMutationOverrideForSelfCheck(
             System.Action<SimulationWorld, LF2Entity> mutationOverride)
         {
@@ -1869,9 +1917,18 @@ namespace NTSD.Simulation
 
         public void HeldObjectProcessAll(int tickIndex) => queryAndLinkModule.HeldObjectProcessAll(tickIndex);
 
-        public void ValidateHeldLinksAll(int tickIndex) => battleEcsPositiveLinkValidationPass.Execute(tickIndex);
+        public long HeldInvalidReciprocalFailureCountForDiagnostics =>
+            queryAndLinkModule.HeldInvalidReciprocalFailureCountForDiagnostics;
 
-        internal void RunLegacyPositiveLinkValidation(int tickIndex) => queryAndLinkModule.RunLegacyPositiveLinkValidation(tickIndex);
+        public int LastHeldInvalidReciprocalFailureCountForDiagnostics =>
+            queryAndLinkModule
+                .LastHeldInvalidReciprocalFailureCountForDiagnostics;
+
+        [Obsolete(
+            "Positive-link validation is retired; relationship cleanup is owned by lifecycle transactions.")]
+        public void ValidateHeldLinksAll(int tickIndex)
+        {
+        }
 
         public LF2Entity FindEntityByRuntimeSlotForQuery(int runtimeSlot) => queryAndLinkModule.FindEntityByRuntimeSlotCurrent(runtimeSlot);
 
@@ -2243,6 +2300,11 @@ namespace NTSD.Simulation
 
         internal NTSDEntityRuntime GetRawRuntimeSlotState(int runtimeSlot) => registryModule.GetRawRuntimeSlotState(runtimeSlot);
 
+        internal void ProjectNativeHitResourceGateToActiveEntities(bool enabled)
+        {
+            registryModule.ProjectNativeHitResourceGateToActiveEntities(enabled);
+        }
+
         internal bool TryGetCurrentRuntimeHandle(
             int runtimeSlot,
             LF2Entity expectedEntity,
@@ -2327,7 +2389,6 @@ namespace NTSD.Simulation
             battleEcsCharacterStageZPass.Reset();
             battleEcsCharacterPreFrameBoundsPass.Reset();
             battleEcsFramePostProcessPass.Reset();
-            battleEcsPositiveLinkValidationPass.Reset();
             battleEcsCharacterFrameAdvancePass.Reset();
             battleEcsCharacterRecoveryPass.Reset();
             battleEcsCharacterFrameTickPass.Reset();
@@ -2337,12 +2398,14 @@ namespace NTSD.Simulation
 
             Runtime ??= new BattleRuntimeState();
             Runtime.Reset();
+            oneTuInput = false;
             // Unity lockstep owns one deterministic stream per SimulationWorld. The
             // explicit reset seed is an adapter boundary: it makes a world reset
             // replayable without sharing RNG state between independent Unity worlds.
             // It must remain distinct from MatchConfig.seed, which is applied by the
             // simulation driver at the formal battle-bootstrap boundary.
             Rng?.Seed(0x4E545344u);
+            NativeRandom?.ResetFromSeed(0x4E545344u);
             PendingSounds.Clear();
             _cameraX = 0;
             _cameraVel = 0;
@@ -2645,6 +2708,11 @@ namespace NTSD.Simulation
                     }
 
                     entity.ClearBattleEntryInputState();
+                    if (UsesNTSD28NativeInputPipeline)
+                    {
+                        NTSD28NativeComboStateMachine
+                            .InitializeNativeHistory(entity.Runtime);
+                    }
                     if (IsActiveForCurrentPass(entity))
                         RefreshRuntimeSnapshot(entity);
                 }
@@ -2653,7 +2721,8 @@ namespace NTSD.Simulation
 
         public void AiInputAndComboAll(int tickIndex)
         {
-            if (tickIndex <= 1)
+            // Alignment contract: NTSD28-B2-FIRST-TICK-CHARACTER-INPUT-AI-READINESS-001.
+            if (tickIndex <= 0)
                 return;
 
             EnsureAiSensingModeAvailableBeforeTick();
@@ -2716,7 +2785,27 @@ namespace NTSD.Simulation
 
         public void CharacterInputAll(int tickIndex)
         {
-            if (tickIndex <= 1)
+            RunCharacterInputPasses(
+                tickIndex,
+                includeNonCharacterHitFa: false,
+                applyFrameMotionTail: true);
+        }
+
+        public void NativeProducerSampleAndInputRouteAll(int tickIndex)
+        {
+            RunCharacterInputPasses(
+                tickIndex,
+                includeNonCharacterHitFa: true,
+                applyFrameMotionTail: false);
+        }
+
+        private void RunCharacterInputPasses(
+            int tickIndex,
+            bool includeNonCharacterHitFa,
+            bool applyFrameMotionTail)
+        {
+            // Alignment contract: NTSD28-B2-FIRST-TICK-CHARACTER-INPUT-AI-READINESS-001.
+            if (tickIndex <= 0)
                 return;
 
             LastCharacterInputProgressCommitCountForDiagnostics = 0;
@@ -2728,6 +2817,7 @@ namespace NTSD.Simulation
             BattleAiInputDetailDiagnostics aiDetailDiagnostics =
                 ActiveBattleAiInputDetailDiagnosticsForDiagnostics;
             aiDetailDiagnostics?.BeginTick(tickIndex);
+            ntsd28InputTwoPassModule.BeginPass();
             detailDiagnostics?.BeginPhase(
                 BattleTickDetailPhase.CharacterInputSnapshotBuild);
             BuildAiInputSlotSnapshot();
@@ -2743,6 +2833,50 @@ namespace NTSD.Simulation
             {
                 using (BeginDeferredMutationEntityPass())
                 {
+                    // NTSD 2.8 first completes every producer/sample before
+                    // any slot can consume a linked input proxy or route an action.
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                    {
+                        int dataObjectType =
+                            entity.GetCurrentDataObjectTypeForSimulation();
+                        if (dataObjectType != (int)LF2ObjectType.Character)
+                        {
+                            if (includeNonCharacterHitFa &&
+                                entity.Frame?.D?.hit_Fa > 0)
+                            {
+                                entity.RunFrameLogicBeforeAdvance();
+                                FlushQueuedObjectPointTasks();
+                                if (IsActiveForCurrentPass(entity))
+                                    RefreshRuntimeSnapshot(entity);
+                            }
+                            continue;
+                        }
+
+                        BeginAiUnifiedSnapshotExecutionConsumer(entity);
+                        entity.RunCharacterInputProducerPhaseForKnownCharacterDat(
+                            tickIndex);
+#if UNITY_INCLUDE_TESTS
+                        if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
+                        {
+                            aiRuntime.Decision
+                                .ApplySharedPostLegacyMutationForSelfCheck(entity);
+                        }
+                        runtimeHooks.CharacterInputProducerPassMutationOverride
+                            ?.Invoke(this, entity);
+#endif
+                        ntsd28InputTwoPassModule.FreezeProducerState(entity);
+
+                        bool refreshProducer = entity.AiControlled;
+#if UNITY_INCLUDE_TESTS
+                        refreshProducer |=
+                            runtimeHooks.CharacterInputProducerPassMutationOverride != null;
+#endif
+                        if (refreshProducer && IsActiveForCurrentPass(entity))
+                            RefreshCharacterInputSnapshotsAfterProducer(entity);
+                    }
+
+                    // The second ascending scan performs exact proxy copy first,
+                    // then routes the now-frozen input state for the same Tick.
                     foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                     {
                         if (entity.GetCurrentDataObjectTypeForSimulation() !=
@@ -2751,12 +2885,30 @@ namespace NTSD.Simulation
                             continue;
                         }
 
-                        BeginAiUnifiedSnapshotExecutionConsumer(entity);
-                        if (!battleEcsCharacterInputPass.TryExecute(entity, tickIndex))
-                            entity.RunCharacterInputPhaseForKnownCharacterDat(tickIndex);
+                        bool proxyApplied =
+                            ntsd28InputTwoPassModule.TryApplyProxy(entity);
+                        if (UsesNTSD28NativeInputPipeline)
+                        {
+                            ntsd28InputTwoPassModule
+                                .ProcessNativeSampledState(entity);
+                        }
+                        else if (proxyApplied)
+                        {
+                            NTSD28NativeComboStateMachine
+                                .ProjectExactStateToLegacy(entity.Runtime);
+                            if (entity is LF2Character character)
+                                character.InputState?.SyncFromRuntime(entity.Runtime);
+                        }
+                        if (!battleEcsCharacterInputPass.TryExecute(
+                                entity,
+                                tickIndex,
+                                applyFrameMotionTail))
+                        {
+                            entity.RunCharacterInputRoutingPhaseForKnownCharacterDat(
+                                tickIndex,
+                                applyFrameMotionTail);
+                        }
 #if UNITY_INCLUDE_TESTS
-                        if (aiDecisionShadowMode == AiDecisionShadowMode.SharedShadow)
-                            aiRuntime.Decision.ApplySharedPostLegacyMutationForSelfCheck(entity);
                         runtimeHooks.CharacterInputPassMutationOverride?.Invoke(this, entity);
 #endif
                         if (IsActiveForCurrentPass(entity))
@@ -2819,6 +2971,31 @@ namespace NTSD.Simulation
             }
         }
 
+        private void RefreshCharacterInputSnapshotsAfterProducer(LF2Entity entity)
+        {
+            RefreshRuntimeSnapshot(entity);
+            if (AiUnifiedSnapshotExecutionOwnsCurrentPass)
+            {
+                RefreshAiUnifiedSnapshotExecutionRowAfterCharacterInput(entity);
+                return;
+            }
+
+            if (AiDecisionRequiresSharedRows)
+                RefreshAiDecisionSharedRowAfterCharacterInput(entity);
+            if (aiSensingMode == AiSensingMode.SoAAiSensing)
+            {
+                ObserveAiCandidateCharacterInputMutation(entity);
+                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+            }
+            else
+            {
+                ObserveAiTeamHpSummaryMutation(entity);
+            }
+            if (aiSensingMode == AiSensingMode.SoAShadowAiSensing)
+                RefreshAiSoASensingShadowRowAfterCharacterInput(entity);
+            RefreshAiUnifiedSnapshotShadowRowAfterCharacterInput(entity);
+        }
+
         internal void RecordCharacterInputProgressCommitForDiagnostics(bool committed)
         {
             if (committed)
@@ -2829,16 +3006,67 @@ namespace NTSD.Simulation
 
         public void Oid5152RuntimeMaintenanceAll(int tickIndex) => passPipeline.RunOid5152Maintenance(tickIndex);
 
-        public void SerialTickAll(int tickIndex)
+        public void Oid5152FusionScanAll(int tickIndex) =>
+            passPipeline.RunOid5152FusionScan(tickIndex);
+
+        public void AdvanceOid5152ReactionTimerForDiagnostics(LF2Entity entity) =>
+            passPipeline.AdvanceOid5152ReactionTimer(entity);
+
+        internal void AdvanceOid5152ReactionTimerForModule(LF2Entity entity) =>
+            passPipeline.AdvanceOid5152ReactionTimer(entity);
+
+        internal bool SuppressLegacyFrameMotionForSerialPass =>
+            suppressLegacyFrameMotionForSerialPass;
+
+        public void NativeFrameMotionAll()
         {
-            BattleTickDetailPhaseDiagnostics detailDiagnostics =
-                ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
             using (BeginDeferredMutationEntityPass())
             {
-                // C# authority GameTick scans active slots in ascending order and completes
-                // one entity before advancing to the next slot. The dynamic scan lets a
-                // flushed producer in a later slot participate this tick; a reused lower slot
-                // waits until the next tick.
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    entity.ApplyNativeFrameMotionForWorldPass();
+                    if (IsActiveForCurrentPass(entity))
+                        RefreshRuntimeSnapshot(entity);
+                }
+            }
+        }
+
+        public void SerialTickAll(int tickIndex)
+        {
+            SerialTickAll(
+                tickIndex,
+                nativeFrameMotionAlreadyApplied: false,
+                nativePhysicsAlreadyApplied: false);
+        }
+
+        public void SerialTickAll(
+            int tickIndex,
+            bool nativeFrameMotionAlreadyApplied)
+        {
+            SerialTickAll(
+                tickIndex,
+                nativeFrameMotionAlreadyApplied,
+                nativePhysicsAlreadyApplied: false);
+        }
+
+        public void SerialTickAll(
+            int tickIndex,
+            bool nativeFrameMotionAlreadyApplied,
+            bool nativePhysicsAlreadyApplied)
+        {
+            bool previousSuppression = suppressLegacyFrameMotionForSerialPass;
+            suppressLegacyFrameMotionForSerialPass =
+                nativeFrameMotionAlreadyApplied;
+            try
+            {
+                BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                    ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                using (BeginDeferredMutationEntityPass())
+                {
+                // Legacy Unity scheduling scans active slots in ascending order and completes
+                // one entity before advancing to the next slot. NTSD 2.8-Logan instead owns a
+                // different global-barrier plus nested-tail contract; B3 must migrate this
+                // method without treating the current interleaving as authority.
                 foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
                     // Alignment contract R3-FRAME-001A: human poll and AI preparation write
@@ -2847,7 +3075,8 @@ namespace NTSD.Simulation
                     // producers or the battle-entry branch own any clear/roll boundary.
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.FrameAdvanceTransit);
-                    if (!battleEcsCharacterFrameAdvancePass.TryExecute(
+                    if (!nativePhysicsAlreadyApplied &&
+                        !battleEcsCharacterFrameAdvancePass.TryExecute(
                             entity,
                             tickIndex))
                     {
@@ -2860,7 +3089,14 @@ namespace NTSD.Simulation
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.FrameAdvanceEntityUpdate);
-                    entity.SimTU(tickIndex);
+                    if (nativePhysicsAlreadyApplied)
+                    {
+                        entity.ExecutePostNativePhysicsSerialForWorldPass(tickIndex);
+                    }
+                    else
+                    {
+                        entity.SimTU(tickIndex);
+                    }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.FrameAdvanceEntityUpdate);
                     if (!IsActiveForCurrentPass(entity))
@@ -2875,8 +3111,38 @@ namespace NTSD.Simulation
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
                 CleanupState9998Entities();
-                detailDiagnostics?.EndPhase(
-                    BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
+                }
+            }
+            finally
+            {
+                suppressLegacyFrameMotionForSerialPass = previousSuppression;
+            }
+        }
+
+        public void NativePhysicsAndDeadCharacterResourceNormalizeAll(int tickIndex)
+        {
+            using (BeginDeferredMutationEntityPass())
+            {
+                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                {
+                    if (battleEcsCharacterFrameAdvancePass.TryExecute(
+                            entity,
+                            tickIndex))
+                    {
+                        entity.MarkNativePhysicsCompletedForWorldPass(tickIndex);
+                    }
+                    else
+                    {
+                        entity.ExecuteNativePhysicsForWorldPass(tickIndex);
+                    }
+                    if (!IsActiveForCurrentPass(entity))
+                        continue;
+
+                    entity.NormalizeNativeDeadCharacterResourcesForWorldPass();
+                    RefreshRuntimeSnapshot(entity);
+                }
             }
         }
 
@@ -2897,6 +3163,8 @@ namespace NTSD.Simulation
         public void PostFrameAdvanceDeathCleanupAll(int tickIndex) => passPipeline.RunRespawn(tickIndex);
 
         public void EarlyFrameAdvanceSpecialsAll(int tickIndex) => passPipeline.RunEarlyFrameAdvance(tickIndex);
+
+        public void NativeTeleportAll() => passPipeline.RunNativeTeleport();
 
         public void FrameLogicBeforeAdvanceAll(int tickIndex)
         {
@@ -2925,6 +3193,12 @@ namespace NTSD.Simulation
         internal int FindFirstFreeFrameLogicRuntimeSlot() => FindFirstFreeRuntimeSlot(DynamicRuntimeSlotStart, RuntimeSlotCapacity);
 
         public void CaptureCollisionFrameSnapshotsAll()
+        {
+            PrepareAttackerRestForCandidateAll();
+            CaptureCollisionActionSnapshotsOnlyAll();
+        }
+
+        public void CaptureCollisionActionSnapshotsOnlyAll()
         {
             BruteForceSceneQuery bruteForce = SceneQuery as BruteForceSceneQuery;
             int currentTick = CurrentTickIndex;
@@ -3051,45 +3325,6 @@ namespace NTSD.Simulation
                     continue;
                 }
 
-                if (entity.HealTimer / 1000 == 1 && entity.Health.HP > 0)
-                {
-                    entity.HealTimer--;
-                    if (entity.HealTimer % 8 == 0)
-                    {
-                        if (entity.Health.HP < entity.Health.HPBound)
-                        {
-                            entity.Health.HP += 8;
-                            if (entity.Health.HP > entity.Health.HPBound)
-                                entity.Health.HP = entity.Health.HPBound;
-                        }
-                        else
-                        {
-                            entity.HealTimer = 0;
-                        }
-                    }
-
-                    if (entity.HealTimer % 1000 == 0)
-                        entity.HealTimer = 0;
-                }
-
-                if (entity.CatchTimer > 0 && entity.Health.HP > 0)
-                {
-                    entity.CatchTimer--;
-                    if (entity.CatchTimer % 8 == 0 && entity.Health.HP < entity.Health.HPBound)
-                    {
-                        entity.Health.HP += 8;
-                        if (entity.Health.HP > entity.Health.HPBound)
-                        {
-                            entity.Health.HP = entity.Health.HPBound;
-                            entity.CatchTimer = 0;
-                        }
-                    }
-                }
-
-                LF2FrameData frame = entity.Frame?.D;
-                if (frame != null && frame.state == 1700)
-                    entity.HealTimer = 1100;
-
                 entity.ClearHitCandidateCarriers();
                 entity.Runtime.TransientMp = 0;
                 entity.Runtime.TransientMp2 = 1000;
@@ -3142,20 +3377,61 @@ namespace NTSD.Simulation
             foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
                 entity.ItrRest?.TickArest();
-                ClearAttackExemptIfCurrentFrameCannotHit(entity);
+                ClearAttackExemptIfCurrentFrameCannotHit(
+                    entity,
+                    synchronizeMirror: false);
                 RefreshRuntimeSnapshot(entity);
             }
         }
 
-        private void ClearAttackExemptIfCurrentFrameCannotHit(LF2Entity entity)
+        public void PrepareAttackerRestForCandidateAll()
         {
-            if (entity == null || entity.AttackExempt <= 0)
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+            {
+                ClearAttackExemptIfCurrentFrameCannotHit(
+                    entity,
+                    synchronizeMirror: true);
+                RefreshRuntimeSnapshot(entity);
+            }
+        }
+
+        internal void SyncAttackerRestMirrorAfterFrameTickForModule(
+            LF2Entity entity,
+            int canonicalBeforeFrameTick,
+            int mirrorBeforeFrameTick)
+        {
+            if (entity?.ItrRest == null ||
+                mirrorBeforeFrameTick != canonicalBeforeFrameTick)
                 return;
+
+            entity.ItrRest.Arest = entity.AttackExempt > 0
+                ? entity.AttackExempt
+                : 0;
+        }
+
+        private void ClearAttackExemptIfCurrentFrameCannotHit(
+            LF2Entity entity,
+            bool synchronizeMirror)
+        {
+            if (entity == null)
+                return;
+
+            int current = entity.AttackExempt;
+            if (current <= 0)
+            {
+                if (synchronizeMirror && entity.ItrRest != null)
+                    entity.ItrRest.Arest = 0;
+                return;
+            }
 
             LF2CharacterData entityData = (entity as LF2LivingObject)?._FrameDataWrapper?.characterData
                 ?? entity.FrameCache?.Wrapper?.characterData;
             if (entityData == null)
+            {
+                if (synchronizeMirror && entity.ItrRest != null)
+                    entity.ItrRest.Arest = current;
                 return;
+            }
 
             LF2FrameData frame = entity.Frame?.D;
             bool clear = frame?.itrs == null || frame.itrs.Count == 0;
@@ -3178,7 +3454,11 @@ namespace NTSD.Simulation
             }
 
             if (clear)
-                entity.AttackExempt = 0;
+                current = 0;
+
+            entity.AttackExempt = current;
+            if (synchronizeMirror && entity.ItrRest != null)
+                entity.ItrRest.Arest = current;
         }
 
         public void PostInteractionTickAll(int tickIndex) => passPipeline.RunPostInteraction(tickIndex);
@@ -3188,6 +3468,15 @@ namespace NTSD.Simulation
         public void PreInteractionTickAll(int tickIndex) => passPipeline.RunPreInteraction(tickIndex);
 
         public void RandomWeaponDropTickAll(int tickIndex) => passPipeline.RunRandomWeaponDrop(tickIndex);
+
+        public void CaptureActiveWeaponObjectCountBeforeHits(int tickIndex) =>
+            passPipeline.CaptureActiveWeaponObjectCountBeforeHits(tickIndex);
+
+        public int ActiveWeaponObjectCountBeforeHitsForDiagnostics =>
+            passPipeline.ActiveWeaponObjectCountBeforeHits;
+
+        public int ActiveWeaponObjectCountCapturedTickForDiagnostics =>
+            passPipeline.ActiveWeaponObjectCountCapturedTick;
 
         public void Mode2RandomWeaponDropTailAll(int tickIndex) => passPipeline.RunMode2RandomWeaponDropTail(tickIndex);
 
@@ -3566,6 +3855,8 @@ namespace NTSD.Simulation
         internal int GetAiZForInputModule(LF2Entity entity) => Z(entity);
 
         internal int GetAiYForInputModule(LF2Entity entity) => Y(entity);
+        internal int GetAiHitStopForInputModule(LF2Entity entity) =>
+            entity?.Runtime?.HitStop ?? 0;
 
         internal bool IsCharacterDatForAiInputModule(LF2Entity entity) => IsCharacterDat(entity);
 
@@ -3737,6 +4028,11 @@ namespace NTSD.Simulation
             LF2Entity self,
             int tickIndex)
         {
+            NTSD28NativeRandom nativeRandom = NativeRandom;
+            NTSD28SynchronizedRandomCursor synchronizedCursor =
+                nativeRandom != null
+                    ? nativeRandom.CaptureSynchronizedCursor()
+                    : default;
             return aiRuntime.Decision.TryPrepareIndexedCanonical(
                 this,
                 battleCharacterInputWriter,
@@ -3748,6 +4044,8 @@ namespace NTSD.Simulation
                 CaptureAiDecisionWorldState(),
                 Rng?.State ?? 0,
                 Rng?.CallCount ?? 0,
+                synchronizedCursor,
+                nativeRandom != null,
                 Rng != null && Runtime?.Flow != null);
         }
 
@@ -3834,7 +4132,8 @@ namespace NTSD.Simulation
             get
             {
 #if UNITY_INCLUDE_TESTS
-                return runtimeHooks.CharacterInputPassMutationOverride != null;
+                return runtimeHooks.CharacterInputPassMutationOverride != null ||
+                       runtimeHooks.CharacterInputProducerPassMutationOverride != null;
 #else
                 return false;
 #endif
@@ -4201,22 +4500,22 @@ namespace NTSD.Simulation
             LF2Entity self,
             LF2Entity candidate,
             int inputPhase,
-            int candidateY)
+            int candidateRenderPhase)
         {
-            return aiRuntime.Input.AiAirRoleMutationMatchesBruteForSelfCheck(self, candidate, inputPhase, candidateY);
+            return aiRuntime.Input.AiAirRoleMutationMatchesBruteForSelfCheck(self, candidate, inputPhase, candidateRenderPhase);
         }
 
         internal bool AiAirRoleCountMutationForSelfCheck(
             LF2Entity candidate,
             int airState,
-            int airY,
+            int airRenderPhase,
             int groundState,
-            int groundY,
+            int groundRenderPhase,
             out int initialCount,
             out int airCount,
             out int groundCount)
         {
-            return aiRuntime.Input.AiAirRoleCountMutationForSelfCheck(candidate, airState, airY, groundState, groundY, out initialCount, out airCount, out groundCount);
+            return aiRuntime.Input.AiAirRoleCountMutationForSelfCheck(candidate, airState, airRenderPhase, groundState, groundRenderPhase, out initialCount, out airCount, out groundCount);
         }
 
         internal bool AiAirNullMutationInvalidatesCountForSelfCheck() => aiRuntime.Input.AiAirNullMutationInvalidatesCountForSelfCheck();
@@ -5352,6 +5651,13 @@ namespace NTSD.Simulation
             }
         }
 
+        internal void SetAcceptedAiRandomTraceObserverForDiagnostics(
+            INTSD28NativeRandomCallObserver observer)
+        {
+            // Alignment contract: NTSD28-B2-AI-ACCEPTED-RNG-PER-CALL-JOINT-TRACE-001.
+            aiRuntime.Decision.AcceptedRandomTraceObserver = observer;
+        }
+
         private bool AiDecisionRequiresSharedRows => true;
 
         public long AiDecisionShadowEligibleCountForDiagnostics { get => aiRuntime.Decision.ShadowEligibleCount; private set => aiRuntime.Decision.ShadowEligibleCount = value; }
@@ -5619,6 +5925,7 @@ namespace NTSD.Simulation
             {
                 Difficulty = Difficulty,
                 AiPhaseGate = AiPhaseGate,
+                BattleMode = BattleGameModeId,
                 InputPhase = InputPhase,
                 StageTargetX = Runtime?.Stage?.XMaxOverride > 0
                     ? Runtime.Stage.XMaxOverride

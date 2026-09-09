@@ -62,10 +62,19 @@ namespace NTSD.Simulation.Ecs
 
             diagnostics?.BeginPhase(BattleAiInputDetailPhase.ActionComboDirectResolve);
             bool result;
+            bool nativeActionRoutingOwned = character.RegisteredWorldForSimulation?
+                .UsesNTSD28NativeInputPipeline == true;
             try
             {
-                result = ApplyComboFrameInput(character, ref input);
-                result |= ApplyDirectFrameInput(character, ref input);
+                if (nativeActionRoutingOwned)
+                {
+                    result = false;
+                }
+                else
+                {
+                    result = ApplyComboFrameInput(character, ref input);
+                    result |= ApplyDirectFrameInput(character, ref input);
+                }
             }
             finally
             {
@@ -77,7 +86,8 @@ namespace NTSD.Simulation.Ecs
                 diagnostics?.BeginPhase(BattleAiInputDetailPhase.ActionReleaseResolve);
                 try
                 {
-                    result |= realCharacter.ProcessReleaseInput();
+                    if (!nativeActionRoutingOwned)
+                        result |= realCharacter.ProcessReleaseInput();
                 }
                 finally
                 {

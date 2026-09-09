@@ -88,20 +88,23 @@ namespace NTSD.Animation.LF2Objects
             int itrIndex = candidate.ItrIndex;
             if (itrIndex < 0 || itrIndex >= collisionFrame.itrs.Count)
                 return false;
+            InteractionArea originalItr = collisionFrame.itrs[itrIndex];
+            if (originalItr == null)
+                return false;
 
             SimulationWorld world = attacker.Match;
             LF2Entity target = candidate.ResolveCurrentTarget(world);
             if (target == null)
                 return false;
 
-            // C++ release collision.cpp consumes a valid frozen pair by checking vrest first.
-            // A nonzero hit_confirm2 then aborts the whole attacker only for character DAT targets,
-            // before runtime ITR replacement or any writer is reached.
+            // NTSD 2.8 checks the persistent special-hit latch after the frozen-pair/vrest gate
+            // and aborts the attacker only for character DAT targets, before ITR resolution.
+            // Alignment contract: NTSD28-B5-SPECIAL-HIT-LATCH-ATOMIC-PRODUCTION-INTEGRATION-001.
             bool canConsume = CanConsumeRecordedCandidate(attacker, target);
             if (!canConsume)
                 return false;
 
-            if (attacker.HitConfirm2 != 0 &&
+            if (attacker.Runtime.SpecialHitLatch0EB &&
                 target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
             {
                 return true;
@@ -114,11 +117,50 @@ namespace NTSD.Animation.LF2Objects
                 attacker,
                 target,
                 collisionFrame,
-                collisionFrame.itrs[itrIndex],
+                originalItr,
                 out bool zeroAttackerHpOnConsume,
                 out bool releaseHeavyHeldTargetOnConsume);
             if (runtimeItr == null)
                 return false;
+
+            // Alignment contract: NTSD28-B5-CANDIDATE-EFFECT-TYPE-PRODUCTION-FILTER-001.
+            // The release consumer revalidates the resolved runtime ITR before any
+            // disposition or writer can observe the candidate.
+            if (!BattleHitCandidateEffectTypeResolver.Accepts(
+                    runtimeItr.effect,
+                    target.GetCurrentDataObjectTypeForSimulation()))
+            {
+                return false;
+            }
+
+            // Alignment contract: NTSD28-B5-HIT-GROUP-ELIGIBILITY-ATOMIC-PRODUCTION-INTEGRATION-001.
+            // Formal candidates re-use their candidate-time pair values. Only
+            // hand-authored compatibility candidates are sampled live here.
+            BattleHitCandidatePairSnapshot pairSnapshot = candidate.PairSnapshot.Valid
+                ? candidate.PairSnapshot
+                : BattleHitCandidatePairSnapshotFactory.Capture(
+                    attacker,
+                    target,
+                    world);
+            int activeModeHitGroupGate18 =
+                world.Runtime?.NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState.DefaultActiveModeHitGroupGate18;
+            if (!BattleHitGroupEligibilityResolver.Resolve(
+                    originalItr.kind,
+                    runtimeItr.effect,
+                    in pairSnapshot,
+                    activeModeHitGroupGate18).Accepted)
+            {
+                return false;
+            }
+            if (originalItr.kind == 5 &&
+                runtimeItr.kind == 0 &&
+                pairSnapshot.TargetObjectType == (int)LF2ObjectType.Character &&
+                !BattleHitGroupEligibilityResolver
+                    .AcceptsSubstitutedKind5Character(in pairSnapshot))
+            {
+                return false;
+            }
 
             // Alignment contract: R4-COL-003. C++ collision.cpp evaluates this only
             // after its local kind5/4/9 runtime-itr conversions, then aborts the
@@ -148,7 +190,8 @@ namespace NTSD.Animation.LF2Objects
                 itrIndex,
                 runtimeItr,
                 zeroAttackerHpOnConsume,
-                releaseHeavyHeldTargetOnConsume);
+                releaseHeavyHeldTargetOnConsume,
+                pairSnapshot);
             BattleHitCandidateDisposition disposition =
                 LF2HitResolveRuntimeData.ResolveCandidateDisposition(
                     target,
@@ -186,6 +229,40 @@ namespace NTSD.Animation.LF2Objects
 
             if (!LF2HitResolveRuntimeData.IsAttackDisposition(disposition))
                 return false;
+
+            if (BattleFirstBodyResponseWriter
+                    .IsUnarmoredContinuationDisposition(disposition) &&
+                runtimeItr.kind == 0)
+            {
+                // Alignment contract:
+                // NTSD28-B5-FIRST-BDY-RESPONSE-ATOMIC-PRODUCTION-INTEGRATION-001.
+                // The native first-current-BDY branch precedes all generic consume
+                // effects and ordinary damage, and a success terminates only this
+                // attacker's remaining candidate sequence.
+                if (world.ShouldObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt)
+                {
+                    world.PrepareBattleHitExecutionPlanLegacyFirstBodyResponseAttemptObservation(
+                        attacker,
+                        target,
+                        runtimeItr,
+                        disposition);
+                }
+                BattleFirstBodyResponseAttemptResult firstBodyResponse =
+                    BattleFirstBodyResponseWriter.TryApply(
+                        world,
+                        attacker,
+                        target,
+                        runtimeItr);
+                if (world.ShouldObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt)
+                {
+                    world.ObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt(
+                        attacker,
+                        target,
+                        in firstBodyResponse);
+                }
+                if (firstBodyResponse.Applied)
+                    return true;
+            }
 
             if (world.ShouldObserveBattleHitExecutionPlanLegacyConsumeEffects)
             {
@@ -242,8 +319,22 @@ namespace NTSD.Animation.LF2Objects
                     disposition);
             }
 
+            int nativeComboAttackerSlot = attacker.Runtime?.SlotIndex ?? -1;
+            int nativeComboTargetSlot = target.Runtime?.SlotIndex ?? -1;
             consumer.BeforeDispatch(itrIndex);
-            bool dispatched = consumer.Dispatch(kindService, runtimeItr, target);
+            bool dispatched = disposition == BattleHitCandidateDisposition.Kind8
+                ? BattleKind8ControlRelationWriter.TryApply(
+                    world,
+                    attacker,
+                    target,
+                    runtimeItr)
+                : consumer.Dispatch(kindService, runtimeItr, target);
+            TryProduceNativeComboAfterDispatch(
+                world,
+                disposition,
+                dispatched,
+                nativeComboAttackerSlot,
+                nativeComboTargetSlot);
             if (observeWriterEffect)
                 world.ObserveBattleHitExecutionPlanLegacyWriterEffect(attacker, target);
             if (observeLifecycleEffect)
@@ -257,6 +348,21 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return dispatched && abortAfterSuccessfulHit;
+        }
+
+        internal static bool TryProduceNativeComboAfterDispatch(
+            SimulationWorld world,
+            BattleHitCandidateDisposition disposition,
+            bool dispatched,
+            int attackerSlot,
+            int targetSlot)
+        {
+            return dispatched &&
+                   disposition == BattleHitCandidateDisposition.Damage &&
+                   BattleNativeComboOrdinaryProducer.TryApply(
+                       world,
+                       attackerSlot,
+                       targetSlot);
         }
 
         private static bool CanConsumeRecordedCandidate(
@@ -311,7 +417,7 @@ namespace NTSD.Animation.LF2Objects
             return disposition == BattleHitCandidateDisposition.Kind8 ||
                    disposition == BattleHitCandidateDisposition.Kind14 ||
                    disposition == BattleHitCandidateDisposition.Kind10Or11 ||
-                   disposition == BattleHitCandidateDisposition.Kind15Or16 ||
+                   disposition == BattleHitCandidateDisposition.Kind15 ||
                    (disposition == BattleHitCandidateDisposition.Damage &&
                     world.CanProjectBattleHitExecutionPlanLegacyWriterEffect(
                         attacker,

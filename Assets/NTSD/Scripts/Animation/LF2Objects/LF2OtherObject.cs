@@ -63,6 +63,18 @@ namespace NTSD.Animation.LF2Objects
             frameModule.SimTU(tickIndex);
         }
 
+        internal override bool RunNativePhysicsForWorldPass(int tickIndex)
+        {
+            int dataType = GetCurrentDataObjectTypeForSimulation();
+            if (dataType == (int)LF2ObjectType.Character)
+            {
+                RunSharedCharacterDatFrameAdvanceAsCharacter(tickIndex);
+                return true;
+            }
+
+            return RunSharedNonCharacterDatFrameAdvance();
+        }
+
         protected override bool FrameEvent()
         {
             return frameModule.FrameEvent();

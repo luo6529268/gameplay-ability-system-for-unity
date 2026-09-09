@@ -195,7 +195,10 @@ namespace NTSD.Test
             var kb = Keyboard.current;
             if (kb == null) return;
 
-            if (kb.f6Key.wasPressedThisFrame)
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            bool nativeFunctionKeysOwnBattle = NativeFunctionKeysOwnBattle(driver);
+
+            if (!nativeFunctionKeysOwnBattle && kb.f6Key.wasPressedThisFrame)
             {
                 forceWalkingMode = !forceWalkingMode;
                 if (forceWalkingMode)
@@ -208,15 +211,7 @@ namespace NTSD.Test
                 }
             }
 
-            BattleMatchRuntimeState match = SimulationTickDriver.Instance?.World?.Runtime?.Match;
-            BattleFunctionKeyCommand reservedCommands = GameConfig.Instance != null
-                ? GameConfig.Instance.ResolveBattleFunctionKeyCommands(
-                    match?.LocalGameModeId ?? 0,
-                    match?.BattleGameModeId ?? 1)
-                : BattleFunctionKeyCommand.None;
-            bool f7ReservedForBattle =
-                (reservedCommands & BattleFunctionKeyCommand.InitializeStats) != 0;
-            if (!f7ReservedForBattle && kb.f7Key.wasPressedThisFrame)
+            if (!nativeFunctionKeysOwnBattle && kb.f7Key.wasPressedThisFrame)
             {
                 forceRunningMode = !forceRunningMode;
                 if (forceRunningMode)
@@ -230,6 +225,13 @@ namespace NTSD.Test
             }
 
             EnsureForceModesExclusive();
+        }
+
+        internal static bool NativeFunctionKeysOwnBattle(
+            SimulationTickDriver driver)
+        {
+            return driver?.World != null &&
+                   driver.LifecycleState == BattleRuntimeLifecycleState.Running;
         }
 
         private void EnsureForceModesExclusive()
@@ -263,11 +265,17 @@ namespace NTSD.Test
 
                 lf2.InjectDependencies(entityObj.transform, EntityModel.transform, $"TestPlayer_{i}");
                 lf2.ModuleInitialize();
+                BattleMatchConfigRuntimeAdapter.PrepareDirectParticipantRegistration(lf2, i);
 
                 EntityModel.SetLogicObject(lf2, null);
 
                 var frameData = CharacterAnimtorManager.Instance.GetCharacterConfig(characterId);
                 lf2.ModuleBind(frameData, characterId);
+                if (lf2.Runtime.SlotIndex != i)
+                {
+                    LF2ObjectPointFactory.ReleaseRejectedSpawn(EntityModel, lf2);
+                    continue;
+                }
                 lf2.Initialize(NTSDGlobal.Default.Health.HpFull, NTSDGlobal.Default.Health.MpFull);
                 lf2.Team = i + 1;
                 lf2.RelationTeam = i + 1;

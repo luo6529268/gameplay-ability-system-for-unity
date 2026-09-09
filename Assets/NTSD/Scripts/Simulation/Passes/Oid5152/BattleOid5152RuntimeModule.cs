@@ -19,6 +19,27 @@ namespace NTSD.Simulation
 
         internal void RunMaintenance(int tickIndex)
         {
+            RunFusionScan(tickIndex, advanceTimerBeforeFusion: true);
+        }
+
+        internal void RunFusionScan(int tickIndex)
+        {
+            RunFusionScan(tickIndex, advanceTimerBeforeFusion: false);
+        }
+
+        internal void AdvanceReactionTimer(LF2Entity entity)
+        {
+            if (entity?.Runtime == null || entity.Runtime.Unk338 <= 0)
+                return;
+
+            entity.Runtime.Unk338--;
+            world.RefreshRuntimeSnapshotForModule(entity);
+        }
+
+        private void RunFusionScan(
+            int tickIndex,
+            bool advanceTimerBeforeFusion)
+        {
             world.BeginDeferredEntityMutationPass();
             try
             {
@@ -32,11 +53,8 @@ namespace NTSD.Simulation
                         continue;
                     }
 
-                    if (entity.Runtime.Unk338 > 0)
-                    {
-                        entity.Runtime.Unk338--;
-                        world.RefreshRuntimeSnapshotForModule(entity);
-                    }
+                    if (advanceTimerBeforeFusion)
+                        AdvanceReactionTimer(entity);
 
                     if (entity.ObjectId == 51)
                     {

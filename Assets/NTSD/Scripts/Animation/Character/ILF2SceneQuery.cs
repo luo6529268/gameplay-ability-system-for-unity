@@ -88,6 +88,146 @@ namespace NTSD.Animation
         }
     }
 
+    /// <summary>
+    /// Candidate-time pair values frozen by the native collector before nearest
+    /// selection and later hit consumption. Default is the explicit invalid
+    /// compatibility value used by immediate and hand-authored queries.
+    /// </summary>
+    public readonly struct BattleHitCandidatePairSnapshot :
+        System.IEquatable<BattleHitCandidatePairSnapshot>
+    {
+        public BattleHitCandidatePairSnapshot(
+            bool valid,
+            int attackerObjectId,
+            int targetObjectId,
+            int attackerObjectType,
+            int targetObjectType,
+            int attackerBattleGroup,
+            int targetBattleGroup,
+            int attackerAction,
+            int targetAction,
+            int attackerCurrentState,
+            int targetCurrentState,
+            int attackerPreviousState,
+            int targetPreviousState,
+            int attackerTickState,
+            int targetTickState,
+            bool attackerFacing,
+            bool targetFacing,
+            bool linkedHolderPresent,
+            int linkedHolderBattleGroup)
+        {
+            Valid = valid;
+            AttackerObjectId = attackerObjectId;
+            TargetObjectId = targetObjectId;
+            AttackerObjectType = attackerObjectType;
+            TargetObjectType = targetObjectType;
+            AttackerBattleGroup = attackerBattleGroup;
+            TargetBattleGroup = targetBattleGroup;
+            AttackerAction = attackerAction;
+            TargetAction = targetAction;
+            AttackerCurrentState = attackerCurrentState;
+            TargetCurrentState = targetCurrentState;
+            AttackerPreviousState = attackerPreviousState;
+            TargetPreviousState = targetPreviousState;
+            AttackerTickState = attackerTickState;
+            TargetTickState = targetTickState;
+            AttackerFacing = attackerFacing;
+            TargetFacing = targetFacing;
+            LinkedHolderPresent = linkedHolderPresent;
+            LinkedHolderBattleGroup = linkedHolderBattleGroup;
+        }
+
+        public bool Valid { get; }
+        public int AttackerObjectId { get; }
+        public int TargetObjectId { get; }
+        public int AttackerObjectType { get; }
+        public int TargetObjectType { get; }
+        public int AttackerBattleGroup { get; }
+        public int TargetBattleGroup { get; }
+        public int AttackerAction { get; }
+        public int TargetAction { get; }
+        public int AttackerCurrentState { get; }
+        public int TargetCurrentState { get; }
+        public int AttackerPreviousState { get; }
+        public int TargetPreviousState { get; }
+        public int AttackerTickState { get; }
+        public int TargetTickState { get; }
+        public bool AttackerFacing { get; }
+        public bool TargetFacing { get; }
+        public bool LinkedHolderPresent { get; }
+        public int LinkedHolderBattleGroup { get; }
+
+        public bool Equals(BattleHitCandidatePairSnapshot other)
+        {
+            return Valid == other.Valid &&
+                   AttackerObjectId == other.AttackerObjectId &&
+                   TargetObjectId == other.TargetObjectId &&
+                   AttackerObjectType == other.AttackerObjectType &&
+                   TargetObjectType == other.TargetObjectType &&
+                   AttackerBattleGroup == other.AttackerBattleGroup &&
+                   TargetBattleGroup == other.TargetBattleGroup &&
+                   AttackerAction == other.AttackerAction &&
+                   TargetAction == other.TargetAction &&
+                   AttackerCurrentState == other.AttackerCurrentState &&
+                   TargetCurrentState == other.TargetCurrentState &&
+                   AttackerPreviousState == other.AttackerPreviousState &&
+                   TargetPreviousState == other.TargetPreviousState &&
+                   AttackerTickState == other.AttackerTickState &&
+                   TargetTickState == other.TargetTickState &&
+                   AttackerFacing == other.AttackerFacing &&
+                   TargetFacing == other.TargetFacing &&
+                   LinkedHolderPresent == other.LinkedHolderPresent &&
+                   LinkedHolderBattleGroup == other.LinkedHolderBattleGroup;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is BattleHitCandidatePairSnapshot other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                int hash = Valid ? 1 : 0;
+                hash = (hash * 397) ^ AttackerObjectId;
+                hash = (hash * 397) ^ TargetObjectId;
+                hash = (hash * 397) ^ AttackerObjectType;
+                hash = (hash * 397) ^ TargetObjectType;
+                hash = (hash * 397) ^ AttackerBattleGroup;
+                hash = (hash * 397) ^ TargetBattleGroup;
+                hash = (hash * 397) ^ AttackerAction;
+                hash = (hash * 397) ^ TargetAction;
+                hash = (hash * 397) ^ AttackerCurrentState;
+                hash = (hash * 397) ^ TargetCurrentState;
+                hash = (hash * 397) ^ AttackerPreviousState;
+                hash = (hash * 397) ^ TargetPreviousState;
+                hash = (hash * 397) ^ AttackerTickState;
+                hash = (hash * 397) ^ TargetTickState;
+                hash = (hash * 397) ^ (AttackerFacing ? 1 : 0);
+                hash = (hash * 397) ^ (TargetFacing ? 1 : 0);
+                hash = (hash * 397) ^ (LinkedHolderPresent ? 1 : 0);
+                hash = (hash * 397) ^ LinkedHolderBattleGroup;
+                return hash;
+            }
+        }
+
+        public static bool operator ==(
+            BattleHitCandidatePairSnapshot left,
+            BattleHitCandidatePairSnapshot right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(
+            BattleHitCandidatePairSnapshot left,
+            BattleHitCandidatePairSnapshot right)
+        {
+            return !left.Equals(right);
+        }
+    }
+
     public readonly struct SceneQueryHit
     {
         public readonly LF2Entity Target;
@@ -97,6 +237,7 @@ namespace NTSD.Animation
         public readonly InteractionArea RuntimeItr;
         public readonly bool ZeroAttackerHpOnConsume;
         public readonly bool ReleaseHeavyHeldTargetOnConsume;
+        public readonly BattleHitCandidatePairSnapshot PairSnapshot;
 
         public SceneQueryHit(
             LF2Entity target,
@@ -104,7 +245,8 @@ namespace NTSD.Animation
             int itrIndex = -1,
             InteractionArea runtimeItr = null,
             bool zeroAttackerHpOnConsume = false,
-            bool releaseHeavyHeldTargetOnConsume = false)
+            bool releaseHeavyHeldTargetOnConsume = false,
+            BattleHitCandidatePairSnapshot pairSnapshot = default)
         {
             Target = target;
             TargetSlot = target?.Runtime?.SlotIndex ?? -1;
@@ -113,6 +255,7 @@ namespace NTSD.Animation
             RuntimeItr = runtimeItr;
             ZeroAttackerHpOnConsume = zeroAttackerHpOnConsume;
             ReleaseHeavyHeldTargetOnConsume = releaseHeavyHeldTargetOnConsume;
+            PairSnapshot = pairSnapshot;
         }
 
         internal SceneQueryHit(
@@ -122,7 +265,8 @@ namespace NTSD.Animation
             int itrIndex,
             InteractionArea runtimeItr,
             bool zeroAttackerHpOnConsume,
-            bool releaseHeavyHeldTargetOnConsume)
+            bool releaseHeavyHeldTargetOnConsume,
+            BattleHitCandidatePairSnapshot pairSnapshot = default)
         {
             Target = target;
             TargetSlot = targetSlot;
@@ -131,6 +275,7 @@ namespace NTSD.Animation
             RuntimeItr = runtimeItr;
             ZeroAttackerHpOnConsume = zeroAttackerHpOnConsume;
             ReleaseHeavyHeldTargetOnConsume = releaseHeavyHeldTargetOnConsume;
+            PairSnapshot = pairSnapshot;
         }
 
         public LF2Entity ResolveCurrentTarget(SimulationWorld world)

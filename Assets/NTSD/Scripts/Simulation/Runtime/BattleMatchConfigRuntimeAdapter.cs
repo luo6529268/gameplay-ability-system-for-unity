@@ -1,10 +1,32 @@
 using System;
+using NTSD.Animation.LF2Objects;
 using NTSD.App;
 
 namespace NTSD.Simulation
 {
     public static class BattleMatchConfigRuntimeAdapter
     {
+        private const int DirectParticipantPhysicalSlotCount = 20;
+
+        public static bool PrepareDirectParticipantRegistration(
+            LF2Entity entity,
+            int physicalSlot)
+        {
+            if (entity == null ||
+                physicalSlot < 0 ||
+                physicalSlot >= DirectParticipantPhysicalSlotCount)
+            {
+                return false;
+            }
+
+            entity.SetRequiredRuntimeSlot(physicalSlot);
+            entity.OwnerEntityIndex = physicalSlot;
+            entity.HP2Orig = 1;
+            entity.HPOrig = 0;
+            entity.RespawnCount = 0;
+            return true;
+        }
+
         public static void ApplyMatchConfig(
             this BattleRosterRuntimeState roster,
             MatchConfig config)

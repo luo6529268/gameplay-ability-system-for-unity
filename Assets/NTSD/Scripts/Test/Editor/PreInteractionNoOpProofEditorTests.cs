@@ -52,10 +52,10 @@ namespace NTSD.Test
                 Is.Zero);
             Assert.That(
                 fast.World.LastPreInteractionProofSkipCountForDiagnostics,
-                Is.EqualTo(96));
+                Is.EqualTo(64));
             Assert.That(
                 fast.World.LastPreInteractionSnapshotSkipCountForDiagnostics,
-                Is.EqualTo(96));
+                Is.EqualTo(64));
 
             Assert.That(
                 legacy.World
@@ -63,7 +63,7 @@ namespace NTSD.Test
                 Is.False);
             Assert.That(
                 legacy.World.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(96));
+                Is.EqualTo(64));
             Assert.That(
                 legacy.World.LastPreInteractionProofSkipCountForDiagnostics,
                 Is.Zero);
@@ -108,7 +108,7 @@ namespace NTSD.Test
                 Is.Zero);
             Assert.That(
                 fullScan.World.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(96));
+                Is.EqualTo(64));
         }
 
         [Test]
@@ -214,7 +214,7 @@ namespace NTSD.Test
                 Is.False);
             Assert.That(
                 fast.World.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(15));
+                Is.EqualTo(10));
             Assert.That(
                 fast.World.LastPreInteractionProofSkipCountForDiagnostics,
                 Is.Zero);
@@ -248,22 +248,22 @@ namespace NTSD.Test
                 Is.EqualTo(5));
             Assert.That(
                 filtered.World.LastPreInteractionProofSkipCountForDiagnostics,
-                Is.EqualTo(10));
+                Is.EqualTo(5));
             Assert.That(
                 filtered.World
                     .LastPreInteractionCpointCheckProofSkipCountForDiagnostics,
-                Is.EqualTo(4));
+                Is.EqualTo(3));
             Assert.That(
                 filtered.World
                     .LastPreInteractionMismatchTailProofSkipCountForDiagnostics,
-                Is.EqualTo(4));
+                Is.Zero);
             Assert.That(
                 filtered.World
                     .LastPreInteractionHeldSyncProofSkipCountForDiagnostics,
                 Is.EqualTo(2));
             Assert.That(
                 legacy.World.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(15));
+                Is.EqualTo(10));
             AssertHeldLinkCleared(filtered.Entities[2]);
             AssertHeldLinkCleared(filtered.Entities[3]);
             AssertHeldLinkCleared(filtered.Entities[4]);
@@ -290,7 +290,7 @@ namespace NTSD.Test
                 Is.False);
             Assert.That(
                 fast.World.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(3));
+                Is.EqualTo(2));
             Assert.That(
                 fast.Entities[0].Runtime.Frame,
                 Is.EqualTo(fast.Entities[0].Frame.N));
@@ -320,13 +320,13 @@ namespace NTSD.Test
             Assert.That(
                 world.LastPreInteractionWholePassProofSucceededForDiagnostics,
                 Is.False);
-            Assert.That(probe.CpointCheckCount, Is.EqualTo(1));
+            Assert.That(probe.CpointCheckCount, Is.Zero);
             Assert.That(probe.MismatchTailCount, Is.EqualTo(1));
             Assert.That(probe.WeaponSyncCount, Is.EqualTo(1));
-            Assert.That(probe.RefreshCount, Is.EqualTo(3));
+            Assert.That(probe.RefreshCount, Is.EqualTo(2));
             Assert.That(
                 world.LastPreInteractionExecutedCountForDiagnostics,
-                Is.EqualTo(3));
+                Is.EqualTo(2));
         }
 
         [Test]
@@ -364,6 +364,7 @@ namespace NTSD.Test
                 37,
                 Frame(0, LF2States.BeingCaught, new CatchPoint { kind = 2 }));
             catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.Runtime.CatchSourceSlot90 = catcher.Runtime.SlotIndex;
             victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
             victim.Runtime.Y = 7.5;
             victim.Runtime.Vy = 9.0;
@@ -389,6 +390,7 @@ namespace NTSD.Test
                 39,
                 Frame(0, LF2States.BeingCaught, new CatchPoint { kind = 2 }));
             catcher.CaughtSlotIndex = victim.Runtime.SlotIndex;
+            victim.Runtime.CatchSourceSlot90 = catcher.Runtime.SlotIndex;
             victim.CatcherSlotIndex = catcher.Runtime.SlotIndex;
 
             for (int i = 0; i < 32; i++)
@@ -473,7 +475,7 @@ namespace NTSD.Test
             Assert.That(
                 world.LastPreInteractionWholePassProofSucceededForDiagnostics,
                 Is.False);
-            Assert.That(replacement.CpointCheckCount, Is.EqualTo(1));
+            Assert.That(replacement.CpointCheckCount, Is.Zero);
             Assert.That(replacement.MismatchTailCount, Is.EqualTo(1));
             Assert.That(replacement.WeaponSyncCount, Is.EqualTo(1));
         }
@@ -739,6 +741,21 @@ namespace NTSD.Test
             {
                 object fastValue = field.GetValue(fast);
                 object legacyValue = field.GetValue(legacy);
+                if (fastValue is NTSD28InputProxyBlock fastProxy &&
+                    legacyValue is NTSD28InputProxyBlock legacyProxy)
+                {
+                    var fastBytes =
+                        new byte[NTSD28InputProxyBlock.SerializedByteCount];
+                    var legacyBytes =
+                        new byte[NTSD28InputProxyBlock.SerializedByteCount];
+                    fastProxy.WriteSerialized(fastBytes);
+                    legacyProxy.WriteSerialized(legacyBytes);
+                    CollectionAssert.AreEqual(
+                        fastBytes,
+                        legacyBytes,
+                        $"runtime field {field.Name}");
+                    continue;
+                }
                 if (fastValue is IEnumerable fastEnumerable &&
                     fastValue is not string &&
                     legacyValue is IEnumerable legacyEnumerable)

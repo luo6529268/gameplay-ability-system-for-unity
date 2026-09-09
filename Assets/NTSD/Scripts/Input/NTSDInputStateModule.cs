@@ -14,6 +14,14 @@ namespace NTSD.Input
         private bool _jump;
         private bool _defend;
 
+        private bool _pendingRight;
+        private bool _pendingLeft;
+        private bool _pendingUp;
+        private bool _pendingDown;
+        private bool _pendingAttack;
+        private bool _pendingJump;
+        private bool _pendingDefend;
+
         private bool _prevRight;
         private bool _prevLeft;
         private bool _prevUp;
@@ -63,6 +71,8 @@ namespace NTSD.Input
         {
             _right = _left = _up = _down = false;
             _attack = _jump = _defend = false;
+            _pendingRight = _pendingLeft = _pendingUp = _pendingDown = false;
+            _pendingAttack = _pendingJump = _pendingDefend = false;
             _prevRight = _prevLeft = _prevUp = _prevDown = false;
             _prevAttack = _prevJump = _prevDefend = false;
             _cdRight = _cdLeft = _cdUp = _cdDown = 0;
@@ -72,6 +82,15 @@ namespace NTSD.Input
         }
 
         public void UpdateFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Entity owner)
+        {
+            UpdateFromBuffer(inputBuffer, tickIndex, owner, updateCurrent: true);
+        }
+
+        internal void UpdateFromBuffer(
+            SimInputBuffer inputBuffer,
+            int tickIndex,
+            LF2Entity owner,
+            bool updateCurrent)
         {
             SimInputEventBatch events = default;
             bool hasEvents = inputBuffer != null &&
@@ -90,7 +109,7 @@ namespace NTSD.Input
             }
 
             if (hasCompletePacket)
-                SetHeldStateFromRuntime(owner?.Runtime);
+                SetPendingHeldStateFromRuntime(owner?.Runtime);
 
             _prevRight = _right;
             _prevLeft = _left;
@@ -107,32 +126,50 @@ namespace NTSD.Input
                     SimInputEvent evt = events[i];
                     if (hasCompletePacket && !evt.completePacket)
                         continue;
-                    ApplyEvent(evt.key, evt.down);
+                    ApplyPendingEvent(evt.key, evt.down);
                 }
             }
 
-            DecrementCooldowns();
-            ApplyNewPressEdges(owner);
+            if (updateCurrent)
+                SamplePendingToCurrent();
+
+            bool nativeSecondPassOwnsProgress =
+                owner?.RegisteredWorldForSimulation
+                    ?.UsesNTSD28NativeInputPipeline == true;
+            if (!nativeSecondPassOwnsProgress)
+            {
+                DecrementCooldowns();
+                ApplyNewPressEdges(owner);
+            }
         }
 
         internal void PollFromBuffer(SimInputBuffer inputBuffer, int tickIndex, LF2Entity owner)
         {
-            UpdateFromBuffer(inputBuffer, tickIndex, owner);
+            PollFromBuffer(inputBuffer, tickIndex, owner, updateCurrent: true);
+        }
+
+        internal void PollFromBuffer(
+            SimInputBuffer inputBuffer,
+            int tickIndex,
+            LF2Entity owner,
+            bool updateCurrent)
+        {
+            UpdateFromBuffer(inputBuffer, tickIndex, owner, updateCurrent);
             SyncToRuntime(owner);
         }
 
-        private void SetHeldStateFromRuntime(NTSDEntityRuntime runtime)
+        private void SetPendingHeldStateFromRuntime(NTSDEntityRuntime runtime)
         {
             if (runtime == null)
                 return;
 
-            _right = runtime.KeyRight != 0;
-            _left = runtime.KeyLeft != 0;
-            _up = runtime.KeyUp != 0;
-            _down = runtime.KeyDown != 0;
-            _attack = runtime.KeyAttack != 0;
-            _jump = runtime.KeyJump != 0;
-            _defend = runtime.KeyDefend != 0;
+            _pendingRight = runtime.KeyRight != 0;
+            _pendingLeft = runtime.KeyLeft != 0;
+            _pendingUp = runtime.KeyUp != 0;
+            _pendingDown = runtime.KeyDown != 0;
+            _pendingAttack = runtime.KeyAttack != 0;
+            _pendingJump = runtime.KeyJump != 0;
+            _pendingDefend = runtime.KeyDefend != 0;
         }
 
         public bool ApplyFrameInput(LF2Entity character)
@@ -225,6 +262,14 @@ namespace NTSD.Input
             _jump = runtime.KeyJump != 0;
             _defend = runtime.KeyDefend != 0;
 
+            _pendingRight = _right;
+            _pendingLeft = _left;
+            _pendingUp = _up;
+            _pendingDown = _down;
+            _pendingAttack = _attack;
+            _pendingJump = _jump;
+            _pendingDefend = _defend;
+
             _prevRight = runtime.PrevRight != 0;
             _prevLeft = runtime.PrevLeft != 0;
             _prevUp = runtime.PrevUp != 0;
@@ -295,18 +340,29 @@ namespace NTSD.Input
             if (_cdDefendLock > 0) _cdDefendLock--;
         }
 
-        private void ApplyEvent(FuncKeyMask key, bool down)
+        private void ApplyPendingEvent(FuncKeyMask key, bool down)
         {
             switch (key)
             {
-                case FuncKeyMask.right: _right = down; break;
-                case FuncKeyMask.left: _left = down; break;
-                case FuncKeyMask.up: _up = down; break;
-                case FuncKeyMask.down: _down = down; break;
-                case FuncKeyMask.att: _attack = down; break;
-                case FuncKeyMask.jump: _jump = down; break;
-                case FuncKeyMask.def: _defend = down; break;
+                case FuncKeyMask.right: _pendingRight = down; break;
+                case FuncKeyMask.left: _pendingLeft = down; break;
+                case FuncKeyMask.up: _pendingUp = down; break;
+                case FuncKeyMask.down: _pendingDown = down; break;
+                case FuncKeyMask.att: _pendingAttack = down; break;
+                case FuncKeyMask.jump: _pendingJump = down; break;
+                case FuncKeyMask.def: _pendingDefend = down; break;
             }
+        }
+
+        private void SamplePendingToCurrent()
+        {
+            _right = _pendingRight;
+            _left = _pendingLeft;
+            _up = _pendingUp;
+            _down = _pendingDown;
+            _attack = _pendingAttack;
+            _jump = _pendingJump;
+            _defend = _pendingDefend;
         }
 
         private void ApplyNewPressEdges(LF2Entity owner)

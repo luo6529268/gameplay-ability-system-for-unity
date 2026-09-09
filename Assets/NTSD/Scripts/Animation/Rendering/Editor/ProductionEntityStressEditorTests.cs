@@ -3707,6 +3707,47 @@ namespace NTSD.Animation.Rendering.Editor
                 ProductionEntityStressRunner
                     .CaptureAiDecisionSoAShadowDiagnosticsForReport(report, world);
 
+                File.WriteAllText(
+                    Path.Combine(ProductionEntityStressPaths.ProjectRoot,
+                        "Temp/Goal5_UnifiedAiSnapshot_Counters.json"),
+                    Newtonsoft.Json.JsonConvert.SerializeObject(new
+                    {
+                        Utc = DateTime.UtcNow.ToString("O"),
+                        Stage = "After CharacterInputAll(2) and report capture; before original counter assertions",
+                        BuildCount = report.aiUnifiedSnapshotExecutionBuildCount,
+                        InitialCaptureCount = report.aiUnifiedSnapshotExecutionCanonicalInitialCaptureCount,
+                        CommittedPassCount = report.aiUnifiedSnapshotExecutionCommittedPassCount,
+                        RefreshCount = report.aiUnifiedSnapshotExecutionRefreshCount,
+                        ReadCount = report.aiUnifiedSnapshotExecutionReadCount,
+                        SlotVisitCount = report.aiUnifiedSnapshotExecutionSlotVisitCount,
+                        WorldCounters = new
+                        {
+                            BuildCount = world.AiUnifiedSnapshotExecutionBuildCountForDiagnostics,
+                            InitialCaptureCount = world.AiUnifiedSnapshotExecutionCanonicalInitialCaptureCountForDiagnostics,
+                            CommittedPassCount = world.AiUnifiedSnapshotExecutionCommittedPassCountForDiagnostics,
+                            RefreshCount = world.AiUnifiedSnapshotExecutionRefreshCountForDiagnostics,
+                            ReadCount = world.AiUnifiedSnapshotExecutionReadCountForDiagnostics,
+                            SlotVisitCount = world.AiUnifiedSnapshotExecutionSlotVisitCountForDiagnostics,
+                        },
+                        Phase = new
+                        {
+                            InputCallTick = 2,
+                            WorldTick = world.CurrentTickIndex,
+                            InputPhase = world.InputPhase,
+                            ExecutionMode = world.AiUnifiedSnapshotExecutionMode.ToString(),
+                            DecisionMode = world.AiDecisionExecutionMode.ToString(),
+                            ForceFullRebuild = world.ForceFullAiUnifiedSnapshotRebuildForDiagnostics,
+                            ForceFullPostRefresh = world.ForceFullCharacterInputPostRefreshForDiagnostics,
+                            RollForwardCount = world.AiUnifiedSnapshotExecutionRollForwardCountForDiagnostics,
+                            PreCommitFailureCount = world.AiUnifiedSnapshotExecutionPreCommitFailureCountForDiagnostics,
+                            PostCommitHardBreachCount = world.AiUnifiedSnapshotExecutionPostCommitHardBreachCountForDiagnostics,
+                            FirstFailureStage = world.AiUnifiedSnapshotExecutionFirstFailureStageForDiagnostics.ToString(),
+                            ObjectCount = world.ObjectCount,
+                            ClaimedSlotCount = world.ClaimedRuntimeSlotCountForDiagnostics,
+                            CharacterSlot = character.Runtime.SlotIndex,
+                        },
+                    }, Newtonsoft.Json.Formatting.Indented));
+
                 Assert.That(report.aiUnifiedSnapshotExecutionBuildCount, Is.EqualTo(1));
                 Assert.That(
                     report.aiUnifiedSnapshotExecutionSlotVisitCount,
@@ -3716,7 +3757,8 @@ namespace NTSD.Animation.Rendering.Editor
                     Is.EqualTo(1));
                 Assert.That(report.aiUnifiedSnapshotExecutionCommittedPassCount,
                     Is.EqualTo(1));
-                Assert.That(report.aiUnifiedSnapshotExecutionRefreshCount, Is.EqualTo(1));
+                // Refresh once after the AI producer and once at the input-routing tail.
+                Assert.That(report.aiUnifiedSnapshotExecutionRefreshCount, Is.EqualTo(2));
                 Assert.That(report.aiUnifiedSnapshotExecutionReadCount, Is.EqualTo(1));
                 Assert.That(report.aiUnifiedSnapshotExecutionLegacyFusedSensingBuildCount,
                     Is.Zero);
@@ -6119,13 +6161,12 @@ namespace NTSD.Animation.Rendering.Editor
                 "RuntimeMaintenance",
                 "InputClear",
                 "CharacterInput",
-                "EarlyFrameAdvance",
-                "FrameLogic",
+                "NativeTeleport",
+                "FrameMotion",
                 "FrameAdvance",
-                "DeathCleanup",
+                "Revival",
                 "StageBounds",
                 "PreInteraction",
-                "HeldLinkValidation",
                 "HeldProcess",
                 "CollisionSnapshot",
                 "PairVRest",
@@ -6142,6 +6183,11 @@ namespace NTSD.Animation.Rendering.Editor
                 "RandomWeaponDropTail",
                 "EntityPostFrameTail",
                 "BattleResults",
+                "NativeSparkAdvance",
+                "NestedPhysics",
+                "ActiveWeaponCount",
+                "NativeResourceTick",
+                "NativeFrameTick",
             };
 
             Assert.That(BattleTickPhaseDiagnostics.PhaseCount, Is.EqualTo(expected.Length));

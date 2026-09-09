@@ -172,6 +172,39 @@ namespace NTSD.Test
                     continue;
                 }
 
+                if (field.Name == nameof(NTSDEntityRuntime.InputRemapIndices13C))
+                {
+                    var remap = new byte[NTSDEntityRuntime.NativeInputRemapCount];
+                    for (int remapIndex = 0;
+                         remapIndex < remap.Length;
+                         remapIndex++)
+                    {
+                        remap[remapIndex] =
+                            (byte)(next++ % byte.MaxValue);
+                    }
+                    field.SetValue(runtime, remap);
+                    continue;
+                }
+
+                if (field.FieldType == typeof(NTSD28InputProxyBlock))
+                {
+                    NTSD28InputProxyBlock proxy =
+                        (NTSD28InputProxyBlock)field.GetValue(runtime);
+                    for (int key = 0; key < proxy.EdgeWindow.Length; key++)
+                        proxy.EdgeWindow[key] = (byte)(next++ % byte.MaxValue);
+                    proxy.DefendReentryCooldown =
+                        (byte)(next++ % byte.MaxValue);
+                    for (int key = 0; key < proxy.Previous.Length; key++)
+                    {
+                        proxy.Previous[key] = (byte)(next++ % byte.MaxValue);
+                        proxy.Current[key] = (byte)(next++ % byte.MaxValue);
+                    }
+                    for (int combo = 0; combo < proxy.ComboState.Length; combo++)
+                        proxy.ComboState[combo] = (byte)(next++ % byte.MaxValue);
+                    proxy.ProxyTail = (byte)(next++ % byte.MaxValue);
+                    continue;
+                }
+
                 if (field.FieldType == typeof(int))
                 {
                     field.SetValue(runtime, next++);
@@ -195,6 +228,10 @@ namespace NTSD.Test
                 else if (field.FieldType == typeof(double))
                 {
                     field.SetValue(runtime, next++ + 0.125d);
+                }
+                else if (field.FieldType == typeof(ulong))
+                {
+                    field.SetValue(runtime, (ulong)next++);
                 }
                 else
                 {
@@ -223,9 +260,27 @@ namespace NTSD.Test
 
                 object expectedValue = field.GetValue(expected);
                 object actualValue = field.GetValue(actual);
-                if (expectedValue is Array expectedArray &&
+                if (expectedValue is NTSD28InputProxyBlock expectedProxy &&
+                    actualValue is NTSD28InputProxyBlock actualProxy)
+                {
+                    Assert.That(actualProxy, Is.Not.SameAs(expectedProxy), field.Name);
+                    Assert.That(actualProxy.EdgeWindow,
+                        Is.EqualTo(expectedProxy.EdgeWindow), field.Name);
+                    Assert.That(actualProxy.DefendReentryCooldown,
+                        Is.EqualTo(expectedProxy.DefendReentryCooldown), field.Name);
+                    Assert.That(actualProxy.Previous,
+                        Is.EqualTo(expectedProxy.Previous), field.Name);
+                    Assert.That(actualProxy.Current,
+                        Is.EqualTo(expectedProxy.Current), field.Name);
+                    Assert.That(actualProxy.ComboState,
+                        Is.EqualTo(expectedProxy.ComboState), field.Name);
+                    Assert.That(actualProxy.ProxyTail,
+                        Is.EqualTo(expectedProxy.ProxyTail), field.Name);
+                }
+                else if (expectedValue is Array expectedArray &&
                     actualValue is Array actualArray)
                 {
+                    Assert.That(actualArray, Is.Not.SameAs(expectedArray), field.Name);
                     Assert.That(actualArray, Is.EqualTo(expectedArray), field.Name);
                 }
                 else

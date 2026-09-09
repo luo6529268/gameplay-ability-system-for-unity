@@ -220,7 +220,7 @@ namespace NTSD.EditorTools
                 "NeutralExactCharacters_SkipSnapshotsAndMatchForcedLegacy",
                 "ToggleGateAndTeleportTieSelection_MatchForcedLegacyAndRng",
                 "State500Branches_MatchForcedLegacy",
-                "State501OwnerChildrenDeadAndMissingReplacement_MatchLegacy",
+                "State501SelfAndChildren_AreInertAcrossFastAndForcedLegacy",
                 "ReusedState500Slot_UsesCurrentGeneration",
                 "WarmedNeutralFastPath_AllocatesNoManagedMemory",
             };

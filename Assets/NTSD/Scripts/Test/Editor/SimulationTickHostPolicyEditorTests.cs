@@ -1,14 +1,24 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Reflection;
 using NTSD.Simulation;
+using NTSD.Tools;
 using NUnit.Framework;
+using UnityEngine;
 
 namespace NTSD.Test
 {
     public sealed class SimulationTickHostPolicyEditorTests
     {
         [Test]
-        public void OfflineLocal_ExecutesAtMostOneAutomaticTickPerUpdate()
+        public void OfflineLocal_UsesExactCadenceAndDrainsAtMostTwoIntervalsPerUpdate()
         {
+            Assert.That(
+                SimulationConstants.SIM_DT,
+                Is.EqualTo(0.033f).Within(0.0000001f));
+            Assert.That(
+                SimulationConstants.FAST_SIM_DT,
+                Is.EqualTo(0.003f).Within(0.0000001f));
             var settings = new LockstepSimulationSettings
             {
                 maxCatchUpTicksPerFrame = 4,
@@ -24,16 +34,208 @@ namespace NTSD.Test
                 policy.ShouldBuildPresentationForNextTick(0, settings),
                 Is.True);
             policy.CommitAutomaticTick();
-            Assert.That(policy.ShouldAttemptAutomaticTick(1, settings), Is.False);
             Assert.That(
                 policy.Accumulator,
-                Is.GreaterThanOrEqualTo(SimulationConstants.SIM_DT * 2.99f));
+                Is.EqualTo(SimulationConstants.SIM_DT).Within(0.0000001f));
+            Assert.That(policy.ShouldAttemptAutomaticTick(1, settings), Is.True);
+            Assert.That(
+                policy.ShouldBuildPresentationForNextTick(1, settings),
+                Is.True);
+            policy.CommitAutomaticTick();
+            Assert.That(policy.Accumulator, Is.Zero.Within(0.0000001f));
+            Assert.That(policy.ShouldAttemptAutomaticTick(2, settings), Is.False);
 
             policy.BeginUpdate(0f, settings);
             Assert.That(
                 policy.ShouldAttemptAutomaticTick(0, settings),
+                Is.False,
+                "two active intervals were drained without unbounded catch-up");
+        }
+
+        [Test]
+        public void OfflineLocal_CapsWallClockDebtAtTwoActiveIntervals()
+        {
+            var settings = new LockstepSimulationSettings
+            {
+                maxCatchUpTicksPerFrame = 4,
+                maxBacklogTicks = 8,
+            };
+            settings.Normalize();
+            var policy = new OfflineLocalTickPolicy();
+
+            policy.BeginUpdate(SimulationConstants.SIM_DT * 20f, settings);
+
+            Assert.That(
+                policy.Accumulator,
+                Is.EqualTo(SimulationConstants.SIM_DT * 2f)
+                    .Within(0.0000001f));
+        }
+
+        [Test]
+        public void OfflineLocal_CadenceChangeClearsDebtAndSameModePreservesIt()
+        {
+            var settings = new LockstepSimulationSettings();
+            var policy = new OfflineLocalTickPolicy();
+            policy.BeginUpdate(SimulationConstants.SIM_DT, settings);
+
+            Assert.That(
+                policy.SetCadenceMode(SimulationHostCadenceMode.Fast),
+                Is.True);
+            Assert.That(policy.Accumulator, Is.Zero);
+            Assert.That(
+                policy.ActiveIntervalSeconds,
+                Is.EqualTo(0.003f).Within(0.0000001f));
+
+            policy.BeginUpdate(0.02f, settings);
+            Assert.That(
+                policy.Accumulator,
+                Is.EqualTo(0.006f).Within(0.0000001f));
+            Assert.That(
+                policy.SetCadenceMode(SimulationHostCadenceMode.Fast),
+                Is.False);
+            Assert.That(
+                policy.Accumulator,
+                Is.EqualTo(0.006f).Within(0.0000001f));
+
+            Assert.That(
+                policy.SetCadenceMode(SimulationHostCadenceMode.Normal),
+                Is.True);
+            Assert.That(policy.Accumulator, Is.Zero);
+        }
+
+        [Test]
+        public void HostControl_AppliesF1ThenF2ThenF5WithPausedOnlySingleStep()
+        {
+            SimulationHostControlTransition runningF2 =
+                SimulationHostControl.Apply(
+                    SimulationHostControlCommand.SingleStep,
+                    new SimulationHostControlState(
+                        paused: false,
+                        SimulationHostCadenceMode.Normal));
+            Assert.That(runningF2.RequestSingleStep, Is.False);
+            Assert.That(runningF2.State.Paused, Is.False);
+
+            SimulationHostControlTransition pausedF2 =
+                SimulationHostControl.Apply(
+                    SimulationHostControlCommand.SingleStep,
+                    new SimulationHostControlState(
+                        paused: true,
+                        SimulationHostCadenceMode.Normal));
+            Assert.That(pausedF2.RequestSingleStep, Is.True);
+            Assert.That(pausedF2.State.Paused, Is.True);
+
+            SimulationHostControlTransition folded =
+                SimulationHostControl.Apply(
+                    SimulationHostControlCommand.TogglePause |
+                    SimulationHostControlCommand.SingleStep |
+                    SimulationHostControlCommand.ToggleFastMode,
+                    new SimulationHostControlState(
+                        paused: false,
+                        SimulationHostCadenceMode.Normal));
+            Assert.That(folded.State.Paused, Is.True);
+            Assert.That(folded.RequestSingleStep, Is.True);
+            Assert.That(folded.State.CadenceMode, Is.EqualTo(
+                SimulationHostCadenceMode.Fast));
+            Assert.That(folded.CadenceChanged, Is.True);
+        }
+
+        [Test]
+        public void HostPhysicalEdgeLatch_EmitsOnlyFalseToTrueAndReleaseRearms()
+        {
+            var latch = new SimulationHostControlPhysicalEdgeLatch();
+
+            Assert.That(
+                latch.Capture(f1Pressed: false, f2Pressed: false, f5Pressed: false),
+                Is.EqualTo(SimulationHostControlCommand.None));
+            Assert.That(
+                latch.Capture(f1Pressed: true, f2Pressed: true, f5Pressed: true),
+                Is.EqualTo(
+                    SimulationHostControlCommand.TogglePause |
+                    SimulationHostControlCommand.SingleStep |
+                    SimulationHostControlCommand.ToggleFastMode));
+            Assert.That(
+                latch.Capture(f1Pressed: true, f2Pressed: true, f5Pressed: true),
+                Is.EqualTo(SimulationHostControlCommand.None),
+                "held keys must not repeat");
+            Assert.That(
+                latch.Capture(f1Pressed: false, f2Pressed: false, f5Pressed: false),
+                Is.EqualTo(SimulationHostControlCommand.None));
+            Assert.That(
+                latch.Capture(f1Pressed: true, f2Pressed: false, f5Pressed: true),
+                Is.EqualTo(
+                    SimulationHostControlCommand.TogglePause |
+                    SimulationHostControlCommand.ToggleFastMode),
+                "release must rearm each key independently");
+
+            latch.Clear();
+            Assert.That(
+                latch.Capture(f1Pressed: true, f2Pressed: true, f5Pressed: true),
+                Is.EqualTo(
+                    SimulationHostControlCommand.TogglePause |
+                    SimulationHostControlCommand.SingleStep |
+                    SimulationHostControlCommand.ToggleFastMode),
+                "clear must discard held state across lifecycle boundaries");
+        }
+
+        [Test]
+        public void DriverHostControl_RunningF2IsDroppedAndPausedF2AdvancesExactlyOnce()
+        {
+            using var scope = new DriverScope();
+            SimulationTickDriver driver = scope.Driver;
+            driver.SetPaused(false);
+            Assert.That(
+                driver.LifecycleState,
+                Is.EqualTo(BattleRuntimeLifecycleState.Running));
+            int initialTick = driver.CurrentTickIndex;
+
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.SingleStep);
+            Assert.That(
+                driver.ProcessHostControlCommandsForDiagnostics(),
+                Is.False);
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(initialTick));
+
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.TogglePause);
+            Assert.That(
+                driver.ProcessHostControlCommandsForDiagnostics(),
+                Is.False);
+            Assert.That(driver.IsPaused, Is.True);
+            Assert.That(driver.RemainingAccumulatorTime, Is.Zero);
+
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.SingleStep);
+            bool advanced = driver.ProcessHostControlCommandsForDiagnostics();
+            Assert.That(
+                advanced,
                 Is.True,
-                "the remaining backlog may advance on the next Unity Update");
+                $"paused F2 must advance exactly one production tick; " +
+                $"lifecycle={driver.LifecycleState}, paused={driver.IsPaused}, " +
+                $"drive={driver.Settings.driveMode}, worldNull={driver.World == null}, " +
+                $"reason={driver.HostControlLastFailureReasonForDiagnostics}");
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(initialTick + 1));
+            Assert.That(driver.IsPaused, Is.True);
+            Assert.That(driver.RemainingAccumulatorTime, Is.Zero);
+            Assert.That(
+                driver.ProcessHostControlCommandsForDiagnostics(),
+                Is.False);
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(initialTick + 1));
+
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.ToggleFastMode);
+            driver.ProcessHostControlCommandsForDiagnostics();
+            Assert.That(
+                driver.IsFastMode,
+                Is.True,
+                "F5 must toggle LocalFreeRun into fast cadence");
+            Assert.That(
+                driver.ActiveHostIntervalSeconds,
+                Is.EqualTo(0.003f).Within(0.0000001f));
+
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.TogglePause);
+            driver.ProcessHostControlCommandsForDiagnostics();
+            Assert.That(driver.IsPaused, Is.False);
         }
 
         [Test]
@@ -57,6 +259,60 @@ namespace NTSD.Test
                 Assert.That(
                     policy.ShouldBuildPresentationForNextTick(0, settings),
                     Is.True);
+            }
+        }
+
+        private sealed class DriverScope : IDisposable
+        {
+            private static readonly PropertyInfo InstanceProperty =
+                typeof(SingletonBehaviour<SimulationTickDriver>).GetProperty(
+                    "Instance",
+                    BindingFlags.Public | BindingFlags.Static);
+
+            private readonly SimulationTickDriver previousInstance;
+            private readonly GameObject host;
+
+            internal DriverScope()
+            {
+                previousInstance = SimulationTickDriver.Instance;
+                host = new GameObject("__NTSD28_HostControlTest")
+                {
+                    hideFlags = HideFlags.HideAndDontSave,
+                };
+                Driver = host.AddComponent<SimulationTickDriver>();
+                SetInstance(Driver);
+                Driver.RecreateWorld();
+                Driver.SetFrameInputProvider(null);
+            }
+
+            internal SimulationTickDriver Driver { get; }
+
+            public void Dispose()
+            {
+                if (Driver != null)
+                {
+                    BattleRuntimeShutdownReport report =
+                        Driver.ShutdownBattleRuntime();
+                    if (report.Status != BattleRuntimeShutdownStatus.Failed)
+                    {
+                        Driver.CompleteBattleRuntimeShutdownAfterMapCleanup(true);
+                    }
+                }
+                SetInstance(null);
+                if (host != null)
+                    UnityEngine.Object.DestroyImmediate(host);
+                SetInstance(previousInstance);
+            }
+
+            private static void SetInstance(SimulationTickDriver value)
+            {
+                MethodInfo setter = InstanceProperty?.GetSetMethod(true);
+                if (setter == null)
+                {
+                    throw new MissingMethodException(
+                        "SimulationTickDriver singleton setter was not found.");
+                }
+                setter.Invoke(null, new object[] { value });
             }
         }
     }

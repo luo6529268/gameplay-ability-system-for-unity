@@ -483,6 +483,78 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void ShadowCompare_MismatchedPairSnapshotFailsPlanClosed()
+        {
+            Scenario scenario = CreateScenario();
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+            scenario.World.CaptureBattleHitExecutionPlanPass(
+                721,
+                BattleHitExecutionPass.Character);
+            Assert.That(
+                scenario.World.SceneQuery.TryGetCollisionCandidateRange(
+                    scenario.CharacterAttacker,
+                    out CollisionCandidateRange candidates),
+                Is.True);
+            Assert.That(candidates.TryGet(0, out SceneQueryHit hit), Is.True);
+            Assert.That(
+                scenario.World.TryGetCurrentRuntimeHandle(
+                    scenario.CharacterAttacker.Runtime.SlotIndex,
+                    scenario.CharacterAttacker,
+                    out RuntimeEntityHandle attackerHandle),
+                Is.True);
+            Assert.That(
+                scenario.World.BeginBattleHitExecutionPlanLegacyObservation(
+                    721,
+                    BattleHitExecutionPass.Character),
+                Is.True);
+
+            var mismatchedSnapshot = new BattleHitCandidatePairSnapshot(
+                true,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                true,
+                false,
+                true,
+                15);
+            var mismatched = new SceneQueryHit(
+                hit.Target,
+                hit.TargetSlot,
+                hit.BodyX,
+                hit.ItrIndex,
+                hit.RuntimeItr,
+                hit.ZeroAttackerHpOnConsume,
+                hit.ReleaseHeavyHeldTargetOnConsume,
+                mismatchedSnapshot);
+            scenario.World.ObserveBattleHitExecutionPlanLegacyCandidateRead(
+                attackerHandle,
+                0,
+                mismatched);
+            scenario.World.EndBattleHitExecutionPlanLegacyObservation();
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(diagnostics.CurrentTickPlanValid, Is.False);
+            Assert.That(
+                diagnostics.FirstFailureReason,
+                Is.EqualTo(
+                    BattleHitExecutionPlanFailureReason.ObservationEntryMismatch));
+            Assert.That(diagnostics.ObservationMismatchCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void ShadowCompare_ProjectsCurrentKind9PreprocessAtCandidateRead()
         {
             Scenario scenario = CreateScenario();
@@ -757,8 +829,8 @@ namespace NTSD.Test
         [TestCase(6, BattleHitCandidateDisposition.HitConfirm)]
         [TestCase(8, BattleHitCandidateDisposition.Kind8)]
         [TestCase(14, BattleHitCandidateDisposition.Kind14)]
-        [TestCase(15, BattleHitCandidateDisposition.Kind15Or16)]
-        [TestCase(16, BattleHitCandidateDisposition.Kind15Or16)]
+        [TestCase(15, BattleHitCandidateDisposition.Kind15)]
+        [TestCase(16, BattleHitCandidateDisposition.Unsupported)]
         [TestCase(10, BattleHitCandidateDisposition.Kind10Or11)]
         [TestCase(11, BattleHitCandidateDisposition.Kind10Or11)]
         [TestCase(1, BattleHitCandidateDisposition.Kind1Grab)]
@@ -897,14 +969,14 @@ namespace NTSD.Test
         [TestCase(9, true, 10, 0, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 1, LF2StandardFrames.Injured, 20, 1.1, "SFX_002")]
         [TestCase(0, false, 70, 1, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_002")]
-        [TestCase(0, false, 10, 2, LF2StandardFrames.Injured, 20, 1.1, "SFX_006")]
-        [TestCase(0, false, 10, 3, LF2StandardFrames.Injured, 20, 1.1, "SFX_010")]
+        [TestCase(0, false, 10, 2, 203, 20, 1.1, "SFX_006")]
+        [TestCase(0, false, 10, 3, 200, 20, 1.1, "SFX_010")]
         [TestCase(0, false, 10, 5, LF2StandardFrames.Injured, 20, 1.1, "SFX_004")]
-        [TestCase(0, false, 10, 20, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
-        [TestCase(0, false, 10, 21, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
-        [TestCase(0, false, 10, 22, LF2StandardFrames.Injured, 20, -0.9, "SFX_001")]
+        [TestCase(0, false, 10, 20, 203, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 21, 203, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 22, 203, 20, -0.9, "SFX_001")]
         [TestCase(0, false, 10, 23, LF2StandardFrames.Injured, 20, -0.9, "SFX_001")]
-        [TestCase(0, false, 10, 30, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
+        [TestCase(0, false, 10, 30, 200, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 6, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 7000, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(9, true, 10, 4, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_011")]
@@ -1028,6 +1100,174 @@ namespace NTSD.Test
                             ? "SFX_006"
                             : "SFX_001"));
             }
+        }
+
+        [Test]
+        public void ShadowCompare_Type0DamageProjectionUsesTargetScaleThenAttackerWeakness()
+        {
+            Scenario scenario = CreateScenario();
+            InteractionArea itr =
+                scenario.CharacterAttacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 11;
+            itr.fall = 1;
+            itr.dvx = 1;
+            scenario.CharacterAttacker.Runtime.WeakTimer12C = 1;
+            scenario.CharacterVictim.Runtime.IncomingDamageScale340 = 25;
+            scenario.CharacterVictim.Health.HP = 100;
+            scenario.CharacterVictim.Health.HPBound = 100;
+            scenario.CharacterVictim.ComboCountVic = 0;
+            scenario.CharacterVictim.Unk344 = 1;
+            scenario.World.DamageStats[1] = 0;
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            scenario.World.PostInteractionTickAll(7461);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(
+                diagnostics.LastWriterEffectDifferenceMask,
+                Is.Zero,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(scenario.CharacterVictim.Health.HP, Is.EqualTo(78));
+            Assert.That(scenario.CharacterVictim.Health.HPBound, Is.EqualTo(93));
+            Assert.That(scenario.CharacterVictim.ComboCountVic, Is.EqualTo(22));
+            Assert.That(scenario.World.DamageStats[1], Is.EqualTo(22));
+        }
+
+        [Test]
+        public void ShadowCompare_Effect8CaughtActionOverrideMatchesAuthorityState()
+        {
+            Scenario scenario = CreateScenario();
+            InteractionArea itr =
+                scenario.CharacterAttacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.effect = 8;
+            itr.injury = 1;
+            itr.fall = 1;
+            itr.dvx = 1;
+            itr.caughtact = new[] { 232 };
+            scenario.CharacterVictim.Health.HP = 100;
+            scenario.CharacterVictim.Health.HPBound = 100;
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            scenario.World.PostInteractionTickAll(7462);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(
+                diagnostics.LastWriterEffectDifferenceMask,
+                Is.Zero,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(scenario.CharacterVictim.Frame.N, Is.EqualTo(232));
+            Assert.That(scenario.CharacterVictim.Runtime.Frame, Is.EqualTo(232));
+        }
+
+        [Test]
+        public void ShadowCompare_Effect2DirectPostActionMatchesAuthorityState()
+        {
+            Scenario scenario = CreateScenario();
+            InteractionArea itr =
+                scenario.CharacterAttacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.effect = 2;
+            itr.injury = 1;
+            itr.fall = 1;
+            itr.dvx = 1;
+            scenario.CharacterVictim.Health.HP = 100;
+            scenario.CharacterVictim.Health.HPBound = 100;
+            scenario.CharacterVictim.AttackingCounter = 9;
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            scenario.World.PostInteractionTickAll(7463);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(
+                diagnostics.LastWriterEffectDifferenceMask,
+                Is.Zero,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(scenario.CharacterVictim.Frame.N, Is.EqualTo(203));
+            Assert.That(scenario.CharacterVictim.Runtime.Frame, Is.EqualTo(203));
+            Assert.That(scenario.CharacterVictim.AttackingCounter, Is.Zero);
+            Assert.That(scenario.CharacterVictim.Runtime.IsFacingLeft, Is.True);
+        }
+
+        [Test]
+        public void ShadowCompare_KindTransformEffectOverrideReadsTransferredDefinition()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            LF2SpecialAttack attacker = CreateSpecialAttackEntity(
+                world,
+                "HitPlanKindTransformEffectAttacker",
+                209,
+                0,
+                1,
+                0);
+            LF2SpecialAttack target = CreateSpecialAttackEntity(
+                world,
+                "HitPlanKindTransformEffectTarget",
+                200,
+                1,
+                2,
+                10);
+            var itr = new InteractionArea
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 30,
+                h = 20,
+                zwidth = 12,
+                injury = 10,
+                fall = 10,
+                effect = 9,
+                caughtact = new[] { 30 },
+                arest = 2,
+                vrest = 3,
+            };
+            attacker.Frame.D.itrs.Add(itr);
+            target.Frame.D.primaryBodyKindForEffectSuppression = 50;
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.ObjectInteractionTickAll(783);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(target.ObjectId, Is.EqualTo(209));
+            Assert.That(target.Frame.N, Is.EqualTo(30));
+            Assert.That(target.Frame.Prev, Is.EqualTo(40));
+            Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
         }
 
         [TestCase(false)]
@@ -1406,8 +1646,11 @@ namespace NTSD.Test
             Assert.That(catcher.CaughtSlotIndex, Is.EqualTo(target.Runtime.SlotIndex));
         }
 
-        [Test]
-        public void ShadowCompare_State3000StandardDamageResetsAttackerFromFrame10()
+        [TestCase(LF2States.ProjectileFlying, 0)]
+        [TestCase(3007, 2)]
+        public void ShadowCompare_Type3AttackerPostHitUsesHitFjAndSelectedFrameDvx(
+            int attackerState,
+            int frameCover)
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
@@ -1420,6 +1663,7 @@ namespace NTSD.Test
                 next = 10,
                 centerx = 0,
                 centery = 0,
+                dvx = 13,
                 dvz = 3,
             };
             TypedCharacter attacker = CreateEntity(
@@ -1433,6 +1677,20 @@ namespace NTSD.Test
                 hasItr: true,
                 hasBody: false,
                 extraFrame: frame10);
+            var frame77 = new LF2FrameData
+            {
+                frameId = 77,
+                state = LF2States.Standing,
+                wait = 1,
+                next = 77,
+                centerx = 0,
+                centery = 0,
+                dvx = 17,
+                dvz = -19,
+            };
+            attacker.FrameCache.Wrapper.characterData.frames.Add(frame77);
+            attacker.FrameCache.Load(attacker.FrameCache.Wrapper);
+            attacker.Frame.D = attacker.GetFrameDataById(0);
             TypedCharacter target = CreateEntity(
                 world,
                 "HitPlanState3000Target",
@@ -1443,7 +1701,9 @@ namespace NTSD.Test
                 10,
                 hasItr: false,
                 hasBody: true);
-            attacker.Frame.D.state = LF2States.ProjectileFlying;
+            attacker.Frame.D.state = attackerState;
+            attacker.Frame.D.cover = frameCover;
+            attacker.Frame.D.hit_Fj = 77;
             attacker.Runtime.Vx = 6.5;
             attacker.Runtime.Vz = -8.5;
             attacker.AttackingCounter = 7;
@@ -1477,11 +1737,11 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(attacker.Frame.N, Is.EqualTo(10));
-            Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
+            Assert.That(attacker.Frame.N, Is.EqualTo(77));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(77));
             Assert.That(attacker.AttackingCounter, Is.Zero);
             Assert.That(attacker.Runtime.Vx, Is.Zero);
-            Assert.That(attacker.Runtime.Vz, Is.EqualTo(3.0).Within(0.0000001));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(17.0).Within(0.0000001));
             Assert.That(target.Health.HP, Is.EqualTo(90));
         }
 
@@ -1664,6 +1924,7 @@ namespace NTSD.Test
             itr.arest = 2;
             itr.vrest = 3;
             attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             target.Health.HP = 10;
             target.Health.HPBound = 100;
             target.ComboCountVic = 2;
@@ -1671,6 +1932,7 @@ namespace NTSD.Test
             target.Unk344 = 1;
             holder.ComboCountAtk = 3;
             holder.KillStat = 4;
+            holder.Runtime.KnockoutCount358 = 6;
             world.DamageStats[1] = 5;
             world.KillStats[1] = 7;
             world.Rng.Seed(0x13572468u);
@@ -1706,6 +1968,7 @@ namespace NTSD.Test
             Assert.That(target.ComboCountVic, Is.EqualTo(12));
             Assert.That(holder.ComboCountAtk, Is.EqualTo(13));
             Assert.That(holder.KillStat, Is.EqualTo(5));
+            Assert.That(holder.Runtime.KnockoutCount358, Is.EqualTo(7));
             Assert.That(world.DamageStats[1], Is.EqualTo(15));
             Assert.That(world.KillStats[1], Is.EqualTo(8));
             Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.FallingBack));
@@ -1929,6 +2192,14 @@ namespace NTSD.Test
                 wait = 1,
                 next = 7,
             };
+            defendFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
             TypedCharacter target = CreateEntity(
                 world,
                 "HitPlanAlternateDamageTarget",
@@ -1951,6 +2222,9 @@ namespace NTSD.Test
                 hasItr: false,
                 hasBody: false);
             attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+            target.DirectWriteFramePreserveWaitCounter(defendFrame.frameId);
+            target.RefreshRuntimeSnapshot();
             target.Runtime.PrevFrame2 = defendFrame.frameId;
             target.Frame.Prev2 = defendFrame.frameId;
             target.Frame.Prev2D = defendFrame;
@@ -1964,6 +2238,7 @@ namespace NTSD.Test
             target.AttackingCounter = 9;
             holder.ComboCountAtk = 4;
             holder.KillStat = 4;
+            holder.Runtime.KnockoutCount358 = 6;
             world.DamageStats[1] = 3;
             world.KillStats[1] = 7;
             InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
@@ -1972,6 +2247,7 @@ namespace NTSD.Test
             itr.fall = 10;
             itr.dvx = lethal ? 0 : -4;
             itr.effect = 0;
+            itr.spark = 1;
             itr.bdefend = 10;
             itr.arest = 20;
             itr.vrest = 9;
@@ -2003,9 +2279,9 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.Health.HP, Is.EqualTo(lethal ? 0 : 98));
-            Assert.That(target.Health.HPBound, Is.EqualTo(100));
-            Assert.That(target.ComboCountVic, Is.EqualTo(2));
+            Assert.That(target.Health.HP, Is.EqualTo(lethal ? -3 : 95));
+            Assert.That(target.Health.HPBound, Is.EqualTo(99));
+            Assert.That(target.ComboCountVic, Is.EqualTo(5));
             Assert.That(target.AttackingCounter, Is.Zero);
             Assert.That(target.HitStateCount, Is.EqualTo(15));
             Assert.That(target.HitCount, Is.EqualTo(1));
@@ -2017,9 +2293,11 @@ namespace NTSD.Test
             Assert.That(target.FrameDelay, Is.EqualTo(-5));
             Assert.That(attacker.AttackExempt, Is.EqualTo(12));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(9));
-            Assert.That(holder.ComboCountAtk, Is.EqualTo(6));
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(9));
             Assert.That(holder.KillStat, Is.EqualTo(lethal ? 5 : 4));
-            Assert.That(world.DamageStats[1], Is.EqualTo(5));
+            Assert.That(holder.Runtime.KnockoutCount358,
+                Is.EqualTo(lethal ? 7 : 6));
+            Assert.That(world.DamageStats[1], Is.EqualTo(8));
             Assert.That(world.KillStats[1], Is.EqualTo(lethal ? 8 : 7));
             Assert.That(target.HitRecordCount, Is.EqualTo(1));
             Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
@@ -2059,6 +2337,7 @@ namespace NTSD.Test
                 fall = 10,
                 dvx = 4,
                 effect = 1,
+                spark = 1,
                 bdefend = 0,
                 arest = 2,
                 vrest = 3,
@@ -2081,6 +2360,7 @@ namespace NTSD.Test
             target.Runtime.SetPosition(10, -5, 0);
             target.Runtime.SyncIntegerPosition();
             target.RefreshRuntimeSnapshot();
+            target.Frame.D.state = LF2States.Defending;
 
             world.CaptureCollisionFrameSnapshotsAll();
             world.CollectCollisionCandidatesAll();
@@ -2276,8 +2556,8 @@ namespace NTSD.Test
         }
 
         [TestCase(LF2States.WeaponThrowing, -1.05, -4.0, -4.0, 2.1, 3)]
-        [TestCase(LF2States.HeavyWeaponInSky, 3.2, 2.0, 2.4, 4.1, 2)]
-        [TestCase(LF2States.ProjectileFlying, 0.0, 2.0, 6.0, 2.1, 2)]
+        [TestCase(LF2States.HeavyWeaponInSky, 8.0, 2.0, 6.0, 4.1, 2)]
+        [TestCase(LF2States.ProjectileFlying, 0.0, 2.0, 13.0, 2.1, 2)]
         public void ShadowCompare_AlternateDamageAppliesAttackerStateTailBeforeHitRecord(
             int attackerState,
             double expectedAttackerVx,
@@ -2296,6 +2576,7 @@ namespace NTSD.Test
                     state = LF2States.Standing,
                     wait = 1,
                     next = 10,
+                    dvx = 13,
                     centerx = 0,
                     centery = 0,
                 }
@@ -2334,12 +2615,14 @@ namespace NTSD.Test
             target.KillCount = -1;
             target.Unk344 = 1;
             target.HitStateCount = 0;
+            target.Frame.D.state = LF2States.Defending;
 
             InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
             itr.kind = 0;
             itr.injury = 10;
             itr.dvx = 4;
             itr.effect = 0;
+            itr.spark = 1;
             itr.bdefend = 1;
             itr.arest = 2;
             itr.vrest = 3;
@@ -2450,6 +2733,11 @@ namespace NTSD.Test
             itr.fall = 10;
             itr.dvx = 2;
             itr.effect = 0;
+            if (alternateDamage)
+            {
+                target.Frame.D.state = LF2States.Defending;
+                itr.spark = 1;
+            }
             itr.bdefend = 1;
             itr.arest = 2;
             itr.vrest = 3;
@@ -3384,11 +3672,11 @@ namespace NTSD.Test
         [TestCase(6, 30, 100, 1, "SFX_001")]
         [TestCase(21, 30, 100, 1, "SFX_001")]
         [TestCase(22, 30, 100, 1, "SFX_001")]
-        [TestCase(23, 30, 100, 2, "SFX_068")]
+        [TestCase(23, 30, 100, 1, "SFX_001")]
         [TestCase(30, 30, 100, 1, "SFX_001")]
-        [TestCase(5005, 30, 95, 1, "SFX_001")]
-        [TestCase(5999, 30, 0, 1, "SFX_001")]
-        [TestCase(6033, 33, 100, 1, "SFX_001")]
+        [TestCase(5005, 30, 100, 1, "SFX_001")]
+        [TestCase(5999, 30, 100, 1, "SFX_001")]
+        [TestCase(6033, 30, 100, 1, "SFX_001")]
         [TestCase(7000, 30, 100, 1, "SFX_001")]
         public void ShadowCompare_StandardType3DamageWriterEffectMatchesAuthorityState(
             int effect,
@@ -3429,7 +3717,8 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            attacker.HolderCopySlot = 77;
+            target.HolderCopySlot = 99;
             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
             target.KnockbackVx = 5.0;
             target.KnockbackVy = 6.0;
@@ -3477,12 +3766,15 @@ namespace NTSD.Test
             Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
             Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(holder.Runtime.SlotIndex));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+            Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
@@ -3490,7 +3782,7 @@ namespace NTSD.Test
             Assert.That(target.Health.PP, Is.EqualTo(expectedPp));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
-            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
@@ -3579,19 +3871,22 @@ namespace NTSD.Test
             Assert.That(target.Frame.N, Is.EqualTo(20));
             Assert.That(target.Runtime.Frame, Is.EqualTo(20));
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(attacker.HolderCopySlot));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+            Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
             Assert.That(target.FallCounter, Is.EqualTo(10));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
-            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
@@ -3685,8 +3980,11 @@ namespace NTSD.Test
             Assert.That(target.Frame.N, Is.EqualTo(30));
             Assert.That(target.Runtime.Frame, Is.EqualTo(30));
             Assert.That(target.RelationTeam, Is.EqualTo(holder.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(holder.HolderCopySlot));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(holder.Runtime.OwnerSlotIndex));
+            Assert.That(target.Runtime.AnimCounter, Is.EqualTo(holder.Runtime.SlotIndex));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
             Assert.That(target.Runtime.Vx, Is.Zero);
             Assert.That(target.Runtime.Vy, Is.Zero);
@@ -3698,7 +3996,7 @@ namespace NTSD.Test
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
-            Assert.That(holder.FrameDelay, Is.EqualTo(3));
+            Assert.That(holder.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
@@ -3775,7 +4073,9 @@ namespace NTSD.Test
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
             Assert.That(target.Frame.N, Is.EqualTo(30));
             Assert.That(target.Runtime.Frame, Is.EqualTo(30));
-            Assert.That(target.RelationTeam, Is.EqualTo(2));
+            Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+            Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+            Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
             Assert.That(target.HolderCopySlot, Is.EqualTo(66));
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
@@ -3890,7 +4190,8 @@ namespace NTSD.Test
                 Is.EqualTo(heldByCharacter
                     ? holder.RelationTeam
                     : attacker.RelationTeam));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.HitRecordCount, Is.EqualTo(1));
         }
 
@@ -4069,6 +4370,7 @@ namespace NTSD.Test
                 next = 10,
                 centerx = 0,
                 centery = 0,
+                dvx = 13,
                 dvz = 7,
             };
             attacker.FrameCache.Wrapper.characterData.frames.Add(frame10);
@@ -4123,7 +4425,7 @@ namespace NTSD.Test
             Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
             Assert.That(attacker.AttackingCounter, Is.Zero);
             Assert.That(attacker.Runtime.Vx, Is.Zero);
-            Assert.That(attacker.Runtime.Vz, Is.EqualTo(7.0));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(13.0));
             Assert.That(target.Frame.N, Is.EqualTo(20));
             Assert.That(target.Runtime.Frame, Is.EqualTo(20));
         }
@@ -4363,6 +4665,7 @@ namespace NTSD.Test
                 next = 10,
                 centerx = 0,
                 centery = 0,
+                dvx = 13,
                 dvz = 7,
             };
             TypedCharacter attacker = CreateEntity(
@@ -4419,7 +4722,7 @@ namespace NTSD.Test
             Assert.That(attacker.Runtime.Frame, Is.EqualTo(10));
             Assert.That(attacker.AttackingCounter, Is.Zero);
             Assert.That(attacker.Runtime.Vx, Is.Zero);
-            Assert.That(attacker.Runtime.Vz, Is.EqualTo(7.0));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(13.0));
             Assert.That(target.Runtime.WeaponFlightCounter, Is.EqualTo(90));
         }
 
@@ -4561,7 +4864,8 @@ namespace NTSD.Test
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
             Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
             Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(world.PendingSounds.Count, Is.EqualTo(2));
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_010"));
@@ -4572,7 +4876,10 @@ namespace NTSD.Test
             if (expectRelationCopy)
             {
                 Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-                Assert.That(target.HolderCopySlot, Is.EqualTo(holder.Runtime.SlotIndex));
+                Assert.That(
+                    target.HolderCopySlot,
+                    Is.EqualTo(99),
+                    "Authority type3 kind9 has no legacy HolderCopy write.");
                 Assert.That(target.AttackingCounter, Is.Zero);
                 Assert.That(target.Runtime.Vx, Is.Zero);
                 Assert.That(target.Runtime.Vy, Is.Zero);
@@ -4585,7 +4892,7 @@ namespace NTSD.Test
             else
             {
                 Assert.That(target.RelationTeam, Is.EqualTo(2));
-                Assert.That(target.HolderCopySlot, Is.Not.EqualTo(holder.Runtime.SlotIndex));
+                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
                 Assert.That(target.AttackingCounter, Is.EqualTo(9));
                 Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
                 Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
@@ -4674,19 +4981,23 @@ namespace NTSD.Test
             Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
             Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(holder.Runtime.SlotIndex));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            // kind=9 is converted to kind=0 for state 1002/2000 before the
+            // type-3 writer; the native generic continuation preserves this
+            // legacy-only shadow field instead of running the kind=9 copier.
+            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
             Assert.That(target.FallCounter, Is.EqualTo(expectedFall));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
-            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
@@ -4699,7 +5010,8 @@ namespace NTSD.Test
         }
 
         [TestCase(LF2States.ObjectFlying)]
-        public void ShadowCompare_Type3StateSyncWriterEffectMatchesAuthorityState(int synchronizedState)
+        public void ShadowCompare_Type3MatchedPairEarlyBranchMatchesAuthorityState(
+            int synchronizedState)
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
@@ -4720,6 +5032,8 @@ namespace NTSD.Test
                 10);
             attacker.Frame.D.state = synchronizedState;
             target.Frame.D.state = synchronizedState;
+            attacker.Frame.D.hit_Uj = 71;
+            target.Frame.D.hit_Uj = 72;
             var itr = new InteractionArea
             {
                 kind = 0,
@@ -4749,17 +5063,9 @@ namespace NTSD.Test
             target.KnockbackVy = -6.0;
             target.KnockbackVz = -7.0;
             target.AttackingCounter = 9;
+            int initialHp = target.Health.HP;
             world.Rng.Seed(0x778899AAu);
-            uint firstRngState;
-            uint secondRngState;
-            unchecked
-            {
-                firstRngState = 0x778899AAu * 0x343FDu + 0x269EC3u;
-                secondRngState = firstRngState * 0x343FDu + 0x269EC3u;
-            }
-            int expectedHitZ = (int)((firstRngState >> 16) & 0x7FFFu) % 9 - 4;
-            int expectedHitX = 10 +
-                (int)((secondRngState >> 16) & 0x7FFFu) % 9 - 4;
+            uint initialRngState = world.Rng.State;
 
             world.CaptureCollisionFrameSnapshotsAll();
             world.CollectCollisionCandidatesAll();
@@ -4777,42 +5083,40 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(attacker.Frame.N, Is.EqualTo(20));
-            Assert.That(attacker.Runtime.Frame, Is.EqualTo(20));
+            Assert.That(attacker.Frame.N, Is.EqualTo(71));
+            Assert.That(attacker.Runtime.Frame, Is.EqualTo(71));
             Assert.That(attacker.AttackingCounter, Is.Zero);
-            Assert.That(attacker.Runtime.Vx, Is.Zero);
-            Assert.That(attacker.Runtime.Vy, Is.Zero);
-            Assert.That(attacker.Runtime.Vz, Is.Zero);
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(2.0));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(3.0));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(4.0));
             Assert.That(attacker.KnockbackVx, Is.Zero);
             Assert.That(attacker.KnockbackVy, Is.Zero);
             Assert.That(attacker.KnockbackVz, Is.Zero);
             Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
-            Assert.That(target.Frame.N, Is.EqualTo(20));
-            Assert.That(target.Runtime.Frame, Is.EqualTo(20));
+            Assert.That(target.Frame.N, Is.EqualTo(72));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(72));
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(-2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(-3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(-4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
             Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.False);
             Assert.That(target.RelationTeam, Is.EqualTo(2));
-            Assert.That(target.FallCounter, Is.EqualTo(10));
-            Assert.That(target.HitCount, Is.EqualTo(1));
-            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(target.Health.HP, Is.EqualTo(initialHp));
+            Assert.That(target.FallCounter, Is.Zero);
+            Assert.That(target.HitCount, Is.Zero);
+            Assert.That(target.HitStateCount, Is.Zero);
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
-            Assert.That(target.HitRecordCount, Is.EqualTo(1));
-            Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
-            Assert.That(target.GetHitRecordX(0), Is.EqualTo(expectedHitX));
-            Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
-            Assert.That(world.Rng.State, Is.EqualTo(secondRngState));
-            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
-            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
+            Assert.That(target.HitRecordCount, Is.Zero);
+            Assert.That(world.Rng.State, Is.EqualTo(initialRngState));
+            Assert.That(world.Rng.CallCount, Is.Zero);
+            Assert.That(world.PendingSounds.Count, Is.Zero);
         }
 
         [TestCase(false)]
@@ -4912,18 +5216,19 @@ namespace NTSD.Test
             Assert.That(
                 target.GetCurrentDataObjectTypeForSimulation(),
                 Is.EqualTo((int)LF2ObjectType.SpecialAttack));
-            Assert.That(target.WeaponCount, Is.EqualTo(17));
+            Assert.That(target.WeaponCount, Is.Zero);
             Assert.That(target.Frame.N, Is.EqualTo(expandingStateSync ? 20 : 40));
             Assert.That(target.Runtime.Frame, Is.EqualTo(expandingStateSync ? 20 : 40));
             Assert.That(target.Frame.Prev, Is.EqualTo(40));
             Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(77));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(-2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(-3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(-4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
@@ -4934,13 +5239,13 @@ namespace NTSD.Test
             Assert.That(attacker.Frame.N, Is.EqualTo(expandingStateSync ? 20 : 0));
             Assert.That(attacker.Runtime.Frame, Is.EqualTo(expandingStateSync ? 20 : 0));
             Assert.That(attacker.AttackingCounter, Is.EqualTo(expandingStateSync ? 0 : 8));
-            Assert.That(attacker.Runtime.Vx, Is.EqualTo(expandingStateSync ? 0.0 : 2.0));
-            Assert.That(attacker.Runtime.Vy, Is.EqualTo(expandingStateSync ? 0.0 : 3.0));
-            Assert.That(attacker.Runtime.Vz, Is.EqualTo(expandingStateSync ? 0.0 : 4.0));
+            Assert.That(attacker.Runtime.Vx, Is.EqualTo(2.0));
+            Assert.That(attacker.Runtime.Vy, Is.EqualTo(3.0));
+            Assert.That(attacker.Runtime.Vz, Is.EqualTo(4.0));
             Assert.That(attacker.KnockbackVx, Is.EqualTo(expandingStateSync ? 0.0 : 5.0));
             Assert.That(attacker.KnockbackVy, Is.EqualTo(expandingStateSync ? 0.0 : 6.0));
             Assert.That(attacker.KnockbackVz, Is.EqualTo(expandingStateSync ? 0.0 : 7.0));
-            Assert.That(attacker.FrameDelay, Is.EqualTo(expandingStateSync ? -3 : 3));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
@@ -5085,23 +5390,39 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.ObjectId, Is.EqualTo(0xD1));
-            Assert.That(target.FrameCache.Wrapper.characterId, Is.EqualTo(0xD1));
-            Assert.That(target.WeaponCount, Is.EqualTo(17));
-            Assert.That(target.Frame.N, Is.EqualTo(30));
-            Assert.That(target.Runtime.Frame, Is.EqualTo(30));
-            Assert.That(target.Frame.Prev, Is.EqualTo(30));
+            Assert.That(target.ObjectId, Is.EqualTo(heldByCharacter ? attackerOid : 0xC8));
+            Assert.That(
+                target.FrameCache.Wrapper.characterId,
+                Is.EqualTo(heldByCharacter ? attackerOid : 0xC8));
+            if (heldByCharacter)
+                Assert.That(target.WeaponCount, Is.Zero);
+            Assert.That(target.Frame.N, Is.EqualTo(heldByCharacter ? 40 : 30));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(heldByCharacter ? 40 : 30));
+            if (heldByCharacter)
+            {
+                Assert.That(target.Frame.Prev, Is.EqualTo(40));
+                Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
+            }
             Assert.That(
                 target.RelationTeam,
-                Is.EqualTo(heldByCharacter ? holder.RelationTeam : attacker.RelationTeam));
-            Assert.That(
-                target.HolderCopySlot,
-                Is.EqualTo(heldByCharacter ? holder.HolderCopySlot : attacker.HolderCopySlot));
-            Assert.That(target.HitConfirm2, Is.EqualTo(1));
+                Is.EqualTo(attacker.RelationTeam));
+            if (heldByCharacter)
+            {
+                Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            }
+            else
+            {
+                Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+                Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            }
+            Assert.That(target.HitConfirm2, Is.Zero);
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.Runtime.Vx, Is.Zero);
-            Assert.That(target.Runtime.Vy, Is.Zero);
-            Assert.That(target.Runtime.Vz, Is.Zero);
+            Assert.That(target.Runtime.Vx, Is.EqualTo(-2.0));
+            Assert.That(target.Runtime.Vy, Is.EqualTo(-3.0));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(-4.0));
             Assert.That(target.KnockbackVx, Is.Zero);
             Assert.That(target.KnockbackVy, Is.Zero);
             Assert.That(target.KnockbackVz, Is.Zero);
@@ -5109,7 +5430,7 @@ namespace NTSD.Test
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitStateCount, Is.EqualTo(45));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
-            Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+            Assert.That(attacker.FrameDelay, Is.EqualTo(heldByCharacter ? 3 : -3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
             Assert.That(attacker.ItrRest.Arest, Is.EqualTo(2));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(3));
@@ -5123,14 +5444,14 @@ namespace NTSD.Test
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
         }
 
-        [TestCase(8, false, 0, 3, 0, 200, "SFX_065", 2)]
+        [TestCase(8, false, 0, 3, 0, 30, "SFX_001", 1)]
         [TestCase(8, false, 0, 30, 13, 30, "SFX_001", 1)]
-        [TestCase(8, false, 0, 21, 0, 203, "SFX_068", 2)]
+        [TestCase(8, false, 0, 21, 0, 30, "SFX_001", 1)]
         [TestCase(8, false, 0, 5005, 0, 30, "SFX_001", 1)]
-        [TestCase(8, false, 0, 6033, 0, 33, "SFX_001", 1)]
-        [TestCase(8, false, 0, 23, 0, 30, "SFX_068", 2)]
-        [TestCase(0xD5, true, 0, 2, 0, 203, "SFX_068", 2)]
-        [TestCase(0xD5, true, 9, 20, 0, 203, "SFX_068", 2)]
+        [TestCase(8, false, 0, 6033, 0, 30, "SFX_001", 1)]
+        [TestCase(8, false, 0, 23, 0, 30, "SFX_001", 1)]
+        [TestCase(0xD5, true, 0, 2, 0, 40, "SFX_001", 1)]
+        [TestCase(0xD5, true, 9, 20, 0, 40, "SFX_001", 1)]
         public void ShadowCompare_Type3ActiveCharacterDatEffectTailMatchesAuthorityState(
             int attackerOid,
             bool heldByCharacter,
@@ -5267,20 +5588,24 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.ObjectId, Is.EqualTo(0xD1));
-            Assert.That(target.FrameCache.Wrapper.characterId, Is.EqualTo(0xD1));
+            Assert.That(target.ObjectId, Is.EqualTo(heldByCharacter ? attackerOid : 0xC8));
+            Assert.That(
+                target.FrameCache.Wrapper.characterId,
+                Is.EqualTo(heldByCharacter ? attackerOid : 0xC8));
             Assert.That(
                 target.GetCurrentDataObjectTypeForSimulation(),
-                Is.EqualTo((int)LF2ObjectType.Character));
+                Is.EqualTo((int)LF2ObjectType.SpecialAttack));
             Assert.That(target.Frame.N, Is.EqualTo(expectedFrame));
             Assert.That(target.Runtime.Frame, Is.EqualTo(expectedFrame));
-            Assert.That(target.Frame.Prev, Is.EqualTo(replacementFrame));
-            Assert.That(target.WeaponCount, Is.EqualTo(17));
+            if (heldByCharacter)
+            {
+                Assert.That(target.Frame.Prev, Is.EqualTo(40));
+                Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
+                Assert.That(target.WeaponCount, Is.Zero);
+            }
             Assert.That(
                 target.Health.PP,
-                Is.EqualTo(effect >= 5000 && effect < 6000
-                    ? Math.Max(0, initialPp - (effect - 5000))
-                    : initialPp));
+                Is.EqualTo(initialPp));
             if (expectedFrame == 203)
                 Assert.That(target.Dirh(), Is.EqualTo(-1));
             int customSoundCount = heldByCharacter ? 2 : 1;
@@ -5361,10 +5686,12 @@ namespace NTSD.Test
                 Is.EqualTo(scenario.CharacterVictim.Runtime.Z + 1.0));
             Assert.That(
                 scenario.CharacterAttacker.Runtime.XInt,
-                Is.EqualTo(scenario.CharacterVictim.Runtime.XInt));
+                Is.EqualTo(-50),
+                "Kind8 writes only precise X; the later physics pass owns XInt.");
             Assert.That(
                 scenario.CharacterAttacker.Runtime.ZInt,
-                Is.EqualTo(scenario.CharacterVictim.Runtime.ZInt + 1));
+                Is.EqualTo(30),
+                "Kind8 writes only precise Z; the later physics pass owns ZInt.");
         }
 
         [Test]
@@ -5608,8 +5935,8 @@ namespace NTSD.Test
             Assert.That(target.Runtime.Vz, Is.EqualTo(-3.75 * 0.9345794392523364));
             Assert.That(target.Runtime.Vy, Is.EqualTo(-5.5));
             Assert.That(target.KnockbackVy, Is.EqualTo(-5.5));
-            Assert.That(holder.ComboCountAtk, Is.EqualTo(11));
-            Assert.That(world.DamageStats[1], Is.EqualTo(18));
+            Assert.That(holder.ComboCountAtk, Is.Zero);
+            Assert.That(world.DamageStats[1], Is.EqualTo(7));
         }
 
         [Test]
@@ -5670,7 +5997,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ShadowCompare_Kind16CharacterWriterEffectMatchesFullAuthorityState()
+        public void ShadowCompare_Kind16IsUnsupportedAndDoesNotProjectWriterEffects()
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
@@ -5745,12 +6072,6 @@ namespace NTSD.Test
             heldTarget.Runtime.LinkState = -2;
             heldTarget.Runtime.HolderStableId = target.Runtime.SlotIndex;
             world.Rng.Seed(0x12345678u);
-            uint expectedRngState;
-            unchecked
-            {
-                expectedRngState = 0x12345678u * 0x343FDu + 0x269EC3u;
-            }
-            int expectedHeldFrame = (int)((expectedRngState >> 16) & 0x7FFFu) % 6;
 
             world.CaptureCollisionFrameSnapshotsAll();
             world.CollectCollisionCandidatesAll();
@@ -5766,31 +6087,27 @@ namespace NTSD.Test
                 diagnostics.CurrentTickPlanValid,
                 Is.True,
                 DescribeDiagnostics(diagnostics));
-            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.Zero);
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.Health.HP, Is.EqualTo(-5));
-            Assert.That(target.Health.HPBound, Is.EqualTo(92));
-            Assert.That(target.ComboCountVic, Is.EqualTo(28));
-            Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.MpDrain));
-            Assert.That(target.Runtime.Frame, Is.EqualTo(LF2StandardFrames.MpDrain));
-            Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(holder.ComboCountAtk, Is.EqualTo(29));
-            Assert.That(holder.KillStat, Is.EqualTo(3));
-            Assert.That(world.DamageStats[1], Is.EqualTo(32));
-            Assert.That(world.KillStats[1], Is.EqualTo(9));
-            Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(7));
-            Assert.That(world.GetRawRestVrest(0, 2), Is.EqualTo(45));
-            Assert.That(world.GetRawRestVrest(1, 2), Is.EqualTo(30));
-            Assert.That(target.Runtime.LinkState, Is.Zero);
-            Assert.That(heldTarget.Runtime.LinkState, Is.Zero);
-            Assert.That(heldTarget.Frame.N, Is.EqualTo(expectedHeldFrame));
-            Assert.That(heldTarget.Runtime.Frame, Is.EqualTo(expectedHeldFrame));
-            Assert.That(heldTarget.Runtime.Vy, Is.EqualTo(-1.0));
-            Assert.That(world.Rng.State, Is.EqualTo(expectedRngState));
-            Assert.That(world.Rng.CallCount, Is.EqualTo(1));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
-            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_065"));
-            Assert.That(world.PendingSounds[0].WorldX, Is.EqualTo(target.Runtime.XInt));
+            Assert.That(target.Health.HP, Is.EqualTo(20));
+            Assert.That(target.Health.HPBound, Is.EqualTo(100));
+            Assert.That(target.ComboCountVic, Is.EqualTo(3));
+            Assert.That(target.Frame.N, Is.Zero);
+            Assert.That(target.Runtime.Frame, Is.Zero);
+            Assert.That(target.AttackingCounter, Is.EqualTo(9));
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(4));
+            Assert.That(holder.KillStat, Is.EqualTo(2));
+            Assert.That(world.DamageStats[1], Is.EqualTo(7));
+            Assert.That(world.KillStats[1], Is.EqualTo(8));
+            Assert.That(world.GetRawRestVrest(1, 0), Is.Zero);
+            Assert.That(world.GetRawRestVrest(0, 2), Is.Zero);
+            Assert.That(world.GetRawRestVrest(1, 2), Is.Zero);
+            Assert.That(target.Runtime.LinkState, Is.EqualTo(2));
+            Assert.That(heldTarget.Runtime.LinkState, Is.EqualTo(-2));
+            Assert.That(heldTarget.Runtime.Vy, Is.Zero);
+            Assert.That(world.Rng.State, Is.EqualTo(0x12345678u));
+            Assert.That(world.Rng.CallCount, Is.Zero);
+            Assert.That(world.PendingSounds.Count, Is.Zero);
         }
 
         [Test]
@@ -5860,7 +6177,7 @@ namespace NTSD.Test
                 diagnostics.CurrentTickPlanValid,
                 Is.True,
                 DescribeDiagnostics(diagnostics));
-            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.Zero);
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
             Assert.That(target.Runtime.LinkState, Is.EqualTo(2));
             Assert.That(staleHeldTarget.Runtime.LinkState, Is.EqualTo(-2));
@@ -6307,6 +6624,8 @@ namespace NTSD.Test
             });
             holder.Runtime.TargetSlotIndex = scenario.CharacterAttacker.Runtime.SlotIndex;
             scenario.CharacterAttacker.Runtime.LinkState = -1;
+            scenario.CharacterAttacker.Runtime.HolderStableId =
+                holder.Runtime.SlotIndex;
             scenario.CharacterAttacker.HolderCopySlot = holder.Runtime.SlotIndex;
             scenario.CharacterVictim.Runtime.LinkState = 2;
             scenario.CharacterVictim.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
@@ -6759,6 +7078,67 @@ namespace NTSD.Test
                 $"firstFailure={diagnostics.FirstFailureReason}, " +
                 $"firstSlot={diagnostics.FirstFailureAttackerSlot}, " +
                 $"firstOrdinal={diagnostics.FirstFailureCandidateOrdinal}.";
+        }
+
+        [Test]
+        public void ShadowCompare_StandardHitRestUsesRuntimeCarriersAndNativeByteVrest()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world,
+                "HitPlanStandardRestAttacker",
+                7390,
+                0,
+                LF2ObjectType.Character,
+                1,
+                0,
+                hasItr: true,
+                hasBody: false);
+            TypedCharacter target = CreateEntity(
+                world,
+                "HitPlanStandardRestTarget",
+                7391,
+                1,
+                LF2ObjectType.Character,
+                2,
+                10,
+                hasItr: false,
+                hasBody: true);
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.kind = 0;
+            itr.injury = 1;
+            itr.fall = 1;
+            itr.dvx = 1;
+            itr.arest = 10;
+            itr.vrest = 258;
+            itr.recover = 0;
+            attacker.FrameCache.Wrapper.characterData.definition_effect = 3;
+            target.FrameCache.Wrapper.characterData.definition_effect = 4;
+            attacker.FrameDelay = 7;
+            target.FrameDelay = -7;
+            world.Runtime.NativeStandardHitRest.SetTimingReduction4A9FF4(2);
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(3091);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(
+                diagnostics.CurrentTickPlanValid,
+                Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
+            Assert.That(attacker.FrameDelay, Is.EqualTo(7));
+            Assert.That(target.FrameDelay, Is.EqualTo(-7));
+            Assert.That(attacker.AttackExempt, Is.EqualTo(8));
+            Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(1));
         }
 
         private static Scenario CreateScenario()

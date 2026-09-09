@@ -294,6 +294,8 @@ namespace NTSD.Animation
                 task.opoint = spawnOp;
                 task.parent = spawner;
                 task.team = spawner.Team;
+                // Alignment contract: NTSD28-B0-OPOINT-OWNER-PROPAGATION-PRODUCTION-001.
+                task.ownerEntityIndex = spawner.OwnerEntityIndex;
                 ConfigureLateOpointPosition(task, spawner, frame, op);
                 task.dir = spawner.PS.dir;
                 task.dvz = 0f;
@@ -532,9 +534,10 @@ namespace NTSD.Animation
                 if (task.attackExempt > 0)
                     living.AttackExempt = task.attackExempt;
 
-                // 生成后写入 OwnerEntityIndex（C++ release 对齐 hit_Fa=5/6/8/9 case 直接写 [+1016]）
                 if (task.ownerEntityIndex >= 0)
                     living.OwnerEntityIndex = task.ownerEntityIndex;
+                if (task.trackedTargetSlot >= 0)
+                    living.ObjectAiTargetSlot3F8 = task.trackedTargetSlot;
 
                 return living;
             }
@@ -782,16 +785,15 @@ namespace NTSD.Animation
                     ? -1
                     : (parent.OwnerId > -1 ? parent.OwnerId : parent.StableId);
 
-                // kill_count 继承链：父实体已有归属时沿用，否则记录父实体 StableId。
                 if (objType == 0)
                 {
-                    living.KillCount = parent.KillCount > -1 ? parent.KillCount : GetRuntimeSlotOrStableId(parent);
+                    // Alignment contract: NTSD28-B5-ORDINARY-CREDIT-GATE-2F4-PRODUCER-CONSUMER-CORRECTION-001.
+                    living.Runtime.OrdinaryCreditGate2F4 =
+                        parent.Runtime.OrdinaryCreditGate2F4 > -1
+                            ? parent.Runtime.OrdinaryCreditGate2F4
+                            : GetRuntimeSlotOrStableId(parent);
                     living.HitStun = parent.HitStun;
                     living.AiControlled = releaseOpointSpawn;
-                }
-                else if (!releaseOpointSpawn)
-                {
-                    living.KillCount = parent.KillCount > -1 ? parent.KillCount : parent.StableId;
                 }
             }
 

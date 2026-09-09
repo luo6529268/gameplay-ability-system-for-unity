@@ -34,6 +34,10 @@ namespace NTSD.Animation.LF2Objects
         private readonly LF2HitCountersModule characterDatHitCounters;
         private readonly LF2CharacterDatHitResolver characterDatHitResolver;
         private readonly LF2CharacterDatInteractionResolver characterDatInteractionResolver;
+        private bool nativeC25FrameTickActive;
+        private bool renderPhaseTransitionArmedThisTick;
+        private bool nativePreviousActionOverrideActive;
+        private int nativePreviousActionOverride;
         private static readonly (
             int oid,
             int frameId,
@@ -331,11 +335,18 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.HitConfirmEa = value;
         }
 
-        /// <summary>生成者实体索引，opoint 生成时写入。</summary>
+        /// <summary>Authority Entity28+0x354 owner/credit physical slot。</summary>
         public int OwnerEntityIndex
         {
             get => Runtime.OwnerSlotIndex;
             set => Runtime.OwnerSlotIndex = value;
+        }
+
+        /// <summary>Authority Entity28+0x3F8 non-character AI target physical slot。</summary>
+        public int ObjectAiTargetSlot3F8
+        {
+            get => Runtime.ObjectAiTargetSlot3F8;
+            set => Runtime.ObjectAiTargetSlot3F8 = value;
         }
 
         /// <summary>发射/生成计数。</summary>
@@ -695,6 +706,43 @@ namespace NTSD.Animation.LF2Objects
 
         internal int GetHitRecordLastAdvanceTickForSnapshot(int slotIndex)
             => _hitRecordLastAdvanceTick[slotIndex];
+
+        internal static bool IsNativeSparkTerminalCell(int nativeSparkId)
+        {
+            return nativeSparkId >= 9 &&
+                   nativeSparkId <= 99 &&
+                   nativeSparkId % 10 == 9;
+        }
+
+        // Alignment contract: NTSD28-B3-NATIVE-SPARK-LIFECYCLE-CORE-001.
+        // This is logical native-cell maintenance; it must not depend on whether
+        // a presentation resource or renderer is available.
+        internal bool AdvanceNativeSparkLifecycle()
+        {
+            bool changed = false;
+            int index = 0;
+            while (index < HitRecordCount)
+            {
+                int nativeSparkId = _hitRecordDamage[index];
+                if (IsNativeSparkTerminalCell(nativeSparkId))
+                {
+                    if (index + 1 == HitRecordCount)
+                    {
+                        RemoveHitRecord(index);
+                        changed = true;
+                    }
+                }
+                else if (nativeSparkId >= 0 && nativeSparkId < 99)
+                {
+                    _hitRecordDamage[index] = nativeSparkId + 1;
+                    changed = true;
+                }
+
+                index++;
+            }
+
+            return changed;
+        }
 
         internal bool TryRestoreBaseShellForSnapshot(
             in BattleEntityBaseShellSnapshot state,
@@ -1358,8 +1406,63 @@ namespace NTSD.Animation.LF2Objects
             return parent;
         }
 
+        private int nativePhysicsCompletedTickForSerial = int.MinValue;
+
         public virtual void SimTransit(int tickIndex) { }
         public virtual void SimTU(int tickIndex) { }
+
+        internal void ExecuteNativePhysicsForWorldPass(int tickIndex)
+        {
+            nativePhysicsCompletedTickForSerial =
+                RunNativePhysicsForWorldPass(tickIndex)
+                    ? tickIndex
+                    : int.MinValue;
+        }
+
+        internal void MarkNativePhysicsCompletedForWorldPass(int tickIndex)
+        {
+            nativePhysicsCompletedTickForSerial = tickIndex;
+        }
+
+        internal void ExecutePostNativePhysicsSerialForWorldPass(int tickIndex)
+        {
+            bool nativePhysicsCompleted =
+                nativePhysicsCompletedTickForSerial == tickIndex;
+            RunPostNativePhysicsSerialForWorldPass(
+                tickIndex,
+                nativePhysicsCompleted);
+            nativePhysicsCompletedTickForSerial = int.MinValue;
+        }
+
+        internal virtual bool RunNativePhysicsForWorldPass(int tickIndex)
+        {
+            SimTransit(tickIndex);
+            SimTU(tickIndex);
+            return true;
+        }
+
+        internal virtual void RunPostNativePhysicsSerialForWorldPass(
+            int tickIndex,
+            bool nativePhysicsCompleted)
+        {
+        }
+
+        internal bool NormalizeNativeDeadCharacterResourcesForWorldPass()
+        {
+            if (Health == null || Runtime == null ||
+                GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character ||
+                Health.HP > 0)
+            {
+                return false;
+            }
+
+            // Alignment contract: NTSD28-B3-C06-NESTED-PHYSICS-PRODUCTION-001.
+            // Native current_mp maps to PP; Unity MP is an unrelated carrier.
+            Health.HPBound = 0;
+            Health.PP = 0;
+            return true;
+        }
         public virtual void SimPostInteraction(int tickIndex)
         {
             if (!UsesCharacterDatInteractionPhase())
@@ -1459,7 +1562,13 @@ namespace NTSD.Animation.LF2Objects
         private void RunHitFa1FrameLogic()
         {
             LF2Entity target = ResolveFrameLogicTargetByHitFa(1);
-            if (target == null || target.Health == null || target.Health.HP <= 0)
+            if (target == null)
+            {
+                if (ObjectAiTargetSlot3F8 == -1 && Health != null)
+                    Health.HP = 0;
+                return;
+            }
+            if (target.Health == null || target.Health.HP <= 0)
             {
                 if (Health != null)
                     Health.HP = 0;
@@ -1508,7 +1617,7 @@ namespace NTSD.Animation.LF2Objects
             LF2Entity target = ResolveFrameLogicTargetByHitFa(3);
             if (target == null)
             {
-                if (Health != null)
+                if (ObjectAiTargetSlot3F8 == -1 && Health != null)
                     Health.HP = 0;
 
                 return;
@@ -1700,7 +1809,15 @@ namespace NTSD.Animation.LF2Objects
                     task.directVx = vx;
                     task.directVy = vy;
                     task.directVz = 0f;
-                    task.ownerEntityIndex = enemySlot;
+                    if (hitFa == 6)
+                    {
+                        task.ownerEntityIndex = OwnerEntityIndex;
+                        task.trackedTargetSlot = enemySlot;
+                    }
+                    else
+                    {
+                        task.ownerEntityIndex = enemySlot;
+                    }
                     task.requiredRuntimeSlot = lastFreeSlot;
                     FillHitFa8SpawnTask(task);
                     LF2Entity spawned;
@@ -1808,7 +1925,7 @@ namespace NTSD.Animation.LF2Objects
         {
             LF2Entity target = ResolveFrameLogicTargetByHitFa(hitFa);
             NTSDEntityRuntime rawTargetRuntime = hitFa == 4 && target == null
-                ? Match?.GetRawRuntimeSlotState(OwnerEntityIndex)
+                ? Match?.GetRawRuntimeSlotState(ObjectAiTargetSlot3F8)
                 : null;
             bool rawSlotTarget = rawTargetRuntime != null;
 
@@ -1842,7 +1959,10 @@ namespace NTSD.Animation.LF2Objects
 
             if (target == null && !rawSlotTarget)
             {
-                if (hitFa != 4 && Health != null)
+                if (ObjectAiTargetSlot3F8 != -1)
+                    return;
+
+                if (hitFa != 4 && ObjectAiTargetSlot3F8 == -1 && Health != null)
                 {
                     Health.HP = 0;
                     return;
@@ -1917,7 +2037,7 @@ namespace NTSD.Animation.LF2Objects
                 SpawnHitFa7Clone();
 
             LF2Entity target = null;
-            int targetSlot = Runtime.OwnerSlotIndex;
+            int targetSlot = ObjectAiTargetSlot3F8;
             if (Match != null && targetSlot >= 0)
                 target = Match.FindEntityByRuntimeSlotForQuery(targetSlot) ??
                          Match.FindEntityByRuntimeSlotIncludingPending(targetSlot);
@@ -2121,7 +2241,8 @@ namespace NTSD.Animation.LF2Objects
                 task.directVx = (ally.GetRuntimeXInt() - GetRuntimeXInt()) / 50.0;
                 task.directVy = 0.0;
                 task.directVz = 0.0;
-                task.ownerEntityIndex = allySlot;
+                task.ownerEntityIndex = OwnerEntityIndex;
+                task.trackedTargetSlot = allySlot;
                 FillHitFa13SpawnTask(task);
                 task.initialRuntimeX = Runtime.XInt;
                 task.initialRuntimeY = Runtime.YInt;
@@ -2195,7 +2316,7 @@ namespace NTSD.Animation.LF2Objects
             Runtime.PendingFlushDestroy = true;
             ResolveFrameLogicTargetByHitFa(11);
 
-            if (OwnerEntityIndex < 0)
+            if (ObjectAiTargetSlot3F8 < 0)
             {
                 if (Health != null)
                     Health.HP = 0;
@@ -2302,9 +2423,9 @@ namespace NTSD.Animation.LF2Objects
 
             if (hitFa == 4)
             {
-                return OwnerEntityIndex >= 0
-                    ? Match.FindEntityByRuntimeSlotForQuery(OwnerEntityIndex) ??
-                      Match.FindEntityByRuntimeSlotIncludingPending(OwnerEntityIndex)
+                return ObjectAiTargetSlot3F8 >= 0
+                    ? Match.FindEntityByRuntimeSlotForQuery(ObjectAiTargetSlot3F8) ??
+                      Match.FindEntityByRuntimeSlotIncludingPending(ObjectAiTargetSlot3F8)
                     : null;
             }
 
@@ -2317,7 +2438,7 @@ namespace NTSD.Animation.LF2Objects
                     holderTeam = ResolveFrameLogicRelationIdentity(spawner);
             }
 
-            int currentTargetSlot = OwnerEntityIndex;
+            int currentTargetSlot = ObjectAiTargetSlot3F8;
             bool needScan = true;
             LF2Entity target = currentTargetSlot >= 0
                 ? Match.FindEntityByRuntimeSlotForQuery(currentTargetSlot)
@@ -2357,8 +2478,15 @@ namespace NTSD.Animation.LF2Objects
                         continue;
                     if (holderTeam >= 0 && objTeam == holderTeam)
                         continue;
-                    if ((obj.GetState() == LF2States.Lying || Mathf.Abs(obj.HitStun) > 2f) && currentTargetSlot != -1)
+                    if (obj.GetState() == LF2States.Lying)
+                    {
+                        if (currentTargetSlot != -1)
+                            continue;
+                    }
+                    else if (Mathf.Abs(obj.HitStun) > 2f)
+                    {
                         continue;
+                    }
 
                     int dist = Mathf.Abs(obj.GetRuntimeXInt() - GetRuntimeXInt()) +
                                Mathf.Abs(GetFrameLogicTargetZInt(obj, hitFa) - GetFrameLogicTargetZInt(this, hitFa));
@@ -2369,7 +2497,8 @@ namespace NTSD.Animation.LF2Objects
                     }
                 }
 
-                OwnerEntityIndex = bestSlot;
+                if (bestSlot >= 0)
+                    ObjectAiTargetSlot3F8 = bestSlot;
                 target = bestSlot >= 0
                     ? Match.FindEntityByRuntimeSlotForQuery(bestSlot)
                     : null;
@@ -2624,6 +2753,85 @@ namespace NTSD.Animation.LF2Objects
                 ApplyStateDataTransform(state - 8000, true);
         }
 
+        internal bool TryApplyNativeC25DefinitionTransition()
+        {
+            LF2FrameData sourceFrame = Frame?.D;
+            if (sourceFrame == null ||
+                sourceFrame.state < 8000 ||
+                sourceFrame.state >= 9000)
+            {
+                return false;
+            }
+
+            int targetObjectId = sourceFrame.state - 8000;
+            int targetAction = sourceFrame.next < 999 ? sourceFrame.next : 0;
+            SimulationWorld world = registeredWorld;
+            ObjectDefinition targetDefinition =
+                world?.RuntimeDataCatalog.GetObjectDefinition(targetObjectId);
+            if (targetDefinition == null &&
+                world?.RuntimeDataCatalog.IsSealedForBattle != true)
+            {
+                targetDefinition = GameDataManager.Instance?.GetObjectById(
+                    targetObjectId);
+            }
+
+            LF2CharacterDataWrapper targetWrapper =
+                ResolveRuntimeCharacterConfig(targetObjectId);
+            LF2FrameData targetFrame = FindAuthoredFrame(
+                targetWrapper?.characterData,
+                targetAction);
+            if (targetDefinition == null ||
+                targetWrapper?.characterData == null ||
+                targetFrame == null)
+            {
+                return false;
+            }
+
+            // Alignment contract: NTSD28-B3-C25A-B-DEFINITION-CLONE-001.
+            // C25a commits only after both the target DAT and the old-frame
+            // `next` action are resolved. The old 9995/4000/render-offset
+            // compatibility chain intentionally remains outside production.
+            ObjectId = targetDefinition.id;
+            FrameCache.Load(targetWrapper);
+            if (GetCurrentDataObjectTypeForSimulation() ==
+                (int)LF2ObjectType.Character)
+            {
+                EnsureSharedCharacterDatControllerForSimulation();
+            }
+
+            WriteCurrentFrameId(targetAction);
+            Frame.D = targetFrame;
+            Trans?.SyncDirectFrameData(
+                targetFrame.wait,
+                targetFrame.next,
+                targetAction);
+            AttackingCounter = 0;
+            Frame.Prev2 = targetAction;
+            Frame.Prev2D = targetFrame;
+            Runtime.PrevFrame2 = targetAction;
+            Runtime.RenderPicOffset = 0;
+            RefreshRuntimeSnapshot();
+            return true;
+        }
+
+        private static LF2FrameData FindAuthoredFrame(
+            LF2CharacterData data,
+            int frameId)
+        {
+            List<LF2FrameData> frames = data?.frames;
+            if (frames == null)
+                return null;
+
+            for (int index = 0; index < frames.Count; index++)
+            {
+                LF2FrameData frame = frames[index];
+                if (frame != null && frame.frameId == frameId)
+                    return frame;
+            }
+
+            return null;
+        }
+
         internal virtual void RunPreCollisionRecoveryPhase(int tickIndex)
         {
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character || Health == null)
@@ -2632,37 +2840,22 @@ namespace NTSD.Animation.LF2Objects
             BattleFlowRuntimeState flow = Match?.Runtime?.Flow;
             bool stepWaitGate = flow != null && flow.BattleStepMode == 1 && flow.BattleStepGate != 1;
             bool period12 = tickIndex % NTSDGlobal.Gameplay.HpRecoverPeriod == 0;
-            if (Health.HP > 0 && Health.HP < Health.HPBound && period12 && !stepWaitGate)
-                Health.HP++;
+            BattleRecoveryStatusWriter.ApplyHpRecovery(this, period12, stepWaitGate);
 
-            if (WeaponCount < 0 && period12 && !stepWaitGate)
-            {
-                int injury = NTSDGlobal.Gameplay.NegativeWeaponCountInjury;
-                if (FallDamageDiv > 0)
-                    injury = NTSDGlobal.Gameplay.NegativeWeaponCountScaledInjury / FallDamageDiv;
-
-                Health.HP -= injury;
-                Health.HPBound -= injury / NTSDGlobal.Gameplay.NegativeWeaponCountHpBoundDivisor;
-                if (Health.HP < 0)
-                    Health.HP = 0;
-                if (Health.HPBound < 0)
-                    Health.HPBound = 0;
-                ComboCountVic += 9;
-            }
+            // Alignment contract: NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001.
+            BattleNegativeEnvironmentRecoveryWriter.Apply(
+                RegisteredWorldForSimulation,
+                this);
 
             if (tickIndex % NTSDGlobal.Gameplay.PpRecoverPeriod != 0)
                 return;
-            if (KillCount != -1 && Health.PP >= NTSDGlobal.Gameplay.PpRecoverLowLimit)
+            if (Runtime.OrdinaryCreditGate2F4 != -1 &&
+                Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit)
                 return;
             if (Health.PP >= NTSDGlobal.Gameplay.PpRecoverCap || HitStun < 0 || stepWaitGate)
                 return;
 
-            int hpForRate = System.Math.Min(Health.HP, NTSDGlobal.Gameplay.PpRecoverCap);
-            if (ObjectId == 51 || ObjectId == 52)
-                hpForRate /= 2;
-
-            Health.PP += ((NTSDGlobal.Gameplay.PpRecoverCap - hpForRate) /
-                          NTSDGlobal.Gameplay.PpRecoverHpRateDivisor) + 1;
+            BattleRecoveryStatusWriter.ApplyMpRecovery(this);
         }
 
         /// <summary>
@@ -2708,15 +2901,41 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime == null)
                 return;
 
+            RunCharacterInputProducerPhaseForKnownCharacterDat(tickIndex);
+            RunCharacterInputRoutingPhaseForKnownCharacterDat(tickIndex);
+        }
+
+        internal virtual void RunCharacterInputProducerPhaseForKnownCharacterDat(
+            int tickIndex)
+        {
+            if (Runtime == null)
+                return;
+
             if (AiControlled)
                 Match?.PrepareAiInputBasic(this, tickIndex);
+        }
+
+        internal virtual void RunCharacterInputRoutingPhaseForKnownCharacterDat(
+            int tickIndex,
+            bool applyFrameMotionTail = true)
+        {
+            if (Runtime == null)
+                return;
 
             if (this is LF2Character)
                 return;
 
+            if (registeredWorld?.UsesNTSD28NativeInputPipeline == true)
+            {
+                if (applyFrameMotionTail)
+                    ApplyNonCharacterFrameVelocityForFrameAdvance();
+                return;
+            }
+
             RunSharedCharacterDatFrameJumpInputPhase();
             RunSharedCharacterDatStandingActionInputPhase();
-            ApplyNonCharacterFrameVelocityForFrameAdvance();
+            if (applyFrameMotionTail)
+                ApplyNonCharacterFrameVelocityForFrameAdvance();
         }
 
         /// <summary>
@@ -2780,7 +2999,9 @@ namespace NTSD.Animation.LF2Objects
             sharedCharacterDatInputModule.PollFromBuffer(
                 inputBuffer,
                 tickIndex,
-                this);
+                this,
+                registeredWorld == null ||
+                registeredWorld.ShouldSampleHumanCurrentInput);
         }
 
         private void RunSharedCharacterDatFrameJumpInputPhase()
@@ -3568,6 +3789,30 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
+        internal bool WriteNativeInputActionUnchecked(int frameId)
+        {
+            if (Frame == null || Runtime == null)
+                return false;
+
+            WriteCurrentFrameId(frameId);
+            LF2FrameData targetFrame = FrameCache?.HasFrame(frameId) == true
+                ? FrameCache.GetFrameDataById(frameId)
+                : null;
+            Frame.D = targetFrame;
+            if (targetFrame == null)
+            {
+                Runtime.NextFrame = 0;
+                return true;
+            }
+
+            Trans?.SyncDirectFrameData(
+                targetFrame.wait,
+                targetFrame.next,
+                Trans?.WaitCounter ?? 0);
+            Runtime.NextFrame = targetFrame.next;
+            return true;
+        }
+
         private void ApplySharedCharacterDatSpecialStateLaneControl()
         {
             if (Runtime == null || GetRuntimeYInt() != 0)
@@ -3659,38 +3904,9 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool TryCharacterDatInputFrameJumpCompatibility(int frameId)
         {
-            bool flipFacing = false;
-            if (frameId < 0)
-            {
-                frameId = -frameId;
-                flipFacing = true;
-            }
-
-            if (frameId == 999)
-                frameId = 0;
-
-            if (FrameCache?.HasFrame(frameId) != true || Health == null)
-                return false;
-
-            LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);
-            bool ppMode = IsPpModeEnabled();
-            if (ppMode)
-            {
-                int ppCost = targetFrame.mp % 1000;
-                int hpCost = (targetFrame.mp / 1000) * 10;
-                if (Health.PP < ppCost || Health.HP <= hpCost)
-                    return false;
-
-                Health.HP -= hpCost;
-                Health.PP -= ppCost;
-                ComboCountVic += hpCost;
-                SpendPpDisplay(ppCost);
-            }
-
-            if (flipFacing && ppMode)
-                SwitchDir(Runtime.Dir == "right" ? "left" : "right");
-
-            return SetSharedCharacterDatInputFrameDirect(frameId);
+            return BattleCharacterActionWriter
+                .ApplyNativeInputActionCore(this, frameId)
+                .Applied;
         }
 
         /// <summary>
@@ -3978,6 +4194,73 @@ namespace NTSD.Animation.LF2Objects
                    writesTeleportRuntime;
         }
 
+        internal bool RunNativeTeleportState(
+            System.Collections.Generic.List<LF2Entity> entities)
+        {
+            if (entities == null || Runtime == null || Health == null)
+                return false;
+
+            int state = Frame?.D?.state ?? -1;
+            bool toEnemy = state == LF2States.TeleportToEnemy;
+            bool toTeammate = state == LF2States.TeleportToTeammate;
+            if (!toEnemy && !toTeammate)
+                return false;
+
+            LF2Entity best = null;
+            int bestDistance = toEnemy ? 10000 : -1;
+            for (int i = 0; i < entities.Count; i++)
+            {
+                LF2Entity candidate = entities[i];
+                if (candidate == null || ReferenceEquals(candidate, this) ||
+                    candidate.Runtime == null || candidate.Health == null ||
+                    candidate.GetCurrentDataObjectTypeForSimulation() !=
+                        (int)LF2ObjectType.Character ||
+                    candidate.Health.HP <= 0)
+                {
+                    continue;
+                }
+
+                bool sameGroup = candidate.RelationTeam == RelationTeam;
+                if ((toEnemy && sameGroup) || (toTeammate && !sameGroup))
+                    continue;
+
+                int distance =
+                    System.Math.Abs(candidate.GetRenderZInt() - GetRenderZInt()) +
+                    System.Math.Abs(candidate.GetRuntimeXInt() - GetRuntimeXInt());
+                bool selected = toEnemy
+                    ? distance < bestDistance
+                    : distance > bestDistance;
+                if (!selected)
+                    continue;
+
+                best = candidate;
+                bestDistance = distance;
+            }
+
+            int nextX = Runtime.XInt;
+            int nextZ = Runtime.ZInt;
+            int nextY = (int)(PS?.groundY ?? 0f);
+            if (best != null)
+            {
+                int offset = toEnemy ? 120 : 60;
+                nextX = best.GetRuntimeXInt() +
+                    (Runtime.IsFacingLeft ? offset : -offset);
+                nextY = (int)(best.PS?.groundY ?? 0f);
+                nextZ = best.GetRenderZInt() + 1;
+            }
+
+            Runtime.X = nextX;
+            Runtime.XInt = nextX;
+            Runtime.Y = nextY;
+            Runtime.YInt = nextY;
+            Runtime.Z = nextZ;
+            Runtime.ZInt = nextZ;
+            Runtime.Vx = 0.0;
+            Runtime.Vy = 0.0;
+            Runtime.Vz = 0.0;
+            return true;
+        }
+
         internal virtual void RunLateDeathOpointPreCleanupPhase()
         {
             if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
@@ -4057,6 +4340,69 @@ namespace NTSD.Animation.LF2Objects
             SpawnLateTransitionEffects();
         }
 
+        internal void RunLateTailAfterNativePreviousActionCommit(
+            int previousActionBeforeCommit)
+        {
+            nativePreviousActionOverride = previousActionBeforeCommit;
+            nativePreviousActionOverrideActive = true;
+            try
+            {
+                RunLateTailBeforePrevFrame();
+            }
+            finally
+            {
+                nativePreviousActionOverrideActive = false;
+                nativePreviousActionOverride = 0;
+            }
+        }
+
+        internal int ResolveLateTransitionPreviousActionForWorldPass()
+        {
+            return nativePreviousActionOverrideActive
+                ? nativePreviousActionOverride
+                : Frame?.Prev ?? 0;
+        }
+
+        internal bool RunNativeC25State18BrokenWeaponParticles()
+        {
+            LF2FrameData previousFrame = GetFrameDataById(Frame?.Prev ?? 0);
+            LF2FrameData currentFrame = Frame?.D;
+            if (previousFrame == null || currentFrame == null)
+                return false;
+
+            // The live Unity host does not yet expose the native global-delay
+            // producer. Its current formal caller is delay-clear; B8 owns the
+            // future dynamic producer without changing this C25l transaction.
+            int count = BattleNativeState18ParticleKernel.ResolvePreRollCount(
+                previousFrame.state,
+                currentFrame.state,
+                0);
+            if (count < 0)
+                count = BattleRandInt(0, 4) == 0 ? 1 : 0;
+            if (count <= 0)
+                return false;
+
+            bool hasEffectResources =
+                ResolveObjectPointFactoryForSimulation() != null &&
+                ResolveRuntimeCharacterConfig(999) != null;
+            if (!hasEffectResources)
+                return false;
+
+            int availableSlots = CountAvailableTransitionEffectSlots();
+            bool spawned = SpawnTransitionEffectBranch2(
+                count,
+                ref availableSlots);
+            if (spawned)
+            {
+                if (Match == null)
+                    RefreshRuntimeSnapshot();
+                else
+                    Match.RefreshLateTransitionRuntimeSnapshot(this);
+            }
+
+            return spawned;
+        }
+
         public virtual void MirrorLatePrevFrame()
         {
             if (Frame != null)
@@ -4065,7 +4411,9 @@ namespace NTSD.Animation.LF2Objects
 
         private void SpawnLateTransitionEffects()
         {
-            LF2FrameData prevFrame = GetFrameDataById(Frame?.Prev ?? 0);
+            int previousAction =
+                ResolveLateTransitionPreviousActionForWorldPass();
+            LF2FrameData prevFrame = GetFrameDataById(previousAction);
             LF2FrameData currentFrame = Frame?.D;
             if (prevFrame == null || currentFrame == null)
                 return;
@@ -4073,44 +4421,19 @@ namespace NTSD.Animation.LF2Objects
             int prevState = prevFrame.state;
             int currentState = currentFrame.state;
             bool shouldSpawnBranch1 =
-                (prevState == 13 || (Frame?.Prev ?? 0) == 200) &&
+                (prevState == 13 || previousAction == 200) &&
                 currentState != 13 && (Frame?.N ?? 0) != 200;
-            bool shouldSpawnBranch2 = prevState == 18 || prevState == 19;
-            if (!shouldSpawnBranch1 && !shouldSpawnBranch2)
+            if (!shouldSpawnBranch1)
                 return;
 
             bool spawned = false;
             bool hasEffectResources = ResolveObjectPointFactoryForSimulation() != null &&
                                       ResolveRuntimeCharacterConfig(999) != null;
-            int availableSlots = 0;
-            bool availableSlotsCalculated = false;
-
-            if (hasEffectResources && shouldSpawnBranch1)
+            if (hasEffectResources)
             {
-                availableSlots = CountAvailableTransitionEffectSlots();
-                availableSlotsCalculated = true;
+                int availableSlots = CountAvailableTransitionEffectSlots();
                 Match?.QueueSound("SFX_066", Runtime.XInt);
                 spawned |= SpawnTransitionEffectBranch1(ref availableSlots);
-            }
-
-            if (!shouldSpawnBranch2)
-                return;
-
-            int count = 0;
-            if (currentState != 18 && currentState != 19)
-                count = 7;
-            else if (BattleRandInt(0, 4) == 0)
-                count = 1;
-
-            if (count > 0)
-            {
-                if (hasEffectResources && !availableSlotsCalculated)
-                {
-                    availableSlots = CountAvailableTransitionEffectSlots();
-                    availableSlotsCalculated = true;
-                }
-
-                spawned |= SpawnTransitionEffectBranch2(count, ref availableSlots);
             }
 
             if (spawned)
@@ -4415,6 +4738,45 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual int GetCurrentDataObjectType() => GetCurrentDataObjectTypeForSimulation();
 
+        internal bool TryGetNativeArmorRecoveryProfileForWorldPass(
+            out int armorHp,
+            out int recover)
+        {
+            armorHp = 0;
+            recover = 0;
+            LF2CharacterData data =
+                (this as LF2LivingObject)?._FrameDataWrapper?.characterData ??
+                FrameCache?.Wrapper?.characterData;
+            if (data?.armors == null || data.armors.Count == 0)
+                return false;
+
+            LF2ArmorData armor = data.armors[0];
+            if (armor == null)
+                return false;
+
+            armorHp = armor.hp;
+            recover = armor.recover;
+            return true;
+        }
+
+        internal void InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn()
+        {
+            if (Runtime == null)
+                return;
+
+            if (TryGetNativeArmorRecoveryProfileForWorldPass(
+                out int armorHp,
+                out int recover))
+            {
+                Runtime.RuntimeArmorHp118 = armorHp;
+                Runtime.ArmorRecoveryTimer11C = recover > 0 ? recover : -1;
+                return;
+            }
+
+            Runtime.RuntimeArmorHp118 = 0;
+            Runtime.ArmorRecoveryTimer11C = -1;
+        }
+
         /// <summary>
         /// 参考 C# release 的 `ObjTypeRules.ToRuntimeObjType(...)`：
         /// 运行时粗分类只区分“角色”与“非角色”。
@@ -4655,15 +5017,15 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual int ResolveReleaseNeutralHolderSlotOrImplicitZero()
         {
-            int slot = HolderCopySlot;
+            // Alignment contract:
+            // NTSD28-B5-KIND5-LINKED-PARENT-SLOT-CORRECTION-001.
+            int slot = Runtime?.HolderStableId ?? -1;
             return slot >= 0 ? slot : 0;
         }
 
         public virtual int ResolveReleaseNegativeLinkHolderSlotOrImplicitZero()
         {
-            int slot = Runtime.HolderStableId;
-            if (slot < 0)
-                slot = HolderCopySlot;
+            int slot = Runtime?.HolderStableId ?? -1;
             return slot >= 0 ? slot : 0;
         }
 
@@ -4766,6 +5128,10 @@ namespace NTSD.Animation.LF2Objects
         public virtual void ResetPooledEntityState()
         {
             requiredRuntimeSlot = -1;
+            nativeC25FrameTickActive = false;
+            renderPhaseTransitionArmedThisTick = false;
+            nativePreviousActionOverrideActive = false;
+            nativePreviousActionOverride = 0;
             Runtime.PendingFlushDestroy = false;
             Runtime.TransformOriginalObjectId = -1;
             Runtime.TransformTargetObjectId = -1;
@@ -4828,6 +5194,19 @@ namespace NTSD.Animation.LF2Objects
         public virtual void RunCpointCheckStep10()
         {
             Match?.CpointWriter.RunKind1(Match, this);
+        }
+
+        public virtual void RunCpointAdvanceStep10()
+        {
+            BattleCpointWriter writer = Match?.CpointWriter;
+            if (writer == null)
+                return;
+
+            // Alignment contract: NTSD28-B6-CATCH-EXACT-CONSUMER-AND-ADVANCE-ORDER-PRODUCTION-001.
+            if (writer.ShouldRunKind1Advance(this))
+                RunCpointCheckStep10();
+            else
+                RunCpointMismatchTailStep10();
         }
 
         public virtual void RunCpointMismatchTailStep10()
@@ -5162,7 +5541,8 @@ namespace NTSD.Animation.LF2Objects
         /// </summary>
         internal void RunReleaseFrameTickCounters()
         {
-            // AttackExempt is now decremented in RunCommonFrameTick before LinkState guard (BMD-062)
+            if (nativeC25FrameTickActive)
+                return;
 
             if (HitStun > 0)
                 HitStun--;
@@ -5202,6 +5582,24 @@ namespace NTSD.Animation.LF2Objects
             }
 
             HitStun = 15;
+            renderPhaseTransitionArmedThisTick = true;
+        }
+
+        internal bool NativeC25ReactionTailOwnsFrameCounters =>
+            nativeC25FrameTickActive;
+
+        internal void BeginNativeC25FrameTickForWorldPass()
+        {
+            nativeC25FrameTickActive = true;
+            renderPhaseTransitionArmedThisTick = false;
+        }
+
+        internal bool EndNativeC25FrameTickForWorldPass()
+        {
+            bool armed = renderPhaseTransitionArmedThisTick;
+            renderPhaseTransitionArmedThisTick = false;
+            nativeC25FrameTickActive = false;
+            return armed;
         }
 
         internal void ApplyCaughtExitHitStopForWorldPass(int previousFrameId)
@@ -5338,15 +5736,31 @@ namespace NTSD.Animation.LF2Objects
                     context.spriteWidthPx);
             }
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
-            if (ShouldResolveCharacterLanding(stepResult))
+            ApplyCurrentDatType0State1218EnvironmentDamage(
+                Frame?.D,
+                stepResult);
+            bool state1218ContactResolved =
+                ApplyCurrentDatType0State1218ContactAction(
+                    Frame?.D,
+                    stepResult);
+            if (!state1218ContactResolved &&
+                ShouldResolveCharacterLanding(stepResult))
             {
-                ApplySharedCharacterDatLandingIfNeeded(
-                    stepResult.VerticalVelocityBeforeLanding);
+                if (!ApplyCurrentDatType0OrdinaryLanding(
+                        Frame?.D,
+                        stepResult))
+                {
+                    ApplySharedCharacterDatLandingIfNeeded(
+                        stepResult.VerticalVelocityBeforeLanding);
+                }
             }
 
+            ApplyCurrentDatType0AirborneAction(
+                Frame?.D,
+                stepResult,
+                tickIndex);
+
             Runtime.SyncIntegerPosition();
-            PromoteSharedCharacterDatState12AirborneFrameIfNeeded(tickIndex);
-            PromoteSharedCharacterDatBurningAirborneFrame205IfNeeded();
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
         }
@@ -5364,6 +5778,208 @@ namespace NTSD.Animation.LF2Objects
         internal bool ShouldResolveCharacterLanding(BattleMechanicsStepResult stepResult)
         {
             return stepResult.Landed;
+        }
+
+        internal bool ApplyCurrentDatType0OrdinaryLanding(
+            LF2FrameData landingFrame,
+            BattleMechanicsStepResult stepResult)
+        {
+            if (Runtime == null || landingFrame == null || !stepResult.Landed ||
+                landingFrame.state == LF2States.Falling ||
+                landingFrame.state == LF2States.Burning)
+            {
+                return false;
+            }
+
+            int currentAction = Frame?.N ?? 0;
+            Runtime.Y = stepResult.EffectiveFloorY;
+            Runtime.Vy = 0.0;
+            Runtime.Vx /= 3.0;
+
+            int landingAction;
+            if (landingFrame.state == LF2States.CustomSkill1)
+                landingAction = 94;
+            else if (currentAction == LF2StandardFrames.JumpingAir ||
+                     landingFrame.state == LF2States.Rowing)
+                landingAction = LF2StandardFrames.Crouch;
+            else if (landingFrame.hit_g != 0)
+                landingAction = landingFrame.hit_g;
+            else
+                landingAction = LF2StandardFrames.Crouch2;
+
+            DirectWriteRawFramePreserveWaitCounter(landingAction);
+            AttackingCounter = 0;
+            return true;
+        }
+
+        internal bool ApplyCurrentDatType0State1218ContactAction(
+            LF2FrameData contactFrame,
+            BattleMechanicsStepResult stepResult)
+        {
+            if (Runtime == null || contactFrame == null ||
+                !stepResult.EffectiveFloorContact ||
+                GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character ||
+                (contactFrame.state != LF2States.Falling &&
+                 contactFrame.state != LF2States.Burning))
+            {
+                return false;
+            }
+
+            int currentAction = Frame?.N ?? 0;
+            bool hardLanding =
+                contactFrame.state == LF2States.Burning ||
+                Runtime.Vy > 11.0 ||
+                Runtime.Vx > 9.0 ||
+                Runtime.Vx < -9.0;
+
+            Runtime.Y = stepResult.EffectiveFloorY;
+            int action;
+            if (!hardLanding)
+            {
+                Runtime.Vy = 0.0;
+                Runtime.Vx /= 3.0;
+                action = currentAction >= 186 ? 231 : 230;
+                DirectWriteRawFramePreserveWaitCounter(action);
+                AttackingCounter = 0;
+                return true;
+            }
+
+            Runtime.Vy = -3.5;
+            if (Runtime.Vx > 7.0)
+                Runtime.Vx = 7.0;
+            else if (Runtime.Vx < -7.0)
+                Runtime.Vx = -7.0;
+
+            if (Runtime.StatusGain1CC == 1)
+            {
+                BattleNativeHardLandingMotionKernel.Consume(Runtime);
+                action = currentAction >= 186 &&
+                         contactFrame.state != LF2States.Burning
+                    ? Runtime.StatusPickedAction1D4
+                    : Runtime.StatusPickingAction1D8;
+            }
+            else
+            {
+                action = currentAction < 186 ||
+                         contactFrame.state == LF2States.Burning
+                    ? 185
+                    : 191;
+            }
+
+            DirectWriteRawFramePreserveWaitCounter(action);
+            return true;
+        }
+
+        internal bool ApplyCurrentDatType0State1218EnvironmentDamage(
+            LF2FrameData contactFrame,
+            BattleMechanicsStepResult stepResult)
+        {
+            if (Runtime == null || contactFrame == null ||
+                !stepResult.EffectiveFloorContact ||
+                GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character ||
+                (contactFrame.state != LF2States.Falling &&
+                 contactFrame.state != LF2States.Burning) ||
+                Runtime.EnvironmentState320 == 0)
+            {
+                return false;
+            }
+
+            int encodedDamage = Runtime.EnvironmentState320;
+            int damage = encodedDamage < 0 ? -encodedDamage : encodedDamage;
+            if (Runtime.IncomingDamageScale340 > 0)
+            {
+                damage = (int)(((long)damage * 100L) /
+                    Runtime.IncomingDamageScale340);
+            }
+
+            NTSDEntityRuntime credit = null;
+            SimulationWorld world = RegisteredWorldForSimulation;
+            if (world != null && Runtime.CatchSourceSlot90 >= 0)
+            {
+                int creditSlot = Runtime.CatchSourceSlot90 >= 0x2000
+                    ? Runtime.CatchSourceSlot90 - 0x2000
+                    : Runtime.CatchSourceSlot90;
+                credit = ResolveEnvironmentCreditRuntime(world, creditSlot);
+                for (int depth = 0; credit != null && depth < 2; depth++)
+                {
+                    if (credit.OwnerSlotIndex < 0)
+                        break;
+
+                    NTSDEntityRuntime next = ResolveEnvironmentCreditRuntime(
+                        world,
+                        credit.OwnerSlotIndex);
+                    if (next == null)
+                        break;
+                    credit = next;
+                }
+            }
+
+            if (Runtime.HP > 0 &&
+                (long)Runtime.HP - damage <= 0L &&
+                credit != null)
+            {
+                credit.KnockoutCount358++;
+            }
+
+            Runtime.HP -= damage;
+            Runtime.HPBound -= damage;
+            Runtime.InputHpConsumedTotal34C += damage;
+            if (credit != null)
+                credit.InputScoreTotal348 += damage;
+            Runtime.EnvironmentState320 = 1;
+            return true;
+        }
+
+        private static NTSDEntityRuntime ResolveEnvironmentCreditRuntime(
+            SimulationWorld world,
+            int slot)
+        {
+            if (world == null ||
+                !world.TryGetRuntimeSlotReadOnlyView(
+                    slot,
+                    out RuntimeSlotTable.ReadOnlySlotView view) ||
+                !view.Claimed)
+            {
+                return null;
+            }
+
+            return view.Entity?.Runtime ?? view.RawRuntime;
+        }
+
+        internal bool ApplyCurrentDatType0AirborneAction(
+            LF2FrameData frame,
+            BattleMechanicsStepResult stepResult,
+            int tickIndex)
+        {
+            if (Runtime == null || frame == null || !stepResult.Airborne)
+                return false;
+
+            SimulationWorld world = RegisteredWorldForSimulation;
+            int upcomingPhase12;
+            if (world != null)
+            {
+                upcomingPhase12 = (world.NativeResourcePhase12 + 1) % 12;
+            }
+            else
+            {
+                upcomingPhase12 = tickIndex % 12;
+                if (upcomingPhase12 < 0)
+                    upcomingPhase12 += 12;
+            }
+
+            int action = BattleNativeType0AirborneActionKernel.Resolve(
+                frame.state,
+                Frame?.N ?? 0,
+                Runtime.Vy,
+                Runtime.EnvironmentState320,
+                upcomingPhase12);
+            if (action < 0)
+                return false;
+
+            DirectWriteRawFramePreserveWaitCounter(action);
+            return true;
         }
 
         protected bool RunSharedNonCharacterDatFrameAdvance()
@@ -5384,10 +6000,12 @@ namespace NTSD.Animation.LF2Objects
             if (Runtime == null || frame == null)
                 return false;
 
-            if (dataType == (int)LF2ObjectType.ThrowWeapon || ObjectId == 120)
-                Runtime.X += Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
-            if (ObjectId == 101)
-                Runtime.X -= Runtime.Vx * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+            int objectIdAlias = FrameCache?.Wrapper?.characterData?.type_sub ?? 0;
+            Runtime.X += BattleNativeIdentityXExtraKernel.ResolveExtra(
+                dataType,
+                ObjectId,
+                objectIdAlias,
+                Runtime.Vx);
 
             if (dataType == (int)LF2ObjectType.SpecialAttack && frame.hit_j > 0)
             {
@@ -5405,9 +6023,41 @@ namespace NTSD.Animation.LF2Objects
             }
 
             double gravity = ResolveCurrentDatWeaponGravity(dataType, frame.state);
-            bool landed = CharacterMechanics.WeaponDynamics(Runtime, gravity, out double landingVy);
+            BattleNonCharacterMechanicsStepResult step =
+                CharacterMechanics.StepNonCharacterBattleLogic(
+                    Runtime,
+                    gravity);
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
-            ApplyCurrentDatNonCharacterLanding(dataType, frame, landingVy, landed);
+            if (dataType == (int)LF2ObjectType.LightWeapon)
+            {
+                ApplyCurrentDatType1Landing(
+                    frame,
+                    step.VerticalVelocityBeforeMove,
+                    step.Type1LandingPredicate,
+                    step.CollisionYReference);
+            }
+            else if (dataType == (int)LF2ObjectType.HeavyWeapon ||
+                     dataType == (int)LF2ObjectType.ThrowWeapon ||
+                     dataType == (int)LF2ObjectType.Drink)
+            {
+                bool resolvesLanding =
+                    dataType == (int)LF2ObjectType.HeavyWeapon
+                        ? step.PenetratedEffectiveFloor
+                        : step.Type4Or6LandingPredicate;
+                ApplyCurrentDatNonCharacterLanding(
+                    dataType,
+                    frame,
+                    step.VerticalVelocityBeforeMove,
+                    resolvesLanding,
+                    step.CollisionYReference);
+            }
+            else
+            {
+                ApplyCurrentDatType3AndOid999Landing(
+                    dataType,
+                    frame,
+                    step);
+            }
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
             Runtime.SyncIntegerPosition();
@@ -5421,6 +6071,21 @@ namespace NTSD.Animation.LF2Objects
             double landingVy,
             bool crossedGround)
         {
+            return ApplyCurrentDatNonCharacterLanding(
+                dataType,
+                landingFrame,
+                landingVy,
+                crossedGround,
+                0);
+        }
+
+        protected bool ApplyCurrentDatNonCharacterLanding(
+            int dataType,
+            LF2FrameData landingFrame,
+            double landingVy,
+            bool crossedGround,
+            int landingY)
+        {
             if (Runtime == null || landingFrame == null)
                 return false;
 
@@ -5431,35 +6096,11 @@ namespace NTSD.Animation.LF2Objects
 
             if (dataType == (int)LF2ObjectType.LightWeapon)
             {
-                if (!crossedGround || landingVy <= 0.0001)
-                    return true;
-
-                Runtime.WeaponFlightCounter -= dropHurt;
-                Runtime.Y = 0.0;
-                if (landingVy <= 9.9)
-                {
-                    Runtime.Vy = 0.0;
-                    SetFrameTickRawDirect(state == LF2States.WeaponThrowing ? 70 : 60);
-                    Runtime.Vx *= 0.5;
-                    AttackingCounter = 0;
-                }
-                else if (state == LF2States.WeaponThrowing)
-                {
-                    Runtime.Vy = -8.0;
-                    SetFrameTickRawDirect(7);
-                    SwitchDir(Runtime.Dir == "left" ? "right" : "left");
-                    Runtime.Vx *= 0.5;
-                    QueueBattleSound(dropSound);
-                }
-                else
-                {
-                    Runtime.Vy = 0.0;
-                    SetFrameTickRawDirect(60);
-                    Runtime.Vx *= 0.5;
-                    AttackingCounter = 0;
-                }
-
-                return true;
+                return ApplyCurrentDatType1Landing(
+                    landingFrame,
+                    landingVy,
+                    crossedGround && landingVy > 0.0001,
+                    landingY);
             }
 
             if (dataType == (int)LF2ObjectType.HeavyWeapon)
@@ -5468,7 +6109,7 @@ namespace NTSD.Animation.LF2Objects
                     return true;
 
                 Runtime.WeaponFlightCounter -= 1;
-                Runtime.Y = 0.0;
+                Runtime.Y = landingY;
                 if (landingVy > 9.0)
                 {
                     QueueBattleSound(dropSound);
@@ -5481,7 +6122,7 @@ namespace NTSD.Animation.LF2Objects
                     Runtime.WeaponFlightCounter -= dropHurt;
                     if (Runtime.WeaponFlightCounter < 0)
                         Runtime.WeaponFlightCounter = 0;
-                    Runtime.Vy = 0.0;
+                    Runtime.Vy = landingY;
                     SetFrameTickRawDirect(20);
                     Runtime.Vx *= 0.5;
                     AttackingCounter = 0;
@@ -5500,7 +6141,7 @@ namespace NTSD.Animation.LF2Objects
                 if (dataType == (int)LF2ObjectType.Drink && Health != null && Health.HP <= 0)
                     Runtime.WeaponFlightCounter = -1;
 
-                Runtime.Y = 0.0;
+                Runtime.Y = landingY;
                 bool highSpeed = landingVy > 8.5 || Runtime.Vx < -10.0 || Runtime.Vx > 10.0;
                 bool bounceState = state == LF2States.WeaponThrowing || state == LF2States.WeaponInSky;
                 if (highSpeed && bounceState)
@@ -5534,6 +6175,82 @@ namespace NTSD.Animation.LF2Objects
             }
 
             return false;
+        }
+
+        internal bool ApplyCurrentDatType3AndOid999Landing(
+            int dataType,
+            LF2FrameData landingFrame,
+            BattleNonCharacterMechanicsStepResult step)
+        {
+            if (Runtime == null || landingFrame == null || step.Airborne)
+                return false;
+
+            bool specialType3State =
+                dataType == (int)LF2ObjectType.SpecialAttack &&
+                (landingFrame.state == 3000 ||
+                 landingFrame.state == 3006 ||
+                 landingFrame.state == 3007);
+            bool resolved = false;
+            if (specialType3State)
+            {
+                Runtime.Y = step.CollisionYReference;
+                if (landingFrame.hit_g != 0)
+                {
+                    SetFrameTickRawDirect(landingFrame.hit_g);
+                    Runtime.Vx = 0.0;
+                    Runtime.Vy = 0.0;
+                    Runtime.Vz = 0.0;
+                }
+
+                resolved = true;
+            }
+
+            if (ObjectId == 999 && step.ContactY < -9.0)
+            {
+                Runtime.Y = 9.0;
+                Runtime.Vx = 9.0;
+                Runtime.Vy = 9.0;
+                SetFrameTickRawDirect(101);
+                AttackingCounter = 0;
+                return true;
+            }
+
+            return resolved;
+        }
+
+        private bool ApplyCurrentDatType1Landing(
+            LF2FrameData landingFrame,
+            double landingVy,
+            bool resolvesLanding,
+            int landingY)
+        {
+            if (!resolvesLanding)
+                return true;
+
+            LF2CharacterData characterData = FrameCache?.Wrapper?.characterData;
+            int dropHurt = characterData?.weapon_drop_hurt ?? 0;
+            string dropSound = characterData?.weapon_drop_sound;
+            int state = landingFrame.state;
+            Runtime.WeaponFlightCounter -= dropHurt;
+            Runtime.Y = landingY;
+            if (BattleNativeType1LandingKernel.ShouldBounce(state, landingVy))
+            {
+                Runtime.Vy = -8.0;
+                SetFrameTickRawDirect(7);
+                SwitchDir(Runtime.Dir == "left" ? "right" : "left");
+                Runtime.Vx *= 0.5;
+                QueueBattleSound(dropSound);
+            }
+            else
+            {
+                Runtime.Vy = 0.0;
+                SetFrameTickRawDirect(
+                    state == LF2States.WeaponThrowing ? 70 : 60);
+                Runtime.Vx *= 0.5;
+                AttackingCounter = 0;
+            }
+
+            return true;
         }
 
         private double ResolveCurrentDatWeaponGravity(int dataType, int state)
@@ -5782,11 +6499,16 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual bool RunCommonFrameTick()
         {
+            return RunNativeC25FrameBodyForWorldPass();
+        }
+
+        internal bool RunNativeC25FrameBodyForWorldPass()
+        {
             int dataType = GetCurrentDataObjectTypeForSimulation();
             if (FrameDelay != 0 && dataType != (int)LF2ObjectType.SpecialAttack)
                 return false;
 
-            if (AttackExempt > 0)
+            if (!nativeC25FrameTickActive && AttackExempt > 0)
                 AttackExempt--;
 
             if ((Runtime?.LinkState ?? 0) < 0)
@@ -5799,16 +6521,44 @@ namespace NTSD.Animation.LF2Objects
                 frame.PrimaryCatchPoint.Kind == 2)
                 return false;
 
-            if (dataType == (int)LF2ObjectType.SpecialAttack && frame.hit_a > 0 && Health != null)
+            if (nativeC25FrameTickActive &&
+                dataType == (int)LF2ObjectType.Character &&
+                (Runtime?.SlotIndex ?? -1) >= 0 &&
+                Runtime.SlotIndex < 20 &&
+                (Health?.HP ?? 0) <= 0 &&
+                frame.state == LF2States.Lying &&
+                Runtime.HP2Orig <= 1 &&
+                Runtime.RespawnCount <= 0)
             {
-                Health.HP -= frame.hit_a;
-                if (Health.HP <= 0)
+                return false;
+            }
+
+            if (dataType == (int)LF2ObjectType.SpecialAttack && Health != null)
+            {
+                if (nativeC25FrameTickActive && frame.state == 3007)
                 {
-                    Health.HP = 0;
-                    SetFrameTickImmediateRawDirect(frame.hit_d);
-                    frame = Frame?.D;
-                    if (frame == null)
-                        return false;
+                    if (Health.HP < 1)
+                    {
+                        Health.HP = 0;
+                        SetFrameTickImmediateRawDirect(
+                            frame.hit_d == 0 ? 10 : frame.hit_d);
+                        AttackingCounter = 0;
+                        frame = Frame?.D;
+                        if (frame == null)
+                            return false;
+                    }
+                }
+                else if (frame.hit_a > 0)
+                {
+                    Health.HP -= frame.hit_a;
+                    if (Health.HP <= 0)
+                    {
+                        Health.HP = 0;
+                        SetFrameTickImmediateRawDirect(frame.hit_d);
+                        frame = Frame?.D;
+                        if (frame == null)
+                            return false;
+                    }
                 }
             }
 
@@ -5835,7 +6585,8 @@ namespace NTSD.Animation.LF2Objects
                 state = frame.state;
             }
 
-            if (dataType == (int)LF2ObjectType.HeavyWeapon &&
+            if (!nativeC25FrameTickActive &&
+                dataType == (int)LF2ObjectType.HeavyWeapon &&
                 state == LF2States.HeavyWeaponInSky &&
                 GetRuntimeYInt() == 0 &&
                 System.Math.Abs(Runtime.Vx) < 0.1)
@@ -5843,10 +6594,11 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            if (state == LF2States.Lying && Health != null && Health.HP <= 0)
+            if (!nativeC25FrameTickActive &&
+                state == LF2States.Lying &&
+                Health != null &&
+                Health.HP <= 0)
             {
-                if ((KillCount >= 0 || RelationTeam == 5 || (Runtime?.SlotIndex ?? -1) >= 20) && HitStun <= 0)
-                    HitStun = 30;
                 AttackingCounter = 0;
             }
 
@@ -5943,6 +6695,9 @@ namespace NTSD.Animation.LF2Objects
 
         protected void ApplyNonCharacterFrameVelocityForFrameAdvance()
         {
+            if (registeredWorld?.SuppressLegacyFrameMotionForSerialPass == true)
+                return;
+
             LF2FrameData frame = Frame?.D;
             if (frame == null || Runtime == null)
                 return;
@@ -5969,6 +6724,32 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Vz = -frame.dvz;
             if (IsFrameTickDownPressed() && GetFrameTickCdDown() >= GetFrameTickCdUp())
                 Runtime.Vz = frame.dvz;
+        }
+
+        internal void ApplyNativeFrameMotionForWorldPass()
+        {
+            LF2FrameData frame = Frame?.D;
+            if (frame == null || Runtime == null)
+                return;
+
+            bool up = IsFrameTickUpPressed();
+            bool down = IsFrameTickDownPressed();
+            int depthIntent = up == down ? 0 : up ? -1 : 1;
+            double vx = Runtime.Vx;
+            double vy = Runtime.Vy;
+            double vz = Runtime.Vz;
+            BattleNativeFrameMotionKernel.Apply(
+                frame.dvx,
+                frame.dvy,
+                frame.dvz,
+                Runtime.IsFacingLeft,
+                depthIntent,
+                ref vx,
+                ref vy,
+                ref vz);
+            Runtime.Vx = vx;
+            Runtime.Vy = vy;
+            Runtime.Vz = vz;
         }
 
         private static void ApplyFrameAxisVelocity(int value, ref double velocity, int direction) // P0-f: double sim velocity
@@ -6185,5 +6966,101 @@ namespace NTSD.Animation.LF2Objects
             return (int)value;
         }
 
+    }
+
+    internal static class BattleNativeState18ParticleKernel
+    {
+        internal static int ResolvePreRollCount(
+            int previousState,
+            int currentState,
+            int globalDelayDuration)
+        {
+            if (previousState != 18 && previousState != 19)
+                return 0;
+            if (currentState != 18 && currentState != 19)
+                return 7;
+            if (globalDelayDuration > 0)
+                return 0;
+
+            return -1;
+        }
+    }
+
+    internal static class BattleNativeType1LandingKernel
+    {
+        internal const double State1002BounceThreshold =
+            5.2571022450498032e120;
+
+        internal static bool ShouldBounce(int frameState, double motionY)
+        {
+            return frameState == LF2States.WeaponThrowing &&
+                   motionY > State1002BounceThreshold;
+        }
+    }
+
+    internal static class BattleNativeIdentityXExtraKernel
+    {
+        internal static double ResolveExtra(
+            int objectType,
+            int objectId,
+            int objectIdAlias,
+            double motionX)
+        {
+            bool matches120 = objectId == 120 || objectIdAlias == 120;
+            bool matches101 = objectId == 101 || objectIdAlias == 101;
+            double extra = 0.0;
+            if (objectType == (int)LF2ObjectType.ThrowWeapon || matches120)
+                extra += motionX * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+            if (matches101)
+                extra -= motionX * NTSDGlobal.Gameplay.WeaponExtraVxFactor;
+            return extra;
+        }
+    }
+
+    internal static class BattleNativeFrameMotionKernel
+    {
+        internal static void Apply(
+            int dvx,
+            int dvy,
+            int dvz,
+            bool facingLeft,
+            int depthIntent,
+            ref double vx,
+            ref double vy,
+            ref double vz)
+        {
+            if (dvx != 0)
+            {
+                if (dvx > 500)
+                {
+                    vx = dvx - 550.0;
+                }
+                else
+                {
+                    double facingAdjustedVx = facingLeft ? -vx : vx;
+                    bool shouldClamp =
+                        (dvx >= 0 && facingAdjustedVx < dvx) ||
+                        (dvx < 0 && facingAdjustedVx > dvx);
+                    if (shouldClamp)
+                        vx = facingLeft ? -dvx : dvx;
+                }
+            }
+
+            if (dvy != 0)
+                vy = dvy > 500 ? dvy - 550.0 : vy + dvy;
+
+            if (dvz == 0)
+                return;
+            if (dvz > 500)
+            {
+                vz = dvz - 550.0;
+                return;
+            }
+
+            if (depthIntent > 0)
+                vz = dvz;
+            else if (depthIntent < 0)
+                vz = -dvz;
+        }
     }
 }

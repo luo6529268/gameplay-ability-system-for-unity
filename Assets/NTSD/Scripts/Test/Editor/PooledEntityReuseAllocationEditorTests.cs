@@ -774,6 +774,15 @@ namespace NTSD.Test.Editor
                 centerx = 20,
                 centery = 20,
             });
+            data.frames.Add(new LF2FrameData
+            {
+                frameId = 70,
+                state = LF2States.WeaponOnGround,
+                wait = 10000,
+                next = 70,
+                centerx = 20,
+                centery = 20,
+            });
 
             var weapon = new AllocationProbeWeapon
             {
@@ -811,8 +820,8 @@ namespace NTSD.Test.Editor
 
             Assert.That(allocatedBytes, Is.Zero);
             Assert.That(allLandingsAccepted, Is.True);
-            Assert.That(weapon.Frame.N, Is.EqualTo(7));
-            Assert.That(world.PendingSounds, Has.Count.EqualTo(1));
+            Assert.That(weapon.Frame.N, Is.EqualTo(70));
+            Assert.That(world.PendingSounds, Is.Empty);
         }
 
         [Test]

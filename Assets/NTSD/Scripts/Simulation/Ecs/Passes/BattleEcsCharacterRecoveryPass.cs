@@ -102,7 +102,11 @@ namespace NTSD.Simulation.Ecs
                 tickIndex % NTSDGlobal.Gameplay.HpRecoverPeriod == 0;
             bool periodPp =
                 tickIndex % NTSDGlobal.Gameplay.PpRecoverPeriod == 0;
-            if (!periodHp && !periodPp)
+            bool nativeNegativeEnvironment =
+                BattleNegativeEnvironmentRecoveryWriter.IsEligible(
+                    world,
+                    entity);
+            if (!periodHp && !periodPp && !nativeNegativeEnvironment)
             {
                 provenNoOpCount++;
                 return BattleEcsCharacterRecoveryResult.ProvenNoOp;
@@ -123,36 +127,14 @@ namespace NTSD.Simulation.Ecs
                 flow.BattleStepMode == 1 &&
                 flow.BattleStepGate != 1;
 
-            if (entity.Health.HP > 0 &&
-                entity.Health.HP < entity.Health.HPBound &&
-                periodHp &&
-                !stepWaitGate)
-            {
-                entity.Health.HP++;
-            }
+            BattleRecoveryStatusWriter.ApplyHpRecovery(entity, periodHp, stepWaitGate);
 
-            if (entity.WeaponCount < 0 && periodHp && !stepWaitGate)
-            {
-                int injury = NTSDGlobal.Gameplay.NegativeWeaponCountInjury;
-                if (entity.FallDamageDiv > 0)
-                {
-                    injury = NTSDGlobal.Gameplay.NegativeWeaponCountScaledInjury /
-                             entity.FallDamageDiv;
-                }
-
-                entity.Health.HP -= injury;
-                entity.Health.HPBound -=
-                    injury / NTSDGlobal.Gameplay.NegativeWeaponCountHpBoundDivisor;
-                if (entity.Health.HP < 0)
-                    entity.Health.HP = 0;
-                if (entity.Health.HPBound < 0)
-                    entity.Health.HPBound = 0;
-                entity.ComboCountVic += 9;
-            }
+            // Alignment contract: NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001.
+            BattleNegativeEnvironmentRecoveryWriter.Apply(world, entity);
 
             if (!periodPp ||
-                (entity.KillCount != -1 &&
-                 entity.Health.PP >= NTSDGlobal.Gameplay.PpRecoverLowLimit) ||
+                (entity.Runtime.OrdinaryCreditGate2F4 != -1 &&
+                 entity.Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit) ||
                 entity.Health.PP >= NTSDGlobal.Gameplay.PpRecoverCap ||
                 entity.HitStun < 0 ||
                 stepWaitGate)
@@ -160,15 +142,7 @@ namespace NTSD.Simulation.Ecs
                 return;
             }
 
-            int hpForRate = Math.Min(
-                entity.Health.HP,
-                NTSDGlobal.Gameplay.PpRecoverCap);
-            if (entity.ObjectId == 51 || entity.ObjectId == 52)
-                hpForRate /= 2;
-
-            entity.Health.PP +=
-                ((NTSDGlobal.Gameplay.PpRecoverCap - hpForRate) /
-                 NTSDGlobal.Gameplay.PpRecoverHpRateDivisor) + 1;
+            BattleRecoveryStatusWriter.ApplyMpRecovery(entity);
         }
 
         private void ResetDiagnostics()

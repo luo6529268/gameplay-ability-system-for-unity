@@ -25,6 +25,7 @@ namespace NTSD.Animation
         RuntimeItrIdentityMismatch = 17,
         ZeroAttackerHpOnConsumeMismatch = 18,
         ReleaseHeavyHeldTargetOnConsumeMismatch = 19,
+        PairSnapshotMismatch = 20,
     }
 
     /// <summary>
@@ -173,7 +174,8 @@ namespace NTSD.Animation
             int itrIndex,
             InteractionArea runtimeItr,
             bool zeroAttackerHpOnConsume,
-            bool releaseHeavyHeldTargetOnConsume)
+            bool releaseHeavyHeldTargetOnConsume,
+            BattleHitCandidatePairSnapshot pairSnapshot = default)
         {
             TargetSlot = targetSlot;
             TargetHandle = targetHandle;
@@ -182,6 +184,7 @@ namespace NTSD.Animation
             RuntimeItr = runtimeItr;
             ZeroAttackerHpOnConsume = zeroAttackerHpOnConsume;
             ReleaseHeavyHeldTargetOnConsume = releaseHeavyHeldTargetOnConsume;
+            PairSnapshot = pairSnapshot;
         }
 
         public int TargetSlot { get; }
@@ -191,6 +194,7 @@ namespace NTSD.Animation
         public InteractionArea RuntimeItr { get; }
         public bool ZeroAttackerHpOnConsume { get; }
         public bool ReleaseHeavyHeldTargetOnConsume { get; }
+        public BattleHitCandidatePairSnapshot PairSnapshot { get; }
     }
 
     /// <summary>

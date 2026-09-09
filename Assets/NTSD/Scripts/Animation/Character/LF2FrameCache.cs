@@ -12,7 +12,7 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class LF2FrameCache
     {
-        public const int MaxFrameIdExclusive = 600;
+        public const int MaxFrameIdExclusive = 857;
 
         private static readonly LF2FrameData EmptyFrame = new LF2FrameData();
 

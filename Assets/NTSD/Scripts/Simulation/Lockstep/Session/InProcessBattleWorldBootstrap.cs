@@ -49,6 +49,7 @@ namespace NTSD.Simulation.Lockstep
 
             world.SetLogicOnlyEntityMaterialization(true);
             world.Rng.Seed(barrier.Identity.Seed);
+            world.NativeRandom.ResetForDirectBattle(barrier.Identity.Seed);
             world.Runtime.Match.Seed = unchecked((int)barrier.Identity.Seed);
 
             BattleRosterRuntimeState roster = world.Runtime.Roster;

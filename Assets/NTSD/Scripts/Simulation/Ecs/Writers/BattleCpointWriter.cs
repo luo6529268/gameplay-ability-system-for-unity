@@ -1,14 +1,54 @@
+using System.Collections.Generic;
+
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 
 namespace NTSD.Simulation.Ecs
 {
+    internal readonly struct BattleHeldInjuryEvent
+    {
+        internal BattleHeldInjuryEvent(int catcherSlot, int caughtSlot)
+        {
+            CatcherSlot = catcherSlot;
+            CaughtSlot = caughtSlot;
+        }
+
+        internal int CatcherSlot { get; }
+        internal int CaughtSlot { get; }
+    }
+
     /// <summary>
     /// Owns cpoint state writes performed by the pre-interaction pass.
     /// Runtime-slot traversal order remains owned by the battle pipeline.
     /// </summary>
     internal sealed class BattleCpointWriter
     {
+        private List<BattleHeldInjuryEvent> heldInjuryEventSink;
+
+        internal void BeginHeldInjuryEventCollection(
+            List<BattleHeldInjuryEvent> eventSink)
+        {
+            heldInjuryEventSink = eventSink;
+        }
+
+        internal void EndHeldInjuryEventCollection()
+        {
+            heldInjuryEventSink = null;
+        }
+
+        internal bool ShouldRunKind1Advance(LF2Entity entity)
+        {
+            if (entity?.Runtime == null)
+                return false;
+
+            LF2FrameData frame = entity.GetCollisionFrameData();
+            return frame != null &&
+                   frame.TryGetPrimaryCatchPoint(
+                       out BattleCatchPointValue cpoint) &&
+                   cpoint.Kind == 1 &&
+                   entity.FrameDelay >= 0;
+        }
+
         internal void RunKind1(
             SimulationWorld world,
             LF2Entity attacker)
@@ -33,55 +73,43 @@ namespace NTSD.Simulation.Ecs
             }
 
             LF2FrameData victimFrame = victim.GetCollisionFrameData();
-            bool skipActions = false;
-            bool skipDecrease = false;
-            bool useFallbackFrameForThrow = false;
-            if (victim.CatcherSlotIndex != attacker.Runtime.SlotIndex ||
+            if (victim.Runtime.CatchSourceSlot90 != attacker.Runtime.SlotIndex ||
                 victimFrame == null ||
                 !victimFrame.TryGetPrimaryCatchPoint(
                     out BattleCatchPointValue victimCpoint) ||
                 victimCpoint.Kind != 2)
             {
                 attacker.DirectWriteRawFramePreserveWaitCounter(0);
-                skipActions = true;
-                skipDecrease = true;
-                useFallbackFrameForThrow = true;
+                return;
             }
 
-            if (!skipDecrease && cpoint.Decrease > 0)
+            if (cpoint.Decrease > 0)
             {
                 attacker.Runtime.CaughtDuration -= cpoint.Decrease;
             }
-            else if (!skipDecrease && cpoint.Decrease < 0)
+            else if (cpoint.Decrease < 0)
             {
                 attacker.Runtime.CaughtDuration += cpoint.Decrease;
                 if (attacker.Runtime.CaughtDuration < 0)
                 {
                     attacker.DirectWriteRawFramePreserveWaitCounter(0);
                     victim.DirectWriteRawFramePreserveWaitCounter(181);
-                    attacker.HitCount = 1;
-                    victim.HitCount = 1;
+                    attacker.AttackingCounter = 1;
+                    victim.AttackingCounter = 1;
                     victim.KnockbackVx = attacker.Runtime.XInt > victim.Runtime.XInt
                         ? -4f
                         : 4f;
                     victim.KnockbackVy = -3f;
                     victim.Runtime.Vx = victim.KnockbackVx;
                     victim.Runtime.Vy = victim.KnockbackVy;
-                    skipActions = true;
-                    useFallbackFrameForThrow = true;
+                    return;
                 }
             }
 
-            if (!skipActions)
-                RunActionSelection(attacker, victim, cpoint);
+            RunActionSelection(attacker, victim, cpoint);
 
             if (cpoint.ThrowVx != 0)
-            {
-                LF2FrameData throwFrame = useFallbackFrameForThrow
-                    ? attacker.Frame?.D
-                    : catcherFrame;
-                ApplyThrow(attacker, victim, cpoint, throwFrame);
-            }
+                ApplyThrow(world, attacker, victim, cpoint, catcherFrame);
 
             ApplyDirControl(attacker, cpoint);
         }
@@ -102,7 +130,7 @@ namespace NTSD.Simulation.Ecs
 
             bool valid = false;
             LF2Entity catcher = world?.FindEntityByRuntimeSlotForQuery(
-                entity.CatcherSlotIndex);
+                entity.Runtime.CatchSourceSlot90);
             if (catcher != null &&
                 catcher.CaughtSlotIndex == entity.Runtime.SlotIndex)
             {
@@ -143,7 +171,7 @@ namespace NTSD.Simulation.Ecs
             LF2Entity victim = world?.FindEntityByRuntimeSlotForQuery(
                 attacker.CaughtSlotIndex);
             if (victim == null ||
-                victim.CatcherSlotIndex != attacker.Runtime.SlotIndex)
+                victim.Runtime.CatchSourceSlot90 != attacker.Runtime.SlotIndex)
             {
                 return;
             }
@@ -211,89 +239,139 @@ namespace NTSD.Simulation.Ecs
             LF2FrameData catcherFrame,
             BattleCatchPointValue cpoint)
         {
-            if ((cpoint.Hurtable == 0 ||
-                 (victim.FrameDelay == 0 && cpoint.Hurtable == 1)) &&
-                cpoint.Vaction != 0)
+            if (cpoint.Hurtable == 0 ||
+                (victim.FrameDelay == 0 && cpoint.Hurtable == 1))
             {
-                victim.DirectWriteRawFramePreserveWaitCounter(cpoint.Vaction);
-            }
-
-            if (victim.Frame?.N < 0)
-            {
-                victim.SwitchDir(
-                    victim.Runtime.Dir == "left" ? "right" : "left");
-                victim.SetCpointRawFramePreserveWait(-victim.Frame.N);
+                // Alignment contract:
+                // NTSD28-B6-CATCH-SETTLEMENT-VACTION-PREFLIGHT-PRODUCTION-001.
+                // Native settlement commits signed/zero vaction first, then
+                // fences every remaining side effect on the new kind-2 frame.
+                ApplySettlementVictimAction(victim, cpoint.Vaction);
+                LF2FrameData postActionFrame = victim.Frame?.D;
+                if (postActionFrame == null ||
+                    !postActionFrame.TryGetPrimaryCatchPoint(
+                        out BattleCatchPointValue postActionCpoint) ||
+                    postActionCpoint.Kind != 2)
+                {
+                    return;
+                }
             }
 
             int injury = cpoint.Injury;
             if (injury != 0 && attacker.AttackingCounter == 0)
-                ApplyHeldInjury(world, attacker, victim, injury);
+                ApplyHeldInjury(world, attacker, victim, injury, cpoint.Cover);
 
             SyncHeldPosition(attacker, victim, catcherFrame, cpoint);
+        }
+
+        private static void ApplySettlementVictimAction(
+            LF2Entity victim,
+            int encodedAction)
+        {
+            int action = encodedAction;
+            if (action < 0)
+            {
+                victim.SwitchDir(
+                    victim.Runtime.Dir == "left" ? "right" : "left");
+                action = -action;
+            }
+            victim.DirectWriteRawFramePreserveWaitCounter(action);
         }
 
         private void ApplyHeldInjury(
             SimulationWorld world,
             LF2Entity attacker,
             LF2Entity victim,
-            int injury)
+            int injury,
+            int cover)
         {
-            if (victim.Health == null)
-                return;
-
-            if (injury > 0)
+            if (attacker?.Runtime == null ||
+                victim?.Runtime == null ||
+                victim.Health == null ||
+                injury <= 0)
             {
-                int actualInjury = injury;
-                if (victim.FallDamageDiv > 0)
-                    actualInjury = injury * 100 / victim.FallDamageDiv;
-
-                if (victim.Health.HP > 0 &&
-                    actualInjury >= victim.Health.HP &&
-                    victim.KillCount == -1)
-                {
-                    LF2Entity holder = world?.FindEntityByRuntimeSlotForQuery(
-                        attacker.HolderCopySlot);
-                    if (holder != null)
-                        holder.KillStat++;
-
-                    int killStatIndex = victim.Unk344;
-                    if (world != null &&
-                        world.KillStats != null &&
-                        killStatIndex > 0 &&
-                        killStatIndex < 3 &&
-                        killStatIndex < world.KillStats.Length)
-                    {
-                        world.KillStats[killStatIndex]++;
-                    }
-                }
-
-                victim.Health.HP -= actualInjury;
-                victim.Health.HPBound -= actualInjury / 3;
-                victim.ComboCountVic += actualInjury;
-                attacker.AttackingCounter = 1;
-                attacker.FrameDelay = 2;
-                victim.FrameDelay = -3;
-
-                LF2Entity comboHolder = world?.FindEntityByRuntimeSlotForQuery(
-                    attacker.HolderCopySlot);
-                if (comboHolder != null)
-                    comboHolder.ComboCountAtk += actualInjury;
-
-                int damageStatIndex = victim.Unk344;
-                if (world != null &&
-                    world.DamageStats != null &&
-                    damageStatIndex > 0 &&
-                    damageStatIndex < 3 &&
-                    damageStatIndex < world.DamageStats.Length)
-                {
-                    world.DamageStats[damageStatIndex] += actualInjury;
-                }
                 return;
             }
 
-            victim.Health.HP += injury;
-            victim.Health.HPBound += injury / 3;
+            // Alignment contract:
+            // NTSD28-B6-HELD-INJURY-ACCOUNTING-COVER-PRODUCTION-001.
+            LF2Entity resourceAttacker =
+                BattleDamageWriter.ResolveNativeHitResourceAttacker(
+                    world,
+                    attacker.Runtime.SlotIndex);
+            if (resourceAttacker?.Runtime != null)
+            {
+                BattleDamageWriter.ApplyNativeHitDisplaySteps(
+                    victim.Runtime,
+                    injury);
+            }
+
+            int damage = injury;
+            if (victim.Runtime.IncomingDamageScale340 > 0)
+            {
+                damage = unchecked((int)(
+                    (long)injury * 100L /
+                    victim.Runtime.IncomingDamageScale340));
+            }
+
+            LF2Entity credit = ResolveHeldInjuryCredit(world, attacker);
+            if (victim.Health.HP > 0 &&
+                damage >= victim.Health.HP &&
+                victim.Runtime.OrdinaryCreditGate2F4 == -1 &&
+                credit?.Runtime != null)
+            {
+                credit.Runtime.KnockoutCount358 = unchecked(
+                    credit.Runtime.KnockoutCount358 + 1);
+            }
+
+            victim.Health.HP -= damage;
+            victim.Health.HPBound -= damage / 3;
+            victim.Runtime.InputHpConsumedTotal34C = unchecked(
+                victim.Runtime.InputHpConsumedTotal34C + damage);
+            if (credit?.Runtime != null)
+            {
+                credit.Runtime.InputScoreTotal348 = unchecked(
+                    credit.Runtime.InputScoreTotal348 + damage);
+            }
+
             attacker.AttackingCounter = 1;
+            if (cover != 3)
+            {
+                if (cover != 1)
+                    attacker.FrameDelay = 2;
+                if (cover != 2)
+                    victim.FrameDelay = -3;
+            }
+
+            // Alignment contract:
+            // NTSD28-B6-HELD-INJURY-CAUGHTACT-EVENT-PRODUCTION-001.
+            // The pipeline consumes these physical slots only after the
+            // complete live settlement scan has finished.
+            heldInjuryEventSink?.Add(new BattleHeldInjuryEvent(
+                attacker.Runtime.SlotIndex,
+                victim.Runtime.SlotIndex));
+        }
+
+        private static LF2Entity ResolveHeldInjuryCredit(
+            SimulationWorld world,
+            LF2Entity attacker)
+        {
+            if (attacker?.Runtime == null)
+                return null;
+
+            LF2Entity credit = null;
+            if (attacker.Runtime.OwnerSlotIndex >= 0)
+            {
+                credit = world?.FindEntityByRuntimeSlotForQuery(
+                    attacker.Runtime.OwnerSlotIndex);
+            }
+            if (credit == null &&
+                attacker.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character)
+            {
+                credit = attacker;
+            }
+            return credit;
         }
 
         private void SyncHeldPosition(
@@ -345,6 +423,7 @@ namespace NTSD.Simulation.Ecs
         }
 
         private void ApplyThrow(
+            SimulationWorld world,
             LF2Entity attacker,
             LF2Entity victim,
             BattleCatchPointValue cpoint,
@@ -363,7 +442,16 @@ namespace NTSD.Simulation.Ecs
             }
 
             if (cpoint.ThrowInjury > 0)
-                victim.WeaponCount = cpoint.ThrowInjury;
+            {
+                ApplyThrowInjuryDisplayLead(
+                    world,
+                    attacker,
+                    victim,
+                    cpoint.ThrowInjury);
+                victim.Runtime.EnvironmentState320 = cpoint.ThrowInjury;
+                victim.Runtime.EnvironmentSourceSlot160 =
+                    victim.Runtime.SlotIndex;
+            }
 
             LF2FrameData throwFrame = throwFrameSnapshot ??
                 attacker.FrameCache?.GetFrameDataById(attacker.Frame?.N ?? 0) ??
@@ -390,14 +478,35 @@ namespace NTSD.Simulation.Ecs
                 ? cpoint.ThrowVx
                 : -cpoint.ThrowVx;
             victim.Runtime.Vy = cpoint.ThrowVy;
-            victim.Runtime.Vz = 0f;
-            if (attacker.Runtime.KeyUp != 0 && attacker.Runtime.KeyDown == 0)
-                victim.Runtime.Vz = -cpoint.ThrowVz;
-            else if (attacker.Runtime.KeyUp == 0 && attacker.Runtime.KeyDown != 0)
-                victim.Runtime.Vz = cpoint.ThrowVz;
+            bool depthUp = attacker.Runtime.KeyUp != 0;
+            bool depthDown = attacker.Runtime.KeyDown != 0;
+            if (depthUp != depthDown)
+            {
+                victim.Runtime.Vz = depthUp
+                    ? -cpoint.ThrowVz
+                    : cpoint.ThrowVz;
+            }
 
             victim.SetCpointRawFramePreserveWait(cpoint.Vaction);
             victim.SetCpointRawPrevFrame2(cpoint.Vaction);
+        }
+
+        private static void ApplyThrowInjuryDisplayLead(
+            SimulationWorld world,
+            LF2Entity attackEffectSource,
+            LF2Entity target,
+            int injury)
+        {
+            LF2Entity resourceAttacker =
+                BattleDamageWriter.ResolveNativeHitResourceAttacker(
+                    world,
+                    attackEffectSource.Runtime.SlotIndex);
+            if (resourceAttacker?.Runtime == null)
+                return;
+
+            BattleDamageWriter.ApplyNativeHitDisplaySteps(
+                target.Runtime,
+                injury);
         }
 
         private void ApplyDirControl(
