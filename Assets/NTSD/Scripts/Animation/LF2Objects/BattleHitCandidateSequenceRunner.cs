@@ -329,7 +329,9 @@ namespace NTSD.Animation.LF2Objects
                     attacker,
                     target,
                     runtimeItr)
-                : consumer.Dispatch(kindService, runtimeItr, target);
+                : BattleNativeImpactResolver.IsImpactKind(runtimeItr.kind)
+                    ? world.DamageWriter.TryApplyNativeImpact(world, attacker, target, runtimeItr)
+                    : consumer.Dispatch(kindService, runtimeItr, target);
             TryProduceNativeComboAfterDispatch(
                 world,
                 disposition,

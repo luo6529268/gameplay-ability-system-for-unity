@@ -93,6 +93,8 @@ namespace NTSD.Animation.LF2Objects
                     return BattleHitCandidateDisposition.Kind15;
                 case 10:
                 case 11:
+                case 17:
+                case 18:
                     return BattleHitCandidateDisposition.Kind10Or11;
                 case 1:
                     return BattleHitCandidateDisposition.Kind1Grab;
@@ -202,56 +204,6 @@ namespace NTSD.Animation.LF2Objects
                 : null;
             if (holder != null)
                 holder.FrameDelay = attacker.FrameDelay;
-        }
-
-        internal static void ApplyCaughtVictimHurtFrame(
-            LF2Entity victim,
-            LF2Entity attacker,
-            int fallCounter)
-        {
-            if (fallCounter == 80 || victim?.Runtime == null || attacker == null)
-                return;
-
-            LF2FrameData previousFrame = victim.GetFrameDataById(
-                victim.Runtime.PrevFrame2);
-            if (previousFrame == null ||
-                !previousFrame.TryGetPrimaryCatchPoint(
-                    out BattleCatchPointValue cpoint) ||
-                cpoint.Kind != 2)
-                return;
-
-            int catcherSlot = victim.CatcherSlotIndex;
-            int victimSlot = victim.Runtime.SlotIndex;
-            LF2Entity catcher = catcherSlot >= 0
-                ? victim.Match?.FindEntityByRuntimeSlotForQuery(catcherSlot)
-                : null;
-            if (catcher == null || catcher.CaughtSlotIndex != victimSlot)
-                return;
-
-            int hurtFrame = ResolveCaughtVictimHurtAction(
-                cpoint,
-                victim.Dirh() != attacker.Dirh());
-            if (hurtFrame != 0)
-                victim.DirectWriteRawFramePreserveWaitCounter(hurtFrame);
-        }
-
-        internal static int ResolveCaughtVictimHurtAction(
-            BattleCatchPointValue cpoint,
-            bool oppositeFacing)
-        {
-            return oppositeFacing ? cpoint.Injury : cpoint.Cover;
-        }
-
-        internal static int ResolveCaughtVictimHurtAction(
-            CatchPoint cpoint,
-            bool oppositeFacing)
-        {
-            if (cpoint == null)
-                return 0;
-
-            return ResolveCaughtVictimHurtAction(
-                BattleCatchPointValueAdapter.FromLegacy(cpoint),
-                oppositeFacing);
         }
 
         internal static LF2CharacterData ResolveCharacterData(LF2Entity entity)
@@ -558,13 +510,10 @@ namespace NTSD.Animation.LF2Objects
                 ApplyKind14DirectionalBlockFrom(attacker);
                 return false;
             }
-            else if (itr.kind == 10 || itr.kind == 11)
+            else if (NTSD.Simulation.Ecs.BattleNativeImpactResolver.IsImpactKind(itr.kind))
             {
-                if (itr.kind == 11 && _victim.WeaponCount >= 0)
-                    return false;
-
-                ApplyFluteCharacterForce();
-                return true;
+                SimulationWorld impactWorld = _victim.Match ?? attacker?.Match;
+                return impactWorld?.DamageWriter.TryApplyNativeImpact(impactWorld, attacker, _victim, itr) == true;
             }
             else if (itr.kind == 15)
             {
@@ -672,9 +621,6 @@ namespace NTSD.Animation.LF2Objects
                         _victim.HitCount++;
                 }
 
-                if (standardDamageApplied && !isKnockdown)
-                    ApplyCaughtVictimHurtFrame(attacker);
-
                 if (_hitCounters.Fall == 80)
                     _hitCounters.SetFall(0);
             }
@@ -744,17 +690,6 @@ namespace NTSD.Animation.LF2Objects
                 _victim.Runtime.ZBoundNegative = true;
         }
 
-        private void ApplyFluteCharacterForce()
-        {
-            const double factor = 0.9345794392523364;
-            _victim.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-            _victim.KnockbackVx = _victim.Runtime.Vx * factor;
-            _victim.Runtime.Vx = _victim.KnockbackVx;
-            _victim.KnockbackVz = _victim.Runtime.Vz * factor;
-            _victim.Runtime.Vz = _victim.KnockbackVz;
-            _victim.DirectWriteRawFramePreserveWaitCounter(182);
-            ApplyAirStep(3.0f);
-        }
 
         private void ApplyWhirlwindCharacterForce(LF2Entity attacker)
         {
@@ -1001,14 +936,6 @@ namespace NTSD.Animation.LF2Objects
                 return catcherEntity.Runtime?.SlotIndex == attackerSlot && catcherEntity.CaughtSlotIndex == victimSlot;
 
             return victim.CatcherSlotIndex == attackerSlot && attacker.CaughtSlotIndex == victimSlot;
-        }
-
-        private void ApplyCaughtVictimHurtFrame(LF2Entity attacker)
-        {
-            LF2HitResolveRuntimeData.ApplyCaughtVictimHurtFrame(
-                _victim,
-                attacker,
-                _hitCounters.Fall);
         }
 
         private void HitPostEffect(int effectNum, PhysicsState.BattleVolume rect, float effectDvx, float effectDvy, bool defended, Vector3 attackerPos, int victimState)

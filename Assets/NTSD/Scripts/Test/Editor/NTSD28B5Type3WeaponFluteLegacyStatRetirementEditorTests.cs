@@ -74,8 +74,8 @@ namespace NTSD.Test.Editor
                 "private static void ProjectNativeStandardHitCreditAndConsume(");
             string flutePlan = Slice(
                 hitPlan,
-                "private static bool ProjectKind10Or11WriterEffect(",
-                "private static void ProjectScaledAirStep(");
+                "private static bool ProjectNativeImpactWriterEffect(",
+                "private static bool ProjectKind15WriterEffect(");
 
             StringAssert.DoesNotContain("ComboCountVic", type3Actual);
             StringAssert.DoesNotContain("DamageStats", type3Actual);
@@ -146,6 +146,8 @@ namespace NTSD.Test.Editor
             target.WeaponCount = 5;
             target.Runtime.SetVelocity(4.25, -2.5, -3.75);
             world.DamageStats[1] = 51;
+            attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+            holder.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             var interaction = new InteractionArea { kind = 10 };
 
             bool applied = sharedResolver
@@ -158,7 +160,9 @@ namespace NTSD.Test.Editor
                 : target.Hit(interaction, attacker, Vector3.zero, default);
 
             Assert.That(applied, Is.True);
-            Assert.That(target.WeaponCount, Is.EqualTo(-20));
+            Assert.That(target.WeaponCount, Is.EqualTo(5));
+            Assert.That(target.Runtime.EnvironmentState320, Is.EqualTo(-20));
+            Assert.That(target.Runtime.CatchSourceSlot90, Is.EqualTo(0x2000 + holder.Runtime.SlotIndex));
             Assert.That(target.Frame.N, Is.EqualTo(182));
             Assert.That(holder.ComboCountAtk, Is.EqualTo(41));
             Assert.That(world.DamageStats[1], Is.EqualTo(51));

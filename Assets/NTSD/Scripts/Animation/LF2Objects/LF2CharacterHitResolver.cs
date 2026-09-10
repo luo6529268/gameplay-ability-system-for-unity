@@ -281,18 +281,11 @@ namespace NTSD.Animation.LF2Objects
             }
 
             // Kind 10/11：笛子效果。
-            else if (itr.kind == 10 || itr.kind == 11)
+            else if (NTSD.Simulation.Ecs.BattleNativeImpactResolver.IsImpactKind(itr.kind))
             {
-                if (itr.kind == 11 && _character.WeaponCount >= 0)
-                    return false;
-
-                _character.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                ApplyFluteCharacterForce();
-                return true;
+                SimulationWorld impactWorld = _character.Match ?? attacker?.Match;
+                return impactWorld?.DamageWriter.TryApplyNativeImpact(impactWorld, attacker, _character, itr) == true;
             }
-
-            // Kind 15：旋风效果。
-            // 按 attacker 与 victim 的相对位置推开 x/z 速度。
             else if (itr.kind == 15)
             {
                 ApplyWhirlwindCharacterForce(attacker);
@@ -336,10 +329,6 @@ namespace NTSD.Animation.LF2Objects
                 // 攻击方未被抓取时，将 FrameDelay 传给 TrackerParent。
                 LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
 
-                LF2HitResolveRuntimeData.ApplyCaughtVictimHurtFrame(
-                    _character,
-                    attacker,
-                    _character.HitCounters.Fall);
 
                 // 地面上 HitStateCount 足够高且 kind=7 时进入破防帧。
                 if (!isKnockdown && _character.PS.vy == 0f &&
@@ -408,16 +397,6 @@ namespace NTSD.Animation.LF2Objects
             _character.RefreshRuntimeSnapshot();
         }
 
-        private void ApplyFluteCharacterForce()
-        {
-            const double factor = 0.9345794392523364;
-            _character.KnockbackVx = _character.Runtime.Vx * factor;
-            _character.Runtime.Vx = _character.KnockbackVx;
-            _character.KnockbackVz = _character.Runtime.Vz * factor;
-            _character.Runtime.Vz = _character.KnockbackVz;
-            _character.DirectWriteRawFramePreserveWaitCounter(182);
-            ApplyWhirlwindAirStep(3.0);
-        }
 
         private void ApplyWhirlwindAirStep(double vyStep)
         {

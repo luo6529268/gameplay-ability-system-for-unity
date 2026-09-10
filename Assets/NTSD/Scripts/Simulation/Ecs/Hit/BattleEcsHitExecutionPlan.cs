@@ -2098,6 +2098,8 @@ namespace NTSD.Simulation.Ecs
                     return BattleHitCandidateDisposition.Kind15;
                 case 10:
                 case 11:
+                case 17:
+                case 18:
                     return BattleHitCandidateDisposition.Kind10Or11;
                 case 1:
                     return BattleHitCandidateDisposition.Kind1Grab;
@@ -2441,6 +2443,8 @@ namespace NTSD.Simulation.Ecs
                 TargetCatcherSlot = target?.Runtime?.CatcherSlotIndex ?? int.MinValue,
                 TargetCatchSourceSlot90 =
                     target?.Runtime?.CatchSourceSlot90 ?? int.MinValue,
+                TargetEnvironmentState320 = target?.Runtime?.EnvironmentState320 ?? int.MinValue,
+                TargetImpactSourceSlot164 = target?.Runtime?.ImpactSourceSlot164 ?? int.MinValue,
                 TargetHolderSlot = target?.Runtime?.HolderStableId ?? int.MinValue,
                 TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,
                 TargetOwnerSlot = target?.Runtime?.OwnerSlotIndex ?? int.MinValue,
@@ -2646,10 +2650,10 @@ namespace NTSD.Simulation.Ecs
                     return true;
 
                 case BattleHitCandidateDisposition.Kind10Or11:
-                    return ProjectKind10Or11WriterEffect(
+                    return ProjectNativeImpactWriterEffect(
                         attacker,
                         target,
-                        resolvedItr.kind,
+                        resolvedItr,
                         ref projection);
 
                 case BattleHitCandidateDisposition.Kind15:
@@ -4730,16 +4734,6 @@ namespace NTSD.Simulation.Ecs
             if (projection.TargetFall == 80)
                 projection.TargetFall = 0;
 
-            if (!knockback &&
-                TryResolveCaughtVictimHurtFrame(
-                    attacker,
-                    target,
-                    out int caughtHurtFrame))
-            {
-                projection.TargetFrame = caughtHurtFrame;
-                projection.TargetRuntimeFrame = caughtHurtFrame;
-            }
-
             if (attacker.GetState() == LF2States.WeaponThrowing)
             {
                 int attackerFrame = ProjectBattleRandInt(ref projection, 16);
@@ -4844,40 +4838,6 @@ namespace NTSD.Simulation.Ecs
             projection.TargetAttackingCounter = 0;
             if (decision.Facing >= 0)
                 projection.TargetFacing = decision.Facing;
-        }
-
-        private static bool TryResolveCaughtVictimHurtFrame(
-            LF2Entity attacker,
-            LF2Entity target,
-            out int hurtFrame)
-        {
-            hurtFrame = 0;
-            if (attacker?.Runtime == null || target?.Runtime == null ||
-                target.Runtime.CatcherSlotIndex < 0)
-            {
-                return false;
-            }
-
-            LF2FrameData previous2Frame =
-                target.GetFrameDataById(target.Runtime.PrevFrame2);
-            if (previous2Frame == null ||
-                !previous2Frame.TryGetPrimaryCatchPoint(
-                    out BattleCatchPointValue cpoint) ||
-                cpoint.Kind != 2)
-                return false;
-
-            LF2Entity catcher = target.Match?.FindEntityByRuntimeSlotForQuery(
-                target.Runtime.CatcherSlotIndex);
-            if (catcher?.Runtime == null ||
-                catcher.Runtime.CaughtSlotIndex != target.Runtime.SlotIndex)
-            {
-                return false;
-            }
-
-            hurtFrame = LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                cpoint,
-                target.Dirh() != attacker.Dirh());
-            return hurtFrame != 0;
         }
 
         private static bool CanProjectAlternateCharacterDamageWriterEffect(
@@ -5272,62 +5232,36 @@ namespace NTSD.Simulation.Ecs
             return (int)((projection.RngState >> 16) & 0x7FFFu) % exclusiveMaximum;
         }
 
-        private static bool ProjectKind10Or11WriterEffect(
+        private static bool ProjectNativeImpactWriterEffect(
             LF2Entity attacker,
             LF2Entity target,
-            int kind,
+            InteractionArea itr,
             ref WriterEffectSnapshot projection)
         {
-            if (kind != 10 && kind != 11)
-                return false;
-            if (kind == 11 && target.WeaponCount >= 0)
-                return true;
-
-            const double factor = 0.9345794392523364;
-            int targetType = target.GetCurrentDataObjectTypeForSimulation();
-            if (targetType == (int)LF2ObjectType.Character)
+            BattleNativeImpactPlan plan = BattleDamageWriter.CreateNativeImpactPlan(
+                target.Match ?? attacker.Match, attacker, target, itr);
+            for (int i = 0; i < plan.OperationCount; i++)
             {
-                projection.TargetWeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                projection.TargetFrame = 182;
-                projection.TargetRuntimeFrame = 182;
-                ProjectScaledAirStep(factor, 3.0, ref projection);
-                return true;
-            }
-
-            bool lightLike = targetType == (int)LF2ObjectType.LightWeapon ||
-                             targetType == (int)LF2ObjectType.ThrowWeapon ||
-                             targetType == (int)LF2ObjectType.Drink;
-            if (lightLike)
-            {
-                int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
-                if (targetOid == 0xC9 || targetOid == 0xCA)
-                    return true;
-
-                if (target.GetFrameDataById(projection.TargetFrame)?.state !=
-                    LF2States.WeaponInSky)
+                BattleNativeImpactOperation op = plan.GetOperation(i);
+                switch (op.Kind)
                 {
-                    projection.TargetFrame = 0;
-                    projection.TargetRuntimeFrame = 0;
+                    case BattleNativeImpactWriteKind.Environment: projection.TargetEnvironmentState320 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.CatchSource: projection.TargetCatchSourceSlot90 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.ImpactSource: projection.TargetImpactSourceSlot164 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.Action:
+                        projection.TargetFrame = (int)op.Value;
+                        projection.TargetRuntimeFrame = (int)op.Value;
+                        break;
+                    case BattleNativeImpactWriteKind.Vx: projection.TargetVx = op.Value; break;
+                    case BattleNativeImpactWriteKind.Vz: projection.TargetVz = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingX: projection.TargetKnockbackVx = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingZ: projection.TargetKnockbackVz = op.Value; break;
+                    case BattleNativeImpactWriteKind.YInt: projection.TargetYInt = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.Y: projection.TargetY = op.Value; break;
+                    case BattleNativeImpactWriteKind.Vy: projection.TargetVy = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingY: projection.TargetKnockbackVy = op.Value; break;
                 }
-
-                projection.TargetWeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                ProjectScaledAirStep(factor, 3.0, ref projection);
-                return true;
             }
-
-            if (targetType == (int)LF2ObjectType.HeavyWeapon)
-            {
-                if (target.GetFrameDataById(projection.TargetFrame)?.state !=
-                    LF2States.HeavyWeaponInSky)
-                {
-                    projection.TargetFrame = 0;
-                    projection.TargetRuntimeFrame = 0;
-                }
-
-                projection.TargetWeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                ProjectScaledAirStep(factor, 2.3, ref projection);
-            }
-
             return true;
         }
 
@@ -5378,17 +5312,6 @@ namespace NTSD.Simulation.Ecs
             return true;
         }
 
-        private static void ProjectScaledAirStep(
-            double factor,
-            double vyStep,
-            ref WriterEffectSnapshot projection)
-        {
-            projection.TargetKnockbackVx = projection.TargetVx * factor;
-            projection.TargetVx = projection.TargetKnockbackVx;
-            projection.TargetKnockbackVz = projection.TargetVz * factor;
-            projection.TargetVz = projection.TargetKnockbackVz;
-            ProjectAirStep(vyStep, ref projection);
-        }
 
         private static void ProjectWhirlwindMovement(
             LF2Entity attacker,
@@ -5998,7 +5921,8 @@ namespace NTSD.Simulation.Ecs
             if (expected.TargetLinkState != actual.TargetLinkState) mask |= 1UL << 30;
             if (expected.TargetCatcherSlot != actual.TargetCatcherSlot ||
                 expected.TargetCatchSourceSlot90 !=
-                    actual.TargetCatchSourceSlot90) mask |= 1UL << 31;
+                    actual.TargetCatchSourceSlot90 ||
+                expected.TargetImpactSourceSlot164 != actual.TargetImpactSourceSlot164) mask |= 1UL << 31;
             if (expected.TargetHolderSlot != actual.TargetHolderSlot) mask |= 1UL << 32;
             if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;
             if (expected.TargetRelationTeam != actual.TargetRelationTeam ||
@@ -6012,7 +5936,8 @@ namespace NTSD.Simulation.Ecs
                 expected.TargetAnimCounter != actual.TargetAnimCounter ||
                 expected.TargetHitCount != actual.TargetHitCount ||
                 expected.TargetHitStateCount != actual.TargetHitStateCount) mask |= 1UL << 37;
-            if (expected.TargetHealTimer != actual.TargetHealTimer) mask |= 1UL << 38;
+            if (expected.TargetHealTimer != actual.TargetHealTimer ||
+                expected.TargetEnvironmentState320 != actual.TargetEnvironmentState320) mask |= 1UL << 38;
             if (expected.TargetXBoundPositive != actual.TargetXBoundPositive) mask |= 1UL << 39;
             if (expected.TargetXBoundNegative != actual.TargetXBoundNegative) mask |= 1UL << 40;
             if (expected.TargetZBoundPositive != actual.TargetZBoundPositive) mask |= 1UL << 41;
@@ -6312,6 +6237,8 @@ namespace NTSD.Simulation.Ecs
             internal int TargetLinkState;
             internal int TargetCatcherSlot;
             internal int TargetCatchSourceSlot90;
+            internal int TargetEnvironmentState320;
+            internal int TargetImpactSourceSlot164;
             internal int TargetHolderSlot;
             internal int TargetHolderCopySlot;
             internal int TargetOwnerSlot;

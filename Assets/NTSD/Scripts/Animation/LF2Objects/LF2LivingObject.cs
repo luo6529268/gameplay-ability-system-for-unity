@@ -437,13 +437,6 @@ namespace NTSD.Animation.LF2Objects
         {
             if (num < Effect.Num) return;
 
-            int efid = num + NTSDGlobal.Gameplay.EffectNumToId;
-            int oscillate = NTSDSpec.GetOscillateOrDefault(efid);
-            if (oscillate != 0)
-            {
-                Effect.Oscillate = oscillate;
-            }
-
             Effect.Stuck = true;
             if (dvx != 0) Effect.Dvx = dvx;
             if (dvy != 0) Effect.Dvy = dvy;

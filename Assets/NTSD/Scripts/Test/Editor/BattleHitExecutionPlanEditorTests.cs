@@ -1521,7 +1521,7 @@ namespace NTSD.Test
 
         [TestCase(false, 230)]
         [TestCase(true, 232)]
-        public void ShadowCompare_CaughtVictimUsesPreviousCpointHurtFrame(
+        public void ShadowCompare_CaughtVictimIgnoresPreviousCpointHurtFrame(
             bool sameFacing,
             int expectedHurtFrame)
         {
@@ -1640,8 +1640,8 @@ namespace NTSD.Test
                 Is.EqualTo(1),
                 "caught-victim hit must produce one writer-effect observation");
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.Frame.N, Is.EqualTo(expectedHurtFrame));
-            Assert.That(target.Runtime.Frame, Is.EqualTo(expectedHurtFrame));
+            Assert.That(target.Frame.N, Is.EqualTo(220));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(220));
             Assert.That(target.CatcherSlotIndex, Is.EqualTo(catcher.Runtime.SlotIndex));
             Assert.That(catcher.CaughtSlotIndex, Is.EqualTo(target.Runtime.SlotIndex));
         }
@@ -5905,6 +5905,8 @@ namespace NTSD.Test
                 hasItr: false,
                 hasBody: false);
             attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+            attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+            holder.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             target.KillCount = -1;
             target.Unk344 = 1;
             target.WeaponCount = 5;
@@ -5929,10 +5931,13 @@ namespace NTSD.Test
                 DescribeDiagnostics(diagnostics));
             Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(target.WeaponCount, Is.EqualTo(-20));
+            Assert.That(target.WeaponCount, Is.EqualTo(5));
+            Assert.That(target.Runtime.EnvironmentState320, Is.EqualTo(-20));
+            Assert.That(target.Runtime.CatchSourceSlot90, Is.EqualTo(0x2000 + holder.Runtime.SlotIndex));
+            Assert.That(target.Runtime.ImpactSourceSlot164, Is.EqualTo(attacker.Runtime.SlotIndex));
             Assert.That(target.Frame.N, Is.EqualTo(182));
-            Assert.That(target.Runtime.Vx, Is.EqualTo(4.25 * 0.9345794392523364));
-            Assert.That(target.Runtime.Vz, Is.EqualTo(-3.75 * 0.9345794392523364));
+            Assert.That(target.Runtime.Vx, Is.EqualTo(4.25 / 1.07));
+            Assert.That(target.Runtime.Vz, Is.EqualTo(-3.75 / 1.07));
             Assert.That(target.Runtime.Vy, Is.EqualTo(-5.5));
             Assert.That(target.KnockbackVy, Is.EqualTo(-5.5));
             Assert.That(holder.ComboCountAtk, Is.Zero);
@@ -5940,11 +5945,12 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ShadowCompare_Kind11NonNegativeWeaponCountIsAuthorityNoOp()
+        public void ShadowCompare_Kind11NonNegativeEnvironmentIsAuthorityNoOp()
         {
             Scenario scenario = CreateScenario();
             scenario.CharacterAttacker.GetCollisionFrameData().itrs[0].kind = 11;
             scenario.CharacterVictim.WeaponCount = 0;
+            scenario.CharacterVictim.Runtime.EnvironmentState320 = 0;
             scenario.CharacterVictim.Runtime.SetVelocity(3.25, -2.5, -4.75);
             scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
                 BattleHitExecutionPlanMode.ShadowCompare);

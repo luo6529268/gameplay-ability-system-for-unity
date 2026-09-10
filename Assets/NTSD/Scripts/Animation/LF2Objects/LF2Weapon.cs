@@ -368,26 +368,10 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            if (itr.kind == 10 || itr.kind == 11)
+            if (NTSD.Simulation.Ecs.BattleNativeImpactResolver.IsImpactKind(itr.kind))
             {
-                if (itr.kind == 11 && FluteWeight >= 0)
-                    return false;
-                if (ObjectId == 201 || ObjectId == 202)
-                    return false;
-
-                const double kFluteVxzFactor = 0.9345794392523364;
-                int curState = Frame?.D?.state ?? -1;
-                bool isLight = WeaponType == 1 || WeaponType == 4 || WeaponType == 6;
-                int inSkyState = isLight ? LF2States.WeaponInSky : LF2States.HeavyWeaponInSky;
-                if (curState != inSkyState)
-                    SetFrameDirect(0);
-                KnockbackVx = Runtime.Vx * kFluteVxzFactor;
-                Runtime.Vx = KnockbackVx;
-                KnockbackVz = Runtime.Vz * kFluteVxzFactor;
-                Runtime.Vz = KnockbackVz;
-                ApplyWeaponAirStep(isLight ? 3.0 : 2.3);
-                FluteWeight = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                return true;
+                SimulationWorld impactWorld = Match ?? attacker?.Match;
+                return impactWorld?.DamageWriter.TryApplyNativeImpact(impactWorld, attacker, this, itr) == true;
             }
 
             if (itr.kind == 15)

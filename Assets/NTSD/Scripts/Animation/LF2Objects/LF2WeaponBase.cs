@@ -377,10 +377,6 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        public override void FluteForce()
-        {
-        }
-
         protected void CoincideXYWithWPoint(
             Vector3 holdpoint,
             BattleWeaponPointValue heldFrameWpoint)

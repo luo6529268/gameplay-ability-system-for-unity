@@ -14889,13 +14889,13 @@ namespace NTSD.Test
         {
             int actualFront = RunCaughtCharacterDamageTailCase(true, sameFacing: false, catcherHurtable: 0);
             int sharedFront = RunCaughtCharacterDamageTailCase(false, sameFacing: false, catcherHurtable: 0);
-            Expect(actualFront == 230 && sharedFront == 230,
-                "C-15/C-33: caught hurtable=0 actual/shared targets must use facing mismatch front hurt frame after damage");
+            Expect(actualFront == 220 && sharedFront == 220,
+                "C-15/C-33: caught hurtable=0 actual/shared targets must preserve standard damage action220 without CPoint override");
 
             int actualBack = RunCaughtCharacterDamageTailCase(true, sameFacing: true, catcherHurtable: 1);
             int sharedBack = RunCaughtCharacterDamageTailCase(false, sameFacing: true, catcherHurtable: 1);
-            Expect(actualBack == 232 && sharedBack == 232,
-                "C-15/C-33: caught actual/shared targets must use facing match back hurt frame after damage");
+            Expect(actualBack == 220 && sharedBack == 220,
+                "C-15/C-33: caught actual/shared targets must preserve standard damage action220 for matching facing");
 
             int actualKnockdown = RunCaughtCharacterDamageTailCase(
                 true, sameFacing: false, catcherHurtable: 1, fall: 61);
@@ -15174,6 +15174,9 @@ namespace NTSD.Test
                     victim.KillCount = -1;
                     victim.Unk344 = 1;
                     victim.WeaponCount = -1;
+                    victim.Runtime.EnvironmentState320 = -1;
+                    attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+                    holder.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
                     victim.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront);
                     const int preservedPreviousFrame = 71;
                     const int preservedAttackingCounter = 29;
@@ -15196,7 +15199,10 @@ namespace NTSD.Test
                         ? ((LF2Character)victim).Hit(itr, attacker, Vector3.zero, default)
                         : LF2CharacterDatHitResolver.TryResolveHit(victim, itr, attacker, Vector3.zero, default);
                     Expect(accepted && victim.Health.HP == 100 && victim.Health.HPBound == 100 &&
-                           victim.WeaponCount == -20 && holder.ComboCountAtk == preservedComboCount &&
+                           victim.WeaponCount == -1 && victim.Runtime.EnvironmentState320 == -20 &&
+                           victim.Runtime.CatchSourceSlot90 == 0x2000 + holder.Runtime.SlotIndex &&
+                           victim.Runtime.ImpactSourceSlot164 == attacker.Runtime.SlotIndex &&
+                           holder.ComboCountAtk == preservedComboCount &&
                            world.DamageStats[1] == 51 &&
                            victim.Frame.N == 182 && victim.Runtime.Frame == 182 &&
                            ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(182)) &&
@@ -18543,11 +18549,11 @@ namespace NTSD.Test
                 }
 
                 Expect(RunCaughtCase("Front", sameFacing: false, reciprocal: true, cpointKind: 2,
-                           victimType: LF2ObjectType.SpecialAttack) == 310,
-                    "BATTLE-C30: caught-hurt facing mismatch must select resolved injury");
+                           victimType: LF2ObjectType.SpecialAttack) == 0,
+                    "BATTLE-C30: type3 facing mismatch must retain action0 without CPoint injury override");
                 Expect(RunCaughtCase("Back", sameFacing: true, reciprocal: true, cpointKind: 2,
-                           victimType: LF2ObjectType.SpecialAttack) == 320,
-                    "BATTLE-C30: caught-hurt same facing must select resolved cover");
+                           victimType: LF2ObjectType.SpecialAttack) == 0,
+                    "BATTLE-C30: type3 matching facing must retain action0 without CPoint cover override");
                 Expect(RunCaughtCase("Mismatch", sameFacing: false, reciprocal: false, cpointKind: 2,
                            victimType: LF2ObjectType.SpecialAttack) == 0,
                     "BATTLE-C30: caught-hurt must reject a non-reciprocal catcher/victim pair");

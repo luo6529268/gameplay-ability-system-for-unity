@@ -965,40 +965,6 @@ namespace NTSD.Animation.LF2Objects
 
 
 
-        /// <summary>受到 itr kind=10/11 时的受力处理，角色和武器共用。</summary>
-        public virtual void FluteForce()
-        {
-            if (Runtime == null) return;
-            float mass = NTSDSpec.GetMassOrDefault(ObjectId);
-
-            float lowLevel = -140f;
-            float midLevel = -160f;
-            float highLevel = -180f;
-
-            Effect.Super = true;
-            Runtime.Vx = 0;
-            Runtime.Vz = 0;
-
-            if (Runtime.Y > lowLevel)
-                Runtime.Vy = (Runtime.Vy <= 0) ? -7.5f : -Runtime.Vy / 2f;
-            else if (Runtime.Y <= lowLevel && Runtime.Y > midLevel)
-                Runtime.Vy -= mass / 2f;
-            else if (Runtime.Y <= midLevel && Runtime.Y > highLevel)
-                Runtime.Vy += mass / 2f;
-
-            switch ((LF2ObjectType)GetCurrentDataObjectType())
-            {
-                case LF2ObjectType.Character:
-                    if (Frame.N >= 55) ImmediateFrame(40);
-                    break;
-                case LF2ObjectType.HeavyWeapon:
-                    if (Frame.N >= 5) ImmediateFrame(1);
-                    break;
-            }
-        }
-
-
-
         /// <summary>写入实体位置。</summary>
         public void SetPos(double x, double y, double z)
         {
@@ -1170,12 +1136,12 @@ namespace NTSD.Animation.LF2Objects
 
         private static bool SuppressesGenericArest(int kind)
         {
-            return kind == 8 || kind == 10 || kind == 11 || kind == 14 || kind == 15 || kind == 16;
+            return kind == 8 || BattleNativeImpactResolver.IsImpactKind(kind) || kind == 14 || kind == 15 || kind == 16;
         }
 
         private static bool SuppressesGenericVrest(int kind)
         {
-            return kind == 8 || kind == 10 || kind == 11 || kind == 14 || kind == 15;
+            return kind == 8 || BattleNativeImpactResolver.IsImpactKind(kind) || kind == 14 || kind == 15;
         }
 
         public bool ItrVrestTest(int uid, bool releaseRuntimeSlot) => ItrVrestTest(uid);

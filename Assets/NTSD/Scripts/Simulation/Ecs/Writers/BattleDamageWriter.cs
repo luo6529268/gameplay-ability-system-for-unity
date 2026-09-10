@@ -6,6 +6,88 @@ namespace NTSD.Simulation.Ecs
 {
     internal sealed class BattleDamageWriter
     {
+        private static readonly int[] NativeImpactImmuneObjectIds = { 201, 202 };
+
+        internal static BattleNativeImpactPlan CreateNativeImpactPlan(
+            SimulationWorld world, LF2Entity attacker, LF2Entity victim, InteractionArea itr)
+        {
+            if (world == null || attacker?.Runtime == null || victim?.Runtime == null || itr == null)
+                return default;
+
+            NTSDEntityRuntime source = attacker.Runtime;
+            NTSDEntityRuntime target = victim.Runtime;
+            int firstSlot = source.OwnerSlotIndex;
+            NTSDEntityRuntime first = ResolveNativeImpactOwner(world, firstSlot);
+            int creditSlot = first?.OwnerSlotIndex ?? -1;
+            NTSDEntityRuntime credit = ResolveNativeImpactOwner(world, creditSlot);
+            var input = new BattleNativeImpactInput
+            {
+                Kind = itr.kind,
+                TargetType = victim.GetCurrentDataObjectTypeForSimulation(),
+                TargetState = victim.GetState(),
+                TargetAction = victim.Frame?.N ?? target.Frame,
+                TargetObjectId = LF2Entity.ResolveCurrentDataObjectId(victim),
+                Environment = target.EnvironmentState320,
+                CatchSource = target.CatchSourceSlot90,
+                ImpactSource = target.ImpactSourceSlot164,
+                Respond = itr.respond,
+                FirstOwnerSlot = firstSlot,
+                FirstOwnerValid = first != null,
+                CreditSlot = creditSlot,
+                CreditOwnerValid = credit != null,
+                AttackerSlot = source.SlotIndex,
+                Rule94 = 20,
+                ImmunityAudited = true,
+                ImmuneObjectIds = NativeImpactImmuneObjectIds,
+                YInt = target.YInt,
+                Y = target.Y,
+                Vx = target.Vx,
+                Vy = target.Vy,
+                Vz = target.Vz,
+                PendingX = target.KnockbackVx,
+                PendingY = target.KnockbackVy,
+                PendingZ = target.KnockbackVz,
+            };
+            return BattleNativeImpactResolver.Resolve(in input);
+        }
+
+        private static NTSDEntityRuntime ResolveNativeImpactOwner(SimulationWorld world, int slot)
+        {
+            if (!world.TryGetRuntimeSlotReadOnlyView(slot, out RuntimeSlotTable.ReadOnlySlotView view) || !view.Claimed)
+                return null;
+            return view.Entity?.Runtime ?? view.RawRuntime;
+        }
+
+        internal bool TryApplyNativeImpact(SimulationWorld world, LF2Entity attacker, LF2Entity victim, InteractionArea itr)
+        {
+            BattleNativeImpactPlan plan = CreateNativeImpactPlan(world, attacker, victim, itr);
+            if (!plan.Applied)
+                return false;
+
+            // Alignment contract: NTSD28-B6-NATIVE-IMPACT-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001
+            NTSDEntityRuntime target = victim.Runtime;
+            for (int i = 0; i < plan.OperationCount; i++)
+            {
+                BattleNativeImpactOperation op = plan.GetOperation(i);
+                switch (op.Kind)
+                {
+                    case BattleNativeImpactWriteKind.Environment: target.EnvironmentState320 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.CatchSource: target.CatchSourceSlot90 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.ImpactSource: target.ImpactSourceSlot164 = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.Action: victim.DirectWriteRawFramePreserveWaitCounter((int)op.Value); break;
+                    case BattleNativeImpactWriteKind.Vx: target.Vx = op.Value; break;
+                    case BattleNativeImpactWriteKind.Vz: target.Vz = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingX: target.KnockbackVx = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingZ: target.KnockbackVz = op.Value; break;
+                    case BattleNativeImpactWriteKind.YInt: target.YInt = (int)op.Value; break;
+                    case BattleNativeImpactWriteKind.Y: target.Y = op.Value; break;
+                    case BattleNativeImpactWriteKind.Vy: target.Vy = op.Value; break;
+                    case BattleNativeImpactWriteKind.PendingY: target.KnockbackVy = op.Value; break;
+                }
+            }
+            return true;
+        }
+
         internal readonly struct NativeEffectActionOverrideDecision
         {
             internal NativeEffectActionOverrideDecision(
@@ -720,6 +802,9 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
+            if (BattleNativeImpactResolver.IsImpactKind(itr.kind))
+                return TryApplyNativeImpact(world, attacker, victim, itr);
+
             int victimType = victim.GetCurrentDataObjectTypeForSimulation();
             if (victimType == (int)LF2ObjectType.Character)
             {
@@ -832,35 +917,8 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            if (itr.kind == 10 || itr.kind == 11)
-            {
-                if (itr.kind == 11 && victim.WeaponCount >= 0)
-                    return false;
-                int victimOid = LF2Entity.ResolveCurrentDataObjectId(victim);
-                if (victimOid == 201 || victimOid == 202)
-                    return false;
-
-                const double velocityFactor = 0.9345794392523364;
-                bool lightLike =
-                    victimType == (int)LF2ObjectType.LightWeapon ||
-                    victimType == (int)LF2ObjectType.ThrowWeapon ||
-                    victimType == (int)LF2ObjectType.Drink;
-                int expectedState = lightLike
-                    ? LF2States.WeaponInSky
-                    : LF2States.HeavyWeaponInSky;
-                if (victim.GetState() != expectedState)
-                    victim.DirectWriteRawFramePreserveWaitCounter(0);
-
-                victim.KnockbackVx = victim.Runtime.Vx * velocityFactor;
-                victim.Runtime.Vx = victim.KnockbackVx;
-                victim.KnockbackVz = victim.Runtime.Vz * velocityFactor;
-                victim.Runtime.Vz = victim.KnockbackVz;
-                ApplyGenericWeaponAirStep(
-                    victim,
-                    lightLike ? 3.0 : 2.3);
-                victim.WeaponCount = NTSDGlobal.Gameplay.FluteCharacterWeaponCount;
-                return true;
-            }
+            if (BattleNativeImpactResolver.IsImpactKind(itr.kind))
+                return TryApplyNativeImpact(world, attacker, victim, itr);
 
             if (itr.kind == 15)
             {
@@ -875,24 +933,6 @@ namespace NTSD.Simulation.Ecs
                    ApplyWeaponDamage(world, attacker, victim, itr);
         }
 
-        private static void ApplyGenericWeaponAirStep(
-            LF2Entity victim,
-            double velocityStep)
-        {
-            if (victim.GetRuntimeYInt() >= -2)
-            {
-                victim.Runtime.Y = -2.0;
-                victim.Runtime.YInt = -2;
-                victim.Runtime.Vy = -6.0;
-                return;
-            }
-
-            if (victim.Runtime.Vy > -6.0)
-            {
-                victim.Runtime.Vy -= velocityStep;
-                victim.KnockbackVy = victim.Runtime.Vy;
-            }
-        }
 
         private static void ApplyGenericWeaponWhirlwind(
             LF2Entity victim,
@@ -1166,10 +1206,6 @@ namespace NTSD.Simulation.Ecs
             victimHitCounters.SetHitStateCount(45);
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
 
-            LF2HitResolveRuntimeData.ApplyCaughtVictimHurtFrame(
-                victim,
-                attacker,
-                victimHitCounters.Fall);
             if (victimHitCounters.Fall == 80)
                 victimHitCounters.SetFall(0);
 
@@ -1834,10 +1870,6 @@ namespace NTSD.Simulation.Ecs
             victim.HitStateCount = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
 
-            LF2HitResolveRuntimeData.ApplyCaughtVictimHurtFrame(
-                victim,
-                attacker,
-                victim.FallCounter);
             if (victim.FallCounter == 80)
                 victim.FallCounter = 0;
 

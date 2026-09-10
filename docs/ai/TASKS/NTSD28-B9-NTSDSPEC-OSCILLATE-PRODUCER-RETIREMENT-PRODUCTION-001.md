@@ -13,3 +13,13 @@
 副作用/兼容：仅改变各自退休行为；旧snapshot字段布局不变，但不能承诺旧行为续跑等值。外部程序集/API兼容与repo内部caller区别记录，不凭repo扫描断言不存在所有外部调用。
 回滚：用户明确批准后仅反向本包增量，保留当前P1/P2/P3未提交基线。当前脚本增量为0，无需回滚。禁止Git清理/提交/push与跨包顺手修复。
 当前验证：只读工作树、源码和Unity状态检查；未运行本轮RED/编译/回归/Play。没有报告新测试失败；这是确定的事前授权范围冲突。
+
+
+## 2026-09-10 用户追加授权恢复
+IN_PROGRESS / TEST_FIRST。用户确认恢复本Goal17三包；此前范围阻塞解除。新增测试路径：Assets/NTSD/Scripts/Test/Editor/NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs及meta。全批次一次共享回归；P3 Record保持已确认VERIFIED/USER_REVIEW_ACCEPTED，不再修改。
+先完成全repo C#/序列化/反射字符串名审查，再创建RED测试；发现生产caller立即报告，不删动态caller。Luna只负责本包文件和新测试，主线程独占Unity测试/编译、共享文件、旧测试和最终审阅；RED实测完成前禁止改生产。
+
+
+最终状态VERIFIED / SCOPED_RETIREMENT / REVIEW_PENDING。已验证的范围为旧OID→Oscillate producer退休：LF2LivingObject.EffectCreate只删除7行efid/lookup/条件赋值，原BOM保持；num0/2映射旧OID300/302的写4/3行为归零，调用前的默认及非零Oscillate值保持。新focused10项RED9FAIL/1PASS→GREEN10PASS，同时验证优先级、Stuck、Dvx/Dvy、Num、TimeIn/TimeOut等字段。
+LF2LivingObject中的NTSDSpec引用归零；全仓仍保留LF2Character mass及WeaponLinkResolver compat的2文件/5表达式，NTSDSpec.cs本体未改。ProcessEffects晚帧consumer及base-shell capture/restore读取保留；旧snapshot恢复的Oscillate仍可被晚帧consumer使用，reader退休等联合schema窗口。不声明B9 native render_phase±3 body-shake已对齐。本包没有自然producer caller，未执行Play；不以synthetic EffectCreate测试冒充自然Play。
+共享B6610、refill9、oldcompat7、fullSelfCheck、双build0error和固定Scene/范围检查已通过，完整证据见同IDRecord最终节。报告后停止。

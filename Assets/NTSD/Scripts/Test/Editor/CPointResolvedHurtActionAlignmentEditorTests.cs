@@ -22,14 +22,10 @@ namespace NTSD.Test
             };
 
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: true),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Injury,
                 Is.EqualTo(310));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: false),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Cover,
                 Is.EqualTo(320));
         }
 
@@ -43,14 +39,10 @@ namespace NTSD.Test
             Assert.That(cpoint.injury, Is.EqualTo(230));
             Assert.That(cpoint.cover, Is.EqualTo(232));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: true),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Injury,
                 Is.EqualTo(230));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: false),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Cover,
                 Is.EqualTo(232));
         }
 
@@ -66,14 +58,10 @@ namespace NTSD.Test
             Assert.That(cpoint.fronthurtact, Is.EqualTo(230));
             Assert.That(cpoint.backhurtact, Is.EqualTo(232));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: true),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Injury,
                 Is.EqualTo(310));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: false),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Cover,
                 Is.EqualTo(320));
         }
 
@@ -87,14 +75,10 @@ namespace NTSD.Test
                 new Lf2DatProperty("backhurtact", "232"));
 
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: true),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Injury,
                 Is.EqualTo(230));
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: false),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Cover,
                 Is.EqualTo(232));
         }
 
@@ -111,14 +95,10 @@ namespace NTSD.Test
             };
 
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: true),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Injury,
                 Is.Zero);
             Assert.That(
-                LF2HitResolveRuntimeData.ResolveCaughtVictimHurtAction(
-                    cpoint,
-                    oppositeFacing: false),
+                NTSD.Simulation.BattleCatchPointValueAdapter.FromLegacy(cpoint).Cover,
                 Is.Zero);
         }
 

@@ -14,3 +14,13 @@
 副作用/兼容：仅改变各自退休行为；旧snapshot字段布局不变，但不能承诺旧行为续跑等值。外部程序集/API兼容与repo内部caller区别记录，不凭repo扫描断言不存在所有外部调用。
 回滚：用户明确批准后仅反向本包增量，保留当前P1/P2/P3未提交基线。当前脚本增量为0，无需回滚。禁止Git清理/提交/push与跨包顺手修复。
 当前验证：只读工作树、源码和Unity状态检查；未运行本轮RED/编译/回归/Play。没有报告新测试失败；这是确定的事前授权范围冲突。
+
+
+## 2026-09-10 用户追加授权恢复
+IN_PROGRESS / TEST_FIRST。用户确认恢复本Goal17三包；此前范围阻塞解除。新增测试路径：Assets/NTSD/Scripts/Test/Editor/NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs及meta。全批次一次共享回归；P3 Record保持已确认VERIFIED/USER_REVIEW_ACCEPTED，不再修改。
+先完成全repo C#/序列化/反射字符串名审查，再创建RED测试；发现生产caller立即报告，不删动态caller。Luna只负责本包文件和新测试，主线程独占Unity测试/编译、共享文件、旧测试和最终审阅；RED实测完成前禁止改生产。
+
+
+最终状态VERIFIED / SCOPED_RETIREMENT / REVIEW_PENDING。已验证的范围为无repo生产caller的FluteForce API退休：删除LF2Entity完整方法及LF2WeaponBase空override，未把impact规则迁回旧virtual。新architecture4项RED3FAIL/1PASS→GREEN4PASS，reflection base/inherited方法均不存在，production source引用归零，既有impact owner与独立character mass owner保持。
+PLAY_NOT_PERFORMED_NO_NATURAL_PRODUCER。仓库外预编译程序集不由repo扫描证明；本次runtime/editor编译和目标回归通过。NTSDSpec本体和mass/compat生产行为未改。早期审计中的969-994是旧定位简写，最终diff删除完整方法及相邻自身注释，下一SetPos文档原1002起保持；没有截断函数。
+共享B6610、refill9、oldcompat7、fullSelfCheck、双build0error和固定Scene/范围检查已通过，完整证据见同IDRecord最终节。报告后停止。
