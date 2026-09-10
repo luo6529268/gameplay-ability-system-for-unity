@@ -288,3 +288,14 @@
   保留，但必须用新身份重新出证；受规则变化影响的pass contract必须修改后再继续。
 - **写入边界**：authority目录继续只读；只在Unity workspace更新治理、诊断工具和经独立Task/Change批准的
   实现。此决定不改变用户批准例外、用户排除项或H项内容策略待定边界。
+
+
+## D-022 — B6联合schema迁移、旧midbattle拒绝与locked系统规则
+
+- **状态**：USER_CONFIRMED / ROADMAP_APPROVED / SCHEMA_IMPLEMENTATION_NOT_STARTED
+- **日期**：2026-09-10
+- **决定**：采用一次性联合主版本迁移：entity runtime 12→13、aggregate snapshot20→21、checksum23→24；涉及删除的base-shell/character-shell按实际项升版。旧midbattle snapshot严格拒绝，新session按seed/input重放，不建立adapter。首批system规则表locked immutable，明确不支持alternate配置。
+- **附带条款**：reserved字段仅为过渡；对应producer/consumer退休并通过新版本capture/restore/hash验收后，在该联合窗口删除，不成为长期规则状态。历史checksum/parity按版本分组，不跨版本直接等值比较。CPoint19→27内容字段合同与hurt consumer退休独立，不因本裁定改变converter、内容authority或H内容迁移策略。
+- **路线图**：行为producer/consumer退休（期间必要reserved默认值与退出条件明确）→一次性提升主版本及必要shell版本→接线/验收；只保留一个不兼容窗口。+2F8缺失不能通过旧Spawner/Owner推导来假兼容。
+- **依据**：用户2026-09-10明确裁定；决策材料 `Temp/Goal14_Triage_Report.md` 第5节（当前实际版本12/20/23，现有restore严格版本检查，无既有adapter）。
+- **影响与边界**：本Goal只登记路线图并实现pickup P1关系计数/locked规则与P2纯事务；不修改任何Lockstep/Snapshot、Checksum或shell/schema文件，不做P3原子接线。以后实际联合迁移另建Task/Record并按裁定验收。首批locked表只承认正式{120,124}；unaudited、空表或alternate集合在Unity规则准入层unsupported，这一限制不冒称Authority的audited空表一般语义。

@@ -1,9 +1,37 @@
+using System.Collections.Generic;
+
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Extensions;
 
 namespace NTSD.Simulation.Ecs
 {
+    internal readonly struct BattleLockedPickupWeaponThrowRules
+    {
+        private BattleLockedPickupWeaponThrowRules(bool supported)
+        {
+            IsSupported = supported;
+        }
+
+        internal bool IsSupported { get; }
+        internal static BattleLockedPickupWeaponThrowRules Locked => new BattleLockedPickupWeaponThrowRules(true);
+
+        internal static BattleLockedPickupWeaponThrowRules FromAuditedTable(bool audited, IReadOnlyList<int> objectIds)
+        {
+            if (!audited || objectIds == null || objectIds.Count != 2)
+                return default;
+            bool locked = (objectIds[0] == 120 && objectIds[1] == 124) ||
+                          (objectIds[0] == 124 && objectIds[1] == 120);
+            return new BattleLockedPickupWeaponThrowRules(locked);
+        }
+
+        internal bool TryResolveType1Relation(int objectId, out int relation)
+        {
+            relation = IsSupported ? (objectId == 120 || objectId == 124 ? 101 : 1) : 0;
+            return IsSupported;
+        }
+    }
+
     /// <summary>
     /// Owns the canonical cpoint, held and link writes produced while consuming
     /// interaction candidates. Candidate ordering remains owned by the battle
@@ -149,90 +177,81 @@ namespace NTSD.Simulation.Ecs
             LF2Entity target,
             int kind)
         {
-            if (attacker?.Runtime == null || target?.Runtime == null)
-                return false;
-            if (kind != 2 && kind != 7)
-                return false;
-            if (kind == 7 && attacker.Runtime.LinkState != 0)
+            return TryApplyPickup(attacker, target, kind, BattleLockedPickupWeaponThrowRules.Locked);
+        }
+
+        internal bool TryApplyPickup(
+            LF2Entity attacker,
+            LF2Entity target,
+            int kind,
+            BattleLockedPickupWeaponThrowRules rules)
+        {
+            if (attacker?.Runtime == null || target?.Runtime == null || attacker.Frame == null || kind != 2)
                 return false;
 
-            int targetType = target.GetCurrentDataObjectTypeForSimulation();
-            int attackerSlot = attacker.Runtime.SlotIndex;
-            int targetSlot = target.Runtime.SlotIndex;
-            if (attackerSlot < 0 || targetSlot < 0)
+            LF2FrameData targetFrame = target.Frame != null
+                ? target.GetFrameDataById(target.Frame.N)
+                : null;
+            var input = new BattlePickupTransactionInput(
+                target.GetCurrentDataObjectTypeForSimulation(),
+                target.FrameCache?.Wrapper?.characterId ?? target.ObjectId,
+                target.Health?.HP ?? 0,
+                target.Runtime.WeaponFlightCounter,
+                attacker.Runtime.SlotIndex,
+                target.Runtime.SlotIndex,
+                attacker.RelationTeam,
+                attacker.Runtime.LinkState,
+                attacker.Runtime.PickupCount,
+                attacker.Frame.N,
+                attacker.AttackingCounter,
+                targetFrame != null,
+                targetFrame?.PrimaryWeaponPoint.WeaponAct ?? 0);
+            BattlePickupTransactionPlan plan = BattlePickupTransactionPlan.Create(input, rules);
+            if (!plan.Applied)
                 return false;
 
-            int linkState;
-            int targetLinkState;
-            if (kind == 7)
+            // Alignment contract: NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001.
+            for (int i = 0; i < plan.OperationCount; i++)
             {
-                int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
-                linkState = 1;
-                targetLinkState = -1;
-                if (targetOid == 120 || targetOid == 124)
-                    linkState = 101;
-                else if (targetType == (int)LF2ObjectType.ThrowWeapon)
+                BattlePickupWriteOperation operation = plan.GetOperation(i);
+                switch (operation.Kind)
                 {
-                    linkState = 4;
-                    targetLinkState = -4;
-                }
-                else if (targetType == (int)LF2ObjectType.Drink)
-                {
-                    linkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
-                    targetLinkState = -linkState;
+                    case BattlePickupWriteKind.SetTargetWeaponHp:
+                        target.Runtime.WeaponFlightCounter = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderRelationCount:
+                        attacker.Runtime.PickupCount = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderRelation:
+                        attacker.Runtime.LinkState = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetRelation:
+                        target.Runtime.LinkState = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderLinkedChildSlot:
+                        attacker.Runtime.TargetSlotIndex = operation.Value;
+                        attacker.Runtime.HeldWeaponStableId = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetLinkedParentSlot:
+                        target.Runtime.HolderStableId = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetOwnerSlot:
+                        target.Runtime.OwnerSlotIndex = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetBattleGroup:
+                        target.RelationTeam = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderAction:
+                        attacker.DirectWriteRawFramePreserveWaitCounter(operation.Value);
+                        break;
+                    case BattlePickupWriteKind.SetHolderFrameCounter:
+                        attacker.AttackingCounter = operation.Value;
+                        break;
                 }
             }
-            else
-            {
-                if (targetType == (int)LF2ObjectType.LightWeapon)
-                {
-                    linkState = 1;
-                    attacker.DirectWriteRawFramePreserveWaitCounter(
-                        LF2StandardFrames.PickingLight);
-                }
-                else if (targetType == (int)LF2ObjectType.HeavyWeapon)
-                {
-                    linkState = 2;
-                    attacker.DirectWriteRawFramePreserveWaitCounter(
-                        LF2StandardFrames.PickingHeavy);
-                }
-                else if (targetType == (int)LF2ObjectType.ThrowWeapon)
-                {
-                    linkState = 4;
-                    attacker.DirectWriteRawFramePreserveWaitCounter(
-                        LF2StandardFrames.PickingLight);
-                }
-                else if (targetType == (int)LF2ObjectType.Drink)
-                {
-                    linkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
-                    attacker.DirectWriteRawFramePreserveWaitCounter(
-                        LF2StandardFrames.PickingLight);
-                    if (target.Health == null || target.Health.HP <= 0)
-                        target.Runtime.WeaponFlightCounter = 0;
-                }
-                else
-                {
-                    return false;
-                }
 
-                attacker.AttackingCounter = 0;
-                targetLinkState = -linkState;
-            }
-
-            attacker.Runtime.LinkState = linkState;
-            target.Runtime.LinkState = targetLinkState;
-            target.RelationTeam = attacker.RelationTeam;
-            attacker.Runtime.TargetSlotIndex = targetSlot;
-            attacker.Runtime.HeldWeaponStableId = targetSlot;
-            target.Runtime.HolderStableId = attackerSlot;
-            target.HolderCopySlot = attackerSlot;
-            attacker.Runtime.PickupCount++;
-            if (targetType == (int)LF2ObjectType.Drink &&
-                (target.Health == null || target.Health.HP <= 0))
-            {
-                target.Runtime.WeaponFlightCounter = 0;
-            }
-
+            if (plan.RelationEstablished && attacker is LF2Character character)
+                character.HeldWeaponReferenceInternal = target;
             return true;
         }
 

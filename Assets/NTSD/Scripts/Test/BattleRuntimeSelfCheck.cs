@@ -14607,12 +14607,12 @@ namespace NTSD.Test
             light.BindData(lightData.name, 100, 1, lightData, 0);
             kind7World.Register(kind7Attacker);
             kind7World.Register(light);
-            Expect(LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
+            Expect(!LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
                        kind7Attacker, new InteractionArea { kind = 7 }, light) &&
-                   kind7Attacker.Runtime.LinkState == 1 && light.Runtime.LinkState == -1 &&
-                   kind7Attacker.Runtime.HeldWeaponStableId == light.Runtime.SlotIndex &&
-                   kind7Attacker.Runtime.PickupCount == 1,
-                "C-02: shared current Character-DAT attacker must execute kind7 pickup");
+                   kind7Attacker.Runtime.LinkState == 0 && light.Runtime.LinkState == 0 &&
+                   kind7Attacker.Runtime.HeldWeaponStableId == -1 &&
+                   kind7Attacker.Runtime.PickupCount == 0,
+                "C-02: current Character-DAT kind7 must be unsupported without pickup writes");
 
             var currentOid120World = new SimulationWorld();
             var currentOid120Attacker = new CurrentDatDispatchSelfCheckEntity(
@@ -14624,14 +14624,14 @@ namespace NTSD.Test
             currentOid120Target.ObjectId = 999;
             currentOid120World.Register(currentOid120Attacker);
             currentOid120World.Register(currentOid120Target);
-            Expect(LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
+            Expect(!LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
                        currentOid120Attacker, new InteractionArea { kind = 7 }, currentOid120Target) &&
-                   currentOid120Attacker.Runtime.LinkState == 101 &&
-                   currentOid120Target.Runtime.LinkState == -1 &&
-                   currentOid120Attacker.Runtime.HeldWeaponStableId == currentOid120Target.Runtime.SlotIndex &&
-                   currentOid120Target.Runtime.HolderStableId == currentOid120Attacker.Runtime.SlotIndex &&
-                   currentOid120Attacker.Runtime.PickupCount == 1,
-                "P2: kind7 must use current DAT oid120 for link101 while preserving the victim link-1 contract");
+                   currentOid120Attacker.Runtime.LinkState == 0 &&
+                   currentOid120Target.Runtime.LinkState == 0 &&
+                   currentOid120Attacker.Runtime.HeldWeaponStableId == -1 &&
+                   currentOid120Target.Runtime.HolderStableId == -1 &&
+                   currentOid120Attacker.Runtime.PickupCount == 0,
+                "P3: current DAT oid120 must not enable retired kind7 pickup writes");
 
             var clrOid120World = new SimulationWorld();
             var clrOid120Attacker = new CurrentDatDispatchSelfCheckEntity(
@@ -14643,14 +14643,14 @@ namespace NTSD.Test
             clrOid120Target.ObjectId = 120;
             clrOid120World.Register(clrOid120Attacker);
             clrOid120World.Register(clrOid120Target);
-            Expect(LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
+            Expect(!LF2CharacterDatInteractionResolver.TryApplyPreInteraction(
                        clrOid120Attacker, new InteractionArea { kind = 7 }, clrOid120Target) &&
-                   clrOid120Attacker.Runtime.LinkState == 1 &&
-                   clrOid120Target.Runtime.LinkState == -1 &&
-                   clrOid120Attacker.Runtime.HeldWeaponStableId == clrOid120Target.Runtime.SlotIndex &&
-                   clrOid120Target.Runtime.HolderStableId == clrOid120Attacker.Runtime.SlotIndex &&
-                   clrOid120Attacker.Runtime.PickupCount == 1,
-                "P2: CLR oid120 must not override ordinary current light-DAT kind7 link identity");
+                   clrOid120Attacker.Runtime.LinkState == 0 &&
+                   clrOid120Target.Runtime.LinkState == 0 &&
+                   clrOid120Attacker.Runtime.HeldWeaponStableId == -1 &&
+                   clrOid120Target.Runtime.HolderStableId == -1 &&
+                   clrOid120Attacker.Runtime.PickupCount == 0,
+                "P3: CLR oid120 must not enable retired kind7 pickup writes");
         }
 
         private static void CheckActualCharacterCurrentDatPickupShells()
@@ -14767,12 +14767,12 @@ namespace NTSD.Test
                    picker.Runtime.TargetSlotIndex == -1 &&
                    picker.Runtime.HeldWeaponStableId == -1 &&
                    picker.Runtime.PickupCount == 0 &&
-                   picker.AttackingCounter == 7 &&
+                   picker.AttackingCounter == 0 &&
                    invalid.Runtime.LinkState == 0 &&
                    invalid.Runtime.HolderStableId == -1 &&
                    invalid.Health.HP == 0 &&
                    invalid.Runtime.WeaponFlightCounter == 19,
-                "R-HC-04: formal consumer must reject a non-weapon current type3 DAT without pickup side effects");
+                "R-HC-04: unsupported current type3 must apply the counter-reset tail without establishing a pickup relation");
         }
 
         private static void CheckActualCharacterCurrentDatPickupShell(
@@ -14856,7 +14856,8 @@ namespace NTSD.Test
                    picker.Runtime.TargetSlotIndex == targetSlot &&
                    picker.Runtime.HeldWeaponStableId == targetSlot &&
                    target.Runtime.HolderStableId == pickerSlot &&
-                   target.HolderCopySlot == pickerSlot &&
+                   target.Runtime.OwnerSlotIndex == pickerSlot &&
+                   target.HolderCopySlot == 99 &&
                    picker.Runtime.PickupCount == 1 &&
                    picker.AttackingCounter == 0 &&
                    ReferenceEquals(picker.GetHeldWeapon(), target) &&
@@ -18248,20 +18249,20 @@ namespace NTSD.Test
                     kind2World,
                     "SelfCheck_C03_InvalidPickup",
                     LF2ObjectType.Other);
-                Expect(!Dispatch(kind2Attacker, kind2World, new InteractionArea { kind = 2 }, invalidPickup) &&
+                Expect(Dispatch(kind2Attacker, kind2World, new InteractionArea { kind = 2 }, invalidPickup) &&
                        kind2Attacker.Runtime.PickupCount == 1,
-                    "BATTLE-C03: a rejected SpecialAttack pickup must not increment PickupCount");
+                    "BATTLE-C03: SpecialAttack tail-only pickup must apply without incrementing PickupCount");
 
                 var kind7World = new SimulationWorld();
                 Audit4SelfCheckSpecialAttack kind7Attacker = Special(kind7World, "SelfCheck_C03_Kind7Attacker");
                 var flying = new CurrentDatSelfCheckWeapon(LF2ObjectType.ThrowWeapon);
                 flying.BindData("SelfCheck_C03_Kind7CurrentFlying", 913, 1, Data("SelfCheck_C03_Kind7CurrentFlying"), 0);
                 kind7World.Register(flying);
-                Expect(Dispatch(kind7Attacker, kind7World, new InteractionArea { kind = 7 }, flying) &&
-                       kind7Attacker.Runtime.LinkState == 4 && flying.Runtime.LinkState == -4 &&
-                       flying.Runtime.HolderStableId == kind7Attacker.Runtime.SlotIndex &&
-                       kind7Attacker.Runtime.PickupCount == 1,
-                    "BATTLE-C03: SpecialAttack kind7 must pick up by current flying DAT type");
+                Expect(!Dispatch(kind7Attacker, kind7World, new InteractionArea { kind = 7 }, flying) &&
+                       kind7Attacker.Runtime.LinkState == 0 && flying.Runtime.LinkState == 0 &&
+                       flying.Runtime.HolderStableId == -1 &&
+                       kind7Attacker.Runtime.PickupCount == 0,
+                    "BATTLE-C03: SpecialAttack kind7 must remain unsupported without pickup writes");
             }
 
             {

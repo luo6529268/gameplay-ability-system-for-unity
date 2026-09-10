@@ -2104,7 +2104,6 @@ namespace NTSD.Simulation.Ecs
                 case 3:
                     return BattleHitCandidateDisposition.Kind3Grab;
                 case 2:
-                case 7:
                     return BattleHitCandidateDisposition.Pickup;
                 default:
                     return BattleHitCandidateDisposition.Unsupported;
@@ -5522,96 +5521,71 @@ namespace NTSD.Simulation.Ecs
             int kind,
             ref WriterEffectSnapshot projection)
         {
-            int attackerSlot = attacker.Runtime.SlotIndex;
-            int targetSlot = target.Runtime.SlotIndex;
-            if (attackerSlot < 0 || targetSlot < 0)
-                return false;
-
-            if (kind == 7)
-            {
-                if (projection.AttackerLinkState != 0)
-                    return true;
-
-                projection.AttackerLinkState = 1;
-                projection.TargetLinkState = -1;
-                int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
-                int targetType = target.GetCurrentDataObjectTypeForSimulation();
-                if (targetOid == 0x78 || targetOid == 0x7C)
-                {
-                    projection.AttackerLinkState = 101;
-                }
-                else if (targetType == (int)LF2ObjectType.ThrowWeapon)
-                {
-                    projection.AttackerLinkState = 4;
-                    projection.TargetLinkState = -4;
-                }
-                else if (targetType == (int)LF2ObjectType.Drink)
-                {
-                    projection.AttackerLinkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
-                    projection.TargetLinkState = -projection.AttackerLinkState;
-                    if (target.Health == null || target.Health.HP <= 0)
-                        projection.TargetWeaponFlightCounter = 0;
-                }
-
-                ProjectPickupLinkFields(attackerSlot, targetSlot, ref projection);
-                return true;
-            }
-
             if (kind != 2)
                 return false;
 
-            int dataType = target.GetCurrentDataObjectTypeForSimulation();
-            if (dataType == (int)LF2ObjectType.LightWeapon)
+            LF2FrameData targetFrame = target.GetFrameDataById(projection.TargetFrame);
+            var input = new BattlePickupTransactionInput(
+                projection.TargetDataObjectType,
+                projection.TargetDataObjectId != int.MinValue
+                    ? projection.TargetDataObjectId
+                    : projection.TargetObjectId,
+                target.Health != null ? projection.TargetHp : 0,
+                projection.TargetWeaponFlightCounter,
+                attacker.Runtime.SlotIndex,
+                target.Runtime.SlotIndex,
+                projection.AttackerRelationTeam,
+                projection.AttackerLinkState,
+                projection.AttackerPickupCount,
+                projection.AttackerFrame,
+                projection.AttackerAttackingCounter,
+                targetFrame != null,
+                targetFrame?.PrimaryWeaponPoint.WeaponAct ?? 0);
+            BattlePickupTransactionPlan plan = BattlePickupTransactionPlan.Create(input, BattleLockedPickupWeaponThrowRules.Locked);
+            if (!plan.Applied)
+                return false;
+
+            for (int i = 0; i < plan.OperationCount; i++)
             {
-                projection.AttackerFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerRuntimeFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerLinkState = 1;
-                projection.TargetLinkState = -1;
-            }
-            else if (dataType == (int)LF2ObjectType.ThrowWeapon)
-            {
-                projection.AttackerFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerRuntimeFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerLinkState = 4;
-                projection.TargetLinkState = -4;
-            }
-            else if (dataType == (int)LF2ObjectType.Drink)
-            {
-                projection.AttackerFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerRuntimeFrame = LF2StandardFrames.PickingLight;
-                projection.AttackerLinkState = target.Health != null && target.Health.HP > 0 ? 6 : 4;
-                projection.TargetLinkState = -projection.AttackerLinkState;
-                if (target.Health == null || target.Health.HP <= 0)
-                    projection.TargetWeaponFlightCounter = 0;
-            }
-            else if (dataType == (int)LF2ObjectType.HeavyWeapon)
-            {
-                projection.AttackerFrame = LF2StandardFrames.PickingHeavy;
-                projection.AttackerRuntimeFrame = LF2StandardFrames.PickingHeavy;
-                projection.AttackerLinkState = 2;
-                projection.TargetLinkState = -2;
-            }
-            else
-            {
-                return true;
+                BattlePickupWriteOperation operation = plan.GetOperation(i);
+                switch (operation.Kind)
+                {
+                    case BattlePickupWriteKind.SetTargetWeaponHp:
+                        projection.TargetWeaponFlightCounter = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderRelationCount:
+                        projection.AttackerPickupCount = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderRelation:
+                        projection.AttackerLinkState = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetRelation:
+                        projection.TargetLinkState = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderLinkedChildSlot:
+                        projection.AttackerTargetSlot = operation.Value;
+                        projection.AttackerHeldWeaponSlot = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetLinkedParentSlot:
+                        projection.TargetHolderSlot = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetOwnerSlot:
+                        projection.TargetOwnerSlot = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetTargetBattleGroup:
+                        projection.TargetRelationTeam = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderAction:
+                        projection.AttackerFrame = operation.Value;
+                        projection.AttackerRuntimeFrame = operation.Value;
+                        break;
+                    case BattlePickupWriteKind.SetHolderFrameCounter:
+                        projection.AttackerAttackingCounter = operation.Value;
+                        break;
+                }
             }
 
-            ProjectPickupLinkFields(attackerSlot, targetSlot, ref projection);
-            projection.AttackerAttackingCounter = 0;
             return true;
-        }
-
-        private static void ProjectPickupLinkFields(
-            int attackerSlot,
-            int targetSlot,
-            ref WriterEffectSnapshot projection)
-        {
-            projection.TargetRelationTeam = projection.AttackerRelationTeam;
-            projection.AttackerTargetSlot = targetSlot;
-            projection.TargetHolderSlot = attackerSlot;
-            projection.TargetHolderCopySlot = attackerSlot;
-            projection.AttackerPickupCount++;
-            projection.AttackerHeldWeaponSlot = targetSlot;
         }
 
         private RuntimeEntityHandle ResolveCurrentHandle(

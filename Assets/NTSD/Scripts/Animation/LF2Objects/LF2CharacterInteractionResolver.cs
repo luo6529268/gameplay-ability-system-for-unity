@@ -217,42 +217,15 @@ namespace NTSD.Animation.LF2Objects
             return PickupWeapon(itr, target);
         }
 
-        // 武器拾取共享逻辑。
-        // playAnimation：kind=2 时播放拾取帧，kind=7 时不播。
-        private bool PickupWeapon(InteractionArea itr, LF2Entity target, bool skipGroundCheck = false)
+        private bool PickupWeapon(InteractionArea itr, LF2Entity target)
         {
-            if (_character.HasHeldObjectInternal())
-                return false;
-
-            // kind=2 只允许拾取地面上的武器；kind=7 只检查 picker==0，不检查地面状态。
-            if (!skipGroundCheck)
-            {
-                int wstate = target is LF2WeaponBase targetWeapon
-                    ? targetWeapon.GetResolvedWeaponStateForExternalUse()
-                    : target.GetState();
-                bool isOnGround = wstate == LF2States.WeaponOnGround
-                               || wstate == LF2States.WeaponJustOnGround
-                               || wstate == LF2States.HeavyWeaponOnGround;
-                if (!isOnGround)
-                    return false;
-            }
-
-            if (!(_character.Match?.InteractionWriter.TryApplyPickup(
-                    _character,
-                    target,
-                    itr.kind) ?? false))
-                return false;
-
-            _character.HeldWeaponReferenceInternal = target;
-            return true;
+            // Candidate-time state1004/2004 admission must survive earlier pickups in this sequence.
+            return _character.Match?.InteractionWriter.TryApplyPickup(_character, target, itr.kind) ?? false;
         }
 
         private bool HandlePreInteractionKind7(InteractionArea itr, LF2Entity target)
         {
-            // C++ release 0x0042E97B/0x0042E984：kind=7 近身拾取
-            // 条件：target.picker==0（武器未被持有），无 att 键守卫，无重武器排除
-            // 与 kind=2 相同逻辑，但不播放拾取动画帧
-            return PickupWeapon(itr, target, skipGroundCheck: true);
+            return PickupWeapon(itr, target);
         }
 
         /// <summary>

@@ -5772,7 +5772,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ShadowCompare_Kind7GenericPickupWriterEffectMatchesAuthorityState()
+        public void ShadowCompare_Kind7UnsupportedPreservesPickupState()
         {
             Scenario scenario = CreateScenario();
             scenario.CharacterAttacker.GetCollisionFrameData().itrs[0].kind = 7;
@@ -5789,15 +5789,15 @@ namespace NTSD.Test
                 diagnostics.CurrentTickPlanValid,
                 Is.True,
                 DescribeDiagnostics(diagnostics));
-            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.Zero);
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
-            Assert.That(scenario.CharacterAttacker.Runtime.LinkState, Is.EqualTo(1));
-            Assert.That(scenario.CharacterVictim.Runtime.LinkState, Is.EqualTo(-1));
-            Assert.That(scenario.CharacterAttacker.Runtime.TargetSlotIndex, Is.EqualTo(1));
-            Assert.That(scenario.CharacterAttacker.Runtime.HeldWeaponStableId, Is.EqualTo(1));
-            Assert.That(scenario.CharacterVictim.Runtime.HolderStableId, Is.Zero);
-            Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.Zero);
-            Assert.That(scenario.CharacterAttacker.Runtime.PickupCount, Is.EqualTo(3));
+            Assert.That(scenario.CharacterAttacker.Runtime.LinkState, Is.Zero);
+            Assert.That(scenario.CharacterVictim.Runtime.LinkState, Is.Zero);
+            Assert.That(scenario.CharacterAttacker.Runtime.TargetSlotIndex, Is.EqualTo(-1));
+            Assert.That(scenario.CharacterAttacker.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
+            Assert.That(scenario.CharacterVictim.Runtime.HolderStableId, Is.EqualTo(-1));
+            Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(scenario.CharacterAttacker.Runtime.PickupCount, Is.EqualTo(2));
         }
 
         [Test]

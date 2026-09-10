@@ -192,8 +192,9 @@ namespace NTSD.Animation.LF2Objects
                 zeroAttackerHpOnConsume,
                 releaseHeavyHeldTargetOnConsume,
                 pairSnapshot);
-            BattleHitCandidateDisposition disposition =
-                LF2HitResolveRuntimeData.ResolveCandidateDisposition(
+            BattleHitCandidateDisposition disposition = runtimeItr.kind == 7
+                ? BattleHitCandidateDisposition.Unsupported
+                : LF2HitResolveRuntimeData.ResolveCandidateDisposition(
                     target,
                     runtimeItr,
                     canConsume);
