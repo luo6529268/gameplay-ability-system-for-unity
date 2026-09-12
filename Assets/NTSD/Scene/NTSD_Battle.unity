@@ -3070,7 +3070,7 @@ MonoBehaviour:
     recoverableHealth: 75
     maximumHealth: 100
   drawFootMarkers: 1
-  footMarkerSprite: {fileID: 21300000, guid: 9ec1a792c386a3348810e0ae524bee6d, type: 3}
+  gameConfig: {fileID: 11400000, guid: 513170c32731baa449d4d0e9abf8c827, type: 2}
   footMarkerStyle:
     widthPixels: 64
     heightPixels: 24

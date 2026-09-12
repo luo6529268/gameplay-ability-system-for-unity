@@ -1,5 +1,16 @@
 # NTSD 长期项目决策记录
 
+## D-023 — DAT 与角色相关图片采用 NTSD 2.8-Logan 内容权威
+
+- **状态**：`USER_CONFIRMED / CONTENT_TARGET_DECIDED / MIGRATION_NOT_STARTED`。
+- **日期**：2026-09-12。
+- **用户明确要求**：“Dat文件和图片资源要用NTSD2.8-Logan版本的”，并指出当前 DAT 和角色相关图片估计需要全部删除；本轮重点另要求核对现有脚本、整理已对齐项目与真实剩余修改。
+- **决定**：DAT 及角色相关图片的正式目标采用当前权威 EXE 实际消费的 `resources/runtime` 版本；不采用“旧同名 DAT 数值继续保留、只补缺失”的方向。旧 Unity 138-DAT manifest/projection 与图片是迁移前基线，保留历史验证价值，不能再裁决目标内容。
+- **替代关系**：替代 D-020/H 和 Direction-B 合同中该范围的“策略待定/新 DAT 不可覆盖”条款；不改历史测试原始结果。迁移后必须以新内容指纹重验受影响行为，旧内容专项 VERIFIED 不自动升级为新版全角色验收。
+- **边界**：资源源版本已决定，实际迁移未执行。先列出旧→新 object/path/hash/GUID/引用关系、共享资源、parser 和 loader 必需修改，再按独立 Task/Change 分批接入；不能按 Config/Sprite 目录整体清空。精确删除集合尚待清单核验，不将“估计”扩张成无差别删除许可。
+- **保持项**：既有容量/相机/边界/随机掉落/保留 UI 例外和排除项不变；不自动扩大为所有 UI/地图图片或 WAV 全量迁移；默认 stage.dat 部署暂停仍须单独解决。
+- **恢复入口**：`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 的当前状态、第 4 节实时矩阵和 H 专项。
+
 > **2026-09-12 任务重整说明（不新增用户决策）：** 当前完整对齐执行视图见 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节，标识 `NTSD28-ALIGNMENT-REPLAN-20260912`。
 > D-020 的 IMPLEMENTATION_NOT_STARTED 仅是 9 月 2 日历史状态，不能覆盖 Goal17～20 后续限定成果；其用户例外与 H 策略边界在明确改判前仍有效。
 > D-022 路线已批准，实际联合迁移及前置闭合仍不能写成完成。当前用户要求重新整理任务；建议正式战斗可达资源最终对齐 NTSD 2.8-Logan，但尚未将建议记为内容切换批准。

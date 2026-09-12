@@ -1,12 +1,22 @@
 # CODEX-CURRENT-HANDOFF
 
 
-> **当前任务视图（2026-09-12）：** `NTSD28-ALIGNMENT-REPLAN-20260912 / PLAN_REORGANIZED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
-> 用户要求重新整理完整对齐任务；当前导航以 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节为准。
-> 已核验正式 EXE 哈希仍为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`，并读取 Goal20 原始回归摘要和 SelfCheck PASS 文件。
-> 下方旧暂停/“下一包”仅代表记录时点；Goal17～20 具名成果须复用，不重新实施。旧矩阵尚未逐 ID 对账，不能当实时 backlog。
-> 下一步是 Q0 只读对账，前置 H 资源闭包与 B9/B10 验收设计；本轮未恢复全线 production。例外是否撤销与 H 内容策略待澄清，不能自行覆盖资源。
-> D-022 联合 schema 路线已决定，实施前置待核验。整场逻辑、完整技能物理按键、画面/声音和长跑验收仍是独立出口。
+> **2026-09-13 Foot Marker 六帧动画代码完成、Unity验收待连接：** `BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001 / COMPILE_PASS / STATIC_ANIMATION_CONTRACT_PASS / UNITY_FOCUSED_PENDING / PLAY_PENDING`。用户重导出的frame_01～06均为128×48、Point/no-mip且bbox一致；GameConfig已按序绑定6×80ms，draw按unscaled presentation time换texture，全部Self同步并保持单Foot draw。runtime/editor build均0 error、静态合同PASS、validator 461/8 PASS；Unity Pipeline无实例，focused/Play未运行。用户PNG/meta未修改。
+
+
+> **2026-09-13 Foot Marker 已改走 GameConfig：** `BATTLE-CENTRAL-FOOT-MARKER-GAMECONFIG-001 / COMPILE_PASS / STATIC_CONTRACT_PASS / UNITY_FOCUSED_PENDING / PLAY_PENDING`。生产脚本固定路径和 Scene 独立 Sprite 字段已移除；静态 fallback 最初绑定旧 FootSelf，后由 `BATTLE-CENTRAL-FOOT-MARKER-ANIMATION-001` 改绑 frame_01。runtime/editor 外部编译均0 error、静态合同PASS；focused/Play待连接。
+
+
+> **当前任务视图（2026-09-12 已逐项修订）：** `NTSD28-ALIGNMENT-REPLAN-20260912 / CURRENT_MATRIX_RECONCILED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
+> 用户已通过 D-023 明确 DAT/角色相关图片采用 NTSD 2.8-Logan，迁移未执行；不再等待该内容方向，也未撤销其他例外。
+> **总目标＋六批次已准备，禁止执行（2026-09-13最新用户要求）：** `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / PREPARED_NOT_STARTED / EXECUTION_USER_HOLD`。BATCH-01～06均未启动；当前 `PREPARED_BATCH=BATCH-01 / NEXT=Q01 / ACTIVE=NONE / READY_RETURNS=NONE`，Q01为PREPARED_HOLD。
+> 恢复先读 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第0.14节总目标/批次/启动状态，再读0.11队列、0.12回访、0.13游标；仅准备，不启动Q01审计、goal、线程、自动化或Unity验证。用户明确启动某批才做该批；明确启动总目标持续执行才按批推进。
+> 硬边界：保持Unity/GAS框架与非战斗行为；只改经声明的战斗逻辑及必要适配和D-023资源。共用脚本若无法避免影响非战斗功能，该部分先停并说明，未经用户明确扩大范围不得修改。保护已有Foot Marker等用户工作。
+> B1当前生产职责完成，B2基础与路由职责关闭；B3/B5仅出口放行、整域后置，B4/B6部分子集完成，B7～B12未完全完成。B1/B2已关闭职责移出实施队列；下游依赖/最终验收不撤销既有成果。
+> 确认脚本缺口包括 CPoint27/alias、OPoint24对Unity8、资源根/后台PNG、+2F8语义、mass/联合schema、结果分类/时点、同Z排序/插值和表现音频consumer。
+> Q子包完成后立即检查R回访：B4复活等待B7 producer/新版内容，B5资源KO等待CPoint/B8，B3残余等待B7/B8接管，B1 worker等待B9启用条件。已满足触发的回访优先；Q11只核对是否漏做，不能全部拖到B12。
+> 数据定义/旧行为退休→一次联合schema窗口→生产接线→内容可用→视听→最终集成；schema不等待整场Play，资源载入不等待最终视听，避免循环依赖。本次仅整理文档，无资源删除或运行时修改，未新增编译/测试/Play证据。
+> D-022路线已决定但当前runtime/snapshot/checksum仍12/20/23；正式新内容、整场trace、物理技能键和视听验收尚未完成。
 
 > **CURRENT — USER HOLD / GLM PROGRESS AUDIT（2026-09-09）：** 用户要求暂停
 > `NTSD28-UNITY-BATTLE-REALIGNMENT-001`，由GLM先核验现有进度、生产脚本和证据，再整理遗漏与未处理项；

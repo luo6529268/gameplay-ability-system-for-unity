@@ -19,6 +19,15 @@ MonoBehaviour:
   BattlePresentationBackendName: CentralOnly
   BattleAtlasModeName: 
   BattleDrawModeName: 
+  FootMarkerSprite: {fileID: 21300000, guid: f6a42a29f1719344eb3f73c0a7da8675, type: 3}
+  FootMarkerAnimationFrames:
+  - {fileID: 21300000, guid: f6a42a29f1719344eb3f73c0a7da8675, type: 3}
+  - {fileID: 21300000, guid: 45c75c89037048547bb05ab503796586, type: 3}
+  - {fileID: 21300000, guid: 260f0ff2f69e5324b8188568dc335556, type: 3}
+  - {fileID: 21300000, guid: f2fb726ed8e6e5b41834b027b2e3bd4a, type: 3}
+  - {fileID: 21300000, guid: 873e5c5304375f94b949c03d0ce2fabc, type: 3}
+  - {fileID: 21300000, guid: b8e89faf556f7e84f8a93bc2a1aafe9c, type: 3}
+  FootMarkerAnimationFrameDurationSeconds: 0.08
   BattleFunctionKeyModeRules:
   - gameModeId: 0
     battleGameModeId: 1

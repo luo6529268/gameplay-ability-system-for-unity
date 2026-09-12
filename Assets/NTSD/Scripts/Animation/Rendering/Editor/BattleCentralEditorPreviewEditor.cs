@@ -9,8 +9,6 @@ namespace NTSD.Animation.Rendering.Editor
     {
         private const string SampleSourcePath =
             "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
-        private const string FootMarkerPath =
-            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
         private const string CommonShadowPrefabPath =
             "Assets/NTSD/Prefabs/Common/Shadow.prefab";
 
@@ -212,11 +210,11 @@ namespace NTSD.Animation.Rendering.Editor
                     $"[BattleCentralEditorPreview] Sample source is unavailable: {SampleSourcePath}");
                 return;
             }
-            Sprite footMarker = AssetDatabase.LoadAssetAtPath<Sprite>(FootMarkerPath);
+            Sprite footMarker = preview.ResolveFootMarkerSprite();
             if (footMarker == null)
             {
                 Debug.LogWarning(
-                    $"[BattleCentralEditorPreview] Foot marker is unavailable: {FootMarkerPath}");
+                    "[BattleCentralEditorPreview] GameConfig Foot marker frames and fallback Sprite are unavailable.");
             }
             GameObject commonShadowPrefab =
                 AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
@@ -234,8 +232,6 @@ namespace NTSD.Animation.Rendering.Editor
                 commonShadowPrefab;
             serializedObject.FindProperty("drawFootMarkers").boolValue =
                 footMarker != null;
-            serializedObject.FindProperty("footMarkerSprite").objectReferenceValue =
-                footMarker;
             SerializedProperty footMarkerStyleProperty =
                 serializedObject.FindProperty("footMarkerStyle");
             BattleFootMarkerStyle footMarkerStyle = BattleFootMarkerStyle.Default;

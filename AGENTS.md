@@ -9,7 +9,7 @@
 - 当前工作范围：战斗场景与战斗 runtime
 - 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`；任何上下文压缩、交接或历史检索后必须先读该文件
 - 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码；该身份由用户于 2026-09-04 确认是其修复 Bug 后的新版，旧 `1277B70B...DAF75` 只保留为历史基线
-- 当前正式内容数值权威：仍为 Git 恢复并经 138-DAT manifest/normalized projection 冻结的 Unity `Assets/NTSD/Config` 现状；但用户已将 Unity 与 NTSD 2.8-Logan 的内容/资源差异列为必须处理项，具体整体切换、只补缺失或分类权威策略尚待用户决定
+- 当前 DAT 与角色相关图片内容权威：用户已明确改为 NTSD 2.8-Logan 正式 `resources/runtime` 版本（决策 D-023）；Unity 原 138-DAT/图片仅为迁移前基线，不能继续裁决目标数值。迁移尚未实施；音频和其他图片不由该决定自动整体替换，既有表现例外保持。
 - Unity 是实现目标；NTSD 2.8-Logan 正式 release runtime 用于判定规则、顺序、字段和可观察行为；NTSD 2.4 release、`ntsd_release_C#` 及其旧对齐结论仅保留为历史迁移辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
@@ -21,15 +21,24 @@
 1. 用户在当前任务中的明确要求。
 2. 当前根目录正式 `NTSD2.8-Logan.exe` 的实际可观察战斗行为；正式 EXE 的精确身份以 `docs/ai/CURRENT-AUTHORITY.md` 的 SHA-256 为准。
 3. `source\README_SOURCE.md` 声明对应当前发行 EXE、并实际进入 `source\ntsd28_playable\scripts\build.ps1 -Target playable` 构建闭包的 C++ 源码。
-4. 正式启动参数及 `resources\runtime` 中被正式 EXE 实际消费的数据；但正式内容数值仍受下一项的 Direction B 合同约束。
-5. Git 恢复并经正式 manifest/projection 冻结的 Unity `Assets/NTSD/Config` 现状，用于定义正式内容数值、内容结构与内容指纹；新 release DAT 暂不覆盖这些内容值，除非用户另行改变内容权威。
-6. Unity runtime 实现与测试用于验证规则实现和消费已冻结内容；不能反过来定义当前发行战斗规则。
+4. 正式启动参数及 `resources\runtime` 中被正式 EXE 实际消费的数据；DAT 与角色相关图片按 D-023 使用 NTSD 2.8-Logan 版本。
+5. Git 恢复的 Unity 138-DAT manifest/projection 保留为迁移前内容基线和历史测试证据；不再以其差异阻止已批准的 DAT/角色图片迁移。具体文件替换、引用重绑与删除清单须在独立迁移 Task 中声明。
+6. Unity runtime 实现与测试用于验证规则实现和已声明版本的内容；不能反过来定义当前发行战斗规则或目标内容。
 7. NTSD 2.4 release、`ntsd_release_C#`、旧 trace、旧 self-check 和旧对齐结论，只能用于历史比较、命名定位和夹具回归；与当前权威冲突时无裁决权。
 8. 项目文档和历史记录只用于任务跟踪；与当前规则/内容 authority 合同冲突时必须更新文档，不能修改权威结论。
 
-只有当前 NTSD 2.8-Logan 正式 EXE 和对应 playable live path 才能定义当前战斗规则与逻辑顺序；它暂不改变 Direction B 的正式内容数值权威。未参与 playable 构建的实验代码、备份文件、debug probe、diagnostic、候选 build、反汇编记录和旧对齐结论都不能作为规则 authority。用户没有明确要求历史比较时，不要以 NTSD 2.4、C#、反汇编或旧实现补写当前源码未确认的行为。源码重建输出不会自动覆盖根目录正式 EXE；候选 EXE 不得自动晋升为正式行为。不要因为 Unity 或旧实现更方便而偏离当前 battle rules；也不要把 C++ 的统一实体字段名称机械替换成并不存在的 Unity 类型、字段或方法。
+只有当前 NTSD 2.8-Logan 正式 EXE 和对应 playable live path 才能定义当前战斗规则与逻辑顺序；DAT 与角色图片采用 D-023 的 NTSD 2.8-Logan 内容权威。未参与 playable 构建的实验代码、备份文件、debug probe、diagnostic、候选 build、反汇编记录和旧对齐结论都不能作为规则 authority。用户没有明确要求历史比较时，不要以 NTSD 2.4、C#、反汇编或旧实现补写当前源码未确认的行为。源码重建输出不会自动覆盖根目录正式 EXE；候选 EXE 不得自动晋升为正式行为。不要因为 Unity 或旧实现更方便而偏离当前 battle rules；也不要把 C++ 的统一实体字段名称机械替换成并不存在的 Unity 类型、字段或方法。
 
-### 2.2 Direction B 内容数值权威
+### 2.2 DAT/角色图片内容权威与 Direction B 历史基线
+
+**当前规则（D-023，2026-09-12）：** 用户已明确要求 DAT 和角色相关图片使用 NTSD 2.8-Logan 版本，
+此范围不再等待“整体切换/只补缺失/分类权威”选择。旧 138-DAT 保留为迁移前基线；所有后继报告必须标明
+测试使用旧内容还是正式新版内容。角色图片包括由其正式引用图识别的角色/技能关联资源，不按目录名盲删。
+先核对 indexed catalog、parser、资源路径/格式、GUID 引用，再分批替换和验证，最后处理经清单确认的旧文件。
+“估计全部删除”不能代替具体删除范围；不得清空整个 Config/Sprite，连带删除 InputConfig、GameConfig、地图或保留 UI。
+本内容决定不自动撤销既有表现例外、默认 stage.dat 部署暂缓、音频边界或大型实现的 Task/Change 约束。
+
+以下两段保留 Direction B 的历史形成过程；其中“策略尚未决定/禁止覆盖”对 D-023 已批准范围已被替代，不再作为当前阻塞。
 
 自 `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 起，正式内容值以 Git 恢复后的 Unity `Assets/NTSD/Config` 现状为准，并通过 138-DAT raw manifest 与正式 `Decryptor -> ParserV2 -> Converter` normalized projection 冻结。NTSD 2.4/2.8 release DAT、193 行矩阵、Appendix A～F、0do/0do-c 审计只保留为历史或新权威行为诊断证据，不得在用户未改变内容权威前驱动 DAT token、结构、sound、WPoint 或 topology 修正。内容权威变化不放宽当前 NTSD 2.8-Logan battle rule、pass order、33 ms 正常逻辑间隔、state/lifecycle 或 observable behavior 对齐。
 
@@ -73,7 +82,7 @@ NTSD 2.4 的 `ntsd_release_C#` 不是当前 gameplay authority。它可以用于
 
 ### 对齐工作顺序
 
-1. 对战斗规则/逻辑顺序，在当前 NTSD 2.8-Logan playable live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `build.ps1 -Target playable` 的构建闭包；对内容数值，读取已冻结 Unity content authority artifact，不以 release DAT 覆盖。
+1. 对战斗规则/逻辑顺序，在当前 NTSD 2.8-Logan playable live path 中定位入口、调用者、被调用者和字段定义，并确认其参与 `build.ps1 -Target playable` 的构建闭包；对 DAT/角色图片读取 NTSD 2.8-Logan 正式可达内容，旧 Unity manifest 仅作迁移前基线；具体替换按 D-023 与迁移 Task 执行。
 2. 记录完整前置条件、分支顺序、常量、状态写入、统计副作用和对象生命周期副作用。
 3. 在 Unity 中定位对应 pass、实体类型、runtime 字段与表现层接口。
 4. 先补齐数据契约，再整体移植行为；不得只搬局部扣血、位移或生成片段。

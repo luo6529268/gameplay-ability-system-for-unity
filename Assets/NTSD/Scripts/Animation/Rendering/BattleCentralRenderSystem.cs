@@ -103,6 +103,9 @@ namespace NTSD.Animation.Rendering
             BattleHealthBarStyle.Default;
         private static bool runtimeFootMarkersEnabled;
         private static Sprite runtimeFootMarkerSprite;
+        private static Sprite[] runtimeFootMarkerAnimationFrames = Array.Empty<Sprite>();
+        private static float runtimeFootMarkerAnimationFrameDurationSeconds =
+            BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
         private static BattleFootMarkerStyle runtimeFootMarkerStyle =
             BattleFootMarkerStyle.Default;
         private static BattleRenderFeature observedFeatureOwner;
@@ -1778,20 +1781,41 @@ namespace NTSD.Animation.Rendering
             if (BattleCentralEditorPreview.TryGetRuntimeFootMarkerAuthoringSettings(
                     out bool authoredEnabled,
                     out Sprite authoredSprite,
+                    out Sprite[] authoredAnimationFrames,
+                    out float authoredAnimationFrameDurationSeconds,
                     out BattleFootMarkerStyle authoredStyle))
             {
                 enabled &= authoredEnabled;
                 sprite = authoredSprite;
+                runtimeFootMarkerAnimationFrames =
+                    authoredAnimationFrames ?? Array.Empty<Sprite>();
+                runtimeFootMarkerAnimationFrameDurationSeconds =
+                    authoredAnimationFrameDurationSeconds > 0f
+                        ? authoredAnimationFrameDurationSeconds
+                        : BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
                 style = authoredStyle;
             }
             else
             {
                 enabled = false;
+                runtimeFootMarkerAnimationFrames = Array.Empty<Sprite>();
+                runtimeFootMarkerAnimationFrameDurationSeconds =
+                    BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
             }
 
             runtimeFootMarkersEnabled = enabled && sprite != null;
             runtimeFootMarkerSprite = sprite;
             runtimeFootMarkerStyle = style;
+        }
+
+        internal static Texture ResolveRuntimeFootMarkerTexture(double elapsedSeconds)
+        {
+            Sprite sprite = BattleFootMarkerAnimation.ResolveSprite(
+                runtimeFootMarkerSprite,
+                runtimeFootMarkerAnimationFrames,
+                runtimeFootMarkerAnimationFrameDurationSeconds,
+                elapsedSeconds);
+            return sprite != null ? sprite.texture : null;
         }
 
 #if UNITY_EDITOR
@@ -1802,6 +1826,10 @@ namespace NTSD.Animation.Rendering
             runtimeFootMarkersEnabled;
         internal static Sprite RuntimeFootMarkerSpriteForSelfCheck =>
             runtimeFootMarkerSprite;
+        internal static Sprite[] RuntimeFootMarkerAnimationFramesForSelfCheck =>
+            runtimeFootMarkerAnimationFrames;
+        internal static float RuntimeFootMarkerAnimationFrameDurationSecondsForSelfCheck =>
+            runtimeFootMarkerAnimationFrameDurationSeconds;
         internal static BattleFootMarkerStyle RuntimeFootMarkerStyleForSelfCheck =>
             runtimeFootMarkerStyle;
 #endif

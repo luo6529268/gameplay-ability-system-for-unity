@@ -25,6 +25,13 @@ namespace NTSD.App
         public string BattleAtlasModeName = "";
         [Tooltip("Central battle draw policy. Empty uses the renderer feature default. Valid values: Auto, OrderedChunks, StrictOrderedDraw.")]
         public string BattleDrawModeName = "";
+        [Tooltip("Sprite used by the central renderer for the local human Foot marker.")]
+        public Sprite FootMarkerSprite;
+        [Tooltip("Ordered Foot marker animation frames. When empty, FootMarkerSprite is used.")]
+        public Sprite[] FootMarkerAnimationFrames = new Sprite[0];
+        [Min(0.001f)]
+        [Tooltip("Unscaled presentation time in seconds for each Foot marker animation frame.")]
+        public float FootMarkerAnimationFrameDurationSeconds = 0.08f;
 
         [Header("Battle Function Keys")]
         [Tooltip("F7/F8/F9 are denied when no exact gameModeId + battleGameModeId rule matches. Physical keys are consumed only by LocalFreeRun.")]

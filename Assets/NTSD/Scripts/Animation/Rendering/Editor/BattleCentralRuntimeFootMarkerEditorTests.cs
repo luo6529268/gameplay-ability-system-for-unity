@@ -1,5 +1,6 @@
 #if UNITY_EDITOR
 using NUnit.Framework;
+using NTSD.App;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
@@ -25,18 +26,67 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
+        public void RuntimeAnimation_UsesConfiguredFrameBoundariesAndLoops()
+        {
+            double duration = BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
+
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(0d, (float)duration, 6),
+                Is.EqualTo(0));
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(
+                    duration * 0.99d,
+                    (float)duration,
+                    6),
+                Is.EqualTo(0));
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(
+                    duration * 1.01d,
+                    (float)duration,
+                    6),
+                Is.EqualTo(1));
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(
+                    duration * 5.01d,
+                    (float)duration,
+                    6),
+                Is.EqualTo(5));
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(
+                    duration * 6.01d,
+                    (float)duration,
+                    6),
+                Is.EqualTo(0));
+            Assert.That(
+                BattleFootMarkerAnimation.ResolveFrameIndex(
+                    -duration * 0.01d,
+                    (float)duration,
+                    6),
+                Is.EqualTo(5));
+        }
+
+        [Test]
         public void RuntimeAuthoring_UsesPreviewSpriteSizeOffsetAndTint()
         {
             GameObject previewObject = null;
             Texture2D texture = null;
+            Texture2D secondTexture = null;
             Sprite sprite = null;
+            Sprite secondSprite = null;
             Material material = null;
             BattleRenderFeature feature = null;
+            GameConfig gameConfig = null;
             System.IDisposable validationScope = null;
             try
             {
                 texture = NewTexture(128, 48);
+                secondTexture = NewTexture(128, 48);
                 sprite = NewSprite(texture);
+                secondSprite = NewSprite(secondTexture);
+                gameConfig = ScriptableObject.CreateInstance<GameConfig>();
+                gameConfig.FootMarkerSprite = sprite;
+                gameConfig.FootMarkerAnimationFrames = new[] { sprite, secondSprite };
+                gameConfig.FootMarkerAnimationFrameDurationSeconds = 0.08f;
                 material = NewCentralMaterial();
                 var style = new BattleFootMarkerStyle(
                     64f,
@@ -53,7 +103,7 @@ namespace NTSD.Animation.Rendering.Editor
                     material,
                     new BattleCentralEditorPreviewActor(),
                     BattleHealthBarStyle.Default);
-                preview.ConfigureFootMarkerForSelfCheck(sprite, style);
+                preview.ConfigureGameConfigFootMarkerForSelfCheck(gameConfig, style);
                 validationScope =
                     BattleCentralEditorPreview.BeginExclusiveValidationForSelfCheck(preview);
                 feature = ScriptableObject.CreateInstance<BattleRenderFeature>();
@@ -67,6 +117,22 @@ namespace NTSD.Animation.Rendering.Editor
                 Assert.That(
                     BattleCentralRenderSystem.RuntimeFootMarkerSpriteForSelfCheck,
                     Is.SameAs(sprite));
+                Assert.That(
+                    BattleCentralRenderSystem.RuntimeFootMarkerAnimationFramesForSelfCheck,
+                    Is.SameAs(gameConfig.FootMarkerAnimationFrames));
+                Assert.That(
+                    BattleCentralRenderSystem
+                        .RuntimeFootMarkerAnimationFrameDurationSecondsForSelfCheck,
+                    Is.EqualTo(0.08f));
+                Assert.That(
+                    BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0d),
+                    Is.SameAs(texture));
+                Assert.That(
+                    BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.081d),
+                    Is.SameAs(secondTexture));
+                Assert.That(
+                    BattleCentralRenderSystem.ResolveRuntimeFootMarkerTexture(0.161d),
+                    Is.SameAs(texture));
                 Assert.That(
                     BattleCentralRenderSystem.RuntimeFootMarkerStyleForSelfCheck.WidthPixels,
                     Is.EqualTo(64f));
@@ -90,10 +156,16 @@ namespace NTSD.Animation.Rendering.Editor
                 }
                 if (previewObject != null)
                     Object.DestroyImmediate(previewObject);
+                if (gameConfig != null)
+                    Object.DestroyImmediate(gameConfig);
                 if (sprite != null)
                     Object.DestroyImmediate(sprite);
+                if (secondSprite != null)
+                    Object.DestroyImmediate(secondSprite);
                 if (texture != null)
                     Object.DestroyImmediate(texture);
+                if (secondTexture != null)
+                    Object.DestroyImmediate(secondTexture);
                 if (material != null)
                     Object.DestroyImmediate(material);
                 BattleCentralRenderSystem.RefreshRuntimeFootMarkerAuthoringSettings();

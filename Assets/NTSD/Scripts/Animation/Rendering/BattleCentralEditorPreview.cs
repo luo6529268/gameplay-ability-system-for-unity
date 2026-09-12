@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NTSD.App;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEngine;
@@ -143,8 +144,6 @@ namespace NTSD.Animation.Rendering
             "Assets/NTSD/Materials/BattleCentralTransparent.mat";
         internal const string DefaultCommonShadowPrefabPath =
             "Assets/NTSD/Prefabs/Common/Shadow.prefab";
-        internal const string DefaultFootMarkerPath =
-            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
         private static readonly List<BattleCentralEditorPreview> RegisteredPreviews =
@@ -167,8 +166,12 @@ namespace NTSD.Animation.Rendering
 
         [Header("Foot Markers")]
         [SerializeField] private bool drawFootMarkers = true;
-        [SerializeField] private Sprite footMarkerSprite;
+        [SerializeField] private GameConfig gameConfig;
         [SerializeField] private BattleFootMarkerStyle footMarkerStyle = default;
+#if UNITY_EDITOR
+        private Sprite footMarkerSpriteForSelfCheck;
+        private int lastPreviewFootMarkerAnimationFrame = -1;
+#endif
 
         [Header("Existing Common Shadows")]
         [SerializeField] private bool drawCommonShadows = true;
@@ -221,7 +224,15 @@ namespace NTSD.Animation.Rendering
 #if UNITY_EDITOR
             commonShadowPrefab =
                 AssetDatabase.LoadAssetAtPath<GameObject>(DefaultCommonShadowPrefabPath);
-            footMarkerSprite = AssetDatabase.LoadAssetAtPath<Sprite>(DefaultFootMarkerPath);
+            if (gameConfig == null)
+            {
+                string[] configGuids = AssetDatabase.FindAssets("t:GameConfig");
+                if (configGuids.Length == 1)
+                {
+                    gameConfig = AssetDatabase.LoadAssetAtPath<GameConfig>(
+                        AssetDatabase.GUIDToAssetPath(configGuids[0]));
+                }
+            }
 #endif
             healthBarStyle = BattleHealthBarStyle.Default;
         }
@@ -275,10 +286,25 @@ namespace NTSD.Animation.Rendering
 
         private void Update()
         {
-            if (Application.isPlaying || !transform.hasChanged)
+            if (Application.isPlaying)
                 return;
-            transform.hasChanged = false;
-            InvalidateAndRepaint();
+            if (transform.hasChanged)
+            {
+                transform.hasChanged = false;
+                InvalidateAndRepaint();
+            }
+#if UNITY_EDITOR
+            Sprite[] frames = ResolveFootMarkerAnimationFrames();
+            int animationFrame = BattleFootMarkerAnimation.ResolveFrameIndex(
+                EditorApplication.timeSinceStartup,
+                ResolveFootMarkerAnimationFrameDurationSeconds(),
+                frames?.Length ?? 0);
+            if (animationFrame != lastPreviewFootMarkerAnimationFrame)
+            {
+                lastPreviewFootMarkerAnimationFrame = animationFrame;
+                RepaintEditorViews();
+            }
+#endif
         }
 
         internal static bool TryGetActiveForCamera(
@@ -381,15 +407,23 @@ namespace NTSD.Animation.Rendering
         internal static bool TryGetRuntimeFootMarkerAuthoringSettings(
             out bool enabled,
             out Sprite sprite,
+            out Sprite[] animationFrames,
+            out float animationFrameDurationSeconds,
             out BattleFootMarkerStyle style)
         {
             enabled = false;
             sprite = null;
+            animationFrames = null;
+            animationFrameDurationSeconds = BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
             style = BattleFootMarkerStyle.Default;
 #if UNITY_EDITOR
             if (exclusiveValidationPreview != null)
             {
                 sprite = exclusiveValidationPreview.ResolveFootMarkerSprite();
+                animationFrames =
+                    exclusiveValidationPreview.ResolveFootMarkerAnimationFrames();
+                animationFrameDurationSeconds = exclusiveValidationPreview
+                    .ResolveFootMarkerAnimationFrameDurationSeconds();
                 enabled = exclusiveValidationPreview.drawFootMarkers && sprite != null;
                 style = exclusiveValidationPreview.footMarkerStyle.WidthPixels > 0f &&
                         exclusiveValidationPreview.footMarkerStyle.HeightPixels > 0f
@@ -428,6 +462,9 @@ namespace NTSD.Animation.Rendering
                 return false;
 
             sprite = candidate.ResolveFootMarkerSprite();
+            animationFrames = candidate.ResolveFootMarkerAnimationFrames();
+            animationFrameDurationSeconds =
+                candidate.ResolveFootMarkerAnimationFrameDurationSeconds();
             enabled = candidate.drawFootMarkers && sprite != null;
             style = candidate.footMarkerStyle.WidthPixels > 0f &&
                     candidate.footMarkerStyle.HeightPixels > 0f
@@ -477,7 +514,11 @@ namespace NTSD.Animation.Rendering
                 if (segment.Material == null || segment.Texture == null)
                     continue;
                 propertyBlock.Clear();
-                propertyBlock.SetTexture(MainTexId, segment.Texture);
+                Texture animatedTexture = ResolveFootMarkerTexture(
+                    EditorApplication.timeSinceStartup);
+                propertyBlock.SetTexture(
+                    MainTexId,
+                    animatedTexture != null ? animatedTexture : segment.Texture);
                 commandBuffer.DrawMesh(
                     footMarkerBackend.GetChunkMesh(segment.ChunkIndex),
                     Matrix4x4.identity,
@@ -562,7 +603,10 @@ namespace NTSD.Animation.Rendering
             drawCommonShadows = false;
             commonShadowPrefab = null;
             drawFootMarkers = false;
-            footMarkerSprite = null;
+            gameConfig = null;
+#if UNITY_EDITOR
+            footMarkerSpriteForSelfCheck = null;
+#endif
             footMarkerStyle = BattleFootMarkerStyle.Default;
             healthBarStyle = configuredStyle;
             drawHealthBars = true;
@@ -580,9 +624,27 @@ namespace NTSD.Animation.Rendering
             Sprite configuredSprite,
             in BattleFootMarkerStyle configuredStyle)
         {
-            footMarkerSprite = configuredSprite;
+#if UNITY_EDITOR
+            footMarkerSpriteForSelfCheck = configuredSprite;
+#endif
+            gameConfig = null;
             footMarkerStyle = configuredStyle;
             drawFootMarkers = configuredSprite != null;
+            InvalidateAndRepaint();
+        }
+
+        internal void ConfigureGameConfigFootMarkerForSelfCheck(
+            GameConfig configuredGameConfig,
+            in BattleFootMarkerStyle configuredStyle)
+        {
+            gameConfig = configuredGameConfig;
+#if UNITY_EDITOR
+            footMarkerSpriteForSelfCheck = null;
+#endif
+            footMarkerStyle = configuredStyle;
+            drawFootMarkers = BattleFootMarkerAnimation.ResolveReferenceSprite(
+                configuredGameConfig?.FootMarkerSprite,
+                configuredGameConfig?.FootMarkerAnimationFrames) != null;
             InvalidateAndRepaint();
         }
 
@@ -1088,15 +1150,45 @@ namespace NTSD.Animation.Rendering
 #endif
         }
 
-        private Sprite ResolveFootMarkerSprite()
+        internal Sprite ResolveFootMarkerSprite()
         {
-            if (footMarkerSprite != null)
-                return footMarkerSprite;
 #if UNITY_EDITOR
-            return AssetDatabase.LoadAssetAtPath<Sprite>(DefaultFootMarkerPath);
-#else
-            return null;
+            if (footMarkerSpriteForSelfCheck != null)
+                return footMarkerSpriteForSelfCheck;
 #endif
+            GameConfig resolvedConfig = gameConfig != null ? gameConfig : GameConfig.Instance;
+            return BattleFootMarkerAnimation.ResolveReferenceSprite(
+                resolvedConfig?.FootMarkerSprite,
+                resolvedConfig?.FootMarkerAnimationFrames);
+        }
+
+        internal Sprite[] ResolveFootMarkerAnimationFrames()
+        {
+#if UNITY_EDITOR
+            if (footMarkerSpriteForSelfCheck != null)
+                return null;
+#endif
+            GameConfig resolvedConfig = gameConfig != null ? gameConfig : GameConfig.Instance;
+            return resolvedConfig?.FootMarkerAnimationFrames;
+        }
+
+        internal float ResolveFootMarkerAnimationFrameDurationSeconds()
+        {
+            GameConfig resolvedConfig = gameConfig != null ? gameConfig : GameConfig.Instance;
+            return resolvedConfig != null &&
+                   resolvedConfig.FootMarkerAnimationFrameDurationSeconds > 0f
+                ? resolvedConfig.FootMarkerAnimationFrameDurationSeconds
+                : BattleFootMarkerAnimation.DefaultFrameDurationSeconds;
+        }
+
+        internal Texture ResolveFootMarkerTexture(double elapsedSeconds)
+        {
+            Sprite animatedSprite = BattleFootMarkerAnimation.ResolveSprite(
+                ResolveFootMarkerSprite(),
+                ResolveFootMarkerAnimationFrames(),
+                ResolveFootMarkerAnimationFrameDurationSeconds(),
+                elapsedSeconds);
+            return animatedSprite != null ? animatedSprite.texture : null;
         }
 
         private GameObject ResolveCommonShadowPrefab()

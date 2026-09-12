@@ -16,6 +16,62 @@ namespace NTSD.Animation.Rendering
         }
     }
 
+    internal static class BattleFootMarkerAnimation
+    {
+        internal const float DefaultFrameDurationSeconds = 0.08f;
+
+        internal static Sprite ResolveReferenceSprite(Sprite fallback, Sprite[] frames)
+        {
+            if (frames != null)
+            {
+                for (int index = 0; index < frames.Length; index++)
+                {
+                    if (frames[index] != null && frames[index].texture != null)
+                        return frames[index];
+                }
+            }
+
+            return fallback != null && fallback.texture != null ? fallback : null;
+        }
+
+        internal static int ResolveFrameIndex(
+            double elapsedSeconds,
+            float frameDurationSeconds,
+            int frameCount)
+        {
+            if (frameCount <= 1)
+                return 0;
+            double duration = frameDurationSeconds > 0f
+                ? frameDurationSeconds
+                : DefaultFrameDurationSeconds;
+            double cycleDuration = duration * frameCount;
+            double cycleTime = elapsedSeconds % cycleDuration;
+            if (cycleTime < 0d)
+                cycleTime += cycleDuration;
+            int frameIndex = (int)(cycleTime / duration);
+            return Mathf.Clamp(frameIndex, 0, frameCount - 1);
+        }
+
+        internal static Sprite ResolveSprite(
+            Sprite fallback,
+            Sprite[] frames,
+            float frameDurationSeconds,
+            double elapsedSeconds)
+        {
+            if (frames == null || frames.Length == 0)
+                return ResolveReferenceSprite(fallback, null);
+
+            int frameIndex = ResolveFrameIndex(
+                elapsedSeconds,
+                frameDurationSeconds,
+                frames.Length);
+            Sprite frame = frames[frameIndex];
+            return frame != null && frame.texture != null
+                ? frame
+                : ResolveReferenceSprite(fallback, frames);
+        }
+    }
+
     public sealed class BattleFootMarkerBatchBackend : IDisposable
     {
         public const int MaximumMarkersPerBatch = BattleDynamicMeshBackend.QuadsPerChunk;

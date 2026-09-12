@@ -1,12 +1,21 @@
 # NTSD 当前权威恢复入口
 
+> **D-023 内容决定（2026-09-12，用户已确认）：** DAT 与角色相关图片采用当前 NTSD 2.8-Logan 正式 runtime 版本。
+> 原 Unity 138-DAT 仅保留为迁移前基线；本范围不再是 CONTENT_STRATEGY_PENDING。资源迁移尚未执行，先完成 parser/loader/引用清单与分批验证。
+> “估计全部删除”尚未形成精确删除集合，不清空整个 Config/Sprite；既有 UI/地图/音频和表现例外不自动改变。
+> 当前审计直接修订对齐总表第 4 节，并列出已验证子集、确认脚本缺口与待验项；下方旧恢复建议仅作历史。
 
-> **当前任务视图（2026-09-12）：** `NTSD28-ALIGNMENT-REPLAN-20260912 / PLAN_REORGANIZED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
-> 用户要求重新整理完整对齐任务；当前导航以 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节为准。
-> 已核验正式 EXE 哈希仍为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`，并读取 Goal20 原始回归摘要和 SelfCheck PASS 文件。
-> 下方旧暂停/“下一包”仅代表记录时点；Goal17～20 具名成果须复用，不重新实施。旧矩阵尚未逐 ID 对账，不能当实时 backlog。
-> 下一步是 Q0 只读对账，前置 H 资源闭包与 B9/B10 验收设计；本轮未恢复全线 production。例外是否撤销与 H 内容策略待澄清，不能自行覆盖资源。
-> D-022 联合 schema 路线已决定，实施前置待核验。整场逻辑、完整技能物理按键、画面/声音和长跑验收仍是独立出口。
+
+> **当前任务视图（2026-09-12 已逐项修订）：** `NTSD28-ALIGNMENT-REPLAN-20260912 / CURRENT_MATRIX_RECONCILED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
+> 用户已通过 D-023 明确 DAT/角色相关图片采用 NTSD 2.8-Logan，迁移未执行；不再等待该内容方向，也未撤销其他例外。
+> **总目标＋六批次已准备，禁止执行（2026-09-13最新用户要求）：** `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / PREPARED_NOT_STARTED / EXECUTION_USER_HOLD`。BATCH-01～06均未启动；当前 `PREPARED_BATCH=BATCH-01 / NEXT=Q01 / ACTIVE=NONE / READY_RETURNS=NONE`，Q01为PREPARED_HOLD。
+> 恢复先读 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第0.14节总目标/批次/启动状态，再读0.11队列、0.12回访、0.13游标；仅准备，不启动Q01审计、goal、线程、自动化或Unity验证。用户明确启动某批才做该批；明确启动总目标持续执行才按批推进。
+> 硬边界：保持Unity/GAS框架与非战斗行为；只改经声明的战斗逻辑及必要适配和D-023资源。共用脚本若无法避免影响非战斗功能，该部分先停并说明，未经用户明确扩大范围不得修改。保护已有Foot Marker等用户工作。
+> B1当前生产职责完成，B2基础与路由职责关闭；B3/B5仅出口放行、整域后置，B4/B6部分子集完成，B7～B12未完全完成。B1/B2已关闭职责移出实施队列；下游依赖/最终验收不撤销既有成果。
+> 确认脚本缺口包括 CPoint27/alias、OPoint24对Unity8、资源根/后台PNG、+2F8语义、mass/联合schema、结果分类/时点、同Z排序/插值和表现音频consumer。
+> Q子包完成后立即检查R回访：B4复活等待B7 producer/新版内容，B5资源KO等待CPoint/B8，B3残余等待B7/B8接管，B1 worker等待B9启用条件。已满足触发的回访优先；Q11只核对是否漏做，不能全部拖到B12。
+> 数据定义/旧行为退休→一次联合schema窗口→生产接线→内容可用→视听→最终集成；schema不等待整场Play，资源载入不等待最终视听，避免循环依赖。本次仅整理文档，无资源删除或运行时修改，未新增编译/测试/Play证据。
+> D-022路线已决定但当前runtime/snapshot/checksum仍12/20/23；正式新内容、整场trace、物理技能键和视听验收尚未完成。
 
 > **USER HOLD（2026-09-09）：** 用户要求停止当前 `NTSD28-UNITY-BATTLE-REALIGNMENT-001` 自动推进，
 > 改由 GLM 先核验当前进度、现有生产脚本和证据，再整理真正遗漏与未处理项；禁止从头重做已完成逻辑。
@@ -198,6 +207,10 @@ handoff 和“已对齐”结论全部进入 `REBASELINE_REQUIRED`。在完成�
 当前实施指令，不得因为上下文压缩、搜索命中或旧状态名而恢复。
 
 ## 5. 内容权威和当前用户范围决定
+
+**当前覆盖条款：** D-023 替代下方历史条目中 DAT/角色图片的“Direction B 正式值权威/策略未定/只读限制”。
+正式目标是 NTSD 2.8-Logan；已部署 Unity 内容尚未迁移。下文历史数量和可达性统计只描述旧内容，必须按内容指纹区分。
+音频、非角色图片、已有例外与默认 stage.dat 部署暂缓不因 D-023 自动改变。
 
 - 本次只迁移战斗规则、逻辑顺序、字段语义、时序、生命周期与可观察行为的权威。
 - `GOVERNANCE-S0-UNITY-CONTENT-AUTHORITY-DIRECTION-B-001` 已冻结的 Unity

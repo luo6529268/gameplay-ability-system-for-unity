@@ -1,9 +1,13 @@
 # NTSD 2.8-Logan 与 Unity 战斗完整对齐总表
 
+> **总目标与批次已准备，禁止启动执行（2026-09-13）：** 用户明确要求“先不要执行，只是准备好”。第0.14节保存一个总目标和六个批次目标，全部为 `PREPARED_NOT_STARTED / EXECUTION_USER_HOLD`；Q01只读审计也未启动。
+> 恢复先读第0.14节启动状态，再读第0.11节Q队列、第0.12节R回访、第0.13节游标；B1/B2已关闭职责保持。待用户明确启动后，首批为 **BATCH-01 / Q01 / B11新版DAT与角色图片接入清单**。
+
 ## 0. 当前执行视图：完整对齐任务重整（2026-09-12）
 
 重整标识：`NTSD28-ALIGNMENT-REPLAN-20260912`。总目标仍为 `FULL_ALIGNMENT_INCOMPLETE`。
-本节是本表的当前导航和阶段出口约束；下方原始差异矩阵、启动记录和 Goal 收尾记录保留作证据历史。
+**阶段状态先读第 0.10 节：B1 当前生产职责完成，B2 基础与路由职责关闭；B3/B5 仅阶段出口放行；B4/B6 部分子集完成；B7～B12 未完全完成。** 已关闭职责不重新列入实施队列，后续依赖与最终验收分别跟踪。
+本节是本表的当前导航和阶段出口约束；第 4 节已直接按当前代码与具名证据修订，启动记录和 Goal 收尾记录保留作证据历史。
 本次用户授权重新整理完整对齐任务；本轮只有只读核验和文档修改，不自动恢复所有 production 包。
 不得从旧“下一包”或 2026-09-09 全局暂停文字推断当前具名包未完成；也不得从后继限定授权推断全部暂停已解除。
 
@@ -17,15 +21,15 @@
 | 最近进度 | Goal17～20 有限定收尾记录；Goal20 五项旧行为退休已记录 VERIFIED。读取 `Temp/Goal20_FinalSelfCheck.result` 为 PASS。 | VERIFIED 是具名子集状态，不等于 B6/full tick/full skill/full application parity。 |
 | Goal20 回归 | 已读 reconciliation：一次共享 1824 项原始运行失败，20 个旧 ReleaseTick 期望失败；后续受影响 24 项通过。 | 不改写为一次 1824/1824 全绿，不删除原失败记录。 |
 | 旧表调用数量 | `rg 'NTSDSpec\.'` 在排除 Test 的 Scripts 中只命中 `LF2Character.cs` 的 mass 初始化。 | 只证明直接表达式搜索结果；别名、反射、mass 消费链、快照和 kernel 路径仍须核验，不能宣布 E 已关闭。 |
-| 工作树 | 已有大量脚本、文档、Scene、配置及 UI 图片修改/删除/未跟踪项。 | 本轮不认领、不还原这些变更。Goal20 曾记录 Scene dirty=true；本轮没有重新读取 Editor dirty 状态。 |
+| 工作树 | 上轮曾有大量未提交修改；本轮用户澄清后重新检查，审计开始时 Git 工作树干净，HEAD=`6276c912`。 | 不将提交后的旧变更继续报告为未提交。Goal20 曾记录 Scene dirty=true；本轮没有重新读取 Editor dirty 状态。 |
 
 历史“生产尚未开始”“单 RNG”“无接线”“下一 B6”等文字只描述记录时点。每个差异必须结合当前代码、最新具名 Record 和原始证据更新，不能按文字出现顺序选任务。
 本轮是任务完整性重整，不是全部 C++/Unity 分支的重新审计；未逐项复核的实现成熟度为待核验。
 
-### 0.2 最终目标必须先闭合的两项决策
+### 0.2 当前内容决定与保持的例外
 
-1. **例外范围**：既有容量、固定相机、多边形边界、随机掉武器、头顶血条、FootSelf、平台取景例外，以及 HUD、结果表现、背景多层/cycle、选择流程排除仍有效，直至用户明确改判。本轮已请求澄清“完全一致”是否撤销这些例外；待答复，不自行删除或恢复。
-2. **H 内容策略**：要让相同角色、技能和表现一致，正式可达的战斗内容数值与资源必须一致。建议将 NTSD 2.8-Logan 正式战斗可达内容作为最终目标，按依赖分批迁移；“只补缺失”无法保证同名已有内容一致。此建议不是已批准的 Direction-B 切换，批准前只能只读审计。
+1. **例外范围保持**：既有容量、固定相机、多边形边界、随机掉武器、头顶血条、FootSelf、平台取景例外，以及 HUD、结果表现、背景多层/cycle、选择流程排除仍有效。本轮只明确改判 DAT/角色相关图片，不推断其他例外撤销，也不重复询问已确定范围。
+2. **H 内容方向已决定（D-023）**：DAT 与角色相关图片使用 NTSD 2.8-Logan 正式版本，旧 Unity 138-DAT 不再裁决目标值。迁移尚未执行，必须先闭合 parser、资源根/格式和引用清单；不再等待“只补缺失/整体切换”的选择。音频及非角色图片仍按原边界处理。
 
 若保留例外，只能声明“非例外战斗域对齐”；若要求战斗域无差异，须逐项撤销相关例外并纳入验收。整应用一致还需要另行包含选择与结果等完整流程。
 默认 stage.dat 部署继续暂缓；测试夹具可以验证 stage 逻辑，但不能代表正式 stage 内容交付完成。若最终目标包含正式 stage 内容，该暂停必须单独解决。
@@ -33,7 +37,7 @@
 ### 0.3 双向覆盖台账：防止漏项和重复实现
 
 沿用第 4 节 T/S/I/R/A/F/C/W/L/G/P/O/D/U 差异 ID 和 B0～B12 阶段，不重启旧 campaign。
-下一只读包须逐行生成“当前处置台账”，而不是再堆叠一批无证据的待修列表。每行至少包含：
+本轮直接将第 4 节逐 ID 改为当前处置台账；具体实现仍须沿对应符号继续闭合，不把文档审计冒充全分支运行验证。后续每行持续维护：
 
 - 原差异 ID、行为族/分支、可达角色/对象/资源、当前状态与最近核验日期；
 - 正式源码文件/符号、playable 构建参与性、调用者/被调用者、字段读写及 reset；
@@ -57,7 +61,7 @@
 | B0 字段与证据 | slot/generation/生灭、实体及 world 字段、双 RNG 调用日志、事件、内容/schema identity；正式源码与 EXE 可观察证据分级。 | 双端完整字段映射；缺字段显式不可验，不以 null/零补齐伪造相等。 |
 | B1 Host | 33/3 ms、暂停、单步、F5、debt cap、同次 Update 最多两 interval、失焦/卡顿、模式边界。 | 相同时间线的 tick/input 消费符合正式 Host；Manual/Lockstep 不消费 LocalFreeRun debt。 |
 | B2 输入/RNG/AI | human/link/native AI/object hit_Fa；输入相位、按下/保持/释放、组合窗口、target/owner、双流 call-site/顺序、重开初始化。 | 分支及整 tick trace；真实物理键到动作链；AI 扫描/tie-break/短路的 RNG 消费无首差。 |
-| B3 全局 pass | 物理 slot 顺序、输入/运动/瞬移/physics/复活、双 held、collision freeze、统一 hit、catch、全局尾部和 publication。 | 全 pass 事件序列相同；placement ready 与完整行为分别核验，不能只数 phase。 |
+| B3 全局 pass | 物理 slot 顺序、输入/运动/瞬移/physics/复活、双 held、collision freeze、两个 hit caller loop、catch、逐slot尾部及publication。 | 全 pass 事件序列相同；placement ready 与完整行为分别核验，不能只数 phase。 |
 | B4 帧/物理/复活 | 各对象 frame wait/next/sentinel、速度/位置同步、落地、状态分支、死亡/复活、资源与生成回调。 | 已验证 consumer 复用；补齐 B7/B8/H producer 依赖后再关闭整域。 |
 | B5 碰撞/命中 | candidate 集合和顺序、所有可达 itr/body、护甲/防御、伤害/HP/MP/统计、rest/combo、type 分支、终止与实际/HitPlan 一致。 | 命中前快照到全部副作用原子闭合；旧 stats 退休不能掩盖缺失 native writer。 |
 | B6 抓取/武器/E | catch/held/refill/pickup/throw、WPoint/CPoint、双方关系、+2F8、目标/owner 区分、mass 与旧 NTSDSpec 残留。 | 复用 Goal17～20；完整技能/关系生命周期证据；保留 carrier 不得继续影响行为，空壳删除另定。 |
@@ -71,11 +75,12 @@
 
 ### 0.5 依赖顺序与下一步
 
-1. **立即可做的下一包是 Q0 只读对账**：把原矩阵逐 ID 与当前代码/Record/证据合并，重点复核 B6/E 的剩余入口与 exit；不重复退休 Goal20 已关闭行为。
-2. **同时前置 H 的只读资源闭包和 B9/B10 验收设计**。不再等所有逻辑包结束后才发现资源/表现缺口；批准前不导入资源。
-3. **按字段依赖选实现包**：B6/E 未闭合项、联合 schema 前置、B7 producer、B8 事件必须显式排序。D-022 已有路线授权，不再泛称“schema 策略未定”；但全部前置是否满足尚待 Q0 核验。
-4. **H 方向确认后先闭合 parser/内容合同再迁移**；每批内容变化精确触发 B2～B8 受影响逻辑复验及 B9/B10 资源验收。共同内容前置未满足时，full parity 保持阻塞，仍可推进无关包。
-5. **B9/B10 接入完成后执行 B12**。短场景和差分工具应随每个包持续积累；最终完整对战必须在同一集成版本再跑，不能拼接不同版本的局部 PASS 冒充整体验收。
+本节只作导航，**具体选择顺序、硬前置、交付物与回访义务统一维护在第0.11～0.13节**，不再维护另一份模糊的“下一阶段”。
+
+1. 首先执行Q01，确定正式内容引用/替换清单及parser/loader真实缺口。D-023内容方向不再重复选择。
+2. 按队列闭合加载前置、数据/字段合同、剩余旧行为退休与D-022联合迁移，再接通B6/B7生产链；不先删资源，也不重做Goal17～20。
+3. 新版内容分批接入后，B8补mode/flow/event，B9/B10补视听；每个包达到交付点立即检查第0.12节反向依赖。
+4. 先完成已触发的前阶段回访和出口对账，再进入B12最终集成验收；不得因阶段编号较小而无限重开B1～B6。
 
 每个实现包继续要求独立 Task/Change、准确路径与符号、依赖、禁止项、验收及回滚。只改最小闭合行为，未声明资源/Scene/共享 kernel 路径不借机修改。
 本轮文档可通过反向移除本节及同步导航恢复；任何实际回滚均保留用户既有工作，遵守 Git 安全授权。
@@ -101,291 +106,235 @@
 
 ### 0.7 本轮交付状态
 
-`PLAN_REORGANIZED / DOCUMENTATION_ONLY / IMPLEMENTATION_NOT_RESUMED / FULL_ALIGNMENT_INCOMPLETE`。
+`CURRENT_MATRIX_RECONCILED / DAT_IMAGE_TARGET_CONFIRMED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
 本轮实际完成：权威 EXE 哈希、启动/源码声明、项目依赖与版本、Git 工作树、当前总表/恢复入口/决策、Goal20 原始回归摘要和 SelfCheck 文件、33/3 ms 与 NTSDSpec 直接调用静态核验。
 本轮没有运行编译、Unity 测试、Play、正式 EXE 对战、完整资源 inventory 或逐分支双端审计；本节不产生新的 runtime VERIFIED。
 
-> **Goal17三个限定退休包已验证（2026-09-10）：** `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001 / VERIFIED`。focused13/4/10全PASS，一次共享B6610/610含全部指定前置，refill9/9、旧converter/HitPlan7/7、freshSelfCheckPASS、双build0error；Scene固定SHA/dirtyfalse，schema/内容/NTSDSpec本体/P3 Record均保持。包1不实现drain/recovery，包2无自然Play caller，包3保留Oscillate晚帧consumer/恢复，不声明native B9对齐。报告后等待复核，以下启动记录为过程历史。
-
-> **Goal17已获追加授权恢复：** 三包 `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001` 均IN_PROGRESS/TEST_FIRST；包1引用复核方完整正向证明，限定旧测试范围已批准，drain/recovery延后；包2/3先全量名称认证。P3 Record不再修改。以下事前暂停为已解除历史。
-
-> **2026-09-10三退休包事前暂停：** 包1`NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001 / BLOCKED`；包2`NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001 / PLANNED`；包3`NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001 / PLANNED`。现有SelfCheck/HitPlan仍要求hurt覆盖且旧converter测试直接调用拟删helper，相关旧测试未在本轮授权文件清单内。详见Temp/Goal17_PrechangeScopeReview.md，脚本改动0，新RED/共享验收未执行。P3本轮已获用户复核确认，当前VERIFIED；此前REVIEW_HOLD已解除。
-
-> **Goal16 P3限定子集已验证（2026-09-10）：** `NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / VERIFIED / REVIEW_HOLD`。RED126失败/14控制→focused140PASS；B6 583/583（含所有指定前置）、refill9/9、旧pickup2/2、fresh SelfCheckPASS、双build0error。两scoped Play tick6/8与当前playable C++源码同seed/input/tick比较6记录117字段无首差；该证据是Direction-B夹具源码执行，不是正式EXE完整应用parity。8个旧期望站点逐项留痕。Scene固定SHA/dirtyfalse、37保护哈希不变；P2/schema/Attack映射/old-child cleanup无改。报告后等复核，不启动后继；以下启动/阻塞/恢复条目为过程历史。
-
-> **Goal16 P3已获追加授权并恢复：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST_RESUMED。用户批准两处R-HC-04期望及授权文件内四类P2/Authority直接矛盾的旧期望修订（counter/HolderCopy/count/kind7），逐站点登记；先新RED再生产。下方BLOCKED为已解除的过程历史，类外/P2缺陷仍硬停。
-
-> **Goal16 P3事前范围阻塞：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / BLOCKED / PRODUCTION_UNCHANGED_FROM_GOAL15。SelfCheck14770仍要求unsupported type3保留counter7、14859仍要求HolderCopy镜像；与P2/用户目标冲突且位于明确授权修订行之外。两处最小提案见Temp/Goal16_ProposedAdditionalSelfCheckExpectations.diff，尚未应用。P3 RED/生产/Play/共享回归未执行；需用户追加这两处旧期望范围再恢复，以下启动条目为过程历史。
-
-> **Goal16 P3启动：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。用户已批准本包覆盖Goal15等待复核状态；只消费既有P2计划，kind7副作用退休，state2004替换旧child保留，schema/Attack映射不改；独立Task/Record已先建。
-
-> **Goal15限定子集已验证（2026-09-10）：** NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001 / VERIFIED（rules/relation-count）；NTSD28-B6-KIND2-PICKUP-PURE-TRANSACTION-PRODUCTION-001 / VERIFIED（pure plan）。P1绑定+35C已证明，RED16失败/7控制→23PASS；P2骨架RED32执行、失败明细20条截断→32PASS。共享B6 443/443、refill9/9、fresh SelfCheck PASS、双build0error；34个schema文件哈希不变，Scene SHA D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11/dirtyfalse。PLAY_NOT_PERFORMED_RULES_PURE_LAYER；P3_NOT_CONNECTED，完整pickup仍未关闭。D-022只登记路线图，本Goal无schema变更。报告后等待用户复核；以下启动条目为过程历史。
-
-> **P2启动：** NTSD28-B6-KIND2-PICKUP-PURE-TRANSACTION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST；P1 NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001已23/23 PASS。只新增pure有序计划，P3未接线、schema不改，最后共享回归。
-
-> **P1启动：** NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST / PICKUPCOUNT_BINDING_PROVEN。P2纯计划后继，P3未授权；遵循D-022但本Goal不改schema。
-
-> **2026-09-10用户裁定 D-022：** 行为退休→一次提升→接线，entity12→13/aggregate20→21/checksum23→24及必要shell升版，旧midbattle严格拒绝按seed/input重放，无adapter；首批system规则locked immutable不支持alternate。reserved只过渡，历史checksum/parity按版本分组，CPoint19→27内容合同独立。本Goal不触碰schema文件，先P1/P2，P3待复核。
-
-> **Goal13b已验证三个限定子集：** NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001、NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001（依赖guard）、NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001均VERIFIED。guard RED6/11→17PASS，missing72复跑PASS且Sakura/Sakon双Play两轮均Free0，DVX RED8/16→24PASS且200→199→拾取199→投掷199。共享一次B6 388/388（含17/72/24/92/80），refill9/9，fresh SelfCheckPASS，双build0error，SceneSHA不变。最终SelfCheck Console保留7条负向夹具日志+8条MinMaxAABB引擎断言，根因未排查，不声明Console0。详见三Record；报告后GOAL14_USER_HOLD，不自动推进+2F8/schema。
-
-> **Goal13b包2启动：** NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。守卫NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001已有17/17及双Play；包1NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001已依赖守卫升级VERIFIED（72复跑+第二轮双Play）；批次最终共享回归待包2完成。
-
-> **Goal13b：** NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。用户已授权C25限定guard，先守卫/双Play与72收口，再包2，共享最终回归；原Goal13硬停止由此限定解除。
-
-> **Goal13硬停止：** NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001 / BLOCKED / FOCUSED72_PASS / PLAY_SAKURA_PASS_SAKON_LATE_FREE_FAIL。Sakon-888在C09/C20保持但后续C25 Free1；修复点BattleLateEntityLifecycleModule不在清单。包2未启动、共享回归未运行，不标VERIFIED、不自动扩包；下一步等用户复核。详见同ID Record。
-
-> **Goal13包1：** NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST；仅missing-action精确子集；包2尚未启动，最后共享回归。用户当前授权覆盖此前Goal13 HOLD。
-
-> **Goal12 Part A（2026-09-10）：** NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-PRODUCTION-001 / VERIFIED_TERMINAL_SUBSET / RED_COMPLETED80_FAILED_CAPPED25 / FOCUSED80_PASS / B6_275_PASS / KIND3_REFILL101_PASS / LIFECYCLE_STRUCTURAL35_PASS / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / ROCKLEE254_SCOPED_PLAY_PASS / CONSOLE0 / SCENE_UNCHANGED / LEDGER440_379。tick6/C09 Free/childUnregister/generationRelease各1、terminal RNG/sound0，World4→4及两个pool2→2。详见Record；Part B结果仅最终回复，GOAL13_USER_HOLD。
-
-> **Goal11 kind3 release包（2026-09-10）：** NTSD28-B6-WPOINT-KIND3-RELEASE-PRODUCTION-001 / VERIFIED_KIND3_SUBSET / RED_COMPLETED92_FAILED_CAPPED25 / FOCUSED92_PASS / B6_195_PASS / REFILL9_PASS / RNG_RELATIONS41_PASS / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCOPED_ROCKLEE255_PLAY_PASS / CONSOLE0 / SCENE_UNCHANGED / LEDGER439_378。tick12同步原值0,5,1,0，left-facing final motion100,-1,-2；owned cleanup4→4、roster恢复。Play为current DAT pickup consumer与standing同tick native chord，详见Record。后置族不变，GOAL12_USER_HOLD。
-
-> **Goal9三timer消费包（2026-09-09）：** NTSD28-B5-RECOVERY-STATUS-CONSUMERS-NO-STATS-001 / VERIFIED / NO_STATS_THREE_CONSUMERS_ONLY / FOCUSED_69_OF_69 / B5_846_OF_846 / NTSD28_316_OF_316 / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / PLAY_NOT_PERFORMED_NO_NATURAL_PRODUCER / GOAL10_USER_HOLD。恢复先于C25h递减，render_phase已建模；shared writer仅消费weak/HP-double/MP-bonus。69项RED至少25实测失败（MCP capped）→69/69 GREEN，B5原777+69与NTSD28原247+69全绿，full SelfCheck14:36:14Z PASS，Scene不变。bonus两timer无自然producer，按许可Editor强制载体验收；完整证据见同ID Record。其余C25c-e/B11/B8继续后置，停止等待Goal10。
-
-> **Goal8限定边界包（2026-09-09）：** NTSD28-PP-RECOVERY-LOW-THRESHOLD-INCLUSIVE-BOUNDARY-001 / VERIFIED / PP150_BOUNDARY_ONLY / RED_3_FAIL_15_PASS / BOUNDARY_18_OF_18 / B5_777_OF_777 / NTSD28_247_OF_247 / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / PLAY_NOT_PERFORMED_BOUNDARY_ONLY / GOAL9_USER_HOLD。仅两处>=150改>150与18组新增测试；RED3 fail/15 pass→GREEN18/18，B5原759+18及NTSD28原229+18全部通过，fresh full SelfCheck13:48:37Z PASS。指定Scene不变，完整证据见同ID Record；只关闭等号边界，C25c-e其余算法继续后置，完成停止等待Goal9。
-
-> **Goal7 PartA限定包（2026-09-09）：** NTSD28-RESPAWN-STALE-INTEGER-FIXTURE-READ-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / GOAL8_USER_HOLD。仅respawn stale-int的raw整数断言及消息；fresh full SelfCheck于13:24:41Z PASS，目标全部断言（含后续全局同步guard）通过，无下一停点；两套build0 error，指定Scene SHA不变。完整验收见同ID Record。PartB零文件改动，结论仅报告；其他任务继续USER_HOLD，停止等待Goal8。
-
-> **Goal6 PartA限定包（2026-09-09）：** NTSD28-UNIFIED-AI-SNAPSHOT-REFRESH-EXPECTATION-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / SINGLE_1_OF_1 / STRESS_280_OF_280 / CORE_STRESS_256_OF_256 / BUILDS_0_ERROR / SCENE_UNCHANGED / GOAL7_USER_HOLD。仅具名RefreshCount期望1→2及两阶段注释；单测一次1/1、ProductionEntityStress完整组一次280/280（main256/timing17/capacity7），两套build0 error。完整证据见同ID Task/Record。其余工作保持USER_HOLD；PartB零文件改动，结论仅在报告；完成等待Goal7。
-
-> **Goal5限定双包完成（2026-09-09）：** NTSD28-R4-HIT02A-FLUTE-STAT-SENTINEL-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / FOUR_CASES_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_LATER_RESPAWN_STALE_INT / GOAL6_USER_HOLD；NTSD28-UNIFIED-AI-SNAPSHOT-STRESS-COUNTER-EVIDENCE-001 / VERIFIED / EVIDENCE_CAPTURE_ONLY / SINGLE_RUN_FAILED_REFRESH_1_VS_2 / ASSERTIONS_UNCHANGED / GOAL6_USER_HOLD。A四组通过后停在既有respawn stale-int，不修；B单跑取证1/1/1/2/1/1050，首失败RefreshCount原期望1/实际2，断言未改。两套build0 error，指定Scene SHA不变。各自Task/Record保留完整证据。停止等待Goal6，production及其余B6继续USER_HOLD。
-
-> **Goal3 GT06期望修正已验证（2026-09-09）：** `NTSD28-GT06-RECOVERY-PP-EXPECTATION-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / GT06_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_LATER_R4_HIT_02A / SCENE_UNCHANGED / GOAL4_USER_HOLD`。唯一改动为PP20→4，ApplyRecoveryFixture与production不变。fresh SelfCheck12:04:37Z越过GT06/current-DAT matrix后停在既有后续R4-HIT-02A；不修该检查，不称全量通过。两套build0 error，指定Scene D18E75F7...A2F11不变。仅关闭该夹具，整个战斗目标仍FULL_ALIGNMENT_INCOMPLETE；B6剩余族、任何production修改继续USER_HOLD，停止等待用户复核。
-
-> **Goal 2 held-refill专项Play已闭合（2026-09-09）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001 / VERIFIED / FOCUSED_7_OF_7 / C09_RELATED_2_OF_2 / NTSD28_CATEGORY_229_OF_229 / B5_NAME_GROUP_759_OF_759 / TARGETED_PLAY_6_OF_6 / REFILL_SAMPLES_26 / EXHAUSTION_EVENTS_6 / BUILDS_0_ERROR / CONSOLE_0_ERROR / SCENE_UNCHANGED / SELFCHECK_BLOCKED_UNRELATED_GT06 / HP_BASEMAX_DEFERRED`。本轮沿用现有resolver，只补test-only探针：真实NTSD_Battle、正式Sakura/Naruto DAT、OPoint kind2关系绑定入口、生产driver完整tick5→20；OID122/123连续消费、零/负HP、child cap/exact gate、单次RNG与motion/reset均通过。探针自身实体回收，额外OID150/slot52已证实来自生产normal random-drop；Scene SHA为指定`D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11`。精确记录见`docs/ai/CHANGE-RECORDS/NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001.md`。HP/baseMax与完整OPoint materializer未借本包关闭；**Goal3及所有未授权工作继续USER_HOLD，总目标FULL_ALIGNMENT_INCOMPLETE，等待用户复核。** 此条只supersede该包旧PLAY_PENDING，不删除历史事实。
-
-> **总体目标已暂停（2026-09-09）：** `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / USER_HOLD /
-> FULL_ALIGNMENT_INCOMPLETE`。用户将交由GLM先核验当前进度、已处理脚本和证据，再整理遗漏与未处理项；
-> 禁止从头重做已有成果。暂停期间不得启动新包或继续运行验收。
-> 新会话提示词见 `docs/ai/GLM-INCREMENTAL-CONTINUATION-PROMPT-2026-09-09.md`；
-> 当前状态、未闭环项、用户例外/排除与最终成果定义见
-> `docs/ai/GLM-REALIGNMENT-HANDOFF-2026-09-09.md`。
-
-> **B6 positive-link validation已退休（2026-09-09）：** `NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-PRODUCTION-001 / VERIFIED / RED_4_FAIL_2_PASS_OF_6 / FOCUSED_6_OF_6 / RELATED_33_OF_33 / B6_CATEGORY_103_OF_103 / NTSD28_229_OF_229 / STRESS_255_OF_256_1_UNRELATED_AI_REPORT / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_R2_CPOINT_SYNC / CONSOLE_0_ERROR / SCENE_UNCHANGED / PHASE_33 / NO_POSITIVE_EVENT`。正式tick phase由34压至33，post-catch不再单边清relation或发positive event；stress/U6/W07旧owner同步退出，真实Battle grab与lifecycle cleanup回归通过。下一先复核B6剩余首差与既有held package状态。
-
-> **B6 held injury caughtact event已验证（2026-09-09）：** `NTSD28-B6-HELD-INJURY-CAUGHTACT-EVENT-PRODUCTION-001 / VERIFIED / RED_5_FAIL_10_PASS_OF_15 / FOCUSED_15_OF_15 / B6_CATEGORY_97_OF_97 / NTSD28_223_OF_223 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_POSITIVE_LINK / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_428_364 / POST_SETTLEMENT_EVENT_EXACT`。正injury applied event只在完整settlement后按序消费；formal tuple/type/facing/one-hop owner、双事件与0B均闭合，真实Play count0→1且无重复。下一strict首差为positive-link validation retirement。
-
-> **B6 held injury accounting/cover已验证（2026-09-09）：** `NTSD28-B6-HELD-INJURY-ACCOUNTING-COVER-PRODUCTION-001 / VERIFIED / RED_14_FAIL_3_PASS_OF_17 / FOCUSED_17_OF_17 / B6_CATEGORY_82_OF_82 / NTSD28_208_OF_208 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / RELATED_FIXTURES_9_OF_9 / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_POSITIVE_LINK / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_427_363 / CANONICAL_ACCOUNTING_COVER_EXACT`。current正injury223条路径的canonical damage/score/KO与cover timer已迁，真实Battle grab通过；caughtact/MP/world event后置。
-
-> **B6 settlement vaction preflight已验证（2026-09-09）：** `NTSD28-B6-CATCH-SETTLEMENT-VACTION-PREFLIGHT-PRODUCTION-001 / VERIFIED / RED_4_FAIL_4_PASS_OF_8 / FOCUSED_8_OF_8 / B6_CATEGORY_65_OF_65 / NTSD28_191_OF_191 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / TARGETED_PLAY_8_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_426_362 / ACTUAL_PREFLIGHT_EXACT`。actual settlement现按signed/zero vaction写后重验target frame/首kind2 CPoint，invalid terminal。下一held injury exact accounting。
-
-> **B6 mixed catch advance/exact consumer已验证（2026-09-09）：** `NTSD28-B6-CATCH-EXACT-CONSUMER-AND-ADVANCE-ORDER-PRODUCTION-001 / VERIFIED / RED_1_PASS_7_FAIL_OF_8 / FOCUSED_16_OF_16 / PREINTERACTION_15_OF_15 / B6_CATEGORY_57_OF_57 / HITPLAN_185_OF_185 / NTSD28_183_OF_183 / TARGETED_PLAY_16_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_425_361 / SINGLE_MIXED_ADVANCE_EXACT_CONSUMERS`。两sweep已合并为slot升序mixed advance，settlement保持独立；三个consumer服从plain exact +0x90，mismatch/negative release均terminal。下一settlement vaction preflight。
-
-> **B6 catch relation exact-field production已验证（2026-09-09）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001 / VERIFIED / RED_0_OF_3 / FOCUSED_19_OF_19 / B6_CATEGORY_41_OF_41 / HITPLAN_185_OF_185 / NTSD28_167_OF_167 / TARGETED_PLAY_19_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / EXACT_RELATION_ATOMIC`。kind3 first/signed、双frame原子预检、exact+compat relation、respond timeout与HitPlan已闭合；current criminal 341/130与kind1不变量有真实Play证据。下一mixed catch fences。
-
-> **B6 invalid negative-held reciprocal preserve已验证（2026-09-09）：** `NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001 / VERIFIED / RED_2_OF_2 / FOCUSED_7_OF_7 / B6_CATEGORY_22_OF_22 / RELATED_47_OF_47 / BROAD_56_OF_62_6_UNRELATED_NATIVE_INPUT_PROXY / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_BASELINE_RESTORED / DIAGNOSTIC_PRESERVE`。Authority diagnostic+continue已进入C09/C20共享handler；三reason、slot0/high、lifecycle-clean、RNG/sentinel、trace和0B有真实Unity证据。下一严格包是catch relation exact-field producer。
-
-> **B6 entity-link lifecycle cleanup已验证（2026-09-09）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-PRODUCTION-001 / VERIFIED / FOCUSED_7_OF_7 / B6_CATEGORY_15_OF_15 / RELATED_91_OF_91 / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_BASELINE_RESTORED / ATOMIC_RELEASE_CLEANUP / RED_NOT_EXECUTED`。Unity适配在成功release后、generation release/reuse前同步清held/catch exact+compat关系；same-slot ABA、失败零副作用、deferred/pending与4096-slot零分配均有真实Unity证据。P7旧夹具已纠正，下一严格包为invalid reciprocal preserve。
-
-> **B6 CPoint throw精确子集已验证（2026-09-09）：** `NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / VERIFIED / FOCUSED_8_OF_8 / RELATED_17_OF_17 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_CURRENT_BASELINE_UNCHANGED / FULL_RESOURCE_DEFERRED / ILLEGAL_CATEGORY_RETIRED`。display lead、environment/self-source、WeaponCount exclusion与exclusive-depth Vz均通过真实Unity和Play；full SelfCheck当前首差转到held injury accounting。完整MP resource仍等待B7/B8/B11/H。
-
-> **B5 negative environment shared recovery已验证（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001 / VERIFIED / RED_11_OF_12 / FOCUSED_12_OF_12 / RELATED_154_OF_154 / RELATED_B5_981_OF_981 / TARGETED_PLAY_12_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / SINGLE_EXACT_TRANSACTION / FLUTE_FALSE_POSITIVE_RETIRED`。两套WeaponCount分支已由single exact transaction替换，phase/rule/scale/two-hop/KO/clamp与flute control通过；其当时的CPoint throw Vz阻塞已由后继B6包关闭，fresh full SelfCheck推进到held injury accounting。B6 impact producer、B8 event/schema后置。
-
-> **B5 negative environment clamp合同已纠正（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-CLAMP-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SOURCE_HASH_MATCH / CLAMP_TO_ZERO_REQUIRED / PRIOR_NO_CLAMP_CLAUSE_SUPERSEDED`。无漂移source/test明确HP与HPBound在exact accounting后clamp0；原owner audit仅no-clamp一句作废，后继consumer必须覆盖overkill。
-
-> **B5 negative environment rule carrier已验证（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RULE-CARRIER-001 / VERIFIED / RED_13 / FOCUSED_6_OF_6 / RELATED_106_OF_106 / NTSD28_1394_OF_1394 / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_BASELINE_UNCERTIFIED / CARRIER_READY / RECOVERY_CONSUMER_NEXT`。default9/raw值、world snapshot/restore/checksum/parity、schema `11/20/23`及0B闭合；RED13、focused6、related106、exact NTSD28 broad1394、builds/Ledger绿。下一single recovery consumer，B6 impact/B8 event/legacy schema仍后置。
-
-> **B5 negative environment recovery owner审计已闭合（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / WEAPONCOUNT_WRONG_CARRIER / EXACT_TRANSACTION_REQUIRED / TWO_PACKAGE_ROUTE`。Authority negative EnvironmentState320 transaction已冻结；Unity WeaponCount/FallDamageDiv/ComboVic双路错误且flute可达。下一rule90 carrier→single consumer，B6 producer/B8 event/schema后置。
-
-> **B5 input HP-cost shared transaction已验证（2026-09-09）：** `NTSD28-B5-INPUT-HP-COST-COMPAT-SHARED-TRANSACTION-PRODUCTION-001 / VERIFIED / RED_0_OF_6 / FOCUSED_6_OF_6 / RELATED_INPUT_187_OF_187 / RELATED_B5_926_OF_926 / TARGETED_PLAY_6_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / TWO_INPUT_WRITERS_RETIRED / NEGATIVE_RECOVERY_AUDIT_NEXT`。registered/unregistered generic action共享single exact core，两处旧ComboVic HP-cost镜像归零；下一negative recovery owner audit，CPoint/schema仍后置。
-
-> **B5 input HP-cost compatibility stats审计已闭合（2026-09-09）：** `NTSD28-B5-INPUT-HP-COST-COMPAT-STAT-RETIREMENT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / COMPAT_PATH_LIVE / PARTIAL_RETIREMENT_UNSAFE / SHARED_TRANSACTION_PRODUCTION_DEFINED`。旧input helper一处dead、一处Legacy production可达，且缺完整native transaction；禁止局部改字段。下一包共享exact action core后统一退休两处，negative recovery/B6 held/schema仍后置。
-
-> **B5 type3/weapon/flute legacy stats安全退休已验证（2026-09-09）：** `NTSD28-B5-TYPE3-WEAPON-FLUTE-LEGACY-STAT-WRITER-RETIREMENT-001 / VERIFIED / RED_0_OF_4 / FOCUSED_4_OF_4 / RELATED_B5_777_OF_777 / TARGETED_PLAY_4_CASES / LIVE_COLLISION_MATRIX_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / SCOPED_LEGACY_STATS_RETIRED / INPUT_COMPAT_AUDIT_NEXT`。type3/weapon/flute extra legacy stats实际与HitPlan已归零，exact HP/KO/+0x2F4保持；下一独立审计input compat，standard/reduced/CPoint/recovery/schema不混入。
-
-> **B5 standard/reduced exact KO producer已验证（2026-09-09）：** `NTSD28-B5-STANDARD-REDUCED-KNOCKOUT-PRODUCER-001 / VERIFIED / RED_1_OF_4 / FOCUSED_4_OF_4 / RELATED_270_OF_270 / TARGETED_PLAY_4_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_KO_PRODUCER_READY / TYPE3_WEAPON_FLUTE_STATS_NEXT`。lethal pre-HP、same attribution、gate/HP/source拒绝与HitPlan observable闭合；旧stats/event feed仍后置。
-
-> **B5 legacy damage-stat writer retirement readiness已闭合（2026-09-09）：** `NTSD28-B5-LEGACY-DAMAGE-STAT-WRITER-RETIREMENT-READINESS-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / GLOBAL_RETIREMENT_BLOCKED / FOUR_PREREQUISITE_ROUTES`。production mutation为ComboVic13/ComboAtk8/actual Kill3/Damage7/KillStats3；standard/reduced、held、input compat、negative recovery各有exact前置。先`STANDARD-REDUCED-KNOCKOUT-PRODUCER-001`，禁止直接全删。
-
-> **B5 OrdinaryCreditGate2F4 producer/consumer纠正已验证（2026-09-09）：** `NTSD28-B5-ORDINARY-CREDIT-GATE-2F4-PRODUCER-CONSUMER-CORRECTION-001 / VERIFIED / RED_0_OF_5 / FOCUSED_5_OF_5 / RELATED_287_OF_287 / TARGETED_PLAY_5_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_2F4_READERS_PRODUCERS / LEGACY_STATS_WRITER_NEXT`。damage/CPoint/HitPlan、recovery与OPoint type0 child传播已改绑exact +0x2F4，15处scoped KillCount绑定归零；旧stats writer与联合schema后置。
-
-> **B5 type3 HolderCopy extra-writer退休已验证（2026-09-09）：** `NTSD28-B5-TYPE3-LEGACY-HOLDERCOPY-WRITER-RETIREMENT-001 / VERIFIED / RED_0_OF_3 / FOCUSED_4_OF_4 / RELATED_284_OF_284 / TARGETED_PLAY_3_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / FOUR_TYPE3_WRITERS_RETIRED / TYPE3_SPECIFIC_FAMILY_EXIT_READY / ORDINARY_CREDIT_GATE_2F4_NEXT`。actual kind9一处与HitPlan三处legacy projection已退休；type3 exact group/owner/control/action/motion保持。下一严格route为B5 `OrdinaryCreditGate2F4`，stats/carrier/schema后置。
-
-> **B5 kind5 linked-parent binding已验证（2026-09-09）：** `NTSD28-B5-KIND5-LINKED-PARENT-SLOT-CORRECTION-001 / VERIFIED / RED_0_OF_5 / FOCUSED_5_OF_5 / RELATED_280_OF_280 / TARGETED_PLAY_5_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_LINKED_PARENT_BOUND / HOLDERCOPY_UNCHANGED / TYPE3_WRITER_NEXT`。frozen pair/kind5/negative-link现只读HolderStableId/implicit-zero；旧hit-group exit恢复到binding已纠正的范围。type3 writer与stats/schema后置。
-
-> **B4 revival exit已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-EXIT-AUDIT-001 / VERIFIED / REVIVAL_TRACE_EQUAL_13_RECORDS_416_FIELDS / DOUBLE_RUN_BYTE_STABLE / RELATED_54_OF_54 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / B4_REVIVAL_EXIT_READY / PRODUCTION_UNCHANGED / B7_H_PRODUCER_PENDING`。Authority/Unity同seed trace覆盖direct、C25、C07三分支、peer与slot reuse，13/416 first difference空且双跑稳定；真实Play/Console/Scene绿。B7/H queued producer/schema仍后置。
-
-> **B4 normal floor/RNG已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-NORMAL-FLOOR-RNG-PRODUCTION-001 / VERIFIED / RED_0_OF_7 / FOCUSED_7_OF_7 / RELATED_59_OF_59 / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXIT_AUDIT_NEXT`。effective floor、peer/sumX、sync RNG0x90/0x91、precise-only X/Z和vitals tail已闭合；下一B4 joint exit audit。
-
-> **B4 queued continuation已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-QUEUED-CONTINUATION-PRODUCTION-001 / VERIFIED / RED_4_OF_11 / FOCUSED_13_OF_13 / RELATED_47_OF_47 / TARGETED_PLAY_13_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / NORMAL_ROUTE_NEXT / PRODUCER_B7_H_PENDING / SCHEMA_DEFERRED`。controller/defer/group、queued字段、visual、action219/counter0/hold10与OID998调用前状态已闭合；下一normal floor/RNG。
-
-> **B4 revival participant gate与branch ownership已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-PARTICIPANT-GATE-KILLCOUNT-CORRECTION-001 / VERIFIED / RED_10_OF_16 / FOCUSED_16_OF_16 / RELATED_34_OF_34 / TARGETED_PLAY_20_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / QUEUED_ROUTE_NEXT`。两个legacy HitStun arm与C07 KillCount/team gate已退休，lives-first四结果已恢复；下一queued细节，normal floor/RNG和exit parity后置。
-
-> **B0 direct revival默认producer已验证，B4恢复（2026-09-09）：** `NTSD28-B0-DIRECT-REVIVAL-DEFAULTS-PRODUCTION-001 / VERIFIED / RED_1_OF_3 / DIRECT_DEFAULTS_1_0_0 / FOCUSED_3_OF_3 / DIRECT_OWNER_REGRESSION_15_OF_15 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / B4_RUNTIME_RESUMABLE`。slot0/19在首次注册与active snapshot均为1/0/0，raw backing仍0/0/0；invalid不写。focused3/3、owner15/15、Play/Console/Scene通过；full SelfCheck独立CPoint阻塞。
-
-> **B4 revival owner审计已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-PARTICIPANT-GATE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / KILLCOUNT_NOT_REVIVAL_AUTHORITY / THREE_ENTRY_POINTS_SPLIT / DIRECT_DEFAULT_PRODUCER_MISSING / FOUR_RUNTIME_ROUTES_DEFINED / PRODUCTION_HELD`。Authority C25/C07无KillCount；Unity三旧gate、wrong branch priority、primary free与queued/floor/RNG后继已拆分。Direction-B state14=235；先回退B0闭合direct默认producer。
-
-> **B3 1100..1299 child propagation退休已验证（2026-09-09）：** `NTSD28-B3-LEGACY-1100-1299-CHILD-PROPAGATION-RETIREMENT-001 / VERIFIED / RED_0_OF_4 / PRODUCTION_CHILD_SCAN_REMOVED / FOCUSED_4_OF_4 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELF_RESET_PRESERVED / CURRENT_ITACHI_1250_COVERED / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED`。RED matched child为0/-99/-149/-198而normal为40；删除唯一world/KillCount child write后focused4/4与真实Play通过，self reset与Itachi1250保留。full SelfCheck仍由独立CPoint阻塞；下一严格route为B4 revival participant gate correction。
-
-> **B3 legacy state501生产退休已验证（2026-09-09）：** `NTSD28-B3-LEGACY-STATE501-TRANSFORM-RETIREMENT-001 / VERIFIED / RED_0_OF_1 / PRODUCTION_BRANCH_REMOVED / FOCUSED_1_OF_1 / EARLY_M2_11_OF_11 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED`。RED命中child ObjectId 31→9000；移除fast/fallback/legacy 501分支后两组10实体canonical runtime/definition/identity/frame全不变，M2 11/11、真实Play与builds通过，Console0、Scene不变。full SelfCheck仍由独立CPoint阻塞；下一严格route为B3 1100..1299 child propagation retirement。
-
-> **B3 legacy state501审计已验证（2026-09-09）：** `NTSD28-B3-LEGACY-STATE501-OWNED-CHILD-TRANSFORM-RETIREMENT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_STATE501_TRANSFORM / DIRECTION_B_GAMEPLAY_ZERO / RELEASE_GAMEPLAY_ZERO / HUD_RADAR_ONLY_TWO_TOKENS / UNITY_SYNTHETIC_BRANCH_CONFIRMED / PRODUCTION_RETIREMENT_DEFINED`。Authority C25仅处理8000..8999且不扫描owner；Unity early-frame独有synthetic 501 self/child mutation。本审计无code/content/Scene/Authority改动。
-
-> **B2 AI owner guard family已验证（2026-09-09）：** `NTSD28-B2-AI-OWNER-SLOT-KILLCOUNT-CORRECTION-001 / VERIFIED / OWNER_GUARD_TRACE_EQUAL_8_RECORDS_48_FIELDS / UNITY_FOCUSED_4_OF_4 / TARGETED_PLAY_PASS / DOUBLE_RUN_BYTE_STABLE / BUILDS_0_ERROR / EXACT_OWNER_SLOT_BINDING / LEGACY_KILLCOUNT_DETACHED_FROM_AI / SELFCHECK_BLOCKED_UNRELATED`。Authority source-model/Unity production snapshot专项trace为8 records/48 fields且first difference空，双端各自双跑稳定；B0 producer owner 0/7/99实际消费。真实NTSD_Battle Play通过、Console0、Scene不变；full SelfCheck仍由独立CPoint Vz阻塞。本包只关闭AI owner/KillCount guard binding family，下一严格route为B3 state501 legacy child transform retirement audit。
-
-> **B0 owner-slot producer出口已验证，恢复B2 runtime（2026-09-09）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-EXIT-AUDIT-001 / VERIFIED / OWNER_TRACE_EQUAL_15_RECORDS_135_FIELDS / DOUBLE_RUN_BYTE_STABLE / TARGETED_PLAY_PASS / ROUTES_1_TO_4_REGRESSION_32_OF_32 / BUILDS_0_ERROR / SELFCHECK_BLOCKED_BY_UNRELATED_CPOINT / B0_OWNER_PRODUCER_EXIT_READY / B2_RUNTIME_RESUMABLE / PRODUCTION_UNCHANGED`。Authority/Unity专项trace以相同seed4660、neutral/F8 marker和transaction tick覆盖direct self0/1、owner7/target0独立、root→child→child、F8 first spawn99、state9996五child -1、type3 owner transfer及slot50 generation1→2/owner7→13；15 records/135 fields first difference空，双端各自双跑SHA稳定。01:06:52真实NTSD_Battle Play通过、Console0、Scene SHA/dirty/root不变；route1～4回归32/32、builds 0 error。full SelfCheck仍提前阻塞于既有CPoint throw-Vz；不扩大为full parity或B8 physical F8。下一恢复B2 AI owner runtime验收。
-
-> **B0 owner-slot route 5出口审计已启动（2026-09-09）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-EXIT-AUDIT-001 / IN_PROGRESS / B0_OWNER_PRODUCER_ROUTE_5 / OWNER_ONLY_JOINT_TRACE_DESIGN / PRODUCTION_UNCHANGED`。既有通用raw capture固定两角色/三tick，不能覆盖dynamic owner生命周期。专项双端trace只比较Authority +0x354与Unity OwnerSlot，覆盖direct self、two-hop OPoint、F8 99、state9996 -1、type3 mutation和slot reuse；F8内容/数量/位置、full parity及B8 physical consumer不扩大。诊断代码与验证待执行。
-
-> **B0 ordinary OPoint owner route 4 focused通过、runtime待验（2026-09-09）：** `NTSD28-B0-OPOINT-OWNER-PROPAGATION-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_7_OF_7 / SELFCHECK_BLOCKED_BEFORE_PRESENTATION_ASSERT_BY_UNRELATED_CPOINT / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_4 / LOGIC_AND_PRESENTATION_PRODUCERS_WRITTEN / FRAGMENT_AND_LEGACY_BRANCHES_EXCLUDED`。logic/presentation两个world-owned producer各只写parent literal owner；精确RED=`2/7`，builds 0 error，Unity 00:09:55 GREEN=`7/7`覆盖owner矩阵、kind/type/single/multi/two-hop/holder/raw backing与built-in -1。00:11:22 SelfCheck在更早CPoint停止，未到presentation新增断言；Play/joint待验。下一route5 exit audit。
-
-> **B0 F8 owner99 route 3 focused通过、runtime待验（2026-09-08）：** `NTSD28-B0-F8-OWNER99-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_3_OF_3 / SELFCHECK_REACHED_UNRELATED_CPOINT_AFTER_NEW_CHECK / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_3 / MODE2_MATERIALIZER_OWNER_ONLY / PHYSICAL_F8_EFFECT_WIRING_EXCLUDED`。精确RED=`1/3`后只在mode2 factory前写task owner=`99`；builds均0 error，Unity 23:25:56 GREEN=`3/3`覆盖slot50/399、claimed entity runtime/raw backing分离、frame/位置/四次RNG及normal owner`-1`/六次RNG。23:27:20 SelfCheck通过本包检查后停在较后的既有CPoint throw-Vz；物理F8/Play/joint待验。下一route 4 ordinary OPoint owner propagation。
-
-> **B0 route 4 OPoint/fragment边界已更正（2026-09-08）：** Authority ordinary frame OPoint传播parent literal owner，hit_Fa5/6 source owner与target +3F8独立；但built-in OID999 weapon fragments与state9996保持owner -1，只有DAT `<weapon_piece>` fragments继承source owner。Unity正式late OPoint producer在`BattleLogicObjectPointRuntime.ProcessOneLateOpoint()`且缺task owner；built-in/state9996现状正确，DAT weapon_piece没有parser/materializer仅有pass skeleton，完整行为归B7；hit_Fa8/9/13独立未闭合。route 4只补ordinary single/multi producer并验two-hop/first claimed active-slot runtime/raw-trace projection，独立raw backing保持`-1`，不做factory全局parent推断。本轮无code/content/Scene。
-
-> **B0 F8 owner99 route 3前实施边界已闭合（2026-09-08）：** Authority在`GameSession28::step()`完成战斗tick后消费共享F8/F9 pending，F8的`NativeFunctionKeyDropSpawn28.owner_slot`默认精确99并原样进入`spawn_at`。Unity正式F8当前只写`FunctionKeys.PendingObjectCommand`且无生产consumer；现有`Mode2Request==1 -> SpawnMode2RandomWeapons()`来自legacy diagnostic latch并缺owner。route 2 focused gate现已满足；route 3只给该既有生成task写99并验证slot50/high first claimed active-slot runtime/raw-trace projection；独立raw backing保持`-1`，保留其`requiredRuntimeSlot=-1` lowest-free factory分配，不新增post-register fix-up。physical F8 effect接线仍归B8；`RunNormalDrop`继续默认owner -1，用户保留的candidate/RNG/position不变。本轮无code/content/Scene。
-
-> **B0 direct/stage self-owner focused通过、runtime待验（2026-09-08）：** `NTSD28-B0-DIRECT-ENTITY-SELF-OWNER-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_15_OF_15 / SELFCHECK_BLOCKED_BY_UNRELATED_CPOINT / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_2 / DIRECT_AND_STAGE_SELF_OWNER_ONLY`。direct App/bootstrap在ModuleBind前声明required/self slot，adapter按Authority只接受physical slot `0..19`，actual slot不匹配时统一reset/recycle并跳过roster；stage task携带owner=required，各entity OPoint initializer在首次注册前消费explicit owner，stage/results-reserve最终保持self owner。runtime `0 error / 47 warnings`、Editor进程外compile `0 error / 104 warnings`；重启后的Unity于22:51:33刷新程序集。首轮7/15证明活动实体owner正确但暴露测试错误的raw backing假设；纠正为claimed entity runtime并保护独立raw backing `-1`后，22:51:46实际`15/15`通过。22:52:37 full SelfCheck在更早的既有CPoint throw-Vz断言停止；Play/joint trace仍待验。F8、ordinary OPoint、state9996与其他writer不并入。
-
-> **B0 object-AI target +0x3F8 focused 7/7通过（2026-09-08）：** `NTSD28-B0-OBJECT-AI-TARGET-3F8-DECONFLICTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / 7_OF_7_PASS / SELF_CHECK_BLOCKED_BY_UNRELATED_CPOINT / PLAY_PENDING / JOINT_TRACE_PENDING / RUNTIME_PENDING / B0_OWNER_PRODUCER_PREREQUISITE / EXISTING_STORAGE_REUSED / NO_SCHEMA_CHANGE`。已有`PickerStableId`int现由canonical +3F8入口消费；Authority已闭合的common/4/7/11、5/6 child与specialized 4/12已完成owner/target分离及stale/gate修正。8/9/13、+2F8、schema和raw inactive adapter不并入。Unity compile无CS错误，v2 Unity EditMode focused于20:48实际通过7/7；完整SelfCheck被更早既有CPoint throw-Vz阻塞，Play/joint trace仍待。已满足后继owner producer的compile+focused前置，下一包为direct/stage self-owner。
-
-> **B0 owner-slot production owner已闭合，B2 runtime前置重开（2026-09-08）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / FIELD_BINDING_RETAINED / FORMAL_SELF_OWNER_MISSING / OPOINT_OWNER_PROPAGATION_MISSING / F8_OWNER99_MISSING / TARGET_MULTIPLEXING_CONFLICT / FIVE_ROUTES_DEFINED / B2_RUNTIME_BLOCKED / PRODUCTION_HELD`。Authority direct/stage=self、OPoint/source child=source owner、F8=99、state9996=-1；Unity缺前三类并用OwnerSlot承载+3F8 target。127行中生产59行/18文件。先B0 target deconflict→self/F8/OPoint→exit trace，才恢复B2 runtime。
-
-> **B2 AI owner-slot纠正已写且隔离验证通过，runtime待验（2026-09-08）：** `NTSD28-B2-AI-OWNER-SLOT-KILLCOUNT-CORRECTION-001 / RUNTIME_PENDING / EXACT_OWNER_SLOT_BINDING / LEGACY_KILLCOUNT_DETACHED_FROM_AI / ISOLATED_RUNTIME_AND_EDITOR_COMPILE_PASS / FOCUSED_PURE_PASS / SELFCHECK_BLOCKED_UNRELATED`。Authority `owner_slot>=0`已映射OwnerSlotIndex，SoA/unified/legacy/publisher不再消费KillCount；build 0 error、owner -1/slot0/high OID122/123 harness PASS。SelfCheck被既有CPoint throw Vz断言阻塞，Unity NUnit/Play/joint trace待验。
-
-> **B5 legacy damage/stats owner已闭合，严格顺序回退到B2字段纠正（2026-09-08）：** `NTSD28-B5-LEGACY-DAMAGE-STATS-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_SINGLE_LEGACY_STATS_AUTHORITY / KILLCOUNT_MULTIPLEXED / EARLIER_PHASE_BINDINGS_REOPENED / EXACT_NATIVE_CARRIERS_EXIST / SEVEN_ROUTES_DEFINED / JOINT_SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。`KillCount`同时被当作+0x2F4、AI owner、revival资格、state501/11xx child owner；Authority分别使用exact gate/owner/revival/lifecycle字段。其余legacy entity/world stats与`+0x34C/+0x348/+0x358/+0x1E0/+0x1E4`并行。577行中生产207行/29文件；先B2 AI→B3 child→B4 revival→B5 +2F4/stats，carrier schema还须roster1→2及既有13/20/23。
-
-> **B6 legacy HolderCopy multiplexed-slot owner已闭合，B5前置纠正已完成（2026-09-08，2026-09-09续）：** `NTSD28-B6-LEGACY-HOLDERCOPY-MULTIPLEXED-SLOT-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_SINGLE_AUTHORITY_FIELD / MULTIPLEXED_OWNER_CONFIRMED / EARLY_B5_BINDINGS_CORRECTED / CURRENT_TWO_HOP_GRAPH_WITNESS / ROUTES_SPLIT / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority分别以linked parent、owner、group、control和physical slot表示Unity HolderCopy混合语义。frozen pair/BruteForce/HitPlan已由kind5 correction精确绑定HolderStableId，type3 actual/HitPlan extra write已由本轮退休；current117 ITR-kind2、62 OPoint-kind2及71-row/14-OID/30-pair graph不变。下一严格route回到B5 `+0x2F4`/stats，B6 producer与联合schema仍后置。
-
-> **B6 legacy GrabbedBy relation mirror已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-GRABBEDBY-RELATION-MIRROR-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_SECOND_RELATION_FIELD / CURRENT_OPOINT_WRITER_REACHABLE / LEGACY_READER_ROUTED / TWO_NEW_PACKAGES_PLUS_EXISTING_CONSUMER / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority只以interaction state与linked parent/child slots维护held relation。Unity在current62条OPoint-kind2/39 Character sources写child`GrabbedBy=-1`，而shared117条ITR-kind2不写，证明它不是exact或稳定compat mirror。唯一gameplay readers是已路由退休的raw-kind5 duplicate；carrier进runtime snapshot/ECS fingerprint却不进checksum/parity。后继复用tracker consumer→退nonzero producers→联合carrier/schema。
-
-> **B6 legacy Tracker relation owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-TRACKER-RELATION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_TRACKER_LAYER / CURRENT_OPOINT_WRITERS_REACHABLE / LEGACY_READERS_DEFAULT_BYPASSED / THREE_PACKAGE_SPLIT_DEFINED / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority OPoint kind2/kind5/type3 owner只读reciprocal link。Unity两个factory为current62条OPoint-kind2/56 edges额外写TrackerFlag与managed TrackerParent；shared kind5已按link转换，旧raw readers默认绕过，current13 target OIDs与353 kind5 ITR交集0。后继producer→consumer/cache→联合carrier/schema。
-
-> **B6 object-AI target +0x3F8 owner已闭合（2026-09-08）：** `NTSD28-B6-OBJECT-AI-TARGET-3F8-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / EXISTING_CARRIER_RECLASSIFIED / OWNER_354_CORRUPTION_CURRENT_REACHABLE / THREE_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority +0x354 owner、+0x2F8 excluded source和+0x3F8 target cache独立；Unity specialized OID124已正确使用`PickerStableId` storage，但generic common/4/7/11及5/6 child把target读写到OwnerSlot。current206 common frames、OID219 5→4及9条3→7链可达。后继按carrier语义→common/child producer→既有+0x2F8 consumer执行。
-
-> **B6 legacy WeaponState owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-WEAPON-STATE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_PARALLEL_STATE / BEHAVIOR_RETIREMENT_DEFINED / CURRENT_OID124_WITNESS / CARRIER_SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority只读actual current frame state；Unity独立WeaponState驱动额外1002→2000→3000及Vx halving。OID124 action40..55的16帧state1002/hit_Fa12循环、Tenten/Criminal2 direct spawn和kind2+Naruto clone DVX均可达：tick1 checksum、tick2 motion首差。后继先退休behavior/producer并保留reserved0；carrier删除须与ReleaseTick联合取得schema13/20/23方向。
-
-> **B6 legacy ReleaseTick owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-RELEASE-TICK-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_FIELD_OR_READER / TWO_PACKAGE_SPLIT / CURRENT_RELEASE_WITNESS / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority无对应field/writer/reader；Unity在DVX/kind3/consume写当前tick并纳入canonical copy、ECS fingerprint、checksum/parity。先退休动态producer并暂留reserved-1；删除carrier及snapshot/checksum schema13/20/23需用户方向。current witness为DVX2125、kind3 11116、OID122/123 edges3/35。
-
-> **B6 held missing-action continue owner已闭合（2026-09-08）：** `NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ACTION_WRITE_THEN_CONTINUE / REAL_AND_GENERIC_OWNER / CURRENT_16796_WITNESS / DORMANT_RULES_UNION_RECONFIRMED / PRODUCTION_HELD`。Authority写child action后若frame缺失只diagnostic/continue，保留relation且零RNG；Unity real/generic继续pose/DVX/kind3，real current-frame null gate又阻断下一pass refill/recovery。完整union有16796 rows/2402 triples；cover2/state12/18重验0。production等待cleanup→terminal runtime绿灯。
-
-> **B6 held relation producer domain已纠正并完成后继复核（2026-09-08）：** `NTSD28-B6-HELD-RELATION-PRODUCER-DOMAIN-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ITR_AND_OPOINT_UNION / CURRENT_REACHABILITY_REBASELINED / OWNERS_RETAINED / PRODUCTION_HELD`。完整held域必须合并ITR kind2 pickup与OPoint kind2 direct-link：41 sources/668 edges，而非pickup-only39。current primary WPoint7624、kind3 811、nonkind3 DVX186、terminal33/23 defs全1000；edge-aware missing-action为16796 rows/2402 triples。missing owner已闭合，cover2/state12/18重验0。
-
-> **B6 terminal WPoint structural owner已闭合（relation domain corrected，2026-09-08）：** `NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / FREE_NOT_DESTROY_OWNER / POST_REFILL_PRE_POSE_GATE / CURRENT_33_WITNESS / CORRECTED_RELATION_DOMAIN / PRODUCTION_HELD`。Authority在refill/exhaustion后、child frame/pose/DVX/kind3前无RNG `despawn`；Unity应由held real/generic writer返回transient terminal outcome，world以`StructuralWriter.Free`消费。`Destroy`会增加weapon break audio，明确排除。完整ITR+OPoint union terminal33/23 definitions且全为1000；production须等待entity-link lifecycle cleanup runtime绿灯。
-
-> **B6 Direction-B multiline corpus总纠正已闭合（relation domain后继已应用，2026-09-08）：** `NTSD28-B6-DIRECTION-B-MULTILINE-CORPUS-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ROOT_CAUSE_MULTILINE_OMISSION / CURRENT_REACHABILITY_REBASELINED / OWNER_RULES_RETAINED / PRODUCTION_HELD`。正式projection为WPoint7995/CPoint1426/ITR4437；后继OPoint domain纠正后完整held union为terminal33、kind3 811、nonkind3 DVX186。native impact与OID417 invalid等其他纠正不变；owner保留。
-
-> **B6 kind2 pickup corpus已纠正（2026-09-08）：** `NTSD28-B6-KIND2-PICKUP-CORPUS-CORRECTION-001 / VERIFIED / GOVERNANCE_ONLY / CURRENT_CORPUS_CORRECTED / OWNER_AND_THREE_PACKAGES_RETAINED / PRODUCTION_HELD`。Direction-B frozen projection为117条kind2 / 39 holder definitions与31个supported target frames，不是旧1/1/17；release仍375/53，kind7两端0，target WPoint两端0/0。OID120 witness有效但非唯一，规则/owner/三包保持。
-
-> **B6 positive-link validation retirement owner已闭合（2026-09-08）：** `NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / UNITY_ONLY_MUTATING_PASS_CONFIRMED / POST_LIFECYCLE_RETIREMENT_PACKAGE_DEFINED / PRODUCTION_HELD`。Authority post-catch无独立validation；Unity invalid时单边清holder LinkState、保留其他正反向字段并发额外event。先完成lifecycle cleanup runtime，再退休phase/pass/config/index/parity旧witness；AI relation projection保留，invalid-preserve另包。
-
-> 计划 ID：`NTSD28-UNITY-BATTLE-REALIGNMENT-001`  
-> 建立日期：2026-09-02  
-> 当前状态：`STATIC_INVENTORY_COMPLETE / BUGFIXED_AUTHORITY_PROMOTED_AND_VERIFIED / B3_PLACEMENT_EXIT_READY / B3_FULL_CLOSE_DEFERRED / B4_F02_FRAME_MOTION_VERIFIED / B4_F04_TYPE1_THRESHOLD_VERIFIED / F04_COLLISION_Y_CARRIER_VERIFIED / F04_ALL_NONCHAR_REFERENCE_VERIFIED / F04_TYPE0_ORDINARY_AND_AIRBORNE_VERIFIED / F04_STATUS_MOTION_CARRIER_VERIFIED / F04_STATE12_18_TRANSACTION_COUNTS_VERIFIED / B5_STATUS_PRODUCER_FAMILY_VERIFIED / B5_HIT_RESOURCE_PREREQUISITE_AUDIT_VERIFIED / B5_HIT_DISPLAY_STEP_PRODUCER_VERIFIED / B5_RESOURCE_INJURY_PURE_CORE_VERIFIED / B5_RESOURCE_TRANSACTION_PURE_CORE_VERIFIED / B5_RESOURCE_CARRIER_ATTRIBUTION_AUDIT_VERIFIED / B5_HIT_RESOURCE_SUPPRESSION_CARRIER_VERIFIED / B5_RESOURCE_ATTACKER_RESOLVER_VERIFIED / B5_WORLD_RESOURCE_RULES_F6_AUDIT_VERIFIED / B5_WORLD_HIT_RESOURCE_RULES_CARRIER_VERIFIED / B5_F6_RESOURCE_GATE_PROJECTION_VERIFIED / B5_RESOURCE_PRODUCTION_DEPENDENCIES_ROUTED / B5_DAMAGE_SCALE_EFFECT_AUDIT_VERIFIED / B5_TYPE0_UNARMORED_DAMAGE_SCALE_VERIFIED / B5_NONCHAR_DAMAGE_SCALE_OWNER_AUDIT_VERIFIED / B5_NONCHAR_UNARMORED_DAMAGE_SCALE_VERIFIED / B5_REMAINING_FALLDAMAGEDIV_OWNERS_ROUTED / B5_LEGACY_KIND16_RETIREMENT_VERIFIED / B5_EFFECT_ELIGIBILITY_POSTACTION_AUDIT_VERIFIED / B5_TYPE0_HITPLAN_DAMAGE_SCALE_CORRECTION_VERIFIED / B5_EFFECT_ACTION_OVERRIDE_VERIFIED / B5_KIND0_DIRECT_POST_EFFECT_ACTION_VERIFIED / B5_TYPE3_SPECIFIC_FAMILY_EXIT_READY / B5_STANDARD_HIT_REST_FAMILY_EXIT_READY / B5_ARMOR_REDUCED_HIT_AUDIT_VERIFIED / B5_REDUCED_HIT_REST_PURE_RESOLVER_VERIFIED / B5_ORDINARY_DEFENSE_PURE_RESOLVER_VERIFIED / B5_REDUCED_HIT_DAMAGE_PURE_CORE_VERIFIED / B5_ITR_DEFENSE_FIELDS_CARRIER_VERIFIED / B5_ORDINARY_DEFENSE_NULL_ARMOR_REDUCED_HIT_PRODUCTION_VERIFIED / B5_ORDINARY_DEFENSE_NULL_ARMOR_FAMILY_EXIT_READY / B5_TYPE1_ARMOR_DATA_CONTRACT_VERIFIED / B5_TYPE1_ARMOR_MATCH_PURE_CORE_VERIFIED / B5_TYPE1_ARMOR_ACTIVATION_PURE_CORE_VERIFIED / B5_TYPE1_ARMOR_RUNTIME_INITIALIZATION_AUDIT_VERIFIED / B5_TYPE1_ARMOR_RUNTIME_PROFILE_INTEGRATION_VERIFIED / B5_TYPE1_ARMOR_ATOMIC_PRODUCTION_AUDIT_VERIFIED / B5_DEFINITION_ATTACKING_CARRIER_VERIFIED / B5_TYPE1_ARMOR_HITPLAN_RUNTIME_CARRIERS_VERIFIED / B5_TYPE1_ARMOR_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_TYPE1_ARMOR_EXIT_AUDIT_001_VERIFIED / B5_TYPE1_ARMOR_BREAK_VERTICAL_ORDER_VERIFIED / B5_TYPE1_ARMOR_SPECIFIC_FAMILY_EXIT_READY / B5_HIT_RESOURCE_PRODUCTION_READINESS_AUDIT_002_VERIFIED / B5_UNARMORED_HP_CONSUMPTION_PRODUCTION_VERIFIED / B5_REMAINING_EXIT_AUDIT_VERIFIED / B5_KIND8_ELIGIBILITY_PURE_CORE_VERIFIED / B5_KIND8_PRODUCTION_OWNER_AUDIT_VERIFIED / B5_KIND8_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_KIND8_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_002_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_PURE_CORE_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_PRODUCTION_FILTER_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_003_VERIFIED / B5_MULTI_BODY_CANDIDATE_OWNER_AUDIT_VERIFIED / B5_MULTI_BODY_CANDIDATE_PRODUCTION_VERIFIED / B5_MULTI_BODY_CANDIDATE_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_004_VERIFIED / B5_KIND4_ENVIRONMENT_OWNER_AUDIT_VERIFIED / B5_KIND4_SOURCE_COUNT_CARRIER_VERIFIED / B5_KIND4_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_KIND4_DEAD_WEAPONCOUNT_SELECTION_RETIREMENT_VERIFIED / B5_KIND4_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_005_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_OWNER_AUDIT_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_PRODUCTION_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_EXIT_READY / SCENEVIEW_HIERARCHY_VISIBILITY_VERIFIED / B5_REMAINING_EXIT_AUDIT_006_VERIFIED / B5_SPECIAL_HIT_LATCH_CARRIER_VERIFIED / B5_SPECIAL_HIT_LATCH_OWNER_AUDIT_VERIFIED / B5_SPECIAL_HIT_LATCH_ATOMIC_VERIFIED / B5_REMAINING_EXIT_AUDIT_007_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_OWNER_AUDIT_VERIFIED / B5_WORLD_HIT_GROUP_MODE_GATE_CARRIER_VERIFIED / B5_HIT_CANDIDATE_PAIR_SNAPSHOT_CARRIER_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_PURE_CORE_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_ATOMIC_PRODUCTION_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_CORE_AND_LINKED_PARENT_VERIFIED / B5_REMAINING_EXIT_AUDIT_008_VERIFIED / B5_FIRST_BDY_RESPONSE_OWNER_AUDIT_VERIFIED / B5_FIRST_BDY_RESPONSE_CARRIER_VERIFIED / B5_FIRST_BDY_RESPONSE_PURE_CORE_VERIFIED / B5_FIRST_BDY_RESPONSE_ATOMIC_PRODUCTION_VERIFIED / B5_REMAINING_EXIT_AUDIT_009_VERIFIED / B5_SYSTEM_TABLE_ATTACKER_TERMINAL_VERIFIED / B5_LEGACY_DAMAGE_STATS_OWNER_AUDIT_VERIFIED / B2_AI_OWNER_FIELD_CORRECTION_VERIFIED / B3_STATE501_RETIREMENT_VERIFIED / B3_1100_1299_CHILD_PROPAGATION_VERIFIED / B4_REVIVAL_GATE_BRANCH_VERIFIED / B4_REVIVAL_QUEUED_CONTINUATION_VERIFIED / B4_REVIVAL_NORMAL_FLOOR_RNG_VERIFIED / B4_REVIVAL_EXIT_READY / B5_TYPE3_HOLDERCOPY_EXTRA_WRITE_CORRECTION_VERIFIED / B5_ORDINARY_CREDIT_GATE_2F4_VERIFIED / FULL_ALIGNMENT_INCOMPLETE`
-> 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`  
-> 当前阶段出口：`B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED / NEXT_B6 / FULL_ALIGNMENT_INCOMPLETE`  
-> 本文性质：当前 NTSD 2.8-Logan 对齐工作的唯一差异总表、范围合同和关闭标准；不是已完成证明。
-
-> **B6 kind2 pickup relation已路由（corpus corrected，2026-09-08）：** `NTSD28-B6-KIND2-PICKUP-RELATION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / THREE_PACKAGE_SPLIT_DEFINED / CURRENT_OID120_WITNESS / KIND7_DORMANT_RETIREMENT / PRODUCTION_HELD`。Authority candidate要求attack rising与target state1004/2004；writer按type、weapon_throw表、prior relation写双方link、exact owner/group、conditional +35C、counter0与WPoint final action。Unity kind2漏OID120 promotion/OwnerSlot/conditional count/WPoint tail，反而为两端0语料kind7实现pickup。current/release kind2为117/375、current holders39；OID120 ground frame64可与多个holder构造101-vs-1首差。后续carrier+system rules→pure→atomic actual/HitPlan/legacy，runtime待验。
-
-> **B6 C22 horizontal impulse finalizer standalone已退出（2026-09-08）：** `NTSD28-B6-HORIZONTAL-IMPULSE-FINALIZER-EXIT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / C22_STANDALONE_EXIT_READY / PRODUCER_AND_STAGE_DEPENDENCIES_ROUTED / JOINT_TRACE_PENDING / NO_NEW_PRODUCTION_PACKAGE`。Authority与Unity在motion-hold gate、HitCount/contribution count、pending/motion XYZ、三轴`2/(count+1)`、count≤0清pending但保留motion/negative count、active升序遍历上等价。catch escape误写count与native impact是producer差异，offstage removal归B8 C21；B12 joint trace仍待，故只退出consumer本体。
-
-> **B6 kind2 CPoint旧hurt-action consumer已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CPOINT-KIND2-HURT-ACTION-CONSUMER-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / UNITY_ONLY_HURT_OVERRIDE_CONFIRMED / ATOMIC_ACTUAL_SHADOW_LEGACY_RETIREMENT_DEFINED / PRODUCTION_HELD`。2.8 playable无front/back hit-tail consumer；Unity旧alias进入actual/HitPlan/legacy。current/release front/back rows=170/398且均kind2、无raw injury/cover。后续atomic retirement/schema顺序不变，matrix扩大。
-
-> **B6 CPoint 27-scalar schema已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CPOINT-27-SCALAR-SCHEMA-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / AUTHORITY_27_SCALARS_REQUIRED / RELEASE_DRAIN_WITNESS / CONTENT_STRATEGY_GATED / PRODUCTION_HELD`。current/release CPoint=1426/4019；current front/back170、raw injury298/223、cover142/106、A/T各9，8 missing字段explicit0。release drain600三witness与schema/alias owner不变；先退旧consumer，再versioned schema/resource。
-
-> **B6 catch控制流 fences已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CATCH-CONTROL-FLOW-FENCES-OWNER-AUDIT-001 / VERIFIED / ADVANCE_PACKAGE_AMENDED / SETTLEMENT_PACKAGE_DEFINED / CURRENT_AND_RELEASE_TREE_WITNESS / PRODUCTION_HELD`。Authority mismatch/negative release立即continue；Unity误继续tail且escape写错counter。current kind1/state9/negative=776/760/204，OID417 tree `73→72/130→vaction17`产生40个invalid pairs；release OID555产生134。advance与settlement preflight owners不变。
-
-> **B5 system-DAT attacker terminal首差（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-009 / VERIFIED`确认
-> Authority仅在unarmored/type0 continuation消费`henry_arrow={201}`与`john_biscuit={214}`，而Unity旧
-> `LF2SpecialAttack` post-hit tail会泄漏到armor/defense reduced hit，且214清零时点偏晚。已启动
-> `NTSD28-B5-SYSTEM-TABLE-ATTACKER-TERMINAL-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST`，先固定RED后迁移。
-
-> **B5 system-DAT attacker terminal已验证（2026-09-07）：** `NTSD28-B5-SYSTEM-TABLE-ATTACKER-TERMINAL-PRODUCTION-001 / VERIFIED`。OID214在unarmored writer早期位置清零；OID201预解析route并保留slot到hit-record tail后释放；armor/defense reduced排除、broken fallback保留。RED2+顺序RED，focused11、HitPlan185、B5-149、NTSD28-330、SelfCheck PASS；Scene不变。
-
-> **B5 remaining exit audit 010（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-010 / IN_PROGRESS / GOVERNANCE_ONLY`已从system-table后续target-type/effect/audio/spark/deferred lifecycle与reduced tail开始只读复核；当前不预设下一差异、不改脚本/内容/Scene。
-
-> **B5 reduced state2000首差（2026-09-07）：** audit010已`VERIFIED`：Authority以double X只在attacker
-> 明确向远离target方向（含零速度）时`/2.5`衰减X/Z，equal不衰减；Unity actual/HitPlan使用XInt
-> 与toward极性。正式OID150 type2 `w/1.dat` state2000 kind0可达。
-
-> **B5 reduced state2000 away damping已验证（2026-09-07）：** `NTSD28-B5-REDUCED-STATE2000-AWAY-DAMPING-PRODUCTION-001 / VERIFIED`。actual与HitPlan现共享double-X严格away predicate；RED10、focused14、HitPlan185、B5-813，NTSD28 broad唯一MCP日志污染项isolated1通过，SelfCheck PASS；Console0、Scene unchanged。B5尚未exit，下一audit011。
-
-> **B5 remaining exit audit 011（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-011 / IN_PROGRESS / GOVERNANCE_ONLY`从state2000分支之后继续只读核对reduced余尾、unarmored/non-character continuation、hit-record与命中后生命周期；当前不预设下一差异，不改code/content/Scene。
-
-> **B5 native combo runtime首差（2026-09-07）：** audit011已`VERIFIED`：Authority正式combo记录为`bound1/facing1/respond50/caughtact1`，applied ordinary hit生产专用count/last tick并在C25后到期；Unity没有等价entity/world载体、producer或实际`CoreComboExpire`。已启动owner audit；输入combo、伤害累计和B10 HUD不得混用。
-
-> **B5 native combo owner拆分（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-RUNTIME-OWNER-AUDIT-001 / VERIFIED / FIVE_PACKAGE_SPLIT_DEFINED`。先carrier，再ordinary producer与C25后expiry；caughtact依赖B6，显示归B10，正式tuple激活归H。当前已启动carrier test-first包。
-
-> **B5 native combo carriers已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-CARRIERS-001 / VERIFIED / CARRIERS_READY / BEHAVIOR_UNCONNECTED`。entity count/lastTick与world record/bound/facing/respond/caughtact已进入reset/copy/ECS/snapshot/checksum/parity/restore；focused6、related29、B5-819、NTSD28-1166与fresh SelfCheck通过，Scene unchanged。默认tuple仍关闭；ordinary producer、expiry、B6 caughtact、B10显示和H激活均未连接。
-
-> **B5 native combo ordinary producer已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-ORDINARY-PRODUCER-001 / VERIFIED / PRODUCTION_ROUTED / FORMAL_TUPLE_INACTIVE`。shared runner仅在普通Damage dispatch成功后按捕获slot回查并执行bound、target type0、facing、non-type0 one-hop owner与当前process tick生产；focused7、B5-826（MCP污染项isolated1）、NTSD28-1173、fresh SelfCheck、Console0通过，Scene unchanged。不接expiry、B6 caughtact、B10显示或H正式tuple。
-
-> **B5 native combo expiry已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-EXPIRY-001 / VERIFIED / CORE_COMBO_EXPIRE_ROUTED / FORMAL_TUPLE_INACTIVE`。C25 live-slot尾后按record/negative-respond gate和inclusive elapsed扫描active slots，只清positive count并保留lastTick；focused5、B5-831、NTSD28-1178、fresh SelfCheck、Console0通过，Scene unchanged。不接B6 caughtact、B10显示或H tuple激活；下一步重新执行B5 exit gate。
-
-> **B5出口门已闭合（2026-09-07）：** `NTSD28-B5-EXIT-GATE-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED`。连续first-difference scan已覆盖到Authority hit tail与combo expiry后的driver return，没有新的独立B5首差，下一阶段进入4.8/B6。B6/B7/B8/B10/B11/H与最终joint trace仍后置，不能称整个命中系统完全一致；C-07旧“全局终止”已更正为per-attacker candidate abort。
-
-> **B6入口审计已启动（2026-09-07）：** `NTSD28-B6-ENTRY-CATCH-SETTLEMENT-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。从post-hit catch relation advance、catch settlement、held/cpoint与horizontal/depth impulse tail开始只读核对，选择B6首个production差异；caughtact combo与cpoint resource等待真实settlement injury event。当前不改code/content/Scene。
-
-> **B6入口首差已路由（2026-09-07）：** `NTSD28-B6-ENTRY-CATCH-SETTLEMENT-AUDIT-001 / VERIFIED / CPOINT_THROW_SETTLEMENT_ROUTED`。Authority post-hit顺序与正式4019-CPoint corpus已闭合。完整A/T/D/UZ/DZ/F/B/J输入覆盖规则在Unity不完整，但正式corpus无这些显式action字段；首个正式内容可达差异是kind-1 throw：75条非零throwvx，6条同时最终正throwinjury时Unity误写WeaponCount且漏resource/environment写入，全部throw在无独占depth输入时还会误清Vz。已启动owner audit；held settlement与caughtact combo保持后置。
-
-> **B6 CPoint throw owner审计（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-OWNER-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。只读冻结formal CPoint字段、B5 resource helper、Environment carriers、actual writer、HitPlan/trace与测试拆分；当前不改code/content/Scene。
-
-> **B6 CPoint throw owner已闭合（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-OWNER-AUDIT-001 / VERIFIED / ATOMIC_PRODUCTION_SPLIT_DEFINED`。首差只需修改BattleCpointWriter actual，复用B5 resource pure core与现有Environment/parity carriers；CPoint advance不属于HitPlan。正式throw的drain/gain均0，完整schema扩展与held settlement后置。已启动atomic production test-first包。
-
-> **B6 CPoint throw atomic production（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-ATOMIC-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST`。先以focused RED固定正injury资源/environment/self-source、WeaponCount sentinel、exclusive/nonexclusive depth Vz；随后原子修改actual与既有错误断言。不改content/Scene/HitPlan。
-
-> **B6 CPoint throw范围纠正（2026-09-08）：** 编译后复核既有B5 readiness，发现完整MP transaction仍受B7 child suppression、B8 selected-mode override与B11/H authoritative baseMax阻塞，不能用Unity MPMax代替。`NTSD28-B6-CPOINT-THROW-ATOMIC-PRODUCTION-001`已`SUPERSEDED / NO_VERIFICATION`；当前`NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / IN_PROGRESS`先移除该错误接线，只实现resource-attacker存在时display lead、environment/self-source、WeaponCount exclusion与exclusive-depth Vz。Unity batch两次在Test Runner前被Licensing IPC返回199，运行时验收明确待恢复。
-
-> **B6 CPoint throw可精确子集代码已写（2026-09-08）：** `NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / RUNTIME_PENDING / ISOLATED_COMPILE_PASS / FULL_RESOURCE_DEFERRED`。invalid MP transaction已移除；actual、8-case focused test、SelfCheck与grab probe断言已同步。isolated Runtime47 warnings/0 errors、Editor104/0、source contract7/7、Ledger355/307和Scene SHA不变；Unity Test Runner两次因Licensing IPC 199未启动，所以没有focused/SelfCheck/Play证据，不能标记已验证。
-
-> **B6 CPoint throw许可重试3（2026-09-08）：** 确认stale lock PID不存在后启动单一focused batch；Unity虽拉起LicensingClient，`LicenseClient-Logan` IPC等待60.01秒后仍未建立，return199且无XML。因此仍是Test Runner未启动，throw package保持`RUNTIME_PENDING`。
-
-> **B6 CPoint throw许可诊断终点（2026-09-08）：** 第四次无密钥Hub IPC启动能与versioned client handshake，但因无Hub token而exit1；Hub CLI又因沙箱AppData write EPERM无法代理启动。不使用日志中的任何敏感凭据，停止许可尝试。累计4次均未进入Test Runner、无XML，仍`RUNTIME_PENDING`。
-
-> **B6 post-throw settlement审计（2026-09-08）：** `NTSD28-B6-POST-THROW-SETTLEMENT-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。只读继续核对dircontrol、held injury/cover/position、caughtact combo和后置held/stage settlement，选择下一正式可达差异；不以read-only进度替代throw尚缺的Unity运行时验收，也不提前连接full MP resource。
-
-> **B6 post-throw settlement首差已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-POST-THROW-SETTLEMENT-AUDIT-001 / VERIFIED / HELD_INJURY_ACCOUNTING_ROUTED`。release正injury484；current kind1正injury223、cover0:205/1:15/11:3。Unity canonical accounting与timer首差不变；settlement preflight另有OID417/40-pair current witness。
-
-> **B6 held-injury owner已闭合（2026-09-08）：** `NTSD28-B6-HELD-INJURY-ACCOUNTING-OWNER-AUDIT-001 / VERIFIED / TWO_PRODUCTION_PACKAGE_SPLIT_DEFINED / FULL_RESOURCE_DEFERRED`。第一包只闭合display lead、incoming scale、直接owner/type0-self credit、HP/HPBound/HP-consumed/score/KO和cover timers，不写legacy stats；第二包在整个settlement后聚合caughtact event并复用B5 combo producer。KO world feed需后续独立owner；完整MP resource仍受B7/B8/B11/H阻塞。throw runtime未验前不叠加新code。
-
-> **B6全局入口顺序纠正（relation domain rebased，2026-09-08）：** `NTSD28-B6-HELD-WPOINT-ENTRY-CORRECTION-AUDIT-001 / VERIFIED / GLOBAL_B6_ORDER_CORRECTED / WPOINT_KIND3_ROUTED`。C09早于geometry；release kind3=2744，完整current held-union=811且已有authored overlap。refill仍更早，kind3与terminal均为current后继。
-
-> **B6 WPoint kind3旧owner已被纠正（2026-09-08）：** `NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-AUDIT-001 / SUPERSEDED / CORRECTED_BY_NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-CORRECTION-001`。四draw和final-write事实仍保留，但sole-`DropRandomly()`实施边界无效；以下correction为唯一后继。
-
-> **B6 WPoint kind3 owner纠正（relation domain rebased，2026-09-08）：** `NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-CORRECTION-001 / VERIFIED / TWO_ACTUAL_BRANCHES_DEFINED / PRODUCTION_HELD`。Authority DVX后继续kind3，Unity提前return；完整current held-union kind3=811且Rock Lee255已有authored DV overlap，原770是pickup-only，release2744/5。双owner不变。
-
-> **B6 C09更早refill分支纠正（2026-09-08）：** 在kind3 tail之前，OID122 HP=1或OID123 HP=2就会当次exhaust。Authority写random Vx、Vy=0并保留Vz，Unity写Vy=-8/Vz=0；OID123对HP<=0仍应执行，且+0x2F4 nonnegative应cap child MP，Unity却早退/误用KillCount/误cap holder。因此global next改为`HELD_REFILL_MP_EXHAUSTION_ROUTED`，kind3降为subsequent package。
-
-> **B6 held-refill MP/exhaustion owner已闭合（2026-09-08）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-OWNER-AUDIT-001 / VERIFIED / ACTUAL_ONLY_PACKAGE_DEFINED / HP_BASEMAX_DEFERRED`。唯一actual是`LF2WeaponHeldStateResolver.ProcessDrinkConsumption()`：修OID123 nonpositive entry、`OrdinaryCreditGate2F4`的child MP cap、以及OID122/123共享exhaustion的one RNG/Vy0/Vz preserve。OID122 HP/baseMax clamp仍归B11/H；throw runtime未验前未启动production。
-
-> **B6 held-refill MP/exhaustion暂停于Play前（2026-09-09）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001 / RUNTIME_PENDING / FOCUSED_7_OF_7 / C09_RELATED_2_OF_2 / BUILDS_0_ERROR / PLAY_PENDING / SELFCHECK_BLOCKED_UNRELATED_R2_CPOINT_SYNC / HP_BASEMAX_DEFERRED / USER_HOLD`。OID123 entry/+0x2F4 child cap与OID122/123 exhaustion motion的7-case和C09 placement已真实通过；专门Play仍待，OID122 baseMax继续归B11/H。
-
-> **B6 held DVX weapon HP首差已路由（2026-09-08）：** `NTSD28-B6-WPOINT-DVX-WEAPON-HP-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SUBSEQUENT_WEAPON_HP_PRESERVATION_ROUTED / PRODUCTION_HELD`。Authority non-kind3 DVX release不写`weapon_hp_31c`，Unity real type1/2/4/6却在唯一`OnThrown()`中将`WeaponFlightCounter`恢复为definition值。当前/release non-kind3 DVX WPoint为3/599，受损后拾取再投掷可达。下一actual仅移除该重置，但排在kind3之后；+0x2F8、generic Vz、terminal/invalid/cover2/damaged-drop继续独立审计。
-
-> **B6 held DVX +0x2F8 carrier已拆分（2026-09-08）：** `NTSD28-B6-WPOINT-DVX-EXCLUDED-GROUP-CARRIER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / THREE_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority字段默认-1，仅由type1/4/6 held DVX写holder slot，并在native non-character AI common path排除其battle group；Unity `SpawnerSlotIndex`含respawn/lifecycle等额外writer，不能严格复用。后续按独立carrier→held writer→AI consumer实施，consumer前再确认C02/legacy actual；当前runtime stack未清，未改code/content/Scene。
-
-> **B6 invalid held reciprocal旧reachability状态已关闭（2026-09-08）：** `NTSD28-B6-HELD-RECIPROCAL-FAILURE-AUDIT-001 / SUPERSEDED / REACHABILITY_RESOLVED_BY_NTSD28-B6-HELD-RECIPROCAL-LIFECYCLE-REACHABILITY-AUDIT-001`。missing/mismatch同状态差异与terminal/cover2/current referenced-action统计继续有效，但动态可达已由以下despawn/reuse审计解决。
-
-> **B6 held relation lifecycle可达已确认（2026-09-08）：** 上述pending已由`NTSD28-B6-HELD-RECIPROCAL-LIFECYCLE-REACHABILITY-AUDIT-001 / VERIFIED / LIFECYCLE_REACHABILITY_CONFIRMED / ATOMIC_DESPAWN_LINK_CLEANUP_REQUIRED / PRODUCTION_HELD`解决。Authority `despawn()`在slot reset前全局清held/catch反向引用与rest column；Unity `ReleaseRuntimeSlot()`不清其他active实体且可same-tick reuse，所以invalid C09/C20清零是下游补偿，并存在旧child误认新occupant的physical-slot ABA窗口。修复必须先审计完整held/catch exact字段与structural owner，再原子cleanup，最后更正invalid handler；不能局部改一行。
-
-> **B6 entity-link lifecycle cleanup owner已闭合（2026-09-08）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / TWO_PRODUCTION_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority held/catch字段分别映射到LinkState、TargetSlotIndex、HolderStableId、CaughtSlotIndex、CatchSourceSlot90与CaughtDuration；CatcherSlotIndex/HeldWeaponStableId只作为compat同步，HolderCopy与Kind4 count不清。Unity adaptation在`RuntimeSlots.Release()`成功后、registry方法返回和任何reuse前完成无间隙扫描；先实现cleanup并取runtime证据，之后才更正invalid handler。
-
-> **B6 entity-link lifecycle cleanup production已闭合（2026-09-09）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-PRODUCTION-001 / VERIFIED`。`BattleEntityLinkLifecycleWriter`只由registry成功release事务调用，按slot升序清child/parent/catch target/source与必要compat references，并通过relation property发布；HolderCopy、Kind4、owner/Spawner、action/motion/RNG保持。focused7、B6 category15、相邻91、Play7和build0-error通过；full SelfCheck越过本包P7夹具后停在独立held accounting。测试曾自动保存HUDBg active状态，已恢复到进入本包前SHA `89AA…A673`并重新加载；本包无Scene交付。test-first fixture先写但没有实际RED run，证据明确标为`RED_NOT_EXECUTED`。
-
-> **B6 invalid negative-held reciprocal production已闭合（2026-09-09）：** `NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001 / VERIFIED`。C09/C20的out-of-range/inactive/mismatch不再清Link或刷新snapshot，只累计last/total诊断并在sink开启时发布reasoned preserved trace。RED2、focused7、B6 category22、clean adjacent47与Play7通过；宽回归仅6个独立NativeInputProxy旧比较失败。full SelfCheck回到held accounting首差；Scene reload自动保存副作用已恢复到`89AA…A673`，无Scene交付。
-
-> **B6 catch relation exact-field owner已闭合（corpus rebased，2026-09-08）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ATOMIC_ACTUAL_AND_SHADOW_PACKAGE_DEFINED / PRODUCTION_HELD`。Unity actual/HitPlan漏exact `CatchSourceSlot90`；current/release kind3=249/548，current249均有catching/caught pair且respond0。compat只作mirror，atomic actual+shadow owner不变，current matrix扩大。
-
-> **B6 catch relation exact-field production已闭合（2026-09-09）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001 / VERIFIED`。actual strict kind3与HitPlan shadow同时实现first/signed、双frame preflight、exact source、compat mirror、respond与no-op unsupported；focused19、B6 41、HitPlan185、NTSD28 167、Play19和build0-error均通过。full SelfCheck越过本包后仍停在held accounting；Scene保持`89AA…A673`。下一mixed catch control-flow fences。
-
-> **B6 held WPoint规则分类已二次纠正并复核（2026-09-08）：** `NTSD28-B6-HELD-WPOINT-DORMANT-RULES-AUDIT-001 / VERIFIED / CORRECTED_BY_MULTILINE_AND_RELATION_DOMAIN_AUDITS / DORMANT_RULES_UNION_RECONFIRMED / PRODUCTION_HELD`。current WPoint全量7995、完整held-union primary7624，terminal33已current reachable且owner已闭合；kind3 811、nonkind3 DVX186。cover2与referenced state12/18在668-edge union仍0，generic Vz/damaged-drop其余边界保留。
-
-> **B6 catch advance slot顺序首差已路由（2026-09-08）：** `NTSD28-B6-CATCH-ADVANCE-SLOT-ORDER-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SINGLE_ASCENDING_MIXED_PASS_REQUIRED / EXACT_CONSUMER_PACKAGE_DEFINED / PRODUCTION_HELD`。Authority `advance_catch_relations()`在一个升序loop内逐slot以snapshot-kind1否则current-kind2分派；Unity却先全体kind1再全体kind2，故低槽caught会被错误地按高槽catcher变更后的状态校验。当前2条throw仅vaction180/181且无kind2 definition交叉匹配；release有Hinata/Neji两条action343 `throwvx5/vaction132/next344(state15)`，并有134个type0 definition的action132为kind2。后续production必须重建single mixed pass并迁exact `CatchSourceSlot90` consumer，同时保持settlement为独立后续pass；真实输入Play仍待验，本轮无code。
-
-> **SceneView/Hierarchy 可见性修复（2026-09-06）：** 用户明确要求 Play 时不再出现无逐对象
-> Hierarchy 条目的中央战斗像素。`BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001 / VERIFIED` 已将
-> production camera gate 收窄为 exact Base world camera；真实 Play 在 world frame 19 commands/7
-> segments 有效时，SceneView gate=false、lease=false、isolated pixels=0；benchmark runner、presenter、
-> render children与camera也统一为`DontSave`但Hierarchy可见。该修复不改变战斗状态、Game View、
-> 中央 Mesh 架构或 Edit Mode 中由可见 `BattleCentralEditorPreview` owner 控制的显式预览。
-
-> **新版权威恢复结论（2026-09-04）：** 用户确认指定root变化来自其修复NTSD 2.8-Logan Bug，并要求继续。
-> 当前`B1E13AE1...9033` EXE与82-file playable C++/header `39DDDA15...6109` closure manifest已正式晋升；旧
-> `1277B70B...DAF75`/`C59BD8D3...2D75`只保留为历史比较。新版改变了core pass顺序，B0～当前B3
-> 受影响合同正在显式重新基线，禁止只换hash后继承旧pass证书。详见
-> `GOVERNANCE-NTSD28-AUTHORITY-PROMOTION-002`。
+文档验证实测：原141个差异ID全部保留，118行状态/说明已更新，23行沿用经复核的已有状态或用户例外；无ID丢失。旧页首历史段移至本文件文末，除行尾空白规范化外内容逐行一致。`git diff --check`通过；`git diff --name-only -- '*.cs' '*.ps1' '*.shader'`为空。前次文档重排曾触发行尾空白检查失败，已仅修正移动段的空白后复查通过。未运行ChangeLedger validator，因为本轮无脚本修改、无新runtime Change。
+
+### 0.8 当前确实需要调整的脚本与依赖
+
+以下是本轮代码与权威交叉核验后能够定位的修改点；不是重新实现全部 B0～B6。路径相对仓库根；行号是 HEAD `6276c912` 的读取位置，后续修改后以符号为准。
+
+| 优先项 / 关联 ID | 当前脚本位置与已观察事实 | 应调整的内容 / authority |
+|---|---|---|
+| H-接入 / D-06 | `Assets/NTSD/Scripts/Animation/GameDataManager.cs:44,160`；`Animation/Manager/CharacterAnimtorManager.cs:446,558,851` 仍按旧Config/DAT目录解析。 | 独立registry/DAT/sprite根与逻辑key。正式 `game_session.cpp:1153` 使用decoded_dat与vfs；Naruto `c/nar/nar.dat` 引用 `c/nar/nar.png`，不能在DAT目录下再拼同路径。 |
+| H-PNG / D-07 | `Animation/Manager/CharacterAnimtorManager.cs:1364,1408` 在线程池读取；`Animation/Runtime/BMPLoader.cs:57` 后台直接进入BMP手动解析。 | 为正式PNG建立安全的像素解码与publication路径，覆盖sheet/head/small及alpha。主线程LoadImage存在不能证明当前后台路径支持PNG。 |
+| CPoint / W-02 | `DatParser/Runtime/Utils/Lf2DatConverter.cs:220` 有front/back→injury/cover alias；`Simulation/DataContracts/CatchPoint/BattleCatchPointValueAdapter.cs:13`、`BattleCatchPointCatalog.cs:13` 只承认19字段。 | 按 `combat_records.h:56` / `combat_records.cpp:120` 补27个独立scalar、去alias并接资源/settlement消费者。缺失8项为faction/baction/uzaction/dzaction/z/recover/drain/gain。正式hir/min/sag action414存在drain600 witness；旧hurt consumer已退，不重做Goal17。 |
+| OPoint / L-01、F-05 | `DatParser/Runtime/Utils/Lf2DatConverter.cs:153`、`Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs:12` 仅8 scalar。 | `object_spawning.cpp:15` 实际解码24个内容scalar，另source_line为元数据。缺16项z/dvz/hp/mp/team/reserve/effect/pic/centerx/centery/centerz/framea/attacking/join/join_reserve/join_pic；随后同步factory/logic materializer/respawn，不能只扩DTO。 |
+| B6 +2F8 | `Animation/LF2Objects/LF2WeaponHeldStateResolver.cs:114` 写Spawner；`LF2Entity.cs:2388`、`LF2WeaponFrameLogicResolver.cs:230` 读取，但该carrier另被spawn/respawn等写入。 | `battle_world.cpp:8025` 的held type1/4/6 DVX专属source与 `native_ai.cpp:281` 的excluded-group consumer需独立语义；不能用通用Spawner/Owner冒充+2F8。列入精确字段与联合schema清单。 |
+| E mass / schema | `Animation/LF2Objects/LF2Character.cs:77,1103`、`Animation/Character/CharacterMechanics.cs:374`、`Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs:14` 仍传递/保存mass。 | 退休无当前authority的mass gate与carrier；正式type0默认为1，属遗留潜在差异而非已测玩家移动故障。复用mass owner审计，不只把初始化改为1。 |
+| D-022 reserved迁移 | `NTSDEntityRuntime` 保留GrabbedBy/ReleaseTick/HolderCopy/Tracker/WeaponState；runtime snapshot12、aggregate20、checksum23、character shell1仍在。 | Goal20已退行为，下一按已有联合路线处理声明字段、ECS/hash/capture/restore和版本；CPoint/OPoint内容契约与runtime schema分别声明依赖，不凭本表擅加第二次不兼容窗口。 |
+| B7 slot tail / L-02～L-07 | `Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs:48`、`Animation/Character/LF2ObjectPointFactory.cs`、`Simulation/Runtime/BattleLogicObjectPointRuntime.cs` 已有结构flush，但完整字段/materializer和terminal顺序尚未闭合。 | 跟随新OPoint合同验证重复zero-frame、已扫描低slot/未扫描高slot、fragment/terminal/reset；已有flush、previous commit及关系cleanup保留。需要逐分支首差再定最终改动清单，不把所有deferred机制判错。 |
+| B8结果 / G-05、G-06 | `Simulation/Ecs/Results/BattleResultsOutcomeHostWriter.cs:31,96` 使用HP>0、两bucket、HadBoth和>=11。 | 按 `battle_flow.cpp:16,42` 改living groups、revive_lives与group5排除、timer80/101/350和144后continue；结果UI排除保持。 |
+| B9排序 / P-04 | `Simulation/Stage/SimulationStageRenderModule.cs:812`、`Simulation/Presentation/BattlePresentationShadowBuild.cs:2496` 同Z都slot升序。 | 按 `render_snapshot.cpp:2265` 改同深度较大slot先绘制，并验证central排序与遮挡。 |
+| B9插值 / P-01、P-02 | `Simulation/Host/SimulationTickDriver.cs:904` 算alpha；`Animation/Rendering/BattleCentralRenderSystem.cs` 消费单published frame。 | 复用当前publication，增加previous/current展示消费及identity/teleport断点保护，保持逻辑只读；按 `presentation_interpolation.cpp:41` 验30/60/120。 |
+| B9命令 / P-05～P-13 | `Simulation/Presentation/BattlePresentationShadowBuild.BuildCommands`、`BattleCommonShadowDescriptor`、`BattleEntityOverlayLayout` 未闭合custom shadow/bleed/lives/nameplate/combo/earthquake。 | 按 `render_snapshot.cpp:1596,1777,1823,1857,1942` 与session earthquake接资源/gate/order。spark年龄已验证，只补资源/绘制；旧oscillate仅producer退休，native shake仍待。 |
+| B10声音 / O-01～O-04 | `App/NTSDSoundPlayer.cs:280` 有Time.time节流和随机音高/音量；`Simulation/Input/NTSD28NativeFunctionKeyRouter.cs:193` 只路由音量命令。 | native audio event/channel/voice cap/BGM/stop/衰减与实际音量消费需闭合；先证实正式cue下哪些配置触发差异。QueueSound和checksum后publication已存在，复用设施。 |
+
+### 0.9 已完成子集与只需补验的边界
+
+| 已有成果（不得重做） | 当前证据入口 | 仍未涵盖 |
+|---|---|---|
+| 33/3 ms、Host debt、pause/step | `NTSD28-B1-TIME-HOST-EXIT-AUDIT-001` | OS物理键、长期时间线、worker启用后的复验。 |
+| 输入phase/proxy/combo、双RNG/AI基础、功能键生产路由 | `NTSD28-B2-EXIT-GATE-AUDIT-001`及其最终addendum：本阶段职责已关闭，physical Play通过 | 非AI消费者、功能键effect及正式新DAT自然技能/整场trace由下游阶段接管；不得因此重新打开整个B2。 |
+| motion/teleport/physics/revival及C25多项owner | B3/B4具名production Record；`NTSD28-B3-EXIT-GATE-AUDIT-001`、`NTSD28-B4-REVIVAL-EXIT-AUDIT-001` | placement/core专项不能关闭所有生成、资源、terminal和画面。 |
+| B5大部分候选/伤害/护甲/rest/combo/credit规则族 | 第4.7节当前C行与各B5具名Record | full candidate/fast path/多attacker joint trace与正式内容覆盖。 |
+| catch exact/mixed/preflight/accounting/caughtact与原子link cleanup | 当前W-01/L-08及B6具名Record | 完整CPoint资源、world KO、OPoint生命周期。 |
+| held refill、kind3 release、terminal结构子集 | B6 HELD-REFILL-MP-EXHAUSTION、WPOINT-KIND3-RELEASE、WPOINT-TERMINAL-STRUCTURAL Record | HP/baseMax、正式全部资源与自然技能链。 |
+| pickup P1/P2/P3 | 三个 `NTSD28-B6-KIND2-PICKUP-…-PRODUCTION-001` Record | P3 140 focused/两Play/6记录117字段不等于ITR+OPoint union全量通过。 |
+| Goal17～20退休与shared impact/selector | 本文第5节及原Goal17～20最终收尾 | mass/reserved载体还在；schema尚未迁移。 |
+| central Mesh增长修复 | `NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001` | mesh稳定不等于插值、排序、资源和全部命令对齐。 |
+
+**本轮纠正的 authority 描述：** 两个hit caller loop之间有random drop；timer/armor/rest/healing为逐slot而非全局后扫，只有ordinary combo expiry在loop后。已有Unity结构与这些正式顺序相符的部分保留，禁止根据旧总表误改。正式EXE哈希再次核验一致；源码辅助行与build参与性沿当前入口读取，本轮未重建全closure哈希，也未签发整域运行证书。
+
+### 0.10 B1～B12 阶段状态总览（2026-09-12 出口记录复核）
+
+本节补充**阶段级状态**，第 4 节保留行为域的细项状态。阶段出口 Record 的 `VERIFIED` 表示该份出口审计通过，不自动等于整个行为域 `ALIGNED`。本次只将已有证据准确汇总，不新增运行时完成证据，也不修改历史 Record 状态。
+
+| 阶段 | 当前阶段结论 | 已关闭职责 / 证据 | 剩余工作及归属 |
+|---|---|---|---|
+| B1 时间与 Host | **当前生产路径的阶段职责已完成**；`B1_CURRENT_PRODUCTION_READY` | 33/3 ms、debt cap、暂停/单步/F5，focused、编译和实际Play；[B1出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B1-TIME-HOST-EXIT-AUDIT-001.md)。 | OS物理键与长跑归B12；B9解除presentation绑定、启用worker时触发B1复验。当前不重新实现Host。 |
+| B2 输入、双RNG、AI基础与功能键路由 | **本阶段基础与路由职责已关闭**；`B2-EXIT-READY` | 输入phase/proxy/combo、双RNG/AI基础、non-AI调用点crosswalk、功能键route/carrier/production与physical Play；[B2出口及最终addendum](../../../docs/ai/CHANGE-RECORDS/NTSD28-B2-EXIT-GATE-AUDIT-001.md)。 | non-AI实际consumer和功能键effect归B3/B5/B8/B10/B11；结果输入归B8，LFR adapter有条件处理，正式内容与自然技能/整场trace归B11/B12。下游未完不撤销B2已关闭职责。 |
+| B3 主pass骨架 | **顺序骨架出口通过，整阶段未完全关闭**；`B3_PLACEMENT_EXIT_READY / FULL_CLOSE_DEFERRED` | 多个pass位置、两个hit caller循环及C25多个入口/owner；[B3出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B3-EXIT-GATE-AUDIT-001.md)。 | residual serial、terminal、生成及跨阶段尾部由B4/B5/B7/B8接管；最终逐pass trace待B12。只处理残余，不重排已正确的骨架。 |
+| B4 Frame / Physics / Revival | **多个核心子集已完成，整阶段未完全关闭** | motion、teleport、多项physics与复活gate/queued/normal已有专项；[复活子集出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B4-REVIVAL-EXIT-AUDIT-001.md)。 | 完整资源更新、OPoint复活字段/视觉producer、碎片/terminal及新版内容验证归B7/B8/B10/B11/B12；复活子集出口不是整个B4出口。 |
+| B5 Collision / Hit / Armor / Damage / Combo | **独立规则主线出口通过，整阶段未完全关闭**；`B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED` | 大量candidate/hit/armor/damage/rest/combo/credit规则族已验；[B5出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B5-EXIT-GATE-AUDIT-001.md)允许进入B6。 | 出口审计时未发现额外独立B5首差；catch/resource/content/presentation/lifecycle及最终joint trace仍后置B6/B7/B8/B9/B10/B11/B12。保留后续具名修正，不把出口放行写成整域完成。 |
+| B6 Catch / Held / Weapon / E | **大量子包已完成，整阶段未完成** | catch exact/accounting/caughtact、pickup P1/P2/P3、refill子集、impact、compat selector及Goal17～20退休；见第0.9/5节。 | CPoint27、+2F8、mass、reserved字段与D-022联合schema、完整资源/技能链未闭合。既有退休包不再实施。 |
+| B7 OPoint / Spawn / Lifecycle | **未完成，已有部分基础与子集** | 部分owner、结构flush、关系清理、previous commit及slot/generation能力已存在。 | OPoint24字段、全部materializer、重复zero-frame、birth visibility、fragment/terminal/reuse及最终关闭联验仍待。 |
+| B8 Stage / BattleFlow / Results | **未完成，存在确认的逻辑差异** | 部分clamp位置、模式/结果设施已存在。 | 存活组与复活资格、80/101/350及continue时点、非例外stage/mode/event需要修改和联验；默认stage.dat部署仍暂缓。 |
+| B9 战斗表现 | **未完成，已有表现设施与限定修复** | publication、central renderer、C01 spark推进及Mesh增长修复已有成果。 | 同Z排序、previous/current插值、custom shadow/bleed/lives/nameplate/combo/earthquake、正式资源与画面验收未闭合。 |
+| B10 Audio | **未完成，已有队列与路由设施** | QueueSound、checksum后publication、播放器和F11/F12输入路由存在。 | native事件时序/channel/voice/BGM/stop/衰减及实际音量命令消费未闭合。 |
+| B11 H-Content | **目标已确定，迁移未完成**；`CONTENT_TARGET_DECIDED / MIGRATION_NOT_STARTED` | D-023已确认DAT/角色相关图片采用NTSD2.8-Logan。 | parser/loader/PNG/root前置、引用重绑、分批迁移和新内容覆盖验收仍待；不是策略待定。 |
+| B12 全场景parity验收 | **完整集成验收未完成** | 已积累各子包测试、trace和Play证据。 | 同一最终版本、新DAT/图片下的完整角色技能/整场trace/视听/长跑/退出重进尚未完成，不能拼接局部PASS代替。 |
+
+**实施队列规则：** B1/B2已关闭职责移出待实现队列；新发现的具体首差或上表指定触发条件另建复验/修复包，不能整体重开。B3/B5只保留未接管残余和最终联合出口，B4/B6按未闭合子包推进。B7～B11按依赖补齐，B12承担完整集成验收。所有阶段尚未获得“含全部下游依赖与新版内容终验的整域最终证书”，这不抹除B1/B2阶段成果。
+
+### 0.11 执行优先级队列（2026-09-13）
+
+队列标识：`NTSD28-PRIORITY-DEPENDENCIES-20260913`。Q01～Q12是本总表内的稳定工作组ID，**不是新增Change ID，也不代表代码已启动**。具体实现必须拆成最小闭合Task/Change并登记精确路径；不得把一行跨模块工作一次性全部实施。
+
+当前游标：`EXECUTION=USER_HOLD / PREPARED_BATCH=BATCH-01 / NEXT=Q01 / ACTIVE=NONE / READY_RETURNS=NONE / FULL_ALIGNMENT_INCOMPLETE`。
+Q01已具备依赖条件，但按用户“只准备不执行”的最新要求保持`PREPARED_HOLD`；其余项为`WAIT_DEPENDENCY`且同受执行暂停约束。没有任务可以据本队列自动启动。完成既有包的证据仍在原Record，不能把本队列初始状态反向解释为旧包未完成。
+
+**选包算法（仅在第0.14节执行暂停已由用户明确解除后适用）：** 先检查R表是否有已触发的回访；有则先处理受影响范围的回访。随后从下表按序号选“硬前置已满足且在当前已启动批次/总目标授权范围内”的第一项。没有满足硬前置的任务才报告具体阻塞。较早项因特定资源/用户范围受阻时，可以推进无关的READY项，必须登记跳过原因；不能以一个局部阻塞冻结全部路线。
+
+| 顺位 / ID | 阶段与有界工作组 | 硬前置 | 当前状态 | 本组交付点（不等于整阶段最终完成） | 完成/变化时检查回访 |
+|---|---|---|---|---|---|
+| 01 / Q01 | B11：正式DAT/角色图片接入清单与兼容性检查 | 无技术前置；用户尚未启动 | PREPARED_HOLD | indexed/reachable catalog、旧→新path/hash/GUID引用、共享资源/保留项、parser normalized首差、删除候选清单；冻结后继最小包和证据位置。只读取正式资源，不导入、不删除。 | R15；为全部后继确定内容/字段边界 |
+| 02 / Q02 | B11：DAT/sprite根与PNG加载前置 | Q01 | WAIT_DEPENDENCY | 路径/root/key映射和后台PNG解码的独立focused/载入证据，覆盖sheet/head/small及alpha；可用隔离夹具，不要求整场新内容先通过。生产内容切换留Q07。 | R17 |
+| 03 / Q03 | B6/B7/B0：数据及联合字段合同冻结 | Q01 | WAIT_DEPENDENCY | CPoint27、OPoint24、+2F8、mass/reserved及实际shell/ECS/hash范围；逐字段声明default/reset/producer/consumer、是否入content/runtime schema和验证用例。复核D-022单窗口清单；先审计/合同/隔离数据测试，不提前发布新runtime schema。 | R13、R15 |
+| 04 / Q04 | B6/E：联合迁移前剩余行为退休 | Q03 | WAIT_DEPENDENCY | 仅处理尚存mass等有权威依据的行为gate/reader；检查Goal20退休结果仍成立，声明临时reserved值和其删除出口。已完成的Flute/oscillate/action/关系行为不再重做，carrier最终处置留Q05。 | R13 |
+| 05 / Q05 | B0/B6/B7：D-022联合版本迁移窗口 | Q03、Q04 | WAIT_DEPENDENCY | 在一个协调窗口内实现已冻结的数据/载体/copy/restore/hash/ECS变化；按D-022准确升版，旧midbattle拒绝、seed/input重放和capture/restore验证；不凭本表增加第二次破坏兼容窗口。 | R13、R15；通知所有读取者 |
+| 06 / Q06 | B6/B7及资源owner：精确producer/consumer与slot尾部接线 | Q05 | WAIT_DEPENDENCY | 拆包接CPoint资源/settlement、OPoint完整materializer、+2F8 AI、revival reserve/join、HP/baseMax、C25资源/terminal/pieces/生灭。基础数值合同与规则夹具可先验证；mode/frontend和整场证据分别留Q08/Q12。每个子包实际接通即触发回访，不等整组结束。 | R02、R04～R13、R16 |
+| 07 / Q07 | B11：新版DAT/角色图片分批迁移与内容可用验收 | Q02、Q06（包括Q05版本链） | WAIT_DEPENDENCY | 按Q01闭包分批接入、重绑引用、验证内容fingerprint/normalized值及真实载入；每批复验受影响规则。合格交付点为“该批正式内容可用”，不是全视听/全场景通过。旧资源仅按核对后的精确清单处置，保留UI/配置/用户文件。 | R02、R06～R12、R15、R17、R18 |
+| 08 / Q08 | B8：非例外stage、mode、结果和事件 | Q06 | WAIT_DEPENDENCY | 拆包闭合stage公式/移除、living groups、80/101/350与continue、mode资源规则、F4等effect和KO/world事件；可用明确夹具先验，正式内容验收依赖Q07。无需等待B9结果页面；默认stage.dat暂停单列。 | R02～R05、R07、R10、R11 |
+| 09 / Q09 | B9：正式表现消费与展示验收 | Q07、Q08 | WAIT_DEPENDENCY | 拆包处理同Z排序、post-host snapshot、相邻快照插值及断点、custom shadow/bleed/lives/nameplate/combo/spark/earthquake与资源。按30/60/120采样验证；固定相机等例外保持。 | R01、R08、R14、R16、R17 |
+| 10 / Q10 | B10：音频事件与播放效果 | Q07、Q08 | WAIT_DEPENDENCY | 事件tick/order/channel、voice/BGM/stop/衰减、F11/F12实际音量消费；声明DAT catalog与WAV映射。Q09不是其硬前置；未获决定的WAV整体迁移只阻塞相关部分，不能自动扩大D-023。 | R03、R08、R10、R14、R17 |
+| 11 / Q11 | B3～B11：前阶段回访与整域出口对账 | Q09、Q10；所有已触发的R项已关闭或有明确剩余归属 | WAIT_DEPENDENCY | 逐个原差异ID回链实际Record、首差、内容/schema identity与待验项；确认旧临时owner已被正确接管，无无主后置任务。只把整场/OS/长跑项目带入Q12；未做完的代码/内容不得改写成只缺B12。 | R04～R17；形成Q12精确场景清单 |
+| 12 / Q12 | B12：同版本完整集成验收与最终声明 | Q11；正式内容、schema和例外清单固定 | WAIT_DEPENDENCY | 全角色可达技能、真实物理键、整场逻辑/RNG/事件trace、视听、长跑、退出重进；处理最后首差并归档证据，完成第8节全部门槛后才更新总目标。 | R01、R02、R15～R18及全部剩余终验 |
+
+**开发和终验分开，避免循环依赖：**
+
+- Q01可以读取新版DAT并做兼容性清单；这不要求Q07先完成正式迁移。Q03/Q05/Q06可使用隔离fixture或正式来源测试数据验证字段/事务；不得要求先通过Q12才做schema。
+- Q03先冻结合同，Q04只退休尚存行为；Q05承担唯一协调的版本发布窗口，Q06才接入声明的新生产语义。若字段消费的安全过渡必须在同窗口完成，按独立Task声明窗口内顺序，不拆出额外版本、不用伪造默认值宣称兼容。
+- Q06的基础资源事务与Q08的mode/frontend投影分开：前者接收明确规则输入，后者提供正式模式值并触发R07/R10复验；不得互相以“等整个B8/B7完成”为前置。
+- Q07只要求字段/加载/相关逻辑可用；B9/B10的最终视听依赖Q07资源，不能反过来作为Q07每批导入的入口条件。每批后续视听证据由R17补回。
+- Q02与Q03在Q01后可独立准备；Q08在Q06后可用夹具推进，不必因Q07尚在迁移而空等；Q09与Q10可各自推进。并行写代码仍须路径互斥、明确owner，Unity验证串行。
+- 图中“硬前置满足”只表示交付依赖满足，不替代实际Task/Change、源码依据、既有用户授权或有序关闭合同。本次没有启动任何实现或资源删除。
+
+```mermaid
+flowchart TD
+    Q01[Q01 内容与引用清单] --> Q02[Q02 加载与PNG]
+    Q01 --> Q03[Q03 字段与schema合同]
+    Q03 --> Q04[Q04 剩余行为退休]
+    Q03 --> Q05[Q05 联合版本迁移]
+    Q04 --> Q05
+    Q05 --> Q06[Q06 producer与生命周期接线]
+    Q02 --> Q07[Q07 新版内容分批可用]
+    Q06 --> Q07
+    Q06 --> Q08[Q08 mode与结果事件]
+    Q07 --> Q09[Q09 战斗表现]
+    Q08 --> Q09
+    Q07 --> Q10[Q10 战斗音频]
+    Q08 --> Q10
+    Q09 --> Q11[Q11 已触发回访与出口对账]
+    Q10 --> Q11
+    Q11 --> Q12[Q12 最终集成验收]
+```
+
+图只画Q组的硬前置；R回访在每个子包交付时触发，不是等到Q11才第一次执行。Q11集中核对是否漏做；R01的未启用worker分支和R18的全场景终验可以保留明确条件并由Q12处理，不能形成Q11↔Q12循环。
+
+### 0.12 前阶段后置事项回访表（反向依赖）
+
+R01～R18是稳定回访ID，不是重开整个阶段的指令。当前均为`WAIT_TRIGGER`，因为Q01～Q12尚未开始；此前具名子包的VERIFIED保持。每个Q子包接通producer、改变资源/schema或启用路径时，立即重算关联R项；相关前置已满足则改为`READY_RETURN`，执行后登记`RETURN_VERIFIED`及证据。只完成部分条件则保留`PARTIAL_RETURN`并写未满足的精确条件，禁止只写“以后B12”。
+
+| 回访ID / 前阶段与原差异 | 等待谁 / 实际触发事件 | 触发后必须做什么 | 关闭证据与禁止误判 |
+|---|---|---|---|
+| R01 / B1，T-01～T-03、U-03 | Q09启用原先不可用的worker或改变Host/presentation边界；另在Q12进行OS键/长跑 | worker正式启用前回验33/3ms、pause/F2/debt和最后tick；Q12补物理键与长时间线。未启用worker就明确记录条件未触发，不阻塞无关逻辑。 | B1原出口保留；新增路径focused/Play/时间线，不能以旧单线程证据覆盖worker，也不重做Host。 |
+| R02 / B2，I-01～I-06、R-01～R-07、A-01～A-08 | Q06每个非AI RNG/生成/AI消费者接通、Q08 mode effect接通、Q07对应DAT批次可用 | 核对流/call-site/顺序、proxy/edge/action、owner/target和自然技能；Q12补完整整场序列。 | 逐变更输入与RNG首差、真实技能链；B2基础/路由职责仍关闭，只回验受影响consumer。 |
+| R03 / B2功能键，I-07/I-08/I-10、O-03 | Q08接入F4/资源/结果等effect；Q10接入VolumeDown/Up音频消费 | 对已完成路由后端逐个验证实际效果与拒绝条件、消费tick；Results continue另核144门槛。 | “按键被路由”与“效果已发生”分别记录；已有physical probe不代替新effect验收。 |
+| R04 / B3残余owner，S-01/S-15/S-16、F-01/F-09、L-06 | Q06接管terminal/state9998/pieces等、Q08接管session/F7/global tail | 按B3出口残余表逐项复核当前caller/reader；只在所有职责已转移且新鲜证据通过后缩减旧SerialTickAll/HandleFrameTickExit/EntityPostFrameTail相关职责。 | 精确caller归属、无重复writer、terminal/同tick trace；旧11xx/state501等已退休项不再次删除，随机掉落例外保持。 |
+| R05 / B3顺序，S-03～S-16 | Q06/Q08改变任一生产pass、结构flush或session边界 | 回到实际NTSDBattleTickSystem检查两hit caller循环、双held、C25逐slot、combo loop后、publication及新增事件位置。 | 当前生产逐pass trace与first difference；不能用phase枚举存在、phase数量或旧单循环描述替代。 |
+| R06 / B4复活，F-05、S-06、L-05 | Q06已接reserve/join/join_reserve/join_pic producer且Q07对应正式内容可用 | 用真实死亡→queued/normal复活序列验证资格、资源、位置、owner/slot/出生与visual；图像最终结果在Q09补验。 | 复用原13记录416字段子集；新增producer/内容/Play证据，不能仅因consumer早已VERIFIED关闭整条复活链。 |
+| R07 / B4资源与B5共享恢复，F-07/F-10、C-10/C-14 | Q06补C25 pre-display/display/post-display与resource算法，Q08模式规则正式注入，Q07对应内容可用 | 联验HP/MP/baseMax、display值、状态timer与clamp时点、mode/F6抑制及恢复副作用。 | 同tick资源/显示/统计trace；保留已完成PP150边界、负environment recovery和三timer consumer，不能按旧backlog重做。 |
+| R08 / B4/B7碎片与生灭，F-08/F-09、W-08、L-03～L-06 | Q06接通state18/OID999/weapon pieces，Q07素材可用；Q09绘制、Q10声音各自接通时追加 | 验zero-entry→particles→previous-action→pieces/lifecycle顺序、数量、已扫描低slot/未扫描高slot可见性；补画面/声音。 | slot/事件/帧序列和资源key证据分层归档；程序化顺序通过不等于正式粒子已经生成可见。 |
+| R09 / B5候选与护甲，C-01～C-09 | Q07每批bdy/itr/zwidth/armor/frame内容变化，或Q06更改关系/出生可见性 | 只对受影响族重跑候选集合/顺序、first-body终止、vrest/arest与armor、actual/HitPlan/fast-fallback；Q12全场景。 | 新内容fingerprint、候选与首差报告；旧内容831等计数不是新内容通过证书。 |
+| R10 / B5伤害、held与KO，C-10/C-12/C-14、W-01/W-02 | Q06接CPoint/OPoint资源与owner链，Q08接world KO/mode/result，Q10接相关audio | 验damage→HP/MP/score/KO→caughtact→world event的精确顺序与仅一次副作用；补新DAT witness。 | 同tick资源/统计/event trace；已完成held accounting/caughtact/impact不重做，仅补新链。 |
+| R11 / B6 C22，C-13、S-14 | Q06相关catch/impulse producer闭合且Q08最终stage settlement/removal接通 | 回到finalizer入口验证被移除对象不会再finalize、hold/count/三轴与stage前后顺序。 | 已有C22公式与Goal18 impact成果保留；新增整链trace，无新首差不新写finalizer。 |
+| R12 / B6 held/refill/pickup，W-03～W-05、W-08 | Q06完整HP/baseMax/OPoint关系/old-child cleanup可用且Q07相关DAT批次接入 | 在ITR kind2与OPoint kind2的正式union上验pickup、补给、exhaustion、投掷/中断和技能结束；覆盖新nonzero linked stats。 | 自然操作、完整关系/资源/回收trace；复用P1/P2/P3与refill scoped证据，禁止用两个Play样例宣称全union覆盖。 |
+| R13 / B6/E与联合字段，D-05/D-08、W-06、L-08、U-06 | Q03冻结清单、Q04完成剩余行为退休、Q05新版本发布时分步触发 | 先确认mass/旧字段不再定义行为，再核对reserved实际删除/保留清单、shell/ECS/hash/capture/restore；生产引用清零后裁定NTSDSpec空壳。 | D-022版本化结果与无旧writer证明；0/null/-1断言只证明行为退休，不等于carrier已删除；不能跳过schema验证。 |
+| R14 / B5 combo/C01 spark与B9表现，C-11/C-12、S-02/P-06/P-11 | Q09正式spark/combo图集和命令消费接通；相关声音由Q10单独触发 | 联验命中/计数/expiry与首末可见帧、host slot、命令顺序和资源gate，逻辑只读。 | 复用已完成combo/caughtact和spark age；补30/60/120画面，不能为显示重写计数规则。 |
+| R15 / B0与所有trace，T-06/R-07/D-08/D-09/U-06 | Q01身份基线确认、Q05 schema变化、Q07任一内容fingerprint变化 | 更新双端capture/comparator字段可用性、证据identity；同版本比较，旧snapshot拒绝，seed/input重放。 | 明确authority/source/content/schema哈希；不能填零伪造字段相等或跨版本拼接checksum。 |
+| R16 / B3/B7与U-03/U-05/U-08关闭 | Q06新增queue/entity/producer、Q09新增publication/renderer或启用worker；Q12终验 | 接入既定十一阶段停止/Join/drain/recycle owner；逐新增模块验退出重进及零残留、Scene dirty基线。 | lifecycle声明、focused与真实enter/exit/re-enter；不得等待整场完成后才给新模块补shutdown，也不得重排顶层关闭顺序。 |
+| R17 / B11内容与B9/B10资源出口，D-01～D-07/P-20/O-05 | Q02加载变更、Q07每批迁移、Q09图像消费、Q10相关声音消费各自完成 | 对账manifest/引用/GUID/缺失资源、正式像素/音源映射；精确处置经核验旧文件，保留用户资源。非角色图片/WAV未决只标对应行。 | Q07的内容可用与后续视听验证分别出证；不以“都能加载”宣称B11整域已完成。 |
+| R18 / B2～B6整链与B12，I/F/C/W/L全部非例外域 | Q07相关角色技能内容可用即做定向回访，Q12集成冻结后做全量 | 按具体角色/装备/物理按键走输入→动作→生成→命中→结束/回收；覆盖报告过的组合技、持武器、跑攻、跟手和阴影。 | 记录场景、seed、输入/tick、first difference与影像；注入实体/单测不代替自然技能；最终所有未验项逐条关闭。 |
+
+**反向依赖维护是交付的一部分：** Q表最后一列只提供入口，实际变更影响到未列R项也必须追加。完成Q子包时，在相应R行追加`触发Change ID / 原状态→新状态 / 证据 / 未满足条件 / 下一包`，并同步第0.10节与第4节。上游交付不得悄悄删除R项；若某个等待条件由后继包已解决，写supersede证据后关闭该条件，不能按旧日志再实施一次。
+
+### 0.13 压缩恢复与交接游标
+
+恢复顺序固定为：`CURRENT-AUTHORITY → 本文0.14启动状态 → 0.11队列 → 0.12回访 → 0.10阶段状态 → 目标差异行/Task/Record/原始证据`。执行仍为USER_HOLD时只允许用户要求的准备/讨论，不启动Q01或自动检查权威资源。B编号是职责，不是下一次从哪里开工的游标。
+
+当前交接快照（2026-09-13，文档整理完成，实际执行尚未开始）：
+
+| 必填字段 | 当前值 |
+|---|---|
+| Goal / 执行许可 | `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / PREPARED_NOT_STARTED / EXECUTION_USER_HOLD`；这是本轮剩余campaign的启动状态，不抹除历史已完成包 |
+| Plan / prepared batch / next | `NTSD28-PRIORITY-DEPENDENCIES-20260913 / BATCH-01 / Q01` |
+| Active Q / Task / Change | `NONE / NONE / NONE`；不能把规划行写成IN_PROGRESS |
+| Ready returns / waiting | `NONE`；R01～R18均WAIT_TRIGGER，按各自行的事件重新判断 |
+| 已保护完成项 | B1当前生产职责、B2基础/路由；B3/B5出口与B4/B6/Goal17～20子集证据保留 |
+| 已知内容/schema基线 | 上次审计HEAD `6276c912`、Unity旧138-DAT，目标D-023；runtime/aggregate/checksum `12/20/23`、character shell1。下次开工须重新测量，不把本快照当永恒事实 |
+| 当前明确边界 | DAT/角色图片目标已定；旧资源删除集合未冻结；默认stage.dat部署暂停；其他用户例外、音频范围和十一阶段关闭合同保持 |
+| 当前工作树保护 | 准备目标时已有Foot Marker相关脚本、GameConfig、Scene与文档未提交修改及Foot资源未跟踪；它们是已有工作，不由本轮执行、不清理/覆盖。下次启动重新检查基线 |
+| 下一步最窄动作 | 当前只等待用户明确启动；启动BATCH-01后才进行Q01只读清单和后继精确Task准备。现在不执行catalog审计、不改脚本、不迁移或删除资源 |
+| 最近验证 | 本轮只有文档/依赖结构校验；没有新的compile/SelfCheck/Play/正式EXE战斗结果 |
+
+每次实施交付或压缩交接前，必须更新此游标：当前Q/Task/Change、已满足前置的证据路径、当前first difference、内容/schema身份、被触发R列表、明确未做项、下一最小动作。只有对应交付点实际达成才能将Q置为`DELIVERED`；`DELIVERED`不自动更新整阶段ALIGNED。READY读取/待依赖/局部用户方向等待应分开记录，不复制旧历史“全线HOLD”当作新阻塞，也不凭本次文档整理推断未授权的大型实施已获准。
+
+工作组拆包后，必须在对应Q行或其紧邻索引保留完整的`Q ID → 全部子Task/Change ID → 各子包状态/证据路径 → 触发R ID`映射，不能只保留最后一个包。Q组只有全部必需子包达到本组交付点才能DELIVERED；尚未实施、只写代码或待Play的子包不得被组级状态遮盖。暂停或交接时保留精确阻塞对象与下一个无关可做项。
+
+本轮文档验证（2026-09-13）：从实际Q表解析出12个唯一工作组、18个唯一R回访，硬前置图无环，Q/R引用均可解析，唯一READY_READ_ONLY为Q01；原141个差异ID均保留。`git diff --check`通过，脚本变更为0；AGENTS/DECISIONS与本轮开始时哈希一致，用户资源未处理。未运行编译、Unity测试、Play或ChangeLedger脚本验证器，因为本轮只改优先级与交接文档。
+
+### 0.14 一个总目标与六个执行批次（已准备，未启动）
+
+准备日期：2026-09-13。用户本轮明确要求“按照一个总目标＋多个有明确出口的执行批次指定目标，但是先不要执行，只是准备好”。本节是可恢复的**目标合同**，不是已启动任务、实际代码修改清单或自动执行授权。
+
+#### 0.14.1 总目标与硬边界
+
+沿用既有总目标ID：`NTSD28-UNITY-BATTLE-REALIGNMENT-001`，不另起一条平行campaign。
+
+> 在保留当前Unity／GAS框架、全部已批准例外及非战斗功能的前提下，以当前NTSD2.8-Logan正式EXE及playable源码为战斗规则依据，使用其正式DAT与角色相关图片，完成剩余战斗逻辑、数据接入、生命周期和非例外战斗表现对齐，并通过第8节与B12规定的同版本集成验收。
+
+总目标完成条件：141个原差异ID及后续新增差异全部有准确处置；非例外域有符合风险的实现/编译/focused/SelfCheck/真实Play/authority trace及视听证据；D-023内容落地并验证；D-022声明的联合迁移通过；已触发回访无遗漏；框架和非战斗功能保持；按批准例外准确限定最终声明。某个批次或专项PASS不能关闭总目标。
+
+**执行范围保证：**
+
+- 只处理战斗规则、输入消费、状态、碰撞、伤害、抓取、生成/生命周期，以及直接为战斗服务的必要parser/loader、snapshot/checksum和战斗表现接入；资源替换以D-023和精确引用清单为界。
+- 不修改或删除与战斗无关的菜单、选择流程、普通UI、设置系统、编辑器功能或其他业务行为；不借对齐重构Unity/GAS、Mono分层、asmdef、对象池、异步框架、ECS或联网体系。
+- 共用脚本只修改经声明的战斗路径。若不能避免改变非战斗行为，则该部分暂停并先说明影响，取得用户明确扩大范围的决定后再实施；其他独立且已获授权工作可继续。测试也需覆盖共用入口的非战斗行为保持。
+- 不覆盖用户当前工作；每批启动前检查Git/Scene/资源基线。旧资源删除必须先形成精确集合和引用安全证据，并遵守既有删除授权规则，不能清空Config/Sprite。
+- authority目录只读；33/3ms、既定两hit caller顺序、逻辑/表现分离和十一阶段shutdown合同保持。固定相机、FootSelf、多边形边界、随机掉落等已批准例外不自动撤销；stage.dat部署和音频范围保持原合同。
+
+#### 0.14.2 六个批次目标
+
+批次ID `BATCH-01`～`BATCH-06` 属于上述总目标，区别于原有阶段B1～B12和工作组Q01～Q12。每个Q只属于一个批次；R回访随实际触发归入当前获准批次，不重开整个早期阶段。各批次当前统一为 **PREPARED_NOT_STARTED**。
+
+| 批次ID / 名称 | 对应Q组 | 具体批次目标 | 启动前置 | 明确退出条件 |
+|---|---|---|---|---|
+| BATCH-01 / 新版内容接入范围 | Q01 | 只读核对正式DAT/角色图片catalog与引用，形成旧→新映射、兼容性首差、保留资源和后继精确子包。 | 用户明确启动；读取最新authority/工作树，复用已完成证据。无其他技术前置。 | Q01所列清单与证据路径完整；每个确认缺口关联原差异ID、Q owner和R回访；后继Task范围可审阅。不得以本批完成宣称资源已迁移或开始执行第二批。 |
+| BATCH-02 / 接入基础与联合版本窗口 | Q02、Q03、Q04、Q05 | 修复必要的根路径/PNG支持，冻结CPoint/OPoint/+2F8/mass及reserved合同，退休剩余旧行为，完成一次协调的D-022迁移。 | 第一批交付；用户已启动本批或总目标；每个子包独立Task/Record，按Q依赖执行。 | 加载前置focused证据；准确字段/owner清单；既有退休保持；新版本capture/restore/hash、旧snapshot拒绝和重放验证通过；受影响路径编译及相关检查通过。生产新字段消费及整场新内容验收归后批，不能用假默认宣称兼容。 |
+| BATCH-03 / 战斗生产链与生命周期 | Q06 | 把新字段正确接入CPoint资源/settlement、OPoint materializer、+2F8 AI、revival/HP/baseMax与C25生灭/terminal/pieces。 | 第二批交付；字段与版本明确，纯事务/测试夹具准备；每项修改有当前authority依据。 | 每个必需producer/consumer有实际接线及相应验证，slot/关系/重置/shutdown责任闭合；已触发回访已处理或写明等待正式内容/模式/表现的具体条件。不能把DTO存在当接线完成。 |
+| BATCH-04 / 新内容迁移与模式流程 | Q07、Q08 | 按正式引用闭包分批迁移DAT/角色图片，同时收敛非例外Stage、mode、living groups、结果timer与world事件。 | 第三批交付；Q07还依赖Q02；已核对资源清单及涉及的精确脚本/Scene范围。Q07与Q08可在本批按依赖分别推进。 | 正式内容可用、指纹/引用正确，相关规则与自然技能定向验证通过；mode/结果/资源事件正确接入；B3/B4/B5/B6已触发回访有证据。旧资源只按批准的精确集合处置；未决stage/WAV局部项仍明确列出，不能隐藏后宣布本批完整交付。 |
+| BATCH-05 / 战斗视听表现 | Q09、Q10 | 完成非例外排序、相邻快照插值、shadow/spark/bleed/lives/nameplate/combo/earthquake和声音事件/播放/音量接入。 | 第四批必要内容与mode事件交付；每项表现修改限定战斗路径，保留现有框架及UI例外。 | 相关30/60/120命令/画面对照和音频事件/效果验证；逻辑checksum不被展示频率改变；worker若启用必须先完成R01；其余已触发R项闭合。未决音频资源不自动扩大D-023范围。 |
+| BATCH-06 / 回访收尾与最终认证 | Q11、Q12 | 对账全部阶段残余和回访，再以同一集成版本、新版内容完成最终角色技能/逻辑/视听/长跑/退出重进验收。 | 第五批交付；除本批承担的终验外无未解决代码/内容缺口，身份和例外清单固定。 | Q11确认无无主残余、Q12实际完成第8节全部门槛；所有first difference已修复验证或属于具名批准例外；证据归档后才允许关闭总目标。 |
+
+每批退出前必须检查两份结果：**目标功能证据**和**范围保持证据**。后者说明本批实际修改路径、共用脚本的战斗/非战斗边界、既有功能回归及用户文件保护。发现非战斗行为变化不能以“对齐所需”自动接受。
+
+#### 0.14.3 子任务、批次结束与启动语义
+
+- 层级固定：`一个总目标 → 六个批次 → Q工作组 → 最小Task/Change → 原始验证证据`。总目标保持连续，批次和子包独立验收，Q/R/阶段状态同步；不创建12条互不关联的并行目标。
+- 当前**只准备目标定义**：不创建活动执行goal，不创建新任务线程、不委派执行、不设自动化，不运行Q01的catalog/normalized审计，不修改脚本/资源/Scene、不运行Unity测试/Play。
+- 用户后续若只启动“第一批”或指定某批，执行范围仅限该批及其已触发且属于该批范围的回访；退出后交付报告并等待后续指令，不自动进入下一批。
+- 用户若明确启动“总目标，按批持续推进”，可以在总目标硬边界和既有授权内按批连续执行，每批形成独立出口报告、更新游标后选择后继。未授权的非战斗改动、破坏性删除或其他范围扩展仍不能自行执行。
+- 单个批次内不为每个例行小步骤重复询问许可；但写脚本前必须完成适用的精确Task/Change、源码依据、前置条件与验证计划。若某个批次过大，拆子包，不改变其目标或跳过出口。
+- 若某批有局部前置未满足，记录确切对象、已完成子包和可独立推进项；不能以部分验证关闭整批，也不能不加说明将剩余项丢给B12。
+
+#### 0.14.4 当前准备完成快照
+
+| 字段 | 当前状态 |
+|---|---|
+| Master goal | `NTSD28-UNITY-BATTLE-REALIGNMENT-001`；定义已准备，剩余campaign仍`FULL_ALIGNMENT_INCOMPLETE` |
+| Execution permission | `EXECUTION_USER_HOLD`；用户只授权本次准备 |
+| Batch states | `BATCH-01..BATCH-06 = PREPARED_NOT_STARTED` |
+| Active batch / Q / Task / Change | `NONE / NONE / NONE / NONE` |
+| First prepared entry | `BATCH-01 / Q01 / PREPARED_HOLD`，尚未启动只读审计 |
+| Q/R mapping | 六批完整覆盖Q01～Q12，无重复归属；R01～R18保留原触发条件 |
+| Next action | 等用户明确启动；不能因上下文压缩、自动续跑或看到旧READY_READ_ONLY字样而执行 |
+
+第0.13节“唯一READY_READ_ONLY为Q01”的验证文字保留为上一次优先级整理时的历史结果；本次已按用户新要求改为PREPARED_HOLD。准备目标不改变任何已验证阶段/子包的历史结果。
+
+本次准备验证：六个批次唯一覆盖十二个Q组，无遗漏/重复归属；十八个R回访保留，Q硬前置无环；Q01为PREPARED_HOLD，无READY执行项。活动goal检查为空，未启动自动执行。准备前已有的五个脚本、GameConfig资产和战斗Scene共七个受保护文件，准备后SHA-256均未变化；只更新本总表和三个恢复文档。文档diff检查通过，没有执行Q01、资源迁移、Unity编译/测试或Play。
 
 ## 1. 最终目标与“完全一致”的准确含义
 
@@ -416,7 +365,7 @@
 | Unity 独有 E：旧 `NTSDSpec` | 必须处理；先替换全部生产调用方，最后再决定是否删除空壳。 |
 | Unity 独有 F：Unity 随机掉武器路径 | 保留，不处理；明确属于会改变战斗结果的用户批准例外。 |
 | Unity 独有 G：固定世界相机 | 保留，不处理；不得借表现对齐恢复新权威完整滚动相机。 |
-| Unity 独有 H：内容数值与资源差异 | 必须处理；内容迁移策略尚未决定，不授权直接覆盖 `Assets/NTSD/Config`。 |
+| Unity 独有 H：内容数值与资源差异 | D-023已决定DAT与角色相关图片采用NTSD2.8-Logan；迁移未执行。按精确引用/替换清单处理，旧138-DAT仅作迁移基线；音频及非角色图片边界不自动扩大。 |
 | 新权威缺失项：完整原生 HUD | 用户排除，不处理。 |
 | 新权威缺失项：结果页与战斗内结果信息表现 | 用户排除，不处理。 |
 | 新权威缺失项：背景多层与动画 cycle | 用户排除，不处理。 |
@@ -464,105 +413,106 @@ NTSD 2.4、旧 C#、旧 `game_tick(...)`、旧 trace、旧测试名和旧 Change
 
 因此，“没有在静态源码中发现更多项目”不等于“没有更多差异”。
 
-## 3. 总体结论
+## 3. 总体结论（2026-09-12 当前审计）
 
-截至本文建立时：
-
-- 文档权威已迁移到 NTSD 2.8-Logan；Unity 生产战斗代码尚未开始 2.8 重新基线化。
-- Unity 脚本中没有 `SimulationTickDriver28`、3000-byte 同步随机表或 NTSD 2.8 输入代理的正式接线。
-- 正常 tick、快速模式、主 pass 顺序、输入、RNG、AI、碰撞/命中、抓取、生命周期、结果时序和表现 handoff 均存在明确差异或必须重新核验。
-- 新权威 runtime 资源静态统计为 405 DAT、1255 PNG、981 WAV；Unity 当前静态统计为 138 DAT、323 PNG。数量不能直接相减为迁移清单，但足以证明内容覆盖未闭合。
-- 本次只建立文档，没有修改 C#、Scene、Prefab、DAT、资源或运行行为。
+- B1～B6 已有大量生产接线和具名限定验证；旧“尚未开始、没有双 RNG/输入代理”的总括描述已过时。角色/对象两个hit caller循环符合当前权威，旧表要求合并的描述已纠正；不得由类名与C++不同推断未实现。
+- 第 4 节将当前实现、已验证子集、确认脚本差异、只缺集成/内容验收与未核验分开。`VERIFIED`/`ALIGNED_SUBSET` 只针对所列子域，不升级整个阶段。
+- Goal17～20 已完成的旧 hurt/Flute/oscillate、pickup、impact、compat selector及关系行为退休不再列为待实现。剩余数据/schema、OPoint与跨阶段资源、flow、表现/音频及全场景验证仍须闭合。
+- 本轮实际确认新版资源接入的 CPoint 19→27/alias、DAT与sprite root、后台PNG解码缺口。正式全目录405 DAT、Unity138 DAT不等于可达内容数，迁移按正式catalog引用图进行。
+- D-023 已明确 DAT/角色图片采用 NTSD 2.8-Logan。所有历史 Direction-B 数量与验收保留为旧内容证据；新版内容尚未部署。
+- 本轮只改治理和对齐文档，没有修改 C#、Scene、Prefab、DAT、图片或运行行为；没有新增编译/测试/Play结果。
 
 ## 4. 完整差异矩阵
+
+**读取规则（2026-09-12）：** 本节是当前处置，不再是最初静态盘点。`*_VERIFIED` 是已有具名证据，`*_PENDING` 要看是内容/运行验收还是实现；`REVIEW_REQUIRED` 不等于已经证实代码错误。详细符号与证据索引见本节表格、第 0 节当前剩余脚本清单及第 5/6 节。历史启动/失败记录保持原样，不以它们覆盖本节当前状态。
 
 ### 4.1 Host、时间与调度
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| T-01 | `CONFIRMED_DIFFERENCE` | 正常逻辑间隔为 `33 ms`。 | `SimulationConstants.SIM_DT = 1f / 30f`。 | 长时间运行的 tick 数、输入窗口、wait、计时器和表现节奏会漂移；必须对齐。 |
-| T-02 | `AUTHORITY_ONLY` | F5 快速模式使用 `3 ms` 间隔。 | 无同等正式模式。 | 必须实现相同 host 行为，且不能改变单 tick 规则。 |
-| T-03 | `REBASELINE_REQUIRED` | Win32 host 按 33/3 ms 处理 wall-clock debt、暂停、单步和 excess debt。 | Unity 使用 accumulator、catch-up cap 和 backlog cap。 | 可以 Unity-native 实现，但 tick 数和丢债行为必须通过时间线验证。 |
-| T-04 | `REBASELINE_REQUIRED` | `GameSession28::step()` 先处理上层 battle flow/模式，再调用战斗 step。 | `SimulationTickDriver` 与 `NTSDBattleTickSystem` 有自己的 host/flow 边界。 | 需确认暂停、结果输入、退出和功能键进入逻辑的精确 tick。 |
+| T-01 | `CURRENT_PRODUCTION_VERIFIED / B12_PENDING` | 正常逻辑间隔为 `33 ms`。 | 已为SIM_DT=0.033f；B1-CADENCE-CONTRACT及TIME-HOST-EXIT有focused/实际Play证据。 | 复用实现；物理键、长跑和B9解除worker限制后的复验归B12。 |
+| T-02 | `CURRENT_PRODUCTION_VERIFIED / B12_PENDING` | F5 快速模式使用 `3 ms` 间隔。 | FAST_SIM_DT=0.003f，切换清debt，B1出口包含快速模式Play。 | 不重做F5；实际OS按键、长跑与worker启用后复验。 |
+| T-03 | `CURRENT_PRODUCTION_VERIFIED / B12_PENDING` | Win32 host 按 33/3 ms 处理 wall-clock debt、暂停、单步和 excess debt。 | SimulationTickHostPolicy/Driver已实现两interval debt及每Update最多两tick，F1/F2/F5有focused与Play。 | B1-TIME-HOST-EXIT允许进B2；未启用worker和OS输入不得扩大为已验。 |
+| T-04 | `PARTIAL_IMPLEMENTATION / B8_JOINT_PENDING` | `GameSession28::step()` 先处理上层 battle flow/模式，再调用战斗 step。 | Driver.StepOneTickInternal及function-key session接线已存在。 | 剩余Results/mode/离场与core同tick边界归B8；不是重做整个Host。 |
 | T-05 | `USER_ACCEPTED_EXCEPTION` | 引擎 profile 为 1000 物理 slot。 | Unity 使用多个容量 profile 和动态逻辑容量。 | 按用户决定保留 Unity 容量；只对齐 slot 顺序、identity、复用和生灭可见性。 |
-| T-06 | `REBASELINE_REQUIRED` | 物理 frame id、资源 frame 和逻辑 sequence 有明确整数边界。 | Unity 同时存在 tickIndex、FrameDelay、frame counter、presentation frame。 | 必须建立字段映射，禁止把渲染帧误作逻辑 tick。 |
+| T-06 | `FIELD_BINDINGS_IMPLEMENTED / FINAL_TRACE_PENDING` | 物理 frame id、资源 frame 和逻辑 sequence 有明确整数边界。 | B0 action/frame/counter与B3 C23/C24 world clock已有字段及证据。 | 逐对象完整reset/序列、B7 terminal与presentation tick需联合trace。 |
 
 ### 4.2 主 tick 与 pass 顺序
 
 | ID | 状态 | 新权威顺序 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| S-01 | `CONFIRMED_DIFFERENCE` | 单一 `SimulationTickDriver28::step()` 固定全局顺序。 | 29 个 `BattleTickPhase`，仍保留旧拆分顺序。 | 建立新的逐 pass 映射；不能只调整局部方法。 |
+| S-01 | `PLACEMENT_EXIT_READY / TAIL_FULL_CLOSE_PENDING` | 单一 `SimulationTickDriver28::step()` 固定全局顺序。 | NTSDBattleTickSystem已有B3实际phase及C25生产入口；不是原29phase未迁移状态。 | 复用B3-ACTUAL-PHASE-SEQUENCE/EXIT-GATE；只补C25 residual及B7/B8依赖，最后逐pass trace。 |
 | S-02 | `B3_C01_ALIGNED / B9_RESOURCE_MAPPING_PENDING` | tick 开始先推进原生 spark。 | 已在input phase后、producer/hit前建立resource-independent C01唯一writer；presentation/Host/worker只读。 | lifecycle、同tick新hit base ID和终止时序已通过真实Play；素材/完整资源映射仍归B9。 |
-| S-03 | `CONFIRMED_DIFFERENCE` | 先做物理实体扫描、object `hit_Fa`、原生 AI 和 pending input sample。 | RuntimeMaintenance/HumanInput/CharacterInput 分开执行。 | 输入、AI、生成和随机消费顺序会改变。 |
-| S-04 | `CONFIRMED_DIFFERENCE` | 输入路由后执行 frame motion。 | Unity 在 EarlyFrameAdvance、FrameLogic、FrameAdvance 中拆分。 | 位移、朝向、动作转换的生效 tick 需重排。 |
-| S-05 | `CONFIRMED_DIFFERENCE` | frame motion 后执行 teleport，再执行 physics。 | teleport/specials 位于 EarlyFrameAdvance，和当前 frame/physics 拆分不同。 | 速度继承、瞬移后碰撞和落地结果会不同。 |
-| S-06 | `REBASELINE_REQUIRED` | physics 后统一处理 revival 及其表现对象。 | Unity recovery/revival 分布在 early pass、ECS recovery 和生命周期代码。 | 需闭合死亡、复活、视觉 offset 和出生对象顺序。 |
-| S-07 | `CONFIRMED_DIFFERENCE` | 第一次 stage depth clamp 后第一次 held refill。 | StageBounds 和 HeldProcess 的条件及调用位置不同。 | 会改变碰撞前的位置、HP/MP 和 held object 状态。 |
-| S-08 | `CONFIRMED_DIFFERENCE` | movement/physics 后冻结 action snapshot，再建几何候选。 | Unity CollisionSnapshot 位于自己的 FrameAdvance/Stage/Held 链后。 | 候选使用的 action/frame 可能不同。 |
-| S-09 | `CONFIRMED_DIFFERENCE` | fusion 在候选建立后、命中消费前。 | OID 51/52 maintenance 位于 tick 前部。 | 融合对象能否参与本 tick 命中会不同。 |
-| S-10 | `CONFIRMED_DIFFERENCE` | 一个升序 attacker slot 循环统一消费 hit/relation。 | CharacterHit 与 ObjectHit 为两个 pass。 | 候选次序、目标状态和全局终止语义不同。 |
-| S-11 | `USER_ACCEPTED_EXCEPTION` | 普通模式随机掉落在 hit 后、catch 前；当前正式候选表为空。 | Unity 在角色命中与对象命中之间实际随机生成武器。 | 用户明确保留，不处理；最终必须披露为 gameplay 例外。 |
-| S-12 | `CONFIRMED_DIFFERENCE` | catch relation → catch settlement → horizontal impulse finalizer。 | held/link/cpoint/weapon sync 分散在多个 pass。 | 抓取、投掷、击退和关系清理必须重排。 |
-| S-13 | `CONFIRMED_DIFFERENCE` | 命中后第二次 depth clamp，再第二次 held refill。 | Unity 第二次 StageBounds/HeldProcess 的前置链不同。 | 命中造成的位置和 held 消耗可能在不同 tick 被观察。 |
-| S-14 | `CONFIRMED_DIFFERENCE` | 随后执行最终 X/Z stage settlement。 | Unity PreFrameBounds 位于 Stage 和 RenderDispatch 前。 | 越界销毁、限制、表现位置会不同。 |
-| S-15 | `CONFIRMED_DIFFERENCE` | `begin_native_resource_tick()`、`begin_frame_tick()` 后升序逐 slot 执行定义/资源/帧/生命周期/OPoint。 | Unity FramePostProcess、LateEntityUpdate、RandomWeaponDropTail、EntityPostFrameTail 分开。 | 需要按字段写入时点重新建立尾部。 |
-| S-16 | `CONFIRMED_DIFFERENCE` | 所有 slot 尾部完成后才 healing、display values、reaction timers、armor recovery、attacker rest、combo expire。 | Unity 对应职责分散且顺序未按 2.8 证明。 | 必须建立全局 tail 顺序和 trace。 |
+| S-03 | `TWO_PASS_PLACEMENT_VERIFIED / OBJECT_AI_PENDING` | 先做物理实体扫描、object `hit_Fa`、原生 AI 和 pending input sample。 | SimulationWorld与NTSD28InputTwoPassModule已做producer/sample→proxy/route；B3-C02-C03已接。 | object hit_Fa剩余分支、完整AI/生成与新版DAT触发链仍待；不能称没有输入接线。 |
+| S-04 | `C04_OWNER_VERIFIED / FINAL_TRACE_PENDING` | 输入路由后执行 frame motion。 | RunFrameAdvancePhase先调用NativeFrameMotion，B3-C04与B4-F02有专项证据。 | 复用motion；正式内容/全对象/优化路径的整tick验收后置。 |
+| S-05 | `C04_C05_C06_PLACEMENT_VERIFIED` | frame motion 后执行 teleport，再执行 physics。 | 已实现frame motion→state400/401 teleport→nested physics，相关Play通过。 | 不能重排回旧early pass；特殊资源/完整场景仍需联验。 |
+| S-06 | `REVIVAL_CORE_VERIFIED / PRODUCER_PENDING` | physics 后统一处理 revival 及其表现对象。 | BattleRespawnModule及B4 gate/queued/normal/exit已有13记录416字段trace。 | OPoint reserve/join/join_reserve/join_pic、视觉资源和schema依赖仍归B7/H。 |
+| S-07 | `PLACEMENT_AND_REFILL_SUBSET_VERIFIED` | 第一次 stage depth clamp 后第一次 held refill。 | 首次stage clamp→held refill已接；B6-HELD-REFILL-MP-EXHAUSTION有Sakura/Naruto真实Play。 | HP/baseMax与完整OPoint materializer及新版内容验收未关闭。 |
+| S-08 | `SNAPSHOT_CANDIDATE_PLACEMENT_VERIFIED` | movement/physics 后冻结 action snapshot，再建几何候选。 | C09后冻结action并建候选，B3-C10/C11有focused/Play，B5逐规则迁移已进行。 | 全部candidate集合/顺序与fast path最终trace另验。 |
+| S-09 | `FUSION_PLACEMENT_VERIFIED / LIFECYCLE_PENDING` | fusion 在候选建立后、命中消费前。 | Oid5152FusionScan已在candidate后、hit前；C12 barrier已验证。 | fusion partner生灭、全部内容和同tick可见性依赖B7。 |
+| S-10 | `TWO_CALLER_LOOPS_PRESENT / JOINT_TRACE_PENDING` | simulation_tick_driver.cpp:730起明确两个升序caller loop：type0先消费，random drop后nonzero type消费。 | 当前CharacterHit→RandomWeaponDrop→ObjectHit与正式caller顺序一致；共享hit runner不意味着合并两循环。 | 旧表单一升序循环要求作废；保留两循环，验每循环candidate及终止语义。 |
+| S-11 | `USER_ACCEPTED_EXCEPTION` | consume_native_hit_pass(true)→random drop→consume_native_hit_pass(false)；正式候选表为空。 | 当前随机掉落位于CharacterHit与ObjectHit之间，与正式phase位置一致；生成内容保留Unity例外。 | 只保留生成行为例外，不能把phase位置也误判为待改。 |
+| S-12 | `CATCH_CORE_VERIFIED / RESOURCE_EVENT_PENDING` | 两个hit循环后catch advance/settlement；再clamp/held、最终stage settlement与horizontal impulse。 | B6 mixed advance/exact relation/preflight/held accounting/caughtact及positive validation退休已有证据。 | 补MP resource/world KO及余下producer；C22在最终stage之后，不能按旧文字提前。 |
+| S-13 | `PLACEMENT_VERIFIED / FULL_STAGE_RESOURCE_PENDING` | 命中后第二次 depth clamp，再第二次 held refill。 | 命中/catch后第二次clamp→held已接，不再是位置缺失。 | 复用held-refill证据；完整资源/B8非例外边界/内容联合验收待做。 |
+| S-14 | `C21_C22_PLACEMENT_VERIFIED / JOINT_PENDING` | 随后执行最终 X/Z stage settlement。 | PreFrameBounds→FramePostProcess已映射final settlement→impulse。 | C22 consumer已有独立证据；余下stage/producer联合首差再决定修改。 |
+| S-15 | `C23_C24_VERIFIED / C25_PARTIAL` | `begin_native_resource_tick()`、`begin_frame_tick()` 后升序逐 slot 执行定义/资源/帧/生命周期/OPoint。 | world两时钟与单一LateEntityLifecycle入口已有生产包；多项C25子owner已验证。 | OPoint实时birth visibility、terminal/pieces/resource、残余serial尾需B7，禁止重做所有尾部。 |
+| S-16 | `PER_SLOT_TAIL_PARTIAL / B7_RESOURCE_PENDING` | 当前源码955..1074：每slot definition/resources/display/frame/timers/armor/rest/OPoint/particles/previous/pieces/lifecycle/healing；loop后才combo expiry。 | BattleLateEntityLifecycle已执行逐slot frame/timer/armor/rest/previous/healing子owner；combo expiry另在loop后。 | 原全局healing/display/timer/rest描述错误；按C25同slot顺序补资源/生成/terminal，保留已验owner。 |
 
 ### 4.3 输入、组合键、代理和功能键
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| I-01 | `AUTHORITY_ONLY` | `DAT_004A0B90` 输入更新相位；1tu 强制 0，2tu 交替 1/0。 | 每个逻辑 tick 形成 `FrameInputSet`。 | 必须实现相同 producer cadence。 |
-| I-02 | `CONFIRMED_DIFFERENCE` | 非 AI 物理输入只在相位 0 更新 producer。 | LocalFreeRun 每固定 tick 采集并消费。 | 按下/松开边沿和组合窗口会偏移。 |
-| I-03 | `AUTHORITY_ONLY` | physical sample 位于逐 slot input routing 之前。 | 没有同名、同序的 pending sample 边界。 | 需建立不可变本 tick 输入快照。 |
-| I-04 | `AUTHORITY_ONLY` | linked input proxy 精确复制 `0x21` 字节输入状态。 | 没有等价统一复制合同。 | 必须覆盖 current/previous、edge windows、cooldown、combo 和 tail。 |
-| I-05 | `REBASELINE_REQUIRED` | human、AI、linked producer 的选择和覆盖顺序由 `input_routing.cpp` 定义。 | Unity 有 HumanInput、AI input、controller 与 link 写入者。 | 逐 producer 建立唯一所有权，防止同 tick 后写覆盖。 |
-| I-06 | `REBASELINE_REQUIRED` | 组合键状态与动作解析在输入代理和 frame motion 前闭合。 | Unity 有输入缓冲/组合池，但来自旧基线。 | 需要逐键边沿、窗口和动作 trace。 |
-| I-07 | `CONFIRMED_DIFFERENCE` | F1～F12 含暂停、单步、离场、快速、资源、补 MP、掉落、终止、音量等合同。 | 正式逻辑主要只有配置化 F7/F8/F9。 | 除用户另行排除外，补齐新权威功能键及拒绝条件。 |
-| I-08 | `REBASELINE_REQUIRED` | Results continue 输入只在指定结果 timer 后生效。 | Unity Results writer 有自己的 phase/cursor/input 逻辑。 | 结果逻辑本身仍需对齐；用户只排除了结果页表现。 |
-| I-09 | `AUTHORITY_ONLY` | `.lfr` 录制、回放、保存失败重试/丢弃具有正式格式和 host 行为。 | Unity 有 lockstep journal/replay，但不兼容 LFR。 | 若战斗可复现验收需要正式 LFR，则补兼容 adapter；不得改 authority 文件。 |
-| I-10 | `REBASELINE_REQUIRED` | Win32 key repeat、Ctrl 维护命令、global delay 和 F3 lock 会拒绝部分命令。 | Unity mode rule 使用另一套 allowlist。 | 必须验证命令接受/拒绝和消费 tick。 |
+| I-01 | `PHASE_CADENCE_IMPLEMENTED / JOINT_CONTENT_PENDING` | `DAT_004A0B90` 输入更新相位；1tu 强制 0，2tu 交替 1/0。 | INPUT-PHASE-CADENCE已实现1tu=0、2tu交替及human phase0更新；INPUT-JOINT-TRACE有子集证据。 | 正式新DAT下真实技能/2tu输入与长跑复验，不重写已接phase。 |
+| I-02 | `PHASE_CADENCE_IMPLEMENTED / JOINT_CONTENT_PENDING` | 非 AI 物理输入只在相位 0 更新 producer。 | INPUT-PHASE-CADENCE已实现1tu=0、2tu交替及human phase0更新；INPUT-JOINT-TRACE有子集证据。 | 正式新DAT下真实技能/2tu输入与长跑复验，不重写已接phase。 |
+| I-03 | `TWO_PASS_IMPLEMENTED / NATURAL_TRACE_PENDING` | physical sample 位于逐 slot input routing 之前。 | first scan producer/sample、second scan proxy/route已存在于SimulationWorld/NTSD28InputTwoPassModule。 | 补完整input→动作自然trace及object/AI缺失分支。 |
+| I-04 | `PROXY_33_BYTE_SUBSET_VERIFIED` | linked input proxy 精确复制 `0x21` 字节输入状态。 | NTSD28InputProxyBlock已有33字节序列化/deep-copy，两pass proxy接线已有focused。 | history不属于这33字节；完整AI/history/action链与新版内容复验。 |
+| I-05 | `NATIVE_INPUT_PARTIAL / ACTION_CONTENT_REVIEW` | human、AI、linked producer 的选择和覆盖顺序由 `input_routing.cpp` 定义。 | native producer、combo/router字段和transaction已接；不是只有旧组合池。 | 按最新action crosswalk确认缺caller与仅旧DAT值为0的区别；新内容需自然组合键逐链验收。 |
+| I-06 | `NATIVE_INPUT_PARTIAL / ACTION_CONTENT_REVIEW` | 组合键状态与动作解析在输入代理和 frame motion 前闭合。 | native producer、combo/router字段和transaction已接；不是只有旧组合池。 | 按最新action crosswalk确认缺caller与仅旧DAT值为0的区别；新内容需自然组合键逐链验收。 |
+| I-07 | `PHYSICAL_ROUTE_SUBSET_VERIFIED / EFFECTS_PENDING` | F1～F12 含暂停、单步、离场、快速、资源、补 MP、掉落、终止、音量等合同。 | B2-FUNCTION-KEY-PRODUCTION-INTEGRATION与PHYSICAL-PLAY-PROBE已有F3-F12组证据；B1接F1/F2/F5。 | physical route不等于F4/F6/F7/F8/F9资源/退出/flow全部effect完成，归B5/B8/B10/H。 |
+| I-08 | `B8_FLOW_REVIEW_REQUIRED` | Results continue 输入只在指定结果 timer 后生效。 | 已有BattleResultsFlow/Results writer，完整原生timer与continue尚未闭合。 | 与G-05一起闭合准确字段和首差；结果页面排除不等于逻辑排除。 |
+| I-09 | `NATIVE_LFR_COMPATIBILITY_NOT_VERIFIED` | `.lfr` 录制、回放、保存失败重试/丢弃具有正式格式和 host 行为。 | Unity已有journal/replay，现有source-model诊断不证明原生.lfr格式兼容。 | 先确定验收是否需要直接消费正式LFR；若需要则独立adapter包，不为trace工具重写联网。 |
+| I-10 | `ROUTE_RULES_IMPLEMENTED / OS_MATRIX_PENDING` | Win32 key repeat、Ctrl 维护命令、global delay 和 F3 lock 会拒绝部分命令。 | native key router/session已接Ctrl/priority/F3等规则，不能统称只有旧allowlist。 | OS repeat、延迟/lock/拒绝矩阵与F1/F2/F5物理验收归B12。 |
 
 ### 4.4 RNG
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| R-01 | `CONFIRMED_DIFFERENCE` | 两个进程级流：MSVCR80 CRT 流与 3000-byte synchronized table 流。 | 通用 `DeterministicRng` 加独立 CRT 风格 AI 流。 | 需要建立两个正式流和明确所有权。 |
-| R-02 | `AUTHORITY_ONLY` | `synchronized_next(call_site, bound)` 把结果绑定到固定调用点。 | 通用 `NextInt` 不携带 2.8 call-site。 | 必须建立调用点表，不能只换 LCG。 |
-| R-03 | `REBASELINE_REQUIRED` | AI、掉落、生成、模式选择各自消费指定流。 | Unity 多模块共享/包装 RNG。 | 建立所有生产调用点 ledger。 |
-| R-04 | `CONFIRMED_DIFFERENCE` | 普通随机掉落固定消费 call-site `0x92`、bound 200。 | Unity 使用通用 `NextInt(0, 200)`。 | 本项属于用户保留随机掉落例外，但其 RNG 污染不能改变非例外系统；需隔离或证明。 |
-| R-05 | `REBASELINE_REQUIRED` | 同一 tick 的随机调用顺序由物理扫描、AI、hit、spawn 和 tail 固定。 | Unity pass 顺序不同。 | 即使单点公式相同也会后续永久分叉。 |
-| R-06 | `REBASELINE_REQUIRED` | seed/reset/recording 与 GameSession 生命周期绑定。 | Unity world/reset/lockstep 各有 RNG snapshot。 | 验证重开、回放、rollback 和多 world 不串流。 |
-| R-07 | `REBASELINE_REQUIRED` | 正式 trace 可按流和 call-site 定位 first difference。 | 现有 checksum/诊断基于旧字段体系。 | 新增 2.8 RNG trace schema 和 comparator。 |
+| R-01 | `DUAL_RNG_IMPLEMENTED / CONSUMERS_PARTIAL` | 两个进程级流：MSVCR80 CRT 流与 3000-byte synchronized table 流。 | NTSD28NativeRandom已有CRT与3000-byte同步表、state/reset/capture；AI accepted消费已有专项。 | 不是单RNG缺实现；按最新非AI调用点和B6/B7生产状态补缺，最后整场消费顺序trace。 |
+| R-02 | `CALLSITE_API_IMPLEMENTED / COVERAGE_PENDING` | `synchronized_next(call_site, bound)` 把结果绑定到固定调用点。 | SynchronizedNext(callSite,bound)及accepted AI调用日志已存在。 | B6 refill/throw/复活等后继已迁移部分非AI点，旧crosswalk不得全部重开；余点逐caller核验。 |
+| R-03 | `AI_AND_NONAI_SUBSETS_VERIFIED / FULL_LEDGER_PENDING` | AI、掉落、生成、模式选择各自消费指定流。 | AI及B4复活/B6多项生产consumer已使用native流；RNG ledger非零起点。 | 按当前生产逐调用点闭合流/ordinal/short-circuit；例外流单列。 |
+| R-04 | `USER_ACCEPTED_EXCEPTION / ISOLATION_TRACE_PENDING` | 普通随机掉落固定消费 call-site `0x92`、bound 200。 | BattleRandomWeaponDropModule保留world.Rng独立掉落路径。 | 验证不触发例外的场景及例外开启影响，不能把下游差异无限豁免。 |
+| R-05 | `CROSS_PASS_SEQUENCE_VALIDATION_PENDING` | 同一 tick 的随机调用顺序由物理扫描、AI、hit、spawn 和 tail 固定。 | 当前已有双流和大量有序consumer，不能凭旧pass描述断言全部顺序错误。 | 随B7/C25等缺口闭合逐tick比较callsite；发现首差再修具体owner。 |
+| R-06 | `RESET_SNAPSHOT_SUBSET_VERIFIED / REPLAY_PENDING` | seed/reset/recording 与 GameSession 生命周期绑定。 | RNG-WORLD-STATE与DIRECT-BATTLE-BOOTSTRAP已有reset/restore/seed子集证据。 | 新版内容、联合schema后的回放/多world/worker/长跑复验。 |
+| R-07 | `DIAGNOSTIC_TRACE_IMPLEMENTED / FORMAL_CAMPAIGN_PENDING` | 正式 trace 可按流和 call-site 定位 first difference。 | 已有raw schema/comparator与direct/accepted per-call trace observer。 | 源码runner诊断不升级为正式EXE内部证书；整场各域trace仍需B12。 |
 
 ### 4.5 AI
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| A-01 | `CONFIRMED_DIFFERENCE` | native AI 在物理扫描阶段、输入路由之前执行。 | AI sensing/decision/input 被拆到 Unity 模块。 | 对齐执行 tick 和输入提交边界。 |
-| A-02 | `REBASELINE_REQUIRED` | AI 的目标扫描、距离、队伍、对象类型和 tie-break 来自当前 `native_ai.cpp`。 | Unity AI 来自旧移植并有 SoA/kernel fast path。 | 逐分支重新建立 2.8 合同，旧测试只作回归。 |
-| A-03 | `REBASELINE_REQUIRED` | AI 同时消费 CRT 与 synchronized 随机调用。 | Unity AI 有 CRT 风格流，但未闭合第二流。 | 对齐每次消费和短路分支。 |
-| A-04 | `REBASELINE_REQUIRED` | special scan、linked target、威胁和对象选择使用正式 slot 顺序。 | Unity 有压缩 special list 和优化查询。 | fast path 必须与全 slot 基线 trace 相同。 |
-| A-05 | `REBASELINE_REQUIRED` | AI 输出进入同一 input proxy/routing 数据结构。 | Unity AI 通过自己的 input context/writer。 | 不能让 AI 绕过 human/link 的边沿规则。 |
-| A-06 | `AUTHORITY_ONLY` | type-0 frame state 7000～7999 在 slot tail 刷新 computer timer。 | 没有已确认的 2.8 同序统一 phase。 | 建立字段、默认值和同 tick 可见性。 |
-| A-07 | `REBASELINE_REQUIRED` | 角色/武器/特殊对象的 AI 可见性由物理 slot 和状态门控制。 | Unity sensing 使用空间索引和 active view。 | 需要全量候选集合及顺序比较。 |
-| A-08 | `REBASELINE_REQUIRED` | function key、battle mode、资源开关可改变 AI 可见状态或资源。 | Unity mode/config 接线不同。 | 场景矩阵必须覆盖这些上下文。 |
+| A-01 | `PRODUCER_PLACEMENT_IMPLEMENTED / OBJECT_AI_PENDING` | native AI 在物理扫描阶段、输入路由之前执行。 | native sample/proxy两pass已接；AI先于route，B3-C02/C03已有placement。 | object hit_Fa余分支与正式自然场景仍需闭合。 |
+| A-02 | `NATIVE_KERNEL_PARTIAL / FINAL_TRACE_PENDING` | AI 的目标扫描、距离、队伍、对象类型和 tie-break 来自当前 `native_ai.cpp`。 | AiDecisionKernel已覆盖大量native分支和双RNG accepted transaction，不能称仅旧AI。 | 逐分支核对最新Record；新DAT profile/目标/动作及全世界first difference尚待。 |
+| A-03 | `NATIVE_KERNEL_PARTIAL / FINAL_TRACE_PENDING` | AI 同时消费 CRT 与 synchronized 随机调用。 | AiDecisionKernel已覆盖大量native分支和双RNG accepted transaction，不能称仅旧AI。 | 逐分支核对最新Record；新DAT profile/目标/动作及全世界first difference尚待。 |
+| A-04 | `OPTIMIZED_PATHS_PRESENT / ORDER_TRACE_PENDING` | special scan、linked target、威胁和对象选择使用正式 slot 顺序。 | full/indexed/SoA/shadow均存在且已有相关专项。 | 全slot candidate集合/顺序/tie-break在正式可达场景复验，shadow自身通过不等于native parity。 |
+| A-05 | `PROXY_OUTPUT_IMPLEMENTED / ACTION_CHAIN_PENDING` | AI 输出进入同一 input proxy/routing 数据结构。 | exact input store/host pending/proxy roundtrip已接同输入结构。 | 完整AI→组合动作→frame motion自然链与新内容验证后置。 |
+| A-06 | `C25F_TIMER_OWNER_VERIFIED` | type-0 frame state 7000～7999 在 slot tail 刷新 computer timer。 | BattleLateEntityLifecycle.RefreshNativeComputerState已按slot<10/type0/state7000..7999写timer，同tick后续递减。 | 复用B3-C25F-H-J-TIMER-OWNERS；mode/content/AI可见性仍另验。 |
+| A-07 | `OWNER_BINDING_VERIFIED / SENSING_TRACE_PENDING` | 角色/武器/特殊对象的 AI 可见性由物理 slot 和状态门控制。 | B2-AI-OWNER-SLOT-KILLCOUNT-CORRECTION已有8记录48字段专项，消费OwnerSlotIndex。 | 全对象集合/顺序和空间索引优化对照仍待，不重做owner binding。 |
+| A-08 | `MODE_INTEGRATION_REVIEW_REQUIRED` | function key、battle mode、资源开关可改变 AI 可见状态或资源。 | function/resource/mode已有部分载体与接线。 | 按B8/H具体effect确认AI可见性与decision；未核验部分不能直接报告错误。 |
 
 ### 4.6 Frame、运动、物理和复活
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| F-01 | `REBASELINE_REQUIRED` | `frame_machine.cpp` 定义 wait、next、action 和 frame counter。 | Unity `FrameLogicBeforeAdvance`、`SerialTickAll` 和各对象 override。 | 对每种 next/wait/sentinel 建立逐 tick trace。 |
+| F-01 | `C25G_FRAME_BODY_VERIFIED / TERMINAL_PENDING` | `frame_machine.cpp` 定义 wait、next、action 和 frame counter。 | LF2Entity.RunNativeC25FrameBodyForWorldPass及frame tick已有B3-C25G生产证据。 | B7 terminal/free、所有sentinel与新DAT全对象仍需联验。 |
 | F-02 | `B4_VERIFIED / PRODUCTION_NATIVE_KERNEL` | `frame_motion.cpp`按current frame、facing与strict depth intent写motion。 | production C04已使用统一kernel；legacy direct helper保留。 | XYZ阈值/偏置/facing clamp与双按none已由5+45+455测试及SelfCheck闭合。 |
 | F-03 | `B3_VERIFIED / PLACEMENT_ALIGNED` | teleport 位于 frame motion 后、physics 前。 | production已建立C04→C05→C06顺序；state400/401 Play通过。 | placement闭合；teleport具体字段证据见F-12。 |
-| F-04 | `B3_OWNER_VERIFIED / TYPE1_THRESHOLD_VERIFIED / COLLISION_Y_CARRIER_VERIFIED / ALL_NONCHAR_REFERENCE_VERIFIED / TYPE0_ORDINARY_AND_AIRBORNE_VERIFIED / STATE12_18_ACTION_ENV_COUNTS_VERIFIED / B5_STATUS_PRODUCER_PENDING / B8_KO_EVENT_PENDING / B10_AUDIO_PENDING` | `physics_integrator.cpp` 定义gate、重力、摩擦、collision-Y floor、落地、反弹和精确/整数同步；每slot physics后立即dead-resource normalize。 | C06 owner、all-nonchar、type0 ordinary/airborne、carrier、hard consumer及state12/18 action/environment count事务已闭合；producer/event/audio与其余producer/retirement仍有差异。 | 下一B5 status producer审计/接线；B8 event与B10 Audio独立，禁止宣称完整物理已对齐。 |
+| F-04 | `PHYSICS_CORE_SUBSETS_VERIFIED / CROSS_PHASE_PENDING` | `physics_integrator.cpp` 定义gate、重力、摩擦、collision-Y floor、落地、反弹和精确/整数同步；每slot physics后立即dead-resource normalize。 | type0/nonchar/collisionY/state12/18 motion及后续B5 status producer有具名专项。 | 不重复旧status producer包；剩余KO事件/B10声音、碎片/资源/完整物理trace分开闭合。 |
 | F-05 | `B3_PLACEMENT_VERIFIED / B4_GATE_BRANCH_QUEUED_NORMAL_VERIFIED / B4_REVIVAL_EXIT_READY / B7_H_PRODUCER_PENDING` | revival在physics后；normal按effective floor、sumX与sync RNG0x90/0x91写precise位置和vitals。 | production已闭合gate/branch、queued及normal核心，C07不提前同步integer X/Z；13-record/416-field joint trace覆盖slot reuse且first difference空。 | revival consumer/exit专项已ready；OPoint reserve/join/join_reserve/join_pic producer、schema及最终全场景parity仍后置。 |
-| F-06 | `AUTHORITY_ONLY` | definition transition 在每个 slot 的资源/frame 前执行。 | 没有等价统一 phase。 | 补齐定义切换及所有消费者。 |
-| F-07 | `REBASELINE_REQUIRED` | native resources 在当前 slot frame 前更新。 | Unity HP/MP/PP 更新分散。 | 需对齐同 tick frame 条件和 clamp。 |
-| F-08 | `REBASELINE_REQUIRED` | state 18 broken-weapon particles 在 frame 后、previous action 前生成。 | Unity 破碎逻辑和粒子生成时点来自旧实现。 | 对齐对象数量、slot 和首帧可见性。 |
-| F-09 | `AUTHORITY_ONLY` | `previous_action_078` 在生命周期解析前写入。 | Unity 有多个 previous/current action 缓存。 | 确定唯一对应字段和读取者。 |
-| F-10 | `REBASELINE_REQUIRED` | healing、display HP/MP、reaction timer、armor recovery 在全 slot tail 后。 | Unity post-frame/tail 顺序不同。 | 对齐 UI 可见值与逻辑值的 tick。 |
-| F-11 | `REBASELINE_REQUIRED` | attacker rest 和 combo expiration 最后执行。 | Unity cooldown/rest/combo 分布于早期/尾部 pass。 | 对齐可再次命中的最早 tick。 |
+| F-06 | `C25A_B_DEFINITION_CLONE_SUBSET_VERIFIED` | definition transition 在每个 slot 的资源/frame 前执行。 | TryApplyNativeC25DefinitionTransition和state9996 clone已在slot资源/frame前。 | 正式新DAT definition/stats与完整resource rebinding归H/B7/B9，不从零新增phase。 |
+| F-07 | `CARRIER_AND_MP_BINDING_PRESENT / RESOURCE_ALGORITHM_PENDING` | native resources 在当前 slot frame 前更新。 | C25C-E有carrier及CURRENT-MP-BINDING-CORRECTION；LateLifecycle recovery仍需完整原生事务。 | 按RESOURCE-DISPLAY-INVENTORY对齐pre-display→display→post-display，缺producer/数值/事件明确拆包。 |
+| F-08 | `C25L_ORDER_IMPLEMENTED / RESOURCE_SPAWN_PENDING` | state 18 broken-weapon particles 在 frame 后、previous action 前生成。 | state18 particle owner已有程序化顺序验证；正式OID999生成与birth witness未全验。 | B7/H下验证7/1数量、slot占用和当tick处理；不重复owner位置包。 |
+| F-09 | `C25M_PREVIOUS_ACTION_SUBSET_VERIFIED / TERMINAL_PENDING` | `previous_action_078` 在生命周期解析前写入。 | previous_action_078已有独立commit；不能称没有字段。 | early terminal仍可能提前退出，C25l/m/n/o/p顺序归B7处理。 |
+| F-10 | `PER_SLOT_TIMER_HEALING_SUBSETS_VERIFIED / RESOURCE_PENDING` | 当前源码resources前后夹display；frame后timer/armor/rest；lifecycle未消费slot才healing，均为逐slot。 | C25F-H-J和C25P已有timer/armor/healing owner；display完整资源算法仍待。 | 不得迁到loop后；补资源与terminal跳过语义，并在正式内容复验。 |
+| F-11 | `REST_COMBO_OWNERS_VERIFIED / JOINT_PENDING` | attacker rest在每slot frame/timer/armor后；ordinary combo expiration在整个slot loop后。 | C25 attacker rest及B5-NATIVE-COMBO-EXPIRY已有生产证据。 | 完整复打窗口需与命中、terminal、正式DAT整tick比较；不能据旧全局描述重排。 |
 | F-12 | `B3_VERIFIED / STATE400-401_PLAY_PASS` | C05只处理state400/401；C25a definition transition只处理state8000..8999，当前playable源码无state500/501战斗路径。 | state500/501已从production C05隔离，旧combined入口只保留direct compatibility。 | focused、kind0 no-op Play及state400/401 production定向Play均通过；C05闭合。 |
 
 ### 4.7 碰撞、命中、伤害、防御和护甲
@@ -571,57 +521,57 @@ NTSD 2.4、旧 C#、旧 `game_tick(...)`、旧 trace、旧测试名和旧 Change
 |---|---|---|---|---|
 | C-01 | `B3_B5_PRODUCTION_REBASED / JOINT_TRACE_PENDING` | 物理/移动完成后冻结 `tick_action_snapshot`。 | snapshot时点已迁移并由frozen pair消费。 | 最终同tick joint trace仍待。 |
 | C-02 | `B5_PRODUCTION_REBASED / FAST_PATH_TRACE_PENDING` | 几何候选由当前 bdy/itr、facing、center、zwidth 和 slot 顺序生成。 | brute-force、spatial、candidate store已按B5规则族重基线。 | 最终验证所有fast path集合/顺序trace。 |
-| C-03 | `B5_RULE_REBASED / H_CONTENT_PENDING` | attack `zwidth=0` 的 fallback 与 body depth 规则由 2.8 实现定义。 | production规则已重基线；内容差异仍归H。 | H后重跑边界矩阵。 |
+| C-03 | `B5_RULE_REBASED / D023_DAT_RETEST_PENDING` | attack `zwidth=0` 的 fallback 与 body depth 规则由 2.8 实现定义。 | zwidth/body depth规则已重基线。 | D-023正式内容迁移后复跑边界，不重做规则族。 |
 | C-04 | `B5_PRODUCTION_REBASED / FINAL_TRACE_PENDING` | pair vrest/arest 与候选建立、消费有固定时点。 | cooldown/rest/candidate顺序已按B5迁移。 | 最终同tick复打窗口trace仍待。 |
 | C-05 | `B3_PLACEMENT_VERIFIED / B7_LIFECYCLE_TRACE_PENDING` | fusion 可在命中消费前使 partner 失活。 | production placement已迁移。 | B7生命周期与最终trace继续闭合。 |
-| C-06 | `B3_PLACEMENT_VERIFIED / B5_CONSUMERS_REBASED` | 统一 attacker slot 循环消费 character/object/relation。 | character/object pass已按正式slot顺序映射到共享consumer。 | relation/catch部分转B6。 |
+| C-06 | `TWO_CALLER_LOOPS_PRESENT / SHARED_CONSUMERS_REBASED` | 当前正式源码为type0与nonzero两个升序caller循环，random drop位于两者之间；不要求合并成单循环。 | CharacterHit→RandomWeaponDrop→ObjectHit保留；B5共享consumer与B6 pickup P3已接。 | 保持两caller循环；补全部candidate/relation的多attacker joint trace。 |
 | C-07 | `B5_FIRST_BDY_VERIFIED / FINAL_TRACE_PENDING` | 成功 first-body 响应终止该 attacker 的剩余 candidates；外层 slot 循环继续。 | shared runner已实现per-attacker abort。 | 用多attacker joint trace终验。 |
-| C-08 | `B5_RULE_FAMILIES_REBASED / B6_RELATION_PENDING` | special relation hit 与普通 hit 在同一候选流中裁决。 | kind/effect/status主要规则族已迁移。 | catch/relation settlement归B6。 |
-| C-09 | `B5_TYPE1_ARMOR_VERIFIED / H_CONTENT_PENDING` | type-1 armor 与 unarmored 标准命中分支由当前 armor catalog 决定。 | selection/match/activation/reduced/fallback已验证。 | 正式内容切换与值归H。 |
-| C-10 | `B5_DAMAGE_CORE_REBASED / CROSS_PHASE_RESOURCE_AUDIO_PENDING` | damage、fall、defense、HP/MP、统计和声音副作用有固定写入顺序。 | damage/rest/status/HP核心已迁移。 | B6/B7/B8/H/B11资源与B10音频后置。 |
-| C-11 | `B5_HIT_RESPONSE_REBASED / B10_AUDIO_SPARK_PENDING` | hit stop、震动、击飞、倒地、受伤动作和朝向由当前 hit response 定义。 | logic response规则族已重基线。 | 音频、火花、表现与最终场景矩阵归B10/出口。 |
-| C-12 | `B5_ORDINARY_AND_B6_CAUGHTACT_COMBO_VERIFIED / B10_H_PENDING` | ordinary combo 与 caughtact combo 在命中/抓取指定时点写入。 | 独立carrier、ordinary producer/expiry及真实post-settlement caughtact event producer已验证。 | 显示归B10、正式tuple激活归H。 |
-| C-13 | `B6_C22_STANDALONE_EXIT_READY / PRODUCER_STAGE_JOINT_PENDING` | stage settlement后统一按hold/count与三轴公式finalize。 | consumer公式/gate已等价；catch escape/impact producer及B8 stage removal仍有独立包。 | 不新增C22代码；待producer、B8与B12 joint trace。 |
-| C-14 | `B5_DAMAGE_CREDIT_REBASED / B6_HELD_ACCOUNTING_CAUGHTACT_VERIFIED / CROSS_PHASE_RESOURCE_PENDING` | 统计 credit/owner 链按当前 BattleWorld 关系解析。 | ordinary damage/KO、held direct-owner canonical score/KO及post-settlement caughtact已迁移；legacy held stats退休。 | child/mode/content资源链归B7/B8/H/B11；world KO feed独立。 |
+| C-08 | `B5_REBASED / B6_RELATION_SUBSETS_VERIFIED` | special relation hit 与普通 hit 在同一候选流中裁决。 | kind/effect/status、pickup原子接线及catch exact/accounting/caughtact已有具名专项。 | 完整CPoint资源/OPoint关系链和新内容联测仍待；不重做已验catch core。 |
+| C-09 | `B5_TYPE1_ARMOR_VERIFIED / D023_DAT_RETEST_PENDING` | type-1 armor 与 unarmored 标准命中分支由当前 armor catalog 决定。 | selection/match/activation/reduced/fallback已有验证。 | 正式armor content切换后复验，与未实现算法分开。 |
+| C-10 | `B5_DAMAGE_AND_B6_IMPACT_REBASED / RESOURCE_AUDIO_PENDING` | damage、fall、defense、HP/MP、统计和声音副作用有固定写入顺序。 | damage/rest/status/HP及Goal18 exact impact事务已迁移。 | 完整HP/MP资源、spawn/mode/world事件与声音需B7/B8/B10/H闭合。 |
+| C-11 | `B5_HIT_RESPONSE_REBASED / B9_B10_PENDING` | hit stop、震动、击飞、倒地、受伤动作和朝向由当前 hit response 定义。 | logic response已重基线。 | 火花资源/震动/画面归B9，声音归B10，最终正式场景待验。 |
+| C-12 | `ORDINARY_CAUGHTACT_COMBO_VERIFIED / B9_CONTENT_PENDING` | ordinary combo 与 caughtact combo 在命中/抓取指定时点写入。 | ordinary producer/expiry及post-settlement caughtact event已有专项。 | combo图集与显示归B9；新DAT tuple迁移后复验，不把显示误分到B10音频。 |
+| C-13 | `C22_CONSUMER_EXIT_READY / STAGE_JOINT_PENDING` | stage settlement后统一按hold/count与三轴公式finalize。 | consumer公式/gate已等价；后继Goal18 impact producer也已限定完成。 | 不新增C22公式；复核余下catch escape/B8 stage removal及B12 joint trace。 |
+| C-14 | `DAMAGE_CREDIT_HELD_ACCOUNTING_VERIFIED / WORLD_RESOURCE_PENDING` | 统计 credit/owner 链按当前 BattleWorld 关系解析。 | ordinary damage/KO、held canonical score/KO/caughtact及Goal20 holder-only旧stats退休已完成。 | world KO feed、child/mode/content资源链仍待B7/B8/H。 |
 
 ### 4.8 抓取、持有、武器和 CPoint
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
 | W-01 | `MIXED_ADVANCE_PREFLIGHT_ACCOUNTING_CAUGHTACT_AND_POSITIVE_RETIREMENT_VERIFIED` | catch advance是单一slot升序mixed pass；settlement在vaction重验后执行canonical held damage/score/KO、cover timers及post-settlement caughtact；之后无positive validation。 | mixed/exact/fences/preflight/accounting/caughtact均已迁移，Unity-only positive半清理pass已退休并通过真实Battle grab。 | B6剩余held/weapon规则另行按Authority顺序复核；MP resource和world KO feed继续后置。 |
-| W-02 | `SCHEMA_AND_OLD_CONSUMER_OWNERS_VERIFIED / CONTENT_GATED / PRODUCTION_HELD` | CPoint是27个独立scalar；front/back hurt与injury/cover不互为alias，drain/gain进入resource，z进入settlement；2.8无front/back hit-tail consumer。 | formal value仅19字段；converter alias污染kind2 Injury/Cover并被actual/HitPlan/legacy额外写action；release drain会被unknown admission拒绝。 | 原子退休旧hurt consumer后做versioned schema；resource/H内容后置。current OID300→OID33 action130有可达witness。 |
-| W-03 | `REBASELINE_REQUIRED` | held refill 在碰撞前和命中后各执行一次。 | Unity 两次 HeldProcess 条件不同。 | 对齐饮料/可消耗物的 HP/MP 和销毁时点。 |
-| W-04 | `KIND2_OWNER_VERIFIED / THREE_PACKAGES_HELD` | kind2按attack edge、ground state、type、weapon_throw table、prior relation写link/owner/group/count/action。 | kind2漏OID120=101、OwnerSlot与conditional count；kind7额外pickup；WPoint公共tail缺失。 | carrier/system rules→pure→atomic；lifecycle cleanup后退休Unity-only positive validation。 |
-| W-05 | `OWNER_VERIFIED / SHARED_SELECTOR_PACKAGE_HELD` | 轻/重武器、跑投和普通投掷由 link state 与 linked definition `<stats>` 选择；当前/release九个action stats entry均为0，走call-site fallback。 | canonical writer已有2.8 selector；Legacy仍正式可配置，忽略fields并有type6 neutral 52-vs55等差异；旧ID bool无合法owner。 | `NTSD28-B6-NTSDSPEC-COMPAT-WEAPON-ACTION-OWNER-AUDIT-001`已冻结共享selector+bool退休单包。 |
-| W-06 | `OWNER_INVENTORY_VERIFIED / IMPACT_OWNER_VERIFIED / PACKAGES_HELD` | 新权威无旧 `LF2_19 properties.js` 表；physics无mass gate；kind10/11/17/18是environment/owner/system-table impact事务；body shake另属render phase。 | 6行7表达式仍引用旧表；actual impact误用WeaponCount/+11 stats并漏exact fields/17/18；HitPlan缺carrier。 | NTSDSpec五包已拆；impact另按carrier→pure→atomic三包，均production held。 |
+| W-02 | `CPOINT_27_REQUIRED / OLD_HURT_CONSUMER_RETIRED` | CPoint是27个独立scalar；front/back hurt与injury/cover不互为alias，drain/gain进入resource，z进入settlement；2.8无front/back hit-tail consumer。 | Goal17已退休actual/HitPlan kind2 hurt-action consumer；Converter alias与19-scalar formal value仍在，drain被拒绝。 | 补27字段/去alias/资源与z等consumer；D-023方向已确认，不再策略阻塞；新schema另建Task。 |
+| W-03 | `REFILL_MP_EXHAUSTION_SCOPED_VERIFIED / HP_BASEMAX_PENDING` | held refill 在碰撞前和命中后各执行一次。 | B6-HELD-REFILL-MP-EXHAUSTION：focused7/7、真实Play6/6、26 samples和6 exhaustion，含RNG与motion/reset。 | HP/baseMax完整clamp、全部正式DAT tuple、完整OPoint自然技能链仍待。 |
+| W-04 | `PICKUP_P1_P2_P3_SCOPED_VERIFIED / UNION_TRACE_PENDING` | kind2按attack edge、ground state、type、weapon_throw table、prior relation写link/owner/group/count/action。 | rules23/pure32/atomic140与两个scoped Play、6记录117字段source trace通过；kind7额外pickup已退。 | 不重做三包；old-child cleanup、ITR/OPoint union全域、schema与正式内容迁移复验待做。 |
+| W-05 | `COMPAT_SELECTOR_VERIFIED / PHYSICAL_PIXEL_PENDING` | 轻/重武器、跑投和普通投掷由 link state 与 linked definition `<stats>` 选择；当前/release九个action stats entry均为0，走call-site fallback。 | Goal19共享九字段selector，canonical/Legacy一致；focused771，双profile各32Play和512字段对照。 | 已有真实内容多为zero fallback；nonzero fixture不代替新版技能，物理键和pic999武器像素证据仍缺。 |
+| W-06 | `NATIVE_IMPACT_SCOPED_VERIFIED / E_MASS_PENDING` | 新权威无旧 `LF2_19 properties.js` 表；physics无mass gate；kind10/11/17/18是environment/owner/system-table impact事务；body shake另属render phase。 | Goal18 carrier13/pure147/atomic194及Tayuya10/11Play闭合，17/18以fixture覆盖；旧WeaponCount/stat写入已退。 | 不重做impact；E余mass/schema，B9 body shake与完整新内容GameSession trace仍待。 |
 | W-07 | `USER_ACCEPTED_EXCEPTION` | 当前正式普通模式随机武器表为空。 | Unity 会从加载对象中生成随机武器。 | 保留，但必须隔离其 RNG/slot 副作用，避免污染非例外对齐。 |
-| W-08 | `REBASELINE_REQUIRED` | broken weapon 和 held object 的 lifecycle 进入统一 slot tail。 | Unity 有独立 weapon lifecycle。 | 对齐生灭、粒子、声音和下一帧。 |
+| W-08 | `RELEASE_TERMINAL_SUBSETS_VERIFIED / FULL_TAIL_PENDING` | broken weapon 和 held object 的 lifecycle 进入统一 slot tail。 | WPoint kind3 release与terminal structural有Goal11/12限定证据，Goal20 release/state旧行为已退。 | 完整weapon pieces/粒子/声音、frame→previous→lifecycle和新资源联测归B7/B10。 |
 
 ### 4.9 OPoint、生成、Slot 可见性与生命周期
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| L-01 | `REBASELINE_REQUIRED` | OPoint 由当前 frame、owner、facing、input 和 spawn planner 定义。 | Unity 有 factory、task、logic factory 和 structural writer 多路径。 | 必须统一到相同数据合同。 |
-| L-02 | `AUTHORITY_ONLY` | frame counter 为 0 且 `wait:0,next:0` 可按规则重复发射，不是简单 action one-shot。 | Unity 有 action latch/任务边界。 | 对齐重复生成语义。 |
-| L-03 | `CONFIRMED_DIFFERENCE` | 升序实时 slot 扫描；低 slot 生成到尚未扫描高 slot 时可同 tick 进入尾部。 | Unity 有 deferred mutation 和多个 `Suppress*UntilTick`。 | 每种生成来源建立 birth-visibility 矩阵。 |
-| L-04 | `REBASELINE_REQUIRED` | 生成到已扫描低 slot 时等到下一 tick。 | Unity 逻辑容量与空槽选择不同。 | 容量可不同，但可见性必须等价或列为新例外。 |
-| L-05 | `REBASELINE_REQUIRED` | transient、revival visual、broken particle、fusion child 有各自字段初始化。 | Unity 复用对象通过多个 factory 初始化。 | 对齐所有 runtime 字段和默认值。 |
-| L-06 | `REBASELINE_REQUIRED` | lifecycle pending 在 previous action 写入后解析。 | Unity death cleanup 和 lifecycle 分散在主 tick。 | 对齐最后可攻击/可见/可回收 tick。 |
-| L-07 | `REBASELINE_REQUIRED` | pool/slot 复用后的 identity 由物理 slot 和实体字段决定。 | Unity 有 stable id、generation、handle。 | 可以保留 Unity identity，但逻辑关系与 stale-ref 拒绝必须等价。 |
-| L-08 | `LIFECYCLE_CLEANUP_AND_POSITIVE_PASS_RETIREMENT_VERIFIED` | relation writer建链；despawn/spawn publication前由`clear_entity_links()`原子清held/catch反向引用；无每tick positive validation。 | release/reuse现原子清exact+compat关系；正式HeldLinkValidation、World/stress/U6 owner和positive event已退休，synthetic mismatch保持。 | lifecycle与negative invalid-preserve均有focused/Play证据；positive bitmap只保留无production consumer的兼容诊断存储。 |
-| L-09 | `REBASELINE_REQUIRED` | definition transition 可改变运行定义与表现资源。 | Unity data object/frame cache 有自己的绑定。 | 对齐切换前后 frame、pic、碰撞和资源。 |
-| L-10 | `REBASELINE_REQUIRED` | 有序关闭不定义战斗规则，但不得改变最后一个 tick 的事件和回收。 | Unity 有十一阶段 shutdown 合同。 | 保留 Unity-native shutdown；加入终局 parity 场景。 |
+| L-01 | `OPOINT_CONTENT_GAP_CONFIRMED / MATERIALIZER_PENDING` | OPoint 由当前 frame、owner、facing、input 和 spawn planner 定义。 | BattleObjectPointValue及Converter只有8个正式scalar；C++ decode有24个内容scalar，另source_line是元数据。 | 先补z/dvz/hp/mp/team/reserve/effect/pic/centers/framea/attacking/join族等16字段，再同步各factory/runtime/materializer。 |
+| L-02 | `REPEATED_ZERO_FRAME_REVIEW_REQUIRED` | frame counter 为 0 且 `wait:0,next:0` 可按规则重复发射，不是简单 action one-shot。 | 已有OPoint factory、C25结构materializer和flush，不能直接称整个能力不存在。 | 对wait0/next0重复入口与latch逐tick建立witness，确认后只改实际首差。 |
+| L-03 | `BIRTH_VISIBILITY_CONTRACT_PENDING` | 升序实时 slot 扫描；低 slot 生成到尚未扫描高 slot 时可同 tick 进入尾部。 | C25已有升序处理和结构任务flush，同时保留deferred mutation/suppress字段。 | 逐生成来源核验高slot同tick、低slot次tick；不能仅见deferred就认定全部错误。 |
+| L-04 | `SLOT_VISIBILITY_JOINT_TRACE_PENDING` | 生成到已扫描低 slot 时等到下一 tick。 | Unity容量/profile保留，已有registry/slot代际基础。 | 按正式扫描顺序比较分配到已扫描低slot与未扫描高slot的行为；容量例外不豁免时序。 |
+| L-05 | `EXACT_PRODUCER_SUBSETS_VERIFIED / OPOINT_FIELDS_PENDING` | transient、revival visual、broken particle、fusion child 有各自字段初始化。 | B0 direct/OPoint/F8 owner、B4 revival与Goal20关系seam等已完成；完整OPoint字段仍缺。 | 新增字段的default/继承/reset完整接入后验transient/revival/fusion/pieces；不能重做所有owner。 |
+| L-06 | `PREVIOUS_COMMIT_PRESENT / TERMINAL_TAIL_PENDING` | lifecycle pending 在 previous action 写入后解析。 | C25M previous-action owner已有验证；terminal早退仍需与后续particles/pieces/lifecycle闭合。 | B7核对最后可攻击/可见/回收tick与终止分支，避免提前free跳过native副作用。 |
+| L-07 | `IDENTITY_CLEANUP_SUBSETS_VERIFIED / FULL_REUSE_PENDING` | pool/slot 复用后的 identity 由物理 slot 和实体字段决定。 | generation/stable handle与B6原子关系cleanup已有代码及专项。 | 全生成→释放→复用及stale-ref整场trace待验，不重写Unity identity模型。 |
+| L-08 | `LINK_CLEANUP_VERIFIED / RESERVED_SCHEMA_PENDING` | relation writer建链；despawn/spawn publication前由`clear_entity_links()`原子清held/catch反向引用；无每tick positive validation。 | exact/compat关系release/reuse原子清理与positive validation退休已验；Goal20五类旧行为producer/reader也已退。 | reserved字段仍进入部分snapshot/ECS/hash；按D-022联合迁移，不把行为退休算作字段删除。 |
+| L-09 | `DEFINITION_TRANSITION_SUBSET_VERIFIED / RESOURCE_PENDING` | definition transition 可改变运行定义与表现资源。 | C25A/B definition/clone owner已有验证。 | 新DAT切换后的frame/pic/collision/cache/resource绑定及所有入口归H/B7/B9。 |
+| L-10 | `SHUTDOWN_CONTRACT_PRESENT / INTEGRATED_EXIT_PENDING` | 有序关闭不定义战斗规则，但不得改变最后一个 tick 的事件和回收。 | 现有十一阶段shutdown、worker/pool/world owner必须沿用。 | 用最终集成版本验证最后tick/退出重进/零残留，不重排既定关闭合同。 |
 
 ### 4.10 Stage、边界、模式与战斗结果
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
 | G-01 | `USER_ACCEPTED_EXCEPTION` | 正式 stage bounds 为 width、z-near、z-far 及对象/模式例外区间。 | Unity 场景启用任意多边形 walkable boundary。 | 保留；属于 gameplay 例外，不能宣称无差异。 |
-| G-02 | `CONFIRMED_DIFFERENCE` | 碰撞前和命中后各有一次 depth clamp，之后有最终 X/Z settlement。 | Unity StageBounds/PreFrameBounds 时点不同。 | 在不删除多边形例外的前提下，对齐非多边形相关时序。 |
-| G-03 | `REBASELINE_REQUIRED` | type 0、type 3、grounded object、group 5、transient 和 protected mode 有不同边界行为。 | Unity 类型/模式条件来自旧实现。 | 逐对象类型和模式建立场景矩阵。 |
-| G-04 | `REBASELINE_REQUIRED` | battle mode 影响资源、随机掉落、nameplate、revive 和结果 transition。 | Unity MatchConfig/GameModeConfig 语义未按 2.8 证明。 | 建立 mode-field 映射。 |
-| G-05 | `CONFIRMED_DIFFERENCE` | battle end timer 在 80/101/350 等节点发信号、建结果、完成并跳转。 | Unity `BattleEndPhase >= 11` 后激活 Results。 | 对齐战斗结束逻辑；结果页绘制仍按用户排除。 |
-| G-06 | `REBASELINE_REQUIRED` | living groups、revive lives 和 HP 决定胜负。 | Unity 使用 HadBoth、team buckets、reserve 逻辑。 | 对齐胜负、复活和 reserve 前置条件。 |
+| G-02 | `PLACEMENT_VERIFIED / SETTLEMENT_ALGORITHM_PENDING` | 碰撞前和命中后各有一次 depth clamp，之后有最终 X/Z settlement。 | NTSDBattleTickSystem已按首次clamp→第二次clamp→PreFrameBounds顺序；B3-C08/C21等placement有证据。 | 不能再次重排已对位置；SimulationStageRenderModule与PreFrameBounds的type/mode算法需按BattleWorld settlement闭合。 |
+| G-03 | `TYPE_MODE_BRANCH_REVIEW_REQUIRED` | type 0、type 3、grounded object、group 5、transient 和 protected mode 有不同边界行为。 | 已有角色PreFrameBounds与stage模块，非角色/grounded/transient等分支覆盖尚未形成完整对照。 | 列出各类对象/模式的实际生产入口与首差，补确认缺口，保留多边形例外。 |
+| G-04 | `MODE_FIELD_INTEGRATION_PENDING` | battle mode 影响资源、随机掉落、nameplate、revive 和结果 transition。 | MatchConfig/GameModeConfig与mode4 reserve有局部接线。 | 将正式selected mode映射到资源/掉落/nameplate/revive/results；不能以字段同名证明一致。 |
+| G-05 | `RESULT_TIMER_DIFFERENCE_CONFIRMED` | battle end timer 在 80/101/350 等节点发信号、建结果、完成并跳转。 | BattleResultsOutcomeHostWriter仍在BattleEndPhase>=11激活summary。 | 按BattleFlow28的80/101/350、144后continue及transition重做结果逻辑；不恢复排除的页面。 |
+| G-06 | `LIVING_GROUP_RULE_DIFFERENCE_CONFIRMED` | living groups、revive lives 和 HP 决定胜负。 | OutcomeHostWriter按HP>0、最多两Team bucket、HadBoth和reserve判定。 | 按revive_lives>1、有效group范围及group5排除重建结果分类；同tick复活/结束与B8联验。 |
 | G-07 | `USER_EXCLUDED` | 新权威完整结果页和战斗结果信息表现。 | Unity 使用自己的 Results UI/数据。 | 不处理表现；结果判定与进入时序仍必须对齐。 |
 | G-08 | `USER_EXCLUDED` | 新权威完整角色/模式/背景/BGM 选择流程。 | Unity 使用自己的菜单和选择 UI。 | 不处理；选择结果传入 battle 的字段仍需映射正确。 |
 
@@ -629,65 +579,65 @@ NTSD 2.4、旧 C#、旧 `game_tick(...)`、旧 trace、旧测试名和旧 Change
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| P-01 | `CONFIRMED_DIFFERENCE` | 逻辑 tick 后由独立 `RenderSnapshot28` 建立展示快照。 | RenderDispatch 位于逻辑 tick 内、FramePostProcess 前。 | 重建只读 handoff，表现不能参与逻辑写入。 |
-| P-02 | `AUTHORITY_ONLY` | 正式支持 30/60/120 render FPS，启动器请求 120，并实际插值。 | `RenderAlpha` 只被计算，中央表现没有消费。 | 实现 presentation-only interpolation；logic checksum 不变。 |
+| P-01 | `DISPATCH_PLACEMENT_CORRECTED / SNAPSHOT_HANDOFF_PENDING` | 逻辑 tick 后由独立 `RenderSnapshot28` 建立展示快照。 | FramePostProcess已先于RenderDispatch；coordinator已有capture/publish。旧表提前dispatch描述过时。 | 完整post-host snapshot边界与previous/current publication仍需接入/联合验证，不能重做整个dispatch。 |
+| P-02 | `INTERPOLATION_CONSUMER_MISSING` | 正式支持 30/60/120 render FPS，启动器请求 120，并实际插值。 | Driver只计算/暴露RenderAlpha；central系统消费单published frame，未发现previous/current生产插值。 | 补只读相邻快照与identity/generation/teleport断点保护；30/60/120画面和checksum联验。 |
 | P-03 | `USER_ACCEPTED_EXCEPTION` | 新权威使用 camera X/Y 和 render offset。 | Unity 每帧清零 camera X 和 render offset，固定世界相机。 | 保留，不恢复完整权威相机；属于可观察表现例外。 |
-| P-04 | `CONFIRMED_DIFFERENCE` | 同 Z 时后面的物理 slot 先绘制。 | 同 Z 时较小 runtime slot 先绘制。 | 对齐 tie-break；容量模型不影响此规则。 |
-| P-05 | `CONFIRMED_DIFFERENCE` | 每实体内部顺序为 shadow、body、bleed、lives、nameplate、combo、spark。 | Unity 主要是 shadow、entity、hit record，再追加 overlay/health/marker。 | 对非例外命令建立相同 order key。 |
-| P-06 | `CONFIRMED_DIFFERENCE` | spark 在 tick 开头推进，终止列不绘制。 | Unity hit record 在 RenderDispatch 周边推进。 | 对齐首帧、末帧、位置和 host slot。 |
-| P-07 | `REBASELINE_REQUIRED` | shadow 的 mode/state/object/DAT gate、custom picture/size 和位置由 2.8 定义。 | Unity common shadow 已实现相似 gate。 | 重新按 2.8 验证，不继承旧测试结论。 |
-| P-08 | `AUTHORITY_ONLY` | 正式 bleed-mark command。 | 未找到生产对应类型。 | 必须实现并验证层级、资源和持续时间。 |
-| P-09 | `REBASELINE_REQUIRED` | revive lives 文字有正式 gate、位置和 glyph。 | Unity overlay 有 HP2Orig counter。 | 用 2.8 模式/slot/字体规则重新验证。 |
-| P-10 | `REBASELINE_REQUIRED` | player/CPU nameplate 有正式 gate、关系图集、括号和 viewport clamp。 | Unity `BattleEntityOverlayLayout` 有旧实现。 | 对齐 2.8 gate、文本、颜色和同实体顺序。 |
-| P-11 | `AUTHORITY_ONLY` | combo 使用专用图集、位置和命中计时。 | 未找到正式 runtime combo text command。 | 必须实现；combo 逻辑和表现一起验收。 |
-| P-12 | `REBASELINE_REQUIRED` | body visibility、shake、state 9997 viewport/owner relative 有正式路径。 | Unity 有自身 sprite visibility/position。 | 对齐所有特殊 state 的可见位置与朝向。 |
-| P-13 | `AUTHORITY_ONLY` | earthquake 可分别影响背景和实体展示。 | 未找到正式对应生产路径。 | 必须实现非例外战斗震屏/偏移；不能反写逻辑。 |
+| P-04 | `SLOT_TIEBREAK_DIFFERENCE_CONFIRMED` | 同 Z 时后面的物理 slot 先绘制。 | StageRenderModule.ComparePresentationRenderOrder与ShadowBuild.ComparePresentationSnapshots均同Z按slot升序。 | 两比较器统一为正式同Z较大slot先，确认central无二次反转；专测遮挡，不重构无关渲染。 |
+| P-05 | `COMMAND_PHASE_GAP_CONFIRMED` | 每实体内部顺序为 shadow、body、bleed、lives、nameplate、combo、spark。 | ShadowBuild.BuildCommands已有shadow/entity/overlay/hit record，但未闭合正式各entity phase。 | 按body/bleed/lives/nameplate/combo/spark顺序补命令；保留Unity批准血条/标记例外。 |
+| P-06 | `C01_ADVANCE_VERIFIED / DRAW_RESOURCE_PENDING` | spark 在 tick 开头推进，终止列不绘制。 | B3-C01推进已在tick开头，Play age序列与single writer有证据。 | 不重做age；核验正式spark ID/cell/terminal/resource/host slot及draw order和新资源。 |
+| P-07 | `COMMON_SHADOW_PRESENT / CUSTOM_DATA_PENDING` | shadow 的 mode/state/object/DAT gate、custom picture/size 和位置由 2.8 定义。 | 已有common shadow gate/descriptor，未闭合正式shadow_pic/shadowsize自定义内容与命令。 | 按新DAT shadow数据、模式/状态/对象gate与挂点逐项接入/复验。 |
+| P-08 | `BLEED_COMMAND_GAP_CONFIRMED` | 正式 bleed-mark command。 | 当前BuildCommands未找到正式bleed生产路径。 | 补资源/位置/持续期/phase，不能以不同类型名本身裁定缺失。 |
+| P-09 | `OVERLAY_PRESENT / NATIVE_RULE_REVIEW` | revive lives 文字有正式 gate、位置和 glyph。 | 已有BattleEntityOverlayLayout；lives/nameplate的正式gate/glyph/颜色/slot/viewport规则未完整对照。 | 复用已有布局能力，对照render_snapshot.cpp按具体首差改数据/命令，不重写完整HUD。 |
+| P-10 | `OVERLAY_PRESENT / NATIVE_RULE_REVIEW` | player/CPU nameplate 有正式 gate、关系图集、括号和 viewport clamp。 | 已有BattleEntityOverlayLayout；lives/nameplate的正式gate/glyph/颜色/slot/viewport规则未完整对照。 | 复用已有布局能力，对照render_snapshot.cpp按具体首差改数据/命令，不重写完整HUD。 |
+| P-11 | `COMBO_PRESENTATION_GAP_CONFIRMED` | combo 使用专用图集、位置和命中计时。 | ordinary/caughtact combo逻辑已验，专用native combo atlas/command未接齐。 | 接B9 combo显示，复用现有逻辑计数/expiry；不把缺画面写成combo逻辑未实现。 |
+| P-12 | `SPECIAL_VISIBILITY_REVIEW_REQUIRED` | body visibility、shake、state 9997 viewport/owner relative 有正式路径。 | 已有sprite capture/visibility与旧Effect.Oscillate consumer；Goal17仅退休producer。 | 核对render phase、state9997 owner-relative及viewport；不能因lookup已退就宣称shake完成。 |
+| P-13 | `EARTHQUAKE_PRESENTATION_GAP_CONFIRMED` | earthquake 可分别影响背景和实体展示。 | 只有测试入口/phase标识，未发现正式背景/实体earthquake输出consumer。 | 新增presentation offset并保持固定世界相机例外；不得回写logic位置。 |
 | P-14 | `USER_ACCEPTED_EXCEPTION` | 没有 Unity 头顶三层血条。 | 默认启用 runtime overhead health bar。 | 保留，不处理。 |
 | P-15 | `USER_ACCEPTED_EXCEPTION` | 没有 Unity FootSelf 贴图。 | 战斗场景启用 FootSelf。 | 保留，不处理。 |
 | P-16 | `USER_ACCEPTED_EXCEPTION` | 没有 Unity Android/iOS 底部黑区适配。 | 移动端使用平台取景和底部黑区。 | 保留，不处理。 |
 | P-17 | `USER_EXCLUDED` | 原生角色 HUD、HP/MP panel、status、旗帜等。 | Unity 没有完整 2.8 HUD。 | 用户排除，不处理。 |
 | P-18 | `USER_EXCLUDED` | background DAT 多层和 cycle 动画。 | Unity 主要使用单一背景 Sprite 和平台取景。 | 用户排除，不处理。 |
 | P-19 | `USER_EXCLUDED` | 结果页/KO feed/scoreboard 等完整原生表现。 | Unity 使用自身结果表现。 | 用户排除，不处理。 |
-| P-20 | `REBASELINE_REQUIRED` | 资源缺失、隐藏 pic、frame 无资源时有正式 fail/skip 行为。 | Unity loader/catalog/fallback 语义不同。 | 与内容 H 一起建立缺失资源行为矩阵。 |
+| P-20 | `MISSING_RESOURCE_MATRIX_PENDING` | 资源缺失、隐藏 pic、frame 无资源时有正式 fail/skip 行为。 | 已有effectivePic/catalog fail/skip；与正式resource_available、hidden/terminal和fallback尚未闭合。 | 结合D-023 parser/PNG接入验证缺失、隐藏pic、无帧资源与重复sheet引用。 |
 
 ### 4.12 音频
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| O-01 | `REBASELINE_REQUIRED` | frame/hit/result 事件在固定逻辑位置生成 audio event。 | Unity 多处调用 `QueueSound`/`NTSDSoundPlayer`。 | 对齐事件生成 tick 和顺序。 |
-| O-02 | `REBASELINE_REQUIRED` | XAudio2 backend 定义 effect voice、BGM loop、stop-all 和复用。 | Unity AudioSource pool。 | 可 Unity-native，但同时播放、截断和循环结果必须一致。 |
-| O-03 | `REBASELINE_REQUIRED` | F11/F12 连续调节音量。 | 没有对应完整正式路径。 | 与功能键一起处理。 |
-| O-04 | `REBASELINE_REQUIRED` | story/result/mode transition 有 stop-all/BGM 选择时点。 | Unity App/UI 音频流程不同。 | 只对齐会影响战斗内音频的部分；被排除页面本身不处理。 |
-| O-05 | `STRATEGY_PENDING` | 正式 runtime 有 981 WAV 和 resource catalog 映射。 | Unity 内容/映射不完整。 | 纳入内容 H，等待内容权威策略。 |
+| O-01 | `EVENT_QUEUE_PRESENT / NATIVE_TIMING_PENDING` | frame/hit/result 事件在固定逻辑位置生成 audio event。 | SimulationWorld.QueueSound与Driver.PublishPendingSoundsAfterChecksum/Dispatch已存在。 | 按native source/channel/tick/order/worldX对每个frame/hit/KO事件核验，保留publication隔离。 |
+| O-02 | `BACKEND_BEHAVIOR_DIFFERENCE_CONFIRMED` | XAudio2 backend 定义 effect voice、BGM loop、stop-all 和复用。 | NTSDSoundPlayer有Time.time节流、可配置Unity随机音高/音量和48/24 pool，未等价native voice/BGM合同。 | 对正式cue参数证明随机/节流是否触发，补channel/cap/loop/stop/衰减，避免声音被渲染时间改变。 |
+| O-03 | `KEY_ROUTE_PRESENT / AUDIO_EFFECT_MISSING` | F11/F12 连续调节音量。 | PhysicalLatch/NativeFunctionKeyRouter已有F11/F12→VolumeDown/Up；生产搜索仅见枚举/路由，未见音频effect消费。 | 接入实际音量及repeat/边界；不能写成没有F11/F12输入。 |
+| O-04 | `TRANSITION_AUDIO_PENDING` | story/result/mode transition 有 stop-all/BGM 选择时点。 | 结果/story/mode已有部分应用音频设施，未闭合native stop-all/BGM时点。 | 与G-05 transition接线并验证暂停/退出/重进，页面排除不豁免声音状态。 |
+| O-05 | `DAT_CATALOG_TARGET_DECIDED / WAV_SCOPE_PENDING` | 正式 runtime 有 981 WAV 和 resource catalog 映射。 | D-023覆盖DAT与角色图片，因此sound.dat目标明确；WAV整体迁移未被该决定自动授权。 | 核对sound.dat→现有/正式WAV映射，单列音频资源缺口；不再把全部H写成策略未定。 |
 
 ### 4.13 数据、Parser、资源和旧 `NTSDSpec`
 
 | ID | 状态 | 新权威 | Unity 当前 | 影响与处理 |
 |---|---|---|---|---|
-| D-01 | `STRATEGY_PENDING` | runtime 有 405 DAT、1255 PNG、981 WAV。 | Unity 有 138 DAT、323 PNG。 | 用户要求处理 H；先做逐资源 catalog 映射，不能按数量直接覆盖。 |
-| D-02 | `STRATEGY_PENDING` | 2.8 DAT 定义正式 runtime 可消费字段和资源引用。 | Direction B 暂以 Unity 138 DAT 为内容值权威。 | 必须由用户决定整体切换、仅补缺还是分类权威。 |
-| D-03 | `REBASELINE_REQUIRED` | `dat_parser`/`object_catalog`/`fusion_catalog`/resource catalogs 定义 2.8 schema。 | Unity Decryptor/ParserV2/Converter 及运行 loader。 | 对相同输入建立 normalized projection 和 presence/default 对比。 |
-| D-04 | `REBASELINE_REQUIRED` | DAT 缺字段、重复字段、last-wins、unknown token 和路径规范由 2.8 parser 定义。 | Unity parser 仍带旧权威修正和 fallback。 | 建立 token/schema 差异表，不进行脆弱字符串修补。 |
-| D-05 | `OWNER_INVENTORY_VERIFIED / PRODUCTION_HELD` | ground friction无mass字段；throw/action读取link-state+linked stats；impact读取environment/owner/system table；body shake读取render phase。 | `NTSDSpec`仍有6行7个调用表达式；两组public方法无repo producer，其余compat/snapshot载体待迁。 | `NTSD28-B6-NTSDSPEC-PRODUCTION-OWNER-INVENTORY-AUDIT-001`已穷尽并拆五包；禁止继续把旧表当authority。 |
-| D-06 | `REBASELINE_REQUIRED` | object type、frame、bmp、armor、fusion、mode、background/resource catalog 构成闭合引用图。 | Unity 只覆盖当前内容子集。 | 建立 reachable closure，区分战斗必须、用户排除表现和未引用资源。 |
-| D-07 | `REBASELINE_REQUIRED` | sound、shadow、glyph、spark、combo 等按正式 resource index/path 解析。 | Unity 使用 AssetDatabase/Resources/Addressable 风格映射。 | 可以换载入机制，但逻辑 key、缺失行为和最终资源必须一致或列入例外。 |
-| D-08 | `REBASELINE_REQUIRED` | 2.8 实体/模式/表现字段有明确默认值和重置。 | Unity runtime 字段来自旧 C++/C# 映射。 | 建立字段 ledger：类型、默认、writer、reader、reset、checksum。 |
-| D-09 | `STRATEGY_PENDING` | 正式内容值来自 2.8 runtime 数据。 | 当前治理仍声明 Direction B Unity 内容值。 | 在内容策略决定并更新 authority 文档前，不得声称内容完全一致。 |
+| D-01 | `TARGET_DECIDED / MIGRATION_PENDING` | runtime 全目录本轮仍统计405 DAT；正式 indexed/reachable 集须由catalog确定。 | Unity 本轮仍为138 DAT，尚未迁移。 | D-023 已批准 DAT/角色图片使用新版；逐文件引用与替换清单待执行，不再等待内容方向。 |
+| D-02 | `TARGET_DECIDED / PARSER_CHANGES_REQUIRED` | 正式2.8 DAT的独立字段、默认值和顺序定义内容。 | Unity 仍有19-scalar CPoint准入和front/back→injury/cover alias。 | 先补数据合同和consumer；再迁移正式DAT，旧Direction-B仅作回归基线。 |
+| D-03 | `PARTIAL_IMPLEMENTATION / CPOINT_GAP_CONFIRMED` | CombatRecordDecoder28::catch_point读取27个独立scalar。 | BattleCatchPointValueAdapter只允许19项，Catalog ScalarsPerEntry=19；drain被拒绝。 | 扩展8字段并删除alias；同步value/catalog/admission/hash及kernel边界，先按新内容证明。 |
+| D-04 | `REVIEW_REQUIRED / NOT_A_CONFIRMED_GLOBAL_REWRITE` | parser定义presence/default/重复键/顺序与路径。 | ParserV2/Converter已含native input、armor等迁移；不能统称全旧。 | 保留已有适配；对正式全部可达DAT做normalized差分后仅修真实首差。 |
+| D-05 | `RETIREMENTS_VERIFIED / MASS_SCHEMA_REMAINS` | ground friction没有mass gate。 | Goal17 flute、oscillate producer，Goal18 impact，Goal19 compat selector及Goal20旧关系行为已限定关闭；直接NTSDSpec引用只余mass。 | LF2Character._mass/CharacterMechanics ctx.mass/shell仍待联合退休；不是重做五包。 |
+| D-06 | `CATALOG_MIGRATION_REQUIRED` | GameSession28以decoded_dat/data/data.txt解析对象；图片以vfs为根。 | GameDataManager与CharacterAnimtorManager仍使用旧Config根；新Naruto为c/nar/nar.dat→c/nar/nar.png。 | 对象registry、DAT根与图片根分开映射；按正式依赖闭包迁移，不能按旧basename匹配。 |
+| D-07 | `PNG_WORKER_PATH_GAP_CONFIRMED / OTHER_KEYS_REVIEW` | 正式角色PNG和原生resource key由vfs/catalog解析。 | CharacterAnimtorManager在线程池调用BMPLoader.LoadBmpData；后台分支直接走仅支持BMP的手动解码。 | 新增或复用安全PNG像素解码路径并统一root/key；同步sheet/head/small及失败处理；不能以主线程LoadImage存在就声称PNG已支持。 |
+| D-08 | `PARTIAL_VERIFIED / JOINT_SCHEMA_PENDING` | 默认/关系/owner/target等字段分别有正式语义。 | 多批exact producer已验证，Goal20只退休行为，reserved字段和snapshot形状仍在。 | 复用既有字段成果，按D-022一次迁移后capture/restore/hash；关联B6/B7，不重新移植全部字段。 |
+| D-09 | `USER_CONFIRMED / MIGRATION_NOT_STARTED` | D-023：DAT与角色相关图片采用正式NTSD2.8-Logan。 | 运行内容仍是迁移前Unity版本。 | 迁移与新内容验收完成前不能宣布内容一致；音频/非角色图片不自动整体切换。 |
 
 ### 4.14 Unity-native 基础设施的非差异条件
 
 以下能力可以保留，不因为新权威没有同样架构而删除；但一旦改变可观察结果，就自动转为正式差异：
 
-| ID | Unity 能力 | 保留条件 |
-|---|---|---|
-| U-01 | ECS/SoA writer、fast path、shadow compare | 与基准路径逐 tick、逐字段、逐事件一致。 |
-| U-02 | spatial index、quadtree、candidate store | 候选集合、顺序、first difference 和 fallback 与新权威一致。 |
-| U-03 | worker thread、single-writer host | 不改变 pass 顺序、输入、RNG、异常和关闭时最后一 tick。 |
-| U-04 | central renderer、Texture2DArray、dynamic Mesh、URP | 不改变 sprite、pivot、layer、tie-break、可见帧和命令 identity。 |
-| U-05 | object pool、slot generation、stable handle | 不改变逻辑 slot 语义、birth visibility、关系和重置状态。 |
-| U-06 | lockstep、checksum、snapshot、rollback、replay journal | LocalFreeRun 最终行为一致；回放不能产生额外输入边沿或 RNG 消费。 |
-| U-07 | Editor preview、benchmark、diagnostics、self-check | 不进入生产行为，不作为权威。 |
-| U-08 | MonoBehaviour/GameObject 生命周期适配 | 不让 Transform、Animator、Unity Physics 或销毁顺序成为逻辑真值。 |
+| ID | Unity 能力 | 当前状态 | 剩余验收与保持条件 |
+|---|---|---|---|
+| U-01 | ECS/SoA writer、fast path、shadow compare | IMPLEMENTED / PARITY_PENDING | 已有大量规则族专项；完整trace仍须与正式基准一致，不因使用优化就默认重写。 |
+| U-02 | spatial index、quadtree、candidate store | IMPLEMENTED / ORDER_TRACE_PENDING | 逐场景验证candidate集合/顺序/fallback，已有测试不等于当前正式全场景证书。 |
+| U-03 | worker thread、single-writer host | IMPLEMENTED / ELIGIBLE_PATH_RETEST_PENDING | worker/Stop/Join设施已存在；B1当前worker受presentation绑定限制，启用时复验Host与关闭最后tick。 |
+| U-04 | central renderer、Texture2DArray、dynamic Mesh、URP | MESH_GROWTH_SUBSET_VERIFIED / PRESENTATION_PENDING | Goal19 M1仅证容量/上传；P-02插值、P-04排序、P-05命令等仍是具体缺口。 |
+| U-05 | object pool、slot generation、stable handle | IMPLEMENTED / B7_FULL_LIFECYCLE_PENDING | 已有reset/关系cleanup专项；正式生成→birth→free→reuse整链仍待。 |
+| U-06 | lockstep、checksum、snapshot、replay journal | IMPLEMENTED / D022_MIGRATION_PENDING | 当前12/20/23；联合升版未实施。新schema后capture/restore/hash/seed-input replay验收，不扩张为完整联网开发。 |
+| U-07 | Editor preview、benchmark、diagnostics、self-check | AVAILABLE / NON_AUTHORITY | 诊断设施可复用，不进入规则，也不能将旧content/synthetic测试升格为正式EXE parity。 |
+| U-08 | MonoBehaviour/GameObject 生命周期适配 | CONTRACT_AND_SUBSETS_PRESENT / INTEGRATED_EXIT_PENDING | 保留十一阶段关闭；历史Record阻塞须结合最新SelfCheck重新对账，不把旧Naruto失败自动报为当前仍失败。最终enter/exit/re-enter、dirty与零残留要重验。 |
 
 ### 4.15 生产证据索引
 
@@ -719,59 +669,25 @@ J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan
 
 ## 5. E 项专项：淘汰旧 `NTSDSpec`
 
-### 5.1 已确认生产调用
+### 5.1 当前生产残留与已完成项（2026-09-12）
 
-`NTSD28-B6-NTSDSPEC-PRODUCTION-OWNER-INVENTORY-AUDIT-001` 已穷尽为4个文件、6行、7个调用表达式：
+原 owner inventory 的“4 文件/6 行/7 表达式”是退休前计数，已被 Goal17～20 后续成果更新。本轮生产 Scripts 排除 Test 的直接 `NTSDSpec.` 搜索仅余 `LF2Character.Initialize` 一处 mass lookup；该搜索不能代替完整字段消费审计。
 
-| 当前调用 | 观察结果 | 正确owner |
+| 项目 | 当前状态及证据 | 剩余工作 |
 |---|---|---|
-| `LF2Character.Initialize` 的 mass lookup | 当前type0均得到默认1，friction gate恒真；Authority无mass gate。 | character mechanics + character shell snapshot；后续退休mass carrier。 |
-| `LF2Entity.FluteForce` 的 mass lookup | 全仓只有声明/空override，无repo生产caller。 | dead API retirement；真正kind10/11/17/18 impact另包。 |
-| `LF2CharacterWeaponLinkResolver` 四个attack/throw布尔表达式 | 只属compat/异常关系兜底；canonical以link state+linked DAT stats裁决。 | 与`BattleCharacterActionWriter`共享native selector。 |
-| `LF2LivingObject.EffectCreate` 的 oscillate lookup | 全仓无repo生产caller；Authority body shake不是ID表。 | B9/B10 render-phase/presentation owner。 |
+| Character mass | `NTSD28-B6-NTSDSPEC-MASS-CARRIER-OWNER-AUDIT-001` 是审计 VERIFIED；`LF2Character._mass` 初始化/capture/restore 与 `CharacterMechanics` 的 gate 尚在。正式角色默认1，已知正式输出不受影响。 | 与 character-shell 联合迁移退休无权威的 mass gate/carrier；不要误称玩家当前移动已证实错误，也不要仅硬编码1留下可变快照状态。 |
+| dead Flute API | Goal17 `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001` 已 VERIFIED。 | 不再列待删除；没有自然caller，不冒充完整技能Play。 |
+| compat attack/throw selector | Goal19 `NTSD28-B6-NTSDSPEC-COMPAT-WEAPON-ACTION-PRODUCTION-001` 已 VERIFIED，Legacy/canonical共享native selector，旧四bool退出。 | 不重做52/55、linked stats等已关闭修复；在正式新DAT下做受影响内容回归。 |
+| oscillate producer | Goal17 `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001` 已 VERIFIED。 | 原生 body shake/render phase仍归B9；旧producer退休不等于表现对齐。 |
+| kind10/11/17/18 impact | Goal18F 三包 carrier→pure→atomic 已限定 VERIFIED，参见本文末尾收尾及同名 Record。 | 复用exact事务与HitPlan；17/18无自然内容producer的边界保持，正式内容迁移后复验触发链。 |
+| Tracker/GrabbedBy/WeaponState/ReleaseTick/HolderCopy | Goal20 五个行为退休包已限定 VERIFIED。 | runtime/shell/snapshot/ECS仍有reserved载体，D-022联合迁移尚未完成；不能重复退休，也不能宣布字段已删除。 |
 
-Authority closure的`mass`与`oscillat*` token命中均为0。当前/release catalog的九个linked action stats entry
-均为0；current kind10/11/17/18 ITR已纠正为15/5/0/0（OID36 Tayuya243..247），release为121/61/0/0。dead caller只说明
-当前可达边界，不代表impact或presentation规则已对齐。
+### 5.2 当前处理顺序
 
-Character mass已由`NTSD28-B6-NTSDSPEC-MASS-CARRIER-OWNER-AUDIT-001`闭合：非空旧mass IDs都不是
-current/release type0，正式character恒得1，所以现有formal结果未受旧值影响；但`ctx.mass>0`是Authority
-不存在的latent gate，且该值进入character shell snapshot。后续包将同时删除context、real-character和snapshot
-载体，并把character-shell schema 1升2；不得只把Initialize改成硬编码1而留下可变规则状态。
-
-另一个mass lookup位于`LF2Entity.FluteForce()`。`NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-OWNER-AUDIT-001`
-已证明它只有base声明与weapon空override、无repo caller；后续独立删除两符号。真正kind10/11/17/18 impact
-不得委托给该旧virtual API，仍以shared writer及其HitPlan原子包为唯一owner。
-
-### 5.1.1 kind 10/11/17/18 impact纠正
-
-`NTSD28-B6-NATIVE-IMPACT-10111718-OWNER-AUDIT-001` 已确认真实owner并非旧`FluteForce()`：
-
-- kind11以`EnvironmentState320<0`为gate；17/18分别只收character/object；
-- character先双owner active preflight，再写environment=-20、`0x2000+creditSlot`、physical attacker slot与
-  respond action；object按type 1/2/4/6、state1000/2000与system ID201/202 immunity裁决；
-- X/Z必须以exact除法`/1.07`并覆盖pending impulse，共同Y尾按character 3.0/object 2.3；
-- 不写WeaponCount、legacy combo/damage stats、rest、delay、HP或RNG。
-
-Unity当前只支持10/11，错误使用/写入WeaponCount并加legacy统计，漏environment/catch-source/impact-source、
-owner preflight和17/18。HitPlan也没有三个exact carrier。后续固定顺序为
-`NTSD28-B6-NATIVE-IMPACT-HITPLAN-CARRIERS-001` → `...PURE-CORE-001` →
-`...ATOMIC-PRODUCTION-INTEGRATION-001`。current/release kind10/11/17/18为15/5/0/0与121/61/0/0；
-current20条10/11均来自OID36 Tayuya actions243..247。17/18两端仍无producer；release-only内容接入仍受H策略约束。
-
-### 5.2 处理顺序
-
-1. `NTSD28-B6-NTSDSPEC-MASS-CARRIER-RETIREMENT-PRODUCTION-001`：移除mass gate/载体或显式保留reserved schema位；
-2. `NTSD28-B6-NTSDSPEC-COMPAT-WEAPON-ACTION-PRODUCTION-001`：compat改用canonical link-state+linked-stats selector；
-3. `NTSD28-B6-NATIVE-IMPACT-10111718-OWNER-AUDIT-001`：独立冻结并实现2.8 impact，不与dead flute method混包；
-4. `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-001`：在render-phase owner闭合后移除旧ID lookup；
-5. 所有生产引用为零后运行`NTSD28-B6-NTSDSPEC-EMPTY-SHELL-DISPOSITION-001`，再决定删除文件或保留无规则兼容壳；
-6. 每包必须compile/focused/SelfCheck/必要Play与first-difference验收；当前B6 runtime栈未清，全部production held。
-
-其中compat weapon包已由`NTSD28-B6-NTSDSPEC-COMPAT-WEAPON-ACTION-OWNER-AUDIT-001`进一步闭合：
-默认DataOriented profile不读旧表，但LegacyCanonical仍可由CLI/config进入生产；必须抽取两profile共享的
-linked-action selector。除删除四个无owner旧bool外，还要修Legacy relation6 neutral 52→55、heavy
-`heavy_throw/run_heavy_throw`、relation4 state5 all-directions与nonzero linked fields；不在该包扩大输入采样/边沿。
+1. 复核并声明 mass、其余 reserved carrier 与新增 exact 字段的完整联合迁移清单，沿用 D-022；consumer/producer缺口先补齐。
+2. 在联合窗口处理声明的 runtime/shell/snapshot/checksum/ECS 字段及版本；旧 midbattle 严格拒绝，历史 parity 按版本分组。
+3. 生产规则引用确实清零后，再裁定 `NTSDSpec` 空壳是否删除。当前不为“文件还在”重做已完成包。
+4. 以新版 DAT/角色图片重验可达技能；保留已有旧内容专项证据，不把旧 PASS 直接计为新内容整场验收。
 
 ## 6. H 项专项：内容、数值与资源
 
@@ -780,11 +696,20 @@ linked-action selector。除删除四个无owner旧bool外，还要修Legacy rel
 D-022已获用户确认：行为退休→一次性主版本提升→接线，只一个不兼容窗口。entity12→13、aggregate20→21、checksum23→24，shell按删除项升版；旧midbattle snapshot严格拒绝、seed/input重放、不建adapter。locked immutable规则不支持alternate；reserved退出条件为相关行为退休及联合新版本验收完成即删除。历史checksum/parity分版本；CPoint19→27内容合同仍独立，Direction-B/H资源策略不变。本Goal仅P1/P2，不改schema。
 
 
-### 6.1 当前冲突
+### 6.1 当前决定（D-023，2026-09-12）
 
-当前治理仍把 Unity `Assets/NTSD/Config` 的 138 DAT 规定为 Direction B 内容数值权威；用户现在明确要求处理 Unity 与新权威的内容/资源差异。这个要求使内容域进入正式 backlog，但尚未决定迁移策略。
+用户已明确要求 DAT 和角色相关图片采用 NTSD 2.8-Logan 版本。本范围内容方向已决定，不能再以 Direction B 或“策略未定”阻塞。Unity 138-DAT 及现有图片保留为迁移前基线；迁移尚未执行，旧内容专项验证不等于新内容验证。
 
-### 6.2 实施前必须由用户选择的策略
+角色/技能关联图片以正式引用图确定；不等于清空整个 `Assets/NTSD/Sprite`。`Config` 中还包含 GameConfig/InputConfig 等 Unity 配置，也不能连带删除。旧文件应在新版载入、引用重绑与回归完成后按精确清单处置；“估计全部删除”不是已核验的删除清单。
+
+### 6.2 已选方向与必须先修的接入点
+
+- DAT/角色图片采用新版；下面策略表保留为历史备选对照，不再要求用户重复选择。
+- `GameDataManager.ResolveObjectFilePath` / `CharacterAnimtorManager`：DAT 与 sprite root 分离；正式 Naruto `c/nar/nar.dat` 引用 `c/nar/nar.png`，图片应落在 `vfs` 根，不能拼在 DAT 所在目录下。
+- `CharacterAnimtorManager.ProcessAndCreateSpritesAsync` / `LoadBMPAsSpriteAsync` → `BMPLoader.LoadBmpData`：后台只走手动 BMP，正式 PNG 会失败。必须修复后台像素解码，不能只调整扩展名。
+- `Lf2DatConverter.ConvertToCatchPoint` / `BattleCatchPointValueAdapter` / `BattleCatchPointCatalog`：27 scalar、独立 front/back hurt、drain/gain/recover 等准入和消费；Goal17 已完成旧 hurt consumer 退休，不代表该数据迁移完成。
+- 对所有正式可达 DAT 的 normalized projection 建立首差报告；已有 native input/armor 等适配保留，只修改证实缺失的字段/默认/结构。
+- 音频资源、非角色图片与被排除的 UI/背景不在本次已确认的整体替换范围；按各自原规则处理。默认 stage.dat 的实际部署暂停仍需单独解决。
 
 | 选项 | 含义 | 主要风险 |
 |---|---|---|
@@ -792,7 +717,7 @@ D-022已获用户确认：行为退休→一次性主版本提升→接线，只
 | 只补缺失 | Unity 现有 138 DAT 数值继续正式，只补新权威有而 Unity 没有的对象/资源。 | 同名内容仍可能与权威不同，不能达到内容完全一致。 |
 | 分类权威 | 战斗必需字段/资源按 2.8，另一些 Unity 内容继续保留。 | 需要精确分类表，长期治理复杂。 |
 
-在用户选择前，允许只读 catalog/引用图/差异报告；不允许修改 DAT、PNG、WAV、Prefab、Scene 或 importer。
+具体迁移仍以独立 Task/Change 声明文件、GUID/引用、parser/loader 修改、验收与回滚；内容方向已获用户确认，无需重复询问同一决定。本轮是审计与文档整理，没有执行资源替换或删除。
 
 ### 6.3 必须形成的内容工件
 
@@ -807,11 +732,11 @@ D-022已获用户确认：行为退休→一次性主版本提升→接线，只
 
 ## 7. 分阶段实施顺序
 
-不得把本表一次性实现成大改。建议按以下依赖顺序建立独立 Task/Change：
+**当前阶段状态以第0.10节为准，实际执行优先级与回访以第0.11～0.13节为准。** 以下B编号只表示职责划分，不是线性待办顺序；尤其不能因为B11编号较后而推迟内容前置。B1/B2已关闭职责不重复实施，B3/B5出口放行不等于整域完成。仅对未闭合项建立独立Task/Change。
 
 1. **B0：Trace 与字段基线**——2.8/Unity 双端 schema、输入、RNG、slot、实体字段和 comparator；
-2. **B1：时间与 Host**——33 ms、3 ms、暂停/单步/追帧；
-3. **B2：输入与双 RNG**——相位、proxy、call-site table、回放；
+2. **B1：时间与 Host（当前生产职责已完成）**——保留33/3 ms、暂停/单步/debt实现；仅按worker触发条件及B12要求复验；
+3. **B2：输入、双 RNG 与 AI 基础（基础/路由职责已关闭）**——保留phase/proxy/combo/RNG/AI基础及功能键路由；下游consumer/effect/内容与回放验收由对应阶段接管；
 4. **B3：主 pass 骨架**——只重排边界和不可变快照，不同时重写所有行为；
 5. **B4：Frame/Physics/Revival**；
 6. **B5：Collision/Hit/Armor/Damage/Combo**；
@@ -820,12 +745,14 @@ D-022已获用户确认：行为退休→一次性主版本提升→接线，只
 9. **B8：Stage 非例外时序与 BattleFlow/Results 逻辑**；
 10. **B9：非例外战斗表现**——snapshot、插值、排序、spark、bleed、nameplate、combo、earthquake；
 11. **B10：Audio**；
-12. **B11：H-Content**——只有内容策略获用户确认后实施；
+12. **B11：H-Content**——D-023已确认DAT/角色图片方向；前置parser/loader与引用清单后分批迁移，不能机械等到B10结束才开始；
 13. **B12：全场景 parity campaign**——角色、武器、技能、模式、30/60/120 展示和长时运行。
 
 每一阶段都必须先建立 Task Contract 和 Change Record，再修改脚本；不得复用 NTSD 2.4 的旧 Change ID。
 
-### 7.1 当前激活包
+### 7.1 历史具名包与证据日志（非当前执行队列）
+
+本节保留各包启动、失败、修正和完成历史；当前处置以第 4 节和第 0 节剩余脚本清单为准。不得把旧“下一包”重新排入实施，也不得修改原始失败证据以匹配最新状态。
 
 - `NTSD28-B4-F04-STATE12-18-TRANSACTION-PREREQUISITE-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / CARRIER_AND_OWNER_SPLIT_DEFINED`：缺7个status motion/action carrier；env/credit count已有，KO event sink缺失。下一carrier；B5 producer/B8 event后置。详见`docs/ai/MANIFESTS/NTSD28-B4-F04-STATE12-18-TRANSACTION.md`。
 - `NTSD28-B4-F04-STATUS-MOTION-CARRIER-001 / VERIFIED / CARRIER_READY / PRODUCER_CONSUMER_DEFERRED`：7-field reset/copy/snapshot/checksum/parity已闭合；red21→final focused6、related60、精确NTSD28 broad527、08:00:57Z SelfCheck，Scene/Console/Ledger通过。为保持现有authority capture兼容，本包未单边改变48-leaf raw exact schema。下一hard-motion consumer；B5 producer与B8 event另包。
@@ -1411,7 +1338,7 @@ D-022已获用户确认：行为退休→一次性主版本提升→接线，只
 
 - 本文基于当前源码静态审计和资源计数，没有运行正式 EXE/Unity 同场景 comparator；隐藏常量和分支仍可能新增差异行。
 - 正式 EXE 与对应源码声明一致，但源码候选 build 不自动替代固定 SHA 的正式 EXE 行为。
-- Direction B 内容策略未决，是达到内容完全一致的最大治理门槛。
+- DAT/角色图片方向已由D-023确认；parser/loader接入、实际资源迁移与新内容覆盖验收未完成，是当前内容闭合门槛。
 - 用户批准保留的多边形边界、随机掉武器、固定相机、头顶血条、FootSelf 和移动端取景会持续造成可观察差异。
 - 用户排除的 HUD、结果表现、背景多层/cycle 和选择流程意味着整个应用不能声明逐像素完全相同；当前目标是本文件非例外战斗域的完全对齐。
 
@@ -1420,12 +1347,13 @@ D-022已获用户确认：行为退休→一次性主版本提升→接线，只
 任何上下文压缩或新任务恢复时：
 
 1. 先读 `docs/ai/CURRENT-AUTHORITY.md`；
-2. 再读本文；
-3. 读取根 `AGENTS.md`、`docs/ai/STATE.md` 和当前 handoff；
-4. 从本文最早未关闭且依赖已满足的差异 ID 建立独立 Task/Change；
+2. 先读取本文第0.14节执行许可与批次目标；当前EXECUTION_USER_HOLD未由用户解除时不执行。已明确启动后再读第0.13节游标、0.11节Q队列及0.12节R回访，在已启动范围内先处理READY_RETURN再选满足硬前置的Q；禁止按最小B编号或旧“下一包”恢复；
+3. 读取根 `AGENTS.md`、`docs/ai/STATE.md` 和当前handoff，重新核对Git状态、authority/内容/schema身份；用户未提交与未跟踪资源保持；
+4. 读取第0.10节阶段状态、目标差异ID和具名Task/Change/原始证据；为未覆盖的新脚本路径先建精确Task/Record，不重开已关闭职责；
 5. 不得恢复已删除的旧 C#/NTSD 2.4 对齐计划；
 6. 不得把用户例外偷偷改回待修项，也不得把例外隐藏后声称无差异；
-7. 新发现的差异先追加到本表，再实施修复。
+7. 新发现差异先登记到第4节，并为它指定Q owner、硬前置和R回访；开发前置与最终验证前置分开，不写无owner的“后置”；
+8. 每个子包交付立刻更新Q/R状态、触发证据、未做项及第0.13节游标，同步STATE/handoff；有脚本变更按原合同运行ChangeLedger validator。正式新内容整场证据未完成前保持FULL_ALIGNMENT_INCOMPLETE。
 
 
 Goal18????PLANNED/TEST_FIRST?`NTSD28-B6-NATIVE-IMPACT-HITPLAN-CARRIERS-PRODUCTION-001`, `NTSD28-B6-NATIVE-IMPACT-PURE-CORE-PRODUCTION-001`, `NTSD28-B6-NATIVE-IMPACT-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001`???I1?I2?I3?I3?I1/I2?????Temp/Goal18_*???????Goal17?????
@@ -1511,3 +1439,287 @@ Disk Scene SHA remains D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4
 Reserved contract: GrabbedBy0, TrackerFlag0/TrackerParentnull, WeaponState0, ReleaseTick-1. HolderCopy retains actual type/lifecycle defaults (runtime/Character/SpecialAttack99; Weapon/Other-1; task-1), not a new uniform default. Existing synthetic sentinels remain for no-write/fingerprint tests. Schema/snapshot/checksum/parity/ECS fingerprint structures, +2F8, NTSDSpec, Gen, Plugins and task content/Scene remain untouched; no staged files or git add/commit/push. Broader battle alignment and joint schema migration remain incomplete. Earlier progress statements are superseded by this closure; failures and correction history are retained. Final evidence index: Temp/Goal20_FinalSummary.json. Final validator receipt is appended after execution.
 
 Final validator executed: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity; exit0 PASS,459 records/28 governed code files, Temp/Goal20_Validator.txt. Process-only Git config environment avoided unavailable user global ignore; no Git config files changed. Final git diff --check exit0. All changed scripts also explicitly covered by these five Goal20 Records.
+
+## 历史页首追加记录（已移至文末，内容保留）
+
+> **Goal17三个限定退休包已验证（2026-09-10）：** `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001 / VERIFIED`。focused13/4/10全PASS，一次共享B6610/610含全部指定前置，refill9/9、旧converter/HitPlan7/7、freshSelfCheckPASS、双build0error；Scene固定SHA/dirtyfalse，schema/内容/NTSDSpec本体/P3 Record均保持。包1不实现drain/recovery，包2无自然Play caller，包3保留Oscillate晚帧consumer/恢复，不声明native B9对齐。报告后等待复核，以下启动记录为过程历史。
+
+> **Goal17已获追加授权恢复：** 三包 `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001` 均IN_PROGRESS/TEST_FIRST；包1引用复核方完整正向证明，限定旧测试范围已批准，drain/recovery延后；包2/3先全量名称认证。P3 Record不再修改。以下事前暂停为已解除历史。
+
+> **2026-09-10三退休包事前暂停：** 包1`NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001 / BLOCKED`；包2`NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001 / PLANNED`；包3`NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001 / PLANNED`。现有SelfCheck/HitPlan仍要求hurt覆盖且旧converter测试直接调用拟删helper，相关旧测试未在本轮授权文件清单内。详见Temp/Goal17_PrechangeScopeReview.md，脚本改动0，新RED/共享验收未执行。P3本轮已获用户复核确认，当前VERIFIED；此前REVIEW_HOLD已解除。
+
+> **Goal16 P3限定子集已验证（2026-09-10）：** `NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / VERIFIED / REVIEW_HOLD`。RED126失败/14控制→focused140PASS；B6 583/583（含所有指定前置）、refill9/9、旧pickup2/2、fresh SelfCheckPASS、双build0error。两scoped Play tick6/8与当前playable C++源码同seed/input/tick比较6记录117字段无首差；该证据是Direction-B夹具源码执行，不是正式EXE完整应用parity。8个旧期望站点逐项留痕。Scene固定SHA/dirtyfalse、37保护哈希不变；P2/schema/Attack映射/old-child cleanup无改。报告后等复核，不启动后继；以下启动/阻塞/恢复条目为过程历史。
+
+> **Goal16 P3已获追加授权并恢复：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST_RESUMED。用户批准两处R-HC-04期望及授权文件内四类P2/Authority直接矛盾的旧期望修订（counter/HolderCopy/count/kind7），逐站点登记；先新RED再生产。下方BLOCKED为已解除的过程历史，类外/P2缺陷仍硬停。
+
+> **Goal16 P3事前范围阻塞：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / BLOCKED / PRODUCTION_UNCHANGED_FROM_GOAL15。SelfCheck14770仍要求unsupported type3保留counter7、14859仍要求HolderCopy镜像；与P2/用户目标冲突且位于明确授权修订行之外。两处最小提案见Temp/Goal16_ProposedAdditionalSelfCheckExpectations.diff，尚未应用。P3 RED/生产/Play/共享回归未执行；需用户追加这两处旧期望范围再恢复，以下启动条目为过程历史。
+
+> **Goal16 P3启动：** NTSD28-B6-KIND2-PICKUP-ATOMIC-PRODUCTION-INTEGRATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。用户已批准本包覆盖Goal15等待复核状态；只消费既有P2计划，kind7副作用退休，state2004替换旧child保留，schema/Attack映射不改；独立Task/Record已先建。
+
+> **Goal15限定子集已验证（2026-09-10）：** NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001 / VERIFIED（rules/relation-count）；NTSD28-B6-KIND2-PICKUP-PURE-TRANSACTION-PRODUCTION-001 / VERIFIED（pure plan）。P1绑定+35C已证明，RED16失败/7控制→23PASS；P2骨架RED32执行、失败明细20条截断→32PASS。共享B6 443/443、refill9/9、fresh SelfCheck PASS、双build0error；34个schema文件哈希不变，Scene SHA D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11/dirtyfalse。PLAY_NOT_PERFORMED_RULES_PURE_LAYER；P3_NOT_CONNECTED，完整pickup仍未关闭。D-022只登记路线图，本Goal无schema变更。报告后等待用户复核；以下启动条目为过程历史。
+
+> **P2启动：** NTSD28-B6-KIND2-PICKUP-PURE-TRANSACTION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST；P1 NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001已23/23 PASS。只新增pure有序计划，P3未接线、schema不改，最后共享回归。
+
+> **P1启动：** NTSD28-B6-KIND2-PICKUP-RELATION-COUNT-SYSTEM-RULES-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST / PICKUPCOUNT_BINDING_PROVEN。P2纯计划后继，P3未授权；遵循D-022但本Goal不改schema。
+
+> **2026-09-10用户裁定 D-022：** 行为退休→一次提升→接线，entity12→13/aggregate20→21/checksum23→24及必要shell升版，旧midbattle严格拒绝按seed/input重放，无adapter；首批system规则locked immutable不支持alternate。reserved只过渡，历史checksum/parity按版本分组，CPoint19→27内容合同独立。本Goal不触碰schema文件，先P1/P2，P3待复核。
+
+> **Goal13b已验证三个限定子集：** NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001、NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001（依赖guard）、NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001均VERIFIED。guard RED6/11→17PASS，missing72复跑PASS且Sakura/Sakon双Play两轮均Free0，DVX RED8/16→24PASS且200→199→拾取199→投掷199。共享一次B6 388/388（含17/72/24/92/80），refill9/9，fresh SelfCheckPASS，双build0error，SceneSHA不变。最终SelfCheck Console保留7条负向夹具日志+8条MinMaxAABB引擎断言，根因未排查，不声明Console0。详见三Record；报告后GOAL14_USER_HOLD，不自动推进+2F8/schema。
+
+> **Goal13b包2启动：** NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。守卫NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001已有17/17及双Play；包1NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001已依赖守卫升级VERIFIED（72复跑+第二轮双Play）；批次最终共享回归待包2完成。
+
+> **Goal13b：** NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST。用户已授权C25限定guard，先守卫/双Play与72收口，再包2，共享最终回归；原Goal13硬停止由此限定解除。
+
+> **Goal13硬停止：** NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001 / BLOCKED / FOCUSED72_PASS / PLAY_SAKURA_PASS_SAKON_LATE_FREE_FAIL。Sakon-888在C09/C20保持但后续C25 Free1；修复点BattleLateEntityLifecycleModule不在清单。包2未启动、共享回归未运行，不标VERIFIED、不自动扩包；下一步等用户复核。详见同ID Record。
+
+> **Goal13包1：** NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST；仅missing-action精确子集；包2尚未启动，最后共享回归。用户当前授权覆盖此前Goal13 HOLD。
+
+> **Goal12 Part A（2026-09-10）：** NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-PRODUCTION-001 / VERIFIED_TERMINAL_SUBSET / RED_COMPLETED80_FAILED_CAPPED25 / FOCUSED80_PASS / B6_275_PASS / KIND3_REFILL101_PASS / LIFECYCLE_STRUCTURAL35_PASS / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / ROCKLEE254_SCOPED_PLAY_PASS / CONSOLE0 / SCENE_UNCHANGED / LEDGER440_379。tick6/C09 Free/childUnregister/generationRelease各1、terminal RNG/sound0，World4→4及两个pool2→2。详见Record；Part B结果仅最终回复，GOAL13_USER_HOLD。
+
+> **Goal11 kind3 release包（2026-09-10）：** NTSD28-B6-WPOINT-KIND3-RELEASE-PRODUCTION-001 / VERIFIED_KIND3_SUBSET / RED_COMPLETED92_FAILED_CAPPED25 / FOCUSED92_PASS / B6_195_PASS / REFILL9_PASS / RNG_RELATIONS41_PASS / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCOPED_ROCKLEE255_PLAY_PASS / CONSOLE0 / SCENE_UNCHANGED / LEDGER439_378。tick12同步原值0,5,1,0，left-facing final motion100,-1,-2；owned cleanup4→4、roster恢复。Play为current DAT pickup consumer与standing同tick native chord，详见Record。后置族不变，GOAL12_USER_HOLD。
+
+> **Goal9三timer消费包（2026-09-09）：** NTSD28-B5-RECOVERY-STATUS-CONSUMERS-NO-STATS-001 / VERIFIED / NO_STATS_THREE_CONSUMERS_ONLY / FOCUSED_69_OF_69 / B5_846_OF_846 / NTSD28_316_OF_316 / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / PLAY_NOT_PERFORMED_NO_NATURAL_PRODUCER / GOAL10_USER_HOLD。恢复先于C25h递减，render_phase已建模；shared writer仅消费weak/HP-double/MP-bonus。69项RED至少25实测失败（MCP capped）→69/69 GREEN，B5原777+69与NTSD28原247+69全绿，full SelfCheck14:36:14Z PASS，Scene不变。bonus两timer无自然producer，按许可Editor强制载体验收；完整证据见同ID Record。其余C25c-e/B11/B8继续后置，停止等待Goal10。
+
+> **Goal8限定边界包（2026-09-09）：** NTSD28-PP-RECOVERY-LOW-THRESHOLD-INCLUSIVE-BOUNDARY-001 / VERIFIED / PP150_BOUNDARY_ONLY / RED_3_FAIL_15_PASS / BOUNDARY_18_OF_18 / B5_777_OF_777 / NTSD28_247_OF_247 / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / PLAY_NOT_PERFORMED_BOUNDARY_ONLY / GOAL9_USER_HOLD。仅两处>=150改>150与18组新增测试；RED3 fail/15 pass→GREEN18/18，B5原759+18及NTSD28原229+18全部通过，fresh full SelfCheck13:48:37Z PASS。指定Scene不变，完整证据见同ID Record；只关闭等号边界，C25c-e其余算法继续后置，完成停止等待Goal9。
+
+> **Goal7 PartA限定包（2026-09-09）：** NTSD28-RESPAWN-STALE-INTEGER-FIXTURE-READ-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / FULL_SELFCHECK_PASS / BUILDS_0_ERROR / SCENE_UNCHANGED / GOAL8_USER_HOLD。仅respawn stale-int的raw整数断言及消息；fresh full SelfCheck于13:24:41Z PASS，目标全部断言（含后续全局同步guard）通过，无下一停点；两套build0 error，指定Scene SHA不变。完整验收见同ID Record。PartB零文件改动，结论仅报告；其他任务继续USER_HOLD，停止等待Goal8。
+
+> **Goal6 PartA限定包（2026-09-09）：** NTSD28-UNIFIED-AI-SNAPSHOT-REFRESH-EXPECTATION-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / SINGLE_1_OF_1 / STRESS_280_OF_280 / CORE_STRESS_256_OF_256 / BUILDS_0_ERROR / SCENE_UNCHANGED / GOAL7_USER_HOLD。仅具名RefreshCount期望1→2及两阶段注释；单测一次1/1、ProductionEntityStress完整组一次280/280（main256/timing17/capacity7），两套build0 error。完整证据见同ID Task/Record。其余工作保持USER_HOLD；PartB零文件改动，结论仅在报告；完成等待Goal7。
+
+> **Goal5限定双包完成（2026-09-09）：** NTSD28-R4-HIT02A-FLUTE-STAT-SENTINEL-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / FOUR_CASES_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_LATER_RESPAWN_STALE_INT / GOAL6_USER_HOLD；NTSD28-UNIFIED-AI-SNAPSHOT-STRESS-COUNTER-EVIDENCE-001 / VERIFIED / EVIDENCE_CAPTURE_ONLY / SINGLE_RUN_FAILED_REFRESH_1_VS_2 / ASSERTIONS_UNCHANGED / GOAL6_USER_HOLD。A四组通过后停在既有respawn stale-int，不修；B单跑取证1/1/1/2/1/1050，首失败RefreshCount原期望1/实际2，断言未改。两套build0 error，指定Scene SHA不变。各自Task/Record保留完整证据。停止等待Goal6，production及其余B6继续USER_HOLD。
+
+> **Goal3 GT06期望修正已验证（2026-09-09）：** `NTSD28-GT06-RECOVERY-PP-EXPECTATION-FIXTURE-CORRECTION-001 / VERIFIED / TEST_FIXTURE_ONLY / GT06_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_LATER_R4_HIT_02A / SCENE_UNCHANGED / GOAL4_USER_HOLD`。唯一改动为PP20→4，ApplyRecoveryFixture与production不变。fresh SelfCheck12:04:37Z越过GT06/current-DAT matrix后停在既有后续R4-HIT-02A；不修该检查，不称全量通过。两套build0 error，指定Scene D18E75F7...A2F11不变。仅关闭该夹具，整个战斗目标仍FULL_ALIGNMENT_INCOMPLETE；B6剩余族、任何production修改继续USER_HOLD，停止等待用户复核。
+
+> **Goal 2 held-refill专项Play已闭合（2026-09-09）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001 / VERIFIED / FOCUSED_7_OF_7 / C09_RELATED_2_OF_2 / NTSD28_CATEGORY_229_OF_229 / B5_NAME_GROUP_759_OF_759 / TARGETED_PLAY_6_OF_6 / REFILL_SAMPLES_26 / EXHAUSTION_EVENTS_6 / BUILDS_0_ERROR / CONSOLE_0_ERROR / SCENE_UNCHANGED / SELFCHECK_BLOCKED_UNRELATED_GT06 / HP_BASEMAX_DEFERRED`。本轮沿用现有resolver，只补test-only探针：真实NTSD_Battle、正式Sakura/Naruto DAT、OPoint kind2关系绑定入口、生产driver完整tick5→20；OID122/123连续消费、零/负HP、child cap/exact gate、单次RNG与motion/reset均通过。探针自身实体回收，额外OID150/slot52已证实来自生产normal random-drop；Scene SHA为指定`D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11`。精确记录见`docs/ai/CHANGE-RECORDS/NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001.md`。HP/baseMax与完整OPoint materializer未借本包关闭；**Goal3及所有未授权工作继续USER_HOLD，总目标FULL_ALIGNMENT_INCOMPLETE，等待用户复核。** 此条只supersede该包旧PLAY_PENDING，不删除历史事实。
+
+> **总体目标已暂停（2026-09-09）：** `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / USER_HOLD /
+> FULL_ALIGNMENT_INCOMPLETE`。用户将交由GLM先核验当前进度、已处理脚本和证据，再整理遗漏与未处理项；
+> 禁止从头重做已有成果。暂停期间不得启动新包或继续运行验收。
+> 新会话提示词见 `docs/ai/GLM-INCREMENTAL-CONTINUATION-PROMPT-2026-09-09.md`；
+> 当前状态、未闭环项、用户例外/排除与最终成果定义见
+> `docs/ai/GLM-REALIGNMENT-HANDOFF-2026-09-09.md`。
+
+> **B6 positive-link validation已退休（2026-09-09）：** `NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-PRODUCTION-001 / VERIFIED / RED_4_FAIL_2_PASS_OF_6 / FOCUSED_6_OF_6 / RELATED_33_OF_33 / B6_CATEGORY_103_OF_103 / NTSD28_229_OF_229 / STRESS_255_OF_256_1_UNRELATED_AI_REPORT / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_R2_CPOINT_SYNC / CONSOLE_0_ERROR / SCENE_UNCHANGED / PHASE_33 / NO_POSITIVE_EVENT`。正式tick phase由34压至33，post-catch不再单边清relation或发positive event；stress/U6/W07旧owner同步退出，真实Battle grab与lifecycle cleanup回归通过。下一先复核B6剩余首差与既有held package状态。
+
+> **B6 held injury caughtact event已验证（2026-09-09）：** `NTSD28-B6-HELD-INJURY-CAUGHTACT-EVENT-PRODUCTION-001 / VERIFIED / RED_5_FAIL_10_PASS_OF_15 / FOCUSED_15_OF_15 / B6_CATEGORY_97_OF_97 / NTSD28_223_OF_223 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_POSITIVE_LINK / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_428_364 / POST_SETTLEMENT_EVENT_EXACT`。正injury applied event只在完整settlement后按序消费；formal tuple/type/facing/one-hop owner、双事件与0B均闭合，真实Play count0→1且无重复。下一strict首差为positive-link validation retirement。
+
+> **B6 held injury accounting/cover已验证（2026-09-09）：** `NTSD28-B6-HELD-INJURY-ACCOUNTING-COVER-PRODUCTION-001 / VERIFIED / RED_14_FAIL_3_PASS_OF_17 / FOCUSED_17_OF_17 / B6_CATEGORY_82_OF_82 / NTSD28_208_OF_208 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / RELATED_FIXTURES_9_OF_9 / REAL_BATTLE_GRAB_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_POSITIVE_LINK / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_427_363 / CANONICAL_ACCOUNTING_COVER_EXACT`。current正injury223条路径的canonical damage/score/KO与cover timer已迁，真实Battle grab通过；caughtact/MP/world event后置。
+
+> **B6 settlement vaction preflight已验证（2026-09-09）：** `NTSD28-B6-CATCH-SETTLEMENT-VACTION-PREFLIGHT-PRODUCTION-001 / VERIFIED / RED_4_FAIL_4_PASS_OF_8 / FOCUSED_8_OF_8 / B6_CATEGORY_65_OF_65 / NTSD28_191_OF_191 / HITPLAN_185_OF_185 / PREINTERACTION_15_OF_15 / TARGETED_PLAY_8_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_426_362 / ACTUAL_PREFLIGHT_EXACT`。actual settlement现按signed/zero vaction写后重验target frame/首kind2 CPoint，invalid terminal。下一held injury exact accounting。
+
+> **B6 mixed catch advance/exact consumer已验证（2026-09-09）：** `NTSD28-B6-CATCH-EXACT-CONSUMER-AND-ADVANCE-ORDER-PRODUCTION-001 / VERIFIED / RED_1_PASS_7_FAIL_OF_8 / FOCUSED_16_OF_16 / PREINTERACTION_15_OF_15 / B6_CATEGORY_57_OF_57 / HITPLAN_185_OF_185 / NTSD28_183_OF_183 / TARGETED_PLAY_16_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / LEDGER_PASS_425_361 / SINGLE_MIXED_ADVANCE_EXACT_CONSUMERS`。两sweep已合并为slot升序mixed advance，settlement保持独立；三个consumer服从plain exact +0x90，mismatch/negative release均terminal。下一settlement vaction preflight。
+
+> **B6 catch relation exact-field production已验证（2026-09-09）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001 / VERIFIED / RED_0_OF_3 / FOCUSED_19_OF_19 / B6_CATEGORY_41_OF_41 / HITPLAN_185_OF_185 / NTSD28_167_OF_167 / TARGETED_PLAY_19_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_UNCHANGED / EXACT_RELATION_ATOMIC`。kind3 first/signed、双frame原子预检、exact+compat relation、respond timeout与HitPlan已闭合；current criminal 341/130与kind1不变量有真实Play证据。下一mixed catch fences。
+
+> **B6 invalid negative-held reciprocal preserve已验证（2026-09-09）：** `NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001 / VERIFIED / RED_2_OF_2 / FOCUSED_7_OF_7 / B6_CATEGORY_22_OF_22 / RELATED_47_OF_47 / BROAD_56_OF_62_6_UNRELATED_NATIVE_INPUT_PROXY / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_BASELINE_RESTORED / DIAGNOSTIC_PRESERVE`。Authority diagnostic+continue已进入C09/C20共享handler；三reason、slot0/high、lifecycle-clean、RNG/sentinel、trace和0B有真实Unity证据。下一严格包是catch relation exact-field producer。
+
+> **B6 entity-link lifecycle cleanup已验证（2026-09-09）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-PRODUCTION-001 / VERIFIED / FOCUSED_7_OF_7 / B6_CATEGORY_15_OF_15 / RELATED_91_OF_91 / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_BASELINE_RESTORED / ATOMIC_RELEASE_CLEANUP / RED_NOT_EXECUTED`。Unity适配在成功release后、generation release/reuse前同步清held/catch exact+compat关系；same-slot ABA、失败零副作用、deferred/pending与4096-slot零分配均有真实Unity证据。P7旧夹具已纠正，下一严格包为invalid reciprocal preserve。
+
+> **B6 CPoint throw精确子集已验证（2026-09-09）：** `NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / VERIFIED / FOCUSED_8_OF_8 / RELATED_17_OF_17 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED_HELD_ACCOUNTING / CONSOLE_0_ERROR / SCENE_CURRENT_BASELINE_UNCHANGED / FULL_RESOURCE_DEFERRED / ILLEGAL_CATEGORY_RETIRED`。display lead、environment/self-source、WeaponCount exclusion与exclusive-depth Vz均通过真实Unity和Play；full SelfCheck当前首差转到held injury accounting。完整MP resource仍等待B7/B8/B11/H。
+
+> **B5 negative environment shared recovery已验证（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001 / VERIFIED / RED_11_OF_12 / FOCUSED_12_OF_12 / RELATED_154_OF_154 / RELATED_B5_981_OF_981 / TARGETED_PLAY_12_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / SINGLE_EXACT_TRANSACTION / FLUTE_FALSE_POSITIVE_RETIRED`。两套WeaponCount分支已由single exact transaction替换，phase/rule/scale/two-hop/KO/clamp与flute control通过；其当时的CPoint throw Vz阻塞已由后继B6包关闭，fresh full SelfCheck推进到held injury accounting。B6 impact producer、B8 event/schema后置。
+
+> **B5 negative environment clamp合同已纠正（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-CLAMP-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SOURCE_HASH_MATCH / CLAMP_TO_ZERO_REQUIRED / PRIOR_NO_CLAMP_CLAUSE_SUPERSEDED`。无漂移source/test明确HP与HPBound在exact accounting后clamp0；原owner audit仅no-clamp一句作废，后继consumer必须覆盖overkill。
+
+> **B5 negative environment rule carrier已验证（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RULE-CARRIER-001 / VERIFIED / RED_13 / FOCUSED_6_OF_6 / RELATED_106_OF_106 / NTSD28_1394_OF_1394 / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_BASELINE_UNCERTIFIED / CARRIER_READY / RECOVERY_CONSUMER_NEXT`。default9/raw值、world snapshot/restore/checksum/parity、schema `11/20/23`及0B闭合；RED13、focused6、related106、exact NTSD28 broad1394、builds/Ledger绿。下一single recovery consumer，B6 impact/B8 event/legacy schema仍后置。
+
+> **B5 negative environment recovery owner审计已闭合（2026-09-09）：** `NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / WEAPONCOUNT_WRONG_CARRIER / EXACT_TRANSACTION_REQUIRED / TWO_PACKAGE_ROUTE`。Authority negative EnvironmentState320 transaction已冻结；Unity WeaponCount/FallDamageDiv/ComboVic双路错误且flute可达。下一rule90 carrier→single consumer，B6 producer/B8 event/schema后置。
+
+> **B5 input HP-cost shared transaction已验证（2026-09-09）：** `NTSD28-B5-INPUT-HP-COST-COMPAT-SHARED-TRANSACTION-PRODUCTION-001 / VERIFIED / RED_0_OF_6 / FOCUSED_6_OF_6 / RELATED_INPUT_187_OF_187 / RELATED_B5_926_OF_926 / TARGETED_PLAY_6_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / TWO_INPUT_WRITERS_RETIRED / NEGATIVE_RECOVERY_AUDIT_NEXT`。registered/unregistered generic action共享single exact core，两处旧ComboVic HP-cost镜像归零；下一negative recovery owner audit，CPoint/schema仍后置。
+
+> **B5 input HP-cost compatibility stats审计已闭合（2026-09-09）：** `NTSD28-B5-INPUT-HP-COST-COMPAT-STAT-RETIREMENT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / COMPAT_PATH_LIVE / PARTIAL_RETIREMENT_UNSAFE / SHARED_TRANSACTION_PRODUCTION_DEFINED`。旧input helper一处dead、一处Legacy production可达，且缺完整native transaction；禁止局部改字段。下一包共享exact action core后统一退休两处，negative recovery/B6 held/schema仍后置。
+
+> **B5 type3/weapon/flute legacy stats安全退休已验证（2026-09-09）：** `NTSD28-B5-TYPE3-WEAPON-FLUTE-LEGACY-STAT-WRITER-RETIREMENT-001 / VERIFIED / RED_0_OF_4 / FOCUSED_4_OF_4 / RELATED_B5_777_OF_777 / TARGETED_PLAY_4_CASES / LIVE_COLLISION_MATRIX_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / SCOPED_LEGACY_STATS_RETIRED / INPUT_COMPAT_AUDIT_NEXT`。type3/weapon/flute extra legacy stats实际与HitPlan已归零，exact HP/KO/+0x2F4保持；下一独立审计input compat，standard/reduced/CPoint/recovery/schema不混入。
+
+> **B5 standard/reduced exact KO producer已验证（2026-09-09）：** `NTSD28-B5-STANDARD-REDUCED-KNOCKOUT-PRODUCER-001 / VERIFIED / RED_1_OF_4 / FOCUSED_4_OF_4 / RELATED_270_OF_270 / TARGETED_PLAY_4_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_KO_PRODUCER_READY / TYPE3_WEAPON_FLUTE_STATS_NEXT`。lethal pre-HP、same attribution、gate/HP/source拒绝与HitPlan observable闭合；旧stats/event feed仍后置。
+
+> **B5 legacy damage-stat writer retirement readiness已闭合（2026-09-09）：** `NTSD28-B5-LEGACY-DAMAGE-STAT-WRITER-RETIREMENT-READINESS-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / GLOBAL_RETIREMENT_BLOCKED / FOUR_PREREQUISITE_ROUTES`。production mutation为ComboVic13/ComboAtk8/actual Kill3/Damage7/KillStats3；standard/reduced、held、input compat、negative recovery各有exact前置。先`STANDARD-REDUCED-KNOCKOUT-PRODUCER-001`，禁止直接全删。
+
+> **B5 OrdinaryCreditGate2F4 producer/consumer纠正已验证（2026-09-09）：** `NTSD28-B5-ORDINARY-CREDIT-GATE-2F4-PRODUCER-CONSUMER-CORRECTION-001 / VERIFIED / RED_0_OF_5 / FOCUSED_5_OF_5 / RELATED_287_OF_287 / TARGETED_PLAY_5_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_2F4_READERS_PRODUCERS / LEGACY_STATS_WRITER_NEXT`。damage/CPoint/HitPlan、recovery与OPoint type0 child传播已改绑exact +0x2F4，15处scoped KillCount绑定归零；旧stats writer与联合schema后置。
+
+> **B5 type3 HolderCopy extra-writer退休已验证（2026-09-09）：** `NTSD28-B5-TYPE3-LEGACY-HOLDERCOPY-WRITER-RETIREMENT-001 / VERIFIED / RED_0_OF_3 / FOCUSED_4_OF_4 / RELATED_284_OF_284 / TARGETED_PLAY_3_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / FOUR_TYPE3_WRITERS_RETIRED / TYPE3_SPECIFIC_FAMILY_EXIT_READY / ORDINARY_CREDIT_GATE_2F4_NEXT`。actual kind9一处与HitPlan三处legacy projection已退休；type3 exact group/owner/control/action/motion保持。下一严格route为B5 `OrdinaryCreditGate2F4`，stats/carrier/schema后置。
+
+> **B5 kind5 linked-parent binding已验证（2026-09-09）：** `NTSD28-B5-KIND5-LINKED-PARENT-SLOT-CORRECTION-001 / VERIFIED / RED_0_OF_5 / FOCUSED_5_OF_5 / RELATED_280_OF_280 / TARGETED_PLAY_5_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXACT_LINKED_PARENT_BOUND / HOLDERCOPY_UNCHANGED / TYPE3_WRITER_NEXT`。frozen pair/kind5/negative-link现只读HolderStableId/implicit-zero；旧hit-group exit恢复到binding已纠正的范围。type3 writer与stats/schema后置。
+
+> **B4 revival exit已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-EXIT-AUDIT-001 / VERIFIED / REVIVAL_TRACE_EQUAL_13_RECORDS_416_FIELDS / DOUBLE_RUN_BYTE_STABLE / RELATED_54_OF_54 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / B4_REVIVAL_EXIT_READY / PRODUCTION_UNCHANGED / B7_H_PRODUCER_PENDING`。Authority/Unity同seed trace覆盖direct、C25、C07三分支、peer与slot reuse，13/416 first difference空且双跑稳定；真实Play/Console/Scene绿。B7/H queued producer/schema仍后置。
+
+> **B4 normal floor/RNG已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-NORMAL-FLOOR-RNG-PRODUCTION-001 / VERIFIED / RED_0_OF_7 / FOCUSED_7_OF_7 / RELATED_59_OF_59 / TARGETED_PLAY_7_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / EXIT_AUDIT_NEXT`。effective floor、peer/sumX、sync RNG0x90/0x91、precise-only X/Z和vitals tail已闭合；下一B4 joint exit audit。
+
+> **B4 queued continuation已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-QUEUED-CONTINUATION-PRODUCTION-001 / VERIFIED / RED_4_OF_11 / FOCUSED_13_OF_13 / RELATED_47_OF_47 / TARGETED_PLAY_13_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / NORMAL_ROUTE_NEXT / PRODUCER_B7_H_PENDING / SCHEMA_DEFERRED`。controller/defer/group、queued字段、visual、action219/counter0/hold10与OID998调用前状态已闭合；下一normal floor/RNG。
+
+> **B4 revival participant gate与branch ownership已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-PARTICIPANT-GATE-KILLCOUNT-CORRECTION-001 / VERIFIED / RED_10_OF_16 / FOCUSED_16_OF_16 / RELATED_34_OF_34 / TARGETED_PLAY_20_CASES / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / QUEUED_ROUTE_NEXT`。两个legacy HitStun arm与C07 KillCount/team gate已退休，lives-first四结果已恢复；下一queued细节，normal floor/RNG和exit parity后置。
+
+> **B0 direct revival默认producer已验证，B4恢复（2026-09-09）：** `NTSD28-B0-DIRECT-REVIVAL-DEFAULTS-PRODUCTION-001 / VERIFIED / RED_1_OF_3 / DIRECT_DEFAULTS_1_0_0 / FOCUSED_3_OF_3 / DIRECT_OWNER_REGRESSION_15_OF_15 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED / B4_RUNTIME_RESUMABLE`。slot0/19在首次注册与active snapshot均为1/0/0，raw backing仍0/0/0；invalid不写。focused3/3、owner15/15、Play/Console/Scene通过；full SelfCheck独立CPoint阻塞。
+
+> **B4 revival owner审计已验证（2026-09-09）：** `NTSD28-B4-REVIVAL-PARTICIPANT-GATE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / KILLCOUNT_NOT_REVIVAL_AUTHORITY / THREE_ENTRY_POINTS_SPLIT / DIRECT_DEFAULT_PRODUCER_MISSING / FOUR_RUNTIME_ROUTES_DEFINED / PRODUCTION_HELD`。Authority C25/C07无KillCount；Unity三旧gate、wrong branch priority、primary free与queued/floor/RNG后继已拆分。Direction-B state14=235；先回退B0闭合direct默认producer。
+
+> **B3 1100..1299 child propagation退休已验证（2026-09-09）：** `NTSD28-B3-LEGACY-1100-1299-CHILD-PROPAGATION-RETIREMENT-001 / VERIFIED / RED_0_OF_4 / PRODUCTION_CHILD_SCAN_REMOVED / FOCUSED_4_OF_4 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELF_RESET_PRESERVED / CURRENT_ITACHI_1250_COVERED / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED`。RED matched child为0/-99/-149/-198而normal为40；删除唯一world/KillCount child write后focused4/4与真实Play通过，self reset与Itachi1250保留。full SelfCheck仍由独立CPoint阻塞；下一严格route为B4 revival participant gate correction。
+
+> **B3 legacy state501生产退休已验证（2026-09-09）：** `NTSD28-B3-LEGACY-STATE501-TRANSFORM-RETIREMENT-001 / VERIFIED / RED_0_OF_1 / PRODUCTION_BRANCH_REMOVED / FOCUSED_1_OF_1 / EARLY_M2_11_OF_11 / TARGETED_PLAY_PASS / BUILDS_0_ERROR / SELFCHECK_BLOCKED_UNRELATED / SCENE_UNCHANGED`。RED命中child ObjectId 31→9000；移除fast/fallback/legacy 501分支后两组10实体canonical runtime/definition/identity/frame全不变，M2 11/11、真实Play与builds通过，Console0、Scene不变。full SelfCheck仍由独立CPoint阻塞；下一严格route为B3 1100..1299 child propagation retirement。
+
+> **B3 legacy state501审计已验证（2026-09-09）：** `NTSD28-B3-LEGACY-STATE501-OWNED-CHILD-TRANSFORM-RETIREMENT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_STATE501_TRANSFORM / DIRECTION_B_GAMEPLAY_ZERO / RELEASE_GAMEPLAY_ZERO / HUD_RADAR_ONLY_TWO_TOKENS / UNITY_SYNTHETIC_BRANCH_CONFIRMED / PRODUCTION_RETIREMENT_DEFINED`。Authority C25仅处理8000..8999且不扫描owner；Unity early-frame独有synthetic 501 self/child mutation。本审计无code/content/Scene/Authority改动。
+
+> **B2 AI owner guard family已验证（2026-09-09）：** `NTSD28-B2-AI-OWNER-SLOT-KILLCOUNT-CORRECTION-001 / VERIFIED / OWNER_GUARD_TRACE_EQUAL_8_RECORDS_48_FIELDS / UNITY_FOCUSED_4_OF_4 / TARGETED_PLAY_PASS / DOUBLE_RUN_BYTE_STABLE / BUILDS_0_ERROR / EXACT_OWNER_SLOT_BINDING / LEGACY_KILLCOUNT_DETACHED_FROM_AI / SELFCHECK_BLOCKED_UNRELATED`。Authority source-model/Unity production snapshot专项trace为8 records/48 fields且first difference空，双端各自双跑稳定；B0 producer owner 0/7/99实际消费。真实NTSD_Battle Play通过、Console0、Scene不变；full SelfCheck仍由独立CPoint Vz阻塞。本包只关闭AI owner/KillCount guard binding family，下一严格route为B3 state501 legacy child transform retirement audit。
+
+> **B0 owner-slot producer出口已验证，恢复B2 runtime（2026-09-09）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-EXIT-AUDIT-001 / VERIFIED / OWNER_TRACE_EQUAL_15_RECORDS_135_FIELDS / DOUBLE_RUN_BYTE_STABLE / TARGETED_PLAY_PASS / ROUTES_1_TO_4_REGRESSION_32_OF_32 / BUILDS_0_ERROR / SELFCHECK_BLOCKED_BY_UNRELATED_CPOINT / B0_OWNER_PRODUCER_EXIT_READY / B2_RUNTIME_RESUMABLE / PRODUCTION_UNCHANGED`。Authority/Unity专项trace以相同seed4660、neutral/F8 marker和transaction tick覆盖direct self0/1、owner7/target0独立、root→child→child、F8 first spawn99、state9996五child -1、type3 owner transfer及slot50 generation1→2/owner7→13；15 records/135 fields first difference空，双端各自双跑SHA稳定。01:06:52真实NTSD_Battle Play通过、Console0、Scene SHA/dirty/root不变；route1～4回归32/32、builds 0 error。full SelfCheck仍提前阻塞于既有CPoint throw-Vz；不扩大为full parity或B8 physical F8。下一恢复B2 AI owner runtime验收。
+
+> **B0 owner-slot route 5出口审计已启动（2026-09-09）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-EXIT-AUDIT-001 / IN_PROGRESS / B0_OWNER_PRODUCER_ROUTE_5 / OWNER_ONLY_JOINT_TRACE_DESIGN / PRODUCTION_UNCHANGED`。既有通用raw capture固定两角色/三tick，不能覆盖dynamic owner生命周期。专项双端trace只比较Authority +0x354与Unity OwnerSlot，覆盖direct self、two-hop OPoint、F8 99、state9996 -1、type3 mutation和slot reuse；F8内容/数量/位置、full parity及B8 physical consumer不扩大。诊断代码与验证待执行。
+
+> **B0 ordinary OPoint owner route 4 focused通过、runtime待验（2026-09-09）：** `NTSD28-B0-OPOINT-OWNER-PROPAGATION-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_7_OF_7 / SELFCHECK_BLOCKED_BEFORE_PRESENTATION_ASSERT_BY_UNRELATED_CPOINT / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_4 / LOGIC_AND_PRESENTATION_PRODUCERS_WRITTEN / FRAGMENT_AND_LEGACY_BRANCHES_EXCLUDED`。logic/presentation两个world-owned producer各只写parent literal owner；精确RED=`2/7`，builds 0 error，Unity 00:09:55 GREEN=`7/7`覆盖owner矩阵、kind/type/single/multi/two-hop/holder/raw backing与built-in -1。00:11:22 SelfCheck在更早CPoint停止，未到presentation新增断言；Play/joint待验。下一route5 exit audit。
+
+> **B0 F8 owner99 route 3 focused通过、runtime待验（2026-09-08）：** `NTSD28-B0-F8-OWNER99-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_3_OF_3 / SELFCHECK_REACHED_UNRELATED_CPOINT_AFTER_NEW_CHECK / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_3 / MODE2_MATERIALIZER_OWNER_ONLY / PHYSICAL_F8_EFFECT_WIRING_EXCLUDED`。精确RED=`1/3`后只在mode2 factory前写task owner=`99`；builds均0 error，Unity 23:25:56 GREEN=`3/3`覆盖slot50/399、claimed entity runtime/raw backing分离、frame/位置/四次RNG及normal owner`-1`/六次RNG。23:27:20 SelfCheck通过本包检查后停在较后的既有CPoint throw-Vz；物理F8/Play/joint待验。下一route 4 ordinary OPoint owner propagation。
+
+> **B0 route 4 OPoint/fragment边界已更正（2026-09-08）：** Authority ordinary frame OPoint传播parent literal owner，hit_Fa5/6 source owner与target +3F8独立；但built-in OID999 weapon fragments与state9996保持owner -1，只有DAT `<weapon_piece>` fragments继承source owner。Unity正式late OPoint producer在`BattleLogicObjectPointRuntime.ProcessOneLateOpoint()`且缺task owner；built-in/state9996现状正确，DAT weapon_piece没有parser/materializer仅有pass skeleton，完整行为归B7；hit_Fa8/9/13独立未闭合。route 4只补ordinary single/multi producer并验two-hop/first claimed active-slot runtime/raw-trace projection，独立raw backing保持`-1`，不做factory全局parent推断。本轮无code/content/Scene。
+
+> **B0 F8 owner99 route 3前实施边界已闭合（2026-09-08）：** Authority在`GameSession28::step()`完成战斗tick后消费共享F8/F9 pending，F8的`NativeFunctionKeyDropSpawn28.owner_slot`默认精确99并原样进入`spawn_at`。Unity正式F8当前只写`FunctionKeys.PendingObjectCommand`且无生产consumer；现有`Mode2Request==1 -> SpawnMode2RandomWeapons()`来自legacy diagnostic latch并缺owner。route 2 focused gate现已满足；route 3只给该既有生成task写99并验证slot50/high first claimed active-slot runtime/raw-trace projection；独立raw backing保持`-1`，保留其`requiredRuntimeSlot=-1` lowest-free factory分配，不新增post-register fix-up。physical F8 effect接线仍归B8；`RunNormalDrop`继续默认owner -1，用户保留的candidate/RNG/position不变。本轮无code/content/Scene。
+
+> **B0 direct/stage self-owner focused通过、runtime待验（2026-09-08）：** `NTSD28-B0-DIRECT-ENTITY-SELF-OWNER-PRODUCTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / OUT_OF_PROCESS_COMPILE_PASS / UNITY_FOCUSED_15_OF_15 / SELFCHECK_BLOCKED_BY_UNRELATED_CPOINT / RUNTIME_PENDING / B0_OWNER_PRODUCER_ROUTE_2 / DIRECT_AND_STAGE_SELF_OWNER_ONLY`。direct App/bootstrap在ModuleBind前声明required/self slot，adapter按Authority只接受physical slot `0..19`，actual slot不匹配时统一reset/recycle并跳过roster；stage task携带owner=required，各entity OPoint initializer在首次注册前消费explicit owner，stage/results-reserve最终保持self owner。runtime `0 error / 47 warnings`、Editor进程外compile `0 error / 104 warnings`；重启后的Unity于22:51:33刷新程序集。首轮7/15证明活动实体owner正确但暴露测试错误的raw backing假设；纠正为claimed entity runtime并保护独立raw backing `-1`后，22:51:46实际`15/15`通过。22:52:37 full SelfCheck在更早的既有CPoint throw-Vz断言停止；Play/joint trace仍待验。F8、ordinary OPoint、state9996与其他writer不并入。
+
+> **B0 object-AI target +0x3F8 focused 7/7通过（2026-09-08）：** `NTSD28-B0-OBJECT-AI-TARGET-3F8-DECONFLICTION-001 / FOCUSED_TEST_PASS / UNITY_RUNTIME_COMPILE_PASS / 7_OF_7_PASS / SELF_CHECK_BLOCKED_BY_UNRELATED_CPOINT / PLAY_PENDING / JOINT_TRACE_PENDING / RUNTIME_PENDING / B0_OWNER_PRODUCER_PREREQUISITE / EXISTING_STORAGE_REUSED / NO_SCHEMA_CHANGE`。已有`PickerStableId`int现由canonical +3F8入口消费；Authority已闭合的common/4/7/11、5/6 child与specialized 4/12已完成owner/target分离及stale/gate修正。8/9/13、+2F8、schema和raw inactive adapter不并入。Unity compile无CS错误，v2 Unity EditMode focused于20:48实际通过7/7；完整SelfCheck被更早既有CPoint throw-Vz阻塞，Play/joint trace仍待。已满足后继owner producer的compile+focused前置，下一包为direct/stage self-owner。
+
+> **B0 owner-slot production owner已闭合，B2 runtime前置重开（2026-09-08）：** `NTSD28-B0-OWNER-SLOT-PRODUCTION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / FIELD_BINDING_RETAINED / FORMAL_SELF_OWNER_MISSING / OPOINT_OWNER_PROPAGATION_MISSING / F8_OWNER99_MISSING / TARGET_MULTIPLEXING_CONFLICT / FIVE_ROUTES_DEFINED / B2_RUNTIME_BLOCKED / PRODUCTION_HELD`。Authority direct/stage=self、OPoint/source child=source owner、F8=99、state9996=-1；Unity缺前三类并用OwnerSlot承载+3F8 target。127行中生产59行/18文件。先B0 target deconflict→self/F8/OPoint→exit trace，才恢复B2 runtime。
+
+> **B2 AI owner-slot纠正已写且隔离验证通过，runtime待验（2026-09-08）：** `NTSD28-B2-AI-OWNER-SLOT-KILLCOUNT-CORRECTION-001 / RUNTIME_PENDING / EXACT_OWNER_SLOT_BINDING / LEGACY_KILLCOUNT_DETACHED_FROM_AI / ISOLATED_RUNTIME_AND_EDITOR_COMPILE_PASS / FOCUSED_PURE_PASS / SELFCHECK_BLOCKED_UNRELATED`。Authority `owner_slot>=0`已映射OwnerSlotIndex，SoA/unified/legacy/publisher不再消费KillCount；build 0 error、owner -1/slot0/high OID122/123 harness PASS。SelfCheck被既有CPoint throw Vz断言阻塞，Unity NUnit/Play/joint trace待验。
+
+> **B5 legacy damage/stats owner已闭合，严格顺序回退到B2字段纠正（2026-09-08）：** `NTSD28-B5-LEGACY-DAMAGE-STATS-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_SINGLE_LEGACY_STATS_AUTHORITY / KILLCOUNT_MULTIPLEXED / EARLIER_PHASE_BINDINGS_REOPENED / EXACT_NATIVE_CARRIERS_EXIST / SEVEN_ROUTES_DEFINED / JOINT_SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。`KillCount`同时被当作+0x2F4、AI owner、revival资格、state501/11xx child owner；Authority分别使用exact gate/owner/revival/lifecycle字段。其余legacy entity/world stats与`+0x34C/+0x348/+0x358/+0x1E0/+0x1E4`并行。577行中生产207行/29文件；先B2 AI→B3 child→B4 revival→B5 +2F4/stats，carrier schema还须roster1→2及既有13/20/23。
+
+> **B6 legacy HolderCopy multiplexed-slot owner已闭合，B5前置纠正已完成（2026-09-08，2026-09-09续）：** `NTSD28-B6-LEGACY-HOLDERCOPY-MULTIPLEXED-SLOT-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_SINGLE_AUTHORITY_FIELD / MULTIPLEXED_OWNER_CONFIRMED / EARLY_B5_BINDINGS_CORRECTED / CURRENT_TWO_HOP_GRAPH_WITNESS / ROUTES_SPLIT / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority分别以linked parent、owner、group、control和physical slot表示Unity HolderCopy混合语义。frozen pair/BruteForce/HitPlan已由kind5 correction精确绑定HolderStableId，type3 actual/HitPlan extra write已由本轮退休；current117 ITR-kind2、62 OPoint-kind2及71-row/14-OID/30-pair graph不变。下一严格route回到B5 `+0x2F4`/stats，B6 producer与联合schema仍后置。
+
+> **B6 legacy GrabbedBy relation mirror已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-GRABBEDBY-RELATION-MIRROR-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_SECOND_RELATION_FIELD / CURRENT_OPOINT_WRITER_REACHABLE / LEGACY_READER_ROUTED / TWO_NEW_PACKAGES_PLUS_EXISTING_CONSUMER / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority只以interaction state与linked parent/child slots维护held relation。Unity在current62条OPoint-kind2/39 Character sources写child`GrabbedBy=-1`，而shared117条ITR-kind2不写，证明它不是exact或稳定compat mirror。唯一gameplay readers是已路由退休的raw-kind5 duplicate；carrier进runtime snapshot/ECS fingerprint却不进checksum/parity。后继复用tracker consumer→退nonzero producers→联合carrier/schema。
+
+> **B6 legacy Tracker relation owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-TRACKER-RELATION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_TRACKER_LAYER / CURRENT_OPOINT_WRITERS_REACHABLE / LEGACY_READERS_DEFAULT_BYPASSED / THREE_PACKAGE_SPLIT_DEFINED / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority OPoint kind2/kind5/type3 owner只读reciprocal link。Unity两个factory为current62条OPoint-kind2/56 edges额外写TrackerFlag与managed TrackerParent；shared kind5已按link转换，旧raw readers默认绕过，current13 target OIDs与353 kind5 ITR交集0。后继producer→consumer/cache→联合carrier/schema。
+
+> **B6 object-AI target +0x3F8 owner已闭合（2026-09-08）：** `NTSD28-B6-OBJECT-AI-TARGET-3F8-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / EXISTING_CARRIER_RECLASSIFIED / OWNER_354_CORRUPTION_CURRENT_REACHABLE / THREE_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority +0x354 owner、+0x2F8 excluded source和+0x3F8 target cache独立；Unity specialized OID124已正确使用`PickerStableId` storage，但generic common/4/7/11及5/6 child把target读写到OwnerSlot。current206 common frames、OID219 5→4及9条3→7链可达。后继按carrier语义→common/child producer→既有+0x2F8 consumer执行。
+
+> **B6 legacy WeaponState owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-WEAPON-STATE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_PARALLEL_STATE / BEHAVIOR_RETIREMENT_DEFINED / CURRENT_OID124_WITNESS / CARRIER_SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority只读actual current frame state；Unity独立WeaponState驱动额外1002→2000→3000及Vx halving。OID124 action40..55的16帧state1002/hit_Fa12循环、Tenten/Criminal2 direct spawn和kind2+Naruto clone DVX均可达：tick1 checksum、tick2 motion首差。后继先退休behavior/producer并保留reserved0；carrier删除须与ReleaseTick联合取得schema13/20/23方向。
+
+> **B6 legacy ReleaseTick owner已闭合（2026-09-08）：** `NTSD28-B6-LEGACY-RELEASE-TICK-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / NO_AUTHORITY_FIELD_OR_READER / TWO_PACKAGE_SPLIT / CURRENT_RELEASE_WITNESS / SCHEMA_DIRECTION_GATED / PRODUCTION_HELD`。Authority无对应field/writer/reader；Unity在DVX/kind3/consume写当前tick并纳入canonical copy、ECS fingerprint、checksum/parity。先退休动态producer并暂留reserved-1；删除carrier及snapshot/checksum schema13/20/23需用户方向。current witness为DVX2125、kind3 11116、OID122/123 edges3/35。
+
+> **B6 held missing-action continue owner已闭合（2026-09-08）：** `NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ACTION_WRITE_THEN_CONTINUE / REAL_AND_GENERIC_OWNER / CURRENT_16796_WITNESS / DORMANT_RULES_UNION_RECONFIRMED / PRODUCTION_HELD`。Authority写child action后若frame缺失只diagnostic/continue，保留relation且零RNG；Unity real/generic继续pose/DVX/kind3，real current-frame null gate又阻断下一pass refill/recovery。完整union有16796 rows/2402 triples；cover2/state12/18重验0。production等待cleanup→terminal runtime绿灯。
+
+> **B6 held relation producer domain已纠正并完成后继复核（2026-09-08）：** `NTSD28-B6-HELD-RELATION-PRODUCER-DOMAIN-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ITR_AND_OPOINT_UNION / CURRENT_REACHABILITY_REBASELINED / OWNERS_RETAINED / PRODUCTION_HELD`。完整held域必须合并ITR kind2 pickup与OPoint kind2 direct-link：41 sources/668 edges，而非pickup-only39。current primary WPoint7624、kind3 811、nonkind3 DVX186、terminal33/23 defs全1000；edge-aware missing-action为16796 rows/2402 triples。missing owner已闭合，cover2/state12/18重验0。
+
+> **B6 terminal WPoint structural owner已闭合（relation domain corrected，2026-09-08）：** `NTSD28-B6-WPOINT-TERMINAL-STRUCTURAL-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / FREE_NOT_DESTROY_OWNER / POST_REFILL_PRE_POSE_GATE / CURRENT_33_WITNESS / CORRECTED_RELATION_DOMAIN / PRODUCTION_HELD`。Authority在refill/exhaustion后、child frame/pose/DVX/kind3前无RNG `despawn`；Unity应由held real/generic writer返回transient terminal outcome，world以`StructuralWriter.Free`消费。`Destroy`会增加weapon break audio，明确排除。完整ITR+OPoint union terminal33/23 definitions且全为1000；production须等待entity-link lifecycle cleanup runtime绿灯。
+
+> **B6 Direction-B multiline corpus总纠正已闭合（relation domain后继已应用，2026-09-08）：** `NTSD28-B6-DIRECTION-B-MULTILINE-CORPUS-CORRECTION-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ROOT_CAUSE_MULTILINE_OMISSION / CURRENT_REACHABILITY_REBASELINED / OWNER_RULES_RETAINED / PRODUCTION_HELD`。正式projection为WPoint7995/CPoint1426/ITR4437；后继OPoint domain纠正后完整held union为terminal33、kind3 811、nonkind3 DVX186。native impact与OID417 invalid等其他纠正不变；owner保留。
+
+> **B6 kind2 pickup corpus已纠正（2026-09-08）：** `NTSD28-B6-KIND2-PICKUP-CORPUS-CORRECTION-001 / VERIFIED / GOVERNANCE_ONLY / CURRENT_CORPUS_CORRECTED / OWNER_AND_THREE_PACKAGES_RETAINED / PRODUCTION_HELD`。Direction-B frozen projection为117条kind2 / 39 holder definitions与31个supported target frames，不是旧1/1/17；release仍375/53，kind7两端0，target WPoint两端0/0。OID120 witness有效但非唯一，规则/owner/三包保持。
+
+> **B6 positive-link validation retirement owner已闭合（2026-09-08）：** `NTSD28-B6-POSITIVE-LINK-VALIDATION-RETIREMENT-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / UNITY_ONLY_MUTATING_PASS_CONFIRMED / POST_LIFECYCLE_RETIREMENT_PACKAGE_DEFINED / PRODUCTION_HELD`。Authority post-catch无独立validation；Unity invalid时单边清holder LinkState、保留其他正反向字段并发额外event。先完成lifecycle cleanup runtime，再退休phase/pass/config/index/parity旧witness；AI relation projection保留，invalid-preserve另包。
+
+> 计划 ID：`NTSD28-UNITY-BATTLE-REALIGNMENT-001`
+> 建立日期：2026-09-02
+> 当前状态：`STATIC_INVENTORY_COMPLETE / BUGFIXED_AUTHORITY_PROMOTED_AND_VERIFIED / B3_PLACEMENT_EXIT_READY / B3_FULL_CLOSE_DEFERRED / B4_F02_FRAME_MOTION_VERIFIED / B4_F04_TYPE1_THRESHOLD_VERIFIED / F04_COLLISION_Y_CARRIER_VERIFIED / F04_ALL_NONCHAR_REFERENCE_VERIFIED / F04_TYPE0_ORDINARY_AND_AIRBORNE_VERIFIED / F04_STATUS_MOTION_CARRIER_VERIFIED / F04_STATE12_18_TRANSACTION_COUNTS_VERIFIED / B5_STATUS_PRODUCER_FAMILY_VERIFIED / B5_HIT_RESOURCE_PREREQUISITE_AUDIT_VERIFIED / B5_HIT_DISPLAY_STEP_PRODUCER_VERIFIED / B5_RESOURCE_INJURY_PURE_CORE_VERIFIED / B5_RESOURCE_TRANSACTION_PURE_CORE_VERIFIED / B5_RESOURCE_CARRIER_ATTRIBUTION_AUDIT_VERIFIED / B5_HIT_RESOURCE_SUPPRESSION_CARRIER_VERIFIED / B5_RESOURCE_ATTACKER_RESOLVER_VERIFIED / B5_WORLD_RESOURCE_RULES_F6_AUDIT_VERIFIED / B5_WORLD_HIT_RESOURCE_RULES_CARRIER_VERIFIED / B5_F6_RESOURCE_GATE_PROJECTION_VERIFIED / B5_RESOURCE_PRODUCTION_DEPENDENCIES_ROUTED / B5_DAMAGE_SCALE_EFFECT_AUDIT_VERIFIED / B5_TYPE0_UNARMORED_DAMAGE_SCALE_VERIFIED / B5_NONCHAR_DAMAGE_SCALE_OWNER_AUDIT_VERIFIED / B5_NONCHAR_UNARMORED_DAMAGE_SCALE_VERIFIED / B5_REMAINING_FALLDAMAGEDIV_OWNERS_ROUTED / B5_LEGACY_KIND16_RETIREMENT_VERIFIED / B5_EFFECT_ELIGIBILITY_POSTACTION_AUDIT_VERIFIED / B5_TYPE0_HITPLAN_DAMAGE_SCALE_CORRECTION_VERIFIED / B5_EFFECT_ACTION_OVERRIDE_VERIFIED / B5_KIND0_DIRECT_POST_EFFECT_ACTION_VERIFIED / B5_TYPE3_SPECIFIC_FAMILY_EXIT_READY / B5_STANDARD_HIT_REST_FAMILY_EXIT_READY / B5_ARMOR_REDUCED_HIT_AUDIT_VERIFIED / B5_REDUCED_HIT_REST_PURE_RESOLVER_VERIFIED / B5_ORDINARY_DEFENSE_PURE_RESOLVER_VERIFIED / B5_REDUCED_HIT_DAMAGE_PURE_CORE_VERIFIED / B5_ITR_DEFENSE_FIELDS_CARRIER_VERIFIED / B5_ORDINARY_DEFENSE_NULL_ARMOR_REDUCED_HIT_PRODUCTION_VERIFIED / B5_ORDINARY_DEFENSE_NULL_ARMOR_FAMILY_EXIT_READY / B5_TYPE1_ARMOR_DATA_CONTRACT_VERIFIED / B5_TYPE1_ARMOR_MATCH_PURE_CORE_VERIFIED / B5_TYPE1_ARMOR_ACTIVATION_PURE_CORE_VERIFIED / B5_TYPE1_ARMOR_RUNTIME_INITIALIZATION_AUDIT_VERIFIED / B5_TYPE1_ARMOR_RUNTIME_PROFILE_INTEGRATION_VERIFIED / B5_TYPE1_ARMOR_ATOMIC_PRODUCTION_AUDIT_VERIFIED / B5_DEFINITION_ATTACKING_CARRIER_VERIFIED / B5_TYPE1_ARMOR_HITPLAN_RUNTIME_CARRIERS_VERIFIED / B5_TYPE1_ARMOR_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_TYPE1_ARMOR_EXIT_AUDIT_001_VERIFIED / B5_TYPE1_ARMOR_BREAK_VERTICAL_ORDER_VERIFIED / B5_TYPE1_ARMOR_SPECIFIC_FAMILY_EXIT_READY / B5_HIT_RESOURCE_PRODUCTION_READINESS_AUDIT_002_VERIFIED / B5_UNARMORED_HP_CONSUMPTION_PRODUCTION_VERIFIED / B5_REMAINING_EXIT_AUDIT_VERIFIED / B5_KIND8_ELIGIBILITY_PURE_CORE_VERIFIED / B5_KIND8_PRODUCTION_OWNER_AUDIT_VERIFIED / B5_KIND8_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_KIND8_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_002_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_PURE_CORE_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_PRODUCTION_FILTER_VERIFIED / B5_CANDIDATE_EFFECT_TYPE_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_003_VERIFIED / B5_MULTI_BODY_CANDIDATE_OWNER_AUDIT_VERIFIED / B5_MULTI_BODY_CANDIDATE_PRODUCTION_VERIFIED / B5_MULTI_BODY_CANDIDATE_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_004_VERIFIED / B5_KIND4_ENVIRONMENT_OWNER_AUDIT_VERIFIED / B5_KIND4_SOURCE_COUNT_CARRIER_VERIFIED / B5_KIND4_ATOMIC_PRODUCTION_INTEGRATION_VERIFIED / B5_KIND4_DEAD_WEAPONCOUNT_SELECTION_RETIREMENT_VERIFIED / B5_KIND4_SPECIFIC_FAMILY_EXIT_READY / B5_REMAINING_EXIT_AUDIT_005_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_OWNER_AUDIT_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_PRODUCTION_VERIFIED / B5_WEAPON_DURABILITY_ATTACKING_INJURY_EXIT_READY / SCENEVIEW_HIERARCHY_VISIBILITY_VERIFIED / B5_REMAINING_EXIT_AUDIT_006_VERIFIED / B5_SPECIAL_HIT_LATCH_CARRIER_VERIFIED / B5_SPECIAL_HIT_LATCH_OWNER_AUDIT_VERIFIED / B5_SPECIAL_HIT_LATCH_ATOMIC_VERIFIED / B5_REMAINING_EXIT_AUDIT_007_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_OWNER_AUDIT_VERIFIED / B5_WORLD_HIT_GROUP_MODE_GATE_CARRIER_VERIFIED / B5_HIT_CANDIDATE_PAIR_SNAPSHOT_CARRIER_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_PURE_CORE_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_ATOMIC_PRODUCTION_VERIFIED / B5_HIT_GROUP_ELIGIBILITY_CORE_AND_LINKED_PARENT_VERIFIED / B5_REMAINING_EXIT_AUDIT_008_VERIFIED / B5_FIRST_BDY_RESPONSE_OWNER_AUDIT_VERIFIED / B5_FIRST_BDY_RESPONSE_CARRIER_VERIFIED / B5_FIRST_BDY_RESPONSE_PURE_CORE_VERIFIED / B5_FIRST_BDY_RESPONSE_ATOMIC_PRODUCTION_VERIFIED / B5_REMAINING_EXIT_AUDIT_009_VERIFIED / B5_SYSTEM_TABLE_ATTACKER_TERMINAL_VERIFIED / B5_LEGACY_DAMAGE_STATS_OWNER_AUDIT_VERIFIED / B2_AI_OWNER_FIELD_CORRECTION_VERIFIED / B3_STATE501_RETIREMENT_VERIFIED / B3_1100_1299_CHILD_PROPAGATION_VERIFIED / B4_REVIVAL_GATE_BRANCH_VERIFIED / B4_REVIVAL_QUEUED_CONTINUATION_VERIFIED / B4_REVIVAL_NORMAL_FLOOR_RNG_VERIFIED / B4_REVIVAL_EXIT_READY / B5_TYPE3_HOLDERCOPY_EXTRA_WRITE_CORRECTION_VERIFIED / B5_ORDINARY_CREDIT_GATE_2F4_VERIFIED / FULL_ALIGNMENT_INCOMPLETE`
+> 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`
+> 当前阶段出口：`B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED / NEXT_B6 / FULL_ALIGNMENT_INCOMPLETE`
+> 本文性质：当前 NTSD 2.8-Logan 对齐工作的唯一差异总表、范围合同和关闭标准；不是已完成证明。
+
+> **B6 kind2 pickup relation已路由（corpus corrected，2026-09-08）：** `NTSD28-B6-KIND2-PICKUP-RELATION-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / THREE_PACKAGE_SPLIT_DEFINED / CURRENT_OID120_WITNESS / KIND7_DORMANT_RETIREMENT / PRODUCTION_HELD`。Authority candidate要求attack rising与target state1004/2004；writer按type、weapon_throw表、prior relation写双方link、exact owner/group、conditional +35C、counter0与WPoint final action。Unity kind2漏OID120 promotion/OwnerSlot/conditional count/WPoint tail，反而为两端0语料kind7实现pickup。current/release kind2为117/375、current holders39；OID120 ground frame64可与多个holder构造101-vs-1首差。后续carrier+system rules→pure→atomic actual/HitPlan/legacy，runtime待验。
+
+> **B6 C22 horizontal impulse finalizer standalone已退出（2026-09-08）：** `NTSD28-B6-HORIZONTAL-IMPULSE-FINALIZER-EXIT-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / C22_STANDALONE_EXIT_READY / PRODUCER_AND_STAGE_DEPENDENCIES_ROUTED / JOINT_TRACE_PENDING / NO_NEW_PRODUCTION_PACKAGE`。Authority与Unity在motion-hold gate、HitCount/contribution count、pending/motion XYZ、三轴`2/(count+1)`、count≤0清pending但保留motion/negative count、active升序遍历上等价。catch escape误写count与native impact是producer差异，offstage removal归B8 C21；B12 joint trace仍待，故只退出consumer本体。
+
+> **B6 kind2 CPoint旧hurt-action consumer已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CPOINT-KIND2-HURT-ACTION-CONSUMER-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / UNITY_ONLY_HURT_OVERRIDE_CONFIRMED / ATOMIC_ACTUAL_SHADOW_LEGACY_RETIREMENT_DEFINED / PRODUCTION_HELD`。2.8 playable无front/back hit-tail consumer；Unity旧alias进入actual/HitPlan/legacy。current/release front/back rows=170/398且均kind2、无raw injury/cover。后续atomic retirement/schema顺序不变，matrix扩大。
+
+> **B6 CPoint 27-scalar schema已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CPOINT-27-SCALAR-SCHEMA-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / AUTHORITY_27_SCALARS_REQUIRED / RELEASE_DRAIN_WITNESS / CONTENT_STRATEGY_GATED / PRODUCTION_HELD`。current/release CPoint=1426/4019；current front/back170、raw injury298/223、cover142/106、A/T各9，8 missing字段explicit0。release drain600三witness与schema/alias owner不变；先退旧consumer，再versioned schema/resource。
+
+> **B6 catch控制流 fences已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-CATCH-CONTROL-FLOW-FENCES-OWNER-AUDIT-001 / VERIFIED / ADVANCE_PACKAGE_AMENDED / SETTLEMENT_PACKAGE_DEFINED / CURRENT_AND_RELEASE_TREE_WITNESS / PRODUCTION_HELD`。Authority mismatch/negative release立即continue；Unity误继续tail且escape写错counter。current kind1/state9/negative=776/760/204，OID417 tree `73→72/130→vaction17`产生40个invalid pairs；release OID555产生134。advance与settlement preflight owners不变。
+
+> **B5 system-DAT attacker terminal首差（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-009 / VERIFIED`确认
+> Authority仅在unarmored/type0 continuation消费`henry_arrow={201}`与`john_biscuit={214}`，而Unity旧
+> `LF2SpecialAttack` post-hit tail会泄漏到armor/defense reduced hit，且214清零时点偏晚。已启动
+> `NTSD28-B5-SYSTEM-TABLE-ATTACKER-TERMINAL-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST`，先固定RED后迁移。
+
+> **B5 system-DAT attacker terminal已验证（2026-09-07）：** `NTSD28-B5-SYSTEM-TABLE-ATTACKER-TERMINAL-PRODUCTION-001 / VERIFIED`。OID214在unarmored writer早期位置清零；OID201预解析route并保留slot到hit-record tail后释放；armor/defense reduced排除、broken fallback保留。RED2+顺序RED，focused11、HitPlan185、B5-149、NTSD28-330、SelfCheck PASS；Scene不变。
+
+> **B5 remaining exit audit 010（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-010 / IN_PROGRESS / GOVERNANCE_ONLY`已从system-table后续target-type/effect/audio/spark/deferred lifecycle与reduced tail开始只读复核；当前不预设下一差异、不改脚本/内容/Scene。
+
+> **B5 reduced state2000首差（2026-09-07）：** audit010已`VERIFIED`：Authority以double X只在attacker
+> 明确向远离target方向（含零速度）时`/2.5`衰减X/Z，equal不衰减；Unity actual/HitPlan使用XInt
+> 与toward极性。正式OID150 type2 `w/1.dat` state2000 kind0可达。
+
+> **B5 reduced state2000 away damping已验证（2026-09-07）：** `NTSD28-B5-REDUCED-STATE2000-AWAY-DAMPING-PRODUCTION-001 / VERIFIED`。actual与HitPlan现共享double-X严格away predicate；RED10、focused14、HitPlan185、B5-813，NTSD28 broad唯一MCP日志污染项isolated1通过，SelfCheck PASS；Console0、Scene unchanged。B5尚未exit，下一audit011。
+
+> **B5 remaining exit audit 011（2026-09-07）：** `NTSD28-B5-REMAINING-EXIT-AUDIT-011 / IN_PROGRESS / GOVERNANCE_ONLY`从state2000分支之后继续只读核对reduced余尾、unarmored/non-character continuation、hit-record与命中后生命周期；当前不预设下一差异，不改code/content/Scene。
+
+> **B5 native combo runtime首差（2026-09-07）：** audit011已`VERIFIED`：Authority正式combo记录为`bound1/facing1/respond50/caughtact1`，applied ordinary hit生产专用count/last tick并在C25后到期；Unity没有等价entity/world载体、producer或实际`CoreComboExpire`。已启动owner audit；输入combo、伤害累计和B10 HUD不得混用。
+
+> **B5 native combo owner拆分（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-RUNTIME-OWNER-AUDIT-001 / VERIFIED / FIVE_PACKAGE_SPLIT_DEFINED`。先carrier，再ordinary producer与C25后expiry；caughtact依赖B6，显示归B10，正式tuple激活归H。当前已启动carrier test-first包。
+
+> **B5 native combo carriers已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-CARRIERS-001 / VERIFIED / CARRIERS_READY / BEHAVIOR_UNCONNECTED`。entity count/lastTick与world record/bound/facing/respond/caughtact已进入reset/copy/ECS/snapshot/checksum/parity/restore；focused6、related29、B5-819、NTSD28-1166与fresh SelfCheck通过，Scene unchanged。默认tuple仍关闭；ordinary producer、expiry、B6 caughtact、B10显示和H激活均未连接。
+
+> **B5 native combo ordinary producer已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-ORDINARY-PRODUCER-001 / VERIFIED / PRODUCTION_ROUTED / FORMAL_TUPLE_INACTIVE`。shared runner仅在普通Damage dispatch成功后按捕获slot回查并执行bound、target type0、facing、non-type0 one-hop owner与当前process tick生产；focused7、B5-826（MCP污染项isolated1）、NTSD28-1173、fresh SelfCheck、Console0通过，Scene unchanged。不接expiry、B6 caughtact、B10显示或H正式tuple。
+
+> **B5 native combo expiry已验证（2026-09-07）：** `NTSD28-B5-NATIVE-COMBO-EXPIRY-001 / VERIFIED / CORE_COMBO_EXPIRE_ROUTED / FORMAL_TUPLE_INACTIVE`。C25 live-slot尾后按record/negative-respond gate和inclusive elapsed扫描active slots，只清positive count并保留lastTick；focused5、B5-831、NTSD28-1178、fresh SelfCheck、Console0通过，Scene unchanged。不接B6 caughtact、B10显示或H tuple激活；下一步重新执行B5 exit gate。
+
+> **B5出口门已闭合（2026-09-07）：** `NTSD28-B5-EXIT-GATE-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED`。连续first-difference scan已覆盖到Authority hit tail与combo expiry后的driver return，没有新的独立B5首差，下一阶段进入4.8/B6。B6/B7/B8/B10/B11/H与最终joint trace仍后置，不能称整个命中系统完全一致；C-07旧“全局终止”已更正为per-attacker candidate abort。
+
+> **B6入口审计已启动（2026-09-07）：** `NTSD28-B6-ENTRY-CATCH-SETTLEMENT-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。从post-hit catch relation advance、catch settlement、held/cpoint与horizontal/depth impulse tail开始只读核对，选择B6首个production差异；caughtact combo与cpoint resource等待真实settlement injury event。当前不改code/content/Scene。
+
+> **B6入口首差已路由（2026-09-07）：** `NTSD28-B6-ENTRY-CATCH-SETTLEMENT-AUDIT-001 / VERIFIED / CPOINT_THROW_SETTLEMENT_ROUTED`。Authority post-hit顺序与正式4019-CPoint corpus已闭合。完整A/T/D/UZ/DZ/F/B/J输入覆盖规则在Unity不完整，但正式corpus无这些显式action字段；首个正式内容可达差异是kind-1 throw：75条非零throwvx，6条同时最终正throwinjury时Unity误写WeaponCount且漏resource/environment写入，全部throw在无独占depth输入时还会误清Vz。已启动owner audit；held settlement与caughtact combo保持后置。
+
+> **B6 CPoint throw owner审计（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-OWNER-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。只读冻结formal CPoint字段、B5 resource helper、Environment carriers、actual writer、HitPlan/trace与测试拆分；当前不改code/content/Scene。
+
+> **B6 CPoint throw owner已闭合（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-OWNER-AUDIT-001 / VERIFIED / ATOMIC_PRODUCTION_SPLIT_DEFINED`。首差只需修改BattleCpointWriter actual，复用B5 resource pure core与现有Environment/parity carriers；CPoint advance不属于HitPlan。正式throw的drain/gain均0，完整schema扩展与held settlement后置。已启动atomic production test-first包。
+
+> **B6 CPoint throw atomic production（2026-09-07）：** `NTSD28-B6-CPOINT-THROW-ATOMIC-PRODUCTION-001 / IN_PROGRESS / TEST_FIRST`。先以focused RED固定正injury资源/environment/self-source、WeaponCount sentinel、exclusive/nonexclusive depth Vz；随后原子修改actual与既有错误断言。不改content/Scene/HitPlan。
+
+> **B6 CPoint throw范围纠正（2026-09-08）：** 编译后复核既有B5 readiness，发现完整MP transaction仍受B7 child suppression、B8 selected-mode override与B11/H authoritative baseMax阻塞，不能用Unity MPMax代替。`NTSD28-B6-CPOINT-THROW-ATOMIC-PRODUCTION-001`已`SUPERSEDED / NO_VERIFICATION`；当前`NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / IN_PROGRESS`先移除该错误接线，只实现resource-attacker存在时display lead、environment/self-source、WeaponCount exclusion与exclusive-depth Vz。Unity batch两次在Test Runner前被Licensing IPC返回199，运行时验收明确待恢复。
+
+> **B6 CPoint throw可精确子集代码已写（2026-09-08）：** `NTSD28-B6-CPOINT-THROW-ENVIRONMENT-VZ-PRODUCTION-001 / RUNTIME_PENDING / ISOLATED_COMPILE_PASS / FULL_RESOURCE_DEFERRED`。invalid MP transaction已移除；actual、8-case focused test、SelfCheck与grab probe断言已同步。isolated Runtime47 warnings/0 errors、Editor104/0、source contract7/7、Ledger355/307和Scene SHA不变；Unity Test Runner两次因Licensing IPC 199未启动，所以没有focused/SelfCheck/Play证据，不能标记已验证。
+
+> **B6 CPoint throw许可重试3（2026-09-08）：** 确认stale lock PID不存在后启动单一focused batch；Unity虽拉起LicensingClient，`LicenseClient-Logan` IPC等待60.01秒后仍未建立，return199且无XML。因此仍是Test Runner未启动，throw package保持`RUNTIME_PENDING`。
+
+> **B6 CPoint throw许可诊断终点（2026-09-08）：** 第四次无密钥Hub IPC启动能与versioned client handshake，但因无Hub token而exit1；Hub CLI又因沙箱AppData write EPERM无法代理启动。不使用日志中的任何敏感凭据，停止许可尝试。累计4次均未进入Test Runner、无XML，仍`RUNTIME_PENDING`。
+
+> **B6 post-throw settlement审计（2026-09-08）：** `NTSD28-B6-POST-THROW-SETTLEMENT-AUDIT-001 / IN_PROGRESS / GOVERNANCE_ONLY`。只读继续核对dircontrol、held injury/cover/position、caughtact combo和后置held/stage settlement，选择下一正式可达差异；不以read-only进度替代throw尚缺的Unity运行时验收，也不提前连接full MP resource。
+
+> **B6 post-throw settlement首差已路由（corpus rebased，2026-09-08）：** `NTSD28-B6-POST-THROW-SETTLEMENT-AUDIT-001 / VERIFIED / HELD_INJURY_ACCOUNTING_ROUTED`。release正injury484；current kind1正injury223、cover0:205/1:15/11:3。Unity canonical accounting与timer首差不变；settlement preflight另有OID417/40-pair current witness。
+
+> **B6 held-injury owner已闭合（2026-09-08）：** `NTSD28-B6-HELD-INJURY-ACCOUNTING-OWNER-AUDIT-001 / VERIFIED / TWO_PRODUCTION_PACKAGE_SPLIT_DEFINED / FULL_RESOURCE_DEFERRED`。第一包只闭合display lead、incoming scale、直接owner/type0-self credit、HP/HPBound/HP-consumed/score/KO和cover timers，不写legacy stats；第二包在整个settlement后聚合caughtact event并复用B5 combo producer。KO world feed需后续独立owner；完整MP resource仍受B7/B8/B11/H阻塞。throw runtime未验前不叠加新code。
+
+> **B6全局入口顺序纠正（relation domain rebased，2026-09-08）：** `NTSD28-B6-HELD-WPOINT-ENTRY-CORRECTION-AUDIT-001 / VERIFIED / GLOBAL_B6_ORDER_CORRECTED / WPOINT_KIND3_ROUTED`。C09早于geometry；release kind3=2744，完整current held-union=811且已有authored overlap。refill仍更早，kind3与terminal均为current后继。
+
+> **B6 WPoint kind3旧owner已被纠正（2026-09-08）：** `NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-AUDIT-001 / SUPERSEDED / CORRECTED_BY_NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-CORRECTION-001`。四draw和final-write事实仍保留，但sole-`DropRandomly()`实施边界无效；以下correction为唯一后继。
+
+> **B6 WPoint kind3 owner纠正（relation domain rebased，2026-09-08）：** `NTSD28-B6-WPOINT-KIND3-RELEASE-OWNER-CORRECTION-001 / VERIFIED / TWO_ACTUAL_BRANCHES_DEFINED / PRODUCTION_HELD`。Authority DVX后继续kind3，Unity提前return；完整current held-union kind3=811且Rock Lee255已有authored DV overlap，原770是pickup-only，release2744/5。双owner不变。
+
+> **B6 C09更早refill分支纠正（2026-09-08）：** 在kind3 tail之前，OID122 HP=1或OID123 HP=2就会当次exhaust。Authority写random Vx、Vy=0并保留Vz，Unity写Vy=-8/Vz=0；OID123对HP<=0仍应执行，且+0x2F4 nonnegative应cap child MP，Unity却早退/误用KillCount/误cap holder。因此global next改为`HELD_REFILL_MP_EXHAUSTION_ROUTED`，kind3降为subsequent package。
+
+> **B6 held-refill MP/exhaustion owner已闭合（2026-09-08）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-OWNER-AUDIT-001 / VERIFIED / ACTUAL_ONLY_PACKAGE_DEFINED / HP_BASEMAX_DEFERRED`。唯一actual是`LF2WeaponHeldStateResolver.ProcessDrinkConsumption()`：修OID123 nonpositive entry、`OrdinaryCreditGate2F4`的child MP cap、以及OID122/123共享exhaustion的one RNG/Vy0/Vz preserve。OID122 HP/baseMax clamp仍归B11/H；throw runtime未验前未启动production。
+
+> **B6 held-refill MP/exhaustion暂停于Play前（2026-09-09）：** `NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001 / RUNTIME_PENDING / FOCUSED_7_OF_7 / C09_RELATED_2_OF_2 / BUILDS_0_ERROR / PLAY_PENDING / SELFCHECK_BLOCKED_UNRELATED_R2_CPOINT_SYNC / HP_BASEMAX_DEFERRED / USER_HOLD`。OID123 entry/+0x2F4 child cap与OID122/123 exhaustion motion的7-case和C09 placement已真实通过；专门Play仍待，OID122 baseMax继续归B11/H。
+
+> **B6 held DVX weapon HP首差已路由（2026-09-08）：** `NTSD28-B6-WPOINT-DVX-WEAPON-HP-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SUBSEQUENT_WEAPON_HP_PRESERVATION_ROUTED / PRODUCTION_HELD`。Authority non-kind3 DVX release不写`weapon_hp_31c`，Unity real type1/2/4/6却在唯一`OnThrown()`中将`WeaponFlightCounter`恢复为definition值。当前/release non-kind3 DVX WPoint为3/599，受损后拾取再投掷可达。下一actual仅移除该重置，但排在kind3之后；+0x2F8、generic Vz、terminal/invalid/cover2/damaged-drop继续独立审计。
+
+> **B6 held DVX +0x2F8 carrier已拆分（2026-09-08）：** `NTSD28-B6-WPOINT-DVX-EXCLUDED-GROUP-CARRIER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / THREE_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority字段默认-1，仅由type1/4/6 held DVX写holder slot，并在native non-character AI common path排除其battle group；Unity `SpawnerSlotIndex`含respawn/lifecycle等额外writer，不能严格复用。后续按独立carrier→held writer→AI consumer实施，consumer前再确认C02/legacy actual；当前runtime stack未清，未改code/content/Scene。
+
+> **B6 invalid held reciprocal旧reachability状态已关闭（2026-09-08）：** `NTSD28-B6-HELD-RECIPROCAL-FAILURE-AUDIT-001 / SUPERSEDED / REACHABILITY_RESOLVED_BY_NTSD28-B6-HELD-RECIPROCAL-LIFECYCLE-REACHABILITY-AUDIT-001`。missing/mismatch同状态差异与terminal/cover2/current referenced-action统计继续有效，但动态可达已由以下despawn/reuse审计解决。
+
+> **B6 held relation lifecycle可达已确认（2026-09-08）：** 上述pending已由`NTSD28-B6-HELD-RECIPROCAL-LIFECYCLE-REACHABILITY-AUDIT-001 / VERIFIED / LIFECYCLE_REACHABILITY_CONFIRMED / ATOMIC_DESPAWN_LINK_CLEANUP_REQUIRED / PRODUCTION_HELD`解决。Authority `despawn()`在slot reset前全局清held/catch反向引用与rest column；Unity `ReleaseRuntimeSlot()`不清其他active实体且可same-tick reuse，所以invalid C09/C20清零是下游补偿，并存在旧child误认新occupant的physical-slot ABA窗口。修复必须先审计完整held/catch exact字段与structural owner，再原子cleanup，最后更正invalid handler；不能局部改一行。
+
+> **B6 entity-link lifecycle cleanup owner已闭合（2026-09-08）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / TWO_PRODUCTION_PACKAGE_SPLIT_DEFINED / PRODUCTION_HELD`。Authority held/catch字段分别映射到LinkState、TargetSlotIndex、HolderStableId、CaughtSlotIndex、CatchSourceSlot90与CaughtDuration；CatcherSlotIndex/HeldWeaponStableId只作为compat同步，HolderCopy与Kind4 count不清。Unity adaptation在`RuntimeSlots.Release()`成功后、registry方法返回和任何reuse前完成无间隙扫描；先实现cleanup并取runtime证据，之后才更正invalid handler。
+
+> **B6 entity-link lifecycle cleanup production已闭合（2026-09-09）：** `NTSD28-B6-ENTITY-LINK-LIFECYCLE-CLEANUP-PRODUCTION-001 / VERIFIED`。`BattleEntityLinkLifecycleWriter`只由registry成功release事务调用，按slot升序清child/parent/catch target/source与必要compat references，并通过relation property发布；HolderCopy、Kind4、owner/Spawner、action/motion/RNG保持。focused7、B6 category15、相邻91、Play7和build0-error通过；full SelfCheck越过本包P7夹具后停在独立held accounting。测试曾自动保存HUDBg active状态，已恢复到进入本包前SHA `89AA…A673`并重新加载；本包无Scene交付。test-first fixture先写但没有实际RED run，证据明确标为`RED_NOT_EXECUTED`。
+
+> **B6 invalid negative-held reciprocal production已闭合（2026-09-09）：** `NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001 / VERIFIED`。C09/C20的out-of-range/inactive/mismatch不再清Link或刷新snapshot，只累计last/total诊断并在sink开启时发布reasoned preserved trace。RED2、focused7、B6 category22、clean adjacent47与Play7通过；宽回归仅6个独立NativeInputProxy旧比较失败。full SelfCheck回到held accounting首差；Scene reload自动保存副作用已恢复到`89AA…A673`，无Scene交付。
+
+> **B6 catch relation exact-field owner已闭合（corpus rebased，2026-09-08）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / ATOMIC_ACTUAL_AND_SHADOW_PACKAGE_DEFINED / PRODUCTION_HELD`。Unity actual/HitPlan漏exact `CatchSourceSlot90`；current/release kind3=249/548，current249均有catching/caught pair且respond0。compat只作mirror，atomic actual+shadow owner不变，current matrix扩大。
+
+> **B6 catch relation exact-field production已闭合（2026-09-09）：** `NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001 / VERIFIED`。actual strict kind3与HitPlan shadow同时实现first/signed、双frame preflight、exact source、compat mirror、respond与no-op unsupported；focused19、B6 41、HitPlan185、NTSD28 167、Play19和build0-error均通过。full SelfCheck越过本包后仍停在held accounting；Scene保持`89AA…A673`。下一mixed catch control-flow fences。
+
+> **B6 held WPoint规则分类已二次纠正并复核（2026-09-08）：** `NTSD28-B6-HELD-WPOINT-DORMANT-RULES-AUDIT-001 / VERIFIED / CORRECTED_BY_MULTILINE_AND_RELATION_DOMAIN_AUDITS / DORMANT_RULES_UNION_RECONFIRMED / PRODUCTION_HELD`。current WPoint全量7995、完整held-union primary7624，terminal33已current reachable且owner已闭合；kind3 811、nonkind3 DVX186。cover2与referenced state12/18在668-edge union仍0，generic Vz/damaged-drop其余边界保留。
+
+> **B6 catch advance slot顺序首差已路由（2026-09-08）：** `NTSD28-B6-CATCH-ADVANCE-SLOT-ORDER-OWNER-AUDIT-001 / VERIFIED / GOVERNANCE_ONLY / SINGLE_ASCENDING_MIXED_PASS_REQUIRED / EXACT_CONSUMER_PACKAGE_DEFINED / PRODUCTION_HELD`。Authority `advance_catch_relations()`在一个升序loop内逐slot以snapshot-kind1否则current-kind2分派；Unity却先全体kind1再全体kind2，故低槽caught会被错误地按高槽catcher变更后的状态校验。当前2条throw仅vaction180/181且无kind2 definition交叉匹配；release有Hinata/Neji两条action343 `throwvx5/vaction132/next344(state15)`，并有134个type0 definition的action132为kind2。后续production必须重建single mixed pass并迁exact `CatchSourceSlot90` consumer，同时保持settlement为独立后续pass；真实输入Play仍待验，本轮无code。
+
+> **SceneView/Hierarchy 可见性修复（2026-09-06）：** 用户明确要求 Play 时不再出现无逐对象
+> Hierarchy 条目的中央战斗像素。`BATTLE-SCENEVIEW-HIERARCHY-VISIBILITY-001 / VERIFIED` 已将
+> production camera gate 收窄为 exact Base world camera；真实 Play 在 world frame 19 commands/7
+> segments 有效时，SceneView gate=false、lease=false、isolated pixels=0；benchmark runner、presenter、
+> render children与camera也统一为`DontSave`但Hierarchy可见。该修复不改变战斗状态、Game View、
+> 中央 Mesh 架构或 Edit Mode 中由可见 `BattleCentralEditorPreview` owner 控制的显式预览。
+
+> **新版权威恢复结论（2026-09-04）：** 用户确认指定root变化来自其修复NTSD 2.8-Logan Bug，并要求继续。
+> 当前`B1E13AE1...9033` EXE与82-file playable C++/header `39DDDA15...6109` closure manifest已正式晋升；旧
+> `1277B70B...DAF75`/`C59BD8D3...2D75`只保留为历史比较。新版改变了core pass顺序，B0～当前B3
+> 受影响合同正在显式重新基线，禁止只换hash后继承旧pass证书。详见
+> `GOVERNANCE-NTSD28-AUTHORITY-PROMOTION-002`。

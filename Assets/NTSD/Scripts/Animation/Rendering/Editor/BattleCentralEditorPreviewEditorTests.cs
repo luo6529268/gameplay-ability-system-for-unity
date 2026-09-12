@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using NUnit.Framework;
+using NTSD.App;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -13,6 +14,8 @@ namespace NTSD.Animation.Rendering.Editor
     {
         private const string CommonShadowPrefabPath =
             "Assets/NTSD/Prefabs/Common/Shadow.prefab";
+        private const string GameConfigPath =
+            "Assets/NTSD/Config/GameConfig/GameConfig.asset";
 
         [Test]
         public void HealthBatch_UsesThreeQuadsAndClampedWidths()
@@ -213,19 +216,28 @@ namespace NTSD.Animation.Rendering.Editor
         }
 
         [Test]
-        public void FootMarkerAsset_IsPointFilteredSpriteWithExpectedDimensions()
+        public void FootMarkerAnimationAssets_AreOrderedPointFilteredSpritesWithExpectedDimensions()
         {
-            const string assetPath =
-                "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
-            Sprite marker = AssetDatabase.LoadAssetAtPath<Sprite>(assetPath);
-            var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+            GameConfig config = AssetDatabase.LoadAssetAtPath<GameConfig>(GameConfigPath);
+            Assert.That(config, Is.Not.Null);
+            Assert.That(config.FootMarkerAnimationFrames, Has.Length.EqualTo(6));
+            Assert.That(
+                config.FootMarkerAnimationFrameDurationSeconds,
+                Is.EqualTo(0.08f));
+            for (int index = 0; index < config.FootMarkerAnimationFrames.Length; index++)
+            {
+                Sprite marker = config.FootMarkerAnimationFrames[index];
+                string assetPath = AssetDatabase.GetAssetPath(marker);
+                var importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
 
-            Assert.That(marker, Is.Not.Null);
-            Assert.That(marker.rect.size, Is.EqualTo(new Vector2(128f, 48f)));
-            Assert.That(importer, Is.Not.Null);
-            Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite));
-            Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point));
-            Assert.That(importer.mipmapEnabled, Is.False);
+                Assert.That(marker, Is.Not.Null, $"Foot animation frame {index + 1} is missing.");
+                Assert.That(marker.name, Is.EqualTo($"frame_{index + 1:00}"));
+                Assert.That(marker.rect.size, Is.EqualTo(new Vector2(128f, 48f)));
+                Assert.That(importer, Is.Not.Null);
+                Assert.That(importer.textureType, Is.EqualTo(TextureImporterType.Sprite));
+                Assert.That(importer.filterMode, Is.EqualTo(FilterMode.Point));
+                Assert.That(importer.mipmapEnabled, Is.False);
+            }
         }
 
         [Test]
@@ -586,8 +598,8 @@ namespace NTSD.Animation.Rendering.Editor
             "NTSD/Battle Rendering/Validate Edit Mode Central Preview";
         private const string SourceTexturePath =
             "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
-        private const string FootMarkerPath =
-            "Assets/NTSD/Sprite/UIPanels/FootSelf.png";
+        private const string GameConfigPath =
+            "Assets/NTSD/Config/GameConfig/GameConfig.asset";
         private const string CommonShadowPrefabPath =
             "Assets/NTSD/Prefabs/Common/Shadow.prefab";
         private const string MaterialPath =
@@ -602,7 +614,6 @@ namespace NTSD.Animation.Rendering.Editor
             {
                 status = "FAIL",
                 sourceTexturePath = SourceTexturePath,
-                footMarkerPath = FootMarkerPath,
                 commonShadowPrefabPath = CommonShadowPrefabPath,
             };
             string projectRoot = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
@@ -639,9 +650,17 @@ namespace NTSD.Animation.Rendering.Editor
                 Material material = AssetDatabase.LoadAssetAtPath<Material>(MaterialPath);
                 if (material == null)
                     throw new InvalidOperationException("The central material is unavailable.");
-                Sprite footMarker = AssetDatabase.LoadAssetAtPath<Sprite>(FootMarkerPath);
+                GameConfig gameConfig =
+                    AssetDatabase.LoadAssetAtPath<GameConfig>(GameConfigPath);
+                Sprite footMarker = BattleFootMarkerAnimation.ResolveReferenceSprite(
+                    gameConfig?.FootMarkerSprite,
+                    gameConfig?.FootMarkerAnimationFrames);
                 if (footMarker == null)
-                    throw new InvalidOperationException("The FootSelf marker sprite is unavailable.");
+                {
+                    throw new InvalidOperationException(
+                        "GameConfig Foot marker frames and fallback Sprite are unavailable.");
+                }
+                report.footMarkerPath = AssetDatabase.GetAssetPath(footMarker);
                 GameObject commonShadowPrefab =
                     AssetDatabase.LoadAssetAtPath<GameObject>(CommonShadowPrefabPath);
                 if (commonShadowPrefab == null)
@@ -692,8 +711,8 @@ namespace NTSD.Animation.Rendering.Editor
                 }
                 preview.ConfigureForSelfCheck(material, actor, BattleHealthBarStyle.Default);
                 preview.ConfigureCommonShadowForSelfCheck(commonShadowPrefab);
-                preview.ConfigureFootMarkerForSelfCheck(
-                    footMarker,
+                preview.ConfigureGameConfigFootMarkerForSelfCheck(
+                    gameConfig,
                     BattleFootMarkerStyle.Default);
                 report.controllerBuilt = preview.RebuildForSelfCheck();
                 report.actorCount = preview.PreviewActorCount;

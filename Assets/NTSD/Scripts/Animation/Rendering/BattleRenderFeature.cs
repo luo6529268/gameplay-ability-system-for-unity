@@ -250,19 +250,24 @@ namespace NTSD.Animation.Rendering
                         if (footMarkerBackend != null &&
                             footMarkerBackend.ActiveMarkerCount > 0 &&
                             footMarkerBackend.Mesh != null &&
-                            footMarkerBackend.Texture != null &&
                             fallbackMaterial != null)
                         {
-                            propertyBlock.Clear();
-                            propertyBlock.SetTexture(MainTexId, footMarkerBackend.Texture);
-                            commandBuffer.DrawMesh(
-                                footMarkerBackend.Mesh,
-                                Matrix4x4.identity,
-                                fallbackMaterial,
-                                0,
-                                0,
-                                propertyBlock);
-                            drawCount++;
+                            Texture footMarkerTexture = BattleCentralRenderSystem
+                                .ResolveRuntimeFootMarkerTexture(Time.unscaledTimeAsDouble);
+                            footMarkerTexture ??= footMarkerBackend.Texture;
+                            if (footMarkerTexture != null)
+                            {
+                                propertyBlock.Clear();
+                                propertyBlock.SetTexture(MainTexId, footMarkerTexture);
+                                commandBuffer.DrawMesh(
+                                    footMarkerBackend.Mesh,
+                                    Matrix4x4.identity,
+                                    fallbackMaterial,
+                                    0,
+                                    0,
+                                    propertyBlock);
+                                drawCount++;
+                            }
                         }
                         for (int index = 0; index < backend.SegmentCount; index++)
                         {
