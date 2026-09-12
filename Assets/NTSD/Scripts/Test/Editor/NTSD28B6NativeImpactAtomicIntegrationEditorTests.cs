@@ -416,6 +416,9 @@ namespace NTSD.Test.Editor
                 if (row.after.environment != -20 || row.after.catchSource != 0x2000 + row.sourceSlot ||
                     row.after.impactSource != row.sourceSlot || row.after.weaponCount != 77)
                     throw new InvalidOperationException("Impact transaction mismatch");
+                if (row.before.pp != row.after.pp || row.before.sourceArest != row.after.sourceArest ||
+                    row.before.targetArest != row.after.targetArest || row.before.targetVrest != row.after.targetVrest)
+                    throw new InvalidOperationException("Impact changed PP or rest");
                 row.status = "PASS";
             }
             finally
@@ -454,6 +457,7 @@ namespace NTSD.Test.Editor
         private static PlayState Capture(LF2Entity entity, SimulationWorld world)
         {
             var r = entity.Runtime;
+            LF2Entity source = ((ObservedTarget)entity).Source;
             return new PlayState
             {
                 action = entity.Frame.N, state = entity.GetState(), yInt = r.YInt, y = r.Y, vx = r.Vx, vy = r.Vy, vz = r.Vz,
@@ -461,6 +465,9 @@ namespace NTSD.Test.Editor
                 px = r.KnockbackVx, py = r.KnockbackVy, pz = r.KnockbackVz,
                 environment = r.EnvironmentState320, catchSource = r.CatchSourceSlot90, impactSource = r.ImpactSourceSlot164,
                 hp = r.HP, hpBound = r.HPBound, weaponCount = entity.WeaponCount,
+                pp = entity.Health.PP, sourceArest = source.ItrRest?.Arest ?? 0,
+                targetArest = entity.ItrRest?.Arest ?? 0,
+                targetVrest = entity.ItrRest?.GetVrest(source.Runtime.SlotIndex) ?? 0,
                 delay = r.FrameDelay, wait = r.FrameWaitCounter, rng = world.Rng.State, rngCalls = world.Rng.CallCount,
                 vxBits = BitConverter.DoubleToInt64Bits(r.Vx), vyBits = BitConverter.DoubleToInt64Bits(r.Vy),
                 vzBits = BitConverter.DoubleToInt64Bits(r.Vz), pyBits = BitConverter.DoubleToInt64Bits(r.KnockbackVy),
@@ -482,6 +489,7 @@ namespace NTSD.Test.Editor
         {
             public int action, state, yInt, environment, catchSource, impactSource, hp, hpBound, weaponCount, delay, wait;
             public int xInt, zInt;
+            public int pp, sourceArest, targetArest, targetVrest;
             public double x, z;
             public double y, vx, vy, vz, px, py, pz;
             public long vxBits, vyBits, vzBits, pyBits;

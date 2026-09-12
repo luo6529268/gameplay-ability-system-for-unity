@@ -489,26 +489,6 @@ namespace NTSD.Animation.LF2Objects
             return _weaponLinkResolver.HasHeldObject();
         }
 
-        internal bool IsHeldHeavyWeaponInternal()
-        {
-            return _weaponLinkResolver.IsHeldHeavyWeapon();
-        }
-
-        internal bool IsHeldObjectAttackableInternal()
-        {
-            return _weaponLinkResolver.IsHeldObjectAttackable();
-        }
-
-        internal bool CanHeldObjectStandThrowInternal()
-        {
-            return _weaponLinkResolver.CanHeldObjectStandThrow();
-        }
-
-        internal bool CanHeldObjectRunThrowInternal()
-        {
-            return _weaponLinkResolver.CanHeldObjectRunThrow();
-        }
-
         internal LF2WeaponBase GetHeldWeaponBaseInternal()
         {
             return _weaponLinkResolver.GetHeldWeaponBase();

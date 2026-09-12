@@ -89,21 +89,21 @@ namespace NTSD.Test.Editor
         {
             AssertImpactPath(
                 "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
-                "ApplyFluteCharacterForce",
+                "DamageWriter.TryApplyNativeImpact",
                 "DamageWriter.ApplyStandardCharacterDamage");
             AssertImpactPath(
                 "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
-                "ApplyFluteCharacterForce",
+                "DamageWriter.TryApplyNativeImpact",
                 "DamageWriter.ApplyStandardCharacterDamage");
             AssertImpactPath(
                 "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Weapon.cs",
                 "DamageWriter.ApplyWeaponDamage");
             AssertImpactPath(
                 "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
-                "FluteCharacterWeaponCount");
+                "CreateNativeImpactPlan");
             AssertImpactPath(
                 "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
-                "ProjectKind10Or11WriterEffect");
+                "ProjectNativeImpactWriterEffect");
 
             string weaponBase = Source(
                 "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs");

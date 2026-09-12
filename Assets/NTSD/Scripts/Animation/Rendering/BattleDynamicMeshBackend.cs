@@ -516,6 +516,7 @@ namespace NTSD.Animation.Rendering
             };
 
             private readonly BattleQuadVertex[] vertices = new BattleQuadVertex[VerticesPerChunk];
+            private SubMeshDescriptor[] subMeshDescriptors;
             private readonly ushort[] indexTemplate = new ushort[IndicesPerChunk];
             private readonly int chunkIndex;
             private Mesh mesh;
@@ -628,44 +629,20 @@ namespace NTSD.Animation.Rendering
                 int totalSegments,
                 BattleTickDetailPhaseDiagnostics detailDiagnostics)
             {
-                Mesh targetMesh = EnsureMesh();
-                detailDiagnostics?.BeginPhase(
-                    BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
-                try
+                int activeVertices = activeQuads * VerticesPerQuad;
+                for (int vertexIndex = 0; vertexIndex < activeVertices; vertexIndex++)
                 {
-                    int previousActiveSubMeshCount = activeSubMeshCount;
-                    int desiredSubMeshCount = PendingSegmentCount;
-                    int physicalSubMeshCount = targetMesh.subMeshCount;
-                    if (desiredSubMeshCount > physicalSubMeshCount)
+                    Vector3 position = vertices[vertexIndex].Position;
+                    if (float.IsNaN(position.x) || float.IsInfinity(position.x) ||
+                        float.IsNaN(position.y) || float.IsInfinity(position.y) ||
+                        float.IsNaN(position.z) || float.IsInfinity(position.z))
                     {
-                        targetMesh.subMeshCount = desiredSubMeshCount;
-                        // Unity does not guarantee safe default descriptors after native
-                        // submesh growth, so reinitialize the complete physical range.
-                        for (int subMeshIndex = 0; subMeshIndex < targetMesh.subMeshCount; subMeshIndex++)
-                            SetInertSubmesh(targetMesh, subMeshIndex);
+                        throw new ArgumentException("Battle mesh vertex positions must be finite.");
                     }
-                    else
-                    {
-                        // The active prefix is overwritten below before this backend can be
-                        // leased to the renderer. Only clear the stale tail; resetting the
-                        // whole previous prefix adds a native SetSubMesh call for every live
-                        // segment on every frame without changing the resulting mesh.
-                        // Keep the physical high-water; shrinking subMeshCount here forces
-                        // Unity to rebuild native state.
-                        int inertStart = Math.Min(desiredSubMeshCount, physicalSubMeshCount);
-                        int inertEnd = Math.Min(previousActiveSubMeshCount, physicalSubMeshCount);
-                        for (int subMeshIndex = inertStart; subMeshIndex < inertEnd; subMeshIndex++)
-                            SetInertSubmesh(targetMesh, subMeshIndex);
-                    }
-                }
-                finally
-                {
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
                 }
 
+                Mesh targetMesh = EnsureMesh();
                 ActiveQuadCount = activeQuads;
-                int activeVertices = activeQuads * VerticesPerQuad;
                 if (activeVertices > 0)
                 {
                     detailDiagnostics?.BeginPhase(
@@ -688,7 +665,16 @@ namespace NTSD.Animation.Rendering
                     }
                 }
 
+                int previousActiveSubMeshCount = activeSubMeshCount;
                 int desiredActiveSubMeshCount = PendingSegmentCount;
+                int physicalSubMeshCount = targetMesh.subMeshCount;
+                int retainedSubMeshCount = Math.Max(physicalSubMeshCount, desiredActiveSubMeshCount);
+                bool publishBatch = desiredActiveSubMeshCount > physicalSubMeshCount;
+                if (subMeshDescriptors == null || subMeshDescriptors.Length < retainedSubMeshCount)
+                {
+                    subMeshDescriptors = new SubMeshDescriptor[retainedSubMeshCount];
+                    publishBatch = true;
+                }
                 Bounds currentBounds = CurrentBounds();
                 detailDiagnostics?.BeginPhase(
                     BattleTickDetailPhase.RenderPrepareFrameSetSubMeshes);
@@ -707,21 +693,48 @@ namespace NTSD.Animation.Rendering
                         }
 
                         BattleCentralRenderSegment segment = allSegments[segmentCursor];
-                        targetMesh.SetSubMesh(
-                            activeSubMeshIndex,
-                            new SubMeshDescriptor(
-                                segment.FirstQuad * IndicesPerQuad,
-                                segment.QuadCount * IndicesPerQuad,
-                                MeshTopology.Triangles)
-                            {
-                                baseVertex = 0,
-                                firstVertex = segment.FirstQuad * VerticesPerQuad,
-                                vertexCount = segment.QuadCount * VerticesPerQuad,
-                                bounds = allSegmentBounds[segmentCursor].ToBounds(),
-                            },
+                        var descriptor = new SubMeshDescriptor(
+                            segment.FirstQuad * IndicesPerQuad,
+                            segment.QuadCount * IndicesPerQuad,
+                            MeshTopology.Triangles)
+                        {
+                            baseVertex = 0,
+                            firstVertex = segment.FirstQuad * VerticesPerQuad,
+                            vertexCount = segment.QuadCount * VerticesPerQuad,
+                            bounds = allSegmentBounds[segmentCursor].ToBounds(),
+                        };
+                        SubMeshDescriptor previous = subMeshDescriptors[activeSubMeshIndex];
+                        publishBatch |= previous.indexStart != descriptor.indexStart ||
+                                        previous.indexCount != descriptor.indexCount;
+                        subMeshDescriptors[activeSubMeshIndex] = descriptor;
+                        segmentCursor++;
+                    }
+
+                    int inertStart = Math.Min(desiredActiveSubMeshCount, physicalSubMeshCount);
+                    int inertEnd = Math.Min(previousActiveSubMeshCount, physicalSubMeshCount);
+                    // ClearActive already cleared native descriptors; resynchronize the cached tail on recovery.
+                    int cachedInertEnd = previousActiveSubMeshCount == 0 ? physicalSubMeshCount : inertEnd;
+                    for (int subMeshIndex = inertStart; subMeshIndex < cachedInertEnd; subMeshIndex++)
+                        subMeshDescriptors[subMeshIndex] = new SubMeshDescriptor(0, 0, MeshTopology.Triangles);
+
+                    // Alignment contract: NTSD-BATTLE-MESH-SUBMESH-GROWTH-INITIALIZATION-001.
+                    // Count/range changes must not expose overlapping or uninitialized native descriptors.
+                    if (publishBatch)
+                    {
+                        targetMesh.SetSubMeshes(subMeshDescriptors, 0, retainedSubMeshCount,
                             MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
                             MeshUpdateFlags.DontNotifyMeshUsers);
-                        segmentCursor++;
+                    }
+                    else
+                    {
+                        for (int subMeshIndex = inertStart; subMeshIndex < inertEnd; subMeshIndex++)
+                            SetInertSubmesh(targetMesh, subMeshIndex);
+                        for (int subMeshIndex = 0; subMeshIndex < desiredActiveSubMeshCount; subMeshIndex++)
+                        {
+                            targetMesh.SetSubMesh(subMeshIndex, subMeshDescriptors[subMeshIndex],
+                                MeshUpdateFlags.DontRecalculateBounds | MeshUpdateFlags.DontValidateIndices |
+                                MeshUpdateFlags.DontNotifyMeshUsers);
+                        }
                     }
                 }
                 finally

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NativeLinkedActionField = NTSD.Simulation.BattleNativeLinkedWeaponActionField;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 
@@ -134,19 +135,6 @@ namespace NTSD.Simulation.Ecs
             HoldBack,
             HoldDepthUp,
             HoldDepthDown,
-        }
-
-        private enum NativeLinkedActionField : byte
-        {
-            NormalAttack1,
-            NormalAttack2,
-            LightThrow,
-            WeaponDrink,
-            HeavyThrow,
-            RunHeavyThrow,
-            RunAttack,
-            JumpAttack,
-            SkyLightThrow,
         }
 
         internal bool TryCharacterDatInputFrameJump(
@@ -1472,23 +1460,7 @@ namespace NTSD.Simulation.Ecs
             NativeLinkedActionField field,
             int fallback)
         {
-            if (linkedData == null)
-                return fallback;
-
-            int action = field switch
-            {
-                NativeLinkedActionField.NormalAttack1 => linkedData.normal_attack1,
-                NativeLinkedActionField.NormalAttack2 => linkedData.normal_attack2,
-                NativeLinkedActionField.LightThrow => linkedData.light_throw,
-                NativeLinkedActionField.WeaponDrink => linkedData.weapon_drink,
-                NativeLinkedActionField.HeavyThrow => linkedData.heavy_throw,
-                NativeLinkedActionField.RunHeavyThrow => linkedData.run_heavy_throw,
-                NativeLinkedActionField.RunAttack => linkedData.run_attack,
-                NativeLinkedActionField.JumpAttack => linkedData.jump_attack,
-                NativeLinkedActionField.SkyLightThrow => linkedData.sky_light_throw,
-                _ => 0,
-            };
-            return action == 0 ? fallback : action;
+            return BattleNativeLinkedWeaponActionResolver.Resolve(linkedData, field, fallback);
         }
 
         private static int NativeMovementAction(

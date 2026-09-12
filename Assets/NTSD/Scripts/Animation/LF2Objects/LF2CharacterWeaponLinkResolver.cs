@@ -73,30 +73,6 @@ namespace NTSD.Animation.LF2Objects
             return GetHeldWeaponBase()?.IsHeavy == true;
         }
 
-        private int GetHeldObjectId()
-        {
-            return GetHeldEntity()?.ObjectId ?? -1;
-        }
-
-        public bool IsHeldObjectAttackable()
-        {
-            int objectId = GetHeldObjectId();
-            return objectId > 0 && NTSDSpec.IsWeaponAttackable(objectId);
-        }
-
-        public bool CanHeldObjectStandThrow()
-        {
-            int objectId = GetHeldObjectId();
-            return objectId > 0 &&
-                   (NTSDSpec.CanJustThrowWeapon(objectId) || NTSDSpec.CanStandThrowWeapon(objectId));
-        }
-
-        public bool CanHeldObjectRunThrow()
-        {
-            int objectId = GetHeldObjectId();
-            return objectId > 0 && NTSDSpec.CanRunThrowWeapon(objectId);
-        }
-
         private static LF2WeaponBase AsWeaponEntity(LF2Entity entity)
         {
             return entity as LF2WeaponBase;

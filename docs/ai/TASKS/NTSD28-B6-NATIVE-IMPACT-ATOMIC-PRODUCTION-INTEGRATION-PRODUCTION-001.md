@@ -24,3 +24,10 @@ Authority???????hit_candidates134-256?battle_world4540-4580/5270-5309/5405-5531?
 ???I1/I2??????I3?????????????diff?Scene?????schema/RNG/rest/delay/??????????b1b02287??2022.3.62f3/NTSD_Battle?????Library???git add/commit/push?
 
 ????????????????????Goal17????????????Git discard???????/???RED/focused/build/Play???Temp/Goal18_PrechangeBaseline.json???6404??FRAMING=1?????2022.3.62f3???Scene dirtyfalse?SHA??D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11?
+
+## Goal18F 续传事前追加（2026-09-12，IN_PROGRESS）
+用户当前授权只完成 F1～F4。原实现、历史乱码段落与原 RED/GREEN 证据保持。F1 已于当前 b1b02287 编辑器完整重跑四项，4/4 PASS，未修改旧断言；Goal18_F1_OldFocused_Result.json 为新鲜证据。
+F2 首次新鲜 Play 两行 PASS、cleanup=true、98 字段 C++ 对照 firstDifference=null，但字段覆盖检查发现未采集 PP 与双方 rest，见 Temp/Goal18_PlayF_Coverage_RED.json（16 个缺失项）。这属于测试基建覆盖缺口，不是已观察的生产错误。
+实施前范围：仅 NTSD28B6NativeImpactAtomicIntegrationEditorTests.cs 的 Goal18ImpactPlayProbe.Capture、PlayState 和 Run 追加 PP、source Arest、target Arest、target 对 source 的 Vrest 只读采样与不变断言；不写生产 HP/PP/rest/delay，不改变逻辑或调用顺序。验收：新增字段覆盖转绿、Play 双 kind 与清理通过、原 C++ 98 字段仍无差异，然后一次共享回归与双 build、validator、Scene SHA。新采样字段仅由 Unity 证明不变，不伪称 C++ harness 已输出这些字段。
+无新生命周期模块。风险限于 probe 编译与字段采样位置；回滚方式为获批后仅反向本次 probe 增量，禁止回退既有三包。Scene SHA 必须保持 D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11。
+Goal18F F3 定向修订事前记录：唯一共享 B6 job032efcd73b5949f1bada58270878a741 已完成 964 项，963 PASS/1 FAIL；三包新 focused 为 13/147/194 全通过。失败仅在既有 NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.ImpactLivePaths_RemainIndependentOfRetiredFluteForceApi，仍要求已被 I3 合法替换的 ApplyFluteCharacterForce/FluteCharacterWeaponCount/ProjectKind10Or11WriterEffect 名称。依据用户原批“impact 相关旧期望修订（仅类内）”授权，只修订该方法中的四处 impact 源码定位名称为既有 shared writer/plan 名称，不改 FluteForce 禁止断言、不改非 impact 守卫、不改生产代码。RED 为 Temp/Goal18F_B6.xml。验收为该完整旧 fixture 定向通过，并核对唯一共享结果中的全部前置 coverage；不重跑整批 B6。回滚仅限该方法四个字符串改动，需用户批准。此路径已事前登记到本 Record 元数据。
