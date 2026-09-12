@@ -1,5 +1,13 @@
 # NTSD 当前权威恢复入口
 
+
+> **当前任务视图（2026-09-12）：** `NTSD28-ALIGNMENT-REPLAN-20260912 / PLAN_REORGANIZED / DOCUMENTATION_ONLY / FULL_ALIGNMENT_INCOMPLETE`。
+> 用户要求重新整理完整对齐任务；当前导航以 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节为准。
+> 已核验正式 EXE 哈希仍为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`，并读取 Goal20 原始回归摘要和 SelfCheck PASS 文件。
+> 下方旧暂停/“下一包”仅代表记录时点；Goal17～20 具名成果须复用，不重新实施。旧矩阵尚未逐 ID 对账，不能当实时 backlog。
+> 下一步是 Q0 只读对账，前置 H 资源闭包与 B9/B10 验收设计；本轮未恢复全线 production。例外是否撤销与 H 内容策略待澄清，不能自行覆盖资源。
+> D-022 联合 schema 路线已决定，实施前置待核验。整场逻辑、完整技能物理按键、画面/声音和长跑验收仍是独立出口。
+
 > **USER HOLD（2026-09-09）：** 用户要求停止当前 `NTSD28-UNITY-BATTLE-REALIGNMENT-001` 自动推进，
 > 改由 GLM 先核验当前进度、现有生产脚本和证据，再整理真正遗漏与未处理项；禁止从头重做已完成逻辑。
 > 暂停期间不得启动新对齐包、继续Play验收、修复独立SelfCheck/stress失败或

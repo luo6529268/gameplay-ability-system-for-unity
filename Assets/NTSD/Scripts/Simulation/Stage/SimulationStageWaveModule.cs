@@ -656,7 +656,6 @@ namespace NTSD.Simulation
             entity.Unk344 = side + 1;
             entity.RelationTeam = usesCharacterInit ? side + 1 : 0;
             entity.HitStun = usesCharacterInit ? 20 : 0;
-            entity.HolderCopySlot = requiredRuntimeSlot;
             entity.Health.HP = hp;
             entity.Health.HPBound = hp;
             entity.Health.HP3 = hp;
@@ -687,7 +686,6 @@ namespace NTSD.Simulation
             entity.Health.HP = hp;
             entity.Health.HPBound = hp;
             entity.Health.HP3 = hp;
-            entity.HolderCopySlot = entity.Runtime?.SlotIndex ?? -1;
         }
 
         private bool IsStageRuntimeAllocationSealed()

@@ -53,47 +53,6 @@ namespace NTSD.Animation.LF2Objects
                 }
             }
 
-            // Kind 5：委托攻击，使用 TrackerParent 的 wpoint.attacking 替换伤害字段。
-            // 条件：victim.GrabbedBy<0、TrackerParent.TrackerFlag==attacker.StableId、父对象不是自己。
-            // 替换后走普通 kind=0 命中结算。
-            if (itr.kind == 5 && _character.GrabbedBy < 0)
-            {
-                LF2Entity trackerParent = _character.ResolveTrackerParentFromRuntime();
-                var tp = trackerParent;
-                if (tp != null && tp.TrackerFlag == attacker.StableId && tp != _character)
-                {
-                    var tpFrame = tp.GetFrameDataById(tp.Frame.N);
-                    var wp = (tpFrame?.wpoints?.Count > 0) ? tpFrame.wpoints[0] : null;
-                    if (wp != null && wp.attacking > 0)
-                    {
-                        // 从 attacker 当前帧的 wpoints[wp.attacking] 取得实际伤害数据。
-                        var attackerFrame = attacker.GetFrameDataById(attacker.Frame.N);
-                        int wpIdx = wp.attacking;
-                        var srcWp = (attackerFrame?.wpoints != null && wpIdx < attackerFrame.wpoints.Count)
-                            ? attackerFrame.wpoints[wpIdx] : null;
-                        if (srcWp != null)
-                        {
-                            // 保留原始 itr 的碰撞框，替换伤害字段，并将 kind 强制为普通攻击。
-                            _runtimeItr.CopyFrom(itr);
-                            itr = _runtimeItr;
-                            itr.kind = 0;
-                            itr.zwidth = srcWp.cover;
-                            itr.dvx = srcWp.dvx;
-                            itr.dvy = srcWp.dvy;
-                            itr.dvz = srcWp.dvz;
-                            itr.injury = srcWp.injury;
-                            itr.fall = srcWp.fall;
-                            itr.vaction = srcWp.vaction;
-                            itr.arest = srcWp.arest;
-                            itr.vrest = srcWp.vrest;
-                            itr.effect = srcWp.effect;
-                            itr.kill = srcWp.kill;
-                            itr.bdefend = srcWp.bdefend;
-                        }
-                    }
-                }
-            }
-
             bool acceptHit  = false;
             bool isKnockdown = false;
             float efDvx      = 0f;
@@ -371,15 +330,6 @@ namespace NTSD.Animation.LF2Objects
         private static int ResolveAttackerState(LF2Entity attacker)
         {
             return attacker?.GetState() ?? 0;
-        }
-
-        private LF2Entity ResolveHolderCopyEntity(LF2Entity attacker)
-        {
-            int holderSlot = attacker?.HolderCopySlot ?? -1;
-            if (holderSlot < 0)
-                return null;
-
-            return _character.Match?.FindEntityByRuntimeSlotForQuery(holderSlot);
         }
 
         private void ApplyWhirlwindCharacterForce(LF2Entity attacker)

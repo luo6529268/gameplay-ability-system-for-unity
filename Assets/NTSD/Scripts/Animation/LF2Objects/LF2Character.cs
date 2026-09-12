@@ -895,13 +895,11 @@ namespace NTSD.Animation.LF2Objects
             {
                 Team = task.team;
                 RelationTeam = task.relationTeam;
-                HolderCopySlot = task.holderCopySlot;
             }
             else if (task.parent != null && inheritParentRelation)
             {
                 Team = task.parent.Team;
                 RelationTeam = task.parent.RelationTeam;
-                HolderCopySlot = task.parent.HolderCopySlot;
             }
             else
             {
@@ -909,7 +907,6 @@ namespace NTSD.Animation.LF2Objects
                 RelationTeam = task.relationTeam;
                 if (RelationTeam == 0)
                     RelationTeam = task.team;
-                HolderCopySlot = task.holderCopySlot;
             }
 
             OwnerId = -1;

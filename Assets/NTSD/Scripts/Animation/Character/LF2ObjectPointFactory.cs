@@ -778,7 +778,6 @@ namespace NTSD.Animation
                 // Inherit the C++ release relation identity from the spawning entity.
                 living.Team = parent.Team;
                 living.RelationTeam = parent.RelationTeam;
-                living.HolderCopySlot = parent.HolderCopySlot;
 
                 // owner_id 继承链（C++ release 对齐 0x004224F8-0x0042250B）
                 living.OwnerId = releaseOpointSpawn
@@ -809,9 +808,6 @@ namespace NTSD.Animation
             // kind==2 追踪绑定（C++ release 对齐 0x00422729-0x0042277E，无 entity_type 守卫）
             if (op.kind == 2 && parent != null)
             {
-                parent.TrackerFlag  = 1;
-                living.TrackerFlag  = -1;
-                living.TrackerParent = parent;
                 if (parent is LF2Character parentCharacter)
                     parentCharacter.AttachOpointHeldObject(living);
                 else

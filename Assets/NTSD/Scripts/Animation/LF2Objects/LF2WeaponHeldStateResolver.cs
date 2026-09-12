@@ -30,9 +30,7 @@ namespace NTSD.Animation.LF2Objects
                 holder.Runtime.ThrowFrameGuard = -1;
             }
 
-            weapon.Runtime.WeaponState = 0;
             weapon.ImmediateFrame(weapon.BattleRandInt(0, 16));
-            weapon.Runtime.WeaponState = 0;
             weapon.Runtime.Vx = dvx * (1.0 / 3.0);
             weapon.Runtime.Vy = dvy;
 
@@ -72,8 +70,6 @@ namespace NTSD.Animation.LF2Objects
             }
             weapon.SwitchDir(holder.Runtime.Dir);
             weapon.FrameDelay = holder.FrameDelay;
-            weapon.Runtime.WeaponState = LF2States.WeaponOnHand;
-
             LF2FrameData frame = weapon.Frame.D;
             BattleWeaponPointValue heldWPoint = frame != null
                 ? frame.PrimaryWeaponPoint
@@ -120,7 +116,6 @@ namespace NTSD.Animation.LF2Objects
             BattleWeaponPointValue wpoint,
             bool stampSpawnerSlot)
         {
-            weapon.Runtime.WeaponState = LF2States.WeaponThrowing;
             weapon.Runtime.Vx = weapon.Dirh() * wpoint.Dvx;
             weapon.Runtime.Vy = wpoint.Dvy;
 
@@ -151,8 +146,6 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             weapon.DirectWriteHeldFramePreserveWaitCounter(weapon.BattleRandInt(0, 16));
-            weapon.Runtime.WeaponState = 0;
-
             const double velocityFactor = 1.0 / 3.0;
             if (holder.HitCount == 1)
             {
@@ -169,9 +162,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (weapon.Runtime.Y < -2.0)
                 weapon.Runtime.Y = -2.0;
-
-            if (holder is LF2Character holderCharacter)
-                holderCharacter.GrabbedBy = 0;
 
             weapon.ReleaseHeldWeaponRuntimeInternal(holder);
             result.ForceDrop = true;
@@ -265,9 +255,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (weapon.Health.HP > 0)
                 return;
-
-            if (holder is LF2Character holderCharacter)
-                holderCharacter.GrabbedBy = 0;
 
             // Alignment contract: NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001.
             weapon.DirectWriteHeldFramePreserveWaitCounter(0);

@@ -15,21 +15,16 @@ namespace NTSD.Animation.LF2Objects
 
         public void ForceClearHolder(bool preserveRuntimeOwnerFields = false)
         {
-            ClearWeaponHolderRuntime(
-                clearHolderSlot: !preserveRuntimeOwnerFields,
-                clearHolderCopy: !preserveRuntimeOwnerFields);
+            ClearWeaponHolderRuntime(clearHolderSlot: !preserveRuntimeOwnerFields);
         }
 
         public void ReleaseHeldWeaponRuntime(LF2Entity holder, bool stampReleaseTick = false)
         {
-            if (stampReleaseTick)
-                weapon.Runtime.ReleaseTick = weapon.Match?.CurrentTickIndex ?? 0;
             ClearReleasedLinks(holder);
         }
 
         public void ReleaseHeldWeaponForConsume(LF2Entity holder)
         {
-            weapon.Runtime.ReleaseTick = weapon.Match?.CurrentTickIndex ?? 0;
             ClearReleasedLinks(holder);
             if (holder?.Runtime != null)
                 holder.Runtime.TargetSlotIndex = 0;
@@ -51,18 +46,14 @@ namespace NTSD.Animation.LF2Objects
             if (holder is LF2Character character)
                 character.HeldWeaponReferenceInternal = null;
 
-            weapon.GrabbedBy = 0;
             weapon.Runtime.LinkState = 0;
         }
 
-        private void ClearWeaponHolderRuntime(bool clearHolderSlot, bool clearHolderCopy)
+        private void ClearWeaponHolderRuntime(bool clearHolderSlot)
         {
-            weapon.GrabbedBy = 0;
             weapon.Runtime.LinkState = 0;
             if (clearHolderSlot)
                 weapon.Runtime.HolderStableId = -1;
-            if (clearHolderCopy)
-                weapon.HolderCopySlot = -1;
         }
     }
 }

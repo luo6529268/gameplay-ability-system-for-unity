@@ -32,7 +32,6 @@ namespace NTSD.Animation.LF2Objects
             owner.PS.BindRuntime(owner.Runtime);
             owner.Health.BindRuntime(owner.Runtime);
             owner.AssignRendererFromLifecycle(renderer);
-            owner.GrabbedBy = 0;
 
             if (taskBase is not OPointCreateTask task)
             {
@@ -74,7 +73,6 @@ namespace NTSD.Animation.LF2Objects
             owner.Health.MaxPP = 0;
             owner.Health.PPBound = 0;
             owner.Health.MaxMP = 0;
-            owner.GrabbedBy = 0;
             owner.HolderCopySlot = -1;
             owner.OwnerId = -1;
             owner.RelationOwnerSlot = -1;

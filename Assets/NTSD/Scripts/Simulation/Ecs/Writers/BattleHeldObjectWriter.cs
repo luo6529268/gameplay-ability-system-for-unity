@@ -229,12 +229,6 @@ namespace NTSD.Simulation.Ecs
             LF2Entity held,
             bool stampReleaseTick = false)
         {
-            if (stampReleaseTick)
-            {
-                held.Runtime.ReleaseTick =
-                    held.Match?.CurrentTickIndex ?? holder.Match?.CurrentTickIndex ?? 0;
-            }
-
             holder.Runtime.LinkState = 0;
             if (holder.Runtime.HeldWeaponStableId == held.Runtime.SlotIndex)
             {
@@ -245,7 +239,6 @@ namespace NTSD.Simulation.Ecs
             if (holder is LF2Character character)
                 character.HeldWeaponReferenceInternal = null;
 
-            held.GrabbedBy = 0;
             held.Runtime.LinkState = 0;
         }
     }

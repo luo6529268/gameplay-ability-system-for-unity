@@ -270,7 +270,6 @@ namespace NTSD.Simulation
             {
                 living.Team = parent.Team;
                 living.RelationTeam = parent.RelationTeam;
-                living.HolderCopySlot = parent.HolderCopySlot;
                 living.OwnerId = releaseOpointSpawn
                     ? -1
                     : (parent.OwnerId > -1 ? parent.OwnerId : parent.StableId);
@@ -297,9 +296,6 @@ namespace NTSD.Simulation
 
             if (op.kind == 2 && parent != null)
             {
-                parent.TrackerFlag = 1;
-                living.TrackerFlag = -1;
-                living.TrackerParent = parent;
                 if (parent is LF2Character parentCharacter)
                 {
                     parentCharacter.AttachOpointHeldObject(living);

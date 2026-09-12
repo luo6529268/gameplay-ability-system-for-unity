@@ -1562,11 +1562,6 @@ namespace NTSD.Simulation.Ecs
                 reducedInjury >= victim.Health.HP &&
                 victim.Runtime.OrdinaryCreditGate2F4 == -1)
             {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(
-                    attacker);
-                if (holder != null)
-                    holder.KillStat++;
-
                 int killStatIndex = victim.Unk344;
                 if (killStatIndex > 0 && killStatIndex < world.KillStats.Length)
                     world.KillStats[killStatIndex]++;
@@ -1588,13 +1583,6 @@ namespace NTSD.Simulation.Ecs
                 attacker,
                 victim,
                 reducedInjury);
-            if (victim.Runtime.OrdinaryCreditGate2F4 == -1)
-            {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(
-                    attacker);
-                if (holder != null)
-                    holder.ComboCountAtk += reducedInjury;
-            }
 
             int damageStatIndex = victim.Unk344;
             if (damageStatIndex > 0 && damageStatIndex < world.DamageStats.Length)
@@ -1695,11 +1683,6 @@ namespace NTSD.Simulation.Ecs
             if (originalHp > 0 && injury >= originalHp &&
                 victim.Runtime.OrdinaryCreditGate2F4 == -1)
             {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(
-                    attacker);
-                if (holder != null)
-                    holder.KillStat++;
-
                 int killStatIndex = victim.Unk344;
                 if (killStatIndex > 0 && killStatIndex < world.KillStats.Length)
                     world.KillStats[killStatIndex]++;
@@ -1715,13 +1698,6 @@ namespace NTSD.Simulation.Ecs
                 victim,
                 injury);
             victim.ComboCountVic += injury;
-            if (victim.Runtime.OrdinaryCreditGate2F4 == -1)
-            {
-                LF2Entity holder = LF2HitResolveRuntimeData.ResolveHolderCopyEntity(
-                    attacker);
-                if (holder != null)
-                    holder.ComboCountAtk += injury;
-            }
 
             int damageStatIndex = victim.Unk344;
             if (damageStatIndex > 0 && damageStatIndex < world.DamageStats.Length)

@@ -36,12 +36,6 @@ namespace NTSD.Animation.LF2Objects
             return flow != null && flow.BattleStepMode == 1 && flow.BattleStepGate != 1;
         }
 
-        internal static LF2Entity ResolveHolderCopyEntity(LF2Entity attacker)
-        {
-            int holderSlot = attacker?.HolderCopySlot ?? -1;
-            return holderSlot >= 0 ? attacker.Match?.FindEntityByRuntimeSlotForQuery(holderSlot) : null;
-        }
-
         internal static bool ShouldAbortRemainingHitPairsAfterOid300Redirect(
             LF2Entity victim,
             InteractionArea itr)
@@ -369,42 +363,6 @@ namespace NTSD.Animation.LF2Objects
                     (attacker.Runtime.Vx < 0.0 && attacker.Dirh() > 0))
                 {
                     itr.dvx = -itr.dvx;
-                }
-            }
-
-            if (itr.kind == 5 && _victim.GrabbedBy < 0)
-            {
-                LF2Entity trackerParent = _victim.ResolveTrackerParentFromRuntime();
-                if (trackerParent != null && trackerParent.TrackerFlag == attacker.StableId && trackerParent != _victim)
-                {
-                    LF2FrameData trackerFrame = trackerParent.GetFrameDataById(trackerParent.Frame.N);
-                    WeaponPoint trackerWPoint = (trackerFrame?.wpoints?.Count > 0) ? trackerFrame.wpoints[0] : null;
-                    if (trackerWPoint != null && trackerWPoint.attacking > 0)
-                    {
-                        LF2FrameData attackerFrame = attacker.GetFrameDataById(attacker.Frame.N);
-                        int wpointIndex = trackerWPoint.attacking;
-                        WeaponPoint sourceWPoint = (attackerFrame?.wpoints != null && wpointIndex < attackerFrame.wpoints.Count)
-                            ? attackerFrame.wpoints[wpointIndex]
-                            : null;
-                        if (sourceWPoint != null)
-                        {
-                            _runtimeItr.CopyFrom(itr);
-                            itr = _runtimeItr;
-                            itr.kind = 0;
-                            itr.zwidth = sourceWPoint.cover;
-                            itr.dvx = sourceWPoint.dvx;
-                            itr.dvy = sourceWPoint.dvy;
-                            itr.dvz = sourceWPoint.dvz;
-                            itr.injury = sourceWPoint.injury;
-                            itr.fall = sourceWPoint.fall;
-                            itr.vaction = sourceWPoint.vaction;
-                            itr.arest = sourceWPoint.arest;
-                            itr.vrest = sourceWPoint.vrest;
-                            itr.effect = sourceWPoint.effect;
-                            itr.kill = sourceWPoint.kill;
-                            itr.bdefend = sourceWPoint.bdefend;
-                        }
-                    }
                 }
             }
 

@@ -1,5 +1,110 @@
 # NTSD 2.8-Logan 与 Unity 战斗完整对齐总表
 
+## 0. 当前执行视图：完整对齐任务重整（2026-09-12）
+
+重整标识：`NTSD28-ALIGNMENT-REPLAN-20260912`。总目标仍为 `FULL_ALIGNMENT_INCOMPLETE`。
+本节是本表的当前导航和阶段出口约束；下方原始差异矩阵、启动记录和 Goal 收尾记录保留作证据历史。
+本次用户授权重新整理完整对齐任务；本轮只有只读核验和文档修改，不自动恢复所有 production 包。
+不得从旧“下一包”或 2026-09-09 全局暂停文字推断当前具名包未完成；也不得从后继限定授权推断全部暂停已解除。
+
+### 0.1 本次核验事实与证据边界
+
+| 项目 | 2026-09-12 核验结论 | 不能扩大成的结论 |
+|---|---|---|
+| 正式 EXE | 实际运行 `Get-FileHash`，SHA-256 为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`，与当前权威一致。 | 本轮没有运行正式 EXE 战斗，也没有重新计算全部 source closure manifest。 |
+| 正式资源/启动 | 已读 `source/README_SOURCE.md`、playable build 脚本和正式启动器；启动器以 runtime 同时作为两资源根，请求 render FPS 120。 | 同目录存在的资源、测试或候选代码不自动属于正式可达闭包。 |
+| Unity | `ProjectVersion.txt` 为 2022.3.62f3；依赖包含本地 `com.ntsd.battle-kernel`；当前常量明确正常 33 ms、快速 3 ms。 | 旧 T-01/T-02 “尚未实现”描述不是当前事实；常量正确仍不能代替 Host 实测。共享 kernel 不能漏出审计边界。 |
+| 最近进度 | Goal17～20 有限定收尾记录；Goal20 五项旧行为退休已记录 VERIFIED。读取 `Temp/Goal20_FinalSelfCheck.result` 为 PASS。 | VERIFIED 是具名子集状态，不等于 B6/full tick/full skill/full application parity。 |
+| Goal20 回归 | 已读 reconciliation：一次共享 1824 项原始运行失败，20 个旧 ReleaseTick 期望失败；后续受影响 24 项通过。 | 不改写为一次 1824/1824 全绿，不删除原失败记录。 |
+| 旧表调用数量 | `rg 'NTSDSpec\.'` 在排除 Test 的 Scripts 中只命中 `LF2Character.cs` 的 mass 初始化。 | 只证明直接表达式搜索结果；别名、反射、mass 消费链、快照和 kernel 路径仍须核验，不能宣布 E 已关闭。 |
+| 工作树 | 已有大量脚本、文档、Scene、配置及 UI 图片修改/删除/未跟踪项。 | 本轮不认领、不还原这些变更。Goal20 曾记录 Scene dirty=true；本轮没有重新读取 Editor dirty 状态。 |
+
+历史“生产尚未开始”“单 RNG”“无接线”“下一 B6”等文字只描述记录时点。每个差异必须结合当前代码、最新具名 Record 和原始证据更新，不能按文字出现顺序选任务。
+本轮是任务完整性重整，不是全部 C++/Unity 分支的重新审计；未逐项复核的实现成熟度为待核验。
+
+### 0.2 最终目标必须先闭合的两项决策
+
+1. **例外范围**：既有容量、固定相机、多边形边界、随机掉武器、头顶血条、FootSelf、平台取景例外，以及 HUD、结果表现、背景多层/cycle、选择流程排除仍有效，直至用户明确改判。本轮已请求澄清“完全一致”是否撤销这些例外；待答复，不自行删除或恢复。
+2. **H 内容策略**：要让相同角色、技能和表现一致，正式可达的战斗内容数值与资源必须一致。建议将 NTSD 2.8-Logan 正式战斗可达内容作为最终目标，按依赖分批迁移；“只补缺失”无法保证同名已有内容一致。此建议不是已批准的 Direction-B 切换，批准前只能只读审计。
+
+若保留例外，只能声明“非例外战斗域对齐”；若要求战斗域无差异，须逐项撤销相关例外并纳入验收。整应用一致还需要另行包含选择与结果等完整流程。
+默认 stage.dat 部署继续暂缓；测试夹具可以验证 stage 逻辑，但不能代表正式 stage 内容交付完成。若最终目标包含正式 stage 内容，该暂停必须单独解决。
+
+### 0.3 双向覆盖台账：防止漏项和重复实现
+
+沿用第 4 节 T/S/I/R/A/F/C/W/L/G/P/O/D/U 差异 ID 和 B0～B12 阶段，不重启旧 campaign。
+下一只读包须逐行生成“当前处置台账”，而不是再堆叠一批无证据的待修列表。每行至少包含：
+
+- 原差异 ID、行为族/分支、可达角色/对象/资源、当前状态与最近核验日期；
+- 正式源码文件/符号、playable 构建参与性、调用者/被调用者、字段读写及 reset；
+- Unity 生产文件/符号、共享 kernel、fast/fallback/worker 等实际路径；
+- 现有 Change ID、证据文件、证据内容哈希、测试覆盖范围、与当前代码/内容/schema 是否匹配；
+- 缺口类型：缺实现、缺 producer、缺 consumer、缺资源、缺联测、证据过期、用户决策；
+- 上游依赖、下一个最小包、验收场景和最终出口。
+
+双向检查：正式 build closure 中每个战斗分支必须映射 Unity 实现或具名未实现/例外项；Unity 每个可达战斗 writer 必须映射正式行为或批准例外。
+禁止只从现有测试和 Unity 方法列表反推“完整”；禁止把零 grep 命中等同于无可达行为。
+既有 VERIFIED 包匹配当前身份与代码时复用证据，仅对真实新增依赖、内容/schema 变化或首差补验，不从头重写。
+覆盖率只能基于明确台账分母计算；未知项、缺失 trace 字段和无资源 witness 不计作通过。
+
+### 0.4 完整工作分解与出口
+
+以下为剩余核验与实施工作域，**不是声称所有条目均未实现**。每个工作域先做证据对账，产出具名子包后才实施。
+
+| 工作域 | 必须覆盖的任务 | 退出条件 / 主要依赖 |
+|---|---|---|
+| Q0 当前状态对账 | 原矩阵全部 ID；Goal17～20 成果；旧 blocker 是否已关闭；原始失败与重测；Scene/工作树基线。 | 每个原 ID 都有当前处置，不存在只写“以后处理”的孤儿项；保留全部历史证据。 |
+| B0 字段与证据 | slot/generation/生灭、实体及 world 字段、双 RNG 调用日志、事件、内容/schema identity；正式源码与 EXE 可观察证据分级。 | 双端完整字段映射；缺字段显式不可验，不以 null/零补齐伪造相等。 |
+| B1 Host | 33/3 ms、暂停、单步、F5、debt cap、同次 Update 最多两 interval、失焦/卡顿、模式边界。 | 相同时间线的 tick/input 消费符合正式 Host；Manual/Lockstep 不消费 LocalFreeRun debt。 |
+| B2 输入/RNG/AI | human/link/native AI/object hit_Fa；输入相位、按下/保持/释放、组合窗口、target/owner、双流 call-site/顺序、重开初始化。 | 分支及整 tick trace；真实物理键到动作链；AI 扫描/tie-break/短路的 RNG 消费无首差。 |
+| B3 全局 pass | 物理 slot 顺序、输入/运动/瞬移/physics/复活、双 held、collision freeze、统一 hit、catch、全局尾部和 publication。 | 全 pass 事件序列相同；placement ready 与完整行为分别核验，不能只数 phase。 |
+| B4 帧/物理/复活 | 各对象 frame wait/next/sentinel、速度/位置同步、落地、状态分支、死亡/复活、资源与生成回调。 | 已验证 consumer 复用；补齐 B7/B8/H producer 依赖后再关闭整域。 |
+| B5 碰撞/命中 | candidate 集合和顺序、所有可达 itr/body、护甲/防御、伤害/HP/MP/统计、rest/combo、type 分支、终止与实际/HitPlan 一致。 | 命中前快照到全部副作用原子闭合；旧 stats 退休不能掩盖缺失 native writer。 |
+| B6 抓取/武器/E | catch/held/refill/pickup/throw、WPoint/CPoint、双方关系、+2F8、目标/owner 区分、mass 与旧 NTSDSpec 残留。 | 复用 Goal17～20；完整技能/关系生命周期证据；保留 carrier 不得继续影响行为，空壳删除另定。 |
+| 联合 schema | 按 D-022 审计所有待退 carrier、exact 新字段、shell/snapshot/checksum/ECS；确认当前真实版本与遗漏依赖。 | producer/consumer 退休→一次联合升版→接线验收；旧 midbattle 拒绝、seed/input 重放、capture/restore/hash 通过；不擅改既定版本路线。 |
+| B7 生成/生命周期 | 所有 OPoint kind、direct/stage/F8/clone/复活/碎片 producer、继承/default、同 tick 可见性、slot 复用、对象池。 | 从自然输入到生成/命中/消失完整链；HP/baseMax 等 deferred 字段闭合；有序关闭十一阶段和重进零残留。 |
+| B8 Stage/Flow | 非例外 clamp/settlement、波次/模式、KO/result timer、继续/结束、功能键接受与拒绝、资源事件。 | 规则即使结果页面被排除也须完整；stage 夹具与正式资产部署分开报告。 |
+| B9 战斗画面 | snapshot 时点、前后位置/插值、body/pivot/flip/缩放/透明、Z/slot tie-break、shadow/挂点/spark/bleed/lives/nameplate/combo、shake/earthquake/特殊状态。 | 逻辑命令和 30/60/120 Hz 帧序列对照，出生/消失/瞬移边界不拖影；表现不回写逻辑。 |
+| B10 声音 | frame/hit/spawn/KO/模式事件的 tick/顺序、resource key、重复/截断/voice 并发、循环/stop、F11/F12。 | 事件流相同，音源映射与听感/录音核验；后端实现可不同但可观察结果须满足合同。 |
+| B11 H 内容 | 正式可达 catalog、indexed DAT、parser presence/default/order、frame/armor/fusion/system、PNG/WAV/glyph、缺失资源、GUID/importer。 | 经批准的正式内容 raw/normalized/引用图闭合；不能用总文件数量相近或当前 138 DAT 测试代替。 |
+| B12 集成认证 | 全角色/技能/模式覆盖、完整对战 trace、实际 EXE 与 Unity 操作/画面/声音对照、长跑、回放、worker/fast path 与关闭回归。 | 下述全局门槛全部通过，未解决项为零或逐项批准例外；形成固定版本证据包。 |
+
+### 0.5 依赖顺序与下一步
+
+1. **立即可做的下一包是 Q0 只读对账**：把原矩阵逐 ID 与当前代码/Record/证据合并，重点复核 B6/E 的剩余入口与 exit；不重复退休 Goal20 已关闭行为。
+2. **同时前置 H 的只读资源闭包和 B9/B10 验收设计**。不再等所有逻辑包结束后才发现资源/表现缺口；批准前不导入资源。
+3. **按字段依赖选实现包**：B6/E 未闭合项、联合 schema 前置、B7 producer、B8 事件必须显式排序。D-022 已有路线授权，不再泛称“schema 策略未定”；但全部前置是否满足尚待 Q0 核验。
+4. **H 方向确认后先闭合 parser/内容合同再迁移**；每批内容变化精确触发 B2～B8 受影响逻辑复验及 B9/B10 资源验收。共同内容前置未满足时，full parity 保持阻塞，仍可推进无关包。
+5. **B9/B10 接入完成后执行 B12**。短场景和差分工具应随每个包持续积累；最终完整对战必须在同一集成版本再跑，不能拼接不同版本的局部 PASS 冒充整体验收。
+
+每个实现包继续要求独立 Task/Change、准确路径与符号、依赖、禁止项、验收及回滚。只改最小闭合行为，未声明资源/Scene/共享 kernel 路径不借机修改。
+本轮文档可通过反向移除本节及同步导航恢复；任何实际回滚均保留用户既有工作，遵守 Git 安全授权。
+
+### 0.6 场景覆盖与“完全一致”验收
+
+| 层级 | 覆盖要求 | 必需证据 |
+|---|---|---|
+| 内容覆盖 | 正式可达每个角色/对象/技能入口/特殊 state 与 mode；从 catalog/引用图生成分母，区分 indexed 与全目录。 | manifest、normalized projection、技能入口到测试 case 映射；不可达须有证据。 |
+| 行为覆盖 | 左右朝向，地面/空中，输入冲突/边沿，命中/未命中/防御，HP/MP/死亡边界，抓取/投掷/中断，spawn/free/reuse、同 tick 多事件。 | 分支 trace 和单项测试；非全笛卡尔积，但每个可达分支必须有 witness。 |
+| 真实操作 | 每角色可达技能至少一条自然操作链；报告过的组合技、持有武器、奔跑攻击、跟手、阴影必须复现原角色与按键。 | 起始角色/对手/装备、物理按键及持续 tick、连段状态、完整生成→命中→回收、视频/帧序列；禁止只用注入实体代替。 |
+| 整场逻辑 | 同内容指纹、schema、初态、seed 和离散输入；实体/HP/MP/状态/关系、双 RNG 调用、事件及 pass。 | 每次首差的 tick/pass/slot/字段/预期/实际；双跑稳定；source runner 证据与正式 EXE 观察明确分级。 |
+| 画面 | 相同 viewport、采样时刻、presentation alpha、地图和资源；30/60/120 Hz 与出生/销毁/瞬移边界。 | render command 精确对比，加截图/录像；像素差/字体/采样容差须事前明确，不能看到差异后临时放宽。 |
+| 声音 | 同事件时序、同音源、并发/打断/循环/停止；设备输出延迟与逻辑触发延迟分开。 | event trace、资源 hash/音频参数、录音或定向听验；容差事前登记。 |
+| 稳定性 | 建议固定 10,000 tick 双跑作为最低长跑，另测 wall-clock 33/3 ms、卡顿/暂停/恢复和 enter/exit/re-enter。 | RNG/状态/资源数量无未解释漂移；worker Join、pending spawn 丢弃、pool/world/publication 零残留。运行预算在 Task 中锁定。 |
+| 实现等价 | 所有正式支持的 fast/fallback、单线程/worker、LocalFreeRun/Manual/回放路径。 | 同输入逐 tick trace；不扩张为完整联网/回滚开发任务。 |
+
+例外不可无限传播：固定相机可在事先规定的世界坐标命令域比较；随机掉武器和多边形边界会改变实体/RNG/碰撞，必须使用不触发例外的共同场景做非例外证明，并另测例外开启的影响。不得删除所有下游首差后宣称无差异。
+
+最终交付必须同时满足：全台账闭合、E 无旧规则生产所有权、H 获批且闭合、同版本整场 trace 无未解释首差、正式 EXE 可观察对照、真实 Unity 编译/相关 focused/SelfCheck/Play、画面和声音验收、生命周期与长跑通过。
+测试断言修订须依据当前 authority，保留 RED 和原失败；不能为了全绿删减覆盖。Temp 原始证据须在阶段出口归档至版本化证据目录并建立哈希索引，不能仅依赖可清空目录。
+存在例外/排除项时最终结论必须附清单；存在 UNKNOWN、STRATEGY_PENDING、RUNTIME_PENDING 或未闭合资源时不得宣布完全对齐。
+
+### 0.7 本轮交付状态
+
+`PLAN_REORGANIZED / DOCUMENTATION_ONLY / IMPLEMENTATION_NOT_RESUMED / FULL_ALIGNMENT_INCOMPLETE`。
+本轮实际完成：权威 EXE 哈希、启动/源码声明、项目依赖与版本、Git 工作树、当前总表/恢复入口/决策、Goal20 原始回归摘要和 SelfCheck 文件、33/3 ms 与 NTSDSpec 直接调用静态核验。
+本轮没有运行编译、Unity 测试、Play、正式 EXE 对战、完整资源 inventory 或逐分支双端审计；本节不产生新的 runtime VERIFIED。
+
 > **Goal17三个限定退休包已验证（2026-09-10）：** `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001 / VERIFIED`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001 / VERIFIED`。focused13/4/10全PASS，一次共享B6610/610含全部指定前置，refill9/9、旧converter/HitPlan7/7、freshSelfCheckPASS、双build0error；Scene固定SHA/dirtyfalse，schema/内容/NTSDSpec本体/P3 Record均保持。包1不实现drain/recovery，包2无自然Play caller，包3保留Oscillate晚帧consumer/恢复，不声明native B9对齐。报告后等待复核，以下启动记录为过程历史。
 
 > **Goal17已获追加授权恢复：** 三包 `NTSD28-B6-CPOINT-KIND2-HURT-CONSUMER-RETIREMENT-PRODUCTION-001`, `NTSD28-B6-NTSDSPEC-DEAD-FLUTE-API-RETIREMENT-PRODUCTION-001`, `NTSD28-B9-NTSDSPEC-OSCILLATE-PRODUCER-RETIREMENT-PRODUCTION-001` 均IN_PROGRESS/TEST_FIRST；包1引用复核方完整正向证明，限定旧测试范围已批准，drain/recovery延后；包2/3先全量名称认证。P3 Record不再修改。以下事前暂停为已解除历史。
@@ -1368,3 +1473,41 @@ Exactly one shared regression job637100deade44a0eb4bf25d0d9950b9c:1778/1778 PASS
 Scene NTSD_Battle remains loaded, isDirty=false/root13; SHA D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11. Existing user modifications preserved; no unexpected script paths or staged files. No schema/NTSDSpec/Gen/Plugins/input sampling/content/Scene changes, no git add/commit/push. These facts close only Goal19 scope, not full battle parity or outstanding content strategy.
 
 Authoritative batch evidence index: Temp/Goal19_FinalSummary.json; raw RED/focused/shared XML, Play comparisons, screenshots, Console, build and validator files linked there. Earlier PLANNED/CODE_WRITTEN/RUNTIME_PENDING entries are superseded by this closure, while their failures/corrections remain preserved.
+
+Goal20 R1 `NTSD28-B6-LEGACY-TRACKER-PRODUCER-RETIREMENT-PRODUCTION-001` / IN_PROGRESS / TEST_FIRST. Contract and Record established before scripts; exact scope in docs/ai/TASKS/NTSD28-B6-LEGACY-TRACKER-PRODUCER-RETIREMENT-PRODUCTION-001.md. R2 waits for R1; R3-R5 preflight only. Evidence Temp/Goal20_*. Schema/carriers preserved; no Git mutation.
+
+Goal20 R1 CODE_WRITTEN/focused10of10 (new5+kind5existing5), runtime/shared pending. R2 `NTSD28-B6-LEGACY-GRABBEDBY-NONZERO-PRODUCER-RETIREMENT-PRODUCTION-001` IN_PROGRESS/TEST_FIRST; exact Task/Record created before scripts.
+
+Goal20 progress: `NTSD28-B6-LEGACY-TRACKER-PRODUCER-RETIREMENT-PRODUCTION-001` FOCUSED_TEST_PASS (new5+kind5existing5); `NTSD28-B6-LEGACY-GRABBEDBY-NONZERO-PRODUCER-RETIREMENT-PRODUCTION-001` FOCUSED_TEST_PASS (new6+G16P3existing140). R1RED3FAIL after2reachablePASS; R2 correctedRED6FAIL. Play/shared/build/validator pending.
+
+Goal20 `NTSD28-B6-LEGACY-WEAPON-STATE-BEHAVIOR-RETIREMENT-PRODUCTION-001` IN_PROGRESS / TEST_FIRST / PRODUCTION_UNCHANGED. Exact Task/Record created; main agent controls Unity serial validation. Schema/reserved shape unchanged. Evidence Temp/Goal20_*.
+
+Goal20 `NTSD28-B6-LEGACY-RELEASE-TICK-PRODUCER-RETIREMENT-PRODUCTION-001` IN_PROGRESS / TEST_FIRST / PRODUCTION_UNCHANGED. Exact Task/Record created; main agent controls Unity serial validation. Schema/reserved shape unchanged. Evidence Temp/Goal20_*.
+
+Goal20 R1/R2 RUNTIME_PENDING solely for batch shared gates; focused10/146PASS and targeted PlayPASS (G16 two actual pickup witnesses, current51/279->213/0 OPoint relationship seam, fulltick/unregister reserved0/null, objects4->4). Temp/Goal20_R12_PlaySummary.json defines precise boundary; no full skill/keyboard claim.
+
+Goal20 R5 `NTSD28-B6-LEGACY-HOLDERCOPY-RESIDUAL-RETIREMENT-PRODUCTION-001` IN_PROGRESS / TEST_FIRST / PRODUCTION_UNCHANGED; Task/Record and fresh52production references/22files callgraph Temp/Goal20_R5_Callgraph.json established. True lifecycle defaults99/-1 retained, root-copy/stage/held/legacy-holder stats behavior retired only after RED. Main owns integration and Unity serial execution.
+
+Goal20 R1-R5 RUNTIME_PENDING for shared batch gates. R1focused10/R2focused146/R3focused5/R4focused13/R5focused157 all PASS; R3 native normalized firstDifference=null and currentPlayPASS, R4 currentPlay4PASS only ReleaseTick differs, R1/R2 targetedPlayPASS. Shared1824 planned once (B6 1735+37), fullSelfCheck/two builds/finalvalidator pending.
+
+Goal20 final package statuses:
+
+- `NTSD28-B6-LEGACY-TRACKER-PRODUCER-RETIREMENT-PRODUCTION-001` / VERIFIED / RED 3FAIL after factory reachability2PASS; focused10/10.
+
+- `NTSD28-B6-LEGACY-GRABBEDBY-NONZERO-PRODUCER-RETIREMENT-PRODUCTION-001` / VERIFIED / RED 6FAIL; focused146/146.
+
+- `NTSD28-B6-LEGACY-WEAPON-STATE-BEHAVIOR-RETIREMENT-PRODUCTION-001` / VERIFIED / RED 3FAIL/2PASS; focused5/5; native normalized firstDifference/firstChecksumDifference/firstMotionDifference null.
+
+- `NTSD28-B6-LEGACY-RELEASE-TICK-PRODUCER-RETIREMENT-PRODUCTION-001` / VERIFIED / RED 9FAIL/4PASS; focused13/13; current Play4/4 only retired carrier differs.
+
+- `NTSD28-B6-LEGACY-HOLDERCOPY-RESIDUAL-RETIREMENT-PRODUCTION-001` / VERIFIED / RED 7FAIL/1PASS; focused157/157; fresh production references52/22files to29/13files, only defaults/carrier/diagnostics remain.
+
+Goal20 final scoped closure, 2026-09-12: VERIFIED for the authorized R1-R5 behavior retirement only. Full SelfCheck fresh PASS: Temp/Goal20_FinalSelfCheck.result (attempt4; earlier failures retained). Actual commands: dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -clp:ErrorsOnly and dotnet build Assembly-CSharp-Editor.csproj --no-restore -v:minimal -clp:ErrorsOnly; both exit0/0errors, 47/104 warnings, Temp/Goal20_AcceptanceRuntimeBuild.txt and AcceptanceEditorBuild.txt. One shared1824 job completed with20 old ReleaseTick expectation failures; only authorized assertion rebaseline followed by affected24/24 PASS. Original broad FAILED receipt is retained, no second broad run or standalone all-green1824 claim; Temp/Goal20_SharedRegressionReconciliation.json. B6 coverage1735+37=1772, refill9 included.
+
+Targeted runtime evidence: Temp/Goal20_FinalReservedPlayResult.json, Goal20_R3_PlayWitness.json, Goal20_R4_CurrentPlay_GREEN.json. Current OPoint seam, G16 pickup witnesses, weapon prepass and release pass are covered; no physical-key/full-skill or full native-world checksum parity claim. R3 native comparator covers two isolated hit_Fa pre-frame-advance calls, seed424242/empty input, identical normalized schema; tick1 checksum/tick2 motion differences disappear. No full tick/physics equivalence claim.
+
+Disk Scene SHA remains D18E75F7920E12A1FEB13A8C23949042869E679B420A3073F7C21E4D4F4A2F11. Final editor scene isDirty=true/root13; source of dirty flag UNKNOWN, no save/clear performed, so scene-dirty-unchanged is NOT claimed. External UIPanels deletions/new images appeared during work and were not performed or modified by this batch; preserve them. Final Console snapshot: MinMaxAABB0/Overlap0; 7 expected fault-injection errors plus1 MCP disposed-connection error, warnings0; do not claim Console0errors. Temp/Goal20_FinalScene.json, FinalErrors.json, FinalWarnings.json, FinalScopeAudit.json.
+
+Reserved contract: GrabbedBy0, TrackerFlag0/TrackerParentnull, WeaponState0, ReleaseTick-1. HolderCopy retains actual type/lifecycle defaults (runtime/Character/SpecialAttack99; Weapon/Other-1; task-1), not a new uniform default. Existing synthetic sentinels remain for no-write/fingerprint tests. Schema/snapshot/checksum/parity/ECS fingerprint structures, +2F8, NTSDSpec, Gen, Plugins and task content/Scene remain untouched; no staged files or git add/commit/push. Broader battle alignment and joint schema migration remain incomplete. Earlier progress statements are superseded by this closure; failures and correction history are retained. Final evidence index: Temp/Goal20_FinalSummary.json. Final validator receipt is appended after execution.
+
+Final validator executed: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity; exit0 PASS,459 records/28 governed code files, Temp/Goal20_Validator.txt. Process-only Git config environment avoided unavailable user global ignore; no Git config files changed. Final git diff --check exit0. All changed scripts also explicitly covered by these five Goal20 Records.

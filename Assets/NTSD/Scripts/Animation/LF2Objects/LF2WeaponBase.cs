@@ -210,17 +210,6 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
-        protected int ResolveRuntimeWeaponState()
-        {
-            int runtimeState = Runtime?.WeaponState ?? 0;
-            return runtimeState != 0 ? runtimeState : GetState();
-        }
-
-        internal int GetRuntimeWeaponState()
-        {
-            return ResolveRuntimeWeaponState();
-        }
-
         protected int CurrentFrameState()
         {
             return Frame?.D?.state ?? GetState();
@@ -321,10 +310,8 @@ namespace NTSD.Animation.LF2Objects
 
             var holderEntity = holder as LF2Entity;
             Runtime.HolderStableId = holderEntity?.Runtime?.SlotIndex ?? -1;
-            HolderCopySlot = holderEntity?.Runtime?.SlotIndex ?? -1;
             Team = holder.Team;
             RelationTeam = holderEntity?.RelationTeam ?? holder.Team;
-            GrabbedBy = 0;
 
             return true;
         }
@@ -478,7 +465,6 @@ namespace NTSD.Animation.LF2Objects
             Health.MaxMP = 0;
             ShotCount = 0;
             PickerStableId = -1;
-            GrabbedBy = 0;
             HolderCopySlot = -1;
             OwnerId = -1;
             RelationOwnerSlot = -1;
@@ -715,7 +701,6 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
             character.HoldWeapon(this);
-            _interactionResolver.ApplyPickupGrabbedBy(character);
             return true;
         }
 
@@ -757,7 +742,6 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
             character.HoldWeapon(this);
-            _interactionResolver.ApplyPickupGrabbedBy(character);
             // C++ release 0x42EA9C/0x42EC29：kind=2 拾取后跳转 frame=115/116
             _interactionResolver.ApplyPickupFrameJump(character);
             return true;
@@ -821,13 +805,11 @@ namespace NTSD.Animation.LF2Objects
             {
                 Team = task.team;
                 RelationTeam = task.relationTeam;
-                HolderCopySlot = task.holderCopySlot;
             }
             else if (task.parent != null && inheritParentRelation)
             {
                 Team = task.parent.Team;
                 RelationTeam = task.parent.RelationTeam;
-                HolderCopySlot = task.parent.HolderCopySlot;
             }
             else
             {
@@ -835,7 +817,6 @@ namespace NTSD.Animation.LF2Objects
                 RelationTeam = task.relationTeam;
                 if (RelationTeam == 0)
                     RelationTeam = task.team;
-                HolderCopySlot = task.holderCopySlot;
             }
 
             Runtime.OwnerStableId = -1;

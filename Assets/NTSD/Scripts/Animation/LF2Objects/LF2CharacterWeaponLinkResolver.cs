@@ -97,10 +97,7 @@ namespace NTSD.Animation.LF2Objects
             if (held != null)
             {
                 held.Runtime.HolderStableId = _character.Runtime?.SlotIndex ?? -1;
-                held.HolderCopySlot = _character.Runtime?.SlotIndex ?? -1;
                 held.Runtime.LinkState = ResolveHeldObjectLinkState(weapon);
-                if (held.GrabbedBy == 0)
-                    held.GrabbedBy = -1;
                 held.Team = _character.Team;
                 held.RelationTeam = _character.RelationTeam;
             }
@@ -119,12 +116,10 @@ namespace NTSD.Animation.LF2Objects
             if (held == null)
                 return;
 
-            held.GrabbedBy = -1;
             held.Runtime.LinkState = -1;
             held.Runtime.HolderStableId = _character.Runtime?.SlotIndex ?? -1;
             held.Runtime.TargetSlotIndex = -1;
             held.Runtime.HeldWeaponStableId = -1;
-            held.HolderCopySlot = _character.HolderCopySlot;
             held.Team = _character.Team;
             held.RelationTeam = _character.RelationTeam;
         }
@@ -351,14 +346,12 @@ namespace NTSD.Animation.LF2Objects
                 held.RelationTeam = 0;
             }
 
-            held.GrabbedBy = 0;
             held.Runtime.LinkState = 0;
             LF2WeaponBase weapon = AsWeaponEntity(held);
             if (weapon != null)
                 weapon.ForceClearHolder(preserveRuntimeOwnerFields: true);
 
             _character.HeldWeaponReferenceInternal = null;
-            _character.GrabbedBy = 0;
             _character.Runtime.LinkState = 0;
             if (_character.Runtime.HeldWeaponStableId == held.Runtime.SlotIndex)
             {

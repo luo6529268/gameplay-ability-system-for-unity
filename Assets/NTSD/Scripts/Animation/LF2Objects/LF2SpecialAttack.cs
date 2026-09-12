@@ -632,7 +632,7 @@ namespace NTSD.Animation.LF2Objects
 
                     if (attackerSpecial.ObjectId == 213 && isValidTarget)
                     {
-                        // target.team 和 target.[+354h] 继承 attacker.TrackerParent 的对应值。
+                        // target.team 和 target.[+354h] 继承 attacker linked parent 的对应值。
                         LF2CharacterDataWrapper karasuWrapper =
                             ResolveRuntimeCharacterConfig(209);
                         if (karasuWrapper != null)
@@ -642,7 +642,7 @@ namespace NTSD.Animation.LF2Objects
                             SetFrameDirect(savedFrame);
                             Frame.PN = savedFrame;
                         }
-                        var parent = attackerSpecial.ResolveTrackerParentFromRuntime() as LF2SpecialAttack;
+                        var parent = attackerSpecial.ResolveLinkedParentFromRuntime() as LF2SpecialAttack;
                         if (parent != null)
                         {
                             Team = parent.Team;

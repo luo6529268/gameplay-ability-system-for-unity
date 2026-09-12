@@ -1347,28 +1347,18 @@ namespace NTSD.Animation.LF2Objects
             InvalidateDataObjectTypeTickCache();
         }
 
-        internal LF2Entity ResolveTrackerParentFromRuntime()
+        internal LF2Entity ResolveLinkedParentFromRuntime()
         {
             int selfSlot = Runtime?.SlotIndex ?? -1;
             int parentSlot = Runtime?.HolderStableId ?? -1;
             if ((Runtime?.LinkState ?? 0) >= 0 || selfSlot < 0 || parentSlot < 0)
-            {
-                TrackerParent = null;
                 return null;
-            }
 
             LF2Entity parent = Match?.FindEntityByRuntimeSlotForQuery(parentSlot);
-            if (parent == null && (TrackerParent?.Runtime?.SlotIndex ?? -1) == parentSlot)
-                parent = TrackerParent;
-
             if (parent?.Runtime == null || parent.Runtime.LinkState <= 0 ||
                 parent.Runtime.TargetSlotIndex != selfSlot)
-            {
-                TrackerParent = null;
                 return null;
-            }
 
-            TrackerParent = parent;
             return parent;
         }
 
@@ -2356,7 +2346,6 @@ namespace NTSD.Animation.LF2Objects
             task.spawnerEntityIndex = -1;
             task.useExplicitRelationIdentity = true;
             task.relationTeam = ResolveFrameLogicRelationIdentity();
-            task.holderCopySlot = HolderCopySlot;
             task.skipPostInitZOffset = true;
             task.useInitialRuntimeIntPosition = true;
             task.initialRuntimeX = (int)task.pos.x;
@@ -2374,7 +2363,6 @@ namespace NTSD.Animation.LF2Objects
             task.spawnerEntityIndex = -1;
             task.useExplicitRelationIdentity = true;
             task.relationTeam = ResolveFrameLogicRelationIdentity();
-            task.holderCopySlot = HolderCopySlot;
             task.skipPostInitZOffset = true;
             task.useInitialRuntimeIntPosition = true;
             task.initialRuntimeX = Runtime.XInt;
@@ -4288,7 +4276,6 @@ namespace NTSD.Animation.LF2Objects
 
             held.Runtime.LinkState = 0;
             held.Runtime.HolderStableId = -1;
-            held.HolderCopySlot = 99;
         }
 
         private void EnterCurrentDatDeathBounceFrame()

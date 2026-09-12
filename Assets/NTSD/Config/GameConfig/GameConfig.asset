@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcd6905f1c6dbaa4a91769c14bc8b041, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  BattleRuntimeProfileName: ''
+  BattleRuntimeProfileName: 
   BattleAiExecutionProfileName: DataOrientedCanonical
   DesktopInitialRuntimeSlotCapacity: 512
-  BattleCollisionBroadphaseName: ''
+  BattleCollisionBroadphaseName: 
   BattlePresentationBackendName: CentralOnly
-  BattleAtlasModeName: ''
-  BattleDrawModeName: ''
+  BattleAtlasModeName: 
+  BattleDrawModeName: 
   BattleFunctionKeyModeRules:
   - gameModeId: 0
     battleGameModeId: 1
@@ -56,10 +56,10 @@ MonoBehaviour:
   RandomDisplayName: Random
   RandomIcon: {fileID: 21300000, guid: 4d48d81e81179994c8ccf7daa5a7c546, type: 3}
   CountdownSprites:
-  - {fileID: 21300000, guid: 35cd00159b4153043a4a48e6352b774d, type: 3}
-  - {fileID: 21300000, guid: c7a961c17b9914b49ace060d7ffcb760, type: 3}
-  - {fileID: 21300000, guid: 19d9ef467b8763a44a4da81f90213797, type: 3}
-  - {fileID: 21300000, guid: ef8eb47a03a80a744860eab01dfc7f91, type: 3}
-  - {fileID: 21300000, guid: 6b6f073c4220d7446adc6c3b20e874f7, type: 3}
+  - {fileID: 21300000, guid: 188dafa6c20928146b68e329d88e3320, type: 3}
+  - {fileID: 21300000, guid: a26a34b702058274ba4c0329a370ae47, type: 3}
+  - {fileID: 21300000, guid: 4a0a0c26e3917614c8f90f044e9d607e, type: 3}
+  - {fileID: 21300000, guid: 04580ace18fd3f6429462e56db4fb3eb, type: 3}
+  - {fileID: 21300000, guid: 54b88b064f519be44b1883716c12f6c0, type: 3}
   CountdownDuration: 5
   CountdownAcceleration: 2

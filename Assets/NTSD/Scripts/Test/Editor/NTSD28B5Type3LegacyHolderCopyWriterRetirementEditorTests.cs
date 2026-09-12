@@ -87,10 +87,10 @@ namespace NTSD.Test.Editor
             StringAssert.DoesNotContain(
                 "projection.TargetHolderCopySlot = relationSource.HolderCopySlot;",
                 hitPlan);
-            StringAssert.Contains(
+            StringAssert.DoesNotContain(
                 "projection.TargetHolderCopySlot = attackerSlot;",
                 hitPlan,
-                "Non-type3 pickup writer is outside this retirement package.");
+                "Retired pickup paths must preserve the reserved HolderCopy carrier.");
         }
 
         [Test]

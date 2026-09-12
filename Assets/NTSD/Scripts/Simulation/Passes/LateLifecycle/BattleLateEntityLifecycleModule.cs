@@ -741,7 +741,6 @@ namespace NTSD.Simulation
                 task.targetWorld = world;
                 task.team = 0;
                 task.relationTeam = 0;
-                task.holderCopySlot = 99;
                 task.dir = "right";
                 task.requiredRuntimeSlot = freeSlot;
                 task.preserveActionZero = true;
@@ -786,7 +785,6 @@ namespace NTSD.Simulation
                 spawned.OwnerId = -1;
                 spawned.RelationOwnerSlot = -1;
                 spawned.OwnerEntityIndex = -1;
-                spawned.HolderCopySlot = 99;
                 spawned.KillCount = -1;
                 spawned.AttackExempt = 6;
                 if (useNativeSynchronizedRandom && spawned.Health != null)

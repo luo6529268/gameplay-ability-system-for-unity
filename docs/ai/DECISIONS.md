@@ -1,5 +1,9 @@
 # NTSD 长期项目决策记录
 
+> **2026-09-12 任务重整说明（不新增用户决策）：** 当前完整对齐执行视图见 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节，标识 `NTSD28-ALIGNMENT-REPLAN-20260912`。
+> D-020 的 IMPLEMENTATION_NOT_STARTED 仅是 9 月 2 日历史状态，不能覆盖 Goal17～20 后续限定成果；其用户例外与 H 策略边界在明确改判前仍有效。
+> D-022 路线已批准，实际联合迁移及前置闭合仍不能写成完成。当前用户要求重新整理任务；建议正式战斗可达资源最终对齐 NTSD 2.8-Logan，但尚未将建议记为内容切换批准。
+
 > **CURRENT AUTHORITY / 2026-09-02：** `GOVERNANCE-NTSD28-LOGAN-AUTHORITY-MIGRATION-001`
 > 已由用户确认取代 D-001 的 NTSD 2.4 行为权威。任何恢复工作先读
 > `docs/ai/CURRENT-AUTHORITY.md`。D-001～D-018 中依赖旧 NTSD 2.4 release、

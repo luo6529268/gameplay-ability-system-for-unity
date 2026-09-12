@@ -2340,10 +2340,8 @@ namespace NTSD.Simulation.Ecs
         {
             int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
             int targetSlot = target?.Runtime?.SlotIndex ?? -1;
-            int holderSlot = attacker?.HolderCopySlot ?? -1;
-            LF2Entity holder = holderSlot >= 0
-                ? world.FindEntityByRuntimeSlotForQuery(holderSlot)
-                : null;
+            int holderSlot = -1;
+            LF2Entity holder = null;
             int activeHolderSlot = attacker?.Runtime?.ResolveActiveHolderSlotIndex() ?? -1;
             LF2Entity activeHolder = activeHolderSlot >= 0
                 ? world.FindEntityByRuntimeSlotForQuery(activeHolderSlot)

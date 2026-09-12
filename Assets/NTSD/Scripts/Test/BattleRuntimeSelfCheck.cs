@@ -12284,15 +12284,14 @@ namespace NTSD.Test
             trackerParent.Runtime.TargetSlotIndex = 61;
             trackerChild.Runtime.LinkState = -1;
             trackerChild.Runtime.HolderStableId = 60;
-            trackerChild.TrackerParent = trackerParent;
-            Expect(ReferenceEquals(trackerChild.ResolveTrackerParentFromRuntime(), trackerParent),
+            Expect(ReferenceEquals(trackerChild.ResolveLinkedParentFromRuntime(), trackerParent),
                 "RISK-3: valid TrackerParent must resolve through slot and reverse relation");
             world.Unregister(trackerParent);
             FlowSelfCheckEntity trackerSameSlotNewborn = CreateFlowSelfCheckEntity(
                 "SelfCheck_TrackerReuseSameSlot", LF2ObjectType.Other,
                 LF2States.Standing, 0, 0, 0, 60);
             world.Register(trackerSameSlotNewborn);
-            Expect(trackerChild.ResolveTrackerParentFromRuntime() == null && trackerChild.TrackerParent == null,
+            Expect(trackerChild.ResolveLinkedParentFromRuntime() == null && trackerChild.TrackerParent == null,
                 "RISK-3: TrackerParent must not bind to a same-slot newborn without the reverse relation");
         }
 
@@ -12624,7 +12623,7 @@ namespace NTSD.Test
                 (holder, weapon) =>
                 {
                     Expect(weapon.Frame.N == 40 &&
-                           weapon.Runtime.WeaponState == LF2States.WeaponThrowing &&
+                           weapon.Runtime.WeaponState == 0 &&
                            Nearly(weapon.Runtime.Vx, 8.0) && Nearly(weapon.Runtime.Vy, -3.0),
                         "BATTLE-AUDIT3-12: world-level real LF2Weapon damaged release must continue into dvx throw");
                     Expect(weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
@@ -12688,7 +12687,7 @@ namespace NTSD.Test
                 {
                     Expect(weapon.Frame.N >= 0 && weapon.Frame.N < 6 &&
                            weapon.FrameDelay == 7 &&
-                           weapon.Runtime.WeaponState == LF2States.WeaponThrowing,
+                           weapon.Runtime.WeaponState == 0,
                         "R5-HOLD-001: world-level real type2 throw must select a random frame and retain the copied holder FrameDelay");
                     Expect(Nearly(weapon.Runtime.Vx, 9.0) && Nearly(weapon.Runtime.Vy, -4.0) &&
                            holder.Runtime.LinkState == 0 && weapon.Runtime.LinkState == 0,
@@ -12841,7 +12840,7 @@ namespace NTSD.Test
                 wpoint: new WeaponPoint { weaponact = 0, dvx = 8, dvy = -3 },
                 release: (_, holder, weapon, wpoint) =>
                     weapon.Act(holder, wpoint, Vector3.zero),
-                expectedReleaseTick: 37);
+                expectedReleaseTick: -1);
             RunAudit7WeaponReleaseTickCase(
                 "Kind3",
                 tick: 41,
@@ -12852,7 +12851,7 @@ namespace NTSD.Test
                 wpoint: new WeaponPoint { weaponact = 0, kind = 3 },
                 release: (world, holder, weapon, wpoint) =>
                     world.HeldObjectWriter.RunStep12(holder, weapon, wpoint, out _),
-                expectedReleaseTick: 41);
+                expectedReleaseTick: -1);
             RunAudit7WeaponReleaseTickCase(
                 "Consume",
                 tick: 43,
@@ -12864,7 +12863,7 @@ namespace NTSD.Test
                 beforeRelease: weapon => weapon.Health.HP = 1,
                 release: (_, holder, weapon, wpoint) =>
                     weapon.Act(holder, wpoint, Vector3.zero),
-                expectedReleaseTick: 43);
+                expectedReleaseTick: -1);
             RunAudit7WeaponReleaseTickCase(
                 "DamagedDrop",
                 tick: 47,
@@ -12897,14 +12896,14 @@ namespace NTSD.Test
                 tick: 61,
                 wpoint: new WeaponPoint { weaponact = 0, dvx = 8, dvy = -3 },
                 previousReleaseTick: -1,
-                expectedReleaseTick: 61,
+                expectedReleaseTick: -1,
                 expectDamagedDrop: false);
             RunAudit9GenericHeldReleaseTickCase(
                 "Kind3",
                 tick: 67,
                 wpoint: new WeaponPoint { weaponact = 0, kind = 3 },
                 previousReleaseTick: 19,
-                expectedReleaseTick: 67,
+                expectedReleaseTick: 19,
                 expectDamagedDrop: false);
             RunAudit9GenericHeldReleaseTickCase(
                 "DamagedDrop",
@@ -13065,7 +13064,7 @@ namespace NTSD.Test
             if (consume)
             {
                 Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
-                    "BATTLE-AUDIT9-LP-05: consume release must preserve authority HolderCopy identity");
+                    "BATTLE-AUDIT9-LP-05: consume release must preserve the reserved HolderCopy carrier");
                 Expect(world.Rng.CallCount == consumeRngCallsBefore + 1 &&
                        weapon.Health.HP == 0 &&
                        Nearly(weapon.Runtime.Vx, expectedConsumeVx) &&
@@ -13079,8 +13078,8 @@ namespace NTSD.Test
                     "and clear weapon HP");
             }
             if (forceDrop)
-                Expect(weapon.HolderCopySlot == -1,
-                    "BATTLE-AUDIT9-LP-05: ForceDrop must clear authority HolderCopy identity");
+                Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
+                    "BATTLE-AUDIT9-LP-05: ForceDrop must preserve the reserved HolderCopy carrier");
 
             weapon.Reset();
             Expect(weapon.Runtime.ReleaseTick == -1,
@@ -14226,17 +14225,17 @@ namespace NTSD.Test
             Expect(actual.Equals(shared),
                 $"C-10/C-11/C-12/C-17: actual/shared standard Character hit snapshots must match; actual={actual}, shared={shared}");
             Expect(actual.Accepted && actual.Hp == 69 && actual.HpBound == 90 && actual.Pp == 77 &&
-                   actual.ComboVictim == 31 && actual.ComboAttacker == 31 && actual.DamageStat == 31 &&
+                   actual.ComboVictim == 31 && actual.ComboAttacker == 0 && actual.DamageStat == 31 &&
                    actual.HitStateCount == 45 && actual.HitCount == 1 && actual.Fall == 20 &&
                    actual.Frame == LF2StandardFrames.Injured && actual.AttackExempt == 4 &&
                    actual.WorldArest == 4 && actual.AttackingCounter == 37,
-                "C-10/C-11/C-12/C-17: injury31 must use integer injury/3, preserve PP/attacking, write stats/counters, and mirror ARest");
+                "C-10/C-11/C-12/C-17: injury31 must use integer injury/3, preserve PP/attacking/retired holder stats, write victim/world counters, and mirror ARest");
 
             StandardCharacterHitSnapshot lethal = RunStandardCharacterHitCase(true, injury31, startingHp: 30);
-            Expect(lethal.KillStat == 1 && lethal.KillWorldStat == 1 && lethal.ComboAttacker == 31 &&
+            Expect(lethal.KillStat == 0 && lethal.KillWorldStat == 1 && lethal.ComboAttacker == 0 &&
                    lethal.ComboVictim == 31 && lethal.DamageStat == 31 && lethal.Hp == -1 &&
                    lethal.Fall == 0 && lethal.AttackingCounter == 37,
-                "C-11/C-12: lethal standard hit must attribute kill/combo/damage, preserve attacking, and clear fall80 after knockdown tail");
+                "C-11/C-12: lethal standard hit must preserve retired holder stats, update victim/world accounting, preserve attacking, and clear fall80 after knockdown tail");
 
             StandardCharacterHitSnapshot heavy = RunStandardCharacterHitCase(true, injury31, heavyAttacker: true);
             Expect(heavy.Hp == 69 && heavy.HpBound == 90 && heavy.ComboVictim == 31,
@@ -19005,9 +19004,9 @@ namespace NTSD.Test
                 "reduced defense damage must use raw injury/10 and integer HPBound division without FallDamageDiv");
             Expect(victim.Health.HPLost == 7,
                 "alternate damage must leave HPLost unchanged");
-            Expect(holder.KillStat == 1 && holder.ComboCountAtk == 10 &&
+            Expect(holder.KillStat == 0 && holder.ComboCountAtk == 0 &&
                    holder.Runtime.KnockoutCount358 == 10 && victim.ComboCountVic == 10,
-                "lethal reduced defense damage must update exact KO and legacy holder/victim stats once");
+                "lethal reduced defense damage must update exact KO/victim stats while preserving retired holder stats");
             Expect(world.KillStats[1] == 1 && world.DamageStats[1] == 10,
                 "reduced defense damage must update world kill and damage stat slot Unk344=1");
             Expect(victim.FallCounter == 80 && victim.AttackingCounter == 0 &&
@@ -23011,6 +23010,7 @@ itr_end:
             {
                 LF2CharacterData stateData = BuildFrameLifecycleHitFaData(
                     $"SelfCheck_FL_WeaponState_{weaponTypes[i]}", dataTypes[i], 0);
+                stateData.frames[0].state = LF2States.WeaponThrowing;
                 var weapon = new CurrentDatSelfCheckWeapon(dataTypes[i]);
                 weapon.BindData(
                     $"SelfCheck_FL_WeaponState_{weaponTypes[i]}",
@@ -23018,27 +23018,18 @@ itr_end:
                     weaponTypes[i],
                     stateData,
                     0);
-                weapon.Runtime.WeaponState = LF2States.WeaponThrowing;
+                weapon.Runtime.WeaponState = 0;
                 weapon.Runtime.Vx = 8.0;
 
-                weapon.RunFrameLogicBeforeAdvance();
-                Expect(weapon.Runtime.WeaponState == LF2States.HeavyWeaponInSky &&
-                       Nearly(weapon.Runtime.Vx, 8.0),
-                    $"FL-WEAPON-STATE: type{weaponTypes[i]} state1002 must enter state2000 without early damping");
-
-                double[] expectedVx = { 4.0, 2.0, 1.0, 0.5 };
-                for (int tick = 0; tick < expectedVx.Length; tick++)
+                for (int tick = 1; tick <= 2; tick++)
                 {
                     weapon.RunFrameLogicBeforeAdvance();
-                    Expect(weapon.Runtime.WeaponState == LF2States.HeavyWeaponInSky &&
-                           Nearly(weapon.Runtime.Vx, expectedVx[tick]),
-                        $"FL-WEAPON-STATE: type{weaponTypes[i]} state2000 tick{tick + 1} must halve Vx exactly once");
+                    Expect(weapon.Runtime.WeaponState == 0 &&
+                           weapon.Frame.D?.state == LF2States.WeaponThrowing &&
+                           Nearly(weapon.Runtime.Vx, 8.0),
+                        $"FL-WEAPON-STATE: type{weaponTypes[i]} actual frame state1002 " +
+                        $"must keep reserved carrier zero and Vx unchanged at tick{tick}");
                 }
-
-                weapon.RunFrameLogicBeforeAdvance();
-                Expect(weapon.Runtime.WeaponState == LF2States.ProjectileFlying &&
-                       Nearly(weapon.Runtime.Vx, 0.0),
-                    $"FL-WEAPON-STATE: type{weaponTypes[i]} must enter state3000 only after halved abs(Vx)<0.5");
             }
 
             LF2ObjectType[] boomerangCurrentTypes =
@@ -23050,6 +23041,7 @@ itr_end:
             {
                 LF2CharacterData mismatchData = BuildFrameLifecycleHitFaData(
                     $"SelfCheck_RFL02_Mismatch_{boomerangCurrentTypes[i]}", boomerangCurrentTypes[i], 0);
+                mismatchData.frames[0].state = LF2States.WeaponInSky;
                 mismatchData.frames.Add(Frame(40, LF2States.WeaponInSky, 100, 40, 39, 79));
                 var mismatch = new CurrentDatSelfCheckWeapon(boomerangCurrentTypes[i]);
                 mismatch.BindData(
@@ -23058,14 +23050,14 @@ itr_end:
                     (int)LF2ObjectType.LightWeapon,
                     mismatchData,
                     0);
-                mismatch.Runtime.WeaponState = LF2States.WeaponInSky;
+                mismatch.Runtime.WeaponState = 0;
                 mismatch.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
                 mismatch.AttackingCounter = 23;
 
                 mismatch.RunFrameLogicBeforeAdvance();
 
                 Expect(mismatch.Frame.N == 40 &&
-                       mismatch.Runtime.WeaponState == LF2States.WeaponInSky &&
+                       mismatch.Runtime.WeaponState == 0 &&
                        Nearly(mismatch.Runtime.Vx, NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0) &&
                        mismatch.AttackingCounter == 23,
                     $"R-FL-02: a type1 CLR weapon shell with current {boomerangCurrentTypes[i]} DAT must " +
@@ -23084,18 +23076,20 @@ itr_end:
                 (int)LF2ObjectType.LightWeapon,
                 missingDefinitionData,
                 0);
-            missingDefinition.Runtime.WeaponState = LF2States.WeaponInSky;
+            missingDefinition.Runtime.WeaponState = 0;
             missingDefinition.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
             missingDefinition.RunFrameLogicBeforeAdvance();
             Expect(missingDefinition.Frame.N == 0 &&
-                   missingDefinition.Runtime.WeaponState == LF2States.WeaponInSky,
+                   missingDefinition.Runtime.WeaponState == 0,
                 "R-FL-02: missing current object definition must fall back to the type1 runtime identity and not enter frame40");
 
             LF2CharacterData nativeThrowData = BuildFrameLifecycleHitFaData(
                 "SelfCheck_RFL02_NativeThrow", LF2ObjectType.ThrowWeapon, 0);
+            nativeThrowData.frames[0].state = LF2States.WeaponInSky;
             nativeThrowData.frames.Add(Frame(40, LF2States.WeaponInSky, 100, 40, 39, 79));
             LF2CharacterData nativeLightData = BuildFrameLifecycleHitFaData(
                 "SelfCheck_RFL02_NativeLight", LF2ObjectType.LightWeapon, 0);
+            nativeLightData.frames[0].state = LF2States.WeaponInSky;
             nativeLightData.frames.Add(Frame(40, LF2States.WeaponInSky, 100, 40, 39, 79));
             using (new TemporaryRuntimeObjectConfigs(
                 new Dictionary<int, int>
@@ -23114,7 +23108,7 @@ itr_end:
                     useCurrentDataTypeOverride: false);
                 nativeThrow.BindData(
                     "SelfCheck_RFL02_NativeThrow", 683, (int)LF2ObjectType.ThrowWeapon, nativeThrowData, 0);
-                nativeThrow.Runtime.WeaponState = LF2States.WeaponInSky;
+                nativeThrow.Runtime.WeaponState = 0;
                 nativeThrow.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
                 nativeThrow.RunFrameLogicBeforeAdvance();
 
@@ -23123,7 +23117,7 @@ itr_end:
                     useCurrentDataTypeOverride: false);
                 nativeLight.BindData(
                     "SelfCheck_RFL02_NativeLight", 684, (int)LF2ObjectType.LightWeapon, nativeLightData, 0);
-                nativeLight.Runtime.WeaponState = LF2States.WeaponInSky;
+                nativeLight.Runtime.WeaponState = 0;
                 nativeLight.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
                 nativeLight.RunFrameLogicBeforeAdvance();
 
@@ -25758,7 +25752,7 @@ itr_end:
                 Expect(child.SpawnerEntityIndex == spawner.Runtime.SlotIndex &&
                        child.Team == 0 && child.RelationTeam == 0 &&
                        child.OwnerId == -1 && child.RelationOwnerSlot == -1 &&
-                       child.OwnerEntityIndex == -1 && child.HolderCopySlot == 99 &&
+                       child.OwnerEntityIndex == -1 && child.HolderCopySlot == -1 &&
                        child.KillCount == -1,
                     $"GT-11: state9996 child {spawnIndex} must keep direct-reset relation defaults");
                 Expect(child.Runtime.ObjType == 1 &&
@@ -29732,8 +29726,8 @@ itr_end:
             naruto.Runtime.SyncIntegerPosition();
             naruto.Team = 1;
             naruto.RelationTeam = 7;
-            const int expectedHolderCopySlot = 23;
-            naruto.HolderCopySlot = expectedHolderCopySlot;
+            const int parentHolderCopySentinel = 23;
+            naruto.HolderCopySlot = parentHolderCopySentinel;
             naruto.Health.PP = 500;
             naruto.SetRuntimeSlotIndex(0);
             world.Register(naruto);
@@ -29838,7 +29832,7 @@ itr_end:
                             bool relationMatches =
                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
                             if (relationCheckedStableIds.Add(entity.StableId))
-                                relationMatches &= entity.HolderCopySlot == expectedHolderCopySlot;
+                                relationMatches &= entity.HolderCopySlot == 99;
                             allOpointRelationIdentitiesMatch &= relationMatches;
                             if (!relationMatches && relationMismatchTrace.Count < 12)
                                 relationMismatchTrace.Add(
@@ -29851,7 +29845,7 @@ itr_end:
                             bool relationMatches =
                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
                             if (relationCheckedStableIds.Add(entity.StableId))
-                                relationMatches &= entity.HolderCopySlot == expectedHolderCopySlot;
+                                relationMatches &= entity.HolderCopySlot == 99;
                             allOpointRelationIdentitiesMatch &= relationMatches;
                             if (!relationMatches && relationMismatchTrace.Count < 12)
                                 relationMismatchTrace.Add(
@@ -29866,7 +29860,7 @@ itr_end:
                             bool relationMatches =
                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
                             if (relationCheckedStableIds.Add(entity.StableId))
-                                relationMatches &= entity.HolderCopySlot == expectedHolderCopySlot;
+                                relationMatches &= entity.HolderCopySlot == 99;
                             allOpointRelationIdentitiesMatch &= relationMatches;
                             if (!relationMatches && relationMismatchTrace.Count < 12)
                                 relationMismatchTrace.Add(
@@ -29950,8 +29944,8 @@ itr_end:
                 Expect(allOpointSlotsAreDynamic,
                     "Naruto oid205/204/33 opoints must use the authority dynamic runtime range 50..399");
                 Expect(allOpointRelationIdentitiesMatch,
-                    $"Naruto oid205/204/33 opoints must inherit Team, RelationTeam/Unk364, and HolderCopy " +
-                    $"from their spawner; expected={naruto.Team}/{naruto.RelationTeam}/{expectedHolderCopySlot}; " +
+                    $"Naruto oid205/204/33 opoints must inherit Team/RelationTeam and preserve reserved HolderCopy99 " +
+                    $"without copying the spawner carrier; expected={naruto.Team}/{naruto.RelationTeam}/99; " +
                     $"mismatches={string.Join(",", relationMismatchTrace)}");
                 Expect(cloneRuntimeSlots.Count == 6,
                     $"Naruto DDJ oid204 chain must create exactly six logical oid33 clones; " +
@@ -31212,8 +31206,8 @@ itr_end:
                     "stage immediate spawn must apply configured HP to HP, HPBound and HP3");
                 Expect(spawned.Team == 2 && spawned.RelationTeam == 2 &&
                        spawned.Unk344 == 2 && spawned.HitStun == 20 &&
-                       spawned.HolderCopySlot == spawnedSlot,
-                    "stage immediate character spawn must apply team, Unk344, init and self-holder contracts");
+                       spawned.HolderCopySlot == 99,
+                    "stage immediate character spawn must apply team, Unk344, init and reserved HolderCopy contracts");
                 Expect(spawned.AiControlled,
                     "stage/opoint character spawns must be AI-controlled by default");
                 Expect(world.StageSpawnWaveApplied == 0 && world.StageProgression.WaveIdx == 0,
@@ -31321,7 +31315,7 @@ itr_end:
             character.SetRuntimeSlotIndex(50);
             SimulationWorld.ApplyStageSpawnRuntimeContract(character, 300);
             Expect(character.Team == 2 && character.RelationTeam == 2 &&
-                   character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 50,
+                   character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 99,
                 "stage character contract must map Unk364 to RelationTeam=2 and use character init semantics");
 
             var type5 = new StageSpawnContractSelfCheckEntity(LF2ObjectType.Other);
@@ -32981,7 +32975,7 @@ itr_end:
                             entity.RelationTeam == 1 && entity.HitStun == 20 &&
                              entity.OwnerEntityIndex == 20 &&
                              HasCanonicalActiveOwnerSnapshot(successWorld, 20, entity, 20) &&
-                             entity.HolderCopySlot == 20 &&
+                             entity.HolderCopySlot == 99 &&
                            entity.Health.HP == 50 && entity.Health.HPBound == 50 &&
                            entity.Health.HP3 == 50 && entity.Health.PP == 500,
                         "RESULT-RESERVE-05: success must materialize the exact side0 character reserve contract in lowest slot20");

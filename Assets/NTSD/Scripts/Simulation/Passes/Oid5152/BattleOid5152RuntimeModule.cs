@@ -274,7 +274,6 @@ namespace NTSD.Simulation
             partner.KnockbackVx = 0.1;
             partner.KnockbackVy = 0.1;
             partner.KnockbackVz = 0.1;
-            partner.HolderCopySlot = 99;
             partner.Effect?.Reset();
             if (partner is LF2Character partnerCharacter)
                 partnerCharacter.DeadBlinkCountInternal = -1;
