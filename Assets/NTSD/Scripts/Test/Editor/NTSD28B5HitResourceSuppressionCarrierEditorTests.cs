@@ -56,7 +56,7 @@ namespace NTSD.Test
             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
 
             Assert.That(entity.Runtime.HitResourceSuppression15C, Is.EqualTo(1));
-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(12));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
         }
 
         [Test]
@@ -82,11 +82,11 @@ namespace NTSD.Test
         public void SnapshotAndChecksumSchemas_AdvanceForSuppressionCarrier()
         {
             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(12));
+                Is.EqualTo(13));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(20));
+                Is.EqualTo(21));
             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
-                Is.EqualTo(23));
+                Is.EqualTo(24));
         }
 
         [Test]

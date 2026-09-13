@@ -189,10 +189,7 @@ internal static class Program
         Console.WriteLine(
             $"status={report.Status} certificate={report.CertificateEligible} " +
             $"ticks={report.TicksCompared} firstDifference={report.FirstDifference?.Domain}");
-        return report.Status is TraceComparator.EqualStructureStatus or
-            TraceComparator.ContentStrategyPendingStatus
-                ? 0
-                : 1;
+        return report.Status == TraceComparator.EqualStructureStatus ? 0 : 1;
     }
 
     private static int RunValidateAuthorityCapture(string[] args)

@@ -1,0 +1,32 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+    "onlyDeclaredConstantChanged": true,
+    "old": 12,
+    "new": 13
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+    "onlyDeclaredConstantChanged": true,
+    "old": 20,
+    "new": 21
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "onlyDeclaredConstantChanged": true,
+    "old": 23,
+    "new": 24
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+    "onlyDeclaredConstantChanged": true,
+    "old": 1,
+    "new": 2
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+    "onlyDeclaredConstantChanged": true,
+    "old": 1,
+    "new": 2
+  }
+]

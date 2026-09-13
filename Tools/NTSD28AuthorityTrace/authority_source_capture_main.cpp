@@ -5,6 +5,9 @@
 #define NOMINMAX
 #endif
 #include <windows.h>
+#include <bcrypt.h>
+#include <algorithm>
+#include <iterator>
 
 #include <array>
 #include <cstdint>
@@ -92,9 +95,117 @@ __wrap__ZN6ntsd2814NativeRandom2817synchronized_nextEji(
 
 namespace {
 
-constexpr char capture_schema[] = "ntsd28-authority-source-capture-v1";
+constexpr char capture_schema[] = "ntsd28-authority-source-capture-v2";
 constexpr char formal_exe_sha256[] =
     "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033";
+
+
+// Alignment contract: NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001.
+// Match BinaryWriter UTF-8 strings/int32 and the existing Logan semantic identity.
+using Bytes28 = std::vector<unsigned char>;
+
+Bytes28 content_read_bytes(const std::filesystem::path& path) {
+    std::ifstream stream(path, std::ios::binary);
+    if (!stream) throw std::runtime_error("unable to read content input");
+    Bytes28 result((std::istreambuf_iterator<char>(stream)), std::istreambuf_iterator<char>());
+    if (stream.bad()) throw std::runtime_error("content input read failed");
+    return result;
+}
+
+Bytes28 content_sha256(const Bytes28& bytes) {
+    struct Handles {
+        BCRYPT_ALG_HANDLE algorithm = nullptr;
+        BCRYPT_HASH_HANDLE hash = nullptr;
+        Bytes28 object;
+        ~Handles() {
+            if (hash) BCryptDestroyHash(hash);
+            if (algorithm) BCryptCloseAlgorithmProvider(algorithm, 0);
+        }
+    } handles;
+    if (BCryptOpenAlgorithmProvider(&handles.algorithm, BCRYPT_SHA256_ALGORITHM, nullptr, 0) < 0)
+        throw std::runtime_error("SHA256 provider unavailable");
+    DWORD object_size = 0, returned = 0;
+    if (BCryptGetProperty(handles.algorithm, BCRYPT_OBJECT_LENGTH,
+                         reinterpret_cast<PUCHAR>(&object_size), sizeof(object_size), &returned, 0) < 0)
+        throw std::runtime_error("SHA256 object size unavailable");
+    handles.object.resize(object_size);
+    Bytes28 digest(32);
+    if (BCryptCreateHash(handles.algorithm, &handles.hash, handles.object.data(), object_size, nullptr, 0, 0) < 0)
+        throw std::runtime_error("SHA256 creation failed");
+    std::size_t offset = 0;
+    while (offset < bytes.size()) {
+        const auto count = static_cast<ULONG>(std::min<std::size_t>(bytes.size() - offset, 1024U * 1024U));
+        if (BCryptHashData(handles.hash, const_cast<PUCHAR>(bytes.data() + offset), count, 0) < 0)
+            throw std::runtime_error("SHA256 update failed");
+        offset += count;
+    }
+    if (BCryptFinishHash(handles.hash, digest.data(), static_cast<ULONG>(digest.size()), 0) < 0)
+        throw std::runtime_error("SHA256 finish failed");
+    return digest;
+}
+
+std::string content_hex(const Bytes28& bytes) {
+    constexpr char alphabet[] = "0123456789ABCDEF";
+    std::string result;
+    result.reserve(bytes.size() * 2U);
+    for (unsigned char value : bytes) {
+        result.push_back(alphabet[value >> 4U]);
+        result.push_back(alphabet[value & 15U]);
+    }
+    return result;
+}
+
+void content_string(Bytes28& bytes, const std::string& value) {
+    std::size_t size = value.size();
+    while (size >= 128U) {
+        bytes.push_back(static_cast<unsigned char>((size & 127U) | 128U));
+        size >>= 7U;
+    }
+    bytes.push_back(static_cast<unsigned char>(size));
+    bytes.insert(bytes.end(), value.begin(), value.end());
+}
+
+Bytes28 capture_content_raw(const std::filesystem::path& root) {
+    ntsd28::ObjectDefinitionCatalog28 catalog;
+    if (!catalog.load_extracted_root(root).success)
+        throw std::runtime_error("content identity catalog load failed");
+    std::vector<const ntsd28::ObjectDefinitionEntry28*> entries;
+    for (const auto& pair : catalog.entries()) entries.push_back(&pair.second);
+    std::sort(entries.begin(), entries.end(), [](const auto* left, const auto* right) {
+        return left->registry_index < right->registry_index;
+    });
+    Bytes28 bytes;
+    content_string(bytes, "LOGAN_OBJECT_DEFINITIONS_V1");
+    content_string(bytes, content_hex(content_sha256(content_read_bytes(root / "catalog.csv"))));
+    for (const auto* entry : entries) {
+        const auto index = static_cast<std::uint32_t>(entry->registry_index);
+        for (unsigned int shift = 0; shift < 32U; shift += 8U)
+            bytes.push_back(static_cast<unsigned char>(index >> shift));
+        content_string(bytes, std::filesystem::relative(entry->readable_dat_path, root).generic_u8string());
+        content_string(bytes, content_hex(content_sha256(content_read_bytes(entry->readable_dat_path))));
+    }
+    return content_sha256(bytes);
+}
+
+std::string capture_content_json(const Bytes28& raw) {
+    const std::string tag = "NTSD28_LOGAN_DAT_SEMANTICS_V2";
+    Bytes28 input(tag.begin(), tag.end());
+    input.push_back(0);
+    input.insert(input.end(), raw.begin(), raw.end());
+    const auto semantic = content_sha256(input);
+    std::uint64_t projection = 0;
+    for (unsigned int index = 0; index < 8U; ++index)
+        projection |= static_cast<std::uint64_t>(semantic[index]) << (index * 8U);
+    if (projection == 0) projection = 1;
+    std::ostringstream hex_projection;
+    hex_projection << std::uppercase << std::hex << std::setw(16) << std::setfill('0') << projection;
+    return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"catalog-object-definitions\","
+        "\"profile\":\"logan-runtime\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
+        "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
+        "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
+        "\",\"schemas\":{\"entityRuntime\":13,\"aggregate\":21,\"checksum\":24,"
+        "\"characterShell\":2,\"entityBaseShell\":2}}";
+}
 
 struct Options28 {
     std::filesystem::path scenario;
@@ -454,6 +565,7 @@ void write_entity(std::ostream& output,
            << (entity.special_hit_latch_0eb ? "true" : "false")
            << ",\"environmentState\":" << entity.environment_state_320
            << ",\"environmentSourceSlot\":" << entity.environment_source_slot_160
+           << ",\"objectAiExcludedGroupSourceSlot\":" << entity.object_ai_excluded_group_source_slot_2f8
            << "},\"lifecycle\":{"
            << "\"resolutionPending\":"
            << (entity.lifecycle_resolution_pending ? "true" : "false")
@@ -462,9 +574,11 @@ void write_entity(std::ostream& output,
 
 void write_header(std::ostream& output,
                   const Options28& options,
-                  const ntsd28_playable::Scenario28& scenario) {
+                  const ntsd28_playable::Scenario28& scenario,
+                  const std::string& content_json) {
     output << "{\"kind\":\"header\""
            << ",\"schema\":\"" << capture_schema << "\""
+           << ",\"content\":" << content_json
            << ",\"certificateEligible\":false"
            << ",\"evidenceClass\":\"SOURCE_MODEL_DIAGNOSTIC_ONLY\""
            << ",\"formalExeSha256\":\"" << formal_exe_sha256 << "\""
@@ -807,6 +921,7 @@ int run(int count, wchar_t** arguments) {
         return 3;
     }
 
+    const auto content_raw = capture_content_raw(options.resource_root);
     ntsd28_playable::GameSession28 session(
         options.resource_root, options.complete_vfs_root);
     std::string error;
@@ -825,7 +940,9 @@ int run(int count, wchar_t** arguments) {
         std::cerr << "unable to open capture output\n";
         return 5;
     }
-    write_header(output, options, loaded.scenario);
+    if (capture_content_raw(options.resource_root) != content_raw)
+        throw std::runtime_error("content inputs changed during session initialization");
+    write_header(output, options, loaded.scenario, capture_content_json(content_raw));
 
     std::ofstream domain_output;
     if (!options.domain_output.empty()) {
@@ -910,6 +1027,10 @@ int run(int count, wchar_t** arguments) {
         if (domain_output || b2_input_rng_output) {
             previous_random = current_world->random().state();
         }
+    }
+    if (capture_content_raw(options.resource_root) != content_raw) {
+        output << "INVALID_CONTENT_INPUTS_CHANGED\n";
+        throw std::runtime_error("content inputs changed during simulation");
     }
     if (!output ||
         (domain_output.is_open() && !domain_output) ||

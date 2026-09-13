@@ -1,3 +1,17 @@
+> NTSD28-Q05-WORLD-CLOCK-PHASE-FIXTURE-001 / IN_PROGRESS / TEST_ONLY，clock相邻phase顺序夹具纠正；生产pass保持。
+
+> 当前执行 `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / IN_PROGRESS / TEST_FIRST`，准确19脚本（含CLI退出码与独立native字段见证），真实内容根/语义头/trace v3/raw v2/50字段；13/21/24/2/2未发布，禁止computer-use，非战斗/正式资源保持。
+
+> **Q05五版本及恢复头部已限定验证（2026-09-13）：** `NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERSION-001 / FOCUSED_TEST_PASS / SCOPED_PLAY_PASS / TRACE_IDENTITY_PENDING`。当前正式代码常量已为 **13/21/24/2/2**，仍INTERMEDIATE_UNPUBLISHED_Q05_WINDOW；修复外层有效而内层旧版仍可恢复的漏洞，复用原发布全子域header predicate。RED11+1→最终287不同测试有通过证据（主286PASS/1旧phaseFAIL经独立`NTSD28-Q05-WORLD-CLOCK-PHASE-FIXTURE-001`定向1PASS闭合），新增23全PASS、完整SelfCheck/CS0/真实暂停World双队列Play tick5对象4→4通过。`NTSD28-Q05-REMAINING-CONTENT-HASH-CONSUMER-AUDIT-001`已VERIFIED_AUDIT_ONLY：未发现额外frame/meta生产hash漏项，明确trace仍strategy-pending/缺完整语义头/49字段。**下一唯一Task `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / READY_FOR_EXACT_PRECHANGE_RECORD`**，同窗口trace v3/raw/source v2/50字段2F8及真实source/raw/decode/semantic/schema绑定，再完整replay/Play；Q05/总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE，正式资源未迁移。Scene旧SHA/Foot18既有缺失保持，禁止computer-use及非战斗改动。
+
+
+> NTSD28-Q05-WORKER-LATE-OPOINT-FLOOR-FIXTURE-001 / IN_PROGRESS / TEST_ONLY，旧worker Y45预期按native落地改5并断言parent0；不改生产规则。
+
+> 当前执行 `NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERSION-001 / IN_PROGRESS / TEST_FIRST / INTERMEDIATE_UNPUBLISHED`，准确15脚本，五版本目标13/21/24/2/2；hash消费者审计已闭合，trace身份/50字段后继，禁止computer-use。
+
+> **Q05快照边界限定出口（2026-09-13）：** `NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001 / FOCUSED_TEST_PASS / SCOPED_PLAY_PASS / JOINT_SCHEMA_PENDING`。11脚本统一完整Host/core/worker/kernel tick、structural及两OPoint owner前置；原body/pass保持，拒绝无队列/World/worker副作用。RED14与HostRED1→最终187/187、完整SelfCheck、真实暂停World tick5/对象4→4双队列拒绝与空闲capture通过；该Play无dedicated worker，不宣称物理技能或worker实战。独立`NTSD28-Q05-WORKER-LATE-OPOINT-FLOOR-FIXTURE-001 / VERIFIED_TEST_ONLY`按native落地修旧child45→5并断言parent0；首次175中174PASS/1旧FAIL留证。Scene旧SHA/Foot18缺失保持，无新增缺失，CS0。**下一唯一Task `NTSD28-Q05-REMAINING-CONTENT-HASH-CONSUMER-AUDIT-001 / READY_READONLY_CONTRACT`**，再联合13/21/24/2/2、trace/replay；当前12/20/23/1/1未发布，Q05/总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE，正式资源未迁移，禁止computer-use及非战斗改动。
+
+
 # CODEX-CURRENT-HANDOFF
 
 > 当前执行 `NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001 / IN_PROGRESS / TEST_FIRST`，准确9脚本，统一tick/structural/双队列/host快照前置，拒绝无副作用；不改pass和关闭顺序，禁止computer-use，版本/trace后继。

@@ -533,7 +533,8 @@ namespace NTSD.Test
             Assert.That(child.Renderer, Is.Null);
             Assert.That(child.ShadowRenderer, Is.Null);
             Assert.That(child.Runtime.XInt, Is.EqualTo(105));
-            Assert.That(child.Runtime.YInt, Is.EqualTo(45));
+            Assert.That(parent.Runtime.YInt, Is.Zero);
+            Assert.That(child.Runtime.YInt, Is.EqualTo(5));
             Assert.That(child.Runtime.ZInt, Is.EqualTo(221));
             Assert.That(
                 world.StructuralWriterDiagnosticsForDiagnostics.LastSpawnBoundary,

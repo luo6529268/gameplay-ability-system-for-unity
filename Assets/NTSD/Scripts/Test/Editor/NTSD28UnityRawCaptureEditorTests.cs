@@ -56,7 +56,7 @@ namespace NTSD.EditorTools.Tests
             StringAssert.Contains(
                 $"\"evidenceClass\":\"{NTSD28UnityRawCaptureEditor.EvidenceClass}\"",
                 lines[0]);
-            StringAssert.Contains("\"verifiedCount\":43", lines[0]);
+            StringAssert.Contains("\"verifiedCount\":44", lines[0]);
             StringAssert.Contains("\"candidateCount\":0", lines[0]);
             StringAssert.Contains("\"missingCount\":6", lines[0]);
             StringAssert.Contains("\"reviveLives\":1", lines[1]);

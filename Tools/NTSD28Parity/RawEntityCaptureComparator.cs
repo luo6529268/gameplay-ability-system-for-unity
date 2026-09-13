@@ -7,17 +7,17 @@ namespace NTSD28Parity;
 internal static class RawEntityCaptureComparator
 {
     internal const string UnityCaptureSchema =
-        "ntsd28-unity-raw-capture-v1";
+        "ntsd28-unity-raw-capture-v2";
     internal const string UnityTickSchema =
-        "ntsd28-unity-entity-raw-capture-v1";
+        "ntsd28-unity-entity-raw-capture-v2";
     internal const string UnityEvidenceClass =
         "UNITY_CURRENT_RUNTIME_DIAGNOSTIC_ONLY";
     internal const string UnityTickEvidenceClass =
         "UNITY_RAW_BINDING_DIAGNOSTIC_ONLY";
     internal const string ReportSchema =
-        "ntsd28-raw-entity-comparison-v1";
+        "ntsd28-raw-entity-comparison-v2";
     internal const string SelfTestSchema =
-        "ntsd28-raw-entity-comparison-self-test-v1";
+        "ntsd28-raw-entity-comparison-self-test-v2";
 
     private static readonly string[] UnityHeaderProperties =
     [
@@ -26,7 +26,7 @@ internal static class RawEntityCaptureComparator
         "formalAuthorityExeSha256", "kind", "scenarioDataSha256",
         "scenarioFileSha256", "scenarioId", "scenarioReferenceExeSha256",
         "schema", "slotCapacity", "unityAssemblySha256",
-        "unityContentAuthorityRawManifestSha256",
+        "content", "runtimeAssemblySha256",
     ];
 
     private static readonly string[] UnityTickProperties =
@@ -101,6 +101,8 @@ internal static class RawEntityCaptureComparator
                 authorityText,
                 authorityValidation);
             ParsedRawCapture unity = ParseUnity(unityText);
+            if (authority.ContentIdentityKey != unity.ContentIdentityKey)
+                throw new InvalidDataException("content-identity-mismatch");
             if (!string.Equals(
                     authority.ScenarioId,
                     unity.ScenarioId,
@@ -195,12 +197,13 @@ internal static class RawEntityCaptureComparator
             report.Status = report.UniqueDifferenceFields == 0
                 ? "equal-raw"
                 : "different";
-            report.FirstDifference = report.Differences.FirstOrDefault();
+            report.FirstDifference = report.Differences
+                .OrderBy(difference => difference.FirstCompletedTick)
+                .ThenBy(difference => difference.FirstSlot)
+                .FirstOrDefault();
             return report;
         }
-        catch (Exception exception) when (
-            exception is InvalidDataException or JsonException or
-            FormatException or OverflowException)
+        catch (Exception exception) when (TraceComparator.IsContractFailure(exception))
         {
             report.Status = "invalid-capture";
             report.Reason = exception.Message;
@@ -227,6 +230,7 @@ internal static class RawEntityCaptureComparator
         return new ParsedRawCapture(
             validation.ScenarioId,
             validation.ScenarioDataSha256,
+            validation.ContentIdentityKey,
             ticks);
     }
 
@@ -266,9 +270,9 @@ internal static class RawEntityCaptureComparator
         _ = RequireSha256(header, "scenarioFileSha256");
         _ = RequireSha256(header, "exporterSourceSha256");
         _ = RequireSha256(header, "unityAssemblySha256");
-        _ = RequireSha256(
-            header,
-            "unityContentAuthorityRawManifestSha256");
+        _ = RequireSha256(header, "runtimeAssemblySha256");
+        string contentIdentityKey = TraceContentIdentity.Validate(
+            header["content"] as JsonObject ?? throw new InvalidDataException("content-object-required"));
         string scenarioId = RequireNonEmptyString(header, "scenarioId");
         long firstCompletedTick = RequirePositiveInt64(
             header,
@@ -310,7 +314,7 @@ internal static class RawEntityCaptureComparator
                 ValidateAndIndexUnityEntities(entities, slotCapacity)));
         }
 
-        return new ParsedRawCapture(scenarioId, scenarioDataSha256, ticks);
+        return new ParsedRawCapture(scenarioId, scenarioDataSha256, contentIdentityKey, ticks);
     }
 
     private static SortedDictionary<int, JsonObject> IndexAuthorityEntities(
@@ -546,6 +550,48 @@ internal static class RawEntityCaptureComparator
             1,
             CompareTextForTest(authority, valueDifference));
 
+        var headerMutations = new Dictionary<string, Action<JsonObject>>
+        {
+            ["old-raw-version"] = header => header["schema"] = "ntsd28-unity-raw-capture-v1",
+            ["missing-content"] = header => header.Remove("content"),
+            ["forged-semantic"] = header => header["content"]!["semanticSha256"] = new string('0', 64),
+            ["different-valid-content"] = header => header["content"] = TraceContentIdentity.Create("logan-runtime", new string('B', 64)),
+            ["legacy-content-not-logan"] = header => header["content"] = TraceContentIdentity.Create("unity-legacy", new string('A', 64)),
+            ["wrong-joint-schema"] = header => header["content"]!["schemas"]!["entityRuntime"] = 12,
+            ["missing-runtime-provenance"] = header => header.Remove("runtimeAssemblySha256"),
+        };
+        foreach (var mutation in headerMutations)
+        {
+            string[] lines = SplitLines(equalUnity);
+            JsonObject header = ParseObject(lines[0], "synthetic-header");
+            mutation.Value(header);
+            lines[0] = header.ToJsonString();
+            AddSelfTest(report, "Q05-" + mutation.Key, "invalid-capture", 0,
+                CompareTextForTest(authority, string.Join(Environment.NewLine, lines) + Environment.NewLine));
+        }
+        AddSelfTest(report, "Q05-nondefault-2f8-difference", "different", 1,
+            CompareTextForTest(authority, MutateUnityField(equalUnity, "combat", "objectAiExcludedGroupSourceSlot", JsonValue.Create(37))));
+        static string TwoTicks(string capture, bool different)
+        {
+            string[] lines = SplitLines(capture);
+            JsonObject header = ParseObject(lines[0], "synthetic-header");
+            header["expectedTickCount"] = 2;
+            JsonObject first = ParseObject(lines[1], "synthetic-first");
+            JsonObject second = first.DeepClone().AsObject();
+            second["completedTick"] = 2;
+            if (different)
+            {
+                first["entities"]![0]!["vitals"]!["baseMaxMp"] = 499;
+                second["entities"]![0]!["vitals"]!["currentMp"] = 99999;
+            }
+            return SerializeLines(header, first, second);
+        }
+        var chronological = CompareTextForTest(TwoTicks(authority, false), TwoTicks(equalUnity, true));
+        AddSelfTest(report, "Q05-earliest-tick-first-difference", "different", 2, chronological);
+        report.Cases[^1].Passed &= chronological.FirstDifference?.Path == "vitals.baseMaxMp" &&
+            chronological.FirstDifference.FirstCompletedTick == 1;
+        if (!report.Cases[^1].Passed)
+            report.Cases[^1].Reason = "Expected earliest tick 1/baseMaxMp, observed " + chronological.FirstDifference?.Path;
         report.Passed = report.Cases.All(test => test.Passed);
         return report;
     }
@@ -579,6 +625,7 @@ internal static class RawEntityCaptureComparator
         {
             ["kind"] = "header",
             ["schema"] = AuthorityCaptureValidator.CaptureSchema,
+            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
             ["certificateEligible"] = false,
             ["evidenceClass"] = AuthorityCaptureValidator.EvidenceClass,
             ["formalExeSha256"] = TraceContract.AuthorityExecutableSha256,
@@ -622,7 +669,8 @@ internal static class RawEntityCaptureComparator
             ["schema"] = UnityCaptureSchema,
             ["slotCapacity"] = 400,
             ["unityAssemblySha256"] = new string('1', 64),
-            ["unityContentAuthorityRawManifestSha256"] = new string('2', 64),
+            ["runtimeAssemblySha256"] = new string('2', 64),
+            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
         };
         JsonObject tick = new()
         {
@@ -885,6 +933,7 @@ internal static class RawEntityCaptureComparator
     private sealed record ParsedRawCapture(
         string ScenarioId,
         string ScenarioDataSha256,
+        string ContentIdentityKey,
         List<ParsedRawTick> Ticks);
 
     private sealed record ParsedRawTick(

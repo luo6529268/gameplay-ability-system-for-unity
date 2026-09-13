@@ -400,35 +400,43 @@ namespace NTSD.Simulation
         public BattleSimulationTickPublication Execute(
             in BattleSimulationTickRequest request)
         {
-            FrameInputSet frameInput = request.FrameInput;
-            if (frameInput == null)
-                throw new InvalidOperationException("The simulation worker request has no canonical input frame.");
-
-            int tickIndex = frameInput.TickIndex;
-            long executionStartedAt = System.Diagnostics.Stopwatch.GetTimestamp();
-            managedMemoryBoundary?.BeginSimulationWorkerTick();
+            world.EnterSnapshotTickBoundary();
             try
             {
-                request.Stage.Apply(world.Runtime?.Stage);
-                if (world.Runtime?.Flow != null)
-                    world.Runtime.Flow.SparkRenderFrame = tickIndex;
-                world.ApplyFrameInputSet(frameInput);
-                tickSystem.RunSimulationWorkerTick(tickIndex, request.BuildPresentation);
+                FrameInputSet frameInput = request.FrameInput;
+                if (frameInput == null)
+                    throw new InvalidOperationException("The simulation worker request has no canonical input frame.");
 
-                ulong checksum = captureChecksum
-                    ? world.CaptureRuntimeChecksum64(tickIndex, frameInput)
-                    : 0UL;
-                return new BattleSimulationTickPublication(
-                    tickIndex,
-                    frameInput.GetCanonicalHash64(),
-                    checksum,
-                    captureChecksum,
-                    request.BuildPresentation,
-                    System.Diagnostics.Stopwatch.GetTimestamp() - executionStartedAt);
+                int tickIndex = frameInput.TickIndex;
+                long executionStartedAt = System.Diagnostics.Stopwatch.GetTimestamp();
+                managedMemoryBoundary?.BeginSimulationWorkerTick();
+                try
+                {
+                    request.Stage.Apply(world.Runtime?.Stage);
+                    if (world.Runtime?.Flow != null)
+                        world.Runtime.Flow.SparkRenderFrame = tickIndex;
+                    world.ApplyFrameInputSet(frameInput);
+                    tickSystem.RunSimulationWorkerTick(tickIndex, request.BuildPresentation);
+
+                    ulong checksum = captureChecksum
+                        ? world.CaptureRuntimeChecksum64(tickIndex, frameInput)
+                        : 0UL;
+                    return new BattleSimulationTickPublication(
+                        tickIndex,
+                        frameInput.GetCanonicalHash64(),
+                        checksum,
+                        captureChecksum,
+                        request.BuildPresentation,
+                        System.Diagnostics.Stopwatch.GetTimestamp() - executionStartedAt);
+                }
+                finally
+                {
+                    managedMemoryBoundary?.ObserveAfterSimulationWorkerTick(tickIndex);
+                }
             }
             finally
             {
-                managedMemoryBoundary?.ObserveAfterSimulationWorkerTick(tickIndex);
+                world.ExitSnapshotTickBoundary();
             }
         }
 

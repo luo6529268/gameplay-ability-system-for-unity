@@ -85,6 +85,7 @@ internal static class EntityFieldContract
                 "specialHitLatch0eb",
                 "environmentState",
                 "environmentSourceSlot",
+                "objectAiExcludedGroupSourceSlot",
             ],
             ["lifecycle"] =
             [
@@ -148,6 +149,7 @@ internal static class EntityFieldContract
         Field("combat.specialHitLatch0eb", "boolean", "EntityState28::special_hit_latch_0eb", "NTSDEntityRuntime::SpecialHitLatch0EB", VerifiedBinding),
         Field("combat.environmentState", "int32", "EntityState28::environment_state_320", "none", MissingBinding),
         Field("combat.environmentSourceSlot", "int32", "EntityState28::environment_source_slot_160", null, MissingBinding),
+        Field("combat.objectAiExcludedGroupSourceSlot", "int32", "EntityState28::object_ai_excluded_group_source_slot_2f8", "NTSDEntityRuntime::ObjectAiExcludedGroupSourceSlot2F8", VerifiedBinding),
 
         Field("lifecycle.resolutionPending", "boolean", "EntityState28::lifecycle_resolution_pending", "none", MissingBinding),
         Field("lifecycle.code", "int32", "EntityState28::lifecycle_code", null, MissingBinding),

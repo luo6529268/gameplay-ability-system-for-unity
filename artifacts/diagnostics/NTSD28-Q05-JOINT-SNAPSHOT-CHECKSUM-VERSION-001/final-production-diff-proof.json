@@ -1,0 +1,31 @@
+{
+  "capturedUtc": "2026-09-13T12:29:40.117394+00:00",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "version": 13,
+      "onlyVersionConstantChanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+      "version": 21,
+      "originalAllDomainPredicatePreservedExactly": true,
+      "readValidityNowReusesPublishPredicate": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "version": 24,
+      "onlyVersionConstantChanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+      "version": 2,
+      "onlyVersionConstantChanged": true
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+      "version": 2,
+      "onlyVersionConstantChanged": true
+    }
+  ]
+}

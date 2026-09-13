@@ -1,0 +1,16 @@
+[
+  "NTSD.Test.Editor.NTSD28Q05OpointSnapshotBoundaryEditorTests",
+  "NTSD.Test.BattleStateSnapshotEditorTests",
+  "NTSD.Test.BattleStateSnapshotRestoreEditorTests",
+  "NTSD.Test.LockstepSnapshotRingEditorTests",
+  "NTSD.Test.BattleSimulationWorkerBoundaryEditorTests",
+  "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+  "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests",
+  "NTSD.Test.W05OpointLifecycleEditorTests",
+  "NTSD.Test.LateOpointRuntimeSlotCapacityEditorTests",
+  "NTSD.Tests.Editor.BattleParityStructuralWitnessEditorTests",
+  "NTSD.Test.Editor.NTSD28B0OpointOwnerPropagationProductionEditorTests",
+  "NTSD.Test.Editor.NTSD28B6WpointTerminalStructuralProductionEditorTests",
+  "NTSD.Test.NTSD28Q05UnclaimedRawRestoreEditorTests",
+  "NTSD.Test.BattleWorldEntityRuntimeSnapshotEditorTests"
+]

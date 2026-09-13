@@ -127,56 +127,64 @@ namespace NTSD.Simulation.Lockstep
 
         internal bool TryStepOneTick(FrameInputSet frame)
         {
-            if (!CanStep(frame, out LockstepProtocolReason reason))
-            {
-                LatchFault(reason, null);
-                return false;
-            }
-
+            world.EnterSnapshotTickBoundary();
             try
             {
-                int tickIndex = frame.TickIndex;
-                world.Runtime.Flow.SparkRenderFrame = tickIndex;
-                world.ApplyFrameInputSet(frame);
-                BattleTickCompletion completion = tickSystem.RunSimulationWorkerTick(
-                    tickIndex,
-                    buildPresentation: false);
-                // Alignment contract: CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001.
-                // A partial C++-aligned pass chain is terminal and publishes no tick result.
-                if (completion != BattleTickCompletion.FullReturn)
-                {
-                    LatchFault(LockstepProtocolReason.DriverRejectedFrame, null);
-                    return false;
-                }
-
-                ulong inputHash = frame.GetCanonicalHash64();
-                ulong stateChecksum = world.CaptureRuntimeChecksum64(
-                    tickIndex,
-                    frame);
-                if (!Journal.TryRecordConsumed(frame, out reason) ||
-                    !FrameHistory.TryRecordConsumed(frame, out reason) ||
-                    !ChecksumHistory.TryRecordConsumed(
-                        tickIndex,
-                        inputHash,
-                        BattleLockstepChecksumModule.CurrentSchemaVersion,
-                        stateChecksum,
-                        out reason))
+                if (!CanStep(frame, out LockstepProtocolReason reason))
                 {
                     LatchFault(reason, null);
                     return false;
                 }
 
-                currentTick = tickIndex;
-                LastInputHash = inputHash;
-                LastStateChecksum = stateChecksum;
-                LastReason = LockstepProtocolReason.None;
-                Status = InProcessBattleKernelHostStatus.Advanced;
-                return true;
+                try
+                {
+                    int tickIndex = frame.TickIndex;
+                    world.Runtime.Flow.SparkRenderFrame = tickIndex;
+                    world.ApplyFrameInputSet(frame);
+                    BattleTickCompletion completion = tickSystem.RunSimulationWorkerTick(
+                        tickIndex,
+                        buildPresentation: false);
+                    // Alignment contract: CLIENT-FORMAL-KERNEL-FULL-RETURN-COMMIT-SEAM-001.
+                    // A partial C++-aligned pass chain is terminal and publishes no tick result.
+                    if (completion != BattleTickCompletion.FullReturn)
+                    {
+                        LatchFault(LockstepProtocolReason.DriverRejectedFrame, null);
+                        return false;
+                    }
+
+                    ulong inputHash = frame.GetCanonicalHash64();
+                    ulong stateChecksum = world.CaptureRuntimeChecksum64(
+                        tickIndex,
+                        frame);
+                    if (!Journal.TryRecordConsumed(frame, out reason) ||
+                        !FrameHistory.TryRecordConsumed(frame, out reason) ||
+                        !ChecksumHistory.TryRecordConsumed(
+                            tickIndex,
+                            inputHash,
+                            BattleLockstepChecksumModule.CurrentSchemaVersion,
+                            stateChecksum,
+                            out reason))
+                    {
+                        LatchFault(reason, null);
+                        return false;
+                    }
+
+                    currentTick = tickIndex;
+                    LastInputHash = inputHash;
+                    LastStateChecksum = stateChecksum;
+                    LastReason = LockstepProtocolReason.None;
+                    Status = InProcessBattleKernelHostStatus.Advanced;
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    LatchFault(LockstepProtocolReason.DriverRejectedFrame, exception);
+                    return false;
+                }
             }
-            catch (Exception exception)
+            finally
             {
-                LatchFault(LockstepProtocolReason.DriverRejectedFrame, exception);
-                return false;
+                world.ExitSnapshotTickBoundary();
             }
         }
 

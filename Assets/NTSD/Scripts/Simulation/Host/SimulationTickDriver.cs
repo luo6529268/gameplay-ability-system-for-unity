@@ -493,42 +493,51 @@ namespace NTSD.Simulation
 
         private bool StepOneTickInternal(int tickIndex, bool buildPresentation)
         {
-            if (_world == null || !CanAdvanceTick(tickIndex))
-                return false;
-
-            ISimulationFrameInputProvider provider = _frameInputProvider;
-            if (provider == null)
-                return false;
-
-            FrameInputSet frameInput = provider.GetFrameInput(tickIndex);
-            if (frameInput == null || frameInput.TickIndex != tickIndex)
-                return false;
-
-            provider.BeforeSimTick(tickIndex);
-            bool functionKeysDispatched = false;
-            if (ShouldSubmitToDedicatedSimulationWorker())
+            SimulationWorld snapshotWorld = _world;
+            snapshotWorld?.EnterSnapshotTickBoundary();
+            try
             {
-                ApplyPendingBattleFunctionKeyCommandsForTick();
-                functionKeysDispatched = true;
-                if (TrySubmitDedicatedSimulationWorkerTick(
-                        frameInput,
-                        buildPresentation,
-                        provider))
+                if (_world == null || !CanAdvanceTick(tickIndex))
+                    return false;
+
+                ISimulationFrameInputProvider provider = _frameInputProvider;
+                if (provider == null)
+                    return false;
+
+                FrameInputSet frameInput = provider.GetFrameInput(tickIndex);
+                if (frameInput == null || frameInput.TickIndex != tickIndex)
+                    return false;
+
+                provider.BeforeSimTick(tickIndex);
+                bool functionKeysDispatched = false;
+                if (ShouldSubmitToDedicatedSimulationWorker())
                 {
-                    return true;
+                    ApplyPendingBattleFunctionKeyCommandsForTick();
+                    functionKeysDispatched = true;
+                    if (TrySubmitDedicatedSimulationWorkerTick(
+                            frameInput,
+                            buildPresentation,
+                            provider))
+                    {
+                        return true;
+                    }
+
+                    if (PauseForDedicatedSimulationWorkerFailure())
+                        return false;
                 }
 
-                if (PauseForDedicatedSimulationWorkerFailure())
-                    return false;
+                bool stepped = StepOneTickInternal(
+                    frameInput,
+                    buildPresentation,
+                    !functionKeysDispatched);
+                if (stepped)
+                    provider.AfterSimTick(tickIndex);
+                return stepped;
             }
-
-            bool stepped = StepOneTickInternal(
-                frameInput,
-                buildPresentation,
-                !functionKeysDispatched);
-            if (stepped)
-                provider.AfterSimTick(tickIndex);
-            return stepped;
+            finally
+            {
+                snapshotWorld?.ExitSnapshotTickBoundary();
+            }
         }
 
         private bool StepOneTickInternal(
@@ -536,40 +545,49 @@ namespace NTSD.Simulation
             bool buildPresentation,
             bool applyPendingFunctionKeys = true)
         {
-            if (_world == null || frameInput == null || frameInput.TickIndex != _tickIndex + 1)
-                return false;
-
-            int tickIndex = frameInput.TickIndex;
-            if (applyPendingFunctionKeys)
-                ApplyPendingBattleFunctionKeyCommandsForTick();
-            _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
-            _managedMemoryBoundary.BeginTick();
+            SimulationWorld snapshotWorld = _world;
+            snapshotWorld?.EnterSnapshotTickBoundary();
             try
             {
-                _tickIndex = tickIndex;
-                _sparkRenderFrame = tickIndex;
-                if (_world.Runtime?.Flow != null)
+                if (_world == null || frameInput == null || frameInput.TickIndex != _tickIndex + 1)
+                    return false;
+
+                int tickIndex = frameInput.TickIndex;
+                if (applyPendingFunctionKeys)
+                    ApplyPendingBattleFunctionKeyCommandsForTick();
+                _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
+                _managedMemoryBoundary.BeginTick();
+                try
                 {
-                    _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
+                    _tickIndex = tickIndex;
+                    _sparkRenderFrame = tickIndex;
+                    if (_world.Runtime?.Flow != null)
+                    {
+                        _world.Runtime.Flow.SparkRenderFrame = _sparkRenderFrame;
+                    }
+
+                    if (debugLogPerTick)
+                        Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
+
+                    _lastAppliedFrameInput = frameInput;
+                    _world.ApplyFrameInputSet(frameInput);
+                    _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
+                    CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
+                    PublishPendingSoundsAfterChecksum();
+
+                    if (debugLogPerTick)
+                        Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
+
+                    return true;
                 }
-
-                if (debugLogPerTick)
-                    Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} START ==========");
-
-                _lastAppliedFrameInput = frameInput;
-                _world.ApplyFrameInputSet(frameInput);
-                _battleTickSystem?.RunReleaseTick(tickIndex, buildPresentation);
-                CaptureFrameChecksumIfNeeded(tickIndex, frameInput);
-                PublishPendingSoundsAfterChecksum();
-
-                if (debugLogPerTick)
-                    Log.Info($"[SimulationTickDriver] ========== SimTick {tickIndex} END ==========");
-
-                return true;
+                finally
+                {
+                    _managedMemoryBoundary.ObserveAfterTick(tickIndex);
+                }
             }
             finally
             {
-                _managedMemoryBoundary.ObserveAfterTick(tickIndex);
+                snapshotWorld?.ExitSnapshotTickBoundary();
             }
         }
 

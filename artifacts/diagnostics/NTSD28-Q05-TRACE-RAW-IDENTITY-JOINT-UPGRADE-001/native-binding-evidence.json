@@ -1,0 +1,14 @@
+{
+  "scope": "Source field/actual write_entity unit witness; not gameplay/formal EXE trace",
+  "values": [
+    -1,
+    0,
+    37
+  ],
+  "ownerSlot": 19,
+  "sources": {
+    "Tools/NTSD28AuthorityTrace/trace_binding_witness.cpp": "2cd879458331b21b9c9d460b47acdd453bcc128d5b7f9a7ac8ea22afab0f6cb7",
+    "Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp": "c1c6ed27521e62713db4d61bf691af5bcaf92401cabe505abc29dcd145147a8c"
+  },
+  "binarySha256": "671c853bdebae8e903ecfd48b4ba8566d092ed8192a7397b62d67d6fbc25234d"
+}

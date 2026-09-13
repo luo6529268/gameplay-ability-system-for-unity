@@ -11,7 +11,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleStateSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 20;
+        public const int CurrentSchemaVersion = 21;
 
         internal BattleStateSnapshotBuffer(
             BattleWorldRosterResultsSnapshotBuffer rosterResults,
@@ -53,7 +53,8 @@ namespace NTSD.Simulation
         public int ProtocolSchemaVersion { get; private set; }
         public ulong IdentityFingerprint { get; private set; }
         public int CapturedTick { get; private set; }
-        public bool IsValid => SchemaVersion == CurrentSchemaVersion;
+        public bool IsValid => SchemaVersion == CurrentSchemaVersion &&
+            HasMatchingPayloadHeaders(Core, ProtocolSchemaVersion, IdentityFingerprint, CapturedTick);
 
         public BattleWorldCoreScalarSnapshot Core { get; private set; }
         public BattleWorldRosterResultsSnapshotBuffer RosterResults { get; }
@@ -87,6 +88,26 @@ namespace NTSD.Simulation
 
             int protocolSchema = identity.SchemaVersion;
             ulong fingerprint = identity.IdentityFingerprint;
+            if (!HasMatchingPayloadHeaders(core, protocolSchema, fingerprint, tick))
+            {
+                Invalidate();
+                return false;
+            }
+
+            Core = core;
+            ProtocolSchemaVersion = protocolSchema;
+            IdentityFingerprint = fingerprint;
+            CapturedTick = tick;
+            SchemaVersion = CurrentSchemaVersion;
+            return true;
+        }
+
+        private bool HasMatchingPayloadHeaders(
+            in BattleWorldCoreScalarSnapshot core,
+            int protocolSchema,
+            ulong fingerprint,
+            int tick)
+        {
             if (core.SchemaVersion != BattleWorldCoreScalarSnapshot.CurrentSchemaVersion ||
                 core.ProtocolSchemaVersion != protocolSchema ||
                 core.IdentityFingerprint != fingerprint ||
@@ -180,15 +201,8 @@ namespace NTSD.Simulation
                     fingerprint,
                     tick))
             {
-                Invalidate();
                 return false;
             }
-
-            Core = core;
-            ProtocolSchemaVersion = protocolSchema;
-            IdentityFingerprint = fingerprint;
-            CapturedTick = tick;
-            SchemaVersion = CurrentSchemaVersion;
             return true;
         }
 

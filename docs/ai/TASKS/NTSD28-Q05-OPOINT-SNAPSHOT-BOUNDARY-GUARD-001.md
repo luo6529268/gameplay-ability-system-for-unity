@@ -13,3 +13,7 @@
 后继仍需核对新的FrameSounds/profile/centerz/chp/cmp/六double及metadata的相关内容hash消费；当前source+decode语义身份已覆盖原始输入和版本，不能凭它跳过其他存在的内容hash或trace字段扫描。步骤4按Q03统一entity13/aggregate21/checksum24/character2/base2以及trace v3/raw v2/source wrapper v2、50字段2F8；旧6MISSING不无证据晋升。步骤5旧版本拒绝/新capture→restore→同seed/input replay与checksum、pool/slot复用、零残留/Play后才能关闭Q05。当前12/20/23/1/1中间态不发布，不提前Q07。
 
 保持Unity/GAS/非战斗、33ms/3ms、十一阶段、stage.dat USER_HOLD及例外，Scene旧SHA/Foot18既有缺失及用户新图保留；准确Task/Record/预变更SHA先于脚本，回滚需批准仅差量。
+
+## 最新出口
+
+FOCUSED_TEST_PASS / SCOPED_PLAY_PASS，187/SelfCheck/真实暂停World双队列拒绝及空闲capture通过；完整报告与后继见同Change Record。

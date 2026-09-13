@@ -1,5 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using System.IO;
 using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -8,6 +9,7 @@ using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Lockstep;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace NTSD.Test.Editor
@@ -289,6 +291,23 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void CapturedRendererOwnerWinsOverReplacedGlobalReference()
+        {
+            using var captured = new FactoryScope();
+            using var driver = new DriverScope();
+            captured.Factory.BeginBattlePreparation();
+            typeof(SimulationTickDriver).GetField("_battleObjectPointFactory", PrivateInstance).SetValue(driver.Driver, captured.Factory);
+            using var replacement = new FactoryScope();
+            var world = driver.Driver.World;
+            var saved = Capture(world);
+            var target = Capture(world);
+            captured.Factory.EnqueueCreateObject(new OPointCreateTask { targetWorld = world });
+            AssertRejected(world, saved, target);
+            Assert.That(replacement.Tasks.Count, Is.Zero);
+            Assert.That(captured.Tasks.TryDequeue(out _), Is.True);
+        }
+
+        [Test]
         public void ActualTickCarriesBoundaryThroughTypeQueriesAndReleasesIt()
         {
             var world = new SimulationWorld();
@@ -325,6 +344,40 @@ namespace NTSD.Test.Editor
         {
             internal Action Query;
             public override int GetCurrentDataObjectTypeForSimulation() { Query?.Invoke(); return 0; }
+        }
+
+        [Test]
+        public void HostInputCallbacksAreInsideSnapshotBoundary()
+        {
+            using var scope = new DriverScope();
+            var world = scope.Driver.World;
+            var target = Capture(world);
+            int calls = 0;
+            int accepted = 0;
+            var provider = new InputProbe
+            {
+                Observe = () =>
+                {
+                    calls++;
+                    if (world.TryCaptureBattleStateSnapshot(Identity, world.CurrentTickIndex, target)) accepted++;
+                },
+            };
+            scope.Driver.SetFrameInputProvider(provider);
+            MethodInfo step = typeof(SimulationTickDriver).GetMethod("StepOneTickInternal", PrivateInstance,
+                null, new[] { typeof(int), typeof(bool) }, null);
+            Assert.That(step.Invoke(scope.Driver, new object[] { 1, false }), Is.True);
+            Assert.That(calls, Is.EqualTo(3));
+            Assert.That(accepted, Is.Zero);
+            Assert.That(Capture(world).IsValid, Is.True);
+        }
+
+        private sealed class InputProbe : ISimulationFrameInputProvider
+        {
+            internal Action Observe;
+            public bool IsFrameInputReady(int tickIndex) => true;
+            public FrameInputSet GetFrameInput(int tickIndex) { Observe(); return FrameInputSet.Empty(tickIndex); }
+            public void BeforeSimTick(int tickIndex) => Observe();
+            public void AfterSimTick(int tickIndex) => Observe();
         }
 
         private sealed class ProbeMaterializer : IBattleObjectPointStructuralMaterializer
@@ -383,6 +436,101 @@ namespace NTSD.Test.Editor
                 UnityEngine.Object.DestroyImmediate(host);
                 instance.SetValue(null, previous);
             }
+        }
+    }
+
+    [InitializeOnLoad]
+    internal static class NTSD28Q05SnapshotBoundaryPlayProbe
+    {
+        private const string RequestPath = "Temp/NTSD28_Q05_SnapshotBoundary.request";
+        private const string ResultPath = "Temp/NTSD28_Q05_SnapshotBoundary.result.json";
+        private static bool changedPause;
+        static NTSD28Q05SnapshotBoundaryPlayProbe() { EditorApplication.update += Poll; }
+
+        private static void Poll()
+        {
+            if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
+                !File.Exists(RequestPath) || File.ReadAllText(RequestPath).Trim() != "run") return;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            SimulationWorld world = driver?.World;
+            if (world == null || driver.CurrentTickIndex < 5 || !world.IsBattleSnapshotBoundaryReady) return;
+            if (!driver.IsPaused)
+            {
+                changedPause = true;
+                driver.SetPaused(true);
+                return;
+            }
+            File.WriteAllText(RequestPath, "running");
+            var report = new Report { tick = driver.CurrentTickIndex, objectsBefore = world.ObjectCount };
+            try
+            {
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var factory = (LF2ObjectPointFactory)typeof(SimulationTickDriver).GetField("_battleObjectPointFactory", flags).GetValue(driver);
+                Assert.That(factory, Is.Not.Null, "Prepared renderer owner is required.");
+                report.capturedRendererOwner = true;
+                var logicQueue = NTSD28Q05OpointSnapshotBoundaryEditorTests.Queue(world.LogicObjectPointRuntime, "taskQueue");
+                var rendererQueue = NTSD28Q05OpointSnapshotBoundaryEditorTests.Queue(factory, "_taskQueue");
+                Assert.That(logicQueue.Count, Is.Zero);
+                Assert.That(rendererQueue.Count, Is.Zero);
+                var saved = NTSD28Q05OpointSnapshotBoundaryEditorTests.Capture(world);
+                var target = NTSD28Q05OpointSnapshotBoundaryEditorTests.Capture(world);
+                var logicTask = new OPointCreateTask { targetWorld = world, ownerEntityIndex = 31 };
+                world.LogicObjectPointRuntime.EnqueueCreateObject(logicTask);
+                try
+                {
+                    NTSD28Q05OpointSnapshotBoundaryEditorTests.AssertRejected(world, saved, target);
+                    Assert.That(logicQueue.Count, Is.EqualTo(1));
+                    report.logicRefusedWithoutConsumption = true;
+                }
+                finally
+                {
+                    Assert.That(logicQueue.TryDequeue(out LF2TaskBase retained), Is.True);
+                    Assert.That(retained, Is.SameAs(logicTask));
+                }
+                var rendererTask = new OPointCreateMultipleTask { targetWorld = world, number = 2 };
+                factory.EnqueueCreateMultipleObjects(rendererTask);
+                FieldInfo workerField = typeof(SimulationTickDriver).GetField("_simulationWorker", flags);
+                object worker = workerField.GetValue(driver);
+                report.workerWasPresent = worker != null;
+                try
+                {
+                    NTSD28Q05OpointSnapshotBoundaryEditorTests.AssertRejected(world, saved, target);
+                    var identity = NTSD.Test.StrictDelayedInputBufferEditorTests.CreateIdentity();
+                    Assert.That(driver.TryRestoreBattleStateSnapshot(identity, saved, out var reason), Is.False);
+                    Assert.That(reason, Is.EqualTo(BattleStateSnapshotRestoreFailure.WorldBusy));
+                    Assert.That(workerField.GetValue(driver), Is.SameAs(worker));
+                    Assert.That(rendererQueue.Count, Is.EqualTo(1));
+                    report.rendererRefusedWithoutConsumption = true;
+                }
+                finally
+                {
+                    Assert.That(rendererQueue.TryDequeue(out LF2TaskBase retained), Is.True);
+                    Assert.That(retained, Is.SameAs(rendererTask));
+                }
+                report.emptyBoundaryCapture = NTSD28Q05OpointSnapshotBoundaryEditorTests.Capture(world).IsValid;
+                report.objectsAfter = world.ObjectCount;
+                Assert.That(report.objectsAfter, Is.EqualTo(report.objectsBefore));
+                report.status = "PASS";
+            }
+            catch (Exception error) { report.status = "FAIL"; report.error = error.ToString(); }
+            finally
+            {
+                File.WriteAllText(ResultPath, JsonUtility.ToJson(report, true));
+                File.WriteAllText(RequestPath, "done");
+                if (changedPause) driver.SetPaused(false);
+                changedPause = false;
+                EditorApplication.delayCall += EditorApplication.ExitPlaymode;
+            }
+        }
+
+        [Serializable]
+        private sealed class Report
+        {
+            public string status, error;
+            public int tick, objectsBefore, objectsAfter;
+            public bool capturedRendererOwner, logicRefusedWithoutConsumption, rendererRefusedWithoutConsumption;
+            public bool emptyBoundaryCapture, workerWasPresent;
+            public string scope = "Paused real Battle World; only two probe-owned tasks enqueued and removed after verifying refusal. Guard never consumes tasks; no task materialization or physical-input/full-skill claim.";
         }
     }
 }

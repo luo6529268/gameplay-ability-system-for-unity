@@ -1,0 +1,114 @@
+{
+  "paths": [
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B4StatusMotionCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitResourceSuppressionCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4SourceCountCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28EnvironmentStateCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeySessionStateEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05JointSnapshotVersionEditorTests.cs"
+  ],
+  "production": {
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs": [
+      12,
+      13
+    ],
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs": [
+      20,
+      21
+    ],
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs": [
+      23,
+      24
+    ],
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs": [
+      1,
+      2
+    ],
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs": [
+      1,
+      2
+    ]
+  },
+  "versionTests": [
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B4StatusMotionCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitResourceSuppressionCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4SourceCountCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28EnvironmentStateCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeySessionStateEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "sha256": "94d9ca245a30789f85d304d5eb63a55e7a3fb35572e1289165a21bc60f59aa2a"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+      "sha256": "4000354b1840038b23eb810d6baed9f3bdf7717399f47b9f25ae91b0e380a53d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "sha256": "482bad71443199cb279aafb282bc96bf06f7e93000736d2259ef229f33d27ae4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+      "sha256": "1441a97e8cb328dbc2c8caa39c34fe96acb1df4509d02af022ae97fa530966d6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+      "sha256": "7ea45f518c39dc9343954636c3a372a4aba5646e71d21c6949029177fe5cdb33"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4StatusMotionCarrierEditorTests.cs",
+      "sha256": "2c334446f4c81622eff548ac0d62ed91e996da65cdf736eccacddf3b9d540854"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitResourceSuppressionCarrierEditorTests.cs",
+      "sha256": "2f44699a96c00767944c8c452c4aba2acd3eb2064e643004cd188d2c70128b86"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4SourceCountCarrierEditorTests.cs",
+      "sha256": "d7bf835c0416787e4529e262696c9fdbc9a5d28836da0ac5b9bedfcde1975a5b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs",
+      "sha256": "49aa4510dcaaa511efc0c20ffd6ed8173064044798b29a31505682b1c5a45f81"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs",
+      "sha256": "f2e81db6d4c817f47d5b824284cde8b34c75fc39c4f731cf5798f25c9b2be575"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+      "sha256": "0b910fc38299c83222eb643335c7f57da5b2539755899e960a5fa2132dcaeb6d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28EnvironmentStateCarrierEditorTests.cs",
+      "sha256": "0cb025ccf6d9d12ed34cfd1933f5f6a7463cdd940ab2fe19d91785eb575a3c08"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs",
+      "sha256": "f77af9173cf714f0ee5190f1f9f4748d4868508ef2dd2718e3af343bcced97f1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeySessionStateEditorTests.cs",
+      "sha256": "1b2a403bdca10612d6d3a8bab9e24ee9fb6ce165d47950bd969d651acd1bcd33"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05JointSnapshotVersionEditorTests.cs",
+      "sha256": null
+    }
+  ]
+}

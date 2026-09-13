@@ -86,7 +86,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleWorldEntityBaseShellSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 2;
 
         private readonly bool[] present;
         private readonly BattleEntityBaseShellSnapshot[] states;

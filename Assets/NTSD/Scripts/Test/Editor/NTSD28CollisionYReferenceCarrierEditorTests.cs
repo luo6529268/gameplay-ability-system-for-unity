@@ -55,7 +55,7 @@ namespace NTSD.Test
             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
 
             Assert.That(entity.Runtime.CollisionYReference, Is.EqualTo(-33));
-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(12));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace NTSD.Test
             Assert.That(changed, Is.Not.EqualTo(baseline));
             Assert.That(parity, Does.Contain("\"collisionYReference\":-37"));
             Assert.That(raw, Does.Contain("\"collisionYReference\":-37"));
-            Assert.That(raw, Does.Contain("\"verifiedCount\":43"));
+            Assert.That(raw, Does.Contain("\"verifiedCount\":44"));
             Assert.That(raw, Does.Contain("\"missingCount\":6"));
             Assert.That(raw, Does.Not.Contain("combat.collisionYReference"));
         }
@@ -84,11 +84,11 @@ namespace NTSD.Test
         public void SnapshotAndChecksumSchemas_AdvanceForCollisionReference()
         {
             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(12));
+                Is.EqualTo(13));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(20));
+                Is.EqualTo(21));
             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
-                Is.EqualTo(23));
+                Is.EqualTo(24));
         }
 
         [Test]

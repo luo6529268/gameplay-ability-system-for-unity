@@ -57,8 +57,8 @@ namespace NTSD.Simulation.Tests
             string second = NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1);
 
             Assert.That(second, Is.EqualTo(first));
-            Assert.That(first, Does.Contain("\"fieldCount\":49"));
-            Assert.That(first, Does.Contain("\"verifiedCount\":43"));
+            Assert.That(first, Does.Contain("\"fieldCount\":50"));
+            Assert.That(first, Does.Contain("\"verifiedCount\":44"));
             Assert.That(first, Does.Contain("\"candidateCount\":0"));
             Assert.That(first, Does.Contain("\"missingCount\":6"));
             Assert.That(first, Does.Contain("\"allocationEpoch\":1"));

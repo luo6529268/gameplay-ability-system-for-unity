@@ -6,9 +6,9 @@ namespace NTSD28Parity;
 
 internal static class AuthorityCaptureValidator
 {
-    internal const string CaptureSchema = "ntsd28-authority-source-capture-v1";
+    internal const string CaptureSchema = "ntsd28-authority-source-capture-v2";
     internal const string ReportSchema =
-        "ntsd28-authority-source-capture-validation-v1";
+        "ntsd28-authority-source-capture-validation-v2";
     internal const string EvidenceClass = "SOURCE_MODEL_DIAGNOSTIC_ONLY";
     internal const string LegacyScenarioReferenceSha256 =
         "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B";
@@ -21,7 +21,7 @@ internal static class AuthorityCaptureValidator
         "captureRunnerSourceSha256", "captureBinarySha256",
         "scenarioReferenceExeSha256",
         "scenarioDataSha256", "scenarioId", "firstCompletedTick",
-        "expectedTickCount", "slotCapacity",
+        "expectedTickCount", "slotCapacity", "content",
     ];
 
     private static readonly string[] TickProperties =
@@ -64,6 +64,8 @@ internal static class AuthorityCaptureValidator
 
             RequireString(header, "kind", "header");
             RequireString(header, "schema", CaptureSchema);
+            report.ContentIdentityKey = TraceContentIdentity.Validate(
+                header["content"] as JsonObject ?? throw new InvalidDataException("content-object-required"), true);
             if (RequireBoolean(header, "certificateEligible"))
             {
                 throw new InvalidDataException(
@@ -134,9 +136,7 @@ internal static class AuthorityCaptureValidator
             report.Status = "valid-source-model-capture";
             return report;
         }
-        catch (Exception exception) when (
-            exception is InvalidDataException or JsonException or
-            FormatException or OverflowException)
+        catch (Exception exception) when (TraceComparator.IsContractFailure(exception))
         {
             report.Valid = false;
             report.Status = "invalid";
@@ -240,6 +240,7 @@ internal static class AuthorityCaptureValidator
 internal sealed class AuthorityCaptureValidationReport
 {
     public string Schema { get; set; } = string.Empty;
+    public string ContentIdentityKey { get; set; } = string.Empty;
     public string Source { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public bool Valid { get; set; }

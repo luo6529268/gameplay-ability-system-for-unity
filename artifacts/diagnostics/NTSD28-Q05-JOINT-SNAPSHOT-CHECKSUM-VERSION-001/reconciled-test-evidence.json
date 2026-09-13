@@ -1,0 +1,14 @@
+{
+  "scope": "Distinct tests across preserved main run and one targeted fixture rerun; not a fabricated single green run",
+  "main": {
+    "total": 287,
+    "passed": 286,
+    "failed": 1
+  },
+  "targetedRerun": {
+    "total": 1,
+    "passed": 1
+  },
+  "distinctCovered": 287,
+  "missingPassingEvidence": []
+}

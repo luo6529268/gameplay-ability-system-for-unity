@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "error": "",
+    "tick": 5,
+    "objectsBefore": 4,
+    "objectsAfter": 4,
+    "capturedRendererOwner": true,
+    "logicRefusedWithoutConsumption": true,
+    "rendererRefusedWithoutConsumption": true,
+    "emptyBoundaryCapture": true,
+    "workerWasPresent": false,
+    "scope": "Paused real Battle World; only two probe-owned tasks enqueued and removed after verifying refusal. Guard never consumes tasks; no task materialization or physical-input/full-skill claim."
+}

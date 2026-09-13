@@ -208,6 +208,7 @@ $arguments = @(
     $runnerSource,
     '-Wl,--wrap=_ZN6ntsd2814NativeRandom288crt_nextEv',
     '-Wl,--wrap=_ZN6ntsd2814NativeRandom2817synchronized_nextEji',
+    '-lbcrypt',
     '-static-libgcc',
     '-static-libstdc++',
     '-o',
@@ -222,7 +223,7 @@ if ($LASTEXITCODE -ne 0)
 
 $binarySha = (Get-FileHash -LiteralPath $executable -Algorithm SHA256).Hash
 $manifest = [ordered]@{
-    schema = 'ntsd28-authority-source-capture-build/1.0'
+    schema = 'ntsd28-authority-source-capture-build/2.0'
     evidenceClass = 'SOURCE_MODEL_DIAGNOSTIC_ONLY'
     formalExeSha256 = $formalSha
     authoritySourceManifestSha256 = $authorityManifestSha

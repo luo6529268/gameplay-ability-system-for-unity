@@ -1,0 +1,17 @@
+{
+  "schema": "ntsd28-raw-entity-comparison-v2",
+  "authority": "native-formal.raw.jsonl",
+  "unity": "unity-legacy.raw.jsonl",
+  "status": "invalid-capture",
+  "certificateEligible": false,
+  "ticksCompared": 0,
+  "entityPairsCompared": 0,
+  "fieldOccurrencesCompared": 0,
+  "differenceOccurrences": 0,
+  "uniqueDifferenceFields": 0,
+  "uniqueEqualFields": 0,
+  "firstDifference": null,
+  "differences": [],
+  "equalFields": [],
+  "reason": "content-identity-mismatch"
+}

@@ -3,7 +3,7 @@
 ## B0 input / RNG / slot raw contract
 
 `b0-domain-contract` emits the independent completed-tick raw contract used before
-the full v2 trace can be populated. It records applied seven-action held input,
+the full v3 trace can be populated. It records applied seven-action held input,
 three source-native RNG streams (`authorityCrt`, `authoritySynchronized`, and
 `unityDeterministic`), slot occupants/allocation epochs, and snapshot-derived
 birth/death/reuse deltas. The producer availability matrix is strict: Unity's
@@ -52,7 +52,7 @@ project, Unity assemblies, or the legacy `Tools/NTSDParity` schema.
 It targets the repository host's installed .NET 10 SDK and has no external
 package dependencies.
 
-Current schema package: `NTSD28-B0-ENTITY-FIELD-SCHEMA-001`; the v1 envelope
+Current schema package: `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001`; the v1 envelope
 package `NTSD28-B0-TRACE-CONTRACT-001` remains its historical foundation.
 
 ## Scope
@@ -65,9 +65,9 @@ The tool freezes and validates:
 - input, world, entities, relations, rests, events, and presentation domains;
 - per-domain and overall SHA-256 commitments;
 - the approved Unity exceptions and user-excluded features;
-- content-fingerprint comparison while the H content strategy remains pending;
+- actual object-DAT content identity, decoder semantics and joint-schema compatibility under D-023;
 - streaming first-difference order.
-- a v2 exact-property core entity schema with 48 typed leaves and explicit
+- a v3 exact-property core entity schema with 50 typed fields and explicit
   authority/Unity binding maturity (`VERIFIED`, `CANDIDATE`, or `MISSING`).
 
 This package does not include an NTSD 2.8 C++ exporter or a Unity exporter.
@@ -106,15 +106,20 @@ allocation epoch, event order, and entity state remain strict domains. Each
 producer must still keep every emitted entity slot inside its own declared
 capacity.
 
-Approved exceptions are recorded but are not silently normalized by the v2
+Approved exceptions are recorded but are not silently normalized by the v3
 comparator. Future exporter/projection packages must either select scenarios
 that do not activate a gameplay exception or introduce an explicitly
 versioned projection. This prevents an exception from hiding unrelated state
 or RNG drift.
 
-When content fingerprints differ under `strategy-pending`, comparison returns
-`content-strategy-pending`. This is a successful structural comparison for
-diagnosis, never a parity certificate.
+Content headers bind the actual raw definition digest, decoder tag, semantic SHA-256,
+little-endian 64-bit projection and the 13/21/24/2/2 joint schema set.
+A content/profile/schema mismatch fails before entity comparison and produces a
+nonzero CLI exit; the old `content-strategy-pending` success state is retired.
+The identity scope is catalog object DAT definitions, not every visual/audio/stage
+asset. Source-native and Unity assembly hashes remain separate provenance.
+Unity legacy captures identify their actual DAT files with a separate profile.
+All captures remain diagnostics, never parity certificates.
 
 The entity binding status is not a comparison waiver. `CANDIDATE` and
 `MISSING` fields remain strict trace fields so exporters and later runtime

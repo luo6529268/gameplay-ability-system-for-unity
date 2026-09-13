@@ -1,0 +1,381 @@
+{
+  "command": [
+    "rg",
+    "-n",
+    "-i",
+    "fingerprint|computehash|hashnode|hashdata|addint32|addfloat|adddouble",
+    "-g",
+    "*.cs",
+    "-g",
+    "*.cpp",
+    "-g",
+    "*.py",
+    "-g",
+    "!**/bin/**",
+    "-g",
+    "!**/obj/**",
+    "Assets/NTSD/Scripts/Animation",
+    "Assets/NTSD/Scripts/DatParser",
+    "Assets/NTSD/Scripts/Simulation",
+    "Assets/NTSD/Scripts/Test",
+    "Tools"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs",
+      "sha256": "a59efadee1bbc296e1031e638fde6919b481b703005b24413c9429abad7b1c32"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganContentIdentity.cs",
+      "sha256": "71ca8bba0aca09211830d476460a241d6d5294042fdf64145c6503e53d93bce1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "sha256": "66676d31c970191f13114cbb46b93f7fc41b4fe648d7072ce6380ba4599ad57b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha256": "3fe0fc2c1c6f2ba9ce56bf3511db98667d7cef73c89ab7f3ec6af16322c8b043"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "96f99ba9542db4a2972c83a470cda07b1f97b869116c07525daf71e23db14d36"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+      "sha256": "7aa349625cbbccf0819d94f1595e2fe8e497dbfdf52eb995d46b2e2f6dc939ec"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleAiExecutionProfileEditorTests.cs",
+      "sha256": "dbe17a78f310526c3c5864c072a71a9d38457b127d5e0023a7deaa8a6e798901"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleRenderingBenchmarkEditorTests.cs",
+      "sha256": "8154740a19bf69af4431b602ab471674a74feda160cd124fc1e976ac616f6ad1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "sha256": "4278221ed4ec1401882bbc3fe3e5871b42bc6c9c80994d9605f8e36e91f21600"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressWindow.cs",
+      "sha256": "14263e082d99aef4eca51cf56833b5958856c7f509a25e340236b5e7b8b77432"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "2bc7ce9604fb4f4c67677e36cf12071f18612750d73ebf223837d8a45604e8f1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "sha256": "d94a25e9d70cb658366fc5539f345d0dfadb21e5354588bf2d39aca9ee6cdaaf"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "sha256": "da0fd6d437b015a0781a84f1e380bd199d2e43d776ec8c29c2a0906f8b71f330"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "sha256": "1bc30197eef56ace38023c85446986823b4c4ea9fbfddf4982b1c699c1fbfddf"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "sha256": "482bad71443199cb279aafb282bc96bf06f7e93000736d2259ef229f33d27ae4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "sha256": "78909289f3dd0b5dea74d46f832fc7efd4a4be96ef401c4196b9f8639bd5e4d9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/History/LockstepChecksumHistoryRing.cs",
+      "sha256": "9dd2cd609a8508097239ccdf57c093a814daba00c1f4ef93a850c3e77965b80c"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/History/LockstepFrameHistoryRing.cs",
+      "sha256": "16fcf71835f630f802acb47a4b50bbe4d457bb667d3529d8c594186fe74f308d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/History/LockstepSnapshotRing.cs",
+      "sha256": "5568dc4a67347164c13d9f8aa2798774ec59356d2318141d65c67202c9c20753"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
+      "sha256": "ddddc7c26402754d7a5aee7b6218c44a1cb007598fd605b5d9584077d4ef4904"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/LockstepFramePacket.cs",
+      "sha256": "a6be63efffb9fa8aced6a3e5fb541efb19ce22416b3fd5b074ee3efe5859aaf2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/LockstepSessionIdentity.cs",
+      "sha256": "b745cd4026f19028b7395bc8bd61ca43911299e6034437b87475e30dd95e073b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/LockstepStartBarrier.cs",
+      "sha256": "847e4c35ec36365a11d336195e23842e1ed287006b1374762a39ea7ff4918fd2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/LockstepSyncMessages.cs",
+      "sha256": "50689ef95ff5f361644f32a0b15a8a9f6e229dae44ae7c7e9f21ba057cef3e41"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/StrictDelayedInputBuffer.cs",
+      "sha256": "837dd0ebbd9ea78fd67b8127841ba038bb0ce0e4568b8d42751aa22abb8e2e92"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+      "sha256": "4000354b1840038b23eb810d6baed9f3bdf7717399f47b9f25ae91b0e380a53d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "0fc1502c632c10eb28e6a5b33c50f1d3d4fc58c69d03baa21549c16eaaf81d11"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+      "sha256": "1441a97e8cb328dbc2c8caa39c34fe96acb1df4509d02af022ae97fa530966d6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCoreScalarSnapshot.cs",
+      "sha256": "099292661addc775bb465da6f6f024719e40027c41bb0a5467f5a5e62f631f89"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+      "sha256": "7ea45f518c39dc9343954636c3a372a4aba5646e71d21c6949029177fe5cdb33"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "sha256": "94d9ca245a30789f85d304d5eb63a55e7a3fb35572e1289165a21bc60f59aa2a"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldLivingShellSnapshot.cs",
+      "sha256": "99e45001f5dbee86c0adcaf1f5c7cc93ff5e4acbf04318e56dcd971d28f033eb"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldPendingEventSnapshot.cs",
+      "sha256": "5879ee1b1cd6b86dec9a91d8e08437799fa7add6c4b971a5f2d54b32844ec7d7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRestSnapshot.cs",
+      "sha256": "5d49a890bc327117dfcbc9f6399111d47f3a74dcb610cc1165ca6752019a8f72"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRosterResultsSnapshot.cs",
+      "sha256": "61e2c4ef2c4b886052cae00d2b87c855dc3833f0efdc94cba0d02aea0b37821b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRuntimeSlotSnapshot.cs",
+      "sha256": "12c0591f3f70510d9e9ad01b5cf854aa6e5632134da853383687c464628055ee"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldSpecialOtherShellSnapshot.cs",
+      "sha256": "9375a557a9050eb6d8baf35fd1e4c4aee096943a607c583078f14532128939de"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldStageSpawnSnapshot.cs",
+      "sha256": "848fba3b92c7cb17055d7e0fe19087f60e41dc0136db888f8f8d38fce2f21a4d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldWeaponShellSnapshot.cs",
+      "sha256": "450c02ed3a00019af92bf5ad09e9b01d0e56b2e3867525832a166ec6877b37c2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "sha256": "4de8c1b85dd3a1ac882f3c75c948519bb2e95348c080f2f832c84f13cfd3aa69"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsReadOnlyShadowEditorTests.cs",
+      "sha256": "e572d228a4f8e80c3f9192702005f5440c3511f54b14415e3063f92b4ddf32cb"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "sha256": "b25c816c6b660a4d2953be24f7af54c127c2544d4aa2d5c4b1df977e08d52898"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleStateSnapshotEditorTests.cs",
+      "sha256": "d9839199e606806d7a1617640cf839723d7d8f24b1a6a0089e271f3442d93f77"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldCharacterShellSnapshotEditorTests.cs",
+      "sha256": "397dcbb20c2fed12880cdc3aebb1fcca36208d7426dc90adf2a7e28aed6ad1aa"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldCoreScalarSnapshotEditorTests.cs",
+      "sha256": "10a20da5b9c539453ee506be358a5411d6b91fea521ad677c5d7b4ded5c9f70a"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityBaseShellSnapshotEditorTests.cs",
+      "sha256": "cbbf22fc14b68b90b02c41b280b7ae4d896766ebd2ede03433044bdb0775de60"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityRuntimeSnapshotEditorTests.cs",
+      "sha256": "eaa9b125588a17b0da34c0aa8516b56b9e3adb12cfb0a969a6ae414f81947e60"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldLivingShellSnapshotEditorTests.cs",
+      "sha256": "6e2158fcfc4426432a276db3c30848c4601c3bb86523f493b10adc4994f0f749"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRestSnapshotEditorTests.cs",
+      "sha256": "1c688dee7980e2ddb4face95940b5599cbda63020dfb96bc78e4e1e1d748558e"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRosterResultsSnapshotEditorTests.cs",
+      "sha256": "847bce0858f320a30c7be5561aca2a67067ca7032f13b8a500c2f23b8faacf3f"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldRuntimeSlotSnapshotEditorTests.cs",
+      "sha256": "d4f0e37a7603599befbc2256c13f4bce8cb2c36ccb03e201c208879a484a5c69"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldStageSpawnSnapshotEditorTests.cs",
+      "sha256": "6b3a9d9e051fb53e9a9e3eb1d7c62f5a606a31159114cb4f783f18c63867a815"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldWeaponShellSnapshotEditorTests.cs",
+      "sha256": "2d7b46a958adcfec0900e1a016b3c58894cb1a77aaf5260eb81a54424ce21505"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelBodyBoxValueSeamEditorTests.cs",
+      "sha256": "3e83a068f30eee7992ce9f2c784dfe0f6ffb24e8ea4b1910fed6933b9aa011c9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelFullReturnCommitSeamEditorTests.cs",
+      "sha256": "25a1f9432955edad5110651ebef9e91f24dfda34b5c482321e29d11a53bcc74b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelObjectPointValueSeamEditorTests.cs",
+      "sha256": "79191ba15be95f8e5c84e08e383b6e73718c68a20b131458ab24c5ced667e40b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelWorldBootstrapFactorySeamEditorTests.cs",
+      "sha256": "6eb9f982cb88b03f1c1cf8f49a462cbcd0350b3434ac15cfd732e83a92d412ee"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs",
+      "sha256": "94f711fd8e2328dbe6df91feb9fb9cf4d3e06d549b1bc6ba074650707c2df3c3"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/LockstepChecksumHistoryRingEditorTests.cs",
+      "sha256": "c9f33582bb4a0814b6a0ebb6354678c273c8400ca3e7f0849936bbb5d2642f65"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/LockstepFrameHistoryRingEditorTests.cs",
+      "sha256": "345a8cdac72919230a2932a2b7a8ce6fc1255ccbfd73e7584cbeed2d32bcedeb"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/LockstepSnapshotRingEditorTests.cs",
+      "sha256": "73c7a3249b8d894abc8bb4ad36eea6480f670e3d911ae5a4cb7ef40508857c19"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "43de3e1fd1ebc924d6d7d15460cbefb4f1c87cc5aca6991143890a31b5b33997"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11LoganCatalogEditorTests.cs",
+      "sha256": "f710a4c55543026a08a548bc17213a60911d74eda4ae5ad99607aace60d051d6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11NativeSpriteRangeEditorTests.cs",
+      "sha256": "d6321c2ef31510f55384fb19d0a5233d5c1be6136eba3a40e1eedf1d563e466b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11VisualContentCandidateEditorTests.cs",
+      "sha256": "a73c766f8da3689db75bdc5c10d698bfb880ded8a62c27a98a9b560b6643b930"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs",
+      "sha256": "d55275845b8d6abe8d5b89ea7dd1fac60eb60ecac4762d5eb5ed892115a04537"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ItrStatusFieldCarrierEditorTests.cs",
+      "sha256": "28a0704f521f6a04ed22722833bfd1c657109a84890fd29d282cf205c0a34cc8"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardHitRestDataCarrierEditorTests.cs",
+      "sha256": "bc022bbfc72a702b0f0d5f9eef5379da52f284cd98352ac9e435414bb7781ff5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorDataContractEditorTests.cs",
+      "sha256": "5533f4ac39b1add03128b8c6adf69df963cfae328a6dcaa996b9a9bce64111fa"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "sha256": "fc7ab66f0f7bbc781d7b197cfb188f434f043850fb25aefee83d3ce10b855ef6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "sha256": "7e07efab00e8846241430c1b66dc1896597545722e3b14d2a77f3d0cdbd03dce"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q052F8CarrierEditorTests.cs",
+      "sha256": "355f7f24995439f4b0729a531292b120cca8d800b43c71af797bc90e43d4e73a"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05DefinitionAuditEditorTests.cs",
+      "sha256": "170fa0b1c0230582e1091c91dab09fbbdf1604a4acea2e3b6b406d539a80b955"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05FrameAstEditorTests.cs",
+      "sha256": "d7510ae2038609351ed4a8546dcd763a2ee8fe22513c216d1922416acc720e37"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05GeometryContentEditorTests.cs",
+      "sha256": "ea5c0dad5924633c57baaa17e781824cf8b98a87d745677398c4722a84c19216"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ItrStrengthContentEditorTests.cs",
+      "sha256": "93d96b19a8c4cdeb3469f468790a49dfd3c2507998c1a422521a8f980663f733"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SemanticContentIdentityEditorTests.cs",
+      "sha256": "089142a6695abecd8f63d23f6954856f9bb25960b7139a4ac682ac63a001aff0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TypedFrameEditorTests.cs",
+      "sha256": "d46b26780b88d902f94cc54d503dd9ef46c7147bb54ba456dc4ee1615562f60b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "sha256": "68439091d712cdda7a395fb4eb5cae1bbd81eb9a5bae97eb4c34c66eb1de2f44"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RuntimeRestStateSeamEditorTests.cs",
+      "sha256": "47cee10aacf652a933e084d60b324178e2ee583d6dd02cc100a0bf6b2c13955d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/StrictDelayedInputBufferEditorTests.cs",
+      "sha256": "61bfc5b930e704354b93240bed58995255f27cf88901c6cf842c4fffb51261d0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/UnityPresentContentAuthorityEditorTests.cs",
+      "sha256": "d5f5932006b9a2452a9a35db13ba56eb3053681282bb48cfa66f5707334245cb"
+    },
+    {
+      "path": "Tools/NTSD28ContentAudit/UnityContentCapture.cs",
+      "sha256": "c433097d83c6ee0f0e61bf1039612a1a3fa157f87c0e85026ba14ce51e8ac519"
+    },
+    {
+      "path": "Tools/NTSD28Parity/B0DomainRawComparator.cs",
+      "sha256": "0f86b6a14da9eb4926a48ad6ea0206e19d4be8634e775268b9a334834d577e83"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceComparator.cs",
+      "sha256": "f9294397a790a938b131a139c3ae41dc6152affebff688965f4f452cdddd9818"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceContract.cs",
+      "sha256": "59f078e29e9c2e1aa1b315e2bdc4b1bfb159cae394156e20789a0686fd13a1d4"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceContractSelfTest.cs",
+      "sha256": "20ee1ce936a9f71e5df72fd62a6d05bb9ac82204f58431b13e86c94b0dac7324"
+    },
+    {
+      "path": "Tools/NTSD28PngDecode/PngCorpusVerifier.cs",
+      "sha256": "5612d711c9bc14f5dd910254771ac74429b871459cd0c0e0fca5ad9f01b1c2a2"
+    },
+    {
+      "path": "Tools/NTSDParity/CanonicalJson.cs",
+      "sha256": "a6bcc56f3dcd4768434491b9081d6b80844d02dfc76b467d45728f53dfc09aae"
+    }
+  ]
+}

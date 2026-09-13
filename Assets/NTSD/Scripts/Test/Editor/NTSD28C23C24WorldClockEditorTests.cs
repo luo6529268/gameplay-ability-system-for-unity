@@ -57,13 +57,21 @@ namespace NTSD.Test.Editor
                 1,
                 buildPresentation: false);
 
-            Assert.That(PhaseAt(diagnostics, 23), Is.EqualTo(BattleTickPhase.PreFrameBounds));
-            Assert.That(PhaseAt(diagnostics, 24), Is.EqualTo(BattleTickPhase.FramePostProcess));
-            Assert.That(PhaseAt(diagnostics, 25), Is.EqualTo(BattleTickPhase.NativeResourceTick));
-            Assert.That(PhaseAt(diagnostics, 26), Is.EqualTo(BattleTickPhase.NativeFrameTick));
-            Assert.That(PhaseAt(diagnostics, 27), Is.EqualTo(BattleTickPhase.LateEntityUpdate));
-            Assert.That(PhaseAt(diagnostics, 28), Is.EqualTo(BattleTickPhase.FrameAdvance));
-            Assert.That(diagnostics.LastPhaseSequenceCount, Is.EqualTo(34));
+            int boundsIndex = -1;
+            for (int index = 0; diagnostics.TryGetLastPhaseAt(index, out BattleTickPhase phase); index++)
+            {
+                if (phase != BattleTickPhase.PreFrameBounds)
+                    continue;
+                Assert.That(boundsIndex, Is.EqualTo(-1), "The tail must occur once per complete tick.");
+                boundsIndex = index;
+            }
+            Assert.That(boundsIndex, Is.GreaterThanOrEqualTo(0));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 1), Is.EqualTo(BattleTickPhase.FramePostProcess));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 2), Is.EqualTo(BattleTickPhase.NativeResourceTick));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 3), Is.EqualTo(BattleTickPhase.NativeFrameTick));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 4), Is.EqualTo(BattleTickPhase.LateEntityUpdate));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 5), Is.EqualTo(BattleTickPhase.FrameAdvance));
+            Assert.That(diagnostics.LastPhaseSequenceCount, Is.EqualTo(33));
         }
 
         [Test]
@@ -100,8 +108,8 @@ namespace NTSD.Test.Editor
             Assert.That(snapshot.NativeClock.FrameSequence, Is.EqualTo(99UL));
             Assert.That(after, Is.Not.EqualTo(before));
             Assert.That(BattleWorldCoreScalarSnapshot.CurrentSchemaVersion, Is.EqualTo(11));
-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(20));
-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(23));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(21));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(24));
         }
 
         private static BattleTickPhase PhaseAt(

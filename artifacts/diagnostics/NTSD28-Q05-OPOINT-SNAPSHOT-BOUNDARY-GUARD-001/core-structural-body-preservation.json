@@ -1,0 +1,37 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs",
+    "method": "private BattleTickCompletion RunTick(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal LF2Entity Spawn(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal void SpawnMultiple(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal void Register(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal void Unregister(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal void Free(",
+    "oldBodyPreservedContiguously": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "method": "internal void Destroy(",
+    "oldBodyPreservedContiguously": true
+  }
+]

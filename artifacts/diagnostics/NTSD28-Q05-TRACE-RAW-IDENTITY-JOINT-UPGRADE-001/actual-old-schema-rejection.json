@@ -1,0 +1,18 @@
+{
+  "schema": "ntsd28-authority-source-capture-validation-v2",
+  "contentIdentityKey": "",
+  "source": "negative-old-authority-v1.raw.jsonl",
+  "status": "invalid",
+  "valid": false,
+  "certificateEligible": false,
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scenarioId": "",
+  "authoritySourceManifestSha256": "",
+  "captureRunnerSourceSha256": "",
+  "captureBinarySha256": "",
+  "scenarioDataSha256": "",
+  "expectedTicks": 0,
+  "validatedTicks": 0,
+  "entitySnapshots": 0,
+  "reason": "schema-mismatch: expected ntsd28-authority-source-capture-v2, got ntsd28-authority-source-capture-v1"
+}

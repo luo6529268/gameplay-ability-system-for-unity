@@ -1,7 +1,16 @@
 # NTSD28AuthorityTrace
 
+The v2 source wrapper hashes the actual catalog and referenced DAT bytes using
+the same frozen BinaryWriter/semantic-byte contract as Unity. It rechecks inputs
+after initialization and after simulation. The content object records raw and
+semantic identity, scope/profile and joint schemas; it does not accept a caller
+provided content digest. Windows system BCrypt supplies SHA-256.
+`trace_binding_witness.cpp` is a separate unit witness for the actual output
+helper (-1/0/37 versus owner19), not a gameplay capture or formal EXE certificate.
+
+
 This workspace-owned diagnostic runner compiles the unchanged NTSD 2.8-Logan
-playable/core sources and emits the 49-field raw entity capture consumed by
+playable/core sources and emits the 50-field raw entity capture consumed by
 `NTSD28Parity`. With `--domain-output`, the same run also emits applied input,
 the two source-native authority RNG streams, physical slot/allocation-epoch
 snapshots, and snapshot-derived lifecycle deltas. It never builds into or
@@ -20,7 +29,7 @@ Formal-EXE observation remains a separate evidence boundary.
 `Scenarios/input-standing-attack-rng.json` exercises one synchronized direct
 call at completed tick 2: call-site `0x82`, upper bound `2`.
 
-`Scenarios/input-ai-one-entity-rng.json` enables one low-slot native AI through
+Historical pre-D-023 content comparison: `Scenarios/input-ai-one-entity-rng.json` enables one low-slot native AI through
 `nativeComputerState1b8=3`. The first-tick readiness and host-pending projection
 fixes now make Unity and authority consume the same 6/7/8 synchronized calls
 across ticks 1/2/3, including call sites, bounds, results, and after-state.

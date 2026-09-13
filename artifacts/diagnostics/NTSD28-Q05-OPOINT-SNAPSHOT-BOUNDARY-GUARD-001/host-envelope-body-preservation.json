@@ -1,0 +1,22 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "method": "private bool StepOneTickInternal(int tickIndex, bool buildPresentation)",
+    "originalBodyTokensPreserved": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "method": "private bool StepOneTickInternal(",
+    "originalBodyTokensPreserved": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Host/BattleSimulationWorkerBoundary.cs",
+    "method": "public BattleSimulationTickPublication Execute(",
+    "originalBodyTokensPreserved": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/InProcessBattleKernelHost.cs",
+    "method": "internal bool TryStepOneTick(FrameInputSet frame)",
+    "originalBodyTokensPreserved": true
+  }
+]

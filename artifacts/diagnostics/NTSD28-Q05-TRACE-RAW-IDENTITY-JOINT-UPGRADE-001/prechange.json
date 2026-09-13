@@ -1,0 +1,101 @@
+{
+  "paths": [
+    "Tools/NTSD28Parity/TraceContract.cs",
+    "Tools/NTSD28Parity/TraceComparator.cs",
+    "Tools/NTSD28Parity/EntityFieldContract.cs",
+    "Tools/NTSD28Parity/RawEntityCaptureComparator.cs",
+    "Tools/NTSD28Parity/AuthorityCaptureValidator.cs",
+    "Tools/NTSD28Parity/TraceContractSelfTest.cs",
+    "Tools/NTSD28Parity/TraceContentIdentity.cs",
+    "Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp",
+    "Tools/NTSD28AuthorityTrace/Build-AuthoritySourceCapture.ps1",
+    "Assets/NTSD/Scripts/Simulation/Diagnostics/NTSD28UnityEntityRawCapture.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28TraceContentIdentity.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TraceIdentityEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityEntityRawCaptureEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FJStateCarrierEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+    "Tools/NTSD28Parity/Program.cs",
+    "Tools/NTSD28AuthorityTrace/trace_binding_witness.cpp"
+  ],
+  "files": [
+    {
+      "path": "Tools/NTSD28Parity/TraceContract.cs",
+      "sha256": "59f078e29e9c2e1aa1b315e2bdc4b1bfb159cae394156e20789a0686fd13a1d4"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceComparator.cs",
+      "sha256": "f9294397a790a938b131a139c3ae41dc6152affebff688965f4f452cdddd9818"
+    },
+    {
+      "path": "Tools/NTSD28Parity/EntityFieldContract.cs",
+      "sha256": "282ca0c05dde99c884101f105ce710fbf34f599a4f0ac685af1c59b0bb28f1ad"
+    },
+    {
+      "path": "Tools/NTSD28Parity/RawEntityCaptureComparator.cs",
+      "sha256": "5fa7e86c2ed8079af443b60a90b8de4f2700a407d8c54df47354a9eb539ebd2c"
+    },
+    {
+      "path": "Tools/NTSD28Parity/AuthorityCaptureValidator.cs",
+      "sha256": "4d3a11b3338d0b66653b873ab782f1e78941ca845478a634aaa3e20248ae9bb6"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceContractSelfTest.cs",
+      "sha256": "20ee1ce936a9f71e5df72fd62a6d05bb9ac82204f58431b13e86c94b0dac7324"
+    },
+    {
+      "path": "Tools/NTSD28Parity/TraceContentIdentity.cs",
+      "sha256": null
+    },
+    {
+      "path": "Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp",
+      "sha256": "6ebadf2fbacb51e089881a5a5cd31f296a12a69c44ef8775294aa3909c54b67e"
+    },
+    {
+      "path": "Tools/NTSD28AuthorityTrace/Build-AuthoritySourceCapture.ps1",
+      "sha256": "5b0dde60cef696ccc2943245d1d204312e20b0cb354fc9511bd1d947456d5001"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Diagnostics/NTSD28UnityEntityRawCapture.cs",
+      "sha256": "16b0fe11c8d224322741e4a1b50637cf58003e5c1f766bf19d77f4a1c21830f4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "sha256": "68439091d712cdda7a395fb4eb5cae1bbd81eb9a5bae97eb4c34c66eb1de2f44"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28TraceContentIdentity.cs",
+      "sha256": null
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TraceIdentityEditorTests.cs",
+      "sha256": null
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityEntityRawCaptureEditorTests.cs",
+      "sha256": "efcfa2bca600f877ba804622cc24fa4cf0ae68af23dc7b2266e36de5a4683548"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditorTests.cs",
+      "sha256": "235e5db6b3f48a1bb24d1045b3ad55eefc784b82fd75f9a34a7881c89cec203d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FJStateCarrierEditorTests.cs",
+      "sha256": "a4be263b3083338613625f90003cb9ba3c85057c9e40ec9066788b9617b508ac"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs",
+      "sha256": "a8620ed8aeef870045d15bf99efd2b0d7932701c79293ffdf73264204e572535"
+    },
+    {
+      "path": "Tools/NTSD28Parity/Program.cs",
+      "sha256": "5e2c8f1efeae378a1cf2d3e70969c34b8410ce2c4c39ae61061093b4685bdfbe"
+    },
+    {
+      "path": "Tools/NTSD28AuthorityTrace/trace_binding_witness.cpp",
+      "sha256": null
+    }
+  ]
+}

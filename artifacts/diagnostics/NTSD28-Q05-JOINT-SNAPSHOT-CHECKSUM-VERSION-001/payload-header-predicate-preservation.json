@@ -1,0 +1,8 @@
+{
+  "exactOriginalInvalidHeaderPredicatePreserved": true,
+  "reusedBy": [
+    "TryPublish",
+    "IsValid -> restore/session/ring"
+  ],
+  "noSourceMutationOnIsValid": true
+}

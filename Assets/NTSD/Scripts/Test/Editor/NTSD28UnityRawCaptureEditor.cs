@@ -20,7 +20,7 @@ namespace NTSD.EditorTools
     [InitializeOnLoad]
     public static class NTSD28UnityRawCaptureEditor
     {
-        internal const string CaptureSchema = "ntsd28-unity-raw-capture-v1";
+        internal const string CaptureSchema = "ntsd28-unity-raw-capture-v2";
         internal const string EvidenceClass =
             "UNITY_CURRENT_RUNTIME_DIAGNOSTIC_ONLY";
         internal const string DomainCaptureSchema =
@@ -56,8 +56,6 @@ namespace NTSD.EditorTools
             "odBearBecauseHeIsVeryGoodSiuHungIsAGo";
         private const string FormalAuthorityExeSha256 =
             "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033";
-        private const string UnityContentRawManifestSha256 =
-            "D32B49D32B57C21E5743A4103FEE8152A58BBA0ADD01C2446D2D76A52D1A0346";
         private const string LegacyScenarioReferenceSha256 =
             "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B";
         private const int Stage23Width = 1330;
@@ -77,6 +75,11 @@ namespace NTSD.EditorTools
         public static void RunDefaultCapture()
         {
             RunAndWriteResult(DefaultScenario, DefaultOutput);
+        }
+
+        internal static string RunLoganScenarioForTests(string runtimeRoot, string scenarioPath, string outputPath)
+        {
+            return RunScenario(scenarioPath, outputPath, null, null, runtimeRoot);
         }
 
         internal static string RunScenarioForTests(
@@ -138,7 +141,8 @@ namespace NTSD.EditorTools
                     scenario,
                     output,
                     request.domainOutputPath,
-                    request.inputRngOutputPath);
+                    request.inputRngOutputPath,
+                    request.loganRuntimeRoot);
             }
             finally
             {
@@ -159,7 +163,8 @@ namespace NTSD.EditorTools
             string scenarioPath,
             string outputPath,
             string domainOutputPath = null,
-            string inputRngOutputPath = null)
+            string inputRngOutputPath = null,
+            string loganRuntimeRoot = null)
         {
             string resultPath = ProjectPath(ResultFile);
             Directory.CreateDirectory(
@@ -170,7 +175,8 @@ namespace NTSD.EditorTools
                     scenarioPath,
                     outputPath,
                     domainOutputPath,
-                    inputRngOutputPath);
+                    inputRngOutputPath,
+                    loganRuntimeRoot);
                 File.WriteAllText(
                     resultPath,
                     $"PASS{Environment.NewLine}{resolvedOutput}",
@@ -193,7 +199,8 @@ namespace NTSD.EditorTools
             string scenarioPath,
             string outputPath,
             string domainOutputPath,
-            string inputRngOutputPath)
+            string inputRngOutputPath,
+            string loganRuntimeRoot = null)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
@@ -242,7 +249,8 @@ namespace NTSD.EditorTools
                 .OrderBy(value => value)
                 .ToArray();
 
-            using var dataScope = new UnityCurrentDatScope(requestedObjectIds);
+            using var dataScope = new UnityCurrentDatScope(requestedObjectIds, loganRuntimeRoot);
+            dataScope.AssertInputsCurrent();
             int[] missingObjectIds = requestedObjectIds
                 .Where(objectId => !dataScope.Configs.ContainsKey(objectId))
                 .ToArray();
@@ -256,7 +264,7 @@ namespace NTSD.EditorTools
             using var driverScope = new TemporarySimulationDriverScope();
             SimulationTickDriver driver = driverScope.Driver;
             SimulationWorld world = driver.World;
-            ConfigureWorldAndRoster(world, dataScope.Configs, scenario);
+            ConfigureWorldAndRoster(world, dataScope.Configs, scenario, dataScope.IsLogan);
             var directRngCalls = new NativeRandomDirectCallRecorder();
             world.NativeRandom.SetDiagnosticCallObserver(directRngCalls);
             world.SetAcceptedAiRandomTraceObserverForDiagnostics(
@@ -291,7 +299,8 @@ namespace NTSD.EditorTools
                 writer.WriteLine(BuildHeaderJson(
                     resolvedScenarioPath,
                     scenario,
-                    world.RuntimeSlotCapacityForDiagnostics));
+                    world.RuntimeSlotCapacityForDiagnostics,
+                    dataScope.Content));
                 List<DomainOccupant> previousOccupants =
                     CaptureDomainOccupants(world);
                 ulong previousRngCalls = world.Rng.CallCount;
@@ -378,6 +387,16 @@ namespace NTSD.EditorTools
                 inputRngWriter?.Dispose();
             }
 
+            try
+            {
+                dataScope.AssertInputsCurrent();
+            }
+            catch
+            {
+                writer.WriteLine("INVALID_CONTENT_INPUTS_CHANGED");
+                writer.Flush();
+                throw;
+            }
             return resolvedOutputPath;
         }
 
@@ -549,7 +568,8 @@ namespace NTSD.EditorTools
         private static void ConfigureWorldAndRoster(
             SimulationWorld world,
             IReadOnlyDictionary<int, LF2CharacterDataWrapper> configs,
-            UnityRawScenario scenario)
+            UnityRawScenario scenario,
+            bool loganContent)
         {
             world.ResetRuntimeState();
             if (world.AiExecutionProfile !=
@@ -589,7 +609,8 @@ namespace NTSD.EditorTools
                 LF2Character character = CreateCharacter(
                     world,
                     configs[source.oid],
-                    source);
+                    source,
+                    loganContent);
                 BattleSlotRuntimeState rosterSlot =
                     runtime.Roster.Slots[source.slot];
                 bool aiControlled =
@@ -609,7 +630,8 @@ namespace NTSD.EditorTools
         private static LF2Character CreateCharacter(
             SimulationWorld world,
             LF2CharacterDataWrapper wrapper,
-            UnityRawCombatant source)
+            UnityRawCombatant source,
+            bool loganContent)
         {
             var character = new LF2Character();
             character.ModuleInitialize();
@@ -623,7 +645,15 @@ namespace NTSD.EditorTools
                     $"Scenario oid {source.oid} did not register into the capture world.");
             }
 
-            character.Initialize(source.hp, source.mp);
+            int baseMaxMp = loganContent
+                ? wrapper.characterData.NativeMetadata.Stats.Int32OrDefault("max_mp", source.mp)
+                : source.mp;
+            character.Initialize(source.hp, baseMaxMp);
+            if (loganContent)
+            {
+                character.Runtime.MP = source.mp;
+                character.Runtime.PP = source.mp;
+            }
             character.Runtime.HPBound = source.baseHp;
             character.Runtime.HP3 = source.baseHp;
             character.Team = source.team;
@@ -662,7 +692,8 @@ namespace NTSD.EditorTools
         private static string BuildHeaderJson(
             string scenarioPath,
             UnityRawScenario scenario,
-            int slotCapacity)
+            int slotCapacity,
+            Dictionary<string, object> content)
         {
             string assemblyPath = typeof(NTSD28UnityRawCaptureEditor)
                 .Assembly.Location;
@@ -689,8 +720,8 @@ namespace NTSD.EditorTools
                 ("schema", CaptureSchema),
                 ("slotCapacity", slotCapacity),
                 ("unityAssemblySha256", ComputeFileSha256(assemblyPath)),
-                ("unityContentAuthorityRawManifestSha256",
-                    UnityContentRawManifestSha256)));
+                ("runtimeAssemblySha256", ComputeFileSha256(typeof(NTSD28UnityEntityRawCapture).Assembly.Location)),
+                ("content", (object)content)));
         }
 
         private static string BuildDomainHeaderJson(
@@ -1299,8 +1330,25 @@ namespace NTSD.EditorTools
             private readonly List<DictionaryEntry> originalObjectsByType;
             private readonly List<DictionaryEntry> originalBackgroundLookup;
 
-            public UnityCurrentDatScope(IReadOnlyCollection<int> requestedObjectIds)
+            private readonly LoganObjectCatalog loganCatalog;
+            private readonly FieldInfo registryField;
+            private readonly object originalRegistry;
+            private readonly string originalPublishedKey;
+            private readonly LoganContentIdentity originalPublishedIdentity;
+
+            public UnityCurrentDatScope(IReadOnlyCollection<int> requestedObjectIds, string loganRuntimeRoot)
             {
+                // Prepare source values before any singleton publication is changed.
+                if (!string.IsNullOrWhiteSpace(loganRuntimeRoot))
+                {
+                    loganCatalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(loganRuntimeRoot));
+                    Configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(loganCatalog);
+                    Content = NTSD28TraceContentIdentity.FromLoganRaw(loganCatalog.DefinitionFingerprint);
+                }
+                else
+                {
+                    Content = NTSD28TraceContentIdentity.CaptureLegacy(ProjectPath(ProductionConfigRoot), ProjectPath(ProductionDataIndex));
+                }
                 ownsDataManager = !GameDataManager.HasInstance;
                 dataManager = GameDataManager.Instance ??
                     throw new InvalidOperationException(
@@ -1340,17 +1388,65 @@ namespace NTSD.EditorTools
                 originalObjectsByType = Snapshot(objectsByType);
                 originalBackgroundLookup = Snapshot(backgroundLookup);
 
-                cachedConfigField.SetValue(dataManager, null);
-                objectLookupField.SetValue(dataManager, null);
-                objectsByType.Clear();
-                backgroundLookup.Clear();
-                dataManager.LoadDataFile(ProjectPath(ProductionDataIndex));
-
-                Configs = LoadRequestedConfigs(requestedObjectIds);
-                frameConfigField.SetValue(animationManager, Configs);
+                registryField = RequireField(typeof(GameDataManager), "objectRegistryIndices", flags);
+                originalRegistry = registryField.GetValue(dataManager);
+                originalPublishedKey = dataManager.PublishedVisualContentKey;
+                originalPublishedIdentity = dataManager.PublishedLoganContentIdentity;
+                try
+                {
+                    cachedConfigField.SetValue(dataManager, null);
+                    objectLookupField.SetValue(dataManager, null);
+                    objectsByType.Clear();
+                    backgroundLookup.Clear();
+                    registryField.SetValue(dataManager, new Dictionary<int, int>());
+                    if (loganCatalog == null)
+                    {
+                        dataManager.LoadDataFile(ProjectPath(ProductionDataIndex));
+                        Configs = LoadRequestedConfigs(requestedObjectIds);
+                    }
+                    else
+                    {
+                        var config = new GameDataConfig();
+                        var lookup = new Dictionary<int, ObjectDefinition>();
+                        var registry = new Dictionary<int, int>();
+                        foreach (LoganObjectCatalog.Entry entry in loganCatalog.Entries)
+                        {
+                            var definition = new ObjectDefinition(entry.Id, entry.Type, entry.DatPath);
+                            config.objects.Add(definition);
+                            lookup.Add(entry.Id, definition);
+                            registry.Add(entry.Id, entry.RegistryIndex);
+                            if (!objectsByType.Contains(entry.Type))
+                                objectsByType[entry.Type] = new List<ObjectDefinition>();
+                            ((List<ObjectDefinition>)objectsByType[entry.Type]).Add(definition);
+                        }
+                        cachedConfigField.SetValue(dataManager, config);
+                        objectLookupField.SetValue(dataManager, lookup);
+                        registryField.SetValue(dataManager, registry);
+                    }
+                    typeof(GameDataManager).GetProperty("PublishedVisualContentKey").SetValue(dataManager, null);
+                    typeof(GameDataManager).GetProperty("PublishedLoganContentIdentity").SetValue(dataManager, loganCatalog?.ContentIdentity);
+                    frameConfigField.SetValue(animationManager, Configs);
+                    AssertInputsCurrent();
+                }
+                catch
+                {
+                    Dispose();
+                    throw;
+                }
             }
 
             public Dictionary<int, LF2CharacterDataWrapper> Configs { get; }
+            internal Dictionary<string, object> Content { get; }
+            internal bool IsLogan => loganCatalog != null;
+
+            internal void AssertInputsCurrent()
+            {
+                Dictionary<string, object> current = loganCatalog == null
+                    ? NTSD28TraceContentIdentity.CaptureLegacy(ProjectPath(ProductionConfigRoot), ProjectPath(ProductionDataIndex))
+                    : NTSD28TraceContentIdentity.FromLoganRaw(LoganObjectCatalog.Read(loganCatalog.Source).DefinitionFingerprint);
+                if (!Equals(current["semanticSha256"], Content["semanticSha256"]))
+                    throw new InvalidDataException("Capture content inputs changed during loading or simulation.");
+            }
 
             public void Dispose()
             {
@@ -1379,6 +1475,9 @@ namespace NTSD.EditorTools
                     {
                         cachedConfigField.SetValue(dataManager, originalCachedConfig);
                         objectLookupField.SetValue(dataManager, originalObjectLookup);
+                        registryField.SetValue(dataManager, originalRegistry);
+                        typeof(GameDataManager).GetProperty("PublishedVisualContentKey").SetValue(dataManager, originalPublishedKey);
+                        typeof(GameDataManager).GetProperty("PublishedLoganContentIdentity").SetValue(dataManager, originalPublishedIdentity);
                         Restore(
                             (IDictionary)objectsByTypeField.GetValue(dataManager),
                             originalObjectsByType);
@@ -1501,6 +1600,7 @@ namespace NTSD.EditorTools
             public string outputPath;
             public string domainOutputPath;
             public string inputRngOutputPath;
+            public string loganRuntimeRoot;
         }
 
         [Serializable]

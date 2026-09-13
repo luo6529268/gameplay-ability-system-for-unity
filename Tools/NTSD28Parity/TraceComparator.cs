@@ -7,7 +7,6 @@ namespace NTSD28Parity;
 internal static class TraceComparator
 {
     internal const string EqualStructureStatus = "equal-structure";
-    internal const string ContentStrategyPendingStatus = "content-strategy-pending";
 
     internal static TraceValidationReport ValidateFile(string tracePath)
     {
@@ -89,7 +88,7 @@ internal static class TraceComparator
             return report;
         }
         catch (Exception exception) when (
-            exception is TraceContractException or
+            exception is InvalidDataException or TraceContractException or
             JsonException or
             FormatException or
             OverflowException)
@@ -151,10 +150,8 @@ internal static class TraceComparator
         report.AuthorityContentManifestSha256 =
             authorityHeader.ContentManifestSha256;
         report.UnityContentManifestSha256 = unityHeader.ContentManifestSha256;
-        bool contentMismatch = !string.Equals(
-            authorityHeader.ContentManifestSha256,
-            unityHeader.ContentManifestSha256,
-            StringComparison.OrdinalIgnoreCase);
+        if (authorityHeader.ContentIdentityKey != unityHeader.ContentIdentityKey)
+            return Fail(report, "header", 0, "content-identity-mismatch");
 
         for (int index = 0; index < authorityHeader.ExpectedTickCount; index++)
         {
@@ -260,10 +257,7 @@ internal static class TraceComparator
                 "extra-unity-tick-after-declared-range");
         }
 
-        report.Status = contentMismatch
-            ? ContentStrategyPendingStatus
-            : EqualStructureStatus;
-        report.ContentStrategyPending = contentMismatch;
+        report.Status = EqualStructureStatus;
         return report;
     }
 
@@ -339,9 +333,8 @@ internal static class TraceComparator
         int slotCapacity = RequirePositiveInt32(header, "slotCapacity");
 
         JsonObject content = RequireObject(header, "content");
-        RequireExactProperties(content, "content", "policy", "manifestSha256");
-        RequireString(content, "policy", TraceContract.ContentPolicy);
-        string contentManifest = RequireSha256(content, "manifestSha256");
+        string contentIdentityKey = TraceContentIdentity.Validate(content, producer == "authority");
+        string contentManifest = RequireSha256(content, "rawDefinitionSha256");
 
         JsonArray approvedExceptions = RequireArray(
             header,
@@ -374,7 +367,8 @@ internal static class TraceComparator
             firstCompletedTick,
             expectedTickCount,
             slotCapacity,
-            contentManifest);
+            contentManifest,
+            contentIdentityKey);
     }
 
     private static string? CompareHeaders(HeaderInfo authority, HeaderInfo unity)
@@ -701,9 +695,9 @@ internal static class TraceComparator
         return report;
     }
 
-    private static bool IsContractFailure(Exception exception)
+    internal static bool IsContractFailure(Exception exception)
     {
-        return exception is TraceContractException or
+        return exception is InvalidDataException or TraceContractException or
             JsonException or
             FormatException or
             OverflowException;
@@ -912,7 +906,8 @@ internal static class TraceComparator
         long FirstCompletedTick,
         int ExpectedTickCount,
         int SlotCapacity,
-        string ContentManifestSha256);
+        string ContentManifestSha256,
+        string ContentIdentityKey);
 
     private sealed record ValidatedTick(
         long CompletedTick,
@@ -949,7 +944,6 @@ internal sealed class TraceComparisonReport
     public string Unity { get; set; } = string.Empty;
     public string Status { get; set; } = string.Empty;
     public bool CertificateEligible { get; set; }
-    public bool ContentStrategyPending { get; set; }
     public int ExpectedTicks { get; set; }
     public int TicksCompared { get; set; }
     public int AuthoritySlotCapacity { get; set; }

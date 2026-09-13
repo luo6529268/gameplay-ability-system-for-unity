@@ -1,0 +1,9 @@
+# World clock phase索引旧夹具
+
+IN_PROGRESS / TEST_ONLY。版本相关首次276中1个旧FullTick_RecordsC23AndC24BeforeC25Skeleton失败，既有Unity删除positive-link phase后硬编码index23已是FramePostProcess。当前正式simulation_tick_driver.cpp末尾明确finalize_horizontal_hit_impulses→begin_native_resource_tick→begin_frame_tick→ascending slot loop；Unity PreFrameBounds→FramePostProcess→NativeResourceTick→NativeFrameTick→LateEntityUpdate次序保持，不能为测试恢复退休pass。
+
+仅该测试定位唯一PreFrameBounds后断言这5项相邻顺序，避免将早先其他phase数量当C23/C24语义。既有schema断言由JOINT-SNAPSHOT-CHECKSUM-VERSION负责，本Record不改其数值。保留原FAIL；验收最窄此类加相关回归及SelfCheck。无production/资源/Scene/非战斗更改，禁止computer-use；回滚需批准，按此preimage差量且保留已升版本。
+
+## 最新出口
+
+VERIFIED_TEST_ONLY，实际报告与失败闭合见同Change Record；Q05仍未发布。

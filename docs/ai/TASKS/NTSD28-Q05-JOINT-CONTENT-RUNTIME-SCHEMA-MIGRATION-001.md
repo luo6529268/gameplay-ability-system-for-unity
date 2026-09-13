@@ -62,3 +62,7 @@ Definition头部审计 NTSD28-Q05-NATIVE-DEFINITION-HEADER-CONTRACT-AUDIT-001 �
 最新步骤2限定出口：NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001完整清理HolderCopy及task/diagnostic，863有纠正后通过证据、SelfCheck与真实关系Play通过；五类载体和Mass/Oscillate、独立2F8/raw已验。下一唯一NTSD28-Q05-CONTENT-IDENTITY-AND-CAPTURE-BOUNDARY-001，按步骤3身份/双OPoint guard→步骤4联合版本/trace→步骤5回放/Play；本父整体未完成。禁止computer-use，全部例外/未发布窗口保持。
 
 最新步骤3身份限定出口：NTSD28-Q05-SEMANTIC-CONTENT-IDENTITY-001已完成source+decoder SHA/LE、cache/pub/local验证会话接线，82不同focused/完整SelfCheck/独立hash/menu重进Play通过。下一唯一NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001；双OPoint guard、其他存在的frame/metadata内容hash审查、联合版本/trace/回放仍待，不发布中间baseline。禁止computer-use。
+
+## 当前子步骤出口
+
+步骤3hash消费者审计NTSD28-Q05-REMAINING-CONTENT-HASH-CONSUMER-AUDIT-001限定闭合；步骤4五版本NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERSION-001已FOCUSED_TEST_PASS/SCOPED_PLAY_PASS，当前13/21/24/2/2。下一NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001，trace/raw/source identity与50字段未完成，仍INTERMEDIATE_UNPUBLISHED；步骤5完整replay/Play后继，不重做已完成来源/载体/identity/guard。

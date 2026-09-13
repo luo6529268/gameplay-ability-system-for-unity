@@ -1,0 +1,231 @@
+{
+  "schema": "ntsd28-logan-trace-self-test-v3",
+  "passed": false,
+  "cases": [
+    {
+      "name": "Q05-current-trace-version",
+      "expectedStatus": "v3",
+      "actualStatus": "v3",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-independent-2f8-binding",
+      "expectedStatus": "bound",
+      "actualStatus": "bound",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-semantic-header-required",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-trace-version-rejected",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "schema-mismatch: expected ntsd28-logan-battle-trace-v3, got ntsd28-logan-battle-trace-v2",
+      "passed": true
+    },
+    {
+      "name": "contract-descriptor",
+      "expectedStatus": "descriptor-valid",
+      "actualStatus": "descriptor-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "entity-binding-inventory",
+      "expectedStatus": "binding-inventory-valid",
+      "actualStatus": "binding-inventory-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-valid",
+      "expectedStatus": "valid-source-model-capture",
+      "actualStatus": "exception",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "NTSD28Parity.TraceComparator\u002BTraceContractException: entity-combat-property-set-mismatch\r\n   at NTSD28Parity.TraceComparator.ValidateEntityArrayForContract(JsonArray entities, Int32 slotCapacity) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceComparator.cs:line 620\r\n   at NTSD28Parity.AuthorityCaptureValidator.Validate(TextReader reader, String source) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 126\r\n   at NTSD28Parity.AuthorityCaptureValidator.ValidateTextForTest(String capture) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 43\r\n   at NTSD28Parity.TraceContractSelfTest.\u003C\u003Ec__DisplayClass1_0.\u003CRun\u003Eb__6() in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 70\r\n   at NTSD28Parity.TraceContractSelfTest.RunCase(TraceSelfTestReport report, String name, String expectedStatus, String expectedDomain, Func\u00601 action) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 346",
+      "passed": false
+    },
+    {
+      "name": "authority-source-capture-truncated",
+      "expectedStatus": "invalid",
+      "actualStatus": "exception",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "NTSD28Parity.TraceComparator\u002BTraceContractException: entity-combat-property-set-mismatch\r\n   at NTSD28Parity.TraceComparator.ValidateEntityArrayForContract(JsonArray entities, Int32 slotCapacity) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceComparator.cs:line 620\r\n   at NTSD28Parity.AuthorityCaptureValidator.Validate(TextReader reader, String source) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 126\r\n   at NTSD28Parity.AuthorityCaptureValidator.ValidateTextForTest(String capture) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 43\r\n   at NTSD28Parity.TraceContractSelfTest.\u003C\u003Ec__DisplayClass1_0.\u003CRun\u003Eb__7() in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 84\r\n   at NTSD28Parity.TraceContractSelfTest.RunCase(TraceSelfTestReport report, String name, String expectedStatus, String expectedDomain, Func\u00601 action) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 346",
+      "passed": false
+    },
+    {
+      "name": "authority-source-capture-extra-tick",
+      "expectedStatus": "invalid",
+      "actualStatus": "exception",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "NTSD28Parity.TraceComparator\u002BTraceContractException: entity-combat-property-set-mismatch\r\n   at NTSD28Parity.TraceComparator.ValidateEntityArrayForContract(JsonArray entities, Int32 slotCapacity) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceComparator.cs:line 620\r\n   at NTSD28Parity.AuthorityCaptureValidator.Validate(TextReader reader, String source) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 126\r\n   at NTSD28Parity.AuthorityCaptureValidator.ValidateTextForTest(String capture) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\AuthorityCaptureValidator.cs:line 43\r\n   at NTSD28Parity.TraceContractSelfTest.\u003C\u003Ec__DisplayClass1_0.\u003CRun\u003Eb__8() in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 100\r\n   at NTSD28Parity.TraceContractSelfTest.RunCase(TraceSelfTestReport report, String name, String expectedStatus, String expectedDomain, Func\u00601 action) in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Parity\\TraceContractSelfTest.cs:line 346",
+      "passed": false
+    },
+    {
+      "name": "authority-source-capture-formal-sha-drift",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "formalExeSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "valid-trace",
+      "expectedStatus": "valid-structure",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "equal-with-different-slot-capacity",
+      "expectedStatus": "equal-structure",
+      "actualStatus": "different",
+      "expectedDomain": null,
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "input-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "input",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "rng-call-site-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "rng",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "skipped-completed-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "forged-domain-hash",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "entity-slot-outside-producer-capacity",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-slot-outside-producer-capacity",
+      "passed": true
+    },
+    {
+      "name": "entity-required-field-missing",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "entity-extra-field-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "entity-field-type-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "content-identity-mismatch",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "approved-exception-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: approved-exceptions-mismatch",
+      "passed": true
+    },
+    {
+      "name": "excluded-feature-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: excluded-features-mismatch",
+      "passed": true
+    },
+    {
+      "name": "extra-authority-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "stream",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    },
+    {
+      "name": "malformed-unity-json",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-combat-property-set-mismatch",
+      "passed": false
+    }
+  ]
+}

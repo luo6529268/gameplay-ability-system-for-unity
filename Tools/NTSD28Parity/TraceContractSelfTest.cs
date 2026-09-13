@@ -17,6 +17,30 @@ internal static class TraceContractSelfTest
             Schema = TraceContract.SelfTestSchema,
         };
 
+        RunCase(report, "Q05-current-trace-version", "v3", null,
+            () => (TraceContract.Schema == "ntsd28-logan-battle-trace-v3" ? "v3" : "old", (string?)null, (string?)null));
+        RunCase(report, "Q05-independent-2f8-binding", "bound", null,
+            () => (EntityFieldContract.Fields.Length == 50 && EntityFieldContract.Fields.Any(
+                field => field.Path == "combat.objectAiExcludedGroupSourceSlot") ? "bound" : "missing", (string?)null, (string?)null));
+        RunCase(report, "Q05-semantic-header-required", "invalid", null, () =>
+        {
+            string[] lines = SplitLines(BuildTrace("authority", 1000, new string('A', 64)));
+            JsonObject header = JsonNode.Parse(lines[0])!.AsObject();
+            header["content"]!.AsObject().Remove("semanticSha256");
+            lines[0] = Serialize(header);
+            var validation = TraceComparator.ValidateTextForTest(JoinLines(lines));
+            return (validation.Status, validation.Reason, (string?)null);
+        });
+        RunCase(report, "Q05-old-trace-version-rejected", "invalid", null, () =>
+        {
+            string[] lines = SplitLines(BuildTrace("authority", 1000, new string('A', 64)));
+            JsonObject header = JsonNode.Parse(lines[0])!.AsObject();
+            header["schema"] = "ntsd28-logan-battle-trace-v2";
+            lines[0] = Serialize(header);
+            var validation = TraceComparator.ValidateTextForTest(JoinLines(lines));
+            return (validation.Status, validation.Reason, (string?)null);
+        });
+
         RunCase(
             report,
             "contract-descriptor",
@@ -238,9 +262,9 @@ internal static class TraceContractSelfTest
 
         RunComparisonCase(
             report,
-            "content-strategy-pending",
-            TraceComparator.ContentStrategyPendingStatus,
-            null,
+            "content-identity-mismatch",
+            "different",
+            "header",
             authority,
             BuildTrace(
                 "unity",
@@ -279,6 +303,52 @@ internal static class TraceContractSelfTest
             authority,
             ReplaceLine(unity, lineIndex: 2, "{not-json}"));
 
+        var mutations = new Dictionary<string, Action<JsonObject>>
+        {
+            ["raw-without-rehash"] = content => content["rawDefinitionSha256"] = new string('B', 64),
+            ["invalid-raw"] = content => content["rawDefinitionSha256"] = "not-a-sha",
+            ["false-semantic"] = content => content["semanticSha256"] = new string('0', 64),
+            ["wrong-projection"] = content => content["catalogFingerprint64"] = "0000000000000000",
+            ["wrong-decode"] = content => content["decodeContract"] = "NTSD28_LOGAN_DAT_SEMANTICS_V1",
+            ["retired-policy"] = content => content["policy"] = "strategy-pending",
+            ["wrong-scope"] = content => content["scope"] = "all-assets",
+            ["unknown-profile"] = content => content["profile"] = "unknown",
+            ["extra-content-field"] = content => content["extra"] = 1,
+            ["wrong-schema-type"] = content => content["schemas"] = "13/21/24/2/2",
+            ["extra-schema"] = content => content["schemas"]!["extra"] = 1,
+        };
+        foreach (string property in new[] { "policy", "scope", "profile", "rawDefinitionSha256", "decodeContract", "semanticSha256", "catalogFingerprint64", "schemas" })
+            mutations["missing-" + property] = content => content.Remove(property);
+        foreach (string schema in new[] { "entityRuntime", "aggregate", "checksum", "characterShell", "entityBaseShell" })
+            mutations["old-" + schema] = content => content["schemas"]![schema] = 0;
+        foreach (var mutation in mutations)
+        {
+            RunCase(report, "Q05-" + mutation.Key, "invalid", null, () =>
+            {
+                string[] lines = SplitLines(authority);
+                JsonObject header = JsonNode.Parse(lines[0])!.AsObject();
+                mutation.Value(header["content"]!.AsObject());
+                lines[0] = Serialize(header);
+                var validation = TraceComparator.ValidateTextForTest(JoinLines(lines));
+                return (validation.Status, validation.Reason, (string?)null);
+            });
+        }
+        RunCase(report, "Q05-frozen-semantic-vector", "match", null, () =>
+        {
+            var content = TraceContentIdentity.Create("logan-runtime", "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C");
+            bool matches = content["semanticSha256"]!.GetValue<string>() == "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407" &&
+                content["catalogFingerprint64"]!.GetValue<string>() == "3900ECBC509557DB";
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        RunCase(report, "Q05-source-missing-2f8-rejected", "invalid", null, () =>
+        {
+            string[] lines = SplitLines(authorityCapture);
+            JsonObject tick = JsonNode.Parse(lines[1])!.AsObject();
+            tick["entities"]![0]!["combat"]!.AsObject().Remove("objectAiExcludedGroupSourceSlot");
+            lines[1] = Serialize(tick);
+            var validation = AuthorityCaptureValidator.ValidateTextForTest(JoinLines(lines));
+            return (validation.Status, validation.Reason, (string?)null);
+        });
         report.Passed = report.Cases.All(test => test.Passed);
         return report;
     }
@@ -395,7 +465,7 @@ internal static class TraceContractSelfTest
             }
         }
 
-        return EntityFieldContract.Fields.Length == 49 &&
+        return EntityFieldContract.Fields.Length == 50 &&
                EntityFieldContract.Fields.Select(field => field.Path)
                    .Distinct(StringComparer.Ordinal)
                    .Count() == EntityFieldContract.Fields.Length &&
@@ -461,11 +531,7 @@ internal static class TraceContractSelfTest
                     TraceContract.FastLogicIntervalMilliseconds,
             },
             ["slotCapacity"] = slotCapacity,
-            ["content"] = new JsonObject
-            {
-                ["policy"] = TraceContract.ContentPolicy,
-                ["manifestSha256"] = contentManifest,
-            },
+            ["content"] = TraceContentIdentity.Create("logan-runtime", contentManifest),
             ["approvedExceptions"] = ToJsonArray(
                 TraceContract.ApprovedExceptions),
             ["excludedFeatures"] = ToJsonArray(
@@ -591,6 +657,7 @@ internal static class TraceContractSelfTest
                 ["specialHitLatch0eb"] = false,
                 ["environmentState"] = 0,
                 ["environmentSourceSlot"] = -1,
+                ["objectAiExcludedGroupSourceSlot"] = -1,
             },
             ["lifecycle"] = new JsonObject
             {
@@ -606,6 +673,7 @@ internal static class TraceContractSelfTest
         {
             ["kind"] = "header",
             ["schema"] = AuthorityCaptureValidator.CaptureSchema,
+            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
             ["certificateEligible"] = false,
             ["evidenceClass"] = AuthorityCaptureValidator.EvidenceClass,
             ["formalExeSha256"] = TraceContract.AuthorityExecutableSha256,

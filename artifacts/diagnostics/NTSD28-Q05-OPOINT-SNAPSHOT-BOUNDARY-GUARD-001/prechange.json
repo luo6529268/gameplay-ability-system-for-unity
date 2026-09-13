@@ -8,7 +8,9 @@
     "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
     "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
     "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
-    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointSnapshotBoundaryEditorTests.cs"
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointSnapshotBoundaryEditorTests.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/BattleSimulationWorkerBoundary.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Session/InProcessBattleKernelHost.cs"
   ],
   "files": [
     {
@@ -42,6 +44,14 @@
     {
       "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
       "sha256": "b7e70ada3fd1c1541d002652ccea919bd1eb48064d1289a9097f21ff5f33d276"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/BattleSimulationWorkerBoundary.cs",
+      "sha256": "0766d99e1f447c6ea5a1bd6d40f2e211b899f215b6115d8a0b7bf847db0d0b77"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/InProcessBattleKernelHost.cs",
+      "sha256": "a78bf03fb0fdf3804b9b8dca5c62007fc002f9975664ffe45e4b21ab9c2920d2"
     }
   ]
 }

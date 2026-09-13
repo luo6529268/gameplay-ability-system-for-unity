@@ -1,0 +1,859 @@
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24600:                catalogFingerprint: 0xCA7A10UL,
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24601:                stageFingerprint: 0x57A6EUL,
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24605:                ruleFingerprint: 0xC0DE0001UL,
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24641:                catalogFingerprint: 0xCA7A10UL,
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24642:                stageFingerprint: 0x57A6EUL,
+Assets/NTSD/Scripts/Test\BattleRuntimeSelfCheck.cs:24646:                ruleFingerprint: 0xC0DE0001UL,
+Assets/NTSD/Scripts/Animation\Runtime\BMPLoader.cs:87:                    string actual = System.BitConverter.ToString(hash.ComputeHash(fileData)).Replace("-", string.Empty);
+Assets/NTSD/Scripts/Animation\LF2ArmorData.cs:74:        public ulong ComputeFingerprint64()
+Tools\NTSDParity\CanonicalJson.cs:20:        return Convert.ToHexString(SHA256.HashData(payload)).ToLowerInvariant();
+Tools\NTSDParity\CanonicalJson.cs:24:        => Convert.ToHexString(SHA256.HashData(value)).ToLowerInvariant();
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:1739:        public string rosterFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:1740:        public string workloadFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:1741:        public string implementationConfigFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:4107:    internal static class ProductionEntityStressFingerprint
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:5346:            report.workloadFingerprint = ProductionEntityStressFingerprint.BuildWorkload(config);
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:5347:            report.implementationConfigFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:5348:                ProductionEntityStressFingerprint.BuildImplementationConfig(config);
+Assets/NTSD/Scripts/Animation\Rendering\ProductionEntityStressHarness.cs:5603:            report.rosterFingerprint = ProductionEntityStressFingerprint.BuildRoster(
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressWindow.cs:987:                workloadFingerprint = ProductionEntityStressFingerprint.BuildWorkload(config),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressWindow.cs:988:                implementationConfigFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressWindow.cs:989:                    ProductionEntityStressFingerprint.BuildImplementationConfig(config),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressWindow.cs:1654:            public string workloadFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressWindow.cs:1655:            public string implementationConfigFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:177:        public void StressFingerprint_ProfileChangesImplementationButNotWorkloadIdentity()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:187:                ProductionEntityStressFingerprint.BuildWorkload(dataOriented),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:188:                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:190:                ProductionEntityStressFingerprint.BuildImplementationConfig(dataOriented),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:191:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleAiExecutionProfileEditorTests.cs:205:                outputPath = "Temp/ai-profile-fingerprint.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:261:                ProductionEntityStressFingerprint.BuildWorkload(required),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:263:                    ProductionEntityStressFingerprint.BuildWorkload(disabled)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:671:                ProductionEntityStressFingerprint.BuildImplementationConfig(config),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:672:                Is.Not.EqualTo(ProductionEntityStressFingerprint
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:726:        public void SoundPresentationMode_ExplicitModesAreFingerprintDistinctNotWorkloadDistinct()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:748:                ProductionEntityStressFingerprint.BuildWorkload(suppress),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:749:                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(dispatch)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:751:                ProductionEntityStressFingerprint.BuildImplementationConfig(suppress),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:753:                    ProductionEntityStressFingerprint.BuildImplementationConfig(dispatch)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5241:        public void FingerprintsAndFinalHashes_AreDeterministicAndSerializable()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5249:                outputPath = "Temp/fingerprint.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5254:            string workload = ProductionEntityStressFingerprint.BuildWorkload(config);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5256:                ProductionEntityStressFingerprint.BuildImplementationConfig(config);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5257:            string roster = ProductionEntityStressFingerprint.BuildRoster(
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5271:                workloadFingerprint = workload,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5272:                implementationConfigFingerprint = implementationConfig,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5273:                rosterFingerprint = roster,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5283:            Assert.That(workload, Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(config)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5284:            Assert.That(roster, Is.EqualTo(ProductionEntityStressFingerprint.BuildRoster(
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5313:            Assert.That(json, Does.Contain("\"rosterFingerprint\""));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5314:            Assert.That(json, Does.Contain("\"workloadFingerprint\""));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5315:            Assert.That(json, Does.Contain("\"implementationConfigFingerprint\""));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5321:        public void Fingerprints_LegacyAndCandidateShareWorkloadButNotImplementationConfig()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5330:                outputPath = "Temp/fingerprint-legacy.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5340:                outputPath = "Temp/fingerprint-candidate.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5350:                ProductionEntityStressFingerprint.BuildWorkload(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5351:                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5353:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5354:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5380:                ProductionEntityStressFingerprint.BuildWorkload(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5381:                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5383:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5385:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5389:        public void Fingerprints_FormalCollectorAndDirectRoutesAreImplementationDistinct()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5396:                    outputPath = "Temp/fingerprint-configured.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5404:                    outputPath = "Temp/fingerprint-adaptive.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5413:                    outputPath = "Temp/fingerprint-direct.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5422:                    outputPath = "Temp/fingerprint-tree.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5432:                    outputPath = "Temp/fingerprint-nested.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5442:                    outputPath = "Temp/fingerprint-sweep.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5446:            string configuredFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5447:                ProductionEntityStressFingerprint.BuildImplementationConfig(configured);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5448:            string adaptiveFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5449:                ProductionEntityStressFingerprint.BuildImplementationConfig(adaptive);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5450:            string directFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5451:                ProductionEntityStressFingerprint.BuildImplementationConfig(direct);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5452:            string treeFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5453:                ProductionEntityStressFingerprint.BuildImplementationConfig(tree);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5454:            string nestedFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5455:                ProductionEntityStressFingerprint.BuildImplementationConfig(nested);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5456:            string sweepFingerprint =
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5457:                ProductionEntityStressFingerprint.BuildImplementationConfig(sweep);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5462:                    configuredFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5463:                    adaptiveFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5464:                    directFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5465:                    treeFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5466:                    nestedFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5467:                    sweepFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5562:        public void Fingerprints_CoverSchedulingAndFastPathConfiguration()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5575:                outputPath = "Temp/fingerprint-baseline.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5588:                outputPath = "Temp/fingerprint-scheduled.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5602:                outputPath = "Temp/fingerprint-fastpath.json",
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5640:                ProductionEntityStressFingerprint.BuildWorkload(scheduled),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5641:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5643:                ProductionEntityStressFingerprint.BuildWorkload(noInput),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5644:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5646:                ProductionEntityStressFingerprint.BuildWorkload(differentSeed),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5647:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5649:                ProductionEntityStressFingerprint.BuildWorkload(withPresentation),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5650:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5652:                ProductionEntityStressFingerprint.BuildWorkload(bruteCollector),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5653:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5655:                ProductionEntityStressFingerprint.BuildImplementationConfig(fastPath),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5656:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildImplementationConfig(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5658:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidateStoreAuthority),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5659:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildImplementationConfig(baseline)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5774:        public void FormalSlotMap_LegacyABRequestIsAppliedReportedAndFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5810:                ProductionEntityStressFingerprint.BuildImplementationConfig(dense),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5812:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5816:        public void CollisionSnapshotRoleRoster_LegacyABRequestIsAppliedReportedAndFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5858:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5860:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5864:        public void RoleBodyTemplate_LegacyABRequestIsAppliedReportedAndFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5900:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5902:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5906:        public void PostFrameRuntimeSnapshot_LegacyABRequestIsParsedAndFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5928:                ProductionEntityStressFingerprint.BuildImplementationConfig(candidate),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:5930:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6391:        public void CatchUpCpuBudget_IsParsedReportedAndFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6421:                ProductionEntityStressFingerprint.BuildWorkload(interactive),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6422:                Is.Not.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(throughput)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6426:        public void HitExecutionPlanMode_IsParsedAndImplementationFingerprinted()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6459:                ProductionEntityStressFingerprint.BuildWorkload(data),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6460:                Is.EqualTo(ProductionEntityStressFingerprint.BuildWorkload(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6462:                ProductionEntityStressFingerprint.BuildImplementationConfig(data),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6464:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6835:        public void CharacterPreFrameBoundsMode_DefaultsToDataAndSeparatesLegacyFingerprint()
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6861:                ProductionEntityStressFingerprint.BuildImplementationConfig(data),
+Assets/NTSD/Scripts/Animation\Rendering\Editor\ProductionEntityStressEditorTests.cs:6863:                    ProductionEntityStressFingerprint.BuildImplementationConfig(legacy)));
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:888:            string workloadFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:908:            WorkloadFingerprint = workloadFingerprint ?? string.Empty;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:936:        public string WorkloadFingerprint { get; }
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:952:        public string InputFingerprint { get; internal set; } = string.Empty;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1014:                ["fingerprint"] = WorkloadFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1024:                ["inputFingerprint"] = InputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1045:                ["inputFingerprint"] = InputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1183:            string workloadFingerprint)
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1187:            WorkloadFingerprint = workloadFingerprint ?? string.Empty;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1192:        public string WorkloadFingerprint { get; }
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1247:                ["workloadFingerprint"] = WorkloadFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1281:            string fingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1288:            string inputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1297:            Fingerprint = fingerprint ?? string.Empty;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1305:            InputFingerprint = inputFingerprint ?? string.Empty;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1316:        public string Fingerprint { get; }
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1325:        public string InputFingerprint { get; }
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1395:                string inputFingerprint = ComputeInputFingerprint(0, 0);
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1396:                string fingerprint = ComputeFingerprint(frame, requested, source);
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1401:                    fingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1408:                    inputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1433:            string inputFingerprint = ComputeInputFingerprint(warmupTickCount, sampleTickCount);
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1495:            string fingerprint = ComputeFingerprint(frame, requested, source);
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1500:                fingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1507:                inputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1654:        private static string ComputeInputFingerprint(int warmupTickCount, int sampleTickCount)
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:1700:        private static string ComputeFingerprint(
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:2596:                workload.Fingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:2613:            report.InputFingerprint = workload.InputFingerprint;
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:2980:                report = new BattleRenderingBenchmarkSuiteReport(config, runs.ToArray(), workload.Fingerprint);
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:3048:                runs[0].WorkloadFingerprint != workload.Fingerprint ||
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:3049:                runs[1].WorkloadFingerprint != workload.Fingerprint ||
+Assets/NTSD/Scripts/Animation\Rendering\BattleRenderingBenchmark.cs:3050:                runs[0].InputFingerprint != runs[1].InputFingerprint ||
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:96:            Assert.That(first.InputFingerprint, Is.Not.Empty);
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:100:            Assert.That(first.Fingerprint, Is.EqualTo(second.Fingerprint));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:101:            Assert.That(first.InputFingerprint, Is.EqualTo(second.InputFingerprint));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:367:                    suite.Report.Runs[0].WorkloadFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:368:                    Is.EqualTo(suite.Report.Runs[1].WorkloadFingerprint));
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:373:                    suite.Report.Runs[0].InputFingerprint,
+Assets/NTSD/Scripts/Animation\Rendering\Editor\BattleRenderingBenchmarkEditorTests.cs:374:                    Is.EqualTo(suite.Report.Runs[1].InputFingerprint));
+Assets/NTSD/Scripts/Animation\Manager\CharacterAnimtorManager.cs:162:                GameDataManager.TryGetInstance()?.PublishedLoganContentIdentity?.SemanticFingerprint != candidate.ContentIdentity.SemanticFingerprint ||
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:31:        public string VisualFingerprint { get; }
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:44:                    writer.Write(catalog.DefinitionFingerprint);
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:52:                    VisualFingerprint = Hex(hash.ComputeHash(bytes.ToArray()));
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:55:                + "|" + VisualFingerprint;
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:84:            if (current.DefinitionFingerprint != Catalog.DefinitionFingerprint ||
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:85:                current.ContentIdentity.SemanticFingerprint != ContentIdentity.SemanticFingerprint)
+Assets/NTSD/Scripts/Animation\LoganVisualContentCandidate.cs:111:                return Hex(hash.ComputeHash(stream));
+Assets/NTSD/Scripts/Animation\LoganObjectCatalog.cs:44:        public string DefinitionFingerprint { get; }
+Assets/NTSD/Scripts/Animation\LoganObjectCatalog.cs:67:                DefinitionFingerprint = Hash(bytes.ToArray());
+Assets/NTSD/Scripts/Animation\LoganObjectCatalog.cs:69:            ContentIdentity = LoganContentIdentity.FromDefinitionFingerprint(DefinitionFingerprint);
+Assets/NTSD/Scripts/Animation\LoganObjectCatalog.cs:194:                return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", string.Empty);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:15:        public string RawDefinitionFingerprint { get; }
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:17:        public string SemanticFingerprint { get; }
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:18:        public ulong CatalogFingerprint { get; }
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:20:        private LoganContentIdentity(string rawFingerprint, string contractTag)
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:22:            if (rawFingerprint == null || rawFingerprint.Length != 64)
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:23:                throw new ArgumentException("A 32-byte hexadecimal definition fingerprint is required.", nameof(rawFingerprint));
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:33:                int high = HexDigit(rawFingerprint[i * 2]);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:34:                int low = HexDigit(rawFingerprint[i * 2 + 1]);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:36:                    throw new ArgumentException("Definition fingerprint contains a non-hexadecimal character.", nameof(rawFingerprint));
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:40:            RawDefinitionFingerprint = Hex(raw);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:48:                byte[] digest = sha.ComputeHash(preimage);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:49:                SemanticFingerprint = Hex(digest);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:50:                CatalogFingerprint = ProjectCatalogFingerprint(digest);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:54:        public static LoganContentIdentity FromDefinitionFingerprint(string rawFingerprint)
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:56:            return new LoganContentIdentity(rawFingerprint, CurrentDecodeContractTag);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:59:        internal static LoganContentIdentity ForDecodeContract(string rawFingerprint, string contractTag)
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:61:            return new LoganContentIdentity(rawFingerprint, contractTag);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:69:                + "|" + SemanticFingerprint;
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:73:            ulong sessionId, uint seed, ulong stageFingerprint, IReadOnlyList<int> playerSlots)
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:78:                sessionId, seed, CatalogFingerprint, stageFingerprint, playerSlots);
+Assets/NTSD/Scripts/Animation\LoganContentIdentity.cs:81:        internal static ulong ProjectCatalogFingerprint(byte[] digest)
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldWeaponShellSnapshot.cs:60:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldWeaponShellSnapshot.cs:117:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldStageSpawnSnapshot.cs:11:    /// cannot fit. Static campaign data remains identified by the stage fingerprint.
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldStageSpawnSnapshot.cs:41:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldStageSpawnSnapshot.cs:140:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldSpecialOtherShellSnapshot.cs:73:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldSpecialOtherShellSnapshot.cs:148:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRuntimeSlotSnapshot.cs:83:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRuntimeSlotSnapshot.cs:186:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRosterResultsSnapshot.cs:78:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRosterResultsSnapshot.cs:250:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRestSnapshot.cs:71:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldRestSnapshot.cs:125:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldPendingEventSnapshot.cs:34:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldPendingEventSnapshot.cs:85:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldLivingShellSnapshot.cs:61:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldLivingShellSnapshot.cs:129:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldEntityRuntimeSnapshot.cs:39:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldEntityRuntimeSnapshot.cs:136:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:120:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:226:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCoreScalarSnapshot.cs:275:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCoreScalarSnapshot.cs:306:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCharacterShellSnapshot.cs:54:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCharacterShellSnapshot.cs:117:            IdentityFingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshotRestore.cs:281:                snapshot.IdentityFingerprint != identity.IdentityFingerprint ||
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshotRestore.cs:283:                snapshot.Core.IdentityFingerprint != identity.IdentityFingerprint)
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:54:        public ulong IdentityFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:75:            IdentityFingerprint = 0UL;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:89:            ulong fingerprint = identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:92:                core.IdentityFingerprint != fingerprint ||
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:97:                    RosterResults.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:100:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:105:                    StageSpawn.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:108:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:113:                    RuntimeSlots.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:116:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:121:                    EntityRuntime.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:124:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:129:                    EntityBaseShell.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:132:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:137:                    LivingShell.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:140:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:145:                    CharacterShell.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:148:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:153:                    WeaponShell.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:156:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:161:                    SpecialOtherShell.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:164:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:169:                    PendingEvents.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:172:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:177:                    Rest.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:180:                    fingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:189:            IdentityFingerprint = fingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:199:            ulong actualFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:202:            ulong expectedFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleStateSnapshot.cs:207:                   actualFingerprint == expectedFingerprint &&
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\StrictDelayedInputBuffer.cs:160:            if (packet.CatalogFingerprint != identity.CatalogFingerprint)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\StrictDelayedInputBuffer.cs:161:                return LockstepProtocolReason.CatalogFingerprintMismatch;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\StrictDelayedInputBuffer.cs:162:            if (packet.StageFingerprint != identity.StageFingerprint)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\StrictDelayedInputBuffer.cs:163:                return LockstepProtocolReason.StageFingerprintMismatch;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\StrictDelayedInputBuffer.cs:164:            if (packet.PlayerSetFingerprint != identity.PlayerSetFingerprint)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:13:        CatalogFingerprintMismatch = 6,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:14:        StageFingerprintMismatch = 7,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:48:        public LockstepChecksumMessage(ulong identityFingerprint, int tick, ulong checksum)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:50:            IdentityFingerprint = identityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:55:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:64:            ulong identityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:69:            IdentityFingerprint = identityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSyncMessages.cs:75:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:19:            ulong ruleFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:24:            if (ruleFingerprint == 0)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:25:                throw new ArgumentOutOfRangeException(nameof(ruleFingerprint));
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:26:            if (identity.CatalogFingerprint == 0)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:28:                    "The start barrier requires a non-zero catalog fingerprint.",
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:30:            if (identity.StageFingerprint == 0)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:32:                    "The start barrier requires a non-zero stage fingerprint.",
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:58:            RuleFingerprint = ruleFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:61:            BarrierFingerprint = ComputeBarrierFingerprint();
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:65:        public ulong RuleFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:68:        public ulong BarrierFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:75:                   BarrierFingerprint == other.BarrierFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:84:        private ulong ComputeBarrierFingerprint()
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:87:            CanonicalHash.AddUlong(ref hash, Identity.IdentityFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepStartBarrier.cs:88:            CanonicalHash.AddUlong(ref hash, RuleFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:18:            ulong catalogFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:19:            ulong stageFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:52:            CatalogFingerprint = catalogFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:53:            StageFingerprint = stageFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:54:            PlayerSetFingerprint = ComputePlayerSetFingerprint(canonicalPlayerSlots);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:55:            IdentityFingerprint = ComputeIdentityFingerprint();
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:61:        public ulong CatalogFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:62:        public ulong StageFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:63:        public ulong PlayerSetFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:64:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:87:        private ulong ComputeIdentityFingerprint()
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:93:            CanonicalHash.AddUlong(ref hash, CatalogFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:94:            CanonicalHash.AddUlong(ref hash, StageFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:95:            CanonicalHash.AddUlong(ref hash, PlayerSetFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepSessionIdentity.cs:99:        private static ulong ComputePlayerSetFingerprint(IReadOnlyList<int> slots)
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:19:                identity?.CatalogFingerprint ?? 0,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:20:                identity?.StageFingerprint ?? 0,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:21:                identity?.PlayerSetFingerprint ?? 0,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:34:            ulong catalogFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:35:            ulong stageFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:36:            ulong playerSetFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:46:            CatalogFingerprint = catalogFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:47:            StageFingerprint = stageFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:48:            PlayerSetFingerprint = playerSetFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:59:        public ulong CatalogFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:60:        public ulong StageFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:61:        public ulong PlayerSetFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:73:                   CatalogFingerprint == other.CatalogFingerprint &&
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:74:                   StageFingerprint == other.StageFingerprint &&
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:75:                   PlayerSetFingerprint == other.PlayerSetFingerprint &&
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:89:            CanonicalHash.AddUlong(ref hash, CatalogFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:90:            CanonicalHash.AddUlong(ref hash, StageFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\LockstepFramePacket.cs:91:            CanonicalHash.AddUlong(ref hash, PlayerSetFingerprint);
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\BattleLockstepSession.cs:555:                snapshot.IdentityFingerprint != identity.IdentityFingerprint ||
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\BattleLockstepSession.cs:638:                    frameEntry.IdentityFingerprint != identity.IdentityFingerprint ||
+Assets/NTSD/Scripts/Simulation\Lockstep\Session\BattleLockstepSession.cs:640:                    checksumEntry.IdentityFingerprint != identity.IdentityFingerprint ||
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepSnapshotRing.cs:49:        public ulong IdentityFingerprint => identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepFrameHistoryRing.cs:9:            ulong identityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepFrameHistoryRing.cs:14:            IdentityFingerprint = identityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepFrameHistoryRing.cs:20:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepFrameHistoryRing.cs:63:        public ulong IdentityFingerprint => identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepFrameHistoryRing.cs:133:                identity.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepChecksumHistoryRing.cs:9:            ulong identityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepChecksumHistoryRing.cs:16:            IdentityFingerprint = identityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepChecksumHistoryRing.cs:24:        public ulong IdentityFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepChecksumHistoryRing.cs:65:        public ulong IdentityFingerprint => identity.IdentityFingerprint;
+Assets/NTSD/Scripts/Simulation\Lockstep\History\LockstepChecksumHistoryRing.cs:131:                identity.IdentityFingerprint,
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:397:            byte[] digest = sha.ComputeHash(payload);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:33:        public void AddInt32(int item)
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:59:            AddInt32(BitConverter.SingleToInt32Bits(item));
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:62:        public void AddDouble(double item)
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:70:            AddInt32(count);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:72:                AddInt32(items[index]);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:78:            AddInt32(count);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:80:                AddInt32(items[index]);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:86:            AddInt32(count);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:95:                AddInt32(0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:132:            AddInt32(length);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:164:            builder.AddInt32(CurrentSchemaVersion);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:165:            builder.AddInt32(tickIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:191:            target.AddInt32(store.LogicalCapacity);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:192:            target.AddInt32(store.ARestEntryCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:196:                target.AddInt32(entry.AttackerSlot);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:197:                target.AddInt32(entry.Value);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:200:            target.AddInt32(store.VRestEntryCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:201:            target.AddInt32(store.VRestRowCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:238:                builder.AddInt32(tickIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:239:                builder.AddInt32(0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:243:            builder.AddInt32(frameInput.TickIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:246:            builder.AddInt32(count);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:250:                builder.AddInt32(player.PlayerSlot);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:259:            builder.AddInt32((int)world.RuntimeProfileForServices);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:260:            builder.AddInt32(tickIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:261:            builder.AddInt32(world.MaxRuntimeSlotsForServices);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:262:            builder.AddInt32(world.ClaimedRuntimeSlotCountForServices);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:263:            builder.AddInt32(world.ObjectCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:272:            builder.AddInt32(nativeRandom.SynchronizedCounter);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:273:            builder.AddInt32(nativeRandom.SynchronizedIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:289:            builder.AddInt32(match?.LocalGameModeId ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:290:            builder.AddInt32(match?.BattleGameModeId ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:291:            builder.AddInt32(match?.BackgroundId ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:292:            builder.AddInt32(match?.Difficulty ?? 2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:293:            builder.AddInt32(match?.StageIdx ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:294:            builder.AddInt32(match?.RandomStage ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:295:            builder.AddInt32(match?.RuntimeStageCount ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:296:            builder.AddInt32(match?.Seed ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:299:            builder.AddInt32(stage?.StageWidthPx ?? 800);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:300:            builder.AddInt32(stage?.ZMin ?? 180);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:301:            builder.AddInt32(stage?.ZMax ?? 350);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:302:            builder.AddInt32(stage?.BoundRight ?? 800);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:303:            builder.AddInt32(stage?.XMaxOverride ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:304:            builder.AddInt32(stage?.CameraMaxOverride ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:305:            builder.AddInt32(world.ReleaseCameraX);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:306:            builder.AddInt32(world.ReleaseCameraVelocityForServices);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:308:            builder.AddInt32(flow?.CurrentTickIndex ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:309:            builder.AddInt32(flow?.AiPhaseGate ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:310:            builder.AddInt32(flow?.InputPhase ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:311:            builder.AddInt32(flow?.FrameMod12 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:312:            builder.AddInt32(flow?.FrameToggle ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:313:            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase12 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:314:            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase3 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:316:            builder.AddInt32(flow?.AiDifficulty ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:317:            builder.AddInt32(flow?.AiRand3 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:318:            builder.AddInt32(flow?.AiRand5 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:319:            builder.AddInt32(flow?.AiRand15 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:320:            builder.AddInt32(flow?.AiRand20 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:321:            builder.AddInt32(flow?.AiMoveMode ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:322:            builder.AddInt32(flow?.AiStageTargetX ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:323:            builder.AddInt32(flow?.BattleExitCountdown ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:324:            builder.AddInt32(flow?.RouteOutRequest ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:325:            builder.AddInt32(flow?.InitStatsRequest ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:326:            builder.AddInt32(flow?.Mode2Request ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:327:            builder.AddInt32(flow?.BattleStepMode ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:328:            builder.AddInt32(flow?.BattleStepGate ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:329:            builder.AddInt32(flow?.DjaGuardGlobal44F224 ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:334:            builder.AddInt32(functionKeys?.LockState ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:348:            builder.AddInt32(hitResourceRules?.ActiveModeHitGroupGate18 ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:351:            builder.AddInt32(hitResourceRules?.ActiveModeAttackingPercent1C ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:354:            builder.AddInt32(hitResourceRules?.AttackerInjuryMpPercent34 ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:357:            builder.AddInt32(hitResourceRules?.TargetInjuryMpPercent38 ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:360:            builder.AddInt32(hitResourceRules?.NegativeEnvironmentDamage90 ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:366:            builder.AddInt32(nativeCombo?.Bound ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:368:            builder.AddInt32(nativeCombo?.Facing ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:370:            builder.AddInt32(nativeCombo?.Respond ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:372:            builder.AddInt32(nativeCombo?.CaughtAct ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:376:            builder.AddInt32(standardHitRest?.TimingReduction4A9FF4 ??
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:381:            builder.AddInt32(roster?.ActiveSlotCount ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:389:                builder.AddInt32(slot?.CharacterId ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:390:                builder.AddInt32(slot?.Team ?? 1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:391:                builder.AddInt32(slot?.RuntimeSlotIndex ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:394:            builder.AddInt32(results?.Phase ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:395:            builder.AddInt32(results?.Timer ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:396:            builder.AddInt32(results?.Winner ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:398:            builder.AddInt32(results?.BattleEndPhase ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:399:            builder.AddInt32(results?.PendingWinner ?? -2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:400:            builder.AddInt32(results?.TeamCount ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:402:            builder.AddInt32(results?.PendingHostAction ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:403:            builder.AddInt32(results?.Cursor ?? 6);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:404:            builder.AddInt32(results?.SettingsCursor ?? 2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:405:            builder.AddInt32(results?.TableCursor ?? 10);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:406:            builder.AddInt32(results?.TableSide ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:407:            builder.AddInt32(results?.ResultSubcursor ?? 2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:417:            builder.AddInt32(results?.ResultTableSavedTop ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:418:            builder.AddInt32(results?.ResultTableSavedBottom ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:426:            builder.AddInt32(progression?.StageSeriesIdx ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:427:            builder.AddInt32(progression?.WaveIdx ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:428:            builder.AddInt32(progression?.Round ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:429:            builder.AddInt32(progression?.RoundMax ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:431:            builder.AddInt32(battle?.StageSpawnWaveApplied ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:432:            builder.AddInt32(battle?.StageSpawnWaveDeferredEntryApplied ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:433:            builder.AddInt32(battle?.StageSpawnRuntimeWave ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:440:            builder.AddInt32(runtimeSlotListCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:453:                    builder.AddInt32(valid ? matrix[row, column] : 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:461:            builder.AddInt32(logicalCapacity);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:469:                builder.AddInt32(runtimeSlot);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:472:                builder.AddInt32(entity?.FrameCache?.Wrapper != null
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:475:                builder.AddInt32(runtime?.StableId ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:492:            builder.AddInt32(entity?.GetCurrentDataObjectTypeForSimulation() ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:493:            builder.AddInt32(isDefault ? -1 : runtime.ObjectId);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:494:            builder.AddInt32(isDefault ? 0 : runtime.EntityType);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:495:            builder.AddInt32(isDefault ? 0 : runtime.ObjType);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:496:            builder.AddInt32(runtime?.OwnerStableId ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:497:            builder.AddInt32(runtimeSlot);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:498:            builder.AddInt32(isDefault ? 0 : runtime.Team);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:499:            builder.AddInt32(runtime?.RelationTeam ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:501:            builder.AddInt32(isDefault || runtime.Dir == "right" ? 0 : 1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:502:            builder.AddInt32(isDefault ? 0 : (int)runtime.RenderOffsetX);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:503:            builder.AddDouble(isDefault ? 0.0 : runtime.Type3VisualZOffset);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:504:            builder.AddDouble(isDefault ? 0.0 : runtime.X);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:505:            builder.AddInt32(isDefault ? 0 : runtime.XInt);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:506:            builder.AddDouble(isDefault ? 0.0 : runtime.Y);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:507:            builder.AddInt32(isDefault ? 0 : runtime.YInt);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:508:            builder.AddDouble(isDefault ? 0.0 : runtime.Z);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:509:            builder.AddInt32(isDefault ? 0 : runtime.ZInt);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:511:            builder.AddInt32(isDefault ? 0 : runtime.Fall);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:512:            builder.AddInt32(isDefault ? 0 : runtime.HitCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:513:            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVx);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:514:            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVy);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:515:            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVz);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:516:            builder.AddDouble(isDefault ? 0.0 : runtime.Vx);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:517:            builder.AddDouble(isDefault ? 0.0 : runtime.Vy);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:518:            builder.AddDouble(isDefault ? 0.0 : runtime.Vz);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:520:            builder.AddInt32(isDefault ? 0 : runtime.AnimCounter);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:521:            builder.AddInt32(isDefault ? 0 : runtime.AnimSub);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:522:            builder.AddInt32(isDefault ? 0 : runtime.AttackingCounter);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:523:            builder.AddInt32(isDefault ? 0 : runtime.Frame);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:524:            builder.AddInt32(isDefault ? 0 : runtime.FrameDelay);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:525:            builder.AddInt32(isDefault ? 0 : runtime.FrameWaitCounter);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:526:            builder.AddInt32(isDefault ? 0 : runtime.HitStateCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:527:            builder.AddInt32(isDefault ? 0 : runtime.HitStop);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:528:            builder.AddInt32(isDefault ? 0 : entity?.Frame?.Prev ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:529:            builder.AddInt32(isDefault ? 0 : runtime.PrevFrame2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:530:            builder.AddInt32(isDefault ? 0 : runtime.WaitCounter);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:532:            builder.AddInt32(isDefault ? -1 : runtime.CatcherSlotIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:533:            builder.AddInt32(isDefault ? 0 : runtime.CaughtDuration);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:534:            builder.AddInt32(isDefault ? -1 : runtime.CaughtSlotIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:535:            builder.AddInt32(isDefault ? 0 : runtime.CatchingStateTU);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:536:            builder.AddInt32(isDefault ? -1 : runtime.HeldWeaponStableId);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:537:            builder.AddInt32(isDefault ? -1 : runtime.HolderStableId);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:538:            builder.AddInt32(isDefault ? 0 : runtime.LinkState);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:539:            builder.AddInt32(isDefault ? -1 : runtime.PickerStableId);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:540:            builder.AddInt32(isDefault ? 0 : runtime.PickupCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:541:            builder.AddInt32(isDefault ? -1 : runtime.TargetSlotIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:542:            builder.AddInt32(isDefault ? -1 : runtime.ThrowFrameGuard);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:544:            builder.AddInt32(isDefault ? 0 : runtime.TransientMp);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:545:            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:546:            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp3);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:547:            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:549:            builder.AddInt32(isDefault ? 0 : runtime.ComboCountAtk);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:550:            builder.AddInt32(isDefault ? 0 : runtime.ComboCountVic);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:551:            builder.AddInt32(isDefault ? 0 : runtime.NativeComboHitCount1E0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:553:            builder.AddInt32(isDefault ? 0 : runtime.FallDamageDiv);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:554:            builder.AddInt32(isDefault ? 500 : runtime.HP);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:555:            builder.AddInt32(isDefault ? 500 : runtime.HP3);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:556:            builder.AddInt32(isDefault ? 500 : runtime.HPBound);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:557:            builder.AddInt32(isDefault ? -1 : runtime.KillCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:558:            builder.AddInt32(isDefault ? 0 : runtime.KillStat);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:559:            builder.AddInt32(isDefault ? 500 : runtime.PP);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:560:            builder.AddInt32(isDefault ? 0 : runtime.RespawnCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:561:            builder.AddInt32(isDefault ? -1 : runtime.SpawnerSlotIndex);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:562:            builder.AddInt32(isDefault ? -1 : runtime.ObjectAiExcludedGroupSourceSlot2F8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:563:            builder.AddInt32(isDefault ? 0 : runtime.Unk344);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:564:            builder.AddInt32(isDefault ? 0 : runtime.WeaponCount);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:598:            builder.AddInt32(runtime?.InputProxyCounter14C ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:599:            builder.AddInt32(runtime?.InputProxySourceSlot178 ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:600:            builder.AddInt32(runtime?.InputProxyEnabled17C ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:606:            builder.AddInt32(isDefault ? 0 : runtime.Blink);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:607:            builder.AddInt32(isDefault ? 0 : runtime.HP2Orig);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:608:            builder.AddInt32(isDefault ? 0 : runtime.HPOrig);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:609:            builder.AddInt32(isDefault ? 0 : runtime.PpDisplay);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:611:            builder.AddInt32(isDefault ? 0 : runtime.AttackExempt);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:616:            builder.AddInt32(runtime?.CatchTimer ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:617:            builder.AddInt32(isDefault ? 0 : runtime.HealTimer);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:618:            builder.AddInt32(isDefault ? 0 : runtime.HitConfirmEa);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:619:            builder.AddInt32(isDefault ? 0 : runtime.HitConfirm2);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:621:            builder.AddInt32(runtime?.RenderPicOffset ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:622:            builder.AddInt32(runtime?.WeaponFlightCounter ?? 0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:623:            builder.AddInt32(runtime?.TransformOriginalObjectId ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:624:            builder.AddInt32(isDefault ? -1 : runtime.Unk328);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:625:            builder.AddInt32(isDefault ? -1 : runtime.Unk32C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:626:            builder.AddInt32(isDefault ? 0 : runtime.Unk330);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:627:            builder.AddInt32(isDefault ? 0 : runtime.Unk334);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:628:            builder.AddInt32(isDefault ? 0 : runtime.Unk338);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:629:            builder.AddInt32(runtime?.TransformTargetObjectId ?? -1);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:630:            builder.AddInt32(isDefault ? -1 : runtime.Unk360);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:631:            builder.AddInt32(isDefault ? -1000 : runtime.Unk3FC);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:632:            builder.AddInt32(isDefault ? -1000 : runtime.Unk400);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:655:            builder.AddInt32(isDefault ? 0 : runtime.InputActionLock130);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:656:            builder.AddInt32(isDefault ? 0 : runtime.InputLastAction144);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:657:            builder.AddInt32(isDefault ? 0 : runtime.InputRemapState138);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:670:            builder.AddInt32(isDefault ? 0 : runtime.BoundState198);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:671:            builder.AddInt32(isDefault ? 0 : runtime.InputGlobalRecordState20);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:672:            builder.AddInt32(isDefault ? 0 : runtime.InputModeCostMultiplier30);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:673:            builder.AddInt32(isDefault ? 0 : runtime.InputDoubleCost19C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:674:            builder.AddInt32(isDefault ? 0 : runtime.InputCostWaived1B4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:675:            builder.AddInt32(isDefault ? 0 : runtime.InputSpecialGate194);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:676:            builder.AddInt32(isDefault ? 0 : runtime.InputModeFallbackActionB8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:678:            builder.AddInt32(isDefault ? 0 : runtime.InputHpConsumedTotal34C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:679:            builder.AddInt32(isDefault ? 0 : runtime.InputMpConsumedTotal350);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:681:            builder.AddInt32(isDefault ? -1 : runtime.InputLinkedDefinitionId324);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:682:            builder.AddInt32(isDefault ? 0 : runtime.EnvironmentState320);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:683:            builder.AddInt32(isDefault ? 0 : runtime.CollisionYReference);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:690:            builder.AddInt32(isDefault ? 0 : runtime.WeakTimer12C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:691:            builder.AddInt32(isDefault ? 0 : runtime.MpRegenBonusTimer1A4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:692:            builder.AddInt32(isDefault ? 0 : runtime.EffectiveMaxRegenDouble1A8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:693:            builder.AddInt32(isDefault ? 0 : runtime.HpRegenDouble1AC);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:694:            builder.AddInt32(isDefault ? 0 : runtime.FullRestoreTimer1B0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:695:            builder.AddInt32(isDefault ? -1 : runtime.OrdinaryCreditGate2F4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:696:            builder.AddInt32(isDefault ? 0 : runtime.IncomingDamageScale340);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:697:            builder.AddInt32(isDefault ? 100 : runtime.ModeDamageScalePercent);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:698:            builder.AddInt32(isDefault ? 0 : runtime.InputScoreTotal348);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:699:            builder.AddInt32(isDefault ? 0 : runtime.KnockoutCount358);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:700:            builder.AddInt32(isDefault ? -1 : runtime.CatchSourceSlot90);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:701:            builder.AddInt32(isDefault ? 0 : runtime.Kind4SourceCount92);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:702:            builder.AddInt32(isDefault ? -1 : runtime.EnvironmentSourceSlot160);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:703:            builder.AddInt32(isDefault ? -1 : runtime.ImpactSourceSlot164);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:704:            builder.AddInt32(isDefault ? 0 : runtime.DisplayScore1F0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:705:            builder.AddInt32(isDefault ? 0 : runtime.DisplayScoreStep1F4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:706:            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageTotal1F8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:707:            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageStep1FC);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:708:            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHp200);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:709:            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHpStep204);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:710:            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHp208);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:711:            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHpStep20C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:718:            builder.AddInt32(isDefault ? 0 : runtime.StatusDx1C0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:719:            builder.AddInt32(isDefault ? 0 : runtime.StatusDy1C4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:720:            builder.AddInt32(isDefault ? 0 : runtime.StatusDz1C8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:721:            builder.AddInt32(isDefault ? 0 : runtime.StatusGain1CC);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:722:            builder.AddInt32(isDefault ? 0 : runtime.StatusHitFacing1D0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:723:            builder.AddInt32(isDefault ? 191 : runtime.StatusPickedAction1D4);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:724:            builder.AddInt32(isDefault ? 185 : runtime.StatusPickingAction1D8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:725:            builder.AddInt32(isDefault ? 0 : runtime.HitResourceSuppression15C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:726:            builder.AddInt32(isDefault ? 0 : runtime.HitResourceInjuryDouble1A0);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:727:            builder.AddInt32(isDefault ? 0 : runtime.DelayTimer134);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:728:            builder.AddInt32(isDefault ? 0 : runtime.JoinTimer148);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:729:            builder.AddInt32(isDefault ? 0 : runtime.PoisonTimer120);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:730:            builder.AddInt32(isDefault ? 0 : runtime.PoisonType124);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:731:            builder.AddInt32(isDefault ? 0 : runtime.PoisonStrength128);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:732:            builder.AddInt32(isDefault ? 0 : runtime.JoinOverrideActive170);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:733:            builder.AddInt32(isDefault ? 0 : runtime.JoinOriginalBattleGroup174);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:734:            builder.AddInt32(isDefault ? 0 : runtime.NativeComputerState1B8);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:735:            builder.AddInt32(isDefault ? 0 : runtime.NativeTimer1BC);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:736:            builder.AddInt32(isDefault ? 0 : runtime.RuntimeArmorHp118);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:737:            builder.AddInt32(isDefault ? -1 : runtime.ArmorRecoveryTimer11C);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:749:            builder.AddInt32(count);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:754:                builder.AddInt32(sound.Tick);
+Assets/NTSD/Scripts/Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:755:                builder.AddInt32(sound.WorldX);
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:94:            ulong sourceItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:95:            ulong recordedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:99:            ulong expectedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:100:            ulong observedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:116:            ulong expectedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:117:            ulong observedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:132:            SourceItrFingerprint = sourceItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:133:            RecordedItrFingerprint = recordedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:137:            ExpectedResolvedItrFingerprint = expectedResolvedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:138:            ObservedResolvedItrFingerprint = observedResolvedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:160:            ExpectedConsumeEffectsFingerprint = expectedConsumeEffectsFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:161:            ObservedConsumeEffectsFingerprint = observedConsumeEffectsFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:184:        public ulong SourceItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:185:        public ulong RecordedItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:189:        public ulong ExpectedResolvedItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:190:        public ulong ObservedResolvedItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:206:        public ulong ExpectedConsumeEffectsFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:207:        public ulong ObservedConsumeEffectsFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:346:        private ulong pendingExpectedResolvedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:358:        private ulong pendingExpectedConsumeEffectsFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:745:                        Fingerprint(sourceItr),
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:746:                        Fingerprint(recordedItr),
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1050:                expected.RecordedItrFingerprint != Fingerprint(hit.RuntimeItr) ||
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1093:            ulong actualFingerprint = Fingerprint(resolvedItr);
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1097:                actualFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1111:                actualFingerprint != pendingExpectedResolvedItrFingerprint ||
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1160:                Fingerprint(resolvedItr) == entry.ObservedResolvedItrFingerprint &&
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1213:                Fingerprint(resolvedItr) == entry.ObservedResolvedItrFingerprint &&
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1361:            pendingExpectedConsumeEffectsFingerprint = Fingerprint(in expected);
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1363:                pendingExpectedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1392:            ulong actualFingerprint = Fingerprint(in actual);
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1395:                actualFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1405:                actualFingerprint != pendingExpectedConsumeEffectsFingerprint)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1448:                Fingerprint(resolvedItr) != entry.ObservedResolvedItrFingerprint)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1495:                Fingerprint(resolvedItr) == entry.ObservedResolvedItrFingerprint &&
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1597:                Fingerprint(resolvedItr) == entry.ObservedResolvedItrFingerprint &&
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1886:            pendingExpectedResolvedItrFingerprint = Fingerprint(in projection);
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1892:                pendingExpectedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1916:            pendingExpectedResolvedItrFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:1960:            pendingExpectedConsumeEffectsFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:2527:                PendingSoundFingerprint = FingerprintPendingSounds(world),
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5175:            AddPendingSoundFingerprint(
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5176:                ref projection.PendingSoundFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5667:        private static ulong Fingerprint(InteractionArea itr)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5727:        private static ulong Fingerprint(in ItrProjection itr)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5784:        private static ulong Fingerprint(in ConsumeEffectsSnapshot snapshot)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6014:                expected.PendingSoundFingerprint != actual.PendingSoundFingerprint ||
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6089:        private static ulong FingerprintPendingSounds(SimulationWorld sourceWorld)
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6099:                AddPendingSoundFingerprint(
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6109:        private static void AddPendingSoundFingerprint(
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6302:            internal ulong PendingSoundFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6323:                ulong sourceItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6324:                ulong recordedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6339:                SourceItrFingerprint = sourceItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6340:                RecordedItrFingerprint = recordedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6345:                ExpectedResolvedItrFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6346:                ObservedResolvedItrFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6364:                ExpectedConsumeEffectsFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6365:                ObservedConsumeEffectsFingerprint = 0;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6382:            internal ulong SourceItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6383:            internal ulong RecordedItrFingerprint { get; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6388:            private ulong ExpectedResolvedItrFingerprint { get; set; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6389:            internal ulong ObservedResolvedItrFingerprint { get; private set; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6413:            private ulong ExpectedConsumeEffectsFingerprint { get; set; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6414:            private ulong ObservedConsumeEffectsFingerprint { get; set; }
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6421:                ulong resolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6426:                ExpectedResolvedItrFingerprint = resolvedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6434:                ulong resolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6440:                ObservedResolvedItrFingerprint = resolvedItrFingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6457:                ulong fingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6461:                ExpectedConsumeEffectsFingerprint = fingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6484:                ulong fingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6489:                ObservedConsumeEffectsFingerprint = fingerprint;
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6506:                    SourceItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6507:                    RecordedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6511:                    ExpectedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6512:                    ObservedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6528:                    ExpectedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6529:                    ObservedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:73:        RuntimeFingerprint = 12,
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:383:        private readonly BattleRuntimeFingerprint[] runtimeFingerprints;
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:408:            runtimeFingerprints = new BattleRuntimeFingerprint[capacity];
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:470:            runtimeFingerprints[slot] = BattleRuntimeFingerprint.Compute(runtime);
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:542:        internal BattleRuntimeFingerprint GetRuntimeFingerprint(int slot)
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:545:            return runtimeFingerprints[slot];
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:587:            if (!runtimeFingerprints[slot].Equals(BattleRuntimeFingerprint.Compute(runtime)))
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:588:                return Mismatch(BattleEcsShadowMismatchKind.RuntimeFingerprint, out mismatchKind);
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:772:            runtimeFingerprints[slot] = default;
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1050:    internal readonly struct BattleRuntimeFingerprint : IEquatable<BattleRuntimeFingerprint>
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1052:        private BattleRuntimeFingerprint(ulong a, ulong b, ulong c, ulong d)
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1065:        public bool Equals(BattleRuntimeFingerprint other)
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1072:            return obj is BattleRuntimeFingerprint other && Equals(other);
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1083:        public static BattleRuntimeFingerprint Compute(NTSDEntityRuntime runtime)
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1088:            var hash = new FingerprintBuilder(0);
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1154:            return hash.ToFingerprint();
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1157:        private struct FingerprintBuilder
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1164:            public FingerprintBuilder(int _)
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1214:            public BattleRuntimeFingerprint ToFingerprint()
+Assets/NTSD/Scripts/Simulation\Ecs\Core\BattleEcsWorld.cs:1216:                return new BattleRuntimeFingerprint(a, b, c, d);
+Assets/NTSD/Scripts/Test\Editor\UnityPresentContentAuthorityEditorTests.cs:300:                return BitConverter.ToString(sha.ComputeHash(bytes))
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:71:                catalogFingerprint: identity.CatalogFingerprint + 1),
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:72:                LockstepProtocolReason.CatalogFingerprintMismatch);
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:74:                stageFingerprint: identity.StageFingerprint + 1),
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:75:                LockstepProtocolReason.StageFingerprintMismatch);
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:77:                playerSetFingerprint: identity.PlayerSetFingerprint + 1),
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:149:            ulong? catalogFingerprint = null,
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:150:            ulong? stageFingerprint = null,
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:151:            ulong? playerSetFingerprint = null)
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:157:                catalogFingerprint ?? identity.CatalogFingerprint,
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:158:                stageFingerprint ?? identity.StageFingerprint,
+Assets/NTSD/Scripts/Test\Editor\StrictDelayedInputBufferEditorTests.cs:159:                playerSetFingerprint ?? identity.PlayerSetFingerprint,
+Assets/NTSD/Scripts/Test\Editor\RuntimeRestStateSeamEditorTests.cs:82:            string digest = BitConverter.ToString(sha.ComputeHash(payload))
+Tools\NTSD28PngDecode\PngCorpusVerifier.cs:12:            return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", string.Empty);
+Assets/NTSD/Scripts/Test\Editor\NTSD28UnityRawCaptureEditor.cs:1167:            return BitConverter.ToString(sha256.ComputeHash(stream))
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05TypedFrameEditorTests.cs:88:            using (var sha = SHA256.Create()) hash = Hex(sha.ComputeHash(Encoding.UTF8.GetBytes(actual)));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:53:            Assert.That(Property(identity, "RawDefinitionFingerprint"), Is.EqualTo(raw));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:55:            Assert.That(Property(identity, "SemanticFingerprint"), Is.EqualTo(digest));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:56:            Assert.That(Property(identity, "CatalogFingerprint"), Is.EqualTo(projection));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:65:            Assert.Throws<ArgumentException>(() => Call("FromDefinitionFingerprint", raw));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:79:            Assert.That(Call("ProjectCatalogFingerprint", new byte[32]), Is.EqualTo(1UL));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:83:            Assert.That(Call("ProjectCatalogFingerprint", digest), Is.EqualTo(0x0200000000000001UL));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:89:            object current = Call("FromDefinitionFingerprint", Raw.ToLowerInvariant());
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:92:            Assert.That(Property(current, "RawDefinitionFingerprint"), Is.EqualTo(Raw));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:118:            Assert.That(Property(identity, "RawDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:119:            Assert.That(candidate.SourceCacheKey, Does.Contain((string)Property(identity, "SemanticFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:120:            Assert.That(candidate.SourceCacheKey, Does.Contain(candidate.VisualFingerprint));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:121:            Assert.That(candidate.Catalog.SourceCacheKey, Does.Contain((string)Property(identity, "SemanticFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:123:            Assert.That(relocated.VisualFingerprint, Is.EqualTo(candidate.VisualFingerprint));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:124:            Assert.That(Property(Property(relocated, "ContentIdentity"), "SemanticFingerprint"), Is.EqualTo(Property(identity, "SemanticFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:128:            Assert.That(Property(Property(changed, "ContentIdentity"), "SemanticFingerprint"), Is.Not.EqualTo(Property(identity, "SemanticFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:135:            object current = Call("FromDefinitionFingerprint", Raw);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:136:            object changed = Call("FromDefinitionFingerprint", new string('F', 64));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:142:            Assert.That(session.CatalogFingerprint, Is.EqualTo(Property(current, "CatalogFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:144:            Assert.That(input.TrySubmit(new LockstepFramePacket(other, 1, 0, SimulationInputButtons.None)), Is.EqualTo(LockstepProtocolReason.CatalogFingerprintMismatch));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:153:            object older = Call("ForDecodeContract", candidate.Catalog.DefinitionFingerprint, "NTSD28_LOGAN_DAT_SEMANTICS_V1");
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:167:            Assert.That(Property(identity, "RawDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:169:            Assert.That(candidate.Catalog.DefinitionFingerprint, Is.EqualTo(LoganObjectCatalog.Read(source).DefinitionFingerprint));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:173:                rawDefinition = candidate.Catalog.DefinitionFingerprint,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:174:                rawVisual = candidate.VisualFingerprint,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:176:                semantic = (string)Property(identity, "SemanticFingerprint"),
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05SemanticContentIdentityEditorTests.cs:177:                catalogProjection = ((ulong)Property(identity, "CatalogFingerprint")).ToString("X16"),
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:83:        public void NewFieldsCopyCloneAndFingerprintIndependently()
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:91:                ulong before = Fingerprint(area, typeof(InteractionArea));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:96:                Assert.That(Fingerprint(area, typeof(InteractionArea)), Is.Not.EqualTo(before));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:101:                Assert.That(Fingerprint(area, typeof(InteractionArea)), Is.EqualTo(Fingerprint(projection, type.MakeByRefType())));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:157:        private static ulong Fingerprint(object value, Type type)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05ItrStrengthContentEditorTests.cs:159:            return (ulong)typeof(BattleEcsHitExecutionPlan).GetMethod("Fingerprint", BindingFlags.Static | BindingFlags.NonPublic,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:119:        public void ProjectionAndBothFingerprintsPreserveDepthAndValidity()
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:129:            Assert.That(Fingerprint(source, typeof(InteractionArea)), Is.EqualTo(Fingerprint(projection, type.MakeByRefType())));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:130:            ulong original = Fingerprint(source, typeof(InteractionArea));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:132:            Assert.That(Fingerprint(source, typeof(InteractionArea)), Is.Not.EqualTo(original));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:133:            ulong missing = Fingerprint(source, typeof(InteractionArea));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:135:            Assert.That(Fingerprint(source, typeof(InteractionArea)), Is.Not.EqualTo(missing));
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:163:        private static ulong Fingerprint(object value, Type type)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05GeometryContentEditorTests.cs:165:            return (ulong)typeof(BattleEcsHitExecutionPlan).GetMethod("Fingerprint", BindingFlags.Static | BindingFlags.NonPublic,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05FrameAstEditorTests.cs:62:                actualHash = Hex(sha.ComputeHash(Encoding.UTF8.GetBytes(actual)));
+Tools\NTSD28Parity\TraceContractSelfTest.cs:726:            hashes[domain] = TraceContract.HashNode(tick[domain]!);
+Tools\NTSD28Parity\TraceContract.cs:129:    internal static string HashNode(JsonNode node)
+Tools\NTSD28Parity\TraceContract.cs:132:        byte[] digest = SHA256.HashData(Encoding.UTF8.GetBytes(canonical));
+Tools\NTSD28Parity\TraceContract.cs:146:        return HashNode(committed);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05DefinitionAuditEditorTests.cs:93:                    hashes[path] = BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(path))).Replace("-", "");
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q05DefinitionAuditEditorTests.cs:101:                ["definitionFingerprint"] = catalog.DefinitionFingerprint,
+Tools\NTSD28Parity\TraceComparator.cs:460:            string actualHash = TraceContract.HashNode(body);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q052F8CarrierEditorTests.cs:50:        public void EcsCapturesValidatesFingerprintsAndClearsIndependentSlot()
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q052F8CarrierEditorTests.cs:65:            var fingerprint = BattleRuntimeFingerprint.Compute(entity.Runtime);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q052F8CarrierEditorTests.cs:69:            Assert.That(BattleRuntimeFingerprint.Compute(entity.Runtime), Is.Not.EqualTo(fingerprint));
+Tools\NTSD28Parity\B0DomainRawComparator.cs:178:                    TraceContract.HashNode(authorityNode),
+Tools\NTSD28Parity\B0DomainRawComparator.cs:179:                    TraceContract.HashNode(unityNode),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:39:        public void EffectiveReleaseRelation_CopyFingerprintAndResetRemain()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:52:            BattleRuntimeFingerprint before = BattleRuntimeFingerprint.Compute(sourceRuntime);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:54:            Assert.That(BattleRuntimeFingerprint.Compute(sourceRuntime).Equals(before), Is.False);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:121:                Does.Not.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:86:            Assert.That(characterEntry.SourceItrFingerprint, Is.Not.Zero);
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:589:                entry.ObservedResolvedItrFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:590:                Is.EqualTo(entry.ExpectedResolvedItrFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:601:                entry.ObservedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:602:                Is.EqualTo(entry.ExpectedConsumeEffectsFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:734:                entry.ObservedConsumeEffectsFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleHitExecutionPlanEditorTests.cs:735:                Is.EqualTo(entry.ExpectedConsumeEffectsFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleEcsReadOnlyShadowEditorTests.cs:48:        public void Capture_CopiesCoreStoresMembershipAndAllRuntimeFingerprint()
+Assets/NTSD/Scripts/Test\Editor\BattleWorldWeaponShellSnapshotEditorTests.cs:49:            Assert.That(destination.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleWorldWeaponShellSnapshotEditorTests.cs:50:                Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldStageSpawnSnapshotEditorTests.cs:40:            Assert.That(destination.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Tools\NTSD28ContentAudit\UnityContentCapture.cs:327:            byte[] hash = SHA256.HashData(stream);
+Tools\NTSD28ContentAudit\UnityContentCapture.cs:549:        return Convert.ToHexString(SHA256.HashData(stream)).ToLowerInvariant();
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:109:        public void DeepCopy_DoesNotShareMutableListsAndKeepsFingerprint()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:116:            MethodInfo fingerprint = source.GetType().GetMethod("ComputeFingerprint64");
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:118:            Assert.That(fingerprint, Is.Not.Null);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:124:            Assert.That(Fingerprint(fingerprint, copy),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:125:                Is.EqualTo(Fingerprint(fingerprint, source)));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:129:            Assert.That(Fingerprint(fingerprint, copy),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:130:                Is.Not.EqualTo(Fingerprint(fingerprint, source)));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:134:        public void Fingerprint_DistinguishesRangeOrderSoundNullAndScalar()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:139:            MethodInfo fingerprint = baseline.GetType().GetMethod("ComputeFingerprint64");
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:140:            Assert.That(fingerprint, Is.Not.Null);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:141:            ulong baselineHash = Fingerprint(fingerprint, baseline);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:145:            Assert.That(Fingerprint(fingerprint, scalar), Is.Not.EqualTo(baselineHash));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:149:            Assert.That(Fingerprint(fingerprint, sound), Is.Not.EqualTo(baselineHash));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:154:            Assert.That(Fingerprint(fingerprint, reversed), Is.Not.EqualTo(baselineHash));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:158:        public void WarmFingerprint_AllocatesNoManagedMemory()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:175:            _ = armor.ComputeFingerprint64();
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:182:                checksum ^= armor.ComputeFingerprint64() + (ulong)index;
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5Type1ArmorDataContractEditorTests.cs:256:        private static ulong Fingerprint(MethodInfo method, object value)
+Assets/NTSD/Scripts/Test\Editor\BattleWorldRuntimeSlotSnapshotEditorTests.cs:51:            Assert.That(destination.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldRosterResultsSnapshotEditorTests.cs:88:            Assert.That(destination.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldRestSnapshotEditorTests.cs:36:            Assert.That(destination.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldLivingShellSnapshotEditorTests.cs:61:            Assert.That(destination.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleWorldLivingShellSnapshotEditorTests.cs:62:                Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldEntityRuntimeSnapshotEditorTests.cs:61:            Assert.That(destination.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleWorldEntityRuntimeSnapshotEditorTests.cs:62:                Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldEntityBaseShellSnapshotEditorTests.cs:108:            Assert.That(destination.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCoreScalarSnapshotEditorTests.cs:43:            Assert.That(snapshot.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:50:            Assert.That(destination.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:51:                Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleStateSnapshotEditorTests.cs:37:            Assert.That(destination.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\BattleStateSnapshotEditorTests.cs:38:                Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\BattleStateSnapshotEditorTests.cs:69:            Assert.That(destination.IdentityFingerprint, Is.Zero);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5StandardHitRestDataCarrierEditorTests.cs:50:            MethodInfo fingerprint = typeof(BattleEcsHitExecutionPlan).GetMethod(
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5StandardHitRestDataCarrierEditorTests.cs:51:                "Fingerprint",
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5StandardHitRestDataCarrierEditorTests.cs:56:            ulong baseline = (ulong)fingerprint.Invoke(
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5StandardHitRestDataCarrierEditorTests.cs:59:            ulong changed = (ulong)fingerprint.Invoke(null, new object[] { parsed });
+Assets/NTSD/Scripts/Test\Editor\LockstepSnapshotRingEditorTests.cs:54:            Assert.That(tickSix.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\LockstepSnapshotRingEditorTests.cs:55:                Is.EqualTo(session.FrameHistory.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\LockstepSnapshotRingEditorTests.cs:56:            Assert.That(tickSix.IdentityFingerprint,
+Assets/NTSD/Scripts/Test\Editor\LockstepSnapshotRingEditorTests.cs:57:                Is.EqualTo(session.ChecksumHistory.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\LockstepFrameHistoryRingEditorTests.cs:35:                Assert.That(entry.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\LockstepChecksumHistoryRingEditorTests.cs:37:            Assert.That(entry.IdentityFingerprint, Is.EqualTo(identity.IdentityFingerprint));
+Assets/NTSD/Scripts/Test\Editor\InProcessLockstepAuthoritySessionEditorTests.cs:382:                catalogFingerprint: 0xCA7A10UL,
+Assets/NTSD/Scripts/Test\Editor\InProcessLockstepAuthoritySessionEditorTests.cs:383:                stageFingerprint: 0x57A6EUL,
+Assets/NTSD/Scripts/Test\Editor\InProcessLockstepAuthoritySessionEditorTests.cs:387:                ruleFingerprint: 0xC0DE0001UL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelWorldBootstrapFactorySeamEditorTests.cs:107:                catalogFingerprint: 0xCA7A10UL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelWorldBootstrapFactorySeamEditorTests.cs:108:                stageFingerprint: 0x57A6EUL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelWorldBootstrapFactorySeamEditorTests.cs:112:                ruleFingerprint: 0xC0DE0001UL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelObjectPointValueSeamEditorTests.cs:233:            string digest = BitConverter.ToString(sha.ComputeHash(payload))
+Assets/NTSD/Scripts/Test\Editor\FormalKernelFullReturnCommitSeamEditorTests.cs:64:                catalogFingerprint: 0xCA7A10UL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelFullReturnCommitSeamEditorTests.cs:65:                stageFingerprint: 0x57A6EUL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelFullReturnCommitSeamEditorTests.cs:69:                ruleFingerprint: 0xC0DE0001UL,
+Assets/NTSD/Scripts/Test\Editor\FormalKernelBodyBoxValueSeamEditorTests.cs:150:            string digest = BitConverter.ToString(sha.ComputeHash(payload))
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:74:        public void HitPlanFingerprints_ChangeForEveryStatusField()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:76:            MethodInfo fingerprint = typeof(BattleEcsHitExecutionPlan)
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:78:                    "Fingerprint",
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:83:            Assert.That(fingerprint, Is.Not.Null);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:84:            ulong baseline = (ulong)fingerprint.Invoke(
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrStatusFieldCarrierEditorTests.cs:108:                ulong changed = (ulong)fingerprint.Invoke(
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:43:        public void RawItrFingerprint_IncludesBothDefenseFields()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:49:            MethodInfo fingerprint = typeof(BattleEcsHitExecutionPlan).GetMethod(
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:50:                "Fingerprint",
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:55:            Assert.That(fingerprint, Is.Not.Null);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:62:            ulong baseline = InvokeFingerprint(fingerprint, baselineItr);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:64:            Assert.That(InvokeFingerprint(fingerprint, sparkItr),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:66:            Assert.That(InvokeFingerprint(fingerprint, dbdefendItr),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:71:        public void ItrProjection_PreservesAndFingerprintsBothFields()
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:88:            MethodInfo fingerprint = typeof(BattleEcsHitExecutionPlan)
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:90:                .Single(method => method.Name == "Fingerprint" &&
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:95:            ulong baselineHash = InvokeFingerprint(fingerprint, baseline);
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:96:            Assert.That(InvokeFingerprint(fingerprint, projection),
+Assets/NTSD/Scripts/Test\Editor\NTSD28B5ItrDefenseFieldsCarrierEditorTests.cs:161:        private static ulong InvokeFingerprint(MethodInfo method, object value)
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11VisualContentCandidateEditorTests.cs:64:            using (var hash = SHA256.Create()) return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", "");
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11VisualContentCandidateEditorTests.cs:86:            Assert.That(Property(Property(before, "Catalog"), "DefinitionFingerprint"), Is.EqualTo(Property(Property(after, "Catalog"), "DefinitionFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11VisualContentCandidateEditorTests.cs:87:            Assert.That(Property(before, "VisualFingerprint"), Is.Not.EqualTo(Property(after, "VisualFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11VisualContentCandidateEditorTests.cs:106:            Assert.That(Property(first, "VisualFingerprint"), Is.EqualTo(Property(second, "VisualFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11NativeSpriteRangeEditorTests.cs:168:                Assert.That(BitConverter.ToString(hash.ComputeHash(stream)).Replace("-", ""), Is.EqualTo("5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F"), "Frozen native capture identity");
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11LoganCatalogEditorTests.cs:156:            Assert.That(Property(first, "DefinitionFingerprint"), Is.EqualTo(Property(Read(root), "DefinitionFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11LoganCatalogEditorTests.cs:159:            Assert.That(Property(first, "DefinitionFingerprint"), Is.Not.EqualTo(Property(second, "DefinitionFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11LoganCatalogEditorTests.cs:175:            Assert.That(Property(first, "DefinitionFingerprint"), Is.EqualTo(Property(second, "DefinitionFingerprint")));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B11AtomicPublicationEditorTests.cs:129:            Assert.That(session.CatalogFingerprint, Is.EqualTo(candidate.ContentIdentity.CatalogFingerprint));

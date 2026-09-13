@@ -5,9 +5,9 @@ namespace NTSD.Simulation
 {
     public static class NTSD28UnityEntityRawCapture
     {
-        public const string Schema = "ntsd28-unity-entity-raw-capture-v1";
-        public const int FieldCount = 49;
-        public const int VerifiedBindingCount = 43;
+        public const string Schema = "ntsd28-unity-entity-raw-capture-v2";
+        public const int FieldCount = 50;
+        public const int VerifiedBindingCount = 44;
 
         public static readonly string[] CandidateBindings =
         {
@@ -97,6 +97,7 @@ namespace NTSD.Simulation
                     ("bdefendAccumulator", runtime.Bdefend),
                     ("collisionYReference", runtime.CollisionYReference),
                     ("environmentSourceSlot", null),
+                    ("objectAiExcludedGroupSourceSlot", runtime.ObjectAiExcludedGroupSourceSlot2F8),
                     ("environmentState", null),
                     ("hitReactionTimer", runtime.Fall),
                     ("motionHoldTimer", runtime.FrameDelay),

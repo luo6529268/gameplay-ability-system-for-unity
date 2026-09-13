@@ -1,0 +1,51 @@
+{
+  "schema": "ntsd28-raw-entity-comparison-self-test-v2",
+  "passed": true,
+  "cases": [
+    {
+      "name": "equal-raw",
+      "expectedStatus": "equal-raw",
+      "actualStatus": "equal-raw",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "missing-bindings",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedUniqueDifferences": 6,
+      "actualUniqueDifferences": 6,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "candidate-null-rejected",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-null-nonmissing-field:frame.previousAction",
+      "passed": true
+    },
+    {
+      "name": "non-contiguous-tick-rejected",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-non-contiguous-completed-tick",
+      "passed": true
+    },
+    {
+      "name": "value-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedUniqueDifferences": 1,
+      "actualUniqueDifferences": 1,
+      "reason": null,
+      "passed": true
+    }
+  ]
+}

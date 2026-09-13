@@ -1,0 +1,176 @@
+[
+  {
+    "name": "NTSD.Test.BattleLockstepChecksumEditorTests",
+    "total": "7",
+    "passed": "7",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleLockstepSessionEditorTests",
+    "total": "9",
+    "passed": "9",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleRuntimeOrderedShutdownEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleSimulationWorkerBoundaryEditorTests",
+    "total": "20",
+    "passed": "20",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleStateSnapshotEditorTests",
+    "total": "3",
+    "passed": "3",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleStateSnapshotRestoreEditorTests",
+    "total": "9",
+    "passed": "9",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.BattleWorldEntityRuntimeSnapshotEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28B0OpointOwnerPropagationProductionEditorTests",
+    "total": "7",
+    "passed": "7",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28B5Kind4SourceCountCarrierEditorTests",
+    "total": "5",
+    "passed": "5",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28B5SpecialHitLatchCarrierEditorTests",
+    "total": "5",
+    "passed": "5",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28B6WpointTerminalStructuralProductionEditorTests",
+    "total": "80",
+    "passed": "80",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28C23C24WorldClockEditorTests",
+    "total": "5",
+    "passed": "4",
+    "failed": "1"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28NativeFunctionKeySessionStateEditorTests",
+    "total": "9",
+    "passed": "9",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.Editor.NTSD28Q05OpointSnapshotBoundaryEditorTests",
+    "total": "20",
+    "passed": "20",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.FormalKernelFullReturnCommitSeamEditorTests",
+    "total": "3",
+    "passed": "3",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.InProcessLockstepAuthoritySessionEditorTests",
+    "total": "8",
+    "passed": "8",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.LateOpointRuntimeSlotCapacityEditorTests",
+    "total": "1",
+    "passed": "1",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.LockstepChecksumHistoryRingEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.LockstepSnapshotRingEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28B4StatusMotionCarrierEditorTests",
+    "total": "6",
+    "passed": "6",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28B5HitResourceSuppressionCarrierEditorTests",
+    "total": "6",
+    "passed": "6",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28CollisionYReferenceCarrierEditorTests",
+    "total": "6",
+    "passed": "6",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28EnvironmentStateCarrierEditorTests",
+    "total": "5",
+    "passed": "5",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28NativeActionDataCarrierEditorTests",
+    "total": "10",
+    "passed": "10",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28PreparingShutdownOwnerEditorTests",
+    "total": "8",
+    "passed": "8",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28Q05JointSnapshotVersionEditorTests",
+    "total": "23",
+    "passed": "23",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.NTSD28Q05UnclaimedRawRestoreEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Test.W05OpointLifecycleEditorTests",
+    "total": "8",
+    "passed": "8",
+    "failed": "0"
+  },
+  {
+    "name": "NTSD.Tests.Editor.BattleParityStructuralWitnessEditorTests",
+    "total": "4",
+    "passed": "4",
+    "failed": "0"
+  }
+]

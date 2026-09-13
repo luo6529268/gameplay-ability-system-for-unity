@@ -1,0 +1,43 @@
+{
+  "scopePaths": [
+    "Assets/NTSD/Scripts/Animation/LF2Tasks/LF2TaskRingBuffer.cs",
+    "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointSnapshotBoundaryEditorTests.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/BattleSimulationWorkerBoundary.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Session/InProcessBattleKernelHost.cs"
+  ],
+  "productionCount": 10,
+  "testCount": 1,
+  "relatedFixtureChange": "NTSD28-Q05-WORKER-LATE-OPOINT-FLOOR-FIXTURE-001",
+  "tests": {
+    "total": "187",
+    "passed": "187",
+    "failed": "0",
+    "start-time": "2026-09-13 11:57:19Z",
+    "end-time": "2026-09-13 11:57:42Z"
+  },
+  "bodyPreservationMethods": 11,
+  "selfCheck": "PASS",
+  "selfCheckRequestedUtc": "2026-09-13T11:58:10.2121605Z",
+  "selfCheckResultUtc": "2026-09-13T11:58:48.1797681Z",
+  "ledger": "PASS / 500 records / 5 current script diffs; prior package code already in user-created HEAD f3e11239",
+  "play": {
+    "status": "PASS",
+    "error": "",
+    "tick": 5,
+    "objectsBefore": 4,
+    "objectsAfter": 4,
+    "capturedRendererOwner": true,
+    "logicRefusedWithoutConsumption": true,
+    "rendererRefusedWithoutConsumption": true,
+    "emptyBoundaryCapture": true,
+    "workerWasPresent": false,
+    "scope": "Paused real Battle World; only two probe-owned tasks enqueued and removed after verifying refusal. Guard never consumes tasks; no task materialization or physical-input/full-skill claim."
+  }
+}

@@ -1,0 +1,231 @@
+{
+  "schema": "ntsd28-logan-trace-self-test-v2",
+  "passed": false,
+  "cases": [
+    {
+      "name": "Q05-current-trace-version",
+      "expectedStatus": "v3",
+      "actualStatus": "old",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": false
+    },
+    {
+      "name": "Q05-independent-2f8-binding",
+      "expectedStatus": "bound",
+      "actualStatus": "missing",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": false
+    },
+    {
+      "name": "Q05-semantic-header-required",
+      "expectedStatus": "invalid",
+      "actualStatus": "valid-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": false
+    },
+    {
+      "name": "Q05-old-trace-version-rejected",
+      "expectedStatus": "invalid",
+      "actualStatus": "valid-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": false
+    },
+    {
+      "name": "contract-descriptor",
+      "expectedStatus": "descriptor-valid",
+      "actualStatus": "descriptor-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "entity-binding-inventory",
+      "expectedStatus": "binding-inventory-valid",
+      "actualStatus": "binding-inventory-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-valid",
+      "expectedStatus": "valid-source-model-capture",
+      "actualStatus": "valid-source-model-capture",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-truncated",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "missing-required-tick:2",
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-extra-tick",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "extra-tick-after-declared-range",
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-formal-sha-drift",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "formalExeSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "valid-trace",
+      "expectedStatus": "valid-structure",
+      "actualStatus": "valid-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "equal-with-different-slot-capacity",
+      "expectedStatus": "equal-structure",
+      "actualStatus": "equal-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "input-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "input",
+      "actualDomain": "input",
+      "reason": "domain-hash-mismatch",
+      "passed": true
+    },
+    {
+      "name": "rng-call-site-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "rng",
+      "actualDomain": "rng",
+      "reason": "domain-hash-mismatch",
+      "passed": true
+    },
+    {
+      "name": "skipped-completed-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: non-contiguous-completed-tick: expected 2, got 3",
+      "passed": true
+    },
+    {
+      "name": "forged-domain-hash",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: forged-domain-hash:world",
+      "passed": true
+    },
+    {
+      "name": "entity-slot-outside-producer-capacity",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-slot-outside-producer-capacity",
+      "passed": true
+    },
+    {
+      "name": "entity-required-field-missing",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: entity-frame-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "entity-extra-field-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: entity-combat-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "entity-field-type-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: preciseX-must-be-float64",
+      "passed": true
+    },
+    {
+      "name": "content-strategy-pending",
+      "expectedStatus": "content-strategy-pending",
+      "actualStatus": "content-strategy-pending",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "approved-exception-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: approved-exceptions-mismatch",
+      "passed": true
+    },
+    {
+      "name": "excluded-feature-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: excluded-features-mismatch",
+      "passed": true
+    },
+    {
+      "name": "extra-authority-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "stream",
+      "actualDomain": "stream",
+      "reason": "extra-authority-tick-after-declared-range",
+      "passed": true
+    },
+    {
+      "name": "malformed-unity-json",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: \u0027n\u0027 is an invalid start of a property name. Expected a \u0027\u0022\u0027. LineNumber: 0 | BytePositionInLine: 1.",
+      "passed": true
+    }
+  ]
+}

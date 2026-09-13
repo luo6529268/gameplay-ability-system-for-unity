@@ -8,14 +8,14 @@ namespace NTSD28Parity;
 
 internal static class TraceContract
 {
-    internal const string Schema = "ntsd28-logan-battle-trace-v2";
-    internal const string DescriptorSchema = "ntsd28-logan-trace-contract-v2";
-    internal const string ComparisonSchema = "ntsd28-logan-trace-comparison-v2";
-    internal const string ValidationSchema = "ntsd28-logan-trace-validation-v2";
-    internal const string SelfTestSchema = "ntsd28-logan-trace-self-test-v2";
+    internal const string Schema = "ntsd28-logan-battle-trace-v3";
+    internal const string DescriptorSchema = "ntsd28-logan-trace-contract-v3";
+    internal const string ComparisonSchema = "ntsd28-logan-trace-comparison-v3";
+    internal const string ValidationSchema = "ntsd28-logan-trace-validation-v3";
+    internal const string SelfTestSchema = "ntsd28-logan-trace-self-test-v3";
     internal const string AuthorityExecutableSha256 =
         "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033";
-    internal const string ContentPolicy = "strategy-pending";
+    internal const string ContentPolicy = TraceContentIdentity.Policy;
     internal const int NormalLogicIntervalMilliseconds = 33;
     internal const int FastLogicIntervalMilliseconds = 3;
 
