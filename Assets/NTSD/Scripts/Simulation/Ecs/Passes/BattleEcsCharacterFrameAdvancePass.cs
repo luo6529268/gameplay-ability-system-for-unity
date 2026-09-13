@@ -120,7 +120,6 @@ namespace NTSD.Simulation.Ecs
                 runtime,
                 frame,
                 0f,
-                character.MassForFrameAdvance,
                 NTSDGlobal.Gameplay.MinSpeed,
                 NTSDGlobal.Gameplay.Gravity);
 

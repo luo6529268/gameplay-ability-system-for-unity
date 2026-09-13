@@ -1,0 +1,19 @@
+# Q05 新版definition头部与剩余内容合同核验
+
+状态 DELIVERED_CONTRACT_ONLY / METADATA_GAPS_CONFIRMED。属于现有Q05步骤1的内容接入完整性门槛，不新增schema窗口，不重做已验证frame AST/typed记录/PNG/路径。
+
+先读CURRENT-AUTHORITY、Q05-NATIVE-FRAME-TYPED-CONVERSION REPORT及Q03冻结合同。现native frame数据已覆盖40int、六double、ordered FrameSounds、CPoint27/OPoint24/ITR40/BDY6/WPoint9/BPoint2及strength19，原六DAT九frame问题已能通过实际构建，330 indexed configs构建与非法candidate拒绝已有专项证据；这些不等于完整definition数值或运行时行为全部一致。
+
+尚未由完整native projection覆盖的入口包括CharacterAnimtorManager.ExtractMovementParameters/ApplyMovementProperty、ExtractWeaponParameters的HP/sound等metadata；Lf2DatConverter.ApplyNativeInputDefinitionData/ApplyNativeArmorDefinitionData及其stats/BMP/sequences读取。当前观察到legacy float.TryParse、宽松ParseInt、大小写不敏感分支仍在共享入口。不能据此直接断言当前正式内容有差异，也不能因为330可构建就当作已对齐。先核对各字段实际native reader、精度/缺省/重复/namespace/准入，测量后决定精确改动。
+
+只读追踪formal playable object_catalog.cpp、dat_parser.cpp、combat_records.cpp、frame_motion/input_routing/native_ai、battle_world、render_snapshot及相关definition/stats/weapon_piece消费者。明确BMP移动值是float32/float64还是整数、空/缺省和sequence计数，stats/armor/property字段和weapon_piece内容是否已有Unity载体及真实consumer。检查generic metadata AST对native行语法是否可靠；不可发明新字段或拿旧C#补当前源码未确认语义。菜单资源字段只判断其是否影响战斗内容，非战斗菜单行为保持。
+
+复用当前indexed330清单与405 source输入hash。对真正进入playable build的definition数据做完整native/Unity projection，记录字段存在性、精度、raw bits、默认值、数组顺序及first-difference。任何新工具脚本同样先建准确Change Record；本Task仅允许只读合同调查，不能拿此文件当目录级写入许可。实测一致的项直接登记证据，不重复实现；有差异则拆准确可验收子Record接入当前Q05窗口。
+
+内容字段全部明确后才回父Q05步骤2～4的retired carrier、+2F8、semantic identity/capture guard/联合版本。Q05 identity必须补上本轮新FrameSounds、UsesLoganFrameNumbers、centerz/chp/cmp、nativeDvx/Dvy/Dvz与dx/dy/dz；不能只沿用旧37字段投影。Q06根据原版各reader分别消费整数与double（不能全局替换dvx类型），接chp/cmp；Q09接centerz；Q10按声明顺序前20条并跳空值消费FrameSounds。上述只写入后继，不在本只读审计偷偷接runtime。
+
+保留33ms/3ms、十一阶段关闭、Unity/GAS/非战斗功能/Scene/InputActions/外部包边界；stage.dat暂停、音频/视觉例外保持。Scene现有UI精度差异来源pending继续保护。本Task不发布新baseline，不部署Q07 DAT/图片，不改变原删除授权规则。
+
+当前已建立同ID两个诊断脚本准确Record：实际Unity metadata capture与对照，production保持。
+
+当前出口见同ID REPORT/CONTRACT-MATRIX与完整JSON首差。下一 NTSD28-Q05-NATIVE-DEFINITION-METADATA-INTEGRATION-001，只读审计已闭合，不再重复捕获已有结论。

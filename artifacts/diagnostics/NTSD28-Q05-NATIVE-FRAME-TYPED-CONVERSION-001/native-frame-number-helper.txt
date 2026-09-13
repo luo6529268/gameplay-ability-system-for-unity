@@ -1,0 +1,13 @@
+double field_number_or_zero(const FieldBag& fields, std::string_view key) noexcept {
+    const auto* field = fields.last(key);
+    if (field == nullptr || field->value.empty()) {
+        return 0.0;
+    }
+    char* end = nullptr;
+    const double value = std::strtod(field->value.c_str(), &end);
+    if (end != field->value.c_str() + field->value.size() ||
+        !std::isfinite(value)) {
+        return 0.0;
+    }
+    return value;
+}

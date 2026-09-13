@@ -1,0 +1,3342 @@
+{
+  "scope": "source-linked production decoders; float type and signed zero are reported separately from numeric equality",
+  "summary": {
+    "fieldsCompared": 333,
+    "numericDifferent": 113,
+    "floatTypedSlots": 111,
+    "signedZeroLost": 3,
+    "unityCaptureSha256": "FE32B2E0B227296CCB258850D2002BC05BEDF47B4A6910477C5878765A631F8B"
+  },
+  "rows": [
+    {
+      "id": "comma_decimal",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "comma_decimal",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 12,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 12,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 12,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "caughtact",
+      "native": 12,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "catchingact",
+      "native": 12,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "pickedact",
+      "native": 12,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "decimal_prefix",
+      "field": "pickingact",
+      "native": 12,
+      "nativeBits": null,
+      "unity": 12,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "throwvx",
+      "native": -2.25,
+      "nativeBits": "C0100000",
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "throwvy",
+      "native": 2.0,
+      "nativeBits": "40000000",
+      "unity": 2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "injury",
+      "native": 2,
+      "nativeBits": null,
+      "unity": 2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "wpoint_x",
+      "native": 2,
+      "nativeBits": null,
+      "unity": 2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "caughtact",
+      "native": 3,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "catchingact",
+      "native": 5,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "pickedact",
+      "native": 7,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "duplicate_last",
+      "field": "pickingact",
+      "native": 9,
+      "nativeBits": null,
+      "unity": 9,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "throwvx",
+      "native": 100.0,
+      "nativeBits": "42C80000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "throwvy",
+      "native": 100.0,
+      "nativeBits": "42C80000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "throwvz",
+      "native": 100.0,
+      "nativeBits": "42C80000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "exponent",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "throwvx",
+      "native": 1.5,
+      "nativeBits": "3FC00000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "throwvy",
+      "native": 1.5,
+      "nativeBits": "3FC00000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "throwvz",
+      "native": 1.5,
+      "nativeBits": "3FC00000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "fraction",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "throwvx",
+      "native": 3.0,
+      "nativeBits": "40400000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "throwvy",
+      "native": 3.0,
+      "nativeBits": "40400000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "throwvz",
+      "native": 3.0,
+      "nativeBits": "40400000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_float",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "throwvx",
+      "native": 16.0,
+      "nativeBits": "41800000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "throwvy",
+      "native": 16.0,
+      "nativeBits": "41800000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "throwvz",
+      "native": 16.0,
+      "nativeBits": "41800000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_integer",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "throwvx",
+      "native": -1.401298464324817e-45,
+      "nativeBits": "80000001",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "throwvy",
+      "native": -1.401298464324817e-45,
+      "nativeBits": "80000001",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "throwvz",
+      "native": -1.401298464324817e-45,
+      "nativeBits": "80000001",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "hex_subnormal",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "infinity",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "throwvx",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "throwvy",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "throwvz",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "injury",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "wpoint_x",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "caughtact",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "catchingact",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "pickedact",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_max",
+      "field": "pickingact",
+      "native": 2147483647,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "throwvx",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "throwvy",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "throwvz",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "injury",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "wpoint_x",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "caughtact",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "catchingact",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "pickedact",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_min",
+      "field": "pickingact",
+      "native": -2147483648,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "throwvx",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "throwvy",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "throwvz",
+      "native": 2147483648.0,
+      "nativeBits": "4F000000",
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_overflow",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2147483647,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "throwvx",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "throwvy",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "throwvz",
+      "native": -2147483648.0,
+      "nativeBits": "CF000000",
+      "unity": -2147483648,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "int_underflow",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2147483648,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "invalid_last",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "throwvx",
+      "native": 0.5,
+      "nativeBits": "3F000000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "throwvy",
+      "native": 0.5,
+      "nativeBits": "3F000000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "throwvz",
+      "native": 0.5,
+      "nativeBits": "3F000000",
+      "unity": 0,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_dot",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "throwvx",
+      "native": 5.0,
+      "nativeBits": "40A00000",
+      "unity": 5,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "throwvy",
+      "native": 5.0,
+      "nativeBits": "40A00000",
+      "unity": 5,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "throwvz",
+      "native": 5.0,
+      "nativeBits": "40A00000",
+      "unity": 5,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_plus",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 5,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "throwvx",
+      "native": 10.0,
+      "nativeBits": "41200000",
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "throwvy",
+      "native": 10.0,
+      "nativeBits": "41200000",
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "throwvz",
+      "native": 10.0,
+      "nativeBits": "41200000",
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "injury",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "wpoint_x",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "caughtact",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "catchingact",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "pickedact",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "leading_zeros",
+      "field": "pickingact",
+      "native": 10,
+      "nativeBits": null,
+      "unity": 10,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "throwvx",
+      "native": 3.4028234663852886e+38,
+      "nativeBits": "7F7FFFFF",
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "throwvy",
+      "native": 3.4028234663852886e+38,
+      "nativeBits": "7F7FFFFF",
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "throwvz",
+      "native": 3.4028234663852886e+38,
+      "nativeBits": "7F7FFFFF",
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "caughtact",
+      "native": 3,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "catchingact",
+      "native": 3,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "pickedact",
+      "native": 3,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "max_finite",
+      "field": "pickingact",
+      "native": 3,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "throwvx",
+      "native": 1.1754943508222875e-38,
+      "nativeBits": "00800000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "throwvy",
+      "native": 1.1754943508222875e-38,
+      "nativeBits": "00800000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "throwvz",
+      "native": 1.1754943508222875e-38,
+      "nativeBits": "00800000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "minimum_normal",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "missing",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "nan_payload",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "throwvx",
+      "native": -2.25,
+      "nativeBits": "C0100000",
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "throwvy",
+      "native": -2.25,
+      "nativeBits": "C0100000",
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "throwvz",
+      "native": -2.25,
+      "nativeBits": "C0100000",
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "caughtact",
+      "native": -2,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "catchingact",
+      "native": -2,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "pickedact",
+      "native": -2,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_fraction",
+      "field": "pickingact",
+      "native": -2,
+      "nativeBits": null,
+      "unity": -2,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_infinity",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": -1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": -1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": -1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "caughtact",
+      "native": -1,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "catchingact",
+      "native": -1,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "pickedact",
+      "native": -1,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_overflow",
+      "field": "pickingact",
+      "native": -1,
+      "nativeBits": null,
+      "unity": -1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "throwvx",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": -7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "throwvy",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": -7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "throwvz",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": -7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "caughtact",
+      "native": -7,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "catchingact",
+      "native": -7,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "pickedact",
+      "native": -7,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_underflow",
+      "field": "pickingact",
+      "native": -7,
+      "nativeBits": null,
+      "unity": -7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "throwvx",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": true
+    },
+    {
+      "id": "negative_zero",
+      "field": "throwvy",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": true
+    },
+    {
+      "id": "negative_zero",
+      "field": "throwvz",
+      "native": -0.0,
+      "nativeBits": "80000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": true
+    },
+    {
+      "id": "negative_zero",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "negative_zero",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "overflow",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "injury",
+      "native": 6,
+      "nativeBits": null,
+      "unity": 6,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "caughtact",
+      "native": 130,
+      "nativeBits": null,
+      "unity": 130,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "catchingact",
+      "native": 403,
+      "nativeBits": null,
+      "unity": 403,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "pickedact",
+      "native": 200,
+      "nativeBits": null,
+      "unity": 200,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "packed_actions",
+      "field": "pickingact",
+      "native": 100,
+      "nativeBits": null,
+      "unity": 100,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "plus_zero",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "positive_zero",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "throwvx",
+      "native": 1.0000001192092896,
+      "nativeBits": "3F800001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "throwvy",
+      "native": 1.0000001192092896,
+      "nativeBits": "3F800001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "throwvz",
+      "native": 1.0000001192092896,
+      "nativeBits": "3F800001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_just_above",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "throwvx",
+      "native": 1.0,
+      "nativeBits": "3F800000",
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "throwvy",
+      "native": 1.0,
+      "nativeBits": "3F800000",
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "throwvz",
+      "native": 1.0,
+      "nativeBits": "3F800000",
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "round_tie_even",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "throwvx",
+      "native": -842150464.0,
+      "nativeBits": "CE48C8C9",
+      "unity": -842150451,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "throwvy",
+      "native": -842150464.0,
+      "nativeBits": "CE48C8C9",
+      "unity": -842150451,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "throwvz",
+      "native": -842150464.0,
+      "nativeBits": "CE48C8C9",
+      "unity": -842150451,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "injury",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "wpoint_x",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "caughtact",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "catchingact",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "pickedact",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "sentinel_rounding",
+      "field": "pickingact",
+      "native": -842150451,
+      "nativeBits": null,
+      "unity": -842150451,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "throwvx",
+      "native": 1.401298464324817e-45,
+      "nativeBits": "00000001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "throwvy",
+      "native": 1.401298464324817e-45,
+      "nativeBits": "00000001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "throwvz",
+      "native": 1.401298464324817e-45,
+      "nativeBits": "00000001",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "caughtact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "catchingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "pickedact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "smallest_subnormal",
+      "field": "pickingact",
+      "native": 1,
+      "nativeBits": null,
+      "unity": 1,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "caughtact",
+      "native": 7,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "catchingact",
+      "native": 7,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "pickedact",
+      "native": 7,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "underflow",
+      "field": "pickingact",
+      "native": 7,
+      "nativeBits": null,
+      "unity": 7,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "throwvx",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "throwvy",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "throwvz",
+      "native": 0.0,
+      "nativeBits": "00000000",
+      "unity": 1,
+      "numericEqual": false,
+      "nativeFloatUnityInt": true,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "injury",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "wpoint_x",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 2,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "caughtact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 3,
+      "numericEqual": false,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "catchingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "pickedact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    },
+    {
+      "id": "uppercase_keys",
+      "field": "pickingact",
+      "native": 0,
+      "nativeBits": null,
+      "unity": 0,
+      "numericEqual": true,
+      "nativeFloatUnityInt": false,
+      "signedZeroLost": false
+    }
+  ]
+}

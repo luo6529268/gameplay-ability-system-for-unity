@@ -39,6 +39,7 @@ namespace NTSD.Animation
         private bool _battleCapacitySealed;
         private bool _acceptingRequests = true;
         private bool _quiesced;
+        private int _prewarmGeneration;
         private int _preparedObjectCapacity;
         private int _preparedSpriteCapacity;
         private long _rejectedObjectFetchCount;
@@ -223,41 +224,51 @@ namespace NTSD.Animation
 
         public async UniTask PrepareCapacityAsync(int targetObjectCount, int targetSpriteCount)
         {
-            if (!_acceptingRequests || _battleCapacitySealed)
-                return;
+            if (!await PrepareCapacityForContentAsync(targetObjectCount, targetSpriteCount, null))
+                throw new System.OperationCanceledException("Object pool preparation is no longer current.");
+        }
+
+        internal async UniTask<bool> PrepareCapacityForContentAsync(
+            int targetObjectCount, int targetSpriteCount, System.Func<bool> canContinue)
+        {
+            int generation = _prewarmGeneration;
+            bool IsCurrent() => this != null && generation == _prewarmGeneration && _acceptingRequests &&
+                !_battleCapacitySealed && (canContinue?.Invoke() ?? true);
+            if (!IsCurrent()) return false;
 
             int normalizedObjectTarget = Mathf.Max(0, targetObjectCount);
             BattleCentralPresentationMountRegistry.PrepareCapacity(normalizedObjectTarget);
-            int currentObjectCount = _availableObjects.Count + _activeObjects.Count;
             _activeObjects.EnsureCapacity(normalizedObjectTarget);
             _releaseTimeMap.EnsureCapacity(normalizedObjectTarget);
             if (_shutdownObjectScratch.Capacity < normalizedObjectTarget)
                 _shutdownObjectScratch.Capacity = normalizedObjectTarget;
-            int missingObjects = normalizedObjectTarget - currentObjectCount;
-            if (missingObjects > 0)
+            int created = 0;
+            while (_availableObjects.Count + _activeObjects.Count < normalizedObjectTarget)
             {
-                for (int i = 0; i < missingObjects; i++)
-                {
-                    CreateNewObject();
-                    if ((i + 1) % 5 == 0)
-                        await UniTask.Yield();
-                }
+                // Alignment contract: NTSD28-B11-SOURCE-CACHE-CALLER-PRODUCTION-001
+                if (!IsCurrent()) return false;
+                if (CreateNewObject() == null)
+                    throw new System.InvalidOperationException("Object pool prewarm could not create a renderer.");
+                if (++created % 5 == 0) await UniTask.Yield();
             }
 
+            if (!IsCurrent()) return false;
             int normalizedSpriteTarget = Mathf.Max(0, targetSpriteCount);
             _activeSprites.EnsureCapacity(normalizedSpriteTarget);
             if (_shutdownSpriteScratch.Capacity < normalizedSpriteTarget)
                 _shutdownSpriteScratch.Capacity = normalizedSpriteTarget;
-            int missingSprites = normalizedSpriteTarget - _spritePool.Count;
-            for (int i = 0; i < missingSprites; i++)
+            created = 0;
+            while (_spritePool.Count < normalizedSpriteTarget)
             {
+                if (!IsCurrent()) return false;
                 CreateNewSpriteRenderer();
-                if ((i + 1) % 5 == 0)
-                    await UniTask.Yield();
+                if (++created % 5 == 0) await UniTask.Yield();
             }
 
+            if (!IsCurrent()) return false;
             _preparedObjectCapacity = Mathf.Max(_preparedObjectCapacity, normalizedObjectTarget);
             _preparedSpriteCapacity = Mathf.Max(_preparedSpriteCapacity, normalizedSpriteTarget);
+            return true;
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -459,6 +470,7 @@ namespace NTSD.Animation
 
         public void BeginBattlePreparation()
         {
+            _prewarmGeneration++;
             _acceptingRequests = true;
             _quiesced = false;
             enabled = true;
@@ -466,6 +478,7 @@ namespace NTSD.Animation
 
         public void BeginBattleShutdown()
         {
+            _prewarmGeneration++;
             _acceptingRequests = false;
         }
 

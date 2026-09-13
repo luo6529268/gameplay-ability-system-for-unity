@@ -1,0 +1,12 @@
+{
+  "success": false,
+  "command": "test",
+  "data": null,
+  "errors": [
+    {
+      "code": "COMMAND_FAILED",
+      "message": "测试失败：Unity 进程以代码 1073741845 退出。"
+    }
+  ],
+  "warnings": []
+}

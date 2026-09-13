@@ -1,0 +1,17 @@
+{
+  "existingProtected": 3059,
+  "unchangedExisting": 3056,
+  "expectedCumulativeChanges": [
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs"
+  ],
+  "downstreamManagerDataUiDriverUnchangedThisSegment": [
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+    "Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs",
+    "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs"
+  ],
+  "missing": []
+}

@@ -21,20 +21,21 @@ namespace NTSD.Test.Editor
             WithSpawn(presentation, (parent, child) =>
             {
                 AssertRelation(parent, child);
+                bool carrierAbsent = typeof(LF2Entity).GetMember("TrackerFlag").Length == 0;
+                Assert.That(carrierAbsent, Is.True);
                 File.WriteAllText($"Temp/Goal20_R1_Reachability_{presentation}.json",
-                    $"{{\"parentFlag\":{parent.TrackerFlag},\"childFlag\":{child.TrackerFlag},\"parentCachePresent\":{(child.TrackerParent != null).ToString().ToLowerInvariant()},\"parentLink\":{parent.Runtime.LinkState},\"childLink\":{child.Runtime.LinkState}}}");
+                    $"{{\"retiredFlagCarrierAbsent\":{carrierAbsent.ToString().ToLowerInvariant()},\"parentCachePresent\":{(child.TrackerParent != null).ToString().ToLowerInvariant()},\"parentLink\":{parent.Runtime.LinkState},\"childLink\":{child.Runtime.LinkState}}}");
             });
         }
 
         [TestCase(false)]
         [TestCase(true)]
-        public void Kind2Factory_LeavesReservedTrackersAtDefaults(bool presentation)
+        public void Kind2Factory_PreservesRelationWithoutTrackerFlag(bool presentation)
         {
             WithSpawn(presentation, (parent, child) =>
             {
                 AssertRelation(parent, child);
-                Assert.That(parent.TrackerFlag, Is.Zero);
-                Assert.That(child.TrackerFlag, Is.Zero);
+                Assert.That(typeof(LF2Entity).GetMember("TrackerFlag"), Is.Empty);
                 Assert.That(parent.TrackerParent, Is.Null);
                 Assert.That(child.TrackerParent, Is.Null);
             });

@@ -1,0 +1,50 @@
+# Q02-A：source、catalog、cache 与实际 sprite range 消费
+
+日期2026-09-13；只读审计出口已形成。最小实现子包为NTSD28-B11-CONTENT-SOURCE-PATH-CONTRACT-001，具体代码/测试状态见该Record。此文不认证资源已迁移、缓存切换安全或完整Q02已完成。
+
+## 权威合同纠正
+
+GameSession28构造把正式runtime拆为decoded_dat和vfs；initialize调用ObjectDefinitionCatalog28.load_extracted_root(runtime)，正式对象索引实际来自catalog.csv。object_catalog.cpp:98-239必需registry_section、registry_index、id、type、source_path、published_folder，拒绝重复object id/registry_index及无效DAT；portable布局读取decoded_dat/source_path。GameSession28:4039-4081还按registry_index排序候选。
+
+decoded_dat/data/data.txt在GameSession28:150-215用于背景等辅助入口；不能将其与catalog.csv的字段对账相等扩大为“唯一对象加载权威”。Q01的330/24记录和路径/type对账仍成立，但后续对象目录适配必须保留catalog/index/validation合同。README_SOURCE与playable build.ps1确认game_session、object_catalog、dat_parser和render_snapshot进入正式构建；正式EXE hash仍为B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033。
+
+## 已确认的共享调用链
+
+1. NTSD_Menu的LoadingPrewarmController.Start/PrewarmOnceAsync先配置再图片；CreateCharacterConfigTask（约206-228）使用固定NTSD.CharacterConfig，sprite任务使用NTSD.CharacterSprites。
+2. 首次GameDataManager.Instance会InitializeSingleton并载旧Config/data.txt，LoadDataFile在objectLookup.Count>0后拒绝重载。CharacterAnimtorManager.ParseCharacterFrameConfigs固定旧AnimationConfig/../data.txt，又读取该global lookup。
+3. NTSD_ResourceLoader的cache是进程级；ClearCache清全局而非角色source，不能用来解决战斗切源，否则影响声音等资源。配置/sprite任务缓存不能仅凭旧固定key报告新版预热完成。
+4. CharacterSelectionController.StartBattle经AppManager.LoadBattleAdditive加载战斗，菜单和自动创建manager仍在。AppManager.InitializeBattleAsync直接SetupBattleCharacters，从同一CharacterAnimtorManager.GetCharacterConfig取配置，随后PrepareBattleCuesAsync读取同源sound id。不能只在SetupBattleCharacters前换一个路径。
+5. SelectRoleItem.GetAllLoadedCharacterIds/角色名与CharacterUIResourceManager.GetHeadSprite共享上述publication。头像cache只有int角色ID；SetCharacterUISprites在head/small都null时保留旧值，可能造成新角色拿到旧头像。
+6. CharacterAnimtorManager有spritePrewarmGeneration，但它只是异步失效/对象销毁generation，不是content/source identity。IsPrewarmCompleted和固定cachekey均不能证明对应哪一内容版本。
+
+精确后继范围：Animation/GameDataManager.cs；Animation/Manager/CharacterAnimtorManager.cs；UI/LoadingPrewarmController.cs；Load/NTSDResourceLoader.cs；UI/CharacterUIResourceManager.cs；AppManager的InitializeBattleAsync/SetupBattleCharacters；NTSDSoundPlayer.PrepareBattleCuesAsync。这里只审计这些caller，当前纯路径子包不修改它们。
+
+## 必须保持的非战斗/历史入口
+
+- SelectRoleItem、CharacterSelectionController的选择/随机/排序流程不改；source本身不能代替用户菜单范围决定。
+- CharacterFramePreviewWindow仍显式旧Config入口；BattleCentralEditorPreview的旧sasuke_0.bmp静态引用在Scene中仍存在，不随动态source修复。
+- NTSD28UnityRawCaptureEditor与BattleParityTraceEditor的ExternalDatScope会反射暂时清lookup并读旧baseline，不能在live battle复用此做法；后续替代须另建诊断合同。
+- NTSD_Test与BattleTestBootstrap直接预热，无菜单前置，未来必须显式携带对应测试source。
+- GameConfig的Foot六帧、RandomIcon、普通UI、SPARK、地图与音频例外不由本source包改变。
+
+真正正式接入的事务必须覆盖catalog/config、SpriteCatalog、角色头像cache、角色资源cachekey、未完成async prewarm及声音cue的来源一致性，再允许battle setup。不得靠独立cache清空、返回旧值或全局热reload凑成“已切换”。现阶段只实现不可变路径描述，既有global caller不切源；catalog解析/验证、staging及publication另建闭合包。纯路径描述也不伪造content fingerprint或registry验证状态。
+
+## Sprite range追到最终consumer后的结论
+
+原生dat_parser.cpp:192-220保留declared端点，但effective first从0开始、按前面row×col累加；render_snapshot.cpp:1104-1147消费该effective范围。原生render_snapshot_tests.cpp:65-80明确覆盖file(20-19)/file(900-900)。
+
+Unity ParserV2:149-200保存文本StartIndex/EndIndex，TryParseSpriteFileRange:344-373直接拒绝end<start。CharacterAnimtorManager.BuildCharacterDataFromDat:588-617原样赋SpriteFileInfo.startFrame/endFrame；后续LoadCharacterSpritesAsync、ProcessAndCreateSpritesAsync:1408-1528、BuildFirstDeclaredSpriteOwnership:1630-1655、BuildBattleSpriteCatalog:1550-1617继续使用它。ResolveEffectiveGrid/BuildIndexedSpriteRects只处理矩形容量和横纵适配，未重新计算累计范围；BattleSpriteCatalog Builder接收已算好的pic，LF2Sprite直接按key查找。
+
+Q01的31文件55差异中，按当前代码静态推导：6文件范围集合会被容量裁剪偶然纠正，25文件仍不同；其中19文件的authored frame直接命中native有而Unity推导集合缺失的pic。此为PNG成功载入前提下的条件性推导，**不是已发布catalog运行证据**，集合相同也不证明sheet/rect/像素相同。
+
+六个集合偶然相同文件：c/asu/a/ash.dat、c/jiro/gol.dat、c/jiro/gol2.dat、c/kan/a/san.dat、c/kid/a/kyo.dat、w/e.dat。
+三个reversed declaration被丢弃文件：c/jug/jugo.dat、c/jug/jugoCS2.dat的file(250-249)，c/shis/shis.dat的file(145-132)。原生分别仍生成250..270和145..152。
+直接例子：a/tra/tra.dat的authored pic0..4，native范围0..4，Unity条件性范围65..69；c/oro/a/atk.dat和c/sasu/a/mss.dat末sheet文本重从0开始，当前first ownership会吞掉原生累计尾段。
+
+Q02-C后继应独立修Parser保留declared端点，并在CharacterData接入处计算native effective范围，后续catalog复用现有集中consumer；保持原文供诊断。现有BattleSpriteOverlappingRangeEditorTests与SelfCheck.CheckSpriteFileRangeParsingContracts固化旧声明/ownership，必须按source区分fixture，不盲改全部旧Editor行为。最终需要native fixture、Unity实际Sprite catalog与PNG pixel证据；Q02-B后台PNG是实际发布前置。
+
+## 本次最小包与出口
+
+新增BattleContentSource纯托管不可变路径合同，没有singleton、异步任务、文件流、Unity对象或任何全局state。显式source实例不改变旧默认入口、不触发迁移，故无需新增shutdown owner。准确Task/Record已在代码之前建立；相同NUnit20项RED/GREEN结果及Unity后续验证单独记录。
+
+后继优先顺序：完成本路径合同focused/Unity编译出口 → Q02-B后台PNG → Q02-C有效pic范围及native parser入口 → Q02目录验证和source/staging/publication完整接线。Q03字段合同可独立准备；Q05/Q06/Q07硬依赖保持，不把本基础类存在当成生产新内容可用。

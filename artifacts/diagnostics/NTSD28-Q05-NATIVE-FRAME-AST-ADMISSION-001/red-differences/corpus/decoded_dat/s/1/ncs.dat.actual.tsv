@@ -1,0 +1,2549 @@
+decoded_dat/s/1/ncs.dat	frame	0	0		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	0	-1	pic	30
+decoded_dat/s/1/ncs.dat	field	0	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	0	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	0	-1	next	31
+decoded_dat/s/1/ncs.dat	field	0	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	0	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	0	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	0	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	0	-1	hit_a	313236
+decoded_dat/s/1/ncs.dat	field	0	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	0	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	0	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	0	0	kind	33
+decoded_dat/s/1/ncs.dat	field	0	0	x	3339
+decoded_dat/s/1/ncs.dat	field	0	0	y	3739
+decoded_dat/s/1/ncs.dat	field	0	0	weaponact	333939
+decoded_dat/s/1/ncs.dat	field	0	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	0	0	cover	30
+decoded_dat/s/1/ncs.dat	block	0	1	bdy	
+decoded_dat/s/1/ncs.dat	field	0	1	kind	30
+decoded_dat/s/1/ncs.dat	field	0	1	x	3231
+decoded_dat/s/1/ncs.dat	field	0	1	y	3138
+decoded_dat/s/1/ncs.dat	field	0	1	w	3433
+decoded_dat/s/1/ncs.dat	field	0	1	h	3632
+decoded_dat/s/1/ncs.dat	block	0	2	bdy	
+decoded_dat/s/1/ncs.dat	field	0	2	kind	30
+decoded_dat/s/1/ncs.dat	field	0	2	x	3231
+decoded_dat/s/1/ncs.dat	field	0	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	0	2	w	3433
+decoded_dat/s/1/ncs.dat	field	0	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	1	1		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	1	-1	pic	31
+decoded_dat/s/1/ncs.dat	field	1	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	1	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	1	-1	next	32
+decoded_dat/s/1/ncs.dat	field	1	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	1	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	1	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	1	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	1	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	field	1	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	1	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	1	0	bdy	
+decoded_dat/s/1/ncs.dat	field	1	0	kind	30
+decoded_dat/s/1/ncs.dat	field	1	0	x	3231
+decoded_dat/s/1/ncs.dat	field	1	0	y	3138
+decoded_dat/s/1/ncs.dat	field	1	0	w	3433
+decoded_dat/s/1/ncs.dat	field	1	0	h	3632
+decoded_dat/s/1/ncs.dat	block	1	1	bdy	
+decoded_dat/s/1/ncs.dat	field	1	1	kind	30
+decoded_dat/s/1/ncs.dat	field	1	1	x	3231
+decoded_dat/s/1/ncs.dat	field	1	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	1	1	w	3433
+decoded_dat/s/1/ncs.dat	field	1	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	2	2		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	2	-1	pic	32
+decoded_dat/s/1/ncs.dat	field	2	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	2	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	2	-1	next	33
+decoded_dat/s/1/ncs.dat	field	2	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	2	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	2	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	2	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	2	-1	hit_a	313236
+decoded_dat/s/1/ncs.dat	field	2	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	2	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	2	0	bdy	
+decoded_dat/s/1/ncs.dat	field	2	0	kind	30
+decoded_dat/s/1/ncs.dat	field	2	0	x	3231
+decoded_dat/s/1/ncs.dat	field	2	0	y	3138
+decoded_dat/s/1/ncs.dat	field	2	0	w	3433
+decoded_dat/s/1/ncs.dat	field	2	0	h	3632
+decoded_dat/s/1/ncs.dat	block	2	1	bdy	
+decoded_dat/s/1/ncs.dat	field	2	1	kind	30
+decoded_dat/s/1/ncs.dat	field	2	1	x	3231
+decoded_dat/s/1/ncs.dat	field	2	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	2	1	w	3433
+decoded_dat/s/1/ncs.dat	field	2	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	3	3		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	3	-1	pic	33
+decoded_dat/s/1/ncs.dat	field	3	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	3	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	3	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	3	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	3	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	3	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	3	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	3	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	field	3	-1	hit_d	2d313235
+decoded_dat/s/1/ncs.dat	field	3	-1	hit_j	313236
+decoded_dat/s/1/ncs.dat	block	3	0	bdy	
+decoded_dat/s/1/ncs.dat	field	3	0	kind	30
+decoded_dat/s/1/ncs.dat	field	3	0	x	3231
+decoded_dat/s/1/ncs.dat	field	3	0	y	3138
+decoded_dat/s/1/ncs.dat	field	3	0	w	3433
+decoded_dat/s/1/ncs.dat	field	3	0	h	3632
+decoded_dat/s/1/ncs.dat	block	3	1	bdy	
+decoded_dat/s/1/ncs.dat	field	3	1	kind	30
+decoded_dat/s/1/ncs.dat	field	3	1	x	3231
+decoded_dat/s/1/ncs.dat	field	3	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	3	1	w	3433
+decoded_dat/s/1/ncs.dat	field	3	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	4	100		726f77696e67
+decoded_dat/s/1/ncs.dat	field	4	-1	pic	3635
+decoded_dat/s/1/ncs.dat	field	4	-1	state	36
+decoded_dat/s/1/ncs.dat	field	4	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	4	-1	next	313031
+decoded_dat/s/1/ncs.dat	field	4	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	4	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	4	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	4	-1	sound	646174615c3031372e776176
+decoded_dat/s/1/ncs.dat	block	4	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	4	0	kind	31
+decoded_dat/s/1/ncs.dat	field	4	0	x	3533
+decoded_dat/s/1/ncs.dat	field	4	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	4	0	weaponact	3237
+decoded_dat/s/1/ncs.dat	field	4	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	4	0	cover	30
+decoded_dat/s/1/ncs.dat	block	4	1	bdy	
+decoded_dat/s/1/ncs.dat	field	4	1	kind	30
+decoded_dat/s/1/ncs.dat	field	4	1	x	3231
+decoded_dat/s/1/ncs.dat	field	4	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	4	1	w	3433
+decoded_dat/s/1/ncs.dat	field	4	1	h	3632
+decoded_dat/s/1/ncs.dat	block	4	2	bdy	
+decoded_dat/s/1/ncs.dat	field	4	2	kind	30
+decoded_dat/s/1/ncs.dat	field	4	2	x	3231
+decoded_dat/s/1/ncs.dat	field	4	2	y	32303434303030
+decoded_dat/s/1/ncs.dat	field	4	2	w	3433
+decoded_dat/s/1/ncs.dat	field	4	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	5	101		726f77696e67
+decoded_dat/s/1/ncs.dat	field	5	-1	pic	3635
+decoded_dat/s/1/ncs.dat	field	5	-1	state	36
+decoded_dat/s/1/ncs.dat	field	5	-1	wait	36
+decoded_dat/s/1/ncs.dat	field	5	-1	next	30
+decoded_dat/s/1/ncs.dat	field	5	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	5	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	5	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	5	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	5	0	kind	31
+decoded_dat/s/1/ncs.dat	field	5	0	x	3533
+decoded_dat/s/1/ncs.dat	field	5	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	5	0	weaponact	3237
+decoded_dat/s/1/ncs.dat	field	5	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	5	0	cover	30
+decoded_dat/s/1/ncs.dat	block	5	1	bdy	
+decoded_dat/s/1/ncs.dat	field	5	1	kind	30
+decoded_dat/s/1/ncs.dat	field	5	1	x	3231
+decoded_dat/s/1/ncs.dat	field	5	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	5	1	w	3433
+decoded_dat/s/1/ncs.dat	field	5	1	h	3632
+decoded_dat/s/1/ncs.dat	block	5	2	bdy	
+decoded_dat/s/1/ncs.dat	field	5	2	kind	30
+decoded_dat/s/1/ncs.dat	field	5	2	x	3231
+decoded_dat/s/1/ncs.dat	field	5	2	y	32303434303030
+decoded_dat/s/1/ncs.dat	field	5	2	w	3433
+decoded_dat/s/1/ncs.dat	field	5	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	6	102		726f77696e67
+decoded_dat/s/1/ncs.dat	field	6	-1	pic	3439
+decoded_dat/s/1/ncs.dat	field	6	-1	state	36
+decoded_dat/s/1/ncs.dat	field	6	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	6	-1	next	313033
+decoded_dat/s/1/ncs.dat	field	6	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	6	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	6	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	6	-1	sound	646174615c3031372e776176
+decoded_dat/s/1/ncs.dat	block	6	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	6	0	kind	31
+decoded_dat/s/1/ncs.dat	field	6	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	6	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	6	0	weaponact	3237
+decoded_dat/s/1/ncs.dat	field	6	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	6	0	cover	31
+decoded_dat/s/1/ncs.dat	block	6	1	itr	
+decoded_dat/s/1/ncs.dat	field	6	1	kind	30
+decoded_dat/s/1/ncs.dat	field	6	1	x	3335
+decoded_dat/s/1/ncs.dat	field	6	1	y	363636
+decoded_dat/s/1/ncs.dat	field	6	1	w	353030
+decoded_dat/s/1/ncs.dat	field	6	1	h	3134
+decoded_dat/s/1/ncs.dat	field	6	1	effect	35
+decoded_dat/s/1/ncs.dat	field	6	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	6	1	vrest	37
+decoded_dat/s/1/ncs.dat	field	6	1	bdefend	3136
+decoded_dat/s/1/ncs.dat	field	6	1	injury	31
+decoded_dat/s/1/ncs.dat	block	6	2	bdy	
+decoded_dat/s/1/ncs.dat	field	6	2	kind	30
+decoded_dat/s/1/ncs.dat	field	6	2	x	3231
+decoded_dat/s/1/ncs.dat	field	6	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	6	2	w	3433
+decoded_dat/s/1/ncs.dat	field	6	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	7	103		726f77696e67
+decoded_dat/s/1/ncs.dat	field	7	-1	pic	3439
+decoded_dat/s/1/ncs.dat	field	7	-1	state	36
+decoded_dat/s/1/ncs.dat	field	7	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	7	-1	next	313034
+decoded_dat/s/1/ncs.dat	field	7	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	7	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	7	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	7	-1	mp	2d3235
+decoded_dat/s/1/ncs.dat	block	7	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	7	0	kind	31
+decoded_dat/s/1/ncs.dat	field	7	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	7	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	7	0	weaponact	3237
+decoded_dat/s/1/ncs.dat	field	7	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	7	0	cover	31
+decoded_dat/s/1/ncs.dat	block	7	1	bdy	
+decoded_dat/s/1/ncs.dat	field	7	1	kind	30
+decoded_dat/s/1/ncs.dat	field	7	1	x	3231
+decoded_dat/s/1/ncs.dat	field	7	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	7	1	w	3433
+decoded_dat/s/1/ncs.dat	field	7	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	8	104		726f77696e67
+decoded_dat/s/1/ncs.dat	field	8	-1	pic	393939
+decoded_dat/s/1/ncs.dat	field	8	-1	state	36
+decoded_dat/s/1/ncs.dat	field	8	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	8	-1	next	313035
+decoded_dat/s/1/ncs.dat	field	8	-1	dvx	3235
+decoded_dat/s/1/ncs.dat	field	8	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	8	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	8	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	8	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	8	0	kind	31
+decoded_dat/s/1/ncs.dat	field	8	0	x	3330
+decoded_dat/s/1/ncs.dat	field	8	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	8	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	8	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	8	0	cover	30
+decoded_dat/s/1/ncs.dat	block	8	1	bdy	
+decoded_dat/s/1/ncs.dat	field	8	1	kind	30
+decoded_dat/s/1/ncs.dat	field	8	1	x	3231
+decoded_dat/s/1/ncs.dat	field	8	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	8	1	w	3433
+decoded_dat/s/1/ncs.dat	field	8	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	9	105		726f77696e67
+decoded_dat/s/1/ncs.dat	field	9	-1	pic	393939
+decoded_dat/s/1/ncs.dat	field	9	-1	state	36
+decoded_dat/s/1/ncs.dat	field	9	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	9	-1	next	313036
+decoded_dat/s/1/ncs.dat	field	9	-1	dvx	3235
+decoded_dat/s/1/ncs.dat	field	9	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	9	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	9	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	9	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	9	0	kind	31
+decoded_dat/s/1/ncs.dat	field	9	0	x	3434
+decoded_dat/s/1/ncs.dat	field	9	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	9	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	9	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	9	0	cover	30
+decoded_dat/s/1/ncs.dat	block	9	1	bdy	
+decoded_dat/s/1/ncs.dat	field	9	1	kind	30
+decoded_dat/s/1/ncs.dat	field	9	1	x	3231
+decoded_dat/s/1/ncs.dat	field	9	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	9	1	w	3433
+decoded_dat/s/1/ncs.dat	field	9	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	10	106		726f77696e67
+decoded_dat/s/1/ncs.dat	field	10	-1	pic	3439
+decoded_dat/s/1/ncs.dat	field	10	-1	state	36
+decoded_dat/s/1/ncs.dat	field	10	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	10	-1	next	313037
+decoded_dat/s/1/ncs.dat	field	10	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	10	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	10	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	10	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	10	0	kind	31
+decoded_dat/s/1/ncs.dat	field	10	0	x	3434
+decoded_dat/s/1/ncs.dat	field	10	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	10	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	10	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	10	0	cover	30
+decoded_dat/s/1/ncs.dat	block	10	1	bdy	
+decoded_dat/s/1/ncs.dat	field	10	1	kind	30
+decoded_dat/s/1/ncs.dat	field	10	1	x	3231
+decoded_dat/s/1/ncs.dat	field	10	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	10	1	w	3433
+decoded_dat/s/1/ncs.dat	field	10	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	11	107		726f77696e67
+decoded_dat/s/1/ncs.dat	field	11	-1	pic	3439
+decoded_dat/s/1/ncs.dat	field	11	-1	state	36
+decoded_dat/s/1/ncs.dat	field	11	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	11	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	11	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	11	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	11	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	11	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	11	0	kind	31
+decoded_dat/s/1/ncs.dat	field	11	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	11	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	11	0	weaponact	3237
+decoded_dat/s/1/ncs.dat	field	11	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	11	0	cover	31
+decoded_dat/s/1/ncs.dat	block	11	1	bdy	
+decoded_dat/s/1/ncs.dat	field	11	1	kind	30
+decoded_dat/s/1/ncs.dat	field	11	1	x	3231
+decoded_dat/s/1/ncs.dat	field	11	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	11	1	w	3433
+decoded_dat/s/1/ncs.dat	field	11	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	12	108		726f77696e67
+decoded_dat/s/1/ncs.dat	field	12	-1	pic	3636
+decoded_dat/s/1/ncs.dat	field	12	-1	state	36
+decoded_dat/s/1/ncs.dat	field	12	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	12	-1	next	313039
+decoded_dat/s/1/ncs.dat	field	12	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	12	-1	centerx	3435
+decoded_dat/s/1/ncs.dat	field	12	-1	centery	3632
+decoded_dat/s/1/ncs.dat	field	12	-1	sound	646174615c3031372e776176
+decoded_dat/s/1/ncs.dat	block	12	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	12	0	kind	31
+decoded_dat/s/1/ncs.dat	field	12	0	x	3433
+decoded_dat/s/1/ncs.dat	field	12	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	12	0	weaponact	3232
+decoded_dat/s/1/ncs.dat	field	12	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	12	0	cover	30
+decoded_dat/s/1/ncs.dat	block	12	1	bdy	
+decoded_dat/s/1/ncs.dat	field	12	1	kind	30
+decoded_dat/s/1/ncs.dat	field	12	1	x	3231
+decoded_dat/s/1/ncs.dat	field	12	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	12	1	w	3433
+decoded_dat/s/1/ncs.dat	field	12	1	h	3632
+decoded_dat/s/1/ncs.dat	block	12	2	bdy	
+decoded_dat/s/1/ncs.dat	field	12	2	kind	30
+decoded_dat/s/1/ncs.dat	field	12	2	x	3231
+decoded_dat/s/1/ncs.dat	field	12	2	y	32303434303030
+decoded_dat/s/1/ncs.dat	field	12	2	w	3433
+decoded_dat/s/1/ncs.dat	field	12	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	13	109		726f77696e67
+decoded_dat/s/1/ncs.dat	field	13	-1	pic	3636
+decoded_dat/s/1/ncs.dat	field	13	-1	state	36
+decoded_dat/s/1/ncs.dat	field	13	-1	wait	36
+decoded_dat/s/1/ncs.dat	field	13	-1	next	30
+decoded_dat/s/1/ncs.dat	field	13	-1	dvz	33
+decoded_dat/s/1/ncs.dat	field	13	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	13	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	13	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	13	0	kind	31
+decoded_dat/s/1/ncs.dat	field	13	0	x	3533
+decoded_dat/s/1/ncs.dat	field	13	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	13	0	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	13	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	13	0	cover	30
+decoded_dat/s/1/ncs.dat	block	13	1	bdy	
+decoded_dat/s/1/ncs.dat	field	13	1	kind	30
+decoded_dat/s/1/ncs.dat	field	13	1	x	3231
+decoded_dat/s/1/ncs.dat	field	13	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	13	1	w	3433
+decoded_dat/s/1/ncs.dat	field	13	1	h	3632
+decoded_dat/s/1/ncs.dat	block	13	2	bdy	
+decoded_dat/s/1/ncs.dat	field	13	2	kind	30
+decoded_dat/s/1/ncs.dat	field	13	2	x	3231
+decoded_dat/s/1/ncs.dat	field	13	2	y	32303434303030
+decoded_dat/s/1/ncs.dat	field	13	2	w	3433
+decoded_dat/s/1/ncs.dat	field	13	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	14	110		646566656e64
+decoded_dat/s/1/ncs.dat	field	14	-1	pic	3530
+decoded_dat/s/1/ncs.dat	field	14	-1	state	37
+decoded_dat/s/1/ncs.dat	field	14	-1	wait	3132
+decoded_dat/s/1/ncs.dat	field	14	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	14	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	14	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	14	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	14	0	kind	31
+decoded_dat/s/1/ncs.dat	field	14	0	x	3230
+decoded_dat/s/1/ncs.dat	field	14	0	y	2d3137
+decoded_dat/s/1/ncs.dat	field	14	0	weaponact	3238
+decoded_dat/s/1/ncs.dat	field	14	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	14	0	cover	30
+decoded_dat/s/1/ncs.dat	block	14	1	bdy	
+decoded_dat/s/1/ncs.dat	field	14	1	kind	30
+decoded_dat/s/1/ncs.dat	field	14	1	x	3230
+decoded_dat/s/1/ncs.dat	field	14	1	y	3139
+decoded_dat/s/1/ncs.dat	field	14	1	w	3338
+decoded_dat/s/1/ncs.dat	field	14	1	h	3630
+decoded_dat/s/1/ncs.dat	block	14	2	bdy	
+decoded_dat/s/1/ncs.dat	field	14	2	kind	30
+decoded_dat/s/1/ncs.dat	field	14	2	x	3231
+decoded_dat/s/1/ncs.dat	field	14	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	14	2	w	3433
+decoded_dat/s/1/ncs.dat	field	14	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	15	111		646566656e64
+decoded_dat/s/1/ncs.dat	field	15	-1	pic	3530
+decoded_dat/s/1/ncs.dat	field	15	-1	state	37
+decoded_dat/s/1/ncs.dat	field	15	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	15	-1	next	313134
+decoded_dat/s/1/ncs.dat	field	15	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	15	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	15	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	15	0	kind	31
+decoded_dat/s/1/ncs.dat	field	15	0	x	3230
+decoded_dat/s/1/ncs.dat	field	15	0	y	2d3137
+decoded_dat/s/1/ncs.dat	field	15	0	weaponact	3238
+decoded_dat/s/1/ncs.dat	field	15	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	15	0	cover	30
+decoded_dat/s/1/ncs.dat	block	15	1	bdy	
+decoded_dat/s/1/ncs.dat	field	15	1	kind	30
+decoded_dat/s/1/ncs.dat	field	15	1	x	3136
+decoded_dat/s/1/ncs.dat	field	15	1	y	3139
+decoded_dat/s/1/ncs.dat	field	15	1	w	3432
+decoded_dat/s/1/ncs.dat	field	15	1	h	3630
+decoded_dat/s/1/ncs.dat	block	15	2	bdy	
+decoded_dat/s/1/ncs.dat	field	15	2	kind	30
+decoded_dat/s/1/ncs.dat	field	15	2	x	3231
+decoded_dat/s/1/ncs.dat	field	15	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	15	2	w	3433
+decoded_dat/s/1/ncs.dat	field	15	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	16	112		62726f6b656e5f646566656e64
+decoded_dat/s/1/ncs.dat	field	16	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	16	-1	state	38
+decoded_dat/s/1/ncs.dat	field	16	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	16	-1	next	313133
+decoded_dat/s/1/ncs.dat	field	16	-1	dvx	2d32
+decoded_dat/s/1/ncs.dat	field	16	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	16	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	16	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	16	0	kind	31
+decoded_dat/s/1/ncs.dat	field	16	0	x	3230
+decoded_dat/s/1/ncs.dat	field	16	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	16	0	weaponact	3238
+decoded_dat/s/1/ncs.dat	field	16	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	16	0	cover	30
+decoded_dat/s/1/ncs.dat	block	16	1	bdy	
+decoded_dat/s/1/ncs.dat	field	16	1	kind	30
+decoded_dat/s/1/ncs.dat	field	16	1	x	35
+decoded_dat/s/1/ncs.dat	field	16	1	y	3137
+decoded_dat/s/1/ncs.dat	field	16	1	w	3634
+decoded_dat/s/1/ncs.dat	field	16	1	h	3635
+decoded_dat/s/1/ncs.dat	block	16	2	bdy	
+decoded_dat/s/1/ncs.dat	field	16	2	kind	30
+decoded_dat/s/1/ncs.dat	field	16	2	x	3231
+decoded_dat/s/1/ncs.dat	field	16	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	16	2	w	3433
+decoded_dat/s/1/ncs.dat	field	16	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	17	113		62726f6b656e5f646566656e64
+decoded_dat/s/1/ncs.dat	field	17	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	17	-1	state	38
+decoded_dat/s/1/ncs.dat	field	17	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	17	-1	next	313134
+decoded_dat/s/1/ncs.dat	field	17	-1	dvx	2d32
+decoded_dat/s/1/ncs.dat	field	17	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	17	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	17	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	17	0	kind	31
+decoded_dat/s/1/ncs.dat	field	17	0	x	3230
+decoded_dat/s/1/ncs.dat	field	17	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	17	0	weaponact	3238
+decoded_dat/s/1/ncs.dat	field	17	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	17	0	cover	30
+decoded_dat/s/1/ncs.dat	block	17	1	bdy	
+decoded_dat/s/1/ncs.dat	field	17	1	kind	30
+decoded_dat/s/1/ncs.dat	field	17	1	x	35
+decoded_dat/s/1/ncs.dat	field	17	1	y	3137
+decoded_dat/s/1/ncs.dat	field	17	1	w	3634
+decoded_dat/s/1/ncs.dat	field	17	1	h	3635
+decoded_dat/s/1/ncs.dat	block	17	2	bdy	
+decoded_dat/s/1/ncs.dat	field	17	2	kind	30
+decoded_dat/s/1/ncs.dat	field	17	2	x	3231
+decoded_dat/s/1/ncs.dat	field	17	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	17	2	w	3433
+decoded_dat/s/1/ncs.dat	field	17	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	18	114		62726f6b656e5f646566656e64
+decoded_dat/s/1/ncs.dat	field	18	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	18	-1	state	38
+decoded_dat/s/1/ncs.dat	field	18	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	18	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	18	-1	dvx	2d32
+decoded_dat/s/1/ncs.dat	field	18	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	18	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	18	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	18	0	kind	31
+decoded_dat/s/1/ncs.dat	field	18	0	x	3230
+decoded_dat/s/1/ncs.dat	field	18	0	y	2d393939
+decoded_dat/s/1/ncs.dat	field	18	0	weaponact	3238
+decoded_dat/s/1/ncs.dat	field	18	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	18	0	cover	30
+decoded_dat/s/1/ncs.dat	block	18	1	bdy	
+decoded_dat/s/1/ncs.dat	field	18	1	kind	30
+decoded_dat/s/1/ncs.dat	field	18	1	x	35
+decoded_dat/s/1/ncs.dat	field	18	1	y	3137
+decoded_dat/s/1/ncs.dat	field	18	1	w	3634
+decoded_dat/s/1/ncs.dat	field	18	1	h	3635
+decoded_dat/s/1/ncs.dat	block	18	2	bdy	
+decoded_dat/s/1/ncs.dat	field	18	2	kind	30
+decoded_dat/s/1/ncs.dat	field	18	2	x	3231
+decoded_dat/s/1/ncs.dat	field	18	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	18	2	w	3433
+decoded_dat/s/1/ncs.dat	field	18	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	19	118		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	19	-1	pic	30
+decoded_dat/s/1/ncs.dat	field	19	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	19	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	19	-1	next	313139
+decoded_dat/s/1/ncs.dat	field	19	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	19	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	19	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	19	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	19	-1	hit_a	313236
+decoded_dat/s/1/ncs.dat	field	19	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	19	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	19	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	19	0	kind	33
+decoded_dat/s/1/ncs.dat	field	19	0	x	3339
+decoded_dat/s/1/ncs.dat	field	19	0	y	3739
+decoded_dat/s/1/ncs.dat	field	19	0	weaponact	333939
+decoded_dat/s/1/ncs.dat	field	19	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	19	0	cover	30
+decoded_dat/s/1/ncs.dat	block	19	1	bdy	
+decoded_dat/s/1/ncs.dat	field	19	1	kind	30
+decoded_dat/s/1/ncs.dat	field	19	1	x	3231
+decoded_dat/s/1/ncs.dat	field	19	1	y	3138
+decoded_dat/s/1/ncs.dat	field	19	1	w	3433
+decoded_dat/s/1/ncs.dat	field	19	1	h	3632
+decoded_dat/s/1/ncs.dat	block	19	2	bdy	
+decoded_dat/s/1/ncs.dat	field	19	2	kind	30
+decoded_dat/s/1/ncs.dat	field	19	2	x	3231
+decoded_dat/s/1/ncs.dat	field	19	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	19	2	w	3433
+decoded_dat/s/1/ncs.dat	field	19	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	20	119		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	20	-1	pic	31
+decoded_dat/s/1/ncs.dat	field	20	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	20	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	20	-1	next	313230
+decoded_dat/s/1/ncs.dat	field	20	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	20	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	20	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	20	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	20	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	field	20	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	20	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	20	0	bdy	
+decoded_dat/s/1/ncs.dat	field	20	0	kind	30
+decoded_dat/s/1/ncs.dat	field	20	0	x	3231
+decoded_dat/s/1/ncs.dat	field	20	0	y	3138
+decoded_dat/s/1/ncs.dat	field	20	0	w	3433
+decoded_dat/s/1/ncs.dat	field	20	0	h	3632
+decoded_dat/s/1/ncs.dat	block	20	1	bdy	
+decoded_dat/s/1/ncs.dat	field	20	1	kind	30
+decoded_dat/s/1/ncs.dat	field	20	1	x	3231
+decoded_dat/s/1/ncs.dat	field	20	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	20	1	w	3433
+decoded_dat/s/1/ncs.dat	field	20	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	21	120		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	21	-1	pic	32
+decoded_dat/s/1/ncs.dat	field	21	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	21	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	21	-1	next	313231
+decoded_dat/s/1/ncs.dat	field	21	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	21	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	21	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	21	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	21	-1	hit_a	313236
+decoded_dat/s/1/ncs.dat	field	21	-1	hit_d	313236
+decoded_dat/s/1/ncs.dat	field	21	-1	hit_j	2d313235
+decoded_dat/s/1/ncs.dat	block	21	0	bdy	
+decoded_dat/s/1/ncs.dat	field	21	0	kind	30
+decoded_dat/s/1/ncs.dat	field	21	0	x	3231
+decoded_dat/s/1/ncs.dat	field	21	0	y	3138
+decoded_dat/s/1/ncs.dat	field	21	0	w	3433
+decoded_dat/s/1/ncs.dat	field	21	0	h	3632
+decoded_dat/s/1/ncs.dat	block	21	1	bdy	
+decoded_dat/s/1/ncs.dat	field	21	1	kind	30
+decoded_dat/s/1/ncs.dat	field	21	1	x	3231
+decoded_dat/s/1/ncs.dat	field	21	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	21	1	w	3433
+decoded_dat/s/1/ncs.dat	field	21	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	22	121		7374616e64696e6733
+decoded_dat/s/1/ncs.dat	field	22	-1	pic	33
+decoded_dat/s/1/ncs.dat	field	22	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	22	-1	wait	35
+decoded_dat/s/1/ncs.dat	field	22	-1	next	313138
+decoded_dat/s/1/ncs.dat	field	22	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	22	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	22	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	22	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	22	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	field	22	-1	hit_d	2d313235
+decoded_dat/s/1/ncs.dat	field	22	-1	hit_j	313236
+decoded_dat/s/1/ncs.dat	block	22	0	bdy	
+decoded_dat/s/1/ncs.dat	field	22	0	kind	30
+decoded_dat/s/1/ncs.dat	field	22	0	x	3231
+decoded_dat/s/1/ncs.dat	field	22	0	y	3138
+decoded_dat/s/1/ncs.dat	field	22	0	w	3433
+decoded_dat/s/1/ncs.dat	field	22	0	h	3632
+decoded_dat/s/1/ncs.dat	block	22	1	bdy	
+decoded_dat/s/1/ncs.dat	field	22	1	kind	30
+decoded_dat/s/1/ncs.dat	field	22	1	x	3231
+decoded_dat/s/1/ncs.dat	field	22	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	22	1	w	3433
+decoded_dat/s/1/ncs.dat	field	22	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	23	125		74656c65
+decoded_dat/s/1/ncs.dat	field	23	-1	pic	3439
+decoded_dat/s/1/ncs.dat	field	23	-1	state	343030
+decoded_dat/s/1/ncs.dat	field	23	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	23	-1	next	313138
+decoded_dat/s/1/ncs.dat	field	23	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	23	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	23	-1	sound	646174615c3031372e776176
+decoded_dat/s/1/ncs.dat	block	23	0	bdy	
+decoded_dat/s/1/ncs.dat	field	23	0	kind	30
+decoded_dat/s/1/ncs.dat	field	23	0	x	3231
+decoded_dat/s/1/ncs.dat	field	23	0	y	38303030
+decoded_dat/s/1/ncs.dat	field	23	0	w	3433
+decoded_dat/s/1/ncs.dat	field	23	0	h	3632
+decoded_dat/s/1/ncs.dat	frame	24	126		666c616d6573
+decoded_dat/s/1/ncs.dat	field	24	-1	pic	3335
+decoded_dat/s/1/ncs.dat	field	24	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	24	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	24	-1	next	313237
+decoded_dat/s/1/ncs.dat	field	24	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	24	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	24	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	24	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	24	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	block	24	0	bdy	
+decoded_dat/s/1/ncs.dat	field	24	0	kind	30
+decoded_dat/s/1/ncs.dat	field	24	0	x	3231
+decoded_dat/s/1/ncs.dat	field	24	0	y	3138
+decoded_dat/s/1/ncs.dat	field	24	0	w	3433
+decoded_dat/s/1/ncs.dat	field	24	0	h	3632
+decoded_dat/s/1/ncs.dat	block	24	1	bdy	
+decoded_dat/s/1/ncs.dat	field	24	1	kind	30
+decoded_dat/s/1/ncs.dat	field	24	1	x	3231
+decoded_dat/s/1/ncs.dat	field	24	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	24	1	w	3433
+decoded_dat/s/1/ncs.dat	field	24	1	h	3632
+decoded_dat/s/1/ncs.dat	frame	25	127		666c616d6573
+decoded_dat/s/1/ncs.dat	field	25	-1	pic	3336
+decoded_dat/s/1/ncs.dat	field	25	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	25	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	25	-1	next	313238
+decoded_dat/s/1/ncs.dat	field	25	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	25	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	25	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	25	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	25	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	block	25	0	opoint	
+decoded_dat/s/1/ncs.dat	field	25	0	kind	31
+decoded_dat/s/1/ncs.dat	field	25	0	x	3637
+decoded_dat/s/1/ncs.dat	field	25	0	y	3435
+decoded_dat/s/1/ncs.dat	field	25	0	action	30
+decoded_dat/s/1/ncs.dat	field	25	0	dvx	3230
+decoded_dat/s/1/ncs.dat	field	25	0	oid	323131
+decoded_dat/s/1/ncs.dat	field	25	0	facing	3530
+decoded_dat/s/1/ncs.dat	block	25	1	bdy	
+decoded_dat/s/1/ncs.dat	field	25	1	kind	30
+decoded_dat/s/1/ncs.dat	field	25	1	x	3231
+decoded_dat/s/1/ncs.dat	field	25	1	y	3138
+decoded_dat/s/1/ncs.dat	field	25	1	w	3433
+decoded_dat/s/1/ncs.dat	field	25	1	h	3632
+decoded_dat/s/1/ncs.dat	block	25	2	bdy	
+decoded_dat/s/1/ncs.dat	field	25	2	kind	30
+decoded_dat/s/1/ncs.dat	field	25	2	x	3231
+decoded_dat/s/1/ncs.dat	field	25	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	25	2	w	3433
+decoded_dat/s/1/ncs.dat	field	25	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	26	128		666c616d6573
+decoded_dat/s/1/ncs.dat	field	26	-1	pic	3336
+decoded_dat/s/1/ncs.dat	field	26	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	26	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	26	-1	next	313239
+decoded_dat/s/1/ncs.dat	field	26	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	26	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	26	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	26	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	26	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	block	26	0	opoint	
+decoded_dat/s/1/ncs.dat	field	26	0	kind	31
+decoded_dat/s/1/ncs.dat	field	26	0	x	3637
+decoded_dat/s/1/ncs.dat	field	26	0	y	3435
+decoded_dat/s/1/ncs.dat	field	26	0	action	30
+decoded_dat/s/1/ncs.dat	field	26	0	dvx	3230
+decoded_dat/s/1/ncs.dat	field	26	0	oid	323131
+decoded_dat/s/1/ncs.dat	field	26	0	facing	3530
+decoded_dat/s/1/ncs.dat	block	26	1	bdy	
+decoded_dat/s/1/ncs.dat	field	26	1	kind	30
+decoded_dat/s/1/ncs.dat	field	26	1	x	3231
+decoded_dat/s/1/ncs.dat	field	26	1	y	3138
+decoded_dat/s/1/ncs.dat	field	26	1	w	3433
+decoded_dat/s/1/ncs.dat	field	26	1	h	3632
+decoded_dat/s/1/ncs.dat	block	26	2	bdy	
+decoded_dat/s/1/ncs.dat	field	26	2	kind	30
+decoded_dat/s/1/ncs.dat	field	26	2	x	3231
+decoded_dat/s/1/ncs.dat	field	26	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	26	2	w	3433
+decoded_dat/s/1/ncs.dat	field	26	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	27	129		666c616d6573
+decoded_dat/s/1/ncs.dat	field	27	-1	pic	3336
+decoded_dat/s/1/ncs.dat	field	27	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	27	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	27	-1	next	313138
+decoded_dat/s/1/ncs.dat	field	27	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	27	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	27	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	27	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	27	-1	hit_a	2d313235
+decoded_dat/s/1/ncs.dat	block	27	0	opoint	
+decoded_dat/s/1/ncs.dat	field	27	0	kind	31
+decoded_dat/s/1/ncs.dat	field	27	0	x	3637
+decoded_dat/s/1/ncs.dat	field	27	0	y	3435
+decoded_dat/s/1/ncs.dat	field	27	0	action	30
+decoded_dat/s/1/ncs.dat	field	27	0	dvx	3230
+decoded_dat/s/1/ncs.dat	field	27	0	oid	323131
+decoded_dat/s/1/ncs.dat	field	27	0	facing	3530
+decoded_dat/s/1/ncs.dat	block	27	1	bdy	
+decoded_dat/s/1/ncs.dat	field	27	1	kind	30
+decoded_dat/s/1/ncs.dat	field	27	1	x	3231
+decoded_dat/s/1/ncs.dat	field	27	1	y	3138
+decoded_dat/s/1/ncs.dat	field	27	1	w	3433
+decoded_dat/s/1/ncs.dat	field	27	1	h	3632
+decoded_dat/s/1/ncs.dat	block	27	2	bdy	
+decoded_dat/s/1/ncs.dat	field	27	2	kind	30
+decoded_dat/s/1/ncs.dat	field	27	2	x	3231
+decoded_dat/s/1/ncs.dat	field	27	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	27	2	w	3433
+decoded_dat/s/1/ncs.dat	field	27	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	28	130		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	28	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	28	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	28	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	28	-1	next	30
+decoded_dat/s/1/ncs.dat	field	28	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	28	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	28	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	28	0	kind	32
+decoded_dat/s/1/ncs.dat	field	28	0	x	3431
+decoded_dat/s/1/ncs.dat	field	28	0	y	3339
+decoded_dat/s/1/ncs.dat	field	28	0	fronthurtact	313332
+decoded_dat/s/1/ncs.dat	field	28	0	backhurtact	313331
+decoded_dat/s/1/ncs.dat	block	28	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	28	1	kind	31
+decoded_dat/s/1/ncs.dat	field	28	1	x	3331
+decoded_dat/s/1/ncs.dat	field	28	1	y	3536
+decoded_dat/s/1/ncs.dat	field	28	1	weaponact	3330
+decoded_dat/s/1/ncs.dat	field	28	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	28	1	cover	30
+decoded_dat/s/1/ncs.dat	block	28	2	bdy	
+decoded_dat/s/1/ncs.dat	field	28	2	kind	30
+decoded_dat/s/1/ncs.dat	field	28	2	x	3231
+decoded_dat/s/1/ncs.dat	field	28	2	y	3138
+decoded_dat/s/1/ncs.dat	field	28	2	w	3433
+decoded_dat/s/1/ncs.dat	field	28	2	h	3632
+decoded_dat/s/1/ncs.dat	block	28	3	bdy	
+decoded_dat/s/1/ncs.dat	field	28	3	kind	30
+decoded_dat/s/1/ncs.dat	field	28	3	x	3231
+decoded_dat/s/1/ncs.dat	field	28	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	28	3	w	3433
+decoded_dat/s/1/ncs.dat	field	28	3	h	3632
+decoded_dat/s/1/ncs.dat	block	28	4	bdy	
+decoded_dat/s/1/ncs.dat	field	28	4	kind	30
+decoded_dat/s/1/ncs.dat	field	28	4	x	30
+decoded_dat/s/1/ncs.dat	field	28	4	y	35303030
+decoded_dat/s/1/ncs.dat	field	28	4	w	3739
+decoded_dat/s/1/ncs.dat	field	28	4	h	353030
+decoded_dat/s/1/ncs.dat	frame	29	131		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	29	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	29	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	29	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	29	-1	next	30
+decoded_dat/s/1/ncs.dat	field	29	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	29	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	29	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	29	0	kind	32
+decoded_dat/s/1/ncs.dat	field	29	0	x	3431
+decoded_dat/s/1/ncs.dat	field	29	0	y	3339
+decoded_dat/s/1/ncs.dat	field	29	0	fronthurtact	313332
+decoded_dat/s/1/ncs.dat	field	29	0	backhurtact	313332
+decoded_dat/s/1/ncs.dat	block	29	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	29	1	kind	31
+decoded_dat/s/1/ncs.dat	field	29	1	x	3236
+decoded_dat/s/1/ncs.dat	field	29	1	y	3534
+decoded_dat/s/1/ncs.dat	field	29	1	weaponact	3331
+decoded_dat/s/1/ncs.dat	field	29	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	29	1	cover	30
+decoded_dat/s/1/ncs.dat	block	29	2	bdy	
+decoded_dat/s/1/ncs.dat	field	29	2	kind	30
+decoded_dat/s/1/ncs.dat	field	29	2	x	3231
+decoded_dat/s/1/ncs.dat	field	29	2	y	3138
+decoded_dat/s/1/ncs.dat	field	29	2	w	3433
+decoded_dat/s/1/ncs.dat	field	29	2	h	3632
+decoded_dat/s/1/ncs.dat	block	29	3	bdy	
+decoded_dat/s/1/ncs.dat	field	29	3	kind	30
+decoded_dat/s/1/ncs.dat	field	29	3	x	3231
+decoded_dat/s/1/ncs.dat	field	29	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	29	3	w	3433
+decoded_dat/s/1/ncs.dat	field	29	3	h	3632
+decoded_dat/s/1/ncs.dat	block	29	4	bdy	
+decoded_dat/s/1/ncs.dat	field	29	4	kind	30
+decoded_dat/s/1/ncs.dat	field	29	4	x	30
+decoded_dat/s/1/ncs.dat	field	29	4	y	35303030
+decoded_dat/s/1/ncs.dat	field	29	4	w	3739
+decoded_dat/s/1/ncs.dat	field	29	4	h	353030
+decoded_dat/s/1/ncs.dat	frame	30	132		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	30	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	30	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	30	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	30	-1	next	30
+decoded_dat/s/1/ncs.dat	field	30	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	30	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	30	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	30	0	kind	32
+decoded_dat/s/1/ncs.dat	field	30	0	x	3431
+decoded_dat/s/1/ncs.dat	field	30	0	y	3339
+decoded_dat/s/1/ncs.dat	field	30	0	fronthurtact	313331
+decoded_dat/s/1/ncs.dat	field	30	0	backhurtact	313331
+decoded_dat/s/1/ncs.dat	block	30	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	30	1	kind	31
+decoded_dat/s/1/ncs.dat	field	30	1	x	3339
+decoded_dat/s/1/ncs.dat	field	30	1	y	3531
+decoded_dat/s/1/ncs.dat	field	30	1	weaponact	3330
+decoded_dat/s/1/ncs.dat	field	30	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	30	1	cover	30
+decoded_dat/s/1/ncs.dat	block	30	2	bdy	
+decoded_dat/s/1/ncs.dat	field	30	2	kind	30
+decoded_dat/s/1/ncs.dat	field	30	2	x	3231
+decoded_dat/s/1/ncs.dat	field	30	2	y	3138
+decoded_dat/s/1/ncs.dat	field	30	2	w	3433
+decoded_dat/s/1/ncs.dat	field	30	2	h	3632
+decoded_dat/s/1/ncs.dat	block	30	3	bdy	
+decoded_dat/s/1/ncs.dat	field	30	3	kind	30
+decoded_dat/s/1/ncs.dat	field	30	3	x	3231
+decoded_dat/s/1/ncs.dat	field	30	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	30	3	w	3433
+decoded_dat/s/1/ncs.dat	field	30	3	h	3632
+decoded_dat/s/1/ncs.dat	block	30	4	bdy	
+decoded_dat/s/1/ncs.dat	field	30	4	kind	30
+decoded_dat/s/1/ncs.dat	field	30	4	x	30
+decoded_dat/s/1/ncs.dat	field	30	4	y	35303030
+decoded_dat/s/1/ncs.dat	field	30	4	w	3739
+decoded_dat/s/1/ncs.dat	field	30	4	h	353030
+decoded_dat/s/1/ncs.dat	frame	31	133		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	31	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	31	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	31	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	31	-1	next	30
+decoded_dat/s/1/ncs.dat	field	31	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	31	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	31	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	31	0	kind	32
+decoded_dat/s/1/ncs.dat	field	31	0	x	3333
+decoded_dat/s/1/ncs.dat	field	31	0	y	3336
+decoded_dat/s/1/ncs.dat	block	31	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	31	1	kind	31
+decoded_dat/s/1/ncs.dat	field	31	1	x	3335
+decoded_dat/s/1/ncs.dat	field	31	1	y	3436
+decoded_dat/s/1/ncs.dat	field	31	1	weaponact	3232
+decoded_dat/s/1/ncs.dat	field	31	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	31	1	cover	30
+decoded_dat/s/1/ncs.dat	block	31	2	bdy	
+decoded_dat/s/1/ncs.dat	field	31	2	kind	30
+decoded_dat/s/1/ncs.dat	field	31	2	x	30
+decoded_dat/s/1/ncs.dat	field	31	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	31	2	w	3739
+decoded_dat/s/1/ncs.dat	field	31	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	32	134		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	32	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	32	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	32	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	32	-1	next	30
+decoded_dat/s/1/ncs.dat	field	32	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	32	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	32	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	32	0	kind	32
+decoded_dat/s/1/ncs.dat	field	32	0	x	3337
+decoded_dat/s/1/ncs.dat	field	32	0	y	3238
+decoded_dat/s/1/ncs.dat	block	32	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	32	1	kind	31
+decoded_dat/s/1/ncs.dat	field	32	1	x	3431
+decoded_dat/s/1/ncs.dat	field	32	1	y	3336
+decoded_dat/s/1/ncs.dat	field	32	1	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	32	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	32	1	cover	30
+decoded_dat/s/1/ncs.dat	block	32	2	bdy	
+decoded_dat/s/1/ncs.dat	field	32	2	kind	30
+decoded_dat/s/1/ncs.dat	field	32	2	x	30
+decoded_dat/s/1/ncs.dat	field	32	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	32	2	w	3739
+decoded_dat/s/1/ncs.dat	field	32	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	33	135		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	33	-1	pic	3332
+decoded_dat/s/1/ncs.dat	field	33	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	33	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	33	-1	next	30
+decoded_dat/s/1/ncs.dat	field	33	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	33	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	33	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	33	0	kind	32
+decoded_dat/s/1/ncs.dat	field	33	0	x	3331
+decoded_dat/s/1/ncs.dat	field	33	0	y	3232
+decoded_dat/s/1/ncs.dat	block	33	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	33	1	kind	31
+decoded_dat/s/1/ncs.dat	field	33	1	x	3430
+decoded_dat/s/1/ncs.dat	field	33	1	y	3339
+decoded_dat/s/1/ncs.dat	field	33	1	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	33	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	33	1	cover	30
+decoded_dat/s/1/ncs.dat	block	33	2	bdy	
+decoded_dat/s/1/ncs.dat	field	33	2	kind	30
+decoded_dat/s/1/ncs.dat	field	33	2	x	30
+decoded_dat/s/1/ncs.dat	field	33	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	33	2	w	3739
+decoded_dat/s/1/ncs.dat	field	33	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	34	136		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	34	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	34	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	34	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	34	-1	next	30
+decoded_dat/s/1/ncs.dat	field	34	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	34	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	34	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	34	0	kind	32
+decoded_dat/s/1/ncs.dat	field	34	0	x	3237
+decoded_dat/s/1/ncs.dat	field	34	0	y	3436
+decoded_dat/s/1/ncs.dat	block	34	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	34	1	kind	31
+decoded_dat/s/1/ncs.dat	field	34	1	x	3234
+decoded_dat/s/1/ncs.dat	field	34	1	y	3332
+decoded_dat/s/1/ncs.dat	field	34	1	weaponact	3333
+decoded_dat/s/1/ncs.dat	field	34	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	34	1	cover	30
+decoded_dat/s/1/ncs.dat	block	34	2	bdy	
+decoded_dat/s/1/ncs.dat	field	34	2	kind	30
+decoded_dat/s/1/ncs.dat	field	34	2	x	30
+decoded_dat/s/1/ncs.dat	field	34	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	34	2	w	3739
+decoded_dat/s/1/ncs.dat	field	34	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	35	137		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	35	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	35	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	35	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	35	-1	next	30
+decoded_dat/s/1/ncs.dat	field	35	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	35	-1	centery	3731
+decoded_dat/s/1/ncs.dat	block	35	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	35	0	kind	32
+decoded_dat/s/1/ncs.dat	field	35	0	x	3333
+decoded_dat/s/1/ncs.dat	field	35	0	y	3638
+decoded_dat/s/1/ncs.dat	block	35	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	35	1	kind	31
+decoded_dat/s/1/ncs.dat	field	35	1	x	3333
+decoded_dat/s/1/ncs.dat	field	35	1	y	3735
+decoded_dat/s/1/ncs.dat	field	35	1	weaponact	3332
+decoded_dat/s/1/ncs.dat	field	35	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	35	1	cover	30
+decoded_dat/s/1/ncs.dat	block	35	2	bdy	
+decoded_dat/s/1/ncs.dat	field	35	2	kind	30
+decoded_dat/s/1/ncs.dat	field	35	2	x	3231
+decoded_dat/s/1/ncs.dat	field	35	2	y	3138
+decoded_dat/s/1/ncs.dat	field	35	2	w	3433
+decoded_dat/s/1/ncs.dat	field	35	2	h	3632
+decoded_dat/s/1/ncs.dat	block	35	3	bdy	
+decoded_dat/s/1/ncs.dat	field	35	3	kind	30
+decoded_dat/s/1/ncs.dat	field	35	3	x	3231
+decoded_dat/s/1/ncs.dat	field	35	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	35	3	w	3433
+decoded_dat/s/1/ncs.dat	field	35	3	h	3632
+decoded_dat/s/1/ncs.dat	block	35	4	bdy	
+decoded_dat/s/1/ncs.dat	field	35	4	kind	30
+decoded_dat/s/1/ncs.dat	field	35	4	x	30
+decoded_dat/s/1/ncs.dat	field	35	4	y	35303030
+decoded_dat/s/1/ncs.dat	field	35	4	w	3739
+decoded_dat/s/1/ncs.dat	field	35	4	h	353030
+decoded_dat/s/1/ncs.dat	frame	36	138		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	36	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	36	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	36	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	36	-1	next	30
+decoded_dat/s/1/ncs.dat	field	36	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	36	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	36	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	36	0	kind	32
+decoded_dat/s/1/ncs.dat	field	36	0	x	3334
+decoded_dat/s/1/ncs.dat	field	36	0	y	3534
+decoded_dat/s/1/ncs.dat	block	36	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	36	1	kind	31
+decoded_dat/s/1/ncs.dat	field	36	1	x	3338
+decoded_dat/s/1/ncs.dat	field	36	1	y	3634
+decoded_dat/s/1/ncs.dat	field	36	1	weaponact	3331
+decoded_dat/s/1/ncs.dat	field	36	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	36	1	cover	30
+decoded_dat/s/1/ncs.dat	block	36	2	bdy	
+decoded_dat/s/1/ncs.dat	field	36	2	kind	30
+decoded_dat/s/1/ncs.dat	field	36	2	x	30
+decoded_dat/s/1/ncs.dat	field	36	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	36	2	w	3739
+decoded_dat/s/1/ncs.dat	field	36	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	37	139		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	37	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	37	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	37	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	37	-1	next	30
+decoded_dat/s/1/ncs.dat	field	37	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	37	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	37	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	37	0	kind	32
+decoded_dat/s/1/ncs.dat	field	37	0	x	3430
+decoded_dat/s/1/ncs.dat	field	37	0	y	3336
+decoded_dat/s/1/ncs.dat	block	37	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	37	1	kind	31
+decoded_dat/s/1/ncs.dat	field	37	1	x	3232
+decoded_dat/s/1/ncs.dat	field	37	1	y	3437
+decoded_dat/s/1/ncs.dat	field	37	1	weaponact	3335
+decoded_dat/s/1/ncs.dat	field	37	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	37	1	cover	30
+decoded_dat/s/1/ncs.dat	block	37	2	bdy	
+decoded_dat/s/1/ncs.dat	field	37	2	kind	30
+decoded_dat/s/1/ncs.dat	field	37	2	x	30
+decoded_dat/s/1/ncs.dat	field	37	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	37	2	w	3739
+decoded_dat/s/1/ncs.dat	field	37	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	38	140		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	38	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	38	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	38	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	38	-1	next	30
+decoded_dat/s/1/ncs.dat	field	38	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	38	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	38	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	38	0	kind	32
+decoded_dat/s/1/ncs.dat	field	38	0	x	3336
+decoded_dat/s/1/ncs.dat	field	38	0	y	3338
+decoded_dat/s/1/ncs.dat	block	38	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	38	1	kind	31
+decoded_dat/s/1/ncs.dat	field	38	1	x	3233
+decoded_dat/s/1/ncs.dat	field	38	1	y	3433
+decoded_dat/s/1/ncs.dat	field	38	1	weaponact	3230
+decoded_dat/s/1/ncs.dat	field	38	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	38	1	cover	30
+decoded_dat/s/1/ncs.dat	block	38	2	bdy	
+decoded_dat/s/1/ncs.dat	field	38	2	kind	30
+decoded_dat/s/1/ncs.dat	field	38	2	x	30
+decoded_dat/s/1/ncs.dat	field	38	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	38	2	w	3739
+decoded_dat/s/1/ncs.dat	field	38	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	39	141		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	39	-1	pic	3332
+decoded_dat/s/1/ncs.dat	field	39	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	39	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	39	-1	next	30
+decoded_dat/s/1/ncs.dat	field	39	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	39	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	39	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	39	0	kind	32
+decoded_dat/s/1/ncs.dat	field	39	0	x	3434
+decoded_dat/s/1/ncs.dat	field	39	0	y	3430
+decoded_dat/s/1/ncs.dat	block	39	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	39	1	kind	31
+decoded_dat/s/1/ncs.dat	field	39	1	x	3330
+decoded_dat/s/1/ncs.dat	field	39	1	y	3433
+decoded_dat/s/1/ncs.dat	field	39	1	weaponact	3233
+decoded_dat/s/1/ncs.dat	field	39	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	39	1	cover	30
+decoded_dat/s/1/ncs.dat	block	39	2	bdy	
+decoded_dat/s/1/ncs.dat	field	39	2	kind	30
+decoded_dat/s/1/ncs.dat	field	39	2	x	30
+decoded_dat/s/1/ncs.dat	field	39	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	39	2	w	3739
+decoded_dat/s/1/ncs.dat	field	39	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	40	142		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	40	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	40	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	40	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	40	-1	next	30
+decoded_dat/s/1/ncs.dat	field	40	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	40	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	40	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	40	0	kind	32
+decoded_dat/s/1/ncs.dat	field	40	0	x	3436
+decoded_dat/s/1/ncs.dat	field	40	0	y	3531
+decoded_dat/s/1/ncs.dat	block	40	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	40	1	kind	31
+decoded_dat/s/1/ncs.dat	field	40	1	x	3332
+decoded_dat/s/1/ncs.dat	field	40	1	y	3530
+decoded_dat/s/1/ncs.dat	field	40	1	weaponact	3236
+decoded_dat/s/1/ncs.dat	field	40	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	40	1	cover	30
+decoded_dat/s/1/ncs.dat	block	40	2	bdy	
+decoded_dat/s/1/ncs.dat	field	40	2	kind	30
+decoded_dat/s/1/ncs.dat	field	40	2	x	30
+decoded_dat/s/1/ncs.dat	field	40	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	40	2	w	3739
+decoded_dat/s/1/ncs.dat	field	40	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	41	143		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	41	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	41	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	41	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	41	-1	next	30
+decoded_dat/s/1/ncs.dat	field	41	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	41	-1	centery	3734
+decoded_dat/s/1/ncs.dat	block	41	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	41	0	kind	32
+decoded_dat/s/1/ncs.dat	field	41	0	x	3435
+decoded_dat/s/1/ncs.dat	field	41	0	y	3636
+decoded_dat/s/1/ncs.dat	block	41	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	41	1	kind	31
+decoded_dat/s/1/ncs.dat	field	41	1	x	3330
+decoded_dat/s/1/ncs.dat	field	41	1	y	3734
+decoded_dat/s/1/ncs.dat	field	41	1	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	41	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	41	1	cover	30
+decoded_dat/s/1/ncs.dat	block	41	2	bdy	
+decoded_dat/s/1/ncs.dat	field	41	2	kind	30
+decoded_dat/s/1/ncs.dat	field	41	2	x	30
+decoded_dat/s/1/ncs.dat	field	41	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	41	2	w	3739
+decoded_dat/s/1/ncs.dat	field	41	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	42	144		7069636b65645f636175676874
+decoded_dat/s/1/ncs.dat	field	42	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	42	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	42	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	42	-1	next	30
+decoded_dat/s/1/ncs.dat	field	42	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	42	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	42	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	42	0	kind	32
+decoded_dat/s/1/ncs.dat	field	42	0	x	3432
+decoded_dat/s/1/ncs.dat	field	42	0	y	3535
+decoded_dat/s/1/ncs.dat	block	42	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	42	1	kind	31
+decoded_dat/s/1/ncs.dat	field	42	1	x	3339
+decoded_dat/s/1/ncs.dat	field	42	1	y	3637
+decoded_dat/s/1/ncs.dat	field	42	1	weaponact	3235
+decoded_dat/s/1/ncs.dat	field	42	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	42	1	cover	30
+decoded_dat/s/1/ncs.dat	block	42	2	bdy	
+decoded_dat/s/1/ncs.dat	field	42	2	kind	30
+decoded_dat/s/1/ncs.dat	field	42	2	x	30
+decoded_dat/s/1/ncs.dat	field	42	2	y	35303030
+decoded_dat/s/1/ncs.dat	field	42	2	w	3739
+decoded_dat/s/1/ncs.dat	field	42	2	h	353030
+decoded_dat/s/1/ncs.dat	frame	43	180		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	43	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	43	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	43	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	43	-1	next	30
+decoded_dat/s/1/ncs.dat	field	43	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	43	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	43	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	43	0	kind	31
+decoded_dat/s/1/ncs.dat	field	43	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	43	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	43	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	43	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	43	0	cover	31
+decoded_dat/s/1/ncs.dat	block	43	1	itr	
+decoded_dat/s/1/ncs.dat	field	43	1	kind	34
+decoded_dat/s/1/ncs.dat	field	43	1	x	3231
+decoded_dat/s/1/ncs.dat	field	43	1	y	3134
+decoded_dat/s/1/ncs.dat	field	43	1	w	3239
+decoded_dat/s/1/ncs.dat	field	43	1	h	3434
+decoded_dat/s/1/ncs.dat	field	43	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	43	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	43	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	43	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	43	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	43	2	bdy	
+decoded_dat/s/1/ncs.dat	field	43	2	kind	30
+decoded_dat/s/1/ncs.dat	field	43	2	x	3235
+decoded_dat/s/1/ncs.dat	field	43	2	y	3235
+decoded_dat/s/1/ncs.dat	field	43	2	w	3231
+decoded_dat/s/1/ncs.dat	field	43	2	h	3230
+decoded_dat/s/1/ncs.dat	block	43	3	bdy	
+decoded_dat/s/1/ncs.dat	field	43	3	kind	30
+decoded_dat/s/1/ncs.dat	field	43	3	x	3231
+decoded_dat/s/1/ncs.dat	field	43	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	43	3	w	3433
+decoded_dat/s/1/ncs.dat	field	43	3	h	3632
+decoded_dat/s/1/ncs.dat	block	43	4	bdy	
+decoded_dat/s/1/ncs.dat	field	43	4	kind	30
+decoded_dat/s/1/ncs.dat	field	43	4	x	3231
+decoded_dat/s/1/ncs.dat	field	43	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	43	4	w	3433
+decoded_dat/s/1/ncs.dat	field	43	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	44	181		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	44	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	44	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	44	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	44	-1	next	30
+decoded_dat/s/1/ncs.dat	field	44	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	44	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	44	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	44	0	kind	31
+decoded_dat/s/1/ncs.dat	field	44	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	44	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	44	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	44	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	44	0	cover	31
+decoded_dat/s/1/ncs.dat	block	44	1	itr	
+decoded_dat/s/1/ncs.dat	field	44	1	kind	34
+decoded_dat/s/1/ncs.dat	field	44	1	x	3135
+decoded_dat/s/1/ncs.dat	field	44	1	y	3131
+decoded_dat/s/1/ncs.dat	field	44	1	w	3432
+decoded_dat/s/1/ncs.dat	field	44	1	h	3236
+decoded_dat/s/1/ncs.dat	field	44	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	44	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	44	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	44	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	44	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	44	2	itr	
+decoded_dat/s/1/ncs.dat	field	44	2	kind	34
+decoded_dat/s/1/ncs.dat	field	44	2	x	3335
+decoded_dat/s/1/ncs.dat	field	44	2	y	3330
+decoded_dat/s/1/ncs.dat	field	44	2	w	3237
+decoded_dat/s/1/ncs.dat	field	44	2	h	3239
+decoded_dat/s/1/ncs.dat	field	44	2	dvx	32
+decoded_dat/s/1/ncs.dat	field	44	2	fall	3730
+decoded_dat/s/1/ncs.dat	field	44	2	vrest	3230
+decoded_dat/s/1/ncs.dat	field	44	2	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	44	2	injury	3330
+decoded_dat/s/1/ncs.dat	block	44	3	bdy	
+decoded_dat/s/1/ncs.dat	field	44	3	kind	30
+decoded_dat/s/1/ncs.dat	field	44	3	x	3232
+decoded_dat/s/1/ncs.dat	field	44	3	y	3230
+decoded_dat/s/1/ncs.dat	field	44	3	w	3234
+decoded_dat/s/1/ncs.dat	field	44	3	h	3233
+decoded_dat/s/1/ncs.dat	block	44	4	bdy	
+decoded_dat/s/1/ncs.dat	field	44	4	kind	30
+decoded_dat/s/1/ncs.dat	field	44	4	x	3231
+decoded_dat/s/1/ncs.dat	field	44	4	y	38303030
+decoded_dat/s/1/ncs.dat	field	44	4	w	3433
+decoded_dat/s/1/ncs.dat	field	44	4	h	3632
+decoded_dat/s/1/ncs.dat	block	44	5	bdy	
+decoded_dat/s/1/ncs.dat	field	44	5	kind	30
+decoded_dat/s/1/ncs.dat	field	44	5	x	3231
+decoded_dat/s/1/ncs.dat	field	44	5	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	44	5	w	3433
+decoded_dat/s/1/ncs.dat	field	44	5	h	393939
+decoded_dat/s/1/ncs.dat	frame	45	182		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	45	-1	pic	3332
+decoded_dat/s/1/ncs.dat	field	45	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	45	-1	wait	36
+decoded_dat/s/1/ncs.dat	field	45	-1	next	30
+decoded_dat/s/1/ncs.dat	field	45	-1	dvx	2d33
+decoded_dat/s/1/ncs.dat	field	45	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	45	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	45	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	45	0	kind	31
+decoded_dat/s/1/ncs.dat	field	45	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	45	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	45	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	45	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	45	0	cover	31
+decoded_dat/s/1/ncs.dat	block	45	1	itr	
+decoded_dat/s/1/ncs.dat	field	45	1	kind	34
+decoded_dat/s/1/ncs.dat	field	45	1	x	3133
+decoded_dat/s/1/ncs.dat	field	45	1	y	3138
+decoded_dat/s/1/ncs.dat	field	45	1	w	3436
+decoded_dat/s/1/ncs.dat	field	45	1	h	3236
+decoded_dat/s/1/ncs.dat	field	45	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	45	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	45	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	45	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	45	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	45	2	bdy	
+decoded_dat/s/1/ncs.dat	field	45	2	kind	30
+decoded_dat/s/1/ncs.dat	field	45	2	x	3237
+decoded_dat/s/1/ncs.dat	field	45	2	y	3232
+decoded_dat/s/1/ncs.dat	field	45	2	w	3230
+decoded_dat/s/1/ncs.dat	field	45	2	h	3138
+decoded_dat/s/1/ncs.dat	block	45	3	bdy	
+decoded_dat/s/1/ncs.dat	field	45	3	kind	30
+decoded_dat/s/1/ncs.dat	field	45	3	x	3231
+decoded_dat/s/1/ncs.dat	field	45	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	45	3	w	3433
+decoded_dat/s/1/ncs.dat	field	45	3	h	3632
+decoded_dat/s/1/ncs.dat	block	45	4	bdy	
+decoded_dat/s/1/ncs.dat	field	45	4	kind	30
+decoded_dat/s/1/ncs.dat	field	45	4	x	3231
+decoded_dat/s/1/ncs.dat	field	45	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	45	4	w	3433
+decoded_dat/s/1/ncs.dat	field	45	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	46	183		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	46	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	46	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	46	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	46	-1	next	30
+decoded_dat/s/1/ncs.dat	field	46	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	46	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	46	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	46	0	kind	31
+decoded_dat/s/1/ncs.dat	field	46	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	46	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	46	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	46	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	46	0	cover	31
+decoded_dat/s/1/ncs.dat	block	46	1	itr	
+decoded_dat/s/1/ncs.dat	field	46	1	kind	34
+decoded_dat/s/1/ncs.dat	field	46	1	x	3332
+decoded_dat/s/1/ncs.dat	field	46	1	y	3138
+decoded_dat/s/1/ncs.dat	field	46	1	w	3333
+decoded_dat/s/1/ncs.dat	field	46	1	h	3237
+decoded_dat/s/1/ncs.dat	field	46	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	46	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	46	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	46	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	46	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	46	2	itr	
+decoded_dat/s/1/ncs.dat	field	46	2	kind	34
+decoded_dat/s/1/ncs.dat	field	46	2	x	3130
+decoded_dat/s/1/ncs.dat	field	46	2	y	3338
+decoded_dat/s/1/ncs.dat	field	46	2	w	3338
+decoded_dat/s/1/ncs.dat	field	46	2	h	3231
+decoded_dat/s/1/ncs.dat	field	46	2	dvx	32
+decoded_dat/s/1/ncs.dat	field	46	2	fall	3730
+decoded_dat/s/1/ncs.dat	field	46	2	vrest	3230
+decoded_dat/s/1/ncs.dat	field	46	2	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	46	2	injury	3330
+decoded_dat/s/1/ncs.dat	block	46	3	bdy	
+decoded_dat/s/1/ncs.dat	field	46	3	kind	30
+decoded_dat/s/1/ncs.dat	field	46	3	x	3232
+decoded_dat/s/1/ncs.dat	field	46	3	y	3330
+decoded_dat/s/1/ncs.dat	field	46	3	w	3237
+decoded_dat/s/1/ncs.dat	field	46	3	h	3231
+decoded_dat/s/1/ncs.dat	block	46	4	bdy	
+decoded_dat/s/1/ncs.dat	field	46	4	kind	30
+decoded_dat/s/1/ncs.dat	field	46	4	x	3231
+decoded_dat/s/1/ncs.dat	field	46	4	y	38303030
+decoded_dat/s/1/ncs.dat	field	46	4	w	3433
+decoded_dat/s/1/ncs.dat	field	46	4	h	3632
+decoded_dat/s/1/ncs.dat	block	46	5	bdy	
+decoded_dat/s/1/ncs.dat	field	46	5	kind	30
+decoded_dat/s/1/ncs.dat	field	46	5	x	3231
+decoded_dat/s/1/ncs.dat	field	46	5	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	46	5	w	3433
+decoded_dat/s/1/ncs.dat	field	46	5	h	393939
+decoded_dat/s/1/ncs.dat	frame	47	184		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	47	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	47	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	47	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	47	-1	next	30
+decoded_dat/s/1/ncs.dat	field	47	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	47	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	47	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	47	0	kind	31
+decoded_dat/s/1/ncs.dat	field	47	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	47	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	47	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	47	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	47	0	cover	31
+decoded_dat/s/1/ncs.dat	block	47	1	bdy	
+decoded_dat/s/1/ncs.dat	field	47	1	kind	30
+decoded_dat/s/1/ncs.dat	field	47	1	x	3231
+decoded_dat/s/1/ncs.dat	field	47	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	47	1	w	3433
+decoded_dat/s/1/ncs.dat	field	47	1	h	3632
+decoded_dat/s/1/ncs.dat	block	47	2	bdy	
+decoded_dat/s/1/ncs.dat	field	47	2	kind	30
+decoded_dat/s/1/ncs.dat	field	47	2	x	3231
+decoded_dat/s/1/ncs.dat	field	47	2	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	47	2	w	3433
+decoded_dat/s/1/ncs.dat	field	47	2	h	393939
+decoded_dat/s/1/ncs.dat	frame	48	185		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	48	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	48	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	48	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	48	-1	next	30
+decoded_dat/s/1/ncs.dat	field	48	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	48	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	48	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	48	0	kind	31
+decoded_dat/s/1/ncs.dat	field	48	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	48	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	48	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	48	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	48	0	cover	31
+decoded_dat/s/1/ncs.dat	block	48	1	bdy	
+decoded_dat/s/1/ncs.dat	field	48	1	kind	30
+decoded_dat/s/1/ncs.dat	field	48	1	x	3231
+decoded_dat/s/1/ncs.dat	field	48	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	48	1	w	3433
+decoded_dat/s/1/ncs.dat	field	48	1	h	3632
+decoded_dat/s/1/ncs.dat	block	48	2	bdy	
+decoded_dat/s/1/ncs.dat	field	48	2	kind	30
+decoded_dat/s/1/ncs.dat	field	48	2	x	3231
+decoded_dat/s/1/ncs.dat	field	48	2	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	48	2	w	3433
+decoded_dat/s/1/ncs.dat	field	48	2	h	393939
+decoded_dat/s/1/ncs.dat	frame	49	186		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	49	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	49	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	49	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	49	-1	next	30
+decoded_dat/s/1/ncs.dat	field	49	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	49	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	49	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	49	0	kind	31
+decoded_dat/s/1/ncs.dat	field	49	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	49	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	49	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	49	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	49	0	cover	31
+decoded_dat/s/1/ncs.dat	block	49	1	itr	
+decoded_dat/s/1/ncs.dat	field	49	1	kind	34
+decoded_dat/s/1/ncs.dat	field	49	1	x	3232
+decoded_dat/s/1/ncs.dat	field	49	1	y	3132
+decoded_dat/s/1/ncs.dat	field	49	1	w	3336
+decoded_dat/s/1/ncs.dat	field	49	1	h	3530
+decoded_dat/s/1/ncs.dat	field	49	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	49	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	49	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	49	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	49	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	49	2	bdy	
+decoded_dat/s/1/ncs.dat	field	49	2	kind	30
+decoded_dat/s/1/ncs.dat	field	49	2	x	3331
+decoded_dat/s/1/ncs.dat	field	49	2	y	3234
+decoded_dat/s/1/ncs.dat	field	49	2	w	3235
+decoded_dat/s/1/ncs.dat	field	49	2	h	3233
+decoded_dat/s/1/ncs.dat	block	49	3	bdy	
+decoded_dat/s/1/ncs.dat	field	49	3	kind	30
+decoded_dat/s/1/ncs.dat	field	49	3	x	3231
+decoded_dat/s/1/ncs.dat	field	49	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	49	3	w	3433
+decoded_dat/s/1/ncs.dat	field	49	3	h	3632
+decoded_dat/s/1/ncs.dat	block	49	4	bdy	
+decoded_dat/s/1/ncs.dat	field	49	4	kind	30
+decoded_dat/s/1/ncs.dat	field	49	4	x	3231
+decoded_dat/s/1/ncs.dat	field	49	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	49	4	w	3433
+decoded_dat/s/1/ncs.dat	field	49	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	50	187		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	50	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	50	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	50	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	50	-1	next	30
+decoded_dat/s/1/ncs.dat	field	50	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	50	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	50	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	50	0	kind	31
+decoded_dat/s/1/ncs.dat	field	50	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	50	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	50	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	50	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	50	0	cover	31
+decoded_dat/s/1/ncs.dat	block	50	1	itr	
+decoded_dat/s/1/ncs.dat	field	50	1	kind	34
+decoded_dat/s/1/ncs.dat	field	50	1	x	3333
+decoded_dat/s/1/ncs.dat	field	50	1	y	36
+decoded_dat/s/1/ncs.dat	field	50	1	w	3236
+decoded_dat/s/1/ncs.dat	field	50	1	h	3436
+decoded_dat/s/1/ncs.dat	field	50	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	50	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	50	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	50	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	50	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	50	2	itr	
+decoded_dat/s/1/ncs.dat	field	50	2	kind	34
+decoded_dat/s/1/ncs.dat	field	50	2	x	3236
+decoded_dat/s/1/ncs.dat	field	50	2	y	3433
+decoded_dat/s/1/ncs.dat	field	50	2	w	3231
+decoded_dat/s/1/ncs.dat	field	50	2	h	3239
+decoded_dat/s/1/ncs.dat	field	50	2	dvx	32
+decoded_dat/s/1/ncs.dat	field	50	2	fall	3730
+decoded_dat/s/1/ncs.dat	field	50	2	vrest	3230
+decoded_dat/s/1/ncs.dat	field	50	2	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	50	2	injury	3330
+decoded_dat/s/1/ncs.dat	block	50	3	bdy	
+decoded_dat/s/1/ncs.dat	field	50	3	kind	30
+decoded_dat/s/1/ncs.dat	field	50	3	x	3238
+decoded_dat/s/1/ncs.dat	field	50	3	y	3237
+decoded_dat/s/1/ncs.dat	field	50	3	w	3234
+decoded_dat/s/1/ncs.dat	field	50	3	h	3236
+decoded_dat/s/1/ncs.dat	block	50	4	bdy	
+decoded_dat/s/1/ncs.dat	field	50	4	kind	30
+decoded_dat/s/1/ncs.dat	field	50	4	x	3231
+decoded_dat/s/1/ncs.dat	field	50	4	y	38303030
+decoded_dat/s/1/ncs.dat	field	50	4	w	3433
+decoded_dat/s/1/ncs.dat	field	50	4	h	3632
+decoded_dat/s/1/ncs.dat	block	50	5	bdy	
+decoded_dat/s/1/ncs.dat	field	50	5	kind	30
+decoded_dat/s/1/ncs.dat	field	50	5	x	3231
+decoded_dat/s/1/ncs.dat	field	50	5	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	50	5	w	3433
+decoded_dat/s/1/ncs.dat	field	50	5	h	393939
+decoded_dat/s/1/ncs.dat	frame	51	188		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	51	-1	pic	3332
+decoded_dat/s/1/ncs.dat	field	51	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	51	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	51	-1	next	30
+decoded_dat/s/1/ncs.dat	field	51	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	51	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	51	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	51	0	kind	31
+decoded_dat/s/1/ncs.dat	field	51	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	51	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	51	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	51	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	51	0	cover	31
+decoded_dat/s/1/ncs.dat	block	51	1	itr	
+decoded_dat/s/1/ncs.dat	field	51	1	kind	34
+decoded_dat/s/1/ncs.dat	field	51	1	x	3134
+decoded_dat/s/1/ncs.dat	field	51	1	y	3239
+decoded_dat/s/1/ncs.dat	field	51	1	w	3538
+decoded_dat/s/1/ncs.dat	field	51	1	h	3233
+decoded_dat/s/1/ncs.dat	field	51	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	51	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	51	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	51	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	51	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	51	2	bdy	
+decoded_dat/s/1/ncs.dat	field	51	2	kind	30
+decoded_dat/s/1/ncs.dat	field	51	2	x	3330
+decoded_dat/s/1/ncs.dat	field	51	2	y	3331
+decoded_dat/s/1/ncs.dat	field	51	2	w	3234
+decoded_dat/s/1/ncs.dat	field	51	2	h	3231
+decoded_dat/s/1/ncs.dat	block	51	3	bdy	
+decoded_dat/s/1/ncs.dat	field	51	3	kind	30
+decoded_dat/s/1/ncs.dat	field	51	3	x	3231
+decoded_dat/s/1/ncs.dat	field	51	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	51	3	w	3433
+decoded_dat/s/1/ncs.dat	field	51	3	h	3632
+decoded_dat/s/1/ncs.dat	block	51	4	bdy	
+decoded_dat/s/1/ncs.dat	field	51	4	kind	30
+decoded_dat/s/1/ncs.dat	field	51	4	x	3231
+decoded_dat/s/1/ncs.dat	field	51	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	51	4	w	3433
+decoded_dat/s/1/ncs.dat	field	51	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	52	189		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	52	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	52	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	52	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	52	-1	next	30
+decoded_dat/s/1/ncs.dat	field	52	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	52	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	52	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	52	0	kind	31
+decoded_dat/s/1/ncs.dat	field	52	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	52	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	52	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	52	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	52	0	cover	31
+decoded_dat/s/1/ncs.dat	block	52	1	itr	
+decoded_dat/s/1/ncs.dat	field	52	1	kind	34
+decoded_dat/s/1/ncs.dat	field	52	1	x	3234
+decoded_dat/s/1/ncs.dat	field	52	1	y	3237
+decoded_dat/s/1/ncs.dat	field	52	1	w	3236
+decoded_dat/s/1/ncs.dat	field	52	1	h	3238
+decoded_dat/s/1/ncs.dat	field	52	1	dvx	32
+decoded_dat/s/1/ncs.dat	field	52	1	fall	3730
+decoded_dat/s/1/ncs.dat	field	52	1	vrest	3230
+decoded_dat/s/1/ncs.dat	field	52	1	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	52	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	52	2	itr	
+decoded_dat/s/1/ncs.dat	field	52	2	kind	34
+decoded_dat/s/1/ncs.dat	field	52	2	x	3337
+decoded_dat/s/1/ncs.dat	field	52	2	y	3435
+decoded_dat/s/1/ncs.dat	field	52	2	w	3331
+decoded_dat/s/1/ncs.dat	field	52	2	h	3238
+decoded_dat/s/1/ncs.dat	field	52	2	dvx	32
+decoded_dat/s/1/ncs.dat	field	52	2	fall	3730
+decoded_dat/s/1/ncs.dat	field	52	2	vrest	3230
+decoded_dat/s/1/ncs.dat	field	52	2	bdefend	3130
+decoded_dat/s/1/ncs.dat	field	52	2	injury	3330
+decoded_dat/s/1/ncs.dat	block	52	3	bdy	
+decoded_dat/s/1/ncs.dat	field	52	3	kind	30
+decoded_dat/s/1/ncs.dat	field	52	3	x	3330
+decoded_dat/s/1/ncs.dat	field	52	3	y	3339
+decoded_dat/s/1/ncs.dat	field	52	3	w	3233
+decoded_dat/s/1/ncs.dat	field	52	3	h	3231
+decoded_dat/s/1/ncs.dat	block	52	4	bdy	
+decoded_dat/s/1/ncs.dat	field	52	4	kind	30
+decoded_dat/s/1/ncs.dat	field	52	4	x	3231
+decoded_dat/s/1/ncs.dat	field	52	4	y	38303030
+decoded_dat/s/1/ncs.dat	field	52	4	w	3433
+decoded_dat/s/1/ncs.dat	field	52	4	h	3632
+decoded_dat/s/1/ncs.dat	block	52	5	bdy	
+decoded_dat/s/1/ncs.dat	field	52	5	kind	30
+decoded_dat/s/1/ncs.dat	field	52	5	x	3231
+decoded_dat/s/1/ncs.dat	field	52	5	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	52	5	w	3433
+decoded_dat/s/1/ncs.dat	field	52	5	h	393939
+decoded_dat/s/1/ncs.dat	frame	53	190		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	53	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	53	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	53	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	53	-1	next	30
+decoded_dat/s/1/ncs.dat	field	53	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	53	-1	centery	3735
+decoded_dat/s/1/ncs.dat	block	53	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	53	0	kind	31
+decoded_dat/s/1/ncs.dat	field	53	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	53	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	53	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	53	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	53	0	cover	31
+decoded_dat/s/1/ncs.dat	block	53	1	bdy	
+decoded_dat/s/1/ncs.dat	field	53	1	kind	30
+decoded_dat/s/1/ncs.dat	field	53	1	x	3231
+decoded_dat/s/1/ncs.dat	field	53	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	53	1	w	3433
+decoded_dat/s/1/ncs.dat	field	53	1	h	3632
+decoded_dat/s/1/ncs.dat	block	53	2	bdy	
+decoded_dat/s/1/ncs.dat	field	53	2	kind	30
+decoded_dat/s/1/ncs.dat	field	53	2	x	3231
+decoded_dat/s/1/ncs.dat	field	53	2	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	53	2	w	3433
+decoded_dat/s/1/ncs.dat	field	53	2	h	393939
+decoded_dat/s/1/ncs.dat	frame	54	191		66616c6c696e67
+decoded_dat/s/1/ncs.dat	field	54	-1	pic	3333
+decoded_dat/s/1/ncs.dat	field	54	-1	state	3132
+decoded_dat/s/1/ncs.dat	field	54	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	54	-1	next	30
+decoded_dat/s/1/ncs.dat	field	54	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	54	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	54	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	54	0	kind	31
+decoded_dat/s/1/ncs.dat	field	54	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	54	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	54	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	54	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	54	0	cover	31
+decoded_dat/s/1/ncs.dat	block	54	1	bdy	
+decoded_dat/s/1/ncs.dat	field	54	1	kind	30
+decoded_dat/s/1/ncs.dat	field	54	1	x	3231
+decoded_dat/s/1/ncs.dat	field	54	1	y	38303030
+decoded_dat/s/1/ncs.dat	field	54	1	w	3433
+decoded_dat/s/1/ncs.dat	field	54	1	h	3632
+decoded_dat/s/1/ncs.dat	block	54	2	bdy	
+decoded_dat/s/1/ncs.dat	field	54	2	kind	30
+decoded_dat/s/1/ncs.dat	field	54	2	x	3231
+decoded_dat/s/1/ncs.dat	field	54	2	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	54	2	w	3433
+decoded_dat/s/1/ncs.dat	field	54	2	h	393939
+decoded_dat/s/1/ncs.dat	frame	55	200		6d70647261696e
+decoded_dat/s/1/ncs.dat	field	55	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	55	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	55	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	55	-1	next	323031
+decoded_dat/s/1/ncs.dat	field	55	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	55	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	55	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	55	0	kind	31
+decoded_dat/s/1/ncs.dat	field	55	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	55	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	55	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	55	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	55	0	cover	31
+decoded_dat/s/1/ncs.dat	frame	56	201		6d70647261696e
+decoded_dat/s/1/ncs.dat	field	56	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	56	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	56	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	56	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	56	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	56	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	56	-1	mp	2d3435
+decoded_dat/s/1/ncs.dat	block	56	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	56	0	kind	31
+decoded_dat/s/1/ncs.dat	field	56	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	56	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	56	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	56	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	56	0	cover	31
+decoded_dat/s/1/ncs.dat	frame	57	203		66697265
+decoded_dat/s/1/ncs.dat	field	57	-1	pic	3139
+decoded_dat/s/1/ncs.dat	field	57	-1	state	3138
+decoded_dat/s/1/ncs.dat	field	57	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	57	-1	next	323034
+decoded_dat/s/1/ncs.dat	field	57	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	57	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	57	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	57	0	kind	31
+decoded_dat/s/1/ncs.dat	field	57	0	x	3432
+decoded_dat/s/1/ncs.dat	field	57	0	y	3436
+decoded_dat/s/1/ncs.dat	field	57	0	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	57	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	57	0	cover	30
+decoded_dat/s/1/ncs.dat	block	57	1	itr	
+decoded_dat/s/1/ncs.dat	field	57	1	kind	30
+decoded_dat/s/1/ncs.dat	field	57	1	x	3232
+decoded_dat/s/1/ncs.dat	field	57	1	y	3335
+decoded_dat/s/1/ncs.dat	field	57	1	w	3236
+decoded_dat/s/1/ncs.dat	field	57	1	h	3139
+decoded_dat/s/1/ncs.dat	field	57	1	effect	3230
+decoded_dat/s/1/ncs.dat	field	57	1	dvx	2d36
+decoded_dat/s/1/ncs.dat	field	57	1	dvy	2d36
+decoded_dat/s/1/ncs.dat	field	57	1	fall	393939
+decoded_dat/s/1/ncs.dat	field	57	1	vrest	3130
+decoded_dat/s/1/ncs.dat	field	57	1	bdefend	3136
+decoded_dat/s/1/ncs.dat	field	57	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	57	2	bdy	
+decoded_dat/s/1/ncs.dat	field	57	2	kind	30
+decoded_dat/s/1/ncs.dat	field	57	2	x	3232
+decoded_dat/s/1/ncs.dat	field	57	2	y	3335
+decoded_dat/s/1/ncs.dat	field	57	2	w	3236
+decoded_dat/s/1/ncs.dat	field	57	2	h	3139
+decoded_dat/s/1/ncs.dat	block	57	3	bdy	
+decoded_dat/s/1/ncs.dat	field	57	3	kind	30
+decoded_dat/s/1/ncs.dat	field	57	3	x	3231
+decoded_dat/s/1/ncs.dat	field	57	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	57	3	w	3433
+decoded_dat/s/1/ncs.dat	field	57	3	h	3632
+decoded_dat/s/1/ncs.dat	block	57	4	bdy	
+decoded_dat/s/1/ncs.dat	field	57	4	kind	30
+decoded_dat/s/1/ncs.dat	field	57	4	x	3231
+decoded_dat/s/1/ncs.dat	field	57	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	57	4	w	3433
+decoded_dat/s/1/ncs.dat	field	57	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	58	204		66697265
+decoded_dat/s/1/ncs.dat	field	58	-1	pic	3138
+decoded_dat/s/1/ncs.dat	field	58	-1	state	3138
+decoded_dat/s/1/ncs.dat	field	58	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	58	-1	next	323033
+decoded_dat/s/1/ncs.dat	field	58	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	58	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	58	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	58	0	kind	31
+decoded_dat/s/1/ncs.dat	field	58	0	x	3432
+decoded_dat/s/1/ncs.dat	field	58	0	y	3436
+decoded_dat/s/1/ncs.dat	field	58	0	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	58	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	58	0	cover	30
+decoded_dat/s/1/ncs.dat	block	58	1	itr	
+decoded_dat/s/1/ncs.dat	field	58	1	kind	30
+decoded_dat/s/1/ncs.dat	field	58	1	x	3232
+decoded_dat/s/1/ncs.dat	field	58	1	y	3335
+decoded_dat/s/1/ncs.dat	field	58	1	w	3236
+decoded_dat/s/1/ncs.dat	field	58	1	h	3139
+decoded_dat/s/1/ncs.dat	field	58	1	effect	3230
+decoded_dat/s/1/ncs.dat	field	58	1	dvx	2d36
+decoded_dat/s/1/ncs.dat	field	58	1	dvy	2d36
+decoded_dat/s/1/ncs.dat	field	58	1	fall	393939
+decoded_dat/s/1/ncs.dat	field	58	1	vrest	3130
+decoded_dat/s/1/ncs.dat	field	58	1	bdefend	3136
+decoded_dat/s/1/ncs.dat	field	58	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	58	2	bdy	
+decoded_dat/s/1/ncs.dat	field	58	2	kind	30
+decoded_dat/s/1/ncs.dat	field	58	2	x	3232
+decoded_dat/s/1/ncs.dat	field	58	2	y	3335
+decoded_dat/s/1/ncs.dat	field	58	2	w	3236
+decoded_dat/s/1/ncs.dat	field	58	2	h	3139
+decoded_dat/s/1/ncs.dat	block	58	3	bdy	
+decoded_dat/s/1/ncs.dat	field	58	3	kind	30
+decoded_dat/s/1/ncs.dat	field	58	3	x	3231
+decoded_dat/s/1/ncs.dat	field	58	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	58	3	w	3433
+decoded_dat/s/1/ncs.dat	field	58	3	h	3632
+decoded_dat/s/1/ncs.dat	block	58	4	bdy	
+decoded_dat/s/1/ncs.dat	field	58	4	kind	30
+decoded_dat/s/1/ncs.dat	field	58	4	x	3231
+decoded_dat/s/1/ncs.dat	field	58	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	58	4	w	3433
+decoded_dat/s/1/ncs.dat	field	58	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	59	205		66697265
+decoded_dat/s/1/ncs.dat	field	59	-1	pic	3138
+decoded_dat/s/1/ncs.dat	field	59	-1	state	3138
+decoded_dat/s/1/ncs.dat	field	59	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	59	-1	next	323036
+decoded_dat/s/1/ncs.dat	field	59	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	59	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	59	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	59	0	kind	31
+decoded_dat/s/1/ncs.dat	field	59	0	x	3330
+decoded_dat/s/1/ncs.dat	field	59	0	y	3333
+decoded_dat/s/1/ncs.dat	field	59	0	weaponact	3230
+decoded_dat/s/1/ncs.dat	field	59	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	59	0	cover	30
+decoded_dat/s/1/ncs.dat	block	59	1	itr	
+decoded_dat/s/1/ncs.dat	field	59	1	kind	30
+decoded_dat/s/1/ncs.dat	field	59	1	x	3232
+decoded_dat/s/1/ncs.dat	field	59	1	y	3335
+decoded_dat/s/1/ncs.dat	field	59	1	w	3236
+decoded_dat/s/1/ncs.dat	field	59	1	h	3139
+decoded_dat/s/1/ncs.dat	field	59	1	effect	3230
+decoded_dat/s/1/ncs.dat	field	59	1	dvx	2d36
+decoded_dat/s/1/ncs.dat	field	59	1	dvy	2d36
+decoded_dat/s/1/ncs.dat	field	59	1	fall	393939
+decoded_dat/s/1/ncs.dat	field	59	1	vrest	3130
+decoded_dat/s/1/ncs.dat	field	59	1	bdefend	3136
+decoded_dat/s/1/ncs.dat	field	59	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	59	2	bdy	
+decoded_dat/s/1/ncs.dat	field	59	2	kind	30
+decoded_dat/s/1/ncs.dat	field	59	2	x	3232
+decoded_dat/s/1/ncs.dat	field	59	2	y	3335
+decoded_dat/s/1/ncs.dat	field	59	2	w	3236
+decoded_dat/s/1/ncs.dat	field	59	2	h	3139
+decoded_dat/s/1/ncs.dat	block	59	3	bdy	
+decoded_dat/s/1/ncs.dat	field	59	3	kind	30
+decoded_dat/s/1/ncs.dat	field	59	3	x	3231
+decoded_dat/s/1/ncs.dat	field	59	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	59	3	w	3433
+decoded_dat/s/1/ncs.dat	field	59	3	h	3632
+decoded_dat/s/1/ncs.dat	block	59	4	bdy	
+decoded_dat/s/1/ncs.dat	field	59	4	kind	30
+decoded_dat/s/1/ncs.dat	field	59	4	x	3231
+decoded_dat/s/1/ncs.dat	field	59	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	59	4	w	3433
+decoded_dat/s/1/ncs.dat	field	59	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	60	206		66697265
+decoded_dat/s/1/ncs.dat	field	60	-1	pic	3139
+decoded_dat/s/1/ncs.dat	field	60	-1	state	3138
+decoded_dat/s/1/ncs.dat	field	60	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	60	-1	next	323035
+decoded_dat/s/1/ncs.dat	field	60	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	60	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	60	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	60	0	kind	31
+decoded_dat/s/1/ncs.dat	field	60	0	x	3330
+decoded_dat/s/1/ncs.dat	field	60	0	y	3333
+decoded_dat/s/1/ncs.dat	field	60	0	weaponact	3230
+decoded_dat/s/1/ncs.dat	field	60	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	60	0	cover	30
+decoded_dat/s/1/ncs.dat	block	60	1	itr	
+decoded_dat/s/1/ncs.dat	field	60	1	kind	30
+decoded_dat/s/1/ncs.dat	field	60	1	x	3232
+decoded_dat/s/1/ncs.dat	field	60	1	y	3335
+decoded_dat/s/1/ncs.dat	field	60	1	w	3236
+decoded_dat/s/1/ncs.dat	field	60	1	h	3139
+decoded_dat/s/1/ncs.dat	field	60	1	effect	3230
+decoded_dat/s/1/ncs.dat	field	60	1	dvx	2d36
+decoded_dat/s/1/ncs.dat	field	60	1	dvy	2d36
+decoded_dat/s/1/ncs.dat	field	60	1	fall	393939
+decoded_dat/s/1/ncs.dat	field	60	1	vrest	3130
+decoded_dat/s/1/ncs.dat	field	60	1	bdefend	3136
+decoded_dat/s/1/ncs.dat	field	60	1	injury	3330
+decoded_dat/s/1/ncs.dat	block	60	2	bdy	
+decoded_dat/s/1/ncs.dat	field	60	2	kind	30
+decoded_dat/s/1/ncs.dat	field	60	2	x	3232
+decoded_dat/s/1/ncs.dat	field	60	2	y	3335
+decoded_dat/s/1/ncs.dat	field	60	2	w	3236
+decoded_dat/s/1/ncs.dat	field	60	2	h	3139
+decoded_dat/s/1/ncs.dat	block	60	3	bdy	
+decoded_dat/s/1/ncs.dat	field	60	3	kind	30
+decoded_dat/s/1/ncs.dat	field	60	3	x	3231
+decoded_dat/s/1/ncs.dat	field	60	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	60	3	w	3433
+decoded_dat/s/1/ncs.dat	field	60	3	h	3632
+decoded_dat/s/1/ncs.dat	block	60	4	bdy	
+decoded_dat/s/1/ncs.dat	field	60	4	kind	30
+decoded_dat/s/1/ncs.dat	field	60	4	x	3231
+decoded_dat/s/1/ncs.dat	field	60	4	y	38393330303030
+decoded_dat/s/1/ncs.dat	field	60	4	w	3433
+decoded_dat/s/1/ncs.dat	field	60	4	h	393939
+decoded_dat/s/1/ncs.dat	frame	61	207		7469726564
+decoded_dat/s/1/ncs.dat	field	61	-1	pic	3631
+decoded_dat/s/1/ncs.dat	field	61	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	61	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	61	-1	next	30
+decoded_dat/s/1/ncs.dat	field	61	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	61	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	61	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	61	0	kind	31
+decoded_dat/s/1/ncs.dat	field	61	0	x	3432
+decoded_dat/s/1/ncs.dat	field	61	0	y	3634
+decoded_dat/s/1/ncs.dat	field	61	0	weaponact	3232
+decoded_dat/s/1/ncs.dat	field	61	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	61	0	cover	30
+decoded_dat/s/1/ncs.dat	block	61	1	bdy	
+decoded_dat/s/1/ncs.dat	field	61	1	kind	30
+decoded_dat/s/1/ncs.dat	field	61	1	x	3231
+decoded_dat/s/1/ncs.dat	field	61	1	y	3138
+decoded_dat/s/1/ncs.dat	field	61	1	w	3433
+decoded_dat/s/1/ncs.dat	field	61	1	h	3632
+decoded_dat/s/1/ncs.dat	block	61	2	bdy	
+decoded_dat/s/1/ncs.dat	field	61	2	kind	30
+decoded_dat/s/1/ncs.dat	field	61	2	x	3231
+decoded_dat/s/1/ncs.dat	field	61	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	61	2	w	3433
+decoded_dat/s/1/ncs.dat	field	61	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	62	215		63726f756368
+decoded_dat/s/1/ncs.dat	field	62	-1	pic	3630
+decoded_dat/s/1/ncs.dat	field	62	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	62	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	62	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	62	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	62	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	62	-1	sound	646174615c3031322e776176
+decoded_dat/s/1/ncs.dat	block	62	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	62	0	kind	31
+decoded_dat/s/1/ncs.dat	field	62	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	62	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	62	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	62	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	62	0	cover	31
+decoded_dat/s/1/ncs.dat	block	62	1	bdy	
+decoded_dat/s/1/ncs.dat	field	62	1	kind	30
+decoded_dat/s/1/ncs.dat	field	62	1	x	3231
+decoded_dat/s/1/ncs.dat	field	62	1	y	3138
+decoded_dat/s/1/ncs.dat	field	62	1	w	3433
+decoded_dat/s/1/ncs.dat	field	62	1	h	3632
+decoded_dat/s/1/ncs.dat	block	62	2	bdy	
+decoded_dat/s/1/ncs.dat	field	62	2	kind	30
+decoded_dat/s/1/ncs.dat	field	62	2	x	3231
+decoded_dat/s/1/ncs.dat	field	62	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	62	2	w	3433
+decoded_dat/s/1/ncs.dat	field	62	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	63	219		63726f75636832
+decoded_dat/s/1/ncs.dat	field	63	-1	pic	3631
+decoded_dat/s/1/ncs.dat	field	63	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	63	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	63	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	63	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	63	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	63	-1	sound	646174615c3031322e776176
+decoded_dat/s/1/ncs.dat	block	63	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	63	0	kind	31
+decoded_dat/s/1/ncs.dat	field	63	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	63	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	63	0	weaponact	30
+decoded_dat/s/1/ncs.dat	field	63	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	63	0	cover	31
+decoded_dat/s/1/ncs.dat	block	63	1	bdy	
+decoded_dat/s/1/ncs.dat	field	63	1	kind	30
+decoded_dat/s/1/ncs.dat	field	63	1	x	3231
+decoded_dat/s/1/ncs.dat	field	63	1	y	3138
+decoded_dat/s/1/ncs.dat	field	63	1	w	3433
+decoded_dat/s/1/ncs.dat	field	63	1	h	3632
+decoded_dat/s/1/ncs.dat	block	63	2	bdy	
+decoded_dat/s/1/ncs.dat	field	63	2	kind	30
+decoded_dat/s/1/ncs.dat	field	63	2	x	3231
+decoded_dat/s/1/ncs.dat	field	63	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	63	2	w	3433
+decoded_dat/s/1/ncs.dat	field	63	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	64	220		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	64	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	64	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	64	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	64	-1	next	323231
+decoded_dat/s/1/ncs.dat	field	64	-1	centerx	3437
+decoded_dat/s/1/ncs.dat	field	64	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	64	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	64	0	kind	31
+decoded_dat/s/1/ncs.dat	field	64	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	64	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	64	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	64	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	64	0	cover	31
+decoded_dat/s/1/ncs.dat	field	64	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	64	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	64	1	bdy	
+decoded_dat/s/1/ncs.dat	field	64	1	kind	30
+decoded_dat/s/1/ncs.dat	field	64	1	x	3437
+decoded_dat/s/1/ncs.dat	field	64	1	y	3233
+decoded_dat/s/1/ncs.dat	field	64	1	w	3233
+decoded_dat/s/1/ncs.dat	field	64	1	h	3534
+decoded_dat/s/1/ncs.dat	block	64	2	bdy	
+decoded_dat/s/1/ncs.dat	field	64	2	kind	30
+decoded_dat/s/1/ncs.dat	field	64	2	x	3239
+decoded_dat/s/1/ncs.dat	field	64	2	y	3431
+decoded_dat/s/1/ncs.dat	field	64	2	w	3230
+decoded_dat/s/1/ncs.dat	field	64	2	h	3337
+decoded_dat/s/1/ncs.dat	block	64	3	bdy	
+decoded_dat/s/1/ncs.dat	field	64	3	kind	30
+decoded_dat/s/1/ncs.dat	field	64	3	x	3231
+decoded_dat/s/1/ncs.dat	field	64	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	64	3	w	3433
+decoded_dat/s/1/ncs.dat	field	64	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	65	221		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	65	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	65	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	65	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	65	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	65	-1	centerx	3434
+decoded_dat/s/1/ncs.dat	field	65	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	65	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	65	0	kind	31
+decoded_dat/s/1/ncs.dat	field	65	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	65	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	65	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	65	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	65	0	cover	31
+decoded_dat/s/1/ncs.dat	field	65	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	65	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	65	1	bdy	
+decoded_dat/s/1/ncs.dat	field	65	1	kind	30
+decoded_dat/s/1/ncs.dat	field	65	1	x	3436
+decoded_dat/s/1/ncs.dat	field	65	1	y	3233
+decoded_dat/s/1/ncs.dat	field	65	1	w	3231
+decoded_dat/s/1/ncs.dat	field	65	1	h	3536
+decoded_dat/s/1/ncs.dat	block	65	2	bdy	
+decoded_dat/s/1/ncs.dat	field	65	2	kind	30
+decoded_dat/s/1/ncs.dat	field	65	2	x	3330
+decoded_dat/s/1/ncs.dat	field	65	2	y	3430
+decoded_dat/s/1/ncs.dat	field	65	2	w	3137
+decoded_dat/s/1/ncs.dat	field	65	2	h	3431
+decoded_dat/s/1/ncs.dat	block	65	3	bdy	
+decoded_dat/s/1/ncs.dat	field	65	3	kind	30
+decoded_dat/s/1/ncs.dat	field	65	3	x	3231
+decoded_dat/s/1/ncs.dat	field	65	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	65	3	w	3433
+decoded_dat/s/1/ncs.dat	field	65	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	66	222		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	66	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	66	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	66	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	66	-1	next	323233
+decoded_dat/s/1/ncs.dat	field	66	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	66	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	66	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	66	0	kind	31
+decoded_dat/s/1/ncs.dat	field	66	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	66	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	66	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	66	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	66	0	cover	31
+decoded_dat/s/1/ncs.dat	field	66	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	66	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	66	1	bdy	
+decoded_dat/s/1/ncs.dat	field	66	1	kind	30
+decoded_dat/s/1/ncs.dat	field	66	1	x	3131
+decoded_dat/s/1/ncs.dat	field	66	1	y	3234
+decoded_dat/s/1/ncs.dat	field	66	1	w	3339
+decoded_dat/s/1/ncs.dat	field	66	1	h	3331
+decoded_dat/s/1/ncs.dat	block	66	2	bdy	
+decoded_dat/s/1/ncs.dat	field	66	2	kind	30
+decoded_dat/s/1/ncs.dat	field	66	2	x	3235
+decoded_dat/s/1/ncs.dat	field	66	2	y	3533
+decoded_dat/s/1/ncs.dat	field	66	2	w	3430
+decoded_dat/s/1/ncs.dat	field	66	2	h	3237
+decoded_dat/s/1/ncs.dat	block	66	3	bdy	
+decoded_dat/s/1/ncs.dat	field	66	3	kind	30
+decoded_dat/s/1/ncs.dat	field	66	3	x	3231
+decoded_dat/s/1/ncs.dat	field	66	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	66	3	w	3433
+decoded_dat/s/1/ncs.dat	field	66	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	67	223		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	67	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	67	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	67	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	67	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	67	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	67	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	67	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	67	0	kind	31
+decoded_dat/s/1/ncs.dat	field	67	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	67	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	67	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	67	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	67	0	cover	31
+decoded_dat/s/1/ncs.dat	field	67	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	67	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	67	1	bdy	
+decoded_dat/s/1/ncs.dat	field	67	1	kind	30
+decoded_dat/s/1/ncs.dat	field	67	1	x	3132
+decoded_dat/s/1/ncs.dat	field	67	1	y	3233
+decoded_dat/s/1/ncs.dat	field	67	1	w	3430
+decoded_dat/s/1/ncs.dat	field	67	1	h	3337
+decoded_dat/s/1/ncs.dat	block	67	2	bdy	
+decoded_dat/s/1/ncs.dat	field	67	2	kind	30
+decoded_dat/s/1/ncs.dat	field	67	2	x	3237
+decoded_dat/s/1/ncs.dat	field	67	2	y	3536
+decoded_dat/s/1/ncs.dat	field	67	2	w	3336
+decoded_dat/s/1/ncs.dat	field	67	2	h	3234
+decoded_dat/s/1/ncs.dat	block	67	3	bdy	
+decoded_dat/s/1/ncs.dat	field	67	3	kind	30
+decoded_dat/s/1/ncs.dat	field	67	3	x	3231
+decoded_dat/s/1/ncs.dat	field	67	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	67	3	w	3433
+decoded_dat/s/1/ncs.dat	field	67	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	68	224		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	68	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	68	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	68	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	68	-1	next	323235
+decoded_dat/s/1/ncs.dat	field	68	-1	centerx	3438
+decoded_dat/s/1/ncs.dat	field	68	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	68	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	68	0	kind	31
+decoded_dat/s/1/ncs.dat	field	68	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	68	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	68	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	68	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	68	0	cover	31
+decoded_dat/s/1/ncs.dat	field	68	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	68	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	68	1	bdy	
+decoded_dat/s/1/ncs.dat	field	68	1	kind	30
+decoded_dat/s/1/ncs.dat	field	68	1	x	3332
+decoded_dat/s/1/ncs.dat	field	68	1	y	3138
+decoded_dat/s/1/ncs.dat	field	68	1	w	3238
+decoded_dat/s/1/ncs.dat	field	68	1	h	3630
+decoded_dat/s/1/ncs.dat	block	68	2	bdy	
+decoded_dat/s/1/ncs.dat	field	68	2	kind	30
+decoded_dat/s/1/ncs.dat	field	68	2	x	3532
+decoded_dat/s/1/ncs.dat	field	68	2	y	3338
+decoded_dat/s/1/ncs.dat	field	68	2	w	3230
+decoded_dat/s/1/ncs.dat	field	68	2	h	3139
+decoded_dat/s/1/ncs.dat	block	68	3	bdy	
+decoded_dat/s/1/ncs.dat	field	68	3	kind	30
+decoded_dat/s/1/ncs.dat	field	68	3	x	3231
+decoded_dat/s/1/ncs.dat	field	68	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	68	3	w	3433
+decoded_dat/s/1/ncs.dat	field	68	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	69	225		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	69	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	69	-1	state	3131
+decoded_dat/s/1/ncs.dat	field	69	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	69	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	69	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	69	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	69	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	69	0	kind	31
+decoded_dat/s/1/ncs.dat	field	69	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	69	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	69	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	69	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	69	0	cover	31
+decoded_dat/s/1/ncs.dat	field	69	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	69	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	69	1	bdy	
+decoded_dat/s/1/ncs.dat	field	69	1	kind	30
+decoded_dat/s/1/ncs.dat	field	69	1	x	3234
+decoded_dat/s/1/ncs.dat	field	69	1	y	3138
+decoded_dat/s/1/ncs.dat	field	69	1	w	3335
+decoded_dat/s/1/ncs.dat	field	69	1	h	3633
+decoded_dat/s/1/ncs.dat	block	69	2	bdy	
+decoded_dat/s/1/ncs.dat	field	69	2	kind	30
+decoded_dat/s/1/ncs.dat	field	69	2	x	3231
+decoded_dat/s/1/ncs.dat	field	69	2	y	38303030
+decoded_dat/s/1/ncs.dat	field	69	2	w	3433
+decoded_dat/s/1/ncs.dat	field	69	2	h	3632
+decoded_dat/s/1/ncs.dat	frame	70	226		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	70	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	70	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	70	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	70	-1	next	323237
+decoded_dat/s/1/ncs.dat	field	70	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	70	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	70	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	70	0	kind	31
+decoded_dat/s/1/ncs.dat	field	70	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	70	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	70	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	70	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	70	0	cover	31
+decoded_dat/s/1/ncs.dat	field	70	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	70	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	70	1	itr	
+decoded_dat/s/1/ncs.dat	field	70	1	kind	36
+decoded_dat/s/1/ncs.dat	field	70	1	x	36
+decoded_dat/s/1/ncs.dat	field	70	1	y	3132
+decoded_dat/s/1/ncs.dat	field	70	1	w	3835
+decoded_dat/s/1/ncs.dat	field	70	1	h	3638
+decoded_dat/s/1/ncs.dat	field	70	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	70	2	bdy	
+decoded_dat/s/1/ncs.dat	field	70	2	kind	30
+decoded_dat/s/1/ncs.dat	field	70	2	x	3237
+decoded_dat/s/1/ncs.dat	field	70	2	y	3232
+decoded_dat/s/1/ncs.dat	field	70	2	w	3432
+decoded_dat/s/1/ncs.dat	field	70	2	h	3538
+decoded_dat/s/1/ncs.dat	block	70	3	bdy	
+decoded_dat/s/1/ncs.dat	field	70	3	kind	30
+decoded_dat/s/1/ncs.dat	field	70	3	x	3231
+decoded_dat/s/1/ncs.dat	field	70	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	70	3	w	3433
+decoded_dat/s/1/ncs.dat	field	70	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	71	227		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	71	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	71	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	71	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	71	-1	next	323238
+decoded_dat/s/1/ncs.dat	field	71	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	71	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	71	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	71	0	kind	31
+decoded_dat/s/1/ncs.dat	field	71	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	71	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	71	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	71	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	71	0	cover	31
+decoded_dat/s/1/ncs.dat	field	71	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	71	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	71	1	itr	
+decoded_dat/s/1/ncs.dat	field	71	1	kind	36
+decoded_dat/s/1/ncs.dat	field	71	1	x	36
+decoded_dat/s/1/ncs.dat	field	71	1	y	3132
+decoded_dat/s/1/ncs.dat	field	71	1	w	3835
+decoded_dat/s/1/ncs.dat	field	71	1	h	3638
+decoded_dat/s/1/ncs.dat	field	71	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	71	2	bdy	
+decoded_dat/s/1/ncs.dat	field	71	2	kind	30
+decoded_dat/s/1/ncs.dat	field	71	2	x	3238
+decoded_dat/s/1/ncs.dat	field	71	2	y	3234
+decoded_dat/s/1/ncs.dat	field	71	2	w	3339
+decoded_dat/s/1/ncs.dat	field	71	2	h	3537
+decoded_dat/s/1/ncs.dat	block	71	3	bdy	
+decoded_dat/s/1/ncs.dat	field	71	3	kind	30
+decoded_dat/s/1/ncs.dat	field	71	3	x	3231
+decoded_dat/s/1/ncs.dat	field	71	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	71	3	w	3433
+decoded_dat/s/1/ncs.dat	field	71	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	72	228		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	72	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	72	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	72	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	72	-1	next	323239
+decoded_dat/s/1/ncs.dat	field	72	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	72	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	72	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	72	0	kind	31
+decoded_dat/s/1/ncs.dat	field	72	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	72	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	72	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	72	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	72	0	cover	31
+decoded_dat/s/1/ncs.dat	field	72	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	72	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	72	1	itr	
+decoded_dat/s/1/ncs.dat	field	72	1	kind	36
+decoded_dat/s/1/ncs.dat	field	72	1	x	36
+decoded_dat/s/1/ncs.dat	field	72	1	y	3132
+decoded_dat/s/1/ncs.dat	field	72	1	w	3835
+decoded_dat/s/1/ncs.dat	field	72	1	h	3638
+decoded_dat/s/1/ncs.dat	field	72	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	72	2	bdy	
+decoded_dat/s/1/ncs.dat	field	72	2	kind	30
+decoded_dat/s/1/ncs.dat	field	72	2	x	3238
+decoded_dat/s/1/ncs.dat	field	72	2	y	3233
+decoded_dat/s/1/ncs.dat	field	72	2	w	3337
+decoded_dat/s/1/ncs.dat	field	72	2	h	3538
+decoded_dat/s/1/ncs.dat	block	72	3	bdy	
+decoded_dat/s/1/ncs.dat	field	72	3	kind	30
+decoded_dat/s/1/ncs.dat	field	72	3	x	3231
+decoded_dat/s/1/ncs.dat	field	72	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	72	3	w	3433
+decoded_dat/s/1/ncs.dat	field	72	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	73	229		696e6a75726564
+decoded_dat/s/1/ncs.dat	field	73	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	73	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	73	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	73	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	73	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	73	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	73	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	73	0	kind	31
+decoded_dat/s/1/ncs.dat	field	73	0	x	2d3530
+decoded_dat/s/1/ncs.dat	field	73	0	y	2d3230
+decoded_dat/s/1/ncs.dat	field	73	0	weaponact	3830
+decoded_dat/s/1/ncs.dat	field	73	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	73	0	cover	31
+decoded_dat/s/1/ncs.dat	field	73	0	dvx	3535
+decoded_dat/s/1/ncs.dat	field	73	0	dvy	2d35
+decoded_dat/s/1/ncs.dat	block	73	1	itr	
+decoded_dat/s/1/ncs.dat	field	73	1	kind	36
+decoded_dat/s/1/ncs.dat	field	73	1	x	36
+decoded_dat/s/1/ncs.dat	field	73	1	y	3132
+decoded_dat/s/1/ncs.dat	field	73	1	w	3835
+decoded_dat/s/1/ncs.dat	field	73	1	h	3638
+decoded_dat/s/1/ncs.dat	field	73	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	73	2	bdy	
+decoded_dat/s/1/ncs.dat	field	73	2	kind	30
+decoded_dat/s/1/ncs.dat	field	73	2	x	3239
+decoded_dat/s/1/ncs.dat	field	73	2	y	3236
+decoded_dat/s/1/ncs.dat	field	73	2	w	3337
+decoded_dat/s/1/ncs.dat	field	73	2	h	3533
+decoded_dat/s/1/ncs.dat	block	73	3	bdy	
+decoded_dat/s/1/ncs.dat	field	73	3	kind	30
+decoded_dat/s/1/ncs.dat	field	73	3	x	3231
+decoded_dat/s/1/ncs.dat	field	73	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	73	3	w	3433
+decoded_dat/s/1/ncs.dat	field	73	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	74	230		6c79696e67
+decoded_dat/s/1/ncs.dat	field	74	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	74	-1	state	3134
+decoded_dat/s/1/ncs.dat	field	74	-1	wait	3330
+decoded_dat/s/1/ncs.dat	field	74	-1	next	323139
+decoded_dat/s/1/ncs.dat	field	74	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	74	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	74	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	74	0	kind	31
+decoded_dat/s/1/ncs.dat	field	74	0	x	3335
+decoded_dat/s/1/ncs.dat	field	74	0	y	3734
+decoded_dat/s/1/ncs.dat	field	74	0	weaponact	3332
+decoded_dat/s/1/ncs.dat	field	74	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	74	0	cover	30
+decoded_dat/s/1/ncs.dat	block	74	1	bdy	
+decoded_dat/s/1/ncs.dat	field	74	1	kind	30
+decoded_dat/s/1/ncs.dat	field	74	1	x	30
+decoded_dat/s/1/ncs.dat	field	74	1	y	33303030
+decoded_dat/s/1/ncs.dat	field	74	1	w	3739
+decoded_dat/s/1/ncs.dat	field	74	1	h	3939
+decoded_dat/s/1/ncs.dat	frame	75	231		6c79696e67
+decoded_dat/s/1/ncs.dat	field	75	-1	pic	3334
+decoded_dat/s/1/ncs.dat	field	75	-1	state	3134
+decoded_dat/s/1/ncs.dat	field	75	-1	wait	3330
+decoded_dat/s/1/ncs.dat	field	75	-1	next	323139
+decoded_dat/s/1/ncs.dat	field	75	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	75	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	75	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	75	0	kind	31
+decoded_dat/s/1/ncs.dat	field	75	0	x	3332
+decoded_dat/s/1/ncs.dat	field	75	0	y	3734
+decoded_dat/s/1/ncs.dat	field	75	0	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	75	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	75	0	cover	30
+decoded_dat/s/1/ncs.dat	block	75	1	bdy	
+decoded_dat/s/1/ncs.dat	field	75	1	kind	30
+decoded_dat/s/1/ncs.dat	field	75	1	x	30
+decoded_dat/s/1/ncs.dat	field	75	1	y	33353030
+decoded_dat/s/1/ncs.dat	field	75	1	w	3739
+decoded_dat/s/1/ncs.dat	field	75	1	h	3939
+decoded_dat/s/1/ncs.dat	frame	76	232		6c79696e67
+decoded_dat/s/1/ncs.dat	field	76	-1	pic	38
+decoded_dat/s/1/ncs.dat	field	76	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	76	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	76	-1	next	323333
+decoded_dat/s/1/ncs.dat	field	76	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	76	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	76	-1	dvz	353530
+decoded_dat/s/1/ncs.dat	field	76	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	76	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	76	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	76	0	kind	31
+decoded_dat/s/1/ncs.dat	field	76	0	x	3332
+decoded_dat/s/1/ncs.dat	field	76	0	y	3734
+decoded_dat/s/1/ncs.dat	field	76	0	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	76	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	76	0	cover	30
+decoded_dat/s/1/ncs.dat	frame	77	233		6c79696e67
+decoded_dat/s/1/ncs.dat	field	77	-1	pic	39
+decoded_dat/s/1/ncs.dat	field	77	-1	state	3134
+decoded_dat/s/1/ncs.dat	field	77	-1	wait	3330
+decoded_dat/s/1/ncs.dat	field	77	-1	next	323139
+decoded_dat/s/1/ncs.dat	field	77	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	77	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	77	-1	dvz	353530
+decoded_dat/s/1/ncs.dat	field	77	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	77	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	77	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	77	0	kind	31
+decoded_dat/s/1/ncs.dat	field	77	0	x	3332
+decoded_dat/s/1/ncs.dat	field	77	0	y	3734
+decoded_dat/s/1/ncs.dat	field	77	0	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	77	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	77	0	cover	30
+decoded_dat/s/1/ncs.dat	frame	78	397		6c79696e67
+decoded_dat/s/1/ncs.dat	field	78	-1	pic	38
+decoded_dat/s/1/ncs.dat	field	78	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	78	-1	wait	30
+decoded_dat/s/1/ncs.dat	field	78	-1	next	333938
+decoded_dat/s/1/ncs.dat	field	78	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	78	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	78	-1	dvz	353530
+decoded_dat/s/1/ncs.dat	field	78	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	78	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	78	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	78	0	kind	31
+decoded_dat/s/1/ncs.dat	field	78	0	x	3332
+decoded_dat/s/1/ncs.dat	field	78	0	y	3734
+decoded_dat/s/1/ncs.dat	field	78	0	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	78	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	78	0	cover	30
+decoded_dat/s/1/ncs.dat	frame	79	398		6c79696e67
+decoded_dat/s/1/ncs.dat	field	79	-1	pic	39
+decoded_dat/s/1/ncs.dat	field	79	-1	state	3134
+decoded_dat/s/1/ncs.dat	field	79	-1	wait	3330
+decoded_dat/s/1/ncs.dat	field	79	-1	next	323139
+decoded_dat/s/1/ncs.dat	field	79	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	79	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	79	-1	dvz	353530
+decoded_dat/s/1/ncs.dat	field	79	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	79	-1	centery	3732
+decoded_dat/s/1/ncs.dat	block	79	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	79	0	kind	31
+decoded_dat/s/1/ncs.dat	field	79	0	x	3332
+decoded_dat/s/1/ncs.dat	field	79	0	y	3734
+decoded_dat/s/1/ncs.dat	field	79	0	weaponact	3234
+decoded_dat/s/1/ncs.dat	field	79	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	79	0	cover	30
+decoded_dat/s/1/ncs.dat	frame	80	399		64756d6d79
+decoded_dat/s/1/ncs.dat	field	80	-1	pic	3330
+decoded_dat/s/1/ncs.dat	field	80	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	80	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	80	-1	next	31303030
+decoded_dat/s/1/ncs.dat	field	80	-1	dvx	353530
+decoded_dat/s/1/ncs.dat	field	80	-1	dvy	353530
+decoded_dat/s/1/ncs.dat	field	80	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	80	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	80	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	80	0	kind	33
+decoded_dat/s/1/ncs.dat	field	80	0	x	3538
+decoded_dat/s/1/ncs.dat	field	80	0	y	3335
+decoded_dat/s/1/ncs.dat	field	80	0	weaponact	3231
+decoded_dat/s/1/ncs.dat	field	80	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	80	0	cover	30
+decoded_dat/s/1/ncs.dat	frame	81	615		696e6a7572656432
+decoded_dat/s/1/ncs.dat	field	81	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	81	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	81	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	81	-1	next	363136
+decoded_dat/s/1/ncs.dat	field	81	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	81	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	81	-1	hit_g	363135
+decoded_dat/s/1/ncs.dat	block	81	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	81	0	kind	33
+decoded_dat/s/1/ncs.dat	field	81	0	x	3538
+decoded_dat/s/1/ncs.dat	field	81	0	y	3439
+decoded_dat/s/1/ncs.dat	field	81	0	weaponact	3335
+decoded_dat/s/1/ncs.dat	field	81	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	81	0	cover	30
+decoded_dat/s/1/ncs.dat	block	81	1	itr	
+decoded_dat/s/1/ncs.dat	field	81	1	kind	36
+decoded_dat/s/1/ncs.dat	field	81	1	x	36
+decoded_dat/s/1/ncs.dat	field	81	1	y	3132
+decoded_dat/s/1/ncs.dat	field	81	1	w	3835
+decoded_dat/s/1/ncs.dat	field	81	1	h	3638
+decoded_dat/s/1/ncs.dat	field	81	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	81	2	bdy	
+decoded_dat/s/1/ncs.dat	field	81	2	kind	30
+decoded_dat/s/1/ncs.dat	field	81	2	x	3237
+decoded_dat/s/1/ncs.dat	field	81	2	y	3232
+decoded_dat/s/1/ncs.dat	field	81	2	w	3432
+decoded_dat/s/1/ncs.dat	field	81	2	h	3538
+decoded_dat/s/1/ncs.dat	block	81	3	bdy	
+decoded_dat/s/1/ncs.dat	field	81	3	kind	30
+decoded_dat/s/1/ncs.dat	field	81	3	x	3231
+decoded_dat/s/1/ncs.dat	field	81	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	81	3	w	3433
+decoded_dat/s/1/ncs.dat	field	81	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	82	616		696e6a7572656432
+decoded_dat/s/1/ncs.dat	field	82	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	82	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	82	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	82	-1	next	363137
+decoded_dat/s/1/ncs.dat	field	82	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	82	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	82	-1	hit_g	363136
+decoded_dat/s/1/ncs.dat	block	82	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	82	0	kind	33
+decoded_dat/s/1/ncs.dat	field	82	0	x	3630
+decoded_dat/s/1/ncs.dat	field	82	0	y	3531
+decoded_dat/s/1/ncs.dat	field	82	0	weaponact	3335
+decoded_dat/s/1/ncs.dat	field	82	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	82	0	cover	30
+decoded_dat/s/1/ncs.dat	block	82	1	itr	
+decoded_dat/s/1/ncs.dat	field	82	1	kind	36
+decoded_dat/s/1/ncs.dat	field	82	1	x	36
+decoded_dat/s/1/ncs.dat	field	82	1	y	3132
+decoded_dat/s/1/ncs.dat	field	82	1	w	3835
+decoded_dat/s/1/ncs.dat	field	82	1	h	3638
+decoded_dat/s/1/ncs.dat	field	82	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	82	2	bdy	
+decoded_dat/s/1/ncs.dat	field	82	2	kind	30
+decoded_dat/s/1/ncs.dat	field	82	2	x	3238
+decoded_dat/s/1/ncs.dat	field	82	2	y	3234
+decoded_dat/s/1/ncs.dat	field	82	2	w	3339
+decoded_dat/s/1/ncs.dat	field	82	2	h	3537
+decoded_dat/s/1/ncs.dat	block	82	3	bdy	
+decoded_dat/s/1/ncs.dat	field	82	3	kind	30
+decoded_dat/s/1/ncs.dat	field	82	3	x	3231
+decoded_dat/s/1/ncs.dat	field	82	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	82	3	w	3433
+decoded_dat/s/1/ncs.dat	field	82	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	83	617		696e6a7572656432
+decoded_dat/s/1/ncs.dat	field	83	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	83	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	83	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	83	-1	next	363138
+decoded_dat/s/1/ncs.dat	field	83	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	83	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	83	-1	hit_g	363137
+decoded_dat/s/1/ncs.dat	block	83	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	83	0	kind	33
+decoded_dat/s/1/ncs.dat	field	83	0	x	3631
+decoded_dat/s/1/ncs.dat	field	83	0	y	3438
+decoded_dat/s/1/ncs.dat	field	83	0	weaponact	3335
+decoded_dat/s/1/ncs.dat	field	83	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	83	0	cover	30
+decoded_dat/s/1/ncs.dat	block	83	1	itr	
+decoded_dat/s/1/ncs.dat	field	83	1	kind	36
+decoded_dat/s/1/ncs.dat	field	83	1	x	36
+decoded_dat/s/1/ncs.dat	field	83	1	y	3132
+decoded_dat/s/1/ncs.dat	field	83	1	w	3835
+decoded_dat/s/1/ncs.dat	field	83	1	h	3638
+decoded_dat/s/1/ncs.dat	field	83	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	83	2	bdy	
+decoded_dat/s/1/ncs.dat	field	83	2	kind	30
+decoded_dat/s/1/ncs.dat	field	83	2	x	3238
+decoded_dat/s/1/ncs.dat	field	83	2	y	3233
+decoded_dat/s/1/ncs.dat	field	83	2	w	3337
+decoded_dat/s/1/ncs.dat	field	83	2	h	3538
+decoded_dat/s/1/ncs.dat	block	83	3	bdy	
+decoded_dat/s/1/ncs.dat	field	83	3	kind	30
+decoded_dat/s/1/ncs.dat	field	83	3	x	3231
+decoded_dat/s/1/ncs.dat	field	83	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	83	3	w	3433
+decoded_dat/s/1/ncs.dat	field	83	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	84	618		696e6a7572656432
+decoded_dat/s/1/ncs.dat	field	84	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	84	-1	state	3136
+decoded_dat/s/1/ncs.dat	field	84	-1	wait	32
+decoded_dat/s/1/ncs.dat	field	84	-1	next	393939
+decoded_dat/s/1/ncs.dat	field	84	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	84	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	84	-1	hit_g	363138
+decoded_dat/s/1/ncs.dat	block	84	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	84	0	kind	33
+decoded_dat/s/1/ncs.dat	field	84	0	x	3631
+decoded_dat/s/1/ncs.dat	field	84	0	y	3531
+decoded_dat/s/1/ncs.dat	field	84	0	weaponact	3335
+decoded_dat/s/1/ncs.dat	field	84	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	84	0	cover	30
+decoded_dat/s/1/ncs.dat	block	84	1	itr	
+decoded_dat/s/1/ncs.dat	field	84	1	kind	36
+decoded_dat/s/1/ncs.dat	field	84	1	x	36
+decoded_dat/s/1/ncs.dat	field	84	1	y	3132
+decoded_dat/s/1/ncs.dat	field	84	1	w	3835
+decoded_dat/s/1/ncs.dat	field	84	1	h	3638
+decoded_dat/s/1/ncs.dat	field	84	1	vrest	31
+decoded_dat/s/1/ncs.dat	block	84	2	bdy	
+decoded_dat/s/1/ncs.dat	field	84	2	kind	30
+decoded_dat/s/1/ncs.dat	field	84	2	x	3239
+decoded_dat/s/1/ncs.dat	field	84	2	y	3236
+decoded_dat/s/1/ncs.dat	field	84	2	w	3337
+decoded_dat/s/1/ncs.dat	field	84	2	h	3533
+decoded_dat/s/1/ncs.dat	block	84	3	bdy	
+decoded_dat/s/1/ncs.dat	field	84	3	kind	30
+decoded_dat/s/1/ncs.dat	field	84	3	x	3231
+decoded_dat/s/1/ncs.dat	field	84	3	y	38303030
+decoded_dat/s/1/ncs.dat	field	84	3	w	3433
+decoded_dat/s/1/ncs.dat	field	84	3	h	3632
+decoded_dat/s/1/ncs.dat	frame	85	700		63686962616b75
+decoded_dat/s/1/ncs.dat	field	85	-1	pic	3331
+decoded_dat/s/1/ncs.dat	field	85	-1	state	3130
+decoded_dat/s/1/ncs.dat	field	85	-1	wait	33
+decoded_dat/s/1/ncs.dat	field	85	-1	next	30
+decoded_dat/s/1/ncs.dat	field	85	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	85	-1	centery	3739
+decoded_dat/s/1/ncs.dat	block	85	0	cpoint	
+decoded_dat/s/1/ncs.dat	field	85	0	kind	32
+decoded_dat/s/1/ncs.dat	field	85	0	x	3431
+decoded_dat/s/1/ncs.dat	field	85	0	y	3339
+decoded_dat/s/1/ncs.dat	block	85	1	wpoint	
+decoded_dat/s/1/ncs.dat	field	85	1	kind	31
+decoded_dat/s/1/ncs.dat	field	85	1	x	2d3430
+decoded_dat/s/1/ncs.dat	field	85	1	y	2d34
+decoded_dat/s/1/ncs.dat	field	85	1	weaponact	3232
+decoded_dat/s/1/ncs.dat	field	85	1	attacking	30
+decoded_dat/s/1/ncs.dat	field	85	1	cover	30
+decoded_dat/s/1/ncs.dat	frame	86	701		74656e736569
+decoded_dat/s/1/ncs.dat	field	86	-1	pic	3332
+decoded_dat/s/1/ncs.dat	field	86	-1	state	3135
+decoded_dat/s/1/ncs.dat	field	86	-1	wait	31
+decoded_dat/s/1/ncs.dat	field	86	-1	next	373031
+decoded_dat/s/1/ncs.dat	field	86	-1	centerx	3339
+decoded_dat/s/1/ncs.dat	field	86	-1	centery	3739
+decoded_dat/s/1/ncs.dat	field	86	-1	hit_g	31
+decoded_dat/s/1/ncs.dat	block	86	0	wpoint	
+decoded_dat/s/1/ncs.dat	field	86	0	kind	31
+decoded_dat/s/1/ncs.dat	field	86	0	x	2d3430
+decoded_dat/s/1/ncs.dat	field	86	0	y	2d34
+decoded_dat/s/1/ncs.dat	field	86	0	weaponact	3232
+decoded_dat/s/1/ncs.dat	field	86	0	attacking	30
+decoded_dat/s/1/ncs.dat	field	86	0	cover	30
+decoded_dat/s/1/ncs.dat	block	86	1	bdy	
+decoded_dat/s/1/ncs.dat	field	86	1	kind	30
+decoded_dat/s/1/ncs.dat	field	86	1	x	3139
+decoded_dat/s/1/ncs.dat	field	86	1	y	3232
+decoded_dat/s/1/ncs.dat	field	86	1	w	3437
+decoded_dat/s/1/ncs.dat	field	86	1	h	3539

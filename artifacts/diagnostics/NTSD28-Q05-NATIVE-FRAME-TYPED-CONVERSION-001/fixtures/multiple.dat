@@ -1,0 +1,14 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+cpoint: injury: 5 throwvx: -0 cpoint_end:
+cpoint: injury: 9 throwvx: 2.5 cpoint_end:
+opoint: oid: 10 z: 9 opoint_end:
+opoint: oid: 20 z: 19 opoint_end:
+wpoint: weaponact: 7 wpoint_end:
+wpoint: weaponact: 8 wpoint_end:
+bpoint: x: 1 bpoint_end:
+bpoint: x: 2 bpoint_end:
+<frame_end>

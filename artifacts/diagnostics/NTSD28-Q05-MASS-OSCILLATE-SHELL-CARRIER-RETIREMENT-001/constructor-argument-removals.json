@@ -1,0 +1,82 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "removedArgument": "_mass"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "removedArgument": "mass"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterFrameAdvancePass.cs",
+    "removedArgument": "character.MassForFrameAdvance"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "removedArgument": "0f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218ContactActionEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type0PhysicsCoreEditorTests.cs",
+    "removedArgument": "1f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionGateEditorTests.cs",
+    "removedArgument": "mass"
+  }
+]

@@ -1,0 +1,9 @@
+<weapon_piece>
+piece: 1 amount: 2
+<stats> recmp: 8 <stats_end>
+oid: 9
+piece_end:
+<weapon_piece_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

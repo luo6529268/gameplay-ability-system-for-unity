@@ -1,0 +1,8 @@
+<weapon_piece>
+team: 1
+piece: 1 amount: 2 oid: 999 action: 10 dvx: 2
+piece_end:
+<weapon_piece_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

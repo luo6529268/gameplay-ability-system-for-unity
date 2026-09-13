@@ -1,0 +1,17 @@
+<bmp_begin>
+name: Table
+type: 1
+weapon_hp: 83
+walking_speed 2
+<bmp_end>
+<weapon_strength_list>
+entry: 1
+dvx: 2
+<weapon_strength_list_end>
+<weapon_strength_list>
+entry: 1
+dvx: 3
+<weapon_strength_list_end>
+<frame> 0 standing
+state: 0 wait: 1 next: 0
+<frame_end>

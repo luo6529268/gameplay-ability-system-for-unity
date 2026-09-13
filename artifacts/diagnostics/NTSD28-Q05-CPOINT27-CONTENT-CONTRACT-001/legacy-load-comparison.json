@@ -1,0 +1,238 @@
+{
+  "files": 138,
+  "parseSuccess": 138,
+  "converterSuccess": 138,
+  "comparedSections": [
+    "parseSuccess",
+    "fullConverterSuccess",
+    "frames",
+    "top",
+    "bmp",
+    "blocks",
+    "stats",
+    "sprites",
+    "bmpHeader",
+    "bmpFrameSequences"
+  ],
+  "differences": [
+    {
+      "path": "Character/chiyo.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/deidara.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/deidara_bird.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/gaara.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/hidan.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/Hsasori.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/hunter.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/itachi.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/jiraiya.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/jiroubou.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kabuto.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kakashi.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kakuzu.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kankuro.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kiba.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kidomaru.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kisame.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/kyubi.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/naruto.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/naruto_clone.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/nckakuzu.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/neji.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/orochimaru.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/pein.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/puppet_sasori.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/reaper.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/rock_lee.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sai.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sakon.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sakura.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sasori.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sasuke.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sasuke_cs2.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/shikamaru.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/shino.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sound_nin.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/sound_nin2.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/tayuya.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/temari.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/tenten.dat",
+      "section": "frames"
+    },
+    {
+      "path": "Character/yamato.dat",
+      "section": "frames"
+    },
+    {
+      "path": "chars/criminal.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/chiyo_kunais.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/crow_2.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/ink.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/karasu.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/mirror.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/poison.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/rasenshuriken.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/shadow.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/spider.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/sword.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/tree.dat",
+      "section": "frames"
+    },
+    {
+      "path": "specialattack/water.dat",
+      "section": "frames"
+    }
+  ],
+  "baselineSha256": "52135192067dd87afe76f33ed98e68336148cc6513c9dc467577bb100d6d2bbd",
+  "captureSha256": "9383ddaa418827128a29c3f05f008a5dfb279622e798ae302c344875afc59ec8",
+  "limitation": "Existing 19-field CPoint diagnostic projection remains historical; numeric JSON equality is not full float-bit or 27-field proof, covered separately by Unity/native witness."
+}

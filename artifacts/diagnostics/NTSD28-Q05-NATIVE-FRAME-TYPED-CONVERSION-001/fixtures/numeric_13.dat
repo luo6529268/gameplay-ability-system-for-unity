@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: -7 99 state: -7 99 cover: -7 99 wait: -7 99 next: -7 99 dvx: -7 99 dvy: -7 99 dvz: -7 99 centerx: -7 99 centery: -7 99 mp: -7 99 hp: -7 99 hit_a: -7 99 hit_d: -7 99 hit_j: -7 99 hit_g: -7 99 hit_Fj: -7 99 hit_Fa: -7 99 hit_Da: -7 99 hit_Ua: -7 99 hit_ja: -7 99 hit_aj: -7 99 hit_ad: -7 99 hit_jd: -7 99 hit_Dj: -7 99 hit_Uj: -7 99 hit_f: -7 99 hit_b: -7 99 hit_uz: -7 99 hit_dz: -7 99 hold_a: -7 99 hold_d: -7 99 hold_j: -7 99 hold_f: -7 99 hold_b: -7 99 hold_uz: -7 99 hold_dz: -7 99
+cpoint: kind: -7 99 x: -7 99 y: -7 99 injury: -7 99 cover: -7 99 vaction: -7 99 aaction: -7 99 jaction: -7 99 daction: -7 99 taction: -7 99 faction: -7 99 baction: -7 99 uzaction: -7 99 dzaction: -7 99 throwvx: -7 99 throwvy: -7 99 hurtable: -7 99 fronthurtact: -7 99 backhurtact: -7 99 decrease: -7 99 dircontrol: -7 99 throwinjury: -7 99 throwvz: -7 99 z: -7 99 recover: -7 99 drain: -7 99 gain: -7 99 cpoint_end:
+opoint: kind: -7 99 x: -7 99 y: -7 99 z: -7 99 action: -7 99 dvx: -7 99 dvy: -7 99 dvz: -7 99 oid: -7 99 facing: -7 99 hp: -7 99 mp: -7 99 team: -7 99 reserve: -7 99 effect: -7 99 pic: -7 99 centerx: -7 99 centery: -7 99 centerz: -7 99 framea: -7 99 attacking: -7 99 join: -7 99 join_reserve: -7 99 join_pic: -7 99 opoint_end:
+itr: kind: -7 99 x: -7 99 y: -7 99 w: -7 99 h: -7 99 dvx: -7 99 dvy: -7 99 fall: -7 99 arest: -7 99 vrest: -7 99 respond: -7 99 effect: -7 99 drain: -7 99 spark: -7 99 recover: -7 99 dbdefend: -7 99 bdefend: -7 99 injury: -7 99 zwidth: -7 99 z: -7 99 dvz: -7 99 sound: -7 99 cover: -7 99 caughtact: -7 99 catchingact: -7 99 pickedact: -7 99 pickingact: -7 99 delay: -7 99 poison: -7 99 confus: -7 99 weak: -7 99 manacle: -7 99 join: -7 99 mimic: -7 99 bound: -7 99 facing: -7 99 dx: -7 99 dy: -7 99 dz: -7 99 gain: -7 99 itr_end:
+wpoint: kind: -7 99 x: -7 99 y: -7 99 weaponact: -7 99 attacking: -7 99 cover: -7 99 dvx: -7 99 dvy: -7 99 dvz: -7 99 wpoint_end:
+bpoint: x: -7 99 y: -7 99 bpoint_end:
+centerz: -7 99 chp: -7 99 cmp: -7 99 dx: -7 99 dy: -7 99 dz: -7 99
+<frame_end>

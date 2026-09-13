@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>9</LangVersion>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+    <DefineConstants>UNITY_EDITOR;UNITY_INCLUDE_TESTS</DefineConstants>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="../../Assets/NTSD/Scripts/Animation/BattleContentSource.cs" Condition="Exists('../../Assets/NTSD/Scripts/Animation/BattleContentSource.cs')" />
+    <Compile Include="../../Assets/NTSD/Scripts/Test/Editor/NTSD28B11ContentSourceEditorTests.cs" />
+    <Reference Include="nunit.framework">
+      <HintPath>../../Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

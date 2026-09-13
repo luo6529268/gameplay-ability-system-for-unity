@@ -1,0 +1,2178 @@
+decoded_dat/c/rai/a/rai.dat	frame	0	0		64656c
+decoded_dat/c/rai/a/rai.dat	field	0	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	0	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	0	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	0	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	0	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	0	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	0	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	1	10		64656c
+decoded_dat/c/rai/a/rai.dat	field	1	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	1	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	1	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	1	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	1	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	1	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	1	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	2	20		64656c
+decoded_dat/c/rai/a/rai.dat	field	2	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	2	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	2	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	2	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	2	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	2	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	2	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	3	30		64656c
+decoded_dat/c/rai/a/rai.dat	field	3	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	3	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	3	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	3	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	3	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	3	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	3	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	4	54		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	4	-1	pic	30
+decoded_dat/c/rai/a/rai.dat	field	4	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	4	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	4	-1	next	3535
+decoded_dat/c/rai/a/rai.dat	field	4	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	4	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	4	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	4	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	4	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	4	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	4	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	4	0	x	34
+decoded_dat/c/rai/a/rai.dat	field	4	0	y	30
+decoded_dat/c/rai/a/rai.dat	field	4	0	w	313232
+decoded_dat/c/rai/a/rai.dat	field	4	0	h	373635
+decoded_dat/c/rai/a/rai.dat	field	4	0	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	4	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	4	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	4	0	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	4	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	4	0	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	4	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	4	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	5	55		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	5	-1	pic	31
+decoded_dat/c/rai/a/rai.dat	field	5	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	5	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	5	-1	next	3536
+decoded_dat/c/rai/a/rai.dat	field	5	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	5	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	field	5	-1	hit_d	31
+decoded_dat/c/rai/a/rai.dat	block	5	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	5	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	5	0	x	3536
+decoded_dat/c/rai/a/rai.dat	field	5	0	y	373631
+decoded_dat/c/rai/a/rai.dat	field	5	0	action	3730
+decoded_dat/c/rai/a/rai.dat	field	5	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	5	0	facing	30
+decoded_dat/c/rai/a/rai.dat	block	5	1	opoint	
+decoded_dat/c/rai/a/rai.dat	field	5	1	kind	31
+decoded_dat/c/rai/a/rai.dat	field	5	1	x	3537
+decoded_dat/c/rai/a/rai.dat	field	5	1	y	373630
+decoded_dat/c/rai/a/rai.dat	field	5	1	action	373038
+decoded_dat/c/rai/a/rai.dat	field	5	1	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	5	1	facing	30
+decoded_dat/c/rai/a/rai.dat	block	5	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	5	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	5	2	x	34
+decoded_dat/c/rai/a/rai.dat	field	5	2	y	30
+decoded_dat/c/rai/a/rai.dat	field	5	2	w	313232
+decoded_dat/c/rai/a/rai.dat	field	5	2	h	373635
+decoded_dat/c/rai/a/rai.dat	field	5	2	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	5	2	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	5	2	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	5	2	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	5	2	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	5	2	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	5	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	5	2	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	6	56		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	6	-1	pic	32
+decoded_dat/c/rai/a/rai.dat	field	6	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	6	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	6	-1	next	3537
+decoded_dat/c/rai/a/rai.dat	field	6	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	6	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	6	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	6	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	6	0	x	34
+decoded_dat/c/rai/a/rai.dat	field	6	0	y	30
+decoded_dat/c/rai/a/rai.dat	field	6	0	w	313232
+decoded_dat/c/rai/a/rai.dat	field	6	0	h	373635
+decoded_dat/c/rai/a/rai.dat	field	6	0	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	6	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	6	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	6	0	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	6	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	6	0	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	6	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	6	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	7	57		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	7	-1	pic	33
+decoded_dat/c/rai/a/rai.dat	field	7	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	7	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	7	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	7	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	7	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	7	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	7	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	7	0	x	3138
+decoded_dat/c/rai/a/rai.dat	field	7	0	y	30
+decoded_dat/c/rai/a/rai.dat	field	7	0	w	3839
+decoded_dat/c/rai/a/rai.dat	field	7	0	h	373635
+decoded_dat/c/rai/a/rai.dat	field	7	0	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	7	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	7	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	7	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	7	0	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	7	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	7	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	8	58		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	8	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	8	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	8	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	8	-1	next	3534
+decoded_dat/c/rai/a/rai.dat	field	8	-1	dvx	313230
+decoded_dat/c/rai/a/rai.dat	field	8	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	8	-1	centery	333831
+decoded_dat/c/rai/a/rai.dat	frame	9	70		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	9	-1	pic	3236
+decoded_dat/c/rai/a/rai.dat	field	9	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	9	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	9	-1	next	3731
+decoded_dat/c/rai/a/rai.dat	field	9	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	9	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	9	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	9	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	9	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	field	9	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	block	9	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	9	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	9	0	x	3935
+decoded_dat/c/rai/a/rai.dat	field	9	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	9	0	w	3736
+decoded_dat/c/rai/a/rai.dat	field	9	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	9	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	9	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	9	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	9	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	9	0	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	9	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	9	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	9	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	block	9	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	9	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	9	1	x	3230
+decoded_dat/c/rai/a/rai.dat	field	9	1	y	3533
+decoded_dat/c/rai/a/rai.dat	field	9	1	w	3733
+decoded_dat/c/rai/a/rai.dat	field	9	1	h	313237
+decoded_dat/c/rai/a/rai.dat	field	9	1	effect	30
+decoded_dat/c/rai/a/rai.dat	field	9	1	dvx	2d3230
+decoded_dat/c/rai/a/rai.dat	field	9	1	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	9	1	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	9	1	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	9	1	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	9	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	9	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	10	71		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	10	-1	pic	3237
+decoded_dat/c/rai/a/rai.dat	field	10	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	10	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	10	-1	next	3732
+decoded_dat/c/rai/a/rai.dat	field	10	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	10	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	10	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	10	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	10	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	10	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	10	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	10	0	x	3935
+decoded_dat/c/rai/a/rai.dat	field	10	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	10	0	w	3736
+decoded_dat/c/rai/a/rai.dat	field	10	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	10	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	10	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	10	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	10	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	10	0	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	10	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	10	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	10	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	block	10	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	10	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	10	1	x	3230
+decoded_dat/c/rai/a/rai.dat	field	10	1	y	3533
+decoded_dat/c/rai/a/rai.dat	field	10	1	w	3733
+decoded_dat/c/rai/a/rai.dat	field	10	1	h	313237
+decoded_dat/c/rai/a/rai.dat	field	10	1	effect	30
+decoded_dat/c/rai/a/rai.dat	field	10	1	dvx	2d3230
+decoded_dat/c/rai/a/rai.dat	field	10	1	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	10	1	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	10	1	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	10	1	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	10	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	10	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	11	72		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	11	-1	pic	3238
+decoded_dat/c/rai/a/rai.dat	field	11	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	11	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	11	-1	next	3733
+decoded_dat/c/rai/a/rai.dat	field	11	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	11	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	11	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	11	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	11	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	11	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	11	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	11	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	11	0	x	3935
+decoded_dat/c/rai/a/rai.dat	field	11	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	11	0	w	3736
+decoded_dat/c/rai/a/rai.dat	field	11	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	11	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	11	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	11	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	11	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	11	0	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	11	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	11	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	11	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	block	11	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	11	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	11	1	x	3230
+decoded_dat/c/rai/a/rai.dat	field	11	1	y	3533
+decoded_dat/c/rai/a/rai.dat	field	11	1	w	3733
+decoded_dat/c/rai/a/rai.dat	field	11	1	h	313237
+decoded_dat/c/rai/a/rai.dat	field	11	1	effect	30
+decoded_dat/c/rai/a/rai.dat	field	11	1	dvx	2d3230
+decoded_dat/c/rai/a/rai.dat	field	11	1	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	11	1	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	11	1	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	11	1	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	11	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	11	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	12	73		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	12	-1	pic	3239
+decoded_dat/c/rai/a/rai.dat	field	12	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	12	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	12	-1	next	3734
+decoded_dat/c/rai/a/rai.dat	field	12	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	12	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	12	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	12	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	12	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	12	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	12	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	12	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	12	0	x	3935
+decoded_dat/c/rai/a/rai.dat	field	12	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	12	0	w	3736
+decoded_dat/c/rai/a/rai.dat	field	12	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	12	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	12	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	12	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	12	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	12	0	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	12	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	12	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	12	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	block	12	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	12	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	12	1	x	3230
+decoded_dat/c/rai/a/rai.dat	field	12	1	y	3533
+decoded_dat/c/rai/a/rai.dat	field	12	1	w	3733
+decoded_dat/c/rai/a/rai.dat	field	12	1	h	313237
+decoded_dat/c/rai/a/rai.dat	field	12	1	effect	30
+decoded_dat/c/rai/a/rai.dat	field	12	1	dvx	2d3230
+decoded_dat/c/rai/a/rai.dat	field	12	1	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	12	1	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	12	1	vrest	3235
+decoded_dat/c/rai/a/rai.dat	field	12	1	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	12	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	12	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	13	74		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	13	-1	pic	3330
+decoded_dat/c/rai/a/rai.dat	field	13	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	13	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	13	-1	next	3735
+decoded_dat/c/rai/a/rai.dat	field	13	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	13	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	13	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	13	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	13	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	14	75		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	14	-1	pic	3331
+decoded_dat/c/rai/a/rai.dat	field	14	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	14	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	14	-1	next	3736
+decoded_dat/c/rai/a/rai.dat	field	14	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	14	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	14	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	14	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	14	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	15	76		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	15	-1	pic	3332
+decoded_dat/c/rai/a/rai.dat	field	15	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	15	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	15	-1	next	3737
+decoded_dat/c/rai/a/rai.dat	field	15	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	15	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	15	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	15	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	15	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	16	77		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	16	-1	pic	3335
+decoded_dat/c/rai/a/rai.dat	field	16	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	16	-1	wait	33
+decoded_dat/c/rai/a/rai.dat	field	16	-1	next	3738
+decoded_dat/c/rai/a/rai.dat	field	16	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	16	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	16	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	16	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	16	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	17	78		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	17	-1	pic	3336
+decoded_dat/c/rai/a/rai.dat	field	17	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	17	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	17	-1	next	3739
+decoded_dat/c/rai/a/rai.dat	field	17	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	17	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	17	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	17	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	17	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	18	79		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	18	-1	pic	3337
+decoded_dat/c/rai/a/rai.dat	field	18	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	18	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	18	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	18	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	18	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	18	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	18	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	18	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	19	80		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	19	-1	pic	3236
+decoded_dat/c/rai/a/rai.dat	field	19	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	19	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	19	-1	next	3831
+decoded_dat/c/rai/a/rai.dat	field	19	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	19	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	19	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	19	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	19	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	field	19	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	20	81		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	20	-1	pic	3237
+decoded_dat/c/rai/a/rai.dat	field	20	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	20	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	20	-1	next	3832
+decoded_dat/c/rai/a/rai.dat	field	20	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	20	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	20	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	20	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	20	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	20	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	20	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	20	0	x	3230
+decoded_dat/c/rai/a/rai.dat	field	20	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	20	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	20	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	20	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	20	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	20	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	20	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	20	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	20	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	20	0	injury	313030
+decoded_dat/c/rai/a/rai.dat	field	20	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	21	82		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	21	-1	pic	3238
+decoded_dat/c/rai/a/rai.dat	field	21	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	21	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	21	-1	next	3833
+decoded_dat/c/rai/a/rai.dat	field	21	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	21	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	21	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	21	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	21	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	21	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	21	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	21	0	x	3230
+decoded_dat/c/rai/a/rai.dat	field	21	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	21	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	21	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	21	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	21	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	21	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	21	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	21	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	21	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	21	0	injury	313030
+decoded_dat/c/rai/a/rai.dat	field	21	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	22	83		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	22	-1	pic	3239
+decoded_dat/c/rai/a/rai.dat	field	22	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	22	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	22	-1	next	3834
+decoded_dat/c/rai/a/rai.dat	field	22	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	22	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	22	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	22	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	22	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	22	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	22	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	22	0	x	3230
+decoded_dat/c/rai/a/rai.dat	field	22	0	y	3534
+decoded_dat/c/rai/a/rai.dat	field	22	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	22	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	22	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	22	0	dvx	3230
+decoded_dat/c/rai/a/rai.dat	field	22	0	dvy	2d3330
+decoded_dat/c/rai/a/rai.dat	field	22	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	22	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	22	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	22	0	injury	313030
+decoded_dat/c/rai/a/rai.dat	field	22	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	23	84		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	23	-1	pic	3330
+decoded_dat/c/rai/a/rai.dat	field	23	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	23	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	23	-1	next	3835
+decoded_dat/c/rai/a/rai.dat	field	23	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	23	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	23	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	23	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	23	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	24	85		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	24	-1	pic	3331
+decoded_dat/c/rai/a/rai.dat	field	24	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	24	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	24	-1	next	3836
+decoded_dat/c/rai/a/rai.dat	field	24	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	24	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	24	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	24	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	24	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	25	86		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	25	-1	pic	3332
+decoded_dat/c/rai/a/rai.dat	field	25	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	25	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	25	-1	next	3837
+decoded_dat/c/rai/a/rai.dat	field	25	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	25	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	25	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	25	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	25	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	26	87		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	26	-1	pic	3335
+decoded_dat/c/rai/a/rai.dat	field	26	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	26	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	26	-1	next	323238
+decoded_dat/c/rai/a/rai.dat	field	26	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	26	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	26	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	26	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	26	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	27	228		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	27	-1	pic	3336
+decoded_dat/c/rai/a/rai.dat	field	27	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	27	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	27	-1	next	323239
+decoded_dat/c/rai/a/rai.dat	field	27	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	27	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	27	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	27	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	27	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	28	229		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	28	-1	pic	3337
+decoded_dat/c/rai/a/rai.dat	field	28	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	28	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	28	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	28	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	28	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	28	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	28	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	28	-1	centery	313636
+decoded_dat/c/rai/a/rai.dat	frame	29	90		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	29	-1	pic	3436
+decoded_dat/c/rai/a/rai.dat	field	29	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	29	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	29	-1	next	3931
+decoded_dat/c/rai/a/rai.dat	field	29	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	29	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	29	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	29	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	29	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	30	91		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	30	-1	pic	3437
+decoded_dat/c/rai/a/rai.dat	field	30	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	30	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	30	-1	next	3932
+decoded_dat/c/rai/a/rai.dat	field	30	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	30	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	30	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	30	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	30	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	block	30	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	30	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	30	0	x	3730
+decoded_dat/c/rai/a/rai.dat	field	30	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	30	0	action	373038
+decoded_dat/c/rai/a/rai.dat	field	30	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	30	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	31	92		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	31	-1	pic	3438
+decoded_dat/c/rai/a/rai.dat	field	31	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	31	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	31	-1	next	3933
+decoded_dat/c/rai/a/rai.dat	field	31	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	31	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	31	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	31	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	31	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	32	93		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	32	-1	pic	3439
+decoded_dat/c/rai/a/rai.dat	field	32	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	32	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	32	-1	next	3934
+decoded_dat/c/rai/a/rai.dat	field	32	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	32	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	32	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	32	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	32	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	33	94		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	33	-1	pic	3530
+decoded_dat/c/rai/a/rai.dat	field	33	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	33	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	33	-1	next	3935
+decoded_dat/c/rai/a/rai.dat	field	33	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	33	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	33	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	33	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	33	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	34	95		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	34	-1	pic	3531
+decoded_dat/c/rai/a/rai.dat	field	34	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	34	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	34	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	34	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	34	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	34	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	34	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	34	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	35	100		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	35	-1	pic	3339
+decoded_dat/c/rai/a/rai.dat	field	35	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	35	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	35	-1	next	313031
+decoded_dat/c/rai/a/rai.dat	field	35	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	35	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	35	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	35	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	35	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	frame	36	101		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	36	-1	pic	3430
+decoded_dat/c/rai/a/rai.dat	field	36	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	36	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	36	-1	next	313032
+decoded_dat/c/rai/a/rai.dat	field	36	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	36	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	36	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	36	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	36	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	block	36	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	36	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	36	0	x	3734
+decoded_dat/c/rai/a/rai.dat	field	36	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	36	0	action	373038
+decoded_dat/c/rai/a/rai.dat	field	36	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	36	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	37	102		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	37	-1	pic	3431
+decoded_dat/c/rai/a/rai.dat	field	37	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	37	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	37	-1	next	313033
+decoded_dat/c/rai/a/rai.dat	field	37	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	37	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	37	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	37	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	37	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	frame	38	103		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	38	-1	pic	3432
+decoded_dat/c/rai/a/rai.dat	field	38	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	38	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	38	-1	next	313034
+decoded_dat/c/rai/a/rai.dat	field	38	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	38	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	38	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	38	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	38	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	frame	39	104		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	39	-1	pic	3433
+decoded_dat/c/rai/a/rai.dat	field	39	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	39	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	39	-1	next	313035
+decoded_dat/c/rai/a/rai.dat	field	39	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	39	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	39	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	39	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	39	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	frame	40	105		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	40	-1	pic	3434
+decoded_dat/c/rai/a/rai.dat	field	40	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	40	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	40	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	40	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	40	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	40	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	40	-1	centerx	3734
+decoded_dat/c/rai/a/rai.dat	field	40	-1	centery	313132
+decoded_dat/c/rai/a/rai.dat	frame	41	110		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	41	-1	pic	3532
+decoded_dat/c/rai/a/rai.dat	field	41	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	41	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	41	-1	next	313131
+decoded_dat/c/rai/a/rai.dat	field	41	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	41	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	41	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	41	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	41	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	42	111		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	42	-1	pic	3533
+decoded_dat/c/rai/a/rai.dat	field	42	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	42	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	42	-1	next	313132
+decoded_dat/c/rai/a/rai.dat	field	42	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	42	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	42	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	42	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	42	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	block	42	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	42	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	42	0	x	3730
+decoded_dat/c/rai/a/rai.dat	field	42	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	42	0	action	373038
+decoded_dat/c/rai/a/rai.dat	field	42	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	42	0	facing	30
+decoded_dat/c/rai/a/rai.dat	block	42	1	opoint	
+decoded_dat/c/rai/a/rai.dat	field	42	1	kind	31
+decoded_dat/c/rai/a/rai.dat	field	42	1	x	3531
+decoded_dat/c/rai/a/rai.dat	field	42	1	y	313138
+decoded_dat/c/rai/a/rai.dat	field	42	1	action	34
+decoded_dat/c/rai/a/rai.dat	field	42	1	oid	393030
+decoded_dat/c/rai/a/rai.dat	field	42	1	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	43	112		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	43	-1	pic	3534
+decoded_dat/c/rai/a/rai.dat	field	43	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	43	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	43	-1	next	313133
+decoded_dat/c/rai/a/rai.dat	field	43	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	43	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	43	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	43	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	43	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	block	43	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	43	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	43	0	x	3838
+decoded_dat/c/rai/a/rai.dat	field	43	0	y	313138
+decoded_dat/c/rai/a/rai.dat	field	43	0	action	34
+decoded_dat/c/rai/a/rai.dat	field	43	0	oid	393030
+decoded_dat/c/rai/a/rai.dat	field	43	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	44	113		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	44	-1	pic	3535
+decoded_dat/c/rai/a/rai.dat	field	44	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	44	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	44	-1	next	313134
+decoded_dat/c/rai/a/rai.dat	field	44	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	44	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	44	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	44	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	44	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	block	44	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	44	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	44	0	x	3731
+decoded_dat/c/rai/a/rai.dat	field	44	0	y	313138
+decoded_dat/c/rai/a/rai.dat	field	44	0	action	34
+decoded_dat/c/rai/a/rai.dat	field	44	0	oid	393030
+decoded_dat/c/rai/a/rai.dat	field	44	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	45	114		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	45	-1	pic	3536
+decoded_dat/c/rai/a/rai.dat	field	45	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	45	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	45	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	45	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	45	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	45	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	45	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	45	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	46	121		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	46	-1	pic	3537
+decoded_dat/c/rai/a/rai.dat	field	46	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	46	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	46	-1	next	313232
+decoded_dat/c/rai/a/rai.dat	field	46	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	46	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	46	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	46	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	46	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	47	122		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	47	-1	pic	3538
+decoded_dat/c/rai/a/rai.dat	field	47	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	47	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	47	-1	next	313230
+decoded_dat/c/rai/a/rai.dat	field	47	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	47	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	47	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	47	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	47	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	48	120		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	48	-1	pic	3539
+decoded_dat/c/rai/a/rai.dat	field	48	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	48	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	48	-1	next	313233
+decoded_dat/c/rai/a/rai.dat	field	48	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	48	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	48	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	48	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	48	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	49	123		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	49	-1	pic	3630
+decoded_dat/c/rai/a/rai.dat	field	49	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	49	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	49	-1	next	313234
+decoded_dat/c/rai/a/rai.dat	field	49	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	49	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	49	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	49	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	49	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	block	49	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	49	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	49	0	x	3730
+decoded_dat/c/rai/a/rai.dat	field	49	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	49	0	action	373038
+decoded_dat/c/rai/a/rai.dat	field	49	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	49	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	50	124		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	50	-1	pic	3631
+decoded_dat/c/rai/a/rai.dat	field	50	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	50	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	50	-1	next	313235
+decoded_dat/c/rai/a/rai.dat	field	50	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	50	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	50	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	50	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	50	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	51	125		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	51	-1	pic	3632
+decoded_dat/c/rai/a/rai.dat	field	51	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	51	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	51	-1	next	313236
+decoded_dat/c/rai/a/rai.dat	field	51	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	51	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	51	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	51	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	51	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	52	126		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	52	-1	pic	3633
+decoded_dat/c/rai/a/rai.dat	field	52	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	52	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	52	-1	next	313237
+decoded_dat/c/rai/a/rai.dat	field	52	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	52	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	52	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	52	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	52	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	53	127		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	53	-1	pic	3634
+decoded_dat/c/rai/a/rai.dat	field	53	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	53	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	53	-1	next	313238
+decoded_dat/c/rai/a/rai.dat	field	53	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	53	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	53	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	53	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	53	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	54	128		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	54	-1	pic	3635
+decoded_dat/c/rai/a/rai.dat	field	54	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	54	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	54	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	54	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	54	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	54	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	54	-1	centerx	3730
+decoded_dat/c/rai/a/rai.dat	field	54	-1	centery	313230
+decoded_dat/c/rai/a/rai.dat	frame	55	140		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	55	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	55	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	55	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	55	-1	next	313431
+decoded_dat/c/rai/a/rai.dat	field	55	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	55	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	55	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	55	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	55	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	55	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	56	141		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	56	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	56	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	56	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	56	-1	next	313432
+decoded_dat/c/rai/a/rai.dat	field	56	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	56	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	56	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	56	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	56	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	56	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	56	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	56	0	x	313130
+decoded_dat/c/rai/a/rai.dat	field	56	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	56	0	z	3230
+decoded_dat/c/rai/a/rai.dat	field	56	0	action	313630
+decoded_dat/c/rai/a/rai.dat	field	56	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	56	1	opoint	
+decoded_dat/c/rai/a/rai.dat	field	56	1	kind	31
+decoded_dat/c/rai/a/rai.dat	field	56	1	x	313130
+decoded_dat/c/rai/a/rai.dat	field	56	1	y	3739
+decoded_dat/c/rai/a/rai.dat	field	56	1	z	2d3230
+decoded_dat/c/rai/a/rai.dat	field	56	1	action	313630
+decoded_dat/c/rai/a/rai.dat	field	56	1	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	56	2	opoint	
+decoded_dat/c/rai/a/rai.dat	field	56	2	kind	31
+decoded_dat/c/rai/a/rai.dat	field	56	2	x	2d3430
+decoded_dat/c/rai/a/rai.dat	field	56	2	y	3739
+decoded_dat/c/rai/a/rai.dat	field	56	2	z	3230
+decoded_dat/c/rai/a/rai.dat	field	56	2	action	313630
+decoded_dat/c/rai/a/rai.dat	field	56	2	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	56	3	opoint	
+decoded_dat/c/rai/a/rai.dat	field	56	3	kind	31
+decoded_dat/c/rai/a/rai.dat	field	56	3	x	2d3430
+decoded_dat/c/rai/a/rai.dat	field	56	3	y	3739
+decoded_dat/c/rai/a/rai.dat	field	56	3	z	2d3230
+decoded_dat/c/rai/a/rai.dat	field	56	3	action	313630
+decoded_dat/c/rai/a/rai.dat	field	56	3	oid	343437
+decoded_dat/c/rai/a/rai.dat	frame	57	142		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	57	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	57	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	57	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	57	-1	next	313433
+decoded_dat/c/rai/a/rai.dat	field	57	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	57	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	57	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	57	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	57	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	57	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	57	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	57	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	57	0	x	313730
+decoded_dat/c/rai/a/rai.dat	field	57	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	57	0	z	3330
+decoded_dat/c/rai/a/rai.dat	field	57	0	action	313630
+decoded_dat/c/rai/a/rai.dat	field	57	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	57	1	opoint	
+decoded_dat/c/rai/a/rai.dat	field	57	1	kind	31
+decoded_dat/c/rai/a/rai.dat	field	57	1	x	313730
+decoded_dat/c/rai/a/rai.dat	field	57	1	y	3739
+decoded_dat/c/rai/a/rai.dat	field	57	1	z	2d3330
+decoded_dat/c/rai/a/rai.dat	field	57	1	action	313630
+decoded_dat/c/rai/a/rai.dat	field	57	1	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	57	2	opoint	
+decoded_dat/c/rai/a/rai.dat	field	57	2	kind	31
+decoded_dat/c/rai/a/rai.dat	field	57	2	x	2d313030
+decoded_dat/c/rai/a/rai.dat	field	57	2	y	3739
+decoded_dat/c/rai/a/rai.dat	field	57	2	z	3330
+decoded_dat/c/rai/a/rai.dat	field	57	2	action	313630
+decoded_dat/c/rai/a/rai.dat	field	57	2	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	57	3	opoint	
+decoded_dat/c/rai/a/rai.dat	field	57	3	kind	31
+decoded_dat/c/rai/a/rai.dat	field	57	3	x	2d313030
+decoded_dat/c/rai/a/rai.dat	field	57	3	y	3739
+decoded_dat/c/rai/a/rai.dat	field	57	3	z	2d3330
+decoded_dat/c/rai/a/rai.dat	field	57	3	action	313630
+decoded_dat/c/rai/a/rai.dat	field	57	3	oid	343437
+decoded_dat/c/rai/a/rai.dat	frame	58	143		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	58	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	58	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	58	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	58	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	58	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	58	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	58	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	58	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	58	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	58	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	58	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	58	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	58	0	x	323330
+decoded_dat/c/rai/a/rai.dat	field	58	0	y	3739
+decoded_dat/c/rai/a/rai.dat	field	58	0	z	3430
+decoded_dat/c/rai/a/rai.dat	field	58	0	action	313630
+decoded_dat/c/rai/a/rai.dat	field	58	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	58	1	opoint	
+decoded_dat/c/rai/a/rai.dat	field	58	1	kind	31
+decoded_dat/c/rai/a/rai.dat	field	58	1	x	323330
+decoded_dat/c/rai/a/rai.dat	field	58	1	y	3739
+decoded_dat/c/rai/a/rai.dat	field	58	1	z	2d3430
+decoded_dat/c/rai/a/rai.dat	field	58	1	action	313630
+decoded_dat/c/rai/a/rai.dat	field	58	1	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	58	2	opoint	
+decoded_dat/c/rai/a/rai.dat	field	58	2	kind	31
+decoded_dat/c/rai/a/rai.dat	field	58	2	x	2d313630
+decoded_dat/c/rai/a/rai.dat	field	58	2	y	3739
+decoded_dat/c/rai/a/rai.dat	field	58	2	z	3430
+decoded_dat/c/rai/a/rai.dat	field	58	2	action	313630
+decoded_dat/c/rai/a/rai.dat	field	58	2	oid	343437
+decoded_dat/c/rai/a/rai.dat	block	58	3	opoint	
+decoded_dat/c/rai/a/rai.dat	field	58	3	kind	31
+decoded_dat/c/rai/a/rai.dat	field	58	3	x	2d313630
+decoded_dat/c/rai/a/rai.dat	field	58	3	y	3739
+decoded_dat/c/rai/a/rai.dat	field	58	3	z	2d3430
+decoded_dat/c/rai/a/rai.dat	field	58	3	action	313630
+decoded_dat/c/rai/a/rai.dat	field	58	3	oid	343437
+decoded_dat/c/rai/a/rai.dat	frame	59	160		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	59	-1	pic	3637
+decoded_dat/c/rai/a/rai.dat	field	59	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	59	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	59	-1	next	313631
+decoded_dat/c/rai/a/rai.dat	field	59	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	59	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	59	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	59	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	59	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	59	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	60	161		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	60	-1	pic	3638
+decoded_dat/c/rai/a/rai.dat	field	60	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	60	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	60	-1	next	313632
+decoded_dat/c/rai/a/rai.dat	field	60	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	60	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	60	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	60	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	60	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	block	60	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	60	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	60	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	60	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	60	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	60	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	60	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	60	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	60	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	60	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	60	0	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	60	0	injury	3430
+decoded_dat/c/rai/a/rai.dat	field	60	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	60	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	60	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	60	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	60	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	60	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	60	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	60	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	60	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	60	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	60	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	60	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	60	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	60	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	60	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	60	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	60	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	60	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	60	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	60	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	60	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	60	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	60	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	61	162		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	61	-1	pic	3639
+decoded_dat/c/rai/a/rai.dat	field	61	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	61	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	61	-1	next	313633
+decoded_dat/c/rai/a/rai.dat	field	61	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	61	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	61	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	61	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	61	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	61	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	block	61	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	61	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	61	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	61	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	61	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	61	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	61	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	61	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	61	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	61	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	61	0	vrest	3330
+decoded_dat/c/rai/a/rai.dat	field	61	0	injury	3430
+decoded_dat/c/rai/a/rai.dat	field	61	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	61	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	61	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	61	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	61	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	61	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	61	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	61	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	61	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	61	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	61	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	61	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	61	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	61	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	61	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	61	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	61	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	61	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	61	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	61	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	61	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	61	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	61	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	62	163		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	62	-1	pic	3730
+decoded_dat/c/rai/a/rai.dat	field	62	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	62	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	62	-1	next	313734
+decoded_dat/c/rai/a/rai.dat	field	62	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	62	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	62	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	62	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	62	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	62	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	block	62	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	62	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	62	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	62	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	62	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	62	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	62	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	62	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	62	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	62	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	62	0	vrest	3330
+decoded_dat/c/rai/a/rai.dat	field	62	0	injury	3430
+decoded_dat/c/rai/a/rai.dat	field	62	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	62	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	62	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	62	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	62	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	62	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	62	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	62	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	62	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	62	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	62	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	62	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	62	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	62	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	62	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	62	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	62	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	62	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	62	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	62	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	62	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	62	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	62	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	63	170		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	63	-1	pic	3637
+decoded_dat/c/rai/a/rai.dat	field	63	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	63	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	63	-1	next	313731
+decoded_dat/c/rai/a/rai.dat	field	63	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	63	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	63	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	63	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	63	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	63	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	64	171		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	64	-1	pic	3638
+decoded_dat/c/rai/a/rai.dat	field	64	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	64	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	64	-1	next	313732
+decoded_dat/c/rai/a/rai.dat	field	64	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	64	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	64	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	64	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	64	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	block	64	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	64	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	64	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	64	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	64	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	64	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	64	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	64	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	64	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	64	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	64	0	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	64	0	injury	3630
+decoded_dat/c/rai/a/rai.dat	field	64	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	64	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	64	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	64	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	64	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	64	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	64	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	64	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	64	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	64	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	64	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	64	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	64	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	64	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	64	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	64	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	64	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	64	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	64	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	64	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	64	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	64	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	64	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	65	172		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	65	-1	pic	3639
+decoded_dat/c/rai/a/rai.dat	field	65	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	65	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	65	-1	next	313733
+decoded_dat/c/rai/a/rai.dat	field	65	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	65	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	65	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	65	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	65	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	65	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	block	65	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	65	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	65	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	65	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	65	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	65	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	65	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	65	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	65	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	65	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	65	0	vrest	3330
+decoded_dat/c/rai/a/rai.dat	field	65	0	injury	3630
+decoded_dat/c/rai/a/rai.dat	field	65	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	65	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	65	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	65	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	65	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	65	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	65	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	65	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	65	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	65	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	65	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	65	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	65	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	65	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	65	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	65	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	65	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	65	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	65	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	65	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	65	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	65	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	65	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	66	173		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	66	-1	pic	3730
+decoded_dat/c/rai/a/rai.dat	field	66	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	66	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	66	-1	next	313734
+decoded_dat/c/rai/a/rai.dat	field	66	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	66	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	66	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	66	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	66	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	field	66	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	block	66	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	66	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	66	0	x	3532
+decoded_dat/c/rai/a/rai.dat	field	66	0	y	36
+decoded_dat/c/rai/a/rai.dat	field	66	0	w	3437
+decoded_dat/c/rai/a/rai.dat	field	66	0	h	313533
+decoded_dat/c/rai/a/rai.dat	field	66	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	66	0	dvy	2d3230
+decoded_dat/c/rai/a/rai.dat	field	66	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	66	0	bdefend	3530
+decoded_dat/c/rai/a/rai.dat	field	66	0	vrest	3330
+decoded_dat/c/rai/a/rai.dat	field	66	0	injury	3630
+decoded_dat/c/rai/a/rai.dat	field	66	0	effect	30
+decoded_dat/c/rai/a/rai.dat	block	66	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	66	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	66	1	x	3236
+decoded_dat/c/rai/a/rai.dat	field	66	1	y	33313530
+decoded_dat/c/rai/a/rai.dat	field	66	1	w	3936
+decoded_dat/c/rai/a/rai.dat	field	66	1	h	3338
+decoded_dat/c/rai/a/rai.dat	field	66	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	66	1	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	66	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	66	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	66	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	66	2	itr	
+decoded_dat/c/rai/a/rai.dat	field	66	2	kind	30
+decoded_dat/c/rai/a/rai.dat	field	66	2	x	3236
+decoded_dat/c/rai/a/rai.dat	field	66	2	y	33363530
+decoded_dat/c/rai/a/rai.dat	field	66	2	w	3936
+decoded_dat/c/rai/a/rai.dat	field	66	2	h	3338
+decoded_dat/c/rai/a/rai.dat	field	66	2	effect	38
+decoded_dat/c/rai/a/rai.dat	field	66	2	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	66	2	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	66	2	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	66	2	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	67	174		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	67	-1	pic	3731
+decoded_dat/c/rai/a/rai.dat	field	67	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	67	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	67	-1	next	313735
+decoded_dat/c/rai/a/rai.dat	field	67	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	67	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	67	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	67	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	67	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	frame	68	175		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	68	-1	pic	3732
+decoded_dat/c/rai/a/rai.dat	field	68	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	68	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	68	-1	next	313736
+decoded_dat/c/rai/a/rai.dat	field	68	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	68	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	68	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	68	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	68	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	frame	69	176		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	69	-1	pic	3733
+decoded_dat/c/rai/a/rai.dat	field	69	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	69	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	69	-1	next	313737
+decoded_dat/c/rai/a/rai.dat	field	69	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	69	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	69	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	69	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	69	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	frame	70	177		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	70	-1	pic	3734
+decoded_dat/c/rai/a/rai.dat	field	70	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	70	-1	wait	3130
+decoded_dat/c/rai/a/rai.dat	field	70	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	70	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	70	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	70	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	70	-1	centerx	3735
+decoded_dat/c/rai/a/rai.dat	field	70	-1	centery	313535
+decoded_dat/c/rai/a/rai.dat	frame	71	180		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	71	-1	pic	3236
+decoded_dat/c/rai/a/rai.dat	field	71	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	71	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	71	-1	next	313831
+decoded_dat/c/rai/a/rai.dat	field	71	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	71	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	71	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	71	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	71	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	field	71	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	72	181		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	72	-1	pic	3237
+decoded_dat/c/rai/a/rai.dat	field	72	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	72	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	72	-1	next	313832
+decoded_dat/c/rai/a/rai.dat	field	72	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	72	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	72	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	72	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	72	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	72	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	72	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	72	0	x	3239
+decoded_dat/c/rai/a/rai.dat	field	72	0	y	33313630
+decoded_dat/c/rai/a/rai.dat	field	72	0	w	313330
+decoded_dat/c/rai/a/rai.dat	field	72	0	h	3634
+decoded_dat/c/rai/a/rai.dat	field	72	0	effect	38
+decoded_dat/c/rai/a/rai.dat	field	72	0	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	72	0	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	72	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	72	0	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	72	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	72	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	72	1	x	3239
+decoded_dat/c/rai/a/rai.dat	field	72	1	y	33363630
+decoded_dat/c/rai/a/rai.dat	field	72	1	w	313330
+decoded_dat/c/rai/a/rai.dat	field	72	1	h	3634
+decoded_dat/c/rai/a/rai.dat	field	72	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	72	1	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	72	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	72	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	72	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	73	182		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	73	-1	pic	3238
+decoded_dat/c/rai/a/rai.dat	field	73	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	73	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	73	-1	next	313833
+decoded_dat/c/rai/a/rai.dat	field	73	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	73	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	73	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	73	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	73	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	73	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	73	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	73	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	73	0	x	3239
+decoded_dat/c/rai/a/rai.dat	field	73	0	y	33313630
+decoded_dat/c/rai/a/rai.dat	field	73	0	w	313330
+decoded_dat/c/rai/a/rai.dat	field	73	0	h	3634
+decoded_dat/c/rai/a/rai.dat	field	73	0	effect	38
+decoded_dat/c/rai/a/rai.dat	field	73	0	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	73	0	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	73	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	73	0	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	73	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	73	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	73	1	x	3239
+decoded_dat/c/rai/a/rai.dat	field	73	1	y	33363630
+decoded_dat/c/rai/a/rai.dat	field	73	1	w	313330
+decoded_dat/c/rai/a/rai.dat	field	73	1	h	3634
+decoded_dat/c/rai/a/rai.dat	field	73	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	73	1	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	73	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	73	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	73	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	74	183		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	74	-1	pic	3239
+decoded_dat/c/rai/a/rai.dat	field	74	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	74	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	74	-1	next	313834
+decoded_dat/c/rai/a/rai.dat	field	74	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	74	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	74	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	74	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	74	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	74	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	block	74	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	74	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	74	0	x	3239
+decoded_dat/c/rai/a/rai.dat	field	74	0	y	33313630
+decoded_dat/c/rai/a/rai.dat	field	74	0	w	313330
+decoded_dat/c/rai/a/rai.dat	field	74	0	h	3634
+decoded_dat/c/rai/a/rai.dat	field	74	0	effect	38
+decoded_dat/c/rai/a/rai.dat	field	74	0	caughtact	323332
+decoded_dat/c/rai/a/rai.dat	field	74	0	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	74	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	74	0	sound	3130
+decoded_dat/c/rai/a/rai.dat	block	74	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	74	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	74	1	x	3239
+decoded_dat/c/rai/a/rai.dat	field	74	1	y	33363630
+decoded_dat/c/rai/a/rai.dat	field	74	1	w	313330
+decoded_dat/c/rai/a/rai.dat	field	74	1	h	3634
+decoded_dat/c/rai/a/rai.dat	field	74	1	effect	38
+decoded_dat/c/rai/a/rai.dat	field	74	1	caughtact	333937
+decoded_dat/c/rai/a/rai.dat	field	74	1	vrest	3230
+decoded_dat/c/rai/a/rai.dat	field	74	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	74	1	sound	3130
+decoded_dat/c/rai/a/rai.dat	frame	75	184		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	75	-1	pic	3330
+decoded_dat/c/rai/a/rai.dat	field	75	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	75	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	75	-1	next	3735
+decoded_dat/c/rai/a/rai.dat	field	75	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	75	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	75	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	75	-1	centerx	3935
+decoded_dat/c/rai/a/rai.dat	field	75	-1	centery	313635
+decoded_dat/c/rai/a/rai.dat	frame	76	200		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	76	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	76	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	76	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	76	-1	next	323031
+decoded_dat/c/rai/a/rai.dat	field	76	-1	dvx	313230
+decoded_dat/c/rai/a/rai.dat	field	76	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	76	-1	centery	333831
+decoded_dat/c/rai/a/rai.dat	frame	77	201		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	77	-1	pic	30
+decoded_dat/c/rai/a/rai.dat	field	77	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	77	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	77	-1	next	323032
+decoded_dat/c/rai/a/rai.dat	field	77	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	77	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	77	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	77	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	77	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	77	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	77	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	77	0	x	3537
+decoded_dat/c/rai/a/rai.dat	field	77	0	y	373330
+decoded_dat/c/rai/a/rai.dat	field	77	0	action	373038
+decoded_dat/c/rai/a/rai.dat	field	77	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	77	0	facing	30
+decoded_dat/c/rai/a/rai.dat	block	77	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	77	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	77	1	x	3138
+decoded_dat/c/rai/a/rai.dat	field	77	1	y	30
+decoded_dat/c/rai/a/rai.dat	field	77	1	w	3839
+decoded_dat/c/rai/a/rai.dat	field	77	1	h	373635
+decoded_dat/c/rai/a/rai.dat	field	77	1	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	77	1	dvx	3138
+decoded_dat/c/rai/a/rai.dat	field	77	1	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	77	1	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	77	1	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	77	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	77	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	78	202		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	78	-1	pic	31
+decoded_dat/c/rai/a/rai.dat	field	78	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	78	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	78	-1	next	323033
+decoded_dat/c/rai/a/rai.dat	field	78	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	78	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	field	78	-1	hit_d	31
+decoded_dat/c/rai/a/rai.dat	block	78	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	78	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	78	0	x	3536
+decoded_dat/c/rai/a/rai.dat	field	78	0	y	373631
+decoded_dat/c/rai/a/rai.dat	field	78	0	action	313830
+decoded_dat/c/rai/a/rai.dat	field	78	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	78	0	facing	30
+decoded_dat/c/rai/a/rai.dat	block	78	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	78	1	kind	30
+decoded_dat/c/rai/a/rai.dat	field	78	1	x	3138
+decoded_dat/c/rai/a/rai.dat	field	78	1	y	30
+decoded_dat/c/rai/a/rai.dat	field	78	1	w	3839
+decoded_dat/c/rai/a/rai.dat	field	78	1	h	373635
+decoded_dat/c/rai/a/rai.dat	field	78	1	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	78	1	dvx	3138
+decoded_dat/c/rai/a/rai.dat	field	78	1	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	78	1	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	78	1	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	78	1	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	78	1	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	79	203		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	79	-1	pic	32
+decoded_dat/c/rai/a/rai.dat	field	79	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	79	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	79	-1	next	323034
+decoded_dat/c/rai/a/rai.dat	field	79	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	79	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	79	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	79	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	79	0	x	3138
+decoded_dat/c/rai/a/rai.dat	field	79	0	y	30
+decoded_dat/c/rai/a/rai.dat	field	79	0	w	3839
+decoded_dat/c/rai/a/rai.dat	field	79	0	h	373635
+decoded_dat/c/rai/a/rai.dat	field	79	0	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	79	0	dvx	3138
+decoded_dat/c/rai/a/rai.dat	field	79	0	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	79	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	79	0	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	79	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	79	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	80	204		6b6972696e5f6e6f726d616c
+decoded_dat/c/rai/a/rai.dat	field	80	-1	pic	33
+decoded_dat/c/rai/a/rai.dat	field	80	-1	state	33303036
+decoded_dat/c/rai/a/rai.dat	field	80	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	80	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	80	-1	centerx	3537
+decoded_dat/c/rai/a/rai.dat	field	80	-1	centery	373630
+decoded_dat/c/rai/a/rai.dat	block	80	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	80	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	80	0	x	3138
+decoded_dat/c/rai/a/rai.dat	field	80	0	y	30
+decoded_dat/c/rai/a/rai.dat	field	80	0	w	3839
+decoded_dat/c/rai/a/rai.dat	field	80	0	h	373635
+decoded_dat/c/rai/a/rai.dat	field	80	0	effect	3233
+decoded_dat/c/rai/a/rai.dat	field	80	0	dvx	3138
+decoded_dat/c/rai/a/rai.dat	field	80	0	fall	3830
+decoded_dat/c/rai/a/rai.dat	field	80	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	80	0	bdefend	3830
+decoded_dat/c/rai/a/rai.dat	field	80	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	80	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	81	190		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	81	-1	pic	3235
+decoded_dat/c/rai/a/rai.dat	field	81	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	81	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	81	-1	next	313931
+decoded_dat/c/rai/a/rai.dat	field	81	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	81	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	81	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	81	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	81	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	82	191		7265706c6163656d656e7431
+decoded_dat/c/rai/a/rai.dat	field	82	-1	pic	3235
+decoded_dat/c/rai/a/rai.dat	field	82	-1	state	3135
+decoded_dat/c/rai/a/rai.dat	field	82	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	82	-1	next	313932
+decoded_dat/c/rai/a/rai.dat	field	82	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	82	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	82	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	82	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	82	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	82	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	82	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	82	0	x	3339
+decoded_dat/c/rai/a/rai.dat	field	82	0	y	3930
+decoded_dat/c/rai/a/rai.dat	field	82	0	action	313130
+decoded_dat/c/rai/a/rai.dat	field	82	0	dvx	3132
+decoded_dat/c/rai/a/rai.dat	field	82	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	82	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	83	192		5261696b6167655f6a756d70
+decoded_dat/c/rai/a/rai.dat	field	83	-1	pic	3235
+decoded_dat/c/rai/a/rai.dat	field	83	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	83	-1	wait	3130
+decoded_dat/c/rai/a/rai.dat	field	83	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	83	-1	dvy	2d3233
+decoded_dat/c/rai/a/rai.dat	field	83	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	83	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	84	296		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	84	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	84	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	84	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	84	-1	next	333030
+decoded_dat/c/rai/a/rai.dat	field	84	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	84	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	84	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	84	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	field	84	-1	hit_j	3435
+decoded_dat/c/rai/a/rai.dat	frame	85	297		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	85	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	85	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	85	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	85	-1	next	323936
+decoded_dat/c/rai/a/rai.dat	field	85	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	85	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	85	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	85	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	block	85	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	85	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	85	0	x	3938
+decoded_dat/c/rai/a/rai.dat	field	85	0	y	3339
+decoded_dat/c/rai/a/rai.dat	field	85	0	action	333037
+decoded_dat/c/rai/a/rai.dat	field	85	0	oid	343437
+decoded_dat/c/rai/a/rai.dat	field	85	0	facing	31
+decoded_dat/c/rai/a/rai.dat	frame	86	299		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	86	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	86	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	86	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	86	-1	next	323937
+decoded_dat/c/rai/a/rai.dat	field	86	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	86	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	86	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	86	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	frame	87	300		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	87	-1	pic	34
+decoded_dat/c/rai/a/rai.dat	field	87	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	87	-1	wait	3630
+decoded_dat/c/rai/a/rai.dat	field	87	-1	next	333032
+decoded_dat/c/rai/a/rai.dat	field	87	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	87	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	87	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	87	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	87	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	field	87	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	88	302		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	88	-1	pic	35
+decoded_dat/c/rai/a/rai.dat	field	88	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	88	-1	wait	32
+decoded_dat/c/rai/a/rai.dat	field	88	-1	next	333033
+decoded_dat/c/rai/a/rai.dat	field	88	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	88	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	frame	89	303		67726f756e64
+decoded_dat/c/rai/a/rai.dat	field	89	-1	pic	36
+decoded_dat/c/rai/a/rai.dat	field	89	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	89	-1	wait	32
+decoded_dat/c/rai/a/rai.dat	field	89	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	89	-1	centerx	3938
+decoded_dat/c/rai/a/rai.dat	field	89	-1	centery	3430
+decoded_dat/c/rai/a/rai.dat	frame	90	307		6561727468
+decoded_dat/c/rai/a/rai.dat	field	90	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	90	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	90	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	90	-1	next	333039
+decoded_dat/c/rai/a/rai.dat	field	90	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	90	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	90	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	90	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	91	308		6561727468
+decoded_dat/c/rai/a/rai.dat	field	91	-1	pic	37
+decoded_dat/c/rai/a/rai.dat	field	91	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	91	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	91	-1	next	333039
+decoded_dat/c/rai/a/rai.dat	field	91	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	91	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	91	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	91	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	block	91	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	91	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	91	0	x	2d38
+decoded_dat/c/rai/a/rai.dat	field	91	0	y	3932
+decoded_dat/c/rai/a/rai.dat	field	91	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	91	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	91	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	91	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	91	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	91	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	91	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	91	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	91	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	91	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	92	309		6561727468
+decoded_dat/c/rai/a/rai.dat	field	92	-1	pic	38
+decoded_dat/c/rai/a/rai.dat	field	92	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	92	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	92	-1	next	333130
+decoded_dat/c/rai/a/rai.dat	field	92	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	92	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	92	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	92	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	block	92	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	92	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	92	0	x	2d38
+decoded_dat/c/rai/a/rai.dat	field	92	0	y	3932
+decoded_dat/c/rai/a/rai.dat	field	92	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	92	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	92	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	92	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	92	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	92	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	92	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	92	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	92	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	92	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	93	310		6561727468
+decoded_dat/c/rai/a/rai.dat	field	93	-1	pic	39
+decoded_dat/c/rai/a/rai.dat	field	93	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	93	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	93	-1	next	333131
+decoded_dat/c/rai/a/rai.dat	field	93	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	93	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	93	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	93	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	block	93	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	93	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	93	0	x	2d38
+decoded_dat/c/rai/a/rai.dat	field	93	0	y	3932
+decoded_dat/c/rai/a/rai.dat	field	93	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	93	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	93	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	93	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	93	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	93	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	93	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	93	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	93	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	93	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	94	311		6561727468
+decoded_dat/c/rai/a/rai.dat	field	94	-1	pic	3130
+decoded_dat/c/rai/a/rai.dat	field	94	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	94	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	94	-1	next	333132
+decoded_dat/c/rai/a/rai.dat	field	94	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	94	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	block	94	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	94	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	94	0	x	2d38
+decoded_dat/c/rai/a/rai.dat	field	94	0	y	3932
+decoded_dat/c/rai/a/rai.dat	field	94	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	94	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	94	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	94	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	94	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	94	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	94	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	94	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	94	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	94	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	95	312		6561727468
+decoded_dat/c/rai/a/rai.dat	field	95	-1	pic	3131
+decoded_dat/c/rai/a/rai.dat	field	95	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	95	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	95	-1	next	333133
+decoded_dat/c/rai/a/rai.dat	field	95	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	95	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	96	313		6561727468
+decoded_dat/c/rai/a/rai.dat	field	96	-1	pic	3132
+decoded_dat/c/rai/a/rai.dat	field	96	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	96	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	96	-1	next	333134
+decoded_dat/c/rai/a/rai.dat	field	96	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	96	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	97	314		6561727468
+decoded_dat/c/rai/a/rai.dat	field	97	-1	pic	3133
+decoded_dat/c/rai/a/rai.dat	field	97	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	97	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	97	-1	next	333135
+decoded_dat/c/rai/a/rai.dat	field	97	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	97	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	98	315		6561727468
+decoded_dat/c/rai/a/rai.dat	field	98	-1	pic	3134
+decoded_dat/c/rai/a/rai.dat	field	98	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	98	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	98	-1	next	333136
+decoded_dat/c/rai/a/rai.dat	field	98	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	98	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	99	316		6561727468
+decoded_dat/c/rai/a/rai.dat	field	99	-1	pic	3135
+decoded_dat/c/rai/a/rai.dat	field	99	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	99	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	99	-1	next	333137
+decoded_dat/c/rai/a/rai.dat	field	99	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	99	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	100	317		6561727468
+decoded_dat/c/rai/a/rai.dat	field	100	-1	pic	3136
+decoded_dat/c/rai/a/rai.dat	field	100	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	100	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	100	-1	next	333138
+decoded_dat/c/rai/a/rai.dat	field	100	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	100	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	101	318		6561727468
+decoded_dat/c/rai/a/rai.dat	field	101	-1	pic	3137
+decoded_dat/c/rai/a/rai.dat	field	101	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	101	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	101	-1	next	333139
+decoded_dat/c/rai/a/rai.dat	field	101	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	101	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	102	319		6561727468
+decoded_dat/c/rai/a/rai.dat	field	102	-1	pic	3138
+decoded_dat/c/rai/a/rai.dat	field	102	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	102	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	102	-1	next	333230
+decoded_dat/c/rai/a/rai.dat	field	102	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	102	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	103	320		6561727468
+decoded_dat/c/rai/a/rai.dat	field	103	-1	pic	3139
+decoded_dat/c/rai/a/rai.dat	field	103	-1	state	33303032
+decoded_dat/c/rai/a/rai.dat	field	103	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	103	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	103	-1	centerx	3636
+decoded_dat/c/rai/a/rai.dat	field	103	-1	centery	323039
+decoded_dat/c/rai/a/rai.dat	frame	104	330		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	104	-1	pic	313339
+decoded_dat/c/rai/a/rai.dat	field	104	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	104	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	104	-1	next	333331
+decoded_dat/c/rai/a/rai.dat	field	104	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	104	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	104	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	104	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	104	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	field	104	-1	sound	646174615c3032312e776176
+decoded_dat/c/rai/a/rai.dat	frame	105	331		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	105	-1	pic	313430
+decoded_dat/c/rai/a/rai.dat	field	105	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	105	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	105	-1	next	333332
+decoded_dat/c/rai/a/rai.dat	field	105	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	105	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	105	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	105	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	105	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	block	105	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	105	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	105	0	x	3139
+decoded_dat/c/rai/a/rai.dat	field	105	0	y	3531
+decoded_dat/c/rai/a/rai.dat	field	105	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	105	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	105	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	105	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	105	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	105	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	105	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	105	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	105	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	105	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	106	332		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	106	-1	pic	313431
+decoded_dat/c/rai/a/rai.dat	field	106	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	106	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	106	-1	next	333333
+decoded_dat/c/rai/a/rai.dat	field	106	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	106	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	106	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	106	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	106	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	block	106	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	106	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	106	0	x	3139
+decoded_dat/c/rai/a/rai.dat	field	106	0	y	3531
+decoded_dat/c/rai/a/rai.dat	field	106	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	106	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	106	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	106	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	106	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	106	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	106	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	106	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	106	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	106	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	107	333		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	107	-1	pic	313432
+decoded_dat/c/rai/a/rai.dat	field	107	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	107	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	107	-1	next	333334
+decoded_dat/c/rai/a/rai.dat	field	107	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	107	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	107	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	107	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	107	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	block	107	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	107	0	kind	30
+decoded_dat/c/rai/a/rai.dat	field	107	0	x	3139
+decoded_dat/c/rai/a/rai.dat	field	107	0	y	3531
+decoded_dat/c/rai/a/rai.dat	field	107	0	w	313531
+decoded_dat/c/rai/a/rai.dat	field	107	0	h	313237
+decoded_dat/c/rai/a/rai.dat	field	107	0	effect	30
+decoded_dat/c/rai/a/rai.dat	field	107	0	dvx	31
+decoded_dat/c/rai/a/rai.dat	field	107	0	dvy	2d31
+decoded_dat/c/rai/a/rai.dat	field	107	0	fall	313030
+decoded_dat/c/rai/a/rai.dat	field	107	0	vrest	3135
+decoded_dat/c/rai/a/rai.dat	field	107	0	bdefend	313030
+decoded_dat/c/rai/a/rai.dat	field	107	0	injury	3530
+decoded_dat/c/rai/a/rai.dat	field	107	0	zwidth	3230
+decoded_dat/c/rai/a/rai.dat	frame	108	334		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	108	-1	pic	313433
+decoded_dat/c/rai/a/rai.dat	field	108	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	108	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	108	-1	next	333335
+decoded_dat/c/rai/a/rai.dat	field	108	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	108	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	108	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	108	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	108	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	block	108	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	108	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	108	0	x	313031
+decoded_dat/c/rai/a/rai.dat	field	108	0	y	313730
+decoded_dat/c/rai/a/rai.dat	field	108	0	action	33
+decoded_dat/c/rai/a/rai.dat	field	108	0	oid	393030
+decoded_dat/c/rai/a/rai.dat	field	108	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	109	335		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	109	-1	pic	313434
+decoded_dat/c/rai/a/rai.dat	field	109	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	109	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	109	-1	next	333336
+decoded_dat/c/rai/a/rai.dat	field	109	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	109	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	109	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	109	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	109	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	block	109	0	opoint	
+decoded_dat/c/rai/a/rai.dat	field	109	0	kind	31
+decoded_dat/c/rai/a/rai.dat	field	109	0	x	313031
+decoded_dat/c/rai/a/rai.dat	field	109	0	y	313730
+decoded_dat/c/rai/a/rai.dat	field	109	0	action	33
+decoded_dat/c/rai/a/rai.dat	field	109	0	oid	393030
+decoded_dat/c/rai/a/rai.dat	field	109	0	facing	30
+decoded_dat/c/rai/a/rai.dat	frame	110	336		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	110	-1	pic	313435
+decoded_dat/c/rai/a/rai.dat	field	110	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	110	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	110	-1	next	333337
+decoded_dat/c/rai/a/rai.dat	field	110	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	110	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	110	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	110	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	110	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	frame	111	337		6c69676874
+decoded_dat/c/rai/a/rai.dat	field	111	-1	pic	313436
+decoded_dat/c/rai/a/rai.dat	field	111	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	111	-1	wait	3130
+decoded_dat/c/rai/a/rai.dat	field	111	-1	next	393939
+decoded_dat/c/rai/a/rai.dat	field	111	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	111	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	111	-1	dvz	353530
+decoded_dat/c/rai/a/rai.dat	field	111	-1	centerx	3937
+decoded_dat/c/rai/a/rai.dat	field	111	-1	centery	313730
+decoded_dat/c/rai/a/rai.dat	frame	112	410		666c79696e67
+decoded_dat/c/rai/a/rai.dat	field	112	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	112	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	112	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	112	-1	next	343131
+decoded_dat/c/rai/a/rai.dat	field	112	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	112	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	112	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	112	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	112	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	112	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	112	0	respond	34
+decoded_dat/c/rai/a/rai.dat	field	112	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	112	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	112	0	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	112	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	112	0	h	313939
+decoded_dat/c/rai/a/rai.dat	field	112	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	112	0	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	113	411		666c79696e67
+decoded_dat/c/rai/a/rai.dat	field	113	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	113	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	113	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	113	-1	next	343132
+decoded_dat/c/rai/a/rai.dat	field	113	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	113	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	113	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	113	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	block	113	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	113	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	113	0	respond	34
+decoded_dat/c/rai/a/rai.dat	field	113	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	113	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	113	0	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	113	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	113	0	h	313939
+decoded_dat/c/rai/a/rai.dat	field	113	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	113	0	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	114	412		64656c
+decoded_dat/c/rai/a/rai.dat	field	114	-1	pic	313239
+decoded_dat/c/rai/a/rai.dat	field	114	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	114	-1	wait	33
+decoded_dat/c/rai/a/rai.dat	field	114	-1	next	343133
+decoded_dat/c/rai/a/rai.dat	field	114	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	114	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	114	-1	hit_d	353030
+decoded_dat/c/rai/a/rai.dat	block	114	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	114	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	114	0	dvx	393939
+decoded_dat/c/rai/a/rai.dat	field	114	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	114	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	114	0	y	373838303030
+decoded_dat/c/rai/a/rai.dat	field	114	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	114	0	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	114	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	114	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	block	114	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	114	1	kind	38
+decoded_dat/c/rai/a/rai.dat	field	114	1	respond	34
+decoded_dat/c/rai/a/rai.dat	field	114	1	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	114	1	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	114	1	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	114	1	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	114	1	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	114	1	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	114	1	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	115	413		64656c
+decoded_dat/c/rai/a/rai.dat	field	115	-1	pic	313330
+decoded_dat/c/rai/a/rai.dat	field	115	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	115	-1	wait	33
+decoded_dat/c/rai/a/rai.dat	field	115	-1	next	343134
+decoded_dat/c/rai/a/rai.dat	field	115	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	115	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	115	-1	hit_d	353030
+decoded_dat/c/rai/a/rai.dat	block	115	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	115	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	115	0	dvx	393939
+decoded_dat/c/rai/a/rai.dat	field	115	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	115	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	115	0	y	373838303030
+decoded_dat/c/rai/a/rai.dat	field	115	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	115	0	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	115	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	115	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	block	115	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	115	1	kind	38
+decoded_dat/c/rai/a/rai.dat	field	115	1	respond	34
+decoded_dat/c/rai/a/rai.dat	field	115	1	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	115	1	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	115	1	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	115	1	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	115	1	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	115	1	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	115	1	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	116	414		64656c
+decoded_dat/c/rai/a/rai.dat	field	116	-1	pic	313331
+decoded_dat/c/rai/a/rai.dat	field	116	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	116	-1	wait	33
+decoded_dat/c/rai/a/rai.dat	field	116	-1	next	343135
+decoded_dat/c/rai/a/rai.dat	field	116	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	116	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	116	-1	hit_d	353030
+decoded_dat/c/rai/a/rai.dat	block	116	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	116	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	116	0	dvx	393939
+decoded_dat/c/rai/a/rai.dat	field	116	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	116	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	116	0	y	373838303030
+decoded_dat/c/rai/a/rai.dat	field	116	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	116	0	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	116	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	116	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	block	116	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	116	1	kind	38
+decoded_dat/c/rai/a/rai.dat	field	116	1	respond	34
+decoded_dat/c/rai/a/rai.dat	field	116	1	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	116	1	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	116	1	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	116	1	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	116	1	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	116	1	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	116	1	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	117	415		64656c
+decoded_dat/c/rai/a/rai.dat	field	117	-1	pic	313332
+decoded_dat/c/rai/a/rai.dat	field	117	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	117	-1	wait	33
+decoded_dat/c/rai/a/rai.dat	field	117	-1	next	343132
+decoded_dat/c/rai/a/rai.dat	field	117	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	117	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	117	-1	hit_d	353030
+decoded_dat/c/rai/a/rai.dat	block	117	0	itr	
+decoded_dat/c/rai/a/rai.dat	field	117	0	kind	38
+decoded_dat/c/rai/a/rai.dat	field	117	0	dvx	393939
+decoded_dat/c/rai/a/rai.dat	field	117	0	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	117	0	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	117	0	y	373838303030
+decoded_dat/c/rai/a/rai.dat	field	117	0	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	117	0	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	117	0	fall	3730
+decoded_dat/c/rai/a/rai.dat	field	117	0	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	block	117	1	itr	
+decoded_dat/c/rai/a/rai.dat	field	117	1	kind	38
+decoded_dat/c/rai/a/rai.dat	field	117	1	respond	34
+decoded_dat/c/rai/a/rai.dat	field	117	1	dvy	32
+decoded_dat/c/rai/a/rai.dat	field	117	1	x	2d39393939
+decoded_dat/c/rai/a/rai.dat	field	117	1	y	373831303030
+decoded_dat/c/rai/a/rai.dat	field	117	1	w	3939393939
+decoded_dat/c/rai/a/rai.dat	field	117	1	h	31393939
+decoded_dat/c/rai/a/rai.dat	field	117	1	zwidth	393939
+decoded_dat/c/rai/a/rai.dat	field	117	1	dvx	353030
+decoded_dat/c/rai/a/rai.dat	frame	118	500		666c79696e67
+decoded_dat/c/rai/a/rai.dat	field	118	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	118	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	118	-1	wait	31
+decoded_dat/c/rai/a/rai.dat	field	118	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	118	-1	dvx	353530
+decoded_dat/c/rai/a/rai.dat	field	118	-1	dvy	353530
+decoded_dat/c/rai/a/rai.dat	field	118	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	118	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	frame	119	700		6131
+decoded_dat/c/rai/a/rai.dat	field	119	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	119	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	119	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	119	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	119	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	119	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	119	-1	sound	635c7261695c775c61312e776176
+decoded_dat/c/rai/a/rai.dat	frame	120	701		6132
+decoded_dat/c/rai/a/rai.dat	field	120	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	120	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	120	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	120	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	120	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	120	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	120	-1	sound	635c7261695c775c61322e776176
+decoded_dat/c/rai/a/rai.dat	frame	121	702		6133
+decoded_dat/c/rai/a/rai.dat	field	121	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	121	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	121	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	121	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	121	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	121	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	121	-1	sound	635c7261695c775c61332e776176
+decoded_dat/c/rai/a/rai.dat	frame	122	703		6134
+decoded_dat/c/rai/a/rai.dat	field	122	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	122	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	122	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	122	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	122	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	122	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	122	-1	sound	635c7261695c775c61342e776176
+decoded_dat/c/rai/a/rai.dat	frame	123	704		6a31
+decoded_dat/c/rai/a/rai.dat	field	123	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	123	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	123	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	123	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	123	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	123	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	123	-1	sound	635c7261695c775c6a312e776176
+decoded_dat/c/rai/a/rai.dat	frame	124	705		63
+decoded_dat/c/rai/a/rai.dat	field	124	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	124	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	124	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	124	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	124	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	124	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	124	-1	sound	635c7261695c775c632e776176
+decoded_dat/c/rai/a/rai.dat	frame	125	706		7031
+decoded_dat/c/rai/a/rai.dat	field	125	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	125	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	125	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	125	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	125	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	125	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	125	-1	sound	635c7261695c775c70312e776176
+decoded_dat/c/rai/a/rai.dat	frame	126	707		7032
+decoded_dat/c/rai/a/rai.dat	field	126	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	126	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	126	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	126	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	126	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	126	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	126	-1	sound	635c7261695c775c70322e776176
+decoded_dat/c/rai/a/rai.dat	frame	127	708		6531
+decoded_dat/c/rai/a/rai.dat	field	127	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	127	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	127	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	127	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	127	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	127	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	127	-1	sound	635c7261695c775c65312e776176
+decoded_dat/c/rai/a/rai.dat	frame	128	709		6532
+decoded_dat/c/rai/a/rai.dat	field	128	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	128	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	128	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	128	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	128	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	128	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	128	-1	sound	635c7261695c775c65322e776176
+decoded_dat/c/rai/a/rai.dat	frame	129	710		6135
+decoded_dat/c/rai/a/rai.dat	field	129	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	129	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	129	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	129	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	129	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	129	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	129	-1	sound	635c7261695c775c61352e776176
+decoded_dat/c/rai/a/rai.dat	frame	130	711		6a33
+decoded_dat/c/rai/a/rai.dat	field	130	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	130	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	130	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	130	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	130	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	130	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	130	-1	sound	635c7261695c775c6a332e776176
+decoded_dat/c/rai/a/rai.dat	frame	131	712		6a34
+decoded_dat/c/rai/a/rai.dat	field	131	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	131	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	131	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	131	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	131	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	131	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	131	-1	sound	635c7261695c775c6a342e776176
+decoded_dat/c/rai/a/rai.dat	frame	132	713		6a35
+decoded_dat/c/rai/a/rai.dat	field	132	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	132	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	132	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	132	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	132	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	132	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	132	-1	sound	635c7261695c775c6a352e776176
+decoded_dat/c/rai/a/rai.dat	frame	133	714		6a36
+decoded_dat/c/rai/a/rai.dat	field	133	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	133	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	133	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	133	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	133	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	133	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	133	-1	sound	635c7261695c775c6a362e776176
+decoded_dat/c/rai/a/rai.dat	frame	134	715		6a37
+decoded_dat/c/rai/a/rai.dat	field	134	-1	pic	393939
+decoded_dat/c/rai/a/rai.dat	field	134	-1	state	33303035
+decoded_dat/c/rai/a/rai.dat	field	134	-1	wait	30
+decoded_dat/c/rai/a/rai.dat	field	134	-1	next	31303030
+decoded_dat/c/rai/a/rai.dat	field	134	-1	centerx	3339
+decoded_dat/c/rai/a/rai.dat	field	134	-1	centery	3739
+decoded_dat/c/rai/a/rai.dat	field	134	-1	sound	635c7261695c775c6a372e776176

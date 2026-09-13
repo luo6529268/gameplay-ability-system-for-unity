@@ -1,0 +1,20 @@
+{
+  "status": "SCENE_BASELINE_CHANGED_ORIGIN_PENDING",
+  "path": "Assets\\NTSD\\Scene\\NTSD_Battle.unity",
+  "sha256": "838d8bdaf5640e4ae564c37831a01f593e4c23596838bbf07156dc0d26fc55b3",
+  "objects": {
+    "916859856": "HUDCamera",
+    "1947371489": "Canvas",
+    "2051450405": "ScenesCamera"
+  },
+  "changes": [
+    "two Camera.enabled 1->0",
+    "one Canvas.enabled 1->0",
+    "one RectTransform anchored y 122.61->122.609985"
+  ],
+  "observedLastWriteLocal": "2026-09-13 12:15:20",
+  "editorIsDirty": false,
+  "directSceneEditOrSaveIssuedByThisTask": false,
+  "origin": "Unconfirmed; user clarification pending, preserve current file",
+  "gate": "Do not certify scene-baseline unchanged or revert; resolve before full Play/source migration exit."
+}

@@ -1,0 +1,21 @@
+{
+  "limits": [
+    "GUID scan does not prove absence of dynamically built paths or external project references",
+    "No image is deletion-approved by this audit",
+    "Indexed and declared edges do not prove runtime reachability"
+  ],
+  "unreadableOrBinary": [
+    {
+      "path": "Assets/NTSD/MoreMountains/MMFeedbacks/Demos/MMFeedbacksDemo/TestScene/LightingData.asset",
+      "reason": "BINARY_REFERENCE_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/MoreMountains/MMTools/Demos/MMPrototypeTextures/MMPrototypeTexturesDemo/LightingData.asset",
+      "reason": "BINARY_REFERENCE_REVIEW"
+    },
+    {
+      "path": "Assets/Plugins/ProCamera2D/Examples/TopDownShooter/Scenes/TopDownShooter/NavMesh.asset",
+      "reason": "BINARY_REFERENCE_REVIEW"
+    }
+  ]
+}

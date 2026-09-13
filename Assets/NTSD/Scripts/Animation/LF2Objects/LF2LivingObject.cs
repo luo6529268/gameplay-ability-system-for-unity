@@ -1,4 +1,4 @@
-﻿using NTSD.App;
+using NTSD.App;
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Simulation;
@@ -77,8 +77,6 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>是否处于定身/卡住效果。</summary>
         public bool Stuck { get; set; } = false;
 
-        /// <summary>精灵震荡幅度。</summary>
-        public int Oscillate { get; set; } = 0;
 
         /// <summary>是否启用闪烁效果。</summary>
         public bool Blink { get; set; } = false;
@@ -92,7 +90,6 @@ namespace NTSD.Animation.LF2Objects
         /// <summary>效果剩余时间。</summary>
         public int TimeOut { get; set; } = 0;
 
-        public int OscillateDirection { get; set; } = 1;
         public int BlinkCounter { get; set; } = 0;
 
         public void Reset()
@@ -101,12 +98,10 @@ namespace NTSD.Animation.LF2Objects
             Dvx = 0;
             Dvy = 0;
             Stuck = false;
-            Oscillate = 0;
             Blink = false;
             Super = false;
             TimeIn = 0;
             TimeOut = 0;
-            OscillateDirection = 1;
             BlinkCounter = 0;
         }
     }
@@ -603,18 +598,14 @@ namespace NTSD.Animation.LF2Objects
         #region 效果内部处理
 
         /// <summary>
-        /// 推进当前效果状态：震荡、闪烁、效果结束和延迟速度写入。
+        /// 推进当前效果状态：闪烁、效果结束和延迟速度写入。
         /// </summary>
         protected virtual void ProcessEffects()
         {
             if (Effect.TimeIn >= 0) return;
 
-            if (Effect.Oscillate != 0)
-            {
-                Effect.OscillateDirection = Effect.OscillateDirection == 1 ? -1 : 1;
-                Sprite?.SetXY(Effect.Oscillate * Effect.OscillateDirection, 0f);
-            }
-            else if (Effect.Blink)
+            // Alignment contract: NTSD28-Q04-OSCILLATE-CONSUMER-RETIREMENT-001.
+            if (Effect.Blink)
             {
                 switch (Effect.BlinkCounter % 4)
                 {
@@ -634,11 +625,6 @@ namespace NTSD.Animation.LF2Objects
             {
                 Effect.Num = -99;
                 if (Effect.Stuck) Effect.Stuck = false;
-                if (Effect.Oscillate != 0)
-                {
-                    Effect.Oscillate = 0;
-                    Sprite?.SetXY(0f, 0f);
-                }
                 if (Effect.Blink)
                 {
                     Effect.Blink = false;

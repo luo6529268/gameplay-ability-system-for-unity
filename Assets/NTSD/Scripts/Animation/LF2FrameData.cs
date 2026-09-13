@@ -159,6 +159,24 @@ namespace NTSD.Animation
         }
 
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
+        public int centerz;
+        public int chp;
+        public int cmp;
+        public double nativeDvx;
+        public double nativeDvy;
+        public double nativeDvz;
+        public double dx;
+        public double dy;
+        public double dz;
+        public bool UsesLoganFrameNumbers { get; internal set; }
+        private IReadOnlyList<string> frameSounds = System.Array.Empty<string>();
+        public IReadOnlyList<string> FrameSounds => frameSounds;
+
+        internal void SealFrameSounds(IEnumerable<string> sounds)
+        {
+            frameSounds = new List<string>(sounds).AsReadOnly();
+        }
+
         public List<BattleObjectPointValue> opoints =
             new List<BattleObjectPointValue>();
 
@@ -316,6 +334,8 @@ namespace NTSD.Animation
         public int y = 0;
         public int w = 0;
         public int h = 0;
+        public int zwidth = 0;
+        public bool hasGeometry = true;
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
     }
 
@@ -333,6 +353,8 @@ namespace NTSD.Animation
         public int w = 0;
         public int h = 0;
         public int zwidth = 15;
+        public int z = 0;
+        public bool hasGeometry = true;
 
         // 击退速度字段；DAT 缺失时默认 0。
         public int dvx = 0;
@@ -341,6 +363,9 @@ namespace NTSD.Animation
 
         //伤害值
         public int injury = 0;
+        public int drain = 0;
+        public int sound = 0;
+        public int cover = 0;
         public int fall = 0;
         public int vaction = 0;
         //攻击者休息帧数
@@ -407,10 +432,15 @@ namespace NTSD.Animation
             w = source.w;
             h = source.h;
             zwidth = source.zwidth;
+            z = source.z;
+            hasGeometry = source.hasGeometry;
             dvx = source.dvx;
             dvy = source.dvy;
             dvz = source.dvz;
             injury = source.injury;
+            drain = source.drain;
+            sound = source.sound;
+            cover = source.cover;
             fall = source.fall;
             vaction = source.vaction;
             arest = source.arest;
@@ -467,6 +497,21 @@ namespace NTSD.Animation
         public int dvz;
         public int oid;
         public int facing;
+        public int z;
+        public int hp;
+        public int mp;
+        public int team;
+        public int reserve;
+        public int effect;
+        public int pic;
+        public int centerx;
+        public int centery;
+        public int centerz;
+        public int framea;
+        public int attacking;
+        public int join;
+        public int join_reserve;
+        public int join_pic;
 
         public static implicit operator BattleObjectPointValue(ObjectPoint source)
         {
@@ -497,7 +542,7 @@ namespace NTSD.Animation
         public int fronthurtact = 0;
         public int backhurtact = 0;
         public int vaction = 0;
-        public int throwvz = 0;
+        public float throwvz = 0;
         public int hurtable = 0;
         public int throwinjury = 0;
         public int decrease = 0;
@@ -508,9 +553,17 @@ namespace NTSD.Animation
         public int jaction = 0;     // 跳跃动作帧
         public int taction = 0;     // 投掷动作帧
         public int daction = 0;     // 防御动作帧
-        public int throwvx = 0;     // 投掷X速度
-        public int throwvy = 0;     // 投掷Y速度
+        public float throwvx = 0;     // 投掷X速度
+        public float throwvy = 0;     // 投掷Y速度
         public int dircontrol = 0;  // 方向控制
+        public int faction = 0;
+        public int baction = 0;
+        public int uzaction = 0;
+        public int dzaction = 0;
+        public int z = 0;
+        public int recover = 0;
+        public int drain = 0;
+        public int gain = 0;
         public Dictionary<string, string> rawProperties = new Dictionary<string, string>();
     }
 
@@ -526,5 +579,16 @@ namespace NTSD.Animation
         public int bdefend = 0;
         public int injury = 0;
         public int effect = 0;
+        public int respond = 0;
+        public int drain = 0;
+        public int spark = 0;
+        public int recover = 0;
+        public int dbdefend = 0;
+        public int zwidth = 0;
+        public int z = 0;
+        public int dvz = 0;
+        public int sound = 0;
+        public int cover = 0;
+        public int caughtact = 0;
     }
 }

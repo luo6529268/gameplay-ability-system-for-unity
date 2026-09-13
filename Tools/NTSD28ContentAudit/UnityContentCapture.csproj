@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RestoreIgnoreFailedSources>true</RestoreIgnoreFailedSources>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <AssemblyName>NTSD28UnityContentCapture</AssemblyName>
+    <RootNamespace>NTSD28ContentAudit</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="UnityContentCapture.cs" />
+    <Compile Include="UnityDiagnosticStubs.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Utils\LoganCombatRecordDecoder.cs" Link="Production\DatParser\Utils\LoganCombatRecordDecoder.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Parsing\Lf2DatParserV2.LoganFrames.cs" Link="Production\DatParser\Parsing\Lf2DatParserV2.LoganFrames.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2WeaponStrengthRow.cs" Link="Production\DatParser\Models\Lf2WeaponStrengthRow.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Parsing\Lf2DatParserV2.LoganStrength.cs" Link="Production\DatParser\Parsing\Lf2DatParserV2.LoganStrength.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Utils\LoganNumericDecoder.cs" Link="Production\DatParser\Utils\LoganNumericDecoder.cs" />
+
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2DatProperty.cs" Link="Production\DatParser\Models\Lf2DatProperty.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2DatBlock.cs" Link="Production\DatParser\Models\Lf2DatBlock.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2DatSubBlock.cs" Link="Production\DatParser\Models\Lf2DatSubBlock.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2DatFile.cs" Link="Production\DatParser\Models\Lf2DatFile.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2DatEnums.cs" Link="Production\DatParser\Models\Lf2DatEnums.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2BmpSection.cs" Link="Production\DatParser\Models\Lf2BmpSection.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2FrameBlock.cs" Link="Production\DatParser\Models\Lf2FrameBlock.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Models\Lf2SpriteFileDef.cs" Link="Production\DatParser\Models\Lf2SpriteFileDef.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Parsing\Lf2DatTokenizer.cs" Link="Production\DatParser\Parsing\Lf2DatTokenizer.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Parsing\Lf2DatParserV2.cs" Link="Production\DatParser\Parsing\Lf2DatParserV2.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatDecryptor.cs" Link="Production\DatParser\Utils\Lf2DatDecryptor.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\DatParser\Runtime\Utils\Lf2DatConverter.cs" Link="Production\DatParser\Utils\Lf2DatConverter.cs" />
+
+    <Compile Include="..\..\Assets\NTSD\Scripts\Animation\LF2FrameData.cs" Link="Production\Animation\LF2FrameData.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Animation\LF2CharacterData.cs" Link="Production\Animation\LF2CharacterData.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Animation\LF2ArmorData.cs" Link="Production\Animation\LF2ArmorData.cs" />
+
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\BloodPoint\BattleBloodPointValue.cs" Link="Production\DataContracts\BloodPoint\BattleBloodPointValue.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\BloodPoint\BattleBloodPointCatalog.cs" Link="Production\DataContracts\BloodPoint\BattleBloodPointCatalog.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\CatchPoint\BattleCatchPointValue.cs" Link="Production\DataContracts\CatchPoint\BattleCatchPointValue.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\CatchPoint\BattleCatchPointCatalog.cs" Link="Production\DataContracts\CatchPoint\BattleCatchPointCatalog.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\CatchPoint\BattleCatchPointValueAdapter.cs" Link="Production\DataContracts\CatchPoint\BattleCatchPointValueAdapter.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\BodyBox\BattleBodyBoxValue.cs" Link="Production\DataContracts\BodyBox\BattleBodyBoxValue.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\BodyBox\BattleBodyBoxValueAdapter.cs" Link="Production\DataContracts\BodyBox\BattleBodyBoxValueAdapter.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\ObjectPoint\BattleObjectPointValue.cs" Link="Production\DataContracts\ObjectPoint\BattleObjectPointValue.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\ObjectPoint\BattleObjectPointValueAdapter.cs" Link="Production\DataContracts\ObjectPoint\BattleObjectPointValueAdapter.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\WeaponPoint\BattleWeaponPointValue.cs" Link="Production\DataContracts\WeaponPoint\BattleWeaponPointValue.cs" />
+    <Compile Include="..\..\Assets\NTSD\Scripts\Simulation\DataContracts\WeaponPoint\BattleWeaponPointValueAdapter.cs" Link="Production\DataContracts\WeaponPoint\BattleWeaponPointValueAdapter.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.LoganHeaders.cs" />
+    <Compile Include="../../Assets/NTSD/Scripts/Animation/LoganDefinitionMetadata.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2LoganDefinitionBlocks.cs" />
+    <Compile Include="../../Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.LoganDefinitions.cs" />
+    <Compile Include="../../Assets/NTSD/Scripts/Animation/LoganWeaponPieceDefinition.cs" />
+  </ItemGroup>
+</Project>

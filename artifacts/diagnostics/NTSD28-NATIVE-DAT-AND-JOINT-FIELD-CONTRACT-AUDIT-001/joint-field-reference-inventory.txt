@@ -1,0 +1,223 @@
+ALL REFERENCES; includes tests/diagnostics and name collisions; not classified production readers.
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:2583:            Expect(defaultRuntime.HolderCopySlotIndex == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:2858:            character.Runtime.ReleaseTick = 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12626:                           weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12629:                    Expect(weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12645:                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12659:                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12690:                           weapon.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12695:                    Expect(weapon.SpawnerEntityIndex == 77,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12745:            weapon.SpawnerEntityIndex = initialSpawnerEntityIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12757:            weapon.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12875:                beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12887:                beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12950:            held.Runtime.ReleaseTick = previousReleaseTick;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12951:            held.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12961:            Expect(held.Runtime.ReleaseTick == expectedReleaseTick &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12970:                $"BATTLE-AUDIT9-LP-01: generic held {label} must produce ReleaseTick={expectedReleaseTick} " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12974:            Expect(held.Runtime.ReleaseTick == -1,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12975:                $"BATTLE-AUDIT9-LP-01: generic held {label} reset must restore ReleaseTick=-1");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13053:            Expect(weapon.Runtime.ReleaseTick == expectedReleaseTick && holder.Runtime.LinkState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13058:                $"BATTLE-AUDIT7-R3/LP-03/LP-05: {label} must produce ReleaseTick={expectedReleaseTick}, " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13060:                $"actual releaseTick={weapon.Runtime.ReleaseTick}, target={holder.Runtime.TargetSlotIndex}, " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13085:            Expect(weapon.Runtime.ReleaseTick == -1,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13086:                "BATTLE-AUDIT7-R3: pooled weapon reset must restore ReleaseTick=-1");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13409:            held.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13570:            inactiveTarget.GrabbedBy = 12;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13585:                   inactiveTarget.GrabbedBy == 12,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19440:            characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19452:            Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23021:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23027:                    Expect(weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23053:                mismatch.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23060:                       mismatch.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23079:            missingDefinition.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23083:                   missingDefinition.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23111:                nativeThrow.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23120:                nativeLight.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23907:                   Nearly(defaults.KnockbackVz, 0.1) && defaults.HolderCopySlotIndex == 99,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:25752:                Expect(child.SpawnerEntityIndex == spawner.Runtime.SlotIndex &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:25943:                   firstClone.SpawnerEntityIndex == -1 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27219:                    light.Runtime.WeaponState = 4321;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27223:                           light.Runtime.WeaponState == 4321,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27238:                    lightFiniteImpact.Runtime.WeaponState = 4322;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27243:                           lightFiniteImpact.Runtime.WeaponFlightCounter == 17 && lightFiniteImpact.Runtime.WeaponState == 4322,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27249:                    heavy.Runtime.WeaponState = 4323;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27253:                           heavy.Runtime.WeaponState == 4323,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27261:                    heavyBounce.Runtime.WeaponState = 4324;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27266:                           heavyBounce.Runtime.WeaponFlightCounter == 19 && heavyBounce.Runtime.WeaponState == 4324,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27276:                    thrown.Runtime.WeaponState = 4325;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27280:                           thrown.Runtime.WeaponState == 4325,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27316:                    drink.Runtime.WeaponState = 4326;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27324:                           drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:28981:                    spawned.SpawnerEntityIndex = source.Runtime?.SlotIndex ?? -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29035:                Expect(spawned.RelationTeam == 3 && spawned.SpawnerEntityIndex == dead.Runtime.SlotIndex,
+Assets/NTSD/Scripts\Simulation\Stage\SimulationStageWaveModule.cs:561:            entity.SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Simulation\Stage\SimulationStageWaveModule.cs:654:            entity.SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:263:                respawnEffect.SpawnerEntityIndex == storedSlot,
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:400:                    entity.SpawnerEntityIndex == spawnerSlot)
+Assets/NTSD/Scripts\Simulation\Passes\Respawn\BattleRespawnModule.cs:261:            spawned.SpawnerEntityIndex = entity.Runtime?.SlotIndex ?? -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:115:        public int SpawnerSlotIndex = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:116:        public int GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:123:        public int ReleaseTick = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:231:        public int HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:238:        public int TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:384:        public int WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:814:            destination.SpawnerSlotIndex = SpawnerSlotIndex;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:815:            destination.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:822:            destination.ReleaseTick = ReleaseTick;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:933:            destination.HolderCopySlotIndex = HolderCopySlotIndex;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:935:            destination.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1011:            destination.WeaponState = WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1052:            SpawnerSlotIndex = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1053:            GrabbedBy = 0;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1060:            ReleaseTick = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1113:            HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1115:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1188:            WeaponState = 0;
+Assets/NTSD/Scripts\Simulation\Passes\LateLifecycle\BattleLateEntityLifecycleModule.cs:780:                spawned.SpawnerEntityIndex = useNativeSynchronizedRandom
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponHeldStateResolver.cs:133:                weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponFrameLogicResolver.cs:230:            if (_weapon.SpawnerEntityIndex >= 0)
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponFrameLogicResolver.cs:232:                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(_weapon.SpawnerEntityIndex);
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:472:            SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:473:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:479:            Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:825:            SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:80:            owner.SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:81:            owner.TrackerFlag = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:101:            owner.SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:255:            weapon.SpawnerEntityIndex = SpawnerSentinel;
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:285:                    weapon.SpawnerEntityIndex == expectedSpawner &&
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:288:                $"delay={weapon.FrameDelay}, spawner={weapon.SpawnerEntityIndex}, " +
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:292:            int observedSpawner = weapon.SpawnerEntityIndex;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:153:        public int GrabbedBy
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:155:            get => Runtime.GrabbedBy;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:156:            set => Runtime.GrabbedBy = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:160:        public int TrackerFlag
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:162:            get => Runtime.TrackerFlag;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:163:            set => Runtime.TrackerFlag = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:511:            get => Runtime.HolderCopySlotIndex;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:512:            set => Runtime.HolderCopySlotIndex = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:521:        public int SpawnerEntityIndex
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:523:            get => Runtime.SpawnerSlotIndex;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:524:            set => Runtime.SpawnerSlotIndex = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:2388:            if (SpawnerEntityIndex >= 0)
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:2390:                LF2Entity spawner = Match.FindEntityByRuntimeSlotForQuery(SpawnerEntityIndex);
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:6884:            Runtime.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:6885:            Runtime.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:537:            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:542:            builder.AddInt32(runtime?.ReleaseTick ?? -1);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:563:            builder.AddInt32(isDefault ? -1 : runtime.SpawnerSlotIndex);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:634:            builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1053:                ("holderCopy", isDefault ? 99 : runtime.HolderCopySlotIndex),
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1058:                ("releaseTick", runtime?.ReleaseTick ?? -1),
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1086:                ("spawnerSlot", isDefault ? -1 : runtime.SpawnerSlotIndex),
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1207:                ("weaponState", isDefault ? 0 : runtime.WeaponState));
+Assets/NTSD/Scripts\Test\Editor\BattleRandomWeaponLateEffectPlayModeProbeEditor.cs:319:                    child.SpawnerEntityIndex == spawnerSlot &&
+Assets/NTSD/Scripts\Test\Editor\BattleRandomWeaponLateEffectPlayModeProbeEditor.cs:652:                spawner = child.SpawnerEntityIndex,
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:915:            SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:1130:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:1136:            SpawnerEntityIndex = -1;
+Assets/NTSD/Scripts\Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:2447:                TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:356:            GrabbedBy = new int[capacity];
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:357:            TrackerFlag = new int[capacity];
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:368:        internal readonly int[] GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:369:        internal readonly int[] TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:608:            Identity.SpawnerSlot[slot] = runtime.SpawnerSlotIndex;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:721:            Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:727:            Links.GrabbedBy[slot] = runtime.GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:728:            Links.TrackerFlag[slot] = runtime.TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:776:            Links.GrabbedBy[slot] = Links.TrackerFlag[slot] = 0;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:862:                   Identity.SpawnerSlot[slot] == runtime.SpawnerSlotIndex;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:952:                Links.HolderCopySlot[slot] != runtime.HolderCopySlotIndex ||
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:958:                Links.GrabbedBy[slot] != runtime.GrabbedBy ||
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:959:                Links.TrackerFlag[slot] != runtime.TrackerFlag)
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1101:            hash.Add(runtime.RelationOwnerSlotIndex); hash.Add(runtime.SpawnerSlotIndex);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1102:            hash.Add(runtime.GrabbedBy); hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1105:            hash.Add(runtime.ReleaseTick); hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1121:            hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1122:            hash.Add(runtime.PickerStableId); hash.Add(runtime.TrackerFlag); hash.Add(runtime.AiControlled);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1150:            hash.Add(runtime.WeaponState); hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5ResourceAttackerResolverEditorTests.cs:116:            attacker.Runtime.HolderCopySlotIndex = 1;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs:289:            entity.Runtime.SpawnerSlotIndex = seed + 300;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs:300:            Assert.That(entity.Runtime.SpawnerSlotIndex, Is.EqualTo(seed + 300));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:910:            weapon.GrabbedBy = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:978:            oldChild.GrabbedBy = 41;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:1382:            child.Runtime.HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:33:            int heldGrabbedBy = child.GrabbedBy;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:44:            Assert.That(holder.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:45:            Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:67:            Assert.That(holder.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:68:            Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:185:            Assert.That(parent.GrabbedBy, Is.Zero); Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:186:            Assert.That(parent.TrackerFlag, Is.Zero); Assert.That(child.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:188:            Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:189:            Assert.That(parent.Runtime.ReleaseTick, Is.EqualTo(-1)); Assert.That(child.Runtime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:200:            public string reservedContract = "GrabbedBy0;TrackerFlag0;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:109:            Assert.That(runtime, Does.Contain("public int HolderCopySlotIndex = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:111:                Does.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:112:            Assert.That(runtime, Does.Contain("HolderCopySlotIndex = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:117:                Does.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:119:                Does.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:121:                Does.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:123:                Does.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:125:                Does.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:32:            Assert.That(Count(releaseFlow, "Runtime.ReleaseTick ="), Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:33:            Assert.That(Count(heldWriter, "Runtime.ReleaseTick ="), Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:45:            sourceRuntime.ReleaseTick = -1;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:48:            Assert.That(destinationRuntime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:51:            sourceRuntime.ReleaseTick = 23;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:56:            Assert.That(sourceRuntime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:67:            Assert.That(runtime, Does.Contain("public int ReleaseTick = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:68:            Assert.That(runtime, Does.Contain("destination.ReleaseTick = ReleaseTick;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:69:            Assert.That(runtime, Does.Contain("ReleaseTick = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:70:            Assert.That(ecs, Does.Contain("hash.Add(runtime.ReleaseTick);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:72:                "builder.AddInt32(runtime?.ReleaseTick ?? -1);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:74:                "(\"releaseTick\", runtime?.ReleaseTick ?? -1)"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:93:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:117:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:139:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:174:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:200:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:218:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:277:            child.Runtime.ReleaseTick = Sentinel;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:454:                    releaseTickBefore = child.Runtime.ReleaseTick };
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:457:                row.releaseTickAfter = child.Runtime.ReleaseTick; row.holderLinkAfter = holder.Runtime.LinkState; row.childLinkAfter = child.Runtime.LinkState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:25:                    $"{{\"parentFlag\":{parent.TrackerFlag},\"childFlag\":{child.TrackerFlag},\"parentCachePresent\":{(child.TrackerParent != null).ToString().ToLowerInvariant()},\"parentLink\":{parent.Runtime.LinkState},\"childLink\":{child.Runtime.LinkState}}}");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:36:                Assert.That(parent.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:37:                Assert.That(child.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:50:                "the parallel WeaponState resolver is retired");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:52:                Regex.Matches(frameLogic, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:54:                "frame logic must not mutate the reserved WeaponState carrier");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:56:                Regex.Matches(heldState, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:58:                "held/drop/throw logic must not mutate the reserved WeaponState carrier");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:60:                Regex.Matches(weaponBase, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:62:                "WeaponState remains only as the Reset-time reserved zero");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:63:            StringAssert.Contains("Runtime.WeaponState = 0;", weaponBase);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:137:            weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:152:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:214:                followState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:220:                throwState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:227:                    dropState = dropScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:238:                damagedState = damagedScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:277:                WeaponState = 0,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:281:                WeaponState = 777,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:284:            Assert.That(copied.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:293:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:309:                Assert.That(snapshotCopy.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:316:                weapon.Runtime.WeaponState = 777;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:322:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:365:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:369:                    Assert.That(weapon.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:562:                return "tick1 checksum: reserved WeaponState changed to " +
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:565:                return "tick2 checksum: reserved WeaponState changed to " +
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:82:            int releaseTickBefore = scope.Child.Runtime.ReleaseTick;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:90:            Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(releaseTickBefore));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:141:                Child.Runtime.ReleaseTick = 99;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:126:            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:188:                child.Runtime.ReleaseTick = 27;
+Assets/NTSD/Scripts\Test\Editor\NTSD28C25DefinitionCloneEditorTests.cs:287:                Assert.That(child.SpawnerEntityIndex, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28C25DefinitionClonePlayModeProbeEditor.cs:186:                    child.SpawnerEntityIndex == -1 &&
+Assets/NTSD/Scripts\Test\Editor\NTSD28UnityEntityRawCaptureEditorTests.cs:23:            runtime.SpawnerSlotIndex = 19;
+Assets/NTSD/Scripts\Test\Editor\SimulationQueryAndLinkModuleEditorTests.cs:81:            child.Runtime.SpawnerSlotIndex = 75;
+Assets/NTSD/Scripts\Test\Editor\SimulationQueryAndLinkModuleEditorTests.cs:93:            Assert.That(child.Runtime.SpawnerSlotIndex, Is.EqualTo(75));

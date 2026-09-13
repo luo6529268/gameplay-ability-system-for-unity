@@ -1,0 +1,47 @@
+{
+  "capturedUtc": "2026-09-13T00:55:50.519247+00:00",
+  "priorReadCount": 50,
+  "priorReadDrift": [],
+  "newReadSources": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha256": "AFFC30EC3E7A7496D4AB98C0F151D3AD3EF1B2709C5F7FC39CC0F44C9119745D"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "B273DF5504E92E50DAA48CD8DD254CD61EDF1E5CBA49227185E47DE2437C8416"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
+      "sha256": "B7E70ADA3FD1C1541D002652CCEA919BD1EB48064D1289A9097F21FF5F33D276"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/LockstepSessionIdentity.cs",
+      "sha256": "B745CD4026F19028B7395BC8BD61CA43911299E6034437B87475E30DD95E073B"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/History/LockstepSnapshotRing.cs",
+      "sha256": "5568DC4A67347164C13D9F8AA2798774EC59356D2318141D65C67202C9C20753"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "0559C67F7C4FC0D0306F1F500FBD6678A0B2CEB2A155719CC8CC02AA5F916F5E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldPendingEventSnapshot.cs",
+      "sha256": "5879EE1B1CD6B86DEC9A91D8E08437799FA7ADD6C4B971A5F2D54B32844EC7D7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Snapshots/AiSensingSnapshot.cs",
+      "sha256": "D10927B5638BA54423AD21548E1198C7149E2BC4B9C5B35701EF01D681BEB759"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiSensingModule.cs",
+      "sha256": "C447FC853AE3DC390BA9B6DEB6848269A678E20ECF05D6185B463B4F771CDD40"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs",
+      "sha256": "97789A0C86FA08F0177185848BB208D9F3412B3A0DA6E50704105C8045C86E21"
+    }
+  ]
+}

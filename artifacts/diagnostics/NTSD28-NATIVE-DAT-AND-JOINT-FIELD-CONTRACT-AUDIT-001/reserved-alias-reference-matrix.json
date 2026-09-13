@@ -1,0 +1,2039 @@
+{
+  "scope": "direct five-field plus HolderCopy alias references; descriptive categories, not a completed behavior audit",
+  "rows": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 2583,
+      "code": "Expect(defaultRuntime.HolderCopySlotIndex == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 2858,
+      "code": "character.Runtime.ReleaseTick = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 11528,
+      "code": "catcher.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 11749,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 11755,
+      "code": "attacker.HolderCopySlot = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12519,
+      "code": "heldWeapon.HolderCopySlot = holderSlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12626,
+      "code": "weapon.Runtime.WeaponState == 0 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12690,
+      "code": "weapon.Runtime.WeaponState == 0,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12757,
+      "code": "weapon.GrabbedBy = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12875,
+      "code": "beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12887,
+      "code": "beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12949,
+      "code": "held.HolderCopySlot = 10;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12950,
+      "code": "held.Runtime.ReleaseTick = previousReleaseTick;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12951,
+      "code": "held.GrabbedBy = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12961,
+      "code": "Expect(held.Runtime.ReleaseTick == expectedReleaseTick &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12968,
+      "code": "held.HolderCopySlot == 10 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12970,
+      "code": "$\"BATTLE-AUDIT9-LP-01: generic held {label} must produce ReleaseTick={expectedReleaseTick} \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12974,
+      "code": "Expect(held.Runtime.ReleaseTick == -1,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 12975,
+      "code": "$\"BATTLE-AUDIT9-LP-01: generic held {label} reset must restore ReleaseTick=-1\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13030,
+      "code": "int holderCopyBeforeRelease = weapon.HolderCopySlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13053,
+      "code": "Expect(weapon.Runtime.ReleaseTick == expectedReleaseTick && holder.Runtime.LinkState == 0 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13058,
+      "code": "$\"BATTLE-AUDIT7-R3/LP-03/LP-05: {label} must produce ReleaseTick={expectedReleaseTick}, \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13060,
+      "code": "$\"actual releaseTick={weapon.Runtime.ReleaseTick}, target={holder.Runtime.TargetSlotIndex}, \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13061,
+      "code": "$\"holder={weapon.Runtime.HolderStableId}, holderCopy={weapon.HolderCopySlot}, zz={weapon.Runtime.Zz}, \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13066,
+      "code": "Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13081,
+      "code": "Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13085,
+      "code": "Expect(weapon.Runtime.ReleaseTick == -1,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13086,
+      "code": "\"BATTLE-AUDIT7-R3: pooled weapon reset must restore ReleaseTick=-1\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13154,
+      "code": "held.HolderCopySlot = holderSlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13409,
+      "code": "held.GrabbedBy = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13570,
+      "code": "inactiveTarget.GrabbedBy = 12;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 13585,
+      "code": "inactiveTarget.GrabbedBy == 12,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 14377,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 14859,
+      "code": "target.HolderCopySlot == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 15170,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 17947,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 18597,
+      "code": "attacker.HolderCopySlot = 23;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 18598,
+      "code": "victim.HolderCopySlot = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 18606,
+      "code": "victim.RelationTeam == 17 && victim.HolderCopySlot == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 18949,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 19440,
+      "code": "characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 19452,
+      "code": "Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 19690,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 21657,
+      "code": "mixedAttacker.HolderCopySlot = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 21703,
+      "code": "$\"rootCopy={mixedAttacker.HolderCopySlot}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23021,
+      "code": "weapon.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23027,
+      "code": "Expect(weapon.Runtime.WeaponState == 0 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23053,
+      "code": "mismatch.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23060,
+      "code": "mismatch.Runtime.WeaponState == 0 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23079,
+      "code": "missingDefinition.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23083,
+      "code": "missingDefinition.Runtime.WeaponState == 0,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23111,
+      "code": "nativeThrow.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23120,
+      "code": "nativeLight.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 23907,
+      "code": "Nearly(defaults.KnockbackVz, 0.1) && defaults.HolderCopySlotIndex == 99,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 25755,
+      "code": "child.OwnerEntityIndex == -1 && child.HolderCopySlot == -1 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27219,
+      "code": "light.Runtime.WeaponState = 4321;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27223,
+      "code": "light.Runtime.WeaponState == 4321,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27238,
+      "code": "lightFiniteImpact.Runtime.WeaponState = 4322;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27243,
+      "code": "lightFiniteImpact.Runtime.WeaponFlightCounter == 17 && lightFiniteImpact.Runtime.WeaponState == 4322,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27249,
+      "code": "heavy.Runtime.WeaponState = 4323;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27253,
+      "code": "heavy.Runtime.WeaponState == 4323,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27261,
+      "code": "heavyBounce.Runtime.WeaponState = 4324;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27266,
+      "code": "heavyBounce.Runtime.WeaponFlightCounter == 19 && heavyBounce.Runtime.WeaponState == 4324,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27276,
+      "code": "thrown.Runtime.WeaponState = 4325;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27280,
+      "code": "thrown.Runtime.WeaponState == 4325,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27316,
+      "code": "drink.Runtime.WeaponState = 4326;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 27324,
+      "code": "drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 28010,
+      "code": "attacker.HolderCopySlot = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 28319,
+      "code": "partner.HolderCopySlot = 3;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 28353,
+      "code": "Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 28427,
+      "code": "partner.HolderCopySlot = 4;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 28478,
+      "code": "Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29165,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29730,
+      "code": "naruto.HolderCopySlot = parentHolderCopySentinel;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29835,
+      "code": "relationMatches &= entity.HolderCopySlot == 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29839,
+      "code": "$\"t{tick}/s{slot}/oid205:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29848,
+      "code": "relationMatches &= entity.HolderCopySlot == 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29852,
+      "code": "$\"t{tick}/s{slot}/oid204:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29863,
+      "code": "relationMatches &= entity.HolderCopySlot == 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 29867,
+      "code": "$\"t{tick}/s{slot}/oid33:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 31209,
+      "code": "spawned.HolderCopySlot == 99,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 31318,
+      "code": "character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 99,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "line": 32978,
+      "code": "entity.HolderCopySlot == 99 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs",
+      "line": 50,
+      "code": "public int holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs",
+      "line": 94,
+      "code": "holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs",
+      "line": 99,
+      "code": "task.holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 116,
+      "code": "public int GrabbedBy;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 123,
+      "code": "public int ReleaseTick = -1;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 231,
+      "code": "public int HolderCopySlotIndex = 99;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 238,
+      "code": "public int TrackerFlag;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 384,
+      "code": "public int WeaponState;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 815,
+      "code": "destination.GrabbedBy = GrabbedBy;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 822,
+      "code": "destination.ReleaseTick = ReleaseTick;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 933,
+      "code": "destination.HolderCopySlotIndex = HolderCopySlotIndex;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 935,
+      "code": "destination.TrackerFlag = TrackerFlag;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1011,
+      "code": "destination.WeaponState = WeaponState;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1053,
+      "code": "GrabbedBy = 0;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1060,
+      "code": "ReleaseTick = -1;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1113,
+      "code": "HolderCopySlotIndex = 99;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1115,
+      "code": "TrackerFlag = 0;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "line": 1188,
+      "code": "WeaponState = 0;",
+      "category": "CANONICAL_STORAGE_COPY_RESET"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 2447,
+      "code": "TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,",
+      "category": "DIAGNOSTIC_PROJECTION"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Passes/Respawn/BattleRespawnModule.cs",
+      "line": 226,
+      "code": "task.holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "line": 182,
+      "code": "fixtures.noCount.HolderCopySlot = 123;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "line": 224,
+      "code": "fixtures.noCount.HolderCopySlot == 123 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "line": 248,
+      "code": "fixtures.stored.HolderCopySlot == 125 &&",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "line": 365,
+      "code": "fixtures.stored.HolderCopySlot = 125;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "line": 587,
+      "code": "holder = entity.HolderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs",
+      "line": 453,
+      "code": "fixtures.characterAttacker.HolderCopySlot =",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 350,
+      "code": "HolderCopySlot = new int[capacity];",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 356,
+      "code": "GrabbedBy = new int[capacity];",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 357,
+      "code": "TrackerFlag = new int[capacity];",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 362,
+      "code": "internal readonly int[] HolderCopySlot;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 368,
+      "code": "internal readonly int[] GrabbedBy;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 369,
+      "code": "internal readonly int[] TrackerFlag;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 721,
+      "code": "Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 727,
+      "code": "Links.GrabbedBy[slot] = runtime.GrabbedBy;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 728,
+      "code": "Links.TrackerFlag[slot] = runtime.TrackerFlag;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 773,
+      "code": "Links.HolderCopySlot[slot] = Links.TargetSlot[slot] = 0;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 776,
+      "code": "Links.GrabbedBy[slot] = Links.TrackerFlag[slot] = 0;",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 952,
+      "code": "Links.HolderCopySlot[slot] != runtime.HolderCopySlotIndex ||",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 958,
+      "code": "Links.GrabbedBy[slot] != runtime.GrabbedBy ||",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 959,
+      "code": "Links.TrackerFlag[slot] != runtime.TrackerFlag)",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 1102,
+      "code": "hash.Add(runtime.GrabbedBy); hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 1105,
+      "code": "hash.Add(runtime.ReleaseTick); hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 1121,
+      "code": "hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 1122,
+      "code": "hash.Add(runtime.PickerStableId); hash.Add(runtime.TrackerFlag); hash.Add(runtime.AiControlled);",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "line": 1150,
+      "code": "hash.Add(runtime.WeaponState); hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);",
+      "category": "ECS_MIRROR_CLEAR_VALIDATE_HASH"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs",
+      "line": 217,
+      "code": "weapon.HolderCopySlot == holderSlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs",
+      "line": 282,
+      "code": "weapon.HolderCopySlot == holderSlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleGrabCpointLinkPlayModeProbeEditor.cs",
+      "line": 194,
+      "code": "catcher.HolderCopySlot = holderSlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 1926,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 2224,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3720,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3721,
+      "code": "target.HolderCopySlot = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3771,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3876,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3935,
+      "code": "holder.HolderCopySlot = 88;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3937,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 3985,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4035,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4038,
+      "code": "target.HolderCopySlot = 66;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4079,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(66));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4149,
+      "code": "holder.HolderCopySlot = 88;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4835,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4880,
+      "code": "target.HolderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4895,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4946,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 4987,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5162,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5225,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5330,
+      "code": "holder.HolderCopySlot = 88;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5341,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5412,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5418,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5554,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5555,
+      "code": "holder.HolderCopySlot = 88;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5799,
+      "code": "Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 5907,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 6064,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "line": 6635,
+      "code": "scenario.CharacterAttacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleRandomWeaponLateEffectPlayModeProbeEditor.cs",
+      "line": 331,
+      "code": "child.HolderCopySlot == 99 && child.KillCount == -1,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "line": 468,
+      "code": "HolderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "line": 473,
+      "code": "TrackerFlag = 0;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "line": 479,
+      "code": "Runtime.WeaponState = 0;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "line": 1108,
+      "code": "HolderCopySlot = 99;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "line": 1130,
+      "code": "TrackerFlag = 0;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "line": 1132,
+      "code": "HolderCopySlot = 99;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterLateRuntimeModule.cs",
+      "line": 71,
+      "code": "task.holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+      "line": 76,
+      "code": "owner.HolderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+      "line": 81,
+      "code": "owner.TrackerFlag = 0;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+      "line": 97,
+      "code": "owner.HolderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 153,
+      "code": "public int GrabbedBy",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 155,
+      "code": "get => Runtime.GrabbedBy;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 156,
+      "code": "set => Runtime.GrabbedBy = value;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 160,
+      "code": "public int TrackerFlag",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 162,
+      "code": "get => Runtime.TrackerFlag;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 163,
+      "code": "set => Runtime.TrackerFlag = value;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 509,
+      "code": "public int HolderCopySlot",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 511,
+      "code": "get => Runtime.HolderCopySlotIndex;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 512,
+      "code": "set => Runtime.HolderCopySlotIndex = value;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 3951,
+      "code": "task.holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 4492,
+      "code": "task.holderCopySlot = -1;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 6884,
+      "code": "Runtime.GrabbedBy = GrabbedBy;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 6885,
+      "code": "Runtime.TrackerFlag = TrackerFlag;",
+      "category": "ALIAS_INITIALIZATION_OR_TASK_RESET_REVIEW"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "line": 537,
+      "code": "builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "line": 542,
+      "code": "builder.AddInt32(runtime?.ReleaseTick ?? -1);",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "line": 634,
+      "code": "builder.AddInt32(isDefault ? 0 : runtime.WeaponState);",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "line": 1053,
+      "code": "(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "line": 1058,
+      "code": "(\"releaseTick\", runtime?.ReleaseTick ?? -1),",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "line": 1207,
+      "code": "(\"weaponState\", isDefault ? 0 : runtime.WeaponState));",
+      "category": "CHECKSUM_OR_PARITY"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 27,
+      "code": "int holderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 37,
+      "code": "attacker.HolderCopySlot = holderCopySlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 45,
+      "code": "Assert.That(attacker.HolderCopySlot, Is.EqualTo(holderCopySlot));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 74,
+      "code": "attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 85,
+      "code": "Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 127,
+      "code": "attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "line": 142,
+      "code": "Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs",
+      "line": 339,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceAttackerResolverEditorTests.cs",
+      "line": 116,
+      "code": "attacker.Runtime.HolderCopySlotIndex = 1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardReducedKnockoutProducerEditorTests.cs",
+      "line": 182,
+      "code": "attacker.HolderCopySlot = credit.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+      "line": 104,
+      "code": "attacker.HolderCopySlot = 55;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+      "line": 109,
+      "code": "parent.HolderCopySlot = 88;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+      "line": 134,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(66));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+      "line": 204,
+      "code": "target.HolderCopySlot = 66;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 39,
+      "code": "attacker.HolderCopySlot = 77;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 40,
+      "code": "target.HolderCopySlot = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 53,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 60,
+      "code": "Assert.That(attacker.HolderCopySlot, Is.EqualTo(77));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 82,
+      "code": "\"target.HolderCopySlot = source.HolderCopySlot;\",",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 85,
+      "code": "\"projection.TargetHolderCopySlot = attacker.HolderCopySlot;\",",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "line": 88,
+      "code": "\"projection.TargetHolderCopySlot = relationSource.HolderCopySlot;\",",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+      "line": 34,
+      "code": "Assert.That(target.HolderCopySlot, Is.EqualTo(66));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+      "line": 169,
+      "code": "target.HolderCopySlot = 66;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs",
+      "line": 142,
+      "code": "attacker.HolderCopySlot = holder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs",
+      "line": 286,
+      "code": "entity.HolderCopySlot = seed;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs",
+      "line": 297,
+      "code": "Assert.That(entity.HolderCopySlot, Is.EqualTo(seed));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+      "line": 34,
+      "code": "catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+      "line": 266,
+      "code": "catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 138,
+      "code": "Assert.That(scenario.Target.HolderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 140,
+      "code": "\"HolderCopySlot is outside the shared kind2 transaction.\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 185,
+      "code": "int oldHolderCopy = scenario.OldChild.HolderCopySlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 210,
+      "code": "Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 214,
+      "code": "Assert.That(scenario.OldChild.HolderCopySlot, Is.EqualTo(oldHolderCopy));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 265,
+      "code": "int targetHolderCopyBefore = scenario.Target.HolderCopySlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 281,
+      "code": "Assert.That(scenario.Target.HolderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 341,
+      "code": "Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 397,
+      "code": "Assert.That(scenario.FirstTarget.HolderCopySlot, Is.EqualTo(733));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 398,
+      "code": "Assert.That(scenario.SecondTarget.HolderCopySlot, Is.EqualTo(733));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 576,
+      "code": "Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 909,
+      "code": "weapon.HolderCopySlot = 733;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 910,
+      "code": "weapon.GrabbedBy = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 950,
+      "code": "target.HolderCopySlot = 733;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 974,
+      "code": "oldChild.HolderCopySlot = 73;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 978,
+      "code": "oldChild.GrabbedBy = 41;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 1382,
+      "code": "child.Runtime.HolderCopySlotIndex = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "line": 1410,
+      "code": "holderCopy = target.HolderCopySlot,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 33,
+      "code": "int heldGrabbedBy = child.GrabbedBy;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 44,
+      "code": "Assert.That(holder.GrabbedBy, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 45,
+      "code": "Assert.That(child.GrabbedBy, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 67,
+      "code": "Assert.That(holder.GrabbedBy, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 68,
+      "code": "Assert.That(child.GrabbedBy, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 185,
+      "code": "Assert.That(parent.GrabbedBy, Is.Zero); Assert.That(child.GrabbedBy, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 186,
+      "code": "Assert.That(parent.TrackerFlag, Is.Zero); Assert.That(child.TrackerFlag, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 188,
+      "code": "Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 189,
+      "code": "Assert.That(parent.Runtime.ReleaseTick, Is.EqualTo(-1)); Assert.That(child.Runtime.ReleaseTick, Is.EqualTo(-1));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 190,
+      "code": "Assert.That(parent.HolderCopySlot, Is.EqualTo(99)); Assert.That(child.HolderCopySlot, Is.EqualTo(99));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "line": 200,
+      "code": "public string reservedContract = \"GrabbedBy0;TrackerFlag0;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99\";",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 50,
+      "code": "Does.Not.Contain(\"living.HolderCopySlot = parent.HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 52,
+      "code": "Does.Not.Contain(\"HolderCopySlot = task.holderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 54,
+      "code": "Does.Not.Contain(\"HolderCopySlot = task.parent.HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 56,
+      "code": "Does.Not.Contain(\"task.holderCopySlot = HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 58,
+      "code": "Does.Not.Contain(\"held.HolderCopySlot = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 60,
+      "code": "Does.Not.Contain(\"held.HolderCopySlot = _character.Runtime?.SlotIndex ?? -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 62,
+      "code": "Does.Not.Contain(\"held.HolderCopySlot = _character.HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 64,
+      "code": "Does.Not.Contain(\"HolderCopySlot = holderEntity?.Runtime?.SlotIndex ?? -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 66,
+      "code": "Does.Not.Contain(\"HolderCopySlot = task.holderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 68,
+      "code": "Does.Not.Contain(\"HolderCopySlot = task.parent.HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 70,
+      "code": "Does.Not.Contain(\"weapon.HolderCopySlot = -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 72,
+      "code": "Does.Not.Contain(\"task.holderCopySlot = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 74,
+      "code": "Does.Not.Contain(\"spawned.HolderCopySlot = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 76,
+      "code": "Does.Not.Contain(\"partner.HolderCopySlot = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 78,
+      "code": "Does.Not.Contain(\"entity.HolderCopySlot = requiredRuntimeSlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 80,
+      "code": "Does.Not.Contain(\"entity.HolderCopySlot = entity.Runtime?.SlotIndex ?? -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 82,
+      "code": "Does.Not.Contain(\"living.HolderCopySlot = parent.HolderCopySlot;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 90,
+      "code": "Does.Not.Contain(\"int holderSlot = attacker?.HolderCopySlot ?? -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 109,
+      "code": "Assert.That(runtime, Does.Contain(\"public int HolderCopySlotIndex = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 111,
+      "code": "Does.Contain(\"destination.HolderCopySlotIndex = HolderCopySlotIndex;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 112,
+      "code": "Assert.That(runtime, Does.Contain(\"HolderCopySlotIndex = 99;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 113,
+      "code": "Assert.That(task, Does.Contain(\"public int holderCopySlot = -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 114,
+      "code": "Assert.That(task, Does.Contain(\"holderCopySlot = -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 115,
+      "code": "Assert.That(ecs, Does.Contain(\"HolderCopySlot = new int[capacity];\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 117,
+      "code": "Does.Contain(\"Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 119,
+      "code": "Does.Contain(\"hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 121,
+      "code": "Does.Contain(\"builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 123,
+      "code": "Does.Contain(\"(\\\"holderCopy\\\", isDefault ? 99 : runtime.HolderCopySlotIndex),\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 125,
+      "code": "Does.Contain(\"TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 143,
+      "code": "holder.HolderCopySlot = 73;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 145,
+      "code": "child.HolderCopySlot = initialCopy;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 150,
+      "code": "int holderCopyBefore = child.HolderCopySlot;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "line": 157,
+      "code": "Assert.That(child.HolderCopySlot, Is.EqualTo(holderCopyBefore));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyTrackerRetirementEditorTests.cs",
+      "line": 25,
+      "code": "$\"{{\\\"parentFlag\\\":{parent.TrackerFlag},\\\"childFlag\\\":{child.TrackerFlag},\\\"parentCachePresent\\\":{(child.TrackerParent != null).ToString().ToLowerInvariant()},\\\"parentLink\\\":{parent.Runtime.LinkState},\\\"childLink\\\":{child.Runtime.LinkState}}}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyTrackerRetirementEditorTests.cs",
+      "line": 36,
+      "code": "Assert.That(parent.TrackerFlag, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyTrackerRetirementEditorTests.cs",
+      "line": 37,
+      "code": "Assert.That(child.TrackerFlag, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 32,
+      "code": "Assert.That(Count(releaseFlow, \"Runtime.ReleaseTick =\"), Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 33,
+      "code": "Assert.That(Count(heldWriter, \"Runtime.ReleaseTick =\"), Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 45,
+      "code": "sourceRuntime.ReleaseTick = -1;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 48,
+      "code": "Assert.That(destinationRuntime.ReleaseTick, Is.EqualTo(-1));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 51,
+      "code": "sourceRuntime.ReleaseTick = 23;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 56,
+      "code": "Assert.That(sourceRuntime.ReleaseTick, Is.EqualTo(-1));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 67,
+      "code": "Assert.That(runtime, Does.Contain(\"public int ReleaseTick = -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 68,
+      "code": "Assert.That(runtime, Does.Contain(\"destination.ReleaseTick = ReleaseTick;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 69,
+      "code": "Assert.That(runtime, Does.Contain(\"ReleaseTick = -1;\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 70,
+      "code": "Assert.That(ecs, Does.Contain(\"hash.Add(runtime.ReleaseTick);\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 72,
+      "code": "\"builder.AddInt32(runtime?.ReleaseTick ?? -1);\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 74,
+      "code": "\"(\\\"releaseTick\\\", runtime?.ReleaseTick ?? -1)\"));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 93,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 117,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 139,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 174,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 200,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 218,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 277,
+      "code": "child.Runtime.ReleaseTick = Sentinel;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 454,
+      "code": "releaseTickBefore = child.Runtime.ReleaseTick };",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "line": 457,
+      "code": "row.releaseTickAfter = child.Runtime.ReleaseTick; row.holderLinkAfter = holder.Runtime.LinkState; row.childLinkAfter = child.Runtime.LinkState;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 50,
+      "code": "\"the parallel WeaponState resolver is retired\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 52,
+      "code": "Regex.Matches(frameLogic, @\"Runtime\\.WeaponState\\s*=\").Count,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 54,
+      "code": "\"frame logic must not mutate the reserved WeaponState carrier\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 56,
+      "code": "Regex.Matches(heldState, @\"Runtime\\.WeaponState\\s*=\").Count,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 58,
+      "code": "\"held/drop/throw logic must not mutate the reserved WeaponState carrier\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 60,
+      "code": "Regex.Matches(weaponBase, @\"Runtime\\.WeaponState\\s*=\").Count,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 62,
+      "code": "\"WeaponState remains only as the Reset-time reserved zero\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 63,
+      "code": "StringAssert.Contains(\"Runtime.WeaponState = 0;\", weaponBase);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 137,
+      "code": "weapon.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 152,
+      "code": "reservedWeaponState = weapon.Runtime.WeaponState,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 214,
+      "code": "followState = followScope.Weapon.Runtime.WeaponState;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 220,
+      "code": "throwState = followScope.Weapon.Runtime.WeaponState;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 227,
+      "code": "dropState = dropScope.Weapon.Runtime.WeaponState;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 238,
+      "code": "damagedState = damagedScope.Weapon.Runtime.WeaponState;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 277,
+      "code": "WeaponState = 0,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 281,
+      "code": "WeaponState = 777,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 284,
+      "code": "Assert.That(copied.WeaponState, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 293,
+      "code": "weapon.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 309,
+      "code": "Assert.That(snapshotCopy.WeaponState, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 316,
+      "code": "weapon.Runtime.WeaponState = 777;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 322,
+      "code": "weapon.Runtime.WeaponState = 0;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 365,
+      "code": "reservedWeaponState = weapon.Runtime.WeaponState,",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 369,
+      "code": "Assert.That(weapon.Runtime.WeaponState, Is.Zero);",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 562,
+      "code": "return \"tick1 checksum: reserved WeaponState changed to \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "line": 565,
+      "code": "return \"tick2 checksum: reserved WeaponState changed to \" +",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+      "line": 82,
+      "code": "int releaseTickBefore = scope.Child.Runtime.ReleaseTick;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+      "line": 90,
+      "code": "Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(releaseTickBefore));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+      "line": 141,
+      "code": "Child.Runtime.ReleaseTick = 99;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs",
+      "line": 188,
+      "code": "Assert.That(scope.Child.HolderCopySlot, Is.EqualTo(29));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs",
+      "line": 266,
+      "code": "child.HolderCopySlot = 29;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+      "line": 126,
+      "code": "$\"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}\");",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+      "line": 188,
+      "code": "child.Runtime.ReleaseTick = 27;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs",
+      "line": 137,
+      "code": "encodedObserver.HolderCopySlot = 29;",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs",
+      "line": 153,
+      "code": "Assert.That(encodedObserver.HolderCopySlot, Is.EqualTo(29));",
+      "category": "TEST_OR_DIAGNOSTIC_FIXTURE"
+    }
+  ]
+}

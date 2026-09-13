@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 0 state: 0 cover: 0 wait: 0 next: 0 dvx: 0 dvy: 0 dvz: 0 centerx: 0 centery: 0 mp: 0 hp: 0 hit_a: 0 hit_d: 0 hit_j: 0 hit_g: 0 hit_Fj: 0 hit_Fa: 0 hit_Da: 0 hit_Ua: 0 hit_ja: 0 hit_aj: 0 hit_ad: 0 hit_jd: 0 hit_Dj: 0 hit_Uj: 0 hit_f: 0 hit_b: 0 hit_uz: 0 hit_dz: 0 hold_a: 0 hold_d: 0 hold_j: 0 hold_f: 0 hold_b: 0 hold_uz: 0 hold_dz: 0
+cpoint: kind: 0 x: 0 y: 0 injury: 0 cover: 0 vaction: 0 aaction: 0 jaction: 0 daction: 0 taction: 0 faction: 0 baction: 0 uzaction: 0 dzaction: 0 throwvx: 0 throwvy: 0 hurtable: 0 fronthurtact: 0 backhurtact: 0 decrease: 0 dircontrol: 0 throwinjury: 0 throwvz: 0 z: 0 recover: 0 drain: 0 gain: 0 cpoint_end:
+opoint: kind: 0 x: 0 y: 0 z: 0 action: 0 dvx: 0 dvy: 0 dvz: 0 oid: 0 facing: 0 hp: 0 mp: 0 team: 0 reserve: 0 effect: 0 pic: 0 centerx: 0 centery: 0 centerz: 0 framea: 0 attacking: 0 join: 0 join_reserve: 0 join_pic: 0 opoint_end:
+itr: kind: 0 x: 0 y: 0 w: 0 h: 0 dvx: 0 dvy: 0 fall: 0 arest: 0 vrest: 0 respond: 0 effect: 0 drain: 0 spark: 0 recover: 0 dbdefend: 0 bdefend: 0 injury: 0 zwidth: 0 z: 0 dvz: 0 sound: 0 cover: 0 caughtact: 0 catchingact: 0 pickedact: 0 pickingact: 0 delay: 0 poison: 0 confus: 0 weak: 0 manacle: 0 join: 0 mimic: 0 bound: 0 facing: 0 dx: 0 dy: 0 dz: 0 gain: 0 itr_end:
+wpoint: kind: 0 x: 0 y: 0 weaponact: 0 attacking: 0 cover: 0 dvx: 0 dvy: 0 dvz: 0 wpoint_end:
+bpoint: x: 0 y: 0 bpoint_end:
+centerz: 0 chp: 0 cmp: 0 dx: 0 dy: 0 dz: 0
+<frame_end>

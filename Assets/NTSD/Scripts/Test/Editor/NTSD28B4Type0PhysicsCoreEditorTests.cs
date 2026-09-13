@@ -76,7 +76,6 @@ namespace NTSD.Test.Editor
                 runtime,
                 null,
                 0f,
-                1f,
                 0f,
                 1.7);
             return new CharacterMechanics().StepBattleLogic(context);

@@ -1,0 +1,118 @@
+[
+  {
+    "path": "fixtures/inside/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/inside/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/positive_edge/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/positive_edge/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/negative_edge/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/negative_edge/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/outside/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/outside/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/explicit_zero/attacker.dat",
+    "sha256": "4BF0DFE3793211D5F111827B7DDED6B93B9C068EF77098D1A53DF28061A1248B"
+  },
+  {
+    "path": "fixtures/explicit_zero/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/negative_width/attacker.dat",
+    "sha256": "C2613822780BEF51FEC5AC024F785B5EA64B9A968404C686EE17C68F1C54283C"
+  },
+  {
+    "path": "fixtures/negative_width/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/body_depth_edge/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/body_depth_edge/target.dat",
+    "sha256": "C10E8291D6C587BA43EE74B5113AB3C3A056D69CDE737A96121A149ED6035C2A"
+  },
+  {
+    "path": "fixtures/body_depth_inside/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/body_depth_inside/target.dat",
+    "sha256": "C10E8291D6C587BA43EE74B5113AB3C3A056D69CDE737A96121A149ED6035C2A"
+  },
+  {
+    "path": "fixtures/body_z_ignored/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/body_z_ignored/target.dat",
+    "sha256": "F1748602D6AEDB78FEC65B468DBBFC07D48EB5A6C57B32CEC9795A2B3AA16D2B"
+  },
+  {
+    "path": "fixtures/itr_z_edge/attacker.dat",
+    "sha256": "9CF6E0871D49B40133B20C6B0A07EE627151CD0254FB6A7416AEE12207DBC398"
+  },
+  {
+    "path": "fixtures/itr_z_edge/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/itr_z_inside/attacker.dat",
+    "sha256": "9CF6E0871D49B40133B20C6B0A07EE627151CD0254FB6A7416AEE12207DBC398"
+  },
+  {
+    "path": "fixtures/itr_z_inside/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/xy_edge/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/xy_edge/target.dat",
+    "sha256": "448033A2A1AEA9999AFE48FB2BAAD7EAF6757BD83727F8AA306CBB6C88A86DD5"
+  },
+  {
+    "path": "fixtures/missing_body_x/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/missing_body_x/target.dat",
+    "sha256": "A737C9F1D7477BD0A7EC0562AAF5BEBB3D69D9B1F0DED7E63136EEEA24F033ED"
+  },
+  {
+    "path": "fixtures/zero_body_width/attacker.dat",
+    "sha256": "433761F352BEE5AE19CD23B46426047D3A7E38FAB5BD45778EFAE81D91757AC7"
+  },
+  {
+    "path": "fixtures/zero_body_width/target.dat",
+    "sha256": "1DDED0417021A6729E63131CB0B36F861B55CD4585E731AFC4C9629773A7CBC9"
+  },
+  {
+    "path": "fixtures/cases.tsv",
+    "sha256": "5EAA58C376C9A2E87F3D27777B33C8C16C0F096828D31A7A283B6CA0151A2B53"
+  }
+]

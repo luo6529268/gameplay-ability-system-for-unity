@@ -1,0 +1,24 @@
+{
+    "runId": "play-running-cycle-3",
+    "status": "PASS",
+    "message": "Real Play native publication, rollback, ordered cancellation and owned-resource teardown passed.",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Running",
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "shutdownFailure": "",
+    "initialObjectCount": 4,
+    "checksCompleted": 4,
+    "trackedObjects": 113,
+    "survivors": 0,
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "activeBoundaryRejected": true,
+    "checks": [
+        "FullPrewarm_PublishesAllViewsBeforeEvent_AndRebindsBeforeRetirement",
+        "CancelAfterBodyStaging_PreservesPublishedSource_AndAllowsRetry",
+        "DriverShutdown_CancelsAndRecyclesUnpublishedImagesInOrderedStages",
+        "LegacyOwnedUiImages_TransferAfterNativeRebind_WhileBorrowedAssetsSurvive"
+    ]
+}

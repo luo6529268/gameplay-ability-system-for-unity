@@ -1,0 +1,9 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 8 pic: +4 hit_Fa: 3 hit_fa: 9
+cpoint: injury: 5 fronthurtact: 20 throwvx: 0.5 throwvx: nan drain: 600 cpoint_end:
+itr: x: 3 x: bad caughtact: -7 +99abc catchingact: 8 2 pickedact: 9 -3 pickingact: 10 6 confuse: 33 itr_end:
+<frame_end>

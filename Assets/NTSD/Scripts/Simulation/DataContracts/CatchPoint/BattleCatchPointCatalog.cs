@@ -5,12 +5,12 @@ namespace NTSD.Simulation
 {
     /// <summary>
     /// Defensive source-ordered CPoint content. The canonical writer emits
-    /// count followed by each entry's 19 fixed-order signed scalars.
+    /// count followed by each entry's 27 fixed-order int32/float32-bit units.
     /// </summary>
     public sealed class BattleCatchPointCatalog :
         IReadOnlyList<BattleCatchPointValue>
     {
-        private const int ScalarsPerEntry = 19;
+        private const int ScalarsPerEntry = 27;
         private readonly BattleCatchPointValue[] entries;
 
         public static BattleCatchPointCatalog Empty { get; } =
@@ -76,16 +76,24 @@ namespace NTSD.Simulation
                 destination[cursor++] = value.Aaction;
                 destination[cursor++] = value.Jaction;
                 destination[cursor++] = value.Daction;
-                destination[cursor++] = value.ThrowVx;
-                destination[cursor++] = value.ThrowVy;
-                destination[cursor++] = value.Hurtable;
-                destination[cursor++] = value.Decrease;
-                destination[cursor++] = value.DirControl;
                 destination[cursor++] = value.Taction;
-                destination[cursor++] = value.ThrowInjury;
-                destination[cursor++] = value.ThrowVz;
+                destination[cursor++] = value.Faction;
+                destination[cursor++] = value.Baction;
+                destination[cursor++] = value.Uzaction;
+                destination[cursor++] = value.Dzaction;
+                destination[cursor++] = BitConverter.SingleToInt32Bits(value.ThrowVx);
+                destination[cursor++] = BitConverter.SingleToInt32Bits(value.ThrowVy);
+                destination[cursor++] = value.Hurtable;
                 destination[cursor++] = value.FrontHurtAct;
                 destination[cursor++] = value.BackHurtAct;
+                destination[cursor++] = value.Decrease;
+                destination[cursor++] = value.DirControl;
+                destination[cursor++] = value.ThrowInjury;
+                destination[cursor++] = BitConverter.SingleToInt32Bits(value.ThrowVz);
+                destination[cursor++] = value.Z;
+                destination[cursor++] = value.Recover;
+                destination[cursor++] = value.Drain;
+                destination[cursor++] = value.Gain;
             }
 
             return required;

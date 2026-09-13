@@ -1,0 +1,44 @@
+Assets/NTSD/Scripts/Animation/Character\CharacterMechanics.cs:123:        public readonly float mass;
+Assets/NTSD/Scripts/Animation/Character\CharacterMechanics.cs:131:            float mass,
+Assets/NTSD/Scripts/Animation/Character\CharacterMechanics.cs:138:            this.mass = mass;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:77:        private float _mass = NTSDGlobal.Default.Machanics.Mass;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:79:        internal float MassForFrameAdvance => _mass;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:89:            _mass = state.Mass;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:164:                _mass,
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:1103:            _mass = NTSDSpec.GetMassOrDefault(characterId);
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:5673:            float mass = NTSDGlobal.Default.Machanics.Mass;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:5678:                mass,
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:16:            public readonly float? Mass;
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:33:                float? mass = null,
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:47:                Mass = mass;
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:76:                mass: 0.3f,
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:86:            { 101, new SpecEntry(mass: 0.7f, attackable: true, runThrow: true, jumpThrow: true) },
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:89:            { 150, new SpecEntry(mass: 0.9f) },
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:92:            { 201, new SpecEntry(mass: 0.3f, zWidth: 1f) },
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:95:            { 202, new SpecEntry(mass: 0.3f, zWidth: 1f) },
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:107:            { 213, new SpecEntry(mass: 0.5f, attackable: true, runThrow: true, jumpThrow: true) },
+Assets/NTSD/Scripts/Simulation\Core\NTSDSpec.cs:137:            return entry.Mass ?? NTSDGlobal.Default.Machanics.Mass;
+Assets/NTSD/Scripts/Simulation\Core\NTSDGlobal.cs:187:                public const float Mass = 1f;
+Assets/NTSD/Scripts/Simulation\Ecs\Passes\BattleEcsCharacterFrameAdvancePass.cs:123:                character.MassForFrameAdvance,
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCharacterShellSnapshot.cs:14:            Mass = character.MassForFrameAdvance;
+Assets/NTSD/Scripts/Simulation\Lockstep\Snapshot\BattleWorldCharacterShellSnapshot.cs:22:        public float Mass { get; }
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:30:            SetPrivateField(character, "_mass", 12.5f);
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:43:            Assert.That(state.Mass, Is.EqualTo(12.5f));
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:58:            SetPrivateField(character, "_mass", 99f);
+Assets/NTSD/Scripts/Test\Editor\BattleWorldCharacterShellSnapshotEditorTests.cs:61:            Assert.That(state.Mass, Is.EqualTo(12.5f));
+Assets/NTSD/Scripts/Test\Editor\NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs:84:                "Character initialization retains the independent mass owner.");
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:20:        public void CoreMatchesNativeRegardlessOfReservedMass(float mass)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:42:                var context = new CharacterMechanicsContext(runtime, null, 0, mass, 0, 1.7);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:55:                        id + "/mass=" + mass + "/field=" + field);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:67:        public void RealCharacterAndEcsUseSameGroundedRule(float mass, bool ecs)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:73:                typeof(LF2Character).GetField("_mass", BindingFlags.Instance | BindingFlags.NonPublic)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:74:                    .SetValue(character, mass);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:87:                Assert.That(character.MassForFrameAdvance, Is.EqualTo(mass), "Q05 carrier must remain in this package");
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:15:        [MenuItem("NTSD/Battle Diagnostics/Q04/Run Mass Friction Play Probe")]
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:44:                    typeof(LF2Character).GetField("_mass", BindingFlags.Instance | BindingFlags.NonPublic)
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:57:                    report.rows.Add(new Row { mass = masses[i], x = state.X, y = state.Y,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:60:                        "Grounded production tick differs for mass " + masses[i]);
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:73:                    report.landingRows.Add(new Row { mass = masses[i], x = state.X, y = state.Y,
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:77:                        state.Vz == entities[2].Runtime.Vz, "Mass changed landing result");
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:80:                report.message = "Actual driver ground/landing ticks: mass 0/-2/1 agree; injected logic characters, existing Play world.";
+Assets/NTSD/Scripts/Test\Editor\NTSD28Q04MassFrictionPlayProbeEditor.cs:106:            public float mass;

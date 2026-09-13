@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace NTSD.Animation
 {
@@ -14,6 +15,7 @@ namespace NTSD.Animation
             public int Width;
             public int Height;
             public Color[] Pixels;
+            public bool IsPng { get; internal set; }
         }
 
         /// <summary>
@@ -56,6 +58,18 @@ namespace NTSD.Animation
 
         public static BmpData LoadBmpData(string filePath)
         {
+            return LoadDataCore(filePath, null);
+        }
+
+        public static BmpData LoadVerifiedImageData(string filePath, string expectedSha256)
+        {
+            if (string.IsNullOrEmpty(expectedSha256) || expectedSha256.Length != 64)
+                throw new System.ArgumentException("An expected SHA-256 image identity is required.", nameof(expectedSha256));
+            return LoadDataCore(filePath, expectedSha256);
+        }
+
+        private static BmpData LoadDataCore(string filePath, string expectedSha256)
+        {
             if (!File.Exists(filePath))
             {
                 Debug.LogError($"[BMPLoader] 文件不存在: {filePath}");
@@ -64,14 +78,50 @@ namespace NTSD.Animation
 
             byte[] fileData = File.ReadAllBytes(filePath);
 
+            // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
+            // Verify the same bytes that the decoder consumes, not a separate earlier file read.
+            if (expectedSha256 != null)
+            {
+                using (var hash = SHA256.Create())
+                {
+                    string actual = System.BitConverter.ToString(hash.ComputeHash(fileData)).Replace("-", string.Empty);
+                    if (!string.Equals(actual, expectedSha256, System.StringComparison.OrdinalIgnoreCase))
+                        throw new InvalidDataException("Image changed before decoding: " + filePath);
+                }
+            }
+
             // TryLoadWithUnityData 依赖 Texture2D（主线程 API），后台线程直接走手动解析
             if (System.Threading.Thread.CurrentThread.ManagedThreadId != 1)
+            {
+                // Alignment contract: NTSD28-B11-PNG-WORKER-DECODE-001
+                if (PngPixelDecoder.HasSignature(fileData))
+                    return LoadPngDataManual(fileData);
                 return LoadBmpDataManual(fileData);
+            }
 
             var data = TryLoadWithUnityData(fileData, filePath);
             if (data != null) return data;
 
             return LoadBmpDataManual(fileData);
+        }
+
+        private static BmpData LoadPngDataManual(byte[] fileData)
+        {
+            if (!PngPixelDecoder.TryDecode(fileData, out int width, out int height,
+                    out byte[] rgba, out string error))
+            {
+                Debug.LogError("[BMPLoader] PNG decode failed: " + error);
+                return null;
+            }
+
+            var pixels = new Color[width * height];
+            for (int i = 0; i < pixels.Length; i++)
+            {
+                int offset = i * 4;
+                pixels[i] = new Color(rgba[offset] / 255f, rgba[offset + 1] / 255f,
+                    rgba[offset + 2] / 255f, rgba[offset + 3] / 255f);
+            }
+            return new BmpData { Width = width, Height = height, Pixels = pixels, IsPng = true };
         }
 
         /// <summary>
@@ -128,7 +178,8 @@ namespace NTSD.Animation
                     {
                         Width = texture.width,
                         Height = texture.height,
-                        Pixels = pixels
+                        Pixels = pixels,
+                        IsPng = PngPixelDecoder.HasSignature(fileData)
                     };
                     Object.DestroyImmediate(texture);
                     return data;

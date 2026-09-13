@@ -11,6 +11,8 @@ namespace NTSD.App
     public class GameConfig : ScriptableObject
     {
         [Header("Battle Runtime Profile")]
+        [Tooltip("Logan runtime content root. Empty retains the pre-migration Unity content. Relative paths start beside the application's data directory.")]
+        public string BattleContentRuntimeRoot = "";
         [Tooltip("Optional profile name. Empty uses the platform default.")]
         public string BattleRuntimeProfileName = "";
         [Tooltip("Battle AI execution profile. Empty uses LegacyCanonical on every platform. Valid values: LegacyCanonical, DataOrientedCanonical.")]

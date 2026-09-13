@@ -180,6 +180,8 @@ namespace NTSD.Simulation.Ecs
             OwnerStableId = new int[capacity];
             RelationOwnerSlot = new int[capacity];
             SpawnerSlot = new int[capacity];
+            ObjectAiExcludedGroupSourceSlot2F8 = new int[capacity];
+            Array.Fill(ObjectAiExcludedGroupSourceSlot2F8, -1);
         }
 
         internal readonly uint[] Generation;
@@ -193,6 +195,7 @@ namespace NTSD.Simulation.Ecs
         internal readonly int[] OwnerStableId;
         internal readonly int[] RelationOwnerSlot;
         internal readonly int[] SpawnerSlot;
+        internal readonly int[] ObjectAiExcludedGroupSourceSlot2F8;
     }
 
     internal sealed class BattleEcsMotionStore
@@ -353,8 +356,6 @@ namespace NTSD.Simulation.Ecs
             CatcherSlot = new int[capacity];
             HeldWeaponStableId = new int[capacity];
             PickerStableId = new int[capacity];
-            GrabbedBy = new int[capacity];
-            TrackerFlag = new int[capacity];
         }
 
         internal readonly int[] LinkState;
@@ -365,8 +366,6 @@ namespace NTSD.Simulation.Ecs
         internal readonly int[] CatcherSlot;
         internal readonly int[] HeldWeaponStableId;
         internal readonly int[] PickerStableId;
-        internal readonly int[] GrabbedBy;
-        internal readonly int[] TrackerFlag;
     }
 
     internal sealed class BattleEcsWorld
@@ -606,6 +605,7 @@ namespace NTSD.Simulation.Ecs
             Identity.OwnerStableId[slot] = runtime.OwnerStableId;
             Identity.RelationOwnerSlot[slot] = runtime.RelationOwnerSlotIndex;
             Identity.SpawnerSlot[slot] = runtime.SpawnerSlotIndex;
+            Identity.ObjectAiExcludedGroupSourceSlot2F8[slot] = runtime.ObjectAiExcludedGroupSourceSlot2F8;
         }
 
         private void CaptureMotion(int slot, NTSDEntityRuntime runtime)
@@ -724,8 +724,6 @@ namespace NTSD.Simulation.Ecs
             Links.CatcherSlot[slot] = runtime.CatcherSlotIndex;
             Links.HeldWeaponStableId[slot] = runtime.HeldWeaponStableId;
             Links.PickerStableId[slot] = runtime.PickerStableId;
-            Links.GrabbedBy[slot] = runtime.GrabbedBy;
-            Links.TrackerFlag[slot] = runtime.TrackerFlag;
         }
 
         private void ClearSlot(int slot)
@@ -740,6 +738,7 @@ namespace NTSD.Simulation.Ecs
             Identity.OwnerStableId[slot] = 0;
             Identity.RelationOwnerSlot[slot] = 0;
             Identity.SpawnerSlot[slot] = 0;
+            Identity.ObjectAiExcludedGroupSourceSlot2F8[slot] = -1;
             Motion.X[slot] = Motion.Y[slot] = Motion.Z[slot] = 0.0;
             Motion.XInt[slot] = Motion.YInt[slot] = Motion.ZInt[slot] = 0;
             Motion.Vx[slot] = Motion.Vy[slot] = Motion.Vz[slot] = 0.0;
@@ -773,7 +772,6 @@ namespace NTSD.Simulation.Ecs
             Links.HolderCopySlot[slot] = Links.TargetSlot[slot] = 0;
             Links.CaughtSlot[slot] = Links.CatcherSlot[slot] = 0;
             Links.HeldWeaponStableId[slot] = Links.PickerStableId[slot] = 0;
-            Links.GrabbedBy[slot] = Links.TrackerFlag[slot] = 0;
             runtimeFingerprints[slot] = default;
         }
 
@@ -859,7 +857,8 @@ namespace NTSD.Simulation.Ecs
                    Identity.OwnerSlot[slot] == runtime.OwnerSlotIndex &&
                    Identity.OwnerStableId[slot] == runtime.OwnerStableId &&
                    Identity.RelationOwnerSlot[slot] == runtime.RelationOwnerSlotIndex &&
-                   Identity.SpawnerSlot[slot] == runtime.SpawnerSlotIndex;
+                   Identity.SpawnerSlot[slot] == runtime.SpawnerSlotIndex &&
+                   Identity.ObjectAiExcludedGroupSourceSlot2F8[slot] == runtime.ObjectAiExcludedGroupSourceSlot2F8;
         }
 
         private bool MatchesMotion(int slot, NTSDEntityRuntime runtime)
@@ -954,9 +953,7 @@ namespace NTSD.Simulation.Ecs
                 Links.CaughtSlot[slot] != runtime.CaughtSlotIndex ||
                 Links.CatcherSlot[slot] != runtime.CatcherSlotIndex ||
                 Links.HeldWeaponStableId[slot] != runtime.HeldWeaponStableId ||
-                Links.PickerStableId[slot] != runtime.PickerStableId ||
-                Links.GrabbedBy[slot] != runtime.GrabbedBy ||
-                Links.TrackerFlag[slot] != runtime.TrackerFlag)
+                Links.PickerStableId[slot] != runtime.PickerStableId)
             {
                 return false;
             }
@@ -1099,7 +1096,8 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.Team); hash.Add(runtime.RelationTeam);
             hash.Add(runtime.OwnerSlotIndex); hash.Add(runtime.OwnerStableId);
             hash.Add(runtime.RelationOwnerSlotIndex); hash.Add(runtime.SpawnerSlotIndex);
-            hash.Add(runtime.GrabbedBy); hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);
+            hash.Add(runtime.ObjectAiExcludedGroupSourceSlot2F8);
+            hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);
             hash.Add(runtime.CaughtSlotIndex); hash.Add(runtime.CatcherSlotIndex);
             hash.Add(runtime.HeldWeaponStableId); hash.Add(runtime.ThrowFrameGuard);
             hash.Add(runtime.ReleaseTick); hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);
@@ -1119,7 +1117,7 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.KeyLeft); hash.Add(runtime.KeyRight); hash.Add(runtime.KeyAttack);
             hash.Add(runtime.KeyJump); hash.Add(runtime.KeyDefend);
             hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);
-            hash.Add(runtime.PickerStableId); hash.Add(runtime.TrackerFlag); hash.Add(runtime.AiControlled);
+            hash.Add(runtime.PickerStableId); hash.Add(runtime.AiControlled);
             hash.Add(runtime.X); hash.Add(runtime.Y); hash.Add(runtime.Z);
             hash.Add(runtime.XInt); hash.Add(runtime.YInt); hash.Add(runtime.ZInt);
             hash.Add(runtime.Vx); hash.Add(runtime.Vy); hash.Add(runtime.Vz);

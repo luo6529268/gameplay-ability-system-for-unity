@@ -572,6 +572,41 @@ namespace NTSD.UI
             }
         }
 
+        internal System.Action PrepareNativeResourceRebind(
+            Dictionary<int, LF2CharacterDataWrapper> configs,
+            Dictionary<int, CharacterUISprites> prepared,
+            CharacterUIResourceManager currentResources,
+            IReadOnlyDictionary<Sprite, int> ownedHeads)
+        {
+            if (selectedCharacterId == GameConfig.RandomCharacterId)
+                return null;
+            Sprite previousHead = currentResources.GetHeadSprite(selectedCharacterId);
+            Sprite previousIcon = RoleIcon != null ? RoleIcon.sprite : null;
+            bool ownedIcon = !ReferenceEquals(previousIcon, null) && ((!ReferenceEquals(previousHead, null) && ReferenceEquals(previousIcon, previousHead)) ||
+                (ownedHeads.TryGetValue(previousIcon, out int ownerId) && ownerId == selectedCharacterId));
+            if (!ReferenceEquals(CharacterUIResourceManager.TryGetInstance(), currentResources) && !ownedIcon)
+                return null;
+            prepared.TryGetValue(selectedCharacterId, out CharacterUISprites next);
+            string nextName = configs.TryGetValue(selectedCharacterId, out LF2CharacterDataWrapper config)
+                ? config.characterData.name : "Unknown";
+            return () =>
+            {
+                if (this == null)
+                    return;
+                // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
+                // Rebind resource references only. Idle text/countdown and selection/input state stay owned here.
+                if (RoleIcon != null && (state != SelectRoleState.Idle ||
+                    (ownedIcon && RoleIcon.sprite == previousIcon)))
+                {
+                    RoleIcon.sprite = next?.HeadSprite;
+                    if (RoleIcon.sprite != null)
+                        RoleIcon.SetNativeSize();
+                }
+                if (state != SelectRoleState.Idle && RoleNameTxt != null)
+                    RoleNameTxt.text = nextName;
+            };
+        }
+
         /// <summary>
         /// 更新队伍显示
         /// </summary>

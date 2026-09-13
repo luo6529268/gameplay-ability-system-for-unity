@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 1e-45 state: 1e-45 cover: 1e-45 wait: 1e-45 next: 1e-45 dvx: 1e-45 dvy: 1e-45 dvz: 1e-45 centerx: 1e-45 centery: 1e-45 mp: 1e-45 hp: 1e-45 hit_a: 1e-45 hit_d: 1e-45 hit_j: 1e-45 hit_g: 1e-45 hit_Fj: 1e-45 hit_Fa: 1e-45 hit_Da: 1e-45 hit_Ua: 1e-45 hit_ja: 1e-45 hit_aj: 1e-45 hit_ad: 1e-45 hit_jd: 1e-45 hit_Dj: 1e-45 hit_Uj: 1e-45 hit_f: 1e-45 hit_b: 1e-45 hit_uz: 1e-45 hit_dz: 1e-45 hold_a: 1e-45 hold_d: 1e-45 hold_j: 1e-45 hold_f: 1e-45 hold_b: 1e-45 hold_uz: 1e-45 hold_dz: 1e-45
+cpoint: kind: 1e-45 x: 1e-45 y: 1e-45 injury: 1e-45 cover: 1e-45 vaction: 1e-45 aaction: 1e-45 jaction: 1e-45 daction: 1e-45 taction: 1e-45 faction: 1e-45 baction: 1e-45 uzaction: 1e-45 dzaction: 1e-45 throwvx: 1e-45 throwvy: 1e-45 hurtable: 1e-45 fronthurtact: 1e-45 backhurtact: 1e-45 decrease: 1e-45 dircontrol: 1e-45 throwinjury: 1e-45 throwvz: 1e-45 z: 1e-45 recover: 1e-45 drain: 1e-45 gain: 1e-45 cpoint_end:
+opoint: kind: 1e-45 x: 1e-45 y: 1e-45 z: 1e-45 action: 1e-45 dvx: 1e-45 dvy: 1e-45 dvz: 1e-45 oid: 1e-45 facing: 1e-45 hp: 1e-45 mp: 1e-45 team: 1e-45 reserve: 1e-45 effect: 1e-45 pic: 1e-45 centerx: 1e-45 centery: 1e-45 centerz: 1e-45 framea: 1e-45 attacking: 1e-45 join: 1e-45 join_reserve: 1e-45 join_pic: 1e-45 opoint_end:
+itr: kind: 1e-45 x: 1e-45 y: 1e-45 w: 1e-45 h: 1e-45 dvx: 1e-45 dvy: 1e-45 fall: 1e-45 arest: 1e-45 vrest: 1e-45 respond: 1e-45 effect: 1e-45 drain: 1e-45 spark: 1e-45 recover: 1e-45 dbdefend: 1e-45 bdefend: 1e-45 injury: 1e-45 zwidth: 1e-45 z: 1e-45 dvz: 1e-45 sound: 1e-45 cover: 1e-45 caughtact: 1e-45 catchingact: 1e-45 pickedact: 1e-45 pickingact: 1e-45 delay: 1e-45 poison: 1e-45 confus: 1e-45 weak: 1e-45 manacle: 1e-45 join: 1e-45 mimic: 1e-45 bound: 1e-45 facing: 1e-45 dx: 1e-45 dy: 1e-45 dz: 1e-45 gain: 1e-45 itr_end:
+wpoint: kind: 1e-45 x: 1e-45 y: 1e-45 weaponact: 1e-45 attacking: 1e-45 cover: 1e-45 dvx: 1e-45 dvy: 1e-45 dvz: 1e-45 wpoint_end:
+bpoint: x: 1e-45 y: 1e-45 bpoint_end:
+centerz: 1e-45 chp: 1e-45 cmp: 1e-45 dx: 1e-45 dy: 1e-45 dz: 1e-45
+<frame_end>

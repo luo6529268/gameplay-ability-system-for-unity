@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Q05
+type: 1
+<bmp_end>
+<weapon_strength_list>
+entry: 1
+drain: 9 drain: 12junk sound: +5 caughtact: -8 9 catchingact: 12junk
+<weapon_strength_list_end>
+<frame> 0 witness
+itr: drain: 9 drain: 12junk sound: +5 caughtact: -8 9 catchingact: 12junk itr_end:
+<frame_end>

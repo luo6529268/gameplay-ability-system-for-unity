@@ -1,0 +1,50 @@
+{
+  "loadsLibraryScriptAssemblies": false,
+  "linkedProductionSourceSha256": {
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2DatProperty.cs": "e0990a14939eb24f33c9fea186a076ef3bd22ae285b4f3e567af31412015f7c5",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2DatBlock.cs": "30d3858b6162cb47eed2db2ba1fac5bcc257de876180bd7fdc719bffb79f0f39",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2DatSubBlock.cs": "626057840c6bb654f58bafde9876df7b75d8e2f42414b2e699e97404bec94f57",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2DatFile.cs": "bccc0e4156e8e029841059c97e52a1b116e77302725d958e78e465da08f1571b",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2WeaponStrengthRow.cs": "2050f00371c1f17468205c2d39354bf8b1b45d08f51c8314e978b898b51a0277",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.LoganStrength.cs": "8e5244536506b4234feb95bee5157fe12c298400f8ec4a946bbf1b42d0b25ac8",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganNumericDecoder.cs": "2a6117bdf4d247d2c05e71b9455ad77fca8f70bce0070372e274a951cf1ddb86",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/LoganCombatRecordDecoder.cs": "3a7b19663571e9d753cb1f2c167de7e3af27c516aec8d476778bf76e785208d8",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2DatEnums.cs": "33aad0c1eb78ca463321ad40e121fc92f535e9ac9011cac578c2d4c8b6946d0f",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2BmpSection.cs": "a84f21ce3314249a1f70f74b86cc3dfdad6fe0e01f1ad55ab81a226d851341c0",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2FrameBlock.cs": "526da458c73a1c26daab5ff72ae66473dfca593f3a63cdfc4b0e46e4efd706eb",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Models/Lf2SpriteFileDef.cs": "30bd8995d64774b606b2acf9f3ef6d6e25672ae420d00be81bc42909685545d6",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatTokenizer.cs": "fe68b092cf196a2ef8cc2edba08ad484294967c810a40dec204ec483d244dadc",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs": "8125c463c3f3c01d2ae9c96edb81ed19d7dcd9c79133d15664fef262eef92e9e",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.LoganFrames.cs": "8142566f415b382a6937e493bef10a0b69a8b26765cbb848ca0a9de7a9512b08",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatDecryptor.cs": "3029c7c54ca8cb5c2f148be093ae5f583b46436de3248ae64bd11a354ce77847",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs": "057a8b5ee1d4301453f2d906d835c8abd0177536198660bd46ac1dc2da2feff7",
+    "Assets/NTSD/Scripts/Animation/LF2FrameData.cs": "fe7b1ac57a8f39943eec6f26fe561b5b699d48f7bd391067630c07dc9c907b61",
+    "Assets/NTSD/Scripts/Animation/LF2CharacterData.cs": "7fbdb18541bc5cddfe484a52d9d981bc72ee4f7f1351daa56a44f851d98f7a44",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.LoganHeaders.cs": "6f1a599ee8fd737eec31e89ecc803d395ccee48df7408fe1a68d93fd648d48b5",
+    "Assets/NTSD/Scripts/Animation/LoganDefinitionMetadata.cs": "3cd3b14bd32c4b8d189642b2c593c464d429d6b96274af670bc1ba601f88fc02",
+    "Assets/NTSD/Scripts/Animation/LF2ArmorData.cs": "a59efadee1bbc296e1031e638fde6919b481b703005b24413c9429abad7b1c32",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/BloodPoint/BattleBloodPointValue.cs": "d9cb2c04e5bf1efbaabb04d1fa6b9fb967f432384dba87ab219f685e7a79dd67",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/BloodPoint/BattleBloodPointCatalog.cs": "90914128a1ff941b3f51a00912e058b23ca77ffc0f0d829a4114480aa6f34e09",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValue.cs": "011227cc0b218623413da2c8929d80755dc4fc1590c39c6c89e00d9421406b48",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointCatalog.cs": "761c0b9cf26a411a06e9c1a14a5732e35e24e9fa56640730d95636864ae45037",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValueAdapter.cs": "5adbd656291f53c838c5df9ca523df974177fd5605ffd21295bd422fe7a32cac",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/BodyBox/BattleBodyBoxValue.cs": "ee8946c9b29653add816c40c7071e8eab66b59aade501f678adc35e17aa7efe9",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/BodyBox/BattleBodyBoxValueAdapter.cs": "2ba20273acb1acc4f88158bbb71e39d047a0fc854389e616dba86701ad1ec8cc",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs": "f060584ed76e3b3787e412a37e3bac49145e8c0de9fcda0732f47f48afe7a322",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValueAdapter.cs": "6059d8eac1ca85c7c5717b8cca737b12dbd95caa0c04cd3e9ab9fc1793f7627b",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/WeaponPoint/BattleWeaponPointValue.cs": "c05d45c30fbd306e90b05be5e34890d4463a36c4e7dbfe7a753208183f4ea291",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/WeaponPoint/BattleWeaponPointValueAdapter.cs": "9ef1d51fadfd095f7f794395aedbe14e04f7460712480b688d5573a2b461b29e"
+  },
+  "stubBoundary": {
+    "file": "Tools/NTSD28ContentAudit/UnityDiagnosticStubs.cs",
+    "sha256": "dff833796c3a6003321b9b672992859f911b18206ccb5051bc42561eb363bd89",
+    "allowedTypes": [
+      "UnityEngine.HeaderAttribute",
+      "UnityEngine.CreateAssetMenuAttribute",
+      "UnityEngine.ScriptableObject",
+      "UnityEngine.Debug",
+      "UnityEngine.JsonUtility"
+    ],
+    "boundary": "Only compile-time/runtime no-op stubs for linked parser/model code; no Unity scene, asset database, renderer, or Library DLL access."
+  }
+}

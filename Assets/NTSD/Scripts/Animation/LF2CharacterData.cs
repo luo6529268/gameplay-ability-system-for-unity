@@ -9,6 +9,8 @@ namespace NTSD.Animation
     [System.Serializable]
     public class LF2CharacterData
     {
+        public LoganDefinitionMetadata NativeMetadata { get; internal set; }
+
         [Header("基本信息")]
         public string name = "Naruto";
         public string head = "";

@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Q05
+type: 1
+<bmp_end>
+<weapon_strength_list>
+entry: 1
+kind: --2 x: --2 y: --2 w: --2 h: --2 dvx: --2 dvy: --2 fall: --2 arest: --2 vrest: --2 respond: --2 effect: --2 drain: --2 spark: --2 recover: --2 dbdefend: --2 bdefend: --2 injury: --2 zwidth: --2 z: --2 dvz: --2 sound: --2 cover: --2 caughtact: --2 catchingact: --2 pickedact: --2 pickingact: --2 delay: --2 poison: --2 confus: --2 weak: --2 manacle: --2 join: --2 mimic: --2 bound: --2 facing: --2 dx: --2 dy: --2 dz: --2 gain: --2
+<weapon_strength_list_end>
+<frame> 0 witness
+itr: kind: --2 x: --2 y: --2 w: --2 h: --2 dvx: --2 dvy: --2 fall: --2 arest: --2 vrest: --2 respond: --2 effect: --2 drain: --2 spark: --2 recover: --2 dbdefend: --2 bdefend: --2 injury: --2 zwidth: --2 z: --2 dvz: --2 sound: --2 cover: --2 caughtact: --2 catchingact: --2 pickedact: --2 pickingact: --2 delay: --2 poison: --2 confus: --2 weak: --2 manacle: --2 join: --2 mimic: --2 bound: --2 facing: --2 dx: --2 dy: --2 dz: --2 gain: --2 itr_end:
+<frame_end>

@@ -1,0 +1,57 @@
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:2858:            character.Runtime.ReleaseTick = 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12874:                beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12886:                beforeRelease: weapon => weapon.Runtime.ReleaseTick = preservedTick,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12949:            held.Runtime.ReleaseTick = previousReleaseTick;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12959:            Expect(held.Runtime.ReleaseTick == expectedReleaseTick &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12968:                $"BATTLE-AUDIT9-LP-01: generic held {label} must produce ReleaseTick={expectedReleaseTick} " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12972:            Expect(held.Runtime.ReleaseTick == -1,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12973:                $"BATTLE-AUDIT9-LP-01: generic held {label} reset must restore ReleaseTick=-1");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13051:            Expect(weapon.Runtime.ReleaseTick == expectedReleaseTick && holder.Runtime.LinkState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13056:                $"BATTLE-AUDIT7-R3/LP-03/LP-05: {label} must produce ReleaseTick={expectedReleaseTick}, " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13058:                $"actual releaseTick={weapon.Runtime.ReleaseTick}, target={holder.Runtime.TargetSlotIndex}, " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13083:            Expect(weapon.Runtime.ReleaseTick == -1,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13084:                "BATTLE-AUDIT7-R3: pooled weapon reset must restore ReleaseTick=-1");
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:238:        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder, bool stampReleaseTick = false)
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:240:            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder, stampReleaseTick);
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponReleaseFlowResolver.cs:21:        public void ReleaseHeldWeaponRuntime(LF2Entity holder, bool stampReleaseTick = false)
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponHeldStateResolver.cs:135:            weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
+Assets/NTSD/Scripts\Simulation\Ecs\Writers\BattleHeldObjectWriter.cs:202:            ClearLinks(holder, held, stampReleaseTick: true);
+Assets/NTSD/Scripts\Simulation\Ecs\Writers\BattleHeldObjectWriter.cs:211:                weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
+Assets/NTSD/Scripts\Simulation\Ecs\Writers\BattleHeldObjectWriter.cs:213:                ClearLinks(holder, held, stampReleaseTick: true);
+Assets/NTSD/Scripts\Simulation\Ecs\Writers\BattleHeldObjectWriter.cs:230:            bool stampReleaseTick = false)
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:124:        public int ReleaseTick = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:822:            destination.ReleaseTick = ReleaseTick;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1059:            ReleaseTick = -1;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1103:            hash.Add(runtime.ReleaseTick); hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1058:                ("releaseTick", runtime?.ReleaseTick ?? -1),
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:542:            builder.AddInt32(runtime?.ReleaseTick ?? -1);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:183:            Assert.That(parent.Runtime.ReleaseTick, Is.EqualTo(-1)); Assert.That(child.Runtime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:194:            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:32:            Assert.That(Count(releaseFlow, "Runtime.ReleaseTick ="), Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:33:            Assert.That(Count(heldWriter, "Runtime.ReleaseTick ="), Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:36:            Assert.That(releaseFlow, Does.Contain("bool stampReleaseTick = false"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:37:            Assert.That(heldWriter, Does.Contain("bool stampReleaseTick = false"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:45:            sourceRuntime.ReleaseTick = -1;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:48:            Assert.That(destinationRuntime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:51:            sourceRuntime.ReleaseTick = 23;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:56:            Assert.That(sourceRuntime.ReleaseTick, Is.EqualTo(-1));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:67:            Assert.That(runtime, Does.Contain("public int ReleaseTick = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:68:            Assert.That(runtime, Does.Contain("destination.ReleaseTick = ReleaseTick;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:69:            Assert.That(runtime, Does.Contain("ReleaseTick = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:70:            Assert.That(ecs, Does.Contain("hash.Add(runtime.ReleaseTick);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:72:                "builder.AddInt32(runtime?.ReleaseTick ?? -1);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:74:                "(\"releaseTick\", runtime?.ReleaseTick ?? -1)"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:93:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:117:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:139:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:174:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:200:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:218:                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:277:            child.Runtime.ReleaseTick = Sentinel;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:454:                    releaseTickBefore = child.Runtime.ReleaseTick };
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyReleaseTickRetirementEditorTests.cs:457:                row.releaseTickAfter = child.Runtime.ReleaseTick; row.holderLinkAfter = holder.Runtime.LinkState; row.childLinkAfter = child.Runtime.LinkState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:82:            int releaseTickBefore = scope.Child.Runtime.ReleaseTick;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:90:            Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(releaseTickBefore));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs:141:                Child.Runtime.ReleaseTick = 99;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:126:            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:188:                child.Runtime.ReleaseTick = 27;

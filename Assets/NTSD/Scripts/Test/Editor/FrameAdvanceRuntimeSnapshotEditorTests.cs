@@ -125,14 +125,12 @@ namespace NTSD.Test
                 compatibilityRuntime,
                 frame,
                 80f,
-                1f,
                 0.01f,
                 0.85);
             var battleContext = new CharacterMechanicsContext(
                 battleRuntime,
                 frame,
                 80f,
-                1f,
                 0.01f,
                 0.85);
 
@@ -155,7 +153,6 @@ namespace NTSD.Test
             var context = new CharacterMechanicsContext(
                 runtime,
                 null,
-                0f,
                 0f,
                 0f,
                 0.85);
@@ -215,14 +212,12 @@ namespace NTSD.Test
                 compatibilityRuntime,
                 frame,
                 80f,
-                1f,
                 0.01f,
                 0.85);
             var battleContext = new CharacterMechanicsContext(
                 battleRuntime,
                 frame,
                 80f,
-                1f,
                 0.01f,
                 0.85);
 

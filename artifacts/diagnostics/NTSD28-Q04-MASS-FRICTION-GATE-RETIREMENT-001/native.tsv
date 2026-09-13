@@ -1,0 +1,9 @@
+id	x	y	z	vx	vy	vz
+grounded	5	0	-5	4	0	-4
+reverse	-3	0	3	-2	0	2
+small	0.25	0	-0.25	0	0	0
+blocked	0	0	0	4	0	-4
+airborne	5	-5	-5	5	1.7	-5
+landing	5	0	-5	1.6666666666666667	0	-5
+negative_floor	5	-10	-5	4	0	-4
+integer_snapshot	5	-0.5	-5	4	1.7	-4

@@ -1,0 +1,2933 @@
+decoded_dat/c/shino/a/bug.dat	frame	0	0		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	0	-1	pic	30
+decoded_dat/c/shino/a/bug.dat	field	0	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	0	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	0	-1	next	31
+decoded_dat/c/shino/a/bug.dat	field	0	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	0	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	0	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	0	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	0	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	0	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	0	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	0	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	0	0	x	3530
+decoded_dat/c/shino/a/bug.dat	field	0	0	y	3330
+decoded_dat/c/shino/a/bug.dat	field	0	0	action	3730
+decoded_dat/c/shino/a/bug.dat	field	0	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	0	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	0	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	0	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	0	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	0	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	0	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	0	1	h	3338
+decoded_dat/c/shino/a/bug.dat	field	0	1	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	0	1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	0	1	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	0	1	fall	3230
+decoded_dat/c/shino/a/bug.dat	field	0	1	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	0	1	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	0	1	injury	3830
+decoded_dat/c/shino/a/bug.dat	block	0	2	bdy	
+decoded_dat/c/shino/a/bug.dat	field	0	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	0	2	x	3232
+decoded_dat/c/shino/a/bug.dat	field	0	2	y	3232
+decoded_dat/c/shino/a/bug.dat	field	0	2	w	3339
+decoded_dat/c/shino/a/bug.dat	field	0	2	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	1	1		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	1	-1	pic	31
+decoded_dat/c/shino/a/bug.dat	field	1	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	1	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	1	-1	next	32
+decoded_dat/c/shino/a/bug.dat	field	1	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	1	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	1	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	1	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	1	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	1	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	1	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	1	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	1	0	x	3530
+decoded_dat/c/shino/a/bug.dat	field	1	0	y	3330
+decoded_dat/c/shino/a/bug.dat	field	1	0	action	3730
+decoded_dat/c/shino/a/bug.dat	field	1	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	1	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	1	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	1	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	1	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	1	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	1	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	1	1	h	3338
+decoded_dat/c/shino/a/bug.dat	field	1	1	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	1	1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	1	1	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	1	1	fall	3230
+decoded_dat/c/shino/a/bug.dat	field	1	1	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	1	1	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	1	1	injury	3830
+decoded_dat/c/shino/a/bug.dat	block	1	2	bdy	
+decoded_dat/c/shino/a/bug.dat	field	1	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	1	2	x	3232
+decoded_dat/c/shino/a/bug.dat	field	1	2	y	3232
+decoded_dat/c/shino/a/bug.dat	field	1	2	w	3339
+decoded_dat/c/shino/a/bug.dat	field	1	2	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	2	2		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	2	-1	pic	32
+decoded_dat/c/shino/a/bug.dat	field	2	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	2	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	2	-1	next	33
+decoded_dat/c/shino/a/bug.dat	field	2	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	2	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	2	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	2	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	2	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	2	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	2	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	2	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	2	0	x	3530
+decoded_dat/c/shino/a/bug.dat	field	2	0	y	3330
+decoded_dat/c/shino/a/bug.dat	field	2	0	action	3730
+decoded_dat/c/shino/a/bug.dat	field	2	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	2	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	2	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	2	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	2	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	2	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	2	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	2	1	h	3338
+decoded_dat/c/shino/a/bug.dat	field	2	1	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	2	1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	2	1	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	2	1	fall	3230
+decoded_dat/c/shino/a/bug.dat	field	2	1	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	2	1	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	2	1	injury	3830
+decoded_dat/c/shino/a/bug.dat	block	2	2	bdy	
+decoded_dat/c/shino/a/bug.dat	field	2	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	2	2	x	3232
+decoded_dat/c/shino/a/bug.dat	field	2	2	y	3232
+decoded_dat/c/shino/a/bug.dat	field	2	2	w	3339
+decoded_dat/c/shino/a/bug.dat	field	2	2	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	3	3		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	3	-1	pic	31
+decoded_dat/c/shino/a/bug.dat	field	3	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	3	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	3	-1	next	393939
+decoded_dat/c/shino/a/bug.dat	field	3	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	3	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	3	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	3	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	3	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	3	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	3	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	3	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	3	0	x	3530
+decoded_dat/c/shino/a/bug.dat	field	3	0	y	3330
+decoded_dat/c/shino/a/bug.dat	field	3	0	action	3730
+decoded_dat/c/shino/a/bug.dat	field	3	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	3	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	3	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	3	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	3	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	3	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	3	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	3	1	h	3338
+decoded_dat/c/shino/a/bug.dat	field	3	1	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	3	1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	3	1	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	3	1	fall	3230
+decoded_dat/c/shino/a/bug.dat	field	3	1	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	3	1	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	3	1	injury	3830
+decoded_dat/c/shino/a/bug.dat	block	3	2	bdy	
+decoded_dat/c/shino/a/bug.dat	field	3	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	3	2	x	3232
+decoded_dat/c/shino/a/bug.dat	field	3	2	y	3232
+decoded_dat/c/shino/a/bug.dat	field	3	2	w	3339
+decoded_dat/c/shino/a/bug.dat	field	3	2	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	4	5		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	4	-1	pic	32
+decoded_dat/c/shino/a/bug.dat	field	4	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	4	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	4	-1	next	35
+decoded_dat/c/shino/a/bug.dat	field	4	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	4	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	4	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	4	-1	hit_Fa	3130
+decoded_dat/c/shino/a/bug.dat	block	4	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	4	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	4	0	x	3330
+decoded_dat/c/shino/a/bug.dat	field	4	0	y	3330
+decoded_dat/c/shino/a/bug.dat	field	4	0	action	3730
+decoded_dat/c/shino/a/bug.dat	field	4	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	4	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	4	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	4	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	4	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	4	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	4	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	4	1	h	3338
+decoded_dat/c/shino/a/bug.dat	field	4	1	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	4	1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	4	1	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	4	1	fall	3230
+decoded_dat/c/shino/a/bug.dat	field	4	1	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	4	1	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	4	1	injury	3830
+decoded_dat/c/shino/a/bug.dat	frame	5	10		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	5	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	5	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	5	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	5	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	5	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	5	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	5	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	6	15		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	6	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	6	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	6	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	6	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	6	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	6	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	6	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	7	20		686974
+decoded_dat/c/shino/a/bug.dat	field	7	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	7	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	7	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	7	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	7	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	7	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	7	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	8	30		7265626f756e64696e67
+decoded_dat/c/shino/a/bug.dat	field	8	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	8	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	8	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	8	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	8	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	8	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	8	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	9	40		7461696c
+decoded_dat/c/shino/a/bug.dat	field	9	-1	pic	33
+decoded_dat/c/shino/a/bug.dat	field	9	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	9	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	9	-1	next	3431
+decoded_dat/c/shino/a/bug.dat	field	9	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	9	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	block	9	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	9	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	9	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	9	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	9	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	9	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	9	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	9	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	9	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	9	0	fall	31
+decoded_dat/c/shino/a/bug.dat	field	9	0	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	9	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	9	0	injury	3135
+decoded_dat/c/shino/a/bug.dat	frame	10	41		7461696c
+decoded_dat/c/shino/a/bug.dat	field	10	-1	pic	34
+decoded_dat/c/shino/a/bug.dat	field	10	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	10	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	10	-1	next	3432
+decoded_dat/c/shino/a/bug.dat	field	10	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	10	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	block	10	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	10	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	10	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	10	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	10	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	10	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	10	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	10	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	10	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	10	0	fall	31
+decoded_dat/c/shino/a/bug.dat	field	10	0	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	10	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	10	0	injury	3135
+decoded_dat/c/shino/a/bug.dat	frame	11	42		7461696c
+decoded_dat/c/shino/a/bug.dat	field	11	-1	pic	35
+decoded_dat/c/shino/a/bug.dat	field	11	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	11	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	11	-1	next	3433
+decoded_dat/c/shino/a/bug.dat	field	11	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	11	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	block	11	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	11	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	11	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	11	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	11	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	11	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	11	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	11	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	11	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	11	0	fall	31
+decoded_dat/c/shino/a/bug.dat	field	11	0	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	11	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	11	0	injury	3135
+decoded_dat/c/shino/a/bug.dat	frame	12	43		7461696c
+decoded_dat/c/shino/a/bug.dat	field	12	-1	pic	34
+decoded_dat/c/shino/a/bug.dat	field	12	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	12	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	12	-1	next	3434
+decoded_dat/c/shino/a/bug.dat	field	12	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	12	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	block	12	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	12	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	12	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	12	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	12	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	12	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	12	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	12	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	12	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	12	0	fall	31
+decoded_dat/c/shino/a/bug.dat	field	12	0	vrest	3133
+decoded_dat/c/shino/a/bug.dat	field	12	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	12	0	injury	3135
+decoded_dat/c/shino/a/bug.dat	frame	13	44		7461696c
+decoded_dat/c/shino/a/bug.dat	field	13	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	13	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	13	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	13	-1	next	3435
+decoded_dat/c/shino/a/bug.dat	field	13	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	13	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	14	45		7461696c
+decoded_dat/c/shino/a/bug.dat	field	14	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	14	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	14	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	14	-1	next	3436
+decoded_dat/c/shino/a/bug.dat	field	14	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	14	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	15	46		7461696c
+decoded_dat/c/shino/a/bug.dat	field	15	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	15	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	15	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	15	-1	next	3437
+decoded_dat/c/shino/a/bug.dat	field	15	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	15	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	16	47		7461696c
+decoded_dat/c/shino/a/bug.dat	field	16	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	16	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	16	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	16	-1	next	3438
+decoded_dat/c/shino/a/bug.dat	field	16	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	16	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	17	48		7461696c
+decoded_dat/c/shino/a/bug.dat	field	17	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	17	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	17	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	17	-1	next	3439
+decoded_dat/c/shino/a/bug.dat	field	17	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	17	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	18	49		7461696c
+decoded_dat/c/shino/a/bug.dat	field	18	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	18	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	18	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	18	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	18	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	18	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	19	50		7374617274
+decoded_dat/c/shino/a/bug.dat	field	19	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	19	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	19	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	19	-1	next	3531
+decoded_dat/c/shino/a/bug.dat	field	19	-1	dvx	33
+decoded_dat/c/shino/a/bug.dat	field	19	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	19	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	20	51		7374617274
+decoded_dat/c/shino/a/bug.dat	field	20	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	20	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	20	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	20	-1	next	3532
+decoded_dat/c/shino/a/bug.dat	field	20	-1	dvx	32
+decoded_dat/c/shino/a/bug.dat	field	20	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	20	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	21	52		7374617274
+decoded_dat/c/shino/a/bug.dat	field	21	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	21	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	21	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	21	-1	next	393939
+decoded_dat/c/shino/a/bug.dat	field	21	-1	dvx	31
+decoded_dat/c/shino/a/bug.dat	field	21	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	21	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	22	55		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	22	-1	pic	30
+decoded_dat/c/shino/a/bug.dat	field	22	-1	state	33303036
+decoded_dat/c/shino/a/bug.dat	field	22	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	22	-1	next	31
+decoded_dat/c/shino/a/bug.dat	field	22	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	22	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	22	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	22	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	23	60		686974696e675f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	23	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	23	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	23	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	23	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	23	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	23	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	23	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	24	70		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	24	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	24	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	24	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	24	-1	next	3731
+decoded_dat/c/shino/a/bug.dat	field	24	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	24	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	24	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	24	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	25	71		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	25	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	25	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	25	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	25	-1	next	3732
+decoded_dat/c/shino/a/bug.dat	field	25	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	25	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	25	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	25	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	26	72		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	26	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	26	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	26	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	26	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	26	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	26	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	26	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	26	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	frame	27	80		75705f61746b
+decoded_dat/c/shino/a/bug.dat	field	27	-1	pic	3133
+decoded_dat/c/shino/a/bug.dat	field	27	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	27	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	27	-1	next	3831
+decoded_dat/c/shino/a/bug.dat	field	27	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	27	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	28	81		75705f61746b
+decoded_dat/c/shino/a/bug.dat	field	28	-1	pic	3134
+decoded_dat/c/shino/a/bug.dat	field	28	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	28	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	28	-1	next	3832
+decoded_dat/c/shino/a/bug.dat	field	28	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	28	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	28	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	28	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	28	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	28	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	28	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	28	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	28	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	29	82		75705f61746b
+decoded_dat/c/shino/a/bug.dat	field	29	-1	pic	3135
+decoded_dat/c/shino/a/bug.dat	field	29	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	29	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	29	-1	next	3833
+decoded_dat/c/shino/a/bug.dat	field	29	-1	dvy	2d33
+decoded_dat/c/shino/a/bug.dat	field	29	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	29	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	30	83		75705f61746b
+decoded_dat/c/shino/a/bug.dat	field	30	-1	pic	3136
+decoded_dat/c/shino/a/bug.dat	field	30	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	30	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	30	-1	next	3834
+decoded_dat/c/shino/a/bug.dat	field	30	-1	dvx	2d33
+decoded_dat/c/shino/a/bug.dat	field	30	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	30	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	30	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	30	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	30	0	x	38
+decoded_dat/c/shino/a/bug.dat	field	30	0	y	33
+decoded_dat/c/shino/a/bug.dat	field	30	0	w	3834
+decoded_dat/c/shino/a/bug.dat	field	30	0	h	3839
+decoded_dat/c/shino/a/bug.dat	field	30	0	dvx	38
+decoded_dat/c/shino/a/bug.dat	field	30	0	dvy	2d3130
+decoded_dat/c/shino/a/bug.dat	field	30	0	fall	313030
+decoded_dat/c/shino/a/bug.dat	field	30	0	vrest	3230
+decoded_dat/c/shino/a/bug.dat	field	30	0	bdefend	3630
+decoded_dat/c/shino/a/bug.dat	field	30	0	injury	3530
+decoded_dat/c/shino/a/bug.dat	frame	31	84		75705f61746b
+decoded_dat/c/shino/a/bug.dat	field	31	-1	pic	3137
+decoded_dat/c/shino/a/bug.dat	field	31	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	31	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	31	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	31	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	31	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	32	85		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	32	-1	pic	39
+decoded_dat/c/shino/a/bug.dat	field	32	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	32	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	32	-1	next	3836
+decoded_dat/c/shino/a/bug.dat	field	32	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	32	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	33	86		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	33	-1	pic	3130
+decoded_dat/c/shino/a/bug.dat	field	33	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	33	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	33	-1	next	3837
+decoded_dat/c/shino/a/bug.dat	field	33	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	33	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	33	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	33	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	33	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	33	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	33	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	33	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	33	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	34	87		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	34	-1	pic	3131
+decoded_dat/c/shino/a/bug.dat	field	34	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	34	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	34	-1	next	3838
+decoded_dat/c/shino/a/bug.dat	field	34	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	34	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	35	88		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	35	-1	pic	3132
+decoded_dat/c/shino/a/bug.dat	field	35	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	35	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	35	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	35	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	35	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	36	90		627567735f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	36	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	36	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	36	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	36	-1	next	3931
+decoded_dat/c/shino/a/bug.dat	field	36	-1	dvx	38
+decoded_dat/c/shino/a/bug.dat	field	36	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	36	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	36	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	frame	37	91		627567735f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	37	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	37	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	37	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	37	-1	next	3932
+decoded_dat/c/shino/a/bug.dat	field	37	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	37	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	37	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	frame	38	92		627567735f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	38	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	38	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	38	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	38	-1	next	3930
+decoded_dat/c/shino/a/bug.dat	field	38	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	38	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	38	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	frame	39	95		6169725f61746b
+decoded_dat/c/shino/a/bug.dat	field	39	-1	pic	33
+decoded_dat/c/shino/a/bug.dat	field	39	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	39	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	39	-1	next	3936
+decoded_dat/c/shino/a/bug.dat	field	39	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	39	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	39	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	39	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	frame	40	96		6169725f61746b
+decoded_dat/c/shino/a/bug.dat	field	40	-1	pic	34
+decoded_dat/c/shino/a/bug.dat	field	40	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	40	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	40	-1	next	3937
+decoded_dat/c/shino/a/bug.dat	field	40	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	40	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	40	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	40	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	block	40	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	40	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	40	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	40	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	40	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	40	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	40	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	40	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	40	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	40	1	x	3130
+decoded_dat/c/shino/a/bug.dat	field	40	1	y	3135
+decoded_dat/c/shino/a/bug.dat	field	40	1	w	3735
+decoded_dat/c/shino/a/bug.dat	field	40	1	h	3330
+decoded_dat/c/shino/a/bug.dat	field	40	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	40	1	dvx	38
+decoded_dat/c/shino/a/bug.dat	field	40	1	fall	313030
+decoded_dat/c/shino/a/bug.dat	field	40	1	vrest	3230
+decoded_dat/c/shino/a/bug.dat	field	40	1	bdefend	3630
+decoded_dat/c/shino/a/bug.dat	field	40	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	frame	41	97		6169725f61746b
+decoded_dat/c/shino/a/bug.dat	field	41	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	41	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	41	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	41	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	41	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	41	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	41	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	41	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	frame	42	100		637261776c
+decoded_dat/c/shino/a/bug.dat	field	42	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	42	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	42	-1	wait	39
+decoded_dat/c/shino/a/bug.dat	field	42	-1	next	313031
+decoded_dat/c/shino/a/bug.dat	field	42	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	42	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	42	-1	hit_Fj	313032
+decoded_dat/c/shino/a/bug.dat	field	42	-1	hit_Uj	313032
+decoded_dat/c/shino/a/bug.dat	field	42	-1	hit_Dj	313032
+decoded_dat/c/shino/a/bug.dat	field	42	-1	hit_ja	313032
+decoded_dat/c/shino/a/bug.dat	block	42	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	42	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	42	0	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	42	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	42	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	42	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	42	0	h	3939
+decoded_dat/c/shino/a/bug.dat	field	42	0	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	42	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	42	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	42	1	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	42	1	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	42	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	42	1	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	42	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	42	1	h	3939
+decoded_dat/c/shino/a/bug.dat	field	42	1	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	42	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	42	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	42	2	x	3230
+decoded_dat/c/shino/a/bug.dat	field	42	2	y	3136
+decoded_dat/c/shino/a/bug.dat	field	42	2	w	3438
+decoded_dat/c/shino/a/bug.dat	field	42	2	h	3238
+decoded_dat/c/shino/a/bug.dat	field	42	2	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	42	2	fall	35
+decoded_dat/c/shino/a/bug.dat	field	42	2	arest	31
+decoded_dat/c/shino/a/bug.dat	field	42	2	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	42	2	injury	3230
+decoded_dat/c/shino/a/bug.dat	block	42	3	bdy	
+decoded_dat/c/shino/a/bug.dat	field	42	3	kind	30
+decoded_dat/c/shino/a/bug.dat	field	42	3	x	3230
+decoded_dat/c/shino/a/bug.dat	field	42	3	y	3136
+decoded_dat/c/shino/a/bug.dat	field	42	3	w	3438
+decoded_dat/c/shino/a/bug.dat	field	42	3	h	3238
+decoded_dat/c/shino/a/bug.dat	block	42	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	42	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	42	4	x	3230
+decoded_dat/c/shino/a/bug.dat	field	42	4	y	3533303030
+decoded_dat/c/shino/a/bug.dat	field	42	4	w	3438
+decoded_dat/c/shino/a/bug.dat	field	42	4	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	43	101		637261776c
+decoded_dat/c/shino/a/bug.dat	field	43	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	43	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	43	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	43	-1	next	333130
+decoded_dat/c/shino/a/bug.dat	field	43	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	43	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	43	-1	dvz	353530
+decoded_dat/c/shino/a/bug.dat	field	43	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	43	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	43	-1	hit_Fj	313032
+decoded_dat/c/shino/a/bug.dat	field	43	-1	hit_Uj	313032
+decoded_dat/c/shino/a/bug.dat	field	43	-1	hit_Dj	313032
+decoded_dat/c/shino/a/bug.dat	field	43	-1	hit_ja	313032
+decoded_dat/c/shino/a/bug.dat	block	43	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	43	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	43	0	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	43	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	43	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	43	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	43	0	h	3939
+decoded_dat/c/shino/a/bug.dat	field	43	0	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	43	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	43	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	43	1	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	43	1	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	43	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	43	1	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	43	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	43	1	h	3939
+decoded_dat/c/shino/a/bug.dat	field	43	1	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	43	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	43	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	43	2	x	3230
+decoded_dat/c/shino/a/bug.dat	field	43	2	y	3136
+decoded_dat/c/shino/a/bug.dat	field	43	2	w	3438
+decoded_dat/c/shino/a/bug.dat	field	43	2	h	3238
+decoded_dat/c/shino/a/bug.dat	field	43	2	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	43	2	fall	35
+decoded_dat/c/shino/a/bug.dat	field	43	2	arest	31
+decoded_dat/c/shino/a/bug.dat	field	43	2	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	43	2	injury	3230
+decoded_dat/c/shino/a/bug.dat	block	43	3	bdy	
+decoded_dat/c/shino/a/bug.dat	field	43	3	kind	30
+decoded_dat/c/shino/a/bug.dat	field	43	3	x	3230
+decoded_dat/c/shino/a/bug.dat	field	43	3	y	3136
+decoded_dat/c/shino/a/bug.dat	field	43	3	w	3438
+decoded_dat/c/shino/a/bug.dat	field	43	3	h	3238
+decoded_dat/c/shino/a/bug.dat	block	43	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	43	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	43	4	x	3230
+decoded_dat/c/shino/a/bug.dat	field	43	4	y	3533303030
+decoded_dat/c/shino/a/bug.dat	field	43	4	w	3438
+decoded_dat/c/shino/a/bug.dat	field	43	4	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	44	102		686974
+decoded_dat/c/shino/a/bug.dat	field	44	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	44	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	44	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	44	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	44	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	44	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	44	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	45	110		637261776c
+decoded_dat/c/shino/a/bug.dat	field	45	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	45	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	45	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	45	-1	next	313131
+decoded_dat/c/shino/a/bug.dat	field	45	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	45	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	45	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	45	-1	hit_d	313133
+decoded_dat/c/shino/a/bug.dat	field	45	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	block	45	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	45	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	45	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	45	0	y	3136
+decoded_dat/c/shino/a/bug.dat	field	45	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	45	0	h	3238
+decoded_dat/c/shino/a/bug.dat	field	45	0	dvx	2d38
+decoded_dat/c/shino/a/bug.dat	field	45	0	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	45	0	fall	35
+decoded_dat/c/shino/a/bug.dat	field	45	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	45	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	45	0	injury	3237
+decoded_dat/c/shino/a/bug.dat	block	45	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	45	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	45	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	45	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	45	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	45	1	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	46	111		637261776c
+decoded_dat/c/shino/a/bug.dat	field	46	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	46	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	46	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	46	-1	next	313132
+decoded_dat/c/shino/a/bug.dat	field	46	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	46	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	46	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	46	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	46	-1	hit_d	313133
+decoded_dat/c/shino/a/bug.dat	field	46	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	block	46	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	46	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	46	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	46	0	y	3136
+decoded_dat/c/shino/a/bug.dat	field	46	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	46	0	h	3238
+decoded_dat/c/shino/a/bug.dat	field	46	0	dvx	2d38
+decoded_dat/c/shino/a/bug.dat	field	46	0	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	46	0	fall	35
+decoded_dat/c/shino/a/bug.dat	field	46	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	46	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	46	0	injury	3237
+decoded_dat/c/shino/a/bug.dat	block	46	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	46	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	46	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	46	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	46	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	46	1	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	47	112		637261776c
+decoded_dat/c/shino/a/bug.dat	field	47	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	47	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	47	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	47	-1	next	313130
+decoded_dat/c/shino/a/bug.dat	field	47	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	47	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	47	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	47	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	47	-1	hit_d	313133
+decoded_dat/c/shino/a/bug.dat	field	47	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	block	47	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	47	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	47	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	47	0	y	3136
+decoded_dat/c/shino/a/bug.dat	field	47	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	47	0	h	3238
+decoded_dat/c/shino/a/bug.dat	field	47	0	dvx	2d38
+decoded_dat/c/shino/a/bug.dat	field	47	0	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	47	0	fall	35
+decoded_dat/c/shino/a/bug.dat	field	47	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	47	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	47	0	injury	3237
+decoded_dat/c/shino/a/bug.dat	block	47	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	47	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	47	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	47	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	47	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	47	1	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	48	113		637261776c
+decoded_dat/c/shino/a/bug.dat	field	48	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	48	-1	state	3135
+decoded_dat/c/shino/a/bug.dat	field	48	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	48	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	48	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	48	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	48	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	frame	49	155		46616a
+decoded_dat/c/shino/a/bug.dat	field	49	-1	pic	30
+decoded_dat/c/shino/a/bug.dat	field	49	-1	state	33303036
+decoded_dat/c/shino/a/bug.dat	field	49	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	49	-1	next	313536
+decoded_dat/c/shino/a/bug.dat	field	49	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	49	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	49	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	49	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	frame	50	156		46616a
+decoded_dat/c/shino/a/bug.dat	field	50	-1	pic	30
+decoded_dat/c/shino/a/bug.dat	field	50	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	50	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	50	-1	next	313537
+decoded_dat/c/shino/a/bug.dat	field	50	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	50	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	50	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	50	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	50	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	50	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	50	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	50	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	50	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	50	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	50	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	50	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	50	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	50	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	50	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	50	0	fall	3130
+decoded_dat/c/shino/a/bug.dat	field	50	0	arest	33
+decoded_dat/c/shino/a/bug.dat	field	50	0	bdefend	3130
+decoded_dat/c/shino/a/bug.dat	field	50	0	injury	38
+decoded_dat/c/shino/a/bug.dat	block	50	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	50	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	50	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	50	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	50	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	50	1	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	51	157		46616a
+decoded_dat/c/shino/a/bug.dat	field	51	-1	pic	31
+decoded_dat/c/shino/a/bug.dat	field	51	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	51	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	51	-1	next	313538
+decoded_dat/c/shino/a/bug.dat	field	51	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	51	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	51	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	51	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	51	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	51	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	51	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	51	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	51	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	51	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	51	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	51	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	51	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	51	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	51	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	51	0	fall	3130
+decoded_dat/c/shino/a/bug.dat	field	51	0	arest	33
+decoded_dat/c/shino/a/bug.dat	field	51	0	bdefend	3130
+decoded_dat/c/shino/a/bug.dat	field	51	0	injury	38
+decoded_dat/c/shino/a/bug.dat	block	51	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	51	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	51	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	51	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	51	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	51	1	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	52	158		46616a
+decoded_dat/c/shino/a/bug.dat	field	52	-1	pic	32
+decoded_dat/c/shino/a/bug.dat	field	52	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	52	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	52	-1	next	313539
+decoded_dat/c/shino/a/bug.dat	field	52	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	52	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	52	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	52	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	52	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	52	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	52	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	52	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	52	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	52	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	52	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	52	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	52	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	52	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	52	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	52	0	fall	3130
+decoded_dat/c/shino/a/bug.dat	field	52	0	arest	33
+decoded_dat/c/shino/a/bug.dat	field	52	0	bdefend	3130
+decoded_dat/c/shino/a/bug.dat	field	52	0	injury	38
+decoded_dat/c/shino/a/bug.dat	block	52	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	52	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	52	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	52	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	52	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	52	1	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	53	159		46616a
+decoded_dat/c/shino/a/bug.dat	field	53	-1	pic	31
+decoded_dat/c/shino/a/bug.dat	field	53	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	53	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	53	-1	next	313536
+decoded_dat/c/shino/a/bug.dat	field	53	-1	dvx	3135
+decoded_dat/c/shino/a/bug.dat	field	53	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	53	-1	centerx	3330
+decoded_dat/c/shino/a/bug.dat	field	53	-1	centery	3330
+decoded_dat/c/shino/a/bug.dat	field	53	-1	hit_a	31
+decoded_dat/c/shino/a/bug.dat	field	53	-1	hit_d	35
+decoded_dat/c/shino/a/bug.dat	block	53	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	53	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	53	0	x	3232
+decoded_dat/c/shino/a/bug.dat	field	53	0	y	3232
+decoded_dat/c/shino/a/bug.dat	field	53	0	w	3339
+decoded_dat/c/shino/a/bug.dat	field	53	0	h	3338
+decoded_dat/c/shino/a/bug.dat	field	53	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	53	0	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	53	0	dvy	2d3137
+decoded_dat/c/shino/a/bug.dat	field	53	0	fall	3130
+decoded_dat/c/shino/a/bug.dat	field	53	0	arest	33
+decoded_dat/c/shino/a/bug.dat	field	53	0	bdefend	3130
+decoded_dat/c/shino/a/bug.dat	field	53	0	injury	38
+decoded_dat/c/shino/a/bug.dat	block	53	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	53	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	53	1	x	3232
+decoded_dat/c/shino/a/bug.dat	field	53	1	y	3232
+decoded_dat/c/shino/a/bug.dat	field	53	1	w	3339
+decoded_dat/c/shino/a/bug.dat	field	53	1	h	3338
+decoded_dat/c/shino/a/bug.dat	frame	54	185		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	54	-1	pic	39
+decoded_dat/c/shino/a/bug.dat	field	54	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	54	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	54	-1	next	313836
+decoded_dat/c/shino/a/bug.dat	field	54	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	54	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	55	186		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	55	-1	pic	3130
+decoded_dat/c/shino/a/bug.dat	field	55	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	55	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	55	-1	next	313837
+decoded_dat/c/shino/a/bug.dat	field	55	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	55	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	55	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	55	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	55	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	55	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	55	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	55	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	55	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	56	187		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	56	-1	pic	3131
+decoded_dat/c/shino/a/bug.dat	field	56	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	56	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	56	-1	next	313838
+decoded_dat/c/shino/a/bug.dat	field	56	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	56	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	56	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	56	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	56	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	56	0	y	3230
+decoded_dat/c/shino/a/bug.dat	field	56	0	action	353035
+decoded_dat/c/shino/a/bug.dat	field	56	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	frame	57	188		7265706c6163656d656e74
+decoded_dat/c/shino/a/bug.dat	field	57	-1	pic	3132
+decoded_dat/c/shino/a/bug.dat	field	57	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	57	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	57	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	57	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	57	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	58	265		7570
+decoded_dat/c/shino/a/bug.dat	field	58	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	58	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	58	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	58	-1	next	323636
+decoded_dat/c/shino/a/bug.dat	field	58	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	58	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	58	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	59	266		7570
+decoded_dat/c/shino/a/bug.dat	field	59	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	59	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	59	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	59	-1	next	323637
+decoded_dat/c/shino/a/bug.dat	field	59	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	59	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	59	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	59	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	59	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	59	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	59	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	59	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	59	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	59	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	60	267		7570
+decoded_dat/c/shino/a/bug.dat	field	60	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	60	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	60	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	60	-1	next	323638
+decoded_dat/c/shino/a/bug.dat	field	60	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	60	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	60	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	61	268		7570
+decoded_dat/c/shino/a/bug.dat	field	61	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	61	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	61	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	61	-1	next	323639
+decoded_dat/c/shino/a/bug.dat	field	61	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	61	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	61	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	62	269		7570
+decoded_dat/c/shino/a/bug.dat	field	62	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	62	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	62	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	62	-1	next	343530
+decoded_dat/c/shino/a/bug.dat	field	62	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	62	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	62	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	63	310		637261776c
+decoded_dat/c/shino/a/bug.dat	field	63	-1	pic	36
+decoded_dat/c/shino/a/bug.dat	field	63	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	63	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	63	-1	next	333131
+decoded_dat/c/shino/a/bug.dat	field	63	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	63	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_d	333133
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_Fj	313032
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_Uj	313032
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_Dj	313032
+decoded_dat/c/shino/a/bug.dat	field	63	-1	hit_ja	313032
+decoded_dat/c/shino/a/bug.dat	block	63	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	63	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	63	0	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	63	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	63	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	63	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	63	0	h	3939
+decoded_dat/c/shino/a/bug.dat	field	63	0	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	63	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	63	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	63	1	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	63	1	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	63	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	63	1	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	63	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	63	1	h	3939
+decoded_dat/c/shino/a/bug.dat	field	63	1	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	63	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	63	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	63	2	x	3230
+decoded_dat/c/shino/a/bug.dat	field	63	2	y	3136
+decoded_dat/c/shino/a/bug.dat	field	63	2	w	3438
+decoded_dat/c/shino/a/bug.dat	field	63	2	h	3238
+decoded_dat/c/shino/a/bug.dat	field	63	2	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	63	2	fall	35
+decoded_dat/c/shino/a/bug.dat	field	63	2	arest	31
+decoded_dat/c/shino/a/bug.dat	field	63	2	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	63	2	injury	3230
+decoded_dat/c/shino/a/bug.dat	block	63	3	bdy	
+decoded_dat/c/shino/a/bug.dat	field	63	3	kind	30
+decoded_dat/c/shino/a/bug.dat	field	63	3	x	3230
+decoded_dat/c/shino/a/bug.dat	field	63	3	y	3136
+decoded_dat/c/shino/a/bug.dat	field	63	3	w	3438
+decoded_dat/c/shino/a/bug.dat	field	63	3	h	3238
+decoded_dat/c/shino/a/bug.dat	block	63	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	63	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	63	4	x	3230
+decoded_dat/c/shino/a/bug.dat	field	63	4	y	3533303030
+decoded_dat/c/shino/a/bug.dat	field	63	4	w	3438
+decoded_dat/c/shino/a/bug.dat	field	63	4	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	64	311		637261776c
+decoded_dat/c/shino/a/bug.dat	field	64	-1	pic	37
+decoded_dat/c/shino/a/bug.dat	field	64	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	64	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	64	-1	next	333134
+decoded_dat/c/shino/a/bug.dat	field	64	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	64	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	64	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_d	333133
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_Fj	313032
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_Uj	313032
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_Dj	313032
+decoded_dat/c/shino/a/bug.dat	field	64	-1	hit_ja	313032
+decoded_dat/c/shino/a/bug.dat	block	64	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	64	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	64	0	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	64	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	64	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	64	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	64	0	h	3939
+decoded_dat/c/shino/a/bug.dat	field	64	0	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	64	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	64	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	64	1	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	64	1	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	64	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	64	1	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	64	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	64	1	h	3939
+decoded_dat/c/shino/a/bug.dat	field	64	1	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	64	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	64	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	64	2	x	3230
+decoded_dat/c/shino/a/bug.dat	field	64	2	y	3136
+decoded_dat/c/shino/a/bug.dat	field	64	2	w	3438
+decoded_dat/c/shino/a/bug.dat	field	64	2	h	3238
+decoded_dat/c/shino/a/bug.dat	field	64	2	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	64	2	fall	35
+decoded_dat/c/shino/a/bug.dat	field	64	2	arest	31
+decoded_dat/c/shino/a/bug.dat	field	64	2	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	64	2	injury	3230
+decoded_dat/c/shino/a/bug.dat	block	64	3	bdy	
+decoded_dat/c/shino/a/bug.dat	field	64	3	kind	30
+decoded_dat/c/shino/a/bug.dat	field	64	3	x	3230
+decoded_dat/c/shino/a/bug.dat	field	64	3	y	3136
+decoded_dat/c/shino/a/bug.dat	field	64	3	w	3438
+decoded_dat/c/shino/a/bug.dat	field	64	3	h	3238
+decoded_dat/c/shino/a/bug.dat	block	64	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	64	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	64	4	x	3230
+decoded_dat/c/shino/a/bug.dat	field	64	4	y	3533303030
+decoded_dat/c/shino/a/bug.dat	field	64	4	w	3438
+decoded_dat/c/shino/a/bug.dat	field	64	4	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	65	313		637261776c
+decoded_dat/c/shino/a/bug.dat	field	65	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	65	-1	state	3135
+decoded_dat/c/shino/a/bug.dat	field	65	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	65	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	65	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	65	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	65	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	frame	66	314		637261776c
+decoded_dat/c/shino/a/bug.dat	field	66	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	66	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	66	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	66	-1	next	333130
+decoded_dat/c/shino/a/bug.dat	field	66	-1	dvx	35
+decoded_dat/c/shino/a/bug.dat	field	66	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	66	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_a	32
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_d	333133
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_Fa	3134
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_Fj	313032
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_Uj	313032
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_Dj	313032
+decoded_dat/c/shino/a/bug.dat	field	66	-1	hit_ja	313032
+decoded_dat/c/shino/a/bug.dat	block	66	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	66	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	66	0	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	66	0	x	3230
+decoded_dat/c/shino/a/bug.dat	field	66	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	66	0	w	3438
+decoded_dat/c/shino/a/bug.dat	field	66	0	h	3939
+decoded_dat/c/shino/a/bug.dat	field	66	0	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	66	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	66	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	66	1	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	66	1	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	66	1	x	3230
+decoded_dat/c/shino/a/bug.dat	field	66	1	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	66	1	w	3438
+decoded_dat/c/shino/a/bug.dat	field	66	1	h	3939
+decoded_dat/c/shino/a/bug.dat	field	66	1	dvx	333530
+decoded_dat/c/shino/a/bug.dat	block	66	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	66	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	66	2	x	3230
+decoded_dat/c/shino/a/bug.dat	field	66	2	y	3136
+decoded_dat/c/shino/a/bug.dat	field	66	2	w	3438
+decoded_dat/c/shino/a/bug.dat	field	66	2	h	3238
+decoded_dat/c/shino/a/bug.dat	field	66	2	dvy	2d3135
+decoded_dat/c/shino/a/bug.dat	field	66	2	fall	35
+decoded_dat/c/shino/a/bug.dat	field	66	2	arest	31
+decoded_dat/c/shino/a/bug.dat	field	66	2	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	66	2	injury	3230
+decoded_dat/c/shino/a/bug.dat	block	66	3	bdy	
+decoded_dat/c/shino/a/bug.dat	field	66	3	kind	30
+decoded_dat/c/shino/a/bug.dat	field	66	3	x	3230
+decoded_dat/c/shino/a/bug.dat	field	66	3	y	3136
+decoded_dat/c/shino/a/bug.dat	field	66	3	w	3438
+decoded_dat/c/shino/a/bug.dat	field	66	3	h	3238
+decoded_dat/c/shino/a/bug.dat	block	66	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	66	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	66	4	x	3230
+decoded_dat/c/shino/a/bug.dat	field	66	4	y	3533303030
+decoded_dat/c/shino/a/bug.dat	field	66	4	w	3438
+decoded_dat/c/shino/a/bug.dat	field	66	4	h	3939
+decoded_dat/c/shino/a/bug.dat	frame	67	350		6a756d70
+decoded_dat/c/shino/a/bug.dat	field	67	-1	pic	38
+decoded_dat/c/shino/a/bug.dat	field	67	-1	state	3135
+decoded_dat/c/shino/a/bug.dat	field	67	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	67	-1	next	333531
+decoded_dat/c/shino/a/bug.dat	field	67	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	67	-1	centerx	3438
+decoded_dat/c/shino/a/bug.dat	field	67	-1	centery	3430
+decoded_dat/c/shino/a/bug.dat	frame	68	351		6a756d70
+decoded_dat/c/shino/a/bug.dat	field	68	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	68	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	68	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	68	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	68	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	68	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	block	68	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	68	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	68	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	68	0	y	3835
+decoded_dat/c/shino/a/bug.dat	field	68	0	action	323635
+decoded_dat/c/shino/a/bug.dat	field	68	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	68	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	69	365		6a756d70
+decoded_dat/c/shino/a/bug.dat	field	69	-1	pic	3237
+decoded_dat/c/shino/a/bug.dat	field	69	-1	state	3135
+decoded_dat/c/shino/a/bug.dat	field	69	-1	wait	39
+decoded_dat/c/shino/a/bug.dat	field	69	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	69	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	69	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	69	-1	dvz	353530
+decoded_dat/c/shino/a/bug.dat	field	69	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	69	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	block	69	0	bdy	
+decoded_dat/c/shino/a/bug.dat	field	69	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	69	0	x	2d39393939
+decoded_dat/c/shino/a/bug.dat	field	69	0	y	3532303030
+decoded_dat/c/shino/a/bug.dat	field	69	0	w	3939393939
+decoded_dat/c/shino/a/bug.dat	field	69	0	h	393939
+decoded_dat/c/shino/a/bug.dat	field	69	0	zwidth	393939
+decoded_dat/c/shino/a/bug.dat	frame	70	400		7374617274
+decoded_dat/c/shino/a/bug.dat	field	70	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	70	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	70	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	70	-1	next	343031
+decoded_dat/c/shino/a/bug.dat	field	70	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	70	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	70	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	70	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	70	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	70	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	70	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	70	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	70	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	70	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	70	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	70	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	70	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	70	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	70	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	70	0	fall	313030
+decoded_dat/c/shino/a/bug.dat	field	70	0	arest	3130
+decoded_dat/c/shino/a/bug.dat	field	70	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	70	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	70	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	70	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	70	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	70	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	70	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	70	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	70	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	70	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	70	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	70	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	70	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	70	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	70	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	70	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	70	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	70	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	70	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	70	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	70	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	70	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	70	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	70	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	71	401		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	71	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	71	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	71	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	71	-1	next	343032
+decoded_dat/c/shino/a/bug.dat	field	71	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	71	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	71	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	71	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	71	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	71	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	71	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	71	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	71	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	71	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	71	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	71	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	71	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	71	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	71	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	71	0	fall	313030
+decoded_dat/c/shino/a/bug.dat	field	71	0	arest	3130
+decoded_dat/c/shino/a/bug.dat	field	71	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	71	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	71	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	71	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	71	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	71	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	71	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	71	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	71	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	71	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	71	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	71	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	71	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	71	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	71	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	71	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	71	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	71	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	71	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	71	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	71	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	71	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	71	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	71	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	72	402		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	72	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	72	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	72	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	72	-1	next	343030
+decoded_dat/c/shino/a/bug.dat	field	72	-1	dvy	31
+decoded_dat/c/shino/a/bug.dat	field	72	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	72	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	72	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	72	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	72	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	72	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	72	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	72	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	72	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	72	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	72	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	72	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	72	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	72	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	72	0	fall	313030
+decoded_dat/c/shino/a/bug.dat	field	72	0	arest	3130
+decoded_dat/c/shino/a/bug.dat	field	72	0	bdefend	313030
+decoded_dat/c/shino/a/bug.dat	field	72	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	72	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	72	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	72	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	72	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	72	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	72	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	72	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	72	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	72	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	72	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	72	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	72	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	72	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	72	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	72	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	72	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	72	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	72	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	72	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	72	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	72	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	72	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	73	403		7374617274
+decoded_dat/c/shino/a/bug.dat	field	73	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	73	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	73	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	73	-1	next	343034
+decoded_dat/c/shino/a/bug.dat	field	73	-1	dvy	3130
+decoded_dat/c/shino/a/bug.dat	field	73	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	73	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	73	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	73	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	73	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	73	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	73	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	73	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	73	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	73	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	73	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	73	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	73	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	73	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	73	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	73	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	73	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	73	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	73	0	injury	31
+decoded_dat/c/shino/a/bug.dat	block	73	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	73	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	73	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	73	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	73	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	73	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	73	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	73	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	73	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	73	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	73	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	73	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	73	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	73	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	73	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	73	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	73	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	73	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	73	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	73	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	73	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	73	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	74	404		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	74	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	74	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	74	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	74	-1	next	343035
+decoded_dat/c/shino/a/bug.dat	field	74	-1	dvy	3130
+decoded_dat/c/shino/a/bug.dat	field	74	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	74	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	74	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	74	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	74	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	74	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	74	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	74	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	74	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	74	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	74	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	74	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	74	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	74	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	74	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	74	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	74	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	74	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	74	0	injury	31
+decoded_dat/c/shino/a/bug.dat	block	74	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	74	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	74	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	74	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	74	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	74	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	74	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	74	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	74	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	74	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	74	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	74	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	74	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	74	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	74	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	74	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	74	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	74	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	74	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	74	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	74	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	74	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	75	405		666c79696e67
+decoded_dat/c/shino/a/bug.dat	field	75	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	75	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	75	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	75	-1	next	343033
+decoded_dat/c/shino/a/bug.dat	field	75	-1	dvy	3130
+decoded_dat/c/shino/a/bug.dat	field	75	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	75	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	75	-1	hit_Fa	37
+decoded_dat/c/shino/a/bug.dat	field	75	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	75	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	75	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	75	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	75	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	75	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	75	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	75	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	75	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	75	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	75	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	75	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	75	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	75	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	75	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	75	0	injury	31
+decoded_dat/c/shino/a/bug.dat	block	75	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	75	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	75	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	75	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	75	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	75	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	75	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	75	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	75	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	75	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	75	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	75	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	75	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	75	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	75	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	75	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	75	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	75	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	75	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	75	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	75	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	75	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	76	410		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	76	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	76	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	76	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	76	-1	next	343735
+decoded_dat/c/shino/a/bug.dat	field	76	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	76	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	frame	77	411		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	77	-1	pic	3232
+decoded_dat/c/shino/a/bug.dat	field	77	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	77	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	77	-1	next	343132
+decoded_dat/c/shino/a/bug.dat	field	77	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	77	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	frame	78	412		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	78	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	78	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	78	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	78	-1	next	343133
+decoded_dat/c/shino/a/bug.dat	field	78	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	78	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	frame	79	413		686974696e67
+decoded_dat/c/shino/a/bug.dat	field	79	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	79	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	79	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	79	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	79	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	79	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	frame	80	420		686974
+decoded_dat/c/shino/a/bug.dat	field	80	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	80	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	80	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	80	-1	next	343231
+decoded_dat/c/shino/a/bug.dat	field	80	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	80	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	81	421		686974
+decoded_dat/c/shino/a/bug.dat	field	81	-1	pic	3232
+decoded_dat/c/shino/a/bug.dat	field	81	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	81	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	81	-1	next	343232
+decoded_dat/c/shino/a/bug.dat	field	81	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	81	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	82	422		686974
+decoded_dat/c/shino/a/bug.dat	field	82	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	82	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	82	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	82	-1	next	343233
+decoded_dat/c/shino/a/bug.dat	field	82	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	82	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	83	423		686974
+decoded_dat/c/shino/a/bug.dat	field	83	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	83	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	83	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	83	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	83	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	83	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	84	430		7265626f756e64696e67
+decoded_dat/c/shino/a/bug.dat	field	84	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	84	-1	state	33303032
+decoded_dat/c/shino/a/bug.dat	field	84	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	84	-1	next	343231
+decoded_dat/c/shino/a/bug.dat	field	84	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	84	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	85	440		7461696c
+decoded_dat/c/shino/a/bug.dat	field	85	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	85	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	85	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	85	-1	next	343431
+decoded_dat/c/shino/a/bug.dat	field	85	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	85	-1	centery	3635
+decoded_dat/c/shino/a/bug.dat	field	85	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	85	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	85	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	85	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	85	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	85	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	85	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	85	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	85	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	85	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	85	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	85	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	85	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	85	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	85	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	85	0	injury	32
+decoded_dat/c/shino/a/bug.dat	frame	86	441		7461696c
+decoded_dat/c/shino/a/bug.dat	field	86	-1	pic	3232
+decoded_dat/c/shino/a/bug.dat	field	86	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	86	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	86	-1	next	343432
+decoded_dat/c/shino/a/bug.dat	field	86	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	86	-1	centery	3635
+decoded_dat/c/shino/a/bug.dat	field	86	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	86	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	86	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	86	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	86	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	86	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	86	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	86	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	86	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	86	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	86	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	86	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	86	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	86	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	86	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	86	0	injury	32
+decoded_dat/c/shino/a/bug.dat	frame	87	442		7461696c
+decoded_dat/c/shino/a/bug.dat	field	87	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	87	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	87	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	87	-1	next	343433
+decoded_dat/c/shino/a/bug.dat	field	87	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	87	-1	centery	3635
+decoded_dat/c/shino/a/bug.dat	field	87	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	87	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	87	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	87	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	87	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	87	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	87	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	87	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	87	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	87	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	87	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	87	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	87	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	87	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	87	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	87	0	injury	32
+decoded_dat/c/shino/a/bug.dat	frame	88	443		7461696c
+decoded_dat/c/shino/a/bug.dat	field	88	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	88	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	88	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	88	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	88	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	88	-1	centery	3635
+decoded_dat/c/shino/a/bug.dat	field	88	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	88	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	88	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	88	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	88	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	88	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	88	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	88	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	88	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	88	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	88	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	88	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	88	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	88	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	88	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	88	0	injury	32
+decoded_dat/c/shino/a/bug.dat	frame	89	450		7374617274
+decoded_dat/c/shino/a/bug.dat	field	89	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	89	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	89	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	89	-1	next	343030
+decoded_dat/c/shino/a/bug.dat	field	89	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	89	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	89	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	90	455		7374617274
+decoded_dat/c/shino/a/bug.dat	field	90	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	90	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	90	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	90	-1	next	343033
+decoded_dat/c/shino/a/bug.dat	field	90	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	90	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	90	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	91	460		686974696e675f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	91	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	91	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	91	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	91	-1	next	343631
+decoded_dat/c/shino/a/bug.dat	field	91	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	91	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	91	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	91	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	91	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	91	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	91	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	91	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	91	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	91	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	91	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	91	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	91	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	91	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	91	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	91	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	91	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	91	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	91	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	91	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	91	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	91	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	91	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	91	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	91	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	91	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	91	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	91	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	91	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	91	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	91	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	91	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	91	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	91	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	91	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	91	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	91	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	91	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	91	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	91	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	92	461		686974696e675f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	92	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	92	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	92	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	92	-1	next	343632
+decoded_dat/c/shino/a/bug.dat	field	92	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	92	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	92	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	92	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	92	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	92	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	92	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	92	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	92	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	92	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	92	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	92	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	92	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	92	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	92	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	92	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	92	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	92	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	92	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	92	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	92	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	92	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	92	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	92	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	92	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	92	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	92	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	92	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	92	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	92	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	92	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	92	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	92	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	92	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	92	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	92	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	92	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	92	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	92	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	92	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	93	462		686974696e675f67726f756e64
+decoded_dat/c/shino/a/bug.dat	field	93	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	93	-1	state	33303031
+decoded_dat/c/shino/a/bug.dat	field	93	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	93	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	93	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	93	-1	centery	3535
+decoded_dat/c/shino/a/bug.dat	field	93	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	93	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	93	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	93	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	93	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	93	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	93	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	93	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	93	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	93	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	93	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	93	0	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	93	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	93	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	93	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	93	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	93	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	93	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	93	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	93	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	93	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	93	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	93	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	93	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	93	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	93	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	93	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	93	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	93	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	93	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	93	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	93	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	93	2	h	3632
+decoded_dat/c/shino/a/bug.dat	field	93	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	93	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	93	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	93	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	93	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	94	465		7570
+decoded_dat/c/shino/a/bug.dat	field	94	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	94	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	94	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	94	-1	next	343636
+decoded_dat/c/shino/a/bug.dat	field	94	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	94	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	94	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	95	466		7570
+decoded_dat/c/shino/a/bug.dat	field	95	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	95	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	95	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	95	-1	next	343637
+decoded_dat/c/shino/a/bug.dat	field	95	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	95	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	95	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	95	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	95	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	95	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	95	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	95	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	95	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	95	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	96	467		7570
+decoded_dat/c/shino/a/bug.dat	field	96	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	96	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	96	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	96	-1	next	343638
+decoded_dat/c/shino/a/bug.dat	field	96	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	96	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	96	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	97	468		7570
+decoded_dat/c/shino/a/bug.dat	field	97	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	97	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	97	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	97	-1	next	343639
+decoded_dat/c/shino/a/bug.dat	field	97	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	97	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	97	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	98	469		7570
+decoded_dat/c/shino/a/bug.dat	field	98	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	98	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	98	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	98	-1	next	343730
+decoded_dat/c/shino/a/bug.dat	field	98	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	98	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	98	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	98	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	98	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	98	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	98	0	y	313035
+decoded_dat/c/shino/a/bug.dat	field	98	0	action	343734
+decoded_dat/c/shino/a/bug.dat	field	98	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	98	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	99	470		7570
+decoded_dat/c/shino/a/bug.dat	field	99	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	99	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	99	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	99	-1	next	343530
+decoded_dat/c/shino/a/bug.dat	field	99	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	99	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	99	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	99	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	99	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	99	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	99	0	y	313035
+decoded_dat/c/shino/a/bug.dat	field	99	0	action	343734
+decoded_dat/c/shino/a/bug.dat	field	99	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	99	0	facing	31
+decoded_dat/c/shino/a/bug.dat	frame	100	471		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	100	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	100	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	100	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	100	-1	next	343732
+decoded_dat/c/shino/a/bug.dat	field	100	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	100	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	101	472		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	101	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	101	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	101	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	101	-1	next	343735
+decoded_dat/c/shino/a/bug.dat	field	101	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	101	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	101	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	101	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	101	0	x	2d3730
+decoded_dat/c/shino/a/bug.dat	field	101	0	y	313030
+decoded_dat/c/shino/a/bug.dat	field	101	0	action	343735
+decoded_dat/c/shino/a/bug.dat	field	101	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	101	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	102	473		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	102	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	102	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	102	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	102	-1	next	343735
+decoded_dat/c/shino/a/bug.dat	field	102	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	102	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	102	-1	hit_j	3531
+decoded_dat/c/shino/a/bug.dat	frame	103	474		7570
+decoded_dat/c/shino/a/bug.dat	field	103	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	103	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	103	-1	wait	39
+decoded_dat/c/shino/a/bug.dat	field	103	-1	next	343530
+decoded_dat/c/shino/a/bug.dat	field	103	-1	dvx	39
+decoded_dat/c/shino/a/bug.dat	field	103	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	103	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	103	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	104	475		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	104	-1	pic	3132
+decoded_dat/c/shino/a/bug.dat	field	104	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	104	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	104	-1	next	343739
+decoded_dat/c/shino/a/bug.dat	field	104	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	104	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	104	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	104	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	104	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	104	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	104	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	104	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	104	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	104	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	104	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	104	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	104	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	104	0	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	104	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	104	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	104	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	104	0	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	105	476		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	105	-1	pic	3133
+decoded_dat/c/shino/a/bug.dat	field	105	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	105	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	105	-1	next	343737
+decoded_dat/c/shino/a/bug.dat	field	105	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	105	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	105	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	105	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	105	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	105	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	105	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	105	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	105	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	105	0	y	313330
+decoded_dat/c/shino/a/bug.dat	field	105	0	action	343830
+decoded_dat/c/shino/a/bug.dat	field	105	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	105	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	105	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	105	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	105	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	105	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	105	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	105	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	105	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	105	1	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	105	1	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	105	1	arest	31
+decoded_dat/c/shino/a/bug.dat	field	105	1	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	105	1	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	106	477		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	106	-1	pic	3133
+decoded_dat/c/shino/a/bug.dat	field	106	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	106	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	106	-1	next	343738
+decoded_dat/c/shino/a/bug.dat	field	106	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	106	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	106	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	106	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	106	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	106	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	106	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	106	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	106	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	106	0	y	3930
+decoded_dat/c/shino/a/bug.dat	field	106	0	action	343830
+decoded_dat/c/shino/a/bug.dat	field	106	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	106	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	106	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	106	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	106	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	106	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	106	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	106	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	106	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	106	1	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	106	1	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	106	1	arest	31
+decoded_dat/c/shino/a/bug.dat	field	106	1	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	106	1	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	107	478		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	107	-1	pic	3133
+decoded_dat/c/shino/a/bug.dat	field	107	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	107	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	107	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	107	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	107	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	107	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	107	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	107	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	107	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	107	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	107	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	107	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	107	0	y	3530
+decoded_dat/c/shino/a/bug.dat	field	107	0	action	343830
+decoded_dat/c/shino/a/bug.dat	field	107	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	107	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	107	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	107	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	107	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	107	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	107	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	107	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	107	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	107	1	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	107	1	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	107	1	arest	31
+decoded_dat/c/shino/a/bug.dat	field	107	1	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	107	1	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	108	479		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	108	-1	pic	3132
+decoded_dat/c/shino/a/bug.dat	field	108	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	108	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	108	-1	next	343736
+decoded_dat/c/shino/a/bug.dat	field	108	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	108	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	108	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	108	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	108	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	108	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	108	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	108	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	108	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	108	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	108	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	108	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	108	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	108	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	108	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	108	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	108	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	108	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	108	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	108	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	108	1	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	108	1	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	108	1	arest	31
+decoded_dat/c/shino/a/bug.dat	field	108	1	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	108	1	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	109	480		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	109	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	109	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	109	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	109	-1	next	343831
+decoded_dat/c/shino/a/bug.dat	field	109	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	109	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	109	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	109	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	109	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	109	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	109	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	109	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	109	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	109	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	109	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	109	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	109	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	109	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	109	0	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	109	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	109	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	109	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	109	0	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	110	481		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	110	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	110	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	110	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	110	-1	next	343832
+decoded_dat/c/shino/a/bug.dat	field	110	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	110	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	110	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	110	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	110	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	110	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	110	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	110	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	110	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	110	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	110	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	110	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	110	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	110	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	110	0	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	110	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	110	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	110	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	110	0	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	111	482		70696c6c6172
+decoded_dat/c/shino/a/bug.dat	field	111	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	111	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	111	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	111	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	111	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	111	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	111	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	111	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	111	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	111	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	111	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	111	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	111	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	111	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	111	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	111	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	111	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	111	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	111	0	dvy	2d38
+decoded_dat/c/shino/a/bug.dat	field	111	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	111	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	111	0	bdefend	32
+decoded_dat/c/shino/a/bug.dat	field	111	0	injury	34
+decoded_dat/c/shino/a/bug.dat	frame	112	485		667761726431
+decoded_dat/c/shino/a/bug.dat	field	112	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	112	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	112	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	112	-1	next	343836
+decoded_dat/c/shino/a/bug.dat	field	112	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	112	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	112	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	112	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	112	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	112	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	112	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	112	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	112	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	112	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	112	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	112	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	112	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	112	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	112	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	112	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	112	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	112	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	112	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	112	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	112	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	112	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	112	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	112	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	112	1	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	113	486		667761726431
+decoded_dat/c/shino/a/bug.dat	field	113	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	113	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	113	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	113	-1	next	343837
+decoded_dat/c/shino/a/bug.dat	field	113	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	113	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	113	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	113	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	113	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	113	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	113	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	113	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	113	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	113	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	113	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	113	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	113	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	113	0	facing	30
+decoded_dat/c/shino/a/bug.dat	block	113	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	113	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	113	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	113	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	113	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	113	1	h	3632
+decoded_dat/c/shino/a/bug.dat	field	113	1	effect	30
+decoded_dat/c/shino/a/bug.dat	field	113	1	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	113	1	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	113	1	arest	31
+decoded_dat/c/shino/a/bug.dat	field	113	1	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	113	1	injury	32
+decoded_dat/c/shino/a/bug.dat	block	113	2	bdy	
+decoded_dat/c/shino/a/bug.dat	field	113	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	113	2	x	3138
+decoded_dat/c/shino/a/bug.dat	field	113	2	y	3139
+decoded_dat/c/shino/a/bug.dat	field	113	2	w	3632
+decoded_dat/c/shino/a/bug.dat	field	113	2	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	114	487		667761726431
+decoded_dat/c/shino/a/bug.dat	field	114	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	114	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	114	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	114	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	114	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	114	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	114	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	114	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	114	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	114	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	114	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	114	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	114	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	114	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	114	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	114	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	114	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	114	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	114	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	114	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	114	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	114	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	114	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	114	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	114	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	114	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	114	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	114	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	114	1	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	115	488		667761726432
+decoded_dat/c/shino/a/bug.dat	field	115	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	115	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	115	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	115	-1	next	343839
+decoded_dat/c/shino/a/bug.dat	field	115	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	115	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	115	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	115	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	115	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	115	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	115	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	115	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	115	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	115	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	115	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	115	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	115	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	115	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	115	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	115	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	115	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	115	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	115	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	115	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	115	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	115	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	115	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	115	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	115	1	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	116	489		667761726432
+decoded_dat/c/shino/a/bug.dat	field	116	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	116	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	116	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	116	-1	next	343930
+decoded_dat/c/shino/a/bug.dat	field	116	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	116	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	116	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	116	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	116	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	116	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	116	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	116	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	116	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	116	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	116	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	116	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	116	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	116	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	116	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	116	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	116	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	116	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	116	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	116	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	116	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	116	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	116	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	116	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	116	1	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	117	490		667761726432
+decoded_dat/c/shino/a/bug.dat	field	117	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	117	-1	state	33303033
+decoded_dat/c/shino/a/bug.dat	field	117	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	117	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	117	-1	dvx	3235
+decoded_dat/c/shino/a/bug.dat	field	117	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	117	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	117	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	117	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	117	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	117	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	117	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	117	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	117	0	x	3138
+decoded_dat/c/shino/a/bug.dat	field	117	0	y	3139
+decoded_dat/c/shino/a/bug.dat	field	117	0	w	3632
+decoded_dat/c/shino/a/bug.dat	field	117	0	h	3632
+decoded_dat/c/shino/a/bug.dat	field	117	0	drain	303035
+decoded_dat/c/shino/a/bug.dat	field	117	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	117	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	117	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	117	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	117	0	injury	32
+decoded_dat/c/shino/a/bug.dat	block	117	1	bdy	
+decoded_dat/c/shino/a/bug.dat	field	117	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	117	1	x	3138
+decoded_dat/c/shino/a/bug.dat	field	117	1	y	3139
+decoded_dat/c/shino/a/bug.dat	field	117	1	w	3632
+decoded_dat/c/shino/a/bug.dat	field	117	1	h	3632
+decoded_dat/c/shino/a/bug.dat	frame	118	491		747261636b
+decoded_dat/c/shino/a/bug.dat	field	118	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	118	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	118	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	118	-1	next	343932
+decoded_dat/c/shino/a/bug.dat	field	118	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	118	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	118	-1	hit_a	33
+decoded_dat/c/shino/a/bug.dat	field	118	-1	hit_d	343934
+decoded_dat/c/shino/a/bug.dat	field	118	-1	hit_Fa	3132
+decoded_dat/c/shino/a/bug.dat	block	118	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	118	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	118	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	118	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	118	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	118	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	118	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	118	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	118	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	118	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	118	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	118	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	118	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	118	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	118	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	118	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	118	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	118	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	118	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	118	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	118	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	118	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	118	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	118	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	118	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	118	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	118	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	118	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	118	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	118	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	118	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	118	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	118	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	118	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	118	4	itr	
+decoded_dat/c/shino/a/bug.dat	field	118	4	kind	38
+decoded_dat/c/shino/a/bug.dat	field	118	4	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	118	4	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	118	4	x	3536
+decoded_dat/c/shino/a/bug.dat	field	118	4	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	118	4	w	35
+decoded_dat/c/shino/a/bug.dat	field	118	4	h	333030
+decoded_dat/c/shino/a/bug.dat	field	118	4	dvx	343934
+decoded_dat/c/shino/a/bug.dat	block	118	5	bdy	
+decoded_dat/c/shino/a/bug.dat	field	118	5	kind	30
+decoded_dat/c/shino/a/bug.dat	field	118	5	x	3430
+decoded_dat/c/shino/a/bug.dat	field	118	5	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	118	5	w	3330
+decoded_dat/c/shino/a/bug.dat	field	118	5	h	333939
+decoded_dat/c/shino/a/bug.dat	frame	119	492		747261636b
+decoded_dat/c/shino/a/bug.dat	field	119	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	119	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	119	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	119	-1	next	343931
+decoded_dat/c/shino/a/bug.dat	field	119	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	119	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	119	-1	hit_a	33
+decoded_dat/c/shino/a/bug.dat	field	119	-1	hit_d	343934
+decoded_dat/c/shino/a/bug.dat	field	119	-1	hit_Fa	3132
+decoded_dat/c/shino/a/bug.dat	block	119	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	119	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	119	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	119	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	119	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	119	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	119	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	119	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	119	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	119	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	119	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	119	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	119	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	119	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	119	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	119	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	119	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	119	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	119	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	119	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	119	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	119	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	119	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	119	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	119	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	119	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	119	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	119	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	119	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	119	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	119	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	119	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	119	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	119	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	119	4	itr	
+decoded_dat/c/shino/a/bug.dat	field	119	4	kind	38
+decoded_dat/c/shino/a/bug.dat	field	119	4	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	119	4	dvy	2d31
+decoded_dat/c/shino/a/bug.dat	field	119	4	x	3536
+decoded_dat/c/shino/a/bug.dat	field	119	4	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	119	4	w	35
+decoded_dat/c/shino/a/bug.dat	field	119	4	h	333030
+decoded_dat/c/shino/a/bug.dat	field	119	4	dvx	343934
+decoded_dat/c/shino/a/bug.dat	block	119	5	bdy	
+decoded_dat/c/shino/a/bug.dat	field	119	5	kind	30
+decoded_dat/c/shino/a/bug.dat	field	119	5	x	2d39393939
+decoded_dat/c/shino/a/bug.dat	field	119	5	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	119	5	w	3939393939
+decoded_dat/c/shino/a/bug.dat	field	119	5	h	333939
+decoded_dat/c/shino/a/bug.dat	field	119	5	zwidth	393939
+decoded_dat/c/shino/a/bug.dat	frame	120	494		747261636b5f646973
+decoded_dat/c/shino/a/bug.dat	field	120	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	120	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	120	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	120	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	120	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	120	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	120	-1	hit_Fa	3132
+decoded_dat/c/shino/a/bug.dat	block	120	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	120	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	120	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	120	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	120	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	120	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	120	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	120	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	120	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	120	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	120	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	120	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	120	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	120	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	120	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	120	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	120	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	120	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	120	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	120	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	120	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	120	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	120	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	120	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	120	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	120	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	120	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	120	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	120	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	120	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	120	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	120	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	120	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	120	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	frame	121	495		747261636b
+decoded_dat/c/shino/a/bug.dat	field	121	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	121	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	121	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	121	-1	next	343936
+decoded_dat/c/shino/a/bug.dat	field	121	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	121	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	121	-1	hit_a	33
+decoded_dat/c/shino/a/bug.dat	field	121	-1	hit_d	343934
+decoded_dat/c/shino/a/bug.dat	field	121	-1	hit_Fa	3132
+decoded_dat/c/shino/a/bug.dat	block	121	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	121	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	121	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	121	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	121	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	121	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	121	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	121	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	121	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	121	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	121	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	121	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	121	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	121	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	121	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	121	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	121	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	121	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	121	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	121	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	121	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	121	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	121	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	121	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	121	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	121	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	121	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	121	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	121	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	121	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	121	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	121	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	121	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	121	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	121	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	121	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	121	4	x	2d39393939
+decoded_dat/c/shino/a/bug.dat	field	121	4	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	121	4	w	3939393939
+decoded_dat/c/shino/a/bug.dat	field	121	4	h	333939
+decoded_dat/c/shino/a/bug.dat	field	121	4	zwidth	393939
+decoded_dat/c/shino/a/bug.dat	frame	122	496		747261636b
+decoded_dat/c/shino/a/bug.dat	field	122	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	122	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	122	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	122	-1	next	343931
+decoded_dat/c/shino/a/bug.dat	field	122	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	122	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	122	-1	hit_a	33
+decoded_dat/c/shino/a/bug.dat	field	122	-1	hit_d	343934
+decoded_dat/c/shino/a/bug.dat	field	122	-1	hit_Fa	3132
+decoded_dat/c/shino/a/bug.dat	block	122	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	122	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	122	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	122	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	122	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	122	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	122	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	122	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	122	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	122	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	122	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	122	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	122	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	122	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	122	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	122	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	122	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	122	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	122	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	122	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	122	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	122	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	122	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	122	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	122	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	122	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	122	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	122	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	122	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	122	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	122	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	122	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	122	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	122	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	122	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	122	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	122	4	x	2d39393939
+decoded_dat/c/shino/a/bug.dat	field	122	4	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	122	4	w	3939393939
+decoded_dat/c/shino/a/bug.dat	field	122	4	h	333939
+decoded_dat/c/shino/a/bug.dat	field	122	4	zwidth	393939
+decoded_dat/c/shino/a/bug.dat	frame	123	497		747261636b
+decoded_dat/c/shino/a/bug.dat	field	123	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	123	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	123	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	123	-1	next	343938
+decoded_dat/c/shino/a/bug.dat	field	123	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	123	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	123	-1	dvz	353530
+decoded_dat/c/shino/a/bug.dat	field	123	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	123	-1	centery	3235
+decoded_dat/c/shino/a/bug.dat	frame	124	498		747261636b
+decoded_dat/c/shino/a/bug.dat	field	124	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	124	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	124	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	124	-1	next	343939
+decoded_dat/c/shino/a/bug.dat	field	124	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	124	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	124	-1	dvz	353530
+decoded_dat/c/shino/a/bug.dat	field	124	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	124	-1	centery	3235
+decoded_dat/c/shino/a/bug.dat	block	124	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	124	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	124	0	x	3532
+decoded_dat/c/shino/a/bug.dat	field	124	0	y	3730
+decoded_dat/c/shino/a/bug.dat	field	124	0	action	353030
+decoded_dat/c/shino/a/bug.dat	field	124	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	124	0	facing	3330
+decoded_dat/c/shino/a/bug.dat	frame	125	499		747261636b
+decoded_dat/c/shino/a/bug.dat	field	125	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	125	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	125	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	125	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	125	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	125	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	125	-1	dvz	353530
+decoded_dat/c/shino/a/bug.dat	field	125	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	125	-1	centery	3235
+decoded_dat/c/shino/a/bug.dat	block	125	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	125	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	125	0	x	3532
+decoded_dat/c/shino/a/bug.dat	field	125	0	y	3730
+decoded_dat/c/shino/a/bug.dat	field	125	0	action	353030
+decoded_dat/c/shino/a/bug.dat	field	125	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	125	0	facing	3331
+decoded_dat/c/shino/a/bug.dat	frame	126	500		747261636b696e67
+decoded_dat/c/shino/a/bug.dat	field	126	-1	pic	3231
+decoded_dat/c/shino/a/bug.dat	field	126	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	126	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	126	-1	next	353031
+decoded_dat/c/shino/a/bug.dat	field	126	-1	dvx	3130
+decoded_dat/c/shino/a/bug.dat	field	126	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	126	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	126	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	126	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	126	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	126	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	126	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	126	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	126	0	x	3137
+decoded_dat/c/shino/a/bug.dat	field	126	0	y	3331
+decoded_dat/c/shino/a/bug.dat	field	126	0	w	3630
+decoded_dat/c/shino/a/bug.dat	field	126	0	h	3433
+decoded_dat/c/shino/a/bug.dat	field	126	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	126	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	126	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	126	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	126	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	126	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	126	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	126	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	126	1	x	3137
+decoded_dat/c/shino/a/bug.dat	field	126	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	126	1	w	3630
+decoded_dat/c/shino/a/bug.dat	field	126	1	h	3433
+decoded_dat/c/shino/a/bug.dat	field	126	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	126	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	126	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	126	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	126	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	126	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	126	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	126	2	x	3137
+decoded_dat/c/shino/a/bug.dat	field	126	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	126	2	w	3630
+decoded_dat/c/shino/a/bug.dat	field	126	2	h	3433
+decoded_dat/c/shino/a/bug.dat	field	126	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	126	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	126	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	126	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	126	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	127	501		747261636b696e67
+decoded_dat/c/shino/a/bug.dat	field	127	-1	pic	3232
+decoded_dat/c/shino/a/bug.dat	field	127	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	127	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	127	-1	next	353032
+decoded_dat/c/shino/a/bug.dat	field	127	-1	dvx	3130
+decoded_dat/c/shino/a/bug.dat	field	127	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	127	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	127	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	127	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	127	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	127	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	127	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	127	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	127	0	x	3137
+decoded_dat/c/shino/a/bug.dat	field	127	0	y	3331
+decoded_dat/c/shino/a/bug.dat	field	127	0	w	3630
+decoded_dat/c/shino/a/bug.dat	field	127	0	h	3433
+decoded_dat/c/shino/a/bug.dat	field	127	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	127	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	127	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	127	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	127	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	127	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	127	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	127	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	127	1	x	3137
+decoded_dat/c/shino/a/bug.dat	field	127	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	127	1	w	3630
+decoded_dat/c/shino/a/bug.dat	field	127	1	h	3433
+decoded_dat/c/shino/a/bug.dat	field	127	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	127	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	127	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	127	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	127	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	127	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	127	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	127	2	x	3137
+decoded_dat/c/shino/a/bug.dat	field	127	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	127	2	w	3630
+decoded_dat/c/shino/a/bug.dat	field	127	2	h	3433
+decoded_dat/c/shino/a/bug.dat	field	127	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	127	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	127	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	127	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	127	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	128	502		747261636b696e67
+decoded_dat/c/shino/a/bug.dat	field	128	-1	pic	3233
+decoded_dat/c/shino/a/bug.dat	field	128	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	128	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	128	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	128	-1	dvx	3130
+decoded_dat/c/shino/a/bug.dat	field	128	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	128	-1	centery	3730
+decoded_dat/c/shino/a/bug.dat	field	128	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	128	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	128	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	128	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	128	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	128	0	kind	30
+decoded_dat/c/shino/a/bug.dat	field	128	0	x	3137
+decoded_dat/c/shino/a/bug.dat	field	128	0	y	3331
+decoded_dat/c/shino/a/bug.dat	field	128	0	w	3630
+decoded_dat/c/shino/a/bug.dat	field	128	0	h	3433
+decoded_dat/c/shino/a/bug.dat	field	128	0	effect	30
+decoded_dat/c/shino/a/bug.dat	field	128	0	dvy	2d35
+decoded_dat/c/shino/a/bug.dat	field	128	0	fall	3730
+decoded_dat/c/shino/a/bug.dat	field	128	0	arest	31
+decoded_dat/c/shino/a/bug.dat	field	128	0	bdefend	31
+decoded_dat/c/shino/a/bug.dat	field	128	0	injury	3130
+decoded_dat/c/shino/a/bug.dat	block	128	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	128	1	kind	30
+decoded_dat/c/shino/a/bug.dat	field	128	1	x	3137
+decoded_dat/c/shino/a/bug.dat	field	128	1	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	128	1	w	3630
+decoded_dat/c/shino/a/bug.dat	field	128	1	h	3433
+decoded_dat/c/shino/a/bug.dat	field	128	1	effect	38
+decoded_dat/c/shino/a/bug.dat	field	128	1	caughtact	323332
+decoded_dat/c/shino/a/bug.dat	field	128	1	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	128	1	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	128	1	sound	3130
+decoded_dat/c/shino/a/bug.dat	block	128	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	128	2	kind	30
+decoded_dat/c/shino/a/bug.dat	field	128	2	x	3137
+decoded_dat/c/shino/a/bug.dat	field	128	2	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	128	2	w	3630
+decoded_dat/c/shino/a/bug.dat	field	128	2	h	3433
+decoded_dat/c/shino/a/bug.dat	field	128	2	effect	38
+decoded_dat/c/shino/a/bug.dat	field	128	2	caughtact	333937
+decoded_dat/c/shino/a/bug.dat	field	128	2	vrest	3330
+decoded_dat/c/shino/a/bug.dat	field	128	2	injury	3530
+decoded_dat/c/shino/a/bug.dat	field	128	2	sound	3130
+decoded_dat/c/shino/a/bug.dat	frame	129	505		747261636b
+decoded_dat/c/shino/a/bug.dat	field	129	-1	pic	3234
+decoded_dat/c/shino/a/bug.dat	field	129	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	129	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	129	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	129	-1	centerx	3532
+decoded_dat/c/shino/a/bug.dat	field	129	-1	centery	3335
+decoded_dat/c/shino/a/bug.dat	field	129	-1	hit_Fj	343130
+decoded_dat/c/shino/a/bug.dat	field	129	-1	hit_Uj	343230
+decoded_dat/c/shino/a/bug.dat	field	129	-1	hit_Dj	343330
+decoded_dat/c/shino/a/bug.dat	field	129	-1	hit_ja	343330
+decoded_dat/c/shino/a/bug.dat	block	129	0	itr	
+decoded_dat/c/shino/a/bug.dat	field	129	0	kind	38
+decoded_dat/c/shino/a/bug.dat	field	129	0	x	3430
+decoded_dat/c/shino/a/bug.dat	field	129	0	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	129	0	w	3330
+decoded_dat/c/shino/a/bug.dat	field	129	0	h	3139
+decoded_dat/c/shino/a/bug.dat	field	129	0	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	129	0	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	129	1	itr	
+decoded_dat/c/shino/a/bug.dat	field	129	1	kind	38
+decoded_dat/c/shino/a/bug.dat	field	129	1	x	3430
+decoded_dat/c/shino/a/bug.dat	field	129	1	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	129	1	w	3330
+decoded_dat/c/shino/a/bug.dat	field	129	1	h	3139
+decoded_dat/c/shino/a/bug.dat	field	129	1	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	129	1	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	129	2	itr	
+decoded_dat/c/shino/a/bug.dat	field	129	2	kind	38
+decoded_dat/c/shino/a/bug.dat	field	129	2	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	129	2	x	3430
+decoded_dat/c/shino/a/bug.dat	field	129	2	y	33303030
+decoded_dat/c/shino/a/bug.dat	field	129	2	w	3330
+decoded_dat/c/shino/a/bug.dat	field	129	2	h	3139
+decoded_dat/c/shino/a/bug.dat	field	129	2	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	129	2	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	129	3	itr	
+decoded_dat/c/shino/a/bug.dat	field	129	3	kind	38
+decoded_dat/c/shino/a/bug.dat	field	129	3	bdefend	33
+decoded_dat/c/shino/a/bug.dat	field	129	3	x	3430
+decoded_dat/c/shino/a/bug.dat	field	129	3	y	33353030
+decoded_dat/c/shino/a/bug.dat	field	129	3	w	3330
+decoded_dat/c/shino/a/bug.dat	field	129	3	h	3139
+decoded_dat/c/shino/a/bug.dat	field	129	3	zwidth	3230
+decoded_dat/c/shino/a/bug.dat	field	129	3	dvx	343937
+decoded_dat/c/shino/a/bug.dat	block	129	4	bdy	
+decoded_dat/c/shino/a/bug.dat	field	129	4	kind	30
+decoded_dat/c/shino/a/bug.dat	field	129	4	x	2d39393939
+decoded_dat/c/shino/a/bug.dat	field	129	4	y	3530303030
+decoded_dat/c/shino/a/bug.dat	field	129	4	w	3939393939
+decoded_dat/c/shino/a/bug.dat	field	129	4	h	333939
+decoded_dat/c/shino/a/bug.dat	field	129	4	zwidth	393939
+decoded_dat/c/shino/a/bug.dat	frame	130	563		757032
+decoded_dat/c/shino/a/bug.dat	field	130	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	130	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	130	-1	wait	34
+decoded_dat/c/shino/a/bug.dat	field	130	-1	next	353634
+decoded_dat/c/shino/a/bug.dat	field	130	-1	dvx	3130
+decoded_dat/c/shino/a/bug.dat	field	130	-1	dvy	2d3230
+decoded_dat/c/shino/a/bug.dat	field	130	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	130	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	131	564		757032
+decoded_dat/c/shino/a/bug.dat	field	131	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	131	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	131	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	131	-1	next	353734
+decoded_dat/c/shino/a/bug.dat	field	131	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	131	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	131	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	132	565		757032
+decoded_dat/c/shino/a/bug.dat	field	132	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	132	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	132	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	132	-1	next	353636
+decoded_dat/c/shino/a/bug.dat	field	132	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	132	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	132	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	133	566		757032
+decoded_dat/c/shino/a/bug.dat	field	133	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	133	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	133	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	133	-1	next	353637
+decoded_dat/c/shino/a/bug.dat	field	133	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	133	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	133	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	133	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	133	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	133	0	x	3339
+decoded_dat/c/shino/a/bug.dat	field	133	0	y	3339
+decoded_dat/c/shino/a/bug.dat	field	133	0	action	373033
+decoded_dat/c/shino/a/bug.dat	field	133	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	133	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	134	567		757032
+decoded_dat/c/shino/a/bug.dat	field	134	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	134	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	134	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	134	-1	next	353638
+decoded_dat/c/shino/a/bug.dat	field	134	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	134	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	134	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	135	568		757032
+decoded_dat/c/shino/a/bug.dat	field	135	-1	pic	3138
+decoded_dat/c/shino/a/bug.dat	field	135	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	135	-1	wait	33
+decoded_dat/c/shino/a/bug.dat	field	135	-1	next	353639
+decoded_dat/c/shino/a/bug.dat	field	135	-1	dvy	2d32
+decoded_dat/c/shino/a/bug.dat	field	135	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	135	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	136	569		757032
+decoded_dat/c/shino/a/bug.dat	field	136	-1	pic	3139
+decoded_dat/c/shino/a/bug.dat	field	136	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	136	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	136	-1	next	353730
+decoded_dat/c/shino/a/bug.dat	field	136	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	136	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	136	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	137	570		757032
+decoded_dat/c/shino/a/bug.dat	field	137	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	137	-1	state	343030
+decoded_dat/c/shino/a/bug.dat	field	137	-1	wait	32
+decoded_dat/c/shino/a/bug.dat	field	137	-1	next	353830
+decoded_dat/c/shino/a/bug.dat	field	137	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	137	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	137	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	frame	138	574		7374617274
+decoded_dat/c/shino/a/bug.dat	field	138	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	138	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	138	-1	wait	31
+decoded_dat/c/shino/a/bug.dat	field	138	-1	next	353735
+decoded_dat/c/shino/a/bug.dat	field	138	-1	dvx	3430
+decoded_dat/c/shino/a/bug.dat	field	138	-1	dvy	3130
+decoded_dat/c/shino/a/bug.dat	field	138	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	138	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	138	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	139	575		7374617274
+decoded_dat/c/shino/a/bug.dat	field	139	-1	pic	3230
+decoded_dat/c/shino/a/bug.dat	field	139	-1	state	33303030
+decoded_dat/c/shino/a/bug.dat	field	139	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	139	-1	next	343030
+decoded_dat/c/shino/a/bug.dat	field	139	-1	dvx	353530
+decoded_dat/c/shino/a/bug.dat	field	139	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	139	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	field	139	-1	hit_Fa	33
+decoded_dat/c/shino/a/bug.dat	frame	140	580		757032
+decoded_dat/c/shino/a/bug.dat	field	140	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	140	-1	state	343030
+decoded_dat/c/shino/a/bug.dat	field	140	-1	wait	3139
+decoded_dat/c/shino/a/bug.dat	field	140	-1	next	353633
+decoded_dat/c/shino/a/bug.dat	field	140	-1	dvy	353530
+decoded_dat/c/shino/a/bug.dat	field	140	-1	centerx	3533
+decoded_dat/c/shino/a/bug.dat	field	140	-1	centery	313035
+decoded_dat/c/shino/a/bug.dat	block	140	0	opoint	
+decoded_dat/c/shino/a/bug.dat	field	140	0	kind	31
+decoded_dat/c/shino/a/bug.dat	field	140	0	x	3533
+decoded_dat/c/shino/a/bug.dat	field	140	0	y	313035
+decoded_dat/c/shino/a/bug.dat	field	140	0	action	353633
+decoded_dat/c/shino/a/bug.dat	field	140	0	oid	323238
+decoded_dat/c/shino/a/bug.dat	field	140	0	facing	30
+decoded_dat/c/shino/a/bug.dat	frame	141	700		6133
+decoded_dat/c/shino/a/bug.dat	field	141	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	141	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	141	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	141	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	141	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	141	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	field	141	-1	sound	635c7368696e6f5c775c61332e776176
+decoded_dat/c/shino/a/bug.dat	frame	142	701		6a32
+decoded_dat/c/shino/a/bug.dat	field	142	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	142	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	142	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	142	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	142	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	142	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	field	142	-1	sound	635c7368696e6f5c775c6a322e776176
+decoded_dat/c/shino/a/bug.dat	frame	143	702		6a33
+decoded_dat/c/shino/a/bug.dat	field	143	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	143	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	143	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	143	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	143	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	143	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	field	143	-1	sound	635c7368696e6f5c775c6a332e776176
+decoded_dat/c/shino/a/bug.dat	frame	144	703		6531
+decoded_dat/c/shino/a/bug.dat	field	144	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	144	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	144	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	144	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	144	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	144	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	field	144	-1	sound	635c7368696e6f5c775c65312e776176
+decoded_dat/c/shino/a/bug.dat	frame	145	704		6a31
+decoded_dat/c/shino/a/bug.dat	field	145	-1	pic	393939
+decoded_dat/c/shino/a/bug.dat	field	145	-1	state	33303035
+decoded_dat/c/shino/a/bug.dat	field	145	-1	wait	30
+decoded_dat/c/shino/a/bug.dat	field	145	-1	next	31303030
+decoded_dat/c/shino/a/bug.dat	field	145	-1	centerx	3339
+decoded_dat/c/shino/a/bug.dat	field	145	-1	centery	3739
+decoded_dat/c/shino/a/bug.dat	field	145	-1	sound	635c7368696e6f5c775c6a312e776176

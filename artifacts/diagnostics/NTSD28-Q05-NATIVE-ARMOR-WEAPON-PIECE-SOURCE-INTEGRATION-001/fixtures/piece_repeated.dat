@@ -1,0 +1,11 @@
+<weapon_piece>
+piece: 2 amount: 1 oid: 8
+piece_end:
+piece: 1 amount: 3 oid: 9
+piece_end:
+piece: 2 amount: 4 oid: 10
+piece_end:
+<weapon_piece_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

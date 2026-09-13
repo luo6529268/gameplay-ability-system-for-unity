@@ -1,0 +1,220 @@
+{
+  "formalExeHash": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "sourcesAndHeaders": [
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C7562E4CCC7D66924F1415AAFBDAA7277614F29EB78F5792A20CEB45039207A2",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q03Geometry\\AuthorityGeometryWitness.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "CF5E81B2F353C4C766DE91B88A27B62AB3F405E94B1016912491C45ABC38C13A",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "E895D1F3F8FA5C0DE1A17ADF634D972AE86EAD4A5DB6FC9C17E995F853193C09",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "8F66035D91FDB8DB900316D4D63DE52F6A7248643074D26F1DDAC4F650EDD739",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "262B31261CA4747DFBE8117EE365E853B0591FC4AA05EDFD7F618CD75206D806",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4168C78A23849EAA17DD749002B89DD335841DB6CECA8B04FAE8356B10F1B905",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "25BECB11DAB9C69D1A704C4A2C5C1F060241E574973DDE38C23191E08467AA72",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\armor_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "D1FEC33326A57E1D243F0FC3F1482BE00A0B68A1C70B4E45E8D13727E8D8FD00",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\background_definition.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "1AB92309CC5E9F548D171DEF9E149BCCD98D3B7FFC12678B49D3E3DE0F1F9921",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_flow.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "8287EC804B928C34711DAE4AE6561A924426965E45F921DD5D085F08F093037B",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_world.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C2CE795FED8BDCCD9BE4E16BF969B9FEB02C2DE238F902939369665889B5E6FE",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\collision_geometry.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "B75533BDB48D81AB21B1CEA7DBDD014F542C6CEF53FF3A94AEC3ACF1EB18B5A1",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\combat_records.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C4FC791C316BC2CB8C9217683C5AF56190E41630FA63E165280FFE051E82A7C4",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\damage_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "F98D23A6271C7156B36F0460F68C1090AF02F051FB9EDFF8C1283E001078CBFD",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_document.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "85600D20198855940A4B9B2AFC81126BCF0EC3CEE91EBD688797D19C7913DAC4",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_parser.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6DAD6BB061888FE44E6D001A4CBE98F33C9D31B7B0F0DC17B50EB1B25CF31047",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\defense_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "0E684E4F014EBFDB1658C751930F6CB6A5DA457B56EE3A48C901F455A280443F",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\engine_profile.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "31431A54A1C6569DFE8E30A1A37CD80F88F9360C6D9D8AB52C9A69FE1CA60DAD",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_machine.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "687B3D8D03D2B19AE5A88BCB19A6625AFA60B97219F02E29A96913CC184D3BE3",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_motion.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A3E858F143124F70E0193AF53769A9597F394E59F31B0604AFA93AECC7DC11F9",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\fusion_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "67115485624736DFE615DEF937E0F910B801987074EE8707759119326FBA73EC",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_candidates.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "258EEB00A11075F8687D215385E8C4FFB17177EF9DC40343DE499A7D4557BF48",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_response.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "380B7597144DEAD54D6592DD2D8D7D8883144B2D4A4BAEBE993112A00DA6ED58",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_routing.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "AC2CD6D7905BD4788C3C86E45312827E6AE7FF6C02108F320EC073931E312B47",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_state.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "F1930B7F41CB5A97D642C866FFF9189B61098CAFA2847E6DB617832620978072",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\kind_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A0092D049F6AB7D62B2A9B41C2351C87CFE610DC093DD157527A056ECD193AE7",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\minibar_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "DFCF326443ED77B1952929892C65F83713FA5ABDDB111C82D0E957D4C80C2E4B",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_ai.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "AA6CC42A8B80ECB00339E7C8EF4D64C2F21BE70080D6D3AB205997BD5B5E83AB",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_combo_hud.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "BF1783E5369EFFF1F4A0D5D6E1A1E21955511EC717F1DF8CFDF6A031B135D257",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_frame_hud.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4776B947299EBC35B0DFEAD8FDD7D25E655C6FC9F5A36E1B4C129123F22BEC47",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_random.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "148CA4B3D0353E3B6B03E180B47583C03DD4B43A941C3242FF0415B808BAF04C",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_resource_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6F22B0466FB0A4220E2CF451A72EB81DE370788B2B09FA48828CA2326ADB1905",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4BB251F30100CE58B87C3B9BFF81271EC79486C39511DECFE2A6A57EB0BEDECE",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_spawning.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "D083212906AC4E0778D12C84A7FE63C6702F2B700F461CD33860AE5E5CB1D12E",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\physics_integrator.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "9DD044C5B4B77811BB87677B13687E54CC607ED2804E8E18E3A31711848D6473",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\render_snapshot.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "FA21D4CCEA117A7CF01D71370FB3B62C6E9E0E702DEFBAFCBC84DFC8787D152A",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\simulation_tick_driver.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "29DFFC3A1FCC56EE69A46605634B264FC27B1EB0D0A2DC3B8FF57A212B8D7C0E",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\system_battle_tables.h"
+    }
+  ],
+  "arguments": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "-Wl,--gc-sections",
+    "-IJ:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q03Geometry\\AuthorityGeometryWitness.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\kind_catalog.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\hit_candidates.cpp",
+    "-o",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q03Geometry\\AuthorityGeometryWitness.exe"
+  ],
+  "compiler": {
+    "Algorithm": "SHA256",
+    "Hash": "4FD46EEF3B96DFD00115598BBAB6E9D7AE660A3B1A576E1D2AA6023C97D10A95",
+    "Path": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe"
+  },
+  "executable": {
+    "Algorithm": "SHA256",
+    "Hash": "BE214E062D14C9ACA217892540117CDD50C47AE7DB81757F6198711247C92C3C",
+    "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q03Geometry\\AuthorityGeometryWitness.exe"
+  }
+}

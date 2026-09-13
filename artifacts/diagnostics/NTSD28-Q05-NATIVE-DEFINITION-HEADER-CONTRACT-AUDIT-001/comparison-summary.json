@@ -1,0 +1,56 @@
+{
+  "kind": "HEADER_AUDIT_NOT_PARITY",
+  "definitions": 330,
+  "comparisons": {
+    "movementComparisons": 5280,
+    "mappedIntComparisons": 6270,
+    "weaponSoundComparisons": 990,
+    "sequenceComparisons": 1320,
+    "armorRecords": 18
+  },
+  "matches": {
+    "movement": 2008,
+    "mappedInt": 5926,
+    "weaponSound": 990
+  },
+  "valueDifferenceCount": 3616,
+  "valueDifferencesByCategory": {
+    "float32_precision": 520,
+    "missing_native_default_zero": 2752,
+    "integer_or_default": 344
+  },
+  "valueDifferencesByObjectType": {
+    "0": 520,
+    "3": 2700,
+    "1": 144,
+    "4": 72,
+    "6": 36,
+    "2": 108,
+    "5": 36
+  },
+  "statsCarrierGapDeclarations": 161,
+  "statsCarrierKeys": {
+    "max_mp": 158,
+    "y": 3
+  },
+  "statsCarrierScopes": {
+    "BATTLE_RULE_DATA": 158,
+    "EXCLUDED_PLATFORM_VIEWING": 3
+  },
+  "rawStatsDifferences": 0,
+  "armorDifferences": 0,
+  "sequenceDifferences": 0,
+  "weaponPieceDefinitions": 3,
+  "bmpCarrierKeys": {
+    "bound": 98,
+    "smallb": 154,
+    "hidden": 158,
+    "random": 158,
+    "shadow": 30
+  },
+  "bmpCarrierScopes": {
+    "BATTLE_PRESENTATION_OR_RULE_READER": 128,
+    "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY": 154,
+    "EXCLUDED_SELECTION_FLOW": 316
+  }
+}

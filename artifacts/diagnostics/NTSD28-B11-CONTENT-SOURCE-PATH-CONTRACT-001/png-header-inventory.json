@@ -1,0 +1,17 @@
+{
+  "classification": "READ_ONLY_IHDR_INVENTORY_ALL_VFS_NOT_MIGRATION_AUTHORIZATION",
+  "counts": {
+    "bitDepth=8,colorType=3,interlace=0": 1082,
+    "bitDepth=1,colorType=3,interlace=0": 25,
+    "bitDepth=2,colorType=3,interlace=0": 15,
+    "bitDepth=4,colorType=3,interlace=0": 123,
+    "bitDepth=8,colorType=6,interlace=0": 10
+  },
+  "examples": {
+    "bitDepth=8,colorType=3,interlace=0": "b\\s.png",
+    "bitDepth=1,colorType=3,interlace=0": "data\\pixel.png",
+    "bitDepth=2,colorType=3,interlace=0": "s\\c.png",
+    "bitDepth=4,colorType=3,interlace=0": "w\\5.png",
+    "bitDepth=8,colorType=6,interlace=0": "c\\oro\\a\\atk.png"
+  }
+}

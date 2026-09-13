@@ -1,0 +1,581 @@
+{
+  "scope": "candidate inventory, not blanket edit authorization",
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "1722F4F95302E8C298F6F714329FC15AE838BACA9A9C2EB4B93CB083E2EAFDB1",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs",
+      "sha256": "F176BAD72159365B14FB6D043D339E3CCA121379B7860BD3568FFB6993037B02",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointModule.cs",
+      "sha256": "56B26142691F919D8C739782673D6E51E64767258AB8EB4597FAE4C1789777BF",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/PhysicsState.cs",
+      "sha256": "96273DCEB9667B9CC882EA91CDD744A65417B3E83D5BD35203425989B14A2A03",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Editor/CharacterFramePreviewWindow.cs",
+      "sha256": "05C92A059D3FDBE309EB667BF86C9C26A7A06D404B7759532875446285C95785",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2CharacterData.cs",
+      "sha256": "CB9BD4AFD264B33907A8E46E60B7208CFF643AEA75CE26BDEE8982B9211FA89B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2FrameData.cs",
+      "sha256": "B4F47780B2AC19D9F16C75FB7A78A58DA2FDE6D7A35316FC33C709F5B65E567A",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "sha256": "CDF8476B17D79A035FA23C4A060EC3EF07BE6A0BCAC957FC175DFA9E170184A7",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+      "sha256": "10D8E77EF1542A6960C9053F97D61862549436021CBB1E90C8DEA79A1F09E503",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+      "sha256": "B77D001C8BF6BAD19E7BE63A1D0C6926CCC02C84A36CDF35171F01E51BD2E586",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+      "sha256": "B14D54202EEE851BB5B0868A38D2A1B27D4D21653381F5EEE987F54257631B3D",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterLateRuntimeModule.cs",
+      "sha256": "09E1F8611CC43CECD8ACAF39553B2F0FEC3CD6A288460BE98E252E82B08D72A8",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "023E3E314441242A438C824BB8B8FC06597E86802668AD7FD2F2C3778E107B22",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+      "sha256": "688C72B125545221C916A3E113915F2A821CBBA9560A8D06917CE1A8257A4543",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+      "sha256": "24EC17D1E56BBBEA3906EE68B2FC9392907B1F06FFD87C5D10C6A98DF904DC9E",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "sha256": "0FBFF914C6F93AA1327B19426CDE7D10333351452869BE0D24452A8D928D8E05",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+      "sha256": "66C78ACA443EE6DDB762C603BD1A3C2B3E90E1D034D6F9C8F3BFBD1767F33E1B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponReleaseFlowResolver.cs",
+      "sha256": "13958B2E578A5068B587DF91EAE36BA92316BC2A3BF08DAE541ACFE774F516C0",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs",
+      "sha256": "97789A0C86FA08F0177185848BB208D9F3412B3A0DA6E50704105C8045C86E21",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "sha256": "EB391D76C769F563DCA101F15BBFB6D98432C52BE1D48AA2D1D8FBE9A847C761",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha256": "3030AF506ADCE89FC0E416031CBDA877435F465602E10470D20DB3C736C294D5",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "EE84999F660F9B46EA03079A60F0E1E7DDC27893717F1A64406D65F0AE52631C",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/BattleRenderingBenchmark.cs",
+      "sha256": "7AA349625CBBCCF0819D94F1595E2FE8E497DBFDF52EB995D46B2E2F6DC939EC",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+      "sha256": "4278221ED4EC1401882BBC3FE3E5871B42BC6C9C80994D9605F8E36E91F21600",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Rendering/ProductionEntityStressHarness.cs",
+      "sha256": "2BC7CE9604FB4F4C67677E36CF12071F18612750D73EBF223837D8A45604E8F1",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs",
+      "sha256": "C573BAFC8F97186A467F11155EA43F83BC1E2DE3E43D63B270D018B58A3423EE",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs",
+      "sha256": "CB5A140A2AF1A609EB74C99F5D8270C013107477BF927F9D8DBBF2CE8DAB73CF",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "sha256": "B316B53827E36BB120AD6560C7EF2708AF4AA01A36AB16A7ECB8762D47593DE4",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/BodyBox/BattleBodyBoxValue.cs",
+      "sha256": "4A7C78CE626AE62B2A163A52D07C3ACF16CBD90A1CD594A979BBF02E04F02A1C",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/BodyBox/BattleBodyBoxValueAdapter.cs",
+      "sha256": "5C3F0A10D8AB10541DDCBFB7FE97F9D8EC4F0BBBA316BDCECAE133546DFC3BA6",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointCatalog.cs",
+      "sha256": "894CA928EECC71E00C56B77BE74DC3669322BFC12A09770DB4A3E243614FE134",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValue.cs",
+      "sha256": "0F99F50E791F298E03C2B6AD795434DD997DABF94EC454D9BFBD8FDCD61B1251",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValueAdapter.cs",
+      "sha256": "F96CF7239E5FC363C95B5CA2B543B46CE0022E1B78EE6FB284B8EF7D5164C429",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs",
+      "sha256": "DBBE4B1DC525000DD8E994C4A116F80752CA599FA896D84EB8C81FFE72907A3B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValueAdapter.cs",
+      "sha256": "B9875A839AF105AEAD162EBADCD2956D8AAC9FFC3B5EA05DF90BA74809710042",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "sha256": "00A53E33D9D12D6D5A1D45358922B3CDF1CDCC41C8D68CA2645445F710907CC5",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "sha256": "54FB33AF50A006A8EF23889D173AD0B8388A7C4E76EC3966B824E6374AA8AD02",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterFrameAdvancePass.cs",
+      "sha256": "81C7E62530F42138E112C0985E36D50C8FF980F40550971820B669DC26371F64",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+      "sha256": "37CF2F5975713AD44409D9114CF79B9C38C1C9CD50903405AEA1B849214AA0F6",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+      "sha256": "7B0600E28667B0AE3096189C447016052BCF2BE7D4E5389CDE4C724162F7FEEA",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "B273DF5504E92E50DAA48CD8DD254CD61EDF1E5CBA49227185E47DE2437C8416",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "sha256": "240EFB25E36225E8F701483CAE873838144CD5210F316CCD6C5154A32E542C25",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "sha256": "583B75D8314BC38A9CEAE0B2C61AD76380EBCD23190B9D0C37B4549C3BE7CC88",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+      "sha256": "F89F6AEC23A953A17EB37FC0ABBDA260FC412F3955A20CBA85D1492FDA858B41",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+      "sha256": "9ADD8F97E50C16601FFD0A7D6EAD9CB1531290631EA179E1EC64129E75B810F7",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Passes/Interaction/BattleInteractionPipeline.cs",
+      "sha256": "1B4BD6E82FC8D264EE8471AEDFA1404181218E86965D0C38F0979825145123D9",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Passes/Respawn/BattleRespawnModule.cs",
+      "sha256": "C90C0EDEDB4CC32734E10FFD89555ECF9B8BF51CC800BF8677D1ACF6A61341DE",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleLogicObjectPointRuntime.cs",
+      "sha256": "21D2855595C481F440E9B322085C353FBC034131385778EF5A6CE29ACCA52030",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs",
+      "sha256": "15CFA7FDB77C3DA6D810B59A374203DC54DDB528FBE5BE7432AB894CDDF8ACE1",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "sha256": "234B2C28D96C0AF6ED57F7D7F4A61AC41B6C5D399A3B928241CA1A23BCF7554D",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs",
+      "sha256": "6D79A55AAAF6AE287977A69A929D3A657CD692C2B65416BE28628618B72463BE",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs",
+      "sha256": "01EEAE7B6C9BA570F89664FE403217D1DD8C5AFD9ABFC0537E70E9FF2ECAEFCD",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsReadOnlyShadowEditorTests.cs",
+      "sha256": "E572D228A4F8E80C3F9192702005F5440C3511F54B14415E3063F92B4DDF32CB",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleGrabCpointLinkPlayModeProbeEditor.cs",
+      "sha256": "D46D1113700B1B600525268D53EBA4E21B947458ECC32156DC7DF8FA6D826B54",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs",
+      "sha256": "D3DBCBD711C7DDD7B06838B75062606FBF076B42B9882D4529CAEF38AE0D10EE",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+      "sha256": "48178BD26BC2D74694D2FD12E1980F1967D7AD9CD88C98EE370BFACFB5CDC607",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleRandomWeaponLateEffectPlayModeProbeEditor.cs",
+      "sha256": "D859F3A51C2F1070B6F19518659012FD5CB5824669D351552CBAD48F8822BE0A",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleResultsSceneHostTickAlignmentEditorTests.cs",
+      "sha256": "CC7EEDB9557095FA28FF0E3168827906C34E5DDE048381E63BE83B082BD6454C",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityBaseShellSnapshotEditorTests.cs",
+      "sha256": "C541BE49A29AD7E8706F3A182D79DD4DA921317B0AF872D7743BB96C1F80D28B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/CPointResolvedHurtActionAlignmentEditorTests.cs",
+      "sha256": "E5505565BCB8A65597BBBC1683B45960F26A0ACF23D0DA7012F9261412FDC549",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelBodyBoxValueSeamEditorTests.cs",
+      "sha256": "EFEF2F1DD78AB9EEDF66F65F6DEADBE76D2B86173208349ABF435C6074D246E0",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelCatchPointValueSeamEditorTests.cs",
+      "sha256": "2140BF7BD34941917F1EE517A8AB243C31A42A2FDF4865FB123A9826C58FE4D8",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/FormalKernelObjectPointValueSeamEditorTests.cs",
+      "sha256": "1375D4E896457330F53A025B4FB06FEE0352532421AA7C6C36C72C91C416F8F7",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11LoganCatalogEditorTests.cs",
+      "sha256": "7581C389ED0F9C388833CB3A9F2A870DE5846FD5BF4CDC1AA838460085FD53D4",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11VisualContentCandidateEditorTests.cs",
+      "sha256": "EA2AC38378AC2F223938E6EE00776659C203A3A4E0C0DFF909F147A3D6A084F1",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5CandidateEffectTypeProductionFilterEditorTests.cs",
+      "sha256": "15C4C789B7CE071CA55828703FBB86916F2E2F81F5F29CC7B65B162FF234AAF6",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5FirstBodyResponseAtomicProductionIntegrationEditorTests.cs",
+      "sha256": "0A5829BAC740E02D5E65EEB9A0C715BC14B3ACC40649D4339E19FD132DBCDF41",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5FirstBodyResponseCarrierEditorTests.cs",
+      "sha256": "5D832EB6CC07A991C07E5DE47AFFEB972013DBE3CA43CFB65D7E107C1E9D899B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs",
+      "sha256": "CDF379F337E941C9D2FF39070D1CA31F8A875003B1760644AF912FDB4502253A",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs",
+      "sha256": "144C5923937D4A62F48A72C8C618ED1D6BA02102A6A49A270C2AC4D96E80C144",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs",
+      "sha256": "598A2A1F0D2E7EB37BF8709498228F5683D82E3FB2F779AB76392041030EDE19",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceAttackerResolverEditorTests.cs",
+      "sha256": "A6D662B3417D799A287F3F35F211E4284BF4E27C4EDF86940696E6221ABD9A12",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardReducedKnockoutProducerEditorTests.cs",
+      "sha256": "D20DA247BAAA19F48F00C3C5A1BA59EE26F54551B0DD7B1CFE3B864195385FCF",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+      "sha256": "6BEDAC04DB15B269FBB6EDD0944EB040DD3EF1EE4013297D8DAB843E12610F5B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs",
+      "sha256": "6EE1A86AB16527938F7BF3A970DC5A1ECA523CC208F6302F26149783531F62E4",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+      "sha256": "0EF00157AF36CBF7F405CBC2AE7F18887EB32E9258A22CB25FF96520874C0E87",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs",
+      "sha256": "A10746C793B7E8A255EF0BCFE2F97BCC83DF283BB284FF69F7FA1F48C1973940",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CpointKind2HurtConsumerRetirementEditorTests.cs",
+      "sha256": "9D0DA0FE8CF6E31CB5BEF6E97B6CDBAA9E830C94D4DE8A7F07F019184A0571FD",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs",
+      "sha256": "822124FA5FBA1FE01CB3BDE11B5343336D5202A87C4905D36432BD9077B6DB86",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+      "sha256": "67257D25F98CBECEE4783892DEF360CC424A10E83C337990A6A5D5E4546016E9",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldNegativeFrameLifecycleGuardProductionEditorTests.cs",
+      "sha256": "6F54FEC27FC800E816F79CB3C268C5ACBB0D7CB3059028C2B82EDE0ACEAE8D22",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs",
+      "sha256": "32E80CB5E546CEFDE2EA253CAC7F28C07AF279B5196011F166DE712A99BA2AA9",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "sha256": "055A9C6F8AC5268B0CF2D62FCA5552809FC9AFB9D5B932A80D27D9E27BF2EAEB",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs",
+      "sha256": "97479A2F9A17928A736C18C80A3CC881E927DDDDC589F4959C8244EE08DA9624",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+      "sha256": "F53EAF551D393C889E2FAD0B9F4A181EA928D73AC6CCA999570411F3C456B053",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyTrackerRetirementEditorTests.cs",
+      "sha256": "46CE5BC45E5EBB84A9D444FEBC320C101339827AF7F9B7E7CCAFC5F703425559",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NativeImpactAtomicIntegrationEditorTests.cs",
+      "sha256": "D9806E371AAD7CCD52C5C06B2B4E8898A512CFE913EBD2D0C9F585AE127AEA39",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+      "sha256": "DDF8204C1FCFF7892A8677913E142C408791E894053D7DB6984C6CA5A39EBB53",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs",
+      "sha256": "B9E29C05F8F97C17F06C5FE6959757CEFCC0091F0B3E79AA2018A83A2F1A8E19",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+      "sha256": "817536F3415E7D38F04E4931B28541608C998240FD1082BA41236BA5C0F87BA5",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs",
+      "sha256": "594B8FE14759FD75C7A1D95F71AC9A3EFDB767EA01ED02B89065AC93B57866DA",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs",
+      "sha256": "487CEAF6B1F361154037D2E3AFE4F5A721E8A957281F5FFD74F7B43DF81D2036",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28BattleActualPhaseSequenceEditorTests.cs",
+      "sha256": "E107356A03BB1FDE09805BA24D21D7C2CC61380D9AEBCF48A48E634B42EF6593",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsProductionEditorTests.cs",
+      "sha256": "394AF5767072C32F6B2AC4836351B58AB228FC32604454A939FD334DE07BF02B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalProductionPlacementEditorTests.cs",
+      "sha256": "21F6759165152FA9C03590DB5D6CD93D221014480DCE2511530D7124F98A0D39",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementEditorTests.cs",
+      "sha256": "C82903438CBC807304C73C85D839B840ABEE7AD108EA6580D17890CCD343CF64",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementEditorTests.cs",
+      "sha256": "BB3B98174FB9D9714634767CCAABF8D6D4329D5F1022960F5AAE5FC33C51B68B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+      "sha256": "8AD3E6718DB84726836F1E05A5264B8101498FC66A423B42F49503C0A7BB02AB",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementEditorTests.cs",
+      "sha256": "99FD8C86813C26ABDF47419506CFD65600975573FE0DA30002D5B5F7A2C708A2",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+      "sha256": "F3C71E37F5B6D64F7B0815E6ECC706FEA22EA44A556AA28259B394A764EA0B3B",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C13ActiveWeaponCountPlacementEditorTests.cs",
+      "sha256": "719E9E2705B40F7C645E7F9E7FC8EB5DA5B985A2015D625111E4191E7505AD65",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C14TypeZeroHitPlacementEditorTests.cs",
+      "sha256": "5905E139FAA5EF307EC284259794AE67306D380354B18BBEF3E06658FEE330C7",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C21C22PlacementEditorTests.cs",
+      "sha256": "B75D2F927BD736CD5A02850860B092A6C198286B7DC1962F58E7C07CE022C0F6",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs",
+      "sha256": "F2E81DB6D4C817F47D5B824284CDE8B34C75FC39C4F731CF5798F25C9B2BE575",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25NestedTailSkeletonEditorTests.cs",
+      "sha256": "106D91602F0536A53B0511481A1C422E5F4CB54447E056DF6618A775C27E0459",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CooldownWriterExtractionEditorTests.cs",
+      "sha256": "5EE5D38004B12B7F4FD852B046B8AB56FF20577BEE8E969B33F83062733EF400",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeSparkC01IntegrationEditorTests.cs",
+      "sha256": "F6D2EAC05A135C7BDC6620CAD3A6D37E0D3E2FF2A9E7B763A836A6E6570D196F",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+      "sha256": "64320EC481B3FF0E0647A072729930D2C9D9A7EDABBBA3DF860660AFD389D347",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionGateEditorTests.cs",
+      "sha256": "0C95992A63044C16FD9BBE40B828A82E15ED4D4A3E98D7F2C9C4F0AA957335C7",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillateConsumerEditorTests.cs",
+      "sha256": "F3F5C65F262233E7C45E9B688E0913D63A48FE506F41F55CBB87EADC2A1D4065",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillatePlayProbeEditor.cs",
+      "sha256": "C770287210AC24985EB219E2837B8C07AFE0BA90D29233B6229FB1927A49A621",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28ResidualSerialTailRehomeEditorTests.cs",
+      "sha256": "CACC6C0BCDC74AF2AE5752DFA7BFA44E63EDDD193F731DF6F0703932758BB38D",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/PooledEntityReuseAllocationEditorTests.cs",
+      "sha256": "D2B4BDF92CC2189E0D492D73AAC80E91CEE4144B0C520EF264117A6121D5851C",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+      "sha256": "C89D4806ECEBB7195E767454B797A326FD80975C3F63D65CEF9C28A94F89618D",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/UnityPresentContentAuthorityEditorTests.cs",
+      "sha256": "D5F5932006B9A2452A9A35DB13BA56EB3053681282BB48CFA66F5707334245CB",
+      "disposition": "candidate reference; must declare exact Record before editing"
+    }
+  ],
+  "firstDeclaredChange": "NTSD28-Q05-NATIVE-NUMERIC-DECODER-001"
+}

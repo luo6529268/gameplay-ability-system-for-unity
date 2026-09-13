@@ -39,6 +39,24 @@ namespace NTSD.Simulation
         public ulong IdentityFingerprint { get; private set; }
         public int CapturedTick { get; private set; }
 
+        internal bool HasCanonicalPayloadStorage
+        {
+            get
+            {
+                for (int slot = 0; slot < SlotCapacity; slot++)
+                {
+                    if (entityRuntimePresent[slot] &&
+                        (!rawRuntimePresent[slot] || entityRuntimes[slot] == null ||
+                         !entityRuntimes[slot].HasCanonicalSnapshotStorage))
+                        return false;
+                    if (rawRuntimePresent[slot] &&
+                        (rawRuntimes[slot] == null || !rawRuntimes[slot].HasCanonicalSnapshotStorage))
+                        return false;
+                }
+                return true;
+            }
+        }
+
         public bool HasEntityRuntime(int runtimeSlot)
         {
             ValidateSlot(runtimeSlot);

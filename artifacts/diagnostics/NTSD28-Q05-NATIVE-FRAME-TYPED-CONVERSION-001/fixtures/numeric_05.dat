@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 1.5 state: 1.5 cover: 1.5 wait: 1.5 next: 1.5 dvx: 1.5 dvy: 1.5 dvz: 1.5 centerx: 1.5 centery: 1.5 mp: 1.5 hp: 1.5 hit_a: 1.5 hit_d: 1.5 hit_j: 1.5 hit_g: 1.5 hit_Fj: 1.5 hit_Fa: 1.5 hit_Da: 1.5 hit_Ua: 1.5 hit_ja: 1.5 hit_aj: 1.5 hit_ad: 1.5 hit_jd: 1.5 hit_Dj: 1.5 hit_Uj: 1.5 hit_f: 1.5 hit_b: 1.5 hit_uz: 1.5 hit_dz: 1.5 hold_a: 1.5 hold_d: 1.5 hold_j: 1.5 hold_f: 1.5 hold_b: 1.5 hold_uz: 1.5 hold_dz: 1.5
+cpoint: kind: 1.5 x: 1.5 y: 1.5 injury: 1.5 cover: 1.5 vaction: 1.5 aaction: 1.5 jaction: 1.5 daction: 1.5 taction: 1.5 faction: 1.5 baction: 1.5 uzaction: 1.5 dzaction: 1.5 throwvx: 1.5 throwvy: 1.5 hurtable: 1.5 fronthurtact: 1.5 backhurtact: 1.5 decrease: 1.5 dircontrol: 1.5 throwinjury: 1.5 throwvz: 1.5 z: 1.5 recover: 1.5 drain: 1.5 gain: 1.5 cpoint_end:
+opoint: kind: 1.5 x: 1.5 y: 1.5 z: 1.5 action: 1.5 dvx: 1.5 dvy: 1.5 dvz: 1.5 oid: 1.5 facing: 1.5 hp: 1.5 mp: 1.5 team: 1.5 reserve: 1.5 effect: 1.5 pic: 1.5 centerx: 1.5 centery: 1.5 centerz: 1.5 framea: 1.5 attacking: 1.5 join: 1.5 join_reserve: 1.5 join_pic: 1.5 opoint_end:
+itr: kind: 1.5 x: 1.5 y: 1.5 w: 1.5 h: 1.5 dvx: 1.5 dvy: 1.5 fall: 1.5 arest: 1.5 vrest: 1.5 respond: 1.5 effect: 1.5 drain: 1.5 spark: 1.5 recover: 1.5 dbdefend: 1.5 bdefend: 1.5 injury: 1.5 zwidth: 1.5 z: 1.5 dvz: 1.5 sound: 1.5 cover: 1.5 caughtact: 1.5 catchingact: 1.5 pickedact: 1.5 pickingact: 1.5 delay: 1.5 poison: 1.5 confus: 1.5 weak: 1.5 manacle: 1.5 join: 1.5 mimic: 1.5 bound: 1.5 facing: 1.5 dx: 1.5 dy: 1.5 dz: 1.5 gain: 1.5 itr_end:
+wpoint: kind: 1.5 x: 1.5 y: 1.5 weaponact: 1.5 attacking: 1.5 cover: 1.5 dvx: 1.5 dvy: 1.5 dvz: 1.5 wpoint_end:
+bpoint: x: 1.5 y: 1.5 bpoint_end:
+centerz: 1.5 chp: 1.5 cmp: 1.5 dx: 1.5 dy: 1.5 dz: 1.5
+<frame_end>

@@ -1,0 +1,7 @@
+<bmp_begin>
+file(+1-2): skip.png w: 3 h: 4 row: 1 col: 1
+file(0-1): a.png w: 3 w: +4 h: 5 row: 2 col: 2
+<bmp_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

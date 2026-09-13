@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+bdy: kind: 100100 respond: 3 x: 9 bdy_end:
+bdy: x: 0 y: 0 w: -3 h: 0 zwidth: -8 bdy_end:
+itr: kind: 100100 itr_end:
+itr: x: 0 y: 0 w: 0 h: 0 itr_end:
+itr: x: 4 y: 0 w: 2 h: 3 x: +4 itr_end:
+<frame_end>

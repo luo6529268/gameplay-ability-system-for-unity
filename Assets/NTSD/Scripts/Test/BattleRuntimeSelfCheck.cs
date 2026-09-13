@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using NTSD.Animation;
@@ -12754,7 +12754,6 @@ namespace NTSD.Test
             holder.Runtime.HeldWeaponStableId = weaponSlot;
             weapon.Runtime.LinkState = -1;
             weapon.Runtime.HolderStableId = holderSlot;
-            weapon.GrabbedBy = -1;
 
             world.HeldObjectProcessAll(1);
 
@@ -12948,7 +12947,6 @@ namespace NTSD.Test
             held.Runtime.HolderStableId = 10;
             held.HolderCopySlot = 10;
             held.Runtime.ReleaseTick = previousReleaseTick;
-            held.GrabbedBy = -1;
 
             bool ran = world.HeldObjectWriter.RunStep12(
                 holder,
@@ -13406,7 +13404,6 @@ namespace NTSD.Test
             holder.Runtime.HeldWeaponStableId = 50;
             held.Runtime.LinkState = -1;
             held.Runtime.HolderStableId = 10;
-            held.GrabbedBy = -1;
 
             bool ran = world.HeldObjectWriter.RunStep12(
                 holder,
@@ -13567,7 +13564,6 @@ namespace NTSD.Test
             inactiveTarget.Runtime.LinkState = -2;
             inactiveTarget.Runtime.TargetSlotIndex = 12;
             inactiveTarget.Runtime.HeldWeaponStableId = 107;
-            inactiveTarget.GrabbedBy = 12;
             inactiveWorld.Register(inactiveTarget);
             inactiveWorld.Register(inactiveHolder);
             inactiveWorld.Unregister(inactiveTarget);
@@ -13581,8 +13577,7 @@ namespace NTSD.Test
             Expect(inactiveTarget.Runtime.LinkState == -2 &&
                    inactiveTarget.Runtime.HolderStableId == 12 &&
                    inactiveTarget.Runtime.TargetSlotIndex == 12 &&
-                   inactiveTarget.Runtime.HeldWeaponStableId == 107 &&
-                   inactiveTarget.GrabbedBy == 12,
+                   inactiveTarget.Runtime.HeldWeaponStableId == 107,
                 "inactive target reverse relation fields must remain unchanged when the holder is invalidated");
         }
 
@@ -19920,7 +19915,7 @@ namespace NTSD.Test
                 BattleObjectPointValueAdapter.ToLegacyTask(value);
 
             Expect(value == new BattleObjectPointValue(
-                       2, -3, 4, 240, -5, 6, 999, 31) &&
+                       2, -3, 4, 240, -5, 6, 999, 31, dvz: 800) &&
                    taskValue.kind == 2 &&
                    taskValue.x == -3 &&
                    taskValue.y == 4 &&
@@ -19930,8 +19925,8 @@ namespace NTSD.Test
                    taskValue.oid == 999 &&
                    taskValue.facing == 31 &&
                    taskValue.objectId == 0 &&
-                   taskValue.dvz == 0,
-                "formal OPoint adapter must preserve exactly eight release fields and discard legacy extras");
+                   taskValue.dvz == 800,
+                "native OPoint adapter must preserve content dvz within all 24 fields and exclude runtime objectId");
 
             var first = new Lf2DatSubBlock { Name = "opoint" };
             first.AddProperty(new Lf2DatProperty("kind", "1"));
@@ -19996,7 +19991,12 @@ namespace NTSD.Test
                    projected.h == 0 &&
                    projected.rawProperties.Count == 0 &&
                    value.Y == int.MinValue && value.X < -100 && value.W >= 900,
-                "formal Bdy adapter must preserve exactly four release fields, discard legacy extras and leave full-height classification external");
+                "Bdy adapter must preserve legacy coordinates and leave full-height classification external");
+            Expect(value.HasGeometry && value.ZWidth == 0 && projected.hasGeometry && projected.zwidth == 0,
+                "legacy explicit Bdy geometry retains valid zero-depth defaults");
+            var missingGeometry = new BattleBodyBoxValue(0, 0, 0, 0, 0, false);
+            Expect(!missingGeometry.HasGeometry && missingGeometry != default(BattleBodyBoxValue),
+                "native missing geometry must remain distinct from legacy explicit zero geometry");
 
             var first = new Lf2DatSubBlock { Name = "bdy" };
             first.AddProperty(new Lf2DatProperty("kind", "9"));
@@ -20269,7 +20269,7 @@ itr_end:
                        1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
                        11, 12, 13, 14, 15, 16, 17, 18, 19) &&
                    value != default,
-                "formal CPoint value equality must include all 19 release scalars");
+                "CPoint compatibility constructor must retain its 19 supplied values within the 27-field contract");
 
             var first = new Lf2DatSubBlock { Name = "cpoint" };
             first.AddProperty(new Lf2DatProperty("kind", "1"));
@@ -20297,9 +20297,9 @@ itr_end:
                    frame.cpoint.kind == 1,
                 "formal CPoint parser must retain every block in source order and expose index zero as primary");
 
-            var scalars = new int[39];
+            var scalars = new int[55];
             int written = frame.CatchPoints.CopyCanonicalScalars(scalars, 0);
-            Expect(written == 39 &&
+            Expect(written == 55 &&
                    scalars[0] == 2 &&
                    scalars[1] == 1 &&
                    scalars[2] == 2 &&
@@ -20307,9 +20307,9 @@ itr_end:
                    scalars[4] == 310 &&
                    scalars[18] == 230 &&
                    scalars[19] == 0 &&
-                   scalars[20] == 2 &&
-                   scalars[21] == 99,
-                "formal CPoint writer must emit count then 19 source-ordered scalars per entry");
+                   scalars[28] == 2 &&
+                   scalars[29] == 99,
+                "formal CPoint writer must emit count then 27 source-ordered int32/float32-bit units per entry");
 
             LF2FrameData empty = Lf2DatConverter.ConvertToFrameData(
                 new Lf2FrameBlock { FrameIndex = 83 });
@@ -26673,7 +26673,7 @@ itr_end:
             movement.SetVelocity(2.0, 0.0, 3.0);
             movement.SyncIntegerPosition();
             MechanicsStepResult movementResult = mechanics.Step(new CharacterMechanicsContext(
-                movement, null, 0f, 0f, 0f, gravity));
+                movement, null, 0f, 0f, gravity));
             Expect(movement.X == 12.0 && movement.Z == 23.0 && movementResult.boundaryMode == BoundaryResolveMode.None,
                 "PH-01: a rejected scene polygon point must not roll back unblocked C# authority X/Z movement");
 
@@ -26683,7 +26683,7 @@ itr_end:
             blockedMovement.SyncIntegerPosition();
             blockedMovement.XBoundPositive = true;
             MechanicsStepResult blockedResult = mechanics.Step(new CharacterMechanicsContext(
-                blockedMovement, null, 0f, 0f, 0f, gravity));
+                blockedMovement, null, 0f, 0f, gravity));
             Expect(blockedMovement.X == 10.0 && blockedMovement.Z == 23.0 &&
                    blockedResult.boundaryMode == BoundaryResolveMode.ZOnly,
                 "PH-01: block flags must remain the sole per-axis movement gate");
@@ -26693,7 +26693,7 @@ itr_end:
             positiveEdge.SetVelocity(0.0, 0.0, 0.0);
             positiveEdge.SyncIntegerPosition();
             MechanicsStepResult positiveEdgeResult = mechanics.Step(new CharacterMechanicsContext(
-                positiveEdge, null, 0f, 0f, 0f, gravity));
+                positiveEdge, null, 0f, 0f, gravity));
             Expect(!positiveEdgeResult.landed && positiveEdge.Y == 0.0 && positiveEdge.Vy == 0.0,
                 "NTSD28 PH-02: type0 contact-side Y=+0.0001 must clamp to the effective floor without reporting a new crossing");
 
@@ -26702,7 +26702,7 @@ itr_end:
             negativeEdge.SetVelocity(0.0, 0.0, 0.0);
             negativeEdge.SyncIntegerPosition();
             MechanicsStepResult negativeEdgeResult = mechanics.Step(new CharacterMechanicsContext(
-                negativeEdge, null, 0f, 0f, 0f, gravity));
+                negativeEdge, null, 0f, 0f, gravity));
             Expect(!negativeEdgeResult.landed && negativeEdge.Y == -epsilon && negativeEdge.Vy == gravity,
                 "NTSD28 PH-02: type0 Y=-0.0001 is strictly above the zero floor and must receive gravity");
 
@@ -26711,7 +26711,7 @@ itr_end:
             abovePositiveEdge.SetVelocity(0.0, 0.0, 0.0);
             abovePositiveEdge.SyncIntegerPosition();
             MechanicsStepResult abovePositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                abovePositiveEdge, null, 0f, 0f, 0f, gravity));
+                abovePositiveEdge, null, 0f, 0f, gravity));
             Expect(!abovePositiveResult.landed && abovePositiveEdge.Y == 0.0 &&
                    abovePositiveEdge.Vy == 0.0,
                 "NTSD28 PH-02: contact-side positive type0 Y must clamp without a new crossing");
@@ -26721,7 +26721,7 @@ itr_end:
             descendingPositiveEdge.SetVelocity(0.0, 0.5, 0.0);
             descendingPositiveEdge.SyncIntegerPosition();
             MechanicsStepResult descendingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                descendingPositiveEdge, null, 0f, 0f, 0f, gravity));
+                descendingPositiveEdge, null, 0f, 0f, gravity));
             Expect(!descendingPositiveResult.landed && descendingPositiveEdge.Y == 0.0,
                 "NTSD28 PH-02: a type0 already on the contact side must clamp without retriggering landing");
 
@@ -26730,7 +26730,7 @@ itr_end:
             risingPositiveEdge.SetVelocity(0.0, -0.1, 0.0);
             risingPositiveEdge.SyncIntegerPosition();
             MechanicsStepResult risingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
-                risingPositiveEdge, null, 0f, 0f, 0f, gravity));
+                risingPositiveEdge, null, 0f, 0f, gravity));
             Expect(!risingPositiveResult.landed && risingPositiveEdge.Y == 0.0 &&
                    risingPositiveEdge.Vy == -0.1,
                 "NTSD28 PH-02: contact-side type0 Y clamps even with upward motion, without a new crossing");
@@ -26742,7 +26742,7 @@ itr_end:
             caughtMechanicsRuntime.SetVelocity(0.0, 0.5, 0.0);
             caughtMechanicsRuntime.SyncIntegerPosition();
             MechanicsStepResult caughtMechanicsResult = mechanics.Step(new CharacterMechanicsContext(
-                caughtMechanicsRuntime, caughtPositiveFrame, 0f, 0f, 0f, gravity));
+                caughtMechanicsRuntime, caughtPositiveFrame, 0f, 0f, gravity));
             Expect(!caughtMechanicsResult.landed && caughtMechanicsRuntime.Y == 0.75 &&
                    caughtMechanicsRuntime.Vy == 0.5,
                 "PH-02: cpoint kind2 ground resolve must return before positive character Y is clamped");
@@ -26774,7 +26774,7 @@ itr_end:
             belowNegativeEdge.SetVelocity(0.0, 0.0, 0.0);
             belowNegativeEdge.SyncIntegerPosition();
             mechanics.Step(new CharacterMechanicsContext(
-                belowNegativeEdge, null, 0f, 0f, 0f, gravity));
+                belowNegativeEdge, null, 0f, 0f, gravity));
             Expect(belowNegativeEdge.Y == -epsilon - 1e-12 && belowNegativeEdge.Vy == gravity,
                 "PH-02: character Y below -0.0001 must receive air gravity without changing Y");
 
@@ -28493,12 +28493,10 @@ itr_end:
             partner.Effect.Dvx = 2f;
             partner.Effect.Dvy = -3f;
             partner.Effect.Stuck = true;
-            partner.Effect.Oscillate = 4;
             partner.Effect.Blink = true;
             partner.Effect.Super = true;
             partner.Effect.TimeIn = -5;
             partner.Effect.TimeOut = 6;
-            partner.Effect.OscillateDirection = -1;
             partner.Effect.BlinkCounter = 8;
         }
 
@@ -28507,9 +28505,9 @@ itr_end:
             LF2EffectState effect = partner.Effect;
             return partner.DeadBlinkCountInternal == -1 &&
                    effect != null && effect.Num == -99 && Nearly(effect.Dvx, 0.0) &&
-                   Nearly(effect.Dvy, 0.0) && !effect.Stuck && effect.Oscillate == 0 &&
+                   Nearly(effect.Dvy, 0.0) && !effect.Stuck &&
                    !effect.Blink && !effect.Super && effect.TimeIn == 0 && effect.TimeOut == 0 &&
-                   effect.OscillateDirection == 1 && effect.BlinkCounter == 0;
+                   effect.BlinkCounter == 0;
         }
 
         private static void CheckOid5152SplitFailurePartialRecovery()

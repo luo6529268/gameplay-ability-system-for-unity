@@ -1,0 +1,56 @@
+{
+  "count": 3059,
+  "unchanged": 3047,
+  "changed": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+      "sha256": "BF9C73347F2C262E0504C0389BE2DA798DAF3678CBDDA2D0709318AB04929E81"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+      "sha256": "9560F2320BDB76570CA983CB0A7A7CB0FA66A52B069154C00ECED5B3E23F8D40"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "EE84999F660F9B46EA03079A60F0E1E7DDC27893717F1A64406D65F0AE52631C"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+      "sha256": "D94A25E9D70CB658366FC5539F345D0DFADB21E5354588BF2D39ACA9EE6CDAAF"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/AppManager.cs",
+      "sha256": "783A34076FE96D336AAB8DCD791B11BF83EF4C820B084B0586E40883D828ADE9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/App/GameConfig.cs",
+      "sha256": "E8FB8B06CE6CC4D3F683B57E72F605366E23982BBDB8462D09F058FFA58FA33E"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs",
+      "sha256": "F1CAC67F2721045D565D99596728485052F1F574C5FFFD202A3477E982B0F3B5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "B273DF5504E92E50DAA48CD8DD254CD61EDF1E5CBA49227185E47DE2437C8416"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+      "sha256": "216EA556EA7C56882B56339888EB8ABC121AE6B3BBF6722908A4CE70B5832C14"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs",
+      "sha256": "BADF2F70D22B6A6CAE2294AFA93FF7304D795B0281240809F9C9287DC55B57D0"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+      "sha256": "DDDCE4EB17792D2F39F2FFBB24B85167B0805D91DF20DD122998D32C55BB87A6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/UI/SelectRoleItem.cs",
+      "sha256": "AD598C20D8F2398C104F88A2DF67F511CEED7ABE8A7AAF3C3783863430C01B64"
+    }
+  ],
+  "missing": [],
+  "unexpected": []
+}

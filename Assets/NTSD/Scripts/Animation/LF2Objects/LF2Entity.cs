@@ -149,19 +149,7 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.OwnerStableId = value;
         }
 
-        /// <summary>被抓取状态。</summary>
-        public int GrabbedBy
-        {
-            get => Runtime.GrabbedBy;
-            set => Runtime.GrabbedBy = value;
-        }
 
-        /// <summary>kind==2 的 tracker 标记。</summary>
-        public int TrackerFlag
-        {
-            get => Runtime.TrackerFlag;
-            set => Runtime.TrackerFlag = value;
-        }
 
         /// <summary>kind==2 的 tracker 父对象引用。</summary>
         public LF2Entity TrackerParent { get; set; }
@@ -792,12 +780,10 @@ namespace NTSD.Animation.LF2Objects
             Effect.Dvx = state.EffectDvx;
             Effect.Dvy = state.EffectDvy;
             Effect.Stuck = state.EffectStuck;
-            Effect.Oscillate = state.EffectOscillate;
             Effect.Blink = state.EffectBlink;
             Effect.Super = state.EffectSuper;
             Effect.TimeIn = state.EffectTimeIn;
             Effect.TimeOut = state.EffectTimeOut;
-            Effect.OscillateDirection = state.EffectOscillateDirection;
             Effect.BlinkCounter = state.EffectBlinkCounter;
 
             PS.groundY = state.PhysicsGroundY;
@@ -5670,12 +5656,10 @@ namespace NTSD.Animation.LF2Objects
                 Frame.D.PrimaryCatchPoint.Kind == 2)
                 return;
 
-            float mass = NTSDGlobal.Default.Machanics.Mass;
             var context = new CharacterMechanicsContext(
                 Runtime,
                 Frame?.D,
                 GetSpriteWidthPxForCollision(),
-                mass,
                 NTSDGlobal.Gameplay.MinSpeed,
                 NTSDGlobal.Gameplay.Gravity);
 
@@ -6881,8 +6865,6 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Team = Team;
             Runtime.OwnerSlotIndex = OwnerEntityIndex;
             Runtime.OwnerStableId = OwnerId;
-            Runtime.GrabbedBy = GrabbedBy;
-            Runtime.TrackerFlag = TrackerFlag;
             Runtime.Frame = Frame?.N ?? 0;
             Runtime.WaitCounter = Trans?.WaitCounter ?? 0;
             Runtime.NextFrame = Trans?.Next ?? 0;

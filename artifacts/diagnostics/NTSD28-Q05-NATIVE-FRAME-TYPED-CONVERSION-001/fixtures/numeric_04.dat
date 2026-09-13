@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 01 state: 01 cover: 01 wait: 01 next: 01 dvx: 01 dvy: 01 dvz: 01 centerx: 01 centery: 01 mp: 01 hp: 01 hit_a: 01 hit_d: 01 hit_j: 01 hit_g: 01 hit_Fj: 01 hit_Fa: 01 hit_Da: 01 hit_Ua: 01 hit_ja: 01 hit_aj: 01 hit_ad: 01 hit_jd: 01 hit_Dj: 01 hit_Uj: 01 hit_f: 01 hit_b: 01 hit_uz: 01 hit_dz: 01 hold_a: 01 hold_d: 01 hold_j: 01 hold_f: 01 hold_b: 01 hold_uz: 01 hold_dz: 01
+cpoint: kind: 01 x: 01 y: 01 injury: 01 cover: 01 vaction: 01 aaction: 01 jaction: 01 daction: 01 taction: 01 faction: 01 baction: 01 uzaction: 01 dzaction: 01 throwvx: 01 throwvy: 01 hurtable: 01 fronthurtact: 01 backhurtact: 01 decrease: 01 dircontrol: 01 throwinjury: 01 throwvz: 01 z: 01 recover: 01 drain: 01 gain: 01 cpoint_end:
+opoint: kind: 01 x: 01 y: 01 z: 01 action: 01 dvx: 01 dvy: 01 dvz: 01 oid: 01 facing: 01 hp: 01 mp: 01 team: 01 reserve: 01 effect: 01 pic: 01 centerx: 01 centery: 01 centerz: 01 framea: 01 attacking: 01 join: 01 join_reserve: 01 join_pic: 01 opoint_end:
+itr: kind: 01 x: 01 y: 01 w: 01 h: 01 dvx: 01 dvy: 01 fall: 01 arest: 01 vrest: 01 respond: 01 effect: 01 drain: 01 spark: 01 recover: 01 dbdefend: 01 bdefend: 01 injury: 01 zwidth: 01 z: 01 dvz: 01 sound: 01 cover: 01 caughtact: 01 catchingact: 01 pickedact: 01 pickingact: 01 delay: 01 poison: 01 confus: 01 weak: 01 manacle: 01 join: 01 mimic: 01 bound: 01 facing: 01 dx: 01 dy: 01 dz: 01 gain: 01 itr_end:
+wpoint: kind: 01 x: 01 y: 01 weaponact: 01 attacking: 01 cover: 01 dvx: 01 dvy: 01 dvz: 01 wpoint_end:
+bpoint: x: 01 y: 01 bpoint_end:
+centerz: 01 chp: 01 cmp: 01 dx: 01 dy: 01 dz: 01
+<frame_end>

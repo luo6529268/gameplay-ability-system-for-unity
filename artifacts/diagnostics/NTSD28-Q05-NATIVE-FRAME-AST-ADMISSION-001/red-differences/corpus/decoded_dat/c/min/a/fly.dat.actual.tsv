@@ -1,0 +1,678 @@
+decoded_dat/c/min/a/fly.dat	frame	0	0		666c79
+decoded_dat/c/min/a/fly.dat	field	0	-1	pic	3337
+decoded_dat/c/min/a/fly.dat	field	0	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	0	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	0	-1	next	31
+decoded_dat/c/min/a/fly.dat	field	0	-1	dvx	3630
+decoded_dat/c/min/a/fly.dat	field	0	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	0	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	field	0	-1	hit_Fj	313130
+decoded_dat/c/min/a/fly.dat	field	0	-1	hit_Uj	313130
+decoded_dat/c/min/a/fly.dat	field	0	-1	hit_Dj	313130
+decoded_dat/c/min/a/fly.dat	field	0	-1	hit_ja	313130
+decoded_dat/c/min/a/fly.dat	block	0	0	itr	
+decoded_dat/c/min/a/fly.dat	field	0	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	0	0	x	3130
+decoded_dat/c/min/a/fly.dat	field	0	0	y	35
+decoded_dat/c/min/a/fly.dat	field	0	0	w	3330
+decoded_dat/c/min/a/fly.dat	field	0	0	h	3237
+decoded_dat/c/min/a/fly.dat	field	0	0	effect	35
+decoded_dat/c/min/a/fly.dat	field	0	0	zwidth	3130
+decoded_dat/c/min/a/fly.dat	field	0	0	fall	2d31
+decoded_dat/c/min/a/fly.dat	field	0	0	bdefend	3130
+decoded_dat/c/min/a/fly.dat	field	0	0	injury	3135
+decoded_dat/c/min/a/fly.dat	block	0	1	bdy	
+decoded_dat/c/min/a/fly.dat	field	0	1	kind	30
+decoded_dat/c/min/a/fly.dat	field	0	1	x	3130
+decoded_dat/c/min/a/fly.dat	field	0	1	y	35
+decoded_dat/c/min/a/fly.dat	field	0	1	w	3330
+decoded_dat/c/min/a/fly.dat	field	0	1	h	3237
+decoded_dat/c/min/a/fly.dat	field	0	1	zwidth	3130
+decoded_dat/c/min/a/fly.dat	frame	1	1		666c79
+decoded_dat/c/min/a/fly.dat	field	1	-1	pic	3337
+decoded_dat/c/min/a/fly.dat	field	1	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	1	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	1	-1	next	31
+decoded_dat/c/min/a/fly.dat	field	1	-1	dvx	3630
+decoded_dat/c/min/a/fly.dat	field	1	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	1	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	field	1	-1	hit_Fj	313130
+decoded_dat/c/min/a/fly.dat	field	1	-1	hit_Uj	313130
+decoded_dat/c/min/a/fly.dat	field	1	-1	hit_Dj	313130
+decoded_dat/c/min/a/fly.dat	field	1	-1	hit_ja	313130
+decoded_dat/c/min/a/fly.dat	block	1	0	itr	
+decoded_dat/c/min/a/fly.dat	field	1	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	1	0	x	3130
+decoded_dat/c/min/a/fly.dat	field	1	0	y	35
+decoded_dat/c/min/a/fly.dat	field	1	0	w	3330
+decoded_dat/c/min/a/fly.dat	field	1	0	h	3237
+decoded_dat/c/min/a/fly.dat	field	1	0	effect	35
+decoded_dat/c/min/a/fly.dat	field	1	0	zwidth	3130
+decoded_dat/c/min/a/fly.dat	field	1	0	fall	2d31
+decoded_dat/c/min/a/fly.dat	field	1	0	bdefend	3130
+decoded_dat/c/min/a/fly.dat	field	1	0	injury	3135
+decoded_dat/c/min/a/fly.dat	block	1	1	itr	
+decoded_dat/c/min/a/fly.dat	field	1	1	kind	38
+decoded_dat/c/min/a/fly.dat	field	1	1	dvy	2d31
+decoded_dat/c/min/a/fly.dat	field	1	1	x	2d39393939
+decoded_dat/c/min/a/fly.dat	field	1	1	y	323734303030
+decoded_dat/c/min/a/fly.dat	field	1	1	w	3939393939
+decoded_dat/c/min/a/fly.dat	field	1	1	h	383030
+decoded_dat/c/min/a/fly.dat	field	1	1	dvx	313130
+decoded_dat/c/min/a/fly.dat	field	1	1	injury	30
+decoded_dat/c/min/a/fly.dat	field	1	1	zwidth	393939
+decoded_dat/c/min/a/fly.dat	block	1	2	bdy	
+decoded_dat/c/min/a/fly.dat	field	1	2	kind	30
+decoded_dat/c/min/a/fly.dat	field	1	2	x	3130
+decoded_dat/c/min/a/fly.dat	field	1	2	y	35
+decoded_dat/c/min/a/fly.dat	field	1	2	w	3330
+decoded_dat/c/min/a/fly.dat	field	1	2	h	3237
+decoded_dat/c/min/a/fly.dat	field	1	2	zwidth	3130
+decoded_dat/c/min/a/fly.dat	frame	2	4		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	2	-1	pic	3338
+decoded_dat/c/min/a/fly.dat	field	2	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	2	-1	wait	31383030
+decoded_dat/c/min/a/fly.dat	field	2	-1	next	37
+decoded_dat/c/min/a/fly.dat	field	2	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	2	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	2	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	2	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	2	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	2	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	2	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	2	0	x	3234
+decoded_dat/c/min/a/fly.dat	field	2	0	y	3437
+decoded_dat/c/min/a/fly.dat	field	2	0	action	35
+decoded_dat/c/min/a/fly.dat	field	2	0	oid	383137
+decoded_dat/c/min/a/fly.dat	field	2	0	facing	30
+decoded_dat/c/min/a/fly.dat	block	2	1	itr	
+decoded_dat/c/min/a/fly.dat	field	2	1	kind	38
+decoded_dat/c/min/a/fly.dat	field	2	1	dvy	2d31
+decoded_dat/c/min/a/fly.dat	field	2	1	x	3232
+decoded_dat/c/min/a/fly.dat	field	2	1	y	323732303030
+decoded_dat/c/min/a/fly.dat	field	2	1	w	313230
+decoded_dat/c/min/a/fly.dat	field	2	1	h	3430
+decoded_dat/c/min/a/fly.dat	field	2	1	dvx	37
+decoded_dat/c/min/a/fly.dat	block	2	2	itr	
+decoded_dat/c/min/a/fly.dat	field	2	2	kind	38
+decoded_dat/c/min/a/fly.dat	field	2	2	bdefend	33
+decoded_dat/c/min/a/fly.dat	field	2	2	dvy	2d31
+decoded_dat/c/min/a/fly.dat	field	2	2	x	3232
+decoded_dat/c/min/a/fly.dat	field	2	2	y	323732303030
+decoded_dat/c/min/a/fly.dat	field	2	2	w	3230
+decoded_dat/c/min/a/fly.dat	field	2	2	h	3430
+decoded_dat/c/min/a/fly.dat	field	2	2	dvx	37
+decoded_dat/c/min/a/fly.dat	block	2	3	itr	
+decoded_dat/c/min/a/fly.dat	field	2	3	kind	38
+decoded_dat/c/min/a/fly.dat	field	2	3	bdefend	33
+decoded_dat/c/min/a/fly.dat	field	2	3	dvy	2d31
+decoded_dat/c/min/a/fly.dat	field	2	3	x	3232
+decoded_dat/c/min/a/fly.dat	field	2	3	y	323733303030
+decoded_dat/c/min/a/fly.dat	field	2	3	w	3230
+decoded_dat/c/min/a/fly.dat	field	2	3	h	3430
+decoded_dat/c/min/a/fly.dat	field	2	3	dvx	39
+decoded_dat/c/min/a/fly.dat	block	2	4	bdy	
+decoded_dat/c/min/a/fly.dat	field	2	4	kind	30
+decoded_dat/c/min/a/fly.dat	field	2	4	x	3232
+decoded_dat/c/min/a/fly.dat	field	2	4	y	323732303030
+decoded_dat/c/min/a/fly.dat	field	2	4	w	3230
+decoded_dat/c/min/a/fly.dat	field	2	4	h	3430
+decoded_dat/c/min/a/fly.dat	frame	3	5		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	3	-1	pic	3338
+decoded_dat/c/min/a/fly.dat	field	3	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	3	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	3	-1	next	34
+decoded_dat/c/min/a/fly.dat	field	3	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	3	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	3	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	3	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	3	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	4	6		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	4	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	4	-1	state	3138
+decoded_dat/c/min/a/fly.dat	field	4	-1	wait	32
+decoded_dat/c/min/a/fly.dat	field	4	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	4	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	4	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	4	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	4	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	4	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	4	0	itr	
+decoded_dat/c/min/a/fly.dat	field	4	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	4	0	x	2d39393939
+decoded_dat/c/min/a/fly.dat	field	4	0	y	30
+decoded_dat/c/min/a/fly.dat	field	4	0	w	3939393939
+decoded_dat/c/min/a/fly.dat	field	4	0	h	313030
+decoded_dat/c/min/a/fly.dat	field	4	0	effect	35
+decoded_dat/c/min/a/fly.dat	field	4	0	zwidth	393939
+decoded_dat/c/min/a/fly.dat	field	4	0	vrest	3230
+decoded_dat/c/min/a/fly.dat	field	4	0	dvx	31
+decoded_dat/c/min/a/fly.dat	field	4	0	vrest	37
+decoded_dat/c/min/a/fly.dat	field	4	0	bdefend	30
+decoded_dat/c/min/a/fly.dat	field	4	0	injury	30
+decoded_dat/c/min/a/fly.dat	frame	5	7		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	5	-1	pic	3338
+decoded_dat/c/min/a/fly.dat	field	5	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	5	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	5	-1	next	38
+decoded_dat/c/min/a/fly.dat	field	5	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	5	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	5	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	5	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	5	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	6	8		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	6	-1	pic	3338
+decoded_dat/c/min/a/fly.dat	field	6	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	6	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	6	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	6	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	6	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	6	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	6	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	6	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	6	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	6	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	6	0	x	3231
+decoded_dat/c/min/a/fly.dat	field	6	0	y	3236
+decoded_dat/c/min/a/fly.dat	field	6	0	action	3431
+decoded_dat/c/min/a/fly.dat	field	6	0	oid	373036
+decoded_dat/c/min/a/fly.dat	frame	7	9		67726f756e64
+decoded_dat/c/min/a/fly.dat	field	7	-1	pic	3338
+decoded_dat/c/min/a/fly.dat	field	7	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	7	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	7	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	7	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	7	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	7	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	7	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	7	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	8	10		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	8	-1	pic	3430
+decoded_dat/c/min/a/fly.dat	field	8	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	8	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	8	-1	next	3131
+decoded_dat/c/min/a/fly.dat	field	8	-1	dvx	323030
+decoded_dat/c/min/a/fly.dat	field	8	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	8	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	8	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	8	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	9	11		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	9	-1	pic	3431
+decoded_dat/c/min/a/fly.dat	field	9	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	9	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	9	-1	next	3132
+decoded_dat/c/min/a/fly.dat	field	9	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	9	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	9	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	9	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	9	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	9	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	9	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	9	0	x	3433
+decoded_dat/c/min/a/fly.dat	field	9	0	y	3539
+decoded_dat/c/min/a/fly.dat	field	9	0	action	333733
+decoded_dat/c/min/a/fly.dat	field	9	0	oid	383135
+decoded_dat/c/min/a/fly.dat	field	9	0	facing	30
+decoded_dat/c/min/a/fly.dat	frame	10	12		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	10	-1	pic	3432
+decoded_dat/c/min/a/fly.dat	field	10	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	10	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	10	-1	next	3133
+decoded_dat/c/min/a/fly.dat	field	10	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	10	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	11	13		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	11	-1	pic	3433
+decoded_dat/c/min/a/fly.dat	field	11	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	11	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	11	-1	next	3134
+decoded_dat/c/min/a/fly.dat	field	11	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	11	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	11	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	11	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	11	0	x	3433
+decoded_dat/c/min/a/fly.dat	field	11	0	y	3439
+decoded_dat/c/min/a/fly.dat	field	11	0	action	3236
+decoded_dat/c/min/a/fly.dat	field	11	0	oid	383135
+decoded_dat/c/min/a/fly.dat	field	11	0	facing	30
+decoded_dat/c/min/a/fly.dat	frame	12	14		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	12	-1	pic	3434
+decoded_dat/c/min/a/fly.dat	field	12	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	12	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	12	-1	next	3135
+decoded_dat/c/min/a/fly.dat	field	12	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	12	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	12	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	13	15		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	13	-1	pic	3435
+decoded_dat/c/min/a/fly.dat	field	13	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	13	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	13	-1	next	3136
+decoded_dat/c/min/a/fly.dat	field	13	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	13	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	13	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	13	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	13	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	14	16		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	14	-1	pic	3436
+decoded_dat/c/min/a/fly.dat	field	14	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	14	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	14	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	14	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	14	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	14	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	14	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	14	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	15	20		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	15	-1	pic	3430
+decoded_dat/c/min/a/fly.dat	field	15	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	15	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	15	-1	next	3131
+decoded_dat/c/min/a/fly.dat	field	15	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	15	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	15	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	15	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	15	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	16	24		70756e6368
+decoded_dat/c/min/a/fly.dat	field	16	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	16	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	16	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	16	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	16	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	16	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	16	-1	centerx	3333
+decoded_dat/c/min/a/fly.dat	field	16	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	frame	17	25		6d696e61746f5f64766a
+decoded_dat/c/min/a/fly.dat	field	17	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	17	-1	state	343030
+decoded_dat/c/min/a/fly.dat	field	17	-1	wait	3130
+decoded_dat/c/min/a/fly.dat	field	17	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	17	-1	centerx	2d3631
+decoded_dat/c/min/a/fly.dat	field	17	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	block	17	0	bdy	
+decoded_dat/c/min/a/fly.dat	field	17	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	17	0	x	3236
+decoded_dat/c/min/a/fly.dat	field	17	0	y	323730303030
+decoded_dat/c/min/a/fly.dat	field	17	0	w	3239
+decoded_dat/c/min/a/fly.dat	field	17	0	h	3434
+decoded_dat/c/min/a/fly.dat	frame	18	26		70756e6368
+decoded_dat/c/min/a/fly.dat	field	18	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	18	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	18	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	18	-1	next	2d3237
+decoded_dat/c/min/a/fly.dat	field	18	-1	dvx	2d3230
+decoded_dat/c/min/a/fly.dat	field	18	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	18	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	18	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	18	-1	sound	646174615c3034332e776176
+decoded_dat/c/min/a/fly.dat	frame	19	27		70756e6368
+decoded_dat/c/min/a/fly.dat	field	19	-1	pic	3437
+decoded_dat/c/min/a/fly.dat	field	19	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	19	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	19	-1	next	3238
+decoded_dat/c/min/a/fly.dat	field	19	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	19	-1	centerx	3333
+decoded_dat/c/min/a/fly.dat	field	19	-1	centery	3530
+decoded_dat/c/min/a/fly.dat	frame	20	28		70756e6368
+decoded_dat/c/min/a/fly.dat	field	20	-1	pic	3438
+decoded_dat/c/min/a/fly.dat	field	20	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	20	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	20	-1	next	3239
+decoded_dat/c/min/a/fly.dat	field	20	-1	dvx	3530
+decoded_dat/c/min/a/fly.dat	field	20	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	20	-1	dvz	35
+decoded_dat/c/min/a/fly.dat	field	20	-1	centerx	3333
+decoded_dat/c/min/a/fly.dat	field	20	-1	centery	3530
+decoded_dat/c/min/a/fly.dat	field	20	-1	sound	646174615c3032382e776176
+decoded_dat/c/min/a/fly.dat	block	20	0	itr	
+decoded_dat/c/min/a/fly.dat	field	20	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	20	0	x	2d3537
+decoded_dat/c/min/a/fly.dat	field	20	0	y	2d36
+decoded_dat/c/min/a/fly.dat	field	20	0	w	313337
+decoded_dat/c/min/a/fly.dat	field	20	0	h	3537
+decoded_dat/c/min/a/fly.dat	field	20	0	effect	31
+decoded_dat/c/min/a/fly.dat	field	20	0	dvx	3130
+decoded_dat/c/min/a/fly.dat	field	20	0	dvy	2d3135
+decoded_dat/c/min/a/fly.dat	field	20	0	fall	3730
+decoded_dat/c/min/a/fly.dat	field	20	0	vrest	3730
+decoded_dat/c/min/a/fly.dat	field	20	0	bdefend	3136
+decoded_dat/c/min/a/fly.dat	field	20	0	injury	3535
+decoded_dat/c/min/a/fly.dat	frame	21	29		70756e6368
+decoded_dat/c/min/a/fly.dat	field	21	-1	pic	3439
+decoded_dat/c/min/a/fly.dat	field	21	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	21	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	21	-1	next	3333
+decoded_dat/c/min/a/fly.dat	field	21	-1	dvx	3330
+decoded_dat/c/min/a/fly.dat	field	21	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	21	-1	dvz	35
+decoded_dat/c/min/a/fly.dat	field	21	-1	centerx	3333
+decoded_dat/c/min/a/fly.dat	field	21	-1	centery	3530
+decoded_dat/c/min/a/fly.dat	block	21	0	itr	
+decoded_dat/c/min/a/fly.dat	field	21	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	21	0	x	2d3537
+decoded_dat/c/min/a/fly.dat	field	21	0	y	2d36
+decoded_dat/c/min/a/fly.dat	field	21	0	w	313337
+decoded_dat/c/min/a/fly.dat	field	21	0	h	3537
+decoded_dat/c/min/a/fly.dat	field	21	0	effect	31
+decoded_dat/c/min/a/fly.dat	field	21	0	dvx	3130
+decoded_dat/c/min/a/fly.dat	field	21	0	dvy	2d3135
+decoded_dat/c/min/a/fly.dat	field	21	0	fall	3730
+decoded_dat/c/min/a/fly.dat	field	21	0	vrest	3730
+decoded_dat/c/min/a/fly.dat	field	21	0	bdefend	3136
+decoded_dat/c/min/a/fly.dat	field	21	0	injury	3535
+decoded_dat/c/min/a/fly.dat	frame	22	30		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	22	-1	pic	3430
+decoded_dat/c/min/a/fly.dat	field	22	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	22	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	22	-1	next	3131
+decoded_dat/c/min/a/fly.dat	field	22	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	22	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	22	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	22	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	22	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	23	33		70756e6368
+decoded_dat/c/min/a/fly.dat	field	23	-1	pic	3439
+decoded_dat/c/min/a/fly.dat	field	23	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	23	-1	wait	35
+decoded_dat/c/min/a/fly.dat	field	23	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	23	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	23	-1	centerx	3333
+decoded_dat/c/min/a/fly.dat	field	23	-1	centery	3530
+decoded_dat/c/min/a/fly.dat	block	23	0	itr	
+decoded_dat/c/min/a/fly.dat	field	23	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	23	0	x	2d3537
+decoded_dat/c/min/a/fly.dat	field	23	0	y	2d36
+decoded_dat/c/min/a/fly.dat	field	23	0	w	313337
+decoded_dat/c/min/a/fly.dat	field	23	0	h	3537
+decoded_dat/c/min/a/fly.dat	field	23	0	effect	31
+decoded_dat/c/min/a/fly.dat	field	23	0	dvx	3130
+decoded_dat/c/min/a/fly.dat	field	23	0	dvy	2d3135
+decoded_dat/c/min/a/fly.dat	field	23	0	fall	3730
+decoded_dat/c/min/a/fly.dat	field	23	0	vrest	3730
+decoded_dat/c/min/a/fly.dat	field	23	0	bdefend	3136
+decoded_dat/c/min/a/fly.dat	field	23	0	injury	3535
+decoded_dat/c/min/a/fly.dat	frame	24	40		7461696c
+decoded_dat/c/min/a/fly.dat	field	24	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	24	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	24	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	24	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	24	-1	centerx	3435
+decoded_dat/c/min/a/fly.dat	field	24	-1	centery	3338
+decoded_dat/c/min/a/fly.dat	frame	25	50		7374617274
+decoded_dat/c/min/a/fly.dat	field	25	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	25	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	25	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	25	-1	next	3535
+decoded_dat/c/min/a/fly.dat	field	25	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	25	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	25	-1	centerx	3435
+decoded_dat/c/min/a/fly.dat	field	25	-1	centery	3338
+decoded_dat/c/min/a/fly.dat	field	25	-1	hit_Fa	33
+decoded_dat/c/min/a/fly.dat	frame	26	55		666c79696e6732
+decoded_dat/c/min/a/fly.dat	field	26	-1	pic	33
+decoded_dat/c/min/a/fly.dat	field	26	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	26	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	26	-1	next	3535
+decoded_dat/c/min/a/fly.dat	field	26	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	26	-1	dvy	32
+decoded_dat/c/min/a/fly.dat	field	26	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	26	-1	centery	3438
+decoded_dat/c/min/a/fly.dat	field	26	-1	hit_Fa	37
+decoded_dat/c/min/a/fly.dat	frame	27	60		686974696e67
+decoded_dat/c/min/a/fly.dat	field	27	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	27	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	27	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	27	-1	next	3631
+decoded_dat/c/min/a/fly.dat	field	27	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	27	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	27	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	27	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	27	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	frame	28	61		686974696e67
+decoded_dat/c/min/a/fly.dat	field	28	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	28	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	28	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	28	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	28	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	28	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	28	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	28	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	28	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	block	28	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	28	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	28	0	x	3639
+decoded_dat/c/min/a/fly.dat	field	28	0	y	3535
+decoded_dat/c/min/a/fly.dat	field	28	0	action	35
+decoded_dat/c/min/a/fly.dat	field	28	0	oid	383135
+decoded_dat/c/min/a/fly.dat	field	28	0	facing	30
+decoded_dat/c/min/a/fly.dat	frame	29	70		61654461
+decoded_dat/c/min/a/fly.dat	field	29	-1	pic	3138
+decoded_dat/c/min/a/fly.dat	field	29	-1	state	33303030
+decoded_dat/c/min/a/fly.dat	field	29	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	29	-1	next	3730
+decoded_dat/c/min/a/fly.dat	field	29	-1	dvx	3134
+decoded_dat/c/min/a/fly.dat	field	29	-1	dvy	39
+decoded_dat/c/min/a/fly.dat	field	29	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	29	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	29	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	field	29	-1	hit_g	3731
+decoded_dat/c/min/a/fly.dat	field	29	-1	hit_Fj	3730
+decoded_dat/c/min/a/fly.dat	block	29	0	itr	
+decoded_dat/c/min/a/fly.dat	field	29	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	29	0	x	3134
+decoded_dat/c/min/a/fly.dat	field	29	0	y	3137
+decoded_dat/c/min/a/fly.dat	field	29	0	w	3234
+decoded_dat/c/min/a/fly.dat	field	29	0	h	3235
+decoded_dat/c/min/a/fly.dat	field	29	0	effect	31
+decoded_dat/c/min/a/fly.dat	field	29	0	dvx	3135
+decoded_dat/c/min/a/fly.dat	field	29	0	dvy	2d3130
+decoded_dat/c/min/a/fly.dat	field	29	0	vrest	3130
+decoded_dat/c/min/a/fly.dat	field	29	0	bdefend	313030
+decoded_dat/c/min/a/fly.dat	field	29	0	fall	313030
+decoded_dat/c/min/a/fly.dat	field	29	0	injury	3535
+decoded_dat/c/min/a/fly.dat	frame	30	71		61654461
+decoded_dat/c/min/a/fly.dat	field	30	-1	pic	3138
+decoded_dat/c/min/a/fly.dat	field	30	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	30	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	30	-1	next	3732
+decoded_dat/c/min/a/fly.dat	field	30	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	30	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	30	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	30	-1	centerx	3234
+decoded_dat/c/min/a/fly.dat	field	30	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	31	72		61654461
+decoded_dat/c/min/a/fly.dat	field	31	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	31	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	31	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	31	-1	next	3733
+decoded_dat/c/min/a/fly.dat	field	31	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	31	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	31	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	31	-1	centerx	3338
+decoded_dat/c/min/a/fly.dat	field	31	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	block	31	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	31	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	31	0	x	3338
+decoded_dat/c/min/a/fly.dat	field	31	0	y	3535
+decoded_dat/c/min/a/fly.dat	field	31	0	action	313035
+decoded_dat/c/min/a/fly.dat	field	31	0	oid	343438
+decoded_dat/c/min/a/fly.dat	field	31	0	facing	30
+decoded_dat/c/min/a/fly.dat	frame	32	73		61654461
+decoded_dat/c/min/a/fly.dat	field	32	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	32	-1	state	3135
+decoded_dat/c/min/a/fly.dat	field	32	-1	wait	31
+decoded_dat/c/min/a/fly.dat	field	32	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	32	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	32	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	32	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	32	-1	centerx	3338
+decoded_dat/c/min/a/fly.dat	field	32	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	block	32	0	itr	
+decoded_dat/c/min/a/fly.dat	field	32	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	32	0	x	3232
+decoded_dat/c/min/a/fly.dat	field	32	0	y	33303030
+decoded_dat/c/min/a/fly.dat	field	32	0	w	3332
+decoded_dat/c/min/a/fly.dat	field	32	0	h	3537
+decoded_dat/c/min/a/fly.dat	field	32	0	effect	38
+decoded_dat/c/min/a/fly.dat	field	32	0	caughtact	323332
+decoded_dat/c/min/a/fly.dat	field	32	0	vrest	3330
+decoded_dat/c/min/a/fly.dat	field	32	0	injury	3530
+decoded_dat/c/min/a/fly.dat	field	32	0	sound	3130
+decoded_dat/c/min/a/fly.dat	block	32	1	itr	
+decoded_dat/c/min/a/fly.dat	field	32	1	kind	30
+decoded_dat/c/min/a/fly.dat	field	32	1	x	3232
+decoded_dat/c/min/a/fly.dat	field	32	1	y	33353030
+decoded_dat/c/min/a/fly.dat	field	32	1	w	3332
+decoded_dat/c/min/a/fly.dat	field	32	1	h	3537
+decoded_dat/c/min/a/fly.dat	field	32	1	effect	38
+decoded_dat/c/min/a/fly.dat	field	32	1	caughtact	333937
+decoded_dat/c/min/a/fly.dat	field	32	1	vrest	3330
+decoded_dat/c/min/a/fly.dat	field	32	1	injury	3530
+decoded_dat/c/min/a/fly.dat	field	32	1	sound	3130
+decoded_dat/c/min/a/fly.dat	frame	33	110		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	33	-1	pic	3430
+decoded_dat/c/min/a/fly.dat	field	33	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	33	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	33	-1	next	313131
+decoded_dat/c/min/a/fly.dat	field	33	-1	dvx	323030
+decoded_dat/c/min/a/fly.dat	field	33	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	33	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	33	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	33	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	34	111		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	34	-1	pic	3431
+decoded_dat/c/min/a/fly.dat	field	34	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	34	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	34	-1	next	313132
+decoded_dat/c/min/a/fly.dat	field	34	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	34	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	34	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	34	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	34	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	block	34	0	opoint	
+decoded_dat/c/min/a/fly.dat	field	34	0	kind	31
+decoded_dat/c/min/a/fly.dat	field	34	0	x	3433
+decoded_dat/c/min/a/fly.dat	field	34	0	y	3539
+decoded_dat/c/min/a/fly.dat	field	34	0	action	333733
+decoded_dat/c/min/a/fly.dat	field	34	0	oid	383135
+decoded_dat/c/min/a/fly.dat	field	34	0	facing	30
+decoded_dat/c/min/a/fly.dat	frame	35	112		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	35	-1	pic	3432
+decoded_dat/c/min/a/fly.dat	field	35	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	35	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	35	-1	next	313133
+decoded_dat/c/min/a/fly.dat	field	35	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	35	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	36	113		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	36	-1	pic	3433
+decoded_dat/c/min/a/fly.dat	field	36	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	36	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	36	-1	next	313134
+decoded_dat/c/min/a/fly.dat	field	36	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	36	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	37	114		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	37	-1	pic	3434
+decoded_dat/c/min/a/fly.dat	field	37	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	37	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	37	-1	next	313135
+decoded_dat/c/min/a/fly.dat	field	37	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	37	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	37	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	38	115		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	38	-1	pic	3435
+decoded_dat/c/min/a/fly.dat	field	38	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	38	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	38	-1	next	313136
+decoded_dat/c/min/a/fly.dat	field	38	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	38	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	38	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	38	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	38	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	39	116		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	39	-1	pic	3436
+decoded_dat/c/min/a/fly.dat	field	39	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	39	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	39	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	39	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	39	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	39	-1	dvz	353530
+decoded_dat/c/min/a/fly.dat	field	39	-1	centerx	3433
+decoded_dat/c/min/a/fly.dat	field	39	-1	centery	3234
+decoded_dat/c/min/a/fly.dat	frame	40	373		696c6c7573696f6e
+decoded_dat/c/min/a/fly.dat	field	40	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	40	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	40	-1	wait	32
+decoded_dat/c/min/a/fly.dat	field	40	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	40	-1	dvx	353530
+decoded_dat/c/min/a/fly.dat	field	40	-1	dvy	353530
+decoded_dat/c/min/a/fly.dat	field	40	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	40	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	block	40	0	bdy	
+decoded_dat/c/min/a/fly.dat	field	40	0	kind	30
+decoded_dat/c/min/a/fly.dat	field	40	0	x	30
+decoded_dat/c/min/a/fly.dat	field	40	0	y	323736303030
+decoded_dat/c/min/a/fly.dat	field	40	0	w	3739
+decoded_dat/c/min/a/fly.dat	field	40	0	h	353030
+decoded_dat/c/min/a/fly.dat	frame	41	700		6131
+decoded_dat/c/min/a/fly.dat	field	41	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	41	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	41	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	41	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	41	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	41	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	41	-1	sound	635c6d696e5c775c61312e776176
+decoded_dat/c/min/a/fly.dat	frame	42	701		6132
+decoded_dat/c/min/a/fly.dat	field	42	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	42	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	42	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	42	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	42	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	42	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	42	-1	sound	635c6d696e5c775c61322e776176
+decoded_dat/c/min/a/fly.dat	frame	43	702		6a31
+decoded_dat/c/min/a/fly.dat	field	43	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	43	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	43	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	43	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	43	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	43	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	43	-1	sound	635c6d696e5c775c6a312e776176
+decoded_dat/c/min/a/fly.dat	frame	44	703		6a32
+decoded_dat/c/min/a/fly.dat	field	44	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	44	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	44	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	44	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	44	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	44	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	44	-1	sound	635c6d696e5c775c6a322e776176
+decoded_dat/c/min/a/fly.dat	frame	45	704		6a33
+decoded_dat/c/min/a/fly.dat	field	45	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	45	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	45	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	45	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	45	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	45	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	45	-1	sound	635c6d696e5c775c6a332e776176
+decoded_dat/c/min/a/fly.dat	frame	46	705		6531
+decoded_dat/c/min/a/fly.dat	field	46	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	46	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	46	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	46	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	46	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	46	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	46	-1	sound	635c6d696e5c775c65312e776176
+decoded_dat/c/min/a/fly.dat	frame	47	706		6a34
+decoded_dat/c/min/a/fly.dat	field	47	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	47	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	47	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	47	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	47	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	47	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	47	-1	sound	635c6d696e5c775c6a342e776176
+decoded_dat/c/min/a/fly.dat	frame	48	707		6a35
+decoded_dat/c/min/a/fly.dat	field	48	-1	pic	393939
+decoded_dat/c/min/a/fly.dat	field	48	-1	state	33303035
+decoded_dat/c/min/a/fly.dat	field	48	-1	wait	30
+decoded_dat/c/min/a/fly.dat	field	48	-1	next	31303030
+decoded_dat/c/min/a/fly.dat	field	48	-1	centerx	3339
+decoded_dat/c/min/a/fly.dat	field	48	-1	centery	3739
+decoded_dat/c/min/a/fly.dat	field	48	-1	sound	635c6d696e5c775c6a352e776176

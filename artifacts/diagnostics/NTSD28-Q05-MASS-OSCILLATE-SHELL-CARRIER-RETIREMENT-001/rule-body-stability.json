@@ -1,0 +1,20 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs",
+    "method": "internal BattleMechanicsStepResult StepBattleLogic(",
+    "bodyUnchanged": true,
+    "sha256NormalizedLF": "08b5f2fc7df6a4359c6c240855ef29674b8db977303fa6a75877aad89893b2d8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "method": "protected virtual void ProcessEffects()",
+    "bodyUnchanged": true,
+    "sha256NormalizedLF": "c6a802096b936fec63feaa4e22786cbc2d25284017504fd65862ae5756d75053"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "method": "public virtual void EffectCreate(",
+    "bodyUnchanged": true,
+    "sha256NormalizedLF": "fa105790b9eda44630f9ea4090f7bdc2eb8a67d1f8a811ae168c2bd0aa26e7d7"
+  }
+]

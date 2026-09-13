@@ -1,0 +1,1131 @@
+decoded_dat/c/saku/a/atk.dat	frame	0	0		64656c
+decoded_dat/c/saku/a/atk.dat	field	0	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	0	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	0	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	0	-1	next	31
+decoded_dat/c/saku/a/atk.dat	field	0	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	0	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	0	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	0	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	1	1		64656c
+decoded_dat/c/saku/a/atk.dat	field	1	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	1	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	1	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	1	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	1	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	1	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	1	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	1	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	2	2		446a
+decoded_dat/c/saku/a/atk.dat	field	2	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	2	-1	state	33303030
+decoded_dat/c/saku/a/atk.dat	field	2	-1	wait	39
+decoded_dat/c/saku/a/atk.dat	field	2	-1	next	3131
+decoded_dat/c/saku/a/atk.dat	field	2	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	2	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	field	2	-1	hit_a	3130
+decoded_dat/c/saku/a/atk.dat	field	2	-1	hit_d	31
+decoded_dat/c/saku/a/atk.dat	frame	3	9		446a
+decoded_dat/c/saku/a/atk.dat	field	3	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	3	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	3	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	3	-1	next	31
+decoded_dat/c/saku/a/atk.dat	field	3	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	3	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	block	3	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	3	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	3	0	x	3436
+decoded_dat/c/saku/a/atk.dat	field	3	0	y	3330
+decoded_dat/c/saku/a/atk.dat	field	3	0	w	313430
+decoded_dat/c/saku/a/atk.dat	field	3	0	h	3630
+decoded_dat/c/saku/a/atk.dat	field	3	0	zwidth	3330
+decoded_dat/c/saku/a/atk.dat	field	3	0	dvx	37
+decoded_dat/c/saku/a/atk.dat	field	3	0	dvy	2d37
+decoded_dat/c/saku/a/atk.dat	field	3	0	fall	313030
+decoded_dat/c/saku/a/atk.dat	field	3	0	vrest	3330
+decoded_dat/c/saku/a/atk.dat	field	3	0	bdefend	313030
+decoded_dat/c/saku/a/atk.dat	field	3	0	injury	3530
+decoded_dat/c/saku/a/atk.dat	block	3	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	3	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	3	1	x	313936
+decoded_dat/c/saku/a/atk.dat	field	3	1	y	3330
+decoded_dat/c/saku/a/atk.dat	field	3	1	w	313430
+decoded_dat/c/saku/a/atk.dat	field	3	1	h	3630
+decoded_dat/c/saku/a/atk.dat	field	3	1	zwidth	3330
+decoded_dat/c/saku/a/atk.dat	field	3	1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	3	1	dvy	2d37
+decoded_dat/c/saku/a/atk.dat	field	3	1	fall	313030
+decoded_dat/c/saku/a/atk.dat	field	3	1	vrest	3330
+decoded_dat/c/saku/a/atk.dat	field	3	1	bdefend	313030
+decoded_dat/c/saku/a/atk.dat	field	3	1	injury	3530
+decoded_dat/c/saku/a/atk.dat	block	3	2	itr	
+decoded_dat/c/saku/a/atk.dat	field	3	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	3	2	x	2d313030
+decoded_dat/c/saku/a/atk.dat	field	3	2	y	3330
+decoded_dat/c/saku/a/atk.dat	field	3	2	w	313430
+decoded_dat/c/saku/a/atk.dat	field	3	2	h	3630
+decoded_dat/c/saku/a/atk.dat	field	3	2	zwidth	3330
+decoded_dat/c/saku/a/atk.dat	field	3	2	dvx	2d33
+decoded_dat/c/saku/a/atk.dat	field	3	2	dvy	2d37
+decoded_dat/c/saku/a/atk.dat	field	3	2	fall	313030
+decoded_dat/c/saku/a/atk.dat	field	3	2	vrest	3330
+decoded_dat/c/saku/a/atk.dat	field	3	2	bdefend	313030
+decoded_dat/c/saku/a/atk.dat	field	3	2	injury	3530
+decoded_dat/c/saku/a/atk.dat	block	3	3	itr	
+decoded_dat/c/saku/a/atk.dat	field	3	3	kind	30
+decoded_dat/c/saku/a/atk.dat	field	3	3	x	2d323530
+decoded_dat/c/saku/a/atk.dat	field	3	3	y	3330
+decoded_dat/c/saku/a/atk.dat	field	3	3	w	313430
+decoded_dat/c/saku/a/atk.dat	field	3	3	h	3630
+decoded_dat/c/saku/a/atk.dat	field	3	3	zwidth	3330
+decoded_dat/c/saku/a/atk.dat	field	3	3	dvx	2d37
+decoded_dat/c/saku/a/atk.dat	field	3	3	dvy	2d37
+decoded_dat/c/saku/a/atk.dat	field	3	3	fall	313030
+decoded_dat/c/saku/a/atk.dat	field	3	3	vrest	3330
+decoded_dat/c/saku/a/atk.dat	field	3	3	bdefend	313030
+decoded_dat/c/saku/a/atk.dat	field	3	3	injury	3530
+decoded_dat/c/saku/a/atk.dat	frame	4	10		64656c
+decoded_dat/c/saku/a/atk.dat	field	4	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	4	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	4	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	4	-1	next	31
+decoded_dat/c/saku/a/atk.dat	field	4	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	4	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	4	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	4	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	5	11		446a
+decoded_dat/c/saku/a/atk.dat	field	5	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	5	-1	state	33303030
+decoded_dat/c/saku/a/atk.dat	field	5	-1	wait	35
+decoded_dat/c/saku/a/atk.dat	field	5	-1	next	3131
+decoded_dat/c/saku/a/atk.dat	field	5	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	5	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	field	5	-1	hit_a	3230
+decoded_dat/c/saku/a/atk.dat	field	5	-1	hit_d	31
+decoded_dat/c/saku/a/atk.dat	block	5	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	5	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	5	0	x	3339
+decoded_dat/c/saku/a/atk.dat	field	5	0	y	3737
+decoded_dat/c/saku/a/atk.dat	field	5	0	action	39
+decoded_dat/c/saku/a/atk.dat	field	5	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	5	0	facing	30
+decoded_dat/c/saku/a/atk.dat	frame	6	20		64656c
+decoded_dat/c/saku/a/atk.dat	field	6	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	6	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	6	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	6	-1	next	31
+decoded_dat/c/saku/a/atk.dat	field	6	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	6	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	6	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	6	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	7	30		64656c
+decoded_dat/c/saku/a/atk.dat	field	7	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	7	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	7	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	7	-1	next	31
+decoded_dat/c/saku/a/atk.dat	field	7	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	7	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	7	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	7	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	8	48		7374616e64
+decoded_dat/c/saku/a/atk.dat	field	8	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	8	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	8	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	8	-1	next	3439
+decoded_dat/c/saku/a/atk.dat	field	8	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	8	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	8	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	8	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	frame	9	49		7374616e64
+decoded_dat/c/saku/a/atk.dat	field	9	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	9	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	9	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	9	-1	next	3530
+decoded_dat/c/saku/a/atk.dat	field	9	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	9	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	9	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	9	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	block	9	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	9	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	9	0	x	313130
+decoded_dat/c/saku/a/atk.dat	field	9	0	y	3337
+decoded_dat/c/saku/a/atk.dat	field	9	0	action	3535
+decoded_dat/c/saku/a/atk.dat	field	9	0	oid	373036
+decoded_dat/c/saku/a/atk.dat	field	9	0	facing	30
+decoded_dat/c/saku/a/atk.dat	frame	10	50		7374616e64
+decoded_dat/c/saku/a/atk.dat	field	10	-1	pic	3230
+decoded_dat/c/saku/a/atk.dat	field	10	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	10	-1	wait	3130
+decoded_dat/c/saku/a/atk.dat	field	10	-1	next	3533
+decoded_dat/c/saku/a/atk.dat	field	10	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	10	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	10	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	10	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	10	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	10	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	10	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	10	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	10	0	bdy	
+decoded_dat/c/saku/a/atk.dat	field	10	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	10	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	10	0	y	3533
+decoded_dat/c/saku/a/atk.dat	field	10	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	10	0	h	3635
+decoded_dat/c/saku/a/atk.dat	block	10	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	10	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	10	1	x	2d39393939
+decoded_dat/c/saku/a/atk.dat	field	10	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	10	1	w	3939393939
+decoded_dat/c/saku/a/atk.dat	field	10	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	10	1	zwidth	393939
+decoded_dat/c/saku/a/atk.dat	frame	11	51		68757274
+decoded_dat/c/saku/a/atk.dat	field	11	-1	pic	3331
+decoded_dat/c/saku/a/atk.dat	field	11	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	11	-1	wait	32
+decoded_dat/c/saku/a/atk.dat	field	11	-1	next	3532
+decoded_dat/c/saku/a/atk.dat	field	11	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	11	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	11	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	11	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	frame	12	52		68757274
+decoded_dat/c/saku/a/atk.dat	field	12	-1	pic	3331
+decoded_dat/c/saku/a/atk.dat	field	12	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	12	-1	wait	32
+decoded_dat/c/saku/a/atk.dat	field	12	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	12	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	12	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	12	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	12	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	12	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	block	12	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	12	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	12	0	x	313130
+decoded_dat/c/saku/a/atk.dat	field	12	0	y	3337
+decoded_dat/c/saku/a/atk.dat	field	12	0	action	3535
+decoded_dat/c/saku/a/atk.dat	field	12	0	oid	373036
+decoded_dat/c/saku/a/atk.dat	field	12	0	facing	30
+decoded_dat/c/saku/a/atk.dat	frame	13	53		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	13	-1	pic	3231
+decoded_dat/c/saku/a/atk.dat	field	13	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	13	-1	wait	3130
+decoded_dat/c/saku/a/atk.dat	field	13	-1	next	3534
+decoded_dat/c/saku/a/atk.dat	field	13	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	13	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	13	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	13	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	13	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	13	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	13	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	13	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	13	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	13	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	13	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	13	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	13	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	13	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	13	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	13	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	13	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	13	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	13	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	13	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	13	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	13	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	13	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	13	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	13	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	13	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	13	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	13	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	13	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	13	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	13	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	13	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	13	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	14	54		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	14	-1	pic	3232
+decoded_dat/c/saku/a/atk.dat	field	14	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	14	-1	wait	33
+decoded_dat/c/saku/a/atk.dat	field	14	-1	next	3535
+decoded_dat/c/saku/a/atk.dat	field	14	-1	dvx	38
+decoded_dat/c/saku/a/atk.dat	field	14	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	14	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	14	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	14	-1	hit_Fa	31
+decoded_dat/c/saku/a/atk.dat	field	14	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	14	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	14	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	14	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	field	14	-1	sound	646174615c3032352e776176
+decoded_dat/c/saku/a/atk.dat	block	14	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	14	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	14	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	14	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	14	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	14	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	14	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	14	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	14	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	14	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	14	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	14	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	14	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	14	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	14	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	14	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	14	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	14	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	14	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	14	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	14	2	x	3536
+decoded_dat/c/saku/a/atk.dat	field	14	2	y	3534
+decoded_dat/c/saku/a/atk.dat	field	14	2	w	313033
+decoded_dat/c/saku/a/atk.dat	field	14	2	h	3634
+decoded_dat/c/saku/a/atk.dat	frame	15	55		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	15	-1	pic	3231
+decoded_dat/c/saku/a/atk.dat	field	15	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	15	-1	wait	38
+decoded_dat/c/saku/a/atk.dat	field	15	-1	next	3536
+decoded_dat/c/saku/a/atk.dat	field	15	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	15	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	15	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	15	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	15	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	15	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	15	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	15	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	15	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	15	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	15	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	15	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	15	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	15	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	15	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	15	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	15	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	15	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	15	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	15	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	15	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	15	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	15	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	15	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	15	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	15	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	15	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	15	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	15	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	15	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	15	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	15	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	16	56		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	16	-1	pic	3231
+decoded_dat/c/saku/a/atk.dat	field	16	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	16	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	16	-1	next	3537
+decoded_dat/c/saku/a/atk.dat	field	16	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	16	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	16	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	16	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	16	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	16	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	16	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	16	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	16	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	16	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	16	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	16	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	16	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	16	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	16	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	16	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	16	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	16	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	16	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	16	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	16	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	16	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	16	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	16	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	16	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	16	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	16	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	16	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	16	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	16	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	16	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	16	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	16	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	17	57		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	17	-1	pic	3232
+decoded_dat/c/saku/a/atk.dat	field	17	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	17	-1	wait	32
+decoded_dat/c/saku/a/atk.dat	field	17	-1	next	3538
+decoded_dat/c/saku/a/atk.dat	field	17	-1	dvx	38
+decoded_dat/c/saku/a/atk.dat	field	17	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	17	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	17	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	17	-1	hit_Fa	31
+decoded_dat/c/saku/a/atk.dat	field	17	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	17	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	17	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	17	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	field	17	-1	sound	646174615c3032352e776176
+decoded_dat/c/saku/a/atk.dat	block	17	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	17	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	17	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	17	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	17	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	17	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	17	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	17	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	17	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	17	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	17	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	17	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	17	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	17	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	17	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	17	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	17	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	17	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	17	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	17	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	17	2	x	3536
+decoded_dat/c/saku/a/atk.dat	field	17	2	y	3534
+decoded_dat/c/saku/a/atk.dat	field	17	2	w	313033
+decoded_dat/c/saku/a/atk.dat	field	17	2	h	3634
+decoded_dat/c/saku/a/atk.dat	frame	18	58		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	18	-1	pic	3231
+decoded_dat/c/saku/a/atk.dat	field	18	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	18	-1	wait	38
+decoded_dat/c/saku/a/atk.dat	field	18	-1	next	3539
+decoded_dat/c/saku/a/atk.dat	field	18	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	18	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	18	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	18	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	18	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	18	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	18	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	18	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	18	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	18	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	18	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	18	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	18	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	18	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	18	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	18	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	18	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	18	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	18	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	18	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	18	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	18	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	18	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	18	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	18	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	18	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	18	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	18	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	18	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	18	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	18	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	18	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	19	59		6d6f76696e67
+decoded_dat/c/saku/a/atk.dat	field	19	-1	pic	3231
+decoded_dat/c/saku/a/atk.dat	field	19	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	19	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	19	-1	next	3537
+decoded_dat/c/saku/a/atk.dat	field	19	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	19	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	19	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	19	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	19	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	19	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	19	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	19	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	19	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	19	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	19	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	19	0	respond	32
+decoded_dat/c/saku/a/atk.dat	field	19	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	19	0	x	313138
+decoded_dat/c/saku/a/atk.dat	field	19	0	y	38303030
+decoded_dat/c/saku/a/atk.dat	field	19	0	w	393939
+decoded_dat/c/saku/a/atk.dat	field	19	0	h	3635
+decoded_dat/c/saku/a/atk.dat	field	19	0	dvx	313335
+decoded_dat/c/saku/a/atk.dat	block	19	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	19	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	19	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	19	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	19	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	19	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	19	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	19	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	19	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	19	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	19	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	19	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	19	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	19	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	19	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	20	60		626c617374
+decoded_dat/c/saku/a/atk.dat	field	20	-1	pic	3130
+decoded_dat/c/saku/a/atk.dat	field	20	-1	state	33303030
+decoded_dat/c/saku/a/atk.dat	field	20	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	20	-1	next	3631
+decoded_dat/c/saku/a/atk.dat	field	20	-1	dvx	3530
+decoded_dat/c/saku/a/atk.dat	field	20	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	20	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	20	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	field	20	-1	hit_Fj	3632
+decoded_dat/c/saku/a/atk.dat	field	20	-1	hit_Uj	3632
+decoded_dat/c/saku/a/atk.dat	field	20	-1	hit_Dj	3632
+decoded_dat/c/saku/a/atk.dat	field	20	-1	hit_ja	3632
+decoded_dat/c/saku/a/atk.dat	block	20	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	20	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	20	0	x	2d3630
+decoded_dat/c/saku/a/atk.dat	field	20	0	y	3230
+decoded_dat/c/saku/a/atk.dat	field	20	0	w	313430
+decoded_dat/c/saku/a/atk.dat	field	20	0	h	3530
+decoded_dat/c/saku/a/atk.dat	field	20	0	dvx	3130
+decoded_dat/c/saku/a/atk.dat	field	20	0	dvy	2d3135
+decoded_dat/c/saku/a/atk.dat	field	20	0	injury	3335
+decoded_dat/c/saku/a/atk.dat	field	20	0	fall	3730
+decoded_dat/c/saku/a/atk.dat	field	20	0	vrest	3730
+decoded_dat/c/saku/a/atk.dat	block	20	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	20	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	20	1	x	2d3630
+decoded_dat/c/saku/a/atk.dat	field	20	1	y	3230
+decoded_dat/c/saku/a/atk.dat	field	20	1	w	313430
+decoded_dat/c/saku/a/atk.dat	field	20	1	h	3530
+decoded_dat/c/saku/a/atk.dat	frame	21	61		626c617374
+decoded_dat/c/saku/a/atk.dat	field	21	-1	pic	3130
+decoded_dat/c/saku/a/atk.dat	field	21	-1	state	33303030
+decoded_dat/c/saku/a/atk.dat	field	21	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	21	-1	next	3631
+decoded_dat/c/saku/a/atk.dat	field	21	-1	dvx	3530
+decoded_dat/c/saku/a/atk.dat	field	21	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	21	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	21	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	field	21	-1	hit_Fj	3632
+decoded_dat/c/saku/a/atk.dat	field	21	-1	hit_Uj	3632
+decoded_dat/c/saku/a/atk.dat	field	21	-1	hit_Dj	3632
+decoded_dat/c/saku/a/atk.dat	field	21	-1	hit_ja	3632
+decoded_dat/c/saku/a/atk.dat	block	21	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	21	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	21	0	x	30
+decoded_dat/c/saku/a/atk.dat	field	21	0	y	3230
+decoded_dat/c/saku/a/atk.dat	field	21	0	w	3830
+decoded_dat/c/saku/a/atk.dat	field	21	0	h	3530
+decoded_dat/c/saku/a/atk.dat	field	21	0	dvx	3130
+decoded_dat/c/saku/a/atk.dat	field	21	0	dvy	2d3135
+decoded_dat/c/saku/a/atk.dat	field	21	0	injury	3335
+decoded_dat/c/saku/a/atk.dat	field	21	0	fall	3730
+decoded_dat/c/saku/a/atk.dat	field	21	0	vrest	3730
+decoded_dat/c/saku/a/atk.dat	block	21	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	21	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	21	1	x	30
+decoded_dat/c/saku/a/atk.dat	field	21	1	y	3230
+decoded_dat/c/saku/a/atk.dat	field	21	1	w	3830
+decoded_dat/c/saku/a/atk.dat	field	21	1	h	3530
+decoded_dat/c/saku/a/atk.dat	frame	22	62		626c617374
+decoded_dat/c/saku/a/atk.dat	field	22	-1	pic	3131
+decoded_dat/c/saku/a/atk.dat	field	22	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	22	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	22	-1	next	3633
+decoded_dat/c/saku/a/atk.dat	field	22	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	22	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	22	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	22	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	22	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	23	63		626c617374
+decoded_dat/c/saku/a/atk.dat	field	23	-1	pic	3132
+decoded_dat/c/saku/a/atk.dat	field	23	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	23	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	23	-1	next	3634
+decoded_dat/c/saku/a/atk.dat	field	23	-1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	23	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	23	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	23	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	23	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	24	64		626c617374
+decoded_dat/c/saku/a/atk.dat	field	24	-1	pic	3133
+decoded_dat/c/saku/a/atk.dat	field	24	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	24	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	24	-1	next	3635
+decoded_dat/c/saku/a/atk.dat	field	24	-1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	24	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	24	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	24	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	24	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	25	65		626c617374
+decoded_dat/c/saku/a/atk.dat	field	25	-1	pic	3134
+decoded_dat/c/saku/a/atk.dat	field	25	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	25	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	25	-1	next	3636
+decoded_dat/c/saku/a/atk.dat	field	25	-1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	25	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	25	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	25	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	25	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	26	66		626c617374
+decoded_dat/c/saku/a/atk.dat	field	26	-1	pic	3135
+decoded_dat/c/saku/a/atk.dat	field	26	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	26	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	26	-1	next	3637
+decoded_dat/c/saku/a/atk.dat	field	26	-1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	26	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	26	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	26	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	26	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	27	67		626c617374
+decoded_dat/c/saku/a/atk.dat	field	27	-1	pic	3136
+decoded_dat/c/saku/a/atk.dat	field	27	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	27	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	27	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	27	-1	dvx	33
+decoded_dat/c/saku/a/atk.dat	field	27	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	27	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	27	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	27	-1	centery	3737
+decoded_dat/c/saku/a/atk.dat	frame	28	70		736d617368
+decoded_dat/c/saku/a/atk.dat	field	28	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	28	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	28	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	28	-1	next	3731
+decoded_dat/c/saku/a/atk.dat	field	28	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	28	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	frame	29	71		736d617368
+decoded_dat/c/saku/a/atk.dat	field	29	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	29	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	29	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	29	-1	next	3732
+decoded_dat/c/saku/a/atk.dat	field	29	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	29	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	29	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	29	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	29	0	x	30
+decoded_dat/c/saku/a/atk.dat	field	29	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	29	0	action	3732
+decoded_dat/c/saku/a/atk.dat	field	29	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	29	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	30	72		736d617368
+decoded_dat/c/saku/a/atk.dat	field	30	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	30	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	30	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	30	-1	next	3733
+decoded_dat/c/saku/a/atk.dat	field	30	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	30	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	frame	31	73		736d617368
+decoded_dat/c/saku/a/atk.dat	field	31	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	31	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	31	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	31	-1	next	3734
+decoded_dat/c/saku/a/atk.dat	field	31	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	31	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	31	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	31	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	31	0	x	313130
+decoded_dat/c/saku/a/atk.dat	field	31	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	31	0	action	3830
+decoded_dat/c/saku/a/atk.dat	field	31	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	31	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	32	74		736d617368
+decoded_dat/c/saku/a/atk.dat	field	32	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	32	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	32	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	32	-1	next	3735
+decoded_dat/c/saku/a/atk.dat	field	32	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	32	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	32	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	32	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	32	0	x	3830
+decoded_dat/c/saku/a/atk.dat	field	32	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	32	0	action	3736
+decoded_dat/c/saku/a/atk.dat	field	32	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	32	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	33	75		736d617368
+decoded_dat/c/saku/a/atk.dat	field	33	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	33	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	33	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	33	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	33	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	33	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	33	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	33	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	33	0	x	3830
+decoded_dat/c/saku/a/atk.dat	field	33	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	33	0	action	3738
+decoded_dat/c/saku/a/atk.dat	field	33	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	33	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	34	76		736d617368
+decoded_dat/c/saku/a/atk.dat	field	34	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	34	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	34	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	34	-1	next	3737
+decoded_dat/c/saku/a/atk.dat	field	34	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	34	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	field	34	-1	hit_j	3730
+decoded_dat/c/saku/a/atk.dat	frame	35	77		736d617368
+decoded_dat/c/saku/a/atk.dat	field	35	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	35	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	35	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	35	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	35	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	35	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	35	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	35	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	35	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	35	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	35	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	35	0	x	3430
+decoded_dat/c/saku/a/atk.dat	field	35	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	35	0	action	3831
+decoded_dat/c/saku/a/atk.dat	field	35	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	35	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	36	78		736d617368
+decoded_dat/c/saku/a/atk.dat	field	36	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	36	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	36	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	36	-1	next	3739
+decoded_dat/c/saku/a/atk.dat	field	36	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	36	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	field	36	-1	hit_j	3330
+decoded_dat/c/saku/a/atk.dat	frame	37	79		736d617368
+decoded_dat/c/saku/a/atk.dat	field	37	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	37	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	37	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	37	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	37	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	37	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	37	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	37	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	37	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	37	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	37	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	37	0	x	3430
+decoded_dat/c/saku/a/atk.dat	field	37	0	y	30
+decoded_dat/c/saku/a/atk.dat	field	37	0	action	3832
+decoded_dat/c/saku/a/atk.dat	field	37	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	37	0	facing	31
+decoded_dat/c/saku/a/atk.dat	frame	38	80		736d617368
+decoded_dat/c/saku/a/atk.dat	field	38	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	38	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	38	-1	wait	32
+decoded_dat/c/saku/a/atk.dat	field	38	-1	next	3831
+decoded_dat/c/saku/a/atk.dat	field	38	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	38	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	frame	39	81		736d617368
+decoded_dat/c/saku/a/atk.dat	field	39	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	39	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	39	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	39	-1	next	3832
+decoded_dat/c/saku/a/atk.dat	field	39	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	39	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	frame	40	82		736d617368
+decoded_dat/c/saku/a/atk.dat	field	40	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	40	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	40	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	40	-1	next	3833
+decoded_dat/c/saku/a/atk.dat	field	40	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	40	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	frame	41	83		736d617368
+decoded_dat/c/saku/a/atk.dat	field	41	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	41	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	41	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	41	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	41	-1	centerx	30
+decoded_dat/c/saku/a/atk.dat	field	41	-1	centery	30
+decoded_dat/c/saku/a/atk.dat	block	41	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	41	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	41	0	x	313135
+decoded_dat/c/saku/a/atk.dat	field	41	0	y	3630
+decoded_dat/c/saku/a/atk.dat	field	41	0	action	313435
+decoded_dat/c/saku/a/atk.dat	field	41	0	oid	323038
+decoded_dat/c/saku/a/atk.dat	field	41	0	facing	30
+decoded_dat/c/saku/a/atk.dat	frame	42	95		6c696d6974636865636b
+decoded_dat/c/saku/a/atk.dat	field	42	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	42	-1	state	343030
+decoded_dat/c/saku/a/atk.dat	field	42	-1	wait	3130
+decoded_dat/c/saku/a/atk.dat	field	42	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	42	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	42	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	42	-1	centerx	3430
+decoded_dat/c/saku/a/atk.dat	field	42	-1	centery	3731
+decoded_dat/c/saku/a/atk.dat	block	42	0	bdy	
+decoded_dat/c/saku/a/atk.dat	field	42	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	42	0	x	3330
+decoded_dat/c/saku/a/atk.dat	field	42	0	y	3135303030
+decoded_dat/c/saku/a/atk.dat	field	42	0	w	3939
+decoded_dat/c/saku/a/atk.dat	field	42	0	h	393939
+decoded_dat/c/saku/a/atk.dat	frame	43	132		67726f756e64
+decoded_dat/c/saku/a/atk.dat	field	43	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	43	-1	state	33303036
+decoded_dat/c/saku/a/atk.dat	field	43	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	43	-1	next	313333
+decoded_dat/c/saku/a/atk.dat	field	43	-1	dvx	3330
+decoded_dat/c/saku/a/atk.dat	field	43	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	43	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	43	-1	hit_a	39
+decoded_dat/c/saku/a/atk.dat	field	43	-1	hit_d	31
+decoded_dat/c/saku/a/atk.dat	block	43	0	bdy	
+decoded_dat/c/saku/a/atk.dat	field	43	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	43	0	x	3234
+decoded_dat/c/saku/a/atk.dat	field	43	0	y	2d3334
+decoded_dat/c/saku/a/atk.dat	field	43	0	w	3439
+decoded_dat/c/saku/a/atk.dat	field	43	0	h	313335
+decoded_dat/c/saku/a/atk.dat	field	43	0	zwidth	3130
+decoded_dat/c/saku/a/atk.dat	frame	44	133		67726f756e64
+decoded_dat/c/saku/a/atk.dat	field	44	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	44	-1	state	33303036
+decoded_dat/c/saku/a/atk.dat	field	44	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	44	-1	next	313332
+decoded_dat/c/saku/a/atk.dat	field	44	-1	dvx	3330
+decoded_dat/c/saku/a/atk.dat	field	44	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	44	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	44	-1	hit_a	39
+decoded_dat/c/saku/a/atk.dat	field	44	-1	hit_d	31
+decoded_dat/c/saku/a/atk.dat	block	44	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	44	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	44	0	x	3339
+decoded_dat/c/saku/a/atk.dat	field	44	0	y	313139
+decoded_dat/c/saku/a/atk.dat	field	44	0	action	313135
+decoded_dat/c/saku/a/atk.dat	field	44	0	oid	323038
+decoded_dat/c/saku/a/atk.dat	field	44	0	facing	30
+decoded_dat/c/saku/a/atk.dat	block	44	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	44	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	44	1	x	3234
+decoded_dat/c/saku/a/atk.dat	field	44	1	y	2d3334
+decoded_dat/c/saku/a/atk.dat	field	44	1	w	3439
+decoded_dat/c/saku/a/atk.dat	field	44	1	h	313335
+decoded_dat/c/saku/a/atk.dat	field	44	1	zwidth	3130
+decoded_dat/c/saku/a/atk.dat	frame	45	135		61636964
+decoded_dat/c/saku/a/atk.dat	field	45	-1	pic	3233
+decoded_dat/c/saku/a/atk.dat	field	45	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	45	-1	wait	38
+decoded_dat/c/saku/a/atk.dat	field	45	-1	next	313336
+decoded_dat/c/saku/a/atk.dat	field	45	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	45	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	45	-1	dvz	353530
+decoded_dat/c/saku/a/atk.dat	field	45	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	45	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	45	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	45	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	45	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	45	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	45	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	45	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	45	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	45	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	45	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	45	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	45	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	45	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	45	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	45	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	45	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	45	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	45	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	45	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	45	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	46	136		61636964
+decoded_dat/c/saku/a/atk.dat	field	46	-1	pic	3234
+decoded_dat/c/saku/a/atk.dat	field	46	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	46	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	46	-1	next	313337
+decoded_dat/c/saku/a/atk.dat	field	46	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	46	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	46	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	46	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	46	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	46	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	46	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	46	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	field	46	-1	sound	646174615c3031352e776176
+decoded_dat/c/saku/a/atk.dat	block	46	0	opoint	
+decoded_dat/c/saku/a/atk.dat	field	46	0	kind	31
+decoded_dat/c/saku/a/atk.dat	field	46	0	x	313539
+decoded_dat/c/saku/a/atk.dat	field	46	0	y	3932
+decoded_dat/c/saku/a/atk.dat	field	46	0	action	3630
+decoded_dat/c/saku/a/atk.dat	field	46	0	oid	373030
+decoded_dat/c/saku/a/atk.dat	field	46	0	facing	30
+decoded_dat/c/saku/a/atk.dat	block	46	1	itr	
+decoded_dat/c/saku/a/atk.dat	field	46	1	kind	38
+decoded_dat/c/saku/a/atk.dat	field	46	1	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	46	1	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	46	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	46	1	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	46	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	46	1	h	3939
+decoded_dat/c/saku/a/atk.dat	field	46	1	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	46	2	bdy	
+decoded_dat/c/saku/a/atk.dat	field	46	2	kind	30
+decoded_dat/c/saku/a/atk.dat	field	46	2	x	3633
+decoded_dat/c/saku/a/atk.dat	field	46	2	y	3533
+decoded_dat/c/saku/a/atk.dat	field	46	2	w	3931
+decoded_dat/c/saku/a/atk.dat	field	46	2	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	47	137		61636964
+decoded_dat/c/saku/a/atk.dat	field	47	-1	pic	3236
+decoded_dat/c/saku/a/atk.dat	field	47	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	47	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	47	-1	next	313338
+decoded_dat/c/saku/a/atk.dat	field	47	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	47	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	47	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	47	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	47	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	47	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	47	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	47	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	47	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	47	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	47	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	47	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	47	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	47	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	47	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	47	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	47	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	47	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	47	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	47	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	47	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	47	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	47	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	48	138		61636964
+decoded_dat/c/saku/a/atk.dat	field	48	-1	pic	3237
+decoded_dat/c/saku/a/atk.dat	field	48	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	48	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	48	-1	next	313339
+decoded_dat/c/saku/a/atk.dat	field	48	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	48	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	48	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	48	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	48	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	48	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	48	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	48	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	48	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	48	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	48	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	48	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	48	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	48	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	48	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	48	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	48	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	48	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	48	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	48	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	48	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	48	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	48	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	49	139		61636964
+decoded_dat/c/saku/a/atk.dat	field	49	-1	pic	3238
+decoded_dat/c/saku/a/atk.dat	field	49	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	49	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	49	-1	next	313430
+decoded_dat/c/saku/a/atk.dat	field	49	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	49	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	49	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	49	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	49	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	49	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	49	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	49	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	49	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	49	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	49	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	49	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	49	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	49	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	49	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	49	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	49	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	49	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	49	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	49	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	49	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	49	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	49	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	50	140		61636964
+decoded_dat/c/saku/a/atk.dat	field	50	-1	pic	3239
+decoded_dat/c/saku/a/atk.dat	field	50	-1	state	3135
+decoded_dat/c/saku/a/atk.dat	field	50	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	50	-1	next	313431
+decoded_dat/c/saku/a/atk.dat	field	50	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	50	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	50	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	50	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	50	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	50	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	50	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	50	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	50	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	50	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	50	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	50	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	50	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	50	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	50	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	50	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	50	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	50	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	50	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	50	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	50	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	50	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	50	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	51	141		61636964
+decoded_dat/c/saku/a/atk.dat	field	51	-1	pic	3330
+decoded_dat/c/saku/a/atk.dat	field	51	-1	state	33303030
+decoded_dat/c/saku/a/atk.dat	field	51	-1	wait	37
+decoded_dat/c/saku/a/atk.dat	field	51	-1	next	3533
+decoded_dat/c/saku/a/atk.dat	field	51	-1	dvx	353530
+decoded_dat/c/saku/a/atk.dat	field	51	-1	dvy	353530
+decoded_dat/c/saku/a/atk.dat	field	51	-1	centerx	313038
+decoded_dat/c/saku/a/atk.dat	field	51	-1	centery	313037
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_a	39
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_d	3531
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_Fj	3531
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_Uj	3531
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_Dj	3531
+decoded_dat/c/saku/a/atk.dat	field	51	-1	hit_ja	3531
+decoded_dat/c/saku/a/atk.dat	block	51	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	51	0	kind	38
+decoded_dat/c/saku/a/atk.dat	field	51	0	bdefend	33
+decoded_dat/c/saku/a/atk.dat	field	51	0	dvy	2d31
+decoded_dat/c/saku/a/atk.dat	field	51	0	x	3633
+decoded_dat/c/saku/a/atk.dat	field	51	0	y	3137303030
+decoded_dat/c/saku/a/atk.dat	field	51	0	w	3931
+decoded_dat/c/saku/a/atk.dat	field	51	0	h	3939
+decoded_dat/c/saku/a/atk.dat	field	51	0	dvx	3531
+decoded_dat/c/saku/a/atk.dat	block	51	1	bdy	
+decoded_dat/c/saku/a/atk.dat	field	51	1	kind	30
+decoded_dat/c/saku/a/atk.dat	field	51	1	x	3633
+decoded_dat/c/saku/a/atk.dat	field	51	1	y	3533
+decoded_dat/c/saku/a/atk.dat	field	51	1	w	3931
+decoded_dat/c/saku/a/atk.dat	field	51	1	h	3635
+decoded_dat/c/saku/a/atk.dat	frame	52	160		62756666
+decoded_dat/c/saku/a/atk.dat	field	52	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	52	-1	state	313930
+decoded_dat/c/saku/a/atk.dat	field	52	-1	wait	31
+decoded_dat/c/saku/a/atk.dat	field	52	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	52	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	52	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	block	52	0	itr	
+decoded_dat/c/saku/a/atk.dat	field	52	0	kind	30
+decoded_dat/c/saku/a/atk.dat	field	52	0	x	3339
+decoded_dat/c/saku/a/atk.dat	field	52	0	y	3639
+decoded_dat/c/saku/a/atk.dat	field	52	0	w	39
+decoded_dat/c/saku/a/atk.dat	field	52	0	h	39
+decoded_dat/c/saku/a/atk.dat	field	52	0	fall	2d393939
+decoded_dat/c/saku/a/atk.dat	field	52	0	bdefend	2d393939
+decoded_dat/c/saku/a/atk.dat	field	52	0	vrest	3330
+decoded_dat/c/saku/a/atk.dat	field	52	0	injury	30
+decoded_dat/c/saku/a/atk.dat	frame	53	700		6131
+decoded_dat/c/saku/a/atk.dat	field	53	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	53	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	53	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	53	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	53	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	53	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	53	-1	sound	635c73616b755c775c61312e776176
+decoded_dat/c/saku/a/atk.dat	frame	54	701		6132
+decoded_dat/c/saku/a/atk.dat	field	54	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	54	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	54	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	54	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	54	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	54	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	54	-1	sound	635c73616b755c775c61322e776176
+decoded_dat/c/saku/a/atk.dat	frame	55	702		6133
+decoded_dat/c/saku/a/atk.dat	field	55	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	55	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	55	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	55	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	55	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	55	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	55	-1	sound	635c73616b755c775c61332e776176
+decoded_dat/c/saku/a/atk.dat	frame	56	703		6134
+decoded_dat/c/saku/a/atk.dat	field	56	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	56	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	56	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	56	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	56	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	56	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	56	-1	sound	635c73616b755c775c61342e776176
+decoded_dat/c/saku/a/atk.dat	frame	57	704		6135
+decoded_dat/c/saku/a/atk.dat	field	57	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	57	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	57	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	57	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	57	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	57	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	57	-1	sound	635c73616b755c775c61352e776176
+decoded_dat/c/saku/a/atk.dat	frame	58	705		6136
+decoded_dat/c/saku/a/atk.dat	field	58	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	58	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	58	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	58	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	58	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	58	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	58	-1	sound	635c73616b755c775c61362e776176
+decoded_dat/c/saku/a/atk.dat	frame	59	706		6a31
+decoded_dat/c/saku/a/atk.dat	field	59	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	59	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	59	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	59	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	59	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	59	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	59	-1	sound	635c73616b755c775c6a312e776176
+decoded_dat/c/saku/a/atk.dat	frame	60	707		6a32
+decoded_dat/c/saku/a/atk.dat	field	60	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	60	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	60	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	60	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	60	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	60	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	60	-1	sound	635c73616b755c775c6a322e776176
+decoded_dat/c/saku/a/atk.dat	frame	61	708		7032
+decoded_dat/c/saku/a/atk.dat	field	61	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	61	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	61	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	61	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	61	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	61	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	61	-1	sound	635c73616b755c775c70322e776176
+decoded_dat/c/saku/a/atk.dat	frame	62	709		7033
+decoded_dat/c/saku/a/atk.dat	field	62	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	62	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	62	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	62	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	62	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	62	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	62	-1	sound	635c73616b755c775c70332e776176
+decoded_dat/c/saku/a/atk.dat	frame	63	710		63
+decoded_dat/c/saku/a/atk.dat	field	63	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	63	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	63	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	63	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	63	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	63	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	63	-1	sound	635c73616b755c775c632e776176
+decoded_dat/c/saku/a/atk.dat	frame	64	711		72
+decoded_dat/c/saku/a/atk.dat	field	64	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	64	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	64	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	64	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	64	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	64	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	64	-1	sound	635c73616b755c775c722e776176
+decoded_dat/c/saku/a/atk.dat	frame	65	712		736861
+decoded_dat/c/saku/a/atk.dat	field	65	-1	pic	393939
+decoded_dat/c/saku/a/atk.dat	field	65	-1	state	33303035
+decoded_dat/c/saku/a/atk.dat	field	65	-1	wait	30
+decoded_dat/c/saku/a/atk.dat	field	65	-1	next	31303030
+decoded_dat/c/saku/a/atk.dat	field	65	-1	centerx	3339
+decoded_dat/c/saku/a/atk.dat	field	65	-1	centery	3739
+decoded_dat/c/saku/a/atk.dat	field	65	-1	sound	635c73616b755c775c7368612e776176

@@ -1,0 +1,9 @@
+<bmp_begin>
+name: Fixture
+<bmp_end>
+<frame> 0
+bdy: x: 1 bdy_end:
+bdy: x: 2 bdy_end:
+opoint: oid: 1 opoint_end:
+opoint: oid: 2 opoint_end:
+<frame_end>

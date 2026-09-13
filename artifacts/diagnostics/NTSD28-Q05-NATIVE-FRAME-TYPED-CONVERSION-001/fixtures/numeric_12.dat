@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 1junk state: 1junk cover: 1junk wait: 1junk next: 1junk dvx: 1junk dvy: 1junk dvz: 1junk centerx: 1junk centery: 1junk mp: 1junk hp: 1junk hit_a: 1junk hit_d: 1junk hit_j: 1junk hit_g: 1junk hit_Fj: 1junk hit_Fa: 1junk hit_Da: 1junk hit_Ua: 1junk hit_ja: 1junk hit_aj: 1junk hit_ad: 1junk hit_jd: 1junk hit_Dj: 1junk hit_Uj: 1junk hit_f: 1junk hit_b: 1junk hit_uz: 1junk hit_dz: 1junk hold_a: 1junk hold_d: 1junk hold_j: 1junk hold_f: 1junk hold_b: 1junk hold_uz: 1junk hold_dz: 1junk
+cpoint: kind: 1junk x: 1junk y: 1junk injury: 1junk cover: 1junk vaction: 1junk aaction: 1junk jaction: 1junk daction: 1junk taction: 1junk faction: 1junk baction: 1junk uzaction: 1junk dzaction: 1junk throwvx: 1junk throwvy: 1junk hurtable: 1junk fronthurtact: 1junk backhurtact: 1junk decrease: 1junk dircontrol: 1junk throwinjury: 1junk throwvz: 1junk z: 1junk recover: 1junk drain: 1junk gain: 1junk cpoint_end:
+opoint: kind: 1junk x: 1junk y: 1junk z: 1junk action: 1junk dvx: 1junk dvy: 1junk dvz: 1junk oid: 1junk facing: 1junk hp: 1junk mp: 1junk team: 1junk reserve: 1junk effect: 1junk pic: 1junk centerx: 1junk centery: 1junk centerz: 1junk framea: 1junk attacking: 1junk join: 1junk join_reserve: 1junk join_pic: 1junk opoint_end:
+itr: kind: 1junk x: 1junk y: 1junk w: 1junk h: 1junk dvx: 1junk dvy: 1junk fall: 1junk arest: 1junk vrest: 1junk respond: 1junk effect: 1junk drain: 1junk spark: 1junk recover: 1junk dbdefend: 1junk bdefend: 1junk injury: 1junk zwidth: 1junk z: 1junk dvz: 1junk sound: 1junk cover: 1junk caughtact: 1junk catchingact: 1junk pickedact: 1junk pickingact: 1junk delay: 1junk poison: 1junk confus: 1junk weak: 1junk manacle: 1junk join: 1junk mimic: 1junk bound: 1junk facing: 1junk dx: 1junk dy: 1junk dz: 1junk gain: 1junk itr_end:
+wpoint: kind: 1junk x: 1junk y: 1junk weaponact: 1junk attacking: 1junk cover: 1junk dvx: 1junk dvy: 1junk dvz: 1junk wpoint_end:
+bpoint: x: 1junk y: 1junk bpoint_end:
+centerz: 1junk chp: 1junk cmp: 1junk dx: 1junk dy: 1junk dz: 1junk
+<frame_end>

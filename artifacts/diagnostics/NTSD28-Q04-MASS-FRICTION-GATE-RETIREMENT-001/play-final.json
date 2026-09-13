@@ -1,0 +1,65 @@
+{
+    "status": "PASS",
+    "message": "Actual driver ground/landing ticks: mass 0/-2/1 agree; injected logic characters, existing Play world.",
+    "startTick": 2076,
+    "endTick": 2077,
+    "cleanupPassed": true,
+    "rows": [
+        {
+            "mass": 0.0,
+            "x": 405.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 4.0,
+            "vy": 0.0,
+            "vz": -4.0
+        },
+        {
+            "mass": -2.0,
+            "x": 505.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 4.0,
+            "vy": 0.0,
+            "vz": -4.0
+        },
+        {
+            "mass": 1.0,
+            "x": 605.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 4.0,
+            "vy": 0.0,
+            "vz": -4.0
+        }
+    ],
+    "landingRows": [
+        {
+            "mass": 0.0,
+            "x": 405.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        },
+        {
+            "mass": -2.0,
+            "x": 505.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        },
+        {
+            "mass": 1.0,
+            "x": 605.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        }
+    ]
+}

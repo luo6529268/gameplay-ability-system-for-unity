@@ -1,0 +1,1221 @@
+decoded_dat/a/cla/cla.dat	frame	0	0		64656c
+decoded_dat/a/cla/cla.dat	field	0	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	0	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	0	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	0	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	0	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	0	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	0	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	0	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	1	3		726169706172616c797a65
+decoded_dat/a/cla/cla.dat	field	1	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	1	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	1	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	1	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	1	-1	centerx	3534
+decoded_dat/a/cla/cla.dat	field	1	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	1	-1	sound	646174615c3039322e776176
+decoded_dat/a/cla/cla.dat	block	1	0	itr	
+decoded_dat/a/cla/cla.dat	field	1	0	kind	33
+decoded_dat/a/cla/cla.dat	field	1	0	x	2d3431
+decoded_dat/a/cla/cla.dat	field	1	0	y	3530
+decoded_dat/a/cla/cla.dat	field	1	0	w	313935
+decoded_dat/a/cla/cla.dat	field	1	0	h	3531
+decoded_dat/a/cla/cla.dat	field	1	0	catchingact	3136203136
+decoded_dat/a/cla/cla.dat	field	1	0	caughtact	31333020313330
+decoded_dat/a/cla/cla.dat	field	1	0	zwidth	3335
+decoded_dat/a/cla/cla.dat	frame	2	4		726169706172616c797a65
+decoded_dat/a/cla/cla.dat	field	2	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	2	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	2	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	2	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	2	-1	centerx	3534
+decoded_dat/a/cla/cla.dat	field	2	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	2	-1	sound	646174615c3039322e776176
+decoded_dat/a/cla/cla.dat	block	2	0	itr	
+decoded_dat/a/cla/cla.dat	field	2	0	kind	33
+decoded_dat/a/cla/cla.dat	field	2	0	x	3239
+decoded_dat/a/cla/cla.dat	field	2	0	y	34
+decoded_dat/a/cla/cla.dat	field	2	0	w	3532
+decoded_dat/a/cla/cla.dat	field	2	0	h	3831
+decoded_dat/a/cla/cla.dat	field	2	0	catchingact	3136203136
+decoded_dat/a/cla/cla.dat	field	2	0	caughtact	31333020313330
+decoded_dat/a/cla/cla.dat	frame	3	5		6b61626b616b61706172616c797a65
+decoded_dat/a/cla/cla.dat	field	3	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	3	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	3	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	3	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	3	-1	centerx	3534
+decoded_dat/a/cla/cla.dat	field	3	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	3	-1	sound	646174615c3039322e776176
+decoded_dat/a/cla/cla.dat	block	3	0	itr	
+decoded_dat/a/cla/cla.dat	field	3	0	kind	33
+decoded_dat/a/cla/cla.dat	field	3	0	x	3630
+decoded_dat/a/cla/cla.dat	field	3	0	y	3435
+decoded_dat/a/cla/cla.dat	field	3	0	w	3330
+decoded_dat/a/cla/cla.dat	field	3	0	h	3430
+decoded_dat/a/cla/cla.dat	field	3	0	catchingact	362036
+decoded_dat/a/cla/cla.dat	field	3	0	caughtact	31333020313330
+decoded_dat/a/cla/cla.dat	frame	4	6		686974696e67
+decoded_dat/a/cla/cla.dat	field	4	-1	pic	3333
+decoded_dat/a/cla/cla.dat	field	4	-1	state	39
+decoded_dat/a/cla/cla.dat	field	4	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	4	-1	next	37
+decoded_dat/a/cla/cla.dat	field	4	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	4	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	4	-1	sound	646174615c3034362e776176
+decoded_dat/a/cla/cla.dat	block	4	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	4	0	kind	31
+decoded_dat/a/cla/cla.dat	field	4	0	x	3339
+decoded_dat/a/cla/cla.dat	field	4	0	y	3432
+decoded_dat/a/cla/cla.dat	field	4	0	injury	31
+decoded_dat/a/cla/cla.dat	field	4	0	vaction	313331
+decoded_dat/a/cla/cla.dat	field	4	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	4	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	4	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	4	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	5	7		686974696e67
+decoded_dat/a/cla/cla.dat	field	5	-1	pic	3334
+decoded_dat/a/cla/cla.dat	field	5	-1	state	39
+decoded_dat/a/cla/cla.dat	field	5	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	5	-1	next	38
+decoded_dat/a/cla/cla.dat	field	5	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	5	-1	centery	3739
+decoded_dat/a/cla/cla.dat	block	5	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	5	0	kind	31
+decoded_dat/a/cla/cla.dat	field	5	0	x	3339
+decoded_dat/a/cla/cla.dat	field	5	0	y	3432
+decoded_dat/a/cla/cla.dat	field	5	0	injury	31
+decoded_dat/a/cla/cla.dat	field	5	0	vaction	313330
+decoded_dat/a/cla/cla.dat	field	5	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	5	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	5	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	5	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	6	8		686974696e67
+decoded_dat/a/cla/cla.dat	field	6	-1	pic	3335
+decoded_dat/a/cla/cla.dat	field	6	-1	state	39
+decoded_dat/a/cla/cla.dat	field	6	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	6	-1	next	36
+decoded_dat/a/cla/cla.dat	field	6	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	6	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	6	-1	sound	646174615c3034332e776176
+decoded_dat/a/cla/cla.dat	block	6	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	6	0	kind	31
+decoded_dat/a/cla/cla.dat	field	6	0	x	3339
+decoded_dat/a/cla/cla.dat	field	6	0	y	3432
+decoded_dat/a/cla/cla.dat	field	6	0	injury	31
+decoded_dat/a/cla/cla.dat	field	6	0	vaction	313330
+decoded_dat/a/cla/cla.dat	field	6	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	6	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	6	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	6	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	7	10		64656c
+decoded_dat/a/cla/cla.dat	field	7	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	7	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	7	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	7	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	7	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	7	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	7	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	7	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	8	16		686974696e6732
+decoded_dat/a/cla/cla.dat	field	8	-1	pic	3333
+decoded_dat/a/cla/cla.dat	field	8	-1	state	39
+decoded_dat/a/cla/cla.dat	field	8	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	8	-1	next	3137
+decoded_dat/a/cla/cla.dat	field	8	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	8	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	8	-1	sound	646174615c3034362e776176
+decoded_dat/a/cla/cla.dat	block	8	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	8	0	kind	31
+decoded_dat/a/cla/cla.dat	field	8	0	x	3339
+decoded_dat/a/cla/cla.dat	field	8	0	y	3239
+decoded_dat/a/cla/cla.dat	field	8	0	injury	31
+decoded_dat/a/cla/cla.dat	field	8	0	vaction	313331
+decoded_dat/a/cla/cla.dat	field	8	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	8	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	8	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	8	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	9	17		686974696e6732
+decoded_dat/a/cla/cla.dat	field	9	-1	pic	3334
+decoded_dat/a/cla/cla.dat	field	9	-1	state	39
+decoded_dat/a/cla/cla.dat	field	9	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	9	-1	next	3138
+decoded_dat/a/cla/cla.dat	field	9	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	9	-1	centery	3739
+decoded_dat/a/cla/cla.dat	block	9	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	9	0	kind	31
+decoded_dat/a/cla/cla.dat	field	9	0	x	3339
+decoded_dat/a/cla/cla.dat	field	9	0	y	3239
+decoded_dat/a/cla/cla.dat	field	9	0	injury	31
+decoded_dat/a/cla/cla.dat	field	9	0	vaction	313330
+decoded_dat/a/cla/cla.dat	field	9	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	9	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	9	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	9	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	10	18		686974696e6732
+decoded_dat/a/cla/cla.dat	field	10	-1	pic	3335
+decoded_dat/a/cla/cla.dat	field	10	-1	state	39
+decoded_dat/a/cla/cla.dat	field	10	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	10	-1	next	3136
+decoded_dat/a/cla/cla.dat	field	10	-1	centerx	3339
+decoded_dat/a/cla/cla.dat	field	10	-1	centery	3739
+decoded_dat/a/cla/cla.dat	field	10	-1	sound	646174615c3034332e776176
+decoded_dat/a/cla/cla.dat	block	10	0	cpoint	
+decoded_dat/a/cla/cla.dat	field	10	0	kind	31
+decoded_dat/a/cla/cla.dat	field	10	0	x	3339
+decoded_dat/a/cla/cla.dat	field	10	0	y	3239
+decoded_dat/a/cla/cla.dat	field	10	0	injury	31
+decoded_dat/a/cla/cla.dat	field	10	0	vaction	313330
+decoded_dat/a/cla/cla.dat	field	10	0	throwvz	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	10	0	hurtable	31
+decoded_dat/a/cla/cla.dat	field	10	0	throwinjury	2d383432313530343531
+decoded_dat/a/cla/cla.dat	field	10	0	decrease	2d37
+decoded_dat/a/cla/cla.dat	frame	11	20		64656c
+decoded_dat/a/cla/cla.dat	field	11	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	11	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	11	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	11	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	11	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	11	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	11	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	11	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	12	30		64656c
+decoded_dat/a/cla/cla.dat	field	12	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	12	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	12	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	12	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	12	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	12	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	12	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	12	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	13	40		64656c
+decoded_dat/a/cla/cla.dat	field	13	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	13	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	13	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	13	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	13	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	13	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	13	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	13	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	14	100		67726162
+decoded_dat/a/cla/cla.dat	field	14	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	14	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	14	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	14	-1	next	313031
+decoded_dat/a/cla/cla.dat	field	14	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	14	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	14	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	14	-1	centery	3833
+decoded_dat/a/cla/cla.dat	frame	15	101		67726162
+decoded_dat/a/cla/cla.dat	field	15	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	15	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	15	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	15	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	15	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	15	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	15	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	15	-1	centery	3738
+decoded_dat/a/cla/cla.dat	block	15	0	itr	
+decoded_dat/a/cla/cla.dat	field	15	0	kind	30
+decoded_dat/a/cla/cla.dat	field	15	0	x	2d3130
+decoded_dat/a/cla/cla.dat	field	15	0	y	2d3132
+decoded_dat/a/cla/cla.dat	field	15	0	w	3935
+decoded_dat/a/cla/cla.dat	field	15	0	h	313931
+decoded_dat/a/cla/cla.dat	field	15	0	effect	35
+decoded_dat/a/cla/cla.dat	field	15	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	15	0	arest	3135
+decoded_dat/a/cla/cla.dat	field	15	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	15	0	dvx	3335
+decoded_dat/a/cla/cla.dat	field	15	0	dvy	2d3132
+decoded_dat/a/cla/cla.dat	field	15	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	15	0	injury	3830
+decoded_dat/a/cla/cla.dat	frame	16	140		666c617368
+decoded_dat/a/cla/cla.dat	field	16	-1	pic	3336
+decoded_dat/a/cla/cla.dat	field	16	-1	state	3230303030
+decoded_dat/a/cla/cla.dat	field	16	-1	wait	35
+decoded_dat/a/cla/cla.dat	field	16	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	16	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	16	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	16	-1	centerx	31353030
+decoded_dat/a/cla/cla.dat	field	16	-1	centery	353530
+decoded_dat/a/cla/cla.dat	field	16	-1	hit_j	3438
+decoded_dat/a/cla/cla.dat	frame	17	141		6576696c636c617368
+decoded_dat/a/cla/cla.dat	field	17	-1	pic	3336
+decoded_dat/a/cla/cla.dat	field	17	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	17	-1	wait	3230
+decoded_dat/a/cla/cla.dat	field	17	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	17	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	17	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	17	-1	centerx	31353030
+decoded_dat/a/cla/cla.dat	field	17	-1	centery	363030
+decoded_dat/a/cla/cla.dat	field	17	-1	hit_j	313030
+decoded_dat/a/cla/cla.dat	frame	18	150		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	18	-1	pic	3239
+decoded_dat/a/cla/cla.dat	field	18	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	18	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	18	-1	next	313531
+decoded_dat/a/cla/cla.dat	field	18	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	18	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	18	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	18	-1	centery	3833
+decoded_dat/a/cla/cla.dat	field	18	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	19	151		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	19	-1	pic	3330
+decoded_dat/a/cla/cla.dat	field	19	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	19	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	19	-1	next	313532
+decoded_dat/a/cla/cla.dat	field	19	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	19	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	19	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	19	-1	centery	3833
+decoded_dat/a/cla/cla.dat	field	19	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	20	152		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	20	-1	pic	3331
+decoded_dat/a/cla/cla.dat	field	20	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	20	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	20	-1	next	313533
+decoded_dat/a/cla/cla.dat	field	20	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	20	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	20	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	20	-1	centery	3738
+decoded_dat/a/cla/cla.dat	field	20	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	21	153		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	21	-1	pic	3332
+decoded_dat/a/cla/cla.dat	field	21	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	21	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	21	-1	next	313534
+decoded_dat/a/cla/cla.dat	field	21	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	21	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	21	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	21	-1	centery	3738
+decoded_dat/a/cla/cla.dat	field	21	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	22	154		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	22	-1	pic	3239
+decoded_dat/a/cla/cla.dat	field	22	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	22	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	22	-1	next	313535
+decoded_dat/a/cla/cla.dat	field	22	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	22	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	22	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	22	-1	centery	3833
+decoded_dat/a/cla/cla.dat	field	22	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	23	155		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	23	-1	pic	3330
+decoded_dat/a/cla/cla.dat	field	23	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	23	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	23	-1	next	313536
+decoded_dat/a/cla/cla.dat	field	23	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	23	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	23	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	23	-1	centery	3833
+decoded_dat/a/cla/cla.dat	field	23	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	24	156		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	24	-1	pic	3331
+decoded_dat/a/cla/cla.dat	field	24	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	24	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	24	-1	next	313537
+decoded_dat/a/cla/cla.dat	field	24	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	24	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	24	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	24	-1	centery	3738
+decoded_dat/a/cla/cla.dat	field	24	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	block	24	0	itr	
+decoded_dat/a/cla/cla.dat	field	24	0	kind	30
+decoded_dat/a/cla/cla.dat	field	24	0	x	2d3331
+decoded_dat/a/cla/cla.dat	field	24	0	y	39
+decoded_dat/a/cla/cla.dat	field	24	0	w	313630
+decoded_dat/a/cla/cla.dat	field	24	0	h	3330
+decoded_dat/a/cla/cla.dat	field	24	0	effect	35
+decoded_dat/a/cla/cla.dat	field	24	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	24	0	arest	3135
+decoded_dat/a/cla/cla.dat	field	24	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	24	0	dvx	3335
+decoded_dat/a/cla/cla.dat	field	24	0	dvy	2d3132
+decoded_dat/a/cla/cla.dat	field	24	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	24	0	injury	3830
+decoded_dat/a/cla/cla.dat	frame	25	157		636869636869626f6f6d
+decoded_dat/a/cla/cla.dat	field	25	-1	pic	3332
+decoded_dat/a/cla/cla.dat	field	25	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	25	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	25	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	25	-1	dvx	353530
+decoded_dat/a/cla/cla.dat	field	25	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	25	-1	centerx	36
+decoded_dat/a/cla/cla.dat	field	25	-1	centery	3738
+decoded_dat/a/cla/cla.dat	field	25	-1	sound	646174615c3130332e776176
+decoded_dat/a/cla/cla.dat	frame	26	209		636c617368
+decoded_dat/a/cla/cla.dat	field	26	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	26	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	26	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	26	-1	next	323133
+decoded_dat/a/cla/cla.dat	field	26	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	26	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	26	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	26	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	27	210		636c617368
+decoded_dat/a/cla/cla.dat	field	27	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	27	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	27	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	27	-1	next	323131
+decoded_dat/a/cla/cla.dat	field	27	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	27	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	27	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	27	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	28	211		636c617368
+decoded_dat/a/cla/cla.dat	field	28	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	28	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	28	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	28	-1	next	323039
+decoded_dat/a/cla/cla.dat	field	28	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	28	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	28	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	28	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	29	213		636c617368
+decoded_dat/a/cla/cla.dat	field	29	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	29	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	29	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	29	-1	next	323134
+decoded_dat/a/cla/cla.dat	field	29	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	29	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	29	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	29	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	30	214		636c617368
+decoded_dat/a/cla/cla.dat	field	30	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	30	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	30	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	30	-1	next	323135
+decoded_dat/a/cla/cla.dat	field	30	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	30	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	30	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	30	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	31	215		636c617368
+decoded_dat/a/cla/cla.dat	field	31	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	31	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	31	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	31	-1	next	323136
+decoded_dat/a/cla/cla.dat	field	31	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	31	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	31	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	31	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	32	216		636c617368
+decoded_dat/a/cla/cla.dat	field	32	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	32	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	32	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	32	-1	next	323137
+decoded_dat/a/cla/cla.dat	field	32	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	32	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	32	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	32	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	33	217		636c617368
+decoded_dat/a/cla/cla.dat	field	33	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	33	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	33	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	33	-1	next	323138
+decoded_dat/a/cla/cla.dat	field	33	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	33	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	33	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	33	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	34	218		636c617368
+decoded_dat/a/cla/cla.dat	field	34	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	34	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	34	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	34	-1	next	323139
+decoded_dat/a/cla/cla.dat	field	34	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	34	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	34	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	34	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	35	219		636c617368
+decoded_dat/a/cla/cla.dat	field	35	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	35	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	35	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	35	-1	next	323230
+decoded_dat/a/cla/cla.dat	field	35	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	35	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	35	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	35	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	36	220		636c617368
+decoded_dat/a/cla/cla.dat	field	36	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	36	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	36	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	36	-1	next	323231
+decoded_dat/a/cla/cla.dat	field	36	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	36	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	36	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	36	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	37	221		636c617368
+decoded_dat/a/cla/cla.dat	field	37	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	37	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	37	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	37	-1	next	323232
+decoded_dat/a/cla/cla.dat	field	37	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	37	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	37	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	37	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	38	222		636c617368
+decoded_dat/a/cla/cla.dat	field	38	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	38	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	38	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	38	-1	next	323233
+decoded_dat/a/cla/cla.dat	field	38	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	38	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	38	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	38	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	39	223		636c617368
+decoded_dat/a/cla/cla.dat	field	39	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	39	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	39	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	39	-1	next	323234
+decoded_dat/a/cla/cla.dat	field	39	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	39	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	39	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	39	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	40	224		636c617368
+decoded_dat/a/cla/cla.dat	field	40	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	40	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	40	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	40	-1	next	323235
+decoded_dat/a/cla/cla.dat	field	40	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	40	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	40	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	40	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	41	225		636c617368
+decoded_dat/a/cla/cla.dat	field	41	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	41	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	41	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	41	-1	next	323236
+decoded_dat/a/cla/cla.dat	field	41	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	41	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	41	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	41	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	42	226		636c617368
+decoded_dat/a/cla/cla.dat	field	42	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	42	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	42	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	42	-1	next	323237
+decoded_dat/a/cla/cla.dat	field	42	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	42	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	42	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	42	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	43	227		636c617368
+decoded_dat/a/cla/cla.dat	field	43	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	43	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	43	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	43	-1	next	323238
+decoded_dat/a/cla/cla.dat	field	43	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	43	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	43	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	43	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	44	228		636c617368
+decoded_dat/a/cla/cla.dat	field	44	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	44	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	44	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	44	-1	next	323239
+decoded_dat/a/cla/cla.dat	field	44	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	44	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	44	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	44	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	45	229		636c617368
+decoded_dat/a/cla/cla.dat	field	45	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	45	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	45	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	45	-1	next	323330
+decoded_dat/a/cla/cla.dat	field	45	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	45	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	45	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	45	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	46	230		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	46	-1	pic	34
+decoded_dat/a/cla/cla.dat	field	46	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	46	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	46	-1	next	323331
+decoded_dat/a/cla/cla.dat	field	46	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	46	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	46	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	46	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	block	46	0	opoint	
+decoded_dat/a/cla/cla.dat	field	46	0	kind	31
+decoded_dat/a/cla/cla.dat	field	46	0	x	30
+decoded_dat/a/cla/cla.dat	field	46	0	y	3432
+decoded_dat/a/cla/cla.dat	field	46	0	action	323334
+decoded_dat/a/cla/cla.dat	field	46	0	oid	393030
+decoded_dat/a/cla/cla.dat	field	46	0	facing	30
+decoded_dat/a/cla/cla.dat	frame	47	231		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	47	-1	pic	35
+decoded_dat/a/cla/cla.dat	field	47	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	47	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	47	-1	next	323332
+decoded_dat/a/cla/cla.dat	field	47	-1	dvx	35
+decoded_dat/a/cla/cla.dat	field	47	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	47	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	47	-1	centery	3432
+decoded_dat/a/cla/cla.dat	block	47	0	itr	
+decoded_dat/a/cla/cla.dat	field	47	0	kind	30
+decoded_dat/a/cla/cla.dat	field	47	0	x	30
+decoded_dat/a/cla/cla.dat	field	47	0	y	3233
+decoded_dat/a/cla/cla.dat	field	47	0	w	313130
+decoded_dat/a/cla/cla.dat	field	47	0	h	313030
+decoded_dat/a/cla/cla.dat	field	47	0	effect	35
+decoded_dat/a/cla/cla.dat	field	47	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	47	0	vrest	3135
+decoded_dat/a/cla/cla.dat	field	47	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	47	0	dvx	3335
+decoded_dat/a/cla/cla.dat	field	47	0	dvy	2d3132
+decoded_dat/a/cla/cla.dat	field	47	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	47	0	injury	3830
+decoded_dat/a/cla/cla.dat	frame	48	232		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	48	-1	pic	36
+decoded_dat/a/cla/cla.dat	field	48	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	48	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	48	-1	next	323333
+decoded_dat/a/cla/cla.dat	field	48	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	48	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	48	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	49	233		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	49	-1	pic	37
+decoded_dat/a/cla/cla.dat	field	49	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	49	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	49	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	49	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	49	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	49	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	50	234		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	50	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	50	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	50	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	50	-1	next	2d323335
+decoded_dat/a/cla/cla.dat	field	50	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	50	-1	centerx	313230
+decoded_dat/a/cla/cla.dat	field	50	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	51	235		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	51	-1	pic	35
+decoded_dat/a/cla/cla.dat	field	51	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	51	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	51	-1	next	323336
+decoded_dat/a/cla/cla.dat	field	51	-1	dvx	35
+decoded_dat/a/cla/cla.dat	field	51	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	51	-1	centerx	313230
+decoded_dat/a/cla/cla.dat	field	51	-1	centery	3432
+decoded_dat/a/cla/cla.dat	block	51	0	itr	
+decoded_dat/a/cla/cla.dat	field	51	0	kind	30
+decoded_dat/a/cla/cla.dat	field	51	0	x	3130
+decoded_dat/a/cla/cla.dat	field	51	0	y	3233
+decoded_dat/a/cla/cla.dat	field	51	0	w	313130
+decoded_dat/a/cla/cla.dat	field	51	0	h	313030
+decoded_dat/a/cla/cla.dat	field	51	0	effect	35
+decoded_dat/a/cla/cla.dat	field	51	0	zwidth	3130
+decoded_dat/a/cla/cla.dat	field	51	0	vrest	3135
+decoded_dat/a/cla/cla.dat	field	51	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	51	0	dvx	3335
+decoded_dat/a/cla/cla.dat	field	51	0	dvy	2d3132
+decoded_dat/a/cla/cla.dat	field	51	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	51	0	injury	3830
+decoded_dat/a/cla/cla.dat	frame	52	236		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	52	-1	pic	36
+decoded_dat/a/cla/cla.dat	field	52	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	52	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	52	-1	next	323337
+decoded_dat/a/cla/cla.dat	field	52	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	52	-1	centerx	313230
+decoded_dat/a/cla/cla.dat	field	52	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	53	237		636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	53	-1	pic	37
+decoded_dat/a/cla/cla.dat	field	53	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	53	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	53	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	53	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	53	-1	centerx	313230
+decoded_dat/a/cla/cla.dat	field	53	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	54	250		636c61736832
+decoded_dat/a/cla/cla.dat	field	54	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	54	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	54	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	54	-1	next	323531
+decoded_dat/a/cla/cla.dat	field	54	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	54	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	54	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	54	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	55	251		636c61736832
+decoded_dat/a/cla/cla.dat	field	55	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	55	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	55	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	55	-1	next	323532
+decoded_dat/a/cla/cla.dat	field	55	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	55	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	55	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	55	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	56	252		636c61736832
+decoded_dat/a/cla/cla.dat	field	56	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	56	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	56	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	56	-1	next	323533
+decoded_dat/a/cla/cla.dat	field	56	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	56	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	56	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	56	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	57	253		636c61736832
+decoded_dat/a/cla/cla.dat	field	57	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	57	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	57	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	57	-1	next	323534
+decoded_dat/a/cla/cla.dat	field	57	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	57	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	57	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	57	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	58	254		636c61736832
+decoded_dat/a/cla/cla.dat	field	58	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	58	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	58	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	58	-1	next	323535
+decoded_dat/a/cla/cla.dat	field	58	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	58	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	58	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	58	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	59	255		636c617368
+decoded_dat/a/cla/cla.dat	field	59	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	59	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	59	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	59	-1	next	323536
+decoded_dat/a/cla/cla.dat	field	59	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	59	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	59	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	59	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	60	256		636c617368
+decoded_dat/a/cla/cla.dat	field	60	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	60	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	60	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	60	-1	next	323537
+decoded_dat/a/cla/cla.dat	field	60	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	60	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	60	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	60	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	61	257		636c617368
+decoded_dat/a/cla/cla.dat	field	61	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	61	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	61	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	61	-1	next	323538
+decoded_dat/a/cla/cla.dat	field	61	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	61	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	61	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	61	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	62	258		636c617368
+decoded_dat/a/cla/cla.dat	field	62	-1	pic	30
+decoded_dat/a/cla/cla.dat	field	62	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	62	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	62	-1	next	323539
+decoded_dat/a/cla/cla.dat	field	62	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	62	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	62	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	62	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	63	259		636c617368
+decoded_dat/a/cla/cla.dat	field	63	-1	pic	31
+decoded_dat/a/cla/cla.dat	field	63	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	63	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	63	-1	next	323630
+decoded_dat/a/cla/cla.dat	field	63	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	63	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	63	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	63	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	64	260		636c617368
+decoded_dat/a/cla/cla.dat	field	64	-1	pic	32
+decoded_dat/a/cla/cla.dat	field	64	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	64	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	64	-1	next	323631
+decoded_dat/a/cla/cla.dat	field	64	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	64	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	64	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	64	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	65	261		636c617368
+decoded_dat/a/cla/cla.dat	field	65	-1	pic	33
+decoded_dat/a/cla/cla.dat	field	65	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	65	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	65	-1	next	323632
+decoded_dat/a/cla/cla.dat	field	65	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	65	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	65	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	65	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	66	262		636c61736862
+decoded_dat/a/cla/cla.dat	field	66	-1	pic	34
+decoded_dat/a/cla/cla.dat	field	66	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	66	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	66	-1	next	323633
+decoded_dat/a/cla/cla.dat	field	66	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	66	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	66	-1	centery	3432
+decoded_dat/a/cla/cla.dat	field	66	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	67	263		636c617368
+decoded_dat/a/cla/cla.dat	field	67	-1	pic	38
+decoded_dat/a/cla/cla.dat	field	67	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	67	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	67	-1	next	323634
+decoded_dat/a/cla/cla.dat	field	67	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	67	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	67	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	68	264		636c617368
+decoded_dat/a/cla/cla.dat	field	68	-1	pic	39
+decoded_dat/a/cla/cla.dat	field	68	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	68	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	68	-1	next	323635
+decoded_dat/a/cla/cla.dat	field	68	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	68	-1	centerx	3730
+decoded_dat/a/cla/cla.dat	field	68	-1	centery	3432
+decoded_dat/a/cla/cla.dat	frame	69	265		636c617368
+decoded_dat/a/cla/cla.dat	field	69	-1	pic	3130
+decoded_dat/a/cla/cla.dat	field	69	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	69	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	69	-1	next	323636
+decoded_dat/a/cla/cla.dat	field	69	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	69	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	69	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	70	266		636c617368
+decoded_dat/a/cla/cla.dat	field	70	-1	pic	3131
+decoded_dat/a/cla/cla.dat	field	70	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	70	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	70	-1	next	323637
+decoded_dat/a/cla/cla.dat	field	70	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	70	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	70	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	71	267		636c617368
+decoded_dat/a/cla/cla.dat	field	71	-1	pic	3132
+decoded_dat/a/cla/cla.dat	field	71	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	71	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	71	-1	next	323638
+decoded_dat/a/cla/cla.dat	field	71	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	71	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	71	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	72	268		636c617368
+decoded_dat/a/cla/cla.dat	field	72	-1	pic	3130
+decoded_dat/a/cla/cla.dat	field	72	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	72	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	72	-1	next	323639
+decoded_dat/a/cla/cla.dat	field	72	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	72	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	72	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	73	269		636c617368
+decoded_dat/a/cla/cla.dat	field	73	-1	pic	3131
+decoded_dat/a/cla/cla.dat	field	73	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	73	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	73	-1	next	323730
+decoded_dat/a/cla/cla.dat	field	73	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	73	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	73	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	74	270		636c617368
+decoded_dat/a/cla/cla.dat	field	74	-1	pic	3132
+decoded_dat/a/cla/cla.dat	field	74	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	74	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	74	-1	next	323731
+decoded_dat/a/cla/cla.dat	field	74	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	74	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	74	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	75	271		636c617368
+decoded_dat/a/cla/cla.dat	field	75	-1	pic	3130
+decoded_dat/a/cla/cla.dat	field	75	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	75	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	75	-1	next	323732
+decoded_dat/a/cla/cla.dat	field	75	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	75	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	75	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	76	272		636c617368
+decoded_dat/a/cla/cla.dat	field	76	-1	pic	3131
+decoded_dat/a/cla/cla.dat	field	76	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	76	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	76	-1	next	323733
+decoded_dat/a/cla/cla.dat	field	76	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	76	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	76	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	77	273		636c617368
+decoded_dat/a/cla/cla.dat	field	77	-1	pic	3132
+decoded_dat/a/cla/cla.dat	field	77	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	77	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	77	-1	next	323734
+decoded_dat/a/cla/cla.dat	field	77	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	77	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	77	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	78	274		636c617368
+decoded_dat/a/cla/cla.dat	field	78	-1	pic	3133
+decoded_dat/a/cla/cla.dat	field	78	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	78	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	78	-1	next	323735
+decoded_dat/a/cla/cla.dat	field	78	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	78	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	78	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	79	275		636c617368
+decoded_dat/a/cla/cla.dat	field	79	-1	pic	3134
+decoded_dat/a/cla/cla.dat	field	79	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	79	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	79	-1	next	323736
+decoded_dat/a/cla/cla.dat	field	79	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	79	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	79	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	80	276		636c617368
+decoded_dat/a/cla/cla.dat	field	80	-1	pic	3135
+decoded_dat/a/cla/cla.dat	field	80	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	80	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	80	-1	next	323737
+decoded_dat/a/cla/cla.dat	field	80	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	80	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	80	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	81	277		636c617368
+decoded_dat/a/cla/cla.dat	field	81	-1	pic	3136
+decoded_dat/a/cla/cla.dat	field	81	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	81	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	81	-1	next	323738
+decoded_dat/a/cla/cla.dat	field	81	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	81	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	81	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	82	278		636c617368
+decoded_dat/a/cla/cla.dat	field	82	-1	pic	3137
+decoded_dat/a/cla/cla.dat	field	82	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	82	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	82	-1	next	323739
+decoded_dat/a/cla/cla.dat	field	82	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	82	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	82	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	83	279		636c617368
+decoded_dat/a/cla/cla.dat	field	83	-1	pic	3136
+decoded_dat/a/cla/cla.dat	field	83	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	83	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	83	-1	next	323830
+decoded_dat/a/cla/cla.dat	field	83	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	83	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	83	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	84	280		636c617368
+decoded_dat/a/cla/cla.dat	field	84	-1	pic	3137
+decoded_dat/a/cla/cla.dat	field	84	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	84	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	84	-1	next	323831
+decoded_dat/a/cla/cla.dat	field	84	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	84	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	84	-1	centery	3838
+decoded_dat/a/cla/cla.dat	field	84	-1	sound	646174615c6566666563742e776176
+decoded_dat/a/cla/cla.dat	frame	85	281		636c617368
+decoded_dat/a/cla/cla.dat	field	85	-1	pic	3138
+decoded_dat/a/cla/cla.dat	field	85	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	85	-1	wait	32
+decoded_dat/a/cla/cla.dat	field	85	-1	next	323832
+decoded_dat/a/cla/cla.dat	field	85	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	85	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	85	-1	centery	3838
+decoded_dat/a/cla/cla.dat	frame	86	282		636c617368
+decoded_dat/a/cla/cla.dat	field	86	-1	pic	3138
+decoded_dat/a/cla/cla.dat	field	86	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	86	-1	wait	39
+decoded_dat/a/cla/cla.dat	field	86	-1	next	323833
+decoded_dat/a/cla/cla.dat	field	86	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	86	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	86	-1	centery	3838
+decoded_dat/a/cla/cla.dat	block	86	0	opoint	
+decoded_dat/a/cla/cla.dat	field	86	0	kind	31
+decoded_dat/a/cla/cla.dat	field	86	0	x	3535
+decoded_dat/a/cla/cla.dat	field	86	0	y	3431
+decoded_dat/a/cla/cla.dat	field	86	0	action	313431
+decoded_dat/a/cla/cla.dat	field	86	0	oid	393030
+decoded_dat/a/cla/cla.dat	field	86	0	facing	30
+decoded_dat/a/cla/cla.dat	frame	87	283		636c617368
+decoded_dat/a/cla/cla.dat	field	87	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	87	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	87	-1	wait	30
+decoded_dat/a/cla/cla.dat	field	87	-1	next	323834
+decoded_dat/a/cla/cla.dat	field	87	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	87	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	87	-1	centery	3838
+decoded_dat/a/cla/cla.dat	block	87	0	opoint	
+decoded_dat/a/cla/cla.dat	field	87	0	kind	31
+decoded_dat/a/cla/cla.dat	field	87	0	x	30
+decoded_dat/a/cla/cla.dat	field	87	0	y	3432
+decoded_dat/a/cla/cla.dat	field	87	0	action	323835
+decoded_dat/a/cla/cla.dat	field	87	0	oid	393030
+decoded_dat/a/cla/cla.dat	field	87	0	facing	30
+decoded_dat/a/cla/cla.dat	frame	88	284		636c617368
+decoded_dat/a/cla/cla.dat	field	88	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	88	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	88	-1	wait	33
+decoded_dat/a/cla/cla.dat	field	88	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	88	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	88	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	88	-1	centery	3838
+decoded_dat/a/cla/cla.dat	block	88	0	itr	
+decoded_dat/a/cla/cla.dat	field	88	0	kind	30
+decoded_dat/a/cla/cla.dat	field	88	0	x	313630
+decoded_dat/a/cla/cla.dat	field	88	0	y	313033
+decoded_dat/a/cla/cla.dat	field	88	0	w	313030
+decoded_dat/a/cla/cla.dat	field	88	0	h	313030
+decoded_dat/a/cla/cla.dat	field	88	0	effect	35
+decoded_dat/a/cla/cla.dat	field	88	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	88	0	vrest	3135
+decoded_dat/a/cla/cla.dat	field	88	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	88	0	dvx	3330
+decoded_dat/a/cla/cla.dat	field	88	0	dvy	2d3230
+decoded_dat/a/cla/cla.dat	field	88	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	88	0	injury	323530
+decoded_dat/a/cla/cla.dat	frame	89	285		636c617368
+decoded_dat/a/cla/cla.dat	field	89	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	89	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	89	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	89	-1	next	323836
+decoded_dat/a/cla/cla.dat	field	89	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	89	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	89	-1	centery	3838
+decoded_dat/a/cla/cla.dat	block	89	0	itr	
+decoded_dat/a/cla/cla.dat	field	89	0	kind	30
+decoded_dat/a/cla/cla.dat	field	89	0	x	313230
+decoded_dat/a/cla/cla.dat	field	89	0	y	313033
+decoded_dat/a/cla/cla.dat	field	89	0	w	313030
+decoded_dat/a/cla/cla.dat	field	89	0	h	313030
+decoded_dat/a/cla/cla.dat	field	89	0	effect	35
+decoded_dat/a/cla/cla.dat	field	89	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	89	0	vrest	3135
+decoded_dat/a/cla/cla.dat	field	89	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	89	0	dvx	2d3330
+decoded_dat/a/cla/cla.dat	field	89	0	dvy	2d3230
+decoded_dat/a/cla/cla.dat	field	89	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	89	0	injury	323530
+decoded_dat/a/cla/cla.dat	frame	90	286		636c617368
+decoded_dat/a/cla/cla.dat	field	90	-1	pic	393939
+decoded_dat/a/cla/cla.dat	field	90	-1	state	3138
+decoded_dat/a/cla/cla.dat	field	90	-1	wait	33
+decoded_dat/a/cla/cla.dat	field	90	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	90	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	90	-1	centerx	313331
+decoded_dat/a/cla/cla.dat	field	90	-1	centery	3838
+decoded_dat/a/cla/cla.dat	block	90	0	itr	
+decoded_dat/a/cla/cla.dat	field	90	0	kind	30
+decoded_dat/a/cla/cla.dat	field	90	0	x	313230
+decoded_dat/a/cla/cla.dat	field	90	0	y	313033
+decoded_dat/a/cla/cla.dat	field	90	0	w	313030
+decoded_dat/a/cla/cla.dat	field	90	0	h	313030
+decoded_dat/a/cla/cla.dat	field	90	0	effect	35
+decoded_dat/a/cla/cla.dat	field	90	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	90	0	vrest	3135
+decoded_dat/a/cla/cla.dat	field	90	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	90	0	dvx	2d3330
+decoded_dat/a/cla/cla.dat	field	90	0	dvy	2d3230
+decoded_dat/a/cla/cla.dat	field	90	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	90	0	injury	323530
+decoded_dat/a/cla/cla.dat	frame	91	310		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	91	-1	pic	3139
+decoded_dat/a/cla/cla.dat	field	91	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	91	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	91	-1	next	333131
+decoded_dat/a/cla/cla.dat	field	91	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	91	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	91	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	91	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	92	311		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	92	-1	pic	3230
+decoded_dat/a/cla/cla.dat	field	92	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	92	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	92	-1	next	333132
+decoded_dat/a/cla/cla.dat	field	92	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	92	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	92	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	92	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	93	312		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	93	-1	pic	3231
+decoded_dat/a/cla/cla.dat	field	93	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	93	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	93	-1	next	333133
+decoded_dat/a/cla/cla.dat	field	93	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	93	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	93	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	93	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	94	313		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	94	-1	pic	3232
+decoded_dat/a/cla/cla.dat	field	94	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	94	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	94	-1	next	333134
+decoded_dat/a/cla/cla.dat	field	94	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	94	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	94	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	94	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	95	314		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	95	-1	pic	3139
+decoded_dat/a/cla/cla.dat	field	95	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	95	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	95	-1	next	333135
+decoded_dat/a/cla/cla.dat	field	95	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	95	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	95	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	95	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	96	315		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	96	-1	pic	3230
+decoded_dat/a/cla/cla.dat	field	96	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	96	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	96	-1	next	333136
+decoded_dat/a/cla/cla.dat	field	96	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	96	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	96	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	96	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	97	316		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	97	-1	pic	3231
+decoded_dat/a/cla/cla.dat	field	97	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	97	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	97	-1	next	333137
+decoded_dat/a/cla/cla.dat	field	97	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	97	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	97	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	97	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	98	317		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	98	-1	pic	3232
+decoded_dat/a/cla/cla.dat	field	98	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	98	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	98	-1	next	333330
+decoded_dat/a/cla/cla.dat	field	98	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	98	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	98	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	98	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	99	318		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	99	-1	pic	3139
+decoded_dat/a/cla/cla.dat	field	99	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	99	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	99	-1	next	333139
+decoded_dat/a/cla/cla.dat	field	99	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	99	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	99	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	99	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	100	319		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	100	-1	pic	3230
+decoded_dat/a/cla/cla.dat	field	100	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	100	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	100	-1	next	333230
+decoded_dat/a/cla/cla.dat	field	100	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	100	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	100	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	100	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	101	320		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	101	-1	pic	3231
+decoded_dat/a/cla/cla.dat	field	101	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	101	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	101	-1	next	333231
+decoded_dat/a/cla/cla.dat	field	101	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	101	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	101	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	101	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	102	321		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	102	-1	pic	3232
+decoded_dat/a/cla/cla.dat	field	102	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	102	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	102	-1	next	333232
+decoded_dat/a/cla/cla.dat	field	102	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	102	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	102	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	102	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	103	322		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	103	-1	pic	3139
+decoded_dat/a/cla/cla.dat	field	103	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	103	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	103	-1	next	333233
+decoded_dat/a/cla/cla.dat	field	103	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	103	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	103	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	103	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	104	323		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	104	-1	pic	3230
+decoded_dat/a/cla/cla.dat	field	104	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	104	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	104	-1	next	333234
+decoded_dat/a/cla/cla.dat	field	104	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	104	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	104	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	104	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	105	324		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	105	-1	pic	3231
+decoded_dat/a/cla/cla.dat	field	105	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	105	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	105	-1	next	333235
+decoded_dat/a/cla/cla.dat	field	105	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	105	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	105	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	105	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	106	325		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	106	-1	pic	3232
+decoded_dat/a/cla/cla.dat	field	106	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	106	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	106	-1	next	333236
+decoded_dat/a/cla/cla.dat	field	106	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	106	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	106	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	106	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	107	326		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	107	-1	pic	3139
+decoded_dat/a/cla/cla.dat	field	107	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	107	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	107	-1	next	333237
+decoded_dat/a/cla/cla.dat	field	107	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	107	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	107	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	107	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	108	327		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	108	-1	pic	3230
+decoded_dat/a/cla/cla.dat	field	108	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	108	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	108	-1	next	333238
+decoded_dat/a/cla/cla.dat	field	108	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	108	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	108	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	108	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	109	328		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	109	-1	pic	3231
+decoded_dat/a/cla/cla.dat	field	109	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	109	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	109	-1	next	333239
+decoded_dat/a/cla/cla.dat	field	109	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	109	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	109	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	109	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	110	329		6d696e69636c617368
+decoded_dat/a/cla/cla.dat	field	110	-1	pic	3232
+decoded_dat/a/cla/cla.dat	field	110	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	110	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	110	-1	next	333330
+decoded_dat/a/cla/cla.dat	field	110	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	110	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	110	-1	centery	3438
+decoded_dat/a/cla/cla.dat	field	110	-1	sound	646174615c3031342e776176
+decoded_dat/a/cla/cla.dat	frame	111	330		6d696e69636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	111	-1	pic	3233
+decoded_dat/a/cla/cla.dat	field	111	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	111	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	111	-1	next	333331
+decoded_dat/a/cla/cla.dat	field	111	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	111	-1	centerx	3231
+decoded_dat/a/cla/cla.dat	field	111	-1	centery	3438
+decoded_dat/a/cla/cla.dat	frame	112	331		6d696e69636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	112	-1	pic	3234
+decoded_dat/a/cla/cla.dat	field	112	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	112	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	112	-1	next	333332
+decoded_dat/a/cla/cla.dat	field	112	-1	dvx	35
+decoded_dat/a/cla/cla.dat	field	112	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	112	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	112	-1	centery	3438
+decoded_dat/a/cla/cla.dat	block	112	0	itr	
+decoded_dat/a/cla/cla.dat	field	112	0	kind	30
+decoded_dat/a/cla/cla.dat	field	112	0	x	30
+decoded_dat/a/cla/cla.dat	field	112	0	y	30
+decoded_dat/a/cla/cla.dat	field	112	0	w	3830
+decoded_dat/a/cla/cla.dat	field	112	0	h	3530
+decoded_dat/a/cla/cla.dat	field	112	0	effect	35
+decoded_dat/a/cla/cla.dat	field	112	0	zwidth	35
+decoded_dat/a/cla/cla.dat	field	112	0	arest	3135
+decoded_dat/a/cla/cla.dat	field	112	0	bdefend	30
+decoded_dat/a/cla/cla.dat	field	112	0	dvx	3335
+decoded_dat/a/cla/cla.dat	field	112	0	dvy	2d3132
+decoded_dat/a/cla/cla.dat	field	112	0	fall	313030
+decoded_dat/a/cla/cla.dat	field	112	0	injury	3830
+decoded_dat/a/cla/cla.dat	frame	113	332		6d696e69636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	113	-1	pic	3235
+decoded_dat/a/cla/cla.dat	field	113	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	113	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	113	-1	next	333333
+decoded_dat/a/cla/cla.dat	field	113	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	113	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	113	-1	centery	3438
+decoded_dat/a/cla/cla.dat	frame	114	333		6d696e69636c617368626f6f6d
+decoded_dat/a/cla/cla.dat	field	114	-1	pic	3236
+decoded_dat/a/cla/cla.dat	field	114	-1	state	33303035
+decoded_dat/a/cla/cla.dat	field	114	-1	wait	31
+decoded_dat/a/cla/cla.dat	field	114	-1	next	31303030
+decoded_dat/a/cla/cla.dat	field	114	-1	dvy	353530
+decoded_dat/a/cla/cla.dat	field	114	-1	centerx	3330
+decoded_dat/a/cla/cla.dat	field	114	-1	centery	3438

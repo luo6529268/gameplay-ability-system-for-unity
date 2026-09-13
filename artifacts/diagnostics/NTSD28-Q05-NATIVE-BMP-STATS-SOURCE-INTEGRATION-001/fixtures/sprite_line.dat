@@ -1,0 +1,6 @@
+<bmp_begin>
+file(10-2): a.png w: 3 w: 4 h: 5 row: 2 col: 3 file(0--1): b.png w: 7
+<bmp_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

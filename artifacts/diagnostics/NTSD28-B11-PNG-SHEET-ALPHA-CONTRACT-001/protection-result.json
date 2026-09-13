@@ -1,0 +1,11 @@
+{
+  "authorityFilesUnchanged": 7,
+  "existingProtectedFiles": 3059,
+  "unchanged": 3056,
+  "expectedChanged": [
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs"
+  ],
+  "legacyPixelProcessorAndShaderUnchanged": true
+}

@@ -1,0 +1,22 @@
+{
+    "runId": "e3-direct-1",
+    "mode": "direct",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: The selected production caller did not reach a running native-content battle.\r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:211 \r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor+Request request) [0x0084d] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:123 ",
+    "sourceKey": "",
+    "shutdownStage": "",
+    "sourceIds": [
+        0,
+        2,
+        50,
+        52
+    ],
+    "worldObjects": 0,
+    "trackedResources": 0,
+    "resourceSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 0,
+    "menuReady": false,
+    "samePublishedKeys": false,
+    "stayedStoppedAfterTwoFrames": false
+}

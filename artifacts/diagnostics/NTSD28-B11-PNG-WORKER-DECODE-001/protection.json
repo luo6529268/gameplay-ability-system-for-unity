@@ -1,0 +1,10 @@
+{
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "pngInputs": 1255,
+  "pngChanges": [],
+  "existingBaselineCount": 3059,
+  "existingChanges": [
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs"
+  ],
+  "expectedChanged": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs"
+}

@@ -470,7 +470,6 @@ namespace NTSD.Animation.LF2Objects
             RelationOwnerSlot = -1;
             OwnerEntityIndex = -1;
             SpawnerEntityIndex = -1;
-            TrackerFlag = 0;
             TrackerParent = null;
             Runtime.LinkState = 0;
             Runtime.TargetSlotIndex = -1;

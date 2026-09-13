@@ -836,7 +836,7 @@ namespace NTSD.Test
         [TestCase(1, BattleHitCandidateDisposition.Kind1Grab)]
         [TestCase(3, BattleHitCandidateDisposition.Kind3Grab)]
         [TestCase(2, BattleHitCandidateDisposition.Pickup)]
-        [TestCase(7, BattleHitCandidateDisposition.Pickup)]
+        [TestCase(7, BattleHitCandidateDisposition.Unsupported)]
         [TestCase(4, BattleHitCandidateDisposition.Unsupported)]
         [TestCase(5, BattleHitCandidateDisposition.Unsupported)]
         [TestCase(99, BattleHitCandidateDisposition.Unsupported)]
@@ -1966,8 +1966,8 @@ namespace NTSD.Test
             Assert.That(target.Health.HP, Is.Zero);
             Assert.That(target.Health.HPBound, Is.EqualTo(97));
             Assert.That(target.ComboCountVic, Is.EqualTo(12));
-            Assert.That(holder.ComboCountAtk, Is.EqualTo(13));
-            Assert.That(holder.KillStat, Is.EqualTo(5));
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(3));
+            Assert.That(holder.KillStat, Is.EqualTo(4));
             Assert.That(holder.Runtime.KnockoutCount358, Is.EqualTo(7));
             Assert.That(world.DamageStats[1], Is.EqualTo(15));
             Assert.That(world.KillStats[1], Is.EqualTo(8));
@@ -2293,8 +2293,8 @@ namespace NTSD.Test
             Assert.That(target.FrameDelay, Is.EqualTo(-5));
             Assert.That(attacker.AttackExempt, Is.EqualTo(12));
             Assert.That(world.GetRawRestVrest(1, 0), Is.EqualTo(9));
-            Assert.That(holder.ComboCountAtk, Is.EqualTo(9));
-            Assert.That(holder.KillStat, Is.EqualTo(lethal ? 5 : 4));
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(4));
+            Assert.That(holder.KillStat, Is.EqualTo(4));
             Assert.That(holder.Runtime.KnockoutCount358,
                 Is.EqualTo(lethal ? 7 : 6));
             Assert.That(world.DamageStats[1], Is.EqualTo(8));
@@ -6858,10 +6858,12 @@ namespace NTSD.Test
                 attacker,
                 target,
                 resolvedItr,
-                LF2HitResolveRuntimeData.ResolveCandidateDisposition(
-                    target,
-                    resolvedItr,
-                    consumeGateAccepted: true));
+                resolvedItr.kind == 7
+                    ? BattleHitCandidateDisposition.Unsupported
+                    : LF2HitResolveRuntimeData.ResolveCandidateDisposition(
+                        target,
+                        resolvedItr,
+                        consumeGateAccepted: true));
             world.EndBattleHitExecutionPlanLegacyObservation();
         }
 

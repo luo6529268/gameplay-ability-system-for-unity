@@ -1,0 +1,14 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 1 state: 2 cover: 3 wait: 4 next: 5 dvx: 6 dvy: 7 dvz: 8 centerx: 9 centery: 10 mp: 11 hp: 12 hit_a: 13 hit_d: 14 hit_j: 15 hit_g: 16 hit_Fj: 17 hit_Fa: 18 hit_Da: 19 hit_Ua: 20 hit_ja: 21 hit_aj: 22 hit_ad: 23 hit_jd: 24 hit_Dj: 25 hit_Uj: 26 hit_f: 27 hit_b: 28 hit_uz: 29 hit_dz: 30 hold_a: 31 hold_d: 32 hold_j: 33 hold_f: 34 hold_b: 35 hold_uz: 36 hold_dz: 37
+bdy: kind: 5 respond: 9 x: 2 y: -4 w: 15 h: 17 zwidth: 21 bdy_end:
+itr: kind: 2 x: 3 y: 4 w: 5 h: 6 dvx: 7 dvy: 8 fall: 9 arest: 10 vrest: 11 respond: 12 effect: 13 drain: 14 spark: 15 recover: 16 dbdefend: 17 bdefend: 18 injury: 19 zwidth: 20 z: 21 dvz: 22 sound: 23 cover: 24 caughtact: 25 catchingact: 26 pickedact: 27 pickingact: 28 delay: 29 poison: 30 confus: 31 weak: 32 manacle: 33 join: 34 mimic: 35 bound: 36 facing: 37 dx: 38 dy: 39 dz: 40 gain: 41 itr_end:
+cpoint: kind: 3 x: 4 y: 5 injury: 6 cover: 7 vaction: 8 aaction: 9 jaction: 10 daction: 11 taction: 12 faction: 13 baction: 14 uzaction: 15 dzaction: 16 throwvx: 1.5 throwvy: -0 hurtable: 19 fronthurtact: 20 backhurtact: 21 decrease: 22 dircontrol: 23 throwinjury: 24 throwvz: 0x1.fp3 z: 26 recover: 27 drain: 28 gain: 29 cpoint_end:
+opoint: kind: 4 x: 5 y: 6 z: 7 action: 8 dvx: 9 dvy: 10 dvz: 11 oid: 12 facing: 13 hp: 14 mp: 15 team: 16 reserve: 17 effect: 18 pic: 19 centerx: 20 centery: 21 centerz: 22 framea: 23 attacking: 24 join: 25 join_reserve: 26 join_pic: 27 opoint_end:
+wpoint: kind: 5 x: 6 y: 7 weaponact: 8 attacking: 9 cover: 10 dvx: 11 dvy: 12 dvz: 13 wpoint_end:
+bpoint: x: 9 y: 17 bpoint_end:
+centerz: 11 chp: 12 cmp: 13 dx: 0.5 dy: -1.5 dz: 0x1.8p-1
+<frame_end>

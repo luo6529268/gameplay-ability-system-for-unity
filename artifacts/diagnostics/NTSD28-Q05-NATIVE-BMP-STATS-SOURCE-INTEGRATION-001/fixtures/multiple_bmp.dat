@@ -1,0 +1,11 @@
+<bmp_begin>
+name: First
+walking_speed 2.5
+<bmp_end>
+<bmp_begin>
+name: Last
+walking_speed 3.3
+<bmp_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

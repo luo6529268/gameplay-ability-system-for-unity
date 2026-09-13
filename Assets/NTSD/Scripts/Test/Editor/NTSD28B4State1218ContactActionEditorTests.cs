@@ -24,7 +24,6 @@ namespace NTSD.Test.Editor
                 runtime,
                 Frame(170, LF2States.Falling),
                 0f,
-                1f,
                 0f,
                 1.0);
 

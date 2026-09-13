@@ -1,0 +1,14 @@
+{
+    "runId": "play-cycle-1",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: Existing App ordered shutdown did not complete.\r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Require (System.Boolean value, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:150 \r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor+Request request) [0x003c3] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:87 ",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Preparing",
+    "shutdownStatus": "",
+    "initialObjectCount": 4,
+    "checksCompleted": 0,
+    "trackedObjects": 0,
+    "survivors": 0,
+    "activeBoundaryRejected": true,
+    "checks": []
+}

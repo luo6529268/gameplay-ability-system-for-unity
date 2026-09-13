@@ -1,0 +1,8 @@
+{
+  "files": 138,
+  "actualOutputSha256": "136e51e58e5ba3a3aaf9bae9e3ef92ac6c82ed9e7c16a2187686138f2b2e306c",
+  "priorOutputSha256": "05ddfa8900b777cfc12aee17ac9208a462ad8b110cdea4b61f4d05a3d22b5890",
+  "currentOutputWithPriorSourceIdentitiesSha256": "05ddfa8900b777cfc12aee17ac9208a462ad8b110cdea4b61f4d05a3d22b5890",
+  "sameProjectionProvenByPriorCompleteOutputHash": true,
+  "method": "Replace only source linkedProductionSourceSha256 using prechange manifest; remove newly added linked source entries; compare complete bytes hash with previous recorded output. Never relabel reconstructed bytes as a fresh old run."
+}

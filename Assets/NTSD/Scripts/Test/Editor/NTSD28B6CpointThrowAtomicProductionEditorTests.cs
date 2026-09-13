@@ -98,7 +98,27 @@ namespace NTSD.Test.Editor
             }
         }
 
-        private static ThrowScope CreateScope(int throwInjury)
+        [TestCase("right", 1.5f, -2.25f, 0.125f)]
+        [TestCase("left", 1.5f, -2.25f, 0.125f)]
+        [TestCase("right", 0.0000001f, -0.0000002f, 0.0000003f)]
+        public void Float32ThrowValuesReachRuntimeWithoutIntegerTruncation(string direction, float vx, float vy, float vz)
+        {
+            var point = new CatchPoint
+            {
+                kind = 1, x = 50, y = 60, vaction = 132,
+                throwvx = vx, throwvy = vy, throwvz = vz,
+            };
+            using (ThrowScope scope = CreateScope(0, point))
+            {
+                scope.Catcher.SwitchDir(direction);
+                scope.RunThrow(up: false, down: true);
+                Assert.That(scope.Caught.Runtime.Vx, Is.EqualTo(direction == "right" ? (double)vx : -(double)vx));
+                Assert.That(scope.Caught.Runtime.Vy, Is.EqualTo((double)vy));
+                Assert.That(scope.Caught.Runtime.Vz, Is.EqualTo((double)vz));
+            }
+        }
+
+        private static ThrowScope CreateScope(int throwInjury, CatchPoint suppliedPoint = null)
         {
             CatchPoint catcherPoint = new CatchPoint
             {
@@ -111,6 +131,7 @@ namespace NTSD.Test.Editor
                 throwvz = 3,
                 throwinjury = throwInjury,
             };
+            if (suppliedPoint != null) catcherPoint = suppliedPoint;
             LF2CharacterData catcherData = new LF2CharacterData
             {
                 name = "B6ThrowCatcher",

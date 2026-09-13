@@ -109,17 +109,41 @@ namespace NTSD.App
 
         private async UniTaskVoid InitializeBattleAsync(Scene scene)
         {
+            SimulationTickDriver simulationDriver = SimulationTickDriver.Instance;
+            if (simulationDriver == null)
+                return;
+            int preparationGeneration = simulationDriver.PreparationGeneration;
+            SimulationWorld preparationWorld = simulationDriver.World;
             await UniTask.Yield();
+            if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                return;
             BattleBootstrap bootstrap = null;
             try
             {
+                CharacterAnimtorManager contentManager = CharacterAnimtorManager.TryGetInstance();
+                if (contentManager == null)
+                    throw new System.InvalidOperationException("Battle content was not prewarmed.");
+                string contentKey = await contentManager.ValidateConfiguredContentForBattleAsync();
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
                 InitializeBattleSingletons();
 
                 bootstrap = FindBattleBootstrap(scene);
 
                 SceneManager.SetActiveScene(scene);
 
-                SimulationTickDriver.Instance?.ApplyMatchConfig(CurrentMatchConfig);
+                try
+                {
+                    simulationDriver.ApplyMatchConfig(CurrentMatchConfig);
+                }
+                finally
+                {
+                    // Synchronous preparation may replace World before reporting failure.
+                    preparationGeneration = simulationDriver.PreparationGeneration;
+                    preparationWorld = simulationDriver.World;
+                }
 
                 if (bootstrap != null)
                 {
@@ -134,6 +158,7 @@ namespace NTSD.App
                 }
 
                 // Step 6: Use pool-based assembly instead of levelMgr.StartLevel()
+                simulationDriver.PrepareBattleRuntimeServices();
                 SetupBattleCharacters(scene);
 
                 if (soundPlayer != null)
@@ -142,6 +167,14 @@ namespace NTSD.App
                         CharacterAnimtorManager.Instance);
                 }
 
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
+
+                await contentManager.AssertConfiguredContentUnchangedAsync(contentKey);
+                if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))
+                    return;
                 if (SimulationTickDriver.Instance != null)
                 {
                     SimulationTickDriver.Instance.ApplySettings(battleLockstepSettings);
@@ -155,6 +188,12 @@ namespace NTSD.App
             }
             catch (System.Exception exception)
             {
+                if (this == null || simulationDriver == null ||
+                    simulationDriver.PreparationGeneration != preparationGeneration ||
+                    !ReferenceEquals(simulationDriver.World, preparationWorld) ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopped)
+                    return;
                 Debug.LogError(
                     $"[AppManager] Battle initialization failed: {exception}");
                 TryShutdownBattleRuntimeBeforeSceneDestroy(out _);

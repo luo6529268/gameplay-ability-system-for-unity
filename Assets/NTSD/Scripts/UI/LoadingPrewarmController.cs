@@ -18,7 +18,18 @@ namespace NTSD.UI
 
         public TextMeshProUGUI LoadingResourceTxt;
 
-        public bool IsPrewarmed { get; private set; }
+        private bool prewarmCompleted;
+        private bool prewarmDisposed;
+        private bool prewarmRunning;
+        private int prewarmGeneration;
+        private string prewarmedRoot;
+        private string prewarmedKey;
+        private CharacterAnimtorManager prewarmedManager;
+        private UniTask prewarmTask;
+        public bool IsPrewarmed => prewarmCompleted && prewarmedManager != null &&
+            ReferenceEquals(CharacterAnimtorManager.TryGetInstance(), prewarmedManager) &&
+            prewarmedManager.IsPublishedContentUsable && prewarmedManager.PublishedVisualContentKey == prewarmedKey &&
+            CharacterAnimtorManager.ConfiguredContentRoot == prewarmedRoot;
 
         private readonly Queue<string> pendingTexts = new Queue<string>();
         private string currentText;
@@ -94,55 +105,91 @@ namespace NTSD.UI
             nextTextUpdateTime = Time.unscaledTime + minTextDisplaySeconds;
         }
 
-        public async UniTask PrewarmOnceAsync()
+        public UniTask PrewarmOnceAsync()
         {
-            if (IsPrewarmed) return;
+            if (prewarmDisposed) throw new System.OperationCanceledException();
+            if (prewarmRunning) return prewarmTask;
+            prewarmRunning = true;
+            int generation = ++prewarmGeneration;
+            prewarmTask = PrewarmOnceCoreAsync(generation).Preserve();
+            return prewarmTask;
+        }
 
-            const int maxWaitFrames = 300;
-            int waitedFrames = 0;
-            var mgr = CharacterAnimtorManager.Instance;
-            while (mgr == null && waitedFrames < maxWaitFrames)
+        private async UniTask PrewarmOnceCoreAsync(int generation)
+        {
+            try
             {
-                await UniTask.Yield();
-                waitedFrames++;
-                mgr = CharacterAnimtorManager.Instance;
+                var mgr = CharacterAnimtorManager.Instance;
+                if (mgr == null) throw new System.InvalidOperationException("Character prewarm owner is unavailable.");
+                string root = CharacterAnimtorManager.ConfiguredContentRoot;
+                bool IsCurrent() => this != null && !prewarmDisposed && generation == prewarmGeneration &&
+                    mgr != null && root == CharacterAnimtorManager.ConfiguredContentRoot;
+                System.Action<string> progress = text => { if (IsCurrent()) OnPrewarmLoadingResourceChanged(text); };
+                prewarmCompleted = false;
+                resourceLoader ??= NTSD_ResourceLoader.Instance;
+                string key;
+                if (root.Length != 0)
+                {
+                    key = await mgr.PrewarmConfiguredLoganContentAsync(progress);
+                }
+                else
+                {
+                    if (mgr.PublishedVisualContentKey != null)
+                        throw new System.InvalidOperationException("Legacy prewarm cannot reuse a Logan publication.");
+                    if (!mgr.IsPrewarmCompleted)
+                    {
+                        var configTask = CreateCharacterConfigTask(mgr, FormatLoadingResourcePath, progress);
+                        var spriteTask = CreateCharacterSpriteTask(mgr, FormatLoadingResourcePath, progress);
+                        resourceLoader.AddTask(configTask);
+                        await PumpPrewarmTasksAsync();
+                        RequireCompleted(configTask);
+                        if (!IsCurrent()) throw new System.OperationCanceledException();
+                        resourceLoader.AddTask(spriteTask);
+                        await PumpPrewarmTasksAsync();
+                        RequireCompleted(spriteTask);
+                    }
+                    key = await mgr.ValidateConfiguredContentForBattleAsync();
+                }
+                if (!IsCurrent()) throw new System.OperationCanceledException();
+                int contentGeneration = mgr.ConfiguredContentGeneration;
+                bool CanWarmPool() => IsCurrent() && contentGeneration == mgr.ConfiguredContentGeneration;
+                var poolTask = CreatePoolPrewarmTask(progress, CanWarmPool);
+                resourceLoader.AddTask(poolTask);
+                await PumpPrewarmTasksAsync();
+                RequireCompleted(poolTask);
+                await mgr.AssertConfiguredContentUnchangedAsync(key);
+                if (!CanWarmPool()) throw new System.OperationCanceledException();
+                prewarmedManager = mgr;
+                prewarmedRoot = root;
+                prewarmedKey = key;
+                prewarmCompleted = true;
             }
-
-            if (mgr == null)
+            finally
             {
-                Debug.LogError("[LoadingPrewarmController] CharacterAnimtorManager.Instance is null after timeout. Aborting prewarm.");
-                return;
+                if (generation == prewarmGeneration) prewarmRunning = false;
             }
+        }
 
-            if (resourceLoader == null)
-            {
-                resourceLoader = NTSD_ResourceLoader.Instance;
-            }
+        private static void RequireCompleted(NTSD_LoadTask task)
+        {
+            if (task.Status != NTSD_LoadTaskStatus.Completed)
+                throw new System.InvalidOperationException("Battle prewarm task did not complete: " + task.Name + "/" + task.Status);
+        }
 
-            if (resourceLoader == null)
-            {
-                Debug.LogError("[LoadingPrewarmController] NTSD_ResourceLoader.Instance is null. Aborting prewarm.");
-                return;
-            }
-
-            var configTask = CreateCharacterConfigTask(mgr, FormatLoadingResourcePath, OnPrewarmLoadingResourceChanged);
-            var spriteTask = CreateCharacterSpriteTask(mgr, FormatLoadingResourcePath, OnPrewarmLoadingResourceChanged);
-            var poolTask = CreatePoolPrewarmTask(OnPrewarmLoadingResourceChanged);
-
-            poolTask.OnCompleted += _ =>
-            {
-                IsPrewarmed = true;
-            };
-
-            resourceLoader.AddTask(configTask);
-            resourceLoader.AddTask(spriteTask);
-            resourceLoader.AddTask(poolTask);
-
+        private async UniTask PumpPrewarmTasksAsync()
+        {
             while (!resourceLoader.IsIdle())
             {
                 await resourceLoader.ProcessFrame();
                 await UniTask.Yield();
             }
+        }
+
+        private void OnDestroy()
+        {
+            prewarmDisposed = true;
+            prewarmCompleted = false;
+            prewarmGeneration++;
         }
 
         private void OnPrewarmLoadingResourceChanged(string resourcePath)
@@ -173,7 +220,7 @@ namespace NTSD.UI
             return System.IO.Path.GetFileName(normalized);
         }
 
-        private NTSD_LoadTask CreatePoolPrewarmTask(System.Action<string> onProgressText)
+        private NTSD_LoadTask CreatePoolPrewarmTask(System.Action<string> onProgressText, System.Func<bool> canContinue = null)
         {
             return new NTSD_LoadTask
             {
@@ -183,6 +230,7 @@ namespace NTSD.UI
                 Priority = 80,
                 Execute = async (task, _) =>
                 {
+                    if (!(canContinue?.Invoke() ?? true)) throw new System.OperationCanceledException();
                     onProgressText?.Invoke("Prewarming Entity Slots...");
                     BattleRuntimeWorldSettings runtimeSettings =
                         BattleRuntimeProfileProductionSource.Resolve(GameConfig.Instance);
@@ -195,9 +243,9 @@ namespace NTSD.UI
                         reservedCapacity);
                     // 同时异步预分配 400 个实体 GameObject 实例
                     LF2ObjectPointFactory.Instance?.PrepareTaskQueueCapacity(reservedCapacity);
-                    await LF2ObjectPool.Instance.PrepareCapacityAsync(
+                    if (!await LF2ObjectPool.Instance.PrepareCapacityForContentAsync(
                         reservedCapacity,
-                        reservedCapacity);
+                        reservedCapacity, canContinue)) throw new System.OperationCanceledException();
                     task.Result = true;
                 }
             };
@@ -213,6 +261,12 @@ namespace NTSD.UI
                 Domain = NTSD_ResourceDomain.Character,
                 Priority = 100,
                 CacheKey = "NTSD.CharacterConfig",
+                OnCompleted = task =>
+                {
+                    if (manager == null || CharacterAnimtorManager.HasConfiguredLoganContent)
+                        throw new System.OperationCanceledException();
+                    manager.ApplyLoadedCharacterConfigs((Dictionary<int, LF2CharacterDataWrapper>)task.Result);
+                },
                 Execute = async (task, _) =>
                 {
                     var dataManager = GameDataManager.Instance;
@@ -222,7 +276,6 @@ namespace NTSD.UI
                         onProgressText?.Invoke(formatted);
                     }));
                     task.Result = configs;
-                    manager.ApplyLoadedCharacterConfigs(configs);
                 }
             };
         }
@@ -236,9 +289,10 @@ namespace NTSD.UI
                 Type = NTSD_LoadTaskType.LoadSprites,
                 Domain = NTSD_ResourceDomain.Character,
                 Priority = 90,
-                CacheKey = "NTSD.CharacterSprites",
                 Execute = async (task, _) =>
                 {
+                    if (manager == null || CharacterAnimtorManager.HasConfiguredLoganContent)
+                        throw new System.OperationCanceledException();
                     await manager.LoadCharacterSpritesAsync(text =>
                     {
                         var formatted = progressTextFormatter != null ? progressTextFormatter(text) : text;

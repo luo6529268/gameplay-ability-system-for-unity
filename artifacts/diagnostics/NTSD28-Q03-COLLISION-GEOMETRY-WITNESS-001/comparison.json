@@ -1,0 +1,345 @@
+{
+  "scope": "source linked geometry vs actual Unity EditMode production collectors; capture succeeded, parity checked separately",
+  "cases": 14,
+  "modeComparisons": 42,
+  "equal": 15,
+  "different": 27,
+  "rows": [
+    {
+      "id": "inside",
+      "mode": "ForceBruteForce",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "inside",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "inside",
+      "mode": "ForceRoleAware",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "positive_edge",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "positive_edge",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "positive_edge",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "negative_edge",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "negative_edge",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "negative_edge",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "outside",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "outside",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "outside",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "explicit_zero",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "explicit_zero",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "explicit_zero",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "negative_width",
+      "mode": "ForceBruteForce",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "negative_width",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "negative_width",
+      "mode": "ForceRoleAware",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "body_depth_edge",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_depth_edge",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_depth_edge",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_depth_inside",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_depth_inside",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_depth_inside",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "body_z_ignored",
+      "mode": "ForceBruteForce",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "body_z_ignored",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "body_z_ignored",
+      "mode": "ForceRoleAware",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "itr_z_edge",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "itr_z_edge",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "itr_z_edge",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "itr_z_inside",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "itr_z_inside",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "itr_z_inside",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 1,
+      "equal": false
+    },
+    {
+      "id": "xy_edge",
+      "mode": "ForceBruteForce",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "xy_edge",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "xy_edge",
+      "mode": "ForceRoleAware",
+      "candidates": "0",
+      "unity": 0,
+      "native": 0,
+      "equal": true
+    },
+    {
+      "id": "missing_body_x",
+      "mode": "ForceBruteForce",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "missing_body_x",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "missing_body_x",
+      "mode": "ForceRoleAware",
+      "candidates": "1",
+      "unity": 1,
+      "native": 0,
+      "equal": false
+    },
+    {
+      "id": "zero_body_width",
+      "mode": "ForceBruteForce",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "zero_body_width",
+      "mode": "ForceLegacyUnionAabb",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    },
+    {
+      "id": "zero_body_width",
+      "mode": "ForceRoleAware",
+      "candidates": "1",
+      "unity": 1,
+      "native": 1,
+      "equal": true
+    }
+  ]
+}

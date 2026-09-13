@@ -1,0 +1,19 @@
+{
+  "files": 138,
+  "parseSuccess": 138,
+  "converterSuccess": 138,
+  "comparedSections": [
+    "parseSuccess",
+    "fullConverterSuccess",
+    "frames",
+    "top",
+    "bmp",
+    "blocks",
+    "stats",
+    "sprites",
+    "bmpHeader",
+    "bmpFrameSequences"
+  ],
+  "differencesSinceCpoint27": [],
+  "limitation": "Existing diagnostic projection is still 19 CPoint / 8 OPoint fields. New 24-field proof uses native45 / Unity tests, not this legacy regression."
+}

@@ -49,6 +49,14 @@ namespace NTSD.UI
         /// Value: 该角色的UI精灵数据 (Head和Small)
         /// </summary>
         private Dictionary<int, CharacterUISprites> characterUISprites = new Dictionary<int, CharacterUISprites>();
+        public string PublishedVisualContentKey { get; private set; }
+
+        internal void CommitNativeSprites(Dictionary<int, CharacterUISprites> prepared, string sourceKey)
+        {
+            // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
+            characterUISprites = prepared;
+            PublishedVisualContentKey = sourceKey;
+        }
 
         #endregion
 
@@ -83,6 +91,7 @@ namespace NTSD.UI
                 HeadSprite = headSprite,
                 SmallSprite = smallSprite
             };
+            PublishedVisualContentKey = null;
         }
 
         /// <summary>
@@ -91,6 +100,7 @@ namespace NTSD.UI
         public void Clear()
         {
             characterUISprites.Clear();
+            PublishedVisualContentKey = null;
         }
 
         #endregion

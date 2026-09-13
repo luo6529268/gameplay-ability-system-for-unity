@@ -1,0 +1,1663 @@
+decoded_dat/s/3/3.dat	frame	0	0		64656c
+decoded_dat/s/3/3.dat	field	0	-1	pic	393939
+decoded_dat/s/3/3.dat	field	0	-1	state	33303035
+decoded_dat/s/3/3.dat	field	0	-1	wait	30
+decoded_dat/s/3/3.dat	field	0	-1	next	31303030
+decoded_dat/s/3/3.dat	field	0	-1	centerx	3534
+decoded_dat/s/3/3.dat	field	0	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	1	1		616c6c79
+decoded_dat/s/3/3.dat	field	1	-1	pic	393939
+decoded_dat/s/3/3.dat	field	1	-1	state	3135
+decoded_dat/s/3/3.dat	field	1	-1	wait	31
+decoded_dat/s/3/3.dat	field	1	-1	next	32
+decoded_dat/s/3/3.dat	field	1	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	1	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	2	2		616c6c79
+decoded_dat/s/3/3.dat	field	2	-1	pic	393939
+decoded_dat/s/3/3.dat	field	2	-1	state	3135
+decoded_dat/s/3/3.dat	field	2	-1	wait	30
+decoded_dat/s/3/3.dat	field	2	-1	next	31303030
+decoded_dat/s/3/3.dat	field	2	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	2	-1	centery	3739
+decoded_dat/s/3/3.dat	block	2	0	opoint	
+decoded_dat/s/3/3.dat	field	2	0	kind	31
+decoded_dat/s/3/3.dat	field	2	0	x	313039
+decoded_dat/s/3/3.dat	field	2	0	y	3739
+decoded_dat/s/3/3.dat	field	2	0	action	313132
+decoded_dat/s/3/3.dat	field	2	0	oid	333033
+decoded_dat/s/3/3.dat	frame	3	7		616c6c79
+decoded_dat/s/3/3.dat	field	3	-1	pic	393939
+decoded_dat/s/3/3.dat	field	3	-1	state	3135
+decoded_dat/s/3/3.dat	field	3	-1	wait	31
+decoded_dat/s/3/3.dat	field	3	-1	next	38
+decoded_dat/s/3/3.dat	field	3	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	3	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	4	8		616c6c79
+decoded_dat/s/3/3.dat	field	4	-1	pic	393939
+decoded_dat/s/3/3.dat	field	4	-1	state	3135
+decoded_dat/s/3/3.dat	field	4	-1	wait	31
+decoded_dat/s/3/3.dat	field	4	-1	next	31303030
+decoded_dat/s/3/3.dat	field	4	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	4	-1	centery	3739
+decoded_dat/s/3/3.dat	block	4	0	opoint	
+decoded_dat/s/3/3.dat	field	4	0	kind	31
+decoded_dat/s/3/3.dat	field	4	0	x	313530
+decoded_dat/s/3/3.dat	field	4	0	y	30
+decoded_dat/s/3/3.dat	field	4	0	action	313934
+decoded_dat/s/3/3.dat	field	4	0	oid	333033
+decoded_dat/s/3/3.dat	field	4	0	facing	3130
+decoded_dat/s/3/3.dat	frame	5	10		74726565
+decoded_dat/s/3/3.dat	field	5	-1	pic	30
+decoded_dat/s/3/3.dat	field	5	-1	state	33303035
+decoded_dat/s/3/3.dat	field	5	-1	wait	32
+decoded_dat/s/3/3.dat	field	5	-1	next	3730
+decoded_dat/s/3/3.dat	field	5	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	5	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	5	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	5	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	5	-1	centery	323530
+decoded_dat/s/3/3.dat	field	5	-1	hit_a	31
+decoded_dat/s/3/3.dat	field	5	-1	hit_d	3231
+decoded_dat/s/3/3.dat	block	5	0	itr	
+decoded_dat/s/3/3.dat	field	5	0	kind	3134
+decoded_dat/s/3/3.dat	field	5	0	x	313230
+decoded_dat/s/3/3.dat	field	5	0	y	3430
+decoded_dat/s/3/3.dat	field	5	0	w	3332
+decoded_dat/s/3/3.dat	field	5	0	h	323330
+decoded_dat/s/3/3.dat	field	5	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	5	0	vrest	31
+decoded_dat/s/3/3.dat	block	5	1	itr	
+decoded_dat/s/3/3.dat	field	5	1	kind	3134
+decoded_dat/s/3/3.dat	field	5	1	x	313230
+decoded_dat/s/3/3.dat	field	5	1	y	38303030
+decoded_dat/s/3/3.dat	field	5	1	w	3332
+decoded_dat/s/3/3.dat	field	5	1	h	323330
+decoded_dat/s/3/3.dat	field	5	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	5	1	vrest	31
+decoded_dat/s/3/3.dat	block	5	2	bdy	
+decoded_dat/s/3/3.dat	field	5	2	kind	30
+decoded_dat/s/3/3.dat	field	5	2	x	313230
+decoded_dat/s/3/3.dat	field	5	2	y	33303334303030
+decoded_dat/s/3/3.dat	field	5	2	w	3332
+decoded_dat/s/3/3.dat	field	5	2	h	313939
+decoded_dat/s/3/3.dat	frame	6	20		74726565
+decoded_dat/s/3/3.dat	field	6	-1	pic	30
+decoded_dat/s/3/3.dat	field	6	-1	state	33303035
+decoded_dat/s/3/3.dat	field	6	-1	wait	32
+decoded_dat/s/3/3.dat	field	6	-1	next	3730
+decoded_dat/s/3/3.dat	field	6	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	6	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	6	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	6	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	6	-1	centery	323530
+decoded_dat/s/3/3.dat	field	6	-1	hit_a	31
+decoded_dat/s/3/3.dat	field	6	-1	hit_d	3231
+decoded_dat/s/3/3.dat	block	6	0	itr	
+decoded_dat/s/3/3.dat	field	6	0	kind	3134
+decoded_dat/s/3/3.dat	field	6	0	x	313230
+decoded_dat/s/3/3.dat	field	6	0	y	3430
+decoded_dat/s/3/3.dat	field	6	0	w	3332
+decoded_dat/s/3/3.dat	field	6	0	h	323330
+decoded_dat/s/3/3.dat	field	6	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	6	0	vrest	31
+decoded_dat/s/3/3.dat	block	6	1	itr	
+decoded_dat/s/3/3.dat	field	6	1	kind	3134
+decoded_dat/s/3/3.dat	field	6	1	x	313230
+decoded_dat/s/3/3.dat	field	6	1	y	38303030
+decoded_dat/s/3/3.dat	field	6	1	w	3332
+decoded_dat/s/3/3.dat	field	6	1	h	323330
+decoded_dat/s/3/3.dat	field	6	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	6	1	vrest	31
+decoded_dat/s/3/3.dat	block	6	2	bdy	
+decoded_dat/s/3/3.dat	field	6	2	kind	30
+decoded_dat/s/3/3.dat	field	6	2	x	313230
+decoded_dat/s/3/3.dat	field	6	2	y	33303334303030
+decoded_dat/s/3/3.dat	field	6	2	w	3332
+decoded_dat/s/3/3.dat	field	6	2	h	313939
+decoded_dat/s/3/3.dat	frame	7	21		74726565
+decoded_dat/s/3/3.dat	field	7	-1	pic	31
+decoded_dat/s/3/3.dat	field	7	-1	state	3138
+decoded_dat/s/3/3.dat	field	7	-1	wait	31
+decoded_dat/s/3/3.dat	field	7	-1	next	3232
+decoded_dat/s/3/3.dat	field	7	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	7	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	7	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	7	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	7	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	8	22		74726565
+decoded_dat/s/3/3.dat	field	8	-1	pic	32
+decoded_dat/s/3/3.dat	field	8	-1	state	33303036
+decoded_dat/s/3/3.dat	field	8	-1	wait	31
+decoded_dat/s/3/3.dat	field	8	-1	next	3233
+decoded_dat/s/3/3.dat	field	8	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	8	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	8	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	8	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	8	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	9	23		74726565
+decoded_dat/s/3/3.dat	field	9	-1	pic	33
+decoded_dat/s/3/3.dat	field	9	-1	state	33303036
+decoded_dat/s/3/3.dat	field	9	-1	wait	31
+decoded_dat/s/3/3.dat	field	9	-1	next	3234
+decoded_dat/s/3/3.dat	field	9	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	9	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	9	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	9	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	9	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	10	24		74726565
+decoded_dat/s/3/3.dat	field	10	-1	pic	34
+decoded_dat/s/3/3.dat	field	10	-1	state	33303036
+decoded_dat/s/3/3.dat	field	10	-1	wait	30
+decoded_dat/s/3/3.dat	field	10	-1	next	3235
+decoded_dat/s/3/3.dat	field	10	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	10	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	10	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	10	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	10	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	11	25		74726565
+decoded_dat/s/3/3.dat	field	11	-1	pic	35
+decoded_dat/s/3/3.dat	field	11	-1	state	33303036
+decoded_dat/s/3/3.dat	field	11	-1	wait	30
+decoded_dat/s/3/3.dat	field	11	-1	next	31303030
+decoded_dat/s/3/3.dat	field	11	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	11	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	11	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	11	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	11	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	12	30		74726565
+decoded_dat/s/3/3.dat	field	12	-1	pic	30
+decoded_dat/s/3/3.dat	field	12	-1	state	33303035
+decoded_dat/s/3/3.dat	field	12	-1	wait	32
+decoded_dat/s/3/3.dat	field	12	-1	next	3730
+decoded_dat/s/3/3.dat	field	12	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	12	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	12	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	12	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	12	-1	centery	323530
+decoded_dat/s/3/3.dat	field	12	-1	hit_a	31
+decoded_dat/s/3/3.dat	field	12	-1	hit_d	3231
+decoded_dat/s/3/3.dat	block	12	0	itr	
+decoded_dat/s/3/3.dat	field	12	0	kind	3134
+decoded_dat/s/3/3.dat	field	12	0	x	313230
+decoded_dat/s/3/3.dat	field	12	0	y	3430
+decoded_dat/s/3/3.dat	field	12	0	w	3332
+decoded_dat/s/3/3.dat	field	12	0	h	323330
+decoded_dat/s/3/3.dat	field	12	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	12	0	vrest	31
+decoded_dat/s/3/3.dat	block	12	1	itr	
+decoded_dat/s/3/3.dat	field	12	1	kind	3134
+decoded_dat/s/3/3.dat	field	12	1	x	313230
+decoded_dat/s/3/3.dat	field	12	1	y	38303030
+decoded_dat/s/3/3.dat	field	12	1	w	3332
+decoded_dat/s/3/3.dat	field	12	1	h	323330
+decoded_dat/s/3/3.dat	field	12	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	12	1	vrest	31
+decoded_dat/s/3/3.dat	block	12	2	bdy	
+decoded_dat/s/3/3.dat	field	12	2	kind	30
+decoded_dat/s/3/3.dat	field	12	2	x	313230
+decoded_dat/s/3/3.dat	field	12	2	y	33303334303030
+decoded_dat/s/3/3.dat	field	12	2	w	3332
+decoded_dat/s/3/3.dat	field	12	2	h	313939
+decoded_dat/s/3/3.dat	frame	13	31		6e696e32
+decoded_dat/s/3/3.dat	field	13	-1	pic	393939
+decoded_dat/s/3/3.dat	field	13	-1	state	33303035
+decoded_dat/s/3/3.dat	field	13	-1	wait	31
+decoded_dat/s/3/3.dat	field	13	-1	next	3331
+decoded_dat/s/3/3.dat	field	13	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	13	-1	centery	3739
+decoded_dat/s/3/3.dat	block	13	0	itr	
+decoded_dat/s/3/3.dat	field	13	0	kind	38
+decoded_dat/s/3/3.dat	field	13	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	13	0	x	3231
+decoded_dat/s/3/3.dat	field	13	0	y	333130303030
+decoded_dat/s/3/3.dat	field	13	0	w	3433
+decoded_dat/s/3/3.dat	field	13	0	h	313939
+decoded_dat/s/3/3.dat	field	13	0	dvx	3332
+decoded_dat/s/3/3.dat	frame	14	32		6e696e32
+decoded_dat/s/3/3.dat	field	14	-1	pic	393939
+decoded_dat/s/3/3.dat	field	14	-1	state	33303035
+decoded_dat/s/3/3.dat	field	14	-1	wait	39
+decoded_dat/s/3/3.dat	field	14	-1	next	3333
+decoded_dat/s/3/3.dat	field	14	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	14	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	15	33		6e696e32
+decoded_dat/s/3/3.dat	field	15	-1	pic	393939
+decoded_dat/s/3/3.dat	field	15	-1	state	38303331
+decoded_dat/s/3/3.dat	field	15	-1	wait	31303030
+decoded_dat/s/3/3.dat	field	15	-1	next	31303030
+decoded_dat/s/3/3.dat	field	15	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	15	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	16	35		6e696e32
+decoded_dat/s/3/3.dat	field	16	-1	pic	393939
+decoded_dat/s/3/3.dat	field	16	-1	state	33303035
+decoded_dat/s/3/3.dat	field	16	-1	wait	31
+decoded_dat/s/3/3.dat	field	16	-1	next	3335
+decoded_dat/s/3/3.dat	field	16	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	16	-1	centery	3739
+decoded_dat/s/3/3.dat	block	16	0	itr	
+decoded_dat/s/3/3.dat	field	16	0	kind	38
+decoded_dat/s/3/3.dat	field	16	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	16	0	x	3231
+decoded_dat/s/3/3.dat	field	16	0	y	333130303030
+decoded_dat/s/3/3.dat	field	16	0	w	3433
+decoded_dat/s/3/3.dat	field	16	0	h	313939
+decoded_dat/s/3/3.dat	field	16	0	dvx	3336
+decoded_dat/s/3/3.dat	frame	17	36		6e696e32
+decoded_dat/s/3/3.dat	field	17	-1	pic	393939
+decoded_dat/s/3/3.dat	field	17	-1	state	33303035
+decoded_dat/s/3/3.dat	field	17	-1	wait	39
+decoded_dat/s/3/3.dat	field	17	-1	next	3337
+decoded_dat/s/3/3.dat	field	17	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	17	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	18	37		6e696e32
+decoded_dat/s/3/3.dat	field	18	-1	pic	393939
+decoded_dat/s/3/3.dat	field	18	-1	state	38353031
+decoded_dat/s/3/3.dat	field	18	-1	wait	31303030
+decoded_dat/s/3/3.dat	field	18	-1	next	31303030
+decoded_dat/s/3/3.dat	field	18	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	18	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	19	52		6b696d69
+decoded_dat/s/3/3.dat	field	19	-1	pic	3331
+decoded_dat/s/3/3.dat	field	19	-1	state	30
+decoded_dat/s/3/3.dat	field	19	-1	wait	33
+decoded_dat/s/3/3.dat	field	19	-1	next	3533
+decoded_dat/s/3/3.dat	field	19	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	19	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	19	-1	centery	3938
+decoded_dat/s/3/3.dat	block	19	0	bdy	
+decoded_dat/s/3/3.dat	field	19	0	kind	31303535
+decoded_dat/s/3/3.dat	field	19	0	x	31
+decoded_dat/s/3/3.dat	field	19	0	y	30
+decoded_dat/s/3/3.dat	field	19	0	w	3535
+decoded_dat/s/3/3.dat	field	19	0	h	3330
+decoded_dat/s/3/3.dat	frame	20	53		6b696d69
+decoded_dat/s/3/3.dat	field	20	-1	pic	3332
+decoded_dat/s/3/3.dat	field	20	-1	state	30
+decoded_dat/s/3/3.dat	field	20	-1	wait	33
+decoded_dat/s/3/3.dat	field	20	-1	next	3534
+decoded_dat/s/3/3.dat	field	20	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	20	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	20	-1	centery	3938
+decoded_dat/s/3/3.dat	block	20	0	bdy	
+decoded_dat/s/3/3.dat	field	20	0	kind	31303535
+decoded_dat/s/3/3.dat	field	20	0	x	31
+decoded_dat/s/3/3.dat	field	20	0	y	30
+decoded_dat/s/3/3.dat	field	20	0	w	3535
+decoded_dat/s/3/3.dat	field	20	0	h	3330
+decoded_dat/s/3/3.dat	frame	21	54		6b696d69
+decoded_dat/s/3/3.dat	field	21	-1	pic	3333
+decoded_dat/s/3/3.dat	field	21	-1	state	30
+decoded_dat/s/3/3.dat	field	21	-1	wait	33
+decoded_dat/s/3/3.dat	field	21	-1	next	3532
+decoded_dat/s/3/3.dat	field	21	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	21	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	21	-1	centery	3938
+decoded_dat/s/3/3.dat	block	21	0	bdy	
+decoded_dat/s/3/3.dat	field	21	0	kind	31303535
+decoded_dat/s/3/3.dat	field	21	0	x	31
+decoded_dat/s/3/3.dat	field	21	0	y	30
+decoded_dat/s/3/3.dat	field	21	0	w	3535
+decoded_dat/s/3/3.dat	field	21	0	h	3330
+decoded_dat/s/3/3.dat	frame	22	55		6b696d69
+decoded_dat/s/3/3.dat	field	22	-1	pic	3332
+decoded_dat/s/3/3.dat	field	22	-1	state	30
+decoded_dat/s/3/3.dat	field	22	-1	wait	31
+decoded_dat/s/3/3.dat	field	22	-1	next	3537
+decoded_dat/s/3/3.dat	field	22	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	22	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	22	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	22	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	22	-1	centery	3938
+decoded_dat/s/3/3.dat	frame	23	56		6b696d69
+decoded_dat/s/3/3.dat	field	23	-1	pic	3334
+decoded_dat/s/3/3.dat	field	23	-1	state	30
+decoded_dat/s/3/3.dat	field	23	-1	wait	31
+decoded_dat/s/3/3.dat	field	23	-1	next	3536
+decoded_dat/s/3/3.dat	field	23	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	23	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	23	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	23	-1	centery	3938
+decoded_dat/s/3/3.dat	block	23	0	bdy	
+decoded_dat/s/3/3.dat	field	23	0	kind	31303538
+decoded_dat/s/3/3.dat	field	23	0	x	31
+decoded_dat/s/3/3.dat	field	23	0	y	30
+decoded_dat/s/3/3.dat	field	23	0	w	3535
+decoded_dat/s/3/3.dat	field	23	0	h	3330
+decoded_dat/s/3/3.dat	frame	24	57		6b696d69
+decoded_dat/s/3/3.dat	field	24	-1	pic	3332
+decoded_dat/s/3/3.dat	field	24	-1	state	38353037
+decoded_dat/s/3/3.dat	field	24	-1	wait	31303030
+decoded_dat/s/3/3.dat	field	24	-1	next	31303030
+decoded_dat/s/3/3.dat	field	24	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	24	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	24	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	24	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	24	-1	centery	3938
+decoded_dat/s/3/3.dat	block	24	0	opoint	
+decoded_dat/s/3/3.dat	field	24	0	kind	31
+decoded_dat/s/3/3.dat	field	24	0	x	3237
+decoded_dat/s/3/3.dat	field	24	0	y	3732
+decoded_dat/s/3/3.dat	field	24	0	action	3630
+decoded_dat/s/3/3.dat	field	24	0	oid	323034
+decoded_dat/s/3/3.dat	frame	25	58		6b696d69
+decoded_dat/s/3/3.dat	field	25	-1	pic	393939
+decoded_dat/s/3/3.dat	field	25	-1	state	30
+decoded_dat/s/3/3.dat	field	25	-1	wait	3330
+decoded_dat/s/3/3.dat	field	25	-1	next	3532
+decoded_dat/s/3/3.dat	field	25	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	25	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	25	-1	centerx	3238
+decoded_dat/s/3/3.dat	field	25	-1	centery	3938
+decoded_dat/s/3/3.dat	frame	26	70		74726565
+decoded_dat/s/3/3.dat	field	26	-1	pic	30
+decoded_dat/s/3/3.dat	field	26	-1	state	33303035
+decoded_dat/s/3/3.dat	field	26	-1	wait	31
+decoded_dat/s/3/3.dat	field	26	-1	next	3731
+decoded_dat/s/3/3.dat	field	26	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	26	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	26	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	26	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	26	-1	centery	323530
+decoded_dat/s/3/3.dat	field	26	-1	hit_a	31
+decoded_dat/s/3/3.dat	field	26	-1	hit_d	3231
+decoded_dat/s/3/3.dat	block	26	0	itr	
+decoded_dat/s/3/3.dat	field	26	0	kind	3134
+decoded_dat/s/3/3.dat	field	26	0	x	313230
+decoded_dat/s/3/3.dat	field	26	0	y	3430
+decoded_dat/s/3/3.dat	field	26	0	w	3332
+decoded_dat/s/3/3.dat	field	26	0	h	323330
+decoded_dat/s/3/3.dat	field	26	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	26	0	vrest	31
+decoded_dat/s/3/3.dat	block	26	1	itr	
+decoded_dat/s/3/3.dat	field	26	1	kind	3134
+decoded_dat/s/3/3.dat	field	26	1	x	313230
+decoded_dat/s/3/3.dat	field	26	1	y	38303030
+decoded_dat/s/3/3.dat	field	26	1	w	3332
+decoded_dat/s/3/3.dat	field	26	1	h	323330
+decoded_dat/s/3/3.dat	field	26	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	26	1	vrest	31
+decoded_dat/s/3/3.dat	block	26	2	bdy	
+decoded_dat/s/3/3.dat	field	26	2	kind	30
+decoded_dat/s/3/3.dat	field	26	2	x	313230
+decoded_dat/s/3/3.dat	field	26	2	y	33303334303030
+decoded_dat/s/3/3.dat	field	26	2	w	3332
+decoded_dat/s/3/3.dat	field	26	2	h	313939
+decoded_dat/s/3/3.dat	frame	27	71		74726565
+decoded_dat/s/3/3.dat	field	27	-1	pic	30
+decoded_dat/s/3/3.dat	field	27	-1	state	33303035
+decoded_dat/s/3/3.dat	field	27	-1	wait	31
+decoded_dat/s/3/3.dat	field	27	-1	next	3732
+decoded_dat/s/3/3.dat	field	27	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	27	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	27	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	27	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	27	-1	centery	323530
+decoded_dat/s/3/3.dat	block	27	0	itr	
+decoded_dat/s/3/3.dat	field	27	0	kind	3134
+decoded_dat/s/3/3.dat	field	27	0	x	313230
+decoded_dat/s/3/3.dat	field	27	0	y	3430
+decoded_dat/s/3/3.dat	field	27	0	w	3332
+decoded_dat/s/3/3.dat	field	27	0	h	323330
+decoded_dat/s/3/3.dat	field	27	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	27	0	vrest	31
+decoded_dat/s/3/3.dat	block	27	1	itr	
+decoded_dat/s/3/3.dat	field	27	1	kind	3134
+decoded_dat/s/3/3.dat	field	27	1	x	313230
+decoded_dat/s/3/3.dat	field	27	1	y	38303030
+decoded_dat/s/3/3.dat	field	27	1	w	3332
+decoded_dat/s/3/3.dat	field	27	1	h	323330
+decoded_dat/s/3/3.dat	field	27	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	27	1	vrest	31
+decoded_dat/s/3/3.dat	block	27	2	opoint	
+decoded_dat/s/3/3.dat	field	27	2	kind	31
+decoded_dat/s/3/3.dat	field	27	2	x	313435
+decoded_dat/s/3/3.dat	field	27	2	y	323530
+decoded_dat/s/3/3.dat	field	27	2	action	313730
+decoded_dat/s/3/3.dat	field	27	2	oid	333033
+decoded_dat/s/3/3.dat	block	27	3	bdy	
+decoded_dat/s/3/3.dat	field	27	3	kind	30
+decoded_dat/s/3/3.dat	field	27	3	x	313230
+decoded_dat/s/3/3.dat	field	27	3	y	33303334303030
+decoded_dat/s/3/3.dat	field	27	3	w	3332
+decoded_dat/s/3/3.dat	field	27	3	h	313939
+decoded_dat/s/3/3.dat	block	27	4	bdy	
+decoded_dat/s/3/3.dat	field	27	4	kind	30
+decoded_dat/s/3/3.dat	field	27	4	x	313230
+decoded_dat/s/3/3.dat	field	27	4	y	33303330303030
+decoded_dat/s/3/3.dat	field	27	4	w	3332
+decoded_dat/s/3/3.dat	field	27	4	h	313939
+decoded_dat/s/3/3.dat	frame	28	72		74726565
+decoded_dat/s/3/3.dat	field	28	-1	pic	30
+decoded_dat/s/3/3.dat	field	28	-1	state	33303035
+decoded_dat/s/3/3.dat	field	28	-1	wait	30
+decoded_dat/s/3/3.dat	field	28	-1	next	3731
+decoded_dat/s/3/3.dat	field	28	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	28	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	28	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	28	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	28	-1	centery	323530
+decoded_dat/s/3/3.dat	block	28	0	itr	
+decoded_dat/s/3/3.dat	field	28	0	kind	3134
+decoded_dat/s/3/3.dat	field	28	0	x	313230
+decoded_dat/s/3/3.dat	field	28	0	y	3430
+decoded_dat/s/3/3.dat	field	28	0	w	3332
+decoded_dat/s/3/3.dat	field	28	0	h	323330
+decoded_dat/s/3/3.dat	field	28	0	zwidth	3135
+decoded_dat/s/3/3.dat	field	28	0	vrest	31
+decoded_dat/s/3/3.dat	block	28	1	itr	
+decoded_dat/s/3/3.dat	field	28	1	kind	3134
+decoded_dat/s/3/3.dat	field	28	1	x	313230
+decoded_dat/s/3/3.dat	field	28	1	y	38303030
+decoded_dat/s/3/3.dat	field	28	1	w	3332
+decoded_dat/s/3/3.dat	field	28	1	h	323330
+decoded_dat/s/3/3.dat	field	28	1	zwidth	3135
+decoded_dat/s/3/3.dat	field	28	1	vrest	31
+decoded_dat/s/3/3.dat	block	28	2	bdy	
+decoded_dat/s/3/3.dat	field	28	2	kind	30
+decoded_dat/s/3/3.dat	field	28	2	x	313230
+decoded_dat/s/3/3.dat	field	28	2	y	33303334303030
+decoded_dat/s/3/3.dat	field	28	2	w	3332
+decoded_dat/s/3/3.dat	field	28	2	h	313939
+decoded_dat/s/3/3.dat	frame	29	80		73706f74
+decoded_dat/s/3/3.dat	field	29	-1	pic	393939
+decoded_dat/s/3/3.dat	field	29	-1	state	33303035
+decoded_dat/s/3/3.dat	field	29	-1	wait	31
+decoded_dat/s/3/3.dat	field	29	-1	next	3830
+decoded_dat/s/3/3.dat	field	29	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	29	-1	centery	3739
+decoded_dat/s/3/3.dat	block	29	0	itr	
+decoded_dat/s/3/3.dat	field	29	0	kind	38
+decoded_dat/s/3/3.dat	field	29	0	x	3231
+decoded_dat/s/3/3.dat	field	29	0	y	333130303030
+decoded_dat/s/3/3.dat	field	29	0	w	3433
+decoded_dat/s/3/3.dat	field	29	0	h	393939
+decoded_dat/s/3/3.dat	field	29	0	dvx	3831
+decoded_dat/s/3/3.dat	frame	30	81		73706f74
+decoded_dat/s/3/3.dat	field	30	-1	pic	393939
+decoded_dat/s/3/3.dat	field	30	-1	state	33303035
+decoded_dat/s/3/3.dat	field	30	-1	wait	30
+decoded_dat/s/3/3.dat	field	30	-1	next	3832
+decoded_dat/s/3/3.dat	field	30	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	30	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	31	82		73706f74
+decoded_dat/s/3/3.dat	field	31	-1	pic	393939
+decoded_dat/s/3/3.dat	field	31	-1	state	33303035
+decoded_dat/s/3/3.dat	field	31	-1	wait	31
+decoded_dat/s/3/3.dat	field	31	-1	next	31303030
+decoded_dat/s/3/3.dat	field	31	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	31	-1	centery	3739
+decoded_dat/s/3/3.dat	block	31	0	opoint	
+decoded_dat/s/3/3.dat	field	31	0	kind	31
+decoded_dat/s/3/3.dat	field	31	0	x	313530
+decoded_dat/s/3/3.dat	field	31	0	y	30
+decoded_dat/s/3/3.dat	field	31	0	action	313931
+decoded_dat/s/3/3.dat	field	31	0	oid	333033
+decoded_dat/s/3/3.dat	field	31	0	facing	3130
+decoded_dat/s/3/3.dat	frame	32	90		776f6f64
+decoded_dat/s/3/3.dat	field	32	-1	pic	3736
+decoded_dat/s/3/3.dat	field	32	-1	state	33303035
+decoded_dat/s/3/3.dat	field	32	-1	wait	3130
+decoded_dat/s/3/3.dat	field	32	-1	next	3930
+decoded_dat/s/3/3.dat	field	32	-1	centerx	3430
+decoded_dat/s/3/3.dat	field	32	-1	centery	3738
+decoded_dat/s/3/3.dat	block	32	0	itr	
+decoded_dat/s/3/3.dat	field	32	0	kind	38
+decoded_dat/s/3/3.dat	field	32	0	respond	32
+decoded_dat/s/3/3.dat	field	32	0	x	3336
+decoded_dat/s/3/3.dat	field	32	0	y	3635
+decoded_dat/s/3/3.dat	field	32	0	w	3135
+decoded_dat/s/3/3.dat	field	32	0	h	35
+decoded_dat/s/3/3.dat	field	32	0	dvx	3931
+decoded_dat/s/3/3.dat	block	32	1	bdy	
+decoded_dat/s/3/3.dat	field	32	1	kind	30
+decoded_dat/s/3/3.dat	field	32	1	x	2d39
+decoded_dat/s/3/3.dat	field	32	1	y	33303337303030
+decoded_dat/s/3/3.dat	field	32	1	w	3939
+decoded_dat/s/3/3.dat	field	32	1	h	313939
+decoded_dat/s/3/3.dat	frame	33	91		776f6f64
+decoded_dat/s/3/3.dat	field	33	-1	pic	393939
+decoded_dat/s/3/3.dat	field	33	-1	state	30
+decoded_dat/s/3/3.dat	field	33	-1	wait	30
+decoded_dat/s/3/3.dat	field	33	-1	next	3932
+decoded_dat/s/3/3.dat	field	33	-1	centerx	3338
+decoded_dat/s/3/3.dat	field	33	-1	centery	3738
+decoded_dat/s/3/3.dat	frame	34	92		776f6f64
+decoded_dat/s/3/3.dat	field	34	-1	pic	393939
+decoded_dat/s/3/3.dat	field	34	-1	state	3135
+decoded_dat/s/3/3.dat	field	34	-1	wait	30
+decoded_dat/s/3/3.dat	field	34	-1	next	3933
+decoded_dat/s/3/3.dat	field	34	-1	centerx	3338
+decoded_dat/s/3/3.dat	field	34	-1	centery	3739
+decoded_dat/s/3/3.dat	field	34	-1	sound	646174615c3032302e776176
+decoded_dat/s/3/3.dat	block	34	0	opoint	
+decoded_dat/s/3/3.dat	field	34	0	kind	31
+decoded_dat/s/3/3.dat	field	34	0	x	3430
+decoded_dat/s/3/3.dat	field	34	0	y	3835
+decoded_dat/s/3/3.dat	field	34	0	action	353735
+decoded_dat/s/3/3.dat	field	34	0	oid	353535
+decoded_dat/s/3/3.dat	field	34	0	facing	30
+decoded_dat/s/3/3.dat	frame	35	93		776f6f64
+decoded_dat/s/3/3.dat	field	35	-1	pic	393939
+decoded_dat/s/3/3.dat	field	35	-1	state	33303035
+decoded_dat/s/3/3.dat	field	35	-1	wait	39
+decoded_dat/s/3/3.dat	field	35	-1	next	3933
+decoded_dat/s/3/3.dat	field	35	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	35	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	35	-1	centerx	3338
+decoded_dat/s/3/3.dat	field	35	-1	centery	3739
+decoded_dat/s/3/3.dat	block	35	0	bdy	
+decoded_dat/s/3/3.dat	field	35	0	kind	30
+decoded_dat/s/3/3.dat	field	35	0	x	2d39
+decoded_dat/s/3/3.dat	field	35	0	y	33303331303030
+decoded_dat/s/3/3.dat	field	35	0	w	3939
+decoded_dat/s/3/3.dat	field	35	0	h	313939
+decoded_dat/s/3/3.dat	frame	36	99		64
+decoded_dat/s/3/3.dat	field	36	-1	pic	393939
+decoded_dat/s/3/3.dat	field	36	-1	state	33303035
+decoded_dat/s/3/3.dat	field	36	-1	wait	31
+decoded_dat/s/3/3.dat	field	36	-1	next	31303030
+decoded_dat/s/3/3.dat	field	36	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	36	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	36	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	36	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	37	100		6e
+decoded_dat/s/3/3.dat	field	37	-1	pic	3335
+decoded_dat/s/3/3.dat	field	37	-1	state	3135
+decoded_dat/s/3/3.dat	field	37	-1	wait	33
+decoded_dat/s/3/3.dat	field	37	-1	next	313031
+decoded_dat/s/3/3.dat	field	37	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	37	-1	centery	3739
+decoded_dat/s/3/3.dat	block	37	0	itr	
+decoded_dat/s/3/3.dat	field	37	0	kind	38
+decoded_dat/s/3/3.dat	field	37	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	37	0	x	3231
+decoded_dat/s/3/3.dat	field	37	0	y	333130303030
+decoded_dat/s/3/3.dat	field	37	0	w	3433
+decoded_dat/s/3/3.dat	field	37	0	h	313939
+decoded_dat/s/3/3.dat	field	37	0	dvx	313034
+decoded_dat/s/3/3.dat	block	37	1	itr	
+decoded_dat/s/3/3.dat	field	37	1	kind	38
+decoded_dat/s/3/3.dat	field	37	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	37	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	37	1	y	3232303030
+decoded_dat/s/3/3.dat	field	37	1	w	3939393939
+decoded_dat/s/3/3.dat	field	37	1	h	313939
+decoded_dat/s/3/3.dat	field	37	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	37	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	38	101		6e
+decoded_dat/s/3/3.dat	field	38	-1	pic	3336
+decoded_dat/s/3/3.dat	field	38	-1	state	3135
+decoded_dat/s/3/3.dat	field	38	-1	wait	33
+decoded_dat/s/3/3.dat	field	38	-1	next	313032
+decoded_dat/s/3/3.dat	field	38	-1	centerx	3338
+decoded_dat/s/3/3.dat	field	38	-1	centery	3739
+decoded_dat/s/3/3.dat	block	38	0	itr	
+decoded_dat/s/3/3.dat	field	38	0	kind	38
+decoded_dat/s/3/3.dat	field	38	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	38	0	x	3231
+decoded_dat/s/3/3.dat	field	38	0	y	333130303030
+decoded_dat/s/3/3.dat	field	38	0	w	3433
+decoded_dat/s/3/3.dat	field	38	0	h	313939
+decoded_dat/s/3/3.dat	field	38	0	dvx	313034
+decoded_dat/s/3/3.dat	block	38	1	itr	
+decoded_dat/s/3/3.dat	field	38	1	kind	38
+decoded_dat/s/3/3.dat	field	38	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	38	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	38	1	y	3232303030
+decoded_dat/s/3/3.dat	field	38	1	w	3939393939
+decoded_dat/s/3/3.dat	field	38	1	h	313939
+decoded_dat/s/3/3.dat	field	38	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	38	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	39	102		6e
+decoded_dat/s/3/3.dat	field	39	-1	pic	3337
+decoded_dat/s/3/3.dat	field	39	-1	state	3135
+decoded_dat/s/3/3.dat	field	39	-1	wait	33
+decoded_dat/s/3/3.dat	field	39	-1	next	313033
+decoded_dat/s/3/3.dat	field	39	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	39	-1	centery	3739
+decoded_dat/s/3/3.dat	block	39	0	itr	
+decoded_dat/s/3/3.dat	field	39	0	kind	38
+decoded_dat/s/3/3.dat	field	39	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	39	0	x	3231
+decoded_dat/s/3/3.dat	field	39	0	y	333130303030
+decoded_dat/s/3/3.dat	field	39	0	w	3433
+decoded_dat/s/3/3.dat	field	39	0	h	313939
+decoded_dat/s/3/3.dat	field	39	0	dvx	313034
+decoded_dat/s/3/3.dat	block	39	1	itr	
+decoded_dat/s/3/3.dat	field	39	1	kind	38
+decoded_dat/s/3/3.dat	field	39	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	39	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	39	1	y	3232303030
+decoded_dat/s/3/3.dat	field	39	1	w	3939393939
+decoded_dat/s/3/3.dat	field	39	1	h	313939
+decoded_dat/s/3/3.dat	field	39	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	39	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	40	103		6e
+decoded_dat/s/3/3.dat	field	40	-1	pic	3338
+decoded_dat/s/3/3.dat	field	40	-1	state	3135
+decoded_dat/s/3/3.dat	field	40	-1	wait	33
+decoded_dat/s/3/3.dat	field	40	-1	next	313030
+decoded_dat/s/3/3.dat	field	40	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	40	-1	centery	3739
+decoded_dat/s/3/3.dat	block	40	0	itr	
+decoded_dat/s/3/3.dat	field	40	0	kind	38
+decoded_dat/s/3/3.dat	field	40	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	40	0	x	3231
+decoded_dat/s/3/3.dat	field	40	0	y	333130303030
+decoded_dat/s/3/3.dat	field	40	0	w	3433
+decoded_dat/s/3/3.dat	field	40	0	h	313939
+decoded_dat/s/3/3.dat	field	40	0	dvx	313034
+decoded_dat/s/3/3.dat	block	40	1	itr	
+decoded_dat/s/3/3.dat	field	40	1	kind	38
+decoded_dat/s/3/3.dat	field	40	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	40	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	40	1	y	3232303030
+decoded_dat/s/3/3.dat	field	40	1	w	3939393939
+decoded_dat/s/3/3.dat	field	40	1	h	313939
+decoded_dat/s/3/3.dat	field	40	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	40	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	41	104		6e
+decoded_dat/s/3/3.dat	field	41	-1	pic	3337
+decoded_dat/s/3/3.dat	field	41	-1	state	38303032
+decoded_dat/s/3/3.dat	field	41	-1	wait	31303030
+decoded_dat/s/3/3.dat	field	41	-1	next	33
+decoded_dat/s/3/3.dat	field	41	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	41	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	42	106		73
+decoded_dat/s/3/3.dat	field	42	-1	pic	3339
+decoded_dat/s/3/3.dat	field	42	-1	state	3135
+decoded_dat/s/3/3.dat	field	42	-1	wait	33
+decoded_dat/s/3/3.dat	field	42	-1	next	313037
+decoded_dat/s/3/3.dat	field	42	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	42	-1	centery	3739
+decoded_dat/s/3/3.dat	block	42	0	itr	
+decoded_dat/s/3/3.dat	field	42	0	kind	38
+decoded_dat/s/3/3.dat	field	42	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	42	0	x	3231
+decoded_dat/s/3/3.dat	field	42	0	y	333130303030
+decoded_dat/s/3/3.dat	field	42	0	w	3433
+decoded_dat/s/3/3.dat	field	42	0	h	313939
+decoded_dat/s/3/3.dat	field	42	0	dvx	313130
+decoded_dat/s/3/3.dat	block	42	1	itr	
+decoded_dat/s/3/3.dat	field	42	1	kind	38
+decoded_dat/s/3/3.dat	field	42	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	42	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	42	1	y	3132303030
+decoded_dat/s/3/3.dat	field	42	1	w	3939393939
+decoded_dat/s/3/3.dat	field	42	1	h	313939
+decoded_dat/s/3/3.dat	field	42	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	42	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	43	107		73
+decoded_dat/s/3/3.dat	field	43	-1	pic	3430
+decoded_dat/s/3/3.dat	field	43	-1	state	3135
+decoded_dat/s/3/3.dat	field	43	-1	wait	33
+decoded_dat/s/3/3.dat	field	43	-1	next	313038
+decoded_dat/s/3/3.dat	field	43	-1	centerx	3338
+decoded_dat/s/3/3.dat	field	43	-1	centery	3739
+decoded_dat/s/3/3.dat	block	43	0	itr	
+decoded_dat/s/3/3.dat	field	43	0	kind	38
+decoded_dat/s/3/3.dat	field	43	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	43	0	x	3231
+decoded_dat/s/3/3.dat	field	43	0	y	333130303030
+decoded_dat/s/3/3.dat	field	43	0	w	3433
+decoded_dat/s/3/3.dat	field	43	0	h	313939
+decoded_dat/s/3/3.dat	field	43	0	dvx	313130
+decoded_dat/s/3/3.dat	block	43	1	itr	
+decoded_dat/s/3/3.dat	field	43	1	kind	38
+decoded_dat/s/3/3.dat	field	43	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	43	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	43	1	y	3132303030
+decoded_dat/s/3/3.dat	field	43	1	w	3939393939
+decoded_dat/s/3/3.dat	field	43	1	h	313939
+decoded_dat/s/3/3.dat	field	43	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	43	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	44	108		73
+decoded_dat/s/3/3.dat	field	44	-1	pic	3431
+decoded_dat/s/3/3.dat	field	44	-1	state	3135
+decoded_dat/s/3/3.dat	field	44	-1	wait	33
+decoded_dat/s/3/3.dat	field	44	-1	next	313039
+decoded_dat/s/3/3.dat	field	44	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	44	-1	centery	3739
+decoded_dat/s/3/3.dat	block	44	0	itr	
+decoded_dat/s/3/3.dat	field	44	0	kind	38
+decoded_dat/s/3/3.dat	field	44	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	44	0	x	3231
+decoded_dat/s/3/3.dat	field	44	0	y	333130303030
+decoded_dat/s/3/3.dat	field	44	0	w	3433
+decoded_dat/s/3/3.dat	field	44	0	h	313939
+decoded_dat/s/3/3.dat	field	44	0	dvx	313130
+decoded_dat/s/3/3.dat	block	44	1	itr	
+decoded_dat/s/3/3.dat	field	44	1	kind	38
+decoded_dat/s/3/3.dat	field	44	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	44	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	44	1	y	3132303030
+decoded_dat/s/3/3.dat	field	44	1	w	3939393939
+decoded_dat/s/3/3.dat	field	44	1	h	313939
+decoded_dat/s/3/3.dat	field	44	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	44	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	45	109		73
+decoded_dat/s/3/3.dat	field	45	-1	pic	3432
+decoded_dat/s/3/3.dat	field	45	-1	state	3135
+decoded_dat/s/3/3.dat	field	45	-1	wait	33
+decoded_dat/s/3/3.dat	field	45	-1	next	313036
+decoded_dat/s/3/3.dat	field	45	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	45	-1	centery	3739
+decoded_dat/s/3/3.dat	block	45	0	itr	
+decoded_dat/s/3/3.dat	field	45	0	kind	38
+decoded_dat/s/3/3.dat	field	45	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	45	0	x	3231
+decoded_dat/s/3/3.dat	field	45	0	y	333130303030
+decoded_dat/s/3/3.dat	field	45	0	w	3433
+decoded_dat/s/3/3.dat	field	45	0	h	313939
+decoded_dat/s/3/3.dat	field	45	0	dvx	313130
+decoded_dat/s/3/3.dat	block	45	1	itr	
+decoded_dat/s/3/3.dat	field	45	1	kind	38
+decoded_dat/s/3/3.dat	field	45	1	dvy	2d31
+decoded_dat/s/3/3.dat	field	45	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	45	1	y	3132303030
+decoded_dat/s/3/3.dat	field	45	1	w	3939393939
+decoded_dat/s/3/3.dat	field	45	1	h	313939
+decoded_dat/s/3/3.dat	field	45	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	45	1	dvx	3939
+decoded_dat/s/3/3.dat	frame	46	110		73
+decoded_dat/s/3/3.dat	field	46	-1	pic	3337
+decoded_dat/s/3/3.dat	field	46	-1	state	38373035
+decoded_dat/s/3/3.dat	field	46	-1	wait	31303030
+decoded_dat/s/3/3.dat	field	46	-1	next	33
+decoded_dat/s/3/3.dat	field	46	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	46	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	47	112		79
+decoded_dat/s/3/3.dat	field	47	-1	pic	3531
+decoded_dat/s/3/3.dat	field	47	-1	state	3135
+decoded_dat/s/3/3.dat	field	47	-1	wait	3130
+decoded_dat/s/3/3.dat	field	47	-1	next	313133
+decoded_dat/s/3/3.dat	field	47	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	47	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	48	113		79
+decoded_dat/s/3/3.dat	field	48	-1	pic	3531
+decoded_dat/s/3/3.dat	field	48	-1	state	3135
+decoded_dat/s/3/3.dat	field	48	-1	wait	3530
+decoded_dat/s/3/3.dat	field	48	-1	next	313134
+decoded_dat/s/3/3.dat	field	48	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	48	-1	centery	3739
+decoded_dat/s/3/3.dat	block	48	0	opoint	
+decoded_dat/s/3/3.dat	field	48	0	kind	31
+decoded_dat/s/3/3.dat	field	48	0	x	313530
+decoded_dat/s/3/3.dat	field	48	0	y	30
+decoded_dat/s/3/3.dat	field	48	0	action	313830
+decoded_dat/s/3/3.dat	field	48	0	oid	333033
+decoded_dat/s/3/3.dat	field	48	0	facing	3130
+decoded_dat/s/3/3.dat	frame	49	114		79
+decoded_dat/s/3/3.dat	field	49	-1	pic	3531
+decoded_dat/s/3/3.dat	field	49	-1	state	3135
+decoded_dat/s/3/3.dat	field	49	-1	wait	33
+decoded_dat/s/3/3.dat	field	49	-1	next	313135
+decoded_dat/s/3/3.dat	field	49	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	49	-1	centery	3739
+decoded_dat/s/3/3.dat	block	49	0	opoint	
+decoded_dat/s/3/3.dat	field	49	0	kind	31
+decoded_dat/s/3/3.dat	field	49	0	x	3339
+decoded_dat/s/3/3.dat	field	49	0	y	3739
+decoded_dat/s/3/3.dat	field	49	0	action	3630
+decoded_dat/s/3/3.dat	field	49	0	oid	323034
+decoded_dat/s/3/3.dat	frame	50	115		79
+decoded_dat/s/3/3.dat	field	50	-1	pic	3433
+decoded_dat/s/3/3.dat	field	50	-1	state	3135
+decoded_dat/s/3/3.dat	field	50	-1	wait	33
+decoded_dat/s/3/3.dat	field	50	-1	next	313136
+decoded_dat/s/3/3.dat	field	50	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	50	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	51	116		79
+decoded_dat/s/3/3.dat	field	51	-1	pic	3434
+decoded_dat/s/3/3.dat	field	51	-1	state	3135
+decoded_dat/s/3/3.dat	field	51	-1	wait	33
+decoded_dat/s/3/3.dat	field	51	-1	next	313137
+decoded_dat/s/3/3.dat	field	51	-1	centerx	3434
+decoded_dat/s/3/3.dat	field	51	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	52	117		79
+decoded_dat/s/3/3.dat	field	52	-1	pic	3435
+decoded_dat/s/3/3.dat	field	52	-1	state	3135
+decoded_dat/s/3/3.dat	field	52	-1	wait	33
+decoded_dat/s/3/3.dat	field	52	-1	next	313138
+decoded_dat/s/3/3.dat	field	52	-1	centerx	3537
+decoded_dat/s/3/3.dat	field	52	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	53	118		79
+decoded_dat/s/3/3.dat	field	53	-1	pic	3436
+decoded_dat/s/3/3.dat	field	53	-1	state	3135
+decoded_dat/s/3/3.dat	field	53	-1	wait	33
+decoded_dat/s/3/3.dat	field	53	-1	next	313139
+decoded_dat/s/3/3.dat	field	53	-1	centerx	3537
+decoded_dat/s/3/3.dat	field	53	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	54	119		79
+decoded_dat/s/3/3.dat	field	54	-1	pic	3437
+decoded_dat/s/3/3.dat	field	54	-1	state	3135
+decoded_dat/s/3/3.dat	field	54	-1	wait	33
+decoded_dat/s/3/3.dat	field	54	-1	next	313230
+decoded_dat/s/3/3.dat	field	54	-1	dvx	35
+decoded_dat/s/3/3.dat	field	54	-1	centerx	3430
+decoded_dat/s/3/3.dat	field	54	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	55	120		79
+decoded_dat/s/3/3.dat	field	55	-1	pic	3438
+decoded_dat/s/3/3.dat	field	55	-1	state	3135
+decoded_dat/s/3/3.dat	field	55	-1	wait	33
+decoded_dat/s/3/3.dat	field	55	-1	next	313231
+decoded_dat/s/3/3.dat	field	55	-1	dvx	35
+decoded_dat/s/3/3.dat	field	55	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	55	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	56	121		79
+decoded_dat/s/3/3.dat	field	56	-1	pic	3439
+decoded_dat/s/3/3.dat	field	56	-1	state	3135
+decoded_dat/s/3/3.dat	field	56	-1	wait	33
+decoded_dat/s/3/3.dat	field	56	-1	next	313232
+decoded_dat/s/3/3.dat	field	56	-1	dvx	35
+decoded_dat/s/3/3.dat	field	56	-1	centerx	3436
+decoded_dat/s/3/3.dat	field	56	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	57	122		79
+decoded_dat/s/3/3.dat	field	57	-1	pic	3530
+decoded_dat/s/3/3.dat	field	57	-1	state	3135
+decoded_dat/s/3/3.dat	field	57	-1	wait	33
+decoded_dat/s/3/3.dat	field	57	-1	next	313139
+decoded_dat/s/3/3.dat	field	57	-1	dvx	35
+decoded_dat/s/3/3.dat	field	57	-1	centerx	3533
+decoded_dat/s/3/3.dat	field	57	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	58	123		79
+decoded_dat/s/3/3.dat	field	58	-1	pic	3433
+decoded_dat/s/3/3.dat	field	58	-1	state	3135
+decoded_dat/s/3/3.dat	field	58	-1	wait	31
+decoded_dat/s/3/3.dat	field	58	-1	next	313234
+decoded_dat/s/3/3.dat	field	58	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	58	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	59	124		79
+decoded_dat/s/3/3.dat	field	59	-1	pic	3433
+decoded_dat/s/3/3.dat	field	59	-1	state	3135
+decoded_dat/s/3/3.dat	field	59	-1	wait	3230
+decoded_dat/s/3/3.dat	field	59	-1	next	313235
+decoded_dat/s/3/3.dat	field	59	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	59	-1	centery	3739
+decoded_dat/s/3/3.dat	block	59	0	opoint	
+decoded_dat/s/3/3.dat	field	59	0	kind	31
+decoded_dat/s/3/3.dat	field	59	0	x	323339
+decoded_dat/s/3/3.dat	field	59	0	y	3739
+decoded_dat/s/3/3.dat	field	59	0	action	333930
+decoded_dat/s/3/3.dat	field	59	0	oid	3233
+decoded_dat/s/3/3.dat	field	59	0	facing	3131
+decoded_dat/s/3/3.dat	frame	60	125		79
+decoded_dat/s/3/3.dat	field	60	-1	pic	3433
+decoded_dat/s/3/3.dat	field	60	-1	state	3135
+decoded_dat/s/3/3.dat	field	60	-1	wait	363530
+decoded_dat/s/3/3.dat	field	60	-1	next	313236
+decoded_dat/s/3/3.dat	field	60	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	60	-1	centery	3739
+decoded_dat/s/3/3.dat	block	60	0	opoint	
+decoded_dat/s/3/3.dat	field	60	0	kind	31
+decoded_dat/s/3/3.dat	field	60	0	x	313530
+decoded_dat/s/3/3.dat	field	60	0	y	30
+decoded_dat/s/3/3.dat	field	60	0	action	313935
+decoded_dat/s/3/3.dat	field	60	0	oid	333033
+decoded_dat/s/3/3.dat	field	60	0	facing	3130
+decoded_dat/s/3/3.dat	frame	61	126		79
+decoded_dat/s/3/3.dat	field	61	-1	pic	3433
+decoded_dat/s/3/3.dat	field	61	-1	state	3135
+decoded_dat/s/3/3.dat	field	61	-1	wait	31
+decoded_dat/s/3/3.dat	field	61	-1	next	313237
+decoded_dat/s/3/3.dat	field	61	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	61	-1	centery	3739
+decoded_dat/s/3/3.dat	block	61	0	opoint	
+decoded_dat/s/3/3.dat	field	61	0	kind	31
+decoded_dat/s/3/3.dat	field	61	0	x	3339
+decoded_dat/s/3/3.dat	field	61	0	y	3739
+decoded_dat/s/3/3.dat	field	61	0	action	3630
+decoded_dat/s/3/3.dat	field	61	0	oid	323034
+decoded_dat/s/3/3.dat	frame	62	127		79
+decoded_dat/s/3/3.dat	field	62	-1	pic	3632
+decoded_dat/s/3/3.dat	field	62	-1	state	3135
+decoded_dat/s/3/3.dat	field	62	-1	wait	39
+decoded_dat/s/3/3.dat	field	62	-1	next	313238
+decoded_dat/s/3/3.dat	field	62	-1	dvx	2d3135
+decoded_dat/s/3/3.dat	field	62	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	62	-1	centery	3739
+decoded_dat/s/3/3.dat	block	62	0	opoint	
+decoded_dat/s/3/3.dat	field	62	0	kind	31
+decoded_dat/s/3/3.dat	field	62	0	x	373339
+decoded_dat/s/3/3.dat	field	62	0	y	3739
+decoded_dat/s/3/3.dat	field	62	0	action	333930
+decoded_dat/s/3/3.dat	field	62	0	oid	3230
+decoded_dat/s/3/3.dat	field	62	0	facing	3131
+decoded_dat/s/3/3.dat	frame	63	128		79
+decoded_dat/s/3/3.dat	field	63	-1	pic	3637
+decoded_dat/s/3/3.dat	field	63	-1	state	3135
+decoded_dat/s/3/3.dat	field	63	-1	wait	313730
+decoded_dat/s/3/3.dat	field	63	-1	next	313239
+decoded_dat/s/3/3.dat	field	63	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	63	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	63	-1	centery	3739
+decoded_dat/s/3/3.dat	block	63	0	opoint	
+decoded_dat/s/3/3.dat	field	63	0	kind	31
+decoded_dat/s/3/3.dat	field	63	0	x	313530
+decoded_dat/s/3/3.dat	field	63	0	y	30
+decoded_dat/s/3/3.dat	field	63	0	action	323039
+decoded_dat/s/3/3.dat	field	63	0	oid	333033
+decoded_dat/s/3/3.dat	field	63	0	facing	3130
+decoded_dat/s/3/3.dat	frame	64	129		79
+decoded_dat/s/3/3.dat	field	64	-1	pic	3632
+decoded_dat/s/3/3.dat	field	64	-1	state	3135
+decoded_dat/s/3/3.dat	field	64	-1	wait	3939
+decoded_dat/s/3/3.dat	field	64	-1	next	31303030
+decoded_dat/s/3/3.dat	field	64	-1	dvx	2d3530
+decoded_dat/s/3/3.dat	field	64	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	64	-1	centery	3739
+decoded_dat/s/3/3.dat	field	64	-1	sound	646174615c3031372e776176
+decoded_dat/s/3/3.dat	block	64	0	opoint	
+decoded_dat/s/3/3.dat	field	64	0	kind	31
+decoded_dat/s/3/3.dat	field	64	0	x	2d373339
+decoded_dat/s/3/3.dat	field	64	0	y	3739
+decoded_dat/s/3/3.dat	field	64	0	action	343930
+decoded_dat/s/3/3.dat	field	64	0	oid	3532
+decoded_dat/s/3/3.dat	field	64	0	facing	30
+decoded_dat/s/3/3.dat	frame	65	130		79
+decoded_dat/s/3/3.dat	field	65	-1	pic	3632
+decoded_dat/s/3/3.dat	field	65	-1	state	3135
+decoded_dat/s/3/3.dat	field	65	-1	wait	33
+decoded_dat/s/3/3.dat	field	65	-1	next	313331
+decoded_dat/s/3/3.dat	field	65	-1	dvx	3135
+decoded_dat/s/3/3.dat	field	65	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	65	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	66	131		79
+decoded_dat/s/3/3.dat	field	66	-1	pic	3731
+decoded_dat/s/3/3.dat	field	66	-1	state	3135
+decoded_dat/s/3/3.dat	field	66	-1	wait	33
+decoded_dat/s/3/3.dat	field	66	-1	next	313332
+decoded_dat/s/3/3.dat	field	66	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	66	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	66	-1	centery	3739
+decoded_dat/s/3/3.dat	block	66	0	opoint	
+decoded_dat/s/3/3.dat	field	66	0	kind	31
+decoded_dat/s/3/3.dat	field	66	0	x	313530
+decoded_dat/s/3/3.dat	field	66	0	y	30
+decoded_dat/s/3/3.dat	field	66	0	action	323131
+decoded_dat/s/3/3.dat	field	66	0	oid	333033
+decoded_dat/s/3/3.dat	field	66	0	facing	3130
+decoded_dat/s/3/3.dat	block	66	1	bdy	
+decoded_dat/s/3/3.dat	field	66	1	kind	30
+decoded_dat/s/3/3.dat	field	66	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	66	1	y	35303836303030
+decoded_dat/s/3/3.dat	field	66	1	w	3939393939
+decoded_dat/s/3/3.dat	field	66	1	h	313939
+decoded_dat/s/3/3.dat	field	66	1	zwidth	313939
+decoded_dat/s/3/3.dat	frame	67	132		79
+decoded_dat/s/3/3.dat	field	67	-1	pic	3731
+decoded_dat/s/3/3.dat	field	67	-1	state	3135
+decoded_dat/s/3/3.dat	field	67	-1	wait	313830
+decoded_dat/s/3/3.dat	field	67	-1	next	313333
+decoded_dat/s/3/3.dat	field	67	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	67	-1	centery	3739
+decoded_dat/s/3/3.dat	block	67	0	bdy	
+decoded_dat/s/3/3.dat	field	67	0	kind	30
+decoded_dat/s/3/3.dat	field	67	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	67	0	y	35303836303030
+decoded_dat/s/3/3.dat	field	67	0	w	3939393939
+decoded_dat/s/3/3.dat	field	67	0	h	313939
+decoded_dat/s/3/3.dat	field	67	0	zwidth	313939
+decoded_dat/s/3/3.dat	frame	68	133		79
+decoded_dat/s/3/3.dat	field	68	-1	pic	3732
+decoded_dat/s/3/3.dat	field	68	-1	state	3135
+decoded_dat/s/3/3.dat	field	68	-1	wait	31
+decoded_dat/s/3/3.dat	field	68	-1	next	313334
+decoded_dat/s/3/3.dat	field	68	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	68	-1	centery	3739
+decoded_dat/s/3/3.dat	block	68	0	bdy	
+decoded_dat/s/3/3.dat	field	68	0	kind	30
+decoded_dat/s/3/3.dat	field	68	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	68	0	y	35303836303030
+decoded_dat/s/3/3.dat	field	68	0	w	3939393939
+decoded_dat/s/3/3.dat	field	68	0	h	313939
+decoded_dat/s/3/3.dat	field	68	0	zwidth	313939
+decoded_dat/s/3/3.dat	frame	69	134		79
+decoded_dat/s/3/3.dat	field	69	-1	pic	3733
+decoded_dat/s/3/3.dat	field	69	-1	state	3135
+decoded_dat/s/3/3.dat	field	69	-1	wait	3131
+decoded_dat/s/3/3.dat	field	69	-1	next	313332
+decoded_dat/s/3/3.dat	field	69	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	69	-1	centery	3739
+decoded_dat/s/3/3.dat	block	69	0	itr	
+decoded_dat/s/3/3.dat	field	69	0	kind	30
+decoded_dat/s/3/3.dat	field	69	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	69	0	y	2d3939
+decoded_dat/s/3/3.dat	field	69	0	w	3939393939
+decoded_dat/s/3/3.dat	field	69	0	h	313939
+decoded_dat/s/3/3.dat	field	69	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	69	0	bdefend	3730
+decoded_dat/s/3/3.dat	field	69	0	fall	3730
+decoded_dat/s/3/3.dat	field	69	0	injury	3939
+decoded_dat/s/3/3.dat	field	69	0	effect	38
+decoded_dat/s/3/3.dat	field	69	0	caughtact	353030
+decoded_dat/s/3/3.dat	field	69	0	sound	31
+decoded_dat/s/3/3.dat	block	69	1	bdy	
+decoded_dat/s/3/3.dat	field	69	1	kind	30
+decoded_dat/s/3/3.dat	field	69	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	69	1	y	35303836303030
+decoded_dat/s/3/3.dat	field	69	1	w	3939393939
+decoded_dat/s/3/3.dat	field	69	1	h	313939
+decoded_dat/s/3/3.dat	field	69	1	zwidth	313939
+decoded_dat/s/3/3.dat	frame	70	170		74726565
+decoded_dat/s/3/3.dat	field	70	-1	pic	393939
+decoded_dat/s/3/3.dat	field	70	-1	state	33303030
+decoded_dat/s/3/3.dat	field	70	-1	wait	31
+decoded_dat/s/3/3.dat	field	70	-1	next	2d313731
+decoded_dat/s/3/3.dat	field	70	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	70	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	70	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	70	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	70	-1	centery	323530
+decoded_dat/s/3/3.dat	field	70	-1	hit_Fj	313732
+decoded_dat/s/3/3.dat	field	70	-1	hit_Uj	313732
+decoded_dat/s/3/3.dat	field	70	-1	hit_Dj	313732
+decoded_dat/s/3/3.dat	field	70	-1	hit_ja	313732
+decoded_dat/s/3/3.dat	block	70	0	bdy	
+decoded_dat/s/3/3.dat	field	70	0	kind	30
+decoded_dat/s/3/3.dat	field	70	0	x	313130
+decoded_dat/s/3/3.dat	field	70	0	y	3430
+decoded_dat/s/3/3.dat	field	70	0	w	3532
+decoded_dat/s/3/3.dat	field	70	0	h	323330
+decoded_dat/s/3/3.dat	field	70	0	zwidth	3135
+decoded_dat/s/3/3.dat	frame	71	171		74726565
+decoded_dat/s/3/3.dat	field	71	-1	pic	393939
+decoded_dat/s/3/3.dat	field	71	-1	state	33303030
+decoded_dat/s/3/3.dat	field	71	-1	wait	31
+decoded_dat/s/3/3.dat	field	71	-1	next	31303030
+decoded_dat/s/3/3.dat	field	71	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	71	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	71	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	71	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	71	-1	centery	323530
+decoded_dat/s/3/3.dat	field	71	-1	hit_Fj	313732
+decoded_dat/s/3/3.dat	field	71	-1	hit_Uj	313732
+decoded_dat/s/3/3.dat	field	71	-1	hit_Dj	313732
+decoded_dat/s/3/3.dat	field	71	-1	hit_ja	313732
+decoded_dat/s/3/3.dat	block	71	0	bdy	
+decoded_dat/s/3/3.dat	field	71	0	kind	30
+decoded_dat/s/3/3.dat	field	71	0	x	313130
+decoded_dat/s/3/3.dat	field	71	0	y	3430
+decoded_dat/s/3/3.dat	field	71	0	w	3532
+decoded_dat/s/3/3.dat	field	71	0	h	323330
+decoded_dat/s/3/3.dat	field	71	0	zwidth	3135
+decoded_dat/s/3/3.dat	frame	72	172		74726565
+decoded_dat/s/3/3.dat	field	72	-1	pic	393939
+decoded_dat/s/3/3.dat	field	72	-1	state	3138
+decoded_dat/s/3/3.dat	field	72	-1	wait	30
+decoded_dat/s/3/3.dat	field	72	-1	next	313733
+decoded_dat/s/3/3.dat	field	72	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	72	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	72	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	72	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	72	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	73	173		74726565
+decoded_dat/s/3/3.dat	field	73	-1	pic	393939
+decoded_dat/s/3/3.dat	field	73	-1	state	3138
+decoded_dat/s/3/3.dat	field	73	-1	wait	30
+decoded_dat/s/3/3.dat	field	73	-1	next	31303030
+decoded_dat/s/3/3.dat	field	73	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	73	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	73	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	73	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	73	-1	centery	323530
+decoded_dat/s/3/3.dat	block	73	0	opoint	
+decoded_dat/s/3/3.dat	field	73	0	kind	31
+decoded_dat/s/3/3.dat	field	73	0	x	313435
+decoded_dat/s/3/3.dat	field	73	0	y	323530
+decoded_dat/s/3/3.dat	field	73	0	action	313734
+decoded_dat/s/3/3.dat	field	73	0	oid	333033
+decoded_dat/s/3/3.dat	frame	74	174		74726565
+decoded_dat/s/3/3.dat	field	74	-1	pic	393939
+decoded_dat/s/3/3.dat	field	74	-1	state	33303035
+decoded_dat/s/3/3.dat	field	74	-1	wait	31
+decoded_dat/s/3/3.dat	field	74	-1	next	313735
+decoded_dat/s/3/3.dat	field	74	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	74	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	74	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	74	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	74	-1	centery	323530
+decoded_dat/s/3/3.dat	block	74	0	itr	
+decoded_dat/s/3/3.dat	field	74	0	kind	38
+decoded_dat/s/3/3.dat	field	74	0	bdefend	33
+decoded_dat/s/3/3.dat	field	74	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	74	0	x	313230
+decoded_dat/s/3/3.dat	field	74	0	y	33303332303030
+decoded_dat/s/3/3.dat	field	74	0	w	3332
+decoded_dat/s/3/3.dat	field	74	0	h	313939
+decoded_dat/s/3/3.dat	field	74	0	dvx	313736
+decoded_dat/s/3/3.dat	frame	75	175		74726565
+decoded_dat/s/3/3.dat	field	75	-1	pic	393939
+decoded_dat/s/3/3.dat	field	75	-1	state	33303035
+decoded_dat/s/3/3.dat	field	75	-1	wait	31
+decoded_dat/s/3/3.dat	field	75	-1	next	31303030
+decoded_dat/s/3/3.dat	field	75	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	75	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	75	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	75	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	75	-1	centery	323530
+decoded_dat/s/3/3.dat	field	75	-1	hit_Fj	313736
+decoded_dat/s/3/3.dat	field	75	-1	hit_Uj	313736
+decoded_dat/s/3/3.dat	field	75	-1	hit_Dj	313736
+decoded_dat/s/3/3.dat	field	75	-1	hit_ja	313736
+decoded_dat/s/3/3.dat	block	75	0	bdy	
+decoded_dat/s/3/3.dat	field	75	0	kind	30
+decoded_dat/s/3/3.dat	field	75	0	x	313230
+decoded_dat/s/3/3.dat	field	75	0	y	33303332303030
+decoded_dat/s/3/3.dat	field	75	0	w	3332
+decoded_dat/s/3/3.dat	field	75	0	h	313939
+decoded_dat/s/3/3.dat	block	75	1	itr	
+decoded_dat/s/3/3.dat	field	75	1	kind	30
+decoded_dat/s/3/3.dat	field	75	1	x	313230
+decoded_dat/s/3/3.dat	field	75	1	y	33303330303030
+decoded_dat/s/3/3.dat	field	75	1	w	3332
+decoded_dat/s/3/3.dat	field	75	1	h	313939
+decoded_dat/s/3/3.dat	field	75	1	injury	3939
+decoded_dat/s/3/3.dat	frame	76	176		74726565
+decoded_dat/s/3/3.dat	field	76	-1	pic	393939
+decoded_dat/s/3/3.dat	field	76	-1	state	33303035
+decoded_dat/s/3/3.dat	field	76	-1	wait	31
+decoded_dat/s/3/3.dat	field	76	-1	next	31303030
+decoded_dat/s/3/3.dat	field	76	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	76	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	76	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	76	-1	centerx	313435
+decoded_dat/s/3/3.dat	field	76	-1	centery	323530
+decoded_dat/s/3/3.dat	frame	77	180		30
+decoded_dat/s/3/3.dat	field	77	-1	pic	3135
+decoded_dat/s/3/3.dat	field	77	-1	state	33303035
+decoded_dat/s/3/3.dat	field	77	-1	wait	313635
+decoded_dat/s/3/3.dat	field	77	-1	next	313831
+decoded_dat/s/3/3.dat	field	77	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	77	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	77	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	77	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	77	-1	centery	323235
+decoded_dat/s/3/3.dat	field	77	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	78	181		30
+decoded_dat/s/3/3.dat	field	78	-1	pic	393939
+decoded_dat/s/3/3.dat	field	78	-1	state	33303035
+decoded_dat/s/3/3.dat	field	78	-1	wait	3530
+decoded_dat/s/3/3.dat	field	78	-1	next	313933
+decoded_dat/s/3/3.dat	field	78	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	78	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	78	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	78	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	78	-1	centery	323235
+decoded_dat/s/3/3.dat	field	78	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	79	191		31
+decoded_dat/s/3/3.dat	field	79	-1	pic	3136
+decoded_dat/s/3/3.dat	field	79	-1	state	33303035
+decoded_dat/s/3/3.dat	field	79	-1	wait	3530
+decoded_dat/s/3/3.dat	field	79	-1	next	31303030
+decoded_dat/s/3/3.dat	field	79	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	79	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	79	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	79	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	79	-1	centery	323235
+decoded_dat/s/3/3.dat	field	79	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	80	192		3132
+decoded_dat/s/3/3.dat	field	80	-1	pic	3236
+decoded_dat/s/3/3.dat	field	80	-1	state	33303035
+decoded_dat/s/3/3.dat	field	80	-1	wait	313635
+decoded_dat/s/3/3.dat	field	80	-1	next	31303030
+decoded_dat/s/3/3.dat	field	80	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	80	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	80	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	80	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	80	-1	centery	323235
+decoded_dat/s/3/3.dat	field	80	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	81	193		33
+decoded_dat/s/3/3.dat	field	81	-1	pic	3137
+decoded_dat/s/3/3.dat	field	81	-1	state	33303035
+decoded_dat/s/3/3.dat	field	81	-1	wait	313635
+decoded_dat/s/3/3.dat	field	81	-1	next	31303030
+decoded_dat/s/3/3.dat	field	81	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	81	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	81	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	81	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	81	-1	centery	323235
+decoded_dat/s/3/3.dat	field	81	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	82	194		34
+decoded_dat/s/3/3.dat	field	82	-1	pic	3138
+decoded_dat/s/3/3.dat	field	82	-1	state	33303035
+decoded_dat/s/3/3.dat	field	82	-1	wait	313635
+decoded_dat/s/3/3.dat	field	82	-1	next	31303030
+decoded_dat/s/3/3.dat	field	82	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	82	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	82	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	82	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	82	-1	centery	323235
+decoded_dat/s/3/3.dat	field	82	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	83	195		35
+decoded_dat/s/3/3.dat	field	83	-1	pic	3139
+decoded_dat/s/3/3.dat	field	83	-1	state	33303035
+decoded_dat/s/3/3.dat	field	83	-1	wait	313635
+decoded_dat/s/3/3.dat	field	83	-1	next	313936
+decoded_dat/s/3/3.dat	field	83	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	83	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	83	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	83	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	83	-1	centery	323235
+decoded_dat/s/3/3.dat	field	83	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	84	196		36
+decoded_dat/s/3/3.dat	field	84	-1	pic	3230
+decoded_dat/s/3/3.dat	field	84	-1	state	33303035
+decoded_dat/s/3/3.dat	field	84	-1	wait	313635
+decoded_dat/s/3/3.dat	field	84	-1	next	323037
+decoded_dat/s/3/3.dat	field	84	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	84	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	84	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	84	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	84	-1	centery	323235
+decoded_dat/s/3/3.dat	field	84	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	85	207		37
+decoded_dat/s/3/3.dat	field	85	-1	pic	3231
+decoded_dat/s/3/3.dat	field	85	-1	state	33303035
+decoded_dat/s/3/3.dat	field	85	-1	wait	313635
+decoded_dat/s/3/3.dat	field	85	-1	next	323038
+decoded_dat/s/3/3.dat	field	85	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	85	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	85	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	85	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	85	-1	centery	323235
+decoded_dat/s/3/3.dat	field	85	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	86	208		38
+decoded_dat/s/3/3.dat	field	86	-1	pic	3232
+decoded_dat/s/3/3.dat	field	86	-1	state	33303035
+decoded_dat/s/3/3.dat	field	86	-1	wait	313635
+decoded_dat/s/3/3.dat	field	86	-1	next	31303030
+decoded_dat/s/3/3.dat	field	86	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	86	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	86	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	86	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	86	-1	centery	323235
+decoded_dat/s/3/3.dat	field	86	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	87	209		39
+decoded_dat/s/3/3.dat	field	87	-1	pic	3233
+decoded_dat/s/3/3.dat	field	87	-1	state	33303035
+decoded_dat/s/3/3.dat	field	87	-1	wait	313635
+decoded_dat/s/3/3.dat	field	87	-1	next	323130
+decoded_dat/s/3/3.dat	field	87	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	87	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	87	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	87	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	87	-1	centery	323235
+decoded_dat/s/3/3.dat	field	87	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	88	210		3130
+decoded_dat/s/3/3.dat	field	88	-1	pic	3234
+decoded_dat/s/3/3.dat	field	88	-1	state	33303035
+decoded_dat/s/3/3.dat	field	88	-1	wait	3530
+decoded_dat/s/3/3.dat	field	88	-1	next	31303030
+decoded_dat/s/3/3.dat	field	88	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	88	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	88	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	88	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	88	-1	centery	323235
+decoded_dat/s/3/3.dat	field	88	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	89	211		3131
+decoded_dat/s/3/3.dat	field	89	-1	pic	3235
+decoded_dat/s/3/3.dat	field	89	-1	state	33303035
+decoded_dat/s/3/3.dat	field	89	-1	wait	313635
+decoded_dat/s/3/3.dat	field	89	-1	next	333030
+decoded_dat/s/3/3.dat	field	89	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	89	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	89	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	89	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	89	-1	centery	323235
+decoded_dat/s/3/3.dat	field	89	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	90	213		3133
+decoded_dat/s/3/3.dat	field	90	-1	pic	3237
+decoded_dat/s/3/3.dat	field	90	-1	state	33303035
+decoded_dat/s/3/3.dat	field	90	-1	wait	313635
+decoded_dat/s/3/3.dat	field	90	-1	next	323330
+decoded_dat/s/3/3.dat	field	90	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	90	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	90	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	90	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	90	-1	centery	323235
+decoded_dat/s/3/3.dat	field	90	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	91	214		3134
+decoded_dat/s/3/3.dat	field	91	-1	pic	3238
+decoded_dat/s/3/3.dat	field	91	-1	state	33303035
+decoded_dat/s/3/3.dat	field	91	-1	wait	3530
+decoded_dat/s/3/3.dat	field	91	-1	next	323135
+decoded_dat/s/3/3.dat	field	91	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	91	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	91	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	91	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	91	-1	centery	323235
+decoded_dat/s/3/3.dat	field	91	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	92	215		3135
+decoded_dat/s/3/3.dat	field	92	-1	pic	3239
+decoded_dat/s/3/3.dat	field	92	-1	state	33303035
+decoded_dat/s/3/3.dat	field	92	-1	wait	313430
+decoded_dat/s/3/3.dat	field	92	-1	next	31303030
+decoded_dat/s/3/3.dat	field	92	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	92	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	92	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	92	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	92	-1	centery	323235
+decoded_dat/s/3/3.dat	field	92	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	93	216		3136
+decoded_dat/s/3/3.dat	field	93	-1	pic	3330
+decoded_dat/s/3/3.dat	field	93	-1	state	33303035
+decoded_dat/s/3/3.dat	field	93	-1	wait	313635
+decoded_dat/s/3/3.dat	field	93	-1	next	31303030
+decoded_dat/s/3/3.dat	field	93	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	93	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	93	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	93	-1	centerx	313530
+decoded_dat/s/3/3.dat	field	93	-1	centery	323235
+decoded_dat/s/3/3.dat	field	93	-1	hit_j	31
+decoded_dat/s/3/3.dat	frame	94	220		3133
+decoded_dat/s/3/3.dat	field	94	-1	pic	393939
+decoded_dat/s/3/3.dat	field	94	-1	state	3135
+decoded_dat/s/3/3.dat	field	94	-1	wait	31
+decoded_dat/s/3/3.dat	field	94	-1	next	323231
+decoded_dat/s/3/3.dat	field	94	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	94	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	95	221		3133
+decoded_dat/s/3/3.dat	field	95	-1	pic	393939
+decoded_dat/s/3/3.dat	field	95	-1	state	3135
+decoded_dat/s/3/3.dat	field	95	-1	wait	31
+decoded_dat/s/3/3.dat	field	95	-1	next	31303030
+decoded_dat/s/3/3.dat	field	95	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	95	-1	centery	3739
+decoded_dat/s/3/3.dat	block	95	0	opoint	
+decoded_dat/s/3/3.dat	field	95	0	kind	31
+decoded_dat/s/3/3.dat	field	95	0	x	313530
+decoded_dat/s/3/3.dat	field	95	0	y	30
+decoded_dat/s/3/3.dat	field	95	0	action	323133
+decoded_dat/s/3/3.dat	field	95	0	oid	333033
+decoded_dat/s/3/3.dat	field	95	0	facing	3130
+decoded_dat/s/3/3.dat	frame	96	222		3134
+decoded_dat/s/3/3.dat	field	96	-1	pic	393939
+decoded_dat/s/3/3.dat	field	96	-1	state	3135
+decoded_dat/s/3/3.dat	field	96	-1	wait	31
+decoded_dat/s/3/3.dat	field	96	-1	next	323233
+decoded_dat/s/3/3.dat	field	96	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	96	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	97	223		3134
+decoded_dat/s/3/3.dat	field	97	-1	pic	393939
+decoded_dat/s/3/3.dat	field	97	-1	state	33303035
+decoded_dat/s/3/3.dat	field	97	-1	wait	31
+decoded_dat/s/3/3.dat	field	97	-1	next	31303030
+decoded_dat/s/3/3.dat	field	97	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	97	-1	centery	3739
+decoded_dat/s/3/3.dat	block	97	0	opoint	
+decoded_dat/s/3/3.dat	field	97	0	kind	31
+decoded_dat/s/3/3.dat	field	97	0	x	313530
+decoded_dat/s/3/3.dat	field	97	0	y	30
+decoded_dat/s/3/3.dat	field	97	0	action	323134
+decoded_dat/s/3/3.dat	field	97	0	oid	333033
+decoded_dat/s/3/3.dat	field	97	0	facing	3130
+decoded_dat/s/3/3.dat	frame	98	224		3136
+decoded_dat/s/3/3.dat	field	98	-1	pic	393939
+decoded_dat/s/3/3.dat	field	98	-1	state	3135
+decoded_dat/s/3/3.dat	field	98	-1	wait	31
+decoded_dat/s/3/3.dat	field	98	-1	next	323235
+decoded_dat/s/3/3.dat	field	98	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	98	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	99	225		3136
+decoded_dat/s/3/3.dat	field	99	-1	pic	393939
+decoded_dat/s/3/3.dat	field	99	-1	state	33303035
+decoded_dat/s/3/3.dat	field	99	-1	wait	31
+decoded_dat/s/3/3.dat	field	99	-1	next	31303030
+decoded_dat/s/3/3.dat	field	99	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	99	-1	centery	3739
+decoded_dat/s/3/3.dat	block	99	0	opoint	
+decoded_dat/s/3/3.dat	field	99	0	kind	31
+decoded_dat/s/3/3.dat	field	99	0	x	313530
+decoded_dat/s/3/3.dat	field	99	0	y	30
+decoded_dat/s/3/3.dat	field	99	0	action	323136
+decoded_dat/s/3/3.dat	field	99	0	oid	333033
+decoded_dat/s/3/3.dat	field	99	0	facing	3130
+decoded_dat/s/3/3.dat	frame	100	230		73
+decoded_dat/s/3/3.dat	field	100	-1	pic	393939
+decoded_dat/s/3/3.dat	field	100	-1	state	3135
+decoded_dat/s/3/3.dat	field	100	-1	wait	31
+decoded_dat/s/3/3.dat	field	100	-1	next	31303030
+decoded_dat/s/3/3.dat	field	100	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	100	-1	centery	3739
+decoded_dat/s/3/3.dat	block	100	0	opoint	
+decoded_dat/s/3/3.dat	field	100	0	kind	31
+decoded_dat/s/3/3.dat	field	100	0	x	2d31303530
+decoded_dat/s/3/3.dat	field	100	0	y	2d323030
+decoded_dat/s/3/3.dat	field	100	0	action	343938
+decoded_dat/s/3/3.dat	field	100	0	oid	34
+decoded_dat/s/3/3.dat	field	100	0	facing	3130
+decoded_dat/s/3/3.dat	frame	101	300		7365616c
+decoded_dat/s/3/3.dat	field	101	-1	pic	393939
+decoded_dat/s/3/3.dat	field	101	-1	state	33303035
+decoded_dat/s/3/3.dat	field	101	-1	wait	39
+decoded_dat/s/3/3.dat	field	101	-1	next	333030
+decoded_dat/s/3/3.dat	field	101	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	101	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	101	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	101	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	101	-1	centery	313739
+decoded_dat/s/3/3.dat	block	101	0	itr	
+decoded_dat/s/3/3.dat	field	101	0	kind	38
+decoded_dat/s/3/3.dat	field	101	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	101	0	y	35303830303030
+decoded_dat/s/3/3.dat	field	101	0	w	3939393939
+decoded_dat/s/3/3.dat	field	101	0	h	313939
+decoded_dat/s/3/3.dat	field	101	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	101	0	dvx	333031
+decoded_dat/s/3/3.dat	frame	102	301		7365616c
+decoded_dat/s/3/3.dat	field	102	-1	pic	39
+decoded_dat/s/3/3.dat	field	102	-1	state	33303035
+decoded_dat/s/3/3.dat	field	102	-1	wait	39
+decoded_dat/s/3/3.dat	field	102	-1	next	333031
+decoded_dat/s/3/3.dat	field	102	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	102	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	102	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	102	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	102	-1	centery	313739
+decoded_dat/s/3/3.dat	block	102	0	itr	
+decoded_dat/s/3/3.dat	field	102	0	kind	38
+decoded_dat/s/3/3.dat	field	102	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	102	0	y	35303832303030
+decoded_dat/s/3/3.dat	field	102	0	w	3939393939
+decoded_dat/s/3/3.dat	field	102	0	h	313939
+decoded_dat/s/3/3.dat	field	102	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	102	0	dvx	333030
+decoded_dat/s/3/3.dat	block	102	1	itr	
+decoded_dat/s/3/3.dat	field	102	1	kind	38
+decoded_dat/s/3/3.dat	field	102	1	x	2d39393939
+decoded_dat/s/3/3.dat	field	102	1	y	35303834303030
+decoded_dat/s/3/3.dat	field	102	1	w	3939393939
+decoded_dat/s/3/3.dat	field	102	1	h	313939
+decoded_dat/s/3/3.dat	field	102	1	zwidth	313939
+decoded_dat/s/3/3.dat	field	102	1	dvx	333032
+decoded_dat/s/3/3.dat	frame	103	302		7365616c
+decoded_dat/s/3/3.dat	field	103	-1	pic	3130
+decoded_dat/s/3/3.dat	field	103	-1	state	33303035
+decoded_dat/s/3/3.dat	field	103	-1	wait	31
+decoded_dat/s/3/3.dat	field	103	-1	next	333033
+decoded_dat/s/3/3.dat	field	103	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	103	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	103	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	103	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	103	-1	centery	313739
+decoded_dat/s/3/3.dat	frame	104	303		7365616c
+decoded_dat/s/3/3.dat	field	104	-1	pic	3131
+decoded_dat/s/3/3.dat	field	104	-1	state	33303035
+decoded_dat/s/3/3.dat	field	104	-1	wait	3730
+decoded_dat/s/3/3.dat	field	104	-1	next	333034
+decoded_dat/s/3/3.dat	field	104	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	104	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	104	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	104	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	104	-1	centery	313739
+decoded_dat/s/3/3.dat	frame	105	304		7365616c
+decoded_dat/s/3/3.dat	field	105	-1	pic	3130
+decoded_dat/s/3/3.dat	field	105	-1	state	33303035
+decoded_dat/s/3/3.dat	field	105	-1	wait	31
+decoded_dat/s/3/3.dat	field	105	-1	next	333035
+decoded_dat/s/3/3.dat	field	105	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	105	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	105	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	105	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	105	-1	centery	313739
+decoded_dat/s/3/3.dat	block	105	0	opoint	
+decoded_dat/s/3/3.dat	field	105	0	kind	31
+decoded_dat/s/3/3.dat	field	105	0	x	313339
+decoded_dat/s/3/3.dat	field	105	0	y	323533
+decoded_dat/s/3/3.dat	field	105	0	action	353030
+decoded_dat/s/3/3.dat	field	105	0	oid	32
+decoded_dat/s/3/3.dat	frame	106	305		7365616c
+decoded_dat/s/3/3.dat	field	106	-1	pic	39
+decoded_dat/s/3/3.dat	field	106	-1	state	33303035
+decoded_dat/s/3/3.dat	field	106	-1	wait	3530
+decoded_dat/s/3/3.dat	field	106	-1	next	313932
+decoded_dat/s/3/3.dat	field	106	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	106	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	106	-1	dvz	353530
+decoded_dat/s/3/3.dat	field	106	-1	centerx	313339
+decoded_dat/s/3/3.dat	field	106	-1	centery	313739
+decoded_dat/s/3/3.dat	block	106	0	opoint	
+decoded_dat/s/3/3.dat	field	106	0	kind	31
+decoded_dat/s/3/3.dat	field	106	0	x	313239
+decoded_dat/s/3/3.dat	field	106	0	y	323533
+decoded_dat/s/3/3.dat	field	106	0	action	353030
+decoded_dat/s/3/3.dat	field	106	0	oid	373035
+decoded_dat/s/3/3.dat	frame	107	310		666c79
+decoded_dat/s/3/3.dat	field	107	-1	pic	3738
+decoded_dat/s/3/3.dat	field	107	-1	state	33303030
+decoded_dat/s/3/3.dat	field	107	-1	wait	31
+decoded_dat/s/3/3.dat	field	107	-1	next	333131
+decoded_dat/s/3/3.dat	field	107	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	107	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	107	-1	centerx	3433
+decoded_dat/s/3/3.dat	field	107	-1	centery	37
+decoded_dat/s/3/3.dat	frame	108	311		666c79
+decoded_dat/s/3/3.dat	field	108	-1	pic	3738
+decoded_dat/s/3/3.dat	field	108	-1	state	33303030
+decoded_dat/s/3/3.dat	field	108	-1	wait	323739
+decoded_dat/s/3/3.dat	field	108	-1	next	333132
+decoded_dat/s/3/3.dat	field	108	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	108	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	108	-1	centerx	3433
+decoded_dat/s/3/3.dat	field	108	-1	centery	37
+decoded_dat/s/3/3.dat	field	108	-1	hit_Fj	333132
+decoded_dat/s/3/3.dat	field	108	-1	hit_Uj	333132
+decoded_dat/s/3/3.dat	field	108	-1	hit_Dj	333132
+decoded_dat/s/3/3.dat	field	108	-1	hit_ja	333132
+decoded_dat/s/3/3.dat	block	108	0	bdy	
+decoded_dat/s/3/3.dat	field	108	0	kind	30
+decoded_dat/s/3/3.dat	field	108	0	x	36
+decoded_dat/s/3/3.dat	field	108	0	y	3436
+decoded_dat/s/3/3.dat	field	108	0	w	3639
+decoded_dat/s/3/3.dat	field	108	0	h	3335
+decoded_dat/s/3/3.dat	frame	109	312		686974
+decoded_dat/s/3/3.dat	field	109	-1	pic	3737
+decoded_dat/s/3/3.dat	field	109	-1	state	3135
+decoded_dat/s/3/3.dat	field	109	-1	wait	31
+decoded_dat/s/3/3.dat	field	109	-1	next	333133
+decoded_dat/s/3/3.dat	field	109	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	109	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	109	-1	centerx	3433
+decoded_dat/s/3/3.dat	field	109	-1	centery	37
+decoded_dat/s/3/3.dat	frame	110	313		686974
+decoded_dat/s/3/3.dat	field	110	-1	pic	3737
+decoded_dat/s/3/3.dat	field	110	-1	state	3138
+decoded_dat/s/3/3.dat	field	110	-1	wait	3135
+decoded_dat/s/3/3.dat	field	110	-1	next	31303030
+decoded_dat/s/3/3.dat	field	110	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	110	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	110	-1	centerx	3433
+decoded_dat/s/3/3.dat	field	110	-1	centery	37
+decoded_dat/s/3/3.dat	field	110	-1	sound	646174615c3032302e776176
+decoded_dat/s/3/3.dat	block	110	0	opoint	
+decoded_dat/s/3/3.dat	field	110	0	kind	31
+decoded_dat/s/3/3.dat	field	110	0	x	3630
+decoded_dat/s/3/3.dat	field	110	0	y	3730
+decoded_dat/s/3/3.dat	field	110	0	action	313330
+decoded_dat/s/3/3.dat	field	110	0	oid	323131
+decoded_dat/s/3/3.dat	field	110	0	facing	30
+decoded_dat/s/3/3.dat	frame	111	390		736563726574
+decoded_dat/s/3/3.dat	field	111	-1	pic	393939
+decoded_dat/s/3/3.dat	field	111	-1	state	33303035
+decoded_dat/s/3/3.dat	field	111	-1	wait	3939
+decoded_dat/s/3/3.dat	field	111	-1	next	333931
+decoded_dat/s/3/3.dat	field	111	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	111	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	111	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	111	-1	centery	3739
+decoded_dat/s/3/3.dat	block	111	0	itr	
+decoded_dat/s/3/3.dat	field	111	0	kind	38
+decoded_dat/s/3/3.dat	field	111	0	bdefend	33
+decoded_dat/s/3/3.dat	field	111	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	111	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	111	0	y	33303331303030
+decoded_dat/s/3/3.dat	field	111	0	w	3939393939
+decoded_dat/s/3/3.dat	field	111	0	h	313939
+decoded_dat/s/3/3.dat	field	111	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	111	0	dvx	333934
+decoded_dat/s/3/3.dat	frame	112	391		736563726574
+decoded_dat/s/3/3.dat	field	112	-1	pic	393939
+decoded_dat/s/3/3.dat	field	112	-1	state	33303035
+decoded_dat/s/3/3.dat	field	112	-1	wait	33
+decoded_dat/s/3/3.dat	field	112	-1	next	333932
+decoded_dat/s/3/3.dat	field	112	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	112	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	112	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	112	-1	centery	3739
+decoded_dat/s/3/3.dat	block	112	0	itr	
+decoded_dat/s/3/3.dat	field	112	0	kind	38
+decoded_dat/s/3/3.dat	field	112	0	bdefend	33
+decoded_dat/s/3/3.dat	field	112	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	112	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	112	0	y	33303334303030
+decoded_dat/s/3/3.dat	field	112	0	w	3939393939
+decoded_dat/s/3/3.dat	field	112	0	h	313939
+decoded_dat/s/3/3.dat	field	112	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	112	0	dvx	333930
+decoded_dat/s/3/3.dat	frame	113	392		736563726574
+decoded_dat/s/3/3.dat	field	113	-1	pic	393939
+decoded_dat/s/3/3.dat	field	113	-1	state	33303035
+decoded_dat/s/3/3.dat	field	113	-1	wait	33
+decoded_dat/s/3/3.dat	field	113	-1	next	333934
+decoded_dat/s/3/3.dat	field	113	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	113	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	113	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	113	-1	centery	3739
+decoded_dat/s/3/3.dat	block	113	0	itr	
+decoded_dat/s/3/3.dat	field	113	0	kind	38
+decoded_dat/s/3/3.dat	field	113	0	bdefend	33
+decoded_dat/s/3/3.dat	field	113	0	dvy	2d31
+decoded_dat/s/3/3.dat	field	113	0	x	2d39393939
+decoded_dat/s/3/3.dat	field	113	0	y	33303337303030
+decoded_dat/s/3/3.dat	field	113	0	w	3939393939
+decoded_dat/s/3/3.dat	field	113	0	h	313939
+decoded_dat/s/3/3.dat	field	113	0	zwidth	313939
+decoded_dat/s/3/3.dat	field	113	0	dvx	333933
+decoded_dat/s/3/3.dat	frame	114	393		736563726574
+decoded_dat/s/3/3.dat	field	114	-1	pic	393939
+decoded_dat/s/3/3.dat	field	114	-1	state	3135
+decoded_dat/s/3/3.dat	field	114	-1	wait	31
+decoded_dat/s/3/3.dat	field	114	-1	next	333935
+decoded_dat/s/3/3.dat	field	114	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	114	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	114	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	114	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	115	394		736563726574
+decoded_dat/s/3/3.dat	field	115	-1	pic	393939
+decoded_dat/s/3/3.dat	field	115	-1	state	33303035
+decoded_dat/s/3/3.dat	field	115	-1	wait	31
+decoded_dat/s/3/3.dat	field	115	-1	next	31303030
+decoded_dat/s/3/3.dat	field	115	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	115	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	115	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	115	-1	centery	3739
+decoded_dat/s/3/3.dat	frame	116	395		736563726574
+decoded_dat/s/3/3.dat	field	116	-1	pic	3735
+decoded_dat/s/3/3.dat	field	116	-1	state	3331
+decoded_dat/s/3/3.dat	field	116	-1	wait	3939
+decoded_dat/s/3/3.dat	field	116	-1	next	333934
+decoded_dat/s/3/3.dat	field	116	-1	dvx	353530
+decoded_dat/s/3/3.dat	field	116	-1	dvy	353530
+decoded_dat/s/3/3.dat	field	116	-1	centerx	3339
+decoded_dat/s/3/3.dat	field	116	-1	centery	3739

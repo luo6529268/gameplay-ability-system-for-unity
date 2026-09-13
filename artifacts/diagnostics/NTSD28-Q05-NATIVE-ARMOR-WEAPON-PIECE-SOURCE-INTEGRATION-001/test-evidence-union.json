@@ -1,0 +1,17 @@
+{
+  "uniquePassed": 1829,
+  "runs": [
+    {
+      "name": "first-green-constructor-and-missing-probe.xml",
+      "total": "1829",
+      "passed": "1817",
+      "failed": "12"
+    },
+    {
+      "name": "GREEN.xml",
+      "total": "467",
+      "passed": "467",
+      "failed": "0"
+    }
+  ]
+}

@@ -8,7 +8,7 @@ namespace NTSD.DatParser
     /// LF2 Dat 文件解析器 V2
     /// 使用 Token 化方法，与 LF2.IDE 的实现保持一致
     /// </summary>
-    public class Lf2DatParserV2
+    public partial class Lf2DatParserV2
     {
         private static readonly HashSet<string> BmpMovementPropertyNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
@@ -56,6 +56,27 @@ namespace NTSD.DatParser
         /// 解析 dat 文件文本
         /// </summary>
         public Lf2DatFile Parse(string text, string sourcePath = null)
+        {
+            return ParseCore(text, sourcePath, false);
+        }
+
+        public Lf2DatFile ParseLoganContent(string text, string sourcePath = null)
+        {
+            var rows = ParseLoganContentRegions(text, out string remainder, out var frames, out var headers, out var definitions);
+            var dat = ParseCore(remainder, sourcePath, true);
+            dat.Bmp = headers.Bmp;
+            dat.LoganStats = headers.Stats;
+            dat.LoganArmors = definitions.Armors;
+            dat.LoganWeaponPiece = definitions.WeaponPiece;
+            dat.Blocks.AddRange(definitions.Armors);
+            if (headers.Stats.Properties.Count != 0) dat.Blocks.Add(headers.Stats);
+            dat.Frames = frames;
+            dat.LoganWeaponStrengthRows = rows;
+            dat.LoganOriginalText = text;
+            return dat;
+        }
+
+        private Lf2DatFile ParseCore(string text, string sourcePath, bool loganContent)
         {
             Lf2DatFile dat = new Lf2DatFile
             {
@@ -152,7 +173,7 @@ namespace NTSD.DatParser
                     Lf2BmpSection bmpSection = stack.Peek() as Lf2BmpSection;
                     if (bmpSection != null)
                     {
-                        if (!TryParseSpriteFileRange(token, out int startIndex, out int endIndex))
+                        if (!TryParseSpriteFileRange(token, loganContent, out int startIndex, out int endIndex))
                         {
                             Debug.LogWarning($"[Parser] Ignoring invalid BMP file range: {token}");
                             continue;
@@ -341,7 +362,7 @@ namespace NTSD.DatParser
             return true;
         }
 
-        private static bool TryParseSpriteFileRange(string token, out int startIndex, out int endIndex)
+        private static bool TryParseSpriteFileRange(string token, bool loganContent, out int startIndex, out int endIndex)
         {
             startIndex = 0;
             endIndex = 0;
@@ -358,14 +379,16 @@ namespace NTSD.DatParser
             }
 
             if (separator == 0 || separator == range.Length - 1 ||
-                range.IndexOf('-', separator + 1) >= 0 ||
+                (!loganContent && range.IndexOf('-', separator + 1) >= 0) ||
                 !int.TryParse(range.Substring(0, separator), out startIndex) ||
                 !int.TryParse(range.Substring(separator + 1), out endIndex))
             {
                 return false;
             }
 
-            return startIndex >= 0 && endIndex >= startIndex;
+            // Alignment contract: NTSD28-B11-NATIVE-SPRITE-RANGE-CONTRACT-001
+            // Native declarations can be reversed; effective ranges are projected at admission.
+            return startIndex >= 0 && (loganContent || endIndex >= startIndex);
         }
 
         private static void AddProperty(object target, Lf2DatProperty prop)

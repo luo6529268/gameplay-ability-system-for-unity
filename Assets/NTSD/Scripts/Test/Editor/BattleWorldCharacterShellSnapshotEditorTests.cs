@@ -27,7 +27,6 @@ namespace NTSD.Test
 
             character.HeldWeaponReferenceInternal = held;
             character.DeadBlinkCountInternal = 17;
-            SetPrivateField(character, "_mass", 12.5f);
             SetPrivateField(character, "_initializedFromOpoint", true);
             SetPrivateField(character, "_preserveOpointActionZero", true);
 
@@ -40,7 +39,6 @@ namespace NTSD.Test
             BattleCharacterShellSnapshot state = destination.GetState(3);
             Assert.That(state.HeldWeaponHandle.IsValid, Is.True);
             Assert.That(state.HeldWeaponHandle.Slot, Is.EqualTo(4));
-            Assert.That(state.Mass, Is.EqualTo(12.5f));
             Assert.That(state.DeadBlinkCount, Is.EqualTo(17));
             Assert.That(state.InitializedFromOpoint, Is.True);
             Assert.That(state.PreserveOpointActionZero, Is.True);
@@ -55,10 +53,8 @@ namespace NTSD.Test
 
             character.HeldWeaponReferenceInternal = null;
             character.DeadBlinkCountInternal = -1;
-            SetPrivateField(character, "_mass", 99f);
             state = destination.GetState(3);
             Assert.That(state.HeldWeaponHandle.Slot, Is.EqualTo(4));
-            Assert.That(state.Mass, Is.EqualTo(12.5f));
             Assert.That(state.DeadBlinkCount, Is.EqualTo(17));
         }
 

@@ -1,0 +1,28 @@
+{
+    "runId": "preparing-owner-fixed-1",
+    "status": "PASS",
+    "message": "Real Play native publication, rollback, ordered cancellation and owned-resource teardown passed.",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Preparing",
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "shutdownFailure": "",
+    "bootstrapMode": "DirectBattleTestBootstrap",
+    "appCharacterIds": [],
+    "initialObjectCount": 4,
+    "checksCompleted": 4,
+    "trackedObjects": 113,
+    "survivors": 0,
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "actualPoolBorrowersAfterShutdown": 0,
+    "remainedStoppedAfterTwoFrames": true,
+    "activeBoundaryRejected": true,
+    "checks": [
+        "FullPrewarm_PublishesAllViewsBeforeEvent_AndRebindsBeforeRetirement",
+        "CancelAfterBodyStaging_PreservesPublishedSource_AndAllowsRetry",
+        "DriverShutdown_CancelsAndRecyclesUnpublishedImagesInOrderedStages",
+        "LegacyOwnedUiImages_TransferAfterNativeRebind_WhileBorrowedAssetsSurvive"
+    ]
+}

@@ -1,0 +1,677 @@
+[
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 848,
+    "section": "bmp",
+    "reader": "last",
+    "key": "name",
+    "code": "bmp.last(\"name\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 964,
+    "section": "bmp",
+    "reader": "all",
+    "key": "mode",
+    "code": "bmp.all(\"mode\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 973,
+    "section": "bmp",
+    "reader": "all",
+    "key": "id",
+    "code": "bmp.all(\"id\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 982,
+    "section": "bmp",
+    "reader": "last",
+    "key": "sound1",
+    "code": "bmp.last(\"sound1\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 986,
+    "section": "bmp",
+    "reader": "last",
+    "key": "sound2",
+    "code": "bmp.last(\"sound2\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1413,
+    "section": "bmp",
+    "reader": "last",
+    "key": "name",
+    "code": "bmp.last(\"name\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1414,
+    "section": "bmp",
+    "reader": "last",
+    "key": "name",
+    "code": "bmp.last(\"name\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1416,
+    "section": "bmp",
+    "reader": "last",
+    "key": "smallb",
+    "code": "bmp.last(\"smallb\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1418,
+    "section": "bmp",
+    "reader": "last",
+    "key": "small",
+    "code": "bmp.last(\"small\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1451,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "small_x",
+    "code": "bmp.integer(\"small_x\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1456,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "small_y",
+    "code": "bmp.integer(\"small_y\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1485,
+    "section": "bmp",
+    "reader": "last",
+    "key": "frame",
+    "code": "bmp.last(\"frame\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1491,
+    "section": "bmp",
+    "reader": "last",
+    "key": "bars",
+    "code": "bmp.last(\"bars\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1602,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "shadow",
+    "code": "bmp.integer(\"shadow\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1611,
+    "section": "bmp",
+    "reader": "last",
+    "key": "shadow_pic",
+    "code": "bmp.last(\"shadow_pic\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1615,
+    "section": "bmp",
+    "reader": "last",
+    "key": "shadowsize",
+    "code": "bmp.last(\"shadowsize\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1678,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "effect",
+    "code": "bmp.integer(\"effect\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1752,
+    "section": "stats",
+    "reader": "integer",
+    "key": "y",
+    "code": "stats.integer(\n                                \"y\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1785,
+    "section": "stats",
+    "reader": "integer",
+    "key": "bleed_hp",
+    "code": "stats.integer(\n                                \"bleed_hp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1864,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "bound",
+    "code": "bmp.integer(\"bound\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\rendering\\render_snapshot.cpp",
+    "line": 1906,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "bound",
+    "code": "bmp.integer(\"bound\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 309,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "property",
+    "code": "bmp.integer(\"property\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 518,
+    "section": "stats",
+    "reader": "integer",
+    "key": "attacking",
+    "code": "stats.integer(\"attacking\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 546,
+    "section": "stats",
+    "reader": "integer",
+    "key": "attacking",
+    "code": "stats.integer(\"attacking\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 885,
+    "section": "stats",
+    "reader": "integer",
+    "key": "recmp",
+    "code": "stats.integer(\"recmp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 1262,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "use_ai",
+    "code": "bmp.integer(\"use_ai\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 1263,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "drop",
+    "code": "bmp.integer(\"drop\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 1276,
+    "section": "stats",
+    "reader": "integer",
+    "key": "max_mp",
+    "code": "stats.integer(\"max_mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 1279,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "weapon_hp",
+    "code": "bmp.integer(\"weapon_hp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 1848,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "weapon_drop_hurt",
+    "code": "bmp.integer(\"weapon_drop_hurt\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2178,
+    "section": "stats",
+    "reader": "integer",
+    "key": "regen_dhp",
+    "code": "stats.integer(\"regen_dhp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2189,
+    "section": "stats",
+    "reader": "integer",
+    "key": "regen_hp",
+    "code": "stats.integer(\"regen_hp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2310,
+    "section": "stats",
+    "reader": "integer",
+    "key": "regen_mp",
+    "code": "stats.integer(\"regen_mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2319,
+    "section": "stats",
+    "reader": "integer",
+    "key": "bound",
+    "code": "stats.integer(\"bound\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2416,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "frame_0mp",
+    "code": "bmp.integer(\"frame_0mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2543,
+    "section": "stats",
+    "reader": "integer",
+    "key": "max_mp",
+    "code": "stats.integer(\"max_mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2664,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "use_ai",
+    "code": "bmp.integer(\"use_ai\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2666,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "drop",
+    "code": "bmp.integer(\"drop\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2668,
+    "section": "stats",
+    "reader": "integer",
+    "key": "max_mp",
+    "code": "stats.integer(\"max_mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2670,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "weapon_hp",
+    "code": "bmp.integer(\"weapon_hp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 2672,
+    "section": "stats",
+    "reader": "integer",
+    "key": "defend",
+    "code": "stats.integer(\"defend\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3622,
+    "section": "stats",
+    "reader": "integer",
+    "key": "max_mp",
+    "code": "stats.integer(\"max_mp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3629,
+    "section": "stats",
+    "reader": "integer",
+    "key": "defend",
+    "code": "stats.integer(\"defend\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3875,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "effect",
+    "code": "bmp.integer(\"effect\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3889,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "effect",
+    "code": "bmp.integer(\"effect\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3943,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "effect",
+    "code": "bmp.integer(\"effect\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 3946,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "effect",
+    "code": "bmp.integer(\"effect\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 7684,
+    "section": "stats",
+    "reader": "integer",
+    "key": "ohp",
+    "code": "stats.integer(\"ohp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 7686,
+    "section": "stats",
+    "reader": "integer",
+    "key": "omp",
+    "code": "stats.integer(\"omp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\battle_world.cpp",
+    "line": 7776,
+    "section": "stats",
+    "reader": "integer",
+    "key": "defend",
+    "code": "stats.integer(\"defend\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 292,
+    "section": "stats",
+    "reader": "integer",
+    "key": "recmp",
+    "code": "stats.integer(\"recmp\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 387,
+    "section": "stats",
+    "reader": "integer",
+    "key": "caughtact",
+    "code": "stats.integer(\"caughtact\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1000,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "heavy_walking_frame",
+    "code": "bmp.integer(\"heavy_walking_frame\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1001,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "walking_frame_rate",
+    "code": "bmp.integer(\n                                          \"walking_frame_rate\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1088,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "walking_frame_rate",
+    "code": "bmp.integer(\"walking_frame_rate\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1204,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "heavy_running_frame",
+    "code": "bmp.integer(\"heavy_running_frame\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1205,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "running_frame_rate",
+    "code": "bmp.integer(\n                                         \"running_frame_rate\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1254,
+    "section": "bmp",
+    "reader": "integer",
+    "key": "running_frame_rate",
+    "code": "bmp.integer(\"running_frame_rate\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 784,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "rowing_height",
+    "code": "field_double(entity.definition->bmp, \"rowing_height\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 786,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "rowing_distance",
+    "code": "field_double(entity.definition->bmp, \"rowing_distance\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 884,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_distance",
+    "code": "field_double(entity.definition->bmp, \"dash_distance\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 887,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_height",
+    "code": "field_double(entity.definition->bmp, \"dash_height\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 892,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_distancez",
+    "code": "field_double(entity.definition->bmp, \"dash_distancez\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 933,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "running_speedz",
+    "code": "field_double(entity.definition->bmp, \"running_speedz\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 948,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_distancez",
+    "code": "field_double(entity.definition->bmp, \"dash_distancez\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 952,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_distance",
+    "code": "field_double(entity.definition->bmp, \"dash_distance\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 954,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "dash_height",
+    "code": "field_double(entity.definition->bmp, \"dash_height\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 997,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "heavy_walking_speed",
+    "code": "field_double(entity.definition->bmp, \"heavy_walking_speed\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 999,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "heavy_walking_speedz",
+    "code": "field_double(entity.definition->bmp, \"heavy_walking_speedz\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1086,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "walking_speed",
+    "code": "field_double(entity.definition->bmp, \"walking_speed\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1087,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "walking_speedz",
+    "code": "field_double(entity.definition->bmp, \"walking_speedz\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1201,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "heavy_running_speed",
+    "code": "field_double(entity.definition->bmp, \"heavy_running_speed\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1203,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "heavy_running_speedz",
+    "code": "field_double(entity.definition->bmp, \"heavy_running_speedz\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1252,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "running_speed",
+    "code": "field_double(entity.definition->bmp, \"running_speed\"",
+    "listedInPlayableCoreSources": true
+  },
+  {
+    "file": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\input_routing.cpp",
+    "line": 1253,
+    "section": "bmp",
+    "reader": "field_double",
+    "key": "running_speedz",
+    "code": "field_double(entity.definition->bmp, \"running_speedz\"",
+    "listedInPlayableCoreSources": true
+  }
+]

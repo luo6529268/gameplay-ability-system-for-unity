@@ -31,7 +31,7 @@ namespace NTSD.Test
             "sequence=duplicate|index=1|kind=1|x=-10|y=-11|action=22|dvx=-13|dvy=-14|oid=215|facing=1\n";
 
         [Test]
-        public void ValuePreservesExactEightScalarsAndIsImmutable()
+        public void CompatibilityConstructorPreservesEightSuppliedScalarsInTwentyFourFieldValue()
         {
             var value = new BattleObjectPointValue(
                 kind: 2,
@@ -54,7 +54,7 @@ namespace NTSD.Test
 
             PropertyInfo[] properties = typeof(BattleObjectPointValue).GetProperties(
                 BindingFlags.Instance | BindingFlags.Public);
-            Assert.That(properties, Has.Length.EqualTo(8));
+            Assert.That(properties, Has.Length.EqualTo(24));
             for (int index = 0; index < properties.Length; index++)
                 Assert.That(properties[index].CanWrite, Is.False, properties[index].Name);
             Assert.That(typeof(BattleObjectPointValue).GetFields(
@@ -68,7 +68,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void AdapterCopiesOnlyFormalFieldsAndLeavesCanonicalValueUnchanged()
+        public void AdapterCopiesNativeDvzAndExcludesLegacyRuntimeObjectId()
         {
             var legacy = new ObjectPoint
             {
@@ -90,7 +90,7 @@ namespace NTSD.Test
                 BattleObjectPointValueAdapter.ToLegacyTask(value);
 
             Assert.That(value, Is.EqualTo(new BattleObjectPointValue(
-                1, 10, -20, 307, 8, -9, 733, 31)));
+                1, 10, -20, 307, 8, -9, 733, 31, dvz: -654321)));
             Assert.That(taskValue.kind, Is.EqualTo(1));
             Assert.That(taskValue.x, Is.EqualTo(10));
             Assert.That(taskValue.y, Is.EqualTo(-20));
@@ -100,7 +100,7 @@ namespace NTSD.Test
             Assert.That(taskValue.oid, Is.EqualTo(733));
             Assert.That(taskValue.facing, Is.EqualTo(31));
             Assert.That(taskValue.objectId, Is.Zero);
-            Assert.That(taskValue.dvz, Is.Zero);
+            Assert.That(taskValue.dvz, Is.EqualTo(-654321));
 
             taskValue.facing = 1;
             Assert.That(value.Facing, Is.EqualTo(31));
@@ -158,7 +158,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void LegacyFixtureProjectionSupportsAliasAndOrderedListWithoutExtras()
+        public void LegacyFixtureProjectionPreservesNativeDvzAndExcludesRuntimeObjectId()
         {
             var frame = new LF2FrameData
             {
@@ -191,9 +191,9 @@ namespace NTSD.Test
             });
 
             Assert.That(frame.opoint.Value, Is.EqualTo(
-                new BattleObjectPointValue(2, 3, 4, 5, 6, 7, 8, 9)));
+                new BattleObjectPointValue(2, 3, 4, 5, 6, 7, 8, 9, dvz: 200)));
             Assert.That(frame.opoints[0], Is.EqualTo(
-                new BattleObjectPointValue(1, -3, -4, -5, -6, -7, 9, 21)));
+                new BattleObjectPointValue(1, -3, -4, -5, -6, -7, 9, 21, dvz: 400)));
         }
 
         [Test]

@@ -80,8 +80,8 @@ namespace NTSD.Test.Editor
             Assert.That(entity, Does.Not.Contain("NTSDSpec.GetMassOrDefault"));
             Assert.That(
                 Count(character, "NTSDSpec.GetMassOrDefault"),
-                Is.EqualTo(1),
-                "Character initialization retains the independent mass owner.");
+                Is.Zero,
+                "Q05 removed the retired mass carrier and initialization query.");
         }
 
         [Test]

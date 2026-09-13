@@ -9,6 +9,70 @@ namespace NTSD.DatParser
     /// </summary>
     public static class Lf2DatTokenizer
     {
+        internal static void ScanLoganScalarFields(string fragment, List<Lf2DatProperty> output, string context = null)
+        {
+            int cursor = 0;
+            while (cursor < fragment.Length)
+            {
+                if (!IsLoganIdentifierStart(fragment[cursor]) ||
+                    (cursor > 0 && IsLoganAlphaNumericOrUnderscore(fragment[cursor - 1])))
+                {
+                    cursor++;
+                    continue;
+                }
+                int keyBegin = cursor;
+                while (cursor < fragment.Length && (IsLoganAlphaNumericOrUnderscore(fragment[cursor]) ||
+                    fragment[cursor] == '(' || fragment[cursor] == ')' || fragment[cursor] == '-'))
+                    cursor++;
+                if (cursor >= fragment.Length || fragment[cursor] != ':')
+                    continue;
+                string key = fragment.Substring(keyBegin, cursor - keyBegin);
+                cursor++;
+                while (cursor < fragment.Length && IsLoganWhitespace(fragment[cursor]))
+                    cursor++;
+                int valueBegin = cursor;
+                while (cursor < fragment.Length && !IsLoganWhitespace(fragment[cursor]) && fragment[cursor] != '<')
+                    cursor++;
+                bool pairedIntegerText = (context == "armor" && key == "frame") ||
+                    (context == "itr" && (key == "caughtact" || key == "catchingact" || key == "pickedact" || key == "pickingact"));
+                if (pairedIntegerText)
+                {
+                    int second = cursor;
+                    while (second < fragment.Length && IsLoganWhitespace(fragment[second]))
+                        second++;
+                    int end = second;
+                    if (end < fragment.Length && (fragment[end] == '-' || fragment[end] == '+'))
+                        end++;
+                    int digitsBegin = end;
+                    while (end < fragment.Length && fragment[end] >= '0' && fragment[end] <= '9')
+                        end++;
+                    if (end > digitsBegin)
+                        cursor = end;
+                }
+                string value = fragment.Substring(valueBegin, cursor - valueBegin);
+                if (key.EndsWith("_end", StringComparison.Ordinal) || key == "layer" ||
+                    (value.Length == 0 && (key == "itr" || key == "bdy" || key == "opoint" ||
+                        key == "wpoint" || key == "bpoint" || key == "cpoint" || key == "ppoint")))
+                    continue;
+                output.Add(new Lf2DatProperty(key, value));
+            }
+        }
+
+        private static bool IsLoganIdentifierStart(char value)
+        {
+            return (value >= 'a' && value <= 'z') || (value >= 'A' && value <= 'Z') || value == '_';
+        }
+
+        private static bool IsLoganAlphaNumericOrUnderscore(char value)
+        {
+            return IsLoganIdentifierStart(value) || (value >= '0' && value <= '9');
+        }
+
+        private static bool IsLoganWhitespace(char value)
+        {
+            return value == ' ' || value == '\t' || value == '\r' || value == '\n' || value == '\v' || value == '\f';
+        }
+
         // 分隔符定义（与 LF2.IDE 保持一致）
         private static readonly char[] TokenDelimiters = { ' ', '\t', '\r', '\n' };
         private static readonly char[] TokenDelimiterEnd = { '>', ':' };

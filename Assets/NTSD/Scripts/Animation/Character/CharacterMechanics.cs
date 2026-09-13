@@ -120,7 +120,6 @@ namespace NTSD.Animation
         public readonly NTSDEntityRuntime Runtime;
         public readonly LF2FrameData frameData;
         public readonly float spriteWidthPx;
-        public readonly float mass;
         public readonly float minSpeed;
         public readonly double gravity; // P0-f-2a: double sim gravity
 
@@ -128,14 +127,12 @@ namespace NTSD.Animation
             NTSDEntityRuntime runtime,
             LF2FrameData frameData,
             float spriteWidthPx,
-            float mass,
             float minSpeed,
             double gravity)
         {
             Runtime = runtime;
             this.frameData = frameData;
             this.spriteWidthPx = spriteWidthPx;
-            this.mass = mass;
             this.minSpeed = minSpeed;
             this.gravity = gravity;
         }
@@ -371,7 +368,8 @@ namespace NTSD.Animation
             runtime.ClearBounds();
 
             // 垂直轴：y == 0 表示地面，y < 0 表示空中。
-            if (startedGrounded && ctx.mass > 0f)
+            // Alignment contract: NTSD28-Q04-MASS-FRICTION-GATE-RETIREMENT-001.
+            if (startedGrounded)
             {
                 UnitFriction(runtime);
             }

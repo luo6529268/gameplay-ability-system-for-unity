@@ -1,0 +1,6 @@
+<armor>
+frame: 1 3 frame: 7 9 state: 3 state: 8 sound1: a sound1: b
+<armor_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

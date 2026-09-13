@@ -1,0 +1,49 @@
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:116:        public int GrabbedBy;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:123:        public int ReleaseTick = -1;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:231:        public int HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:238:        public int TrackerFlag;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:384:        public int WeaponState;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:815:            destination.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:822:            destination.ReleaseTick = ReleaseTick;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:933:            destination.HolderCopySlotIndex = HolderCopySlotIndex;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:935:            destination.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1011:            destination.WeaponState = WeaponState;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1053:            GrabbedBy = 0;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1060:            ReleaseTick = -1;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1113:            HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1115:            TrackerFlag = 0;
+Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs:1188:            WeaponState = 0;
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleParitySnapshot.cs:1053:                ("holderCopy", isDefault ? 99 : runtime.HolderCopySlotIndex),
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleParitySnapshot.cs:1058:                ("releaseTick", runtime?.ReleaseTick ?? -1),
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleParitySnapshot.cs:1207:                ("weaponState", isDefault ? 0 : runtime.WeaponState));
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleLockstepChecksumModule.cs:537:            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleLockstepChecksumModule.cs:542:            builder.AddInt32(runtime?.ReleaseTick ?? -1);
+Assets/NTSD/Scripts/Simulation/Lockstep\Checksum\BattleLockstepChecksumModule.cs:634:            builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Character.cs:1130:            TrackerFlag = 0;
+Assets/NTSD/Scripts/Simulation/Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:33:            EffectOscillate = entity.Effect.Oscillate;
+Assets/NTSD/Scripts/Simulation/Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:38:            EffectOscillateDirection = entity.Effect.OscillateDirection;
+Assets/NTSD/Scripts/Simulation/Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:68:        public int EffectOscillate { get; }
+Assets/NTSD/Scripts/Simulation/Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:73:        public int EffectOscillateDirection { get; }
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:153:        public int GrabbedBy
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:155:            get => Runtime.GrabbedBy;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:156:            set => Runtime.GrabbedBy = value;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:160:        public int TrackerFlag
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:162:            get => Runtime.TrackerFlag;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:163:            set => Runtime.TrackerFlag = value;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:511:            get => Runtime.HolderCopySlotIndex;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:512:            set => Runtime.HolderCopySlotIndex = value;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:795:            Effect.Oscillate = state.EffectOscillate;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:800:            Effect.OscillateDirection = state.EffectOscillateDirection;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:6884:            Runtime.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2Entity.cs:6885:            Runtime.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2LivingObject.cs:95:        public int OscillateDirection { get; set; } = 1;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2LivingObject.cs:109:            OscillateDirection = 1;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2OtherObject.Lifecycle.partial.cs:81:            owner.TrackerFlag = 0;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponBase.cs:218:        internal int GetResolvedWeaponStateForExternalUse()
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponBase.cs:238:        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder, bool stampReleaseTick = false)
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponBase.cs:240:            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder, stampReleaseTick);
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponBase.cs:473:            TrackerFlag = 0;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponBase.cs:479:            Runtime.WeaponState = 0;
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponFrameLogicResolver.cs:45:            int state = _weapon.GetResolvedWeaponStateForExternalUse();
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponHeldStateResolver.cs:135:            weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
+Assets/NTSD/Scripts/Animation/LF2Objects\LF2WeaponReleaseFlowResolver.cs:21:        public void ReleaseHeldWeaponRuntime(LF2Entity holder, bool stampReleaseTick = false)

@@ -1,0 +1,10 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+PIC: 9 hit_fa: 8 hit_Fa: 7 hit_fj: 6 hit_Fj: 5
+wpoint: kind: 1 effect: 9 dircontrol: 2 7: 8 x: +9 wpoint_end:
+cpoint: fronthurtact: 21 injury: 3 backhurtact: 22 cover: 4 faction: 90 unknown: 33 cpoint_end:
+bpoint: x: 1 effect: 9 y: 2 bpoint_end:
+<frame_end>

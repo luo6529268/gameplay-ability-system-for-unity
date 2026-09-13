@@ -1,0 +1,1070 @@
+[
+  {
+    "path": "w/9.dat",
+    "id": 124,
+    "type": 4,
+    "native": {
+      "openingLine": 21,
+      "closingLine": 42,
+      "fields": [
+        {
+          "context": "weapon_piece",
+          "key": "team",
+          "value": "1",
+          "line": 22,
+          "column": 1
+        }
+      ],
+      "groups": [
+        {
+          "piece": 1,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "1",
+              "line": 26,
+              "column": 10
+            }
+          ],
+          "variants": [
+            {
+              "piece": 1,
+              "openingLine": 23,
+              "closingLine": 27,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "1",
+                  "line": 23,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "109",
+                  "line": 24,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "0",
+                  "line": 24,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "oid",
+                  "value": "999",
+                  "line": 26,
+                  "column": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 2,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "2",
+              "line": 31,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 2,
+              "openingLine": 28,
+              "closingLine": 32,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 28,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "170",
+                  "line": 29,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 29,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "12",
+                  "line": 30,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-20",
+                  "line": 30,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 30,
+                  "column": 18
+                }
+              ]
+            },
+            {
+              "piece": 2,
+              "openingLine": 33,
+              "closingLine": 36,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 33,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "170",
+                  "line": 34,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 34,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "4",
+                  "line": 35,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-8",
+                  "line": 35,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 35,
+                  "column": 16
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 3,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "2",
+              "line": 40,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 3,
+              "openingLine": 37,
+              "closingLine": 41,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "3",
+                  "line": 37,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "170",
+                  "line": 38,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 38,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "8",
+                  "line": 39,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-10",
+                  "line": 39,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 39,
+                  "column": 17
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "unityRawBlocks": [
+      {
+        "name": "weapon_piece",
+        "properties": [
+          {
+            "key": "team",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "1"
+          },
+          {
+            "key": "act",
+            "value": "109"
+          },
+          {
+            "key": "framea",
+            "value": "0"
+          },
+          {
+            "key": "oid",
+            "value": "999"
+          },
+          {
+            "key": "amount",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "170"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "12"
+          },
+          {
+            "key": "dvy",
+            "value": "-20"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "2"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "170"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "4"
+          },
+          {
+            "key": "dvy",
+            "value": "-8"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "piece",
+            "value": "3"
+          },
+          {
+            "key": "act",
+            "value": "170"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "8"
+          },
+          {
+            "key": "dvy",
+            "value": "-10"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "2"
+          }
+        ]
+      }
+    ],
+    "carrier": "NO_LF2CharacterData_WEAPON_PIECE_MEMBER"
+  },
+  {
+    "path": "w/1.dat",
+    "id": 150,
+    "type": 2,
+    "native": {
+      "openingLine": 10,
+      "closingLine": 31,
+      "fields": [
+        {
+          "context": "weapon_piece",
+          "key": "team",
+          "value": "1",
+          "line": 11,
+          "column": 1
+        }
+      ],
+      "groups": [
+        {
+          "piece": 1,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "1",
+              "line": 15,
+              "column": 10
+            }
+          ],
+          "variants": [
+            {
+              "piece": 1,
+              "openingLine": 12,
+              "closingLine": 16,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "1",
+                  "line": 12,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "109",
+                  "line": 13,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "0",
+                  "line": 13,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "oid",
+                  "value": "999",
+                  "line": 15,
+                  "column": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 2,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "2",
+              "line": 20,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 2,
+              "openingLine": 17,
+              "closingLine": 21,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 17,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "0",
+                  "line": 18,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 18,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "12",
+                  "line": 19,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-20",
+                  "line": 19,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 19,
+                  "column": 18
+                }
+              ]
+            },
+            {
+              "piece": 2,
+              "openingLine": 22,
+              "closingLine": 25,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 22,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "4",
+                  "line": 23,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 23,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "4",
+                  "line": 24,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-8",
+                  "line": 24,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 24,
+                  "column": 16
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 3,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "4",
+              "line": 29,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 3,
+              "openingLine": 26,
+              "closingLine": 30,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "3",
+                  "line": 26,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "4",
+                  "line": 27,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 27,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "8",
+                  "line": 28,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-10",
+                  "line": 28,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 28,
+                  "column": 17
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "unityRawBlocks": [
+      {
+        "name": "weapon_piece",
+        "properties": [
+          {
+            "key": "team",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "1"
+          },
+          {
+            "key": "act",
+            "value": "109"
+          },
+          {
+            "key": "framea",
+            "value": "0"
+          },
+          {
+            "key": "oid",
+            "value": "999"
+          },
+          {
+            "key": "amount",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "0"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "12"
+          },
+          {
+            "key": "dvy",
+            "value": "-20"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "2"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "4"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "4"
+          },
+          {
+            "key": "dvy",
+            "value": "-8"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "piece",
+            "value": "3"
+          },
+          {
+            "key": "act",
+            "value": "4"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "8"
+          },
+          {
+            "key": "dvy",
+            "value": "-10"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "carrier": "NO_LF2CharacterData_WEAPON_PIECE_MEMBER"
+  },
+  {
+    "path": "w/l.dat",
+    "id": 151,
+    "type": 2,
+    "native": {
+      "openingLine": 10,
+      "closingLine": 31,
+      "fields": [
+        {
+          "context": "weapon_piece",
+          "key": "team",
+          "value": "1",
+          "line": 11,
+          "column": 1
+        }
+      ],
+      "groups": [
+        {
+          "piece": 1,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "1",
+              "line": 15,
+              "column": 10
+            }
+          ],
+          "variants": [
+            {
+              "piece": 1,
+              "openingLine": 12,
+              "closingLine": 16,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "1",
+                  "line": 12,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "109",
+                  "line": 13,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "0",
+                  "line": 13,
+                  "column": 10
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "oid",
+                  "value": "999",
+                  "line": 15,
+                  "column": 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 2,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "2",
+              "line": 20,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 2,
+              "openingLine": 17,
+              "closingLine": 21,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 17,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "40",
+                  "line": 18,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 18,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "12",
+                  "line": 19,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-20",
+                  "line": 19,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 19,
+                  "column": 18
+                }
+              ]
+            },
+            {
+              "piece": 2,
+              "openingLine": 22,
+              "closingLine": 25,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "2",
+                  "line": 22,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "44",
+                  "line": 23,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 23,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "4",
+                  "line": 24,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-8",
+                  "line": 24,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 24,
+                  "column": 16
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "piece": 3,
+          "fields": [
+            {
+              "context": "weapon_piece",
+              "key": "amount",
+              "value": "4",
+              "line": 29,
+              "column": 1
+            }
+          ],
+          "variants": [
+            {
+              "piece": 3,
+              "openingLine": 26,
+              "closingLine": 30,
+              "fields": [
+                {
+                  "context": "weapon_piece",
+                  "key": "piece",
+                  "value": "3",
+                  "line": 26,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "act",
+                  "value": "50",
+                  "line": 27,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "framea",
+                  "value": "4",
+                  "line": 27,
+                  "column": 9
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvx",
+                  "value": "8",
+                  "line": 28,
+                  "column": 1
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvy",
+                  "value": "-10",
+                  "line": 28,
+                  "column": 8
+                },
+                {
+                  "context": "weapon_piece",
+                  "key": "dvz",
+                  "value": "4",
+                  "line": 28,
+                  "column": 17
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "unityRawBlocks": [
+      {
+        "name": "weapon_piece",
+        "properties": [
+          {
+            "key": "team",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "1"
+          },
+          {
+            "key": "act",
+            "value": "109"
+          },
+          {
+            "key": "framea",
+            "value": "0"
+          },
+          {
+            "key": "oid",
+            "value": "999"
+          },
+          {
+            "key": "amount",
+            "value": "1"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "40"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "12"
+          },
+          {
+            "key": "dvy",
+            "value": "-20"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "2"
+          },
+          {
+            "key": "piece",
+            "value": "2"
+          },
+          {
+            "key": "act",
+            "value": "44"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "4"
+          },
+          {
+            "key": "dvy",
+            "value": "-8"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "piece",
+            "value": "3"
+          },
+          {
+            "key": "act",
+            "value": "50"
+          },
+          {
+            "key": "framea",
+            "value": "4"
+          },
+          {
+            "key": "dvx",
+            "value": "8"
+          },
+          {
+            "key": "dvy",
+            "value": "-10"
+          },
+          {
+            "key": "dvz",
+            "value": "4"
+          },
+          {
+            "key": "amount",
+            "value": "4"
+          }
+        ]
+      }
+    ],
+    "carrier": "NO_LF2CharacterData_WEAPON_PIECE_MEMBER"
+  }
+]

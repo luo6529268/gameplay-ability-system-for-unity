@@ -1,0 +1,19 @@
+{
+  "files": 138,
+  "parseSuccess": 138,
+  "converterSuccess": 138,
+  "comparedSections": [
+    "parseSuccess",
+    "fullConverterSuccess",
+    "frames",
+    "top",
+    "bmp",
+    "blocks",
+    "stats",
+    "sprites",
+    "bmpHeader",
+    "bmpFrameSequences"
+  ],
+  "differencesSinceOpoint24": [],
+  "limitation": "Legacy projection omits new geometry carriers; complete native evidence is the 88 direct geometry witnesses and Unity tests."
+}

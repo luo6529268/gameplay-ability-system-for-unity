@@ -207,6 +207,8 @@ namespace NTSD.Simulation
         [SerializeField][MMReadOnly] private bool paused = true;
         [SerializeField][MMReadOnly] private BattleRuntimeLifecycleState lifecycleState =
             BattleRuntimeLifecycleState.Uninitialized;
+        private int preparationGeneration;
+        private bool battleRuntimeServicesPrepared;
         [SerializeField][MMReadOnly] private BattleRuntimeShutdownStage shutdownStage =
             BattleRuntimeShutdownStage.None;
         [SerializeField][MMReadOnly] private float renderAlpha = 0f;
@@ -1097,6 +1099,44 @@ namespace NTSD.Simulation
             return submitted;
         }
 
+        internal int PreparationGeneration => preparationGeneration;
+
+        internal bool IsBattlePreparationCurrent(int generation, SimulationWorld expectedWorld)
+        {
+            return lifecycleState == BattleRuntimeLifecycleState.Preparing &&
+                preparationGeneration == generation && _world != null &&
+                ReferenceEquals(_world, expectedWorld);
+        }
+
+        internal void PrepareBattleRuntimeServices()
+        {
+            if (lifecycleState != BattleRuntimeLifecycleState.Preparing || _world == null)
+                throw new InvalidOperationException("Battle services require a live preparing World.");
+
+            LF2ObjectPool pool = LF2ObjectPool.TryGetInstance();
+            LF2ObjectPointFactory factory = LF2ObjectPointFactory.TryGetInstance();
+            if (battleRuntimeServicesPrepared)
+            {
+                if (!ReferenceEquals(pool, _battleObjectPool) ||
+                    !ReferenceEquals(factory, _battleObjectPointFactory) || pool == null || factory == null)
+                    throw new InvalidOperationException("Prepared battle service owners were replaced.");
+                return;
+            }
+            if (_world.ObjectCount != 0 || _world.ClaimedRuntimeSlotCountForServices != 0 ||
+                _world.RuntimeCapacity.IsSealed ||
+                (pool != null && (pool.ActiveObjectCountForAcceptance != 0 || pool.ActiveSpriteCountForAcceptance != 0)) ||
+                (factory != null && factory.PendingTaskCountForDiagnostics != 0))
+                throw new InvalidOperationException("Battle services must be owned before the first entity or queued spawn.");
+
+            // Alignment contract: NTSD28-PREPARING-SHUTDOWN-OWNER-CAPTURE-001
+            // Capture each owner before birth so Preparing shutdown uses the same services.
+            _battleObjectPointFactory = LF2ObjectPointFactory.Instance;
+            _battleObjectPool = LF2ObjectPool.Instance;
+            _battleObjectPointFactory.BeginBattlePreparation();
+            _battleObjectPool.BeginBattlePreparation();
+            battleRuntimeServicesPrepared = true;
+        }
+
         public void BeginBattleAllocationSeal()
         {
             if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
@@ -1346,6 +1386,8 @@ namespace NTSD.Simulation
             }
 
             lifecycleState = BattleRuntimeLifecycleState.Stopping;
+            CharacterAnimtorManager.TryGetInstance()?.CancelConfiguredContentPrewarm();
+            CharacterAnimtorManager.TryGetInstance()?.CancelNativeContentPrewarm();
             paused = true;
             _battleFunctionKeyInputLatch.Clear();
             ClearNativeFunctionKeyRoutingState();
@@ -1378,6 +1420,7 @@ namespace NTSD.Simulation
                 CompleteShutdownStage(BattleRuntimeShutdownStage.AllocationUnsealed);
 
                 _publishedSoundEvents.Clear();
+                CharacterAnimtorManager.TryGetInstance()?.ReleaseCancelledNativeContentStaging();
                 BattleCentralRenderSystem.ResetRuntime();
                 _world?.BattlePresentation.Reset();
                 CompleteShutdownStage(BattleRuntimeShutdownStage.PresentationCleared);
@@ -2255,6 +2298,8 @@ namespace NTSD.Simulation
 
         private void EnterPreparingState()
         {
+            preparationGeneration = unchecked(preparationGeneration + 1);
+            battleRuntimeServicesPrepared = false;
             lifecycleState = BattleRuntimeLifecycleState.Preparing;
             paused = true;
             _shutdownDiagnostics.Reset();

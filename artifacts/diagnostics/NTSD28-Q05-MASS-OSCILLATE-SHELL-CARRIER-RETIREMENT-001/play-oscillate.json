@@ -1,0 +1,13 @@
+{
+    "status": "PASS",
+    "message": "Existing Play character after retired effect carrier removal; production ProcessEffects and presentation snapshot capture verified; renderer checks when bound.",
+    "backend": "CentralOnly",
+    "slot": 0,
+    "hasSpriteRenderer": false,
+    "productionSnapshotPassed": true,
+    "offsetPreserved": true,
+    "blinkPassed": true,
+    "timeoutPassed": true,
+    "deferredMotionPassed": true,
+    "cleanupPassed": true
+}

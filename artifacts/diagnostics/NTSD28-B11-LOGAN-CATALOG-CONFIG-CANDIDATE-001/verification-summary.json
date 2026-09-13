@@ -1,0 +1,25 @@
+{
+  "status": "VERIFIED_CATALOG_AND_CONFIG_CANDIDATE_GATES_ONLY",
+  "jobId": "d83c695fa2e94d55a87ae8a6a4f2db6d",
+  "summary": {
+    "total": 39,
+    "passed": 39,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 17.6010191,
+    "resultState": "Passed"
+  },
+  "nativeObjectRows": 330,
+  "nativeEntriesMatched": 330,
+  "formalCandidateReady": false,
+  "formalConverterFailures": [
+    "Object 2 (c\\nar\\nar.dat): WPoint property 'dircontrol' is outside the formal release contract.",
+    "Object 65 (c\\ank\\ank.dat): WPoint property 'effect' is outside the formal release contract.",
+    "Object 870 (c\\ank\\ssnk.dat): WPoint property '7' is outside the formal release contract.",
+    "Object 27 (c\\min\\min.dat): CPoint property 'drain' is outside the formal release contract.",
+    "Object 449 (c\\min\\sag.dat): CPoint property 'drain' is outside the formal release contract.",
+    "Object 63 (c\\hir\\hir.dat): WPoint property 'dircontrol' is outside the formal release contract."
+  ],
+  "globalSourcePublished": false,
+  "schema": "12/20/23"
+}

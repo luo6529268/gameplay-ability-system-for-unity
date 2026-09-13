@@ -1,0 +1,19 @@
+{
+    "runId": "play-preparing-diagnostic",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: Existing App ordered shutdown did not complete: unity-renderers-remained-without-an-object-pool-owner\r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Require (System.Boolean value, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:155 \r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor+Request request) [0x00431] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:93 ",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Preparing",
+    "shutdownStatus": "Failed",
+    "shutdownStage": "PendingObjectPointTasksDiscarded",
+    "shutdownFailure": "unity-renderers-remained-without-an-object-pool-owner",
+    "initialObjectCount": 4,
+    "checksCompleted": 0,
+    "trackedObjects": 0,
+    "survivors": 0,
+    "remainingWorldObjects": 4,
+    "remainingRuntimeSlots": 2,
+    "remainingPoolBorrowers": 0,
+    "activeBoundaryRejected": true,
+    "checks": []
+}

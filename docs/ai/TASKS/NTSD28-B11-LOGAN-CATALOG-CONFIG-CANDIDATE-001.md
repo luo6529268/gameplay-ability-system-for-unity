@@ -1,0 +1,5 @@
+# NTSD28-B11-LOGAN-CATALOG-CONFIG-CANDIDATE-001
+
+状态VERIFIED_CATALOG_AND_CONFIG_CANDIDATE_GATES_ONLY。父Task：NTSD28-B11-CATALOG-PUBLICATION-CONTRACT-001 E1；准确六脚本/约束/验证/回滚在同ID Change Record。只执行完整目录和配置候选，E2/E3事务后继不遗漏；旧global未切源，正式6Converter拒绝不得忽略。
+
+出口：native330/330，Unity39/39（15+24），CS0/Scene dirtyfalse；正式候选仍因6个Converter文件失败不可发布。E1已交付，Q02未完成。下一NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001 / READY_CONTRACT；详见同ID Record与Q02-E1-REPORT.md。

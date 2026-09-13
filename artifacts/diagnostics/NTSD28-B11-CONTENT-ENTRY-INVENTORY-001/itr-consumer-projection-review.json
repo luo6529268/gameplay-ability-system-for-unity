@@ -1,0 +1,33 @@
+{
+  "evidenceClass": "SOURCE_LINKED_FIELD_CONSUMER_PROJECTION_ONLY",
+  "mapping": "Unity actual BattleInteractionWriter/LF2CharacterInteractionResolver uses array first element, absent=>0; native CombatRecordDecoder uses first_integer_or_zero",
+  "compared": {
+    "catchingact": 19438,
+    "caughtact": 19438
+  },
+  "skippedItrBlocks": 23,
+  "differences": [
+    {
+      "path": "c/rai/rait.dat",
+      "frame": [
+        723,
+        0
+      ],
+      "block": 4,
+      "field": "caughtact",
+      "native": 397,
+      "unityConsumer": 232
+    },
+    {
+      "path": "c/rai/rait.dat",
+      "frame": [
+        724,
+        0
+      ],
+      "block": 5,
+      "field": "caughtact",
+      "native": 397,
+      "unityConsumer": 232
+    }
+  ]
+}

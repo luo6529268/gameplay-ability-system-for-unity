@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// 对象属性表。运行时复刻以 C++ release 为准；这里仅保存 Unity 侧仍需查询的静态属性。
+    /// 历史兼容属性表。正式战斗 runtime 不再从这里查询规则；其余 API 保留既有诊断用途。
     /// Key: ObjectId（在本项目中等同于 CharacterID）。
     ///
     /// 来源参考：
@@ -13,10 +13,8 @@ namespace NTSD.Simulation
     {
         public readonly struct SpecEntry
         {
-            public readonly float? Mass;
             public readonly float? ZWidth;
             public readonly bool? NoShadow;
-            public readonly int? Oscillate;
 
             public readonly bool? Attackable;
             public readonly bool? RunThrow;
@@ -30,10 +28,8 @@ namespace NTSD.Simulation
             public readonly bool? HeavyWeaponJump;
 
             public SpecEntry(
-                float? mass = null,
                 float? zWidth = null,
                 bool? noShadow = null,
-                int? oscillate = null,
                 bool? attackable = null,
                 bool? runThrow = null,
                 bool? jumpThrow = null,
@@ -44,10 +40,8 @@ namespace NTSD.Simulation
                 bool? heavyWeaponDash = null,
                 bool? heavyWeaponJump = null)
             {
-                Mass = mass;
                 ZWidth = zWidth;
                 NoShadow = noShadow;
-                Oscillate = oscillate;
 
                 Attackable = attackable;
                 RunThrow = runThrow;
@@ -73,7 +67,6 @@ namespace NTSD.Simulation
 
             // 100: 棒球棒（轻武器）
             { 100, new SpecEntry(
-                mass: 0.3f,
                 attackable: true,
                 runThrow: true,
                 jumpThrow: true,
@@ -83,16 +76,16 @@ namespace NTSD.Simulation
                 noShadow: false) },
 
             // 101: 镐头
-            { 101, new SpecEntry(mass: 0.7f, attackable: true, runThrow: true, jumpThrow: true) },
+            { 101, new SpecEntry(attackable: true, runThrow: true, jumpThrow: true) },
 
             // 150: 石头（重武器）
-            { 150, new SpecEntry(mass: 0.9f) },
+            { 150, new SpecEntry() },
 
             // 201: Henry 的箭 1（特殊攻击）
-            { 201, new SpecEntry(mass: 0.3f, zWidth: 1f) },
+            { 201, new SpecEntry(zWidth: 1f) },
 
             // 202: Rudolf 的武器（特殊攻击）
-            { 202, new SpecEntry(mass: 0.3f, zWidth: 1f) },
+            { 202, new SpecEntry(zWidth: 1f) },
 
             // 203: Deep 的球（特殊攻击）- 空表
             { 203, new SpecEntry() },
@@ -104,13 +97,13 @@ namespace NTSD.Simulation
             { 212, new SpecEntry(noShadow: true) },
 
             // 213: 冰剑
-            { 213, new SpecEntry(mass: 0.5f, attackable: true, runThrow: true, jumpThrow: true) },
+            { 213, new SpecEntry(attackable: true, runThrow: true, jumpThrow: true) },
 
-            // 300: 打击特效（振荡幅度）
-            { 300, new SpecEntry(oscillate: 4) },
+            // 300: 历史打击特效 ID，旧振荡属性已退休。
+            { 300, new SpecEntry() },
 
-            // 302: 火焰特效（振荡幅度）
-            { 302, new SpecEntry(oscillate: 3) },
+            // 302: 历史火焰特效 ID，旧振荡属性已退休。
+            { 302, new SpecEntry() },
         };
 
         public static bool TryGet(int objectId, out SpecEntry entry) => ById.TryGetValue(objectId, out entry);
@@ -129,13 +122,7 @@ namespace NTSD.Simulation
 
         public static bool CanHeavyWeaponJump(int characterId) => Get(characterId).HeavyWeaponJump != false;
 
-        public static int GetOscillateOrDefault(int objectId) => Get(objectId).Oscillate ?? 0;
 
-        public static float GetMassOrDefault(int objectId)
-        {
-            var entry = Get(objectId);
-            return entry.Mass ?? NTSDGlobal.Default.Machanics.Mass;
-        }
 
         public static float GetItrZWidthOrDefault(int objectId)
         {

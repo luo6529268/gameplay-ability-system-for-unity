@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: nan state: nan cover: nan wait: nan next: nan dvx: nan dvy: nan dvz: nan centerx: nan centery: nan mp: nan hp: nan hit_a: nan hit_d: nan hit_j: nan hit_g: nan hit_Fj: nan hit_Fa: nan hit_Da: nan hit_Ua: nan hit_ja: nan hit_aj: nan hit_ad: nan hit_jd: nan hit_Dj: nan hit_Uj: nan hit_f: nan hit_b: nan hit_uz: nan hit_dz: nan hold_a: nan hold_d: nan hold_j: nan hold_f: nan hold_b: nan hold_uz: nan hold_dz: nan
+cpoint: kind: nan x: nan y: nan injury: nan cover: nan vaction: nan aaction: nan jaction: nan daction: nan taction: nan faction: nan baction: nan uzaction: nan dzaction: nan throwvx: nan throwvy: nan hurtable: nan fronthurtact: nan backhurtact: nan decrease: nan dircontrol: nan throwinjury: nan throwvz: nan z: nan recover: nan drain: nan gain: nan cpoint_end:
+opoint: kind: nan x: nan y: nan z: nan action: nan dvx: nan dvy: nan dvz: nan oid: nan facing: nan hp: nan mp: nan team: nan reserve: nan effect: nan pic: nan centerx: nan centery: nan centerz: nan framea: nan attacking: nan join: nan join_reserve: nan join_pic: nan opoint_end:
+itr: kind: nan x: nan y: nan w: nan h: nan dvx: nan dvy: nan fall: nan arest: nan vrest: nan respond: nan effect: nan drain: nan spark: nan recover: nan dbdefend: nan bdefend: nan injury: nan zwidth: nan z: nan dvz: nan sound: nan cover: nan caughtact: nan catchingact: nan pickedact: nan pickingact: nan delay: nan poison: nan confus: nan weak: nan manacle: nan join: nan mimic: nan bound: nan facing: nan dx: nan dy: nan dz: nan gain: nan itr_end:
+wpoint: kind: nan x: nan y: nan weaponact: nan attacking: nan cover: nan dvx: nan dvy: nan dvz: nan wpoint_end:
+bpoint: x: nan y: nan bpoint_end:
+centerz: nan chp: nan cmp: nan dx: nan dy: nan dz: nan
+<frame_end>

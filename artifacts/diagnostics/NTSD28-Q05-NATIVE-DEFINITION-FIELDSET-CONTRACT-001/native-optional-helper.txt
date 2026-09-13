@@ -1,0 +1,10 @@
+std::optional<double> field_double(const FieldBag& fields, std::string_view key) {
+    const auto* field = fields.last(key);
+    if (field == nullptr || field->value.empty()) return std::nullopt;
+    char* end = nullptr;
+    const double value = std::strtod(field->value.c_str(), &end);
+    if (end != field->value.c_str() + field->value.size() || !std::isfinite(value)) {
+        return std::nullopt;
+    }
+    return value;
+}

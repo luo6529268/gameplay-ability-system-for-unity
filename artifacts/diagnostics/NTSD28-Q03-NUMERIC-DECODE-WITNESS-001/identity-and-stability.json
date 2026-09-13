@@ -1,0 +1,395 @@
+{
+  "outputHash": "77C8FF1D8BD71FF05EA462C99D8EB9B4712495477996C8EE148944779DD2C7F3",
+  "inputs": [
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6992446CE5DCFC2C6C80704DDC2E7801DCE3BCCC26EF0E7E1D09B9CC49501420",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q03Numeric\\AuthorityNumericWitness.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "CF5E81B2F353C4C766DE91B88A27B62AB3F405E94B1016912491C45ABC38C13A",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "E895D1F3F8FA5C0DE1A17ADF634D972AE86EAD4A5DB6FC9C17E995F853193C09",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "070453131DDC189C51988F2169CAC1EFAF3C223E512A000965D2FD8E11ED5991",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "25BECB11DAB9C69D1A704C4A2C5C1F060241E574973DDE38C23191E08467AA72",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\armor_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "D1FEC33326A57E1D243F0FC3F1482BE00A0B68A1C70B4E45E8D13727E8D8FD00",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\background_definition.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "1AB92309CC5E9F548D171DEF9E149BCCD98D3B7FFC12678B49D3E3DE0F1F9921",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_flow.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "8287EC804B928C34711DAE4AE6561A924426965E45F921DD5D085F08F093037B",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_world.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C2CE795FED8BDCCD9BE4E16BF969B9FEB02C2DE238F902939369665889B5E6FE",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\collision_geometry.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "B75533BDB48D81AB21B1CEA7DBDD014F542C6CEF53FF3A94AEC3ACF1EB18B5A1",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\combat_records.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C4FC791C316BC2CB8C9217683C5AF56190E41630FA63E165280FFE051E82A7C4",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\damage_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "F98D23A6271C7156B36F0460F68C1090AF02F051FB9EDFF8C1283E001078CBFD",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_document.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "85600D20198855940A4B9B2AFC81126BCF0EC3CEE91EBD688797D19C7913DAC4",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_parser.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6DAD6BB061888FE44E6D001A4CBE98F33C9D31B7B0F0DC17B50EB1B25CF31047",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\defense_resolution.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "0E684E4F014EBFDB1658C751930F6CB6A5DA457B56EE3A48C901F455A280443F",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\engine_profile.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "31431A54A1C6569DFE8E30A1A37CD80F88F9360C6D9D8AB52C9A69FE1CA60DAD",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_machine.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "687B3D8D03D2B19AE5A88BCB19A6625AFA60B97219F02E29A96913CC184D3BE3",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_motion.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A3E858F143124F70E0193AF53769A9597F394E59F31B0604AFA93AECC7DC11F9",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\fusion_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "67115485624736DFE615DEF937E0F910B801987074EE8707759119326FBA73EC",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_candidates.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "258EEB00A11075F8687D215385E8C4FFB17177EF9DC40343DE499A7D4557BF48",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_response.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "380B7597144DEAD54D6592DD2D8D7D8883144B2D4A4BAEBE993112A00DA6ED58",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_routing.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "AC2CD6D7905BD4788C3C86E45312827E6AE7FF6C02108F320EC073931E312B47",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_state.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "F1930B7F41CB5A97D642C866FFF9189B61098CAFA2847E6DB617832620978072",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\kind_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A0092D049F6AB7D62B2A9B41C2351C87CFE610DC093DD157527A056ECD193AE7",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\minibar_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "DFCF326443ED77B1952929892C65F83713FA5ABDDB111C82D0E957D4C80C2E4B",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_ai.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "AA6CC42A8B80ECB00339E7C8EF4D64C2F21BE70080D6D3AB205997BD5B5E83AB",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_combo_hud.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "BF1783E5369EFFF1F4A0D5D6E1A1E21955511EC717F1DF8CFDF6A031B135D257",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_frame_hud.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4776B947299EBC35B0DFEAD8FDD7D25E655C6FC9F5A36E1B4C129123F22BEC47",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_random.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "148CA4B3D0353E3B6B03E180B47583C03DD4B43A941C3242FF0415B808BAF04C",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_resource_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6F22B0466FB0A4220E2CF451A72EB81DE370788B2B09FA48828CA2326ADB1905",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_catalog.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4BB251F30100CE58B87C3B9BFF81271EC79486C39511DECFE2A6A57EB0BEDECE",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_spawning.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "D083212906AC4E0778D12C84A7FE63C6702F2B700F461CD33860AE5E5CB1D12E",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\physics_integrator.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "9DD044C5B4B77811BB87677B13687E54CC607ED2804E8E18E3A31711848D6473",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\render_snapshot.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "FA21D4CCEA117A7CF01D71370FB3B62C6E9E0E702DEFBAFCBC84DFC8787D152A",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\simulation_tick_driver.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "29DFFC3A1FCC56EE69A46605634B264FC27B1EB0D0A2DC3B8FF57A212B8D7C0E",
+      "Path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\system_battle_tables.h"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "25F23554AD9444BE80591F00C09384BE155A987E659861D3B374B19A5882809C",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\comma_decimal.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "4A56561BD615B5BC04D5DE1F8B8D37DF7850A2AC48EB5A94EED0FBF5E71F63E3",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\decimal_prefix.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "2FA74FFEDD5E299CD4D7591C63BD35AFC2868FA929B9AE5A5847FF4B6C390886",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\duplicate_last.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "7977C8F16754C16AFABC5D378737E26C0137FE0054168FAE2C4AD88DF270766C",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\exponent.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "766E93D15D7CA68E211AD7066B500669A2DC718432787116D28CC3791E916701",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\fraction.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "5ACE42B8754AC2234248CF87EB0ECB60A952BC4D6440225556CE896A2E4C360F",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\hex_float.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "9FDE8954A4851C567B147139ACD0FFC6CBE0B160E4FAE1C80416AEDA2B0785E1",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\hex_integer.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "635F77F5006932E9D38679A276D9CA5E6FB8871DD993E3E24BC421BE3C47EF5F",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\hex_subnormal.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "3EE837CFB7FC2467978F95CA451640019352C1983741D28AC7A58FB21F10EBFE",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\infinity.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "EDA92312829E964508FA691FA2A28BE66278EEB0AE0761ACD338E3310B1A7684",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\int_max.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A992E61D0462A0A9E1296DFEAA06935D701D292AC76152946A4979AE557CA91F",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\int_min.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A531EF75FA6AC8F64EC8FCD09DD563BB705B22227F4BD98D452F916FDE2194F9",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\int_overflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "5F285ED87DB1B8267E01A4FF0D427655EB78610BF2ADCC0835773D99A046AD65",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\int_underflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "54431BD7AB03865A49BBF8F6896EA095BA74347D079A8FE7E4C189F03AC4F9E1",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\invalid_last.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "2F794A3972C2B048F46389E546BF090C4B122FC7D1F49F90F36D9F34D23C48FA",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\leading_dot.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "549FC18D50A4AC52AF4B8957BAB348D26161F1D27F12C9F4129D5ED5E857626A",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\leading_plus.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "5B7533DAD17C49AE060C0FF7794CD462E28A2B94B1072D38454738E724621A71",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\leading_zeros.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "89585007B3CFAC8FBF638DD8C387874AC897CA78D469B85209DB18D55140E055",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\max_finite.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "0D990C5D5B419AC0AA0E82AF7A8E681701876B5330131E157C24D598E5EE9EAE",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\minimum_normal.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "9BA0CB4652125A78396D021C4CF8EB4057D9AC7C686BDDE9C3750C68990A20C2",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\missing.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "733A0F28FDBA1D3E8AC650BDB6199F039E4976896A918B76BB0A69E022AFECD5",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\nan_payload.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "13BC37AFAB33FF16F241D75D8A5962F0361DF3522665D6F71445F01304832A16",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\nan.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6D25C014457A1840A7E24E6288E44378C8FE4B13BD1C1B8F448049E51A1E965D",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\negative_fraction.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6F583F373923A23DBCB9503FF30172C8E95CC2B3C1A85E3EE30543A57F6AF33A",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\negative_infinity.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "5A3BD8FB1A9C27065980DB47C06E84955ED36B834E3DB2A03E783267342547B9",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\negative_overflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "C9F685BE2CD6355AE65DA210986EAA685E53760A64F5AC94AD8C07ACD99BCF6A",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\negative_underflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "77FAE8F788D03932E3032D1BE2846DBA5D91553977192DDFEEF1F8A5D00C6E93",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\negative_zero.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "E9D9DAC5E4B7DD1FB8ABB9021401F9C52D04890548E88AD9C2026456A359F69F",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\overflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "16FB7DCADF3F813785BCAFDF1AE8B47415E8BA55E3BA8E72B7DD8D5D39E7F461",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\packed_actions.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "104CD9B308DFFDF7460ADF1A6A384B737890423D6B65B1DFC7F269984C2C886F",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\plus_zero.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "2C9DCCCE1CBEA1D88D8B257C47D4E046A08D049887CF5905E2EBCB1F9E177A5B",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\positive_zero.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "6A8A3FBFAE13ACE813F1E5C9FE83AF08C108B2846D06AE7AC5637BDA4827714B",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\round_just_above.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "2C27FC08C58194B80B289EAB385AA4BD8994C65635D3545C81B2B5F2F86B479A",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\round_tie_even.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "99B5982EAF2CA7F740A6762A72F018B2F248B69C4F223F49E877D7C493044E87",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\sentinel_rounding.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "F82B4B5C6EA88C3DA7BF65B2B98F0C9F2627E9D65D667C9A1CAB3D7B1672CC60",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\smallest_subnormal.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "BE53CB7C8332002C41AD4C898263073E7D57E13C2168861EC622AC093E42A359",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\underflow.dat"
+    },
+    {
+      "Algorithm": "SHA256",
+      "Hash": "A7F76C2BEF0484EE5E9B581E6F8A97D2C81EBF3C1010D87620B099FB79D7EF0D",
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q03-NUMERIC-DECODE-WITNESS-001\\fixtures\\uppercase_keys.dat"
+    }
+  ],
+  "compiler": {
+    "Algorithm": "SHA256",
+    "Hash": "4FD46EEF3B96DFD00115598BBAB6E9D7AE660A3B1A576E1D2AA6023C97D10A95",
+    "Path": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe"
+  },
+  "arguments": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "-Wl,--gc-sections",
+    "-IJ:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q03Numeric\\AuthorityNumericWitness.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+    "-o",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q03Numeric\\AuthorityNumericWitness.exe"
+  ],
+  "formalExeHash": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "executable": {
+    "Algorithm": "SHA256",
+    "Hash": "F5D338E4C4786386BAC7475510B367FD7112C84869D3EB6688AE3D588789C6B4",
+    "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q03Numeric\\AuthorityNumericWitness.exe"
+  },
+  "doubleRunStable": true
+}

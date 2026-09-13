@@ -125,15 +125,24 @@ namespace NTSD.Simulation
             {
                 RuntimeSlotTable.ReadOnlySlotView view =
                     _runtimeSlots.GetReadOnlyView(runtimeSlot);
-                if (!view.Claimed)
-                    continue;
+                // Alignment contract: NTSD28-Q05-UNCLAIMED-RAW-RUNTIME-RESTORE-001
+                // Raw payload ownership is independent of whether the slot currently has an entity.
+                if (snapshot.EntityRuntime.HasRawRuntime(runtimeSlot))
+                {
+                    NTSDEntityRuntime raw = view.RawRuntime ?? _runtimeSlots.GetRawRuntime(runtimeSlot);
+                    if (!snapshot.EntityRuntime.TryCopyRawRuntime(runtimeSlot, raw))
+                    {
+                        failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
+                        return false;
+                    }
+                }
+                else
+                {
+                    view.RawRuntime?.Reset();
+                }
 
-                if (!snapshot.EntityRuntime.TryCopyEntityRuntime(
-                        runtimeSlot,
-                        view.Entity.Runtime) ||
-                    !snapshot.EntityRuntime.TryCopyRawRuntime(
-                        runtimeSlot,
-                        view.RawRuntime))
+                if (view.Claimed && !snapshot.EntityRuntime.TryCopyEntityRuntime(
+                        runtimeSlot, view.Entity.Runtime))
                 {
                     failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
                     return false;
@@ -307,12 +316,24 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            if (!snapshot.EntityRuntime.HasCanonicalPayloadStorage)
+            {
+                failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
+                return false;
+            }
+
             for (int runtimeSlot = 0;
                  runtimeSlot < RuntimeSlotCapacity;
                  runtimeSlot++)
             {
                 BattleRuntimeSlotSnapshot expected =
                     snapshot.RuntimeSlots.GetSlot(runtimeSlot);
+                NTSDEntityRuntime currentRaw = _runtimeSlots.GetReadOnlyView(runtimeSlot).RawRuntime;
+                if (currentRaw != null && !currentRaw.HasCanonicalSnapshotStorage)
+                {
+                    failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
+                    return false;
+                }
                 if (!expected.Claimed)
                     continue;
 

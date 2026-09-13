@@ -1,0 +1,232 @@
+{
+  "sourceModel": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "closure": "fallback-required-collision-geometry",
+  "authoritySourceRoot": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source",
+  "authorityIncludeRoot": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include",
+  "conservativeHeaderCount": 31,
+  "conservativeHeaders": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\armor_resolution.h",
+      "sha256": "25BECB11DAB9C69D1A704C4A2C5C1F060241E574973DDE38C23191E08467AA72",
+      "bytes": 1575
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\background_definition.h",
+      "sha256": "D1FEC33326A57E1D243F0FC3F1482BE00A0B68A1C70B4E45E8D13727E8D8FD00",
+      "bytes": 1156
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_flow.h",
+      "sha256": "1AB92309CC5E9F548D171DEF9E149BCCD98D3B7FFC12678B49D3E3DE0F1F9921",
+      "bytes": 1416
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\battle_world.h",
+      "sha256": "8287EC804B928C34711DAE4AE6561A924426965E45F921DD5D085F08F093037B",
+      "bytes": 66979
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\collision_geometry.h",
+      "sha256": "C2CE795FED8BDCCD9BE4E16BF969B9FEB02C2DE238F902939369665889B5E6FE",
+      "bytes": 1985
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\combat_records.h",
+      "sha256": "B75533BDB48D81AB21B1CEA7DBDD014F542C6CEF53FF3A94AEC3ACF1EB18B5A1",
+      "bytes": 3225
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\damage_resolution.h",
+      "sha256": "C4FC791C316BC2CB8C9217683C5AF56190E41630FA63E165280FFE051E82A7C4",
+      "bytes": 1435
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_document.h",
+      "sha256": "F98D23A6271C7156B36F0460F68C1090AF02F051FB9EDFF8C1283E001078CBFD",
+      "bytes": 4441
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\dat_parser.h",
+      "sha256": "85600D20198855940A4B9B2AFC81126BCF0EC3CEE91EBD688797D19C7913DAC4",
+      "bytes": 418
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\defense_resolution.h",
+      "sha256": "6DAD6BB061888FE44E6D001A4CBE98F33C9D31B7B0F0DC17B50EB1B25CF31047",
+      "bytes": 1611
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\engine_profile.h",
+      "sha256": "0E684E4F014EBFDB1658C751930F6CB6A5DA457B56EE3A48C901F455A280443F",
+      "bytes": 678
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_machine.h",
+      "sha256": "31431A54A1C6569DFE8E30A1A37CD80F88F9360C6D9D8AB52C9A69FE1CA60DAD",
+      "bytes": 1898
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\frame_motion.h",
+      "sha256": "687B3D8D03D2B19AE5A88BCB19A6625AFA60B97219F02E29A96913CC184D3BE3",
+      "bytes": 837
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\fusion_catalog.h",
+      "sha256": "A3E858F143124F70E0193AF53769A9597F394E59F31B0604AFA93AECC7DC11F9",
+      "bytes": 2289
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_candidates.h",
+      "sha256": "67115485624736DFE615DEF937E0F910B801987074EE8707759119326FBA73EC",
+      "bytes": 4746
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\hit_response.h",
+      "sha256": "258EEB00A11075F8687D215385E8C4FFB17177EF9DC40343DE499A7D4557BF48",
+      "bytes": 4501
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_routing.h",
+      "sha256": "380B7597144DEAD54D6592DD2D8D7D8883144B2D4A4BAEBE993112A00DA6ED58",
+      "bytes": 1768
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\input_state.h",
+      "sha256": "AC2CD6D7905BD4788C3C86E45312827E6AE7FF6C02108F320EC073931E312B47",
+      "bytes": 1547
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\kind_catalog.h",
+      "sha256": "F1930B7F41CB5A97D642C866FFF9189B61098CAFA2847E6DB617832620978072",
+      "bytes": 2287
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\minibar_catalog.h",
+      "sha256": "A0092D049F6AB7D62B2A9B41C2351C87CFE610DC093DD157527A056ECD193AE7",
+      "bytes": 3402
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_ai.h",
+      "sha256": "DFCF326443ED77B1952929892C65F83713FA5ABDDB111C82D0E957D4C80C2E4B",
+      "bytes": 20605
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_combo_hud.h",
+      "sha256": "AA6CC42A8B80ECB00339E7C8EF4D64C2F21BE70080D6D3AB205997BD5B5E83AB",
+      "bytes": 2885
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_frame_hud.h",
+      "sha256": "BF1783E5369EFFF1F4A0D5D6E1A1E21955511EC717F1DF8CFDF6A031B135D257",
+      "bytes": 6859
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_random.h",
+      "sha256": "4776B947299EBC35B0DFEAD8FDD7D25E655C6FC9F5A36E1B4C129123F22BEC47",
+      "bytes": 2586
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\native_resource_catalog.h",
+      "sha256": "148CA4B3D0353E3B6B03E180B47583C03DD4B43A941C3242FF0415B808BAF04C",
+      "bytes": 2598
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_catalog.h",
+      "sha256": "6F22B0466FB0A4220E2CF451A72EB81DE370788B2B09FA48828CA2326ADB1905",
+      "bytes": 1809
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\object_spawning.h",
+      "sha256": "4BB251F30100CE58B87C3B9BFF81271EC79486C39511DECFE2A6A57EB0BEDECE",
+      "bytes": 2055
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\physics_integrator.h",
+      "sha256": "D083212906AC4E0778D12C84A7FE63C6702F2B700F461CD33860AE5E5CB1D12E",
+      "bytes": 6383
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\render_snapshot.h",
+      "sha256": "9DD044C5B4B77811BB87677B13687E54CC607ED2804E8E18E3A31711848D6473",
+      "bytes": 30914
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\simulation_tick_driver.h",
+      "sha256": "FA21D4CCEA117A7CF01D71370FB3B62C6E9E0E702DEFBAFCBC84DFC8787D152A",
+      "bytes": 7669
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include\\ntsd28\\system_battle_tables.h",
+      "sha256": "29DFFC3A1FCC56EE69A46605634B264FC27B1EB0D0A2DC3B8FF57A212B8D7C0E",
+      "bytes": 2336
+    }
+  ],
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "compilerVersion": "g++.exe (x86_64-win32-seh-rev0, Built by MinGW-Builds project) 15.1.0",
+  "compilerSha256": "4FD46EEF3B96DFD00115598BBAB6E9D7AE660A3B1A576E1D2AA6023C97D10A95",
+  "compileFlags": [
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-ffunction-sections",
+    "-fdata-sections",
+    "-finput-charset=UTF-8",
+    "-fexec-charset=UTF-8",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "-Wl,--gc-sections",
+    "-IJ:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include"
+  ],
+  "sources": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+      "sha256": "E895D1F3F8FA5C0DE1A17ADF634D972AE86EAD4A5DB6FC9C17E995F853193C09",
+      "bytes": 5282
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_parser.cpp",
+      "sha256": "CF5E81B2F353C4C766DE91B88A27B62AB3F405E94B1016912491C45ABC38C13A",
+      "bytes": 33514
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+      "sha256": "070453131DDC189C51988F2169CAC1EFAF3C223E512A000965D2FD8E11ED5991",
+      "bytes": 8670
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\object_spawning.cpp",
+      "sha256": "53F49DC676802DB67B740510B54AA7AE83E617FAEEF293F64D55FBD924535888",
+      "bytes": 6550
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\collision_geometry.cpp",
+      "sha256": "262B31261CA4747DFBE8117EE365E853B0591FC4AA05EDFD7F618CD75206D806",
+      "bytes": 5275
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_motion.cpp",
+      "sha256": "C83EEB02EBF2E1C9337258F4ABEDF535470E65CFA6861301AFFE703FBA7499F3",
+      "bytes": 1913
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\physics_integrator.cpp",
+      "sha256": "C5EEAA493A53A58C8F299E61F2F024D95E0E4502A9C93D3F2E7A7540CF668B9A",
+      "bytes": 20428
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\frame_machine.cpp",
+      "sha256": "0A7C312806FDA33B106006F151E3AD3223C76D68ACB1C65CBAB75662DFBC06FF",
+      "bytes": 2795
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28ContentAudit\\AuthorityContentCapture.cpp",
+      "sha256": "2840D1B558339A4EDFD4C74B8495700D4A95C736A27FCEB4AC3BBB3F0A93155E",
+      "bytes": 33171
+    }
+  ],
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28ContentAudit\\native\\AuthorityContentCapture.exe",
+  "executableSha256": "62EAA479ED88E6435DC72D6073685C9C472206D64A7DA7E1E75E94568D787E10",
+  "generatedUtc": "2026-09-12T17:53:33.3761251Z"
+}

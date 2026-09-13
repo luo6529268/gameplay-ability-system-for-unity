@@ -1,0 +1,18 @@
+{
+  "changeStatus": "FOCUSED_TEST_PASS",
+  "overallE2Status": "IN_PROGRESS",
+  "verifiedScope": "CANDIDATE_INPUT_BINDING_AND_VERIFIED_DECODE_ONLY",
+  "jobId": "ba66c3acc5964dd39be65a5ffe3675bc",
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 21.7047794,
+    "resultState": "Passed"
+  },
+  "atomicPublicationImplemented": false,
+  "nativeGlobalSourceChanged": false,
+  "formalDatSixFailuresStillPresent": true,
+  "schema": "12/20/23"
+}

@@ -1,0 +1,21 @@
+FAIL CanonicalDatKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL CanonicalDatKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL CanonicalDatKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL ImageKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL ImageKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL ImageKeysCannotEscapeTheDeclaredRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL LoganDatKeyIsRelativeToDecodedRootRatherThanRegistryDirectory: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL LoganRootsKeepCatalogRegistryDatAndImagesDistinct: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL LoganSheetHeadAndSmallUseTheSameVfsRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL LoganSheetHeadAndSmallUseTheSameVfsRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL LoganSheetHeadAndSmallUseTheSameVfsRoot: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL MissingOptionalImageStaysMissing: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL MissingOptionalImageStaysMissing: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL MissingRootIsRejectedInsteadOfUsingTheWorkingDirectory: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL MissingRootIsRejectedInsteadOfUsingTheWorkingDirectory: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL MissingRootIsRejectedInsteadOfUsingTheWorkingDirectory: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL SourceInstancesCannotChangeOneAnothersRoots: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL SpriteExtensionIsNotSilentlyRewritten: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL UnityAssetsImageAndDatRelativeImageKeepTheirExistingBases: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+FAIL UnityDefaultRootsAndAssetsDatRemainProjectRelative: Could not load type 'System.Runtime.Remoting.Messaging.CallContext' from assembly 'mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.
+SOURCE_LINKED_NUNIT_ONLY passed=0 failed=20

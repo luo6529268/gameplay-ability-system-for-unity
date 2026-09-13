@@ -1,0 +1,25 @@
+{
+    "runId": "e3-menu-1",
+    "mode": "menu",
+    "status": "PASS",
+    "message": "Actual configured-content caller, World preparation and ordered unload passed with a legal isolated source.",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\E3SourceCaller\\e3-menu-1|BBD7B14F2E6286C11B45CEFE88DC1BECB46CE0E43A4013C0A827F24118C50FF4",
+    "shutdownStage": "RuntimeMapCleared",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "",
+    "failureLifecycle": "",
+    "sourceIds": [
+        0,
+        2,
+        50,
+        52
+    ],
+    "worldObjects": 4,
+    "trackedResources": 46,
+    "resourceSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 1,
+    "menuReady": true,
+    "samePublishedKeys": true,
+    "stayedStoppedAfterTwoFrames": true
+}

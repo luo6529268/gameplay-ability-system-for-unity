@@ -1,0 +1,19 @@
+{
+  "sourceModel": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "fixture": {
+    "output": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28ContentAudit\\native\\smoke-content.jsonl",
+    "sha256": "FAE182F1277A4F2DF5939F7A85C377270A70CA345F0C5468FD8E3F21C1AD0259",
+    "declaredFrames": 1,
+    "cpointFields": 27,
+    "opointFields": 24,
+    "duplicateRawGainFields": 2,
+    "unknownRawFields": 1
+  },
+  "nar": {
+    "output": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28ContentAudit\\native\\nar-content.jsonl",
+    "sha256": "7D2B5DC1F6D1D65C5C9BF9049FDE0048426C9F2C43A52C6E4FE0B6A532CE1663",
+    "declaredFrames": 498,
+    "diagnostics": 0
+  },
+  "generatedUtc": "2026-09-12T17:53:33.7774978Z"
+}

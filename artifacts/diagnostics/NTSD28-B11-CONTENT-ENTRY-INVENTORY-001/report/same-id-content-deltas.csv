@@ -1,0 +1,126 @@
+﻿section,id,nativePath,unityPath,nativeDeclaredFrames,unityDeclaredFrames,nativeOnlyFrameOccurrences,unityOnlyFrameOccurrences,changedCommonFrameFieldBags,firstChangedFrameIds,nativeSpriteDeclarations,unitySpriteDeclarations,classification
+object,1,c\saku\saku.dat,Assets/NTSD/Config/Character/sakura.dat,324,233,115,24,209,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,2,c\nar\nar.dat,Assets/NTSD/Config/Character/naruto.dat,498,318,202,22,296,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,3,c\kaka\kaka.dat,Assets/NTSD/Config/Character/kakashi.dat,446,319,148,21,186,"[0, 1, 2, 3, 5, 6, 7, 8, 16, 17, 18, 19]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,4,c\sai\sai.dat,Assets/NTSD/Config/Character/sai.dat,372,276,104,8,268,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,5,c\shino\shino.dat,Assets/NTSD/Config/Character/shino.dat,284,204,90,10,194,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,6,c\saso\Hsa.dat,Assets/NTSD/Config/Character/Hsasori.dat,350,200,171,21,179,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,7,c\lee\lee.dat,Assets/NTSD/Config/Character/rock_lee.dat,446,357,115,26,331,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,8,c\chi\chi.dat,Assets/NTSD/Config/Character/chiyo.dat,371,246,136,11,235,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,9,c\ita\ita.dat,Assets/NTSD/Config/Character/itachi.dat,485,325,180,20,305,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,10,c\dei\dei.dat,Assets/NTSD/Config/Character/deidara.dat,307,225,98,16,209,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,11,c\sasu\sasu.dat,Assets/NTSD/Config/Character/sasuke.dat,397,268,148,19,249,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,12,c\kib\kib.dat,Assets/NTSD/Config/Character/kiba.dat,311,240,93,22,218,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,13,c\yam\yam.dat,Assets/NTSD/Config/Character/yamato.dat,353,247,117,11,236,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",5,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,14,c\kan\kan.dat,Assets/NTSD/Config/Character/kankuro.dat,327,225,120,18,207,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,15,c\tem\tem.dat,Assets/NTSD/Config/Character/temari.dat,312,276,81,45,231,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,16,c\gaa\gaa.dat,Assets/NTSD/Config/Character/gaara.dat,343,226,126,9,217,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,17,c\kis\kis.dat,Assets/NTSD/Config/Character/kisame.dat,309,230,101,22,208,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,18,c\nej\nej.dat,Assets/NTSD/Config/Character/neji.dat,452,304,159,11,293,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,19,c\ten\ten.dat,Assets/NTSD/Config/Character/tenten.dat,337,207,138,8,199,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,20,c\oro\oro.dat,Assets/NTSD/Config/Character/orochimaru.dat,311,243,83,15,228,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,21,c\jira\jira.dat,Assets/NTSD/Config/Character/jiraiya.dat,512,335,180,3,332,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",5,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,22,c\shik\shik.dat,Assets/NTSD/Config/Character/shikamaru.dat,281,210,81,10,200,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,23,c\kab\kab.dat,Assets/NTSD/Config/Character/kabuto.dat,362,245,123,6,239,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,24,c\hid\hid.dat,Assets/NTSD/Config/Character/hidan.dat,339,231,118,10,221,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",5,5,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,25,c\kaku\kakun.dat,Assets/NTSD/Config/Character/kakuzu.dat,339,262,124,47,215,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,30,m\nin\nin.dat,Assets/NTSD/Config/Character/sound_nin.dat,166,197,8,39,158,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,31,m\nin\nin2.dat,Assets/NTSD/Config/Character/sound_nin2.dat,172,147,39,14,133,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,32,m\nin\hun.dat,Assets/NTSD/Config/Character/hunter.dat,156,165,10,19,141,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,33,c\nar\ncl.dat,Assets/NTSD/Config/Character/naruto_clone.dat,267,203,76,12,191,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,34,c\kid\kid.dat,Assets/NTSD/Config/Character/kidomaru.dat,274,191,88,5,186,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,35,c\sako\sako.dat,Assets/NTSD/Config/Character/sakon.dat,357,217,145,5,212,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,36,c\tay\tay.dat,Assets/NTSD/Config/Character/tayuya.dat,316,199,122,5,194,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,37,c\jiro\jiro.dat,Assets/NTSD/Config/Character/jiroubou.dat,343,212,132,1,211,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,38,c\sasu\cs2.dat,Assets/NTSD/Config/Character/sasuke_cs2.dat,322,236,95,9,227,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,39,m\san\san.dat,Assets/NTSD/Config/Character/sand_creature.dat,181,176,35,30,146,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 60]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,50,m\ton\ton.dat,Assets/NTSD/Config/Character/pein.dat,152,226,13,87,139,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,51,c\saso\saso.dat,Assets/NTSD/Config/Character/sasori.dat,461,333,137,9,324,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,52,c\nar\kyu.dat,Assets/NTSD/Config/Character/kyubi.dat,292,281,80,69,212,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,5,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,55,c\saso\pup.dat,Assets/NTSD/Config/Character/puppet_sasori.dat,143,193,7,57,136,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,56,c\hid\rea.dat,Assets/NTSD/Config/Character/reaper.dat,348,246,112,10,236,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",5,5,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,57,c\kaku\kakunre.dat,Assets/NTSD/Config/Character/nckakuzu.dat,384,244,183,43,201,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",3,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,58,c\dei\bir.dat,Assets/NTSD/Config/Character/deidara_bird.dat,198,144,81,27,117,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 60]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,101,w\2.dat,Assets/NTSD/Config/chars/weapon2.dat,68,61,7,0,61,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,120,w\4.dat,Assets/NTSD/Config/chars/weapon4.dat,65,59,6,0,59,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,121,w\5.dat,Assets/NTSD/Config/FrameConfig/weapon5.dat,104,59,45,0,59,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,122,w\3.dat,Assets/NTSD/Config/chars/weapon3.dat,28,22,6,0,22,"[0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,123,w\8.dat,Assets/NTSD/Config/FrameConfig/weapon8.dat,27,22,5,0,22,"[0, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,124,w\9.dat,Assets/NTSD/Config/chars/weapon9.dat,63,59,4,0,59,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,150,w\1.dat,Assets/NTSD/Config/chars/weapon1.dat,19,11,8,0,11,"[0, 1, 2, 3, 4, 5, 6, 10, 20, 21, 399]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,151,w\l.dat,Assets/NTSD/Config/chars/log.dat,24,16,8,0,16,"[0, 1, 2, 3, 4, 5, 10, 20, 21, 30, 31, 32]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,204,a\cha\cha.dat,Assets/NTSD/Config/specialattack/wind.dat,105,116,54,65,51,"[0, 2, 4, 5, 6, 8, 9, 10, 13, 20, 21, 22]",2,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,206,c\dei\a\cla2.dat,Assets/NTSD/Config/specialattack/clay_bird2.dat,16,96,0,80,16,"[0, 1, 2, 3, 10, 11, 20, 30, 40, 50, 51, 52]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,207,c\sai\a\ink.dat,Assets/NTSD/Config/specialattack/ink.dat,175,114,85,24,90,"[0, 1, 2, 3, 4, 5, 6, 10, 11, 12, 20, 30]",5,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,208,a\gro\gro.dat,Assets/NTSD/Config/specialattack/sword.dat,79,99,33,53,46,"[0, 10, 11, 20, 30, 35, 36, 37, 38, 39, 40, 41]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,210,a\kat\kat2.dat,Assets/NTSD/Config/specialattack/katon_ball.dat,41,37,16,12,25,"[0, 1, 2, 10, 20, 21, 30, 31, 32, 33, 40, 41]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,211,a\fir\fir.dat,Assets/NTSD/Config/specialattack/firen_flame.dat,111,94,27,10,84,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",3,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,212,a\kam\kam.dat,Assets/NTSD/Config/specialattack/freeze_column.dat,52,48,41,37,11,"[0, 1, 2, 3, 10, 20, 30, 60, 61, 62, 63]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,213,c\saso\a\pup.dat,Assets/NTSD/Config/specialattack/puppet.dat,80,57,23,0,57,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,214,a\fla\fla.dat,Assets/NTSD/Config/specialattack/flash.dat,15,33,0,18,15,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,8,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,217,w\t.dat,Assets/NTSD/Config/chars/weapon10.dat,11,10,1,0,10,"[0, 1, 2, 3, 4, 5, 10, 20, 21, 399]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,218,w\h.dat,Assets/NTSD/Config/chars/weapon11.dat,11,10,1,0,10,"[0, 1, 2, 3, 4, 5, 10, 20, 21, 399]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,219,w\e.dat,Assets/NTSD/Config/specialattack/jan_chaseh.dat,29,29,0,0,29,"[0, 1, 2, 3, 10, 11, 12, 13, 20, 21, 22, 23]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,220,c\ita\a\cro2.dat,Assets/NTSD/Config/specialattack/crow_2.dat,192,161,51,20,141,"[0, 1, 10, 20, 30, 31, 50, 51, 52, 53, 54, 55]",7,5,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,221,c\dei\a\cla3.dat,Assets/NTSD/Config/specialattack/big_boom.dat,34,28,10,4,24,"[0, 1, 2, 3, 4, 5, 40, 50, 60, 61, 130, 131]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,222,a\pur\pur.dat,Assets/NTSD/Config/specialattack/ironsand.dat,61,64,40,43,21,"[0, 9, 10, 11, 12, 13, 14, 15, 16, 20, 30, 40]",1,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,223,a\meg\meg.dat,Assets/NTSD/Config/specialattack/mega_ex.dat,16,86,0,70,16,"[0, 10, 20, 30, 40, 41, 42, 43, 44, 45, 46, 47]",1,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,224,a\sna\sna.dat,Assets/NTSD/Config/specialattack/snake.dat,11,47,0,36,11,"[0, 1, 2, 3, 4, 5, 6, 7, 10, 20, 30]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,225,c\dei\a\cla.dat,Assets/NTSD/Config/specialattack/clay_bird.dat,249,24,225,0,24,"[0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 20]",5,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,226,c\kib\a\aka.dat,Assets/NTSD/Config/specialattack/coffin.dat,90,86,53,49,37,"[0, 10, 20, 30, 95, 96, 97, 98, 99, 100, 101, 102]",3,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,228,c\shino\a\bug.dat,Assets/NTSD/Config/specialattack/bugs.dat,146,59,98,11,48,"[0, 1, 2, 3, 5, 10, 15, 20, 30, 40, 41, 42]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,229,a\roc\roc.dat,Assets/NTSD/Config/specialattack/rasenshuriken.dat,10,65,0,55,10,"[0, 90, 91, 92, 95, 96, 97, 98, 165, 166]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,230,c\kan\a\kar.dat,Assets/NTSD/Config/specialattack/karasu.dat,209,134,75,0,134,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 10, 11, 20]",3,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,231,c\kan\a\san.dat,Assets/NTSD/Config/specialattack/sanshouo.dat,30,26,7,3,23,"[0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,235,s\S\S.dat,Assets/NTSD/Config/specialattack/criminal2.dat,47,54,41,48,6,"[0, 118, 119, 146, 147, 157]",2,8,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,300,s\c.dat,Assets/NTSD/Config/chars/criminal.dat,11,154,2,145,9,"[0, 10, 20, 30, 60, 80, 81, 82, 111]",1,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,400,c\jug\jugoCS2.dat,Assets/NTSD/Config/specialattack/dragon.dat,383,25,364,6,19,"[0, 1, 2, 3, 5, 10, 20, 30, 40, 45, 46, 47]",3,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,401,c\pai\a\sum.dat,Assets/NTSD/Config/specialattack/summon.dat,164,64,103,3,61,"[0, 10, 20, 21, 30, 40, 50, 51, 52, 53, 54, 55]",6,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,407,c\dan\a\iza.dat,Assets/NTSD/Config/specialattack/clay_worm.dat,146,44,139,37,7,"[10, 11, 20, 30, 40, 42, 43]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,408,c\dan\a\mark.dat,Assets/NTSD/Config/specialattack/katon_big.dat,31,38,24,31,7,"[0, 10, 11, 20, 30, 66, 67]",1,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,410,c\hay\hayS.dat,Assets/NTSD/Config/specialattack/sand_shield.dat,264,36,242,14,22,"[0, 1, 2, 3, 5, 6, 7, 10, 20, 30, 35, 50]",3,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,411,c\gaa\a\san.dat,Assets/NTSD/Config/specialattack/sand.dat,229,30,199,0,30,"[0, 1, 2, 3, 4, 5, 6, 10, 11, 20, 21, 30]",7,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,412,c\hay\clo1.dat,Assets/NTSD/Config/specialattack/sand_2.dat,203,68,153,18,50,"[0, 1, 2, 3, 10, 11, 20, 30, 40, 45, 46, 47]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,413,c\hay\clo2.dat,Assets/NTSD/Config/specialattack/sand_blast.dat,215,8,209,2,6,"[0, 1, 10, 11, 20, 30]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,416,c\kis\a\wat.dat,Assets/NTSD/Config/specialattack/water.dat,164,66,118,20,46,"[0, 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13]",7,6,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,417,c\hay\a\sla.dat,Assets/NTSD/Config/specialattack/tree.dat,77,35,60,18,17,"[0, 10, 20, 30, 70, 71, 72, 73, 80, 90, 91, 92]",8,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,418,c\hay\a\blo.dat,Assets/NTSD/Config/specialattack/mother_puppet.dat,45,49,31,35,14,"[10, 20, 30, 99, 100, 101, 102, 103, 104, 105, 106, 107]",3,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,419,c\chi\a\atk.dat,Assets/NTSD/Config/specialattack/chiyo_kunais.dat,168,82,129,43,39,"[0, 1, 2, 3, 4, 10, 11, 20, 30, 32, 33, 34]",4,5,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,420,c\chi\a\pup.dat,Assets/NTSD/Config/specialattack/father_puppet.dat,90,54,69,33,21,"[10, 20, 30, 99, 100, 108, 115, 116, 117, 118, 135, 136]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,421,c\sui\a\atk.dat,Assets/NTSD/Config/specialattack/bugs2.dat,197,55,158,16,39,"[0, 10, 11, 12, 13, 20, 21, 22, 30, 40, 41, 42]",6,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,422,w\x.dat,Assets/NTSD/Config/chars/ex_ball.dat,59,57,2,0,57,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,433,a\spi\spi.dat,Assets/NTSD/Config/specialattack/itachi_kunai.dat,17,45,0,28,17,"[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81]",1,3,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,434,c\nar\a\ras.dat,Assets/NTSD/Config/effect/rasengan_ball.dat,55,54,1,0,54,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,435,a\zzz\zzz.dat,Assets/NTSD/Config/specialattack/drunken.dat,7,90,0,83,7,"[0, 1, 2, 3, 10, 20, 30]",1,8,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,436,c\rai\raiT.dat,Assets/NTSD/Config/specialattack/wave.dat,473,39,447,13,26,"[0, 100, 101, 102, 103, 104, 108, 109, 110, 111, 112, 113]",3,7,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,437,c\kab\a\cha.dat,Assets/NTSD/Config/effect/chakra.dat,54,53,1,0,53,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,438,c\kid\a\spi.dat,Assets/NTSD/Config/specialattack/spider.dat,79,52,57,30,22,"[0, 1, 10, 11, 20, 30, 31, 32, 33, 34, 35, 36]",5,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,439,c\tay\a\mon.dat,Assets/NTSD/Config/specialattack/monster.dat,179,37,151,9,28,"[0, 10, 20, 30, 40, 41, 42, 43, 45, 46, 47, 48]",4,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,440,c\sasu\a\chi.dat,Assets/NTSD/Config/specialattack/chidori.dat,236,77,172,13,64,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",7,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,441,c\bee\a\wind.dat,Assets/NTSD/Config/specialattack/wood.dat,148,48,134,34,14,"[0, 10, 20, 30, 112, 116, 117, 132, 133, 134, 135, 136]",3,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,442,c\kid\a\kyo.dat,Assets/NTSD/Config/effect/gate.dat,58,55,34,31,24,"[0, 1, 10, 11, 12, 20, 21, 22, 30, 31, 32, 33]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,444,c\nej\a\bya.dat,Assets/NTSD/Config/effect/byakugan.dat,58,55,3,0,55,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,445,c\nej\a\bya2.dat,Assets/NTSD/Config/effect/shield.dat,58,55,6,3,52,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,446,a\blas\blas.dat,Assets/NTSD/Config/specialattack/4TK_ball.dat,11,98,1,88,10,"[10, 20, 30, 122, 123, 124, 125, 126, 130, 131]",1,10,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,447,c\rai\a\rai.dat,Assets/NTSD/Config/effect/die.dat,135,58,125,48,10,"[0, 10, 20, 30, 54, 55, 70, 71, 72, 100]",8,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,448,c\min\a\fla.dat,Assets/NTSD/Config/effect/flash_weap.dat,33,42,2,11,31,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,449,c\min\sag.dat,Assets/NTSD/Config/effect/jiroubou_rock.dat,327,14,313,0,14,"[0, 1, 10, 20, 21, 22, 23, 24, 25, 26, 27, 28]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,462,c\shik\a\sha.dat,Assets/NTSD/Config/specialattack/shadow.dat,137,174,34,71,103,"[0, 10, 20, 30, 70, 71, 72, 73, 74, 75, 76, 77]",3,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,499,c\kaku\a\nck.dat,Assets/NTSD/Config/specialattack/nckakuzuarm.dat,193,14,185,6,8,"[0, 5, 10, 122, 123, 124, 125, 126]",5,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,500,m\hug\hug.dat,Assets/NTSD/Config/effect/heart.dat,115,61,87,33,28,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,501,m\hug\hug2.dat,Assets/NTSD/Config/effect/heart2.dat,141,61,113,33,28,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,502,m\hug\hug3.dat,Assets/NTSD/Config/effect/heart3.dat,115,61,87,33,28,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,503,w\b.dat,Assets/NTSD/Config/effect/blood.dat,4,4,0,0,4,"[0, 60, 61, 62]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,504,c\hir\hcl.dat,Assets/NTSD/Config/effect/blood2.dat,199,3,196,0,3,"[0, 60, 61]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,505,c\kis\kcl.dat,Assets/NTSD/Config/effect/blood3.dat,159,2,157,0,2,"[0, 60]",2,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,506,c\guy\guy.dat,Assets/NTSD/Config/effect/heart0.dat,336,59,297,20,39,"[0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12]",4,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,507,c\kim\kim.dat,Assets/NTSD/Config/effect/air_creature_die.dat,291,3,289,1,2,"[60, 80]",3,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,510,c\yag\yag.dat,Assets/NTSD/Config/specialattack/100_puppets.dat,317,48,282,13,35,"[0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12, 20]",3,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,511,c\yag\a\mir.dat,Assets/NTSD/Config/specialattack/100_puppets_b.dat,109,50,75,16,34,"[0, 1, 2, 3, 4, 5, 6, 7, 10, 20, 30, 40]",5,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,512,c\saso\a\pup2.dat,Assets/NTSD/Config/specialattack/100_puppets_c.dat,29,49,11,31,18,"[0, 4, 10, 11, 20, 21, 30, 31, 60, 61, 62, 63]",2,4,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,513,c\tsu\tsu.dat,Assets/NTSD/Config/specialattack/lee_counter.dat,220,6,215,1,5,"[0, 10, 11, 20, 30]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,514,c\yag\a\dra.dat,Assets/NTSD/Config/specialattack/katon_kakuzu.dat,17,11,13,7,4,"[0, 10, 20, 30]",2,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,515,w\n.dat,Assets/NTSD/Config/chars/needle.dat,77,59,18,0,59,"[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,516,c\hak\a\mir.dat,Assets/NTSD/Config/specialattack/mirror.dat,105,42,64,1,41,"[0, 1, 30, 50, 51, 52, 53, 54, 55, 56, 57, 58]",3,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,998,data\etc.dat,Assets/NTSD/Config/jsona/etc.dat,9,14,0,5,9,"[0, 1, 2, 3, 4, 5, 6, 7, 399]",1,1,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT
+object,999,data\broken_weapon.dat,Assets/NTSD/Config/jsona/broken_weapon.dat,103,103,0,0,103,"[0, 1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13]",1,2,PARTIAL_AST_PROJECTION_ONLY_NOT_CONTENT_EQUALITY_OR_RULE_DEFECT

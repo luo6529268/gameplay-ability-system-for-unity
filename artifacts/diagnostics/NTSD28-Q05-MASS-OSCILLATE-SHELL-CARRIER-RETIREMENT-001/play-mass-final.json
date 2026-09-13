@@ -1,0 +1,71 @@
+{
+    "status": "PASS",
+    "message": "Actual driver forward/reverse/stationary and landing ticks after mass carrier removal; same object ID avoids unrelated definition behavior, injected logic characters in existing Play world.",
+    "startTick": 192,
+    "endTick": 193,
+    "cleanupPassed": true,
+    "rows": [
+        {
+            "objectId": 0,
+            "caseName": "forward",
+            "x": 405.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 4.0,
+            "vy": 0.0,
+            "vz": -4.0
+        },
+        {
+            "objectId": 0,
+            "caseName": "reverse",
+            "x": 495.0,
+            "y": 0.0,
+            "z": 503.5,
+            "vx": -4.0,
+            "vy": 0.0,
+            "vz": 4.0
+        },
+        {
+            "objectId": 0,
+            "caseName": "stationary",
+            "x": 600.0,
+            "y": 0.0,
+            "z": 498.5,
+            "vx": 0.0,
+            "vy": 0.0,
+            "vz": 0.0
+        }
+    ],
+    "landingRows": [
+        {
+            "objectId": 0,
+            "caseName": "forward",
+            "x": 405.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        },
+        {
+            "objectId": 0,
+            "caseName": "reverse",
+            "x": 505.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        },
+        {
+            "objectId": 0,
+            "caseName": "stationary",
+            "x": 605.0,
+            "y": 0.0,
+            "z": 493.5,
+            "vx": 1.6666666666666666,
+            "vy": 0.0,
+            "vz": -5.0
+        }
+    ]
+}

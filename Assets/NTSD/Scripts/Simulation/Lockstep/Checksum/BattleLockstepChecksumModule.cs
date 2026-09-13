@@ -561,6 +561,7 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? 500 : runtime.PP);
             builder.AddInt32(isDefault ? 0 : runtime.RespawnCount);
             builder.AddInt32(isDefault ? -1 : runtime.SpawnerSlotIndex);
+            builder.AddInt32(isDefault ? -1 : runtime.ObjectAiExcludedGroupSourceSlot2F8);
             builder.AddInt32(isDefault ? 0 : runtime.Unk344);
             builder.AddInt32(isDefault ? 0 : runtime.WeaponCount);
 

@@ -1,0 +1,5384 @@
+[
+  {
+    "path": "custom/1genma/genma.dat",
+    "id": 901,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genma.dat",
+    "id": 901,
+    "type": 0,
+    "key": "smallb",
+    "raw": "custom\\1genma\\genma_sb.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genma.dat",
+    "id": 901,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genma.dat",
+    "id": 901,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genmaclone.dat",
+    "id": 903,
+    "type": 0,
+    "key": "smallb",
+    "raw": "custom\\1genma\\genmaclone_sb.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genmaclone.dat",
+    "id": 903,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "custom/1genma/genmaclone.dat",
+    "id": 903,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/ton/ton.dat",
+    "id": 50,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\pig_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/ton/ton.dat",
+    "id": 50,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/ton/ton.dat",
+    "id": 50,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/san/san.dat",
+    "id": 39,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sand_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/san/san.dat",
+    "id": 39,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/san/san.dat",
+    "id": 39,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/hun.dat",
+    "id": 32,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hunter_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/hun.dat",
+    "id": 32,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/hun.dat",
+    "id": 32,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin2.dat",
+    "id": 31,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sound_nin2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin2.dat",
+    "id": 31,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin2.dat",
+    "id": 31,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin.dat",
+    "id": 30,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sound_nin_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin.dat",
+    "id": 30,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/nin/nin.dat",
+    "id": 30,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug.dat",
+    "id": 500,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\huge_nin_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug.dat",
+    "id": 500,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug.dat",
+    "id": 500,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug2.dat",
+    "id": 501,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\huge_nin2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug2.dat",
+    "id": 501,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug2.dat",
+    "id": 501,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug3.dat",
+    "id": 502,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\huge_nin3_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug3.dat",
+    "id": 502,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/hug/hug3.dat",
+    "id": 502,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/teu/teu.dat",
+    "id": 86,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\teuchi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/teu/teu.dat",
+    "id": 86,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "m/teu/teu.dat",
+    "id": 86,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/nar.dat",
+    "id": 2,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/nar.dat",
+    "id": 2,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\naruto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/nar.dat",
+    "id": 2,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/nar.dat",
+    "id": 2,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/ncl.dat",
+    "id": 33,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\naruto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/ncl.dat",
+    "id": 33,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/ncl.dat",
+    "id": 33,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/sna.dat",
+    "id": 99,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/sna.dat",
+    "id": 99,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\narutosage_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/sna.dat",
+    "id": 99,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/sna.dat",
+    "id": 99,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/snc.dat",
+    "id": 96,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\naruto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/snc.dat",
+    "id": 96,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/snc.dat",
+    "id": 96,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/kyu.dat",
+    "id": 52,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/kyu.dat",
+    "id": 52,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kyubi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/kyu.dat",
+    "id": 52,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/kyu.dat",
+    "id": 52,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/4tk.dat",
+    "id": 508,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/4tk.dat",
+    "id": 508,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\4t_kyubi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/4tk.dat",
+    "id": 508,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/4tk.dat",
+    "id": 508,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/a/ras.dat",
+    "id": 434,
+    "type": 3,
+    "key": "shadow",
+    "raw": "0",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nar/a/atk.dat",
+    "id": 518,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku.dat",
+    "id": 1,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku.dat",
+    "id": 1,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sakura_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku.dat",
+    "id": 1,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku.dat",
+    "id": 1,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku2.dat",
+    "id": 704,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku2.dat",
+    "id": 704,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sakuraCR_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku2.dat",
+    "id": 704,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku2.dat",
+    "id": 704,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku3.dat",
+    "id": 705,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku3.dat",
+    "id": 705,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sakuranothing_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku3.dat",
+    "id": 705,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/saku3.dat",
+    "id": 705,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saku/a/atk.dat",
+    "id": 700,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sasu.dat",
+    "id": 11,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sasu.dat",
+    "id": 11,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sasuke_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sasu.dat",
+    "id": 11,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sasu.dat",
+    "id": 11,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/cs2.dat",
+    "id": 38,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/cs2.dat",
+    "id": 38,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sasuke_cs2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/cs2.dat",
+    "id": 38,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/cs2.dat",
+    "id": 38,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/mss.dat",
+    "id": 98,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/mss.dat",
+    "id": 98,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sasukeMS_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/mss.dat",
+    "id": 98,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/mss.dat",
+    "id": 98,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sus.dat",
+    "id": 87,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sus.dat",
+    "id": 87,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sasukeMSS_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sus.dat",
+    "id": 87,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sasu/sus.dat",
+    "id": 87,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sai/sai.dat",
+    "id": 4,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sai/sai.dat",
+    "id": 4,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sai_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sai/sai.dat",
+    "id": 4,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sai/sai.dat",
+    "id": 4,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/kaka.dat",
+    "id": 3,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/kaka.dat",
+    "id": 3,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakashi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/kaka.dat",
+    "id": 3,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/kaka.dat",
+    "id": 3,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/pak.dat",
+    "id": 721,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakashi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/pak.dat",
+    "id": 721,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaka/pak.dat",
+    "id": 721,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/yam.dat",
+    "id": 13,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/yam.dat",
+    "id": 13,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\yamato_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/yam.dat",
+    "id": 13,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/yam.dat",
+    "id": 13,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/ycl.dat",
+    "id": 48,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\yamato_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/ycl.dat",
+    "id": 48,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/ycl.dat",
+    "id": 48,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yam/a/tre.dat",
+    "id": 555,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ank.dat",
+    "id": 65,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ank.dat",
+    "id": 65,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\anko_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ank.dat",
+    "id": 65,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ank.dat",
+    "id": 65,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/acl.dat",
+    "id": 44,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\anko_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/acl.dat",
+    "id": 44,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/acl.dat",
+    "id": 44,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ssnk.dat",
+    "id": 870,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\anko_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ssnk.dat",
+    "id": 870,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/ssnk.dat",
+    "id": 870,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ank/a/atk2.dat",
+    "id": 876,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hay.dat",
+    "id": 73,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hay.dat",
+    "id": 73,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hay_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hay.dat",
+    "id": 73,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hay.dat",
+    "id": 73,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hayS.dat",
+    "id": 410,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hayS.dat",
+    "id": 410,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hay_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hayS.dat",
+    "id": 410,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/hayS.dat",
+    "id": 410,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo1.dat",
+    "id": 412,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hay_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo1.dat",
+    "id": 412,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo1.dat",
+    "id": 412,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo2.dat",
+    "id": 413,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hay_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo2.dat",
+    "id": 413,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/clo2.dat",
+    "id": 413,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/a/sla.dat",
+    "id": 417,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hay/a/blo.dat",
+    "id": 418,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/dan.dat",
+    "id": 72,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/dan.dat",
+    "id": 72,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\dan_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/dan.dat",
+    "id": 72,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/dan.dat",
+    "id": 72,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/danr.dat",
+    "id": 604,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/danr.dat",
+    "id": 604,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\danr_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/danr.dat",
+    "id": 604,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dan/danr.dat",
+    "id": 604,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shis/shis.dat",
+    "id": 70,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shis/shis.dat",
+    "id": 70,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\Shisui_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shis/shis.dat",
+    "id": 70,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shis/shis.dat",
+    "id": 70,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nej/nej.dat",
+    "id": 18,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nej/nej.dat",
+    "id": 18,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\neji_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nej/nej.dat",
+    "id": 18,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nej/nej.dat",
+    "id": 18,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/nej/a/are.dat",
+    "id": 809,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hin/hin.dat",
+    "id": 41,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hin/hin.dat",
+    "id": 41,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hinata_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hin/hin.dat",
+    "id": 41,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hin/hin.dat",
+    "id": 41,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hin/a/are.dat",
+    "id": 810,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/lee/lee.dat",
+    "id": 7,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/lee/lee.dat",
+    "id": 7,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\rock_lee_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/lee/lee.dat",
+    "id": 7,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/lee/lee.dat",
+    "id": 7,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/guy.dat",
+    "id": 506,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/guy.dat",
+    "id": 506,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\guy_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/guy.dat",
+    "id": 506,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/guy.dat",
+    "id": 506,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gsi.dat",
+    "id": 94,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gsi.dat",
+    "id": 94,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\guy_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gsi.dat",
+    "id": 94,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gsi.dat",
+    "id": 94,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gei.dat",
+    "id": 97,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gei.dat",
+    "id": 97,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\guy_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gei.dat",
+    "id": 97,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/guy/gei.dat",
+    "id": 97,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/ten.dat",
+    "id": 19,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/ten.dat",
+    "id": 19,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ten_ten_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/ten.dat",
+    "id": 19,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/ten.dat",
+    "id": 19,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/pole.dat",
+    "id": 713,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ten_ten_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/pole.dat",
+    "id": 713,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/pole.dat",
+    "id": 713,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/swords.dat",
+    "id": 723,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ten_ten_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/swords.dat",
+    "id": 723,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/swords.dat",
+    "id": 723,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/blade.dat",
+    "id": 724,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ten_ten_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/blade.dat",
+    "id": 724,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/blade.dat",
+    "id": 724,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/bash.dat",
+    "id": 729,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ten_tensage_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/bash.dat",
+    "id": 729,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ten/bash.dat",
+    "id": 729,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shik/shik.dat",
+    "id": 22,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shik/shik.dat",
+    "id": 22,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\shikamaru_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shik/shik.dat",
+    "id": 22,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shik/shik.dat",
+    "id": 22,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/asu/asu.dat",
+    "id": 430,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/asu/asu.dat",
+    "id": 430,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\asuma_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/asu/asu.dat",
+    "id": 430,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/asu/asu.dat",
+    "id": 430,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shino/shino.dat",
+    "id": 5,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shino/shino.dat",
+    "id": 5,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\shino_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shino/shino.dat",
+    "id": 5,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/shino/shino.dat",
+    "id": 5,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kib/kib.dat",
+    "id": 12,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kib/kib.dat",
+    "id": 12,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kiba_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kib/kib.dat",
+    "id": 12,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kib/kib.dat",
+    "id": 12,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kib/a/aka.dat",
+    "id": 226,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/chi.dat",
+    "id": 8,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/chi.dat",
+    "id": 8,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/chi.dat",
+    "id": 8,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/chi.dat",
+    "id": 8,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup1.dat",
+    "id": 850,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup1.dat",
+    "id": 850,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup1.dat",
+    "id": 850,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup2.dat",
+    "id": 851,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup2.dat",
+    "id": 851,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup2.dat",
+    "id": 851,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup3.dat",
+    "id": 852,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup3.dat",
+    "id": 852,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup3.dat",
+    "id": 852,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup4.dat",
+    "id": 853,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup4.dat",
+    "id": 853,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup4.dat",
+    "id": 853,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup5.dat",
+    "id": 854,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup5.dat",
+    "id": 854,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup5.dat",
+    "id": 854,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup6.dat",
+    "id": 855,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup6.dat",
+    "id": 855,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup6.dat",
+    "id": 855,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup7.dat",
+    "id": 856,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup7.dat",
+    "id": 856,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup7.dat",
+    "id": 856,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup8.dat",
+    "id": 857,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup8.dat",
+    "id": 857,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup8.dat",
+    "id": 857,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup9.dat",
+    "id": 858,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup9.dat",
+    "id": 858,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup9.dat",
+    "id": 858,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup10.dat",
+    "id": 859,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\chiyo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup10.dat",
+    "id": 859,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/pup10.dat",
+    "id": 859,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/chi/a/pup.dat",
+    "id": 420,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan.dat",
+    "id": 14,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan.dat",
+    "id": 14,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kankuro_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan.dat",
+    "id": 14,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan.dat",
+    "id": 14,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan2.dat",
+    "id": 95,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan2.dat",
+    "id": 95,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kankuro_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan2.dat",
+    "id": 95,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kan/kan2.dat",
+    "id": 95,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tem/tem.dat",
+    "id": 15,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tem/tem.dat",
+    "id": 15,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\temari_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tem/tem.dat",
+    "id": 15,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tem/tem.dat",
+    "id": 15,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gaa/gaa.dat",
+    "id": 16,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gaa/gaa.dat",
+    "id": 16,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\gaara_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gaa/gaa.dat",
+    "id": 16,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gaa/gaa.dat",
+    "id": 16,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/rai.dat",
+    "id": 78,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/rai.dat",
+    "id": 78,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\rai_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/rai.dat",
+    "id": 78,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/rai.dat",
+    "id": 78,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/raiT.dat",
+    "id": 436,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/raiT.dat",
+    "id": 436,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\rai_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/raiT.dat",
+    "id": 436,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/rai/raiT.dat",
+    "id": 436,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/bee/bee.dat",
+    "id": 75,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/bee/bee.dat",
+    "id": 75,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\bee_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/bee/bee.dat",
+    "id": 75,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/bee/bee.dat",
+    "id": 75,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/bee/a/wind.dat",
+    "id": 441,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/han.dat",
+    "id": 726,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/han.dat",
+    "id": 726,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\han_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/han.dat",
+    "id": 726,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/han.dat",
+    "id": 726,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/smo.dat",
+    "id": 727,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/smo.dat",
+    "id": 727,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\han_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/smo.dat",
+    "id": 727,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/han/smo.dat",
+    "id": 727,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yag/yag.dat",
+    "id": 510,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yag/yag.dat",
+    "id": 510,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\yagura_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yag/yag.dat",
+    "id": 510,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/yag/yag.dat",
+    "id": 510,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hak/hak.dat",
+    "id": 29,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hak/hak.dat",
+    "id": 29,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\haku_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hak/hak.dat",
+    "id": 29,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hak/hak.dat",
+    "id": 29,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/gur.dat",
+    "id": 84,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/gur.dat",
+    "id": 84,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\guren_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/gur.dat",
+    "id": 84,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/gur.dat",
+    "id": 84,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/fakefan.dat",
+    "id": 85,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\guren_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/fakefan.dat",
+    "id": 85,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/fakefan.dat",
+    "id": 85,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/gur/a/cag.dat",
+    "id": 619,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/zab.dat",
+    "id": 60,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/zab.dat",
+    "id": 60,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\zabuza_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/zab.dat",
+    "id": 60,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/zab.dat",
+    "id": 60,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/clo.dat",
+    "id": 49,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\zabuza_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/clo.dat",
+    "id": 49,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/clo.dat",
+    "id": 49,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/dem.dat",
+    "id": 456,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/dem.dat",
+    "id": 456,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\zabuzademon_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/dem.dat",
+    "id": 456,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/zab/dem.dat",
+    "id": 456,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sui/sui.dat",
+    "id": 74,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sui/sui.dat",
+    "id": 74,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sui_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sui/sui.dat",
+    "id": 74,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sui/sui.dat",
+    "id": 74,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kar/kar.dat",
+    "id": 77,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kar/kar.dat",
+    "id": 77,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\karin_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kar/kar.dat",
+    "id": 77,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kar/kar.dat",
+    "id": 77,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugo.dat",
+    "id": 71,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugo.dat",
+    "id": 71,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jugo_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugo.dat",
+    "id": 71,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugo.dat",
+    "id": 71,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugoCS2.dat",
+    "id": 400,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugoCS2.dat",
+    "id": 400,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jugoCS2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugoCS2.dat",
+    "id": 400,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jug/jugoCS2.dat",
+    "id": 400,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/miz.dat",
+    "id": 76,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/miz.dat",
+    "id": 76,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\miz_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/miz.dat",
+    "id": 76,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/miz.dat",
+    "id": 76,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/cs2.dat",
+    "id": 428,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/cs2.dat",
+    "id": 428,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\cs2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/cs2.dat",
+    "id": 428,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/miz/cs2.dat",
+    "id": 428,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro1.dat",
+    "id": 66,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro1.dat",
+    "id": 66,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiroubou_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro1.dat",
+    "id": 66,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro1.dat",
+    "id": 66,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro.dat",
+    "id": 37,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro.dat",
+    "id": 37,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiroubou1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro.dat",
+    "id": 37,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/jiro.dat",
+    "id": 37,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol.dat",
+    "id": 711,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiroubou_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol.dat",
+    "id": 711,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol.dat",
+    "id": 711,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol2.dat",
+    "id": 712,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiroubou_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol2.dat",
+    "id": 712,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/gol2.dat",
+    "id": 712,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jiro/a/gol.dat",
+    "id": 709,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid1.dat",
+    "id": 67,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid1.dat",
+    "id": 67,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kidomaru1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid1.dat",
+    "id": 67,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid1.dat",
+    "id": 67,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid.dat",
+    "id": 34,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid.dat",
+    "id": 34,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kidomaru_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid.dat",
+    "id": 34,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kid/kid.dat",
+    "id": 34,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako1.dat",
+    "id": 61,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako1.dat",
+    "id": 61,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sakon1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako1.dat",
+    "id": 61,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako1.dat",
+    "id": 61,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk1.dat",
+    "id": 81,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sukon1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk1.dat",
+    "id": 81,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk1.dat",
+    "id": 81,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko1.dat",
+    "id": 83,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ukon1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko1.dat",
+    "id": 83,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko1.dat",
+    "id": 83,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako.dat",
+    "id": 35,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako.dat",
+    "id": 35,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sakon_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako.dat",
+    "id": 35,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/sako.dat",
+    "id": 35,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk.dat",
+    "id": 80,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sukon_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk.dat",
+    "id": 80,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/suk.dat",
+    "id": 80,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko.dat",
+    "id": 82,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ukon_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko.dat",
+    "id": 82,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/sako/uko.dat",
+    "id": 82,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay1.dat",
+    "id": 62,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay1.dat",
+    "id": 62,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tayuya1_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay1.dat",
+    "id": 62,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay1.dat",
+    "id": 62,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay.dat",
+    "id": 36,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay.dat",
+    "id": 36,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tayuya_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay.dat",
+    "id": 36,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tay/tay.dat",
+    "id": 36,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim1.dat",
+    "id": 28,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim1.dat",
+    "id": 28,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kimimaro_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim1.dat",
+    "id": 28,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim1.dat",
+    "id": 28,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim.dat",
+    "id": 507,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim.dat",
+    "id": 507,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kimimarocs2_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim.dat",
+    "id": 507,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/kim.dat",
+    "id": 507,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kim/a/bon.dat",
+    "id": 820,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/kab.dat",
+    "id": 23,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/kab.dat",
+    "id": 23,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kabuto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/kab.dat",
+    "id": 23,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/kab.dat",
+    "id": 23,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/tsurugi.dat",
+    "id": 860,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kabuto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/tsurugi.dat",
+    "id": 860,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/tsurugi.dat",
+    "id": 860,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/yoroi.dat",
+    "id": 861,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kabuto_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/yoroi.dat",
+    "id": 861,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kab/yoroi.dat",
+    "id": 861,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/oro.dat",
+    "id": 20,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/oro.dat",
+    "id": 20,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\orochimaru_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/oro.dat",
+    "id": 20,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/oro.dat",
+    "id": 20,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/1.dat",
+    "id": 88,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\orochimaru_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/1.dat",
+    "id": 88,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/1.dat",
+    "id": 88,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/2.dat",
+    "id": 89,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\orochimaru_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/2.dat",
+    "id": 89,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/2.dat",
+    "id": 89,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/oro/a/edo2.dat",
+    "id": 883,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/jira.dat",
+    "id": 21,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/jira.dat",
+    "id": 21,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiraiya_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/jira.dat",
+    "id": 21,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/jira.dat",
+    "id": 21,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/pre.dat",
+    "id": 701,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/pre.dat",
+    "id": 701,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jiraiya_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/pre.dat",
+    "id": 701,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/pre.dat",
+    "id": 701,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/sag.dat",
+    "id": 702,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/sag.dat",
+    "id": 702,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\jira_Sag_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/sag.dat",
+    "id": 702,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/jira/sag.dat",
+    "id": 702,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tsu/tsu.dat",
+    "id": 513,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tsu/tsu.dat",
+    "id": 513,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tsunade_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tsu/tsu.dat",
+    "id": 513,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tsu/tsu.dat",
+    "id": 513,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/min.dat",
+    "id": 27,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/min.dat",
+    "id": 27,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\minato_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/min.dat",
+    "id": 27,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/min.dat",
+    "id": 27,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/sag.dat",
+    "id": 449,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/sag.dat",
+    "id": 449,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\minatoSage_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/sag.dat",
+    "id": 449,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/sag.dat",
+    "id": 449,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/kcm.dat",
+    "id": 427,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/kcm.dat",
+    "id": 427,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\minatoKCM_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/kcm.dat",
+    "id": 427,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/kcm.dat",
+    "id": 427,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/min/a/fly2.dat",
+    "id": 817,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hir.dat",
+    "id": 63,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hir.dat",
+    "id": 63,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hiruzen_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hir.dat",
+    "id": 63,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hir.dat",
+    "id": 63,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hcl.dat",
+    "id": 504,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hiruzen_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hcl.dat",
+    "id": 504,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/hcl.dat",
+    "id": 504,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hir/a/atk.dat",
+    "id": 236,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tobir.dat",
+    "id": 64,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tobir.dat",
+    "id": 64,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tobirama_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tobir.dat",
+    "id": 64,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tobir.dat",
+    "id": 64,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tclo.dat",
+    "id": 415,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tobirama_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tclo.dat",
+    "id": 415,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobir/tclo.dat",
+    "id": 415,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/has.dat",
+    "id": 69,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/has.dat",
+    "id": 69,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hashirama_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/has.dat",
+    "id": 69,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/has.dat",
+    "id": 69,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/sag.dat",
+    "id": 93,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/sag.dat",
+    "id": 93,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hashiramaSage_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/sag.dat",
+    "id": 93,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/sag.dat",
+    "id": 93,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/hcl.dat",
+    "id": 47,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hashirama_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/hcl.dat",
+    "id": 47,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/has/hcl.dat",
+    "id": 47,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakun.dat",
+    "id": 25,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakun.dat",
+    "id": 25,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakun.dat",
+    "id": 25,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakun.dat",
+    "id": 25,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunck.dat",
+    "id": 498,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunck.dat",
+    "id": 498,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzuUn_S.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunck.dat",
+    "id": 498,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunck.dat",
+    "id": 498,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunre.dat",
+    "id": 57,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunre.dat",
+    "id": 57,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunre.dat",
+    "id": 57,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/kakunre.dat",
+    "id": 57,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskfir.dat",
+    "id": 871,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskfir.dat",
+    "id": 871,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskfir.dat",
+    "id": 871,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskthu.dat",
+    "id": 872,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskthu.dat",
+    "id": 872,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskthu.dat",
+    "id": 872,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskwat.dat",
+    "id": 873,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskwat.dat",
+    "id": 873,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskwat.dat",
+    "id": 873,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskair.dat",
+    "id": 874,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kakuzu_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskair.dat",
+    "id": 874,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kaku/maskair.dat",
+    "id": 874,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/hid.dat",
+    "id": 24,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/hid.dat",
+    "id": 24,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\hidan_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/hid.dat",
+    "id": 24,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/hid.dat",
+    "id": 24,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/rea.dat",
+    "id": 56,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/rea.dat",
+    "id": 56,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\reaper_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/rea.dat",
+    "id": 56,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/rea.dat",
+    "id": 56,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/a/rea.dat",
+    "id": 333,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/hid/a/rea2.dat",
+    "id": 334,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/Hsa.dat",
+    "id": 6,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/Hsa.dat",
+    "id": 6,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\Hsasori_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/Hsa.dat",
+    "id": 6,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/Hsa.dat",
+    "id": 6,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/saso.dat",
+    "id": 51,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/saso.dat",
+    "id": 51,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\sasori_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/saso.dat",
+    "id": 51,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/saso.dat",
+    "id": 51,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/ncs.dat",
+    "id": 90,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/ncs.dat",
+    "id": 90,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ncs_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/ncs.dat",
+    "id": 90,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/ncs.dat",
+    "id": 90,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/pup.dat",
+    "id": 55,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\puppet_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/pup.dat",
+    "id": 55,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/pup.dat",
+    "id": 55,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/saso/a/iro.dat",
+    "id": 822,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/dei.dat",
+    "id": 10,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/dei.dat",
+    "id": 10,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidara_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/dei.dat",
+    "id": 10,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/dei.dat",
+    "id": 10,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/bir.dat",
+    "id": 58,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/bir.dat",
+    "id": 58,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidara_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/bir.dat",
+    "id": 58,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/bir.dat",
+    "id": 58,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncd.dat",
+    "id": 45,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncd.dat",
+    "id": 45,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidaraUn_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncd.dat",
+    "id": 45,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncd.dat",
+    "id": 45,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncb.dat",
+    "id": 46,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncb.dat",
+    "id": 46,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidaraUn_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncb.dat",
+    "id": 46,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/ncb.dat",
+    "id": 46,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom.dat",
+    "id": 800,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidara_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom.dat",
+    "id": 800,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom.dat",
+    "id": 800,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom2.dat",
+    "id": 802,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\deidara_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom2.dat",
+    "id": 802,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/dei/zom2.dat",
+    "id": 802,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kis.dat",
+    "id": 17,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kis.dat",
+    "id": 17,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kisame_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kis.dat",
+    "id": 17,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kis.dat",
+    "id": 17,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kcl.dat",
+    "id": 505,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kisame_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kcl.dat",
+    "id": 505,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/kcl.dat",
+    "id": 505,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/sam.dat",
+    "id": 91,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/sam.dat",
+    "id": 91,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kisameSam_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/sam.dat",
+    "id": 91,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/sam.dat",
+    "id": 91,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/nck.dat",
+    "id": 42,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/nck.dat",
+    "id": 42,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\kisameUn_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/nck.dat",
+    "id": 42,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kis/nck.dat",
+    "id": 42,
+    "type": 0,
+    "key": "random",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ita/ita.dat",
+    "id": 9,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ita/ita.dat",
+    "id": 9,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\itachi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ita/ita.dat",
+    "id": 9,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ita/ita.dat",
+    "id": 9,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/ita/a/cro.dat",
+    "id": 603,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/kon.dat",
+    "id": 68,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/kon.dat",
+    "id": 68,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\konan_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/kon.dat",
+    "id": 68,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/kon.dat",
+    "id": 68,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/ang.dat",
+    "id": 54,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/ang.dat",
+    "id": 54,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\konan_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/ang.dat",
+    "id": 54,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/kon/ang.dat",
+    "id": 54,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/pai.dat",
+    "id": 26,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/pai.dat",
+    "id": 26,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\pain_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/pai.dat",
+    "id": 26,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/pai.dat",
+    "id": 26,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/paid.dat",
+    "id": 509,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/paid.dat",
+    "id": 509,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\paint_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/paid.dat",
+    "id": 509,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/pai/paid.dat",
+    "id": 509,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/tobi.dat",
+    "id": 0,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/tobi.dat",
+    "id": 0,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\tobi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/tobi.dat",
+    "id": 0,
+    "type": 0,
+    "key": "hidden",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/tobi.dat",
+    "id": 0,
+    "type": 0,
+    "key": "random",
+    "raw": "0",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/ttobi.dat",
+    "id": 53,
+    "type": 0,
+    "key": "bound",
+    "raw": "2",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/ttobi.dat",
+    "id": 53,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\ttobi_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/ttobi.dat",
+    "id": 53,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/tobi/ttobi.dat",
+    "id": 53,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/0/spe.dat",
+    "id": 899,
+    "type": 0,
+    "key": "smallb",
+    "raw": "sprite\\smallb\\spe_s.png",
+    "scope": "EXCLUDED_ORDINARY_HUD_REVIEW_ONLY",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/0/spe.dat",
+    "id": 899,
+    "type": 0,
+    "key": "hidden",
+    "raw": "1",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "c/0/spe.dat",
+    "id": 899,
+    "type": 0,
+    "key": "random",
+    "raw": "4",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "w/8.dat",
+    "id": 123,
+    "type": 6,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/0/ram.dat",
+    "id": 443,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/0/iru.dat",
+    "id": 92,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/0/iru.dat",
+    "id": 92,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/0/iruc.dat",
+    "id": 43,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/0/iruc.dat",
+    "id": 43,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/1/ncs.dat",
+    "id": 59,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/1/ncs.dat",
+    "id": 59,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/2/ncs2.dat",
+    "id": 40,
+    "type": 0,
+    "key": "hidden",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "s/2/ncs2.dat",
+    "id": 40,
+    "type": 0,
+    "key": "random",
+    "raw": "2",
+    "scope": "EXCLUDED_SELECTION_FLOW",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/cha/cha.dat",
+    "id": 204,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/kam/kam.dat",
+    "id": 212,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/ama/ama.dat",
+    "id": 605,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/blac/blac.dat",
+    "id": 714,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/fro/fro.dat",
+    "id": 715,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  },
+  {
+    "path": "a/pof/god.dat",
+    "id": 717,
+    "type": 3,
+    "key": "shadow",
+    "raw": "1",
+    "scope": "BATTLE_PRESENTATION_OR_RULE_READER",
+    "carrier": "NO_CORRESPONDING_LF2CharacterData_MEMBER"
+  }
+]

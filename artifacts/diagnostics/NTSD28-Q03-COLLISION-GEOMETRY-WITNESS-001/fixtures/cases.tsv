@@ -1,0 +1,15 @@
+id	targetX	targetZ
+inside	0	14
+positive_edge	0	15
+negative_edge	0	-15
+outside	0	16
+explicit_zero	0	15
+negative_width	0	0
+body_depth_edge	0	20
+body_depth_inside	0	19
+body_z_ignored	0	0
+itr_z_edge	0	25
+itr_z_inside	0	24
+xy_edge	20	0
+missing_body_x	0	0
+zero_body_width	5	0

@@ -1,0 +1,9 @@
+<bmp_begin>
+name: Fixture
+<bmp_end>
+<frame> 0 one
+itr:
+kind: 0 x: 3
+<frame> 1 two
+state: 1
+<frame_end>

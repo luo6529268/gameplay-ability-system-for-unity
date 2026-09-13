@@ -1,0 +1,636 @@
+decoded_dat/c/yag/a/dra.dat	frame	0	0		686974696e67
+decoded_dat/c/yag/a/dra.dat	field	0	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	0	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	0	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	0	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	0	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	0	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	0	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	0	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	0	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	0	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	0	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	0	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	0	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	0	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	0	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	0	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	0	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	0	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	0	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	0	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	0	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	0	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	0	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	0	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	0	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	0	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	0	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	0	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	0	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	0	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	0	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	0	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	0	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	0	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	0	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	0	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	0	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	0	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	0	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	0	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	0	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	0	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	0	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	0	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	0	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	0	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	0	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	0	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	0	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	0	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	0	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	1	10		686974696e67
+decoded_dat/c/yag/a/dra.dat	field	1	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	1	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	1	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	1	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	1	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	1	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	1	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	1	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	1	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	1	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	1	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	1	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	1	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	1	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	1	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	1	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	1	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	1	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	1	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	1	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	1	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	1	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	1	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	1	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	1	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	1	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	1	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	1	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	1	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	1	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	1	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	1	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	1	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	1	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	1	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	1	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	1	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	1	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	1	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	1	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	1	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	1	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	1	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	1	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	1	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	1	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	1	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	1	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	1	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	1	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	1	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	2	20		686974
+decoded_dat/c/yag/a/dra.dat	field	2	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	2	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	2	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	2	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	2	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	2	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	2	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	2	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	2	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	2	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	2	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	2	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	2	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	2	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	2	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	2	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	2	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	2	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	2	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	2	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	2	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	2	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	2	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	2	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	2	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	2	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	2	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	2	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	2	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	2	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	2	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	2	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	2	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	2	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	2	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	2	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	2	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	2	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	2	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	2	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	2	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	2	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	2	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	2	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	2	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	2	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	2	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	2	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	2	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	2	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	2	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	3	21		686974696e67
+decoded_dat/c/yag/a/dra.dat	field	3	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	3	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	3	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	3	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	3	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	3	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	3	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	3	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	3	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	3	0	opoint	
+decoded_dat/c/yag/a/dra.dat	field	3	0	kind	31
+decoded_dat/c/yag/a/dra.dat	field	3	0	x	3430
+decoded_dat/c/yag/a/dra.dat	field	3	0	y	3237
+decoded_dat/c/yag/a/dra.dat	field	3	0	action	3730
+decoded_dat/c/yag/a/dra.dat	field	3	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	3	0	oid	353134
+decoded_dat/c/yag/a/dra.dat	field	3	0	facing	30
+decoded_dat/c/yag/a/dra.dat	block	3	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	3	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	3	1	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	3	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	3	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	3	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	3	2	bdy	
+decoded_dat/c/yag/a/dra.dat	field	3	2	kind	30
+decoded_dat/c/yag/a/dra.dat	field	3	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	3	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	3	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	3	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	3	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	3	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	3	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	3	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	3	3	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	3	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	3	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	3	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	3	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	3	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	3	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	3	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	3	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	3	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	3	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	3	4	itr	
+decoded_dat/c/yag/a/dra.dat	field	3	4	kind	38
+decoded_dat/c/yag/a/dra.dat	field	3	4	respond	34
+decoded_dat/c/yag/a/dra.dat	field	3	4	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	3	4	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	3	4	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	3	4	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	3	4	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	3	4	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	3	4	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	3	4	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	3	4	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	3	4	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	3	4	effect	31
+decoded_dat/c/yag/a/dra.dat	field	3	4	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	4	30		7265626f756e64696e67
+decoded_dat/c/yag/a/dra.dat	field	4	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	4	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	4	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	4	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	4	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	4	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	4	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	4	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	4	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	4	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	4	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	4	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	4	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	4	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	4	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	4	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	4	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	4	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	4	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	4	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	4	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	4	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	4	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	4	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	4	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	4	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	4	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	4	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	4	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	4	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	4	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	4	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	4	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	4	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	4	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	4	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	4	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	4	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	4	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	4	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	4	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	4	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	4	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	4	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	4	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	4	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	4	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	4	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	4	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	4	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	4	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	5	50		686974
+decoded_dat/c/yag/a/dra.dat	field	5	-1	pic	30
+decoded_dat/c/yag/a/dra.dat	field	5	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	5	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	5	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	5	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	5	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	5	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	5	-1	centerx	3730
+decoded_dat/c/yag/a/dra.dat	field	5	-1	centery	313132
+decoded_dat/c/yag/a/dra.dat	field	5	-1	hit_a	30
+decoded_dat/c/yag/a/dra.dat	field	5	-1	hit_d	30
+decoded_dat/c/yag/a/dra.dat	field	5	-1	hit_j	30
+decoded_dat/c/yag/a/dra.dat	block	5	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	5	0	kind	31303033333239393930
+decoded_dat/c/yag/a/dra.dat	field	5	0	x	2d3131
+decoded_dat/c/yag/a/dra.dat	field	5	0	y	3339
+decoded_dat/c/yag/a/dra.dat	field	5	0	w	313731
+decoded_dat/c/yag/a/dra.dat	field	5	0	h	3935
+decoded_dat/c/yag/a/dra.dat	block	5	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	5	1	kind	31303033333239393930
+decoded_dat/c/yag/a/dra.dat	field	5	1	x	3231
+decoded_dat/c/yag/a/dra.dat	field	5	1	y	38303030
+decoded_dat/c/yag/a/dra.dat	field	5	1	w	3433
+decoded_dat/c/yag/a/dra.dat	field	5	1	h	3632
+decoded_dat/c/yag/a/dra.dat	block	5	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	5	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	5	2	x	30
+decoded_dat/c/yag/a/dra.dat	field	5	2	y	39303034373030
+decoded_dat/c/yag/a/dra.dat	field	5	2	w	313135
+decoded_dat/c/yag/a/dra.dat	field	5	2	h	3535
+decoded_dat/c/yag/a/dra.dat	field	5	2	zwidth	3530
+decoded_dat/c/yag/a/dra.dat	field	5	2	dvx	3535
+decoded_dat/c/yag/a/dra.dat	block	5	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	5	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	5	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	5	3	x	30
+decoded_dat/c/yag/a/dra.dat	field	5	3	y	39303030303030
+decoded_dat/c/yag/a/dra.dat	field	5	3	w	313135
+decoded_dat/c/yag/a/dra.dat	field	5	3	h	34363030
+decoded_dat/c/yag/a/dra.dat	field	5	3	zwidth	3530
+decoded_dat/c/yag/a/dra.dat	field	5	3	dvx	3535
+decoded_dat/c/yag/a/dra.dat	block	5	4	bdy	
+decoded_dat/c/yag/a/dra.dat	field	5	4	kind	30
+decoded_dat/c/yag/a/dra.dat	field	5	4	x	30
+decoded_dat/c/yag/a/dra.dat	field	5	4	y	39303034373030
+decoded_dat/c/yag/a/dra.dat	field	5	4	w	313030
+decoded_dat/c/yag/a/dra.dat	field	5	4	h	3535
+decoded_dat/c/yag/a/dra.dat	frame	6	51		686974
+decoded_dat/c/yag/a/dra.dat	field	6	-1	pic	30
+decoded_dat/c/yag/a/dra.dat	field	6	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	6	-1	wait	3130
+decoded_dat/c/yag/a/dra.dat	field	6	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	6	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	6	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	6	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	6	-1	centerx	3730
+decoded_dat/c/yag/a/dra.dat	field	6	-1	centery	313132
+decoded_dat/c/yag/a/dra.dat	field	6	-1	hit_a	30
+decoded_dat/c/yag/a/dra.dat	field	6	-1	hit_d	30
+decoded_dat/c/yag/a/dra.dat	field	6	-1	hit_j	30
+decoded_dat/c/yag/a/dra.dat	frame	7	55		686974
+decoded_dat/c/yag/a/dra.dat	field	7	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	7	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	7	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	7	-1	next	3536
+decoded_dat/c/yag/a/dra.dat	field	7	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	7	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	7	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	7	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	7	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	7	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	7	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	7	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	7	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	7	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	7	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	7	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	7	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	7	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	7	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	7	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	7	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	7	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	7	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	7	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	7	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	7	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	7	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	7	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	7	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	7	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	7	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	7	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	7	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	7	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	7	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	7	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	7	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	7	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	7	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	7	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	7	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	7	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	7	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	7	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	7	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	7	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	7	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	7	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	7	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	7	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	7	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	8	56		686974696e67
+decoded_dat/c/yag/a/dra.dat	field	8	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	8	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	8	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	8	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	8	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	8	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	8	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	8	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	8	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	8	0	opoint	
+decoded_dat/c/yag/a/dra.dat	field	8	0	kind	31
+decoded_dat/c/yag/a/dra.dat	field	8	0	x	3230
+decoded_dat/c/yag/a/dra.dat	field	8	0	y	3237
+decoded_dat/c/yag/a/dra.dat	field	8	0	action	3730
+decoded_dat/c/yag/a/dra.dat	field	8	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	8	0	oid	353134
+decoded_dat/c/yag/a/dra.dat	field	8	0	facing	30
+decoded_dat/c/yag/a/dra.dat	block	8	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	8	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	8	1	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	8	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	8	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	8	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	8	2	bdy	
+decoded_dat/c/yag/a/dra.dat	field	8	2	kind	30
+decoded_dat/c/yag/a/dra.dat	field	8	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	8	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	8	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	8	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	8	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	8	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	8	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	8	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	8	3	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	8	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	8	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	8	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	8	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	8	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	8	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	8	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	8	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	8	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	8	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	8	4	itr	
+decoded_dat/c/yag/a/dra.dat	field	8	4	kind	38
+decoded_dat/c/yag/a/dra.dat	field	8	4	respond	34
+decoded_dat/c/yag/a/dra.dat	field	8	4	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	8	4	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	8	4	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	8	4	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	8	4	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	8	4	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	8	4	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	8	4	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	8	4	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	8	4	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	8	4	effect	31
+decoded_dat/c/yag/a/dra.dat	field	8	4	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	9	332		686974
+decoded_dat/c/yag/a/dra.dat	field	9	-1	pic	393939
+decoded_dat/c/yag/a/dra.dat	field	9	-1	state	3135
+decoded_dat/c/yag/a/dra.dat	field	9	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	9	-1	next	3231
+decoded_dat/c/yag/a/dra.dat	field	9	-1	dvx	353530
+decoded_dat/c/yag/a/dra.dat	field	9	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	9	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	9	-1	centerx	3339
+decoded_dat/c/yag/a/dra.dat	field	9	-1	centery	3739
+decoded_dat/c/yag/a/dra.dat	block	9	0	bdy	
+decoded_dat/c/yag/a/dra.dat	field	9	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	9	0	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	9	0	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	9	0	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	9	0	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	9	1	bdy	
+decoded_dat/c/yag/a/dra.dat	field	9	1	kind	30
+decoded_dat/c/yag/a/dra.dat	field	9	1	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	9	1	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	9	1	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	9	1	h	31383030
+decoded_dat/c/yag/a/dra.dat	block	9	2	itr	
+decoded_dat/c/yag/a/dra.dat	field	9	2	kind	38
+decoded_dat/c/yag/a/dra.dat	field	9	2	respond	34
+decoded_dat/c/yag/a/dra.dat	field	9	2	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	9	2	x	313530303030
+decoded_dat/c/yag/a/dra.dat	field	9	2	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	9	2	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	9	2	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	9	2	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	9	2	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	9	2	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	9	2	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	9	2	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	9	2	effect	31
+decoded_dat/c/yag/a/dra.dat	field	9	2	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	block	9	3	itr	
+decoded_dat/c/yag/a/dra.dat	field	9	3	kind	38
+decoded_dat/c/yag/a/dra.dat	field	9	3	respond	34
+decoded_dat/c/yag/a/dra.dat	field	9	3	dvy	2d31
+decoded_dat/c/yag/a/dra.dat	field	9	3	x	2d313530303030
+decoded_dat/c/yag/a/dra.dat	field	9	3	y	35313037303030
+decoded_dat/c/yag/a/dra.dat	field	9	3	w	313030303739
+decoded_dat/c/yag/a/dra.dat	field	9	3	h	31383030
+decoded_dat/c/yag/a/dra.dat	field	9	3	dvx	30
+decoded_dat/c/yag/a/dra.dat	field	9	3	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	9	3	fall	3130
+decoded_dat/c/yag/a/dra.dat	field	9	3	vrest	31
+decoded_dat/c/yag/a/dra.dat	field	9	3	bdefend	313131
+decoded_dat/c/yag/a/dra.dat	field	9	3	effect	31
+decoded_dat/c/yag/a/dra.dat	field	9	3	zwidth	39393939
+decoded_dat/c/yag/a/dra.dat	frame	10	70		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	10	-1	pic	3130
+decoded_dat/c/yag/a/dra.dat	field	10	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	10	-1	wait	30
+decoded_dat/c/yag/a/dra.dat	field	10	-1	next	3731
+decoded_dat/c/yag/a/dra.dat	field	10	-1	dvx	34
+decoded_dat/c/yag/a/dra.dat	field	10	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	10	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	10	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	10	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	field	10	-1	sound	646174615c3038392e776176
+decoded_dat/c/yag/a/dra.dat	block	10	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	10	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	10	0	x	39
+decoded_dat/c/yag/a/dra.dat	field	10	0	y	313334
+decoded_dat/c/yag/a/dra.dat	field	10	0	w	323335
+decoded_dat/c/yag/a/dra.dat	field	10	0	h	313536
+decoded_dat/c/yag/a/dra.dat	field	10	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	10	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	10	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	10	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	10	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	10	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	11	71		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	11	-1	pic	3131
+decoded_dat/c/yag/a/dra.dat	field	11	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	11	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	11	-1	next	3732
+decoded_dat/c/yag/a/dra.dat	field	11	-1	dvx	34
+decoded_dat/c/yag/a/dra.dat	field	11	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	11	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	11	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	11	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	block	11	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	11	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	11	0	x	39
+decoded_dat/c/yag/a/dra.dat	field	11	0	y	313135
+decoded_dat/c/yag/a/dra.dat	field	11	0	w	323438
+decoded_dat/c/yag/a/dra.dat	field	11	0	h	313737
+decoded_dat/c/yag/a/dra.dat	field	11	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	11	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	11	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	11	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	11	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	11	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	12	72		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	12	-1	pic	3132
+decoded_dat/c/yag/a/dra.dat	field	12	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	12	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	12	-1	next	3733
+decoded_dat/c/yag/a/dra.dat	field	12	-1	dvx	34
+decoded_dat/c/yag/a/dra.dat	field	12	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	12	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	12	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	12	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	block	12	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	12	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	12	0	x	35
+decoded_dat/c/yag/a/dra.dat	field	12	0	y	3937
+decoded_dat/c/yag/a/dra.dat	field	12	0	w	323532
+decoded_dat/c/yag/a/dra.dat	field	12	0	h	313933
+decoded_dat/c/yag/a/dra.dat	field	12	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	12	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	12	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	12	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	12	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	12	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	13	73		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	13	-1	pic	3133
+decoded_dat/c/yag/a/dra.dat	field	13	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	13	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	13	-1	next	3734
+decoded_dat/c/yag/a/dra.dat	field	13	-1	dvx	34
+decoded_dat/c/yag/a/dra.dat	field	13	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	13	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	13	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	13	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	block	13	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	13	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	13	0	x	37
+decoded_dat/c/yag/a/dra.dat	field	13	0	y	3836
+decoded_dat/c/yag/a/dra.dat	field	13	0	w	323537
+decoded_dat/c/yag/a/dra.dat	field	13	0	h	313939
+decoded_dat/c/yag/a/dra.dat	field	13	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	13	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	13	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	13	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	13	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	13	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	14	74		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	14	-1	pic	3134
+decoded_dat/c/yag/a/dra.dat	field	14	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	14	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	14	-1	next	3735
+decoded_dat/c/yag/a/dra.dat	field	14	-1	dvx	34
+decoded_dat/c/yag/a/dra.dat	field	14	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	14	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	14	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	14	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	block	14	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	14	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	14	0	x	35
+decoded_dat/c/yag/a/dra.dat	field	14	0	y	313034
+decoded_dat/c/yag/a/dra.dat	field	14	0	w	323636
+decoded_dat/c/yag/a/dra.dat	field	14	0	h	313939
+decoded_dat/c/yag/a/dra.dat	field	14	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	14	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	14	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	14	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	14	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	14	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	15	75		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	15	-1	pic	3135
+decoded_dat/c/yag/a/dra.dat	field	15	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	15	-1	wait	33
+decoded_dat/c/yag/a/dra.dat	field	15	-1	next	3736
+decoded_dat/c/yag/a/dra.dat	field	15	-1	dvx	31
+decoded_dat/c/yag/a/dra.dat	field	15	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	15	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	15	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	15	-1	centery	323136
+decoded_dat/c/yag/a/dra.dat	block	15	0	itr	
+decoded_dat/c/yag/a/dra.dat	field	15	0	kind	30
+decoded_dat/c/yag/a/dra.dat	field	15	0	x	33
+decoded_dat/c/yag/a/dra.dat	field	15	0	y	313233
+decoded_dat/c/yag/a/dra.dat	field	15	0	w	323437
+decoded_dat/c/yag/a/dra.dat	field	15	0	h	313939
+decoded_dat/c/yag/a/dra.dat	field	15	0	dvx	3130
+decoded_dat/c/yag/a/dra.dat	field	15	0	dvy	2d3130
+decoded_dat/c/yag/a/dra.dat	field	15	0	fall	3730
+decoded_dat/c/yag/a/dra.dat	field	15	0	vrest	313030
+decoded_dat/c/yag/a/dra.dat	field	15	0	bdefend	3136
+decoded_dat/c/yag/a/dra.dat	field	15	0	injury	313030
+decoded_dat/c/yag/a/dra.dat	frame	16	76		647261676f6e
+decoded_dat/c/yag/a/dra.dat	field	16	-1	pic	3136
+decoded_dat/c/yag/a/dra.dat	field	16	-1	state	33303035
+decoded_dat/c/yag/a/dra.dat	field	16	-1	wait	31
+decoded_dat/c/yag/a/dra.dat	field	16	-1	next	31303030
+decoded_dat/c/yag/a/dra.dat	field	16	-1	dvx	31
+decoded_dat/c/yag/a/dra.dat	field	16	-1	dvy	353530
+decoded_dat/c/yag/a/dra.dat	field	16	-1	dvz	353530
+decoded_dat/c/yag/a/dra.dat	field	16	-1	centerx	3830
+decoded_dat/c/yag/a/dra.dat	field	16	-1	centery	323136

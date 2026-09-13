@@ -1,0 +1,3523 @@
+decoded_dat/c/nar/a/atk.dat	frame	0	0		64656c
+decoded_dat/c/nar/a/atk.dat	field	0	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	0	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	0	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	0	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	0	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	0	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	0	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	0	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	1	1		666c79
+decoded_dat/c/nar/a/atk.dat	field	1	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	1	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	1	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	1	-1	next	32
+decoded_dat/c/nar/a/atk.dat	field	1	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	1	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_d	31
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	1	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	1	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	1	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	1	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	1	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	1	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	1	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	1	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	1	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	1	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	1	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	1	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	1	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	1	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	1	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	1	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	1	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	1	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	2	2		666c79
+decoded_dat/c/nar/a/atk.dat	field	2	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	2	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	2	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	2	-1	next	31
+decoded_dat/c/nar/a/atk.dat	field	2	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	2	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_d	32
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	2	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	2	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	2	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	2	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	2	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	2	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	2	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	2	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	2	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	2	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	2	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	2	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	2	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	2	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	2	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	2	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	2	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	2	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	3	3		666c79
+decoded_dat/c/nar/a/atk.dat	field	3	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	3	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	3	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	3	-1	next	34
+decoded_dat/c/nar/a/atk.dat	field	3	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	3	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_d	33
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	3	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	3	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	3	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	3	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	3	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	3	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	3	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	3	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	3	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	3	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	3	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	3	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	3	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	3	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	3	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	3	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	3	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	3	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	4	4		666c79
+decoded_dat/c/nar/a/atk.dat	field	4	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	4	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	4	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	4	-1	next	33
+decoded_dat/c/nar/a/atk.dat	field	4	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	4	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_d	34
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	4	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	4	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	4	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	4	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	4	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	4	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	4	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	4	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	4	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	4	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	4	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	4	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	4	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	4	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	4	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	4	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	4	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	4	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	5	5		666c79
+decoded_dat/c/nar/a/atk.dat	field	5	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	5	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	5	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	5	-1	next	36
+decoded_dat/c/nar/a/atk.dat	field	5	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	5	-1	centery	3139
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_d	35
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	5	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	5	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	5	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	5	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	5	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	5	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	5	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	5	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	5	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	5	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	5	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	5	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	5	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	5	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	5	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	5	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	5	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	5	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	6	6		666c79
+decoded_dat/c/nar/a/atk.dat	field	6	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	6	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	6	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	6	-1	next	35
+decoded_dat/c/nar/a/atk.dat	field	6	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	6	-1	centery	3139
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_a	37
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_d	36
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_Fa	32
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	6	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	6	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	6	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	6	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	6	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	6	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	6	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	6	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	6	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	6	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	6	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	6	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	6	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	6	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	6	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	6	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	6	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	6	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	7	10		64656c
+decoded_dat/c/nar/a/atk.dat	field	7	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	7	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	7	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	7	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	7	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	7	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	7	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	7	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	8	20		64656c
+decoded_dat/c/nar/a/atk.dat	field	8	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	8	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	8	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	8	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	8	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	8	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	8	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	8	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	9	30		64656c
+decoded_dat/c/nar/a/atk.dat	field	9	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	9	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	9	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	9	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	9	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	9	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	9	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	9	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	10	35		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	10	-1	pic	3332
+decoded_dat/c/nar/a/atk.dat	field	10	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	10	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	10	-1	next	3336
+decoded_dat/c/nar/a/atk.dat	field	10	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	10	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	11	36		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	11	-1	pic	3333
+decoded_dat/c/nar/a/atk.dat	field	11	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	11	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	11	-1	next	3337
+decoded_dat/c/nar/a/atk.dat	field	11	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	11	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	12	37		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	12	-1	pic	3334
+decoded_dat/c/nar/a/atk.dat	field	12	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	12	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	12	-1	next	3338
+decoded_dat/c/nar/a/atk.dat	field	12	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	12	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	13	38		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	13	-1	pic	3335
+decoded_dat/c/nar/a/atk.dat	field	13	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	13	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	13	-1	next	3339
+decoded_dat/c/nar/a/atk.dat	field	13	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	13	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	14	39		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	14	-1	pic	3336
+decoded_dat/c/nar/a/atk.dat	field	14	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	14	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	14	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	14	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	14	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	15	44		4f6f64616d6132
+decoded_dat/c/nar/a/atk.dat	field	15	-1	pic	3436
+decoded_dat/c/nar/a/atk.dat	field	15	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	15	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	15	-1	next	3436
+decoded_dat/c/nar/a/atk.dat	field	15	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	15	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	15	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	15	-1	hit_a	3530
+decoded_dat/c/nar/a/atk.dat	field	15	-1	hit_d	3730
+decoded_dat/c/nar/a/atk.dat	field	15	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	15	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	15	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	15	0	x	3534
+decoded_dat/c/nar/a/atk.dat	field	15	0	y	3432
+decoded_dat/c/nar/a/atk.dat	field	15	0	w	313034
+decoded_dat/c/nar/a/atk.dat	field	15	0	h	3932
+decoded_dat/c/nar/a/atk.dat	field	15	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	15	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	15	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	15	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	15	0	fall	2d31
+decoded_dat/c/nar/a/atk.dat	field	15	0	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	16	45		4f6f64616d6132
+decoded_dat/c/nar/a/atk.dat	field	16	-1	pic	3436
+decoded_dat/c/nar/a/atk.dat	field	16	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	16	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	16	-1	next	3436
+decoded_dat/c/nar/a/atk.dat	field	16	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	16	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	16	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	16	-1	hit_a	3530
+decoded_dat/c/nar/a/atk.dat	field	16	-1	hit_d	3730
+decoded_dat/c/nar/a/atk.dat	field	16	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	16	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	16	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	16	0	x	3534
+decoded_dat/c/nar/a/atk.dat	field	16	0	y	3432
+decoded_dat/c/nar/a/atk.dat	field	16	0	w	313034
+decoded_dat/c/nar/a/atk.dat	field	16	0	h	3932
+decoded_dat/c/nar/a/atk.dat	field	16	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	16	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	16	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	16	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	16	0	fall	2d31
+decoded_dat/c/nar/a/atk.dat	field	16	0	injury	313730
+decoded_dat/c/nar/a/atk.dat	frame	17	46		4f6f64616d6132
+decoded_dat/c/nar/a/atk.dat	field	17	-1	pic	3437
+decoded_dat/c/nar/a/atk.dat	field	17	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	17	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	17	-1	next	3437
+decoded_dat/c/nar/a/atk.dat	field	17	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	17	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	17	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	17	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	17	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	17	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	17	0	x	3630
+decoded_dat/c/nar/a/atk.dat	field	17	0	y	313230
+decoded_dat/c/nar/a/atk.dat	field	17	0	action	3930
+decoded_dat/c/nar/a/atk.dat	field	17	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	17	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	17	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	17	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	17	1	x	3534
+decoded_dat/c/nar/a/atk.dat	field	17	1	y	3432
+decoded_dat/c/nar/a/atk.dat	field	17	1	w	313034
+decoded_dat/c/nar/a/atk.dat	field	17	1	h	3932
+decoded_dat/c/nar/a/atk.dat	field	17	1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	17	1	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	17	1	vrest	35
+decoded_dat/c/nar/a/atk.dat	field	17	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	17	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	17	1	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	18	47		4f6f64616d6132
+decoded_dat/c/nar/a/atk.dat	field	18	-1	pic	3438
+decoded_dat/c/nar/a/atk.dat	field	18	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	18	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	18	-1	next	3438
+decoded_dat/c/nar/a/atk.dat	field	18	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	18	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	18	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	18	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	18	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	18	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	18	0	x	3534
+decoded_dat/c/nar/a/atk.dat	field	18	0	y	3432
+decoded_dat/c/nar/a/atk.dat	field	18	0	w	313034
+decoded_dat/c/nar/a/atk.dat	field	18	0	h	3932
+decoded_dat/c/nar/a/atk.dat	field	18	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	18	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	18	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	18	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	18	0	fall	2d31
+decoded_dat/c/nar/a/atk.dat	field	18	0	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	19	48		4f6f64616d6132
+decoded_dat/c/nar/a/atk.dat	field	19	-1	pic	3439
+decoded_dat/c/nar/a/atk.dat	field	19	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	19	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	19	-1	next	3434
+decoded_dat/c/nar/a/atk.dat	field	19	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	19	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	19	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	19	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	19	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	19	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	19	0	x	3630
+decoded_dat/c/nar/a/atk.dat	field	19	0	y	313230
+decoded_dat/c/nar/a/atk.dat	field	19	0	action	3930
+decoded_dat/c/nar/a/atk.dat	field	19	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	19	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	19	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	19	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	19	1	x	3534
+decoded_dat/c/nar/a/atk.dat	field	19	1	y	3432
+decoded_dat/c/nar/a/atk.dat	field	19	1	w	313034
+decoded_dat/c/nar/a/atk.dat	field	19	1	h	3932
+decoded_dat/c/nar/a/atk.dat	field	19	1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	19	1	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	19	1	vrest	35
+decoded_dat/c/nar/a/atk.dat	field	19	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	19	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	19	1	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	20	50		726173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	20	-1	pic	3332
+decoded_dat/c/nar/a/atk.dat	field	20	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	20	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	20	-1	next	3531
+decoded_dat/c/nar/a/atk.dat	field	20	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	20	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	21	51		726173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	21	-1	pic	3333
+decoded_dat/c/nar/a/atk.dat	field	21	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	21	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	21	-1	next	3532
+decoded_dat/c/nar/a/atk.dat	field	21	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	21	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	21	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	21	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	21	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	21	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	21	0	action	3538
+decoded_dat/c/nar/a/atk.dat	field	21	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	21	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	22	52		726173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	22	-1	pic	3334
+decoded_dat/c/nar/a/atk.dat	field	22	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	22	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	22	-1	next	3533
+decoded_dat/c/nar/a/atk.dat	field	22	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	22	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	23	53		726173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	23	-1	pic	3335
+decoded_dat/c/nar/a/atk.dat	field	23	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	23	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	23	-1	next	3534
+decoded_dat/c/nar/a/atk.dat	field	23	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	23	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	24	54		726173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	24	-1	pic	3336
+decoded_dat/c/nar/a/atk.dat	field	24	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	24	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	24	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	24	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	24	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	25	55		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	25	-1	pic	3234
+decoded_dat/c/nar/a/atk.dat	field	25	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	25	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	25	-1	next	3536
+decoded_dat/c/nar/a/atk.dat	field	25	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	25	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	26	56		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	26	-1	pic	3235
+decoded_dat/c/nar/a/atk.dat	field	26	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	26	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	26	-1	next	3537
+decoded_dat/c/nar/a/atk.dat	field	26	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	26	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	27	57		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	27	-1	pic	3236
+decoded_dat/c/nar/a/atk.dat	field	27	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	27	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	27	-1	next	3538
+decoded_dat/c/nar/a/atk.dat	field	27	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	27	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	28	58		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	28	-1	pic	3234
+decoded_dat/c/nar/a/atk.dat	field	28	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	28	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	28	-1	next	3539
+decoded_dat/c/nar/a/atk.dat	field	28	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	28	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	29	59		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	29	-1	pic	3235
+decoded_dat/c/nar/a/atk.dat	field	29	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	29	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	29	-1	next	3630
+decoded_dat/c/nar/a/atk.dat	field	29	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	29	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	30	60		726173656e73687572696b656e32
+decoded_dat/c/nar/a/atk.dat	field	30	-1	pic	3236
+decoded_dat/c/nar/a/atk.dat	field	30	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	30	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	30	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	30	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	30	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	31	65		726173656e67616e32
+decoded_dat/c/nar/a/atk.dat	field	31	-1	pic	3239
+decoded_dat/c/nar/a/atk.dat	field	31	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	31	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	31	-1	next	3636
+decoded_dat/c/nar/a/atk.dat	field	31	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	31	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	32	66		726173656e67616e32
+decoded_dat/c/nar/a/atk.dat	field	32	-1	pic	3330
+decoded_dat/c/nar/a/atk.dat	field	32	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	32	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	32	-1	next	3637
+decoded_dat/c/nar/a/atk.dat	field	32	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	32	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	33	67		726173656e67616e32
+decoded_dat/c/nar/a/atk.dat	field	33	-1	pic	3331
+decoded_dat/c/nar/a/atk.dat	field	33	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	33	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	33	-1	next	3638
+decoded_dat/c/nar/a/atk.dat	field	33	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	33	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	34	68		726173656e67616e32
+decoded_dat/c/nar/a/atk.dat	field	34	-1	pic	3337
+decoded_dat/c/nar/a/atk.dat	field	34	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	34	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	34	-1	next	3639
+decoded_dat/c/nar/a/atk.dat	field	34	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	34	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	35	69		726173656e67616e32
+decoded_dat/c/nar/a/atk.dat	field	35	-1	pic	3338
+decoded_dat/c/nar/a/atk.dat	field	35	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	35	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	35	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	35	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	35	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	36	70		66696e69736832
+decoded_dat/c/nar/a/atk.dat	field	36	-1	pic	3531
+decoded_dat/c/nar/a/atk.dat	field	36	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	36	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	36	-1	next	3731
+decoded_dat/c/nar/a/atk.dat	field	36	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	36	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	block	36	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	36	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	36	0	x	3534
+decoded_dat/c/nar/a/atk.dat	field	36	0	y	3432
+decoded_dat/c/nar/a/atk.dat	field	36	0	w	313034
+decoded_dat/c/nar/a/atk.dat	field	36	0	h	3932
+decoded_dat/c/nar/a/atk.dat	field	36	0	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	36	0	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	36	0	vrest	3230
+decoded_dat/c/nar/a/atk.dat	field	36	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	36	0	fall	39393939
+decoded_dat/c/nar/a/atk.dat	field	36	0	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	37	71		66696e69736832
+decoded_dat/c/nar/a/atk.dat	field	37	-1	pic	3530
+decoded_dat/c/nar/a/atk.dat	field	37	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	37	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	37	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	37	-1	centerx	313037
+decoded_dat/c/nar/a/atk.dat	field	37	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	block	37	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	37	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	37	0	x	3534
+decoded_dat/c/nar/a/atk.dat	field	37	0	y	3432
+decoded_dat/c/nar/a/atk.dat	field	37	0	w	313034
+decoded_dat/c/nar/a/atk.dat	field	37	0	h	3932
+decoded_dat/c/nar/a/atk.dat	field	37	0	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	37	0	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	37	0	vrest	3230
+decoded_dat/c/nar/a/atk.dat	field	37	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	37	0	fall	39393939
+decoded_dat/c/nar/a/atk.dat	field	37	0	injury	30
+decoded_dat/c/nar/a/atk.dat	frame	38	80		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	38	-1	pic	34
+decoded_dat/c/nar/a/atk.dat	field	38	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	38	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	38	-1	next	3831
+decoded_dat/c/nar/a/atk.dat	field	38	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	38	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	38	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	38	-1	centerx	3233
+decoded_dat/c/nar/a/atk.dat	field	38	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	39	81		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	39	-1	pic	35
+decoded_dat/c/nar/a/atk.dat	field	39	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	39	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	39	-1	next	3832
+decoded_dat/c/nar/a/atk.dat	field	39	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	39	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	39	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	39	-1	centerx	3233
+decoded_dat/c/nar/a/atk.dat	field	39	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	40	82		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	40	-1	pic	36
+decoded_dat/c/nar/a/atk.dat	field	40	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	40	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	40	-1	next	3833
+decoded_dat/c/nar/a/atk.dat	field	40	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	40	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	40	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	40	-1	centerx	3233
+decoded_dat/c/nar/a/atk.dat	field	40	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	41	83		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	41	-1	pic	37
+decoded_dat/c/nar/a/atk.dat	field	41	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	41	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	41	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	41	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	41	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	41	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	41	-1	centerx	3233
+decoded_dat/c/nar/a/atk.dat	field	41	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	42	85		6f726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	42	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	42	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	42	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	42	-1	next	3435
+decoded_dat/c/nar/a/atk.dat	field	42	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	42	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	42	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	43	87		6b797562696368616b7261
+decoded_dat/c/nar/a/atk.dat	field	43	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	43	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	43	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	43	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	43	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	43	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	43	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	43	-1	centery	313430
+decoded_dat/c/nar/a/atk.dat	block	43	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	43	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	43	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	43	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	43	0	w	3835
+decoded_dat/c/nar/a/atk.dat	field	43	0	h	3139
+decoded_dat/c/nar/a/atk.dat	field	43	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	43	0	zwidth	3235
+decoded_dat/c/nar/a/atk.dat	field	43	0	fall	2d32
+decoded_dat/c/nar/a/atk.dat	field	43	0	vrest	38
+decoded_dat/c/nar/a/atk.dat	field	43	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	43	0	injury	32
+decoded_dat/c/nar/a/atk.dat	frame	44	88		6b7975626973637265616d
+decoded_dat/c/nar/a/atk.dat	field	44	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	44	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	44	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	44	-1	next	3839
+decoded_dat/c/nar/a/atk.dat	field	44	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	44	-1	centery	313430
+decoded_dat/c/nar/a/atk.dat	block	44	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	44	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	44	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	44	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	44	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	44	0	h	393939
+decoded_dat/c/nar/a/atk.dat	field	44	0	dvx	2d31
+decoded_dat/c/nar/a/atk.dat	field	44	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	44	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	44	0	fall	31
+decoded_dat/c/nar/a/atk.dat	field	44	0	vrest	35
+decoded_dat/c/nar/a/atk.dat	field	44	0	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	44	0	injury	3235
+decoded_dat/c/nar/a/atk.dat	frame	45	89		6b7975626973637265616d
+decoded_dat/c/nar/a/atk.dat	field	45	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	45	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	45	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	45	-1	next	3930
+decoded_dat/c/nar/a/atk.dat	field	45	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	45	-1	centery	313430
+decoded_dat/c/nar/a/atk.dat	frame	46	90		6b7975626973637265616d
+decoded_dat/c/nar/a/atk.dat	field	46	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	46	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	46	-1	wait	36
+decoded_dat/c/nar/a/atk.dat	field	46	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	46	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	46	-1	centery	313430
+decoded_dat/c/nar/a/atk.dat	block	46	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	46	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	46	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	46	0	y	3339
+decoded_dat/c/nar/a/atk.dat	field	46	0	action	373136
+decoded_dat/c/nar/a/atk.dat	field	46	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	46	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	46	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	46	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	46	1	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	46	1	y	313030
+decoded_dat/c/nar/a/atk.dat	field	46	1	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	46	1	h	393939
+decoded_dat/c/nar/a/atk.dat	field	46	1	dvx	2d31
+decoded_dat/c/nar/a/atk.dat	field	46	1	effect	35
+decoded_dat/c/nar/a/atk.dat	field	46	1	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	46	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	46	1	vrest	35
+decoded_dat/c/nar/a/atk.dat	field	46	1	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	46	1	injury	3235
+decoded_dat/c/nar/a/atk.dat	frame	47	119		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	47	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	47	-1	state	33303033
+decoded_dat/c/nar/a/atk.dat	field	47	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	47	-1	next	313230
+decoded_dat/c/nar/a/atk.dat	field	47	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	47	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	47	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	48	120		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	48	-1	pic	3430
+decoded_dat/c/nar/a/atk.dat	field	48	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	48	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	48	-1	next	313231
+decoded_dat/c/nar/a/atk.dat	field	48	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	48	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	48	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	field	48	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	48	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	48	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	48	0	x	3433
+decoded_dat/c/nar/a/atk.dat	field	48	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	48	0	w	313430
+decoded_dat/c/nar/a/atk.dat	field	48	0	h	3230
+decoded_dat/c/nar/a/atk.dat	field	48	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	48	0	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	48	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	48	0	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	48	0	vrest	34
+decoded_dat/c/nar/a/atk.dat	field	48	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	48	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	48	0	injury	35
+decoded_dat/c/nar/a/atk.dat	frame	49	121		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	49	-1	pic	3431
+decoded_dat/c/nar/a/atk.dat	field	49	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	49	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	49	-1	next	313232
+decoded_dat/c/nar/a/atk.dat	field	49	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	49	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	field	49	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	49	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	49	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	49	0	x	3433
+decoded_dat/c/nar/a/atk.dat	field	49	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	49	0	w	313430
+decoded_dat/c/nar/a/atk.dat	field	49	0	h	3230
+decoded_dat/c/nar/a/atk.dat	field	49	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	49	0	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	49	0	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	49	0	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	49	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	49	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	49	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	49	0	injury	35
+decoded_dat/c/nar/a/atk.dat	frame	50	122		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	50	-1	pic	3532
+decoded_dat/c/nar/a/atk.dat	field	50	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	50	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	50	-1	next	313233
+decoded_dat/c/nar/a/atk.dat	field	50	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	50	-1	centery	313335
+decoded_dat/c/nar/a/atk.dat	field	50	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	50	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	50	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	50	0	x	3433
+decoded_dat/c/nar/a/atk.dat	field	50	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	50	0	w	313430
+decoded_dat/c/nar/a/atk.dat	field	50	0	h	3230
+decoded_dat/c/nar/a/atk.dat	field	50	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	50	0	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	50	0	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	50	0	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	50	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	50	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	50	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	50	0	injury	35
+decoded_dat/c/nar/a/atk.dat	frame	51	123		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	51	-1	pic	3533
+decoded_dat/c/nar/a/atk.dat	field	51	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	51	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	51	-1	next	313234
+decoded_dat/c/nar/a/atk.dat	field	51	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	51	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	field	51	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	51	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	51	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	51	0	x	3433
+decoded_dat/c/nar/a/atk.dat	field	51	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	51	0	w	313430
+decoded_dat/c/nar/a/atk.dat	field	51	0	h	3230
+decoded_dat/c/nar/a/atk.dat	field	51	0	effect	35
+decoded_dat/c/nar/a/atk.dat	field	51	0	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	51	0	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	51	0	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	51	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	51	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	51	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	51	0	injury	35
+decoded_dat/c/nar/a/atk.dat	frame	52	124		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	52	-1	pic	3534
+decoded_dat/c/nar/a/atk.dat	field	52	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	52	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	52	-1	next	313232
+decoded_dat/c/nar/a/atk.dat	field	52	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	52	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	field	52	-1	hit_a	3730
+decoded_dat/c/nar/a/atk.dat	field	52	-1	hit_d	313435
+decoded_dat/c/nar/a/atk.dat	field	52	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	52	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	52	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	52	0	x	313135
+decoded_dat/c/nar/a/atk.dat	field	52	0	y	313230
+decoded_dat/c/nar/a/atk.dat	field	52	0	action	3935
+decoded_dat/c/nar/a/atk.dat	field	52	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	52	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	52	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	52	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	52	1	x	3433
+decoded_dat/c/nar/a/atk.dat	field	52	1	y	3739
+decoded_dat/c/nar/a/atk.dat	field	52	1	w	313430
+decoded_dat/c/nar/a/atk.dat	field	52	1	h	3230
+decoded_dat/c/nar/a/atk.dat	field	52	1	effect	35
+decoded_dat/c/nar/a/atk.dat	field	52	1	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	52	1	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	52	1	dvy	2d3230
+decoded_dat/c/nar/a/atk.dat	field	52	1	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	52	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	52	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	52	1	injury	35
+decoded_dat/c/nar/a/atk.dat	frame	53	130		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	53	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	53	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	53	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	53	-1	next	313331
+decoded_dat/c/nar/a/atk.dat	field	53	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	53	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	53	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	53	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	53	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	frame	54	131		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	54	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	54	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	54	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	54	-1	next	313332
+decoded_dat/c/nar/a/atk.dat	field	54	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	54	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	54	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	54	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	54	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	54	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	54	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	54	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	54	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	54	0	action	313332
+decoded_dat/c/nar/a/atk.dat	field	54	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	54	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	55	132		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	55	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	55	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	55	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	55	-1	next	313333
+decoded_dat/c/nar/a/atk.dat	field	55	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	55	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	55	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	55	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	55	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	frame	56	133		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	56	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	56	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	56	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	56	-1	next	313334
+decoded_dat/c/nar/a/atk.dat	field	56	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	56	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	56	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	56	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	56	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	56	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	56	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	56	0	x	313130
+decoded_dat/c/nar/a/atk.dat	field	56	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	56	0	action	313430
+decoded_dat/c/nar/a/atk.dat	field	56	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	56	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	57	134		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	57	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	57	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	57	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	57	-1	next	313335
+decoded_dat/c/nar/a/atk.dat	field	57	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	57	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	57	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	57	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	57	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	57	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	57	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	57	0	x	3830
+decoded_dat/c/nar/a/atk.dat	field	57	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	57	0	action	313336
+decoded_dat/c/nar/a/atk.dat	field	57	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	57	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	58	135		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	58	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	58	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	58	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	58	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	58	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	58	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	58	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	58	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	58	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	58	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	58	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	58	0	x	3830
+decoded_dat/c/nar/a/atk.dat	field	58	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	58	0	action	313338
+decoded_dat/c/nar/a/atk.dat	field	58	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	58	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	59	136		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	59	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	59	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	59	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	59	-1	next	313337
+decoded_dat/c/nar/a/atk.dat	field	59	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	59	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	59	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	59	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	59	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	field	59	-1	hit_j	3730
+decoded_dat/c/nar/a/atk.dat	frame	60	137		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	60	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	60	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	60	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	60	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	60	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	60	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	60	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	60	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	60	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	60	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	60	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	60	0	x	3430
+decoded_dat/c/nar/a/atk.dat	field	60	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	60	0	action	313431
+decoded_dat/c/nar/a/atk.dat	field	60	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	60	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	61	138		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	61	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	61	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	61	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	61	-1	next	313339
+decoded_dat/c/nar/a/atk.dat	field	61	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	61	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	61	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	61	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	61	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	field	61	-1	hit_j	3330
+decoded_dat/c/nar/a/atk.dat	frame	62	139		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	62	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	62	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	62	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	62	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	62	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	62	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	62	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	62	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	62	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	62	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	62	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	62	0	x	3430
+decoded_dat/c/nar/a/atk.dat	field	62	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	62	0	action	313432
+decoded_dat/c/nar/a/atk.dat	field	62	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	62	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	63	140		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	63	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	63	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	63	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	63	-1	next	313431
+decoded_dat/c/nar/a/atk.dat	field	63	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	63	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	63	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	63	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	63	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	frame	64	141		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	64	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	64	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	64	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	64	-1	next	313432
+decoded_dat/c/nar/a/atk.dat	field	64	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	64	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	64	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	64	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	64	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	frame	65	142		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	65	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	65	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	65	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	65	-1	next	313433
+decoded_dat/c/nar/a/atk.dat	field	65	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	65	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	65	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	65	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	65	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	frame	66	143		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	66	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	66	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	66	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	66	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	66	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	66	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	66	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	66	-1	centerx	30
+decoded_dat/c/nar/a/atk.dat	field	66	-1	centery	30
+decoded_dat/c/nar/a/atk.dat	block	66	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	66	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	66	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	66	0	y	32
+decoded_dat/c/nar/a/atk.dat	field	66	0	action	313434
+decoded_dat/c/nar/a/atk.dat	field	66	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	66	0	facing	31
+decoded_dat/c/nar/a/atk.dat	frame	67	144		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	67	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	67	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	67	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	67	-1	next	313531
+decoded_dat/c/nar/a/atk.dat	field	67	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	67	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	67	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	67	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	67	-1	centery	3734
+decoded_dat/c/nar/a/atk.dat	frame	68	145		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	68	-1	pic	3534
+decoded_dat/c/nar/a/atk.dat	field	68	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	68	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	68	-1	next	313436
+decoded_dat/c/nar/a/atk.dat	field	68	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	68	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	field	68	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	68	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	68	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	68	0	x	3433
+decoded_dat/c/nar/a/atk.dat	field	68	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	68	0	w	313430
+decoded_dat/c/nar/a/atk.dat	field	68	0	h	3230
+decoded_dat/c/nar/a/atk.dat	field	68	0	zwidth	3135
+decoded_dat/c/nar/a/atk.dat	field	68	0	dvx	3530
+decoded_dat/c/nar/a/atk.dat	field	68	0	dvy	2d3430
+decoded_dat/c/nar/a/atk.dat	field	68	0	vrest	3130
+decoded_dat/c/nar/a/atk.dat	field	68	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	68	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	68	0	injury	3130
+decoded_dat/c/nar/a/atk.dat	frame	69	146		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	69	-1	pic	3433
+decoded_dat/c/nar/a/atk.dat	field	69	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	69	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	69	-1	next	313437
+decoded_dat/c/nar/a/atk.dat	field	69	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	69	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	frame	70	147		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	70	-1	pic	3434
+decoded_dat/c/nar/a/atk.dat	field	70	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	70	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	70	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	70	-1	centerx	313135
+decoded_dat/c/nar/a/atk.dat	field	70	-1	centery	313238
+decoded_dat/c/nar/a/atk.dat	frame	71	150		6b726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	71	-1	pic	3435
+decoded_dat/c/nar/a/atk.dat	field	71	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	71	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	71	-1	next	313230
+decoded_dat/c/nar/a/atk.dat	field	71	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	71	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	71	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	72	151		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	72	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	72	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	72	-1	wait	34
+decoded_dat/c/nar/a/atk.dat	field	72	-1	next	313532
+decoded_dat/c/nar/a/atk.dat	field	72	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	72	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	72	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	72	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	72	-1	centery	3734
+decoded_dat/c/nar/a/atk.dat	block	72	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	72	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	72	0	x	3431
+decoded_dat/c/nar/a/atk.dat	field	72	0	y	3738
+decoded_dat/c/nar/a/atk.dat	field	72	0	action	3630
+decoded_dat/c/nar/a/atk.dat	field	72	0	oid	323034
+decoded_dat/c/nar/a/atk.dat	field	72	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	73	152		636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	73	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	73	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	73	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	73	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	73	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	73	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	73	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	73	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	73	-1	centery	3734
+decoded_dat/c/nar/a/atk.dat	block	73	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	73	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	73	0	x	3431
+decoded_dat/c/nar/a/atk.dat	field	73	0	y	3738
+decoded_dat/c/nar/a/atk.dat	field	73	0	action	333037
+decoded_dat/c/nar/a/atk.dat	field	73	0	oid	3333
+decoded_dat/c/nar/a/atk.dat	field	73	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	74	154		636861726765
+decoded_dat/c/nar/a/atk.dat	field	74	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	74	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	74	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	74	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	74	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	74	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	74	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	74	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	74	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	74	0	bdy	
+decoded_dat/c/nar/a/atk.dat	field	74	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	74	0	x	3231
+decoded_dat/c/nar/a/atk.dat	field	74	0	y	353235303030
+decoded_dat/c/nar/a/atk.dat	field	74	0	w	3433
+decoded_dat/c/nar/a/atk.dat	field	74	0	h	3939
+decoded_dat/c/nar/a/atk.dat	frame	75	155		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	75	-1	pic	3237
+decoded_dat/c/nar/a/atk.dat	field	75	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	75	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	75	-1	next	313536
+decoded_dat/c/nar/a/atk.dat	field	75	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	75	-1	centery	3435
+decoded_dat/c/nar/a/atk.dat	frame	76	156		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	76	-1	pic	3238
+decoded_dat/c/nar/a/atk.dat	field	76	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	76	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	76	-1	next	313537
+decoded_dat/c/nar/a/atk.dat	field	76	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	76	-1	centery	3437
+decoded_dat/c/nar/a/atk.dat	field	76	-1	sound	646174615c3035332e776176
+decoded_dat/c/nar/a/atk.dat	frame	77	157		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	77	-1	pic	3339
+decoded_dat/c/nar/a/atk.dat	field	77	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	77	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	77	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	77	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	77	-1	centery	3437
+decoded_dat/c/nar/a/atk.dat	frame	78	165		6b6368616b7261
+decoded_dat/c/nar/a/atk.dat	field	78	-1	pic	30
+decoded_dat/c/nar/a/atk.dat	field	78	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	78	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	78	-1	next	313636
+decoded_dat/c/nar/a/atk.dat	field	78	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	78	-1	centery	3437
+decoded_dat/c/nar/a/atk.dat	frame	79	166		6b6368616b7261
+decoded_dat/c/nar/a/atk.dat	field	79	-1	pic	31
+decoded_dat/c/nar/a/atk.dat	field	79	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	79	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	79	-1	next	313637
+decoded_dat/c/nar/a/atk.dat	field	79	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	79	-1	centery	3530
+decoded_dat/c/nar/a/atk.dat	frame	80	167		6b6368616b7261
+decoded_dat/c/nar/a/atk.dat	field	80	-1	pic	32
+decoded_dat/c/nar/a/atk.dat	field	80	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	80	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	80	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	80	-1	centerx	3434
+decoded_dat/c/nar/a/atk.dat	field	80	-1	centery	3533
+decoded_dat/c/nar/a/atk.dat	frame	81	179		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	81	-1	pic	3535
+decoded_dat/c/nar/a/atk.dat	field	81	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	81	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	81	-1	next	313830
+decoded_dat/c/nar/a/atk.dat	field	81	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	81	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	field	81	-1	hit_a	3130
+decoded_dat/c/nar/a/atk.dat	field	81	-1	hit_d	313833
+decoded_dat/c/nar/a/atk.dat	field	81	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	frame	82	180		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	82	-1	pic	3535
+decoded_dat/c/nar/a/atk.dat	field	82	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	82	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	82	-1	next	313831
+decoded_dat/c/nar/a/atk.dat	field	82	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	82	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	field	82	-1	hit_a	3130
+decoded_dat/c/nar/a/atk.dat	field	82	-1	hit_d	313833
+decoded_dat/c/nar/a/atk.dat	field	82	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	82	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	82	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	82	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	82	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	82	0	w	323235
+decoded_dat/c/nar/a/atk.dat	field	82	0	h	333030
+decoded_dat/c/nar/a/atk.dat	field	82	0	dvx	2d3330
+decoded_dat/c/nar/a/atk.dat	field	82	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	82	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	82	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	82	0	injury	34
+decoded_dat/c/nar/a/atk.dat	field	82	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	82	0	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	block	82	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	82	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	82	1	x	333235
+decoded_dat/c/nar/a/atk.dat	field	82	1	y	313030
+decoded_dat/c/nar/a/atk.dat	field	82	1	w	323235
+decoded_dat/c/nar/a/atk.dat	field	82	1	h	333030
+decoded_dat/c/nar/a/atk.dat	field	82	1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	82	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	82	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	82	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	82	1	injury	34
+decoded_dat/c/nar/a/atk.dat	field	82	1	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	82	1	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	frame	83	181		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	83	-1	pic	3536
+decoded_dat/c/nar/a/atk.dat	field	83	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	83	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	83	-1	next	313832
+decoded_dat/c/nar/a/atk.dat	field	83	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	83	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	field	83	-1	hit_a	3130
+decoded_dat/c/nar/a/atk.dat	field	83	-1	hit_d	313833
+decoded_dat/c/nar/a/atk.dat	field	83	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	83	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	83	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	83	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	83	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	83	0	w	323235
+decoded_dat/c/nar/a/atk.dat	field	83	0	h	333030
+decoded_dat/c/nar/a/atk.dat	field	83	0	dvx	2d3330
+decoded_dat/c/nar/a/atk.dat	field	83	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	83	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	83	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	83	0	injury	34
+decoded_dat/c/nar/a/atk.dat	field	83	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	83	0	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	block	83	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	83	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	83	1	x	333235
+decoded_dat/c/nar/a/atk.dat	field	83	1	y	313030
+decoded_dat/c/nar/a/atk.dat	field	83	1	w	323235
+decoded_dat/c/nar/a/atk.dat	field	83	1	h	333030
+decoded_dat/c/nar/a/atk.dat	field	83	1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	83	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	83	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	83	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	83	1	injury	34
+decoded_dat/c/nar/a/atk.dat	field	83	1	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	83	1	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	frame	84	182		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	84	-1	pic	3537
+decoded_dat/c/nar/a/atk.dat	field	84	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	84	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	84	-1	next	313830
+decoded_dat/c/nar/a/atk.dat	field	84	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	84	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	field	84	-1	hit_a	3130
+decoded_dat/c/nar/a/atk.dat	field	84	-1	hit_d	313833
+decoded_dat/c/nar/a/atk.dat	field	84	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	84	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	84	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	84	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	84	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	84	0	w	323235
+decoded_dat/c/nar/a/atk.dat	field	84	0	h	333030
+decoded_dat/c/nar/a/atk.dat	field	84	0	dvx	2d3330
+decoded_dat/c/nar/a/atk.dat	field	84	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	84	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	84	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	84	0	injury	34
+decoded_dat/c/nar/a/atk.dat	field	84	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	84	0	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	block	84	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	84	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	84	1	x	333235
+decoded_dat/c/nar/a/atk.dat	field	84	1	y	313030
+decoded_dat/c/nar/a/atk.dat	field	84	1	w	323235
+decoded_dat/c/nar/a/atk.dat	field	84	1	h	333030
+decoded_dat/c/nar/a/atk.dat	field	84	1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	84	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	84	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	84	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	84	1	injury	34
+decoded_dat/c/nar/a/atk.dat	field	84	1	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	84	1	zwidth	3530
+decoded_dat/c/nar/a/atk.dat	frame	85	183		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	85	-1	pic	3538
+decoded_dat/c/nar/a/atk.dat	field	85	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	85	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	85	-1	next	313834
+decoded_dat/c/nar/a/atk.dat	field	85	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	85	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	field	85	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	85	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	85	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	85	0	x	3530
+decoded_dat/c/nar/a/atk.dat	field	85	0	y	313030
+decoded_dat/c/nar/a/atk.dat	field	85	0	w	333235
+decoded_dat/c/nar/a/atk.dat	field	85	0	h	333030
+decoded_dat/c/nar/a/atk.dat	field	85	0	dvx	2d3430
+decoded_dat/c/nar/a/atk.dat	field	85	0	dvy	2d3530
+decoded_dat/c/nar/a/atk.dat	field	85	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	85	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	85	0	injury	38
+decoded_dat/c/nar/a/atk.dat	field	85	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	85	0	zwidth	3730
+decoded_dat/c/nar/a/atk.dat	block	85	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	85	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	85	1	x	333735
+decoded_dat/c/nar/a/atk.dat	field	85	1	y	313030
+decoded_dat/c/nar/a/atk.dat	field	85	1	w	333235
+decoded_dat/c/nar/a/atk.dat	field	85	1	h	333030
+decoded_dat/c/nar/a/atk.dat	field	85	1	dvx	3430
+decoded_dat/c/nar/a/atk.dat	field	85	1	dvy	2d3530
+decoded_dat/c/nar/a/atk.dat	field	85	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	85	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	85	1	injury	38
+decoded_dat/c/nar/a/atk.dat	field	85	1	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	85	1	zwidth	3730
+decoded_dat/c/nar/a/atk.dat	frame	86	184		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	86	-1	pic	3539
+decoded_dat/c/nar/a/atk.dat	field	86	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	86	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	86	-1	next	313835
+decoded_dat/c/nar/a/atk.dat	field	86	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	86	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	frame	87	185		526173656e73687572696b656e
+decoded_dat/c/nar/a/atk.dat	field	87	-1	pic	3630
+decoded_dat/c/nar/a/atk.dat	field	87	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	87	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	87	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	87	-1	centerx	333135
+decoded_dat/c/nar/a/atk.dat	field	87	-1	centery	333730
+decoded_dat/c/nar/a/atk.dat	frame	88	190		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	88	-1	pic	3332
+decoded_dat/c/nar/a/atk.dat	field	88	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	88	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	88	-1	next	313931
+decoded_dat/c/nar/a/atk.dat	field	88	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	88	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	88	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	88	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	88	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	89	191		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	89	-1	pic	3333
+decoded_dat/c/nar/a/atk.dat	field	89	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	89	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	89	-1	next	313932
+decoded_dat/c/nar/a/atk.dat	field	89	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	89	-1	dvy	2d33
+decoded_dat/c/nar/a/atk.dat	field	89	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	89	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	89	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	90	192		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	90	-1	pic	3334
+decoded_dat/c/nar/a/atk.dat	field	90	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	90	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	90	-1	next	313933
+decoded_dat/c/nar/a/atk.dat	field	90	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	90	-1	dvy	2d33
+decoded_dat/c/nar/a/atk.dat	field	90	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	90	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	90	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	91	193		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	91	-1	pic	3335
+decoded_dat/c/nar/a/atk.dat	field	91	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	91	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	91	-1	next	313934
+decoded_dat/c/nar/a/atk.dat	field	91	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	91	-1	dvy	2d33
+decoded_dat/c/nar/a/atk.dat	field	91	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	91	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	91	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	92	194		726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	92	-1	pic	3336
+decoded_dat/c/nar/a/atk.dat	field	92	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	92	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	92	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	92	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	92	-1	dvy	2d33
+decoded_dat/c/nar/a/atk.dat	field	92	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	92	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	92	-1	centery	3832
+decoded_dat/c/nar/a/atk.dat	frame	93	234		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	93	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	93	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	93	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	93	-1	next	323335
+decoded_dat/c/nar/a/atk.dat	field	93	-1	centerx	3639
+decoded_dat/c/nar/a/atk.dat	field	93	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	block	93	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	93	0	kind	38
+decoded_dat/c/nar/a/atk.dat	field	93	0	x	2d343030
+decoded_dat/c/nar/a/atk.dat	field	93	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	93	0	w	373530
+decoded_dat/c/nar/a/atk.dat	field	93	0	h	3730
+decoded_dat/c/nar/a/atk.dat	field	93	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	93	0	dvx	323335
+decoded_dat/c/nar/a/atk.dat	frame	94	235		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	94	-1	pic	3635
+decoded_dat/c/nar/a/atk.dat	field	94	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	94	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	94	-1	next	323336
+decoded_dat/c/nar/a/atk.dat	field	94	-1	centerx	3639
+decoded_dat/c/nar/a/atk.dat	field	94	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	frame	95	236		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	95	-1	pic	3636
+decoded_dat/c/nar/a/atk.dat	field	95	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	95	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	95	-1	next	323337
+decoded_dat/c/nar/a/atk.dat	field	95	-1	centerx	3736
+decoded_dat/c/nar/a/atk.dat	field	95	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	block	95	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	95	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	95	0	x	3637
+decoded_dat/c/nar/a/atk.dat	field	95	0	y	3830
+decoded_dat/c/nar/a/atk.dat	field	95	0	w	3634
+decoded_dat/c/nar/a/atk.dat	field	95	0	h	3533
+decoded_dat/c/nar/a/atk.dat	field	95	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	95	0	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	95	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	95	0	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	95	0	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	95	0	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	95	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	95	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	95	1	x	3630
+decoded_dat/c/nar/a/atk.dat	field	95	1	y	313333
+decoded_dat/c/nar/a/atk.dat	field	95	1	w	3436
+decoded_dat/c/nar/a/atk.dat	field	95	1	h	3235
+decoded_dat/c/nar/a/atk.dat	field	95	1	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	95	1	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	95	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	95	1	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	95	1	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	95	1	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	frame	96	237		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	96	-1	pic	3637
+decoded_dat/c/nar/a/atk.dat	field	96	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	96	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	96	-1	next	323338
+decoded_dat/c/nar/a/atk.dat	field	96	-1	centerx	3436
+decoded_dat/c/nar/a/atk.dat	field	96	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	block	96	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	96	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	96	0	x	3632
+decoded_dat/c/nar/a/atk.dat	field	96	0	y	3431
+decoded_dat/c/nar/a/atk.dat	field	96	0	w	3634
+decoded_dat/c/nar/a/atk.dat	field	96	0	h	3531
+decoded_dat/c/nar/a/atk.dat	field	96	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	96	0	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	96	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	96	0	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	96	0	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	96	0	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	96	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	96	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	96	1	x	3631
+decoded_dat/c/nar/a/atk.dat	field	96	1	y	3932
+decoded_dat/c/nar/a/atk.dat	field	96	1	w	3435
+decoded_dat/c/nar/a/atk.dat	field	96	1	h	3337
+decoded_dat/c/nar/a/atk.dat	field	96	1	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	96	1	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	96	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	96	1	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	96	1	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	96	1	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	96	2	itr	
+decoded_dat/c/nar/a/atk.dat	field	96	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	96	2	x	3334
+decoded_dat/c/nar/a/atk.dat	field	96	2	y	313239
+decoded_dat/c/nar/a/atk.dat	field	96	2	w	3439
+decoded_dat/c/nar/a/atk.dat	field	96	2	h	3239
+decoded_dat/c/nar/a/atk.dat	field	96	2	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	96	2	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	96	2	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	96	2	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	96	2	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	96	2	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	frame	97	238		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	97	-1	pic	3638
+decoded_dat/c/nar/a/atk.dat	field	97	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	97	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	97	-1	next	323339
+decoded_dat/c/nar/a/atk.dat	field	97	-1	centerx	3530
+decoded_dat/c/nar/a/atk.dat	field	97	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	block	97	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	97	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	97	0	x	3732
+decoded_dat/c/nar/a/atk.dat	field	97	0	y	3338
+decoded_dat/c/nar/a/atk.dat	field	97	0	w	3634
+decoded_dat/c/nar/a/atk.dat	field	97	0	h	3530
+decoded_dat/c/nar/a/atk.dat	field	97	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	97	0	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	97	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	97	0	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	97	0	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	97	0	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	97	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	97	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	97	1	x	3639
+decoded_dat/c/nar/a/atk.dat	field	97	1	y	3838
+decoded_dat/c/nar/a/atk.dat	field	97	1	w	3433
+decoded_dat/c/nar/a/atk.dat	field	97	1	h	3334
+decoded_dat/c/nar/a/atk.dat	field	97	1	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	97	1	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	97	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	97	1	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	97	1	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	97	1	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	97	2	itr	
+decoded_dat/c/nar/a/atk.dat	field	97	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	97	2	x	3338
+decoded_dat/c/nar/a/atk.dat	field	97	2	y	313232
+decoded_dat/c/nar/a/atk.dat	field	97	2	w	3434
+decoded_dat/c/nar/a/atk.dat	field	97	2	h	3336
+decoded_dat/c/nar/a/atk.dat	field	97	2	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	97	2	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	97	2	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	97	2	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	97	2	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	97	2	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	frame	98	239		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	98	-1	pic	3639
+decoded_dat/c/nar/a/atk.dat	field	98	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	98	-1	wait	35
+decoded_dat/c/nar/a/atk.dat	field	98	-1	next	323430
+decoded_dat/c/nar/a/atk.dat	field	98	-1	centerx	3439
+decoded_dat/c/nar/a/atk.dat	field	98	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	block	98	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	98	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	98	0	x	3732
+decoded_dat/c/nar/a/atk.dat	field	98	0	y	3237
+decoded_dat/c/nar/a/atk.dat	field	98	0	w	3631
+decoded_dat/c/nar/a/atk.dat	field	98	0	h	3439
+decoded_dat/c/nar/a/atk.dat	field	98	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	98	0	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	98	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	98	0	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	98	0	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	98	0	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	98	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	98	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	98	1	x	3639
+decoded_dat/c/nar/a/atk.dat	field	98	1	y	3736
+decoded_dat/c/nar/a/atk.dat	field	98	1	w	3433
+decoded_dat/c/nar/a/atk.dat	field	98	1	h	3436
+decoded_dat/c/nar/a/atk.dat	field	98	1	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	98	1	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	98	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	98	1	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	98	1	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	98	1	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	block	98	2	itr	
+decoded_dat/c/nar/a/atk.dat	field	98	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	98	2	x	3339
+decoded_dat/c/nar/a/atk.dat	field	98	2	y	313232
+decoded_dat/c/nar/a/atk.dat	field	98	2	w	3434
+decoded_dat/c/nar/a/atk.dat	field	98	2	h	3336
+decoded_dat/c/nar/a/atk.dat	field	98	2	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	98	2	bdefend	3130
+decoded_dat/c/nar/a/atk.dat	field	98	2	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	98	2	injury	3530
+decoded_dat/c/nar/a/atk.dat	field	98	2	dvx	38
+decoded_dat/c/nar/a/atk.dat	field	98	2	dvy	2d3330
+decoded_dat/c/nar/a/atk.dat	frame	99	240		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	99	-1	pic	3638
+decoded_dat/c/nar/a/atk.dat	field	99	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	99	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	99	-1	next	323431
+decoded_dat/c/nar/a/atk.dat	field	99	-1	centerx	3530
+decoded_dat/c/nar/a/atk.dat	field	99	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	frame	100	241		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	100	-1	pic	3637
+decoded_dat/c/nar/a/atk.dat	field	100	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	100	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	100	-1	next	323432
+decoded_dat/c/nar/a/atk.dat	field	100	-1	centerx	3436
+decoded_dat/c/nar/a/atk.dat	field	100	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	frame	101	242		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	101	-1	pic	3636
+decoded_dat/c/nar/a/atk.dat	field	101	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	101	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	101	-1	next	323433
+decoded_dat/c/nar/a/atk.dat	field	101	-1	centerx	3736
+decoded_dat/c/nar/a/atk.dat	field	101	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	frame	102	243		6368616b726161726d
+decoded_dat/c/nar/a/atk.dat	field	102	-1	pic	3635
+decoded_dat/c/nar/a/atk.dat	field	102	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	102	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	102	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	102	-1	centerx	3639
+decoded_dat/c/nar/a/atk.dat	field	102	-1	centery	313538
+decoded_dat/c/nar/a/atk.dat	frame	103	255		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	103	-1	pic	3631
+decoded_dat/c/nar/a/atk.dat	field	103	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	103	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	103	-1	next	323536
+decoded_dat/c/nar/a/atk.dat	field	103	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	103	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	field	103	-1	sound	646174615c3038392e776176
+decoded_dat/c/nar/a/atk.dat	block	103	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	103	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	103	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	103	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	103	0	w	333232
+decoded_dat/c/nar/a/atk.dat	field	103	0	h	313732
+decoded_dat/c/nar/a/atk.dat	field	103	0	effect	30
+decoded_dat/c/nar/a/atk.dat	field	103	0	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	103	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	103	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	103	0	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	103	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	103	0	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	103	0	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	104	256		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	104	-1	pic	3632
+decoded_dat/c/nar/a/atk.dat	field	104	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	104	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	104	-1	next	323537
+decoded_dat/c/nar/a/atk.dat	field	104	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	104	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	104	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	104	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	104	0	x	3530
+decoded_dat/c/nar/a/atk.dat	field	104	0	y	323837
+decoded_dat/c/nar/a/atk.dat	field	104	0	action	3935
+decoded_dat/c/nar/a/atk.dat	field	104	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	104	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	104	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	104	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	104	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	104	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	104	1	w	333232
+decoded_dat/c/nar/a/atk.dat	field	104	1	h	313835
+decoded_dat/c/nar/a/atk.dat	field	104	1	effect	30
+decoded_dat/c/nar/a/atk.dat	field	104	1	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	104	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	104	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	104	1	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	104	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	104	1	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	104	1	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	105	257		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	105	-1	pic	3632
+decoded_dat/c/nar/a/atk.dat	field	105	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	105	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	105	-1	next	323538
+decoded_dat/c/nar/a/atk.dat	field	105	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	105	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	105	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	105	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	105	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	105	0	y	323837
+decoded_dat/c/nar/a/atk.dat	field	105	0	action	3935
+decoded_dat/c/nar/a/atk.dat	field	105	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	105	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	105	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	105	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	105	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	105	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	105	1	w	333232
+decoded_dat/c/nar/a/atk.dat	field	105	1	h	313835
+decoded_dat/c/nar/a/atk.dat	field	105	1	effect	30
+decoded_dat/c/nar/a/atk.dat	field	105	1	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	105	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	105	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	105	1	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	105	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	105	1	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	105	1	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	106	258		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	106	-1	pic	3632
+decoded_dat/c/nar/a/atk.dat	field	106	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	106	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	106	-1	next	323539
+decoded_dat/c/nar/a/atk.dat	field	106	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	106	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	106	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	106	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	106	0	x	323630
+decoded_dat/c/nar/a/atk.dat	field	106	0	y	323837
+decoded_dat/c/nar/a/atk.dat	field	106	0	action	3935
+decoded_dat/c/nar/a/atk.dat	field	106	0	oid	323239
+decoded_dat/c/nar/a/atk.dat	field	106	0	facing	30
+decoded_dat/c/nar/a/atk.dat	block	106	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	106	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	106	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	106	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	106	1	w	333232
+decoded_dat/c/nar/a/atk.dat	field	106	1	h	313835
+decoded_dat/c/nar/a/atk.dat	field	106	1	effect	30
+decoded_dat/c/nar/a/atk.dat	field	106	1	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	106	1	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	106	1	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	106	1	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	106	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	106	1	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	106	1	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	107	259		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	107	-1	pic	3633
+decoded_dat/c/nar/a/atk.dat	field	107	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	107	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	107	-1	next	323630
+decoded_dat/c/nar/a/atk.dat	field	107	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	107	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	107	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	107	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	107	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	107	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	107	0	w	333232
+decoded_dat/c/nar/a/atk.dat	field	107	0	h	323530
+decoded_dat/c/nar/a/atk.dat	field	107	0	effect	30
+decoded_dat/c/nar/a/atk.dat	field	107	0	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	107	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	107	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	107	0	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	107	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	107	0	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	107	0	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	108	260		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	108	-1	pic	3634
+decoded_dat/c/nar/a/atk.dat	field	108	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	108	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	108	-1	next	323631
+decoded_dat/c/nar/a/atk.dat	field	108	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	108	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	108	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	108	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	108	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	108	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	108	0	w	333232
+decoded_dat/c/nar/a/atk.dat	field	108	0	h	323933
+decoded_dat/c/nar/a/atk.dat	field	108	0	effect	30
+decoded_dat/c/nar/a/atk.dat	field	108	0	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	108	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	108	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	108	0	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	108	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	108	0	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	108	0	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	109	261		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	109	-1	pic	3633
+decoded_dat/c/nar/a/atk.dat	field	109	-1	state	3138
+decoded_dat/c/nar/a/atk.dat	field	109	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	109	-1	next	323632
+decoded_dat/c/nar/a/atk.dat	field	109	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	109	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	block	109	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	109	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	109	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	109	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	109	0	w	333232
+decoded_dat/c/nar/a/atk.dat	field	109	0	h	323530
+decoded_dat/c/nar/a/atk.dat	field	109	0	effect	30
+decoded_dat/c/nar/a/atk.dat	field	109	0	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	109	0	dvy	2d3335
+decoded_dat/c/nar/a/atk.dat	field	109	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	109	0	vrest	3330
+decoded_dat/c/nar/a/atk.dat	field	109	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	109	0	injury	313735
+decoded_dat/c/nar/a/atk.dat	field	109	0	zwidth	3337
+decoded_dat/c/nar/a/atk.dat	frame	110	262		6b636f6c
+decoded_dat/c/nar/a/atk.dat	field	110	-1	pic	3632
+decoded_dat/c/nar/a/atk.dat	field	110	-1	state	33303036
+decoded_dat/c/nar/a/atk.dat	field	110	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	110	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	110	-1	centerx	313631
+decoded_dat/c/nar/a/atk.dat	field	110	-1	centery	323933
+decoded_dat/c/nar/a/atk.dat	frame	111	300		666c79
+decoded_dat/c/nar/a/atk.dat	field	111	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	111	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	111	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	111	-1	next	333430
+decoded_dat/c/nar/a/atk.dat	field	111	-1	dvx	33
+decoded_dat/c/nar/a/atk.dat	field	111	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	111	-1	centery	3138
+decoded_dat/c/nar/a/atk.dat	field	111	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	111	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	111	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	111	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	111	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	111	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	111	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	111	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	111	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	111	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	111	0	dvx	3138
+decoded_dat/c/nar/a/atk.dat	field	111	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	111	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	111	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	111	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	111	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	111	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	111	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	111	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	111	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	111	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	112	310		686974
+decoded_dat/c/nar/a/atk.dat	field	112	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	112	-1	state	33303031
+decoded_dat/c/nar/a/atk.dat	field	112	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	112	-1	next	333131
+decoded_dat/c/nar/a/atk.dat	field	112	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	112	-1	centery	3139
+decoded_dat/c/nar/a/atk.dat	frame	113	311		686974
+decoded_dat/c/nar/a/atk.dat	field	113	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	113	-1	state	33303031
+decoded_dat/c/nar/a/atk.dat	field	113	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	113	-1	next	333132
+decoded_dat/c/nar/a/atk.dat	field	113	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	113	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	frame	114	312		686974
+decoded_dat/c/nar/a/atk.dat	field	114	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	114	-1	state	33303031
+decoded_dat/c/nar/a/atk.dat	field	114	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	114	-1	next	333133
+decoded_dat/c/nar/a/atk.dat	field	114	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	114	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	frame	115	313		686974
+decoded_dat/c/nar/a/atk.dat	field	115	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	115	-1	state	33303031
+decoded_dat/c/nar/a/atk.dat	field	115	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	115	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	115	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	115	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	frame	116	320		686974
+decoded_dat/c/nar/a/atk.dat	field	116	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	116	-1	state	33303032
+decoded_dat/c/nar/a/atk.dat	field	116	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	116	-1	next	333231
+decoded_dat/c/nar/a/atk.dat	field	116	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	116	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	frame	117	321		686974
+decoded_dat/c/nar/a/atk.dat	field	117	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	117	-1	state	33303032
+decoded_dat/c/nar/a/atk.dat	field	117	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	117	-1	next	333232
+decoded_dat/c/nar/a/atk.dat	field	117	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	117	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	frame	118	322		686974
+decoded_dat/c/nar/a/atk.dat	field	118	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	118	-1	state	33303032
+decoded_dat/c/nar/a/atk.dat	field	118	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	118	-1	next	333233
+decoded_dat/c/nar/a/atk.dat	field	118	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	118	-1	centery	3130
+decoded_dat/c/nar/a/atk.dat	frame	119	323		686974
+decoded_dat/c/nar/a/atk.dat	field	119	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	119	-1	state	33303032
+decoded_dat/c/nar/a/atk.dat	field	119	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	119	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	119	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	119	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	frame	120	330		726562
+decoded_dat/c/nar/a/atk.dat	field	120	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	120	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	120	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	120	-1	next	333331
+decoded_dat/c/nar/a/atk.dat	field	120	-1	dvx	2d3134
+decoded_dat/c/nar/a/atk.dat	field	120	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	120	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	frame	121	331		726562
+decoded_dat/c/nar/a/atk.dat	field	121	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	121	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	121	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	121	-1	next	31
+decoded_dat/c/nar/a/atk.dat	field	121	-1	dvx	2d3134
+decoded_dat/c/nar/a/atk.dat	field	121	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	121	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	frame	122	340		666c79
+decoded_dat/c/nar/a/atk.dat	field	122	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	122	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	122	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	122	-1	next	333431
+decoded_dat/c/nar/a/atk.dat	field	122	-1	dvx	35
+decoded_dat/c/nar/a/atk.dat	field	122	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	122	-1	centery	3138
+decoded_dat/c/nar/a/atk.dat	field	122	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	122	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	122	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	122	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	122	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	122	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	122	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	122	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	122	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	122	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	122	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	122	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	122	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	122	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	122	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	122	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	122	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	122	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	122	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	122	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	122	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	123	341		666c79
+decoded_dat/c/nar/a/atk.dat	field	123	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	123	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	123	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	123	-1	next	333432
+decoded_dat/c/nar/a/atk.dat	field	123	-1	dvx	37
+decoded_dat/c/nar/a/atk.dat	field	123	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	123	-1	centery	3138
+decoded_dat/c/nar/a/atk.dat	field	123	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	123	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	123	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	123	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	123	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	123	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	123	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	123	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	123	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	123	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	123	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	123	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	123	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	123	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	123	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	123	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	123	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	123	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	123	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	123	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	123	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	124	342		666c79
+decoded_dat/c/nar/a/atk.dat	field	124	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	124	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	124	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	124	-1	next	333433
+decoded_dat/c/nar/a/atk.dat	field	124	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	124	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	124	-1	centery	3138
+decoded_dat/c/nar/a/atk.dat	field	124	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	124	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	124	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	124	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	124	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	124	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	124	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	124	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	124	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	124	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	124	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	124	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	124	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	124	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	124	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	124	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	124	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	124	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	124	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	124	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	124	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	125	343		666c79
+decoded_dat/c/nar/a/atk.dat	field	125	-1	pic	33
+decoded_dat/c/nar/a/atk.dat	field	125	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	125	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	125	-1	next	31
+decoded_dat/c/nar/a/atk.dat	field	125	-1	dvx	3133
+decoded_dat/c/nar/a/atk.dat	field	125	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	125	-1	centery	3138
+decoded_dat/c/nar/a/atk.dat	field	125	-1	hit_Fj	333130
+decoded_dat/c/nar/a/atk.dat	field	125	-1	hit_Uj	333230
+decoded_dat/c/nar/a/atk.dat	field	125	-1	hit_Dj	333330
+decoded_dat/c/nar/a/atk.dat	field	125	-1	hit_ja	333330
+decoded_dat/c/nar/a/atk.dat	block	125	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	125	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	125	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	125	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	125	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	125	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	125	0	dvx	3134
+decoded_dat/c/nar/a/atk.dat	field	125	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	125	0	vrest	3135
+decoded_dat/c/nar/a/atk.dat	field	125	0	bdefend	3630
+decoded_dat/c/nar/a/atk.dat	field	125	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	block	125	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	125	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	125	1	x	30
+decoded_dat/c/nar/a/atk.dat	field	125	1	y	30
+decoded_dat/c/nar/a/atk.dat	field	125	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	125	1	h	39
+decoded_dat/c/nar/a/atk.dat	frame	126	350		726173656e7468726f77
+decoded_dat/c/nar/a/atk.dat	field	126	-1	pic	3234
+decoded_dat/c/nar/a/atk.dat	field	126	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	126	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	126	-1	next	333531
+decoded_dat/c/nar/a/atk.dat	field	126	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	126	-1	centerx	3534
+decoded_dat/c/nar/a/atk.dat	field	126	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	126	-1	hit_Fj	333535
+decoded_dat/c/nar/a/atk.dat	field	126	-1	hit_Uj	333535
+decoded_dat/c/nar/a/atk.dat	field	126	-1	hit_Dj	333535
+decoded_dat/c/nar/a/atk.dat	field	126	-1	hit_ja	333535
+decoded_dat/c/nar/a/atk.dat	field	126	-1	sound	646174615c3039322e776176
+decoded_dat/c/nar/a/atk.dat	block	126	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	126	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	126	0	x	3232
+decoded_dat/c/nar/a/atk.dat	field	126	0	y	3237
+decoded_dat/c/nar/a/atk.dat	field	126	0	w	3535
+decoded_dat/c/nar/a/atk.dat	field	126	0	h	3337
+decoded_dat/c/nar/a/atk.dat	field	126	0	injury	31
+decoded_dat/c/nar/a/atk.dat	block	126	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	126	1	kind	38
+decoded_dat/c/nar/a/atk.dat	field	126	1	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	126	1	x	3232
+decoded_dat/c/nar/a/atk.dat	field	126	1	y	3234303030
+decoded_dat/c/nar/a/atk.dat	field	126	1	w	3535
+decoded_dat/c/nar/a/atk.dat	field	126	1	h	3337
+decoded_dat/c/nar/a/atk.dat	field	126	1	dvx	333535
+decoded_dat/c/nar/a/atk.dat	block	126	2	bdy	
+decoded_dat/c/nar/a/atk.dat	field	126	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	126	2	x	3232
+decoded_dat/c/nar/a/atk.dat	field	126	2	y	3237
+decoded_dat/c/nar/a/atk.dat	field	126	2	w	3535
+decoded_dat/c/nar/a/atk.dat	field	126	2	h	3337
+decoded_dat/c/nar/a/atk.dat	frame	127	351		726173656e7468726f77
+decoded_dat/c/nar/a/atk.dat	field	127	-1	pic	3235
+decoded_dat/c/nar/a/atk.dat	field	127	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	127	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	127	-1	next	333532
+decoded_dat/c/nar/a/atk.dat	field	127	-1	dvx	3330
+decoded_dat/c/nar/a/atk.dat	field	127	-1	centerx	3534
+decoded_dat/c/nar/a/atk.dat	field	127	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	127	-1	hit_Fj	333535
+decoded_dat/c/nar/a/atk.dat	field	127	-1	hit_Uj	333535
+decoded_dat/c/nar/a/atk.dat	field	127	-1	hit_Dj	333535
+decoded_dat/c/nar/a/atk.dat	field	127	-1	hit_ja	333535
+decoded_dat/c/nar/a/atk.dat	field	127	-1	sound	646174615c3039322e776176
+decoded_dat/c/nar/a/atk.dat	block	127	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	127	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	127	0	x	3232
+decoded_dat/c/nar/a/atk.dat	field	127	0	y	3237
+decoded_dat/c/nar/a/atk.dat	field	127	0	w	3535
+decoded_dat/c/nar/a/atk.dat	field	127	0	h	3337
+decoded_dat/c/nar/a/atk.dat	field	127	0	injury	31
+decoded_dat/c/nar/a/atk.dat	block	127	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	127	1	kind	38
+decoded_dat/c/nar/a/atk.dat	field	127	1	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	127	1	x	3232
+decoded_dat/c/nar/a/atk.dat	field	127	1	y	3234303030
+decoded_dat/c/nar/a/atk.dat	field	127	1	w	3535
+decoded_dat/c/nar/a/atk.dat	field	127	1	h	3337
+decoded_dat/c/nar/a/atk.dat	field	127	1	dvx	333535
+decoded_dat/c/nar/a/atk.dat	block	127	2	bdy	
+decoded_dat/c/nar/a/atk.dat	field	127	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	127	2	x	3232
+decoded_dat/c/nar/a/atk.dat	field	127	2	y	3237
+decoded_dat/c/nar/a/atk.dat	field	127	2	w	3535
+decoded_dat/c/nar/a/atk.dat	field	127	2	h	3337
+decoded_dat/c/nar/a/atk.dat	frame	128	352		726173656e7468726f77
+decoded_dat/c/nar/a/atk.dat	field	128	-1	pic	3236
+decoded_dat/c/nar/a/atk.dat	field	128	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	128	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	128	-1	next	333530
+decoded_dat/c/nar/a/atk.dat	field	128	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	128	-1	centerx	3534
+decoded_dat/c/nar/a/atk.dat	field	128	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	128	-1	hit_Fj	333535
+decoded_dat/c/nar/a/atk.dat	field	128	-1	hit_Uj	333535
+decoded_dat/c/nar/a/atk.dat	field	128	-1	hit_Dj	333535
+decoded_dat/c/nar/a/atk.dat	field	128	-1	hit_ja	333535
+decoded_dat/c/nar/a/atk.dat	field	128	-1	sound	646174615c3039322e776176
+decoded_dat/c/nar/a/atk.dat	block	128	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	128	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	128	0	x	3232
+decoded_dat/c/nar/a/atk.dat	field	128	0	y	3237
+decoded_dat/c/nar/a/atk.dat	field	128	0	w	3535
+decoded_dat/c/nar/a/atk.dat	field	128	0	h	3337
+decoded_dat/c/nar/a/atk.dat	field	128	0	injury	31
+decoded_dat/c/nar/a/atk.dat	block	128	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	128	1	kind	38
+decoded_dat/c/nar/a/atk.dat	field	128	1	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	128	1	x	3232
+decoded_dat/c/nar/a/atk.dat	field	128	1	y	3234303030
+decoded_dat/c/nar/a/atk.dat	field	128	1	w	3535
+decoded_dat/c/nar/a/atk.dat	field	128	1	h	3337
+decoded_dat/c/nar/a/atk.dat	field	128	1	dvx	333535
+decoded_dat/c/nar/a/atk.dat	block	128	2	bdy	
+decoded_dat/c/nar/a/atk.dat	field	128	2	kind	30
+decoded_dat/c/nar/a/atk.dat	field	128	2	x	3232
+decoded_dat/c/nar/a/atk.dat	field	128	2	y	3237
+decoded_dat/c/nar/a/atk.dat	field	128	2	w	3535
+decoded_dat/c/nar/a/atk.dat	field	128	2	h	3337
+decoded_dat/c/nar/a/atk.dat	frame	129	355		726173656e7468726f77
+decoded_dat/c/nar/a/atk.dat	field	129	-1	pic	3234
+decoded_dat/c/nar/a/atk.dat	field	129	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	129	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	129	-1	next	333536
+decoded_dat/c/nar/a/atk.dat	field	129	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	129	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	129	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	129	-1	centerx	3534
+decoded_dat/c/nar/a/atk.dat	field	129	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	130	356		726173656e7468726f77
+decoded_dat/c/nar/a/atk.dat	field	130	-1	pic	3234
+decoded_dat/c/nar/a/atk.dat	field	130	-1	state	33303030
+decoded_dat/c/nar/a/atk.dat	field	130	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	130	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	130	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	130	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	130	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	130	-1	centerx	3534
+decoded_dat/c/nar/a/atk.dat	field	130	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	130	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	130	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	130	0	x	3530
+decoded_dat/c/nar/a/atk.dat	field	130	0	y	3830
+decoded_dat/c/nar/a/atk.dat	field	130	0	action	313739
+decoded_dat/c/nar/a/atk.dat	field	130	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	130	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	131	360		6c696d697431
+decoded_dat/c/nar/a/atk.dat	field	131	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	131	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	131	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	131	-1	next	333631
+decoded_dat/c/nar/a/atk.dat	field	131	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	131	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	131	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	131	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	131	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	131	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	131	0	kind	38
+decoded_dat/c/nar/a/atk.dat	field	131	0	bdefend	33
+decoded_dat/c/nar/a/atk.dat	field	131	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	131	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	131	0	y	393930333030
+decoded_dat/c/nar/a/atk.dat	field	131	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	131	0	h	313939
+decoded_dat/c/nar/a/atk.dat	field	131	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	131	0	dvx	333730
+decoded_dat/c/nar/a/atk.dat	frame	132	361		6c696d697431
+decoded_dat/c/nar/a/atk.dat	field	132	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	132	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	132	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	132	-1	next	333631
+decoded_dat/c/nar/a/atk.dat	field	132	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	132	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	132	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	132	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	132	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	132	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	132	0	kind	38
+decoded_dat/c/nar/a/atk.dat	field	132	0	bdefend	33
+decoded_dat/c/nar/a/atk.dat	field	132	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	132	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	132	0	y	393930363030
+decoded_dat/c/nar/a/atk.dat	field	132	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	132	0	h	313939
+decoded_dat/c/nar/a/atk.dat	field	132	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	132	0	dvx	333635
+decoded_dat/c/nar/a/atk.dat	block	132	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	132	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	132	1	x	39
+decoded_dat/c/nar/a/atk.dat	field	132	1	y	393930333030
+decoded_dat/c/nar/a/atk.dat	field	132	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	132	1	h	313939
+decoded_dat/c/nar/a/atk.dat	frame	133	365		6c696d697464656c
+decoded_dat/c/nar/a/atk.dat	field	133	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	133	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	133	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	133	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	133	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	133	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	133	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	133	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	133	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	134	370		6c696d697432
+decoded_dat/c/nar/a/atk.dat	field	134	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	134	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	134	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	134	-1	next	333730
+decoded_dat/c/nar/a/atk.dat	field	134	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	134	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	134	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	134	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	134	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	134	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	134	0	kind	38
+decoded_dat/c/nar/a/atk.dat	field	134	0	bdefend	33
+decoded_dat/c/nar/a/atk.dat	field	134	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	134	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	134	0	y	393930363030
+decoded_dat/c/nar/a/atk.dat	field	134	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	134	0	h	313939
+decoded_dat/c/nar/a/atk.dat	field	134	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	134	0	dvx	333635
+decoded_dat/c/nar/a/atk.dat	block	134	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	134	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	134	1	x	39
+decoded_dat/c/nar/a/atk.dat	field	134	1	y	38363430303030
+decoded_dat/c/nar/a/atk.dat	field	134	1	w	39
+decoded_dat/c/nar/a/atk.dat	field	134	1	h	313939
+decoded_dat/c/nar/a/atk.dat	frame	135	371		6c696d6974656e64
+decoded_dat/c/nar/a/atk.dat	field	135	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	135	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	135	-1	wait	32
+decoded_dat/c/nar/a/atk.dat	field	135	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	135	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	135	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	135	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	135	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	135	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	135	0	bdy	
+decoded_dat/c/nar/a/atk.dat	field	135	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	135	0	x	39
+decoded_dat/c/nar/a/atk.dat	field	135	0	y	393930363030
+decoded_dat/c/nar/a/atk.dat	field	135	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	135	0	h	313939
+decoded_dat/c/nar/a/atk.dat	frame	136	380		687572746b7975756269
+decoded_dat/c/nar/a/atk.dat	field	136	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	136	-1	state	313930
+decoded_dat/c/nar/a/atk.dat	field	136	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	136	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	136	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	136	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	136	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	136	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	136	0	x	3239
+decoded_dat/c/nar/a/atk.dat	field	136	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	136	0	w	39
+decoded_dat/c/nar/a/atk.dat	field	136	0	h	39
+decoded_dat/c/nar/a/atk.dat	field	136	0	vrest	3730
+decoded_dat/c/nar/a/atk.dat	field	136	0	injury	323530
+decoded_dat/c/nar/a/atk.dat	frame	137	381		6b6c696d6974
+decoded_dat/c/nar/a/atk.dat	field	137	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	137	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	137	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	137	-1	next	333831
+decoded_dat/c/nar/a/atk.dat	field	137	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	137	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	137	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	137	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	137	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	137	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	137	0	kind	38
+decoded_dat/c/nar/a/atk.dat	field	137	0	respond	34
+decoded_dat/c/nar/a/atk.dat	field	137	0	dvy	2d31
+decoded_dat/c/nar/a/atk.dat	field	137	0	x	39
+decoded_dat/c/nar/a/atk.dat	field	137	0	y	353232303030
+decoded_dat/c/nar/a/atk.dat	field	137	0	w	3939
+decoded_dat/c/nar/a/atk.dat	field	137	0	h	323939
+decoded_dat/c/nar/a/atk.dat	field	137	0	dvx	333832
+decoded_dat/c/nar/a/atk.dat	block	137	1	bdy	
+decoded_dat/c/nar/a/atk.dat	field	137	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	137	1	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	137	1	y	353232303030
+decoded_dat/c/nar/a/atk.dat	field	137	1	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	137	1	h	323530
+decoded_dat/c/nar/a/atk.dat	field	137	1	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	frame	138	382		6b6c696d6974
+decoded_dat/c/nar/a/atk.dat	field	138	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	138	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	138	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	138	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	138	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	138	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	138	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	138	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	138	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	138	-1	sound	646174615c6d5f6f6b2e776176
+decoded_dat/c/nar/a/atk.dat	frame	139	390		6b696c6c636c6f6e6573
+decoded_dat/c/nar/a/atk.dat	field	139	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	139	-1	state	313930
+decoded_dat/c/nar/a/atk.dat	field	139	-1	wait	35
+decoded_dat/c/nar/a/atk.dat	field	139	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	139	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	139	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	139	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	139	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	139	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	139	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	139	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	139	0	y	31
+decoded_dat/c/nar/a/atk.dat	field	139	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	139	0	h	333530
+decoded_dat/c/nar/a/atk.dat	field	139	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	field	139	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	139	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	139	0	injury	31
+decoded_dat/c/nar/a/atk.dat	field	139	0	fall	3630
+decoded_dat/c/nar/a/atk.dat	frame	140	391		6361746368636c6f6e65
+decoded_dat/c/nar/a/atk.dat	field	140	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	140	-1	state	313930
+decoded_dat/c/nar/a/atk.dat	field	140	-1	wait	35
+decoded_dat/c/nar/a/atk.dat	field	140	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	140	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	140	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	140	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	140	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	140	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	140	0	kind	33
+decoded_dat/c/nar/a/atk.dat	field	140	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	140	0	y	31
+decoded_dat/c/nar/a/atk.dat	field	140	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	140	0	h	333530
+decoded_dat/c/nar/a/atk.dat	field	140	0	catchingact	33393920333939
+decoded_dat/c/nar/a/atk.dat	field	140	0	caughtact	31333020313330
+decoded_dat/c/nar/a/atk.dat	field	140	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	frame	141	392		6361746368636c6f6e6532
+decoded_dat/c/nar/a/atk.dat	field	141	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	141	-1	state	313930
+decoded_dat/c/nar/a/atk.dat	field	141	-1	wait	35
+decoded_dat/c/nar/a/atk.dat	field	141	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	141	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	141	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	141	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	141	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	141	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	141	0	kind	33
+decoded_dat/c/nar/a/atk.dat	field	141	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	141	0	y	31
+decoded_dat/c/nar/a/atk.dat	field	141	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	141	0	h	333530
+decoded_dat/c/nar/a/atk.dat	field	141	0	catchingact	33393320333933
+decoded_dat/c/nar/a/atk.dat	field	141	0	caughtact	31333020313330
+decoded_dat/c/nar/a/atk.dat	field	141	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	frame	142	393		6361746368636c6f6e6532
+decoded_dat/c/nar/a/atk.dat	field	142	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	142	-1	state	313930
+decoded_dat/c/nar/a/atk.dat	field	142	-1	wait	35
+decoded_dat/c/nar/a/atk.dat	field	142	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	142	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	142	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	142	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	142	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	142	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	142	0	kind	33
+decoded_dat/c/nar/a/atk.dat	field	142	0	x	2d39393939
+decoded_dat/c/nar/a/atk.dat	field	142	0	y	31
+decoded_dat/c/nar/a/atk.dat	field	142	0	w	3939393939
+decoded_dat/c/nar/a/atk.dat	field	142	0	h	333530
+decoded_dat/c/nar/a/atk.dat	field	142	0	catchingact	33393920333939
+decoded_dat/c/nar/a/atk.dat	field	142	0	caughtact	31333020313330
+decoded_dat/c/nar/a/atk.dat	field	142	0	zwidth	393939
+decoded_dat/c/nar/a/atk.dat	frame	143	399		64756d6d79
+decoded_dat/c/nar/a/atk.dat	field	143	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	143	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	143	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	143	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	143	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	143	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	143	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	143	-1	centerx	35
+decoded_dat/c/nar/a/atk.dat	field	143	-1	centery	3131
+decoded_dat/c/nar/a/atk.dat	frame	144	405		6c79696e67
+decoded_dat/c/nar/a/atk.dat	field	144	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	144	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	144	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	144	-1	next	343036
+decoded_dat/c/nar/a/atk.dat	field	144	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	144	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	144	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	144	-1	centery	3732
+decoded_dat/c/nar/a/atk.dat	block	144	0	wpoint	
+decoded_dat/c/nar/a/atk.dat	field	144	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	144	0	x	3332
+decoded_dat/c/nar/a/atk.dat	field	144	0	y	3734
+decoded_dat/c/nar/a/atk.dat	field	144	0	weaponact	3234
+decoded_dat/c/nar/a/atk.dat	field	144	0	attacking	30
+decoded_dat/c/nar/a/atk.dat	field	144	0	cover	30
+decoded_dat/c/nar/a/atk.dat	frame	145	406		6c79696e67
+decoded_dat/c/nar/a/atk.dat	field	145	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	145	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	145	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	145	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	145	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	145	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	145	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	145	-1	centery	3732
+decoded_dat/c/nar/a/atk.dat	block	145	0	wpoint	
+decoded_dat/c/nar/a/atk.dat	field	145	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	145	0	x	3332
+decoded_dat/c/nar/a/atk.dat	field	145	0	y	3734
+decoded_dat/c/nar/a/atk.dat	field	145	0	weaponact	3234
+decoded_dat/c/nar/a/atk.dat	field	145	0	attacking	30
+decoded_dat/c/nar/a/atk.dat	field	145	0	cover	30
+decoded_dat/c/nar/a/atk.dat	block	145	1	opoint	
+decoded_dat/c/nar/a/atk.dat	field	145	1	kind	31
+decoded_dat/c/nar/a/atk.dat	field	145	1	x	3339
+decoded_dat/c/nar/a/atk.dat	field	145	1	y	3731
+decoded_dat/c/nar/a/atk.dat	field	145	1	action	343331
+decoded_dat/c/nar/a/atk.dat	field	145	1	oid	3333
+decoded_dat/c/nar/a/atk.dat	field	145	1	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	146	465		726173656e636861726765
+decoded_dat/c/nar/a/atk.dat	field	146	-1	pic	3730
+decoded_dat/c/nar/a/atk.dat	field	146	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	146	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	146	-1	next	343636
+decoded_dat/c/nar/a/atk.dat	field	146	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	146	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	146	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	146	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	146	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	147	466		726173656e636861726765
+decoded_dat/c/nar/a/atk.dat	field	147	-1	pic	3731
+decoded_dat/c/nar/a/atk.dat	field	147	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	147	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	147	-1	next	343637
+decoded_dat/c/nar/a/atk.dat	field	147	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	147	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	147	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	147	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	147	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	148	467		726173656e636861726765
+decoded_dat/c/nar/a/atk.dat	field	148	-1	pic	3732
+decoded_dat/c/nar/a/atk.dat	field	148	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	148	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	148	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	148	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	148	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	148	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	148	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	148	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	149	468		726173656e63686172676532
+decoded_dat/c/nar/a/atk.dat	field	149	-1	pic	3733
+decoded_dat/c/nar/a/atk.dat	field	149	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	149	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	149	-1	next	343639
+decoded_dat/c/nar/a/atk.dat	field	149	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	149	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	149	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	149	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	149	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	150	469		726173656e63686172676532
+decoded_dat/c/nar/a/atk.dat	field	150	-1	pic	3734
+decoded_dat/c/nar/a/atk.dat	field	150	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	150	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	150	-1	next	343730
+decoded_dat/c/nar/a/atk.dat	field	150	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	150	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	150	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	150	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	150	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	151	470		726173656e63686172676532
+decoded_dat/c/nar/a/atk.dat	field	151	-1	pic	3735
+decoded_dat/c/nar/a/atk.dat	field	151	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	151	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	151	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	151	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	151	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	151	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	151	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	151	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	152	471		726173656e63686172676533
+decoded_dat/c/nar/a/atk.dat	field	152	-1	pic	3736
+decoded_dat/c/nar/a/atk.dat	field	152	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	152	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	152	-1	next	343732
+decoded_dat/c/nar/a/atk.dat	field	152	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	152	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	152	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	152	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	152	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	153	472		726173656e63686172676533
+decoded_dat/c/nar/a/atk.dat	field	153	-1	pic	3737
+decoded_dat/c/nar/a/atk.dat	field	153	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	153	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	153	-1	next	343733
+decoded_dat/c/nar/a/atk.dat	field	153	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	153	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	153	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	153	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	153	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	154	473		726173656e63686172676533
+decoded_dat/c/nar/a/atk.dat	field	154	-1	pic	3738
+decoded_dat/c/nar/a/atk.dat	field	154	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	154	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	154	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	154	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	154	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	154	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	154	-1	centerx	313230
+decoded_dat/c/nar/a/atk.dat	field	154	-1	centery	3630
+decoded_dat/c/nar/a/atk.dat	frame	155	485		636c6f6e657468726f77
+decoded_dat/c/nar/a/atk.dat	field	155	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	155	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	155	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	155	-1	next	343836
+decoded_dat/c/nar/a/atk.dat	field	155	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	155	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	156	486		636c6f6e657468726f77
+decoded_dat/c/nar/a/atk.dat	field	156	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	156	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	156	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	156	-1	next	343837
+decoded_dat/c/nar/a/atk.dat	field	156	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	156	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	156	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	156	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	156	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	156	0	x	2d3530
+decoded_dat/c/nar/a/atk.dat	field	156	0	y	30
+decoded_dat/c/nar/a/atk.dat	field	156	0	action	323835
+decoded_dat/c/nar/a/atk.dat	field	156	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	156	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	157	487		636c6f6e657468726f77
+decoded_dat/c/nar/a/atk.dat	field	157	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	157	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	157	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	157	-1	next	343838
+decoded_dat/c/nar/a/atk.dat	field	157	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	157	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	157	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	157	-1	hit_j	31
+decoded_dat/c/nar/a/atk.dat	block	157	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	157	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	157	0	x	2d3530
+decoded_dat/c/nar/a/atk.dat	field	157	0	y	3730
+decoded_dat/c/nar/a/atk.dat	field	157	0	action	323835
+decoded_dat/c/nar/a/atk.dat	field	157	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	157	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	158	488		636c6f6e657468726f77
+decoded_dat/c/nar/a/atk.dat	field	158	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	158	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	158	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	158	-1	next	343839
+decoded_dat/c/nar/a/atk.dat	field	158	-1	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	158	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	158	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	158	-1	hit_j	313030
+decoded_dat/c/nar/a/atk.dat	block	158	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	158	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	158	0	x	30
+decoded_dat/c/nar/a/atk.dat	field	158	0	y	2d3230
+decoded_dat/c/nar/a/atk.dat	field	158	0	action	323835
+decoded_dat/c/nar/a/atk.dat	field	158	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	158	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	159	489		636c6f6e657468726f77
+decoded_dat/c/nar/a/atk.dat	field	159	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	159	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	159	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	159	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	159	-1	dvx	2d3130
+decoded_dat/c/nar/a/atk.dat	field	159	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	159	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	159	-1	hit_j	313030
+decoded_dat/c/nar/a/atk.dat	block	159	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	159	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	159	0	x	3530
+decoded_dat/c/nar/a/atk.dat	field	159	0	y	3330
+decoded_dat/c/nar/a/atk.dat	field	159	0	action	323835
+decoded_dat/c/nar/a/atk.dat	field	159	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	159	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	160	505		6c79696e67
+decoded_dat/c/nar/a/atk.dat	field	160	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	160	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	160	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	160	-1	next	353036
+decoded_dat/c/nar/a/atk.dat	field	160	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	160	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	160	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	160	-1	centery	3732
+decoded_dat/c/nar/a/atk.dat	block	160	0	wpoint	
+decoded_dat/c/nar/a/atk.dat	field	160	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	160	0	x	3332
+decoded_dat/c/nar/a/atk.dat	field	160	0	y	3734
+decoded_dat/c/nar/a/atk.dat	field	160	0	weaponact	3234
+decoded_dat/c/nar/a/atk.dat	field	160	0	attacking	30
+decoded_dat/c/nar/a/atk.dat	field	160	0	cover	30
+decoded_dat/c/nar/a/atk.dat	frame	161	506		6c79696e67
+decoded_dat/c/nar/a/atk.dat	field	161	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	161	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	161	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	161	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	161	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	161	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	161	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	161	-1	centery	3732
+decoded_dat/c/nar/a/atk.dat	block	161	0	wpoint	
+decoded_dat/c/nar/a/atk.dat	field	161	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	161	0	x	3332
+decoded_dat/c/nar/a/atk.dat	field	161	0	y	3734
+decoded_dat/c/nar/a/atk.dat	field	161	0	weaponact	3234
+decoded_dat/c/nar/a/atk.dat	field	161	0	attacking	30
+decoded_dat/c/nar/a/atk.dat	field	161	0	cover	30
+decoded_dat/c/nar/a/atk.dat	block	161	1	opoint	
+decoded_dat/c/nar/a/atk.dat	field	161	1	kind	31
+decoded_dat/c/nar/a/atk.dat	field	161	1	x	3339
+decoded_dat/c/nar/a/atk.dat	field	161	1	y	3731
+decoded_dat/c/nar/a/atk.dat	field	161	1	action	343331
+decoded_dat/c/nar/a/atk.dat	field	161	1	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	161	1	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	162	523		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	162	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	162	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	162	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	162	-1	next	353234
+decoded_dat/c/nar/a/atk.dat	field	162	-1	dvx	33
+decoded_dat/c/nar/a/atk.dat	field	162	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	162	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	163	524		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	163	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	163	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	163	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	163	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	163	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	163	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	163	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	163	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	163	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	163	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	163	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	163	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	163	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	163	0	action	323937
+decoded_dat/c/nar/a/atk.dat	field	163	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	163	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	164	525		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	164	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	164	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	164	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	164	-1	next	353236
+decoded_dat/c/nar/a/atk.dat	field	164	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	164	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	164	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	164	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	164	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	165	526		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	165	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	165	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	165	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	165	-1	next	353237
+decoded_dat/c/nar/a/atk.dat	field	165	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	165	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	165	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	165	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	165	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	165	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	165	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	165	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	165	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	165	0	action	353233
+decoded_dat/c/nar/a/atk.dat	field	165	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	165	0	facing	3230
+decoded_dat/c/nar/a/atk.dat	frame	166	527		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	166	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	166	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	166	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	166	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	166	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	166	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	166	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	166	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	166	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	166	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	166	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	166	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	166	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	166	0	action	353238
+decoded_dat/c/nar/a/atk.dat	field	166	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	166	0	facing	3231
+decoded_dat/c/nar/a/atk.dat	frame	167	528		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	167	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	167	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	167	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	167	-1	next	353239
+decoded_dat/c/nar/a/atk.dat	field	167	-1	dvx	33
+decoded_dat/c/nar/a/atk.dat	field	167	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	167	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	168	529		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	168	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	168	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	168	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	168	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	168	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	168	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	168	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	168	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	168	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	168	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	168	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	168	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	168	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	168	0	action	333035
+decoded_dat/c/nar/a/atk.dat	field	168	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	168	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	169	530		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	169	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	169	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	169	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	169	-1	next	353331
+decoded_dat/c/nar/a/atk.dat	field	169	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	169	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	169	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	169	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	169	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	170	531		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	170	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	170	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	170	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	170	-1	next	353332
+decoded_dat/c/nar/a/atk.dat	field	170	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	170	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	170	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	170	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	170	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	170	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	170	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	170	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	170	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	170	0	action	353333
+decoded_dat/c/nar/a/atk.dat	field	170	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	170	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	170	0	facing	3330
+decoded_dat/c/nar/a/atk.dat	frame	171	532		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	171	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	171	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	171	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	171	-1	next	353335
+decoded_dat/c/nar/a/atk.dat	field	171	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	171	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	171	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	171	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	171	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	171	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	171	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	171	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	171	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	171	0	action	353333
+decoded_dat/c/nar/a/atk.dat	field	171	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	171	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	171	0	facing	3331
+decoded_dat/c/nar/a/atk.dat	frame	172	533		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	172	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	172	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	172	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	172	-1	next	353334
+decoded_dat/c/nar/a/atk.dat	field	172	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	172	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	173	534		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	173	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	173	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	173	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	173	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	173	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	173	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	173	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	173	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	173	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	173	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	173	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	173	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	173	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	173	0	action	333035
+decoded_dat/c/nar/a/atk.dat	field	173	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	173	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	174	535		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	174	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	174	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	174	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	174	-1	next	353336
+decoded_dat/c/nar/a/atk.dat	field	174	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	174	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	174	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	174	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	174	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	174	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	174	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	174	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	174	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	174	0	action	353333
+decoded_dat/c/nar/a/atk.dat	field	174	0	dvx	31
+decoded_dat/c/nar/a/atk.dat	field	174	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	174	0	facing	3230
+decoded_dat/c/nar/a/atk.dat	frame	175	536		6b61676562756e7368696e33
+decoded_dat/c/nar/a/atk.dat	field	175	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	175	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	175	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	175	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	175	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	175	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	175	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	175	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	175	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	175	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	175	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	175	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	175	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	175	0	action	353333
+decoded_dat/c/nar/a/atk.dat	field	175	0	dvx	31
+decoded_dat/c/nar/a/atk.dat	field	175	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	175	0	facing	3231
+decoded_dat/c/nar/a/atk.dat	frame	176	537		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	176	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	176	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	176	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	176	-1	next	353338
+decoded_dat/c/nar/a/atk.dat	field	176	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	176	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	176	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	176	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	176	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	177	538		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	177	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	177	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	177	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	177	-1	next	353339
+decoded_dat/c/nar/a/atk.dat	field	177	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	177	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	177	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	177	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	177	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	177	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	177	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	177	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	177	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	177	0	action	353432
+decoded_dat/c/nar/a/atk.dat	field	177	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	177	0	facing	3230
+decoded_dat/c/nar/a/atk.dat	frame	178	539		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	178	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	178	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	178	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	178	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	178	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	178	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	178	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	178	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	178	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	178	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	178	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	178	0	x	3339
+decoded_dat/c/nar/a/atk.dat	field	178	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	178	0	action	353430
+decoded_dat/c/nar/a/atk.dat	field	178	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	178	0	facing	3231
+decoded_dat/c/nar/a/atk.dat	frame	179	540		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	179	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	179	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	179	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	179	-1	next	353431
+decoded_dat/c/nar/a/atk.dat	field	179	-1	dvx	33
+decoded_dat/c/nar/a/atk.dat	field	179	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	179	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	180	541		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	180	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	180	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	180	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	180	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	180	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	180	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	180	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	180	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	180	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	180	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	180	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	180	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	180	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	180	0	action	333032
+decoded_dat/c/nar/a/atk.dat	field	180	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	180	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	181	542		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	181	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	181	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	181	-1	wait	33
+decoded_dat/c/nar/a/atk.dat	field	181	-1	next	353433
+decoded_dat/c/nar/a/atk.dat	field	181	-1	dvx	33
+decoded_dat/c/nar/a/atk.dat	field	181	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	181	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	frame	182	543		6b61676562756e7368696e32
+decoded_dat/c/nar/a/atk.dat	field	182	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	182	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	182	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	182	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	182	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	182	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	182	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	182	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	182	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	block	182	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	182	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	182	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	182	0	y	3739
+decoded_dat/c/nar/a/atk.dat	field	182	0	action	333432
+decoded_dat/c/nar/a/atk.dat	field	182	0	oid	3936
+decoded_dat/c/nar/a/atk.dat	field	182	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	183	600		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	183	-1	pic	3830
+decoded_dat/c/nar/a/atk.dat	field	183	-1	state	39
+decoded_dat/c/nar/a/atk.dat	field	183	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	183	-1	next	363030
+decoded_dat/c/nar/a/atk.dat	field	183	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	183	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	183	-1	centerx	313035
+decoded_dat/c/nar/a/atk.dat	field	183	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	block	183	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	183	0	kind	33
+decoded_dat/c/nar/a/atk.dat	field	183	0	x	3630
+decoded_dat/c/nar/a/atk.dat	field	183	0	y	3831
+decoded_dat/c/nar/a/atk.dat	field	183	0	w	313030
+decoded_dat/c/nar/a/atk.dat	field	183	0	h	3332
+decoded_dat/c/nar/a/atk.dat	field	183	0	zwidth	35
+decoded_dat/c/nar/a/atk.dat	field	183	0	catchingact	36303520363035
+decoded_dat/c/nar/a/atk.dat	field	183	0	caughtact	31333120313331
+decoded_dat/c/nar/a/atk.dat	frame	184	605		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	184	-1	pic	313037
+decoded_dat/c/nar/a/atk.dat	field	184	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	184	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	184	-1	next	363036
+decoded_dat/c/nar/a/atk.dat	field	184	-1	dvx	3235
+decoded_dat/c/nar/a/atk.dat	field	184	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	184	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	184	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	184	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	184	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	184	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	184	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	184	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	184	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	184	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	184	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	184	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	184	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	184	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	184	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	184	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	184	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	184	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	185	606		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	185	-1	pic	313038
+decoded_dat/c/nar/a/atk.dat	field	185	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	185	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	185	-1	next	363037
+decoded_dat/c/nar/a/atk.dat	field	185	-1	dvx	3135
+decoded_dat/c/nar/a/atk.dat	field	185	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	185	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	185	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	185	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	block	185	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	185	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	185	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	185	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	185	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	185	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	185	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	185	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	185	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	185	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	185	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	185	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	185	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	186	607		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	186	-1	pic	313039
+decoded_dat/c/nar/a/atk.dat	field	186	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	186	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	186	-1	next	363038
+decoded_dat/c/nar/a/atk.dat	field	186	-1	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	186	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	186	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	186	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	186	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	186	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	186	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	186	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	186	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	186	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	186	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	186	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	186	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	186	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	186	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	186	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	186	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	186	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	186	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	187	608		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	187	-1	pic	313130
+decoded_dat/c/nar/a/atk.dat	field	187	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	187	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	187	-1	next	363039
+decoded_dat/c/nar/a/atk.dat	field	187	-1	dvx	3130
+decoded_dat/c/nar/a/atk.dat	field	187	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	187	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	187	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	187	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	block	187	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	187	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	187	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	187	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	187	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	187	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	187	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	187	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	187	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	187	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	187	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	187	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	187	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	188	609		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	188	-1	pic	313131
+decoded_dat/c/nar/a/atk.dat	field	188	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	188	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	188	-1	next	363130
+decoded_dat/c/nar/a/atk.dat	field	188	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	188	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	188	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	188	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	188	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	188	-1	hit_a	3135
+decoded_dat/c/nar/a/atk.dat	field	188	-1	hit_d	363135
+decoded_dat/c/nar/a/atk.dat	field	188	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	188	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	188	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	188	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	188	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	188	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	188	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	188	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	188	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	188	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	188	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	188	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	188	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	188	0	effect	35
+decoded_dat/c/nar/a/atk.dat	block	188	1	opoint	
+decoded_dat/c/nar/a/atk.dat	field	188	1	kind	31
+decoded_dat/c/nar/a/atk.dat	field	188	1	x	323330
+decoded_dat/c/nar/a/atk.dat	field	188	1	y	313630
+decoded_dat/c/nar/a/atk.dat	field	188	1	action	363230
+decoded_dat/c/nar/a/atk.dat	field	188	1	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	188	1	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	189	610		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	189	-1	pic	313132
+decoded_dat/c/nar/a/atk.dat	field	189	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	189	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	189	-1	next	363131
+decoded_dat/c/nar/a/atk.dat	field	189	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	189	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	189	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	189	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	189	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	189	-1	hit_a	3135
+decoded_dat/c/nar/a/atk.dat	field	189	-1	hit_d	363135
+decoded_dat/c/nar/a/atk.dat	block	189	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	189	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	189	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	189	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	189	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	189	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	189	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	189	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	189	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	189	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	189	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	189	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	189	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	190	611		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	190	-1	pic	313133
+decoded_dat/c/nar/a/atk.dat	field	190	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	190	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	190	-1	next	363039
+decoded_dat/c/nar/a/atk.dat	field	190	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	190	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	190	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	190	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	190	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	190	-1	hit_a	3135
+decoded_dat/c/nar/a/atk.dat	field	190	-1	hit_d	363135
+decoded_dat/c/nar/a/atk.dat	field	190	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	190	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	190	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	190	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	190	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	190	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	190	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	190	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	190	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	190	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	190	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	190	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	190	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	190	0	effect	35
+decoded_dat/c/nar/a/atk.dat	block	190	1	opoint	
+decoded_dat/c/nar/a/atk.dat	field	190	1	kind	31
+decoded_dat/c/nar/a/atk.dat	field	190	1	x	323030
+decoded_dat/c/nar/a/atk.dat	field	190	1	y	313630
+decoded_dat/c/nar/a/atk.dat	field	190	1	action	363235
+decoded_dat/c/nar/a/atk.dat	field	190	1	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	190	1	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	191	615		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	191	-1	pic	313134
+decoded_dat/c/nar/a/atk.dat	field	191	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	191	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	191	-1	next	363136
+decoded_dat/c/nar/a/atk.dat	field	191	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	191	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	191	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	191	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	191	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	field	191	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	191	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	191	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	191	0	x	313530
+decoded_dat/c/nar/a/atk.dat	field	191	0	y	3535
+decoded_dat/c/nar/a/atk.dat	field	191	0	w	313230
+decoded_dat/c/nar/a/atk.dat	field	191	0	h	313130
+decoded_dat/c/nar/a/atk.dat	field	191	0	dvx	3230
+decoded_dat/c/nar/a/atk.dat	field	191	0	dvy	2d3135
+decoded_dat/c/nar/a/atk.dat	field	191	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	191	0	vrest	31
+decoded_dat/c/nar/a/atk.dat	field	191	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	191	0	injury	33
+decoded_dat/c/nar/a/atk.dat	field	191	0	effect	35
+decoded_dat/c/nar/a/atk.dat	frame	192	616		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	192	-1	pic	313135
+decoded_dat/c/nar/a/atk.dat	field	192	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	192	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	192	-1	next	363137
+decoded_dat/c/nar/a/atk.dat	field	192	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	192	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	192	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	192	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	192	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	block	192	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	192	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	192	0	x	313336
+decoded_dat/c/nar/a/atk.dat	field	192	0	y	3433
+decoded_dat/c/nar/a/atk.dat	field	192	0	w	313138
+decoded_dat/c/nar/a/atk.dat	field	192	0	h	313133
+decoded_dat/c/nar/a/atk.dat	field	192	0	dvx	313030
+decoded_dat/c/nar/a/atk.dat	field	192	0	dvy	2d3530
+decoded_dat/c/nar/a/atk.dat	field	192	0	fall	313030
+decoded_dat/c/nar/a/atk.dat	field	192	0	vrest	3230
+decoded_dat/c/nar/a/atk.dat	field	192	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	192	0	injury	3430
+decoded_dat/c/nar/a/atk.dat	field	192	0	effect	30
+decoded_dat/c/nar/a/atk.dat	block	192	1	opoint	
+decoded_dat/c/nar/a/atk.dat	field	192	1	kind	31
+decoded_dat/c/nar/a/atk.dat	field	192	1	x	323030
+decoded_dat/c/nar/a/atk.dat	field	192	1	y	313630
+decoded_dat/c/nar/a/atk.dat	field	192	1	action	363235
+decoded_dat/c/nar/a/atk.dat	field	192	1	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	192	1	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	193	617		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	193	-1	pic	313136
+decoded_dat/c/nar/a/atk.dat	field	193	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	193	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	193	-1	next	363138
+decoded_dat/c/nar/a/atk.dat	field	193	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	193	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	193	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	193	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	193	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	194	618		73616765726173656e67616e
+decoded_dat/c/nar/a/atk.dat	field	194	-1	pic	313137
+decoded_dat/c/nar/a/atk.dat	field	194	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	194	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	194	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	194	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	194	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	194	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	194	-1	centerx	323030
+decoded_dat/c/nar/a/atk.dat	field	194	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	195	620		726f636b7332
+decoded_dat/c/nar/a/atk.dat	field	195	-1	pic	3939
+decoded_dat/c/nar/a/atk.dat	field	195	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	195	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	195	-1	next	363231
+decoded_dat/c/nar/a/atk.dat	field	195	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	195	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	195	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	195	-1	centerx	313035
+decoded_dat/c/nar/a/atk.dat	field	195	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	frame	196	621		726f636b7332
+decoded_dat/c/nar/a/atk.dat	field	196	-1	pic	313030
+decoded_dat/c/nar/a/atk.dat	field	196	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	196	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	196	-1	next	363232
+decoded_dat/c/nar/a/atk.dat	field	196	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	196	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	196	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	196	-1	centerx	313035
+decoded_dat/c/nar/a/atk.dat	field	196	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	frame	197	622		726f636b7332
+decoded_dat/c/nar/a/atk.dat	field	197	-1	pic	313031
+decoded_dat/c/nar/a/atk.dat	field	197	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	197	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	197	-1	next	363233
+decoded_dat/c/nar/a/atk.dat	field	197	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	197	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	197	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	197	-1	centerx	313035
+decoded_dat/c/nar/a/atk.dat	field	197	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	frame	198	623		726f636b7332
+decoded_dat/c/nar/a/atk.dat	field	198	-1	pic	313032
+decoded_dat/c/nar/a/atk.dat	field	198	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	198	-1	wait	31
+decoded_dat/c/nar/a/atk.dat	field	198	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	198	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	198	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	198	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	198	-1	centerx	313035
+decoded_dat/c/nar/a/atk.dat	field	198	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	frame	199	625		64757374
+decoded_dat/c/nar/a/atk.dat	field	199	-1	pic	313139
+decoded_dat/c/nar/a/atk.dat	field	199	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	199	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	199	-1	next	363236
+decoded_dat/c/nar/a/atk.dat	field	199	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	199	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	199	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	199	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	199	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	200	626		64757374
+decoded_dat/c/nar/a/atk.dat	field	200	-1	pic	313230
+decoded_dat/c/nar/a/atk.dat	field	200	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	200	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	200	-1	next	363237
+decoded_dat/c/nar/a/atk.dat	field	200	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	200	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	200	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	200	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	200	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	201	627		64757374
+decoded_dat/c/nar/a/atk.dat	field	201	-1	pic	313231
+decoded_dat/c/nar/a/atk.dat	field	201	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	201	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	201	-1	next	363238
+decoded_dat/c/nar/a/atk.dat	field	201	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	201	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	201	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	201	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	201	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	202	628		64757374
+decoded_dat/c/nar/a/atk.dat	field	202	-1	pic	313232
+decoded_dat/c/nar/a/atk.dat	field	202	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	202	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	202	-1	next	363239
+decoded_dat/c/nar/a/atk.dat	field	202	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	202	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	202	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	202	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	202	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	203	629		64757374
+decoded_dat/c/nar/a/atk.dat	field	203	-1	pic	313233
+decoded_dat/c/nar/a/atk.dat	field	203	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	203	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	203	-1	next	363330
+decoded_dat/c/nar/a/atk.dat	field	203	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	203	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	203	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	203	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	203	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	204	630		64757374
+decoded_dat/c/nar/a/atk.dat	field	204	-1	pic	313234
+decoded_dat/c/nar/a/atk.dat	field	204	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	204	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	204	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	204	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	204	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	204	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	204	-1	centerx	313437
+decoded_dat/c/nar/a/atk.dat	field	204	-1	centery	313535
+decoded_dat/c/nar/a/atk.dat	frame	205	635		726173656e67616e616972
+decoded_dat/c/nar/a/atk.dat	field	205	-1	pic	3739
+decoded_dat/c/nar/a/atk.dat	field	205	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	205	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	205	-1	next	363336
+decoded_dat/c/nar/a/atk.dat	field	205	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	205	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	205	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	205	-1	centerx	3735
+decoded_dat/c/nar/a/atk.dat	field	205	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	field	205	-1	hit_a	3735
+decoded_dat/c/nar/a/atk.dat	field	205	-1	hit_d	363339
+decoded_dat/c/nar/a/atk.dat	field	205	-1	sound	646174615c3032312e776176
+decoded_dat/c/nar/a/atk.dat	block	205	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	205	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	205	0	x	3330
+decoded_dat/c/nar/a/atk.dat	field	205	0	y	3330
+decoded_dat/c/nar/a/atk.dat	field	205	0	w	3435
+decoded_dat/c/nar/a/atk.dat	field	205	0	h	313030
+decoded_dat/c/nar/a/atk.dat	field	205	0	dvx	32
+decoded_dat/c/nar/a/atk.dat	field	205	0	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	205	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	205	0	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	205	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	205	0	injury	3135
+decoded_dat/c/nar/a/atk.dat	block	205	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	205	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	205	1	x	3735
+decoded_dat/c/nar/a/atk.dat	field	205	1	y	3330
+decoded_dat/c/nar/a/atk.dat	field	205	1	w	3435
+decoded_dat/c/nar/a/atk.dat	field	205	1	h	313030
+decoded_dat/c/nar/a/atk.dat	field	205	1	dvx	2d32
+decoded_dat/c/nar/a/atk.dat	field	205	1	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	205	1	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	205	1	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	205	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	205	1	injury	3135
+decoded_dat/c/nar/a/atk.dat	frame	206	636		726173656e67616e616972
+decoded_dat/c/nar/a/atk.dat	field	206	-1	pic	3830
+decoded_dat/c/nar/a/atk.dat	field	206	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	206	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	206	-1	next	363337
+decoded_dat/c/nar/a/atk.dat	field	206	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	206	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	206	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	206	-1	centerx	3735
+decoded_dat/c/nar/a/atk.dat	field	206	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	field	206	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	206	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	206	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	206	0	x	3330
+decoded_dat/c/nar/a/atk.dat	field	206	0	y	3330
+decoded_dat/c/nar/a/atk.dat	field	206	0	w	3435
+decoded_dat/c/nar/a/atk.dat	field	206	0	h	313030
+decoded_dat/c/nar/a/atk.dat	field	206	0	dvx	32
+decoded_dat/c/nar/a/atk.dat	field	206	0	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	206	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	206	0	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	206	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	206	0	injury	3135
+decoded_dat/c/nar/a/atk.dat	block	206	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	206	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	206	1	x	3735
+decoded_dat/c/nar/a/atk.dat	field	206	1	y	3330
+decoded_dat/c/nar/a/atk.dat	field	206	1	w	3435
+decoded_dat/c/nar/a/atk.dat	field	206	1	h	313030
+decoded_dat/c/nar/a/atk.dat	field	206	1	dvx	2d32
+decoded_dat/c/nar/a/atk.dat	field	206	1	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	206	1	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	206	1	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	206	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	206	1	injury	3135
+decoded_dat/c/nar/a/atk.dat	frame	207	637		726173656e67616e616972
+decoded_dat/c/nar/a/atk.dat	field	207	-1	pic	3831
+decoded_dat/c/nar/a/atk.dat	field	207	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	207	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	207	-1	next	363338
+decoded_dat/c/nar/a/atk.dat	field	207	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	207	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	207	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	207	-1	centerx	3735
+decoded_dat/c/nar/a/atk.dat	field	207	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	field	207	-1	sound	646174615c3032312e776176
+decoded_dat/c/nar/a/atk.dat	block	207	0	opoint	
+decoded_dat/c/nar/a/atk.dat	field	207	0	kind	31
+decoded_dat/c/nar/a/atk.dat	field	207	0	x	313030
+decoded_dat/c/nar/a/atk.dat	field	207	0	y	313230
+decoded_dat/c/nar/a/atk.dat	field	207	0	action	363230
+decoded_dat/c/nar/a/atk.dat	field	207	0	oid	353138
+decoded_dat/c/nar/a/atk.dat	field	207	0	facing	30
+decoded_dat/c/nar/a/atk.dat	frame	208	638		726173656e67616e616972
+decoded_dat/c/nar/a/atk.dat	field	208	-1	pic	3832
+decoded_dat/c/nar/a/atk.dat	field	208	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	208	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	208	-1	next	363335
+decoded_dat/c/nar/a/atk.dat	field	208	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	208	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	208	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	208	-1	centerx	3735
+decoded_dat/c/nar/a/atk.dat	field	208	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	field	208	-1	sound	646174615c3031342e776176
+decoded_dat/c/nar/a/atk.dat	block	208	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	208	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	208	0	x	3330
+decoded_dat/c/nar/a/atk.dat	field	208	0	y	3330
+decoded_dat/c/nar/a/atk.dat	field	208	0	w	3435
+decoded_dat/c/nar/a/atk.dat	field	208	0	h	313030
+decoded_dat/c/nar/a/atk.dat	field	208	0	dvx	32
+decoded_dat/c/nar/a/atk.dat	field	208	0	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	208	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	208	0	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	208	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	208	0	injury	3135
+decoded_dat/c/nar/a/atk.dat	block	208	1	itr	
+decoded_dat/c/nar/a/atk.dat	field	208	1	kind	30
+decoded_dat/c/nar/a/atk.dat	field	208	1	x	3735
+decoded_dat/c/nar/a/atk.dat	field	208	1	y	3330
+decoded_dat/c/nar/a/atk.dat	field	208	1	w	3435
+decoded_dat/c/nar/a/atk.dat	field	208	1	h	313030
+decoded_dat/c/nar/a/atk.dat	field	208	1	dvx	2d32
+decoded_dat/c/nar/a/atk.dat	field	208	1	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	208	1	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	208	1	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	208	1	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	208	1	injury	3135
+decoded_dat/c/nar/a/atk.dat	frame	209	639		726173656e67616e616972
+decoded_dat/c/nar/a/atk.dat	field	209	-1	pic	3739
+decoded_dat/c/nar/a/atk.dat	field	209	-1	state	3135
+decoded_dat/c/nar/a/atk.dat	field	209	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	209	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	209	-1	dvx	353530
+decoded_dat/c/nar/a/atk.dat	field	209	-1	dvy	353530
+decoded_dat/c/nar/a/atk.dat	field	209	-1	dvz	353530
+decoded_dat/c/nar/a/atk.dat	field	209	-1	centerx	3735
+decoded_dat/c/nar/a/atk.dat	field	209	-1	centery	313230
+decoded_dat/c/nar/a/atk.dat	block	209	0	itr	
+decoded_dat/c/nar/a/atk.dat	field	209	0	kind	30
+decoded_dat/c/nar/a/atk.dat	field	209	0	x	3330
+decoded_dat/c/nar/a/atk.dat	field	209	0	y	3330
+decoded_dat/c/nar/a/atk.dat	field	209	0	w	3930
+decoded_dat/c/nar/a/atk.dat	field	209	0	h	313030
+decoded_dat/c/nar/a/atk.dat	field	209	0	dvx	32
+decoded_dat/c/nar/a/atk.dat	field	209	0	dvy	2d37
+decoded_dat/c/nar/a/atk.dat	field	209	0	fall	3730
+decoded_dat/c/nar/a/atk.dat	field	209	0	vrest	33
+decoded_dat/c/nar/a/atk.dat	field	209	0	bdefend	313030
+decoded_dat/c/nar/a/atk.dat	field	209	0	injury	3135
+decoded_dat/c/nar/a/atk.dat	frame	210	700		6131
+decoded_dat/c/nar/a/atk.dat	field	210	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	210	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	210	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	210	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	210	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	210	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	210	-1	sound	635c6e61725c775c61312e776176
+decoded_dat/c/nar/a/atk.dat	frame	211	701		6132
+decoded_dat/c/nar/a/atk.dat	field	211	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	211	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	211	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	211	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	211	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	211	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	211	-1	sound	635c6e61725c775c61322e776176
+decoded_dat/c/nar/a/atk.dat	frame	212	702		6133
+decoded_dat/c/nar/a/atk.dat	field	212	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	212	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	212	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	212	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	212	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	212	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	212	-1	sound	635c6e61725c775c61332e776176
+decoded_dat/c/nar/a/atk.dat	frame	213	703		6134
+decoded_dat/c/nar/a/atk.dat	field	213	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	213	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	213	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	213	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	213	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	213	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	213	-1	sound	635c6e61725c775c61342e776176
+decoded_dat/c/nar/a/atk.dat	frame	214	704		6135
+decoded_dat/c/nar/a/atk.dat	field	214	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	214	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	214	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	214	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	214	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	214	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	214	-1	sound	635c6e61725c775c61352e776176
+decoded_dat/c/nar/a/atk.dat	frame	215	705		6136
+decoded_dat/c/nar/a/atk.dat	field	215	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	215	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	215	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	215	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	215	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	215	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	215	-1	sound	635c6e61725c775c61362e776176
+decoded_dat/c/nar/a/atk.dat	frame	216	706		6137
+decoded_dat/c/nar/a/atk.dat	field	216	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	216	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	216	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	216	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	216	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	216	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	216	-1	sound	635c6e61725c775c61372e776176
+decoded_dat/c/nar/a/atk.dat	frame	217	707		6138
+decoded_dat/c/nar/a/atk.dat	field	217	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	217	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	217	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	217	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	217	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	217	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	217	-1	sound	635c6e61725c775c61382e776176
+decoded_dat/c/nar/a/atk.dat	frame	218	708		617435
+decoded_dat/c/nar/a/atk.dat	field	218	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	218	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	218	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	218	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	218	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	218	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	218	-1	sound	635c6e61725c775c6174352e776176
+decoded_dat/c/nar/a/atk.dat	frame	219	709		6a31
+decoded_dat/c/nar/a/atk.dat	field	219	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	219	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	219	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	219	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	219	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	219	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	219	-1	sound	635c6e61725c775c6a312e776176
+decoded_dat/c/nar/a/atk.dat	frame	220	710		6a32
+decoded_dat/c/nar/a/atk.dat	field	220	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	220	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	220	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	220	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	220	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	220	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	220	-1	sound	635c6e61725c775c6a322e776176
+decoded_dat/c/nar/a/atk.dat	frame	221	711		6a34
+decoded_dat/c/nar/a/atk.dat	field	221	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	221	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	221	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	221	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	221	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	221	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	221	-1	sound	635c6e61725c775c6a342e776176
+decoded_dat/c/nar/a/atk.dat	frame	222	712		6a37
+decoded_dat/c/nar/a/atk.dat	field	222	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	222	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	222	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	222	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	222	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	222	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	222	-1	sound	635c6e61725c775c6a372e776176
+decoded_dat/c/nar/a/atk.dat	frame	223	713		6a38
+decoded_dat/c/nar/a/atk.dat	field	223	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	223	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	223	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	223	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	223	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	223	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	223	-1	sound	635c6e61725c775c6a382e776176
+decoded_dat/c/nar/a/atk.dat	frame	224	714		7031
+decoded_dat/c/nar/a/atk.dat	field	224	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	224	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	224	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	224	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	224	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	224	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	224	-1	sound	635c6e61725c775c70312e776176
+decoded_dat/c/nar/a/atk.dat	frame	225	715		7032
+decoded_dat/c/nar/a/atk.dat	field	225	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	225	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	225	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	225	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	225	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	225	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	225	-1	sound	635c6e61725c775c70322e776176
+decoded_dat/c/nar/a/atk.dat	frame	226	716		6531
+decoded_dat/c/nar/a/atk.dat	field	226	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	226	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	226	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	226	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	226	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	226	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	226	-1	sound	635c6e61725c775c65312e776176
+decoded_dat/c/nar/a/atk.dat	frame	227	717		7570
+decoded_dat/c/nar/a/atk.dat	field	227	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	227	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	227	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	227	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	227	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	227	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	227	-1	sound	635c6e61725c775c75702e776176
+decoded_dat/c/nar/a/atk.dat	frame	228	718		736e31
+decoded_dat/c/nar/a/atk.dat	field	228	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	228	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	228	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	228	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	228	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	228	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	228	-1	sound	635c6e61725c775c736e312e776176
+decoded_dat/c/nar/a/atk.dat	frame	229	719		6a30
+decoded_dat/c/nar/a/atk.dat	field	229	-1	pic	393939
+decoded_dat/c/nar/a/atk.dat	field	229	-1	state	33303035
+decoded_dat/c/nar/a/atk.dat	field	229	-1	wait	30
+decoded_dat/c/nar/a/atk.dat	field	229	-1	next	31303030
+decoded_dat/c/nar/a/atk.dat	field	229	-1	centerx	3339
+decoded_dat/c/nar/a/atk.dat	field	229	-1	centery	3739
+decoded_dat/c/nar/a/atk.dat	field	229	-1	sound	635c6e61725c775c6a302e776176

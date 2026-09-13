@@ -1,0 +1,24 @@
+{
+  "arguments": [
+    "G:/GoggleDownload/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++.exe",
+    "-std=c++17",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-static-libgcc",
+    "-static-libstdc++",
+    "-IJ:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\include",
+    "Tools/NTSD28NumericDecoderTests/AuthorityRawNumericWitness.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp",
+    "-o",
+    "Temp/Q05NumericDifferential/AuthorityRawNumericWitness.exe"
+  ],
+  "hashes": {
+    "G:/GoggleDownload/x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0/mingw64/bin/g++.exe": "4fd46eef3b96dfd00115598bbab6e9d7ae660a3b1a576e1d2aa6023c97d10a95",
+    "Tools/NTSD28NumericDecoderTests/AuthorityRawNumericWitness.cpp": "5705fffe807b62750fe6c4083d69a9db6ff85fea0d7a463b7e15ddd363f687c2",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\data\\dat_document.cpp": "e895d1f3f8fa5c0de1a17adf634d972ae86ead4a5db6fc9c17e995f853193c09",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\source\\ntsd28_core\\src\\simulation\\combat_records.cpp": "070453131ddc189c51988f2169cac1efaf3c223e512a000965d2fd8e11ed5991",
+    "Temp/Q05NumericDifferential/AuthorityRawNumericWitness.exe": "7b8bb3b50c75b7bcafec6a93ef49d5c54425b32b277f2276339e7ffaa1a9a43f"
+  }
+}

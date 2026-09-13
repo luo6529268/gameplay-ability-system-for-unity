@@ -76,9 +76,19 @@ namespace NTSD.Test
             // 创建 AppManager（含 NTSDSoundPlayer, SparkRenderer, EventSystem）
             EnsureAppManager();
 
+            SimulationTickDriver simulationDriver = SimulationTickDriver.Instance;
+            if (simulationDriver == null)
+            {
+                Debug.LogError("[BattleTestBootstrap] SimulationTickDriver not found before battle preparation.");
+                return;
+            }
+            int preparationGeneration = simulationDriver.PreparationGeneration;
+            SimulationWorld preparationWorld = simulationDriver.World;
+
             for (int i = 0; i < delayFrames; i++)
                 await UniTask.Yield();
-            if (this == null) return;
+            if (this == null || simulationDriver == null ||
+                !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
 
             // 1. 初始化 TimeWheel
             TimeWheel.TimeWheel.CreateSharedInstance();
@@ -100,7 +110,6 @@ namespace NTSD.Test
             }
 
             // 3. 加载角色数据
-            SimulationTickDriver simulationDriver = SimulationTickDriver.Instance;
             if (simulationDriver == null)
             {
                 Debug.LogError(
@@ -114,74 +123,105 @@ namespace NTSD.Test
                 return;
             }
 
-            await LoadCharacterDataAsync();
-            if (this == null) return;
+            preparationGeneration = simulationDriver.PreparationGeneration;
+            preparationWorld = simulationDriver.World;
 
-            if (AppManager.Instance?.SoundPlayer != null)
+            try
             {
-                await AppManager.Instance.SoundPlayer.PrepareBattleCuesAsync(
-                    CharacterAnimtorManager.Instance);
-                if (this == null) return;
-            }
+                await LoadCharacterDataAsync();
+                if (this == null || simulationDriver == null ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
+                CharacterAnimtorManager contentManager = CharacterAnimtorManager.TryGetInstance();
+                string contentKey = await contentManager.ValidateConfiguredContentForBattleAsync();
+                if (this == null || simulationDriver == null ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
 
-            // 4. 获取 BattleBootstrap；表现层必须在容量封印完成后才启用
-            var bootstrap = FindObjectOfType<App.BattleBootstrap>(true);
-
-            // 5. 设置当前场景为活动场景
-            SceneManager.SetActiveScene(gameObject.scene);
-
-            if (bootstrap != null)
-            {
-                if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                if (AppManager.Instance?.SoundPlayer != null)
                 {
-                    Debug.LogError(
-                        $"[BattleTestBootstrap] Battle map preparation failed before test entity setup: {mapFailure}");
+                    await AppManager.Instance.SoundPlayer.PrepareBattleCuesAsync(
+                        CharacterAnimtorManager.Instance);
+                    if (this == null || simulationDriver == null ||
+                        !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
+                }
+
+                await contentManager.AssertConfiguredContentUnchangedAsync(contentKey);
+                if (this == null || simulationDriver == null ||
+                    !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
+                // 4. 获取 BattleBootstrap；表现层必须在容量封印完成后才启用
+                var bootstrap = FindObjectOfType<App.BattleBootstrap>(true);
+
+                // 5. 设置当前场景为活动场景
+                SceneManager.SetActiveScene(gameObject.scene);
+
+                if (bootstrap != null)
+                {
+                    if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                    {
+                        Debug.LogError(
+                            $"[BattleTestBootstrap] Battle map preparation failed before test entity setup: {mapFailure}");
+                        return;
+                    }
+
+                    if (bootstrap.IsMapConfigurationPrepared)
+                        simulationDriver.World?.RefreshStageRuntimeSnapshotFromScene();
+                }
+
+    #if UNITY_EDITOR || DEVELOPMENT_BUILD
+                if (SuppressEntityCreationForProductionStress)
+                {
+                    ProductionStressServicesReady = true;
+                    Debug.Log(
+                        "[BattleTestBootstrap] Production stress services are ready; test entities and auto-resume are suppressed.");
                     return;
                 }
+    #endif
 
-                if (bootstrap.IsMapConfigurationPrepared)
-                    simulationDriver.World?.RefreshStageRuntimeSnapshotFromScene();
-            }
+                // 6. 配置并启动关卡
+                var levelMgr = BoundaryWallManager.Instance;
+                simulationDriver.PrepareBattleRuntimeServices();
+                SetupTestCharacters(levelMgr, gameObject.scene);
+                Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            if (SuppressEntityCreationForProductionStress)
-            {
-                ProductionStressServicesReady = true;
-                Debug.Log(
-                    "[BattleTestBootstrap] Production stress services are ready; test entities and auto-resume are suppressed.");
-                return;
-            }
-#endif
-
-            // 6. 配置并启动关卡
-            var levelMgr = BoundaryWallManager.Instance;
-            SetupTestCharacters(levelMgr, gameObject.scene);
-            Debug.Log("[BattleTestBootstrap] SetupTestCharacters called.");
-
-            // 7. 取消暂停
-            if (autoResume)
-            {
-                await UniTask.Yield();
-                if (this == null) return;
-
-                if (SimulationTickDriver.Instance != null)
+                // 7. 取消暂停
+                if (autoResume)
                 {
-                    SimulationTickDriver.Instance.BeginBattleAllocationSeal();
-                    if (bootstrap != null)
+                    await UniTask.Yield();
+                    if (this == null || simulationDriver == null ||
+                        !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
+
+                    await contentManager.AssertConfiguredContentUnchangedAsync(contentKey);
+                    if (this == null || simulationDriver == null ||
+                        !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld)) return;
+                    if (SimulationTickDriver.Instance != null)
                     {
-                        bootstrap.EnablePresentation();
-                        Debug.Log("[BattleTestBootstrap] BattleBootstrap presentation enabled.");
+                        SimulationTickDriver.Instance.BeginBattleAllocationSeal();
+                        if (bootstrap != null)
+                        {
+                            bootstrap.EnablePresentation();
+                            Debug.Log("[BattleTestBootstrap] BattleBootstrap presentation enabled.");
+                        }
+                        SimulationTickDriver.Instance.SetPaused(false);
+                        Debug.Log("[BattleTestBootstrap] SimulationTickDriver resumed.");
                     }
-                    SimulationTickDriver.Instance.SetPaused(false);
-                    Debug.Log("[BattleTestBootstrap] SimulationTickDriver resumed.");
+                    else
+                    {
+                        Debug.LogError("[BattleTestBootstrap] SimulationTickDriver not found!");
+                    }
                 }
-                else
-                {
-                    Debug.LogError("[BattleTestBootstrap] SimulationTickDriver not found!");
-                }
-            }
 
-            Debug.Log("[BattleTestBootstrap] === Test bootstrap complete ===");
+                Debug.Log("[BattleTestBootstrap] === Test bootstrap complete ===");
+            }
+            catch (System.Exception error)
+            {
+                if (this == null || simulationDriver == null ||
+                    simulationDriver.PreparationGeneration != preparationGeneration ||
+                    !ReferenceEquals(simulationDriver.World, preparationWorld) ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                    simulationDriver.LifecycleState == BattleRuntimeLifecycleState.Stopped)
+                    return;
+                AppManager.Instance?.TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+                Debug.LogError("[BattleTestBootstrap] Battle preparation failed: " + error);
+            }
         }
 
         private void Update()
@@ -346,8 +386,17 @@ namespace NTSD.Test
                 return;
             }
 
+            if (CharacterAnimtorManager.HasConfiguredLoganContent)
+            {
+                await mgr.PrewarmConfiguredLoganContentAsync(text =>
+                    Debug.Log($"[BattleTestBootstrap] Loading content: {text}"));
+                return;
+            }
+            if (mgr.PublishedVisualContentKey != null)
+                throw new System.InvalidOperationException("Legacy bootstrap cannot reuse a Logan publication.");
             if (mgr.IsPrewarmCompleted)
             {
+                await mgr.ValidateConfiguredContentForBattleAsync();
                 Debug.Log("[BattleTestBootstrap] Character data already loaded, skipping.");
                 return;
             }

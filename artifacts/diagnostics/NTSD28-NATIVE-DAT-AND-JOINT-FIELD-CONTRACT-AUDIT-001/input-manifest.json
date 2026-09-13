@@ -1,0 +1,62 @@
+[
+  {
+    "path": "c/ank/ank.dat",
+    "sha256": "7BEEFED713CC85CDF2BF36399FE158B63E822038FBED09AE79901BB6B3E81AC5",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\ank\\ank.dat"
+  },
+  {
+    "path": "c/ank/ssnk.dat",
+    "sha256": "426E106ABAF97ED522DCABFBE8DB2CBD0F57ACD4BFEF5A484C363B27209D7260",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\ank\\ssnk.dat"
+  },
+  {
+    "path": "c/hir/hir.dat",
+    "sha256": "119F6DB71DCEBF14593C05ADCF475DD5AC64232F25E9009C05FE9D3A78FD635E",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\hir\\hir.dat"
+  },
+  {
+    "path": "c/min/min.dat",
+    "sha256": "FEC6191012A2B2E1E2FB4B0873EFC9EFAE12156C417B77B3914CEF1EB634044E",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\min\\min.dat"
+  },
+  {
+    "path": "c/min/sag.dat",
+    "sha256": "C5D1313DAC69E96F1B3A874DAB38F7217D3272F39CBEF82C0AACD42254AAA59D",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\min\\sag.dat"
+  },
+  {
+    "path": "c/nar/nar.dat",
+    "sha256": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9",
+    "source": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\nar.dat"
+  },
+  {
+    "path": "probes/wpoint-extra.dat",
+    "sha256": "A262941DDCE06B762D9362EE104A56BE9CB375BB74C65EADDFACAB86142F5AFB",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  },
+  {
+    "path": "probes/cpoint-independent.dat",
+    "sha256": "E45626B1875ACC1CE903671CD53719CC8B95A7426FB0D2B800D7650288873673",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  },
+  {
+    "path": "probes/cpoint-float.dat",
+    "sha256": "0068EF62A701E9B8451AFFFCD571EAC4A27602E27B4ADF60800E8F6200864EF6",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  },
+  {
+    "path": "probes/cpoint-all.dat",
+    "sha256": "0333C0A365CFE0C77B68F233DD62145D616C1A4ECA20EFB7627B2ECE6161424E",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  },
+  {
+    "path": "probes/integer-boundary.dat",
+    "sha256": "4E2243804C97C75ACA8AF888E596C5F918C1F9F5C08C7EB14CC0191F06B6C2A4",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  },
+  {
+    "path": "probes/opoint-all.dat",
+    "sha256": "4DA5BEF9EAB024AF64EC09BD8D66B4762C0C6137F63C606181C5413D552F3414",
+    "source": "GENERATED_DIAGNOSTIC_FIXTURE"
+  }
+]

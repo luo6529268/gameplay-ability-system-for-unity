@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "startTick": 5,
+  "endTick": 9,
+  "beforeObjects": 4,
+  "afterObjects": 4,
+  "opointSourceOid": 51,
+  "opointSourceAction": 279,
+  "opointChildAction": 0,
+  "opointReservedAndLifecycle": true,
+  "reservedContract": "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99",
+  "scope": "Existing G16 actual pickup/replacement driver witnesses plus current OPoint kind2 ->213 PostInitLiving seam in live world, explicit action injection, full tick and unregister lifecycle; no physical input/full skill emission claim.",
+  "witnesses": [
+    {
+      "name": "oid120_type1",
+      "status": "PASS",
+      "holderOid": 16,
+      "targetOid": 120,
+      "targetType": 1,
+      "tick": 6
+    },
+    {
+      "name": "type2_state2004_replacement",
+      "status": "PASS",
+      "holderOid": 25,
+      "targetOid": 150,
+      "targetType": 2,
+      "tick": 8
+    }
+  ],
+  "g16OuterFieldsNotPopulatedByDirectRunWitness": [
+    "status",
+    "message",
+    "cleanup",
+    "beforeObjects",
+    "afterObjects"
+  ]
+}

@@ -1,0 +1,1467 @@
+decoded_dat/c/tobir/a/atk.dat	frame	0	0		64656c657465
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	centerx	30
+decoded_dat/c/tobir/a/atk.dat	field	0	-1	centery	30
+decoded_dat/c/tobir/a/atk.dat	frame	1	1		666c79
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	pic	3531
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	state	33303030
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	next	32
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	dvx	3630
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	centerx	3234
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	centery	3234
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	hit_Fj	33
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	hit_Uj	33
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	hit_Dj	33
+decoded_dat/c/tobir/a/atk.dat	field	1	-1	hit_ja	33
+decoded_dat/c/tobir/a/atk.dat	block	1	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	1	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	1	0	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	1	0	y	35
+decoded_dat/c/tobir/a/atk.dat	field	1	0	w	3330
+decoded_dat/c/tobir/a/atk.dat	field	1	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	1	0	effect	35
+decoded_dat/c/tobir/a/atk.dat	field	1	0	zwidth	3130
+decoded_dat/c/tobir/a/atk.dat	field	1	0	fall	2d31
+decoded_dat/c/tobir/a/atk.dat	field	1	0	bdefend	3130
+decoded_dat/c/tobir/a/atk.dat	field	1	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	1	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	1	1	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	1	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	1	1	x	2d3530303030
+decoded_dat/c/tobir/a/atk.dat	field	1	1	y	363434303030
+decoded_dat/c/tobir/a/atk.dat	field	1	1	w	313030303739
+decoded_dat/c/tobir/a/atk.dat	field	1	1	h	383030
+decoded_dat/c/tobir/a/atk.dat	field	1	1	dvx	33
+decoded_dat/c/tobir/a/atk.dat	field	1	1	injury	30
+decoded_dat/c/tobir/a/atk.dat	field	1	1	zwidth	333030
+decoded_dat/c/tobir/a/atk.dat	block	1	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	1	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	1	2	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	1	2	y	35
+decoded_dat/c/tobir/a/atk.dat	field	1	2	w	3330
+decoded_dat/c/tobir/a/atk.dat	field	1	2	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	1	2	zwidth	3130
+decoded_dat/c/tobir/a/atk.dat	frame	2	2		666c79
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	pic	3531
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	state	33303030
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	next	32
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	dvx	3630
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	centerx	3234
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	centery	3234
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	hit_Fj	33
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	hit_Uj	33
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	hit_Dj	33
+decoded_dat/c/tobir/a/atk.dat	field	2	-1	hit_ja	33
+decoded_dat/c/tobir/a/atk.dat	block	2	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	2	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	2	0	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	2	0	y	35
+decoded_dat/c/tobir/a/atk.dat	field	2	0	w	3330
+decoded_dat/c/tobir/a/atk.dat	field	2	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	2	0	effect	35
+decoded_dat/c/tobir/a/atk.dat	field	2	0	zwidth	3130
+decoded_dat/c/tobir/a/atk.dat	field	2	0	fall	2d31
+decoded_dat/c/tobir/a/atk.dat	field	2	0	bdefend	3130
+decoded_dat/c/tobir/a/atk.dat	field	2	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	2	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	2	1	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	2	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	2	1	x	2d3530303030
+decoded_dat/c/tobir/a/atk.dat	field	2	1	y	363434303030
+decoded_dat/c/tobir/a/atk.dat	field	2	1	w	313030303739
+decoded_dat/c/tobir/a/atk.dat	field	2	1	h	383030
+decoded_dat/c/tobir/a/atk.dat	field	2	1	dvx	33
+decoded_dat/c/tobir/a/atk.dat	field	2	1	injury	30
+decoded_dat/c/tobir/a/atk.dat	field	2	1	zwidth	333030
+decoded_dat/c/tobir/a/atk.dat	block	2	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	2	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	2	2	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	2	2	y	35
+decoded_dat/c/tobir/a/atk.dat	field	2	2	w	3330
+decoded_dat/c/tobir/a/atk.dat	field	2	2	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	2	2	zwidth	3130
+decoded_dat/c/tobir/a/atk.dat	frame	3	3		696c6c7573696f6e
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	next	34
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	dvx	323030
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	centerx	3433
+decoded_dat/c/tobir/a/atk.dat	field	3	-1	centery	3234
+decoded_dat/c/tobir/a/atk.dat	frame	4	4		696c6c7573696f6e
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	centerx	3433
+decoded_dat/c/tobir/a/atk.dat	field	4	-1	centery	3234
+decoded_dat/c/tobir/a/atk.dat	block	4	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	4	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	4	0	x	3433
+decoded_dat/c/tobir/a/atk.dat	field	4	0	y	3539
+decoded_dat/c/tobir/a/atk.dat	field	4	0	action	35
+decoded_dat/c/tobir/a/atk.dat	field	4	0	oid	343539
+decoded_dat/c/tobir/a/atk.dat	field	4	0	facing	30
+decoded_dat/c/tobir/a/atk.dat	frame	5	5		696c6c7573696f6e
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	5	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	5	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	5	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	5	0	x	30
+decoded_dat/c/tobir/a/atk.dat	field	5	0	y	363436303030
+decoded_dat/c/tobir/a/atk.dat	field	5	0	w	3739
+decoded_dat/c/tobir/a/atk.dat	field	5	0	h	353030
+decoded_dat/c/tobir/a/atk.dat	frame	6	10		64656c657465
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	centerx	30
+decoded_dat/c/tobir/a/atk.dat	field	6	-1	centery	30
+decoded_dat/c/tobir/a/atk.dat	frame	7	13		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	pic	30
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	next	3138
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	7	-1	centery	323630
+decoded_dat/c/tobir/a/atk.dat	frame	8	14		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	pic	38
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	wait	34
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	next	3133
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	8	-1	centery	323630
+decoded_dat/c/tobir/a/atk.dat	block	8	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	8	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	8	0	x	343030
+decoded_dat/c/tobir/a/atk.dat	field	8	0	y	323630
+decoded_dat/c/tobir/a/atk.dat	field	8	0	action	3134
+decoded_dat/c/tobir/a/atk.dat	field	8	0	oid	343539
+decoded_dat/c/tobir/a/atk.dat	field	8	0	facing	31
+decoded_dat/c/tobir/a/atk.dat	frame	9	16		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	pic	38
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	next	3134
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	9	-1	centery	323630
+decoded_dat/c/tobir/a/atk.dat	frame	10	17		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	wait	34
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	next	3136
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	10	-1	centery	323630
+decoded_dat/c/tobir/a/atk.dat	block	10	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	10	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	10	0	bdefend	33
+decoded_dat/c/tobir/a/atk.dat	field	10	0	x	2d333334
+decoded_dat/c/tobir/a/atk.dat	field	10	0	y	363430303030
+decoded_dat/c/tobir/a/atk.dat	field	10	0	w	363631
+decoded_dat/c/tobir/a/atk.dat	field	10	0	h	393939
+decoded_dat/c/tobir/a/atk.dat	field	10	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	10	0	dvx	3136
+decoded_dat/c/tobir/a/atk.dat	frame	11	18		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	pic	3132
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	next	3139
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	field	11	-1	sound	646174615c3038392e776176
+decoded_dat/c/tobir/a/atk.dat	block	11	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	11	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	11	0	x	313733
+decoded_dat/c/tobir/a/atk.dat	field	11	0	y	3938
+decoded_dat/c/tobir/a/atk.dat	field	11	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	11	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	11	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	11	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	11	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	11	1	x	3230
+decoded_dat/c/tobir/a/atk.dat	field	11	1	y	3735
+decoded_dat/c/tobir/a/atk.dat	field	11	1	w	313637
+decoded_dat/c/tobir/a/atk.dat	field	11	1	h	3835
+decoded_dat/c/tobir/a/atk.dat	field	11	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	11	1	dvy	2d37
+decoded_dat/c/tobir/a/atk.dat	field	11	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	11	1	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	11	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	11	1	injury	3235
+decoded_dat/c/tobir/a/atk.dat	frame	12	19		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	pic	3135
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	next	333230
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	12	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	12	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	12	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	12	0	x	313634
+decoded_dat/c/tobir/a/atk.dat	field	12	0	y	313133
+decoded_dat/c/tobir/a/atk.dat	field	12	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	12	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	12	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	12	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	12	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	12	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	12	1	y	3135
+decoded_dat/c/tobir/a/atk.dat	field	12	1	w	313933
+decoded_dat/c/tobir/a/atk.dat	field	12	1	h	313435
+decoded_dat/c/tobir/a/atk.dat	field	12	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	12	1	dvy	2d37
+decoded_dat/c/tobir/a/atk.dat	field	12	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	12	1	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	12	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	12	1	injury	3235
+decoded_dat/c/tobir/a/atk.dat	frame	13	20		64656c657465
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	centerx	30
+decoded_dat/c/tobir/a/atk.dat	field	13	-1	centery	30
+decoded_dat/c/tobir/a/atk.dat	frame	14	21		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	pic	3136
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	next	333231
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	14	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	14	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	14	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	14	0	x	323831
+decoded_dat/c/tobir/a/atk.dat	field	14	0	y	313532
+decoded_dat/c/tobir/a/atk.dat	field	14	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	14	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	14	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	14	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	14	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	14	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	14	1	y	3230
+decoded_dat/c/tobir/a/atk.dat	field	14	1	w	333030
+decoded_dat/c/tobir/a/atk.dat	field	14	1	h	313530
+decoded_dat/c/tobir/a/atk.dat	field	14	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	14	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	14	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	14	1	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	14	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	14	1	injury	3235
+decoded_dat/c/tobir/a/atk.dat	frame	15	22		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	pic	3134
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	wait	34
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	next	333232
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	15	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	15	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	15	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	15	0	x	313532
+decoded_dat/c/tobir/a/atk.dat	field	15	0	y	3935
+decoded_dat/c/tobir/a/atk.dat	field	15	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	15	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	15	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	frame	16	23		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	pic	3139
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	next	3234
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	16	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	16	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	16	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	16	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	16	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	16	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	16	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	16	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	16	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	16	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	16	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	16	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	16	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	16	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	16	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	16	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	16	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	17	24		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	pic	3230
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	next	3235
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	17	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	17	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	17	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	17	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	17	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	17	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	17	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	17	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	17	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	17	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	17	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	17	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	17	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	17	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	17	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	17	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	17	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	18	25		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	pic	3231
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	next	3236
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	18	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	18	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	18	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	18	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	18	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	18	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	18	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	18	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	18	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	18	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	18	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	18	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	18	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	18	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	18	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	18	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	18	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	19	26		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	pic	3232
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	next	3237
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	19	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	19	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	19	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	19	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	19	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	19	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	19	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	19	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	19	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	19	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	19	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	19	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	19	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	19	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	19	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	19	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	19	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	20	27		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	pic	3233
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	next	3238
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	20	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	20	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	20	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	20	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	20	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	20	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	20	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	20	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	20	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	20	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	20	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	20	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	20	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	20	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	20	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	20	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	20	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	21	28		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	pic	3234
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	next	333330
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	21	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	21	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	21	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	21	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	21	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	21	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	21	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	21	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	21	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	21	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	21	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	21	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	21	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	21	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	21	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	21	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	21	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	22	29		6c696d6974636865636b
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	state	343030
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	wait	3237
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	22	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	22	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	22	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	22	0	x	30
+decoded_dat/c/tobir/a/atk.dat	field	22	0	y	363432303030
+decoded_dat/c/tobir/a/atk.dat	field	22	0	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	22	0	h	393939
+decoded_dat/c/tobir/a/atk.dat	frame	23	30		64656c657465
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	centerx	30
+decoded_dat/c/tobir/a/atk.dat	field	23	-1	centery	30
+decoded_dat/c/tobir/a/atk.dat	frame	24	31		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	pic	3139
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	next	3332
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	dvx	3135
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	24	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	24	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	24	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	24	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	24	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	24	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	24	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	24	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	24	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	24	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	24	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	24	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	24	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	24	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	24	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	24	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	24	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	25	32		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	pic	3230
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	next	3333
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	25	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	25	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	25	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	25	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	25	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	25	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	25	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	25	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	25	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	25	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	25	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	25	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	25	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	25	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	25	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	25	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	25	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	26	33		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	pic	3231
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	next	3334
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	26	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	26	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	26	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	26	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	26	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	26	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	26	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	26	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	26	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	26	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	26	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	26	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	26	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	26	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	26	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	26	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	26	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	27	34		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	pic	3232
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	next	3335
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	27	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	27	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	27	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	27	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	27	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	27	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	27	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	27	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	27	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	27	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	27	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	27	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	27	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	27	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	27	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	27	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	27	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	28	35		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	pic	3233
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	next	3336
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	28	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	28	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	28	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	28	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	28	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	28	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	28	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	28	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	28	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	28	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	28	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	28	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	28	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	28	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	28	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	28	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	28	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	29	36		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	pic	3234
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	29	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	29	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	29	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	29	0	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	29	0	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	29	0	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	29	0	h	3237
+decoded_dat/c/tobir/a/atk.dat	field	29	0	fall	3230
+decoded_dat/c/tobir/a/atk.dat	field	29	0	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	29	0	bdefend	3730
+decoded_dat/c/tobir/a/atk.dat	field	29	0	injury	3530
+decoded_dat/c/tobir/a/atk.dat	block	29	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	29	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	29	1	x	3232
+decoded_dat/c/tobir/a/atk.dat	field	29	1	y	3237
+decoded_dat/c/tobir/a/atk.dat	field	29	1	w	3535
+decoded_dat/c/tobir/a/atk.dat	field	29	1	h	3237
+decoded_dat/c/tobir/a/atk.dat	frame	30	37		77617665
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	pic	3331
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	next	3338
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	field	30	-1	sound	646174615c776176652e776176
+decoded_dat/c/tobir/a/atk.dat	block	30	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	30	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	30	0	x	31
+decoded_dat/c/tobir/a/atk.dat	field	30	0	y	323335
+decoded_dat/c/tobir/a/atk.dat	field	30	0	w	31313139
+decoded_dat/c/tobir/a/atk.dat	field	30	0	h	333439
+decoded_dat/c/tobir/a/atk.dat	field	30	0	fall	3730
+decoded_dat/c/tobir/a/atk.dat	field	30	0	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	30	0	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	30	0	bdefend	3930
+decoded_dat/c/tobir/a/atk.dat	field	30	0	injury	3137
+decoded_dat/c/tobir/a/atk.dat	field	30	0	zwidth	3530
+decoded_dat/c/tobir/a/atk.dat	frame	31	38		77617665
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	pic	3332
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	next	3339
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	31	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	block	31	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	31	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	31	0	x	31
+decoded_dat/c/tobir/a/atk.dat	field	31	0	y	323335
+decoded_dat/c/tobir/a/atk.dat	field	31	0	w	31313139
+decoded_dat/c/tobir/a/atk.dat	field	31	0	h	333439
+decoded_dat/c/tobir/a/atk.dat	field	31	0	fall	3730
+decoded_dat/c/tobir/a/atk.dat	field	31	0	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	31	0	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	31	0	bdefend	3930
+decoded_dat/c/tobir/a/atk.dat	field	31	0	injury	3137
+decoded_dat/c/tobir/a/atk.dat	field	31	0	zwidth	3530
+decoded_dat/c/tobir/a/atk.dat	frame	32	39		77617665
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	pic	3333
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	wait	3135
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	next	3430
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	32	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	block	32	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	32	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	32	0	x	31
+decoded_dat/c/tobir/a/atk.dat	field	32	0	y	323335
+decoded_dat/c/tobir/a/atk.dat	field	32	0	w	31313139
+decoded_dat/c/tobir/a/atk.dat	field	32	0	h	333439
+decoded_dat/c/tobir/a/atk.dat	field	32	0	fall	3730
+decoded_dat/c/tobir/a/atk.dat	field	32	0	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	32	0	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	32	0	bdefend	3930
+decoded_dat/c/tobir/a/atk.dat	field	32	0	injury	3137
+decoded_dat/c/tobir/a/atk.dat	field	32	0	zwidth	3530
+decoded_dat/c/tobir/a/atk.dat	frame	33	40		77617665
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	pic	3332
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	wait	3130
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	next	3431
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	33	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	block	33	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	33	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	33	0	x	31
+decoded_dat/c/tobir/a/atk.dat	field	33	0	y	323335
+decoded_dat/c/tobir/a/atk.dat	field	33	0	w	31313139
+decoded_dat/c/tobir/a/atk.dat	field	33	0	h	333439
+decoded_dat/c/tobir/a/atk.dat	field	33	0	fall	3730
+decoded_dat/c/tobir/a/atk.dat	field	33	0	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	33	0	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	33	0	bdefend	3930
+decoded_dat/c/tobir/a/atk.dat	field	33	0	injury	3137
+decoded_dat/c/tobir/a/atk.dat	field	33	0	zwidth	3530
+decoded_dat/c/tobir/a/atk.dat	frame	34	41		77617665
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	pic	3331
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	wait	3130
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	next	3432
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	34	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	block	34	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	34	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	34	0	x	31
+decoded_dat/c/tobir/a/atk.dat	field	34	0	y	323335
+decoded_dat/c/tobir/a/atk.dat	field	34	0	w	31313139
+decoded_dat/c/tobir/a/atk.dat	field	34	0	h	333439
+decoded_dat/c/tobir/a/atk.dat	field	34	0	fall	3730
+decoded_dat/c/tobir/a/atk.dat	field	34	0	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	34	0	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	34	0	bdefend	3930
+decoded_dat/c/tobir/a/atk.dat	field	34	0	injury	3137
+decoded_dat/c/tobir/a/atk.dat	field	34	0	zwidth	3530
+decoded_dat/c/tobir/a/atk.dat	frame	35	42		77617665
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	pic	3334
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	35	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	frame	36	43		64656c657465
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	centerx	30
+decoded_dat/c/tobir/a/atk.dat	field	36	-1	centery	30
+decoded_dat/c/tobir/a/atk.dat	frame	37	44		6c696d6974636865636b
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	state	343030
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	wait	3237
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	37	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	37	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	37	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	37	0	x	30
+decoded_dat/c/tobir/a/atk.dat	field	37	0	y	363430303030
+decoded_dat/c/tobir/a/atk.dat	field	37	0	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	37	0	h	393939
+decoded_dat/c/tobir/a/atk.dat	frame	38	112		776f6f645f74726170
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	pic	3237
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	next	313133
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	38	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	frame	39	113		776f6f645f74726170
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	pic	3238
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	39	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	frame	40	137		77617665
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	pic	3334
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	next	313338
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	40	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	frame	41	138		77617665
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	pic	3331
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	next	313339
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	41	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	frame	42	139		77617665
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	pic	3332
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	wait	3135
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	next	313430
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	42	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	frame	43	140		77617665
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	pic	3331
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	wait	3130
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	next	3432
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	dvx	3130
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	centerx	323435
+decoded_dat/c/tobir/a/atk.dat	field	43	-1	centery	313135
+decoded_dat/c/tobir/a/atk.dat	frame	44	207		414a
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	next	323038
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	field	44	-1	sound	646174615c3033362e776176
+decoded_dat/c/tobir/a/atk.dat	frame	45	208		414a
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	pic	3238
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	next	323039
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	45	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	frame	46	209		414a
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	pic	3237
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	wait	3130
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	next	323130
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	46	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	block	46	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	46	0	kind	33
+decoded_dat/c/tobir/a/atk.dat	field	46	0	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	46	0	y	3335
+decoded_dat/c/tobir/a/atk.dat	field	46	0	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	46	0	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	46	0	catchingact	32383520323835
+decoded_dat/c/tobir/a/atk.dat	field	46	0	caughtact	31333020313330
+decoded_dat/c/tobir/a/atk.dat	field	46	0	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	block	46	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	46	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	46	1	x	30
+decoded_dat/c/tobir/a/atk.dat	field	46	1	y	35303030
+decoded_dat/c/tobir/a/atk.dat	field	46	1	w	313030
+decoded_dat/c/tobir/a/atk.dat	field	46	1	h	3830
+decoded_dat/c/tobir/a/atk.dat	field	46	1	injury	31
+decoded_dat/c/tobir/a/atk.dat	block	46	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	46	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	46	2	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	46	2	y	38303030
+decoded_dat/c/tobir/a/atk.dat	field	46	2	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	46	2	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	46	2	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	frame	47	210		414a
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	pic	3235
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	next	323131
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	dvx	3330
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	47	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	block	47	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	47	0	kind	33
+decoded_dat/c/tobir/a/atk.dat	field	47	0	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	47	0	y	3335
+decoded_dat/c/tobir/a/atk.dat	field	47	0	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	47	0	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	47	0	catchingact	32383520323835
+decoded_dat/c/tobir/a/atk.dat	field	47	0	caughtact	31333020313330
+decoded_dat/c/tobir/a/atk.dat	field	47	0	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	block	47	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	47	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	47	1	x	30
+decoded_dat/c/tobir/a/atk.dat	field	47	1	y	35303030
+decoded_dat/c/tobir/a/atk.dat	field	47	1	w	313030
+decoded_dat/c/tobir/a/atk.dat	field	47	1	h	3830
+decoded_dat/c/tobir/a/atk.dat	field	47	1	injury	31
+decoded_dat/c/tobir/a/atk.dat	block	47	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	47	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	47	2	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	47	2	y	38303030
+decoded_dat/c/tobir/a/atk.dat	field	47	2	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	47	2	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	47	2	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	frame	48	211		414a
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	pic	3236
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	state	33303036
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	next	323130
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	dvx	3330
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	centerx	3434
+decoded_dat/c/tobir/a/atk.dat	field	48	-1	centery	3835
+decoded_dat/c/tobir/a/atk.dat	block	48	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	48	0	kind	33
+decoded_dat/c/tobir/a/atk.dat	field	48	0	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	48	0	y	3335
+decoded_dat/c/tobir/a/atk.dat	field	48	0	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	48	0	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	48	0	catchingact	32383520323835
+decoded_dat/c/tobir/a/atk.dat	field	48	0	caughtact	31333020313330
+decoded_dat/c/tobir/a/atk.dat	field	48	0	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	block	48	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	48	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	48	1	x	30
+decoded_dat/c/tobir/a/atk.dat	field	48	1	y	35303030
+decoded_dat/c/tobir/a/atk.dat	field	48	1	w	313030
+decoded_dat/c/tobir/a/atk.dat	field	48	1	h	3830
+decoded_dat/c/tobir/a/atk.dat	field	48	1	injury	31
+decoded_dat/c/tobir/a/atk.dat	block	48	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	48	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	48	2	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	48	2	y	38303030
+decoded_dat/c/tobir/a/atk.dat	field	48	2	w	3333
+decoded_dat/c/tobir/a/atk.dat	field	48	2	h	3534
+decoded_dat/c/tobir/a/atk.dat	field	48	2	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	frame	49	285		414a
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	state	39
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	next	323836
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	centerx	3537
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	centery	313039
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	hit_a	37
+decoded_dat/c/tobir/a/atk.dat	field	49	-1	hit_d	3433
+decoded_dat/c/tobir/a/atk.dat	block	49	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	49	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	49	0	x	3537
+decoded_dat/c/tobir/a/atk.dat	field	49	0	y	313038
+decoded_dat/c/tobir/a/atk.dat	field	49	0	action	3430
+decoded_dat/c/tobir/a/atk.dat	field	49	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	49	0	facing	30
+decoded_dat/c/tobir/a/atk.dat	block	49	1	cpoint	
+decoded_dat/c/tobir/a/atk.dat	field	49	1	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	49	1	x	3630
+decoded_dat/c/tobir/a/atk.dat	field	49	1	y	3530
+decoded_dat/c/tobir/a/atk.dat	field	49	1	injury	30
+decoded_dat/c/tobir/a/atk.dat	field	49	1	vaction	313332
+decoded_dat/c/tobir/a/atk.dat	field	49	1	throwvz	2d383432313530343531
+decoded_dat/c/tobir/a/atk.dat	field	49	1	hurtable	31
+decoded_dat/c/tobir/a/atk.dat	field	49	1	throwinjury	2d383432313530343531
+decoded_dat/c/tobir/a/atk.dat	field	49	1	decrease	37
+decoded_dat/c/tobir/a/atk.dat	block	49	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	49	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	49	2	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	49	2	y	34353931303030
+decoded_dat/c/tobir/a/atk.dat	field	49	2	w	3539
+decoded_dat/c/tobir/a/atk.dat	field	49	2	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	49	2	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	frame	50	286		414a
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	state	39
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	next	323835
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	centerx	3537
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	centery	313039
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	hit_a	37
+decoded_dat/c/tobir/a/atk.dat	field	50	-1	hit_d	3433
+decoded_dat/c/tobir/a/atk.dat	block	50	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	50	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	50	0	x	3537
+decoded_dat/c/tobir/a/atk.dat	field	50	0	y	313038
+decoded_dat/c/tobir/a/atk.dat	field	50	0	action	3430
+decoded_dat/c/tobir/a/atk.dat	field	50	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	50	0	facing	30
+decoded_dat/c/tobir/a/atk.dat	block	50	1	cpoint	
+decoded_dat/c/tobir/a/atk.dat	field	50	1	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	50	1	x	3630
+decoded_dat/c/tobir/a/atk.dat	field	50	1	y	3530
+decoded_dat/c/tobir/a/atk.dat	field	50	1	injury	30
+decoded_dat/c/tobir/a/atk.dat	field	50	1	vaction	313332
+decoded_dat/c/tobir/a/atk.dat	field	50	1	throwvz	2d383432313530343531
+decoded_dat/c/tobir/a/atk.dat	field	50	1	hurtable	31
+decoded_dat/c/tobir/a/atk.dat	field	50	1	throwinjury	2d383432313530343531
+decoded_dat/c/tobir/a/atk.dat	field	50	1	decrease	37
+decoded_dat/c/tobir/a/atk.dat	block	50	2	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	50	2	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	50	2	x	3238
+decoded_dat/c/tobir/a/atk.dat	field	50	2	y	34353931303030
+decoded_dat/c/tobir/a/atk.dat	field	50	2	w	3539
+decoded_dat/c/tobir/a/atk.dat	field	50	2	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	50	2	zwidth	3230
+decoded_dat/c/tobir/a/atk.dat	frame	51	299		726573657478414a
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	51	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	51	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	51	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	51	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	51	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	51	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	51	0	h	313939
+decoded_dat/c/tobir/a/atk.dat	field	51	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	frame	52	300		78414a
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	wait	3139
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	next	333031
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	52	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	52	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	52	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	52	0	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	52	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	52	0	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	52	0	h	3632
+decoded_dat/c/tobir/a/atk.dat	block	52	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	52	1	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	52	1	bdefend	33
+decoded_dat/c/tobir/a/atk.dat	field	52	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	52	1	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	52	1	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	52	1	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	52	1	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	52	1	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	52	1	dvx	333038
+decoded_dat/c/tobir/a/atk.dat	frame	53	301		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	next	333030
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	53	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	53	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	53	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	53	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	53	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	53	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	53	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	53	0	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	53	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	53	0	dvx	333032
+decoded_dat/c/tobir/a/atk.dat	block	53	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	53	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	53	1	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	53	1	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	53	1	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	53	1	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	54	302		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	wait	3139
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	next	333033
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	54	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	54	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	54	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	54	0	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	54	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	54	0	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	54	0	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	55	303		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	next	333030
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	55	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	55	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	55	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	55	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	55	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	55	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	55	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	55	0	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	55	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	55	0	dvx	333034
+decoded_dat/c/tobir/a/atk.dat	block	55	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	55	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	55	1	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	55	1	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	55	1	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	55	1	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	56	304		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	wait	3139
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	next	333035
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	56	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	56	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	56	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	56	0	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	56	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	56	0	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	56	0	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	57	305		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	next	333030
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	57	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	57	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	57	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	57	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	57	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	57	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	57	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	57	0	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	57	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	57	0	dvx	333036
+decoded_dat/c/tobir/a/atk.dat	block	57	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	57	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	57	1	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	57	1	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	57	1	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	57	1	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	58	306		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	wait	3139
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	next	333037
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	58	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	58	0	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	58	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	58	0	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	58	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	58	0	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	58	0	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	59	307		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	next	333030
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	59	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	59	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	59	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	59	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	59	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	59	0	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	59	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	59	0	h	3939
+decoded_dat/c/tobir/a/atk.dat	field	59	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	59	0	dvx	333038
+decoded_dat/c/tobir/a/atk.dat	block	59	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	59	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	59	1	x	3231
+decoded_dat/c/tobir/a/atk.dat	field	59	1	y	363439303030
+decoded_dat/c/tobir/a/atk.dat	field	59	1	w	3433
+decoded_dat/c/tobir/a/atk.dat	field	59	1	h	3632
+decoded_dat/c/tobir/a/atk.dat	frame	60	308		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	next	333039
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	centery	3733
+decoded_dat/c/tobir/a/atk.dat	field	60	-1	sound	646174615c6d5f6f6b2e776176
+decoded_dat/c/tobir/a/atk.dat	frame	61	309		7265736574
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	dvz	353530
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	61	-1	centery	3733
+decoded_dat/c/tobir/a/atk.dat	frame	62	320		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	pic	3133
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	next	3231
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	62	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	62	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	62	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	62	0	x	333034
+decoded_dat/c/tobir/a/atk.dat	field	62	0	y	3838
+decoded_dat/c/tobir/a/atk.dat	field	62	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	62	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	62	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	62	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	62	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	62	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	62	1	y	3135
+decoded_dat/c/tobir/a/atk.dat	field	62	1	w	333430
+decoded_dat/c/tobir/a/atk.dat	field	62	1	h	313434
+decoded_dat/c/tobir/a/atk.dat	field	62	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	62	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	62	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	62	1	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	62	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	62	1	injury	3235
+decoded_dat/c/tobir/a/atk.dat	frame	63	321		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	pic	3137
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	next	3232
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	63	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	63	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	63	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	63	0	x	323532
+decoded_dat/c/tobir/a/atk.dat	field	63	0	y	313436
+decoded_dat/c/tobir/a/atk.dat	field	63	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	63	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	63	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	frame	64	322		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	pic	3138
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	next	333233
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	hit_a	31
+decoded_dat/c/tobir/a/atk.dat	field	64	-1	hit_d	333234
+decoded_dat/c/tobir/a/atk.dat	block	64	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	64	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	64	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	64	0	x	39
+decoded_dat/c/tobir/a/atk.dat	field	64	0	y	363437303030
+decoded_dat/c/tobir/a/atk.dat	field	64	0	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	64	0	h	313939
+decoded_dat/c/tobir/a/atk.dat	field	64	0	dvx	333335
+decoded_dat/c/tobir/a/atk.dat	block	64	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	64	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	64	1	x	39
+decoded_dat/c/tobir/a/atk.dat	field	64	1	y	363437303030
+decoded_dat/c/tobir/a/atk.dat	field	64	1	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	64	1	h	313939
+decoded_dat/c/tobir/a/atk.dat	frame	65	323		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	pic	3138
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	wait	31
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	next	333232
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	hit_a	31
+decoded_dat/c/tobir/a/atk.dat	field	65	-1	hit_d	333234
+decoded_dat/c/tobir/a/atk.dat	block	65	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	65	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	65	0	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	65	0	x	39
+decoded_dat/c/tobir/a/atk.dat	field	65	0	y	363437303030
+decoded_dat/c/tobir/a/atk.dat	field	65	0	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	65	0	h	313939
+decoded_dat/c/tobir/a/atk.dat	field	65	0	dvx	333335
+decoded_dat/c/tobir/a/atk.dat	block	65	1	bdy	
+decoded_dat/c/tobir/a/atk.dat	field	65	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	65	1	x	39
+decoded_dat/c/tobir/a/atk.dat	field	65	1	y	363437303030
+decoded_dat/c/tobir/a/atk.dat	field	65	1	w	3939
+decoded_dat/c/tobir/a/atk.dat	field	65	1	h	313939
+decoded_dat/c/tobir/a/atk.dat	frame	66	324		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	wait	39
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	66	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	frame	67	330		666c79696e67
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	state	3135
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	next	3331
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	centerx	3430
+decoded_dat/c/tobir/a/atk.dat	field	67	-1	centery	3731
+decoded_dat/c/tobir/a/atk.dat	block	67	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	67	0	kind	38
+decoded_dat/c/tobir/a/atk.dat	field	67	0	bdefend	33
+decoded_dat/c/tobir/a/atk.dat	field	67	0	x	2d333531
+decoded_dat/c/tobir/a/atk.dat	field	67	0	y	363432303030
+decoded_dat/c/tobir/a/atk.dat	field	67	0	w	353939
+decoded_dat/c/tobir/a/atk.dat	field	67	0	h	393939
+decoded_dat/c/tobir/a/atk.dat	field	67	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	67	0	dvx	3331
+decoded_dat/c/tobir/a/atk.dat	frame	68	335		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	pic	3138
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	next	2d333336
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	68	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	frame	69	336		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	pic	3132
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	next	333337
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	field	69	-1	sound	646174615c3038392e776176
+decoded_dat/c/tobir/a/atk.dat	block	69	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	69	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	69	0	x	313733
+decoded_dat/c/tobir/a/atk.dat	field	69	0	y	3938
+decoded_dat/c/tobir/a/atk.dat	field	69	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	69	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	69	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	69	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	69	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	69	1	x	3230
+decoded_dat/c/tobir/a/atk.dat	field	69	1	y	3735
+decoded_dat/c/tobir/a/atk.dat	field	69	1	w	313637
+decoded_dat/c/tobir/a/atk.dat	field	69	1	h	3835
+decoded_dat/c/tobir/a/atk.dat	field	69	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	69	1	dvy	2d37
+decoded_dat/c/tobir/a/atk.dat	field	69	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	69	1	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	69	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	69	1	injury	3130
+decoded_dat/c/tobir/a/atk.dat	frame	70	337		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	pic	3135
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	next	333338
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	70	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	70	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	70	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	70	0	x	313634
+decoded_dat/c/tobir/a/atk.dat	field	70	0	y	313133
+decoded_dat/c/tobir/a/atk.dat	field	70	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	70	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	70	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	70	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	70	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	70	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	70	1	y	3135
+decoded_dat/c/tobir/a/atk.dat	field	70	1	w	313933
+decoded_dat/c/tobir/a/atk.dat	field	70	1	h	313435
+decoded_dat/c/tobir/a/atk.dat	field	70	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	70	1	dvy	2d37
+decoded_dat/c/tobir/a/atk.dat	field	70	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	70	1	vrest	35
+decoded_dat/c/tobir/a/atk.dat	field	70	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	70	1	injury	3430
+decoded_dat/c/tobir/a/atk.dat	frame	71	338		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	pic	3133
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	wait	33
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	next	333339
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	71	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	71	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	71	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	71	0	x	333034
+decoded_dat/c/tobir/a/atk.dat	field	71	0	y	3838
+decoded_dat/c/tobir/a/atk.dat	field	71	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	71	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	71	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	71	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	71	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	71	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	71	1	y	3135
+decoded_dat/c/tobir/a/atk.dat	field	71	1	w	333430
+decoded_dat/c/tobir/a/atk.dat	field	71	1	h	313434
+decoded_dat/c/tobir/a/atk.dat	field	71	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	71	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	71	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	71	1	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	71	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	71	1	injury	3430
+decoded_dat/c/tobir/a/atk.dat	frame	72	339		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	pic	3136
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	next	333430
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	72	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	72	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	72	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	72	0	x	323831
+decoded_dat/c/tobir/a/atk.dat	field	72	0	y	313532
+decoded_dat/c/tobir/a/atk.dat	field	72	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	72	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	72	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	block	72	1	itr	
+decoded_dat/c/tobir/a/atk.dat	field	72	1	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	72	1	x	3130
+decoded_dat/c/tobir/a/atk.dat	field	72	1	y	3230
+decoded_dat/c/tobir/a/atk.dat	field	72	1	w	333030
+decoded_dat/c/tobir/a/atk.dat	field	72	1	h	313530
+decoded_dat/c/tobir/a/atk.dat	field	72	1	dvx	35
+decoded_dat/c/tobir/a/atk.dat	field	72	1	dvy	2d31
+decoded_dat/c/tobir/a/atk.dat	field	72	1	fall	313030
+decoded_dat/c/tobir/a/atk.dat	field	72	1	vrest	3130
+decoded_dat/c/tobir/a/atk.dat	field	72	1	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	72	1	injury	3430
+decoded_dat/c/tobir/a/atk.dat	frame	73	340		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	pic	3137
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	next	333431
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	73	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	73	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	73	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	73	0	x	323532
+decoded_dat/c/tobir/a/atk.dat	field	73	0	y	313436
+decoded_dat/c/tobir/a/atk.dat	field	73	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	73	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	73	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	frame	74	341		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	pic	3134
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	wait	34
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	next	333432
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	74	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	block	74	0	opoint	
+decoded_dat/c/tobir/a/atk.dat	field	74	0	kind	31
+decoded_dat/c/tobir/a/atk.dat	field	74	0	x	313532
+decoded_dat/c/tobir/a/atk.dat	field	74	0	y	3935
+decoded_dat/c/tobir/a/atk.dat	field	74	0	action	313031
+decoded_dat/c/tobir/a/atk.dat	field	74	0	oid	363136
+decoded_dat/c/tobir/a/atk.dat	field	74	0	facing	3330
+decoded_dat/c/tobir/a/atk.dat	frame	75	342		6269675f736861726b
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	pic	3138
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	wait	32
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	centerx	3838
+decoded_dat/c/tobir/a/atk.dat	field	75	-1	centery	313430
+decoded_dat/c/tobir/a/atk.dat	frame	76	390		6b696c6c636c6f6e6573
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	state	313930
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	wait	35
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	dvx	353530
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	dvy	353530
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	76	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	block	76	0	itr	
+decoded_dat/c/tobir/a/atk.dat	field	76	0	kind	30
+decoded_dat/c/tobir/a/atk.dat	field	76	0	x	2d39393939
+decoded_dat/c/tobir/a/atk.dat	field	76	0	y	31
+decoded_dat/c/tobir/a/atk.dat	field	76	0	w	3939393939
+decoded_dat/c/tobir/a/atk.dat	field	76	0	h	333530
+decoded_dat/c/tobir/a/atk.dat	field	76	0	zwidth	393939
+decoded_dat/c/tobir/a/atk.dat	field	76	0	vrest	31
+decoded_dat/c/tobir/a/atk.dat	field	76	0	bdefend	313030
+decoded_dat/c/tobir/a/atk.dat	field	76	0	injury	31
+decoded_dat/c/tobir/a/atk.dat	field	76	0	fall	3630
+decoded_dat/c/tobir/a/atk.dat	frame	77	700		70
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	field	77	-1	sound	635c746f6269725c775c702e776176
+decoded_dat/c/tobir/a/atk.dat	frame	78	701		7033
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	field	78	-1	sound	635c746f6269725c775c70332e776176
+decoded_dat/c/tobir/a/atk.dat	frame	79	702		7034
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	field	79	-1	sound	635c746f6269725c775c70342e776176
+decoded_dat/c/tobir/a/atk.dat	frame	80	703		6a61
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	pic	393939
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	state	33303035
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	wait	30
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	next	31303030
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	centerx	3339
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	centery	3739
+decoded_dat/c/tobir/a/atk.dat	field	80	-1	sound	635c746f6269725c775c6a612e776176

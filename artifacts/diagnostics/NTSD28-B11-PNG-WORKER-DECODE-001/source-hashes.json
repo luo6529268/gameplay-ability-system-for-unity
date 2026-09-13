@@ -1,0 +1,30 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "sha256": "87C30A42FA0146D746E4F95548D071FC66F16DA13D8A91FCCB211CA7D4B3E3F8"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Runtime/PngPixelDecoder.cs",
+    "sha256": "AB8BAA674D1E69BD3F8472CA388A4FA25538CB9BACE221E457FEE71719163413"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11PngWorkerDecodeEditorTests.cs",
+    "sha256": "253050D724E15DAD1BC3615EC13D4B3304164D23DB6DEDCC848F002953AB7571"
+  },
+  {
+    "path": "Tools/NTSD28PngDecode/Generate-Fixtures.py",
+    "sha256": "57E42DD277D09667425B75CF5E78C2B67264ED5B81019E2F855ED0868F7EE8D8"
+  },
+  {
+    "path": "Tools/NTSD28PngDecode/Generate-CorpusManifest.py",
+    "sha256": "624EDC168EF1FC4C8A6D465D733D90EE960A8EB593AAD095E44B61C673E58DDC"
+  },
+  {
+    "path": "Tools/NTSD28PngDecode/PngCorpusVerifier.cs",
+    "sha256": "5612D711C9BC14F5DD910254771AC74429B871459CD0C0E0FCA5AD9F01B1C2A2"
+  },
+  {
+    "path": "Tools/NTSD28PngDecode/PngCorpusVerifier.csproj",
+    "sha256": "7CBC39F32F0148A17FFB88FF3B57B0289BDC8FA82B509214856CFD791DC85A08"
+  }
+]

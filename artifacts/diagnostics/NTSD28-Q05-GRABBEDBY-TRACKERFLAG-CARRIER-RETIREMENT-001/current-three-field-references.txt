@@ -1,0 +1,97 @@
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12626:                           weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12690:                           weapon.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12757:            weapon.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12951:            held.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13409:            held.GrabbedBy = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13570:            inactiveTarget.GrabbedBy = 12;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13585:                   inactiveTarget.GrabbedBy == 12,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19440:            characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19452:            Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23026:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23032:                    Expect(weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23058:                mismatch.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23065:                       mismatch.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23084:            missingDefinition.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23088:                   missingDefinition.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23116:                nativeThrow.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23125:                nativeLight.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27224:                    light.Runtime.WeaponState = 4321;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27228:                           light.Runtime.WeaponState == 4321,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27243:                    lightFiniteImpact.Runtime.WeaponState = 4322;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27248:                           lightFiniteImpact.Runtime.WeaponFlightCounter == 17 && lightFiniteImpact.Runtime.WeaponState == 4322,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27254:                    heavy.Runtime.WeaponState = 4323;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27258:                           heavy.Runtime.WeaponState == 4323,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27266:                    heavyBounce.Runtime.WeaponState = 4324;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27271:                           heavyBounce.Runtime.WeaponFlightCounter == 19 && heavyBounce.Runtime.WeaponState == 4324,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27281:                    thrown.Runtime.WeaponState = 4325;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27285:                           thrown.Runtime.WeaponState == 4325,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27321:                    drink.Runtime.WeaponState = 4326;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27329:                           drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:1125:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:153:        public int GrabbedBy
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:155:            get => Runtime.GrabbedBy;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:156:            set => Runtime.GrabbedBy = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:160:        public int TrackerFlag
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:162:            get => Runtime.TrackerFlag;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:163:            set => Runtime.TrackerFlag = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:6880:            Runtime.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:6881:            Runtime.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:81:            owner.TrackerFlag = 0;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:118:        public int GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:240:        public int TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:386:        public int WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:818:            destination.GrabbedBy = GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:938:            destination.TrackerFlag = TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1014:            destination.WeaponState = WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1057:            GrabbedBy = 0;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1119:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1192:            WeaponState = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:473:            TrackerFlag = 0;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:479:            Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:635:            builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1208:                ("weaponState", isDefault ? 0 : runtime.WeaponState));
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:359:            GrabbedBy = new int[capacity];
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:360:            TrackerFlag = new int[capacity];
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:371:        internal readonly int[] GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:372:        internal readonly int[] TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:731:            Links.GrabbedBy[slot] = runtime.GrabbedBy;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:732:            Links.TrackerFlag[slot] = runtime.TrackerFlag;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:781:            Links.GrabbedBy[slot] = Links.TrackerFlag[slot] = 0;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:964:                Links.GrabbedBy[slot] != runtime.GrabbedBy ||
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:965:                Links.TrackerFlag[slot] != runtime.TrackerFlag)
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1109:            hash.Add(runtime.GrabbedBy); hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1129:            hash.Add(runtime.PickerStableId); hash.Add(runtime.TrackerFlag); hash.Add(runtime.AiControlled);
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1157:            hash.Add(runtime.WeaponState); hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:910:            weapon.GrabbedBy = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:978:            oldChild.GrabbedBy = 41;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:33:            int heldGrabbedBy = child.GrabbedBy;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:44:            Assert.That(holder.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:45:            Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:67:            Assert.That(holder.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:68:            Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:185:            Assert.That(parent.GrabbedBy, Is.Zero); Assert.That(child.GrabbedBy, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:186:            Assert.That(parent.TrackerFlag, Is.Zero); Assert.That(child.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:188:            Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:52:                Regex.Matches(frameLogic, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:56:                Regex.Matches(heldState, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:60:                Regex.Matches(weaponBase, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:63:            StringAssert.Contains("Runtime.WeaponState = 0;", weaponBase);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:137:            weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:152:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:214:                followState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:220:                throwState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:227:                    dropState = dropScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:238:                damagedState = damagedScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:277:                WeaponState = 0,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:281:                WeaponState = 777,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:284:            Assert.That(copied.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:293:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:309:                Assert.That(snapshotCopy.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:316:                weapon.Runtime.WeaponState = 777;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:322:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:365:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:369:                    Assert.That(weapon.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:25:                    $"{{\"parentFlag\":{parent.TrackerFlag},\"childFlag\":{child.TrackerFlag},\"parentCachePresent\":{(child.TrackerParent != null).ToString().ToLowerInvariant()},\"parentLink\":{parent.Runtime.LinkState},\"childLink\":{child.Runtime.LinkState}}}");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:36:                Assert.That(parent.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyTrackerRetirementEditorTests.cs:37:                Assert.That(child.TrackerFlag, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:126:            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}");

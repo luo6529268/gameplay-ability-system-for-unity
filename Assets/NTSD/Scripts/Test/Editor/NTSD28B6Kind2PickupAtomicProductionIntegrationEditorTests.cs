@@ -907,7 +907,6 @@ namespace NTSD.Test.Editor
             weapon.Runtime.TargetSlotIndex = -1;
             weapon.Runtime.HeldWeaponStableId = -1;
             weapon.HolderCopySlot = 733;
-            weapon.GrabbedBy = 0;
             weapon.RefreshRuntimeSnapshot();
             return weapon;
         }
@@ -975,7 +974,6 @@ namespace NTSD.Test.Editor
             oldChild.Runtime.OwnerSlotIndex = 91;
             oldChild.Runtime.TargetSlotIndex = 22;
             oldChild.Runtime.HeldWeaponStableId = 88;
-            oldChild.GrabbedBy = 41;
         }
 
         private static void SetRelationDefaults(LF2Entity entity, int relation)

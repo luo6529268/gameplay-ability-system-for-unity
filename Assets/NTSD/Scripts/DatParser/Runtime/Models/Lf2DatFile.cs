@@ -18,6 +18,12 @@ namespace NTSD.DatParser
         public List<Lf2FrameBlock> Frames = new List<Lf2FrameBlock>();    // 帧列表
         public List<Lf2DatBlock> Blocks = new List<Lf2DatBlock>();        // 其他块
 
+        public IReadOnlyList<Lf2WeaponStrengthRow> LoganWeaponStrengthRows { get; internal set; }
+        public IReadOnlyList<Lf2LoganArmorBlock> LoganArmors { get; internal set; }
+        public Lf2WeaponPieceBlock LoganWeaponPiece { get; internal set; }
+        public Lf2DatBlock LoganStats { get; internal set; }
+        public string LoganOriginalText { get; internal set; }
+
         private List<Lf2DatProperty> _properties = new List<Lf2DatProperty>();
         public List<Lf2DatProperty> Properties => _properties; // 根属性
 

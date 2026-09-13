@@ -13,16 +13,11 @@ namespace NTSD.Test.Editor
     [Category("NTSD28_B9")]
     public sealed class NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests
     {
-        [TestCase(0, 0)]
-        [TestCase(2, 0)]
-        [TestCase(0, 7)]
-        [TestCase(2, -3)]
-        public void EffectCreate_PreservesExistingOscillateAndEffectPayload(
-            int effectNumber,
-            int initialOscillate)
+        [TestCase(0)]
+        [TestCase(2)]
+        public void EffectCreate_PreservesCurrentEffectPayload(int effectNumber)
         {
             var entity = new LF2Character();
-            entity.Effect.Oscillate = initialOscillate;
 
             entity.EffectCreate(
                 effectNumber,
@@ -36,23 +31,16 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Effect.Dvy, Is.EqualTo(-2.25f));
             Assert.That(entity.Effect.TimeIn, Is.Zero);
             Assert.That(entity.Effect.TimeOut, Is.EqualTo(12));
-            Assert.That(
-                entity.Effect.Oscillate,
-                Is.EqualTo(initialOscillate),
-                "EffectCreate must not derive Oscillate from the retired old effect ID table.");
         }
 
-        [TestCase(7)]
-        [TestCase(-3)]
-        public void EffectCreate_HigherPriorityRetainsOscillateAndExistingMotion(
-            int initialOscillate)
+        [Test]
+        public void EffectCreate_HigherPriorityRetainsExistingMotion()
         {
             var entity = new LF2Character();
             entity.Effect.Num = 1;
             entity.Effect.Dvx = 3.5f;
             entity.Effect.Dvy = -4.5f;
             entity.Effect.Stuck = true;
-            entity.Effect.Oscillate = initialOscillate;
             entity.Effect.TimeIn = 4;
             entity.Effect.TimeOut = 5;
 
@@ -64,18 +52,14 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Effect.Dvy, Is.EqualTo(-4.5f));
             Assert.That(entity.Effect.TimeIn, Is.Zero);
             Assert.That(entity.Effect.TimeOut, Is.EqualTo(9));
-            Assert.That(entity.Effect.Oscillate, Is.EqualTo(initialOscillate));
         }
 
-        [TestCase(0, 0)]
-        [TestCase(2, 7)]
-        public void EffectCreate_ExtendsExistingDurationWithoutDerivingOscillate(
-            int effectNumber,
-            int initialOscillate)
+        [TestCase(0)]
+        [TestCase(2)]
+        public void EffectCreate_ExtendsExistingDuration(int effectNumber)
         {
             var entity = new LF2Character();
             entity.Effect.Num = effectNumber;
-            entity.Effect.Oscillate = initialOscillate;
             entity.Effect.TimeIn = -1;
             entity.Effect.TimeOut = 3;
 
@@ -84,7 +68,6 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Effect.Num, Is.EqualTo(effectNumber));
             Assert.That(entity.Effect.TimeIn, Is.EqualTo(-1));
             Assert.That(entity.Effect.TimeOut, Is.EqualTo(5));
-            Assert.That(entity.Effect.Oscillate, Is.EqualTo(initialOscillate));
         }
 
         [Test]
@@ -95,12 +78,10 @@ namespace NTSD.Test.Editor
             entity.Effect.Dvx = 3.5f;
             entity.Effect.Dvy = -4.5f;
             entity.Effect.Stuck = true;
-            entity.Effect.Oscillate = 7;
             entity.Effect.Blink = true;
             entity.Effect.Super = true;
             entity.Effect.TimeIn = 4;
             entity.Effect.TimeOut = 5;
-            entity.Effect.OscillateDirection = -1;
             entity.Effect.BlinkCounter = 6;
 
             entity.EffectCreate(2, duration: 9, dvx: 8f, dvy: 9f);
@@ -109,12 +90,10 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Effect.Dvx, Is.EqualTo(3.5f));
             Assert.That(entity.Effect.Dvy, Is.EqualTo(-4.5f));
             Assert.That(entity.Effect.Stuck, Is.True);
-            Assert.That(entity.Effect.Oscillate, Is.EqualTo(7));
             Assert.That(entity.Effect.Blink, Is.True);
             Assert.That(entity.Effect.Super, Is.True);
             Assert.That(entity.Effect.TimeIn, Is.EqualTo(4));
             Assert.That(entity.Effect.TimeOut, Is.EqualTo(5));
-            Assert.That(entity.Effect.OscillateDirection, Is.EqualTo(-1));
             Assert.That(entity.Effect.BlinkCounter, Is.EqualTo(6));
         }
 

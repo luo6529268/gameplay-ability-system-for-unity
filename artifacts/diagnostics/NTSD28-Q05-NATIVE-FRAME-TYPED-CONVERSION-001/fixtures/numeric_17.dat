@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: -inf state: -inf cover: -inf wait: -inf next: -inf dvx: -inf dvy: -inf dvz: -inf centerx: -inf centery: -inf mp: -inf hp: -inf hit_a: -inf hit_d: -inf hit_j: -inf hit_g: -inf hit_Fj: -inf hit_Fa: -inf hit_Da: -inf hit_Ua: -inf hit_ja: -inf hit_aj: -inf hit_ad: -inf hit_jd: -inf hit_Dj: -inf hit_Uj: -inf hit_f: -inf hit_b: -inf hit_uz: -inf hit_dz: -inf hold_a: -inf hold_d: -inf hold_j: -inf hold_f: -inf hold_b: -inf hold_uz: -inf hold_dz: -inf
+cpoint: kind: -inf x: -inf y: -inf injury: -inf cover: -inf vaction: -inf aaction: -inf jaction: -inf daction: -inf taction: -inf faction: -inf baction: -inf uzaction: -inf dzaction: -inf throwvx: -inf throwvy: -inf hurtable: -inf fronthurtact: -inf backhurtact: -inf decrease: -inf dircontrol: -inf throwinjury: -inf throwvz: -inf z: -inf recover: -inf drain: -inf gain: -inf cpoint_end:
+opoint: kind: -inf x: -inf y: -inf z: -inf action: -inf dvx: -inf dvy: -inf dvz: -inf oid: -inf facing: -inf hp: -inf mp: -inf team: -inf reserve: -inf effect: -inf pic: -inf centerx: -inf centery: -inf centerz: -inf framea: -inf attacking: -inf join: -inf join_reserve: -inf join_pic: -inf opoint_end:
+itr: kind: -inf x: -inf y: -inf w: -inf h: -inf dvx: -inf dvy: -inf fall: -inf arest: -inf vrest: -inf respond: -inf effect: -inf drain: -inf spark: -inf recover: -inf dbdefend: -inf bdefend: -inf injury: -inf zwidth: -inf z: -inf dvz: -inf sound: -inf cover: -inf caughtact: -inf catchingact: -inf pickedact: -inf pickingact: -inf delay: -inf poison: -inf confus: -inf weak: -inf manacle: -inf join: -inf mimic: -inf bound: -inf facing: -inf dx: -inf dy: -inf dz: -inf gain: -inf itr_end:
+wpoint: kind: -inf x: -inf y: -inf weaponact: -inf attacking: -inf cover: -inf dvx: -inf dvy: -inf dvz: -inf wpoint_end:
+bpoint: x: -inf y: -inf bpoint_end:
+centerz: -inf chp: -inf cmp: -inf dx: -inf dy: -inf dz: -inf
+<frame_end>

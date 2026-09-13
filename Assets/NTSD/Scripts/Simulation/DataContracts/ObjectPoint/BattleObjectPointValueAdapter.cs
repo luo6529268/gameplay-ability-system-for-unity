@@ -3,8 +3,8 @@ using NTSD.Animation;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// Copies the eight formal OPoint fields across the immutable content and
-    /// legacy task DTO boundary. Legacy objectId/dvz never enter content.
+    /// Copies all 24 native OPoint fields across the immutable content and
+    /// legacy task DTO boundary. Legacy runtime objectId never enters content.
     /// </summary>
     public static class BattleObjectPointValueAdapter
     {
@@ -18,7 +18,23 @@ namespace NTSD.Simulation
                 source.dvx,
                 source.dvy,
                 source.oid,
-                source.facing);
+                source.facing,
+                source.z,
+                source.dvz,
+                source.hp,
+                source.mp,
+                source.team,
+                source.reserve,
+                source.effect,
+                source.pic,
+                source.centerx,
+                source.centery,
+                source.centerz,
+                source.framea,
+                source.attacking,
+                source.join,
+                source.join_reserve,
+                source.join_pic);
         }
 
         public static ObjectPoint ToLegacyTask(BattleObjectPointValue source)
@@ -34,7 +50,22 @@ namespace NTSD.Simulation
                 oid = source.Oid,
                 facing = source.Facing,
                 objectId = 0,
-                dvz = 0,
+                z = source.Z,
+                dvz = source.Dvz,
+                hp = source.Hp,
+                mp = source.Mp,
+                team = source.Team,
+                reserve = source.Reserve,
+                effect = source.Effect,
+                pic = source.Pic,
+                centerx = source.CenterX,
+                centery = source.CenterY,
+                centerz = source.CenterZ,
+                framea = source.FrameA,
+                attacking = source.Attacking,
+                join = source.Join,
+                join_reserve = source.JoinReserve,
+                join_pic = source.JoinPic,
             };
         }
     }

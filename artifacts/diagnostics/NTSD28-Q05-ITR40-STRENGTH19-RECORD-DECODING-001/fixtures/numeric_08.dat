@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Q05
+type: 1
+<bmp_end>
+<weapon_strength_list>
+entry: 1
+kind: 1e2 x: 1e2 y: 1e2 w: 1e2 h: 1e2 dvx: 1e2 dvy: 1e2 fall: 1e2 arest: 1e2 vrest: 1e2 respond: 1e2 effect: 1e2 drain: 1e2 spark: 1e2 recover: 1e2 dbdefend: 1e2 bdefend: 1e2 injury: 1e2 zwidth: 1e2 z: 1e2 dvz: 1e2 sound: 1e2 cover: 1e2 caughtact: 1e2 catchingact: 1e2 pickedact: 1e2 pickingact: 1e2 delay: 1e2 poison: 1e2 confus: 1e2 weak: 1e2 manacle: 1e2 join: 1e2 mimic: 1e2 bound: 1e2 facing: 1e2 dx: 1e2 dy: 1e2 dz: 1e2 gain: 1e2
+<weapon_strength_list_end>
+<frame> 0 witness
+itr: kind: 1e2 x: 1e2 y: 1e2 w: 1e2 h: 1e2 dvx: 1e2 dvy: 1e2 fall: 1e2 arest: 1e2 vrest: 1e2 respond: 1e2 effect: 1e2 drain: 1e2 spark: 1e2 recover: 1e2 dbdefend: 1e2 bdefend: 1e2 injury: 1e2 zwidth: 1e2 z: 1e2 dvz: 1e2 sound: 1e2 cover: 1e2 caughtact: 1e2 catchingact: 1e2 pickedact: 1e2 pickingact: 1e2 delay: 1e2 poison: 1e2 confus: 1e2 weak: 1e2 manacle: 1e2 join: 1e2 mimic: 1e2 bound: 1e2 facing: 1e2 dx: 1e2 dy: 1e2 dz: 1e2 gain: 1e2 itr_end:
+<frame_end>

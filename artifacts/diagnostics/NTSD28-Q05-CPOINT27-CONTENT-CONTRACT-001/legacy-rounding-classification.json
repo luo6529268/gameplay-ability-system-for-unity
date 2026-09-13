@@ -1,0 +1,11 @@
+{
+  "count": 710,
+  "classification": "CPoint throwvz int32 to native float32 type correction",
+  "nativeFloat32Bits": "CE48C8C9",
+  "exactValueWhenPromotedToDouble": -842150464,
+  "jsonShortestRoundTripText": "-842150460",
+  "otherFrameDifferences": 0,
+  "rawAssetsChanged": false,
+  "authorityEvidence": "Q03 numeric native37 fixed witness; Q05 CPoint DTO/value/canonical tests",
+  "note": "The short JSON float spelling is not the exact promoted double value."
+}

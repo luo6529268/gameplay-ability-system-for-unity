@@ -15,8 +15,63 @@ namespace NTSD.Animation
     {
         private GameDataConfig cachedConfig;
         private Dictionary<int, ObjectDefinition> objectLookup;
-        private readonly Dictionary<int, List<ObjectDefinition>> objectsByTypeLookup =
+        private Dictionary<int, List<ObjectDefinition>> objectsByTypeLookup =
             new Dictionary<int, List<ObjectDefinition>>();
+        private Dictionary<int, int> objectRegistryIndices = new Dictionary<int, int>();
+        public string PublishedVisualContentKey { get; private set; }
+
+        internal sealed class PreparedObjectPublication
+        {
+            internal GameDataConfig Config;
+            internal Dictionary<int, ObjectDefinition> Objects;
+            internal Dictionary<int, List<ObjectDefinition>> Types;
+            internal Dictionary<int, int> RegistryIndices;
+            internal string SourceKey;
+        }
+
+        internal PreparedObjectPublication PrepareObjectPublication(LoganVisualContentCandidate candidate)
+        {
+            var state = new PreparedObjectPublication
+            {
+                Config = new GameDataConfig(),
+                Objects = new Dictionary<int, ObjectDefinition>(candidate.Catalog.Entries.Count),
+                Types = new Dictionary<int, List<ObjectDefinition>>(),
+                RegistryIndices = new Dictionary<int, int>(candidate.Catalog.Entries.Count),
+                SourceKey = candidate.SourceCacheKey
+            };
+            if (cachedConfig != null)
+                state.Config.backgrounds = cachedConfig.backgrounds;
+            foreach (LoganObjectCatalog.Entry entry in candidate.Catalog.Entries)
+            {
+                var definition = new ObjectDefinition(entry.Id, entry.Type, entry.DatPath);
+                state.Config.objects.Add(definition);
+                state.Objects.Add(entry.Id, definition);
+                state.RegistryIndices.Add(entry.Id, entry.RegistryIndex);
+                if (!state.Types.TryGetValue(entry.Type, out List<ObjectDefinition> values))
+                {
+                    values = new List<ObjectDefinition>();
+                    state.Types.Add(entry.Type, values);
+                }
+                values.Add(definition);
+            }
+            return state;
+        }
+
+        internal void CommitObjectPublication(PreparedObjectPublication state)
+        {
+            // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
+            // Prepared reference swaps only; the manager owns the surrounding no-await transaction.
+            cachedConfig = state.Config;
+            objectLookup = state.Objects;
+            objectsByTypeLookup = state.Types;
+            objectRegistryIndices = state.RegistryIndices;
+            PublishedVisualContentKey = state.SourceKey;
+        }
+
+        public int GetObjectRegistryIndex(int id)
+        {
+            return objectRegistryIndices.TryGetValue(id, out int index) ? index : -1;
+        }
         private readonly Dictionary<int, BackgroundDefinition> backgroundLookup =
             new Dictionary<int, BackgroundDefinition>();
         private readonly List<ObjectDefinition> emptyObjectDefinitions =

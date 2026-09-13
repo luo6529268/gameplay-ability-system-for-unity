@@ -1,0 +1,12 @@
+width=2001
+height=8768
+pixels=17544768
+processWorkingSetBefore=0
+sampledProcessPeakWorkingSet=0
+processWorkingSetAvailable=False
+sampledManagedHeapPeak=1553543168
+managedBefore=1287069696
+managedAfter=1553604608
+gen0CollectionsDuringTest=2
+rgbaHashMatches=true
+measurement=10ms heap/process samples; Mono process values of zero mean unavailable; not exact allocation or concurrent-prewarm peak

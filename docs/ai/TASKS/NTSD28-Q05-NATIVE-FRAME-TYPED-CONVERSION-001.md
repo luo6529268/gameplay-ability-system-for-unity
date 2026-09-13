@@ -1,0 +1,5 @@
+# Q05 Native typed frame接线
+
+状态DELIVERED_TYPED_FRAME_CONTENT_ONLY / HEADER_IDENTITY_SCHEMA_CONSUMERS_PLAY_PENDING，父NTSD28-Q05-NATIVE-FRAME-SOURCE-INTEGRATION-001；准确范围/验收/回滚见同ID Record。复用AST与各字段模型，完成真正的Logan转换入口，后继identity/schema/Play保持。
+
+限定出口见同ID REPORT，557不同focused/330构建/完整SelfCheck通过，剩余definition header门槛见 NTSD28-Q05-NATIVE-DEFINITION-HEADER-CONTRACT-AUDIT-001。

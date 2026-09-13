@@ -1,0 +1,32 @@
+{
+  "checked": 3059,
+  "unchanged": 3034,
+  "changed": [
+    "Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs",
+    "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+    "Assets/NTSD/Scripts/Animation/LF2FrameData.cs",
+    "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "Assets/NTSD/Scripts/App/AppManager.cs",
+    "Assets/NTSD/Scripts/App/GameConfig.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointCatalog.cs",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValue.cs",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValueAdapter.cs",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs",
+    "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValueAdapter.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "Assets/NTSD/Scripts/Test/Editor/FormalKernelCatchPointValueSeamEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/FormalKernelObjectPointValueSeamEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CpointThrowAtomicProductionEditorTests.cs",
+    "Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs",
+    "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+    "Assets/NTSD/Scripts/UI/SelectRoleItem.cs"
+  ],
+  "missing": []
+}

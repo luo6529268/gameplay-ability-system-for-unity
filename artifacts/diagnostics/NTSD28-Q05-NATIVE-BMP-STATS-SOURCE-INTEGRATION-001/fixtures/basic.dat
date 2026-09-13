@@ -1,0 +1,9 @@
+<bmp_begin>
+name: Basic
+walking_speed 3.3
+weapon_hp: 83
+<bmp_end>
+<stats> max_mp: 500 <stats_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

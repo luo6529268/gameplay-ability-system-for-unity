@@ -4,7 +4,7 @@ using NTSD.Animation;
 namespace NTSD.Simulation
 {
     /// <summary>
-    /// Copies only the four release Bdy geometry fields across the immutable
+    /// Copies Bdy coordinates, depth and geometry validity across the immutable
     /// content and legacy Unity/editor DTO boundary.
     /// </summary>
     public static class BattleBodyBoxValueAdapter
@@ -18,7 +18,9 @@ namespace NTSD.Simulation
                 source.x,
                 source.y,
                 source.w,
-                source.h);
+                source.h,
+                source.zwidth,
+                source.hasGeometry);
         }
 
         public static BodyBox ToLegacy(BattleBodyBoxValue source)
@@ -40,6 +42,8 @@ namespace NTSD.Simulation
             destination.y = source.Y;
             destination.w = source.W;
             destination.h = source.H;
+            destination.zwidth = source.ZWidth;
+            destination.hasGeometry = source.HasGeometry;
             destination.rawProperties.Clear();
         }
     }

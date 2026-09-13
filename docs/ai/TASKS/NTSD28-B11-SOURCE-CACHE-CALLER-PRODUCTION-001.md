@@ -1,0 +1,50 @@
+# Q02 E3：同源缓存与实际caller生产接线
+
+状态 VERIFIED_SOURCE_CACHE_CALLER_LOAD_GATES_ONLY（2026-09-13）；以下保留合同和写前/实施历史。前置E1/E2及Preparing owner回访已限定VERIFIED；审计入口为NTSD28-B11-SOURCE-CACHE-CALLER-CONTRACT-AUDIT-001。本Task完成全部E3接线与验收，不把新的配置字段或helper存在当成出口。
+
+## 决定与保持的边界
+
+source选择放在既有GameConfig的新增BattleContentRuntimeRoot字符串；默认空表示迁移前旧内容，绝对路径或相对Application.dataPath父目录解析。此次只改脚本定义，不修改任何GameConfig.asset/Scene/Prefab，不启用正式新内容；Q07才按已批准清单配置正式runtime部署路径。三caller读取同一个配置快照，失败的新source不得回退旧内容，Root变更、owner重建或磁盘图片变化均不能靠旧Ready通过。
+
+NTSD_ResourceLoader仍为原通用缓存/调度服务，不改ExecuteTask/AddTask/CancelTask/其他domain。Native仅借用其精确命名的候选输入缓存：root locator指向含root+VisualFingerprint的完整candidate key，locator仅是查询入口，不代表就绪。缓存命中仍在worker核验DAT/catalog/images输入；漂移时重建候选，失败保留当前publication但caller失败。只有完整key对应的候选输入可复用，禁止将cached true视为Unity publication存在。新manager可以从缓存候选重新发布；同manager/key且全部视图活着可复用自身publication。不同root同ID或只改PNG必须隔离。
+
+Native候选获取及E2发布直接按await顺序调用，**不包装为会跳过Execute的缓存化Unity发布task**，避免误复用已销毁Sprite，也避免在NTSD_ResourceLoader.ProcessFrame的isRunning段内递归泵同一个loader导致死锁。复用现有loader的CacheResult/TryGetCache/RemoveCache精确API和E2生产实现；不新增第二manager/全局cache，也不ClearCache。原pool预热仍复用既有task/容量实现，完成后核验真实成功再标Ready。
+
+候选内部配置类可变，E2目前只拷贝dictionary、value仍引用同一对象。用于跨owner缓存后，publication配置必须从候选捕获的immutable catalog DAT文本重新构建，不能把上一个owner改过的LF2定义再发布给后继owner。图片身份与配置数值仍来自同一候选，不重新选择来源。
+
+## 精确生产范围
+
+1. App/GameConfig.cs：只新增BattleContentRuntimeRoot配置字段，默认空；不动UI/Foot/模式配置及序列化资产。
+2. Animation/LoganVisualContentCandidate.cs：CopyCharacterConfigs改成从捕获的catalog DAT重新构建独立配置值，保持图片manifest/identity及原public capture语义。
+3. Animation/Manager/CharacterAnimtorManager.cs：增加configured source预热与验证入口、同owner重复请求共用结果/世代失效、精确候选缓存和published candidate引用。Native commit登记candidate；旧commit/invalidated/destroy同步失效。新预热先捕获配置快照，后台只处理文件/纯数据，回主线程检查alive/世代/配置身份/生命周期再写cache或进入E2。候选命中必须freshness验证；发布复用必须manager/Data/UI三key一致及有效资源/配置，不以bool早退。validate入口只核验，允许App在BattleLoading或出生后只读检查，绝不热切定义。
+4. UI/LoadingPrewarmController.cs：PrewarmOnceAsync先识别所选source，Native走共享manager入口后才预热pool；Ready绑定实际manager/source/key，失败/取消/换源/销毁不置true。旧配置cache命中必须在OnCompleted应用结果；旧sprite发布不缓存bool，复用当前owner已就绪状态；pool成功不得覆盖前置失败。既有Start菜单推进、文本展示、选择/随机/输入/UI布局不重构。
+5. Test/BattleTestBootstrap.cs：仅LoadCharacterDataAsync及Start的必要source快照/复验；Native走同一manager入口，Legacy保留路径；sound和出生后的await之后除World准备世代外还核验所需content key。禁止新版失败退旧。
+6. App/AppManager.cs：仅InitializeBattleAsync，在出生前验证所选source已发布且输入仍当前，sound await后再次验证同key；不在BattleLoading中补热加载或Setup尾部换目录。不动LoadBattle/UI/选择行为。
+7. Simulation/Host/SimulationTickDriver.cs：原stage1对已有manager额外取消configured-input阶段；保留已有Native cancel和stage5资源回收、十一阶段顺序/worker Join。新候选raw工作晚到只能被丢弃。
+8. Animation/LF2ObjectPool.cs：保留原PrepareCapacityAsync签名，复用分批算法增加受控入口/持续有效性检查；每次yield后、每个新Unity对象创建前核对pool alive/accepting/sealed/本次preparation generation及可选caller predicate。BeginBattleShutdown/重新BeginBattlePreparation使旧预热失效，取消不得标容量目标已完成。仅保护战斗容量预热，不改借出/归还/战斗模拟。
+
+NTSDSoundPlayer只读核验而不列入写范围：仍从当前manager.CollectBattleSoundIds消费同源DAT字段，WAV继续原AudioController/soundRootFolder策略。已有缺WAV警告归Q10；不能把retained音频策略说成新版音源完全就绪。caller验证保证过期内容准备不能通过声音await后进入战斗。发现必须改变音频行为才能闭合时另记精确依赖，不擅自扩范围。
+
+9. UI/SelectRoleItem.cs仅现有PrepareNativeResourceRebind的资源引用身份判定：保留已销毁Sprite的原managed引用身份以供重建重绑；manager保存当前owned头像ID metadata，避免UI.Clear后失去重绑证据。既有state/input/倒计时文本/布局处理不改，准确补充在同ID Record。
+
+## 停止、失败与回滚
+
+configured预热世代属于既有manager的加载事务，不进入simulation schema。stage1/manager销毁撤销候选后续cache写入、publication和pool续体许可；raw worker只返回私有managed数据，迟到丢弃。native Unity暂存继续E2的stage5 owner回收。公共通用loader取消仅是标志且执行后仍可能cache/Completed，故本事务不能依赖它替代上述guard；不为此改其他domain通用取消语义。
+
+Loading controller销毁取消自己的等待/预热续体，不清全局cache、不销毁其他consumer的已发布资源。pool部分完成的inactive实例仍归原pool owner，不假报目标容量；关闭后不能继续创建。失败保留旧publication只用于回滚可用性，所选新版caller仍必须失败，App不得出生。精确回滚仅本Change的symbols，保留E2/Preparing修复与用户工作，删除/回退按现有授权规则。
+
+## 验收出口
+
+先写focused RED：配置源统一、旧固定cache命中应用问题、native cache命中重建owner、只改PNG/同ID不同root、可变已发布配置不污染缓存、非法candidate保留旧发布但caller失败、并发/换源/关闭后迟到结果、pool预热取消不继续创建、不标Ready、其他domain cache保持。
+
+复用真实Unity/E2资源管线和隔离合法catalog，执行实际LoadingPrewarmController.PrewarmOnceAsync、直接bootstrap以及App出生前核验路径。真实Play覆盖三caller所选同一source/key、owner重建、取消/失败、进入/退出/重进与零新增残留；旧source定向回归、完整SelfCheck、CS0、Scene dirtyfalse、受保护文件hash及Ledger。必要测试新增NTSD28B11SourceCacheCallerEditorTests.cs和NTSD28B11SourceCallerPlayProbeEditor.cs，脚本前在同ID Record列准确路径。
+
+Q03六DAT错误不允许忽略帧/填零绕过；正式全量内容Q07仍未部署。只有上述caller/cache/生命周期全部有证据才能关闭E3/Q02所覆盖出口；不宣布B11整域或总目标完成。
+
+最新恢复：初始7项实际RED为6FAIL/1PASS，候选value别名已实测，其余入口缺失；11生产文件hash不变、CS0/Scene clean。准确证据及已冻结API名在同ID Record；下一直接实现本Task全部接线合同，初始7项不足以覆盖最终出口。
+
+Play harness追加写前：测试专用NTSD28B11SourceCallerPlaySetup.cs在BeforeSceneLoad安装临时GameConfig clone，确保真实Start从一开始读取所选source；Editor probe预先保存asset path/root/IDs到request。原资产不改，代码在非Editor测试构建中排除；这不增加生产框架入口。首轮late-injection失败保留，改后重新验三caller。
+
+## 当前出口
+
+九生产/三测试脚本按Record实现；final focused40/40、完整SelfCheck PASS、native direct/app/menu/menu重进四次Play、legacy App实际回归均通过；每次native46资源零残留、实际pool0/两帧仍Stopped、三source key一致。CS0/Scene clean/470-40 Ledger PASS/3059保护3047不变+12声明变化/零缺失。E3限定VERIFIED、Q02加载基础交付；下一Q03同名NATIVE-DAT-AND-JOINT-FIELD-CONTRACT-AUDIT任务READY。正式资源/B11全域/总目标未完成。

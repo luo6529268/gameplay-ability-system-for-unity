@@ -1,0 +1,475 @@
+decoded_dat/w/8.dat	frame	0	0		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	0	-1	pic	393939
+decoded_dat/w/8.dat	field	0	-1	state	33303035
+decoded_dat/w/8.dat	field	0	-1	wait	30
+decoded_dat/w/8.dat	field	0	-1	next	31303030
+decoded_dat/w/8.dat	field	0	-1	centerx	3234
+decoded_dat/w/8.dat	field	0	-1	centery	3333
+decoded_dat/w/8.dat	frame	1	1		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	1	-1	pic	393939
+decoded_dat/w/8.dat	field	1	-1	state	33303035
+decoded_dat/w/8.dat	field	1	-1	wait	30
+decoded_dat/w/8.dat	field	1	-1	next	31303030
+decoded_dat/w/8.dat	field	1	-1	centerx	3234
+decoded_dat/w/8.dat	field	1	-1	centery	3333
+decoded_dat/w/8.dat	frame	2	2		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	2	-1	pic	393939
+decoded_dat/w/8.dat	field	2	-1	state	33303035
+decoded_dat/w/8.dat	field	2	-1	wait	30
+decoded_dat/w/8.dat	field	2	-1	next	31303030
+decoded_dat/w/8.dat	field	2	-1	centerx	3234
+decoded_dat/w/8.dat	field	2	-1	centery	3333
+decoded_dat/w/8.dat	frame	3	3		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	3	-1	pic	393939
+decoded_dat/w/8.dat	field	3	-1	state	33303035
+decoded_dat/w/8.dat	field	3	-1	wait	30
+decoded_dat/w/8.dat	field	3	-1	next	31303030
+decoded_dat/w/8.dat	field	3	-1	centerx	3234
+decoded_dat/w/8.dat	field	3	-1	centery	3333
+decoded_dat/w/8.dat	frame	4	4		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	4	-1	pic	393939
+decoded_dat/w/8.dat	field	4	-1	state	33303035
+decoded_dat/w/8.dat	field	4	-1	wait	30
+decoded_dat/w/8.dat	field	4	-1	next	31303030
+decoded_dat/w/8.dat	field	4	-1	centerx	3234
+decoded_dat/w/8.dat	field	4	-1	centery	3333
+decoded_dat/w/8.dat	frame	5	5		696e5f7468655f736b79
+decoded_dat/w/8.dat	field	5	-1	pic	393939
+decoded_dat/w/8.dat	field	5	-1	state	33303035
+decoded_dat/w/8.dat	field	5	-1	wait	30
+decoded_dat/w/8.dat	field	5	-1	next	31303030
+decoded_dat/w/8.dat	field	5	-1	centerx	3234
+decoded_dat/w/8.dat	field	5	-1	centery	3333
+decoded_dat/w/8.dat	frame	6	20		6f6e5f68616e64
+decoded_dat/w/8.dat	field	6	-1	pic	393939
+decoded_dat/w/8.dat	field	6	-1	state	31303031
+decoded_dat/w/8.dat	field	6	-1	wait	30
+decoded_dat/w/8.dat	field	6	-1	next	31303030
+decoded_dat/w/8.dat	field	6	-1	centerx	3234
+decoded_dat/w/8.dat	field	6	-1	centery	3430
+decoded_dat/w/8.dat	block	6	0	wpoint	
+decoded_dat/w/8.dat	field	6	0	kind	32
+decoded_dat/w/8.dat	field	6	0	x	3234
+decoded_dat/w/8.dat	field	6	0	y	3430
+decoded_dat/w/8.dat	field	6	0	weaponact	30
+decoded_dat/w/8.dat	field	6	0	attacking	30
+decoded_dat/w/8.dat	field	6	0	cover	30
+decoded_dat/w/8.dat	block	6	1	itr	
+decoded_dat/w/8.dat	field	6	1	kind	35
+decoded_dat/w/8.dat	field	6	1	x	3137
+decoded_dat/w/8.dat	field	6	1	y	32
+decoded_dat/w/8.dat	field	6	1	w	3133
+decoded_dat/w/8.dat	field	6	1	h	3434
+decoded_dat/w/8.dat	field	6	1	fall	3230
+decoded_dat/w/8.dat	field	6	1	bdefend	3136
+decoded_dat/w/8.dat	field	6	1	injury	373839
+decoded_dat/w/8.dat	frame	7	21		6f6e5f68616e64
+decoded_dat/w/8.dat	field	7	-1	pic	393939
+decoded_dat/w/8.dat	field	7	-1	state	31303031
+decoded_dat/w/8.dat	field	7	-1	wait	30
+decoded_dat/w/8.dat	field	7	-1	next	31303030
+decoded_dat/w/8.dat	field	7	-1	centerx	3234
+decoded_dat/w/8.dat	field	7	-1	centery	3430
+decoded_dat/w/8.dat	block	7	0	wpoint	
+decoded_dat/w/8.dat	field	7	0	kind	32
+decoded_dat/w/8.dat	field	7	0	x	3137
+decoded_dat/w/8.dat	field	7	0	y	3431
+decoded_dat/w/8.dat	field	7	0	weaponact	30
+decoded_dat/w/8.dat	field	7	0	attacking	30
+decoded_dat/w/8.dat	field	7	0	cover	30
+decoded_dat/w/8.dat	block	7	1	itr	
+decoded_dat/w/8.dat	field	7	1	kind	35
+decoded_dat/w/8.dat	field	7	1	x	3135
+decoded_dat/w/8.dat	field	7	1	y	3230
+decoded_dat/w/8.dat	field	7	1	w	3132
+decoded_dat/w/8.dat	field	7	1	h	3233
+decoded_dat/w/8.dat	field	7	1	dvx	38
+decoded_dat/w/8.dat	field	7	1	fall	3230
+decoded_dat/w/8.dat	field	7	1	bdefend	3136
+decoded_dat/w/8.dat	field	7	1	injury	373839
+decoded_dat/w/8.dat	frame	8	22		6f6e5f68616e64
+decoded_dat/w/8.dat	field	8	-1	pic	393939
+decoded_dat/w/8.dat	field	8	-1	state	31303031
+decoded_dat/w/8.dat	field	8	-1	wait	30
+decoded_dat/w/8.dat	field	8	-1	next	31303030
+decoded_dat/w/8.dat	field	8	-1	centerx	3234
+decoded_dat/w/8.dat	field	8	-1	centery	3430
+decoded_dat/w/8.dat	block	8	0	wpoint	
+decoded_dat/w/8.dat	field	8	0	kind	32
+decoded_dat/w/8.dat	field	8	0	x	3132
+decoded_dat/w/8.dat	field	8	0	y	3337
+decoded_dat/w/8.dat	field	8	0	weaponact	30
+decoded_dat/w/8.dat	field	8	0	attacking	30
+decoded_dat/w/8.dat	field	8	0	cover	30
+decoded_dat/w/8.dat	block	8	1	itr	
+decoded_dat/w/8.dat	field	8	1	kind	35
+decoded_dat/w/8.dat	field	8	1	x	3135
+decoded_dat/w/8.dat	field	8	1	y	3231
+decoded_dat/w/8.dat	field	8	1	w	3130
+decoded_dat/w/8.dat	field	8	1	h	3137
+decoded_dat/w/8.dat	field	8	1	dvx	38
+decoded_dat/w/8.dat	field	8	1	fall	3230
+decoded_dat/w/8.dat	field	8	1	bdefend	3136
+decoded_dat/w/8.dat	field	8	1	injury	373839
+decoded_dat/w/8.dat	frame	9	23		6f6e5f68616e64
+decoded_dat/w/8.dat	field	9	-1	pic	393939
+decoded_dat/w/8.dat	field	9	-1	state	31303031
+decoded_dat/w/8.dat	field	9	-1	wait	30
+decoded_dat/w/8.dat	field	9	-1	next	31303030
+decoded_dat/w/8.dat	field	9	-1	centerx	3234
+decoded_dat/w/8.dat	field	9	-1	centery	3430
+decoded_dat/w/8.dat	block	9	0	wpoint	
+decoded_dat/w/8.dat	field	9	0	kind	32
+decoded_dat/w/8.dat	field	9	0	x	39
+decoded_dat/w/8.dat	field	9	0	y	3333
+decoded_dat/w/8.dat	field	9	0	weaponact	30
+decoded_dat/w/8.dat	field	9	0	attacking	30
+decoded_dat/w/8.dat	field	9	0	cover	30
+decoded_dat/w/8.dat	block	9	1	itr	
+decoded_dat/w/8.dat	field	9	1	kind	35
+decoded_dat/w/8.dat	field	9	1	x	39
+decoded_dat/w/8.dat	field	9	1	y	3235
+decoded_dat/w/8.dat	field	9	1	w	3134
+decoded_dat/w/8.dat	field	9	1	h	3133
+decoded_dat/w/8.dat	field	9	1	dvx	38
+decoded_dat/w/8.dat	field	9	1	fall	3230
+decoded_dat/w/8.dat	field	9	1	bdefend	3136
+decoded_dat/w/8.dat	field	9	1	injury	373839
+decoded_dat/w/8.dat	frame	10	24		6f6e5f68616e64
+decoded_dat/w/8.dat	field	10	-1	pic	393939
+decoded_dat/w/8.dat	field	10	-1	state	31303031
+decoded_dat/w/8.dat	field	10	-1	wait	30
+decoded_dat/w/8.dat	field	10	-1	next	31303030
+decoded_dat/w/8.dat	field	10	-1	centerx	3234
+decoded_dat/w/8.dat	field	10	-1	centery	3430
+decoded_dat/w/8.dat	block	10	0	wpoint	
+decoded_dat/w/8.dat	field	10	0	kind	32
+decoded_dat/w/8.dat	field	10	0	x	3132
+decoded_dat/w/8.dat	field	10	0	y	3239
+decoded_dat/w/8.dat	field	10	0	weaponact	30
+decoded_dat/w/8.dat	field	10	0	attacking	30
+decoded_dat/w/8.dat	field	10	0	cover	30
+decoded_dat/w/8.dat	block	10	1	itr	
+decoded_dat/w/8.dat	field	10	1	kind	35
+decoded_dat/w/8.dat	field	10	1	x	38
+decoded_dat/w/8.dat	field	10	1	y	3234
+decoded_dat/w/8.dat	field	10	1	w	3138
+decoded_dat/w/8.dat	field	10	1	h	3132
+decoded_dat/w/8.dat	field	10	1	dvx	38
+decoded_dat/w/8.dat	field	10	1	fall	3230
+decoded_dat/w/8.dat	field	10	1	bdefend	3136
+decoded_dat/w/8.dat	field	10	1	injury	373839
+decoded_dat/w/8.dat	frame	11	25		6f6e5f68616e64
+decoded_dat/w/8.dat	field	11	-1	pic	393939
+decoded_dat/w/8.dat	field	11	-1	state	31303031
+decoded_dat/w/8.dat	field	11	-1	wait	30
+decoded_dat/w/8.dat	field	11	-1	next	31303030
+decoded_dat/w/8.dat	field	11	-1	centerx	3234
+decoded_dat/w/8.dat	field	11	-1	centery	3430
+decoded_dat/w/8.dat	block	11	0	wpoint	
+decoded_dat/w/8.dat	field	11	0	kind	32
+decoded_dat/w/8.dat	field	11	0	x	3132
+decoded_dat/w/8.dat	field	11	0	y	3234
+decoded_dat/w/8.dat	field	11	0	weaponact	30
+decoded_dat/w/8.dat	field	11	0	attacking	30
+decoded_dat/w/8.dat	field	11	0	cover	30
+decoded_dat/w/8.dat	block	11	1	itr	
+decoded_dat/w/8.dat	field	11	1	kind	35
+decoded_dat/w/8.dat	field	11	1	x	36
+decoded_dat/w/8.dat	field	11	1	y	3138
+decoded_dat/w/8.dat	field	11	1	w	3234
+decoded_dat/w/8.dat	field	11	1	h	3135
+decoded_dat/w/8.dat	field	11	1	dvx	38
+decoded_dat/w/8.dat	field	11	1	fall	3230
+decoded_dat/w/8.dat	field	11	1	bdefend	3136
+decoded_dat/w/8.dat	field	11	1	injury	373839
+decoded_dat/w/8.dat	frame	12	100		6f6e5f68616e64
+decoded_dat/w/8.dat	field	12	-1	pic	393939
+decoded_dat/w/8.dat	field	12	-1	state	31303031
+decoded_dat/w/8.dat	field	12	-1	wait	30
+decoded_dat/w/8.dat	field	12	-1	next	31303030
+decoded_dat/w/8.dat	field	12	-1	centerx	3234
+decoded_dat/w/8.dat	field	12	-1	centery	3430
+decoded_dat/w/8.dat	block	12	0	wpoint	
+decoded_dat/w/8.dat	field	12	0	kind	32
+decoded_dat/w/8.dat	field	12	0	x	3132
+decoded_dat/w/8.dat	field	12	0	y	3234
+decoded_dat/w/8.dat	field	12	0	weaponact	30
+decoded_dat/w/8.dat	field	12	0	attacking	30
+decoded_dat/w/8.dat	field	12	0	cover	30
+decoded_dat/w/8.dat	block	12	1	itr	
+decoded_dat/w/8.dat	field	12	1	kind	35
+decoded_dat/w/8.dat	field	12	1	x	36
+decoded_dat/w/8.dat	field	12	1	y	3138
+decoded_dat/w/8.dat	field	12	1	w	3234
+decoded_dat/w/8.dat	field	12	1	h	3135
+decoded_dat/w/8.dat	field	12	1	dvx	38
+decoded_dat/w/8.dat	field	12	1	fall	3230
+decoded_dat/w/8.dat	field	12	1	bdefend	3136
+decoded_dat/w/8.dat	field	12	1	injury	373839
+decoded_dat/w/8.dat	frame	13	26		6f6e5f68616e64
+decoded_dat/w/8.dat	field	13	-1	pic	393939
+decoded_dat/w/8.dat	field	13	-1	state	31303031
+decoded_dat/w/8.dat	field	13	-1	wait	30
+decoded_dat/w/8.dat	field	13	-1	next	31303030
+decoded_dat/w/8.dat	field	13	-1	centerx	3234
+decoded_dat/w/8.dat	field	13	-1	centery	3430
+decoded_dat/w/8.dat	block	13	0	wpoint	
+decoded_dat/w/8.dat	field	13	0	kind	32
+decoded_dat/w/8.dat	field	13	0	x	3135
+decoded_dat/w/8.dat	field	13	0	y	3135
+decoded_dat/w/8.dat	field	13	0	weaponact	30
+decoded_dat/w/8.dat	field	13	0	attacking	30
+decoded_dat/w/8.dat	field	13	0	cover	30
+decoded_dat/w/8.dat	block	13	1	itr	
+decoded_dat/w/8.dat	field	13	1	kind	35
+decoded_dat/w/8.dat	field	13	1	x	3132
+decoded_dat/w/8.dat	field	13	1	y	3132
+decoded_dat/w/8.dat	field	13	1	w	3136
+decoded_dat/w/8.dat	field	13	1	h	3137
+decoded_dat/w/8.dat	field	13	1	dvx	38
+decoded_dat/w/8.dat	field	13	1	fall	3230
+decoded_dat/w/8.dat	field	13	1	bdefend	3136
+decoded_dat/w/8.dat	field	13	1	injury	373839
+decoded_dat/w/8.dat	frame	14	27		6f6e5f68616e64
+decoded_dat/w/8.dat	field	14	-1	pic	393939
+decoded_dat/w/8.dat	field	14	-1	state	31303031
+decoded_dat/w/8.dat	field	14	-1	wait	30
+decoded_dat/w/8.dat	field	14	-1	next	31303030
+decoded_dat/w/8.dat	field	14	-1	centerx	3234
+decoded_dat/w/8.dat	field	14	-1	centery	3430
+decoded_dat/w/8.dat	block	14	0	wpoint	
+decoded_dat/w/8.dat	field	14	0	kind	32
+decoded_dat/w/8.dat	field	14	0	x	3137
+decoded_dat/w/8.dat	field	14	0	y	3135
+decoded_dat/w/8.dat	field	14	0	weaponact	30
+decoded_dat/w/8.dat	field	14	0	attacking	30
+decoded_dat/w/8.dat	field	14	0	cover	30
+decoded_dat/w/8.dat	block	14	1	itr	
+decoded_dat/w/8.dat	field	14	1	kind	35
+decoded_dat/w/8.dat	field	14	1	x	3132
+decoded_dat/w/8.dat	field	14	1	y	38
+decoded_dat/w/8.dat	field	14	1	w	3134
+decoded_dat/w/8.dat	field	14	1	h	3139
+decoded_dat/w/8.dat	field	14	1	dvx	38
+decoded_dat/w/8.dat	field	14	1	fall	3230
+decoded_dat/w/8.dat	field	14	1	bdefend	3136
+decoded_dat/w/8.dat	field	14	1	injury	373839
+decoded_dat/w/8.dat	frame	15	28		6f6e5f68616e64
+decoded_dat/w/8.dat	field	15	-1	pic	393939
+decoded_dat/w/8.dat	field	15	-1	state	31303031
+decoded_dat/w/8.dat	field	15	-1	wait	30
+decoded_dat/w/8.dat	field	15	-1	next	31303030
+decoded_dat/w/8.dat	field	15	-1	centerx	3234
+decoded_dat/w/8.dat	field	15	-1	centery	3430
+decoded_dat/w/8.dat	block	15	0	wpoint	
+decoded_dat/w/8.dat	field	15	0	kind	32
+decoded_dat/w/8.dat	field	15	0	x	3235
+decoded_dat/w/8.dat	field	15	0	y	3134
+decoded_dat/w/8.dat	field	15	0	weaponact	30
+decoded_dat/w/8.dat	field	15	0	attacking	30
+decoded_dat/w/8.dat	field	15	0	cover	30
+decoded_dat/w/8.dat	block	15	1	itr	
+decoded_dat/w/8.dat	field	15	1	kind	35
+decoded_dat/w/8.dat	field	15	1	x	3138
+decoded_dat/w/8.dat	field	15	1	y	39
+decoded_dat/w/8.dat	field	15	1	w	3133
+decoded_dat/w/8.dat	field	15	1	h	3139
+decoded_dat/w/8.dat	field	15	1	dvx	38
+decoded_dat/w/8.dat	field	15	1	fall	3230
+decoded_dat/w/8.dat	field	15	1	bdefend	3136
+decoded_dat/w/8.dat	field	15	1	injury	373839
+decoded_dat/w/8.dat	frame	16	29		6f6e5f68616e64
+decoded_dat/w/8.dat	field	16	-1	pic	393939
+decoded_dat/w/8.dat	field	16	-1	state	31303031
+decoded_dat/w/8.dat	field	16	-1	wait	30
+decoded_dat/w/8.dat	field	16	-1	next	31303030
+decoded_dat/w/8.dat	field	16	-1	centerx	3234
+decoded_dat/w/8.dat	field	16	-1	centery	3430
+decoded_dat/w/8.dat	block	16	0	wpoint	
+decoded_dat/w/8.dat	field	16	0	kind	32
+decoded_dat/w/8.dat	field	16	0	x	3237
+decoded_dat/w/8.dat	field	16	0	y	3135
+decoded_dat/w/8.dat	field	16	0	weaponact	30
+decoded_dat/w/8.dat	field	16	0	attacking	30
+decoded_dat/w/8.dat	field	16	0	cover	30
+decoded_dat/w/8.dat	block	16	1	itr	
+decoded_dat/w/8.dat	field	16	1	kind	35
+decoded_dat/w/8.dat	field	16	1	x	3138
+decoded_dat/w/8.dat	field	16	1	y	36
+decoded_dat/w/8.dat	field	16	1	w	3134
+decoded_dat/w/8.dat	field	16	1	h	3234
+decoded_dat/w/8.dat	field	16	1	dvx	38
+decoded_dat/w/8.dat	field	16	1	fall	3230
+decoded_dat/w/8.dat	field	16	1	bdefend	3136
+decoded_dat/w/8.dat	field	16	1	injury	373839
+decoded_dat/w/8.dat	frame	17	30		6f6e5f68616e64
+decoded_dat/w/8.dat	field	17	-1	pic	393939
+decoded_dat/w/8.dat	field	17	-1	state	31303031
+decoded_dat/w/8.dat	field	17	-1	wait	30
+decoded_dat/w/8.dat	field	17	-1	next	31303030
+decoded_dat/w/8.dat	field	17	-1	centerx	3234
+decoded_dat/w/8.dat	field	17	-1	centery	3430
+decoded_dat/w/8.dat	block	17	0	wpoint	
+decoded_dat/w/8.dat	field	17	0	kind	32
+decoded_dat/w/8.dat	field	17	0	x	3333
+decoded_dat/w/8.dat	field	17	0	y	3137
+decoded_dat/w/8.dat	field	17	0	weaponact	30
+decoded_dat/w/8.dat	field	17	0	attacking	30
+decoded_dat/w/8.dat	field	17	0	cover	30
+decoded_dat/w/8.dat	block	17	1	itr	
+decoded_dat/w/8.dat	field	17	1	kind	35
+decoded_dat/w/8.dat	field	17	1	x	3232
+decoded_dat/w/8.dat	field	17	1	y	3132
+decoded_dat/w/8.dat	field	17	1	w	3139
+decoded_dat/w/8.dat	field	17	1	h	3135
+decoded_dat/w/8.dat	field	17	1	dvx	38
+decoded_dat/w/8.dat	field	17	1	fall	3230
+decoded_dat/w/8.dat	field	17	1	bdefend	3136
+decoded_dat/w/8.dat	field	17	1	injury	373839
+decoded_dat/w/8.dat	frame	18	31		6f6e5f68616e64
+decoded_dat/w/8.dat	field	18	-1	pic	393939
+decoded_dat/w/8.dat	field	18	-1	state	31303031
+decoded_dat/w/8.dat	field	18	-1	wait	30
+decoded_dat/w/8.dat	field	18	-1	next	31303030
+decoded_dat/w/8.dat	field	18	-1	centerx	3234
+decoded_dat/w/8.dat	field	18	-1	centery	3430
+decoded_dat/w/8.dat	block	18	0	wpoint	
+decoded_dat/w/8.dat	field	18	0	kind	32
+decoded_dat/w/8.dat	field	18	0	x	3333
+decoded_dat/w/8.dat	field	18	0	y	3231
+decoded_dat/w/8.dat	field	18	0	weaponact	30
+decoded_dat/w/8.dat	field	18	0	attacking	30
+decoded_dat/w/8.dat	field	18	0	cover	30
+decoded_dat/w/8.dat	block	18	1	itr	
+decoded_dat/w/8.dat	field	18	1	kind	35
+decoded_dat/w/8.dat	field	18	1	x	3139
+decoded_dat/w/8.dat	field	18	1	y	3135
+decoded_dat/w/8.dat	field	18	1	w	3232
+decoded_dat/w/8.dat	field	18	1	h	3134
+decoded_dat/w/8.dat	field	18	1	dvx	38
+decoded_dat/w/8.dat	field	18	1	fall	3230
+decoded_dat/w/8.dat	field	18	1	bdefend	3136
+decoded_dat/w/8.dat	field	18	1	injury	373839
+decoded_dat/w/8.dat	frame	19	32		6f6e5f68616e64
+decoded_dat/w/8.dat	field	19	-1	pic	393939
+decoded_dat/w/8.dat	field	19	-1	state	31303031
+decoded_dat/w/8.dat	field	19	-1	wait	30
+decoded_dat/w/8.dat	field	19	-1	next	31303030
+decoded_dat/w/8.dat	field	19	-1	centerx	3234
+decoded_dat/w/8.dat	field	19	-1	centery	3430
+decoded_dat/w/8.dat	block	19	0	wpoint	
+decoded_dat/w/8.dat	field	19	0	kind	32
+decoded_dat/w/8.dat	field	19	0	x	3333
+decoded_dat/w/8.dat	field	19	0	y	3235
+decoded_dat/w/8.dat	field	19	0	weaponact	30
+decoded_dat/w/8.dat	field	19	0	attacking	30
+decoded_dat/w/8.dat	field	19	0	cover	30
+decoded_dat/w/8.dat	block	19	1	itr	
+decoded_dat/w/8.dat	field	19	1	kind	35
+decoded_dat/w/8.dat	field	19	1	x	3230
+decoded_dat/w/8.dat	field	19	1	y	3230
+decoded_dat/w/8.dat	field	19	1	w	3232
+decoded_dat/w/8.dat	field	19	1	h	3132
+decoded_dat/w/8.dat	frame	20	33		6f6e5f68616e64
+decoded_dat/w/8.dat	field	20	-1	pic	393939
+decoded_dat/w/8.dat	field	20	-1	state	31303031
+decoded_dat/w/8.dat	field	20	-1	wait	30
+decoded_dat/w/8.dat	field	20	-1	next	31303030
+decoded_dat/w/8.dat	field	20	-1	centerx	3234
+decoded_dat/w/8.dat	field	20	-1	centery	3430
+decoded_dat/w/8.dat	block	20	0	wpoint	
+decoded_dat/w/8.dat	field	20	0	kind	32
+decoded_dat/w/8.dat	field	20	0	x	3333
+decoded_dat/w/8.dat	field	20	0	y	3332
+decoded_dat/w/8.dat	field	20	0	weaponact	30
+decoded_dat/w/8.dat	field	20	0	attacking	30
+decoded_dat/w/8.dat	field	20	0	cover	30
+decoded_dat/w/8.dat	block	20	1	itr	
+decoded_dat/w/8.dat	field	20	1	kind	35
+decoded_dat/w/8.dat	field	20	1	x	3232
+decoded_dat/w/8.dat	field	20	1	y	3235
+decoded_dat/w/8.dat	field	20	1	w	3230
+decoded_dat/w/8.dat	field	20	1	h	3135
+decoded_dat/w/8.dat	field	20	1	dvx	38
+decoded_dat/w/8.dat	field	20	1	fall	3230
+decoded_dat/w/8.dat	field	20	1	bdefend	3136
+decoded_dat/w/8.dat	field	20	1	injury	373839
+decoded_dat/w/8.dat	frame	21	34		6f6e5f68616e64
+decoded_dat/w/8.dat	field	21	-1	pic	393939
+decoded_dat/w/8.dat	field	21	-1	state	31303031
+decoded_dat/w/8.dat	field	21	-1	wait	30
+decoded_dat/w/8.dat	field	21	-1	next	31303030
+decoded_dat/w/8.dat	field	21	-1	centerx	3234
+decoded_dat/w/8.dat	field	21	-1	centery	3430
+decoded_dat/w/8.dat	block	21	0	wpoint	
+decoded_dat/w/8.dat	field	21	0	kind	32
+decoded_dat/w/8.dat	field	21	0	x	3333
+decoded_dat/w/8.dat	field	21	0	y	3334
+decoded_dat/w/8.dat	field	21	0	weaponact	30
+decoded_dat/w/8.dat	field	21	0	attacking	30
+decoded_dat/w/8.dat	field	21	0	cover	30
+decoded_dat/w/8.dat	block	21	1	itr	
+decoded_dat/w/8.dat	field	21	1	kind	35
+decoded_dat/w/8.dat	field	21	1	x	3232
+decoded_dat/w/8.dat	field	21	1	y	3235
+decoded_dat/w/8.dat	field	21	1	w	3137
+decoded_dat/w/8.dat	field	21	1	h	3136
+decoded_dat/w/8.dat	field	21	1	dvx	38
+decoded_dat/w/8.dat	field	21	1	fall	3230
+decoded_dat/w/8.dat	field	21	1	bdefend	3136
+decoded_dat/w/8.dat	field	21	1	injury	373839
+decoded_dat/w/8.dat	frame	22	35		6f6e5f68616e64
+decoded_dat/w/8.dat	field	22	-1	pic	393939
+decoded_dat/w/8.dat	field	22	-1	state	31303031
+decoded_dat/w/8.dat	field	22	-1	wait	30
+decoded_dat/w/8.dat	field	22	-1	next	31303030
+decoded_dat/w/8.dat	field	22	-1	centerx	3234
+decoded_dat/w/8.dat	field	22	-1	centery	3430
+decoded_dat/w/8.dat	block	22	0	wpoint	
+decoded_dat/w/8.dat	field	22	0	kind	32
+decoded_dat/w/8.dat	field	22	0	x	3236
+decoded_dat/w/8.dat	field	22	0	y	3335
+decoded_dat/w/8.dat	field	22	0	weaponact	30
+decoded_dat/w/8.dat	field	22	0	attacking	30
+decoded_dat/w/8.dat	field	22	0	cover	30
+decoded_dat/w/8.dat	block	22	1	itr	
+decoded_dat/w/8.dat	field	22	1	kind	35
+decoded_dat/w/8.dat	field	22	1	x	3139
+decoded_dat/w/8.dat	field	22	1	y	3233
+decoded_dat/w/8.dat	field	22	1	w	3133
+decoded_dat/w/8.dat	field	22	1	h	3231
+decoded_dat/w/8.dat	field	22	1	dvx	38
+decoded_dat/w/8.dat	field	22	1	fall	3230
+decoded_dat/w/8.dat	field	22	1	bdefend	3136
+decoded_dat/w/8.dat	field	22	1	injury	373839
+decoded_dat/w/8.dat	frame	23	40		7468726f77696e67
+decoded_dat/w/8.dat	field	23	-1	pic	393939
+decoded_dat/w/8.dat	field	23	-1	state	33303035
+decoded_dat/w/8.dat	field	23	-1	wait	30
+decoded_dat/w/8.dat	field	23	-1	next	31303030
+decoded_dat/w/8.dat	field	23	-1	centerx	3234
+decoded_dat/w/8.dat	field	23	-1	centery	3337
+decoded_dat/w/8.dat	frame	24	60		6f6e5f67726f756e64
+decoded_dat/w/8.dat	field	24	-1	pic	393939
+decoded_dat/w/8.dat	field	24	-1	state	33303035
+decoded_dat/w/8.dat	field	24	-1	wait	30
+decoded_dat/w/8.dat	field	24	-1	next	31303030
+decoded_dat/w/8.dat	field	24	-1	centerx	3234
+decoded_dat/w/8.dat	field	24	-1	centery	3335
+decoded_dat/w/8.dat	frame	25	70		6a7573745f6f6e5f67726f756e64
+decoded_dat/w/8.dat	field	25	-1	pic	393939
+decoded_dat/w/8.dat	field	25	-1	state	33303035
+decoded_dat/w/8.dat	field	25	-1	wait	30
+decoded_dat/w/8.dat	field	25	-1	next	31303030
+decoded_dat/w/8.dat	field	25	-1	centerx	3234
+decoded_dat/w/8.dat	field	25	-1	centery	3338
+decoded_dat/w/8.dat	frame	26	399		64756d6d79
+decoded_dat/w/8.dat	field	26	-1	pic	393939
+decoded_dat/w/8.dat	field	26	-1	state	33303035
+decoded_dat/w/8.dat	field	26	-1	wait	30
+decoded_dat/w/8.dat	field	26	-1	next	31303030
+decoded_dat/w/8.dat	field	26	-1	dvx	353530
+decoded_dat/w/8.dat	field	26	-1	dvy	353530
+decoded_dat/w/8.dat	field	26	-1	centerx	3234
+decoded_dat/w/8.dat	field	26	-1	centery	3330

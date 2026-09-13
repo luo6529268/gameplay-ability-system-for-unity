@@ -1,0 +1,78 @@
+{
+  "failures": [
+    {
+      "diagnostics": [
+        {
+          "line": 1,
+          "message": "invalid <frame> header",
+          "severity": "error"
+        },
+        {
+          "line": 25,
+          "message": "encountered <frame_end> without an open frame",
+          "severity": "error"
+        },
+        {
+          "line": 0,
+          "message": "missing <bmp_begin>",
+          "severity": "warning"
+        },
+        {
+          "line": 0,
+          "message": "document has no frames",
+          "severity": "warning"
+        }
+      ],
+      "domain": "ANCILLARY_DAT_OWNER_REVIEW",
+      "path": "data/frame/inkhud.dat"
+    },
+    {
+      "diagnostics": [
+        {
+          "line": 1,
+          "message": "invalid <frame> header",
+          "severity": "error"
+        },
+        {
+          "line": 25,
+          "message": "encountered <frame_end> without an open frame",
+          "severity": "error"
+        },
+        {
+          "line": 0,
+          "message": "missing <bmp_begin>",
+          "severity": "warning"
+        },
+        {
+          "line": 0,
+          "message": "document has no frames",
+          "severity": "warning"
+        }
+      ],
+      "domain": "ANCILLARY_DAT_OWNER_REVIEW",
+      "path": "data/frame/inkhud2.dat"
+    },
+    {
+      "diagnostics": [
+        {
+          "line": 53,
+          "message": "invalid <frame> header",
+          "severity": "error"
+        },
+        {
+          "line": 61,
+          "message": "encountered <frame_end> without an open frame",
+          "severity": "error"
+        },
+        {
+          "line": 0,
+          "message": "document has no frames",
+          "severity": "warning"
+        }
+      ],
+      "domain": "ANCILLARY_DAT_OWNER_REVIEW",
+      "path": "data/resource.dat"
+    }
+  ],
+  "interpretation": "Non-object resource/HUD formats can have dedicated production parsers. Generic DatParser diagnostics do not establish a formal release defect."
+}

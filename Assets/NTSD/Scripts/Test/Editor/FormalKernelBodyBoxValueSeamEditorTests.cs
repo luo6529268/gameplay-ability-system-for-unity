@@ -31,7 +31,7 @@ namespace NTSD.Test
             "sequence=duplicate|index=1|x=-5|y=-6|w=7|h=8\n";
 
         [Test]
-        public void ValuePreservesExactFourScalarsAndIsImmutable()
+        public void CompatibilityCoordinatesRemainImmutableWithDepthAndValidity()
         {
             var value = new BattleBodyBoxValue(-31, 47, 59, -61);
 
@@ -42,7 +42,7 @@ namespace NTSD.Test
 
             PropertyInfo[] properties = typeof(BattleBodyBoxValue).GetProperties(
                 BindingFlags.Instance | BindingFlags.Public);
-            Assert.That(properties, Has.Length.EqualTo(4));
+            Assert.That(properties, Has.Length.EqualTo(6));
             for (int index = 0; index < properties.Length; index++)
                 Assert.That(properties[index].CanWrite, Is.False, properties[index].Name);
             Assert.That(typeof(BattleBodyBoxValue).GetFields(

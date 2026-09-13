@@ -11,7 +11,6 @@ namespace NTSD.Simulation
             RuntimeEntityHandle heldWeaponHandle)
         {
             HeldWeaponHandle = heldWeaponHandle;
-            Mass = character.MassForFrameAdvance;
             DeadBlinkCount = character.DeadBlinkCountInternal;
             InitializedFromOpoint = character.InitializedFromOpointForSnapshot;
             PreserveOpointActionZero =
@@ -19,7 +18,6 @@ namespace NTSD.Simulation
         }
 
         public RuntimeEntityHandle HeldWeaponHandle { get; }
-        public float Mass { get; }
         public int DeadBlinkCount { get; }
         public bool InitializedFromOpoint { get; }
         public bool PreserveOpointActionZero { get; }

@@ -113,7 +113,8 @@ namespace NTSD.Simulation
         public int OwnerStableId = -1;
         public int RelationOwnerSlotIndex = -1;
         public int SpawnerSlotIndex = -1;
-        public int GrabbedBy;
+        // Alignment contract: NTSD28-Q05-OBJECT-AI-2F8-CARRIER-CONTRACT-001; raw slot, independent of owner/spawner.
+        public int ObjectAiExcludedGroupSourceSlot2F8 = -1;
         private int linkState;
         private int targetSlotIndex = -1;
         public int CaughtSlotIndex = -1;
@@ -235,7 +236,6 @@ namespace NTSD.Simulation
             get => PickerStableId;
             set => PickerStableId = value;
         }
-        public int TrackerFlag;
         public bool AiControlled;
 
         public double X;
@@ -812,7 +812,7 @@ namespace NTSD.Simulation
             destination.OwnerStableId = OwnerStableId;
             destination.RelationOwnerSlotIndex = RelationOwnerSlotIndex;
             destination.SpawnerSlotIndex = SpawnerSlotIndex;
-            destination.GrabbedBy = GrabbedBy;
+            destination.ObjectAiExcludedGroupSourceSlot2F8 = ObjectAiExcludedGroupSourceSlot2F8;
             destination.linkState = linkState;
             destination.targetSlotIndex = targetSlotIndex;
             destination.CaughtSlotIndex = CaughtSlotIndex;
@@ -932,7 +932,6 @@ namespace NTSD.Simulation
             destination.HolderStableId = HolderStableId;
             destination.HolderCopySlotIndex = HolderCopySlotIndex;
             destination.PickerStableId = PickerStableId;
-            destination.TrackerFlag = TrackerFlag;
             destination.AiControlled = AiControlled;
             destination.X = X;
             destination.Y = Y;
@@ -1050,7 +1049,7 @@ namespace NTSD.Simulation
             OwnerStableId = -1;
             RelationOwnerSlotIndex = -1;
             SpawnerSlotIndex = -1;
-            GrabbedBy = 0;
+            ObjectAiExcludedGroupSourceSlot2F8 = -1;
             LinkState = 0;
             TargetSlotIndex = -1;
             CaughtSlotIndex = -1;
@@ -1112,7 +1111,6 @@ namespace NTSD.Simulation
             HolderStableId = -1;
             HolderCopySlotIndex = 99;
             PickerStableId = -1;
-            TrackerFlag = 0;
             AiControlled = false;
             X = 0f;
             Y = 0f;

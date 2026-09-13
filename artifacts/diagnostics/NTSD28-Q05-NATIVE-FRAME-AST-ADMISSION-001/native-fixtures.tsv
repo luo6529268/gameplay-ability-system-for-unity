@@ -1,0 +1,150 @@
+bad_id.dat	document	0	0		
+bmp_interrupt.dat	document	1	1		
+bmp_interrupt.dat	frame	0	0		
+bmp_interrupt.dat	block	0	0	itr	
+bmp_interrupt.dat	field	0	0	x	31
+caption_fields.dat	document	1	1		
+caption_fields.dat	frame	0	0		63617074696f6e20776169743a20393939206e6578743a2039
+caption_fields.dat	field	0	-1	wait	32
+duplicate.dat	document	0	2		
+duplicate.dat	frame	0	0		6669727374
+duplicate.dat	frame	1	0		7365636f6e64
+empty_name.dat	document	1	1		
+empty_name.dat	frame	0	0		
+empty_values.dat	document	1	1		
+empty_values.dat	frame	0	0		
+empty_values.dat	field	0	-1	pic	
+empty_values.dat	block	0	0	itr	
+empty_values.dat	field	0	0	x	
+empty_values.dat	field	0	0	y	33
+eof_frame.dat	document	1	1		
+eof_frame.dat	frame	0	0		
+eof_frame.dat	field	0	-1	wait	31
+eof_pending.dat	document	1	1		
+eof_pending.dat	frame	0	0		
+eof_pending.dat	block	0	0	itr	
+eof_pending.dat	field	0	0	x	32
+eof_pending.dat	field	0	0	y	33
+frame999.dat	document	1	1		
+frame999.dat	frame	0	999		6163636570746564
+frame_close_orphan.dat	document	0	0		
+hash_fields.dat	document	1	1		
+hash_fields.dat	frame	0	0		232063617074696f6e
+hash_fields.dat	field	0	-1	pic	37
+hash_fields.dat	block	0	0	itr	
+hash_fields.dat	field	0	0	x	34
+hash_fields.dat	field	0	0	y	32
+hash_fields.dat	field	0	0	w	33
+hash_fields.dat	field	0	0	h	35
+header_cr.dat	document	1	1		
+header_cr.dat	frame	0	0		63617074696f6e20737061636573
+implicit_next.dat	document	1	2		
+implicit_next.dat	frame	0	0		6f6e65
+implicit_next.dat	block	0	0	itr	
+implicit_next.dat	field	0	0	kind	30
+implicit_next.dat	field	0	0	x	33
+implicit_next.dat	frame	1	1		74776f
+implicit_next.dat	field	1	-1	state	31
+inline_frame_close.dat	document	1	1		
+inline_frame_close.dat	frame	0	0		
+inline_frame_close.dat	field	0	-1	pic	32
+inline_sub_frame_close.dat	document	1	1		
+inline_sub_frame_close.dat	frame	0	0		
+inline_sub_frame_close.dat	block	0	0	itr	
+inline_sub_frame_close.dat	field	0	0	x	31
+inline_unclosed_sub_frame_close.dat	document	1	1		
+inline_unclosed_sub_frame_close.dat	frame	0	0		
+multiple_blocks.dat	document	1	1		
+multiple_blocks.dat	frame	0	0		
+multiple_blocks.dat	block	0	0	bdy	
+multiple_blocks.dat	field	0	0	x	31
+multiple_blocks.dat	block	0	1	bdy	
+multiple_blocks.dat	field	0	1	x	32
+multiple_blocks.dat	block	0	2	opoint	
+multiple_blocks.dat	field	0	2	oid	31
+multiple_blocks.dat	block	0	3	opoint	
+multiple_blocks.dat	field	0	3	oid	32
+negative.dat	document	0	1		
+negative.dat	frame	0	-1		72656a6563746564
+numeric_keys.dat	document	1	1		
+numeric_keys.dat	frame	0	0		
+numeric_keys.dat	field	0	-1	key-1	32
+numeric_keys.dat	field	0	-1	_name	33
+numeric_keys.dat	block	0	0	wpoint	
+numeric_keys.dat	field	0	0	kind	31
+numeric_keys.dat	field	0	0	effect	39
+ordinary.dat	document	1	1		
+ordinary.dat	frame	0	0		7374616e64696e672063617074696f6e20776f726473
+ordinary.dat	field	0	-1	pic	34
+ordinary.dat	field	0	-1	wait	31
+ordinary.dat	field	0	-1	next	32
+ordinary.dat	block	0	0	bdy	
+ordinary.dat	field	0	0	x	31
+ordinary.dat	field	0	0	y	32
+ordinary.dat	field	0	0	w	33
+ordinary.dat	field	0	0	h	34
+out_of_range.dat	document	0	1		
+out_of_range.dat	frame	0	1000		72656a6563746564
+overflow.dat	document	0	0		
+paired_prefix.dat	document	1	1		
+paired_prefix.dat	frame	0	0		
+paired_prefix.dat	block	0	0	itr	
+paired_prefix.dat	field	0	0	caughtact	2d37202b3939
+paired_prefix.dat	field	0	0	catchingact	38202d32
+paired_prefix.dat	field	0	0	pickedact	392033
+paired_prefix.dat	field	0	0	pickingact	34202d3535
+paired_scalar.dat	document	1	1		
+paired_scalar.dat	frame	0	0		
+paired_scalar.dat	field	0	-1	caughtact	37
+paired_scalar.dat	block	0	0	cpoint	
+paired_scalar.dat	field	0	0	throwvx	31
+pending_close_substring.dat	document	1	1		
+pending_close_substring.dat	frame	0	0		
+pending_close_substring.dat	block	0	0	itr	
+pending_close_substring.dat	field	0	0	x	31
+pending_close_tail.dat	document	1	1		
+pending_close_tail.dat	frame	0	0		
+pending_close_tail.dat	block	0	0	itr	
+pending_close_tail.dat	field	0	0	x	31
+pending_inline_frame_close.dat	document	1	1		
+pending_inline_frame_close.dat	frame	0	0		
+pending_inline_frame_close.dat	block	0	0	itr	
+pending_inline_frame_close.dat	field	0	0	x	32
+pending_inline_frame_close.dat	field	0	0	y	33
+pending_other_sub.dat	document	1	1		
+pending_other_sub.dat	frame	0	0		
+pending_other_sub.dat	block	0	0	itr	
+pending_other_sub.dat	field	0	0	x	31
+pending_other_sub.dat	field	0	0	bdy	783a
+plus.dat	document	0	0		
+ppoint.dat	document	1	1		
+ppoint.dat	frame	0	0		
+ppoint.dat	block	0	0	ppoint	
+ppoint.dat	field	0	0	x	35
+stats_pending.dat	document	1	1		
+stats_pending.dat	frame	0	0		
+stats_pending.dat	block	0	0	itr	
+stats_pending.dat	field	0	0	x	32
+strength_frame_interrupt.dat	document	1	1		
+strength_frame_interrupt.dat	frame	0	0		6672616d652063617074696f6e
+strength_frame_interrupt.dat	field	0	-1	wait	32
+strength_interrupt.dat	document	1	1		
+strength_interrupt.dat	frame	0	0		
+strength_interrupt.dat	block	0	0	itr	
+strength_interrupt.dat	field	0	0	x	31
+sub_inline_tail.dat	document	1	1		
+sub_inline_tail.dat	frame	0	0		
+sub_inline_tail.dat	block	0	0	itr	
+sub_inline_tail.dat	field	0	0	x	31
+sub_same_line_start.dat	document	1	1		
+sub_same_line_start.dat	frame	0	0		
+sub_same_line_start.dat	field	0	-1	pic	31
+sub_same_line_start.dat	field	0	-1	itr	783a
+upper_fields.dat	document	1	1		
+upper_fields.dat	frame	0	0		
+upper_fields.dat	field	0	-1	PIC	35
+upper_fields.dat	field	0	-1	pic	33
+upper_fields.dat	field	0	-1	pic	2b34
+upper_fields.dat	field	0	-1	ITR	6b696e643a
+upper_fields.dat	field	0	-1	x	32
+upper_frame.dat	document	1	0		

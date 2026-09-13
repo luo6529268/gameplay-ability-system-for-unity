@@ -1,0 +1,908 @@
+{
+  "cpoint": {
+    "fields": [
+      {
+        "tag": "kind",
+        "nativeMember": "kind",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Kind"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "x",
+        "nativeMember": "x",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "X"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "y",
+        "nativeMember": "y",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Y"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "injury",
+        "nativeMember": "injury",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Injury"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "cover",
+        "nativeMember": "cover",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Cover"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "vaction",
+        "nativeMember": "victim_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Vaction"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "aaction",
+        "nativeMember": "attack_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Aaction"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "jaction",
+        "nativeMember": "jump_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Jaction"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "daction",
+        "nativeMember": "defend_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Daction"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "taction",
+        "nativeMember": "throw_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Taction"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "faction",
+        "nativeMember": "front_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "baction",
+        "nativeMember": "back_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "uzaction",
+        "nativeMember": "up_z_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dzaction",
+        "nativeMember": "down_z_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "throwvx",
+        "nativeMember": "throw_vx",
+        "nativeType": "float32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "float_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "ThrowVx"
+        },
+        "status": "TYPE_MISMATCH",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "throwvy",
+        "nativeMember": "throw_vy",
+        "nativeType": "float32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "float_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "ThrowVy"
+        },
+        "status": "TYPE_MISMATCH",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "hurtable",
+        "nativeMember": "hurtable",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Hurtable"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "fronthurtact",
+        "nativeMember": "front_hurt_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "FrontHurtAct"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "DECODED_CONTENT_PRESERVED_NO_CONFIRMED_CURRENT_GAMEPLAY_READER"
+      },
+      {
+        "tag": "backhurtact",
+        "nativeMember": "back_hurt_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "BackHurtAct"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "DECODED_CONTENT_PRESERVED_NO_CONFIRMED_CURRENT_GAMEPLAY_READER"
+      },
+      {
+        "tag": "decrease",
+        "nativeMember": "decrease",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Decrease"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dircontrol",
+        "nativeMember": "direction_control",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "DirControl"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "throwinjury",
+        "nativeMember": "throw_injury",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "ThrowInjury"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "throwvz",
+        "nativeMember": "throw_vz",
+        "nativeType": "float32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "float_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "ThrowVz"
+        },
+        "status": "TYPE_MISMATCH",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "z",
+        "nativeMember": "z",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "recover",
+        "nativeMember": "recover",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "DECODED_CONTENT_PRESERVED_NO_CONFIRMED_CURRENT_GAMEPLAY_READER"
+      },
+      {
+        "tag": "drain",
+        "nativeMember": "drain",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "gain",
+        "nativeMember": "gain",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      }
+    ],
+    "count": 27,
+    "unityCount": 19
+  },
+  "wpoint": {
+    "fields": [
+      {
+        "tag": "kind",
+        "nativeMember": "kind",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Kind"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "x",
+        "nativeMember": "x",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "X"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "y",
+        "nativeMember": "y",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Y"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "weaponact",
+        "nativeMember": "weapon_action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "WeaponAct"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "attacking",
+        "nativeMember": "attacking",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Attacking"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "cover",
+        "nativeMember": "cover",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Cover"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvx",
+        "nativeMember": "dvx",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Dvx"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvy",
+        "nativeMember": "dvy",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Dvy"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvz",
+        "nativeMember": "dvz",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Dvz"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "Q03-PROGRESS-REPORT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      }
+    ],
+    "count": 9,
+    "unityCount": 9
+  },
+  "opoint": {
+    "fields": [
+      {
+        "tag": "kind",
+        "nativeMember": "kind",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Kind"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "x",
+        "nativeMember": "x",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "X"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "y",
+        "nativeMember": "y",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Y"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "z",
+        "nativeMember": "z",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "action",
+        "nativeMember": "action",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Action"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvx",
+        "nativeMember": "dvx",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Dvx"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvy",
+        "nativeMember": "dvy",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Dvy"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "dvz",
+        "nativeMember": "dvz",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "oid",
+        "nativeMember": "object_id",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Oid"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "facing",
+        "nativeMember": "facing",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": {
+          "type": "int",
+          "name": "Facing"
+        },
+        "status": "SHAPE_PRESENT_CONSUMER_AUDIT_PENDING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "hp",
+        "nativeMember": "hp",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "mp",
+        "nativeMember": "mp",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "team",
+        "nativeMember": "team",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "reserve",
+        "nativeMember": "reserve",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "effect",
+        "nativeMember": "effect",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "pic",
+        "nativeMember": "pic",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "DECODED_CONTENT_PRESERVED_NO_CONFIRMED_CURRENT_GAMEPLAY_READER"
+      },
+      {
+        "tag": "centerx",
+        "nativeMember": "center_x",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "centery",
+        "nativeMember": "center_y",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "centerz",
+        "nativeMember": "center_z",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "framea",
+        "nativeMember": "frame_a",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "attacking",
+        "nativeMember": "attacking",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "DECODED_CONTENT_PRESERVED_NO_CONFIRMED_CURRENT_GAMEPLAY_READER"
+      },
+      {
+        "tag": "join",
+        "nativeMember": "join",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "join_reserve",
+        "nativeMember": "join_reserve",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      },
+      {
+        "tag": "join_pic",
+        "nativeMember": "join_pic",
+        "nativeType": "int32",
+        "nativeDefault": 0,
+        "lookup": "exact-case last field",
+        "parse": "value_or_zero",
+        "unity": null,
+        "status": "MISSING",
+        "contractStatus": "DEFINED_FOR_Q05_CONTENT_Q06_CONSUMER",
+        "contractReference": "OPOINT-AND-HELD-DEPTH-CONTRACT.md",
+        "consumerDisposition": "CURRENT_LIVE_READER_CONTRACT_RECORDED_IMPLEMENTATION_NOT_CERTIFIED"
+      }
+    ],
+    "count": 24,
+    "unityCount": 8
+  }
+}

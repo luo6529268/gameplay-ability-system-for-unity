@@ -30,12 +30,10 @@ namespace NTSD.Simulation
             EffectDvx = entity.Effect.Dvx;
             EffectDvy = entity.Effect.Dvy;
             EffectStuck = entity.Effect.Stuck;
-            EffectOscillate = entity.Effect.Oscillate;
             EffectBlink = entity.Effect.Blink;
             EffectSuper = entity.Effect.Super;
             EffectTimeIn = entity.Effect.TimeIn;
             EffectTimeOut = entity.Effect.TimeOut;
-            EffectOscillateDirection = entity.Effect.OscillateDirection;
             EffectBlinkCounter = entity.Effect.BlinkCounter;
 
             PhysicsGroundY = entity.PS.groundY;
@@ -65,12 +63,10 @@ namespace NTSD.Simulation
         public float EffectDvx { get; }
         public float EffectDvy { get; }
         public bool EffectStuck { get; }
-        public int EffectOscillate { get; }
         public bool EffectBlink { get; }
         public bool EffectSuper { get; }
         public int EffectTimeIn { get; }
         public int EffectTimeOut { get; }
-        public int EffectOscillateDirection { get; }
         public int EffectBlinkCounter { get; }
         public float PhysicsGroundY { get; }
         public bool PhysicsFacingLeft { get; }

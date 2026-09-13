@@ -1,0 +1,6 @@
+<armor>
+type: 1 ratio: 20 hp: 100 frame: 1 8 state: 3 sound1: a.wav
+<armor_end>
+<frame> 1 fixture
+wait: 0
+<frame_end>

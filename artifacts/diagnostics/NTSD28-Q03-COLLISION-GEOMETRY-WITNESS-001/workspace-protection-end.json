@@ -1,0 +1,22 @@
+{
+  "capturedUtc": "2026-09-13T00:39:55.836021+00:00",
+  "baselineCount": 3059,
+  "unchanged": 3047,
+  "priorDeclaredQ02Changes": [
+    "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+    "Assets/NTSD/Scripts/Animation/LF2ObjectPool.cs",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/Runtime/BMPLoader.cs",
+    "Assets/NTSD/Scripts/App/AppManager.cs",
+    "Assets/NTSD/Scripts/App/GameConfig.cs",
+    "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs",
+    "Assets/NTSD/Scripts/UI/CharacterUIResourceManager.cs",
+    "Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs",
+    "Assets/NTSD/Scripts/UI/SelectRoleItem.cs"
+  ],
+  "missing": [],
+  "q03ReadStateIdentitiesChecked": 50,
+  "q03ReadStateDrift": []
+}

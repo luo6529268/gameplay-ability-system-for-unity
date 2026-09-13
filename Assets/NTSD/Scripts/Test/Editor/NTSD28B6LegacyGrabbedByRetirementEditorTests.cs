@@ -19,7 +19,7 @@ namespace NTSD.Test.Editor
     {
         [TestCase(false)]
         [TestCase(true)]
-        public void GenericHoldAndOpoint_KeepReservedDefaultThroughoutRelease(bool opoint)
+        public void GenericHoldAndOpoint_KeepCanonicalRelationThroughoutRelease(bool opoint)
         {
             var holder = new LF2Character();
             var child = new LF2OtherObject();
@@ -30,7 +30,6 @@ namespace NTSD.Test.Editor
                 resolver.AttachOpointHeldObject(child);
             else
                 resolver.HoldWeapon(child);
-            int heldGrabbedBy = child.GrabbedBy;
             Assert.That(holder.Runtime.LinkState, Is.EqualTo(1));
             Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(77));
             Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
@@ -41,9 +40,6 @@ namespace NTSD.Test.Editor
             Assert.That(holder.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
-            Assert.That(holder.GrabbedBy, Is.Zero);
-            Assert.That(child.GrabbedBy, Is.Zero);
-            Assert.That(heldGrabbedBy, Is.Zero);
         }
 
         [TestCase(1, 1, -1)]
@@ -64,8 +60,6 @@ namespace NTSD.Test.Editor
             Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(399));
             Assert.That(child.Runtime.LinkState, Is.EqualTo(expectedChildLink));
             Assert.That(child.Runtime.HolderStableId, Is.Zero);
-            Assert.That(holder.GrabbedBy, Is.Zero);
-            Assert.That(child.GrabbedBy, Is.Zero);
         }
     }
 }
@@ -182,8 +176,8 @@ namespace NTSD.Test.Editor
 
         private static void CheckReserved(LF2Entity parent, LF2Entity child)
         {
-            Assert.That(parent.GrabbedBy, Is.Zero); Assert.That(child.GrabbedBy, Is.Zero);
-            Assert.That(parent.TrackerFlag, Is.Zero); Assert.That(child.TrackerFlag, Is.Zero);
+            Assert.That(typeof(LF2Entity).GetMember("GrabbedBy"), Is.Empty);
+            Assert.That(typeof(LF2Entity).GetMember("TrackerFlag"), Is.Empty);
             Assert.That(parent.TrackerParent, Is.Null); Assert.That(child.TrackerParent, Is.Null);
             Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
             Assert.That(parent.Runtime.ReleaseTick, Is.EqualTo(-1)); Assert.That(child.Runtime.ReleaseTick, Is.EqualTo(-1));
@@ -197,7 +191,7 @@ namespace NTSD.Test.Editor
             public int startTick, endTick, beforeObjects, afterObjects;
             public int opointSourceOid, opointSourceAction, opointChildAction;
             public bool opointReservedAndLifecycle;
-            public string reservedContract = "GrabbedBy0;TrackerFlag0;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99";
+            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99";
             public string scope = "Existing G16 actual pickup/replacement driver witnesses plus current OPoint kind2 ->213 PostInitLiving seam in live world, explicit action injection, full tick and unregister lifecycle; no physical input/full skill emission claim.";
         }
     }

@@ -1,0 +1,187 @@
+[
+  {
+    "id": "positive_zero",
+    "path": "fixtures/positive_zero.dat",
+    "sha256": "2C9DCCCE1CBEA1D88D8B257C47D4E046A08D049887CF5905E2EBCB1F9E177A5B"
+  },
+  {
+    "id": "negative_zero",
+    "path": "fixtures/negative_zero.dat",
+    "sha256": "77FAE8F788D03932E3032D1BE2846DBA5D91553977192DDFEEF1F8A5D00C6E93"
+  },
+  {
+    "id": "plus_zero",
+    "path": "fixtures/plus_zero.dat",
+    "sha256": "104CD9B308DFFDF7460ADF1A6A384B737890423D6B65B1DFC7F269984C2C886F"
+  },
+  {
+    "id": "fraction",
+    "path": "fixtures/fraction.dat",
+    "sha256": "766E93D15D7CA68E211AD7066B500669A2DC718432787116D28CC3791E916701"
+  },
+  {
+    "id": "negative_fraction",
+    "path": "fixtures/negative_fraction.dat",
+    "sha256": "6D25C014457A1840A7E24E6288E44378C8FE4B13BD1C1B8F448049E51A1E965D"
+  },
+  {
+    "id": "sentinel_rounding",
+    "path": "fixtures/sentinel_rounding.dat",
+    "sha256": "99B5982EAF2CA7F740A6762A72F018B2F248B69C4F223F49E877D7C493044E87"
+  },
+  {
+    "id": "smallest_subnormal",
+    "path": "fixtures/smallest_subnormal.dat",
+    "sha256": "F82B4B5C6EA88C3DA7BF65B2B98F0C9F2627E9D65D667C9A1CAB3D7B1672CC60"
+  },
+  {
+    "id": "underflow",
+    "path": "fixtures/underflow.dat",
+    "sha256": "BE53CB7C8332002C41AD4C898263073E7D57E13C2168861EC622AC093E42A359"
+  },
+  {
+    "id": "negative_underflow",
+    "path": "fixtures/negative_underflow.dat",
+    "sha256": "C9F685BE2CD6355AE65DA210986EAA685E53760A64F5AC94AD8C07ACD99BCF6A"
+  },
+  {
+    "id": "minimum_normal",
+    "path": "fixtures/minimum_normal.dat",
+    "sha256": "0D990C5D5B419AC0AA0E82AF7A8E681701876B5330131E157C24D598E5EE9EAE"
+  },
+  {
+    "id": "round_tie_even",
+    "path": "fixtures/round_tie_even.dat",
+    "sha256": "2C27FC08C58194B80B289EAB385AA4BD8994C65635D3545C81B2B5F2F86B479A"
+  },
+  {
+    "id": "round_just_above",
+    "path": "fixtures/round_just_above.dat",
+    "sha256": "6A8A3FBFAE13ACE813F1E5C9FE83AF08C108B2846D06AE7AC5637BDA4827714B"
+  },
+  {
+    "id": "max_finite",
+    "path": "fixtures/max_finite.dat",
+    "sha256": "89585007B3CFAC8FBF638DD8C387874AC897CA78D469B85209DB18D55140E055"
+  },
+  {
+    "id": "overflow",
+    "path": "fixtures/overflow.dat",
+    "sha256": "E9D9DAC5E4B7DD1FB8ABB9021401F9C52D04890548E88AD9C2026456A359F69F"
+  },
+  {
+    "id": "negative_overflow",
+    "path": "fixtures/negative_overflow.dat",
+    "sha256": "5A3BD8FB1A9C27065980DB47C06E84955ED36B834E3DB2A03E783267342547B9"
+  },
+  {
+    "id": "infinity",
+    "path": "fixtures/infinity.dat",
+    "sha256": "3EE837CFB7FC2467978F95CA451640019352C1983741D28AC7A58FB21F10EBFE"
+  },
+  {
+    "id": "negative_infinity",
+    "path": "fixtures/negative_infinity.dat",
+    "sha256": "6F583F373923A23DBCB9503FF30172C8E95CC2B3C1A85E3EE30543A57F6AF33A"
+  },
+  {
+    "id": "nan",
+    "path": "fixtures/nan.dat",
+    "sha256": "13BC37AFAB33FF16F241D75D8A5962F0361DF3522665D6F71445F01304832A16"
+  },
+  {
+    "id": "nan_payload",
+    "path": "fixtures/nan_payload.dat",
+    "sha256": "733A0F28FDBA1D3E8AC650BDB6199F039E4976896A918B76BB0A69E022AFECD5"
+  },
+  {
+    "id": "hex_float",
+    "path": "fixtures/hex_float.dat",
+    "sha256": "5ACE42B8754AC2234248CF87EB0ECB60A952BC4D6440225556CE896A2E4C360F"
+  },
+  {
+    "id": "hex_subnormal",
+    "path": "fixtures/hex_subnormal.dat",
+    "sha256": "635F77F5006932E9D38679A276D9CA5E6FB8871DD993E3E24BC421BE3C47EF5F"
+  },
+  {
+    "id": "hex_integer",
+    "path": "fixtures/hex_integer.dat",
+    "sha256": "9FDE8954A4851C567B147139ACD0FFC6CBE0B160E4FAE1C80416AEDA2B0785E1"
+  },
+  {
+    "id": "exponent",
+    "path": "fixtures/exponent.dat",
+    "sha256": "7977C8F16754C16AFABC5D378737E26C0137FE0054168FAE2C4AD88DF270766C"
+  },
+  {
+    "id": "leading_plus",
+    "path": "fixtures/leading_plus.dat",
+    "sha256": "549FC18D50A4AC52AF4B8957BAB348D26161F1D27F12C9F4129D5ED5E857626A"
+  },
+  {
+    "id": "decimal_prefix",
+    "path": "fixtures/decimal_prefix.dat",
+    "sha256": "4A56561BD615B5BC04D5DE1F8B8D37DF7850A2AC48EB5A94EED0FBF5E71F63E3"
+  },
+  {
+    "id": "comma_decimal",
+    "path": "fixtures/comma_decimal.dat",
+    "sha256": "25F23554AD9444BE80591F00C09384BE155A987E659861D3B374B19A5882809C"
+  },
+  {
+    "id": "leading_dot",
+    "path": "fixtures/leading_dot.dat",
+    "sha256": "2F794A3972C2B048F46389E546BF090C4B122FC7D1F49F90F36D9F34D23C48FA"
+  },
+  {
+    "id": "leading_zeros",
+    "path": "fixtures/leading_zeros.dat",
+    "sha256": "5B7533DAD17C49AE060C0FF7794CD462E28A2B94B1072D38454738E724621A71"
+  },
+  {
+    "id": "int_max",
+    "path": "fixtures/int_max.dat",
+    "sha256": "EDA92312829E964508FA691FA2A28BE66278EEB0AE0761ACD338E3310B1A7684"
+  },
+  {
+    "id": "int_overflow",
+    "path": "fixtures/int_overflow.dat",
+    "sha256": "A531EF75FA6AC8F64EC8FCD09DD563BB705B22227F4BD98D452F916FDE2194F9"
+  },
+  {
+    "id": "int_min",
+    "path": "fixtures/int_min.dat",
+    "sha256": "A992E61D0462A0A9E1296DFEAA06935D701D292AC76152946A4979AE557CA91F"
+  },
+  {
+    "id": "int_underflow",
+    "path": "fixtures/int_underflow.dat",
+    "sha256": "5F285ED87DB1B8267E01A4FF0D427655EB78610BF2ADCC0835773D99A046AD65"
+  },
+  {
+    "id": "missing",
+    "path": "fixtures/missing.dat",
+    "sha256": "9BA0CB4652125A78396D021C4CF8EB4057D9AC7C686BDDE9C3750C68990A20C2"
+  },
+  {
+    "id": "duplicate_last",
+    "path": "fixtures/duplicate_last.dat",
+    "sha256": "2FA74FFEDD5E299CD4D7591C63BD35AFC2868FA929B9AE5A5847FF4B6C390886"
+  },
+  {
+    "id": "invalid_last",
+    "path": "fixtures/invalid_last.dat",
+    "sha256": "54431BD7AB03865A49BBF8F6896EA095BA74347D079A8FE7E4C189F03AC4F9E1"
+  },
+  {
+    "id": "uppercase_keys",
+    "path": "fixtures/uppercase_keys.dat",
+    "sha256": "A7F76C2BEF0484EE5E9B581E6F8A97D2C81EBF3C1010D87620B099FB79D7EF0D"
+  },
+  {
+    "id": "packed_actions",
+    "path": "fixtures/packed_actions.dat",
+    "sha256": "16FB7DCADF3F813785BCAFDF1AE8B47415E8BA55E3BA8E72B7DD8D5D39E7F461"
+  }
+]

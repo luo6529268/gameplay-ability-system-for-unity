@@ -1,0 +1,26 @@
+# Q02 E3：source选择、缓存与实际caller合同
+
+状态 DELIVERED_SOURCE_CALLER_CONTRACT_ONLY / IMPLEMENTATION_IN_SEPARATE_DECLARED_CHANGE；E2及其R16 Preparing回访通过出口后进入。父Task为NTSD28-B11-CATALOG-PUBLICATION-CONTRACT-001。总目标及Q02范围保持，不以E2提供显式API代替实际入口接线。
+
+## 恢复与已观察源码
+
+先读CURRENT-AUTHORITY及E2/Preparing当前Record；已完成raw PNG、range、alpha、catalog、candidate/原子发布不要重做。Q02-A-AUDIT的老源码事实须按当前实现理解，不能再把已实现E2写成缺失。
+
+当前LoadingPrewarmController.PrewarmOnceAsync仅以IsPrewarmed早退，创建固定key NTSD.CharacterConfig/NTSD.CharacterSprites的两个task，poolTask.OnCompleted无条件置IsPrewarmed。NTSD_ResourceLoader.AddTask命中cache时直接设置Result/Completed并触发回调，完全跳过Execute；相同key的in-flight task也合并。CreateCharacterConfigTask对manager的ApplyLoadedCharacterConfigs在Execute内，所以缓存命中不会恢复当前owner的配置。CreateCharacterSpriteTask缓存的只是true，不能证明Sprite及UI仍存在或属于该source。
+
+直接BattleTestBootstrap.LoadCharacterDataAsync仍以manager.IsPrewarmCompleted返回或调用旧Parse/LoadSprites；App正式启动SetupBattleCharacters读取当前manager和GameData全局视图。E2现有LoadLoganContentAsync只解决一次明确candidate的发布，不自动决定这些caller应使用哪个source。声音PrepareBattleCuesAsync消费配置中的sound路径，其完成状态/缓存身份还须核验，WAV整体替换未在本Task授权。
+
+## 先冻结再实施
+
+1. 找到唯一实际source选择owner，说明默认旧内容与Q07正式新内容启用时点；给menu预热、直接battle预热、App出生前一致的期望source身份。不得让失败的新版请求自动退回旧内容伪装成功，也不得仅在Setup尾部换目录。
+2. 核查所有IsPrewarmed/IsPrewarmCompleted/固定cachekey读者。区分“候选输入可复用”与“某owner的Unity publication仍就绪”；缓存命中必须核验身份并实际应用所需候选，不能缓存bool作为已发布证据。只改PNG、不同root相同ID、manager销毁/重建和in-flight世代失效均须覆盖。
+3. 复用既有NTSD_ResourceLoader和E2生产方法；保留通用cache、声音及其他domain。不要ClearCache全局、不要创建第二套manager/加载框架。若选择绕过某缓存，必须说明消费者一致性/重新发布/重复加载/性能语义并满足父Task全部出口，不能只为测试容易而缩小任务。
+4. 只有配置/图片/UI以及必要consumer均成功，pool预热和caller整体才可报告完成。先核查实际错误传播，再冻结最小适配；菜单选择/随机/排序/输入、普通UI效果和加载展示不改。
+5. 声音cue的路径与完成状态应区分同源definition与实际WAV资产，不能因D-023 DAT/角色图授权顺便替换全部音频。已观察旧data/001.wav缺失仍为后续音频问题，不为让测试通过填造资源。
+6. 所有新增async工作/缓存持有/候选选择世代必须声明停止接单、失效/释放、幂等与关闭阶段；保留Preparing修复和十一阶段顺序。
+
+审计输出须冻结准确code-path/symbol和单一实施Change，不把入口文件清单当无限授权。可读LoadingPrewarmController、NTSDResourceLoader、CharacterAnimtorManager、BattleTestBootstrap、AppManager.InitializeBattleAsync、NTSDSoundPlayer及相关现有测试；真正修改前建独立Record并更新Ledger/STATE/handoff。
+
+验收覆盖真实caller生产路径的成功/缓存命中/失败/取消/重建/同ID换source、非战斗功能保护、focused与完整SelfCheck及真实Play退出重进。Q02可以合法隔离candidate测试，不等待Q03六DAT转换修复；Q07正式全量启用仍受Q03/Q05/Q06约束。E3及Q02未获证据不得关闭。
+
+审计已完成：同名PRODUCTION-001 Task/Record冻结GameConfig来源选择、完整key候选缓存/locator、owner重建和独立配置值、实际三caller、pool分批预热取消、stage1输入世代失效。通用loader/音频只读保留；初始focused7项已写待RED，生产未修改。本审计交付不等于E3或Q02完成。

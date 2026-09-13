@@ -1,0 +1,67 @@
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Character.cs:79:        internal float MassForFrameAdvance => _mass;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Character.cs:160:            var ctx = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Character.cs:1103:            _mass = NTSDSpec.GetMassOrDefault(characterId);
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:795:            Effect.Oscillate = state.EffectOscillate;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:800:            Effect.OscillateDirection = state.EffectOscillateDirection;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2Entity.cs:5674:            var context = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2LivingObject.cs:81:        public int Oscillate { get; set; } = 0;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2LivingObject.cs:95:        public int OscillateDirection { get; set; } = 1;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2LivingObject.cs:104:            Oscillate = 0;
+Assets\NTSD\Scripts\Animation\LF2Objects\LF2LivingObject.cs:109:            OscillateDirection = 1;
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26680:            MechanicsStepResult movementResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26690:            MechanicsStepResult blockedResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26700:            MechanicsStepResult positiveEdgeResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26709:            MechanicsStepResult negativeEdgeResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26718:            MechanicsStepResult abovePositiveResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26728:            MechanicsStepResult descendingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26737:            MechanicsStepResult risingPositiveResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26749:            MechanicsStepResult caughtMechanicsResult = mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:26781:            mechanics.Step(new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:28501:            partner.Effect.Oscillate = 4;
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:28506:            partner.Effect.OscillateDirection = -1;
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:28515:                   Nearly(effect.Dvy, 0.0) && !effect.Stuck && effect.Oscillate == 0 &&
+Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:28517:                   effect.OscillateDirection == 1 && effect.BlinkCounter == 0;
+Assets\NTSD\Scripts\Test\Editor\BattleWorldEntityBaseShellSnapshotEditorTests.cs:45:            entity.Effect.Oscillate = 22;
+Assets\NTSD\Scripts\Test\Editor\BattleWorldEntityBaseShellSnapshotEditorTests.cs:50:            entity.Effect.OscillateDirection = -1;
+Assets\NTSD\Scripts\Test\Editor\BattleWorldEntityBaseShellSnapshotEditorTests.cs:92:            Assert.That(state.EffectOscillateDirection, Is.EqualTo(-1));
+Assets\NTSD\Scripts\Simulation\Core\NTSDSpec.cs:19:            public readonly int? Oscillate;
+Assets\NTSD\Scripts\Simulation\Core\NTSDSpec.cs:50:                Oscillate = oscillate;
+Assets\NTSD\Scripts\Simulation\Core\NTSDSpec.cs:132:        public static int GetOscillateOrDefault(int objectId) => Get(objectId).Oscillate ?? 0;
+Assets\NTSD\Scripts\Simulation\Core\NTSDSpec.cs:134:        public static float GetMassOrDefault(int objectId)
+Assets\NTSD\Scripts\Test\Editor\FrameAdvanceRuntimeSnapshotEditorTests.cs:124:            var compatibilityContext = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\Editor\FrameAdvanceRuntimeSnapshotEditorTests.cs:131:            var battleContext = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\Editor\FrameAdvanceRuntimeSnapshotEditorTests.cs:155:            var context = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\Editor\FrameAdvanceRuntimeSnapshotEditorTests.cs:214:            var compatibilityContext = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Test\Editor\FrameAdvanceRuntimeSnapshotEditorTests.cs:221:            var battleContext = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Simulation\Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:33:            EffectOscillate = entity.Effect.Oscillate;
+Assets\NTSD\Scripts\Simulation\Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:38:            EffectOscillateDirection = entity.Effect.OscillateDirection;
+Assets\NTSD\Scripts\Simulation\Lockstep\Snapshot\BattleWorldEntityBaseShellSnapshot.cs:73:        public int EffectOscillateDirection { get; }
+Assets\NTSD\Scripts\Test\Editor\NTSD28B4Type0PhysicsCoreEditorTests.cs:75:            var context = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Simulation\Lockstep\Snapshot\BattleWorldCharacterShellSnapshot.cs:14:            Mass = character.MassForFrameAdvance;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B4State1218ContactActionEditorTests.cs:23:            var context = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Simulation\Ecs\Passes\BattleEcsCharacterFrameAdvancePass.cs:119:            var context = new CharacterMechanicsContext(
+Assets\NTSD\Scripts\Simulation\Ecs\Passes\BattleEcsCharacterFrameAdvancePass.cs:123:                character.MassForFrameAdvance,
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:25:            entity.Effect.Oscillate = initialOscillate;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:40:                entity.Effect.Oscillate,
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:42:                "EffectCreate must not derive Oscillate from the retired old effect ID table.");
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:55:            entity.Effect.Oscillate = initialOscillate;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:67:            Assert.That(entity.Effect.Oscillate, Is.EqualTo(initialOscillate));
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:78:            entity.Effect.Oscillate = initialOscillate;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:87:            Assert.That(entity.Effect.Oscillate, Is.EqualTo(initialOscillate));
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:98:            entity.Effect.Oscillate = 7;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:103:            entity.Effect.OscillateDirection = -1;
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:112:            Assert.That(entity.Effect.Oscillate, Is.EqualTo(7));
+Assets\NTSD\Scripts\Test\Editor\NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs:117:            Assert.That(entity.Effect.OscillateDirection, Is.EqualTo(-1));
+Assets\NTSD\Scripts\Test\Editor\NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs:80:            Assert.That(entity, Does.Not.Contain("NTSDSpec.GetMassOrDefault"));
+Assets\NTSD\Scripts\Test\Editor\NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs:82:                Count(character, "NTSDSpec.GetMassOrDefault"),
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillatePlayProbeEditor.cs:16:        [MenuItem("NTSD/Battle Diagnostics/Q04/Run Oscillate Consumer Play Probe")]
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillatePlayProbeEditor.cs:71:                entity.Effect.Oscillate = 7;
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillatePlayProbeEditor.cs:72:                entity.Effect.OscillateDirection = 1;
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillatePlayProbeEditor.cs:76:                    (renderer == null || renderer.transform.localPosition == testPosition) && entity.Effect.OscillateDirection == 1,
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillatePlayProbeEditor.cs:93:                    entity.Effect.Oscillate == 7 && entity.Effect.OscillateDirection == 1 &&
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillateConsumerEditorTests.cs:102:            entity.Effect.Oscillate = amplitude;
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillateConsumerEditorTests.cs:103:            entity.Effect.OscillateDirection = 1;
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillateConsumerEditorTests.cs:110:            Assert.That(entity.Effect.Oscillate, Is.EqualTo(amplitude), "Carrier remains until Q05");
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04OscillateConsumerEditorTests.cs:111:            Assert.That(entity.Effect.OscillateDirection, Is.EqualTo(1));
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:42:                var context = new CharacterMechanicsContext(runtime, null, 0, mass, 0, 1.7);
+Assets\NTSD\Scripts\Test\Editor\NTSD28Q04MassFrictionGateEditorTests.cs:87:                Assert.That(character.MassForFrameAdvance, Is.EqualTo(mass), "Q05 carrier must remain in this package");

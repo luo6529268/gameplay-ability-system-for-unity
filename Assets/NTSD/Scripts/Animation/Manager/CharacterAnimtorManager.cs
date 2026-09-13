@@ -27,6 +27,430 @@ namespace NTSD.Animation
     {
         public bool IsPrewarmCompleted { get; private set; }
         public event System.Action PrewarmCompleted;
+        public string PublishedVisualContentKey { get; private set; }
+        private LoganVisualContentCandidate publishedLoganCandidate;
+        private int configuredContentGeneration;
+        private bool configuredPrewarmRunning;
+        private string configuredPrewarmRoot;
+        private NTSD.App.GameConfig configuredPrewarmConfig;
+        private UniTask<string> configuredPrewarmTask;
+        private List<Action<string>> configuredProgressCallbacks;
+        public long ConfiguredCandidateCacheHitCount { get; private set; }
+        internal int ConfiguredContentGeneration => configuredContentGeneration;
+        internal static string ConfiguredContentRoot => NTSD.App.GameConfig.Instance?.BattleContentRuntimeRoot?.Trim() ?? string.Empty;
+        internal static bool HasConfiguredLoganContent => ConfiguredContentRoot.Length != 0;
+        internal bool IsPublishedContentUsable => publishedLoganCandidate != null
+            ? IsLoganPublicationCurrent(publishedLoganCandidate)
+            : IsPrewarmCompleted && !spritePrewarmDisposed && PublishedVisualContentKey == null;
+
+        private static BattleContentSource ResolveConfiguredLoganSource(string root)
+        {
+            return BattleContentSource.ForLoganRuntime(Path.GetFullPath(Path.Combine(Application.dataPath, "..", root)));
+        }
+
+        internal bool CanContinueConfiguredContent(int generation)
+        {
+            return this != null && !spritePrewarmDisposed && generation == configuredContentGeneration &&
+                ReferenceEquals(TryGetInstance(), this) &&
+                ReferenceEquals(configuredPrewarmConfig, NTSD.App.GameConfig.Instance) &&
+                string.Equals(configuredPrewarmRoot, ConfiguredContentRoot, StringComparison.Ordinal) &&
+                NativeContentBoundaryIsOpen();
+        }
+
+        public void CancelConfiguredContentPrewarm()
+        {
+            configuredContentGeneration++;
+            configuredPrewarmRunning = false;
+            CancelNativeContentPrewarm();
+        }
+
+        public UniTask<string> PrewarmConfiguredLoganContentAsync(Action<string> onProgressText = null)
+        {
+            if (!HasConfiguredLoganContent || spritePrewarmDisposed || !ReferenceEquals(TryGetInstance(), this) || !NativeContentBoundaryIsOpen())
+                throw new InvalidOperationException("Configured Logan prewarm requires an inactive battle and a selected source.");
+            if (configuredPrewarmRunning && CanContinueConfiguredContent(configuredContentGeneration))
+            {
+                if (onProgressText != null) configuredProgressCallbacks.Add(onProgressText);
+                return configuredPrewarmTask;
+            }
+            BattleContentSource source = ResolveConfiguredLoganSource(ConfiguredContentRoot);
+            CancelConfiguredContentPrewarm();
+            configuredPrewarmConfig = NTSD.App.GameConfig.Instance;
+            configuredPrewarmRoot = ConfiguredContentRoot;
+            int generation = configuredContentGeneration;
+            var callbacks = new List<Action<string>>();
+            if (onProgressText != null) callbacks.Add(onProgressText);
+            configuredProgressCallbacks = callbacks;
+            configuredPrewarmRunning = true;
+            configuredPrewarmTask = PrewarmConfiguredLoganContentCoreAsync(
+                source, generation, callbacks).Preserve();
+            return configuredPrewarmTask;
+        }
+
+        private async UniTask<string> PrewarmConfiguredLoganContentCoreAsync(
+            BattleContentSource source, int generation, List<Action<string>> callbacks)
+        {
+            try
+            {
+                var loader = NTSD.Load.NTSD_ResourceLoader.Instance;
+                string locatorKey = "NTSD.LoganContent.Root::" + source.RuntimeRoot;
+                LoganVisualContentCandidate candidate = null;
+                if (loader.TryGetCache(locatorKey, out object located) && located is string inputKey &&
+                    loader.TryGetCache(inputKey, out object cached) && cached is LoganVisualContentCandidate existing &&
+                    string.Equals(existing.Catalog.Source.RuntimeRoot, source.RuntimeRoot, StringComparison.Ordinal))
+                {
+                    try
+                    {
+                        await UniTask.RunOnThreadPool(existing.AssertInputsCurrent);
+                        candidate = existing;
+                    }
+                    catch (Exception error) when (error is IOException || error is InvalidDataException)
+                    {
+                        candidate = null;
+                    }
+                    await UniTask.SwitchToMainThread();
+                    RequireConfiguredContentScope(generation);
+                    if (candidate != null) ConfiguredCandidateCacheHitCount++;
+                    else loader.RemoveCache(locatorKey);
+                }
+                if (candidate == null)
+                    candidate = await UniTask.RunOnThreadPool(() => LoganVisualContentCandidate.Capture(source));
+                await UniTask.SwitchToMainThread();
+                RequireConfiguredContentScope(generation);
+                string candidateKey = "NTSD.LoganContent.Input::" + candidate.SourceCacheKey;
+                loader.CacheResult(candidateKey, candidate);
+                loader.CacheResult(locatorKey, candidateKey);
+
+                if (!IsLoganPublicationCurrent(candidate))
+                {
+                    bool committed = await LoadLoganContentWithScopeAsync(candidate, GameDataManager.Instance,
+                        CharacterUIResourceManager.Instance, text =>
+                        {
+                            foreach (Action<string> callback in callbacks.ToArray())
+                            {
+                                if (!CanContinueConfiguredContent(generation)) break;
+                                callback(text);
+                            }
+                        }, () => CanContinueConfiguredContent(generation));
+                    RequireConfiguredContentScope(generation);
+                    if (!committed) throw new OperationCanceledException("Configured content publication was cancelled.");
+                }
+                RequireConfiguredContentScope(generation);
+                if (!IsLoganPublicationCurrent(candidate))
+                    throw new InvalidOperationException("Configured content publication is incomplete.");
+                return candidate.SourceCacheKey;
+            }
+            finally
+            {
+                callbacks.Clear();
+                if (generation == configuredContentGeneration) configuredPrewarmRunning = false;
+            }
+        }
+
+        private void RequireConfiguredContentScope(int generation)
+        {
+            if (!CanContinueConfiguredContent(generation))
+                throw new OperationCanceledException("Configured content request is no longer current.");
+        }
+
+        private bool IsLoganPublicationCurrent(LoganVisualContentCandidate candidate)
+        {
+            if (candidate == null || publishedLoganCandidate == null || !IsPrewarmCompleted || spritePrewarmDisposed ||
+                !string.Equals(PublishedVisualContentKey, candidate.SourceCacheKey, StringComparison.Ordinal) ||
+                GameDataManager.TryGetInstance()?.PublishedVisualContentKey != candidate.SourceCacheKey ||
+                CharacterUIResourceManager.TryGetInstance()?.PublishedVisualContentKey != candidate.SourceCacheKey ||
+                TotalCharacterFrameConfig.Count != candidate.Catalog.Entries.Count ||
+                publishedOwnedSprites.Any(value => value == null) || publishedOwnedResources.Any(value => value == null))
+                return false;
+            var ui = CharacterUIResourceManager.TryGetInstance();
+            foreach (var entry in candidate.Catalog.Entries)
+            {
+                if (!TotalCharacterFrameConfig.TryGetValue(entry.Id, out var config) || config?.characterData == null ||
+                    GameDataManager.TryGetInstance().GetObjectById(entry.Id) == null)
+                    return false;
+                if (!string.IsNullOrEmpty(config.characterData.head) && ui.GetHeadSprite(entry.Id) == null)
+                    return false;
+                if (!string.IsNullOrEmpty(config.characterData.small) && ui.GetSmallSprite(entry.Id) == null)
+                    return false;
+            }
+            return true;
+        }
+
+        public async UniTask<string> ValidateConfiguredContentForBattleAsync()
+        {
+            var config = NTSD.App.GameConfig.Instance;
+            string root = ConfiguredContentRoot;
+            if (root.Length == 0)
+            {
+                if (!IsPrewarmCompleted || spritePrewarmDisposed || PublishedVisualContentKey != null ||
+                    GameDataManager.TryGetInstance()?.PublishedVisualContentKey != null ||
+                    CharacterUIResourceManager.TryGetInstance()?.PublishedVisualContentKey != null)
+                    throw new InvalidOperationException("The selected legacy content has no current publication.");
+                return null;
+            }
+            LoganVisualContentCandidate candidate = publishedLoganCandidate;
+            if (candidate == null || !string.Equals(candidate.Catalog.Source.RuntimeRoot,
+                    ResolveConfiguredLoganSource(root).RuntimeRoot, StringComparison.Ordinal) || !IsLoganPublicationCurrent(candidate))
+                throw new InvalidOperationException("The selected Logan source is not the current publication.");
+            await UniTask.RunOnThreadPool(candidate.AssertInputsCurrent);
+            await UniTask.SwitchToMainThread();
+            if (this == null || !ReferenceEquals(config, NTSD.App.GameConfig.Instance) || root != ConfiguredContentRoot ||
+                !ReferenceEquals(candidate, publishedLoganCandidate) || !IsLoganPublicationCurrent(candidate))
+                throw new InvalidOperationException("Content changed while validating battle entry.");
+            return candidate.SourceCacheKey;
+        }
+
+        public async UniTask AssertConfiguredContentUnchangedAsync(string expectedContentKey)
+        {
+            if (!string.Equals(await ValidateConfiguredContentForBattleAsync(), expectedContentKey, StringComparison.Ordinal))
+                throw new InvalidOperationException("Battle content changed during preparation.");
+        }
+
+        private sealed class NativePrewarmOperation
+        {
+            internal int Invocation;
+            internal bool Cancelled;
+            internal bool Committed;
+            internal LoganVisualContentCandidate Candidate;
+            internal GameDataManager Data;
+            internal CharacterUIResourceManager UI;
+            internal Func<bool> CanContinue;
+            internal readonly HashSet<Sprite> Sprites = new HashSet<Sprite>();
+            internal readonly HashSet<Texture2D> Textures = new HashSet<Texture2D>();
+            internal readonly HashSet<UnityEngine.Object> Resources = new HashSet<UnityEngine.Object>();
+        }
+
+        private readonly HashSet<NativePrewarmOperation> nativePrewarmOperations = new HashSet<NativePrewarmOperation>();
+        private NativePrewarmOperation activeNativePrewarm;
+        private readonly HashSet<Sprite> legacyOwnedUiSprites = new HashSet<Sprite>();
+        private readonly HashSet<UnityEngine.Object> legacyOwnedUiResources = new HashSet<UnityEngine.Object>();
+        private readonly Dictionary<Sprite, int> legacyOwnedUiHeads = new Dictionary<Sprite, int>();
+        private Dictionary<Sprite, int> publishedUiHeadIds = new Dictionary<Sprite, int>();
+
+        public int NativeStagedResourceCount
+        {
+            get
+            {
+                var resources = new HashSet<UnityEngine.Object>();
+                foreach (NativePrewarmOperation operation in nativePrewarmOperations)
+                {
+                    if (operation.Committed) continue;
+                    foreach (Sprite value in operation.Sprites) if (value != null) resources.Add(value);
+                    foreach (Texture2D value in operation.Textures) if (value != null) resources.Add(value);
+                    foreach (UnityEngine.Object value in operation.Resources) if (value != null) resources.Add(value);
+                }
+                return resources.Count;
+            }
+        }
+
+        internal static bool NativeContentBoundaryAllows(NTSD.Simulation.BattleRuntimeLifecycleState lifecycle,
+            int objectCount, bool sealedData, bool appBlocked)
+        {
+            return !appBlocked && objectCount == 0 && !sealedData &&
+                lifecycle != NTSD.Simulation.BattleRuntimeLifecycleState.Running &&
+                lifecycle != NTSD.Simulation.BattleRuntimeLifecycleState.Stopping;
+        }
+
+        private static bool NativeContentBoundaryIsOpen()
+        {
+            var driver = NTSD.Simulation.SimulationTickDriver.Instance;
+            var world = driver != null ? driver.World : null;
+            var app = NTSD.App.AppManager.Instance;
+            bool appBlocked = app != null && (app.State == NTSD.App.AppFlowState.BattleLoading ||
+                app.State == NTSD.App.AppFlowState.BattleRunning || app.State == NTSD.App.AppFlowState.BattlePaused ||
+                app.State == NTSD.App.AppFlowState.BattleStopping || app.State == NTSD.App.AppFlowState.MenuSelectCharacter);
+            return NativeContentBoundaryAllows(driver != null ? driver.LifecycleState : NTSD.Simulation.BattleRuntimeLifecycleState.Uninitialized,
+                world != null ? Math.Max(world.ObjectCount, world.ClaimedRuntimeSlotCountForServices) : 0,
+                world != null && world.RuntimeDataCatalog.IsSealedForBattle, appBlocked);
+        }
+
+        public UniTask<bool> LoadLoganContentAsync(LoganVisualContentCandidate candidate, Action<string> onProgressText = null)
+        {
+            if (candidate == null) throw new ArgumentNullException(nameof(candidate));
+            if (spritePrewarmDisposed || !NativeContentBoundaryIsOpen())
+                throw new InvalidOperationException("Native content cannot change across an active battle boundary.");
+            return LoadLoganContentForOwnersAsync(candidate, GameDataManager.Instance, CharacterUIResourceManager.Instance, onProgressText);
+        }
+
+        internal UniTask<bool> LoadLoganContentForOwnersAsync(LoganVisualContentCandidate candidate,
+            GameDataManager data, CharacterUIResourceManager ui, Action<string> onProgressText)
+        {
+            return LoadLoganContentWithScopeAsync(candidate, data, ui, onProgressText, null);
+        }
+
+        private async UniTask<bool> LoadLoganContentWithScopeAsync(LoganVisualContentCandidate candidate,
+            GameDataManager data, CharacterUIResourceManager ui, Action<string> onProgressText, Func<bool> canContinue)
+        {
+            if (candidate == null || data == null || ui == null)
+                throw new ArgumentException("A bound candidate and live publication owners are required.");
+            if (spritePrewarmDisposed || !NativeContentBoundaryIsOpen())
+                throw new InvalidOperationException("Native content cannot change across an active battle boundary.");
+            CancelNativeContentPrewarm();
+            ReleaseCancelledNativeContentStaging();
+            var operation = new NativePrewarmOperation { Candidate = candidate, Data = data, UI = ui, CanContinue = canContinue };
+            nativePrewarmOperations.Add(operation);
+            activeNativePrewarm = operation;
+            try
+            {
+                return await LoadCharacterSpritesCoreAsync(onProgressText, operation);
+            }
+            catch (OperationCanceledException) when (!operation.Committed)
+            {
+                return false;
+            }
+            catch (Exception) when (!operation.Committed && !CanCompleteSpritePrewarmInvocation(operation.Invocation))
+            {
+                return false;
+            }
+            finally
+            {
+                if (!operation.Committed)
+                {
+                    operation.Cancelled = true;
+                    await UniTask.SwitchToMainThread();
+                    RecycleNativeStaging(operation);
+                }
+                nativePrewarmOperations.Remove(operation);
+                if (ReferenceEquals(activeNativePrewarm, operation)) activeNativePrewarm = null;
+            }
+        }
+
+        public void CancelNativeContentPrewarm()
+        {
+            bool invalidated = false;
+            foreach (NativePrewarmOperation operation in nativePrewarmOperations)
+            {
+                if (operation.Committed) continue;
+                operation.Cancelled = true;
+                invalidated = true;
+            }
+            if (invalidated) spritePrewarmGeneration++;
+        }
+
+        public void ReleaseCancelledNativeContentStaging()
+        {
+            foreach (NativePrewarmOperation operation in nativePrewarmOperations)
+                if (operation.Cancelled && !operation.Committed) RecycleNativeStaging(operation);
+        }
+
+        private static void RecycleNativeStaging(NativePrewarmOperation operation)
+        {
+            foreach (Texture2D texture in operation.Textures) operation.Resources.Add(texture);
+            DestroyStagedPresentation(operation.Sprites, operation.Resources);
+            operation.Sprites.Clear();
+            operation.Textures.Clear();
+            operation.Resources.Clear();
+        }
+
+        private async UniTask<Dictionary<int, CharacterUISprites>> PrepareNativeUISpritesAsync(
+            NativePrewarmOperation operation, Dictionary<int, LF2CharacterDataWrapper> configs, Action<string> progress)
+        {
+            var result = new Dictionary<int, CharacterUISprites>();
+            foreach (var config in configs.Values)
+            {
+                if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+                Sprite head = null;
+                Sprite small = null;
+                if (!string.IsNullOrEmpty(config.characterData.head))
+                    head = await LoadNativeUISpriteAsync(operation, config.characterData.head, progress);
+                if (!string.IsNullOrEmpty(config.characterData.small))
+                    small = await LoadNativeUISpriteAsync(operation, config.characterData.small, progress);
+                if (head != null || small != null)
+                    result.Add(config.characterId, new CharacterUISprites { HeadSprite = head, SmallSprite = small });
+            }
+            return result;
+        }
+
+        private async UniTask<Sprite> LoadNativeUISpriteAsync(NativePrewarmOperation operation, string path, Action<string> progress)
+        {
+            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+            progress?.Invoke(FormatLoadingResourcePath(path));
+            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+            string hash = operation.Candidate.GetImageSha256(path);
+            BMPLoader.BmpData pixels = await UniTask.RunOnThreadPool(() => BMPLoader.LoadVerifiedImageData(path, hash));
+            await UniTask.SwitchToMainThread();
+            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) throw new OperationCanceledException();
+            if (pixels == null || pixels.Pixels == null)
+                throw new InvalidDataException("Native UI image could not be decoded: " + path);
+            var texture = new Texture2D(pixels.Width, pixels.Height, TextureFormat.RGBA32, false);
+            operation.Textures.Add(texture);
+            operation.Resources.Add(texture);
+            texture.filterMode = FilterMode.Point;
+            texture.wrapMode = TextureWrapMode.Clamp;
+            texture.SetPixels(pixels.Pixels);
+            texture.Apply();
+            Sprite sprite = Sprite.Create(texture, new Rect(0, 0, pixels.Width, pixels.Height), new Vector2(0.5f, 0.5f), 100f);
+            operation.Sprites.Add(sprite);
+            sprite.name = Path.GetFileNameWithoutExtension(path);
+            return sprite;
+        }
+
+        private bool TryCommitNativePublication(NativePrewarmOperation operation,
+            Dictionary<int, LF2CharacterDataWrapper> configs, Dictionary<int, List<Sprite>> sprites,
+            BattleSpriteCatalog catalog, Dictionary<int, CharacterUISprites> uiSprites,
+            BattleCommonVisualCatalog common, string diagnostic)
+        {
+            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation) || operation.Data == null || operation.UI == null)
+                return false;
+            GameDataManager.PreparedObjectPublication objects = operation.Data.PrepareObjectPublication(operation.Candidate);
+            var previousUiHeads = new Dictionary<Sprite, int>(legacyOwnedUiHeads);
+            foreach (var entry in publishedUiHeadIds) previousUiHeads[entry.Key] = entry.Value;
+            var nextUiHeads = new Dictionary<Sprite, int>();
+            foreach (var entry in uiSprites)
+                if (entry.Value.HeadSprite != null) nextUiHeads[entry.Value.HeadSprite] = entry.Key;
+            Action[] rebind = Resources.FindObjectsOfTypeAll<SelectRoleItem>()
+                .Where(IsLoadedSceneRoleView)
+                .Select(view => view.PrepareNativeResourceRebind(configs, uiSprites, operation.UI, previousUiHeads))
+                .Where(action => action != null).ToArray();
+            BattleSpriteCatalog previousCatalog = SpriteCatalog;
+            SpritePublicationOwnership previous = null;
+            if (publishedOwnedSprites.Count > 0 || publishedOwnedResources.Count > 0 || legacyOwnedUiResources.Count > 0)
+            {
+                var oldSprites = new HashSet<Sprite>(publishedOwnedSprites);
+                var oldResources = new HashSet<UnityEngine.Object>(publishedOwnedResources);
+                oldSprites.UnionWith(legacyOwnedUiSprites);
+                oldResources.UnionWith(legacyOwnedUiResources);
+                previous = new SpritePublicationOwnership(previousCatalog, oldSprites, oldResources);
+                retiredSpritePublications.EnsureCapacity(retiredSpritePublications.Count + 1);
+            }
+            if (!CanCompleteSpritePrewarmInvocation(operation.Invocation)) return false;
+
+            // Alignment contract: NTSD28-B11-SOURCE-ATOMIC-PUBLICATION-001
+            // All allocations and input checks precede this no-await publication. Retirement follows UI rebinding.
+            if (previous != null) retiredSpritePublications[previousCatalog] = previous;
+            operation.Data.CommitObjectPublication(objects);
+            operation.UI.CommitNativeSprites(uiSprites, operation.Candidate.SourceCacheKey);
+            TotalCharacterFrameConfig = configs;
+            MergedSprites = sprites;
+            SpriteCatalog = catalog;
+            CommonVisualCatalog = common;
+            publishedOwnedSprites = operation.Sprites;
+            publishedOwnedResources = operation.Resources;
+            pendingCharacterFrameConfig = null;
+            PublishedVisualContentKey = operation.Candidate.SourceCacheKey;
+            publishedLoganCandidate = operation.Candidate;
+            publishedUiHeadIds = nextUiHeads;
+            LastAtlasDiagnostic = diagnostic ?? string.Empty;
+            operation.Committed = true;
+            foreach (Action action in rebind) action();
+            legacyOwnedUiSprites.Clear();
+            legacyOwnedUiResources.Clear();
+            legacyOwnedUiHeads.Clear();
+            IsPrewarmCompleted = true;
+            TryRetireCatalogIfUnbound(previousCatalog);
+            return true;
+        }
+
+        private static bool IsLoadedSceneRoleView(SelectRoleItem view)
+        {
+            if (view == null || !view.gameObject.scene.IsValid() || !view.gameObject.scene.isLoaded)
+                return false;
+#if UNITY_EDITOR
+            if (UnityEditor.SceneManagement.EditorSceneManager.IsPreviewScene(view.gameObject.scene))
+                return false;
+#endif
+            return true;
+        }
 
         const string TotalCharacterFrameConfigPath = "Assets/NTSD/Config/AnimationConfig";
 
@@ -539,6 +963,33 @@ namespace NTSD.Animation
             return result;
         }
 
+        internal static Dictionary<int, LF2CharacterDataWrapper> BuildCharacterFrameConfigsFromCatalog(LoganObjectCatalog catalog)
+        {
+            if (catalog == null)
+                throw new ArgumentNullException(nameof(catalog));
+            var configs = new Dictionary<int, LF2CharacterDataWrapper>(catalog.Entries.Count);
+            var failures = new List<Exception>();
+            foreach (LoganObjectCatalog.Entry entry in catalog.Entries)
+            {
+                try
+                {
+                    LF2CharacterData data = BuildCharacterDataFromSource(entry.DatText, entry.DatPath, catalog.Source);
+                    if (data.type_sub == 0)
+                        data.type_sub = entry.Id;
+                    configs.Add(entry.Id, new LF2CharacterDataWrapper(entry.Id, data));
+                }
+                catch (Exception error)
+                {
+                    failures.Add(new InvalidDataException("Object " + entry.Id + " (" + entry.SourcePath + "): " + error.Message, error));
+                }
+            }
+            // Alignment contract: NTSD28-B11-LOGAN-CATALOG-CONFIG-CANDIDATE-001
+            // A failed source must never return a partial configuration set for publication.
+            if (failures.Count != 0)
+                throw new AggregateException("Logan content candidate failed; no configurations may be published.", failures);
+            return configs;
+        }
+
         public void SetCharacterSprites(int characterId, List<Sprite> sprites)
         {
             if (sprites == null)
@@ -557,13 +1008,46 @@ namespace NTSD.Animation
         /// <param name="datFileDirectory">DAT 文件所在目录（用于解析相对路径）</param>
         private LF2CharacterData BuildCharacterDataFromDat(Lf2DatFile datFile, string datFileDirectory)
         {
+            return BuildCharacterDataCore(datFile, datFileDirectory, null);
+        }
+
+        internal static LF2CharacterData BuildCharacterDataFromSource(
+            string rawText, string datPath, BattleContentSource source)
+        {
+            if (source == null)
+                throw new ArgumentNullException(nameof(source));
+            var parser = new Lf2DatParserV2();
+            Lf2DatFile dat = source.IsLoganRuntime
+                ? parser.ParseLoganContent(rawText, datPath)
+                : parser.Parse(rawText, datPath);
+            return BuildCharacterDataCore(dat, Path.GetDirectoryName(Path.GetFullPath(datPath)), source);
+        }
+
+        private static LF2CharacterData BuildCharacterDataCore(
+            Lf2DatFile datFile, string datFileDirectory, BattleContentSource source)
+        {
             LF2CharacterData characterData = new LF2CharacterData();
+            bool loganContent = source != null && source.IsLoganRuntime;
+            if (loganContent)
+            {
+                if (datFile.LoganStats == null)
+                    throw new InvalidOperationException("Logan metadata requires the native parser entry.");
+                if (datFile.LoganArmors == null)
+                    throw new InvalidOperationException("Logan armor requires the native parser entry.");
+                characterData.NativeMetadata = new LoganDefinitionMetadata(
+                    LoganDefinitionMetadata.CopyFields(datFile.Bmp?.Properties),
+                    LoganDefinitionMetadata.CopyFields(datFile.LoganStats.Properties),
+                    datFile.LoganArmors.Select(armor => LoganDefinitionMetadata.CopyFields(armor.Properties)),
+                    datFile.LoganWeaponPiece == null ? null : new LoganWeaponPieceDefinition(datFile.LoganWeaponPiece));
+            }
 
             // 1. 转换所有帧数据
             characterData.frames = new List<LF2FrameData>();
             foreach (var frameBlock in datFile.Frames)
             {
-                LF2FrameData frameData = Lf2DatConverter.ConvertToFrameData(frameBlock);
+                LF2FrameData frameData = source != null && source.IsLoganRuntime
+                    ? Lf2DatConverter.ConvertLoganFrameData(frameBlock)
+                    : Lf2DatConverter.ConvertToFrameData(frameBlock);
                 if (frameData != null)
                 {
                     characterData.frames.Add(frameData);
@@ -576,47 +1060,12 @@ namespace NTSD.Animation
                 // 设置角色名称
                 characterData.name = datFile.Bmp.Name ?? "Unknown";
 
-                // ⬇️ 需要添加这两行 ⬇️
-                characterData.head = datFile.Bmp.Head ?? "";
-                characterData.small = datFile.Bmp.Small ?? "";
+                characterData.head = source == null ? datFile.Bmp.Head ?? "" : source.ResolveImagePath(datFile.Bmp.Head, datFileDirectory);
+                characterData.small = source == null ? datFile.Bmp.Small ?? "" : source.ResolveImagePath(datFile.Bmp.Small, datFileDirectory);
 
                 // 转换精灵文件信息
-                characterData.files = new List<SpriteFileInfo>();
-
                 Debug.Log($"<color=cyan>[BMP 解析] 角色={characterData.name}, 找到 {datFile.Bmp.Files.Count} 个精灵文件定义</color>");
-
-                foreach (var fileDef in datFile.Bmp.Files)
-                {
-                    string pathInDat = fileDef.Path.Replace("\\", "/");
-                    string absolutePath;
-
-                    // 检查是否为 Unity 项目相对路径（以 Assets/ 开头）
-                    if (pathInDat.StartsWith("Assets/", System.StringComparison.OrdinalIgnoreCase))
-                    {
-                        // 从项目根目录开始解析
-                        string projectRoot = Directory.GetParent(Application.dataPath).FullName;
-                        absolutePath = Path.GetFullPath(Path.Combine(projectRoot, pathInDat));
-                    }
-                    else
-                    {
-                        // 相对于 DAT 文件所在目录
-                        absolutePath = Path.GetFullPath(Path.Combine(datFileDirectory, pathInDat));
-                    }
-
-                    SpriteFileInfo spriteInfo = new SpriteFileInfo
-                    {
-                        filePath = absolutePath,
-                        width = fileDef.Width,
-                        height = fileDef.Height,
-                        row = fileDef.Row,
-                        col = fileDef.Col,
-                        startFrame = fileDef.StartIndex,
-                        endFrame = fileDef.EndIndex
-                    };
-                    characterData.files.Add(spriteInfo);
-
-                    Debug.Log($"<color=cyan>[BMP 文件] {pathInDat} -> {absolutePath}, 范围=[{fileDef.StartIndex}-{fileDef.EndIndex}], 尺寸={fileDef.Width}x{fileDef.Height}, 行列={fileDef.Row}x{fileDef.Col}</color>");
-                }
+                characterData.files = BuildSpriteFilesForSource(datFile, datFileDirectory, source);
             }
             else
             {
@@ -625,30 +1074,86 @@ namespace NTSD.Animation
             }
 
             // 3. 提取移动参数（从根级别的 Properties 或 Blocks 中）
-            ExtractMovementParameters(datFile, characterData);
+            if (loganContent)
+                ExtractLoganMovementParameters(characterData);
+            else
+                ExtractMovementParameters(datFile, characterData);
 
             // 4. 保留2.8原生输入动作路由所需definition字段。
             Lf2DatConverter.ApplyNativeInputDefinitionData(
                 datFile,
-                characterData);
+                characterData, loganContent);
 
             // Armor blocks stay definition data here; activation/runtime HP
             // remain owned by the battle simulation integration packages.
             Lf2DatConverter.ApplyNativeArmorDefinitionData(
                 datFile,
-                characterData);
+                characterData, loganContent);
 
             // 5. 提取武器专用参数（weapon_hp, weapon_strength_list 等）
-            ExtractWeaponParameters(datFile, characterData);
+            ExtractWeaponParameters(datFile, characterData, source != null && source.IsLoganRuntime);
 
             return characterData;
+        }
+
+        internal static List<SpriteFileInfo> BuildSpriteFilesForSource(
+            Lf2DatFile datFile, string datFileDirectory, BattleContentSource source)
+        {
+            var files = new List<SpriteFileInfo>();
+            if (datFile.Bmp == null)
+                return files;
+
+            long nextPic = 0;
+            foreach (var fileDef in datFile.Bmp.Files)
+            {
+                string pathInDat = fileDef.Path.Replace("\\", "/");
+                string absolutePath;
+                if (source != null)
+                    absolutePath = source.ResolveImagePath(pathInDat, datFileDirectory);
+                else if (pathInDat.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
+                    absolutePath = Path.GetFullPath(Path.Combine(Directory.GetParent(Application.dataPath).FullName, pathInDat));
+                else
+                    absolutePath = Path.GetFullPath(Path.Combine(datFileDirectory, pathInDat));
+
+                int first = fileDef.StartIndex;
+                int last = fileDef.EndIndex;
+                if (source != null && source.IsLoganRuntime)
+                {
+                    // Alignment contract: NTSD28-B11-NATIVE-SPRITE-RANGE-CONTRACT-001
+                    // Preserve authored endpoints in the AST; all consumers receive native cumulative ranges.
+                    long product = (long)fileDef.Row * fileDef.Col;
+                    if (product > int.MaxValue || product < int.MinValue)
+                        throw new OverflowException("Sprite sheet capacity exceeds the native integer range.");
+                    long capacity = Math.Max(product, 0L);
+                    first = checked((int)nextPic);
+                    nextPic = checked((int)(nextPic + capacity));
+                    last = checked((int)(nextPic - 1));
+                }
+                files.Add(new SpriteFileInfo(absolutePath, first, last, fileDef.Width, fileDef.Height, fileDef.Row, fileDef.Col));
+                Debug.Log($"<color=cyan>[BMP 文件] {pathInDat} -> {absolutePath}, 范围=[{first}-{last}], 尺寸={fileDef.Width}x{fileDef.Height}, 行列={fileDef.Row}x{fileDef.Col}</color>");
+            }
+            return files;
         }
 
         /// <summary>
         /// 提取武器专用顶层参数（weapon_hp, weapon_drop_hurt, weapon_strength_list 等）
         /// </summary>
-        private void ExtractWeaponParameters(Lf2DatFile datFile, LF2CharacterData characterData)
+        private static void ExtractWeaponParameters(Lf2DatFile datFile, LF2CharacterData characterData, bool loganContent)
         {
+            if (loganContent)
+            {
+                var bmp = characterData.NativeMetadata.Bmp;
+                characterData.weapon_hp = bmp.Int32OrDefault("weapon_hp", 0);
+                characterData.weapon_drop_hurt = bmp.Int32OrDefault("weapon_drop_hurt", 0);
+                characterData.weapon_hit_sound = bmp.TextOrNull("weapon_hit_sound") ?? "";
+                characterData.weapon_drop_sound = bmp.TextOrNull("weapon_drop_sound") ?? "";
+                characterData.weapon_broken_sound = bmp.TextOrNull("weapon_broken_sound") ?? "";
+                if (datFile.LoganWeaponStrengthRows == null)
+                    throw new InvalidOperationException("Logan weapon strength requires the native parser entry.");
+                foreach (var row in datFile.LoganWeaponStrengthRows)
+                    characterData.weapon_strength_list.Add(LoganCombatRecordDecoder.WeaponStrength(row.Index, row.Properties));
+                return;
+            }
             // 从根属性读取 weapon_hp / weapon_drop_hurt / sound 路径
             foreach (var prop in datFile.Properties)
             {
@@ -707,7 +1212,7 @@ namespace NTSD.Animation
             }
         }
 
-        private void ApplyWeaponProperty(string key, string value, LF2CharacterData data)
+        private static void ApplyWeaponProperty(string key, string value, LF2CharacterData data)
         {
             switch (key.ToLower())
             {
@@ -727,7 +1232,30 @@ namespace NTSD.Animation
         /// <summary>
         /// 从 Dat 文件中提取移动参数（walking_speed, running_speed 等）
         /// </summary>
-        private void ExtractMovementParameters(Lf2DatFile datFile, LF2CharacterData characterData)
+        private static void ExtractLoganMovementParameters(LF2CharacterData data)
+        {
+            var bmp = data.NativeMetadata.Bmp;
+            data.walking_speed = (float)bmp.Float64OrDefault("walking_speed", 0);
+            data.walking_speedz = (float)bmp.Float64OrDefault("walking_speedz", 0);
+            data.running_speed = (float)bmp.Float64OrDefault("running_speed", 0);
+            data.running_speedz = (float)bmp.Float64OrDefault("running_speedz", 0);
+            data.heavy_walking_speed = (float)bmp.Float64OrDefault("heavy_walking_speed", 0);
+            data.heavy_walking_speedz = (float)bmp.Float64OrDefault("heavy_walking_speedz", 0);
+            data.heavy_running_speed = (float)bmp.Float64OrDefault("heavy_running_speed", 0);
+            data.heavy_running_speedz = (float)bmp.Float64OrDefault("heavy_running_speedz", 0);
+            data.jump_height = (float)bmp.Float64OrDefault("jump_height", 0);
+            data.jump_distance = (float)bmp.Float64OrDefault("jump_distance", 0);
+            data.jump_distancez = (float)bmp.Float64OrDefault("jump_distancez", 0);
+            data.dash_height = (float)bmp.Float64OrDefault("dash_height", 0);
+            data.dash_distance = (float)bmp.Float64OrDefault("dash_distance", 0);
+            data.dash_distancez = (float)bmp.Float64OrDefault("dash_distancez", 0);
+            data.rowing_height = (float)bmp.Float64OrDefault("rowing_height", 0);
+            data.rowing_distance = (float)bmp.Float64OrDefault("rowing_distance", 0);
+            data.walking_frame_rate = bmp.Int32OrDefault("walking_frame_rate", 1);
+            data.running_frame_rate = bmp.Int32OrDefault("running_frame_rate", 1);
+        }
+
+        private static void ExtractMovementParameters(Lf2DatFile datFile, LF2CharacterData characterData)
         {
             // 先尝试从根级别属性提取
             foreach (var prop in datFile.Properties)
@@ -756,7 +1284,7 @@ namespace NTSD.Animation
         /// <summary>
         /// 应用单个移动参数属性
         /// </summary>
-        private void ApplyMovementProperty(string key, string value, LF2CharacterData characterData)
+        private static void ApplyMovementProperty(string key, string value, LF2CharacterData characterData)
         {
             string normalizedKey = key.ToLowerInvariant();
             if (normalizedKey == "walking_frame_rate" || normalizedKey == "running_frame_rate")
@@ -867,18 +1395,38 @@ namespace NTSD.Animation
         /// 预加载所有角色精灵
         /// 使用并行后台线程处理所有文件的像素数据
         /// </summary>
-        public async UniTask LoadCharacterSpritesAsync(Action<string> onProgressText)
+        public UniTask LoadCharacterSpritesAsync(Action<string> onProgressText)
+        {
+            return LoadCharacterSpritesFromSourceAsync(onProgressText, null);
+        }
+
+        internal async UniTask LoadCharacterSpritesFromSourceAsync(
+            Action<string> onProgressText, BattleContentSource source)
+        {
+            if (source != null || PublishedVisualContentKey != null)
+                throw new InvalidOperationException("A native publication requires its bound visual content candidate.");
+            await LoadCharacterSpritesCoreAsync(onProgressText, null);
+        }
+
+        private async UniTask<bool> LoadCharacterSpritesCoreAsync(Action<string> onProgressText, NativePrewarmOperation native)
         {
             if (spritePrewarmDisposed)
-                return;
+                return false;
 
             int invocation = BeginSpritePrewarmInvocation();
+            if (native != null)
+            {
+                native.Invocation = invocation;
+                await UniTask.RunOnThreadPool(() => native.Candidate.AssertInputsCurrent());
+                if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
+            }
+            BattleContentSource source = native?.Candidate.Catalog.Source;
             Dictionary<int, LF2CharacterDataWrapper> configSource =
-                pendingCharacterFrameConfig ?? TotalCharacterFrameConfig;
+                native != null ? native.Candidate.CopyCharacterConfigs() : pendingCharacterFrameConfig ?? TotalCharacterFrameConfig;
             var stagedConfigs = new Dictionary<int, LF2CharacterDataWrapper>(configSource);
             var stagedSprites = new Dictionary<int, List<Sprite>>(stagedConfigs.Count);
-            var stagedCreatedSprites = new HashSet<Sprite>();
-            var stagedTextures = new HashSet<Texture2D>();
+            var stagedCreatedSprites = native?.Sprites ?? new HashSet<Sprite>();
+            var stagedTextures = native?.Textures ?? new HashSet<Texture2D>();
             var stagedAtlasSources = new List<BattleAtlasSourcePixels>();
 
             Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {stagedConfigs.Count}</color>");
@@ -920,8 +1468,14 @@ namespace NTSD.Animation
 
             foreach (var (characterId, fileInfo, ownedEffectivePics) in allFileInfos)
             {
+                if (native != null && !CanCompleteSpritePrewarmInvocation(invocation)) break;
                 await cpuSemaphore.WaitAsync();
-                var task = ProcessAndCreateSpritesAsync(
+                if (native != null && !CanCompleteSpritePrewarmInvocation(invocation))
+                {
+                    cpuSemaphore.Release();
+                    break;
+                }
+                var task = ProcessAndCreateSpritesForCandidateAsync(
                         characterId,
                         fileInfo,
                         ownedEffectivePics,
@@ -931,7 +1485,10 @@ namespace NTSD.Animation
                         stagedAtlasSources,
                         onProgressText,
                         cpuSemaphore,
-                        uploadSemaphore)
+                        uploadSemaphore,
+                        source,
+                        native?.Candidate.GetImageSha256(fileInfo.filePath),
+                        native == null ? null : new Func<bool>(() => CanCompleteSpritePrewarmInvocation(invocation)))
                     .ContinueWith(count =>
                     {
                         if (count < 0)
@@ -948,7 +1505,7 @@ namespace NTSD.Animation
             {
                 await UniTask.SwitchToMainThread();
                 DestroyStagedPresentation(stagedCreatedSprites, stagedTextures);
-                return;
+                return false;
             }
 
             if (failedSheets > 0)
@@ -960,7 +1517,7 @@ namespace NTSD.Animation
             }
 
             BattleSpriteCatalog stagedCatalog;
-            var stagedResources = new HashSet<UnityEngine.Object>();
+            var stagedResources = native?.Resources ?? new HashSet<UnityEngine.Object>();
             foreach (Texture2D texture in stagedTextures)
                 stagedResources.Add(texture);
             string atlasDiagnostic = string.Empty;
@@ -987,7 +1544,7 @@ namespace NTSD.Animation
                 if (!CanCompleteSpritePrewarmInvocation(invocation))
                 {
                     DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
-                    return;
+                    return false;
                 }
 
                 commonVisualCatalog = BattleCommonVisualCatalog.Build(
@@ -1041,6 +1598,20 @@ namespace NTSD.Animation
             }
 
             await UniTask.SwitchToMainThread();
+            if (native != null)
+            {
+                Dictionary<int, CharacterUISprites> stagedUI = await PrepareNativeUISpritesAsync(native, stagedConfigs, onProgressText);
+                if (!CanCompleteSpritePrewarmInvocation(invocation)) return false;
+                await UniTask.RunOnThreadPool(() => native.Candidate.AssertInputsCurrent());
+                await UniTask.SwitchToMainThread();
+                if (!TryCommitNativePublication(native, stagedConfigs, stagedSprites, stagedCatalog, stagedUI, commonVisualCatalog, atlasDiagnostic))
+                    return false;
+                LastAtlasPolicyDecision = atlasPolicyDecision;
+                LastAtlasDiagnosticInputs = atlasDiagnosticInputs;
+                BattleCentralRenderSystem.ResolveDrawPolicyForPublication(NTSD.App.GameConfig.Instance);
+                PrewarmCompleted?.Invoke();
+                return true;
+            }
             if (!TryCommitSpritePrewarmInvocation(
                     invocation,
                     stagedConfigs,
@@ -1053,7 +1624,7 @@ namespace NTSD.Animation
                     commonVisualCatalog))
             {
                 DestroyStagedPresentation(stagedCreatedSprites, stagedResources);
-                return;
+                return false;
             }
             LastAtlasPolicyDecision = atlasPolicyDecision;
             LastAtlasDiagnosticInputs = atlasDiagnosticInputs;
@@ -1063,12 +1634,13 @@ namespace NTSD.Animation
 
             // Continue UI loading only while this publication is current.
             if (!CanCompleteSpritePrewarmInvocation(invocation))
-                return;
+                return false;
             await LoadAllCharacterUISpritesAsync(invocation);
 
             if (!CanCompleteSpritePrewarmInvocation(invocation))
-                return;
+                return false;
             PrewarmCompleted?.Invoke();
+            return true;
         }
 
         private async UniTask<SparkPublicationStaging> BuildSparkPublicationAsync(int invocation)
@@ -1077,6 +1649,7 @@ namespace NTSD.Animation
                 Application.dataPath,
                 "NTSD", "Sprite", "UIPanels", "SPARK.bmp");
             BMPLoader.BmpData bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(sparkPath));
+            if (!CanCompleteSpritePrewarmInvocation(invocation)) return null;
             if (bmpData == null || bmpData.Pixels == null ||
                 bmpData.Width < 510 || bmpData.Height != 256)
             {
@@ -1320,6 +1893,7 @@ namespace NTSD.Animation
                 {
                     string headPath = ResolveSpritePath(characterData.head, GetDatFileDirectory(characterId));
                     headSprite = await LoadBMPAsSpriteAsync(headPath, $"{characterData.name}_head");
+                    if (headSprite != null) legacyOwnedUiHeads[headSprite] = characterId;
                     if (!CanCompleteSpritePrewarmInvocation(invocation))
                         return;
                 }
@@ -1363,6 +1937,7 @@ namespace NTSD.Animation
         /// <returns>加载的Sprite，失败返回null</returns>
         private async UniTask<Sprite> LoadBMPAsSpriteAsync(string filePath, string spriteName)
         {
+            int invocation = spritePrewarmGeneration;
             if (!File.Exists(filePath))
             {
                 Debug.LogWarning($"<color=yellow>UI精灵文件不存在: {filePath}</color>");
@@ -1381,8 +1956,10 @@ namespace NTSD.Animation
 
                 // 切换到主线程创建Texture2D和Sprite
                 await UniTask.SwitchToMainThread();
+                if (!CanCompleteSpritePrewarmInvocation(invocation)) return null;
 
                 Texture2D texture = new Texture2D(bmpData.Width, bmpData.Height, TextureFormat.RGBA32, false);
+                legacyOwnedUiResources.Add(texture);
                 texture.filterMode = FilterMode.Point;
                 texture.wrapMode = TextureWrapMode.Clamp;
                 texture.SetPixels(bmpData.Pixels);
@@ -1395,6 +1972,7 @@ namespace NTSD.Animation
                     100f
                 );
                 sprite.name = spriteName;
+                legacyOwnedUiSprites.Add(sprite);
 
                 return sprite;
             }
@@ -1405,7 +1983,23 @@ namespace NTSD.Animation
             }
         }
 
-        private async UniTask<int> ProcessAndCreateSpritesAsync(
+        internal static Color32[] PrepareBattleSheetPixels(BMPLoader.BmpData data, BattleContentSource source)
+        {
+            var pixels = new Color32[data.Pixels.Length];
+            for (int i = 0; i < pixels.Length; i++)
+                pixels[i] = data.Pixels[i];
+
+            // Alignment contract: NTSD28-B11-PNG-SHEET-ALPHA-CONTRACT-001
+            // Native PNG preserves straight RGBA. DAT source rects exclude separators without color guesses.
+            if (source != null && source.IsLoganRuntime && data.IsPng)
+                return pixels;
+
+            RuntimeSpriteProcessor.ProcessSheetPixelsFast(pixels);
+            RuntimeSpriteProcessor.ClearDetectedGridSeparatorAlpha(pixels, data.Width, data.Height);
+            return pixels;
+        }
+
+        internal static UniTask<int> ProcessAndCreateSpritesAsync(
             int characterId,
             SpriteFileInfo fileInfo,
             ISet<int> ownedEffectivePics,
@@ -1415,17 +2009,44 @@ namespace NTSD.Animation
             List<BattleAtlasSourcePixels> stagedAtlasSources,
             Action<string> onProgressText,
             System.Threading.SemaphoreSlim cpuSemaphore,
-            System.Threading.SemaphoreSlim uploadSemaphore)
+            System.Threading.SemaphoreSlim uploadSemaphore,
+            BattleContentSource source)
+        {
+            return ProcessAndCreateSpritesForCandidateAsync(characterId, fileInfo, ownedEffectivePics,
+                stagedSprites, stagedCreatedSprites, stagedTextures, stagedAtlasSources,
+                onProgressText, cpuSemaphore, uploadSemaphore, source, null, null);
+        }
+
+        private static async UniTask<int> ProcessAndCreateSpritesForCandidateAsync(
+            int characterId,
+            SpriteFileInfo fileInfo,
+            ISet<int> ownedEffectivePics,
+            Dictionary<int, List<Sprite>> stagedSprites,
+            HashSet<Sprite> stagedCreatedSprites,
+            HashSet<Texture2D> stagedTextures,
+            List<BattleAtlasSourcePixels> stagedAtlasSources,
+            Action<string> onProgressText,
+            System.Threading.SemaphoreSlim cpuSemaphore,
+            System.Threading.SemaphoreSlim uploadSemaphore,
+            BattleContentSource source, string expectedSha256, Func<bool> canMaterialize)
         {
             int created = 0;
             bool cpuSemaphoreHeld = true;
             bool uploadSemaphoreHeld = false;
             try
             {
+                if (canMaterialize != null && !canMaterialize()) return -1;
                 string filePath = fileInfo.filePath;
                 onProgressText?.Invoke(FormatLoadingResourcePath(filePath));
 
-                var bmpData = await UniTask.RunOnThreadPool(() => BMPLoader.LoadBmpData(filePath));
+                if (canMaterialize != null && !canMaterialize()) return -1;
+                var bmpData = await UniTask.RunOnThreadPool(() => expectedSha256 == null
+                    ? BMPLoader.LoadBmpData(filePath) : BMPLoader.LoadVerifiedImageData(filePath, expectedSha256));
+                if (canMaterialize != null)
+                {
+                    await UniTask.SwitchToMainThread();
+                    if (!canMaterialize()) return -1;
+                }
                 if (bmpData == null || bmpData.Pixels == null)
                 {
                     return -1;
@@ -1433,12 +2054,6 @@ namespace NTSD.Animation
 
                 int textureWidth = bmpData.Width;
                 int textureHeight = bmpData.Height;
-                Color[] loadedPixels = bmpData.Pixels;
-                var sourcePixels = new Color32[loadedPixels.Length];
-                for (int i = 0; i < loadedPixels.Length; i++)
-                {
-                    sourcePixels[i] = loadedPixels[i];
-                }
 
                 ResolveEffectiveGrid(
                     fileInfo,
@@ -1452,16 +2067,7 @@ namespace NTSD.Animation
                 int row = actualRow;
                 int col = actualCol;
 
-                var processedSheet = await UniTask.RunOnThreadPool(() =>
-                {
-                    Color32[] processed =
-                        RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels);
-                    RuntimeSpriteProcessor.ClearDetectedGridSeparatorAlpha(
-                        processed,
-                        textureWidth,
-                        textureHeight);
-                    return processed;
-                });
+                var processedSheet = await UniTask.RunOnThreadPool(() => PrepareBattleSheetPixels(bmpData, source));
                 Rect?[] spriteRects = BuildIndexedSpriteRects(
                     fileInfo,
                     textureWidth,
@@ -1481,6 +2087,7 @@ namespace NTSD.Animation
                 await uploadSemaphore.WaitAsync();
                 uploadSemaphoreHeld = true;
                 await UniTask.SwitchToMainThread();
+                if (canMaterialize != null && !canMaterialize()) return -1;
 
                 var allSprites = stagedSprites[characterId];
                 stagedAtlasSources.Add(new BattleAtlasSourcePixels(
@@ -2355,7 +2962,10 @@ namespace NTSD.Animation
 
         internal bool CanCompleteSpritePrewarmInvocation(int invocation)
         {
-            return !spritePrewarmDisposed && invocation == spritePrewarmGeneration;
+            if (spritePrewarmDisposed || invocation != spritePrewarmGeneration) return false;
+            return activeNativePrewarm == null || activeNativePrewarm.Invocation != invocation ||
+                (!activeNativePrewarm.Cancelled && activeNativePrewarm.Data != null && activeNativePrewarm.UI != null &&
+                    NativeContentBoundaryIsOpen() && (activeNativePrewarm.CanContinue?.Invoke() ?? true));
         }
 
         internal void MarkSpritePrewarmDestroyedForSelfCheck()
@@ -2408,6 +3018,9 @@ namespace NTSD.Animation
             }
             pendingCharacterFrameConfig = null;
             IsPrewarmCompleted = true;
+            PublishedVisualContentKey = null;
+            publishedLoganCandidate = null;
+            publishedUiHeadIds.Clear();
             LastAtlasDiagnostic = atlasDiagnostic ?? string.Empty;
             TryRetireCatalogIfUnbound(previousCatalog);
             return true;
@@ -2571,6 +3184,14 @@ namespace NTSD.Animation
 
         private void OnDestroy()
         {
+            CancelConfiguredContentPrewarm();
+            CancelNativeContentPrewarm();
+            ReleaseCancelledNativeContentStaging();
+            DestroyStagedPresentation(legacyOwnedUiSprites, legacyOwnedUiResources);
+            legacyOwnedUiSprites.Clear();
+            legacyOwnedUiResources.Clear();
+            legacyOwnedUiHeads.Clear();
+            publishedUiHeadIds.Clear();
             // Clear central segments and release their catalog lease before the
             // manager's force-retirement boundary destroys publication resources.
             NTSD.Animation.Rendering.BattleCentralRenderSystem.ResetRuntime();
@@ -2609,6 +3230,8 @@ namespace NTSD.Animation
             SpriteCatalog = BattleSpriteCatalog.Empty;
             CommonVisualCatalog = BattleCommonVisualCatalog.Empty;
             IsPrewarmCompleted = false;
+            PublishedVisualContentKey = null;
+            publishedLoganCandidate = null;
         }
 
         /// <summary>

@@ -1,0 +1,22 @@
+{
+  "mode": "EditMode",
+  "testNames": [
+    "NTSD.Test.BattleWorldCharacterShellSnapshotEditorTests",
+    "NTSD.Test.BattleWorldEntityBaseShellSnapshotEditorTests",
+    "NTSD.Test.FrameAdvanceRuntimeSnapshotEditorTests",
+    "NTSD.Test.Editor.NTSD28B4State1218ContactActionEditorTests",
+    "NTSD.Test.Editor.NTSD28B4Type0PhysicsCoreEditorTests",
+    "NTSD.Test.Editor.NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28Q04MassFrictionGateEditorTests",
+    "NTSD.Test.Editor.NTSD28Q04OscillateConsumerEditorTests",
+    "NTSD.Test.Editor.NTSD28Q05MassOscillateCarrierEditorTests",
+    "NTSD.Test.BattleStateSnapshotRestoreEditorTests",
+    "NTSD.Test.BattleWorldEntityRuntimeSnapshotEditorTests",
+    "NTSD.Test.NTSD28Q052F8CarrierEditorTests",
+    "NTSD.Test.NTSD28Q05UnclaimedRawRestoreEditorTests",
+    "NTSD.Test.Editor.NTSD28B6CompatWeaponActionSelectorEditorTests"
+  ],
+  "includeDetails": false,
+  "includeFailedTests": true
+}

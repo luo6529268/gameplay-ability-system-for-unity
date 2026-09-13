@@ -1,0 +1,10 @@
+<bmp_begin>
+name: Q03Numeric
+type: 0
+<bmp_end>
+<frame> 0 standing
+state: 0 wait: 1 next: 0
+cpoint: kind: 1 throwvx: 1.5 throwvx: -2.25 throwvy: 1 throwvy: 2 throwvz: -0 throwvz: 0 injury: 1 injury: 2 cpoint_end:
+wpoint: kind: 1 x: 1 x: 2 wpoint_end:
+itr: kind: 0 x: 0 y: 0 w: 1 h: 1 caughtact: 1 2 caughtact: 3 4 catchingact: 5 6 pickedact: 7 8 pickingact: 9 10 itr_end:
+<frame_end>

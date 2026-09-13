@@ -1,0 +1,26 @@
+[
+  {
+    "file": "decoded_dat/c/ank/ssnk.dat",
+    "firstRowZeroBased": 2019,
+    "unity": "decoded_dat/c/ank/ssnk.dat\tfield\t75\t0\t7\t30",
+    "native": "decoded_dat/c/ank/ssnk.dat\tblock\t75\t1\titr\t"
+  },
+  {
+    "file": "decoded_dat/c/rai/rai.dat",
+    "firstRowZeroBased": 14869,
+    "unity": "decoded_dat/c/rai/rai.dat\tblock\t426\t3\tbdy\t",
+    "native": "decoded_dat/c/rai/rai.dat\tframe\t427\t796\t\t4144"
+  },
+  {
+    "file": "decoded_dat/c/rai/raiT.dat",
+    "firstRowZeroBased": 43,
+    "unity": "decoded_dat/c/rai/raiT.dat\tblock\t0\t4\tbdy\t",
+    "native": "decoded_dat/c/rai/raiT.dat\tframe\t1\t1\t\t7374616e64696e67"
+  },
+  {
+    "file": "decoded_dat/data/broken_weapon.dat",
+    "firstRowZeroBased": 658,
+    "unity": "decoded_dat/data/broken_weapon.dat\tframe\t94\t170\t\t",
+    "native": "decoded_dat/data/broken_weapon.dat\tframe\t94\t170\t\t3c31"
+  }
+]

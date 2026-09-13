@@ -42,12 +42,10 @@ namespace NTSD.Test
             entity.Effect.Dvx = 20.25f;
             entity.Effect.Dvy = 21.25f;
             entity.Effect.Stuck = true;
-            entity.Effect.Oscillate = 22;
             entity.Effect.Blink = true;
             entity.Effect.Super = true;
             entity.Effect.TimeIn = 23;
             entity.Effect.TimeOut = 24;
-            entity.Effect.OscillateDirection = -1;
             entity.Effect.BlinkCounter = 25;
             entity.PS.groundY = 26.25f;
             entity.PS.dir = "left";
@@ -84,12 +82,10 @@ namespace NTSD.Test
             Assert.That(state.EffectDvx, Is.EqualTo(20.25f));
             Assert.That(state.EffectDvy, Is.EqualTo(21.25f));
             Assert.That(state.EffectStuck, Is.True);
-            Assert.That(state.EffectOscillate, Is.EqualTo(22));
             Assert.That(state.EffectBlink, Is.True);
             Assert.That(state.EffectSuper, Is.True);
             Assert.That(state.EffectTimeIn, Is.EqualTo(23));
             Assert.That(state.EffectTimeOut, Is.EqualTo(24));
-            Assert.That(state.EffectOscillateDirection, Is.EqualTo(-1));
             Assert.That(state.EffectBlinkCounter, Is.EqualTo(25));
             Assert.That(state.PhysicsGroundY, Is.EqualTo(26.25f));
             Assert.That(state.PhysicsFacingLeft, Is.True);

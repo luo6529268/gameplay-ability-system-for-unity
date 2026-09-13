@@ -1,0 +1,2752 @@
+decoded_dat/a/fir/fir.dat	frame	0	0		666c79696e67
+decoded_dat/a/fir/fir.dat	field	0	-1	pic	30
+decoded_dat/a/fir/fir.dat	field	0	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	0	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	0	-1	next	31
+decoded_dat/a/fir/fir.dat	field	0	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	0	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	0	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	0	0	bdy	
+decoded_dat/a/fir/fir.dat	field	0	0	kind	30
+decoded_dat/a/fir/fir.dat	field	0	0	x	36
+decoded_dat/a/fir/fir.dat	field	0	0	y	3235
+decoded_dat/a/fir/fir.dat	field	0	0	w	3334
+decoded_dat/a/fir/fir.dat	field	0	0	h	3235
+decoded_dat/a/fir/fir.dat	frame	1	1		666c79696e67
+decoded_dat/a/fir/fir.dat	field	1	-1	pic	31
+decoded_dat/a/fir/fir.dat	field	1	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	1	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	1	-1	next	32
+decoded_dat/a/fir/fir.dat	field	1	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	1	-1	centerx	31
+decoded_dat/a/fir/fir.dat	field	1	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	1	0	itr	
+decoded_dat/a/fir/fir.dat	field	1	0	kind	30
+decoded_dat/a/fir/fir.dat	field	1	0	x	36
+decoded_dat/a/fir/fir.dat	field	1	0	y	3235
+decoded_dat/a/fir/fir.dat	field	1	0	w	3334
+decoded_dat/a/fir/fir.dat	field	1	0	h	3235
+decoded_dat/a/fir/fir.dat	field	1	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	1	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	1	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	1	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	1	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	1	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	1	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	1	1	bdy	
+decoded_dat/a/fir/fir.dat	field	1	1	kind	30
+decoded_dat/a/fir/fir.dat	field	1	1	x	36
+decoded_dat/a/fir/fir.dat	field	1	1	y	3235
+decoded_dat/a/fir/fir.dat	field	1	1	w	3334
+decoded_dat/a/fir/fir.dat	field	1	1	h	3235
+decoded_dat/a/fir/fir.dat	frame	2	2		666c79696e67
+decoded_dat/a/fir/fir.dat	field	2	-1	pic	32
+decoded_dat/a/fir/fir.dat	field	2	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	2	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	2	-1	next	33
+decoded_dat/a/fir/fir.dat	field	2	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	2	-1	centerx	37
+decoded_dat/a/fir/fir.dat	field	2	-1	centery	3439
+decoded_dat/a/fir/fir.dat	block	2	0	itr	
+decoded_dat/a/fir/fir.dat	field	2	0	kind	30
+decoded_dat/a/fir/fir.dat	field	2	0	x	36
+decoded_dat/a/fir/fir.dat	field	2	0	y	3235
+decoded_dat/a/fir/fir.dat	field	2	0	w	3334
+decoded_dat/a/fir/fir.dat	field	2	0	h	3235
+decoded_dat/a/fir/fir.dat	field	2	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	2	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	2	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	2	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	2	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	2	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	2	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	2	1	bdy	
+decoded_dat/a/fir/fir.dat	field	2	1	kind	30
+decoded_dat/a/fir/fir.dat	field	2	1	x	36
+decoded_dat/a/fir/fir.dat	field	2	1	y	3235
+decoded_dat/a/fir/fir.dat	field	2	1	w	3334
+decoded_dat/a/fir/fir.dat	field	2	1	h	3235
+decoded_dat/a/fir/fir.dat	frame	3	3		666c79696e67
+decoded_dat/a/fir/fir.dat	field	3	-1	pic	33
+decoded_dat/a/fir/fir.dat	field	3	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	3	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	3	-1	next	34
+decoded_dat/a/fir/fir.dat	field	3	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	3	-1	centerx	39
+decoded_dat/a/fir/fir.dat	field	3	-1	centery	3533
+decoded_dat/a/fir/fir.dat	block	3	0	itr	
+decoded_dat/a/fir/fir.dat	field	3	0	kind	30
+decoded_dat/a/fir/fir.dat	field	3	0	x	39
+decoded_dat/a/fir/fir.dat	field	3	0	y	3235
+decoded_dat/a/fir/fir.dat	field	3	0	w	3337
+decoded_dat/a/fir/fir.dat	field	3	0	h	3233
+decoded_dat/a/fir/fir.dat	field	3	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	3	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	3	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	3	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	3	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	3	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	3	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	3	1	bdy	
+decoded_dat/a/fir/fir.dat	field	3	1	kind	30
+decoded_dat/a/fir/fir.dat	field	3	1	x	39
+decoded_dat/a/fir/fir.dat	field	3	1	y	3235
+decoded_dat/a/fir/fir.dat	field	3	1	w	3337
+decoded_dat/a/fir/fir.dat	field	3	1	h	3233
+decoded_dat/a/fir/fir.dat	frame	4	4		666c79696e67
+decoded_dat/a/fir/fir.dat	field	4	-1	pic	34
+decoded_dat/a/fir/fir.dat	field	4	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	4	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	4	-1	next	35
+decoded_dat/a/fir/fir.dat	field	4	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	4	-1	centerx	34
+decoded_dat/a/fir/fir.dat	field	4	-1	centery	3535
+decoded_dat/a/fir/fir.dat	block	4	0	itr	
+decoded_dat/a/fir/fir.dat	field	4	0	kind	30
+decoded_dat/a/fir/fir.dat	field	4	0	x	34
+decoded_dat/a/fir/fir.dat	field	4	0	y	3235
+decoded_dat/a/fir/fir.dat	field	4	0	w	3430
+decoded_dat/a/fir/fir.dat	field	4	0	h	3239
+decoded_dat/a/fir/fir.dat	field	4	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	4	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	4	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	4	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	4	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	4	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	4	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	4	1	bdy	
+decoded_dat/a/fir/fir.dat	field	4	1	kind	30
+decoded_dat/a/fir/fir.dat	field	4	1	x	34
+decoded_dat/a/fir/fir.dat	field	4	1	y	3235
+decoded_dat/a/fir/fir.dat	field	4	1	w	3430
+decoded_dat/a/fir/fir.dat	field	4	1	h	3239
+decoded_dat/a/fir/fir.dat	frame	5	5		666c79696e67
+decoded_dat/a/fir/fir.dat	field	5	-1	pic	35
+decoded_dat/a/fir/fir.dat	field	5	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	5	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	5	-1	next	36
+decoded_dat/a/fir/fir.dat	field	5	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	5	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	5	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	5	0	itr	
+decoded_dat/a/fir/fir.dat	field	5	0	kind	30
+decoded_dat/a/fir/fir.dat	field	5	0	x	38
+decoded_dat/a/fir/fir.dat	field	5	0	y	3235
+decoded_dat/a/fir/fir.dat	field	5	0	w	3434
+decoded_dat/a/fir/fir.dat	field	5	0	h	3338
+decoded_dat/a/fir/fir.dat	field	5	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	5	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	5	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	5	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	5	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	5	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	5	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	5	1	bdy	
+decoded_dat/a/fir/fir.dat	field	5	1	kind	30
+decoded_dat/a/fir/fir.dat	field	5	1	x	38
+decoded_dat/a/fir/fir.dat	field	5	1	y	3235
+decoded_dat/a/fir/fir.dat	field	5	1	w	3434
+decoded_dat/a/fir/fir.dat	field	5	1	h	3338
+decoded_dat/a/fir/fir.dat	frame	6	6		666c79696e67
+decoded_dat/a/fir/fir.dat	field	6	-1	pic	36
+decoded_dat/a/fir/fir.dat	field	6	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	6	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	6	-1	next	37
+decoded_dat/a/fir/fir.dat	field	6	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	6	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	6	-1	centery	3435
+decoded_dat/a/fir/fir.dat	block	6	0	itr	
+decoded_dat/a/fir/fir.dat	field	6	0	kind	30
+decoded_dat/a/fir/fir.dat	field	6	0	x	36
+decoded_dat/a/fir/fir.dat	field	6	0	y	32
+decoded_dat/a/fir/fir.dat	field	6	0	w	3434
+decoded_dat/a/fir/fir.dat	field	6	0	h	3432
+decoded_dat/a/fir/fir.dat	field	6	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	6	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	6	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	6	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	6	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	6	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	6	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	6	1	bdy	
+decoded_dat/a/fir/fir.dat	field	6	1	kind	30
+decoded_dat/a/fir/fir.dat	field	6	1	x	36
+decoded_dat/a/fir/fir.dat	field	6	1	y	32
+decoded_dat/a/fir/fir.dat	field	6	1	w	3434
+decoded_dat/a/fir/fir.dat	field	6	1	h	3432
+decoded_dat/a/fir/fir.dat	frame	7	7		666c79696e67
+decoded_dat/a/fir/fir.dat	field	7	-1	pic	37
+decoded_dat/a/fir/fir.dat	field	7	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	7	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	7	-1	next	38
+decoded_dat/a/fir/fir.dat	field	7	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	7	-1	centerx	3132
+decoded_dat/a/fir/fir.dat	field	7	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	7	0	itr	
+decoded_dat/a/fir/fir.dat	field	7	0	kind	30
+decoded_dat/a/fir/fir.dat	field	7	0	x	3130
+decoded_dat/a/fir/fir.dat	field	7	0	y	3130
+decoded_dat/a/fir/fir.dat	field	7	0	w	3433
+decoded_dat/a/fir/fir.dat	field	7	0	h	3339
+decoded_dat/a/fir/fir.dat	field	7	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	7	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	7	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	7	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	7	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	7	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	7	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	7	1	bdy	
+decoded_dat/a/fir/fir.dat	field	7	1	kind	30
+decoded_dat/a/fir/fir.dat	field	7	1	x	3130
+decoded_dat/a/fir/fir.dat	field	7	1	y	3130
+decoded_dat/a/fir/fir.dat	field	7	1	w	3433
+decoded_dat/a/fir/fir.dat	field	7	1	h	3339
+decoded_dat/a/fir/fir.dat	frame	8	8		666c79696e67
+decoded_dat/a/fir/fir.dat	field	8	-1	pic	38
+decoded_dat/a/fir/fir.dat	field	8	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	8	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	8	-1	next	39
+decoded_dat/a/fir/fir.dat	field	8	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	8	-1	centerx	39
+decoded_dat/a/fir/fir.dat	field	8	-1	centery	3438
+decoded_dat/a/fir/fir.dat	block	8	0	itr	
+decoded_dat/a/fir/fir.dat	field	8	0	kind	30
+decoded_dat/a/fir/fir.dat	field	8	0	x	36
+decoded_dat/a/fir/fir.dat	field	8	0	y	3130
+decoded_dat/a/fir/fir.dat	field	8	0	w	3436
+decoded_dat/a/fir/fir.dat	field	8	0	h	3436
+decoded_dat/a/fir/fir.dat	field	8	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	8	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	8	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	8	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	8	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	8	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	8	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	8	1	bdy	
+decoded_dat/a/fir/fir.dat	field	8	1	kind	30
+decoded_dat/a/fir/fir.dat	field	8	1	x	36
+decoded_dat/a/fir/fir.dat	field	8	1	y	3130
+decoded_dat/a/fir/fir.dat	field	8	1	w	3436
+decoded_dat/a/fir/fir.dat	field	8	1	h	3436
+decoded_dat/a/fir/fir.dat	frame	9	9		666c79696e67
+decoded_dat/a/fir/fir.dat	field	9	-1	pic	39
+decoded_dat/a/fir/fir.dat	field	9	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	9	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	9	-1	next	313030
+decoded_dat/a/fir/fir.dat	field	9	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	9	-1	centerx	3130
+decoded_dat/a/fir/fir.dat	field	9	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	9	0	itr	
+decoded_dat/a/fir/fir.dat	field	9	0	kind	30
+decoded_dat/a/fir/fir.dat	field	9	0	x	37
+decoded_dat/a/fir/fir.dat	field	9	0	y	3130
+decoded_dat/a/fir/fir.dat	field	9	0	w	3434
+decoded_dat/a/fir/fir.dat	field	9	0	h	3439
+decoded_dat/a/fir/fir.dat	field	9	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	9	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	9	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	9	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	9	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	9	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	9	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	9	1	bdy	
+decoded_dat/a/fir/fir.dat	field	9	1	kind	30
+decoded_dat/a/fir/fir.dat	field	9	1	x	37
+decoded_dat/a/fir/fir.dat	field	9	1	y	3130
+decoded_dat/a/fir/fir.dat	field	9	1	w	3434
+decoded_dat/a/fir/fir.dat	field	9	1	h	3439
+decoded_dat/a/fir/fir.dat	frame	10	10		686974696e67
+decoded_dat/a/fir/fir.dat	field	10	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	10	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	10	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	10	-1	next	3131
+decoded_dat/a/fir/fir.dat	field	10	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	10	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	10	-1	centerx	3434
+decoded_dat/a/fir/fir.dat	field	10	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	11	11		686974696e67
+decoded_dat/a/fir/fir.dat	field	11	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	11	-1	state	33303033
+decoded_dat/a/fir/fir.dat	field	11	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	11	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	11	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	11	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	11	-1	centerx	3430
+decoded_dat/a/fir/fir.dat	field	11	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	12	20		686974
+decoded_dat/a/fir/fir.dat	field	12	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	12	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	12	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	12	-1	next	3231
+decoded_dat/a/fir/fir.dat	field	12	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	12	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	12	-1	centerx	3434
+decoded_dat/a/fir/fir.dat	field	12	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	13	21		686974
+decoded_dat/a/fir/fir.dat	field	13	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	13	-1	state	33303033
+decoded_dat/a/fir/fir.dat	field	13	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	13	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	13	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	13	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	13	-1	centerx	3430
+decoded_dat/a/fir/fir.dat	field	13	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	14	30		7265626f756e64696e67
+decoded_dat/a/fir/fir.dat	field	14	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	14	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	14	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	14	-1	next	3331
+decoded_dat/a/fir/fir.dat	field	14	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	14	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	14	-1	centerx	3434
+decoded_dat/a/fir/fir.dat	field	14	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	15	31		7265626f756e64696e67
+decoded_dat/a/fir/fir.dat	field	15	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	15	-1	state	33303033
+decoded_dat/a/fir/fir.dat	field	15	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	15	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	15	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	15	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	15	-1	centerx	3430
+decoded_dat/a/fir/fir.dat	field	15	-1	centery	3432
+decoded_dat/a/fir/fir.dat	frame	16	50		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	16	-1	pic	3138
+decoded_dat/a/fir/fir.dat	field	16	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	16	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	16	-1	next	3531
+decoded_dat/a/fir/fir.dat	field	16	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	16	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	16	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	16	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	16	0	itr	
+decoded_dat/a/fir/fir.dat	field	16	0	kind	38
+decoded_dat/a/fir/fir.dat	field	16	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	16	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	16	0	x	30
+decoded_dat/a/fir/fir.dat	field	16	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	16	0	w	3336
+decoded_dat/a/fir/fir.dat	field	16	0	h	3939
+decoded_dat/a/fir/fir.dat	field	16	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	16	1	bdy	
+decoded_dat/a/fir/fir.dat	field	16	1	kind	30
+decoded_dat/a/fir/fir.dat	field	16	1	x	30
+decoded_dat/a/fir/fir.dat	field	16	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	16	1	w	3336
+decoded_dat/a/fir/fir.dat	field	16	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	17	51		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	17	-1	pic	3139
+decoded_dat/a/fir/fir.dat	field	17	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	17	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	17	-1	next	3532
+decoded_dat/a/fir/fir.dat	field	17	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	17	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	17	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	17	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	17	0	opoint	
+decoded_dat/a/fir/fir.dat	field	17	0	kind	31
+decoded_dat/a/fir/fir.dat	field	17	0	x	2d31
+decoded_dat/a/fir/fir.dat	field	17	0	y	3437
+decoded_dat/a/fir/fir.dat	field	17	0	action	3534
+decoded_dat/a/fir/fir.dat	field	17	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	17	0	facing	30
+decoded_dat/a/fir/fir.dat	block	17	1	itr	
+decoded_dat/a/fir/fir.dat	field	17	1	kind	38
+decoded_dat/a/fir/fir.dat	field	17	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	17	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	17	1	x	30
+decoded_dat/a/fir/fir.dat	field	17	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	17	1	w	3336
+decoded_dat/a/fir/fir.dat	field	17	1	h	3939
+decoded_dat/a/fir/fir.dat	field	17	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	17	2	bdy	
+decoded_dat/a/fir/fir.dat	field	17	2	kind	30
+decoded_dat/a/fir/fir.dat	field	17	2	x	30
+decoded_dat/a/fir/fir.dat	field	17	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	17	2	w	3336
+decoded_dat/a/fir/fir.dat	field	17	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	18	52		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	18	-1	pic	3230
+decoded_dat/a/fir/fir.dat	field	18	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	18	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	18	-1	next	3533
+decoded_dat/a/fir/fir.dat	field	18	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	18	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	18	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	18	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	18	0	itr	
+decoded_dat/a/fir/fir.dat	field	18	0	kind	30
+decoded_dat/a/fir/fir.dat	field	18	0	x	30
+decoded_dat/a/fir/fir.dat	field	18	0	y	3235
+decoded_dat/a/fir/fir.dat	field	18	0	w	3336
+decoded_dat/a/fir/fir.dat	field	18	0	h	3332
+decoded_dat/a/fir/fir.dat	field	18	0	effect	3230
+decoded_dat/a/fir/fir.dat	field	18	0	dvx	2d31
+decoded_dat/a/fir/fir.dat	field	18	0	dvy	2d36
+decoded_dat/a/fir/fir.dat	field	18	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	18	0	vrest	3230
+decoded_dat/a/fir/fir.dat	field	18	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	18	0	injury	3230
+decoded_dat/a/fir/fir.dat	block	18	1	itr	
+decoded_dat/a/fir/fir.dat	field	18	1	kind	38
+decoded_dat/a/fir/fir.dat	field	18	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	18	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	18	1	x	30
+decoded_dat/a/fir/fir.dat	field	18	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	18	1	w	3336
+decoded_dat/a/fir/fir.dat	field	18	1	h	3939
+decoded_dat/a/fir/fir.dat	field	18	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	18	2	bdy	
+decoded_dat/a/fir/fir.dat	field	18	2	kind	30
+decoded_dat/a/fir/fir.dat	field	18	2	x	30
+decoded_dat/a/fir/fir.dat	field	18	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	18	2	w	3336
+decoded_dat/a/fir/fir.dat	field	18	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	19	53		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	19	-1	pic	3231
+decoded_dat/a/fir/fir.dat	field	19	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	19	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	19	-1	next	3534
+decoded_dat/a/fir/fir.dat	field	19	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	19	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	19	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	19	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	19	0	itr	
+decoded_dat/a/fir/fir.dat	field	19	0	kind	38
+decoded_dat/a/fir/fir.dat	field	19	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	19	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	19	0	x	30
+decoded_dat/a/fir/fir.dat	field	19	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	19	0	w	3336
+decoded_dat/a/fir/fir.dat	field	19	0	h	3939
+decoded_dat/a/fir/fir.dat	field	19	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	19	1	bdy	
+decoded_dat/a/fir/fir.dat	field	19	1	kind	30
+decoded_dat/a/fir/fir.dat	field	19	1	x	30
+decoded_dat/a/fir/fir.dat	field	19	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	19	1	w	3336
+decoded_dat/a/fir/fir.dat	field	19	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	20	54		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	20	-1	pic	3232
+decoded_dat/a/fir/fir.dat	field	20	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	20	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	20	-1	next	3535
+decoded_dat/a/fir/fir.dat	field	20	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	20	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	20	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	20	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	20	0	itr	
+decoded_dat/a/fir/fir.dat	field	20	0	kind	38
+decoded_dat/a/fir/fir.dat	field	20	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	20	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	20	0	x	30
+decoded_dat/a/fir/fir.dat	field	20	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	20	0	w	3336
+decoded_dat/a/fir/fir.dat	field	20	0	h	3939
+decoded_dat/a/fir/fir.dat	field	20	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	20	1	bdy	
+decoded_dat/a/fir/fir.dat	field	20	1	kind	30
+decoded_dat/a/fir/fir.dat	field	20	1	x	30
+decoded_dat/a/fir/fir.dat	field	20	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	20	1	w	3336
+decoded_dat/a/fir/fir.dat	field	20	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	21	55		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	21	-1	pic	3233
+decoded_dat/a/fir/fir.dat	field	21	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	21	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	21	-1	next	3536
+decoded_dat/a/fir/fir.dat	field	21	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	21	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	21	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	21	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	21	0	itr	
+decoded_dat/a/fir/fir.dat	field	21	0	kind	38
+decoded_dat/a/fir/fir.dat	field	21	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	21	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	21	0	x	30
+decoded_dat/a/fir/fir.dat	field	21	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	21	0	w	3336
+decoded_dat/a/fir/fir.dat	field	21	0	h	3939
+decoded_dat/a/fir/fir.dat	field	21	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	21	1	bdy	
+decoded_dat/a/fir/fir.dat	field	21	1	kind	30
+decoded_dat/a/fir/fir.dat	field	21	1	x	30
+decoded_dat/a/fir/fir.dat	field	21	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	21	1	w	3336
+decoded_dat/a/fir/fir.dat	field	21	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	22	56		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	22	-1	pic	3234
+decoded_dat/a/fir/fir.dat	field	22	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	22	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	22	-1	next	3537
+decoded_dat/a/fir/fir.dat	field	22	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	22	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	22	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	22	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	22	0	itr	
+decoded_dat/a/fir/fir.dat	field	22	0	kind	38
+decoded_dat/a/fir/fir.dat	field	22	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	22	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	22	0	x	30
+decoded_dat/a/fir/fir.dat	field	22	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	22	0	w	3336
+decoded_dat/a/fir/fir.dat	field	22	0	h	3939
+decoded_dat/a/fir/fir.dat	field	22	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	22	1	bdy	
+decoded_dat/a/fir/fir.dat	field	22	1	kind	30
+decoded_dat/a/fir/fir.dat	field	22	1	x	30
+decoded_dat/a/fir/fir.dat	field	22	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	22	1	w	3336
+decoded_dat/a/fir/fir.dat	field	22	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	23	57		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	23	-1	pic	3235
+decoded_dat/a/fir/fir.dat	field	23	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	23	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	23	-1	next	3538
+decoded_dat/a/fir/fir.dat	field	23	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	23	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	23	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	23	-1	centery	3437
+decoded_dat/a/fir/fir.dat	field	23	-1	hit_a	3330
+decoded_dat/a/fir/fir.dat	field	23	-1	hit_d	3730
+decoded_dat/a/fir/fir.dat	block	23	0	itr	
+decoded_dat/a/fir/fir.dat	field	23	0	kind	38
+decoded_dat/a/fir/fir.dat	field	23	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	23	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	23	0	x	30
+decoded_dat/a/fir/fir.dat	field	23	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	23	0	w	3336
+decoded_dat/a/fir/fir.dat	field	23	0	h	3939
+decoded_dat/a/fir/fir.dat	field	23	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	23	1	bdy	
+decoded_dat/a/fir/fir.dat	field	23	1	kind	30
+decoded_dat/a/fir/fir.dat	field	23	1	x	30
+decoded_dat/a/fir/fir.dat	field	23	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	23	1	w	3336
+decoded_dat/a/fir/fir.dat	field	23	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	24	58		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	24	-1	pic	3138
+decoded_dat/a/fir/fir.dat	field	24	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	24	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	24	-1	next	3539
+decoded_dat/a/fir/fir.dat	field	24	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	24	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	24	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	24	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	24	0	itr	
+decoded_dat/a/fir/fir.dat	field	24	0	kind	38
+decoded_dat/a/fir/fir.dat	field	24	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	24	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	24	0	x	30
+decoded_dat/a/fir/fir.dat	field	24	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	24	0	w	3336
+decoded_dat/a/fir/fir.dat	field	24	0	h	3939
+decoded_dat/a/fir/fir.dat	field	24	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	24	1	bdy	
+decoded_dat/a/fir/fir.dat	field	24	1	kind	30
+decoded_dat/a/fir/fir.dat	field	24	1	x	30
+decoded_dat/a/fir/fir.dat	field	24	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	24	1	w	3336
+decoded_dat/a/fir/fir.dat	field	24	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	25	59		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	25	-1	pic	3139
+decoded_dat/a/fir/fir.dat	field	25	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	25	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	25	-1	next	3532
+decoded_dat/a/fir/fir.dat	field	25	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	25	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	25	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	25	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	25	0	itr	
+decoded_dat/a/fir/fir.dat	field	25	0	kind	38
+decoded_dat/a/fir/fir.dat	field	25	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	25	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	25	0	x	30
+decoded_dat/a/fir/fir.dat	field	25	0	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	25	0	w	3336
+decoded_dat/a/fir/fir.dat	field	25	0	h	3939
+decoded_dat/a/fir/fir.dat	field	25	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	25	1	bdy	
+decoded_dat/a/fir/fir.dat	field	25	1	kind	30
+decoded_dat/a/fir/fir.dat	field	25	1	x	30
+decoded_dat/a/fir/fir.dat	field	25	1	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	25	1	w	3336
+decoded_dat/a/fir/fir.dat	field	25	1	h	3939
+decoded_dat/a/fir/fir.dat	frame	26	70		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	26	-1	pic	3236
+decoded_dat/a/fir/fir.dat	field	26	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	26	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	26	-1	next	3731
+decoded_dat/a/fir/fir.dat	field	26	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	26	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	26	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	26	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	27	71		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	27	-1	pic	3237
+decoded_dat/a/fir/fir.dat	field	27	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	27	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	27	-1	next	3732
+decoded_dat/a/fir/fir.dat	field	27	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	27	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	27	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	27	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	28	72		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	28	-1	pic	3238
+decoded_dat/a/fir/fir.dat	field	28	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	28	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	28	-1	next	3733
+decoded_dat/a/fir/fir.dat	field	28	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	28	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	28	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	28	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	29	73		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	29	-1	pic	3330
+decoded_dat/a/fir/fir.dat	field	29	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	29	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	29	-1	next	3734
+decoded_dat/a/fir/fir.dat	field	29	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	29	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	29	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	29	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	30	74		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	30	-1	pic	3331
+decoded_dat/a/fir/fir.dat	field	30	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	30	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	30	-1	next	3735
+decoded_dat/a/fir/fir.dat	field	30	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	30	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	30	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	30	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	31	75		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	31	-1	pic	3332
+decoded_dat/a/fir/fir.dat	field	31	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	31	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	31	-1	next	3736
+decoded_dat/a/fir/fir.dat	field	31	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	31	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	31	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	31	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	32	76		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	32	-1	pic	3333
+decoded_dat/a/fir/fir.dat	field	32	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	32	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	32	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	32	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	32	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	32	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	32	-1	centery	3437
+decoded_dat/a/fir/fir.dat	frame	33	100		666c79696e67
+decoded_dat/a/fir/fir.dat	field	33	-1	pic	3130
+decoded_dat/a/fir/fir.dat	field	33	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	33	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	33	-1	next	313031
+decoded_dat/a/fir/fir.dat	field	33	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	33	-1	centerx	35
+decoded_dat/a/fir/fir.dat	field	33	-1	centery	3531
+decoded_dat/a/fir/fir.dat	block	33	0	itr	
+decoded_dat/a/fir/fir.dat	field	33	0	kind	30
+decoded_dat/a/fir/fir.dat	field	33	0	x	32
+decoded_dat/a/fir/fir.dat	field	33	0	y	35
+decoded_dat/a/fir/fir.dat	field	33	0	w	3531
+decoded_dat/a/fir/fir.dat	field	33	0	h	3438
+decoded_dat/a/fir/fir.dat	field	33	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	33	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	33	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	33	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	33	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	33	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	33	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	33	1	bdy	
+decoded_dat/a/fir/fir.dat	field	33	1	kind	30
+decoded_dat/a/fir/fir.dat	field	33	1	x	32
+decoded_dat/a/fir/fir.dat	field	33	1	y	35
+decoded_dat/a/fir/fir.dat	field	33	1	w	3531
+decoded_dat/a/fir/fir.dat	field	33	1	h	3438
+decoded_dat/a/fir/fir.dat	frame	34	101		666c79696e67
+decoded_dat/a/fir/fir.dat	field	34	-1	pic	3131
+decoded_dat/a/fir/fir.dat	field	34	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	34	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	34	-1	next	313032
+decoded_dat/a/fir/fir.dat	field	34	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	34	-1	centerx	33
+decoded_dat/a/fir/fir.dat	field	34	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	34	0	itr	
+decoded_dat/a/fir/fir.dat	field	34	0	kind	30
+decoded_dat/a/fir/fir.dat	field	34	0	x	32
+decoded_dat/a/fir/fir.dat	field	34	0	y	3133
+decoded_dat/a/fir/fir.dat	field	34	0	w	3534
+decoded_dat/a/fir/fir.dat	field	34	0	h	3339
+decoded_dat/a/fir/fir.dat	field	34	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	34	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	34	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	34	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	34	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	34	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	34	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	34	1	bdy	
+decoded_dat/a/fir/fir.dat	field	34	1	kind	30
+decoded_dat/a/fir/fir.dat	field	34	1	x	32
+decoded_dat/a/fir/fir.dat	field	34	1	y	3133
+decoded_dat/a/fir/fir.dat	field	34	1	w	3534
+decoded_dat/a/fir/fir.dat	field	34	1	h	3339
+decoded_dat/a/fir/fir.dat	frame	35	102		666c79696e67
+decoded_dat/a/fir/fir.dat	field	35	-1	pic	3132
+decoded_dat/a/fir/fir.dat	field	35	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	35	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	35	-1	next	313033
+decoded_dat/a/fir/fir.dat	field	35	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	35	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	35	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	35	0	itr	
+decoded_dat/a/fir/fir.dat	field	35	0	kind	30
+decoded_dat/a/fir/fir.dat	field	35	0	x	36
+decoded_dat/a/fir/fir.dat	field	35	0	y	36
+decoded_dat/a/fir/fir.dat	field	35	0	w	3533
+decoded_dat/a/fir/fir.dat	field	35	0	h	3330
+decoded_dat/a/fir/fir.dat	field	35	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	35	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	35	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	35	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	35	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	35	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	35	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	35	1	bdy	
+decoded_dat/a/fir/fir.dat	field	35	1	kind	30
+decoded_dat/a/fir/fir.dat	field	35	1	x	36
+decoded_dat/a/fir/fir.dat	field	35	1	y	36
+decoded_dat/a/fir/fir.dat	field	35	1	w	3533
+decoded_dat/a/fir/fir.dat	field	35	1	h	3330
+decoded_dat/a/fir/fir.dat	frame	36	103		666c79696e67
+decoded_dat/a/fir/fir.dat	field	36	-1	pic	3133
+decoded_dat/a/fir/fir.dat	field	36	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	36	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	36	-1	next	313034
+decoded_dat/a/fir/fir.dat	field	36	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	36	-1	centerx	34
+decoded_dat/a/fir/fir.dat	field	36	-1	centery	3435
+decoded_dat/a/fir/fir.dat	block	36	0	itr	
+decoded_dat/a/fir/fir.dat	field	36	0	kind	30
+decoded_dat/a/fir/fir.dat	field	36	0	x	3134
+decoded_dat/a/fir/fir.dat	field	36	0	y	37
+decoded_dat/a/fir/fir.dat	field	36	0	w	3339
+decoded_dat/a/fir/fir.dat	field	36	0	h	3232
+decoded_dat/a/fir/fir.dat	field	36	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	36	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	36	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	36	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	36	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	36	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	36	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	36	1	bdy	
+decoded_dat/a/fir/fir.dat	field	36	1	kind	30
+decoded_dat/a/fir/fir.dat	field	36	1	x	3134
+decoded_dat/a/fir/fir.dat	field	36	1	y	37
+decoded_dat/a/fir/fir.dat	field	36	1	w	3339
+decoded_dat/a/fir/fir.dat	field	36	1	h	3232
+decoded_dat/a/fir/fir.dat	frame	37	104		666c79696e67
+decoded_dat/a/fir/fir.dat	field	37	-1	pic	3134
+decoded_dat/a/fir/fir.dat	field	37	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	37	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	37	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	37	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	37	-1	centerx	35
+decoded_dat/a/fir/fir.dat	field	37	-1	centery	3438
+decoded_dat/a/fir/fir.dat	block	37	0	itr	
+decoded_dat/a/fir/fir.dat	field	37	0	kind	30
+decoded_dat/a/fir/fir.dat	field	37	0	x	3139
+decoded_dat/a/fir/fir.dat	field	37	0	y	38
+decoded_dat/a/fir/fir.dat	field	37	0	w	3331
+decoded_dat/a/fir/fir.dat	field	37	0	h	3230
+decoded_dat/a/fir/fir.dat	field	37	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	37	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	37	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	37	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	37	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	37	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	37	0	injury	3735
+decoded_dat/a/fir/fir.dat	block	37	1	bdy	
+decoded_dat/a/fir/fir.dat	field	37	1	kind	30
+decoded_dat/a/fir/fir.dat	field	37	1	x	3139
+decoded_dat/a/fir/fir.dat	field	37	1	y	38
+decoded_dat/a/fir/fir.dat	field	37	1	w	3331
+decoded_dat/a/fir/fir.dat	field	37	1	h	3230
+decoded_dat/a/fir/fir.dat	frame	38	109		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	38	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	38	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	38	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	38	-1	next	313130
+decoded_dat/a/fir/fir.dat	field	38	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	38	-1	centery	313438
+decoded_dat/a/fir/fir.dat	field	38	-1	sound	646174615c3032302e776176
+decoded_dat/a/fir/fir.dat	frame	39	110		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	39	-1	pic	3334
+decoded_dat/a/fir/fir.dat	field	39	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	39	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	39	-1	next	313131
+decoded_dat/a/fir/fir.dat	field	39	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	39	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	39	0	itr	
+decoded_dat/a/fir/fir.dat	field	39	0	kind	30
+decoded_dat/a/fir/fir.dat	field	39	0	x	3233
+decoded_dat/a/fir/fir.dat	field	39	0	y	3336
+decoded_dat/a/fir/fir.dat	field	39	0	w	3536
+decoded_dat/a/fir/fir.dat	field	39	0	h	313130
+decoded_dat/a/fir/fir.dat	field	39	0	effect	32
+decoded_dat/a/fir/fir.dat	field	39	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	39	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	39	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	39	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	39	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	39	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	39	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	39	1	itr	
+decoded_dat/a/fir/fir.dat	field	39	1	kind	30
+decoded_dat/a/fir/fir.dat	field	39	1	x	3739
+decoded_dat/a/fir/fir.dat	field	39	1	y	3336
+decoded_dat/a/fir/fir.dat	field	39	1	w	3536
+decoded_dat/a/fir/fir.dat	field	39	1	h	313130
+decoded_dat/a/fir/fir.dat	field	39	1	effect	32
+decoded_dat/a/fir/fir.dat	field	39	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	39	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	39	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	39	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	39	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	39	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	39	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	39	2	itr	
+decoded_dat/a/fir/fir.dat	field	39	2	kind	38
+decoded_dat/a/fir/fir.dat	field	39	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	39	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	39	2	x	3233
+decoded_dat/a/fir/fir.dat	field	39	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	39	2	w	313132
+decoded_dat/a/fir/fir.dat	field	39	2	h	3939
+decoded_dat/a/fir/fir.dat	field	39	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	40	111		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	40	-1	pic	3335
+decoded_dat/a/fir/fir.dat	field	40	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	40	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	40	-1	next	313132
+decoded_dat/a/fir/fir.dat	field	40	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	40	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	40	0	itr	
+decoded_dat/a/fir/fir.dat	field	40	0	kind	30
+decoded_dat/a/fir/fir.dat	field	40	0	x	3230
+decoded_dat/a/fir/fir.dat	field	40	0	y	3136
+decoded_dat/a/fir/fir.dat	field	40	0	w	3631
+decoded_dat/a/fir/fir.dat	field	40	0	h	313335
+decoded_dat/a/fir/fir.dat	field	40	0	effect	32
+decoded_dat/a/fir/fir.dat	field	40	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	40	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	40	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	40	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	40	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	40	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	40	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	40	1	itr	
+decoded_dat/a/fir/fir.dat	field	40	1	kind	30
+decoded_dat/a/fir/fir.dat	field	40	1	x	3831
+decoded_dat/a/fir/fir.dat	field	40	1	y	3136
+decoded_dat/a/fir/fir.dat	field	40	1	w	3631
+decoded_dat/a/fir/fir.dat	field	40	1	h	313335
+decoded_dat/a/fir/fir.dat	field	40	1	effect	32
+decoded_dat/a/fir/fir.dat	field	40	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	40	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	40	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	40	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	40	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	40	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	40	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	40	2	itr	
+decoded_dat/a/fir/fir.dat	field	40	2	kind	38
+decoded_dat/a/fir/fir.dat	field	40	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	40	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	40	2	x	3233
+decoded_dat/a/fir/fir.dat	field	40	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	40	2	w	313132
+decoded_dat/a/fir/fir.dat	field	40	2	h	3939
+decoded_dat/a/fir/fir.dat	field	40	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	41	112		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	41	-1	pic	3336
+decoded_dat/a/fir/fir.dat	field	41	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	41	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	41	-1	next	313133
+decoded_dat/a/fir/fir.dat	field	41	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	41	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	41	0	itr	
+decoded_dat/a/fir/fir.dat	field	41	0	kind	30
+decoded_dat/a/fir/fir.dat	field	41	0	x	3139
+decoded_dat/a/fir/fir.dat	field	41	0	y	3138
+decoded_dat/a/fir/fir.dat	field	41	0	w	3633
+decoded_dat/a/fir/fir.dat	field	41	0	h	313331
+decoded_dat/a/fir/fir.dat	field	41	0	effect	32
+decoded_dat/a/fir/fir.dat	field	41	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	41	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	41	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	41	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	41	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	41	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	41	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	41	1	itr	
+decoded_dat/a/fir/fir.dat	field	41	1	kind	30
+decoded_dat/a/fir/fir.dat	field	41	1	x	3832
+decoded_dat/a/fir/fir.dat	field	41	1	y	3138
+decoded_dat/a/fir/fir.dat	field	41	1	w	3633
+decoded_dat/a/fir/fir.dat	field	41	1	h	313331
+decoded_dat/a/fir/fir.dat	field	41	1	effect	32
+decoded_dat/a/fir/fir.dat	field	41	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	41	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	41	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	41	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	41	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	41	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	41	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	41	2	itr	
+decoded_dat/a/fir/fir.dat	field	41	2	kind	38
+decoded_dat/a/fir/fir.dat	field	41	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	41	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	41	2	x	3233
+decoded_dat/a/fir/fir.dat	field	41	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	41	2	w	313132
+decoded_dat/a/fir/fir.dat	field	41	2	h	3939
+decoded_dat/a/fir/fir.dat	field	41	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	42	113		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	42	-1	pic	3337
+decoded_dat/a/fir/fir.dat	field	42	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	42	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	42	-1	next	313134
+decoded_dat/a/fir/fir.dat	field	42	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	42	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	42	0	itr	
+decoded_dat/a/fir/fir.dat	field	42	0	kind	30
+decoded_dat/a/fir/fir.dat	field	42	0	x	37
+decoded_dat/a/fir/fir.dat	field	42	0	y	3136
+decoded_dat/a/fir/fir.dat	field	42	0	w	3733
+decoded_dat/a/fir/fir.dat	field	42	0	h	313332
+decoded_dat/a/fir/fir.dat	field	42	0	effect	32
+decoded_dat/a/fir/fir.dat	field	42	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	42	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	42	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	42	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	42	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	42	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	42	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	42	1	itr	
+decoded_dat/a/fir/fir.dat	field	42	1	kind	30
+decoded_dat/a/fir/fir.dat	field	42	1	x	3830
+decoded_dat/a/fir/fir.dat	field	42	1	y	3136
+decoded_dat/a/fir/fir.dat	field	42	1	w	3733
+decoded_dat/a/fir/fir.dat	field	42	1	h	313332
+decoded_dat/a/fir/fir.dat	field	42	1	effect	32
+decoded_dat/a/fir/fir.dat	field	42	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	42	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	42	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	42	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	42	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	42	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	42	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	42	2	itr	
+decoded_dat/a/fir/fir.dat	field	42	2	kind	38
+decoded_dat/a/fir/fir.dat	field	42	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	42	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	42	2	x	3233
+decoded_dat/a/fir/fir.dat	field	42	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	42	2	w	313132
+decoded_dat/a/fir/fir.dat	field	42	2	h	3939
+decoded_dat/a/fir/fir.dat	field	42	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	43	114		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	43	-1	pic	3338
+decoded_dat/a/fir/fir.dat	field	43	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	43	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	43	-1	next	313135
+decoded_dat/a/fir/fir.dat	field	43	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	43	-1	centery	313530
+decoded_dat/a/fir/fir.dat	block	43	0	itr	
+decoded_dat/a/fir/fir.dat	field	43	0	kind	30
+decoded_dat/a/fir/fir.dat	field	43	0	x	3133
+decoded_dat/a/fir/fir.dat	field	43	0	y	3133
+decoded_dat/a/fir/fir.dat	field	43	0	w	3638
+decoded_dat/a/fir/fir.dat	field	43	0	h	313332
+decoded_dat/a/fir/fir.dat	field	43	0	effect	32
+decoded_dat/a/fir/fir.dat	field	43	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	43	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	43	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	43	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	43	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	43	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	43	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	43	1	itr	
+decoded_dat/a/fir/fir.dat	field	43	1	kind	30
+decoded_dat/a/fir/fir.dat	field	43	1	x	3831
+decoded_dat/a/fir/fir.dat	field	43	1	y	3133
+decoded_dat/a/fir/fir.dat	field	43	1	w	3638
+decoded_dat/a/fir/fir.dat	field	43	1	h	313332
+decoded_dat/a/fir/fir.dat	field	43	1	effect	32
+decoded_dat/a/fir/fir.dat	field	43	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	43	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	43	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	43	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	43	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	43	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	43	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	43	2	itr	
+decoded_dat/a/fir/fir.dat	field	43	2	kind	38
+decoded_dat/a/fir/fir.dat	field	43	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	43	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	43	2	x	3233
+decoded_dat/a/fir/fir.dat	field	43	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	43	2	w	313132
+decoded_dat/a/fir/fir.dat	field	43	2	h	3939
+decoded_dat/a/fir/fir.dat	field	43	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	44	115		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	44	-1	pic	3339
+decoded_dat/a/fir/fir.dat	field	44	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	44	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	44	-1	next	313136
+decoded_dat/a/fir/fir.dat	field	44	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	44	-1	centery	313535
+decoded_dat/a/fir/fir.dat	block	44	0	itr	
+decoded_dat/a/fir/fir.dat	field	44	0	kind	30
+decoded_dat/a/fir/fir.dat	field	44	0	x	37
+decoded_dat/a/fir/fir.dat	field	44	0	y	3134
+decoded_dat/a/fir/fir.dat	field	44	0	w	3732
+decoded_dat/a/fir/fir.dat	field	44	0	h	313137
+decoded_dat/a/fir/fir.dat	field	44	0	effect	32
+decoded_dat/a/fir/fir.dat	field	44	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	44	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	44	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	44	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	44	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	44	0	injury	313235
+decoded_dat/a/fir/fir.dat	field	44	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	44	1	itr	
+decoded_dat/a/fir/fir.dat	field	44	1	kind	30
+decoded_dat/a/fir/fir.dat	field	44	1	x	3739
+decoded_dat/a/fir/fir.dat	field	44	1	y	3134
+decoded_dat/a/fir/fir.dat	field	44	1	w	3732
+decoded_dat/a/fir/fir.dat	field	44	1	h	313137
+decoded_dat/a/fir/fir.dat	field	44	1	effect	32
+decoded_dat/a/fir/fir.dat	field	44	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	44	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	44	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	44	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	44	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	44	1	injury	313235
+decoded_dat/a/fir/fir.dat	field	44	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	44	2	itr	
+decoded_dat/a/fir/fir.dat	field	44	2	kind	38
+decoded_dat/a/fir/fir.dat	field	44	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	44	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	44	2	x	3233
+decoded_dat/a/fir/fir.dat	field	44	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	44	2	w	313132
+decoded_dat/a/fir/fir.dat	field	44	2	h	3939
+decoded_dat/a/fir/fir.dat	field	44	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	45	116		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	45	-1	pic	3430
+decoded_dat/a/fir/fir.dat	field	45	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	45	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	45	-1	next	313137
+decoded_dat/a/fir/fir.dat	field	45	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	45	-1	centery	313537
+decoded_dat/a/fir/fir.dat	frame	46	117		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	46	-1	pic	3431
+decoded_dat/a/fir/fir.dat	field	46	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	46	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	46	-1	next	313138
+decoded_dat/a/fir/fir.dat	field	46	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	46	-1	centery	313634
+decoded_dat/a/fir/fir.dat	frame	47	118		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	47	-1	pic	3432
+decoded_dat/a/fir/fir.dat	field	47	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	47	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	47	-1	next	313139
+decoded_dat/a/fir/fir.dat	field	47	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	47	-1	centery	313731
+decoded_dat/a/fir/fir.dat	frame	48	119		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	48	-1	pic	3433
+decoded_dat/a/fir/fir.dat	field	48	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	48	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	48	-1	next	313230
+decoded_dat/a/fir/fir.dat	field	48	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	48	-1	centery	313737
+decoded_dat/a/fir/fir.dat	frame	49	120		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	49	-1	pic	3434
+decoded_dat/a/fir/fir.dat	field	49	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	49	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	49	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	49	-1	centerx	3736
+decoded_dat/a/fir/fir.dat	field	49	-1	centery	313732
+decoded_dat/a/fir/fir.dat	frame	50	130		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	50	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	50	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	50	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	50	-1	next	313331
+decoded_dat/a/fir/fir.dat	field	50	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	50	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	51	131		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	51	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	51	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	51	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	51	-1	next	313332
+decoded_dat/a/fir/fir.dat	field	51	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	51	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	51	0	opoint	
+decoded_dat/a/fir/fir.dat	field	51	0	kind	31
+decoded_dat/a/fir/fir.dat	field	51	0	x	30
+decoded_dat/a/fir/fir.dat	field	51	0	y	30
+decoded_dat/a/fir/fir.dat	field	51	0	action	313332
+decoded_dat/a/fir/fir.dat	field	51	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	51	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	52	132		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	52	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	52	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	52	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	52	-1	next	313333
+decoded_dat/a/fir/fir.dat	field	52	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	52	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	53	133		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	53	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	53	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	53	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	53	-1	next	313334
+decoded_dat/a/fir/fir.dat	field	53	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	53	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	53	0	opoint	
+decoded_dat/a/fir/fir.dat	field	53	0	kind	31
+decoded_dat/a/fir/fir.dat	field	53	0	x	313130
+decoded_dat/a/fir/fir.dat	field	53	0	y	30
+decoded_dat/a/fir/fir.dat	field	53	0	action	313430
+decoded_dat/a/fir/fir.dat	field	53	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	53	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	54	134		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	54	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	54	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	54	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	54	-1	next	313335
+decoded_dat/a/fir/fir.dat	field	54	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	54	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	54	0	opoint	
+decoded_dat/a/fir/fir.dat	field	54	0	kind	31
+decoded_dat/a/fir/fir.dat	field	54	0	x	3830
+decoded_dat/a/fir/fir.dat	field	54	0	y	30
+decoded_dat/a/fir/fir.dat	field	54	0	action	313336
+decoded_dat/a/fir/fir.dat	field	54	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	54	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	55	135		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	55	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	55	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	55	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	55	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	55	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	55	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	55	0	opoint	
+decoded_dat/a/fir/fir.dat	field	55	0	kind	31
+decoded_dat/a/fir/fir.dat	field	55	0	x	3830
+decoded_dat/a/fir/fir.dat	field	55	0	y	30
+decoded_dat/a/fir/fir.dat	field	55	0	action	313338
+decoded_dat/a/fir/fir.dat	field	55	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	55	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	56	136		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	56	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	56	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	56	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	56	-1	next	313337
+decoded_dat/a/fir/fir.dat	field	56	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	56	-1	centery	30
+decoded_dat/a/fir/fir.dat	field	56	-1	hit_j	3730
+decoded_dat/a/fir/fir.dat	frame	57	137		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	57	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	57	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	57	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	57	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	57	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	57	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	57	-1	dvz	353530
+decoded_dat/a/fir/fir.dat	field	57	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	57	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	57	0	opoint	
+decoded_dat/a/fir/fir.dat	field	57	0	kind	31
+decoded_dat/a/fir/fir.dat	field	57	0	x	3430
+decoded_dat/a/fir/fir.dat	field	57	0	y	30
+decoded_dat/a/fir/fir.dat	field	57	0	action	313431
+decoded_dat/a/fir/fir.dat	field	57	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	57	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	58	138		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	58	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	58	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	58	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	58	-1	next	313339
+decoded_dat/a/fir/fir.dat	field	58	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	58	-1	centery	30
+decoded_dat/a/fir/fir.dat	field	58	-1	hit_j	3330
+decoded_dat/a/fir/fir.dat	frame	59	139		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	59	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	59	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	59	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	59	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	59	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	59	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	59	-1	dvz	353530
+decoded_dat/a/fir/fir.dat	field	59	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	59	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	59	0	opoint	
+decoded_dat/a/fir/fir.dat	field	59	0	kind	31
+decoded_dat/a/fir/fir.dat	field	59	0	x	3430
+decoded_dat/a/fir/fir.dat	field	59	0	y	30
+decoded_dat/a/fir/fir.dat	field	59	0	action	313432
+decoded_dat/a/fir/fir.dat	field	59	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	59	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	60	140		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	60	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	60	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	60	-1	wait	32
+decoded_dat/a/fir/fir.dat	field	60	-1	next	313431
+decoded_dat/a/fir/fir.dat	field	60	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	60	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	61	141		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	61	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	61	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	61	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	61	-1	next	313432
+decoded_dat/a/fir/fir.dat	field	61	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	61	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	62	142		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	62	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	62	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	62	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	62	-1	next	313433
+decoded_dat/a/fir/fir.dat	field	62	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	62	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	63	143		6578706c6f73696f6e5f7374617274
+decoded_dat/a/fir/fir.dat	field	63	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	63	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	63	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	63	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	63	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	63	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	63	0	opoint	
+decoded_dat/a/fir/fir.dat	field	63	0	kind	31
+decoded_dat/a/fir/fir.dat	field	63	0	x	30
+decoded_dat/a/fir/fir.dat	field	63	0	y	32
+decoded_dat/a/fir/fir.dat	field	63	0	action	313434
+decoded_dat/a/fir/fir.dat	field	63	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	63	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	64	144		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	64	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	64	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	64	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	64	-1	next	313435
+decoded_dat/a/fir/fir.dat	field	64	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	64	-1	centery	313438
+decoded_dat/a/fir/fir.dat	field	64	-1	sound	646174615c3032302e776176
+decoded_dat/a/fir/fir.dat	frame	65	145		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	65	-1	pic	3334
+decoded_dat/a/fir/fir.dat	field	65	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	65	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	65	-1	next	313436
+decoded_dat/a/fir/fir.dat	field	65	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	65	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	65	0	itr	
+decoded_dat/a/fir/fir.dat	field	65	0	kind	30
+decoded_dat/a/fir/fir.dat	field	65	0	x	3233
+decoded_dat/a/fir/fir.dat	field	65	0	y	3336
+decoded_dat/a/fir/fir.dat	field	65	0	w	3536
+decoded_dat/a/fir/fir.dat	field	65	0	h	313130
+decoded_dat/a/fir/fir.dat	field	65	0	effect	32
+decoded_dat/a/fir/fir.dat	field	65	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	65	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	65	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	65	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	65	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	65	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	65	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	65	1	itr	
+decoded_dat/a/fir/fir.dat	field	65	1	kind	30
+decoded_dat/a/fir/fir.dat	field	65	1	x	3739
+decoded_dat/a/fir/fir.dat	field	65	1	y	3336
+decoded_dat/a/fir/fir.dat	field	65	1	w	3536
+decoded_dat/a/fir/fir.dat	field	65	1	h	313130
+decoded_dat/a/fir/fir.dat	field	65	1	effect	32
+decoded_dat/a/fir/fir.dat	field	65	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	65	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	65	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	65	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	65	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	65	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	65	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	65	2	itr	
+decoded_dat/a/fir/fir.dat	field	65	2	kind	38
+decoded_dat/a/fir/fir.dat	field	65	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	65	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	65	2	x	3233
+decoded_dat/a/fir/fir.dat	field	65	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	65	2	w	313132
+decoded_dat/a/fir/fir.dat	field	65	2	h	3939
+decoded_dat/a/fir/fir.dat	field	65	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	66	146		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	66	-1	pic	3335
+decoded_dat/a/fir/fir.dat	field	66	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	66	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	66	-1	next	313437
+decoded_dat/a/fir/fir.dat	field	66	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	66	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	66	0	itr	
+decoded_dat/a/fir/fir.dat	field	66	0	kind	30
+decoded_dat/a/fir/fir.dat	field	66	0	x	3230
+decoded_dat/a/fir/fir.dat	field	66	0	y	3136
+decoded_dat/a/fir/fir.dat	field	66	0	w	3631
+decoded_dat/a/fir/fir.dat	field	66	0	h	313335
+decoded_dat/a/fir/fir.dat	field	66	0	effect	32
+decoded_dat/a/fir/fir.dat	field	66	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	66	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	66	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	66	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	66	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	66	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	66	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	66	1	itr	
+decoded_dat/a/fir/fir.dat	field	66	1	kind	30
+decoded_dat/a/fir/fir.dat	field	66	1	x	3831
+decoded_dat/a/fir/fir.dat	field	66	1	y	3136
+decoded_dat/a/fir/fir.dat	field	66	1	w	3631
+decoded_dat/a/fir/fir.dat	field	66	1	h	313335
+decoded_dat/a/fir/fir.dat	field	66	1	effect	32
+decoded_dat/a/fir/fir.dat	field	66	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	66	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	66	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	66	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	66	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	66	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	66	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	66	2	itr	
+decoded_dat/a/fir/fir.dat	field	66	2	kind	38
+decoded_dat/a/fir/fir.dat	field	66	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	66	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	66	2	x	3233
+decoded_dat/a/fir/fir.dat	field	66	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	66	2	w	313132
+decoded_dat/a/fir/fir.dat	field	66	2	h	3939
+decoded_dat/a/fir/fir.dat	field	66	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	67	147		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	67	-1	pic	3336
+decoded_dat/a/fir/fir.dat	field	67	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	67	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	67	-1	next	313438
+decoded_dat/a/fir/fir.dat	field	67	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	67	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	67	0	itr	
+decoded_dat/a/fir/fir.dat	field	67	0	kind	30
+decoded_dat/a/fir/fir.dat	field	67	0	x	3139
+decoded_dat/a/fir/fir.dat	field	67	0	y	3138
+decoded_dat/a/fir/fir.dat	field	67	0	w	3633
+decoded_dat/a/fir/fir.dat	field	67	0	h	313331
+decoded_dat/a/fir/fir.dat	field	67	0	effect	32
+decoded_dat/a/fir/fir.dat	field	67	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	67	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	67	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	67	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	67	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	67	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	67	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	67	1	itr	
+decoded_dat/a/fir/fir.dat	field	67	1	kind	30
+decoded_dat/a/fir/fir.dat	field	67	1	x	3832
+decoded_dat/a/fir/fir.dat	field	67	1	y	3138
+decoded_dat/a/fir/fir.dat	field	67	1	w	3633
+decoded_dat/a/fir/fir.dat	field	67	1	h	313331
+decoded_dat/a/fir/fir.dat	field	67	1	effect	32
+decoded_dat/a/fir/fir.dat	field	67	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	67	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	67	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	67	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	67	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	67	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	67	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	67	2	itr	
+decoded_dat/a/fir/fir.dat	field	67	2	kind	38
+decoded_dat/a/fir/fir.dat	field	67	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	67	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	67	2	x	3233
+decoded_dat/a/fir/fir.dat	field	67	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	67	2	w	313132
+decoded_dat/a/fir/fir.dat	field	67	2	h	3939
+decoded_dat/a/fir/fir.dat	field	67	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	68	148		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	68	-1	pic	3337
+decoded_dat/a/fir/fir.dat	field	68	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	68	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	68	-1	next	313439
+decoded_dat/a/fir/fir.dat	field	68	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	68	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	68	0	itr	
+decoded_dat/a/fir/fir.dat	field	68	0	kind	30
+decoded_dat/a/fir/fir.dat	field	68	0	x	37
+decoded_dat/a/fir/fir.dat	field	68	0	y	3136
+decoded_dat/a/fir/fir.dat	field	68	0	w	3733
+decoded_dat/a/fir/fir.dat	field	68	0	h	313332
+decoded_dat/a/fir/fir.dat	field	68	0	effect	32
+decoded_dat/a/fir/fir.dat	field	68	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	68	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	68	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	68	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	68	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	68	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	68	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	68	1	itr	
+decoded_dat/a/fir/fir.dat	field	68	1	kind	30
+decoded_dat/a/fir/fir.dat	field	68	1	x	3830
+decoded_dat/a/fir/fir.dat	field	68	1	y	3136
+decoded_dat/a/fir/fir.dat	field	68	1	w	3733
+decoded_dat/a/fir/fir.dat	field	68	1	h	313332
+decoded_dat/a/fir/fir.dat	field	68	1	effect	32
+decoded_dat/a/fir/fir.dat	field	68	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	68	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	68	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	68	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	68	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	68	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	68	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	68	2	itr	
+decoded_dat/a/fir/fir.dat	field	68	2	kind	38
+decoded_dat/a/fir/fir.dat	field	68	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	68	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	68	2	x	3233
+decoded_dat/a/fir/fir.dat	field	68	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	68	2	w	313132
+decoded_dat/a/fir/fir.dat	field	68	2	h	3939
+decoded_dat/a/fir/fir.dat	field	68	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	69	149		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	69	-1	pic	3338
+decoded_dat/a/fir/fir.dat	field	69	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	69	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	69	-1	next	313530
+decoded_dat/a/fir/fir.dat	field	69	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	69	-1	centery	313530
+decoded_dat/a/fir/fir.dat	block	69	0	itr	
+decoded_dat/a/fir/fir.dat	field	69	0	kind	30
+decoded_dat/a/fir/fir.dat	field	69	0	x	3133
+decoded_dat/a/fir/fir.dat	field	69	0	y	3133
+decoded_dat/a/fir/fir.dat	field	69	0	w	3638
+decoded_dat/a/fir/fir.dat	field	69	0	h	313332
+decoded_dat/a/fir/fir.dat	field	69	0	effect	32
+decoded_dat/a/fir/fir.dat	field	69	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	69	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	69	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	69	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	69	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	69	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	69	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	69	1	itr	
+decoded_dat/a/fir/fir.dat	field	69	1	kind	30
+decoded_dat/a/fir/fir.dat	field	69	1	x	3831
+decoded_dat/a/fir/fir.dat	field	69	1	y	3133
+decoded_dat/a/fir/fir.dat	field	69	1	w	3638
+decoded_dat/a/fir/fir.dat	field	69	1	h	313332
+decoded_dat/a/fir/fir.dat	field	69	1	effect	32
+decoded_dat/a/fir/fir.dat	field	69	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	69	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	69	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	69	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	69	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	69	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	69	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	69	2	itr	
+decoded_dat/a/fir/fir.dat	field	69	2	kind	38
+decoded_dat/a/fir/fir.dat	field	69	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	69	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	69	2	x	3233
+decoded_dat/a/fir/fir.dat	field	69	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	69	2	w	313132
+decoded_dat/a/fir/fir.dat	field	69	2	h	3939
+decoded_dat/a/fir/fir.dat	field	69	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	70	150		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	70	-1	pic	3339
+decoded_dat/a/fir/fir.dat	field	70	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	70	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	70	-1	next	313136
+decoded_dat/a/fir/fir.dat	field	70	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	70	-1	centery	313535
+decoded_dat/a/fir/fir.dat	block	70	0	itr	
+decoded_dat/a/fir/fir.dat	field	70	0	kind	30
+decoded_dat/a/fir/fir.dat	field	70	0	x	37
+decoded_dat/a/fir/fir.dat	field	70	0	y	3134
+decoded_dat/a/fir/fir.dat	field	70	0	w	3732
+decoded_dat/a/fir/fir.dat	field	70	0	h	313137
+decoded_dat/a/fir/fir.dat	field	70	0	effect	32
+decoded_dat/a/fir/fir.dat	field	70	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	70	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	70	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	70	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	70	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	70	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	70	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	70	1	itr	
+decoded_dat/a/fir/fir.dat	field	70	1	kind	30
+decoded_dat/a/fir/fir.dat	field	70	1	x	3739
+decoded_dat/a/fir/fir.dat	field	70	1	y	3134
+decoded_dat/a/fir/fir.dat	field	70	1	w	3732
+decoded_dat/a/fir/fir.dat	field	70	1	h	313137
+decoded_dat/a/fir/fir.dat	field	70	1	effect	32
+decoded_dat/a/fir/fir.dat	field	70	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	70	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	70	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	70	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	70	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	70	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	70	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	70	2	itr	
+decoded_dat/a/fir/fir.dat	field	70	2	kind	38
+decoded_dat/a/fir/fir.dat	field	70	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	70	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	70	2	x	3233
+decoded_dat/a/fir/fir.dat	field	70	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	70	2	w	313132
+decoded_dat/a/fir/fir.dat	field	70	2	h	3939
+decoded_dat/a/fir/fir.dat	field	70	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	71	160		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	71	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	71	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	71	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	71	-1	next	313631
+decoded_dat/a/fir/fir.dat	field	71	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	71	-1	centery	313438
+decoded_dat/a/fir/fir.dat	field	71	-1	sound	646174615c3032302e776176
+decoded_dat/a/fir/fir.dat	frame	72	161		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	72	-1	pic	3334
+decoded_dat/a/fir/fir.dat	field	72	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	72	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	72	-1	next	313632
+decoded_dat/a/fir/fir.dat	field	72	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	72	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	72	0	itr	
+decoded_dat/a/fir/fir.dat	field	72	0	kind	30
+decoded_dat/a/fir/fir.dat	field	72	0	x	3233
+decoded_dat/a/fir/fir.dat	field	72	0	y	3336
+decoded_dat/a/fir/fir.dat	field	72	0	w	3536
+decoded_dat/a/fir/fir.dat	field	72	0	h	313130
+decoded_dat/a/fir/fir.dat	field	72	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	72	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	72	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	72	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	72	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	72	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	72	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	72	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	72	1	itr	
+decoded_dat/a/fir/fir.dat	field	72	1	kind	30
+decoded_dat/a/fir/fir.dat	field	72	1	x	3739
+decoded_dat/a/fir/fir.dat	field	72	1	y	3336
+decoded_dat/a/fir/fir.dat	field	72	1	w	3536
+decoded_dat/a/fir/fir.dat	field	72	1	h	313130
+decoded_dat/a/fir/fir.dat	field	72	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	72	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	72	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	72	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	72	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	72	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	72	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	72	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	72	2	itr	
+decoded_dat/a/fir/fir.dat	field	72	2	kind	38
+decoded_dat/a/fir/fir.dat	field	72	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	72	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	72	2	x	3233
+decoded_dat/a/fir/fir.dat	field	72	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	72	2	w	313132
+decoded_dat/a/fir/fir.dat	field	72	2	h	3939
+decoded_dat/a/fir/fir.dat	field	72	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	73	162		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	73	-1	pic	3335
+decoded_dat/a/fir/fir.dat	field	73	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	73	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	73	-1	next	313633
+decoded_dat/a/fir/fir.dat	field	73	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	73	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	73	0	itr	
+decoded_dat/a/fir/fir.dat	field	73	0	kind	30
+decoded_dat/a/fir/fir.dat	field	73	0	x	3230
+decoded_dat/a/fir/fir.dat	field	73	0	y	3136
+decoded_dat/a/fir/fir.dat	field	73	0	w	3631
+decoded_dat/a/fir/fir.dat	field	73	0	h	313335
+decoded_dat/a/fir/fir.dat	field	73	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	73	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	73	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	73	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	73	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	73	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	73	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	73	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	73	1	itr	
+decoded_dat/a/fir/fir.dat	field	73	1	kind	30
+decoded_dat/a/fir/fir.dat	field	73	1	x	3831
+decoded_dat/a/fir/fir.dat	field	73	1	y	3136
+decoded_dat/a/fir/fir.dat	field	73	1	w	3631
+decoded_dat/a/fir/fir.dat	field	73	1	h	313335
+decoded_dat/a/fir/fir.dat	field	73	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	73	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	73	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	73	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	73	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	73	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	73	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	73	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	73	2	itr	
+decoded_dat/a/fir/fir.dat	field	73	2	kind	38
+decoded_dat/a/fir/fir.dat	field	73	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	73	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	73	2	x	3233
+decoded_dat/a/fir/fir.dat	field	73	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	73	2	w	313132
+decoded_dat/a/fir/fir.dat	field	73	2	h	3939
+decoded_dat/a/fir/fir.dat	field	73	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	74	163		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	74	-1	pic	3336
+decoded_dat/a/fir/fir.dat	field	74	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	74	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	74	-1	next	313634
+decoded_dat/a/fir/fir.dat	field	74	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	74	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	74	0	itr	
+decoded_dat/a/fir/fir.dat	field	74	0	kind	30
+decoded_dat/a/fir/fir.dat	field	74	0	x	3139
+decoded_dat/a/fir/fir.dat	field	74	0	y	3138
+decoded_dat/a/fir/fir.dat	field	74	0	w	3633
+decoded_dat/a/fir/fir.dat	field	74	0	h	313331
+decoded_dat/a/fir/fir.dat	field	74	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	74	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	74	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	74	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	74	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	74	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	74	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	74	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	74	1	itr	
+decoded_dat/a/fir/fir.dat	field	74	1	kind	30
+decoded_dat/a/fir/fir.dat	field	74	1	x	3832
+decoded_dat/a/fir/fir.dat	field	74	1	y	3138
+decoded_dat/a/fir/fir.dat	field	74	1	w	3633
+decoded_dat/a/fir/fir.dat	field	74	1	h	313331
+decoded_dat/a/fir/fir.dat	field	74	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	74	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	74	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	74	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	74	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	74	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	74	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	74	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	74	2	itr	
+decoded_dat/a/fir/fir.dat	field	74	2	kind	38
+decoded_dat/a/fir/fir.dat	field	74	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	74	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	74	2	x	3233
+decoded_dat/a/fir/fir.dat	field	74	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	74	2	w	313132
+decoded_dat/a/fir/fir.dat	field	74	2	h	3939
+decoded_dat/a/fir/fir.dat	field	74	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	75	164		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	75	-1	pic	3337
+decoded_dat/a/fir/fir.dat	field	75	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	75	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	75	-1	next	313635
+decoded_dat/a/fir/fir.dat	field	75	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	75	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	75	0	itr	
+decoded_dat/a/fir/fir.dat	field	75	0	kind	30
+decoded_dat/a/fir/fir.dat	field	75	0	x	37
+decoded_dat/a/fir/fir.dat	field	75	0	y	3136
+decoded_dat/a/fir/fir.dat	field	75	0	w	3733
+decoded_dat/a/fir/fir.dat	field	75	0	h	313332
+decoded_dat/a/fir/fir.dat	field	75	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	75	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	75	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	75	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	75	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	75	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	75	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	75	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	75	1	itr	
+decoded_dat/a/fir/fir.dat	field	75	1	kind	30
+decoded_dat/a/fir/fir.dat	field	75	1	x	3830
+decoded_dat/a/fir/fir.dat	field	75	1	y	3136
+decoded_dat/a/fir/fir.dat	field	75	1	w	3733
+decoded_dat/a/fir/fir.dat	field	75	1	h	313332
+decoded_dat/a/fir/fir.dat	field	75	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	75	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	75	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	75	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	75	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	75	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	75	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	75	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	75	2	itr	
+decoded_dat/a/fir/fir.dat	field	75	2	kind	38
+decoded_dat/a/fir/fir.dat	field	75	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	75	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	75	2	x	3233
+decoded_dat/a/fir/fir.dat	field	75	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	75	2	w	313132
+decoded_dat/a/fir/fir.dat	field	75	2	h	3939
+decoded_dat/a/fir/fir.dat	field	75	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	76	165		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	76	-1	pic	3338
+decoded_dat/a/fir/fir.dat	field	76	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	76	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	76	-1	next	313636
+decoded_dat/a/fir/fir.dat	field	76	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	76	-1	centery	313530
+decoded_dat/a/fir/fir.dat	block	76	0	itr	
+decoded_dat/a/fir/fir.dat	field	76	0	kind	30
+decoded_dat/a/fir/fir.dat	field	76	0	x	3133
+decoded_dat/a/fir/fir.dat	field	76	0	y	3133
+decoded_dat/a/fir/fir.dat	field	76	0	w	3638
+decoded_dat/a/fir/fir.dat	field	76	0	h	313332
+decoded_dat/a/fir/fir.dat	field	76	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	76	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	76	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	76	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	76	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	76	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	76	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	76	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	76	1	itr	
+decoded_dat/a/fir/fir.dat	field	76	1	kind	30
+decoded_dat/a/fir/fir.dat	field	76	1	x	3831
+decoded_dat/a/fir/fir.dat	field	76	1	y	3133
+decoded_dat/a/fir/fir.dat	field	76	1	w	3638
+decoded_dat/a/fir/fir.dat	field	76	1	h	313332
+decoded_dat/a/fir/fir.dat	field	76	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	76	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	76	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	76	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	76	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	76	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	76	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	76	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	76	2	itr	
+decoded_dat/a/fir/fir.dat	field	76	2	kind	38
+decoded_dat/a/fir/fir.dat	field	76	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	76	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	76	2	x	3233
+decoded_dat/a/fir/fir.dat	field	76	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	76	2	w	313132
+decoded_dat/a/fir/fir.dat	field	76	2	h	3939
+decoded_dat/a/fir/fir.dat	field	76	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	77	166		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	77	-1	pic	3339
+decoded_dat/a/fir/fir.dat	field	77	-1	state	3138
+decoded_dat/a/fir/fir.dat	field	77	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	77	-1	next	313136
+decoded_dat/a/fir/fir.dat	field	77	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	77	-1	centery	313535
+decoded_dat/a/fir/fir.dat	block	77	0	itr	
+decoded_dat/a/fir/fir.dat	field	77	0	kind	30
+decoded_dat/a/fir/fir.dat	field	77	0	x	37
+decoded_dat/a/fir/fir.dat	field	77	0	y	3134
+decoded_dat/a/fir/fir.dat	field	77	0	w	3732
+decoded_dat/a/fir/fir.dat	field	77	0	h	313137
+decoded_dat/a/fir/fir.dat	field	77	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	77	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	77	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	77	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	77	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	77	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	77	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	77	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	77	1	itr	
+decoded_dat/a/fir/fir.dat	field	77	1	kind	30
+decoded_dat/a/fir/fir.dat	field	77	1	x	3739
+decoded_dat/a/fir/fir.dat	field	77	1	y	3134
+decoded_dat/a/fir/fir.dat	field	77	1	w	3732
+decoded_dat/a/fir/fir.dat	field	77	1	h	313137
+decoded_dat/a/fir/fir.dat	field	77	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	77	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	77	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	77	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	77	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	77	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	77	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	77	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	77	2	itr	
+decoded_dat/a/fir/fir.dat	field	77	2	kind	38
+decoded_dat/a/fir/fir.dat	field	77	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	77	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	77	2	x	3233
+decoded_dat/a/fir/fir.dat	field	77	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	77	2	w	313132
+decoded_dat/a/fir/fir.dat	field	77	2	h	3939
+decoded_dat/a/fir/fir.dat	field	77	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	78	172		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	78	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	78	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	78	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	78	-1	next	313732
+decoded_dat/a/fir/fir.dat	field	78	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	78	-1	centery	30
+decoded_dat/a/fir/fir.dat	field	78	-1	hit_a	3730
+decoded_dat/a/fir/fir.dat	field	78	-1	hit_d	313733
+decoded_dat/a/fir/fir.dat	block	78	0	opoint	
+decoded_dat/a/fir/fir.dat	field	78	0	kind	31
+decoded_dat/a/fir/fir.dat	field	78	0	x	30
+decoded_dat/a/fir/fir.dat	field	78	0	y	30
+decoded_dat/a/fir/fir.dat	field	78	0	action	3530
+decoded_dat/a/fir/fir.dat	field	78	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	78	0	facing	31
+decoded_dat/a/fir/fir.dat	frame	79	173		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	79	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	79	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	79	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	79	-1	next	313734
+decoded_dat/a/fir/fir.dat	field	79	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	79	-1	centery	30
+decoded_dat/a/fir/fir.dat	frame	80	174		67726f756e645f66697265
+decoded_dat/a/fir/fir.dat	field	80	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	80	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	80	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	80	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	80	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	80	-1	centery	30
+decoded_dat/a/fir/fir.dat	block	80	0	opoint	
+decoded_dat/a/fir/fir.dat	field	80	0	kind	31
+decoded_dat/a/fir/fir.dat	field	80	0	x	30
+decoded_dat/a/fir/fir.dat	field	80	0	y	30
+decoded_dat/a/fir/fir.dat	field	80	0	action	313735
+decoded_dat/a/fir/fir.dat	field	80	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	80	0	facing	30
+decoded_dat/a/fir/fir.dat	frame	81	175		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	81	-1	pic	3430
+decoded_dat/a/fir/fir.dat	field	81	-1	state	3135
+decoded_dat/a/fir/fir.dat	field	81	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	81	-1	next	313736
+decoded_dat/a/fir/fir.dat	field	81	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	81	-1	centery	313438
+decoded_dat/a/fir/fir.dat	field	81	-1	sound	646174615c3032302e776176
+decoded_dat/a/fir/fir.dat	block	81	0	itr	
+decoded_dat/a/fir/fir.dat	field	81	0	kind	30
+decoded_dat/a/fir/fir.dat	field	81	0	x	3135
+decoded_dat/a/fir/fir.dat	field	81	0	y	36
+decoded_dat/a/fir/fir.dat	field	81	0	w	3634
+decoded_dat/a/fir/fir.dat	field	81	0	h	313233
+decoded_dat/a/fir/fir.dat	field	81	0	effect	32
+decoded_dat/a/fir/fir.dat	field	81	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	81	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	81	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	81	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	81	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	81	0	injury	35
+decoded_dat/a/fir/fir.dat	field	81	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	81	1	itr	
+decoded_dat/a/fir/fir.dat	field	81	1	kind	30
+decoded_dat/a/fir/fir.dat	field	81	1	x	3739
+decoded_dat/a/fir/fir.dat	field	81	1	y	36
+decoded_dat/a/fir/fir.dat	field	81	1	w	3634
+decoded_dat/a/fir/fir.dat	field	81	1	h	313233
+decoded_dat/a/fir/fir.dat	field	81	1	effect	32
+decoded_dat/a/fir/fir.dat	field	81	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	81	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	81	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	81	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	81	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	81	1	injury	35
+decoded_dat/a/fir/fir.dat	field	81	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	81	2	itr	
+decoded_dat/a/fir/fir.dat	field	81	2	kind	38
+decoded_dat/a/fir/fir.dat	field	81	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	81	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	81	2	x	3233
+decoded_dat/a/fir/fir.dat	field	81	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	81	2	w	313132
+decoded_dat/a/fir/fir.dat	field	81	2	h	3939
+decoded_dat/a/fir/fir.dat	field	81	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	82	176		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	82	-1	pic	3430
+decoded_dat/a/fir/fir.dat	field	82	-1	state	3135
+decoded_dat/a/fir/fir.dat	field	82	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	82	-1	next	313737
+decoded_dat/a/fir/fir.dat	field	82	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	82	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	82	0	opoint	
+decoded_dat/a/fir/fir.dat	field	82	0	kind	31
+decoded_dat/a/fir/fir.dat	field	82	0	x	3738
+decoded_dat/a/fir/fir.dat	field	82	0	y	313030
+decoded_dat/a/fir/fir.dat	field	82	0	action	30
+decoded_dat/a/fir/fir.dat	field	82	0	dvx	2d33
+decoded_dat/a/fir/fir.dat	field	82	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	82	0	facing	30
+decoded_dat/a/fir/fir.dat	block	82	1	itr	
+decoded_dat/a/fir/fir.dat	field	82	1	kind	30
+decoded_dat/a/fir/fir.dat	field	82	1	x	3135
+decoded_dat/a/fir/fir.dat	field	82	1	y	36
+decoded_dat/a/fir/fir.dat	field	82	1	w	3634
+decoded_dat/a/fir/fir.dat	field	82	1	h	313233
+decoded_dat/a/fir/fir.dat	field	82	1	effect	32
+decoded_dat/a/fir/fir.dat	field	82	1	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	82	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	82	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	82	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	82	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	82	1	injury	35
+decoded_dat/a/fir/fir.dat	field	82	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	82	2	itr	
+decoded_dat/a/fir/fir.dat	field	82	2	kind	30
+decoded_dat/a/fir/fir.dat	field	82	2	x	3739
+decoded_dat/a/fir/fir.dat	field	82	2	y	36
+decoded_dat/a/fir/fir.dat	field	82	2	w	3634
+decoded_dat/a/fir/fir.dat	field	82	2	h	313233
+decoded_dat/a/fir/fir.dat	field	82	2	effect	32
+decoded_dat/a/fir/fir.dat	field	82	2	dvx	3132
+decoded_dat/a/fir/fir.dat	field	82	2	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	82	2	fall	393939
+decoded_dat/a/fir/fir.dat	field	82	2	vrest	333030
+decoded_dat/a/fir/fir.dat	field	82	2	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	82	2	injury	35
+decoded_dat/a/fir/fir.dat	field	82	2	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	82	3	itr	
+decoded_dat/a/fir/fir.dat	field	82	3	kind	38
+decoded_dat/a/fir/fir.dat	field	82	3	bdefend	33
+decoded_dat/a/fir/fir.dat	field	82	3	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	82	3	x	3233
+decoded_dat/a/fir/fir.dat	field	82	3	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	82	3	w	313132
+decoded_dat/a/fir/fir.dat	field	82	3	h	3939
+decoded_dat/a/fir/fir.dat	field	82	3	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	83	177		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	83	-1	pic	3431
+decoded_dat/a/fir/fir.dat	field	83	-1	state	3135
+decoded_dat/a/fir/fir.dat	field	83	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	83	-1	next	313138
+decoded_dat/a/fir/fir.dat	field	83	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	83	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	83	0	opoint	
+decoded_dat/a/fir/fir.dat	field	83	0	kind	31
+decoded_dat/a/fir/fir.dat	field	83	0	x	3738
+decoded_dat/a/fir/fir.dat	field	83	0	y	313030
+decoded_dat/a/fir/fir.dat	field	83	0	action	30
+decoded_dat/a/fir/fir.dat	field	83	0	dvx	2d33
+decoded_dat/a/fir/fir.dat	field	83	0	oid	323131
+decoded_dat/a/fir/fir.dat	field	83	0	facing	31
+decoded_dat/a/fir/fir.dat	block	83	1	itr	
+decoded_dat/a/fir/fir.dat	field	83	1	kind	30
+decoded_dat/a/fir/fir.dat	field	83	1	x	3135
+decoded_dat/a/fir/fir.dat	field	83	1	y	36
+decoded_dat/a/fir/fir.dat	field	83	1	w	3634
+decoded_dat/a/fir/fir.dat	field	83	1	h	313233
+decoded_dat/a/fir/fir.dat	field	83	1	effect	32
+decoded_dat/a/fir/fir.dat	field	83	1	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	83	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	83	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	83	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	83	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	83	1	injury	35
+decoded_dat/a/fir/fir.dat	field	83	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	83	2	itr	
+decoded_dat/a/fir/fir.dat	field	83	2	kind	30
+decoded_dat/a/fir/fir.dat	field	83	2	x	3739
+decoded_dat/a/fir/fir.dat	field	83	2	y	36
+decoded_dat/a/fir/fir.dat	field	83	2	w	3634
+decoded_dat/a/fir/fir.dat	field	83	2	h	313233
+decoded_dat/a/fir/fir.dat	field	83	2	effect	32
+decoded_dat/a/fir/fir.dat	field	83	2	dvx	3132
+decoded_dat/a/fir/fir.dat	field	83	2	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	83	2	fall	393939
+decoded_dat/a/fir/fir.dat	field	83	2	vrest	333030
+decoded_dat/a/fir/fir.dat	field	83	2	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	83	2	injury	35
+decoded_dat/a/fir/fir.dat	field	83	2	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	83	3	itr	
+decoded_dat/a/fir/fir.dat	field	83	3	kind	38
+decoded_dat/a/fir/fir.dat	field	83	3	bdefend	33
+decoded_dat/a/fir/fir.dat	field	83	3	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	83	3	x	3233
+decoded_dat/a/fir/fir.dat	field	83	3	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	83	3	w	313132
+decoded_dat/a/fir/fir.dat	field	83	3	h	3939
+decoded_dat/a/fir/fir.dat	field	83	3	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	84	231		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	84	-1	pic	393939
+decoded_dat/a/fir/fir.dat	field	84	-1	state	3230
+decoded_dat/a/fir/fir.dat	field	84	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	84	-1	next	323332
+decoded_dat/a/fir/fir.dat	field	84	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	84	-1	centery	313438
+decoded_dat/a/fir/fir.dat	field	84	-1	sound	646174615c3032302e776176
+decoded_dat/a/fir/fir.dat	frame	85	232		6578706c6f73696f6e
+decoded_dat/a/fir/fir.dat	field	85	-1	pic	3334
+decoded_dat/a/fir/fir.dat	field	85	-1	state	3230
+decoded_dat/a/fir/fir.dat	field	85	-1	wait	30
+decoded_dat/a/fir/fir.dat	field	85	-1	next	313632
+decoded_dat/a/fir/fir.dat	field	85	-1	centerx	3738
+decoded_dat/a/fir/fir.dat	field	85	-1	centery	313438
+decoded_dat/a/fir/fir.dat	block	85	0	itr	
+decoded_dat/a/fir/fir.dat	field	85	0	kind	30
+decoded_dat/a/fir/fir.dat	field	85	0	x	3233
+decoded_dat/a/fir/fir.dat	field	85	0	y	3336
+decoded_dat/a/fir/fir.dat	field	85	0	w	3536
+decoded_dat/a/fir/fir.dat	field	85	0	h	313130
+decoded_dat/a/fir/fir.dat	field	85	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	85	0	dvx	2d3132
+decoded_dat/a/fir/fir.dat	field	85	0	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	85	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	85	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	85	0	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	85	0	injury	3830
+decoded_dat/a/fir/fir.dat	field	85	0	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	85	1	itr	
+decoded_dat/a/fir/fir.dat	field	85	1	kind	30
+decoded_dat/a/fir/fir.dat	field	85	1	x	3739
+decoded_dat/a/fir/fir.dat	field	85	1	y	3336
+decoded_dat/a/fir/fir.dat	field	85	1	w	3536
+decoded_dat/a/fir/fir.dat	field	85	1	h	313130
+decoded_dat/a/fir/fir.dat	field	85	1	effect	3231
+decoded_dat/a/fir/fir.dat	field	85	1	dvx	3132
+decoded_dat/a/fir/fir.dat	field	85	1	dvy	2d3138
+decoded_dat/a/fir/fir.dat	field	85	1	fall	393939
+decoded_dat/a/fir/fir.dat	field	85	1	vrest	333030
+decoded_dat/a/fir/fir.dat	field	85	1	bdefend	3830
+decoded_dat/a/fir/fir.dat	field	85	1	injury	3830
+decoded_dat/a/fir/fir.dat	field	85	1	zwidth	3230
+decoded_dat/a/fir/fir.dat	block	85	2	itr	
+decoded_dat/a/fir/fir.dat	field	85	2	kind	38
+decoded_dat/a/fir/fir.dat	field	85	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	85	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	85	2	x	3233
+decoded_dat/a/fir/fir.dat	field	85	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	85	2	w	313132
+decoded_dat/a/fir/fir.dat	field	85	2	h	3939
+decoded_dat/a/fir/fir.dat	field	85	2	dvx	313136
+decoded_dat/a/fir/fir.dat	frame	86	250		6a6972666972
+decoded_dat/a/fir/fir.dat	field	86	-1	pic	3138
+decoded_dat/a/fir/fir.dat	field	86	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	86	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	86	-1	next	323531
+decoded_dat/a/fir/fir.dat	field	86	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	86	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	86	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	86	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	86	0	itr	
+decoded_dat/a/fir/fir.dat	field	86	0	kind	38
+decoded_dat/a/fir/fir.dat	field	86	0	respond	34
+decoded_dat/a/fir/fir.dat	field	86	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	86	0	x	30
+decoded_dat/a/fir/fir.dat	field	86	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	86	0	w	3336
+decoded_dat/a/fir/fir.dat	field	86	0	h	313939
+decoded_dat/a/fir/fir.dat	field	86	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	86	1	itr	
+decoded_dat/a/fir/fir.dat	field	86	1	kind	38
+decoded_dat/a/fir/fir.dat	field	86	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	86	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	86	1	x	30
+decoded_dat/a/fir/fir.dat	field	86	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	86	1	w	3336
+decoded_dat/a/fir/fir.dat	field	86	1	h	3939
+decoded_dat/a/fir/fir.dat	field	86	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	86	2	bdy	
+decoded_dat/a/fir/fir.dat	field	86	2	kind	30
+decoded_dat/a/fir/fir.dat	field	86	2	x	30
+decoded_dat/a/fir/fir.dat	field	86	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	86	2	w	3336
+decoded_dat/a/fir/fir.dat	field	86	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	87	251		6a6972666972
+decoded_dat/a/fir/fir.dat	field	87	-1	pic	3139
+decoded_dat/a/fir/fir.dat	field	87	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	87	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	87	-1	next	323532
+decoded_dat/a/fir/fir.dat	field	87	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	87	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	87	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	87	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	87	0	itr	
+decoded_dat/a/fir/fir.dat	field	87	0	kind	38
+decoded_dat/a/fir/fir.dat	field	87	0	respond	34
+decoded_dat/a/fir/fir.dat	field	87	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	87	0	x	30
+decoded_dat/a/fir/fir.dat	field	87	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	87	0	w	3336
+decoded_dat/a/fir/fir.dat	field	87	0	h	313939
+decoded_dat/a/fir/fir.dat	field	87	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	87	1	itr	
+decoded_dat/a/fir/fir.dat	field	87	1	kind	38
+decoded_dat/a/fir/fir.dat	field	87	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	87	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	87	1	x	30
+decoded_dat/a/fir/fir.dat	field	87	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	87	1	w	3336
+decoded_dat/a/fir/fir.dat	field	87	1	h	3939
+decoded_dat/a/fir/fir.dat	field	87	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	87	2	bdy	
+decoded_dat/a/fir/fir.dat	field	87	2	kind	30
+decoded_dat/a/fir/fir.dat	field	87	2	x	30
+decoded_dat/a/fir/fir.dat	field	87	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	87	2	w	3336
+decoded_dat/a/fir/fir.dat	field	87	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	88	252		6a6972666972
+decoded_dat/a/fir/fir.dat	field	88	-1	pic	3230
+decoded_dat/a/fir/fir.dat	field	88	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	88	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	88	-1	next	323533
+decoded_dat/a/fir/fir.dat	field	88	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	88	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	88	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	88	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	88	0	itr	
+decoded_dat/a/fir/fir.dat	field	88	0	kind	30
+decoded_dat/a/fir/fir.dat	field	88	0	x	30
+decoded_dat/a/fir/fir.dat	field	88	0	y	3235
+decoded_dat/a/fir/fir.dat	field	88	0	w	3336
+decoded_dat/a/fir/fir.dat	field	88	0	h	3332
+decoded_dat/a/fir/fir.dat	field	88	0	effect	3230
+decoded_dat/a/fir/fir.dat	field	88	0	dvx	2d31
+decoded_dat/a/fir/fir.dat	field	88	0	dvy	2d36
+decoded_dat/a/fir/fir.dat	field	88	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	88	0	vrest	3230
+decoded_dat/a/fir/fir.dat	field	88	0	bdefend	33
+decoded_dat/a/fir/fir.dat	field	88	0	injury	3230
+decoded_dat/a/fir/fir.dat	block	88	1	itr	
+decoded_dat/a/fir/fir.dat	field	88	1	kind	38
+decoded_dat/a/fir/fir.dat	field	88	1	respond	34
+decoded_dat/a/fir/fir.dat	field	88	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	88	1	x	30
+decoded_dat/a/fir/fir.dat	field	88	1	y	323135303030
+decoded_dat/a/fir/fir.dat	field	88	1	w	3336
+decoded_dat/a/fir/fir.dat	field	88	1	h	313939
+decoded_dat/a/fir/fir.dat	field	88	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	88	2	itr	
+decoded_dat/a/fir/fir.dat	field	88	2	kind	38
+decoded_dat/a/fir/fir.dat	field	88	2	bdefend	33
+decoded_dat/a/fir/fir.dat	field	88	2	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	88	2	x	30
+decoded_dat/a/fir/fir.dat	field	88	2	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	88	2	w	3336
+decoded_dat/a/fir/fir.dat	field	88	2	h	3939
+decoded_dat/a/fir/fir.dat	field	88	2	dvx	3730
+decoded_dat/a/fir/fir.dat	block	88	3	bdy	
+decoded_dat/a/fir/fir.dat	field	88	3	kind	30
+decoded_dat/a/fir/fir.dat	field	88	3	x	30
+decoded_dat/a/fir/fir.dat	field	88	3	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	88	3	w	3336
+decoded_dat/a/fir/fir.dat	field	88	3	h	3939
+decoded_dat/a/fir/fir.dat	frame	89	253		6a6972666972
+decoded_dat/a/fir/fir.dat	field	89	-1	pic	3231
+decoded_dat/a/fir/fir.dat	field	89	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	89	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	89	-1	next	323534
+decoded_dat/a/fir/fir.dat	field	89	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	89	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	89	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	89	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	89	0	itr	
+decoded_dat/a/fir/fir.dat	field	89	0	kind	38
+decoded_dat/a/fir/fir.dat	field	89	0	respond	34
+decoded_dat/a/fir/fir.dat	field	89	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	89	0	x	30
+decoded_dat/a/fir/fir.dat	field	89	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	89	0	w	3336
+decoded_dat/a/fir/fir.dat	field	89	0	h	313939
+decoded_dat/a/fir/fir.dat	field	89	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	89	1	itr	
+decoded_dat/a/fir/fir.dat	field	89	1	kind	38
+decoded_dat/a/fir/fir.dat	field	89	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	89	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	89	1	x	30
+decoded_dat/a/fir/fir.dat	field	89	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	89	1	w	3336
+decoded_dat/a/fir/fir.dat	field	89	1	h	3939
+decoded_dat/a/fir/fir.dat	field	89	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	89	2	bdy	
+decoded_dat/a/fir/fir.dat	field	89	2	kind	30
+decoded_dat/a/fir/fir.dat	field	89	2	x	30
+decoded_dat/a/fir/fir.dat	field	89	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	89	2	w	3336
+decoded_dat/a/fir/fir.dat	field	89	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	90	254		6a6972666972
+decoded_dat/a/fir/fir.dat	field	90	-1	pic	3232
+decoded_dat/a/fir/fir.dat	field	90	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	90	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	90	-1	next	323535
+decoded_dat/a/fir/fir.dat	field	90	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	90	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	90	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	90	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	90	0	itr	
+decoded_dat/a/fir/fir.dat	field	90	0	kind	38
+decoded_dat/a/fir/fir.dat	field	90	0	respond	34
+decoded_dat/a/fir/fir.dat	field	90	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	90	0	x	30
+decoded_dat/a/fir/fir.dat	field	90	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	90	0	w	3336
+decoded_dat/a/fir/fir.dat	field	90	0	h	313939
+decoded_dat/a/fir/fir.dat	field	90	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	90	1	itr	
+decoded_dat/a/fir/fir.dat	field	90	1	kind	38
+decoded_dat/a/fir/fir.dat	field	90	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	90	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	90	1	x	30
+decoded_dat/a/fir/fir.dat	field	90	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	90	1	w	3336
+decoded_dat/a/fir/fir.dat	field	90	1	h	3939
+decoded_dat/a/fir/fir.dat	field	90	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	90	2	bdy	
+decoded_dat/a/fir/fir.dat	field	90	2	kind	30
+decoded_dat/a/fir/fir.dat	field	90	2	x	30
+decoded_dat/a/fir/fir.dat	field	90	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	90	2	w	3336
+decoded_dat/a/fir/fir.dat	field	90	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	91	255		6a6972666972
+decoded_dat/a/fir/fir.dat	field	91	-1	pic	3233
+decoded_dat/a/fir/fir.dat	field	91	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	91	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	91	-1	next	323536
+decoded_dat/a/fir/fir.dat	field	91	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	91	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	91	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	91	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	91	0	itr	
+decoded_dat/a/fir/fir.dat	field	91	0	kind	38
+decoded_dat/a/fir/fir.dat	field	91	0	respond	34
+decoded_dat/a/fir/fir.dat	field	91	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	91	0	x	30
+decoded_dat/a/fir/fir.dat	field	91	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	91	0	w	3336
+decoded_dat/a/fir/fir.dat	field	91	0	h	313939
+decoded_dat/a/fir/fir.dat	field	91	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	91	1	itr	
+decoded_dat/a/fir/fir.dat	field	91	1	kind	38
+decoded_dat/a/fir/fir.dat	field	91	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	91	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	91	1	x	30
+decoded_dat/a/fir/fir.dat	field	91	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	91	1	w	3336
+decoded_dat/a/fir/fir.dat	field	91	1	h	3939
+decoded_dat/a/fir/fir.dat	field	91	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	91	2	bdy	
+decoded_dat/a/fir/fir.dat	field	91	2	kind	30
+decoded_dat/a/fir/fir.dat	field	91	2	x	30
+decoded_dat/a/fir/fir.dat	field	91	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	91	2	w	3336
+decoded_dat/a/fir/fir.dat	field	91	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	92	256		6a6972666972
+decoded_dat/a/fir/fir.dat	field	92	-1	pic	3234
+decoded_dat/a/fir/fir.dat	field	92	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	92	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	92	-1	next	323537
+decoded_dat/a/fir/fir.dat	field	92	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	92	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	92	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	92	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	92	0	itr	
+decoded_dat/a/fir/fir.dat	field	92	0	kind	38
+decoded_dat/a/fir/fir.dat	field	92	0	respond	34
+decoded_dat/a/fir/fir.dat	field	92	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	92	0	x	30
+decoded_dat/a/fir/fir.dat	field	92	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	92	0	w	3336
+decoded_dat/a/fir/fir.dat	field	92	0	h	313939
+decoded_dat/a/fir/fir.dat	field	92	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	92	1	itr	
+decoded_dat/a/fir/fir.dat	field	92	1	kind	38
+decoded_dat/a/fir/fir.dat	field	92	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	92	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	92	1	x	30
+decoded_dat/a/fir/fir.dat	field	92	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	92	1	w	3336
+decoded_dat/a/fir/fir.dat	field	92	1	h	3939
+decoded_dat/a/fir/fir.dat	field	92	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	92	2	bdy	
+decoded_dat/a/fir/fir.dat	field	92	2	kind	30
+decoded_dat/a/fir/fir.dat	field	92	2	x	30
+decoded_dat/a/fir/fir.dat	field	92	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	92	2	w	3336
+decoded_dat/a/fir/fir.dat	field	92	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	93	257		6a6972666972
+decoded_dat/a/fir/fir.dat	field	93	-1	pic	3235
+decoded_dat/a/fir/fir.dat	field	93	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	93	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	93	-1	next	323538
+decoded_dat/a/fir/fir.dat	field	93	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	93	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	93	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	93	-1	centery	3437
+decoded_dat/a/fir/fir.dat	field	93	-1	hit_a	3330
+decoded_dat/a/fir/fir.dat	field	93	-1	hit_d	3730
+decoded_dat/a/fir/fir.dat	block	93	0	itr	
+decoded_dat/a/fir/fir.dat	field	93	0	kind	38
+decoded_dat/a/fir/fir.dat	field	93	0	respond	34
+decoded_dat/a/fir/fir.dat	field	93	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	93	0	x	30
+decoded_dat/a/fir/fir.dat	field	93	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	93	0	w	3336
+decoded_dat/a/fir/fir.dat	field	93	0	h	313939
+decoded_dat/a/fir/fir.dat	field	93	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	93	1	itr	
+decoded_dat/a/fir/fir.dat	field	93	1	kind	38
+decoded_dat/a/fir/fir.dat	field	93	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	93	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	93	1	x	30
+decoded_dat/a/fir/fir.dat	field	93	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	93	1	w	3336
+decoded_dat/a/fir/fir.dat	field	93	1	h	3939
+decoded_dat/a/fir/fir.dat	field	93	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	93	2	bdy	
+decoded_dat/a/fir/fir.dat	field	93	2	kind	30
+decoded_dat/a/fir/fir.dat	field	93	2	x	30
+decoded_dat/a/fir/fir.dat	field	93	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	93	2	w	3336
+decoded_dat/a/fir/fir.dat	field	93	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	94	258		6a6972666972
+decoded_dat/a/fir/fir.dat	field	94	-1	pic	3138
+decoded_dat/a/fir/fir.dat	field	94	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	94	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	94	-1	next	323539
+decoded_dat/a/fir/fir.dat	field	94	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	94	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	94	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	94	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	94	0	itr	
+decoded_dat/a/fir/fir.dat	field	94	0	kind	38
+decoded_dat/a/fir/fir.dat	field	94	0	respond	34
+decoded_dat/a/fir/fir.dat	field	94	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	94	0	x	30
+decoded_dat/a/fir/fir.dat	field	94	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	94	0	w	3336
+decoded_dat/a/fir/fir.dat	field	94	0	h	313939
+decoded_dat/a/fir/fir.dat	field	94	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	94	1	itr	
+decoded_dat/a/fir/fir.dat	field	94	1	kind	38
+decoded_dat/a/fir/fir.dat	field	94	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	94	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	94	1	x	30
+decoded_dat/a/fir/fir.dat	field	94	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	94	1	w	3336
+decoded_dat/a/fir/fir.dat	field	94	1	h	3939
+decoded_dat/a/fir/fir.dat	field	94	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	94	2	bdy	
+decoded_dat/a/fir/fir.dat	field	94	2	kind	30
+decoded_dat/a/fir/fir.dat	field	94	2	x	30
+decoded_dat/a/fir/fir.dat	field	94	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	94	2	w	3336
+decoded_dat/a/fir/fir.dat	field	94	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	95	259		6a6972666972
+decoded_dat/a/fir/fir.dat	field	95	-1	pic	3139
+decoded_dat/a/fir/fir.dat	field	95	-1	state	33303035
+decoded_dat/a/fir/fir.dat	field	95	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	95	-1	next	323532
+decoded_dat/a/fir/fir.dat	field	95	-1	dvx	353530
+decoded_dat/a/fir/fir.dat	field	95	-1	dvy	353530
+decoded_dat/a/fir/fir.dat	field	95	-1	centerx	3136
+decoded_dat/a/fir/fir.dat	field	95	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	95	0	itr	
+decoded_dat/a/fir/fir.dat	field	95	0	kind	38
+decoded_dat/a/fir/fir.dat	field	95	0	respond	34
+decoded_dat/a/fir/fir.dat	field	95	0	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	95	0	x	30
+decoded_dat/a/fir/fir.dat	field	95	0	y	323135303030
+decoded_dat/a/fir/fir.dat	field	95	0	w	3336
+decoded_dat/a/fir/fir.dat	field	95	0	h	313939
+decoded_dat/a/fir/fir.dat	field	95	0	dvx	3730
+decoded_dat/a/fir/fir.dat	block	95	1	itr	
+decoded_dat/a/fir/fir.dat	field	95	1	kind	38
+decoded_dat/a/fir/fir.dat	field	95	1	bdefend	33
+decoded_dat/a/fir/fir.dat	field	95	1	dvy	2d31
+decoded_dat/a/fir/fir.dat	field	95	1	x	30
+decoded_dat/a/fir/fir.dat	field	95	1	y	32313130303030
+decoded_dat/a/fir/fir.dat	field	95	1	w	3336
+decoded_dat/a/fir/fir.dat	field	95	1	h	3939
+decoded_dat/a/fir/fir.dat	field	95	1	dvx	3730
+decoded_dat/a/fir/fir.dat	block	95	2	bdy	
+decoded_dat/a/fir/fir.dat	field	95	2	kind	30
+decoded_dat/a/fir/fir.dat	field	95	2	x	30
+decoded_dat/a/fir/fir.dat	field	95	2	y	32313132303030
+decoded_dat/a/fir/fir.dat	field	95	2	w	3336
+decoded_dat/a/fir/fir.dat	field	95	2	h	3939
+decoded_dat/a/fir/fir.dat	frame	96	300		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	96	-1	pic	30
+decoded_dat/a/fir/fir.dat	field	96	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	96	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	96	-1	next	333031
+decoded_dat/a/fir/fir.dat	field	96	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	96	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	96	-1	centery	3436
+decoded_dat/a/fir/fir.dat	block	96	0	bdy	
+decoded_dat/a/fir/fir.dat	field	96	0	kind	30
+decoded_dat/a/fir/fir.dat	field	96	0	x	36
+decoded_dat/a/fir/fir.dat	field	96	0	y	3235
+decoded_dat/a/fir/fir.dat	field	96	0	w	3334
+decoded_dat/a/fir/fir.dat	field	96	0	h	3235
+decoded_dat/a/fir/fir.dat	frame	97	301		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	97	-1	pic	31
+decoded_dat/a/fir/fir.dat	field	97	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	97	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	97	-1	next	333032
+decoded_dat/a/fir/fir.dat	field	97	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	97	-1	centerx	31
+decoded_dat/a/fir/fir.dat	field	97	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	97	0	itr	
+decoded_dat/a/fir/fir.dat	field	97	0	kind	30
+decoded_dat/a/fir/fir.dat	field	97	0	x	36
+decoded_dat/a/fir/fir.dat	field	97	0	y	3235
+decoded_dat/a/fir/fir.dat	field	97	0	w	3334
+decoded_dat/a/fir/fir.dat	field	97	0	h	3235
+decoded_dat/a/fir/fir.dat	field	97	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	97	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	97	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	97	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	97	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	97	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	97	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	97	1	bdy	
+decoded_dat/a/fir/fir.dat	field	97	1	kind	30
+decoded_dat/a/fir/fir.dat	field	97	1	x	36
+decoded_dat/a/fir/fir.dat	field	97	1	y	3235
+decoded_dat/a/fir/fir.dat	field	97	1	w	3334
+decoded_dat/a/fir/fir.dat	field	97	1	h	3235
+decoded_dat/a/fir/fir.dat	frame	98	302		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	98	-1	pic	32
+decoded_dat/a/fir/fir.dat	field	98	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	98	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	98	-1	next	333033
+decoded_dat/a/fir/fir.dat	field	98	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	98	-1	centerx	37
+decoded_dat/a/fir/fir.dat	field	98	-1	centery	3439
+decoded_dat/a/fir/fir.dat	block	98	0	itr	
+decoded_dat/a/fir/fir.dat	field	98	0	kind	30
+decoded_dat/a/fir/fir.dat	field	98	0	x	36
+decoded_dat/a/fir/fir.dat	field	98	0	y	3235
+decoded_dat/a/fir/fir.dat	field	98	0	w	3334
+decoded_dat/a/fir/fir.dat	field	98	0	h	3235
+decoded_dat/a/fir/fir.dat	field	98	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	98	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	98	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	98	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	98	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	98	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	98	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	98	1	bdy	
+decoded_dat/a/fir/fir.dat	field	98	1	kind	30
+decoded_dat/a/fir/fir.dat	field	98	1	x	36
+decoded_dat/a/fir/fir.dat	field	98	1	y	3235
+decoded_dat/a/fir/fir.dat	field	98	1	w	3334
+decoded_dat/a/fir/fir.dat	field	98	1	h	3235
+decoded_dat/a/fir/fir.dat	frame	99	303		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	99	-1	pic	33
+decoded_dat/a/fir/fir.dat	field	99	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	99	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	99	-1	next	333034
+decoded_dat/a/fir/fir.dat	field	99	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	99	-1	centerx	39
+decoded_dat/a/fir/fir.dat	field	99	-1	centery	3533
+decoded_dat/a/fir/fir.dat	block	99	0	itr	
+decoded_dat/a/fir/fir.dat	field	99	0	kind	30
+decoded_dat/a/fir/fir.dat	field	99	0	x	39
+decoded_dat/a/fir/fir.dat	field	99	0	y	3235
+decoded_dat/a/fir/fir.dat	field	99	0	w	3337
+decoded_dat/a/fir/fir.dat	field	99	0	h	3233
+decoded_dat/a/fir/fir.dat	field	99	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	99	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	99	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	99	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	99	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	99	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	99	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	99	1	bdy	
+decoded_dat/a/fir/fir.dat	field	99	1	kind	30
+decoded_dat/a/fir/fir.dat	field	99	1	x	39
+decoded_dat/a/fir/fir.dat	field	99	1	y	3235
+decoded_dat/a/fir/fir.dat	field	99	1	w	3337
+decoded_dat/a/fir/fir.dat	field	99	1	h	3233
+decoded_dat/a/fir/fir.dat	frame	100	304		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	100	-1	pic	34
+decoded_dat/a/fir/fir.dat	field	100	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	100	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	100	-1	next	333035
+decoded_dat/a/fir/fir.dat	field	100	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	100	-1	centerx	34
+decoded_dat/a/fir/fir.dat	field	100	-1	centery	3535
+decoded_dat/a/fir/fir.dat	block	100	0	itr	
+decoded_dat/a/fir/fir.dat	field	100	0	kind	30
+decoded_dat/a/fir/fir.dat	field	100	0	x	34
+decoded_dat/a/fir/fir.dat	field	100	0	y	3235
+decoded_dat/a/fir/fir.dat	field	100	0	w	3430
+decoded_dat/a/fir/fir.dat	field	100	0	h	3239
+decoded_dat/a/fir/fir.dat	field	100	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	100	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	100	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	100	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	100	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	100	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	100	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	100	1	bdy	
+decoded_dat/a/fir/fir.dat	field	100	1	kind	30
+decoded_dat/a/fir/fir.dat	field	100	1	x	34
+decoded_dat/a/fir/fir.dat	field	100	1	y	3235
+decoded_dat/a/fir/fir.dat	field	100	1	w	3430
+decoded_dat/a/fir/fir.dat	field	100	1	h	3239
+decoded_dat/a/fir/fir.dat	frame	101	305		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	101	-1	pic	35
+decoded_dat/a/fir/fir.dat	field	101	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	101	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	101	-1	next	333036
+decoded_dat/a/fir/fir.dat	field	101	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	101	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	101	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	101	0	itr	
+decoded_dat/a/fir/fir.dat	field	101	0	kind	30
+decoded_dat/a/fir/fir.dat	field	101	0	x	38
+decoded_dat/a/fir/fir.dat	field	101	0	y	3235
+decoded_dat/a/fir/fir.dat	field	101	0	w	3434
+decoded_dat/a/fir/fir.dat	field	101	0	h	3338
+decoded_dat/a/fir/fir.dat	field	101	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	101	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	101	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	101	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	101	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	101	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	101	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	101	1	bdy	
+decoded_dat/a/fir/fir.dat	field	101	1	kind	30
+decoded_dat/a/fir/fir.dat	field	101	1	x	38
+decoded_dat/a/fir/fir.dat	field	101	1	y	3235
+decoded_dat/a/fir/fir.dat	field	101	1	w	3434
+decoded_dat/a/fir/fir.dat	field	101	1	h	3338
+decoded_dat/a/fir/fir.dat	frame	102	306		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	102	-1	pic	36
+decoded_dat/a/fir/fir.dat	field	102	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	102	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	102	-1	next	333037
+decoded_dat/a/fir/fir.dat	field	102	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	102	-1	centerx	36
+decoded_dat/a/fir/fir.dat	field	102	-1	centery	3435
+decoded_dat/a/fir/fir.dat	block	102	0	itr	
+decoded_dat/a/fir/fir.dat	field	102	0	kind	30
+decoded_dat/a/fir/fir.dat	field	102	0	x	36
+decoded_dat/a/fir/fir.dat	field	102	0	y	32
+decoded_dat/a/fir/fir.dat	field	102	0	w	3434
+decoded_dat/a/fir/fir.dat	field	102	0	h	3432
+decoded_dat/a/fir/fir.dat	field	102	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	102	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	102	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	102	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	102	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	102	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	102	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	102	1	bdy	
+decoded_dat/a/fir/fir.dat	field	102	1	kind	30
+decoded_dat/a/fir/fir.dat	field	102	1	x	36
+decoded_dat/a/fir/fir.dat	field	102	1	y	32
+decoded_dat/a/fir/fir.dat	field	102	1	w	3434
+decoded_dat/a/fir/fir.dat	field	102	1	h	3432
+decoded_dat/a/fir/fir.dat	frame	103	307		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	103	-1	pic	37
+decoded_dat/a/fir/fir.dat	field	103	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	103	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	103	-1	next	333038
+decoded_dat/a/fir/fir.dat	field	103	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	103	-1	centerx	3132
+decoded_dat/a/fir/fir.dat	field	103	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	103	0	itr	
+decoded_dat/a/fir/fir.dat	field	103	0	kind	30
+decoded_dat/a/fir/fir.dat	field	103	0	x	3130
+decoded_dat/a/fir/fir.dat	field	103	0	y	3130
+decoded_dat/a/fir/fir.dat	field	103	0	w	3433
+decoded_dat/a/fir/fir.dat	field	103	0	h	3339
+decoded_dat/a/fir/fir.dat	field	103	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	103	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	103	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	103	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	103	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	103	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	103	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	103	1	bdy	
+decoded_dat/a/fir/fir.dat	field	103	1	kind	30
+decoded_dat/a/fir/fir.dat	field	103	1	x	3130
+decoded_dat/a/fir/fir.dat	field	103	1	y	3130
+decoded_dat/a/fir/fir.dat	field	103	1	w	3433
+decoded_dat/a/fir/fir.dat	field	103	1	h	3339
+decoded_dat/a/fir/fir.dat	frame	104	308		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	104	-1	pic	38
+decoded_dat/a/fir/fir.dat	field	104	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	104	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	104	-1	next	333039
+decoded_dat/a/fir/fir.dat	field	104	-1	dvx	34
+decoded_dat/a/fir/fir.dat	field	104	-1	centerx	39
+decoded_dat/a/fir/fir.dat	field	104	-1	centery	3438
+decoded_dat/a/fir/fir.dat	block	104	0	itr	
+decoded_dat/a/fir/fir.dat	field	104	0	kind	30
+decoded_dat/a/fir/fir.dat	field	104	0	x	36
+decoded_dat/a/fir/fir.dat	field	104	0	y	3130
+decoded_dat/a/fir/fir.dat	field	104	0	w	3436
+decoded_dat/a/fir/fir.dat	field	104	0	h	3436
+decoded_dat/a/fir/fir.dat	field	104	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	104	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	104	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	104	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	104	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	104	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	104	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	104	1	bdy	
+decoded_dat/a/fir/fir.dat	field	104	1	kind	30
+decoded_dat/a/fir/fir.dat	field	104	1	x	36
+decoded_dat/a/fir/fir.dat	field	104	1	y	3130
+decoded_dat/a/fir/fir.dat	field	104	1	w	3436
+decoded_dat/a/fir/fir.dat	field	104	1	h	3436
+decoded_dat/a/fir/fir.dat	frame	105	309		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	105	-1	pic	39
+decoded_dat/a/fir/fir.dat	field	105	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	105	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	105	-1	next	333130
+decoded_dat/a/fir/fir.dat	field	105	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	105	-1	centerx	3130
+decoded_dat/a/fir/fir.dat	field	105	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	105	0	itr	
+decoded_dat/a/fir/fir.dat	field	105	0	kind	30
+decoded_dat/a/fir/fir.dat	field	105	0	x	37
+decoded_dat/a/fir/fir.dat	field	105	0	y	3130
+decoded_dat/a/fir/fir.dat	field	105	0	w	3434
+decoded_dat/a/fir/fir.dat	field	105	0	h	3439
+decoded_dat/a/fir/fir.dat	field	105	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	105	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	105	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	105	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	105	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	105	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	105	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	105	1	bdy	
+decoded_dat/a/fir/fir.dat	field	105	1	kind	30
+decoded_dat/a/fir/fir.dat	field	105	1	x	37
+decoded_dat/a/fir/fir.dat	field	105	1	y	3130
+decoded_dat/a/fir/fir.dat	field	105	1	w	3434
+decoded_dat/a/fir/fir.dat	field	105	1	h	3439
+decoded_dat/a/fir/fir.dat	frame	106	310		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	106	-1	pic	3130
+decoded_dat/a/fir/fir.dat	field	106	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	106	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	106	-1	next	333131
+decoded_dat/a/fir/fir.dat	field	106	-1	dvx	33
+decoded_dat/a/fir/fir.dat	field	106	-1	centerx	35
+decoded_dat/a/fir/fir.dat	field	106	-1	centery	3531
+decoded_dat/a/fir/fir.dat	block	106	0	itr	
+decoded_dat/a/fir/fir.dat	field	106	0	kind	30
+decoded_dat/a/fir/fir.dat	field	106	0	x	32
+decoded_dat/a/fir/fir.dat	field	106	0	y	35
+decoded_dat/a/fir/fir.dat	field	106	0	w	3531
+decoded_dat/a/fir/fir.dat	field	106	0	h	3438
+decoded_dat/a/fir/fir.dat	field	106	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	106	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	106	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	106	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	106	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	106	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	106	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	106	1	bdy	
+decoded_dat/a/fir/fir.dat	field	106	1	kind	30
+decoded_dat/a/fir/fir.dat	field	106	1	x	32
+decoded_dat/a/fir/fir.dat	field	106	1	y	35
+decoded_dat/a/fir/fir.dat	field	106	1	w	3531
+decoded_dat/a/fir/fir.dat	field	106	1	h	3438
+decoded_dat/a/fir/fir.dat	frame	107	311		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	107	-1	pic	3131
+decoded_dat/a/fir/fir.dat	field	107	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	107	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	107	-1	next	333132
+decoded_dat/a/fir/fir.dat	field	107	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	107	-1	centerx	33
+decoded_dat/a/fir/fir.dat	field	107	-1	centery	3534
+decoded_dat/a/fir/fir.dat	block	107	0	itr	
+decoded_dat/a/fir/fir.dat	field	107	0	kind	30
+decoded_dat/a/fir/fir.dat	field	107	0	x	32
+decoded_dat/a/fir/fir.dat	field	107	0	y	3133
+decoded_dat/a/fir/fir.dat	field	107	0	w	3534
+decoded_dat/a/fir/fir.dat	field	107	0	h	3339
+decoded_dat/a/fir/fir.dat	field	107	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	107	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	107	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	107	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	107	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	107	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	107	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	107	1	bdy	
+decoded_dat/a/fir/fir.dat	field	107	1	kind	30
+decoded_dat/a/fir/fir.dat	field	107	1	x	32
+decoded_dat/a/fir/fir.dat	field	107	1	y	3133
+decoded_dat/a/fir/fir.dat	field	107	1	w	3534
+decoded_dat/a/fir/fir.dat	field	107	1	h	3339
+decoded_dat/a/fir/fir.dat	frame	108	312		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	108	-1	pic	3132
+decoded_dat/a/fir/fir.dat	field	108	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	108	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	108	-1	next	333133
+decoded_dat/a/fir/fir.dat	field	108	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	108	-1	centerx	30
+decoded_dat/a/fir/fir.dat	field	108	-1	centery	3437
+decoded_dat/a/fir/fir.dat	block	108	0	itr	
+decoded_dat/a/fir/fir.dat	field	108	0	kind	30
+decoded_dat/a/fir/fir.dat	field	108	0	x	36
+decoded_dat/a/fir/fir.dat	field	108	0	y	36
+decoded_dat/a/fir/fir.dat	field	108	0	w	3533
+decoded_dat/a/fir/fir.dat	field	108	0	h	3330
+decoded_dat/a/fir/fir.dat	field	108	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	108	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	108	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	108	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	108	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	108	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	108	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	108	1	bdy	
+decoded_dat/a/fir/fir.dat	field	108	1	kind	30
+decoded_dat/a/fir/fir.dat	field	108	1	x	36
+decoded_dat/a/fir/fir.dat	field	108	1	y	36
+decoded_dat/a/fir/fir.dat	field	108	1	w	3533
+decoded_dat/a/fir/fir.dat	field	108	1	h	3330
+decoded_dat/a/fir/fir.dat	frame	109	313		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	109	-1	pic	3133
+decoded_dat/a/fir/fir.dat	field	109	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	109	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	109	-1	next	333134
+decoded_dat/a/fir/fir.dat	field	109	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	109	-1	centerx	34
+decoded_dat/a/fir/fir.dat	field	109	-1	centery	3435
+decoded_dat/a/fir/fir.dat	block	109	0	itr	
+decoded_dat/a/fir/fir.dat	field	109	0	kind	30
+decoded_dat/a/fir/fir.dat	field	109	0	x	3134
+decoded_dat/a/fir/fir.dat	field	109	0	y	37
+decoded_dat/a/fir/fir.dat	field	109	0	w	3339
+decoded_dat/a/fir/fir.dat	field	109	0	h	3232
+decoded_dat/a/fir/fir.dat	field	109	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	109	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	109	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	109	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	109	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	109	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	109	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	109	1	bdy	
+decoded_dat/a/fir/fir.dat	field	109	1	kind	30
+decoded_dat/a/fir/fir.dat	field	109	1	x	3134
+decoded_dat/a/fir/fir.dat	field	109	1	y	37
+decoded_dat/a/fir/fir.dat	field	109	1	w	3339
+decoded_dat/a/fir/fir.dat	field	109	1	h	3232
+decoded_dat/a/fir/fir.dat	frame	110	314		6b616b75666972
+decoded_dat/a/fir/fir.dat	field	110	-1	pic	3134
+decoded_dat/a/fir/fir.dat	field	110	-1	state	33303030
+decoded_dat/a/fir/fir.dat	field	110	-1	wait	31
+decoded_dat/a/fir/fir.dat	field	110	-1	next	31303030
+decoded_dat/a/fir/fir.dat	field	110	-1	dvx	32
+decoded_dat/a/fir/fir.dat	field	110	-1	centerx	35
+decoded_dat/a/fir/fir.dat	field	110	-1	centery	3438
+decoded_dat/a/fir/fir.dat	block	110	0	itr	
+decoded_dat/a/fir/fir.dat	field	110	0	kind	30
+decoded_dat/a/fir/fir.dat	field	110	0	x	3139
+decoded_dat/a/fir/fir.dat	field	110	0	y	38
+decoded_dat/a/fir/fir.dat	field	110	0	w	3331
+decoded_dat/a/fir/fir.dat	field	110	0	h	3230
+decoded_dat/a/fir/fir.dat	field	110	0	effect	3231
+decoded_dat/a/fir/fir.dat	field	110	0	dvx	3130
+decoded_dat/a/fir/fir.dat	field	110	0	dvy	2d3130
+decoded_dat/a/fir/fir.dat	field	110	0	fall	393939
+decoded_dat/a/fir/fir.dat	field	110	0	vrest	333030
+decoded_dat/a/fir/fir.dat	field	110	0	bdefend	3136
+decoded_dat/a/fir/fir.dat	field	110	0	injury	3530
+decoded_dat/a/fir/fir.dat	block	110	1	bdy	
+decoded_dat/a/fir/fir.dat	field	110	1	kind	30
+decoded_dat/a/fir/fir.dat	field	110	1	x	3139
+decoded_dat/a/fir/fir.dat	field	110	1	y	38
+decoded_dat/a/fir/fir.dat	field	110	1	w	3331
+decoded_dat/a/fir/fir.dat	field	110	1	h	3230

@@ -1,0 +1,13 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<frame> 0 typed caption
+pic: 1e2 state: 1e2 cover: 1e2 wait: 1e2 next: 1e2 dvx: 1e2 dvy: 1e2 dvz: 1e2 centerx: 1e2 centery: 1e2 mp: 1e2 hp: 1e2 hit_a: 1e2 hit_d: 1e2 hit_j: 1e2 hit_g: 1e2 hit_Fj: 1e2 hit_Fa: 1e2 hit_Da: 1e2 hit_Ua: 1e2 hit_ja: 1e2 hit_aj: 1e2 hit_ad: 1e2 hit_jd: 1e2 hit_Dj: 1e2 hit_Uj: 1e2 hit_f: 1e2 hit_b: 1e2 hit_uz: 1e2 hit_dz: 1e2 hold_a: 1e2 hold_d: 1e2 hold_j: 1e2 hold_f: 1e2 hold_b: 1e2 hold_uz: 1e2 hold_dz: 1e2
+cpoint: kind: 1e2 x: 1e2 y: 1e2 injury: 1e2 cover: 1e2 vaction: 1e2 aaction: 1e2 jaction: 1e2 daction: 1e2 taction: 1e2 faction: 1e2 baction: 1e2 uzaction: 1e2 dzaction: 1e2 throwvx: 1e2 throwvy: 1e2 hurtable: 1e2 fronthurtact: 1e2 backhurtact: 1e2 decrease: 1e2 dircontrol: 1e2 throwinjury: 1e2 throwvz: 1e2 z: 1e2 recover: 1e2 drain: 1e2 gain: 1e2 cpoint_end:
+opoint: kind: 1e2 x: 1e2 y: 1e2 z: 1e2 action: 1e2 dvx: 1e2 dvy: 1e2 dvz: 1e2 oid: 1e2 facing: 1e2 hp: 1e2 mp: 1e2 team: 1e2 reserve: 1e2 effect: 1e2 pic: 1e2 centerx: 1e2 centery: 1e2 centerz: 1e2 framea: 1e2 attacking: 1e2 join: 1e2 join_reserve: 1e2 join_pic: 1e2 opoint_end:
+itr: kind: 1e2 x: 1e2 y: 1e2 w: 1e2 h: 1e2 dvx: 1e2 dvy: 1e2 fall: 1e2 arest: 1e2 vrest: 1e2 respond: 1e2 effect: 1e2 drain: 1e2 spark: 1e2 recover: 1e2 dbdefend: 1e2 bdefend: 1e2 injury: 1e2 zwidth: 1e2 z: 1e2 dvz: 1e2 sound: 1e2 cover: 1e2 caughtact: 1e2 catchingact: 1e2 pickedact: 1e2 pickingact: 1e2 delay: 1e2 poison: 1e2 confus: 1e2 weak: 1e2 manacle: 1e2 join: 1e2 mimic: 1e2 bound: 1e2 facing: 1e2 dx: 1e2 dy: 1e2 dz: 1e2 gain: 1e2 itr_end:
+wpoint: kind: 1e2 x: 1e2 y: 1e2 weaponact: 1e2 attacking: 1e2 cover: 1e2 dvx: 1e2 dvy: 1e2 dvz: 1e2 wpoint_end:
+bpoint: x: 1e2 y: 1e2 bpoint_end:
+centerz: 1e2 chp: 1e2 cmp: 1e2 dx: 1e2 dy: 1e2 dz: 1e2
+<frame_end>

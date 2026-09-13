@@ -4,7 +4,7 @@ namespace NTSD.Simulation
 {
     /// <summary>
     /// Platform-independent immutable CPoint catalog value in C++ release
-    /// field order. It is content identity, not mutable battle state.
+    /// 27-field content contract. Float identity preserves binary32 bits.
     /// </summary>
     public readonly struct BattleCatchPointValue :
         IEquatable<BattleCatchPointValue>
@@ -19,16 +19,24 @@ namespace NTSD.Simulation
             int aaction,
             int jaction,
             int daction,
-            int throwVx,
-            int throwVy,
+            float throwVx,
+            float throwVy,
             int hurtable,
             int decrease,
             int dirControl,
             int taction,
             int throwInjury,
-            int throwVz,
+            float throwVz,
             int frontHurtAct,
-            int backHurtAct)
+            int backHurtAct,
+            int faction = 0,
+            int baction = 0,
+            int uzaction = 0,
+            int dzaction = 0,
+            int z = 0,
+            int recover = 0,
+            int drain = 0,
+            int gain = 0)
         {
             Kind = kind;
             X = x;
@@ -49,6 +57,14 @@ namespace NTSD.Simulation
             ThrowVz = throwVz;
             FrontHurtAct = frontHurtAct;
             BackHurtAct = backHurtAct;
+            Faction = faction;
+            Baction = baction;
+            Uzaction = uzaction;
+            Dzaction = dzaction;
+            Z = z;
+            Recover = recover;
+            Drain = drain;
+            Gain = gain;
         }
 
         public int Kind { get; }
@@ -60,16 +76,24 @@ namespace NTSD.Simulation
         public int Aaction { get; }
         public int Jaction { get; }
         public int Daction { get; }
-        public int ThrowVx { get; }
-        public int ThrowVy { get; }
+        public float ThrowVx { get; }
+        public float ThrowVy { get; }
         public int Hurtable { get; }
         public int Decrease { get; }
         public int DirControl { get; }
         public int Taction { get; }
         public int ThrowInjury { get; }
-        public int ThrowVz { get; }
+        public float ThrowVz { get; }
         public int FrontHurtAct { get; }
         public int BackHurtAct { get; }
+        public int Faction { get; }
+        public int Baction { get; }
+        public int Uzaction { get; }
+        public int Dzaction { get; }
+        public int Z { get; }
+        public int Recover { get; }
+        public int Drain { get; }
+        public int Gain { get; }
 
         public bool Equals(BattleCatchPointValue other)
         {
@@ -82,16 +106,24 @@ namespace NTSD.Simulation
                    Aaction == other.Aaction &&
                    Jaction == other.Jaction &&
                    Daction == other.Daction &&
-                   ThrowVx == other.ThrowVx &&
-                   ThrowVy == other.ThrowVy &&
+                   BitConverter.SingleToInt32Bits(ThrowVx) == BitConverter.SingleToInt32Bits(other.ThrowVx) &&
+                   BitConverter.SingleToInt32Bits(ThrowVy) == BitConverter.SingleToInt32Bits(other.ThrowVy) &&
                    Hurtable == other.Hurtable &&
                    Decrease == other.Decrease &&
                    DirControl == other.DirControl &&
                    Taction == other.Taction &&
                    ThrowInjury == other.ThrowInjury &&
-                   ThrowVz == other.ThrowVz &&
+                   BitConverter.SingleToInt32Bits(ThrowVz) == BitConverter.SingleToInt32Bits(other.ThrowVz) &&
                    FrontHurtAct == other.FrontHurtAct &&
-                   BackHurtAct == other.BackHurtAct;
+                   BackHurtAct == other.BackHurtAct &&
+                   Faction == other.Faction &&
+                   Baction == other.Baction &&
+                   Uzaction == other.Uzaction &&
+                   Dzaction == other.Dzaction &&
+                   Z == other.Z &&
+                   Recover == other.Recover &&
+                   Drain == other.Drain &&
+                   Gain == other.Gain;
         }
 
         public override bool Equals(object obj)
@@ -113,16 +145,24 @@ namespace NTSD.Simulation
                 hash = hash * 31 + Aaction;
                 hash = hash * 31 + Jaction;
                 hash = hash * 31 + Daction;
-                hash = hash * 31 + ThrowVx;
-                hash = hash * 31 + ThrowVy;
+                hash = hash * 31 + BitConverter.SingleToInt32Bits(ThrowVx);
+                hash = hash * 31 + BitConverter.SingleToInt32Bits(ThrowVy);
                 hash = hash * 31 + Hurtable;
                 hash = hash * 31 + Decrease;
                 hash = hash * 31 + DirControl;
                 hash = hash * 31 + Taction;
                 hash = hash * 31 + ThrowInjury;
-                hash = hash * 31 + ThrowVz;
+                hash = hash * 31 + BitConverter.SingleToInt32Bits(ThrowVz);
                 hash = hash * 31 + FrontHurtAct;
                 hash = hash * 31 + BackHurtAct;
+                hash = hash * 31 + Faction;
+                hash = hash * 31 + Baction;
+                hash = hash * 31 + Uzaction;
+                hash = hash * 31 + Dzaction;
+                hash = hash * 31 + Z;
+                hash = hash * 31 + Recover;
+                hash = hash * 31 + Drain;
+                hash = hash * 31 + Gain;
                 return hash;
             }
         }

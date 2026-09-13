@@ -1,0 +1,256 @@
+{
+  "capturedUtc": "2026-09-13T00:27:53.964433+00:00",
+  "meaning": "Read-state provenance only; does not certify full reader closure or runtime parity",
+  "files": [
+    {
+      "root": "authority",
+      "path": "NTSD2.8-Logan.exe",
+      "sha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033"
+    },
+    {
+      "root": "authority",
+      "path": "source/README_SOURCE.md",
+      "sha256": "C0BA44DB4A9037E5086348668F1046A83A760D351F2BB2D6062E724676BB3D85"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_playable/scripts/build.ps1",
+      "sha256": "AA8EBF4520D3C36BD5ADBB5B5BB5750957C5C71826AD64ECC63F0E81A23F292E"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/include/ntsd28/battle_world.h",
+      "sha256": "8287EC804B928C34711DAE4AE6561A924426965E45F921DD5D085F08F093037B"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/include/ntsd28/combat_records.h",
+      "sha256": "B75533BDB48D81AB21B1CEA7DBDD014F542C6CEF53FF3A94AEC3ACF1EB18B5A1"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/include/ntsd28/object_spawning.h",
+      "sha256": "4BB251F30100CE58B87C3B9BFF81271EC79486C39511DECFE2A6A57EB0BEDECE"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/data/dat_parser.cpp",
+      "sha256": "CF5E81B2F353C4C766DE91B88A27B62AB3F405E94B1016912491C45ABC38C13A"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/data/dat_document.cpp",
+      "sha256": "E895D1F3F8FA5C0DE1A17ADF634D972AE86EAD4A5DB6FC9C17E995F853193C09"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/combat_records.cpp",
+      "sha256": "070453131DDC189C51988F2169CAC1EFAF3C223E512A000965D2FD8E11ED5991"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/object_spawning.cpp",
+      "sha256": "53F49DC676802DB67B740510B54AA7AE83E617FAEEF293F64D55FBD924535888"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/battle_world.cpp",
+      "sha256": "EB37E8EC1186BF0349A3B3B5759666C3A8F44F0E1640C159E06F805189FBCCB1"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/native_ai.cpp",
+      "sha256": "61BA9B2C32D0DCFCB157D8946B7F0F4FD43B7C0446EE6E6DF996E857AF665D6E"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/physics_integrator.cpp",
+      "sha256": "C5EEAA493A53A58C8F299E61F2F024D95E0E4502A9C93D3F2E7A7540CF668B9A"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/collision_geometry.cpp",
+      "sha256": "262B31261CA4747DFBE8117EE365E853B0591FC4AA05EDFD7F618CD75206D806"
+    },
+    {
+      "root": "authority",
+      "path": "source/ntsd28_core/src/simulation/hit_candidates.cpp",
+      "sha256": "4168C78A23849EAA17DD749002B89DD335841DB6CECA8B04FAE8356B10F1B905"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointCatalog.cs",
+      "sha256": "894CA928EECC71E00C56B77BE74DC3669322BFC12A09770DB4A3E243614FE134"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValue.cs",
+      "sha256": "0F99F50E791F298E03C2B6AD795434DD997DABF94EC454D9BFBD8FDCD61B1251"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/CatchPoint/BattleCatchPointValueAdapter.cs",
+      "sha256": "F96CF7239E5FC363C95B5CA2B543B46CE0022E1B78EE6FB284B8EF7D5164C429"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValue.cs",
+      "sha256": "DBBE4B1DC525000DD8E994C4A116F80752CA599FA896D84EB8C81FFE72907A3B"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/ObjectPoint/BattleObjectPointValueAdapter.cs",
+      "sha256": "B9875A839AF105AEAD162EBADCD2956D8AAC9FFC3B5EA05DF90BA74809710042"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/WeaponPoint/BattleWeaponPointValue.cs",
+      "sha256": "C05D45C30FBD306E90B05BE5E34890D4463A36C4E7DBFE7A753208183F4EA291"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/DataContracts/WeaponPoint/BattleWeaponPointValueAdapter.cs",
+      "sha256": "9EF1D51FADFD095F7F794395AEDBE14E04F7460712480B688D5573A2B461B29E"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs",
+      "sha256": "4000354B1840038B23EB810D6BAED9F3BDF7717399F47B9F25AE91B0E380A53D"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "0559C67F7C4FC0D0306F1F500FBD6678A0B2CEB2A155719CC8CC02AA5F916F5E"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs",
+      "sha256": "F89F6AEC23A953A17EB37FC0ABBDA260FC412F3955A20CBA85D1492FDA858B41"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCoreScalarSnapshot.cs",
+      "sha256": "099292661ADDC775BB465DA6F6F024719E40027C41BB0A5467F5A5E62F631F89"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs",
+      "sha256": "9ADD8F97E50C16601FFD0A7D6EAD9CB1531290631EA179E1EC64129E75B810F7"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "sha256": "9F9763436847BDB440CFEE54A4837EC4D4D81252FA4B9DB38DFCF49E0DB604BC"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldLivingShellSnapshot.cs",
+      "sha256": "99E45001F5DBEE86C0ADCAF1F5C7CC93FF5E4ACBF04318E56DCD971D28F033EB"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldPendingEventSnapshot.cs",
+      "sha256": "5879EE1B1CD6B86DEC9A91D8E08437799FA7ADD6C4B971A5F2D54B32844EC7D7"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRestSnapshot.cs",
+      "sha256": "5D49A890BC327117DFCBC9F6399111D47F3A74DCB610CC1165CA6752019A8F72"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRosterResultsSnapshot.cs",
+      "sha256": "61E2C4EF2C4B886052CAE00D2B87C855DC3833F0EFDC94CBA0D02AEA0B37821B"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldRuntimeSlotSnapshot.cs",
+      "sha256": "12C0591F3F70510D9E9AD01B5CF854AA6E5632134DA853383687C464628055EE"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldSpecialOtherShellSnapshot.cs",
+      "sha256": "9375A557A9050EB6D8BAF35FD1E4C4AEE096943A607C583078F14532128939DE"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldStageSpawnSnapshot.cs",
+      "sha256": "848FBA3B92C7CB17055D7E0FE19087F60E41DC0136DB888F8F8D38FCE2F21A4D"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldWeaponShellSnapshot.cs",
+      "sha256": "450C02ED3A00019AF92BF5AD09E9B01D0E56B2E3867525832A166EC6877B37C2"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "sha256": "240EFB25E36225E8F701483CAE873838144CD5210F316CCD6C5154A32E542C25"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "sha256": "583B75D8314BC38A9CEAE0B2C61AD76380EBCD23190B9D0C37B4549C3BE7CC88"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/InProcessLockstepChecksumWitness.cs",
+      "sha256": "E23C0BD352F75398BCEC212B4E3E0657FF2F05B5EE236CB443F91908FEDA63C2"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "sha256": "B316B53827E36BB120AD6560C7EF2708AF4AA01A36AB16A7ECB8762D47593DE4"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "sha256": "00A53E33D9D12D6D5A1D45358922B3CDF1CDCC41C8D68CA2645445F710907CC5"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Simulation/Runtime/BattleLogicObjectPointRuntime.cs",
+      "sha256": "21D2855595C481F440E9B322085C353FBC034131385778EF5A6CE29ACCA52030"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs",
+      "sha256": "C573BAFC8F97186A467F11155EA43F83BC1E2DE3E43D63B270D018B58A3423EE"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/DatParser/Runtime/Parsing/Lf2DatParserV2.cs",
+      "sha256": "F1CAC67F2721045D565D99596728485052F1F574C5FFFD202A3477E982B0F3B5"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "sha256": "1722F4F95302E8C298F6F714329FC15AE838BACA9A9C2EB4B93CB083E2EAFDB1"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs",
+      "sha256": "5AD7CD2DACC728A5F72F6A3D7AB5C7100AA81B24A7197EF9E2BAA6C9B5212FF3"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "023E3E314441242A438C824BB8B8FC06597E86802668AD7FD2F2C3778E107B22"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+      "sha256": "CDF8476B17D79A035FA23C4A060EC3EF07BE6A0BCAC957FC175DFA9E170184A7"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+      "sha256": "66C78ACA443EE6DDB762C603BD1A3C2B3E90E1D034D6F9C8F3BFBD1767F33E1B"
+    },
+    {
+      "root": "unity",
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponFrameLogicResolver.cs",
+      "sha256": "1A7CDE90A1F8FD32BCF131E717DB9693962E39D97473C73E3E024D96A8B7B60C"
+    }
+  ]
+}

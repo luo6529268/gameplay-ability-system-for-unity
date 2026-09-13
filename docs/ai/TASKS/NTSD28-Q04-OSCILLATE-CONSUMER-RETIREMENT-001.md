@@ -1,0 +1,13 @@
+# Q04-B 旧Oscillate晚帧consumer退休
+
+状态 VERIFIED_LEGACY_OSCILLATE_READER_ONLY / Q05_CARRIER_PENDING。Q03出口已确认Goal17只退休旧OID producer，ProcessEffects reader与base-shell恢复仍存在。前包Q04-A完成后建立同ID Change Record再改脚本。
+
+准确production范围：Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs中的ProcessEffects，删除旧Oscillate交替方向/SetXY和TimeOut归零位移分支；不重做EffectCreate producer退休。不在本包删LF2EffectState两属性或base-shell字段，Q05同窗口删除并base-shell1→2。
+
+权威：当前render_snapshot.cpp的native_body_shake_x由render_phase_008<0和alternating phase形成±3，未消费旧NTSDSpec amplitude。该native B9效果仍由后续表现包实现，不将旧Oscillate复用成它。
+
+新增focused测试路径Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillateConsumerEditorTests.cs及必要的已声明Play诊断；先RED证明非零旧字段仍写Sprite/改变Blink分支，再GREEN证明旧值不再驱动表现或抑制Blink。保留Stuck/Super/Blink、TimeIn/TimeOut和延迟Dvx/Dvy效果，验证timeout及早退。运行compile/focused/关联Effect与snapshot旧布局回归、SelfCheck和目标Play；自然producer已退休，注入验证必须明确标记synthetic。
+
+无新runtime模块/队列，不改十一阶段或资源/Scene/框架。回滚经批准仅撤销该最小reader变动。Q05再清载体与旧snapshot严格拒绝，不能仅凭本包通过宣布B9对齐。
+
+最终证据见同ID artifacts/diagnostics/REPORT.md：28/28、SelfCheck、CentralOnly真实Play状态/生产快照/恢复PASS；CS0/Scene clean/Ledger474-52PASS。Q04交付，carrier/base-shell仍待Q05。

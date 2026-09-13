@@ -1,0 +1,987 @@
+decoded_dat/a/pur/pur.dat	frame	0	0		686974
+decoded_dat/a/pur/pur.dat	field	0	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	0	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	0	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	0	-1	next	3131
+decoded_dat/a/pur/pur.dat	field	0	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	0	-1	centery	313435
+decoded_dat/a/pur/pur.dat	field	0	-1	sound	646174615c3036312e776176
+decoded_dat/a/pur/pur.dat	block	0	0	itr	
+decoded_dat/a/pur/pur.dat	field	0	0	kind	30
+decoded_dat/a/pur/pur.dat	field	0	0	x	3235
+decoded_dat/a/pur/pur.dat	field	0	0	y	3333
+decoded_dat/a/pur/pur.dat	field	0	0	w	313430
+decoded_dat/a/pur/pur.dat	field	0	0	h	3939
+decoded_dat/a/pur/pur.dat	field	0	0	effect	35
+decoded_dat/a/pur/pur.dat	field	0	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	0	0	vrest	32
+decoded_dat/a/pur/pur.dat	field	0	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	0	0	injury	33
+decoded_dat/a/pur/pur.dat	field	0	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	0	1	bdy	
+decoded_dat/a/pur/pur.dat	field	0	1	kind	30
+decoded_dat/a/pur/pur.dat	field	0	1	x	3235
+decoded_dat/a/pur/pur.dat	field	0	1	y	3333
+decoded_dat/a/pur/pur.dat	field	0	1	w	313430
+decoded_dat/a/pur/pur.dat	field	0	1	h	3939
+decoded_dat/a/pur/pur.dat	frame	1	6		536173466a
+decoded_dat/a/pur/pur.dat	field	1	-1	pic	3131
+decoded_dat/a/pur/pur.dat	field	1	-1	state	33303030
+decoded_dat/a/pur/pur.dat	field	1	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	1	-1	next	3130
+decoded_dat/a/pur/pur.dat	field	1	-1	dvx	353530
+decoded_dat/a/pur/pur.dat	field	1	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	1	-1	centery	313430
+decoded_dat/a/pur/pur.dat	frame	2	7		4b616e466a
+decoded_dat/a/pur/pur.dat	field	2	-1	pic	3131
+decoded_dat/a/pur/pur.dat	field	2	-1	state	33303030
+decoded_dat/a/pur/pur.dat	field	2	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	2	-1	next	3130
+decoded_dat/a/pur/pur.dat	field	2	-1	dvx	353530
+decoded_dat/a/pur/pur.dat	field	2	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	2	-1	centery	313230
+decoded_dat/a/pur/pur.dat	frame	3	8		4b616e466a
+decoded_dat/a/pur/pur.dat	field	3	-1	pic	3131
+decoded_dat/a/pur/pur.dat	field	3	-1	state	33303030
+decoded_dat/a/pur/pur.dat	field	3	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	3	-1	next	38
+decoded_dat/a/pur/pur.dat	field	3	-1	dvx	3530
+decoded_dat/a/pur/pur.dat	field	3	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	3	-1	centery	313230
+decoded_dat/a/pur/pur.dat	field	3	-1	hit_a	39
+decoded_dat/a/pur/pur.dat	field	3	-1	hit_d	37
+decoded_dat/a/pur/pur.dat	block	3	0	itr	
+decoded_dat/a/pur/pur.dat	field	3	0	kind	30
+decoded_dat/a/pur/pur.dat	field	3	0	x	3430
+decoded_dat/a/pur/pur.dat	field	3	0	y	3630
+decoded_dat/a/pur/pur.dat	field	3	0	w	3530
+decoded_dat/a/pur/pur.dat	field	3	0	h	3630
+decoded_dat/a/pur/pur.dat	field	3	0	fall	3130
+decoded_dat/a/pur/pur.dat	field	3	0	vrest	3135
+decoded_dat/a/pur/pur.dat	field	3	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	3	0	injury	3330
+decoded_dat/a/pur/pur.dat	field	3	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	3	1	bdy	
+decoded_dat/a/pur/pur.dat	field	3	1	kind	30
+decoded_dat/a/pur/pur.dat	field	3	1	x	3430
+decoded_dat/a/pur/pur.dat	field	3	1	y	3630
+decoded_dat/a/pur/pur.dat	field	3	1	w	3530
+decoded_dat/a/pur/pur.dat	field	3	1	h	3630
+decoded_dat/a/pur/pur.dat	frame	4	9		536173466a
+decoded_dat/a/pur/pur.dat	field	4	-1	pic	3131
+decoded_dat/a/pur/pur.dat	field	4	-1	state	33303030
+decoded_dat/a/pur/pur.dat	field	4	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	4	-1	next	39
+decoded_dat/a/pur/pur.dat	field	4	-1	dvx	3530
+decoded_dat/a/pur/pur.dat	field	4	-1	dvz	353530
+decoded_dat/a/pur/pur.dat	field	4	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	4	-1	centery	313030
+decoded_dat/a/pur/pur.dat	field	4	-1	hit_a	39
+decoded_dat/a/pur/pur.dat	field	4	-1	hit_d	36
+decoded_dat/a/pur/pur.dat	block	4	0	itr	
+decoded_dat/a/pur/pur.dat	field	4	0	kind	30
+decoded_dat/a/pur/pur.dat	field	4	0	x	3430
+decoded_dat/a/pur/pur.dat	field	4	0	y	3630
+decoded_dat/a/pur/pur.dat	field	4	0	w	3530
+decoded_dat/a/pur/pur.dat	field	4	0	h	3630
+decoded_dat/a/pur/pur.dat	field	4	0	fall	3130
+decoded_dat/a/pur/pur.dat	field	4	0	vrest	3135
+decoded_dat/a/pur/pur.dat	field	4	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	4	0	injury	3330
+decoded_dat/a/pur/pur.dat	field	4	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	4	1	bdy	
+decoded_dat/a/pur/pur.dat	field	4	1	kind	30
+decoded_dat/a/pur/pur.dat	field	4	1	x	3430
+decoded_dat/a/pur/pur.dat	field	4	1	y	3630
+decoded_dat/a/pur/pur.dat	field	4	1	w	3530
+decoded_dat/a/pur/pur.dat	field	4	1	h	3630
+decoded_dat/a/pur/pur.dat	frame	5	10		68697474696e67
+decoded_dat/a/pur/pur.dat	field	5	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	5	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	5	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	5	-1	next	3131
+decoded_dat/a/pur/pur.dat	field	5	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	5	-1	centery	313435
+decoded_dat/a/pur/pur.dat	field	5	-1	sound	646174615c3036312e776176
+decoded_dat/a/pur/pur.dat	block	5	0	itr	
+decoded_dat/a/pur/pur.dat	field	5	0	kind	30
+decoded_dat/a/pur/pur.dat	field	5	0	x	3235
+decoded_dat/a/pur/pur.dat	field	5	0	y	3333
+decoded_dat/a/pur/pur.dat	field	5	0	w	313430
+decoded_dat/a/pur/pur.dat	field	5	0	h	3939
+decoded_dat/a/pur/pur.dat	field	5	0	effect	35
+decoded_dat/a/pur/pur.dat	field	5	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	5	0	vrest	32
+decoded_dat/a/pur/pur.dat	field	5	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	5	0	injury	33
+decoded_dat/a/pur/pur.dat	field	5	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	5	1	bdy	
+decoded_dat/a/pur/pur.dat	field	5	1	kind	30
+decoded_dat/a/pur/pur.dat	field	5	1	x	3235
+decoded_dat/a/pur/pur.dat	field	5	1	y	3333
+decoded_dat/a/pur/pur.dat	field	5	1	w	313430
+decoded_dat/a/pur/pur.dat	field	5	1	h	3939
+decoded_dat/a/pur/pur.dat	frame	6	11		68697474696e67
+decoded_dat/a/pur/pur.dat	field	6	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	6	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	6	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	6	-1	next	3132
+decoded_dat/a/pur/pur.dat	field	6	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	6	-1	centery	313435
+decoded_dat/a/pur/pur.dat	block	6	0	itr	
+decoded_dat/a/pur/pur.dat	field	6	0	kind	30
+decoded_dat/a/pur/pur.dat	field	6	0	x	3235
+decoded_dat/a/pur/pur.dat	field	6	0	y	3333
+decoded_dat/a/pur/pur.dat	field	6	0	w	313430
+decoded_dat/a/pur/pur.dat	field	6	0	h	3939
+decoded_dat/a/pur/pur.dat	field	6	0	effect	35
+decoded_dat/a/pur/pur.dat	field	6	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	6	0	vrest	32
+decoded_dat/a/pur/pur.dat	field	6	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	6	0	injury	33
+decoded_dat/a/pur/pur.dat	field	6	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	6	1	bdy	
+decoded_dat/a/pur/pur.dat	field	6	1	kind	30
+decoded_dat/a/pur/pur.dat	field	6	1	x	3235
+decoded_dat/a/pur/pur.dat	field	6	1	y	3333
+decoded_dat/a/pur/pur.dat	field	6	1	w	313430
+decoded_dat/a/pur/pur.dat	field	6	1	h	3939
+decoded_dat/a/pur/pur.dat	frame	7	12		68697474696e67
+decoded_dat/a/pur/pur.dat	field	7	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	7	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	7	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	7	-1	next	3133
+decoded_dat/a/pur/pur.dat	field	7	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	7	-1	centery	313435
+decoded_dat/a/pur/pur.dat	block	7	0	itr	
+decoded_dat/a/pur/pur.dat	field	7	0	kind	30
+decoded_dat/a/pur/pur.dat	field	7	0	x	3235
+decoded_dat/a/pur/pur.dat	field	7	0	y	3333
+decoded_dat/a/pur/pur.dat	field	7	0	w	313430
+decoded_dat/a/pur/pur.dat	field	7	0	h	3939
+decoded_dat/a/pur/pur.dat	field	7	0	effect	35
+decoded_dat/a/pur/pur.dat	field	7	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	7	0	vrest	32
+decoded_dat/a/pur/pur.dat	field	7	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	7	0	injury	33
+decoded_dat/a/pur/pur.dat	field	7	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	7	1	bdy	
+decoded_dat/a/pur/pur.dat	field	7	1	kind	30
+decoded_dat/a/pur/pur.dat	field	7	1	x	3235
+decoded_dat/a/pur/pur.dat	field	7	1	y	3333
+decoded_dat/a/pur/pur.dat	field	7	1	w	313430
+decoded_dat/a/pur/pur.dat	field	7	1	h	3939
+decoded_dat/a/pur/pur.dat	frame	8	13		68697474696e67
+decoded_dat/a/pur/pur.dat	field	8	-1	pic	31
+decoded_dat/a/pur/pur.dat	field	8	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	8	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	8	-1	next	3134
+decoded_dat/a/pur/pur.dat	field	8	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	8	-1	centery	313435
+decoded_dat/a/pur/pur.dat	block	8	0	itr	
+decoded_dat/a/pur/pur.dat	field	8	0	kind	30
+decoded_dat/a/pur/pur.dat	field	8	0	x	3235
+decoded_dat/a/pur/pur.dat	field	8	0	y	3333
+decoded_dat/a/pur/pur.dat	field	8	0	w	313430
+decoded_dat/a/pur/pur.dat	field	8	0	h	3939
+decoded_dat/a/pur/pur.dat	field	8	0	effect	35
+decoded_dat/a/pur/pur.dat	field	8	0	fall	33
+decoded_dat/a/pur/pur.dat	field	8	0	vrest	32
+decoded_dat/a/pur/pur.dat	field	8	0	bdefend	313030
+decoded_dat/a/pur/pur.dat	field	8	0	injury	33
+decoded_dat/a/pur/pur.dat	field	8	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	8	1	bdy	
+decoded_dat/a/pur/pur.dat	field	8	1	kind	30
+decoded_dat/a/pur/pur.dat	field	8	1	x	3235
+decoded_dat/a/pur/pur.dat	field	8	1	y	3333
+decoded_dat/a/pur/pur.dat	field	8	1	w	313430
+decoded_dat/a/pur/pur.dat	field	8	1	h	3939
+decoded_dat/a/pur/pur.dat	frame	9	14		68697474696e67
+decoded_dat/a/pur/pur.dat	field	9	-1	pic	32
+decoded_dat/a/pur/pur.dat	field	9	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	9	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	9	-1	next	3135
+decoded_dat/a/pur/pur.dat	field	9	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	9	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	10	15		68697474696e67
+decoded_dat/a/pur/pur.dat	field	10	-1	pic	33
+decoded_dat/a/pur/pur.dat	field	10	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	10	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	10	-1	next	3136
+decoded_dat/a/pur/pur.dat	field	10	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	10	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	11	16		68697474696e67
+decoded_dat/a/pur/pur.dat	field	11	-1	pic	34
+decoded_dat/a/pur/pur.dat	field	11	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	11	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	11	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	11	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	11	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	12	20		686974
+decoded_dat/a/pur/pur.dat	field	12	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	12	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	12	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	12	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	12	-1	dvx	353530
+decoded_dat/a/pur/pur.dat	field	12	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	12	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	13	30		686974
+decoded_dat/a/pur/pur.dat	field	13	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	13	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	13	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	13	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	13	-1	dvx	353530
+decoded_dat/a/pur/pur.dat	field	13	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	13	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	14	40		68697474696e67
+decoded_dat/a/pur/pur.dat	field	14	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	14	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	14	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	14	-1	next	3431
+decoded_dat/a/pur/pur.dat	field	14	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	14	-1	centery	313435
+decoded_dat/a/pur/pur.dat	field	14	-1	sound	646174615c3036312e776176
+decoded_dat/a/pur/pur.dat	frame	15	41		68697474696e67
+decoded_dat/a/pur/pur.dat	field	15	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	15	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	15	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	15	-1	next	3432
+decoded_dat/a/pur/pur.dat	field	15	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	15	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	16	42		68697474696e67
+decoded_dat/a/pur/pur.dat	field	16	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	16	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	16	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	16	-1	next	3433
+decoded_dat/a/pur/pur.dat	field	16	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	16	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	17	43		68697474696e67
+decoded_dat/a/pur/pur.dat	field	17	-1	pic	31
+decoded_dat/a/pur/pur.dat	field	17	-1	state	33303032
+decoded_dat/a/pur/pur.dat	field	17	-1	wait	34
+decoded_dat/a/pur/pur.dat	field	17	-1	next	3134
+decoded_dat/a/pur/pur.dat	field	17	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	17	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	18	60		686974696e675f67726f756e64
+decoded_dat/a/pur/pur.dat	field	18	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	18	-1	state	33303031
+decoded_dat/a/pur/pur.dat	field	18	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	18	-1	next	3631
+decoded_dat/a/pur/pur.dat	field	18	-1	centerx	3432
+decoded_dat/a/pur/pur.dat	field	18	-1	centery	3531
+decoded_dat/a/pur/pur.dat	frame	19	61		686974696e675f67726f756e64
+decoded_dat/a/pur/pur.dat	field	19	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	19	-1	state	33303031
+decoded_dat/a/pur/pur.dat	field	19	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	19	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	19	-1	centerx	3435
+decoded_dat/a/pur/pur.dat	field	19	-1	centery	3530
+decoded_dat/a/pur/pur.dat	frame	20	65		6a7573745f736d6f6b65
+decoded_dat/a/pur/pur.dat	field	20	-1	pic	30
+decoded_dat/a/pur/pur.dat	field	20	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	20	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	20	-1	next	3636
+decoded_dat/a/pur/pur.dat	field	20	-1	centerx	313133
+decoded_dat/a/pur/pur.dat	field	20	-1	centery	3138
+decoded_dat/a/pur/pur.dat	field	20	-1	sound	646174615c3036312e776176
+decoded_dat/a/pur/pur.dat	frame	21	66		6a7573745f736d6f6b65
+decoded_dat/a/pur/pur.dat	field	21	-1	pic	31
+decoded_dat/a/pur/pur.dat	field	21	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	21	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	21	-1	next	3637
+decoded_dat/a/pur/pur.dat	field	21	-1	centerx	313133
+decoded_dat/a/pur/pur.dat	field	21	-1	centery	3138
+decoded_dat/a/pur/pur.dat	frame	22	67		6a7573745f736d6f6b65
+decoded_dat/a/pur/pur.dat	field	22	-1	pic	32
+decoded_dat/a/pur/pur.dat	field	22	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	22	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	22	-1	next	3638
+decoded_dat/a/pur/pur.dat	field	22	-1	centerx	313133
+decoded_dat/a/pur/pur.dat	field	22	-1	centery	3138
+decoded_dat/a/pur/pur.dat	frame	23	68		6a7573745f736d6f6b65
+decoded_dat/a/pur/pur.dat	field	23	-1	pic	33
+decoded_dat/a/pur/pur.dat	field	23	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	23	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	23	-1	next	3639
+decoded_dat/a/pur/pur.dat	field	23	-1	centerx	313133
+decoded_dat/a/pur/pur.dat	field	23	-1	centery	3138
+decoded_dat/a/pur/pur.dat	frame	24	69		6a7573745f736d6f6b65
+decoded_dat/a/pur/pur.dat	field	24	-1	pic	34
+decoded_dat/a/pur/pur.dat	field	24	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	24	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	24	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	24	-1	centerx	313133
+decoded_dat/a/pur/pur.dat	field	24	-1	centery	3138
+decoded_dat/a/pur/pur.dat	frame	25	85		676173
+decoded_dat/a/pur/pur.dat	field	25	-1	pic	35
+decoded_dat/a/pur/pur.dat	field	25	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	25	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	25	-1	next	3836
+decoded_dat/a/pur/pur.dat	field	25	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	25	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	25	0	itr	
+decoded_dat/a/pur/pur.dat	field	25	0	kind	30
+decoded_dat/a/pur/pur.dat	field	25	0	x	3432
+decoded_dat/a/pur/pur.dat	field	25	0	y	3430
+decoded_dat/a/pur/pur.dat	field	25	0	w	3730
+decoded_dat/a/pur/pur.dat	field	25	0	h	3830
+decoded_dat/a/pur/pur.dat	field	25	0	effect	35
+decoded_dat/a/pur/pur.dat	field	25	0	fall	33
+decoded_dat/a/pur/pur.dat	field	25	0	arest	37
+decoded_dat/a/pur/pur.dat	field	25	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	25	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	25	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	25	1	bdy	
+decoded_dat/a/pur/pur.dat	field	25	1	kind	30
+decoded_dat/a/pur/pur.dat	field	25	1	x	3432
+decoded_dat/a/pur/pur.dat	field	25	1	y	3430
+decoded_dat/a/pur/pur.dat	field	25	1	w	3730
+decoded_dat/a/pur/pur.dat	field	25	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	26	86		676173
+decoded_dat/a/pur/pur.dat	field	26	-1	pic	36
+decoded_dat/a/pur/pur.dat	field	26	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	26	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	26	-1	next	3837
+decoded_dat/a/pur/pur.dat	field	26	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	26	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	26	0	itr	
+decoded_dat/a/pur/pur.dat	field	26	0	kind	30
+decoded_dat/a/pur/pur.dat	field	26	0	x	3432
+decoded_dat/a/pur/pur.dat	field	26	0	y	3430
+decoded_dat/a/pur/pur.dat	field	26	0	w	3730
+decoded_dat/a/pur/pur.dat	field	26	0	h	3830
+decoded_dat/a/pur/pur.dat	field	26	0	effect	35
+decoded_dat/a/pur/pur.dat	field	26	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	26	0	arest	37
+decoded_dat/a/pur/pur.dat	field	26	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	26	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	26	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	26	1	bdy	
+decoded_dat/a/pur/pur.dat	field	26	1	kind	30
+decoded_dat/a/pur/pur.dat	field	26	1	x	3432
+decoded_dat/a/pur/pur.dat	field	26	1	y	3430
+decoded_dat/a/pur/pur.dat	field	26	1	w	3730
+decoded_dat/a/pur/pur.dat	field	26	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	27	87		676173
+decoded_dat/a/pur/pur.dat	field	27	-1	pic	37
+decoded_dat/a/pur/pur.dat	field	27	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	27	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	27	-1	next	3838
+decoded_dat/a/pur/pur.dat	field	27	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	27	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	27	0	itr	
+decoded_dat/a/pur/pur.dat	field	27	0	kind	30
+decoded_dat/a/pur/pur.dat	field	27	0	x	3432
+decoded_dat/a/pur/pur.dat	field	27	0	y	3430
+decoded_dat/a/pur/pur.dat	field	27	0	w	3730
+decoded_dat/a/pur/pur.dat	field	27	0	h	3830
+decoded_dat/a/pur/pur.dat	field	27	0	effect	35
+decoded_dat/a/pur/pur.dat	field	27	0	fall	33
+decoded_dat/a/pur/pur.dat	field	27	0	arest	37
+decoded_dat/a/pur/pur.dat	field	27	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	27	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	27	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	27	1	bdy	
+decoded_dat/a/pur/pur.dat	field	27	1	kind	30
+decoded_dat/a/pur/pur.dat	field	27	1	x	3432
+decoded_dat/a/pur/pur.dat	field	27	1	y	3430
+decoded_dat/a/pur/pur.dat	field	27	1	w	3730
+decoded_dat/a/pur/pur.dat	field	27	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	28	88		676173
+decoded_dat/a/pur/pur.dat	field	28	-1	pic	38
+decoded_dat/a/pur/pur.dat	field	28	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	28	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	28	-1	next	3839
+decoded_dat/a/pur/pur.dat	field	28	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	28	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	28	0	itr	
+decoded_dat/a/pur/pur.dat	field	28	0	kind	30
+decoded_dat/a/pur/pur.dat	field	28	0	x	3432
+decoded_dat/a/pur/pur.dat	field	28	0	y	3430
+decoded_dat/a/pur/pur.dat	field	28	0	w	3730
+decoded_dat/a/pur/pur.dat	field	28	0	h	3830
+decoded_dat/a/pur/pur.dat	field	28	0	effect	35
+decoded_dat/a/pur/pur.dat	field	28	0	fall	33
+decoded_dat/a/pur/pur.dat	field	28	0	arest	37
+decoded_dat/a/pur/pur.dat	field	28	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	28	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	28	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	28	1	bdy	
+decoded_dat/a/pur/pur.dat	field	28	1	kind	30
+decoded_dat/a/pur/pur.dat	field	28	1	x	3432
+decoded_dat/a/pur/pur.dat	field	28	1	y	3430
+decoded_dat/a/pur/pur.dat	field	28	1	w	3730
+decoded_dat/a/pur/pur.dat	field	28	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	29	89		676173
+decoded_dat/a/pur/pur.dat	field	29	-1	pic	39
+decoded_dat/a/pur/pur.dat	field	29	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	29	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	29	-1	next	3930
+decoded_dat/a/pur/pur.dat	field	29	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	29	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	29	0	itr	
+decoded_dat/a/pur/pur.dat	field	29	0	kind	30
+decoded_dat/a/pur/pur.dat	field	29	0	x	3432
+decoded_dat/a/pur/pur.dat	field	29	0	y	3430
+decoded_dat/a/pur/pur.dat	field	29	0	w	3730
+decoded_dat/a/pur/pur.dat	field	29	0	h	3830
+decoded_dat/a/pur/pur.dat	field	29	0	effect	35
+decoded_dat/a/pur/pur.dat	field	29	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	29	0	arest	37
+decoded_dat/a/pur/pur.dat	field	29	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	29	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	29	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	29	1	bdy	
+decoded_dat/a/pur/pur.dat	field	29	1	kind	30
+decoded_dat/a/pur/pur.dat	field	29	1	x	3432
+decoded_dat/a/pur/pur.dat	field	29	1	y	3430
+decoded_dat/a/pur/pur.dat	field	29	1	w	3730
+decoded_dat/a/pur/pur.dat	field	29	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	30	90		676173
+decoded_dat/a/pur/pur.dat	field	30	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	30	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	30	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	30	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	30	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	30	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	30	0	itr	
+decoded_dat/a/pur/pur.dat	field	30	0	kind	30
+decoded_dat/a/pur/pur.dat	field	30	0	x	3432
+decoded_dat/a/pur/pur.dat	field	30	0	y	3430
+decoded_dat/a/pur/pur.dat	field	30	0	w	3730
+decoded_dat/a/pur/pur.dat	field	30	0	h	3830
+decoded_dat/a/pur/pur.dat	field	30	0	effect	35
+decoded_dat/a/pur/pur.dat	field	30	0	fall	33
+decoded_dat/a/pur/pur.dat	field	30	0	arest	37
+decoded_dat/a/pur/pur.dat	field	30	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	30	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	30	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	30	1	bdy	
+decoded_dat/a/pur/pur.dat	field	30	1	kind	30
+decoded_dat/a/pur/pur.dat	field	30	1	x	3432
+decoded_dat/a/pur/pur.dat	field	30	1	y	3430
+decoded_dat/a/pur/pur.dat	field	30	1	w	3730
+decoded_dat/a/pur/pur.dat	field	30	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	31	95		676173
+decoded_dat/a/pur/pur.dat	field	31	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	31	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	31	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	31	-1	next	313935
+decoded_dat/a/pur/pur.dat	field	31	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	31	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	31	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	31	0	opoint	
+decoded_dat/a/pur/pur.dat	field	31	0	kind	31
+decoded_dat/a/pur/pur.dat	field	31	0	x	3830
+decoded_dat/a/pur/pur.dat	field	31	0	y	313130
+decoded_dat/a/pur/pur.dat	field	31	0	action	323835
+decoded_dat/a/pur/pur.dat	field	31	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	31	0	oid	323232
+decoded_dat/a/pur/pur.dat	field	31	0	facing	3530
+decoded_dat/a/pur/pur.dat	frame	32	96		676173
+decoded_dat/a/pur/pur.dat	field	32	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	32	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	32	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	32	-1	next	313936
+decoded_dat/a/pur/pur.dat	field	32	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	32	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	32	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	32	0	opoint	
+decoded_dat/a/pur/pur.dat	field	32	0	kind	31
+decoded_dat/a/pur/pur.dat	field	32	0	x	3830
+decoded_dat/a/pur/pur.dat	field	32	0	y	313130
+decoded_dat/a/pur/pur.dat	field	32	0	action	323835
+decoded_dat/a/pur/pur.dat	field	32	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	32	0	oid	323232
+decoded_dat/a/pur/pur.dat	field	32	0	facing	3530
+decoded_dat/a/pur/pur.dat	frame	33	97		676173
+decoded_dat/a/pur/pur.dat	field	33	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	33	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	33	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	33	-1	next	313937
+decoded_dat/a/pur/pur.dat	field	33	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	33	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	33	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	33	0	opoint	
+decoded_dat/a/pur/pur.dat	field	33	0	kind	31
+decoded_dat/a/pur/pur.dat	field	33	0	x	3830
+decoded_dat/a/pur/pur.dat	field	33	0	y	313130
+decoded_dat/a/pur/pur.dat	field	33	0	action	323835
+decoded_dat/a/pur/pur.dat	field	33	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	33	0	oid	323232
+decoded_dat/a/pur/pur.dat	field	33	0	facing	3530
+decoded_dat/a/pur/pur.dat	frame	34	98		676173
+decoded_dat/a/pur/pur.dat	field	34	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	34	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	34	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	34	-1	next	313938
+decoded_dat/a/pur/pur.dat	field	34	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	34	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	34	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	34	0	opoint	
+decoded_dat/a/pur/pur.dat	field	34	0	kind	31
+decoded_dat/a/pur/pur.dat	field	34	0	x	3830
+decoded_dat/a/pur/pur.dat	field	34	0	y	313130
+decoded_dat/a/pur/pur.dat	field	34	0	action	323835
+decoded_dat/a/pur/pur.dat	field	34	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	34	0	oid	323232
+decoded_dat/a/pur/pur.dat	field	34	0	facing	3530
+decoded_dat/a/pur/pur.dat	frame	35	99		676173
+decoded_dat/a/pur/pur.dat	field	35	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	35	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	35	-1	wait	30
+decoded_dat/a/pur/pur.dat	field	35	-1	next	313939
+decoded_dat/a/pur/pur.dat	field	35	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	35	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	35	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	35	0	opoint	
+decoded_dat/a/pur/pur.dat	field	35	0	kind	31
+decoded_dat/a/pur/pur.dat	field	35	0	x	3830
+decoded_dat/a/pur/pur.dat	field	35	0	y	313130
+decoded_dat/a/pur/pur.dat	field	35	0	action	323835
+decoded_dat/a/pur/pur.dat	field	35	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	35	0	oid	323232
+decoded_dat/a/pur/pur.dat	field	35	0	facing	3530
+decoded_dat/a/pur/pur.dat	frame	36	105		67617332
+decoded_dat/a/pur/pur.dat	field	36	-1	pic	35
+decoded_dat/a/pur/pur.dat	field	36	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	36	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	36	-1	next	313036
+decoded_dat/a/pur/pur.dat	field	36	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	36	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	36	0	itr	
+decoded_dat/a/pur/pur.dat	field	36	0	kind	30
+decoded_dat/a/pur/pur.dat	field	36	0	x	3432
+decoded_dat/a/pur/pur.dat	field	36	0	y	3430
+decoded_dat/a/pur/pur.dat	field	36	0	w	3730
+decoded_dat/a/pur/pur.dat	field	36	0	h	3830
+decoded_dat/a/pur/pur.dat	field	36	0	effect	35
+decoded_dat/a/pur/pur.dat	field	36	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	36	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	36	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	36	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	36	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	36	1	bdy	
+decoded_dat/a/pur/pur.dat	field	36	1	kind	30
+decoded_dat/a/pur/pur.dat	field	36	1	x	3432
+decoded_dat/a/pur/pur.dat	field	36	1	y	3430
+decoded_dat/a/pur/pur.dat	field	36	1	w	3730
+decoded_dat/a/pur/pur.dat	field	36	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	37	106		67617332
+decoded_dat/a/pur/pur.dat	field	37	-1	pic	36
+decoded_dat/a/pur/pur.dat	field	37	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	37	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	37	-1	next	313037
+decoded_dat/a/pur/pur.dat	field	37	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	37	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	37	0	itr	
+decoded_dat/a/pur/pur.dat	field	37	0	kind	30
+decoded_dat/a/pur/pur.dat	field	37	0	x	3432
+decoded_dat/a/pur/pur.dat	field	37	0	y	3430
+decoded_dat/a/pur/pur.dat	field	37	0	w	3730
+decoded_dat/a/pur/pur.dat	field	37	0	h	3830
+decoded_dat/a/pur/pur.dat	field	37	0	effect	35
+decoded_dat/a/pur/pur.dat	field	37	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	37	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	37	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	37	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	37	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	37	1	bdy	
+decoded_dat/a/pur/pur.dat	field	37	1	kind	30
+decoded_dat/a/pur/pur.dat	field	37	1	x	3432
+decoded_dat/a/pur/pur.dat	field	37	1	y	3430
+decoded_dat/a/pur/pur.dat	field	37	1	w	3730
+decoded_dat/a/pur/pur.dat	field	37	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	38	107		67617332
+decoded_dat/a/pur/pur.dat	field	38	-1	pic	37
+decoded_dat/a/pur/pur.dat	field	38	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	38	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	38	-1	next	313038
+decoded_dat/a/pur/pur.dat	field	38	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	38	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	38	0	itr	
+decoded_dat/a/pur/pur.dat	field	38	0	kind	30
+decoded_dat/a/pur/pur.dat	field	38	0	x	3432
+decoded_dat/a/pur/pur.dat	field	38	0	y	3430
+decoded_dat/a/pur/pur.dat	field	38	0	w	3730
+decoded_dat/a/pur/pur.dat	field	38	0	h	3830
+decoded_dat/a/pur/pur.dat	field	38	0	effect	35
+decoded_dat/a/pur/pur.dat	field	38	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	38	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	38	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	38	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	38	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	38	1	bdy	
+decoded_dat/a/pur/pur.dat	field	38	1	kind	30
+decoded_dat/a/pur/pur.dat	field	38	1	x	3432
+decoded_dat/a/pur/pur.dat	field	38	1	y	3430
+decoded_dat/a/pur/pur.dat	field	38	1	w	3730
+decoded_dat/a/pur/pur.dat	field	38	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	39	108		67617332
+decoded_dat/a/pur/pur.dat	field	39	-1	pic	38
+decoded_dat/a/pur/pur.dat	field	39	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	39	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	39	-1	next	313039
+decoded_dat/a/pur/pur.dat	field	39	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	39	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	39	0	itr	
+decoded_dat/a/pur/pur.dat	field	39	0	kind	30
+decoded_dat/a/pur/pur.dat	field	39	0	x	3432
+decoded_dat/a/pur/pur.dat	field	39	0	y	3430
+decoded_dat/a/pur/pur.dat	field	39	0	w	3730
+decoded_dat/a/pur/pur.dat	field	39	0	h	3830
+decoded_dat/a/pur/pur.dat	field	39	0	effect	35
+decoded_dat/a/pur/pur.dat	field	39	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	39	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	39	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	39	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	39	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	39	1	bdy	
+decoded_dat/a/pur/pur.dat	field	39	1	kind	30
+decoded_dat/a/pur/pur.dat	field	39	1	x	3432
+decoded_dat/a/pur/pur.dat	field	39	1	y	3430
+decoded_dat/a/pur/pur.dat	field	39	1	w	3730
+decoded_dat/a/pur/pur.dat	field	39	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	40	109		67617332
+decoded_dat/a/pur/pur.dat	field	40	-1	pic	39
+decoded_dat/a/pur/pur.dat	field	40	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	40	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	40	-1	next	313130
+decoded_dat/a/pur/pur.dat	field	40	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	40	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	40	0	itr	
+decoded_dat/a/pur/pur.dat	field	40	0	kind	30
+decoded_dat/a/pur/pur.dat	field	40	0	x	3432
+decoded_dat/a/pur/pur.dat	field	40	0	y	3430
+decoded_dat/a/pur/pur.dat	field	40	0	w	3730
+decoded_dat/a/pur/pur.dat	field	40	0	h	3830
+decoded_dat/a/pur/pur.dat	field	40	0	effect	35
+decoded_dat/a/pur/pur.dat	field	40	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	40	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	40	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	40	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	40	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	40	1	bdy	
+decoded_dat/a/pur/pur.dat	field	40	1	kind	30
+decoded_dat/a/pur/pur.dat	field	40	1	x	3432
+decoded_dat/a/pur/pur.dat	field	40	1	y	3430
+decoded_dat/a/pur/pur.dat	field	40	1	w	3730
+decoded_dat/a/pur/pur.dat	field	40	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	41	110		67617332
+decoded_dat/a/pur/pur.dat	field	41	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	41	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	41	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	41	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	41	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	41	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	41	0	itr	
+decoded_dat/a/pur/pur.dat	field	41	0	kind	30
+decoded_dat/a/pur/pur.dat	field	41	0	x	3432
+decoded_dat/a/pur/pur.dat	field	41	0	y	3430
+decoded_dat/a/pur/pur.dat	field	41	0	w	3730
+decoded_dat/a/pur/pur.dat	field	41	0	h	3830
+decoded_dat/a/pur/pur.dat	field	41	0	effect	35
+decoded_dat/a/pur/pur.dat	field	41	0	fall	3430
+decoded_dat/a/pur/pur.dat	field	41	0	arest	3237
+decoded_dat/a/pur/pur.dat	field	41	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	41	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	41	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	41	1	bdy	
+decoded_dat/a/pur/pur.dat	field	41	1	kind	30
+decoded_dat/a/pur/pur.dat	field	41	1	x	3432
+decoded_dat/a/pur/pur.dat	field	41	1	y	3430
+decoded_dat/a/pur/pur.dat	field	41	1	w	3730
+decoded_dat/a/pur/pur.dat	field	41	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	42	185		676173
+decoded_dat/a/pur/pur.dat	field	42	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	42	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	42	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	42	-1	next	313836
+decoded_dat/a/pur/pur.dat	field	42	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	42	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	42	0	itr	
+decoded_dat/a/pur/pur.dat	field	42	0	kind	30
+decoded_dat/a/pur/pur.dat	field	42	0	x	3432
+decoded_dat/a/pur/pur.dat	field	42	0	y	3430
+decoded_dat/a/pur/pur.dat	field	42	0	w	3730
+decoded_dat/a/pur/pur.dat	field	42	0	h	3830
+decoded_dat/a/pur/pur.dat	field	42	0	effect	35
+decoded_dat/a/pur/pur.dat	field	42	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	42	0	fall	33
+decoded_dat/a/pur/pur.dat	field	42	0	arest	37
+decoded_dat/a/pur/pur.dat	field	42	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	42	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	42	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	42	1	bdy	
+decoded_dat/a/pur/pur.dat	field	42	1	kind	30
+decoded_dat/a/pur/pur.dat	field	42	1	x	3432
+decoded_dat/a/pur/pur.dat	field	42	1	y	3430
+decoded_dat/a/pur/pur.dat	field	42	1	w	3730
+decoded_dat/a/pur/pur.dat	field	42	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	43	186		676173
+decoded_dat/a/pur/pur.dat	field	43	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	43	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	43	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	43	-1	next	313837
+decoded_dat/a/pur/pur.dat	field	43	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	43	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	43	0	itr	
+decoded_dat/a/pur/pur.dat	field	43	0	kind	30
+decoded_dat/a/pur/pur.dat	field	43	0	x	3432
+decoded_dat/a/pur/pur.dat	field	43	0	y	3430
+decoded_dat/a/pur/pur.dat	field	43	0	w	3730
+decoded_dat/a/pur/pur.dat	field	43	0	h	3830
+decoded_dat/a/pur/pur.dat	field	43	0	effect	35
+decoded_dat/a/pur/pur.dat	field	43	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	43	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	43	0	arest	37
+decoded_dat/a/pur/pur.dat	field	43	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	43	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	43	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	43	1	bdy	
+decoded_dat/a/pur/pur.dat	field	43	1	kind	30
+decoded_dat/a/pur/pur.dat	field	43	1	x	3432
+decoded_dat/a/pur/pur.dat	field	43	1	y	3430
+decoded_dat/a/pur/pur.dat	field	43	1	w	3730
+decoded_dat/a/pur/pur.dat	field	43	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	44	187		676173
+decoded_dat/a/pur/pur.dat	field	44	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	44	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	44	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	44	-1	next	313838
+decoded_dat/a/pur/pur.dat	field	44	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	44	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	44	0	itr	
+decoded_dat/a/pur/pur.dat	field	44	0	kind	30
+decoded_dat/a/pur/pur.dat	field	44	0	x	3432
+decoded_dat/a/pur/pur.dat	field	44	0	y	3430
+decoded_dat/a/pur/pur.dat	field	44	0	w	3730
+decoded_dat/a/pur/pur.dat	field	44	0	h	3830
+decoded_dat/a/pur/pur.dat	field	44	0	effect	35
+decoded_dat/a/pur/pur.dat	field	44	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	44	0	fall	33
+decoded_dat/a/pur/pur.dat	field	44	0	arest	37
+decoded_dat/a/pur/pur.dat	field	44	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	44	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	44	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	44	1	bdy	
+decoded_dat/a/pur/pur.dat	field	44	1	kind	30
+decoded_dat/a/pur/pur.dat	field	44	1	x	3432
+decoded_dat/a/pur/pur.dat	field	44	1	y	3430
+decoded_dat/a/pur/pur.dat	field	44	1	w	3730
+decoded_dat/a/pur/pur.dat	field	44	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	45	188		676173
+decoded_dat/a/pur/pur.dat	field	45	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	45	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	45	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	45	-1	next	313839
+decoded_dat/a/pur/pur.dat	field	45	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	45	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	45	0	itr	
+decoded_dat/a/pur/pur.dat	field	45	0	kind	30
+decoded_dat/a/pur/pur.dat	field	45	0	x	3432
+decoded_dat/a/pur/pur.dat	field	45	0	y	3430
+decoded_dat/a/pur/pur.dat	field	45	0	w	3730
+decoded_dat/a/pur/pur.dat	field	45	0	h	3830
+decoded_dat/a/pur/pur.dat	field	45	0	effect	35
+decoded_dat/a/pur/pur.dat	field	45	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	45	0	fall	33
+decoded_dat/a/pur/pur.dat	field	45	0	arest	37
+decoded_dat/a/pur/pur.dat	field	45	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	45	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	45	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	45	1	bdy	
+decoded_dat/a/pur/pur.dat	field	45	1	kind	30
+decoded_dat/a/pur/pur.dat	field	45	1	x	3432
+decoded_dat/a/pur/pur.dat	field	45	1	y	3430
+decoded_dat/a/pur/pur.dat	field	45	1	w	3730
+decoded_dat/a/pur/pur.dat	field	45	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	46	189		676173
+decoded_dat/a/pur/pur.dat	field	46	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	46	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	46	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	46	-1	next	313930
+decoded_dat/a/pur/pur.dat	field	46	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	46	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	46	0	itr	
+decoded_dat/a/pur/pur.dat	field	46	0	kind	30
+decoded_dat/a/pur/pur.dat	field	46	0	x	3432
+decoded_dat/a/pur/pur.dat	field	46	0	y	3430
+decoded_dat/a/pur/pur.dat	field	46	0	w	3730
+decoded_dat/a/pur/pur.dat	field	46	0	h	3830
+decoded_dat/a/pur/pur.dat	field	46	0	effect	35
+decoded_dat/a/pur/pur.dat	field	46	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	46	0	fall	2d31
+decoded_dat/a/pur/pur.dat	field	46	0	arest	37
+decoded_dat/a/pur/pur.dat	field	46	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	46	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	46	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	46	1	bdy	
+decoded_dat/a/pur/pur.dat	field	46	1	kind	30
+decoded_dat/a/pur/pur.dat	field	46	1	x	3432
+decoded_dat/a/pur/pur.dat	field	46	1	y	3430
+decoded_dat/a/pur/pur.dat	field	46	1	w	3730
+decoded_dat/a/pur/pur.dat	field	46	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	47	190		676173
+decoded_dat/a/pur/pur.dat	field	47	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	47	-1	state	3138
+decoded_dat/a/pur/pur.dat	field	47	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	47	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	47	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	47	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	47	0	itr	
+decoded_dat/a/pur/pur.dat	field	47	0	kind	30
+decoded_dat/a/pur/pur.dat	field	47	0	x	3432
+decoded_dat/a/pur/pur.dat	field	47	0	y	3430
+decoded_dat/a/pur/pur.dat	field	47	0	w	3730
+decoded_dat/a/pur/pur.dat	field	47	0	h	3830
+decoded_dat/a/pur/pur.dat	field	47	0	effect	35
+decoded_dat/a/pur/pur.dat	field	47	0	zwidth	3530
+decoded_dat/a/pur/pur.dat	field	47	0	fall	33
+decoded_dat/a/pur/pur.dat	field	47	0	arest	37
+decoded_dat/a/pur/pur.dat	field	47	0	bdefend	393939
+decoded_dat/a/pur/pur.dat	field	47	0	injury	3130
+decoded_dat/a/pur/pur.dat	field	47	0	poison	3133333030353939
+decoded_dat/a/pur/pur.dat	block	47	1	bdy	
+decoded_dat/a/pur/pur.dat	field	47	1	kind	30
+decoded_dat/a/pur/pur.dat	field	47	1	x	3432
+decoded_dat/a/pur/pur.dat	field	47	1	y	3430
+decoded_dat/a/pur/pur.dat	field	47	1	w	3730
+decoded_dat/a/pur/pur.dat	field	47	1	h	3830
+decoded_dat/a/pur/pur.dat	frame	48	195		676173
+decoded_dat/a/pur/pur.dat	field	48	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	48	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	48	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	48	-1	next	3936
+decoded_dat/a/pur/pur.dat	field	48	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	48	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	48	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	48	0	opoint	
+decoded_dat/a/pur/pur.dat	field	48	0	kind	31
+decoded_dat/a/pur/pur.dat	field	48	0	x	3830
+decoded_dat/a/pur/pur.dat	field	48	0	y	313130
+decoded_dat/a/pur/pur.dat	field	48	0	action	313835
+decoded_dat/a/pur/pur.dat	field	48	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	48	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	49	196		676173
+decoded_dat/a/pur/pur.dat	field	49	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	49	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	49	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	49	-1	next	3937
+decoded_dat/a/pur/pur.dat	field	49	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	49	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	49	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	49	0	opoint	
+decoded_dat/a/pur/pur.dat	field	49	0	kind	31
+decoded_dat/a/pur/pur.dat	field	49	0	x	3830
+decoded_dat/a/pur/pur.dat	field	49	0	y	313130
+decoded_dat/a/pur/pur.dat	field	49	0	action	313835
+decoded_dat/a/pur/pur.dat	field	49	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	49	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	50	197		676173
+decoded_dat/a/pur/pur.dat	field	50	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	50	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	50	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	50	-1	next	3938
+decoded_dat/a/pur/pur.dat	field	50	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	50	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	50	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	50	0	opoint	
+decoded_dat/a/pur/pur.dat	field	50	0	kind	31
+decoded_dat/a/pur/pur.dat	field	50	0	x	3830
+decoded_dat/a/pur/pur.dat	field	50	0	y	313130
+decoded_dat/a/pur/pur.dat	field	50	0	action	313835
+decoded_dat/a/pur/pur.dat	field	50	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	50	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	51	198		676173
+decoded_dat/a/pur/pur.dat	field	51	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	51	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	51	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	51	-1	next	3939
+decoded_dat/a/pur/pur.dat	field	51	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	51	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	51	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	51	0	opoint	
+decoded_dat/a/pur/pur.dat	field	51	0	kind	31
+decoded_dat/a/pur/pur.dat	field	51	0	x	3830
+decoded_dat/a/pur/pur.dat	field	51	0	y	313130
+decoded_dat/a/pur/pur.dat	field	51	0	action	313835
+decoded_dat/a/pur/pur.dat	field	51	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	51	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	52	199		676173
+decoded_dat/a/pur/pur.dat	field	52	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	52	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	52	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	52	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	52	-1	dvx	3135
+decoded_dat/a/pur/pur.dat	field	52	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	52	-1	centery	313135
+decoded_dat/a/pur/pur.dat	block	52	0	opoint	
+decoded_dat/a/pur/pur.dat	field	52	0	kind	31
+decoded_dat/a/pur/pur.dat	field	52	0	x	3830
+decoded_dat/a/pur/pur.dat	field	52	0	y	313130
+decoded_dat/a/pur/pur.dat	field	52	0	action	313835
+decoded_dat/a/pur/pur.dat	field	52	0	dvx	3130
+decoded_dat/a/pur/pur.dat	field	52	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	53	245		68697474696e67
+decoded_dat/a/pur/pur.dat	field	53	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	53	-1	state	33303035
+decoded_dat/a/pur/pur.dat	field	53	-1	wait	313030
+decoded_dat/a/pur/pur.dat	field	53	-1	next	323436
+decoded_dat/a/pur/pur.dat	field	53	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	53	-1	centery	313435
+decoded_dat/a/pur/pur.dat	frame	54	246		68697474696e67
+decoded_dat/a/pur/pur.dat	field	54	-1	pic	393939
+decoded_dat/a/pur/pur.dat	field	54	-1	state	343030
+decoded_dat/a/pur/pur.dat	field	54	-1	wait	33
+decoded_dat/a/pur/pur.dat	field	54	-1	next	323435
+decoded_dat/a/pur/pur.dat	field	54	-1	centerx	3837
+decoded_dat/a/pur/pur.dat	field	54	-1	centery	313435
+decoded_dat/a/pur/pur.dat	block	54	0	opoint	
+decoded_dat/a/pur/pur.dat	field	54	0	kind	31
+decoded_dat/a/pur/pur.dat	field	54	0	x	3830
+decoded_dat/a/pur/pur.dat	field	54	0	y	313430
+decoded_dat/a/pur/pur.dat	field	54	0	action	3130
+decoded_dat/a/pur/pur.dat	field	54	0	oid	323232
+decoded_dat/a/pur/pur.dat	frame	55	285		676173
+decoded_dat/a/pur/pur.dat	field	55	-1	pic	35
+decoded_dat/a/pur/pur.dat	field	55	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	55	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	55	-1	next	323836
+decoded_dat/a/pur/pur.dat	field	55	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	55	-1	centery	313135
+decoded_dat/a/pur/pur.dat	frame	56	286		676173
+decoded_dat/a/pur/pur.dat	field	56	-1	pic	36
+decoded_dat/a/pur/pur.dat	field	56	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	56	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	56	-1	next	323837
+decoded_dat/a/pur/pur.dat	field	56	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	56	-1	centery	313135
+decoded_dat/a/pur/pur.dat	frame	57	287		676173
+decoded_dat/a/pur/pur.dat	field	57	-1	pic	37
+decoded_dat/a/pur/pur.dat	field	57	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	57	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	57	-1	next	323838
+decoded_dat/a/pur/pur.dat	field	57	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	57	-1	centery	313135
+decoded_dat/a/pur/pur.dat	frame	58	288		676173
+decoded_dat/a/pur/pur.dat	field	58	-1	pic	38
+decoded_dat/a/pur/pur.dat	field	58	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	58	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	58	-1	next	323839
+decoded_dat/a/pur/pur.dat	field	58	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	58	-1	centery	313135
+decoded_dat/a/pur/pur.dat	frame	59	289		676173
+decoded_dat/a/pur/pur.dat	field	59	-1	pic	39
+decoded_dat/a/pur/pur.dat	field	59	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	59	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	59	-1	next	323930
+decoded_dat/a/pur/pur.dat	field	59	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	59	-1	centery	313135
+decoded_dat/a/pur/pur.dat	frame	60	290		676173
+decoded_dat/a/pur/pur.dat	field	60	-1	pic	3130
+decoded_dat/a/pur/pur.dat	field	60	-1	state	3135
+decoded_dat/a/pur/pur.dat	field	60	-1	wait	31
+decoded_dat/a/pur/pur.dat	field	60	-1	next	31303030
+decoded_dat/a/pur/pur.dat	field	60	-1	centerx	3637
+decoded_dat/a/pur/pur.dat	field	60	-1	centery	313135

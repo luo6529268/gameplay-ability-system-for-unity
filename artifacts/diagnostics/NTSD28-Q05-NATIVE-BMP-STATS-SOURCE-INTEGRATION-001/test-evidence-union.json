@@ -1,0 +1,17 @@
+{
+  "uniquePassed": 1390,
+  "runs": [
+    {
+      "artifact": "first-green-sentinel-failure.xml",
+      "total": "1362",
+      "passed": "1360",
+      "failed": "2"
+    },
+    {
+      "artifact": "GREEN.xml",
+      "total": "462",
+      "passed": "462",
+      "failed": "0"
+    }
+  ]
+}

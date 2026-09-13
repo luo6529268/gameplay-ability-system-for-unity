@@ -1,0 +1,8 @@
+<bmp_begin>
+name: Q03Geometry
+type: 0
+<bmp_end>
+<frame> 0 standing
+pic: 0 state: 0 wait: 100 next: 0 centerx: 0 centery: 0
+bdy: kind: 0 y: 0 w: 10 h: 10 bdy_end:
+<frame_end>

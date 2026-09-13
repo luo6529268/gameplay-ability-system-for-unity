@@ -1084,6 +1084,7 @@ namespace NTSD.Simulation
                 ("pp", isDefault ? 500 : runtime.PP),
                 ("respawnCount", isDefault ? 0 : runtime.RespawnCount),
                 ("spawnerSlot", isDefault ? -1 : runtime.SpawnerSlotIndex),
+                ("objectAiExcludedGroupSourceSlot2F8", isDefault ? -1 : runtime.ObjectAiExcludedGroupSourceSlot2F8),
                 ("unk344", isDefault ? 0 : runtime.Unk344),
                 ("weaponCount", isDefault ? 0 : runtime.WeaponCount));
 

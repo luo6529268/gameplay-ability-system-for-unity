@@ -1,0 +1,19 @@
+{
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: Grounded production tick differs for mass 0\r\n  at NTSD.Test.Editor.NTSD28Q04MassFrictionPlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q04MassFrictionPlayProbeEditor.cs:93 \r\n  at NTSD.Test.Editor.NTSD28Q04MassFrictionPlayProbeEditor.Run () [0x0022e] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q04MassFrictionPlayProbeEditor.cs:56 ",
+    "startTick": 0,
+    "endTick": 1,
+    "cleanupPassed": true,
+    "rows": [
+        {
+            "mass": 0.0,
+            "x": 405.0,
+            "y": 0.0,
+            "z": 237.0,
+            "vx": 4.0,
+            "vy": 0.0,
+            "vz": -4.0
+        }
+    ],
+    "landingRows": []
+}

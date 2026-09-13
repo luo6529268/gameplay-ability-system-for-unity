@@ -1,0 +1,21 @@
+{
+  "status": "VERIFIED_SOURCE_RANGE_ADMISSION_ONLY",
+  "jobId": "4257ecda97e44b7abcc978d728373e12",
+  "summary": {
+    "total": 14,
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 19.4572975,
+    "resultState": "Passed"
+  },
+  "formalDat": 405,
+  "spriteDeclarations": 773,
+  "legacyOverlapTests": 2,
+  "compileErrors": 0,
+  "sceneDirty": false,
+  "productionSourceSwitch": false,
+  "resourceMigration": false,
+  "fullPlayOrSelfCheck": false,
+  "schema": "12/20/23"
+}

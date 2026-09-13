@@ -1,0 +1,101 @@
+file	type	index	line	key	value_hex
+ascii_whitespace.dat	document	1	1		
+ascii_whitespace.dat	row	1	8		63617074696f6e
+ascii_whitespace.dat	field	1	9	dvx	37
+bad.dat	document	0	0		
+before_entry.dat	document	0	1		
+before_entry.dat	row	1	9		
+before_entry.dat	field	1	10	dvy	37
+caption.dat	document	1	1		
+caption.dat	row	1	8		6476783a2039393920776561706f6e5f68703a203939392077616c6b696e675f73706565643a20393939
+caption.dat	field	1	9	dvy	37
+cross_duplicate.dat	document	0	1		
+cross_duplicate.dat	row	1	8		
+cross_duplicate.dat	field	1	9	dvx	32
+duplicate.dat	document	0	1		
+duplicate.dat	row	1	8		
+duplicate.dat	field	1	9	dvx	32
+duplicate_normalized.dat	document	0	1		
+duplicate_normalized.dat	row	1	8		
+duplicate_normalized.dat	field	1	9	dvx	32
+embedded_cr.dat	document	0	0		
+empty.dat	document	1	0		
+eof.dat	document	1	1		
+eof.dat	row	1	8		
+eof.dat	field	1	9	dvx	32
+frame_interrupt.dat	document	1	1		
+frame_interrupt.dat	row	1	8		
+frame_interrupt.dat	field	1	9	dvx	32
+hash_after.dat	document	1	1		
+hash_after.dat	row	1	8		
+hash_after.dat	field	1	9	dvx	38
+hash_before.dat	document	0	1		
+hash_before.dat	row	1	9		
+header_cr_before_space.dat	document	1	1		
+header_cr_before_space.dat	row	1	8		63617074696f6e
+header_cr_before_space.dat	field	1	9	dvx	35
+header_cr_before_space.dat	field	1	9	dvy	2d36
+header_cr_before_space.dat	field	1	9	caughtact	2d3233
+inline_entry.dat	document	1	1		
+inline_entry.dat	row	1	8		
+inline_entry.dat	field	1	9	dvx	35
+inline_entry.dat	field	1	9	entry	32
+inline_entry.dat	field	1	9	dvy	37
+leading_zero.dat	document	1	1		
+leading_zero.dat	row	1	8		
+leading_zero.dat	field	1	9	dvx	32
+metadata_namespace.dat	document	1	1		
+metadata_namespace.dat	row	1	8		
+metadata_namespace.dat	field	1	9	weapon_hp	393939
+metadata_namespace.dat	field	1	9	walking_speed	393939
+metadata_namespace.dat	field	1	9	dvx	37
+multiple.dat	document	1	2		
+multiple.dat	row	1	8		
+multiple.dat	field	1	9	dvx	32
+multiple.dat	row	2	12		
+multiple.dat	field	2	13	dvx	33
+negative.dat	document	0	0		
+nine.dat	document	1	1		
+nine.dat	row	9	8		
+nine.dat	field	9	9	dvx	32
+order.dat	document	1	2		
+order.dat	row	9	8		
+order.dat	field	9	9	dvx	39
+order.dat	row	1	10		
+order.dat	field	1	11	dvx	31
+ordinary.dat	document	1	1		
+ordinary.dat	row	1	8		
+ordinary.dat	field	1	9	dvx	35
+ordinary.dat	field	1	9	dvy	2d36
+ordinary.dat	field	1	9	caughtact	2d3233
+plus.dat	document	0	0		
+prefix_markers.dat	document	1	1		
+prefix_markers.dat	row	1	8		
+prefix_markers.dat	field	1	9	dvx	32
+prefix_metadata.dat	document	1	1		
+prefix_metadata.dat	row	1	8		
+prefix_metadata.dat	field	1	9	dvx	35
+prefix_metadata.dat	field	1	9	dvy	2d36
+prefix_metadata.dat	field	1	9	caughtact	2d3233
+repeated_field.dat	document	1	1		
+repeated_field.dat	row	1	8		
+repeated_field.dat	field	1	9	dvx	32
+repeated_field.dat	field	1	9	dvx	37
+repeated_field.dat	field	1	10	DVX	3939
+stats_before.dat	document	1	1		
+stats_before.dat	row	1	9		
+stats_before.dat	field	1	10	dvx	32
+stats_middle.dat	document	1	1		
+stats_middle.dat	row	1	8		
+stats_middle.dat	field	1	9	dvx	32
+stats_middle.dat	field	1	11	dvy	37
+ten.dat	document	0	0		
+trailing_close.dat	document	1	0		
+unknown_fields.dat	document	1	1		
+unknown_fields.dat	row	1	8		
+unknown_fields.dat	field	1	9	foo-bar	34
+unknown_fields.dat	field	1	9	_x	31
+unknown_fields.dat	field	1	9	dvx	39
+upper_entry.dat	document	0	0		
+upper_section.dat	document	1	0		
+zero.dat	document	0	0		

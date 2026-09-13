@@ -1,0 +1,66 @@
+{
+  "ancillaryImageReferencesForOwnerReview": 242,
+  "catalogRows": 354,
+  "deletionApproved": 0,
+  "evidenceClass": "SOURCE_MODEL_CONTENT_DIAGNOSTIC_NOT_RUNTIME_CERTIFICATE",
+  "imageReferenceCounts": {
+    "native": 2005,
+    "unity": 496
+  },
+  "inputs": {
+    "formalExe": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+    "nativeCapture": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+    "nativeCatalog": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE",
+    "nativeRegistry": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+    "unityCurrentCapture": "52135192067DD87AFE76F33ED98E68336148CC6513C9DC467577BB100D6D2BBD",
+    "unityNativeCapture": "B7F7E90A3D1DBA059CDDD87480C0B9BD78FB1EADD1A5C488B24C38DF70C068A8",
+    "unityRegistry": "DB7A5F7A02B45E8461701D5033F30DA7128A07ED1B07134B5E5822884121B913"
+  },
+  "mappingStates": {
+    "MATCHED_BY_SECTION_AND_ID": 125,
+    "NEW_INDEXED_ENTRY": 229,
+    "OLD_ONLY_REVIEW": 12
+  },
+  "menuFaceReferencesForNonBattleReview": {
+    "native": 405
+  },
+  "missingImageReferences": {},
+  "nativeCapturedFiles": 405,
+  "nativeGenericParserFailures": 3,
+  "nativeIndexedObjectParserFailures": 0,
+  "nativeManifestCounts": {
+    ".dat": 405,
+    ".png": 1255
+  },
+  "nativeRegistryCounts": {
+    "background": 24,
+    "object": 330
+  },
+  "oldAssetsReviewed": 695,
+  "opointEdgeCounts": {
+    "native": 7290,
+    "unity": 2455
+  },
+  "registryCatalogEqual": true,
+  "registryRejectedLines": {
+    "native": [],
+    "unity": []
+  },
+  "sameIdContentComparisons": 125,
+  "sameInputRejectedFrames": 9,
+  "sameInputRejectedSubblocks": 9,
+  "sameInputSpriteDifferences": 55,
+  "schema": "ntsd28-content-entry-inventory-v1",
+  "typedGapGroups": 47,
+  "unityCurrentCapturedFiles": 138,
+  "unityRegistryCounts": {
+    "object": 137
+  },
+  "unityThroughNativeCapturedFiles": 405,
+  "unresolved": [
+    "Physical migration layout belongs to Q02",
+    "Registry is not full semantic reachability",
+    "Code-generated asset paths and scene memory references require later review",
+    "No Unity Play or formal executable battle was run"
+  ]
+}

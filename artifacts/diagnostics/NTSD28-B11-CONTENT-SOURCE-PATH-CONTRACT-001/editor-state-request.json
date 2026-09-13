@@ -1,0 +1,6 @@
+{
+  "action": "execute",
+  "safety_checks": true,
+  "compiler": "codedom",
+  "code": "System.Func<string> DetectPipeline = () => { var rpa = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline; if (rpa == null) return \"BuiltIn\"; var name = rpa.GetType().FullName ?? string.Empty; if (name.Contains(\"Universal\")) return \"URP\"; if (name.Contains(\"HighDefinition\")) return \"HDRP\"; return \"Custom\"; }; var scenes = new System.Collections.Generic.List<object>(); for (int i = 0; i < UnityEngine.SceneManagement.SceneManager.sceneCount; i++) { var s = UnityEngine.SceneManagement.SceneManager.GetSceneAt(i); scenes.Add(new { path = s.path, dirty = s.isDirty, loaded = s.isLoaded }); } return new { pipeline = DetectPipeline(), playing = UnityEditor.EditorApplication.isPlaying, compiling = UnityEditor.EditorApplication.isCompiling, updating = UnityEditor.EditorApplication.isUpdating, dataPath = UnityEngine.Application.dataPath, scenes = scenes };"
+}

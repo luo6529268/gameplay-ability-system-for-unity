@@ -1,0 +1,24 @@
+{
+    "runId": "play-running-cycle-2",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: Fixture-owned Unity resources survived teardown.\r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Require (System.Boolean value, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:155 \r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor+Request request) [0x008fb] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:134 ",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Running",
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "shutdownFailure": "",
+    "initialObjectCount": 4,
+    "checksCompleted": 1,
+    "trackedObjects": 34,
+    "survivors": 24,
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "activeBoundaryRejected": true,
+    "checks": [
+        "FullPrewarm_PublishesAllViewsBeforeEvent_AndRebindsBeforeRetirement",
+        "CancelAfterBodyStaging_PreservesPublishedSource_AndAllowsRetry",
+        "DriverShutdown_CancelsAndRecyclesUnpublishedImagesInOrderedStages",
+        "LegacyOwnedUiImages_TransferAfterNativeRebind_WhileBorrowedAssetsSurvive"
+    ]
+}

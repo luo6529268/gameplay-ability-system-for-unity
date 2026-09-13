@@ -1,0 +1,24 @@
+{
+    "runId": "play-running-cycle-1",
+    "status": "FAIL",
+    "message": "System.NullReferenceException: Object reference not set to an instance of an object\r\n  at NUnit.Framework.TestContext.WriteLine (System.String value) [0x00006] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.NTSD28B11AtomicPublicationEditorTests.<FullPrewarm_PublishesAllViewsBeforeEvent_AndRebindsBeforeRetirement>b__17_0 () [0x00223] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11AtomicPublicationEditorTests.cs:141 \r\n  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskCompletionSource.cs:244 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.cs:312 \r\n  at Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator.RunTask (Cysharp.Threading.Tasks.UniTask task) [0x00024] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskExtensions.cs:805 \r\n  at Cysharp.Threading.Tasks.UniTaskExtensions+ToCoroutineEnumerator.MoveNext () [0x0003a] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskExtensions.cs:836 \r\n  at NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11NativePublicationPlayProbeEditor+Request request) [0x00739] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11NativePublicationPlayProbeEditor.cs:123 ",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "initialLifecycle": "Running",
+    "shutdownStatus": "Completed",
+    "shutdownStage": "RuntimeMapCleared",
+    "shutdownFailure": "",
+    "initialObjectCount": 4,
+    "checksCompleted": 0,
+    "trackedObjects": 0,
+    "survivors": 0,
+    "remainingWorldObjects": 0,
+    "remainingRuntimeSlots": 0,
+    "remainingPoolBorrowers": 0,
+    "activeBoundaryRejected": true,
+    "checks": [
+        "FullPrewarm_PublishesAllViewsBeforeEvent_AndRebindsBeforeRetirement",
+        "CancelAfterBodyStaging_PreservesPublishedSource_AndAllowsRetry",
+        "DriverShutdown_CancelsAndRecyclesUnpublishedImagesInOrderedStages",
+        "LegacyOwnedUiImages_TransferAfterNativeRebind_WhileBorrowedAssetsSurvive"
+    ]
+}

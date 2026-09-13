@@ -1,0 +1,20 @@
+{
+  "mode": "EditMode",
+  "testNames": [
+    "NTSD.Test.Editor.NTSD28Q05GrabTrackerCarrierEditorTests",
+    "NTSD.Test.Editor.NTSD28B6LegacyGrabbedByRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28B6LegacyTrackerRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests",
+    "NTSD.Test.Editor.NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests",
+    "NTSD.Test.Editor.NTSD28B6HeldNegativeFrameLifecycleGuardProductionEditorTests",
+    "NTSD.Test.BattleWorldEntityBaseShellSnapshotEditorTests",
+    "NTSD.Test.BattleStateSnapshotRestoreEditorTests",
+    "NTSD.Test.BattleWorldEntityRuntimeSnapshotEditorTests",
+    "NTSD.Test.BattleEcsReadOnlyShadowEditorTests",
+    "NTSD.Test.BattleHitExecutionPlanEditorTests",
+    "NTSD.Test.NTSD28Q052F8CarrierEditorTests",
+    "NTSD.Test.NTSD28Q05UnclaimedRawRestoreEditorTests"
+  ],
+  "includeDetails": false,
+  "includeFailedTests": true
+}

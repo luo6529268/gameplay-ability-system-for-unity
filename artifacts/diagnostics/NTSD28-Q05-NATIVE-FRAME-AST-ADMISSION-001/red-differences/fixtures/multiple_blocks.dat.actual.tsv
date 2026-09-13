@@ -1,0 +1,9 @@
+multiple_blocks.dat	frame	0	0		
+multiple_blocks.dat	block	0	0	bdy	
+multiple_blocks.dat	field	0	0	x	31
+multiple_blocks.dat	block	0	1	bdy	
+multiple_blocks.dat	field	0	1	x	32
+multiple_blocks.dat	block	0	2	opoint	
+multiple_blocks.dat	field	0	2	oid	31
+multiple_blocks.dat	block	0	3	opoint	
+multiple_blocks.dat	field	0	3	oid	32

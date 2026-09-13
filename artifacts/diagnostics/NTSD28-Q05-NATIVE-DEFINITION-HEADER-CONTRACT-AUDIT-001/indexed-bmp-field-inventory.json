@@ -1,0 +1,2201 @@
+{
+  "counts": {
+    "file(0-39)": 17,
+    "w": 773,
+    "h": 773,
+    "row": 773,
+    "col": 773,
+    "weapon_hit_sound": 169,
+    "weapon_drop_sound": 169,
+    "weapon_broken_sound": 169,
+    "shadow": 30,
+    "file(0-17)": 4,
+    "file(0-3)": 15,
+    "file(4-5)": 1,
+    "file(0-31)": 1,
+    "file(32-41)": 1,
+    "file(0-9)": 8,
+    "file(10-18)": 1,
+    "file(19-28)": 1,
+    "file(29-35)": 1,
+    "file(36-36)": 1,
+    "file(18-33)": 1,
+    "file(34-48)": 1,
+    "file(0-7)": 12,
+    "file(8-19)": 3,
+    "file(0-13)": 2,
+    "file(0-14)": 5,
+    "file(0-19)": 12,
+    "file(0-6)": 2,
+    "file(8-9)": 1,
+    "file(15-24)": 1,
+    "file(0-23)": 5,
+    "file(24-48)": 1,
+    "file(0-5)": 8,
+    "file(8-11)": 2,
+    "file(12-16)": 1,
+    "file(0-8)": 8,
+    "file(0-11)": 11,
+    "file(65-80)": 1,
+    "file(14-30)": 1,
+    "file(18-35)": 1,
+    "file(18-29)": 1,
+    "file(0-1)": 5,
+    "file(2-9)": 1,
+    "file(10-10)": 1,
+    "file(11-11)": 1,
+    "file(12-12)": 1,
+    "file(13-13)": 2,
+    "file(0-4)": 6,
+    "name": 158,
+    "head": 159,
+    "small": 159,
+    "smallb": 154,
+    "file(0-0)": 12,
+    "walking_frame_rate": 158,
+    "walking_speed": 158,
+    "walking_speedz": 158,
+    "running_frame_rate": 158,
+    "running_speed": 158,
+    "running_speedz": 158,
+    "heavy_walking_speed": 158,
+    "heavy_walking_speedz": 158,
+    "heavy_running_speed": 158,
+    "heavy_running_speedz": 158,
+    "jump_height": 158,
+    "jump_distance": 158,
+    "jump_distancez": 158,
+    "dash_height": 158,
+    "dash_distance": 158,
+    "dash_distancez": 158,
+    "rowing_height": 158,
+    "rowing_distance": 158,
+    "hidden": 158,
+    "random": 158,
+    "file(0-25)": 1,
+    "file(26-40)": 1,
+    "file(41-46)": 1,
+    "file(47-86)": 1,
+    "file(87-96)": 1,
+    "file(97-106)": 1,
+    "file(107-122)": 1,
+    "file(0-2)": 6,
+    "file(0-209)": 4,
+    "walking_frame": 37,
+    "file(210-213)": 1,
+    "file(214-228)": 1,
+    "file(229-230)": 1,
+    "bound": 98,
+    "file(0-29)": 23,
+    "file(12-21)": 1,
+    "file(22-34)": 1,
+    "file(0-119)": 35,
+    "file(120-179)": 3,
+    "file(180-209)": 1,
+    "file(210-219)": 1,
+    "running_frame": 29,
+    "file(20-79)": 1,
+    "file(80-94)": 1,
+    "file(0-189)": 1,
+    "file(190-224)": 1,
+    "file(30-37)": 3,
+    "file(38-41)": 1,
+    "file(42-61)": 1,
+    "file(0-44)": 1,
+    "file(45-46)": 1,
+    "file(0-109)": 13,
+    "file(30-59)": 1,
+    "file(120-149)": 3,
+    "file(12-19)": 2,
+    "file(20-23)": 5,
+    "file(24-27)": 2,
+    "file(28-31)": 2,
+    "file(32-35)": 1,
+    "file(0-179)": 2,
+    "file(180-189)": 1,
+    "file(0-169)": 2,
+    "file(170-184)": 3,
+    "file(185-202)": 1,
+    "file(0-69)": 12,
+    "file(70-77)": 1,
+    "file(78-83)": 1,
+    "file(84-107)": 1,
+    "file(108-117)": 1,
+    "file(0-34)": 6,
+    "file(0-27)": 5,
+    "file(28-51)": 1,
+    "file(52-59)": 1,
+    "file(60-68)": 1,
+    "file(69-88)": 1,
+    "file(89-96)": 1,
+    "file(97-101)": 1,
+    "file(18-32)": 1,
+    "file(33-52)": 1,
+    "file(53-76)": 1,
+    "file(0-99)": 9,
+    "file(9-17)": 1,
+    "file(18-21)": 2,
+    "file(22-51)": 1,
+    "file(52-52)": 1,
+    "file(53-60)": 1,
+    "file(61-72)": 1,
+    "file(73-84)": 1,
+    "file(85-99)": 2,
+    "file(120-128)": 1,
+    "file(30-30)": 1,
+    "file(31-70)": 1,
+    "file(71-82)": 1,
+    "file(83-86)": 1,
+    "file(87-104)": 1,
+    "file(105-110)": 1,
+    "file(0-149)": 4,
+    "file(150-174)": 3,
+    "file(175-178)": 1,
+    "file(0-139)": 20,
+    "file(140-164)": 2,
+    "file(165-168)": 2,
+    "file(169-178)": 2,
+    "file(0-15)": 5,
+    "file(16-39)": 1,
+    "file(40-57)": 1,
+    "file(0-89)": 12,
+    "file(180-194)": 2,
+    "file(20-24)": 1,
+    "file(25-39)": 2,
+    "file(40-79)": 1,
+    "file(80-84)": 1,
+    "file(100-109)": 1,
+    "file(0-79)": 10,
+    "file(80-82)": 1,
+    "file(100-102)": 1,
+    "file(4-12)": 1,
+    "file(13-33)": 1,
+    "file(4-7)": 1,
+    "file(12-15)": 2,
+    "file(16-23)": 2,
+    "file(24)": 1,
+    "file(25)": 1,
+    "file(26-27)": 1,
+    "file(120-239)": 2,
+    "file(120-125)": 3,
+    "file(126-145)": 3,
+    "file(0-49)": 4,
+    "file(50-55)": 1,
+    "file(56-61)": 1,
+    "file(62-126)": 1,
+    "file(117-128)": 1,
+    "file(0-59)": 2,
+    "file(60-65)": 2,
+    "file(66-71)": 1,
+    "file(72-126)": 1,
+    "file(127-138)": 1,
+    "file(20-37)": 2,
+    "file(38-52)": 1,
+    "file(53-82)": 1,
+    "file(83-90)": 1,
+    "weapon_hp": 23,
+    "weapon_drop_hurt": 21,
+    "file(0-199)": 2,
+    "file(200-229)": 1,
+    "file(230-242)": 1,
+    "file(243-246)": 1,
+    "file(247-376)": 1,
+    "file(377-406)": 1,
+    "file(407-412)": 1,
+    "file(413-444)": 1,
+    "file(445-452)": 1,
+    "file(0-129)": 13,
+    "file(8-12)": 1,
+    "file(14-17)": 1,
+    "file(5-19)": 1,
+    "file(20-20)": 2,
+    "file(21-52)": 1,
+    "file(53-61)": 1,
+    "file(62-73)": 1,
+    "file(74-173)": 1,
+    "file(140-279)": 4,
+    "file(12-18)": 3,
+    "file(19-21)": 1,
+    "file(4-9)": 1,
+    "file(10-15)": 2,
+    "file(28-35)": 2,
+    "file(36-38)": 1,
+    "file(24-59)": 2,
+    "file(60-78)": 1,
+    "file(79-84)": 1,
+    "file(120-135)": 2,
+    "file(136-171)": 2,
+    "file(172-201)": 1,
+    "file(202-231)": 1,
+    "file(120-127)": 1,
+    "file(172-189)": 1,
+    "file(190-194)": 1,
+    "file(9-20)": 3,
+    "file(100-113)": 1,
+    "file(114-213)": 1,
+    "file(214-227)": 1,
+    "file(110-123)": 2,
+    "file(16-21)": 1,
+    "file(22-29)": 1,
+    "file(30-49)": 1,
+    "file(50-61)": 1,
+    "file(120-249)": 2,
+    "file(250-249)": 2,
+    "file(60-71)": 1,
+    "file(10-14)": 2,
+    "file(15-38)": 1,
+    "file(39-98)": 1,
+    "file(99-178)": 1,
+    "file(179-185)": 1,
+    "file(4-83)": 1,
+    "file(84-95)": 1,
+    "file(96-110)": 1,
+    "file(111-114)": 1,
+    "file(180-196)": 1,
+    "file(210-234)": 2,
+    "file(235-241)": 2,
+    "file(242-261)": 1,
+    "file(80-89)": 4,
+    "file(70-89)": 1,
+    "file(90-93)": 1,
+    "file(12-50)": 1,
+    "file(110-113)": 2,
+    "file(114-119)": 2,
+    "file(10-19)": 2,
+    "file(38-59)": 1,
+    "file(120-124)": 1,
+    "file(120-134)": 1,
+    "file(135-152)": 1,
+    "file(153-272)": 1,
+    "file(24-32)": 1,
+    "file(80-97)": 1,
+    "file(20-21)": 1,
+    "file(22-24)": 1,
+    "file(24-33)": 1,
+    "file(34-39)": 1,
+    "file(40-59)": 1,
+    "file(130-139)": 1,
+    "file(140-269)": 5,
+    "file(270-272)": 1,
+    "file(110-112)": 1,
+    "file(80-109)": 1,
+    "file(110-117)": 1,
+    "file(90-114)": 2,
+    "file(115-116)": 1,
+    "file(16-27)": 1,
+    "file(28-67)": 1,
+    "file(68-68)": 2,
+    "file(69-82)": 1,
+    "file(83-97)": 1,
+    "file(98-117)": 1,
+    "file(100-114)": 3,
+    "file(90-91)": 1,
+    "file(3-32)": 1,
+    "file(33-38)": 1,
+    "file(39-63)": 1,
+    "file(64-75)": 1,
+    "file(76-84)": 1,
+    "file(0-53)": 1,
+    "file(54-68)": 1,
+    "file(69-77)": 1,
+    "file(100-135)": 1,
+    "file(136-141)": 1,
+    "file(142-145)": 1,
+    "file(3-17)": 1,
+    "file(22-25)": 1,
+    "file(0-159)": 1,
+    "file(160-161)": 1,
+    "file(40-49)": 1,
+    "file(124-128)": 1,
+    "file(110-124)": 2,
+    "file(15-15)": 1,
+    "file(16-16)": 2,
+    "file(17-17)": 1,
+    "file(18-18)": 1,
+    "file(70-75)": 2,
+    "file(76-131)": 2,
+    "file(20-27)": 1,
+    "file(40-54)": 1,
+    "file(55-60)": 1,
+    "file(61-64)": 1,
+    "file(65-69)": 1,
+    "file(70-78)": 1,
+    "file(79-103)": 1,
+    "file(104-133)": 1,
+    "file(280-419)": 1,
+    "file(420-559)": 1,
+    "file(140-144)": 1,
+    "file(20-52)": 1,
+    "file(53-56)": 1,
+    "file(57-59)": 1,
+    "file(2-11)": 1,
+    "file(16-25)": 1,
+    "file(26-45)": 1,
+    "file(120-129)": 2,
+    "file(130-137)": 1,
+    "file(110-110)": 1,
+    "file(111-116)": 1,
+    "file(117-122)": 1,
+    "file(123-148)": 1,
+    "file(149-155)": 1,
+    "file(156-165)": 1,
+    "file(166-170)": 1,
+    "file(171-182)": 1,
+    "file(16-22)": 1,
+    "file(23-32)": 1,
+    "file(33-40)": 1,
+    "file(41-42)": 1,
+    "file(43-54)": 1,
+    "file(4-6)": 1,
+    "file(7-19)": 1,
+    "file(20-25)": 1,
+    "file(26-37)": 1,
+    "file(38-128)": 1,
+    "file(129-138)": 1,
+    "file(139-146)": 1,
+    "file(150-164)": 2,
+    "file(165-255)": 2,
+    "file(35-44)": 1,
+    "file(45-48)": 1,
+    "file(49-56)": 1,
+    "file(57-71)": 1,
+    "file(20-39)": 1,
+    "file(140-141)": 2,
+    "file(120-131)": 1,
+    "file(70-87)": 1,
+    "file(88-101)": 1,
+    "file(0-24)": 2,
+    "file(25-36)": 1,
+    "file(37-42)": 1,
+    "file(35-40)": 1,
+    "file(40-43)": 2,
+    "file(32-61)": 1,
+    "file(62-65)": 1,
+    "file(66-95)": 1,
+    "file(96-113)": 1,
+    "file(114-125)": 1,
+    "file(17-19)": 1,
+    "file(20-29)": 2,
+    "file(120-139)": 2,
+    "file(140-259)": 2,
+    "file(260-279)": 2,
+    "file(140-169)": 1,
+    "file(170-189)": 1,
+    "file(130-159)": 1,
+    "file(3-62)": 1,
+    "file(63-70)": 1,
+    "file(80-93)": 1,
+    "file(20-34)": 1,
+    "file(35-45)": 1,
+    "file(46)": 1,
+    "file(120-144)": 1,
+    "file(145-132)": 1,
+    "file(115-124)": 1,
+    "file(125-174)": 1,
+    "file(175-194)": 1,
+    "file(195-219)": 1,
+    "heavy_walking_frame": 1,
+    "heavy_running_frame": 1,
+    "file(60-69)": 1,
+    "file(38-45)": 1,
+    "file(46-55)": 1,
+    "file(15-16)": 1,
+    "file(17-31)": 1,
+    "file(32-51)": 1,
+    "file(130-144)": 1,
+    "file(130-149)": 1,
+    "file(130-169)": 2,
+    "file(130-135)": 1,
+    "file(136-175)": 1,
+    "file(176-185)": 1,
+    "file(0)": 1,
+    "file(19-30)": 1,
+    "file(31-34)": 2,
+    "file(35-74)": 1,
+    "file(90-105)": 1,
+    "file(106-109)": 1,
+    "file(9-14)": 1,
+    "file(15-21)": 1,
+    "file(22-28)": 1,
+    "file(29-48)": 1,
+    "file(120-147)": 1,
+    "file(148-159)": 1,
+    "file(44-58)": 1,
+    "file(70-79)": 1,
+    "file(80-91)": 1,
+    "file(92-111)": 1,
+    "file(112-114)": 1,
+    "file(24-29)": 1,
+    "file(30-57)": 1,
+    "file(58-69)": 1,
+    "file(30-31)": 3,
+    "file(30-63)": 1,
+    "file(64-66)": 1,
+    "file(67-67)": 1,
+    "file(69-73)": 1,
+    "file(30-79)": 1,
+    "file(10-149)": 1,
+    "file(15-30)": 1,
+    "file(35-78)": 1,
+    "file(14-38)": 1,
+    "file(39-39)": 1
+  },
+  "examples": {
+    "file(0-39)": {
+      "file": "a/ama/ama.dat",
+      "value": "a\\ama\\ama.png"
+    },
+    "w": {
+      "file": "a/ama/ama.dat",
+      "value": "100"
+    },
+    "h": {
+      "file": "a/ama/ama.dat",
+      "value": "145"
+    },
+    "row": {
+      "file": "a/ama/ama.dat",
+      "value": "10"
+    },
+    "col": {
+      "file": "a/ama/ama.dat",
+      "value": "4"
+    },
+    "weapon_hit_sound": {
+      "file": "a/ama/ama.dat",
+      "value": "data\\020.wav"
+    },
+    "weapon_drop_sound": {
+      "file": "a/ama/ama.dat",
+      "value": "data\\020.wav"
+    },
+    "weapon_broken_sound": {
+      "file": "a/ama/ama.dat",
+      "value": "data\\020.wav"
+    },
+    "shadow": {
+      "file": "a/ama/ama.dat",
+      "value": "1"
+    },
+    "file(0-17)": {
+      "file": "a/ama/ama2.dat",
+      "value": "a\\ama\\ama2.png"
+    },
+    "file(0-3)": {
+      "file": "a/blac/blac.dat",
+      "value": "a\\blac\\blac2.png"
+    },
+    "file(4-5)": {
+      "file": "a/blac/blac.dat",
+      "value": "a\\blac\\blac.png"
+    },
+    "file(0-31)": {
+      "file": "a/cha/cha.dat",
+      "value": "a\\cha\\cha.png"
+    },
+    "file(32-41)": {
+      "file": "a/cha/cha.dat",
+      "value": "a\\cha\\cha2.png"
+    },
+    "file(0-9)": {
+      "file": "a/cla/cla.dat",
+      "value": "a\\cla\\cla.png"
+    },
+    "file(10-18)": {
+      "file": "a/cla/cla.dat",
+      "value": "a\\cla\\cla2.png"
+    },
+    "file(19-28)": {
+      "file": "a/cla/cla.dat",
+      "value": "a\\cla\\cla3.png"
+    },
+    "file(29-35)": {
+      "file": "a/cla/cla.dat",
+      "value": "a\\cla\\cla4.png"
+    },
+    "file(36-36)": {
+      "file": "a/cla/cla.dat",
+      "value": "a\\cla\\fla.png"
+    },
+    "file(18-33)": {
+      "file": "a/fir/fir.dat",
+      "value": "a\\fir\\fir2.png"
+    },
+    "file(34-48)": {
+      "file": "a/fir/fir.dat",
+      "value": "a\\fir\\fir3.png"
+    },
+    "file(0-7)": {
+      "file": "a/fir/firz.dat",
+      "value": "a\\fir\\firz.png"
+    },
+    "file(8-19)": {
+      "file": "a/fir/firz.dat",
+      "value": "a\\fir\\firz2.png"
+    },
+    "file(0-13)": {
+      "file": "a/fla/fla.dat",
+      "value": "a\\fla\\fla.png"
+    },
+    "file(0-14)": {
+      "file": "a/fro/fro.dat",
+      "value": "a\\fro\\fro.png"
+    },
+    "file(0-19)": {
+      "file": "a/gro/gro.dat",
+      "value": "a\\gro\\gro.png"
+    },
+    "file(0-6)": {
+      "file": "a/hea/hea.dat",
+      "value": "a\\hea\\hea.png"
+    },
+    "file(8-9)": {
+      "file": "a/kam/kam.dat",
+      "value": "a\\kam\\kam2.png"
+    },
+    "file(15-24)": {
+      "file": "a/kat/kat.dat",
+      "value": "a\\kat\\kat0.png"
+    },
+    "file(0-23)": {
+      "file": "a/kat/kat2.dat",
+      "value": "a\\kat\\kat2.png"
+    },
+    "file(24-48)": {
+      "file": "a/kat/kat2.dat",
+      "value": "a\\kat\\kat3.png"
+    },
+    "file(0-5)": {
+      "file": "a/pof/pof.dat",
+      "value": "a\\pof\\pof.png"
+    },
+    "file(8-11)": {
+      "file": "a/pof/pof2.dat",
+      "value": "a\\pof\\pof3.png"
+    },
+    "file(12-16)": {
+      "file": "a/pof/pof2.dat",
+      "value": "a\\pof\\pof4.png"
+    },
+    "file(0-8)": {
+      "file": "a/roc/roc.dat",
+      "value": "a\\roc\\roc.png"
+    },
+    "file(0-11)": {
+      "file": "a/spi/spi.dat",
+      "value": "a\\spi\\spi.png"
+    },
+    "file(65-80)": {
+      "file": "a/tra/tra.dat",
+      "value": "a\\tra\\tra.png"
+    },
+    "file(14-30)": {
+      "file": "a/wal/wal.dat",
+      "value": "a\\wal\\wal.png"
+    },
+    "file(18-35)": {
+      "file": "a/wat/wat.dat",
+      "value": "a\\wat\\watb.png"
+    },
+    "file(18-29)": {
+      "file": "a/wat/wat.dat",
+      "value": "a\\wat\\wate.png"
+    },
+    "file(0-1)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\wat2.png"
+    },
+    "file(2-9)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\wat3.png"
+    },
+    "file(10-10)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\mists.png"
+    },
+    "file(11-11)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\mists2.png"
+    },
+    "file(12-12)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\mists3.png"
+    },
+    "file(13-13)": {
+      "file": "a/wat/wat2.dat",
+      "value": "a\\wat\\mists4.png"
+    },
+    "file(0-4)": {
+      "file": "a/win/win.dat",
+      "value": "a\\win\\win.png"
+    },
+    "name": {
+      "file": "c/0/spe.dat",
+      "value": "Spectator"
+    },
+    "head": {
+      "file": "c/0/spe.dat",
+      "value": "c\\0\\spe.png"
+    },
+    "small": {
+      "file": "c/0/spe.dat",
+      "value": "c\\0\\spe_s.png"
+    },
+    "smallb": {
+      "file": "c/0/spe.dat",
+      "value": "sprite\\smallb\\spe_s.png"
+    },
+    "file(0-0)": {
+      "file": "c/0/spe.dat",
+      "value": "data\\pixel.png"
+    },
+    "walking_frame_rate": {
+      "file": "c/0/spe.dat",
+      "value": "3"
+    },
+    "walking_speed": {
+      "file": "c/0/spe.dat",
+      "value": "4.000000"
+    },
+    "walking_speedz": {
+      "file": "c/0/spe.dat",
+      "value": "2.000000"
+    },
+    "running_frame_rate": {
+      "file": "c/0/spe.dat",
+      "value": "3"
+    },
+    "running_speed": {
+      "file": "c/0/spe.dat",
+      "value": "15.000000"
+    },
+    "running_speedz": {
+      "file": "c/0/spe.dat",
+      "value": "3.300000"
+    },
+    "heavy_walking_speed": {
+      "file": "c/0/spe.dat",
+      "value": "4.000000"
+    },
+    "heavy_walking_speedz": {
+      "file": "c/0/spe.dat",
+      "value": "2.000000"
+    },
+    "heavy_running_speed": {
+      "file": "c/0/spe.dat",
+      "value": "15.000000"
+    },
+    "heavy_running_speedz": {
+      "file": "c/0/spe.dat",
+      "value": "3.300000"
+    },
+    "jump_height": {
+      "file": "c/0/spe.dat",
+      "value": "-16.299999"
+    },
+    "jump_distance": {
+      "file": "c/0/spe.dat",
+      "value": "8.000000"
+    },
+    "jump_distancez": {
+      "file": "c/0/spe.dat",
+      "value": "3.000000"
+    },
+    "dash_height": {
+      "file": "c/0/spe.dat",
+      "value": "-13.000000"
+    },
+    "dash_distance": {
+      "file": "c/0/spe.dat",
+      "value": "15.000000"
+    },
+    "dash_distancez": {
+      "file": "c/0/spe.dat",
+      "value": "3.750000"
+    },
+    "rowing_height": {
+      "file": "c/0/spe.dat",
+      "value": "-2.000000"
+    },
+    "rowing_distance": {
+      "file": "c/0/spe.dat",
+      "value": "20.000000"
+    },
+    "hidden": {
+      "file": "c/0/spe.dat",
+      "value": "1"
+    },
+    "random": {
+      "file": "c/0/spe.dat",
+      "value": "4"
+    },
+    "file(0-25)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\kat1.png"
+    },
+    "file(26-40)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\kat2.png"
+    },
+    "file(41-46)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\kat3.png"
+    },
+    "file(47-86)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\atk.png"
+    },
+    "file(87-96)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\s1.png"
+    },
+    "file(97-106)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\s2.png"
+    },
+    "file(107-122)": {
+      "file": "c/ank/a/atk.dat",
+      "value": "c\\ank\\a\\sna.png"
+    },
+    "file(0-2)": {
+      "file": "c/ank/a/atk3.dat",
+      "value": "c\\ank\\a\\par.png"
+    },
+    "file(0-209)": {
+      "file": "c/ank/acl.dat",
+      "value": "c\\ank\\ank1.png"
+    },
+    "walking_frame": {
+      "file": "c/ank/acl.dat",
+      "value": "4"
+    },
+    "file(210-213)": {
+      "file": "c/ank/ank.dat",
+      "value": "c\\ank\\ank2.png"
+    },
+    "file(214-228)": {
+      "file": "c/ank/ank.dat",
+      "value": "c\\ank\\ank3.png"
+    },
+    "file(229-230)": {
+      "file": "c/ank/ank.dat",
+      "value": "c\\ank\\ank4.png"
+    },
+    "bound": {
+      "file": "c/ank/ank.dat",
+      "value": "2"
+    },
+    "file(0-29)": {
+      "file": "c/ank/ssnk.dat",
+      "value": "c\\ank\\ssnk.png"
+    },
+    "file(12-21)": {
+      "file": "c/asu/a/ash.dat",
+      "value": "c\\asu\\a\\ash2.png"
+    },
+    "file(22-34)": {
+      "file": "c/asu/a/ash.dat",
+      "value": "c\\asu\\a\\ash3.png"
+    },
+    "file(0-119)": {
+      "file": "c/asu/asu.dat",
+      "value": "c\\asu\\asu1.png"
+    },
+    "file(120-179)": {
+      "file": "c/asu/asu.dat",
+      "value": "c\\asu\\asu2.png"
+    },
+    "file(180-209)": {
+      "file": "c/asu/asu.dat",
+      "value": "c\\asu\\asu3.png"
+    },
+    "file(210-219)": {
+      "file": "c/asu/asu.dat",
+      "value": "c\\asu\\asu4.png"
+    },
+    "running_frame": {
+      "file": "c/asu/asu.dat",
+      "value": "6"
+    },
+    "file(20-79)": {
+      "file": "c/bee/a/wind.dat",
+      "value": "c\\bee\\a\\effect.png"
+    },
+    "file(80-94)": {
+      "file": "c/bee/a/wind.dat",
+      "value": "c\\bee\\a\\effect2.png"
+    },
+    "file(0-189)": {
+      "file": "c/bee/bee.dat",
+      "value": "c\\bee\\bee.png"
+    },
+    "file(190-224)": {
+      "file": "c/bee/bee.dat",
+      "value": "c\\bee\\bee2.png"
+    },
+    "file(30-37)": {
+      "file": "c/chi/a/atk.dat",
+      "value": "c\\chi\\a\\cha.png"
+    },
+    "file(38-41)": {
+      "file": "c/chi/a/atk.dat",
+      "value": "c\\chi\\a\\suc.png"
+    },
+    "file(42-61)": {
+      "file": "c/chi/a/atk.dat",
+      "value": "c\\chi\\a\\ras.png"
+    },
+    "file(0-44)": {
+      "file": "c/chi/a/pup.dat",
+      "value": "c\\chi\\a\\pup.png"
+    },
+    "file(45-46)": {
+      "file": "c/chi/a/pup.dat",
+      "value": "c\\chi\\a\\pup2.png"
+    },
+    "file(0-109)": {
+      "file": "c/chi/chi.dat",
+      "value": "c\\chi\\chi.png"
+    },
+    "file(30-59)": {
+      "file": "c/chi/pup1.dat",
+      "value": "c\\chi\\pup1b.png"
+    },
+    "file(120-149)": {
+      "file": "c/dan/a/iza.dat",
+      "value": "c\\dan\\a\\iza2.png"
+    },
+    "file(12-19)": {
+      "file": "c/dan/a/win.dat",
+      "value": "c\\dan\\a\\win2.png"
+    },
+    "file(20-23)": {
+      "file": "c/dan/a/win.dat",
+      "value": "c\\dan\\a\\win3.png"
+    },
+    "file(24-27)": {
+      "file": "c/dan/a/win.dat",
+      "value": "c\\dan\\a\\win4.png"
+    },
+    "file(28-31)": {
+      "file": "c/dan/a/win.dat",
+      "value": "c\\dan\\a\\win5.png"
+    },
+    "file(32-35)": {
+      "file": "c/dan/a/win.dat",
+      "value": "c\\dan\\a\\win6.png"
+    },
+    "file(0-179)": {
+      "file": "c/dan/dan.dat",
+      "value": "c\\dan\\dan1.png"
+    },
+    "file(180-189)": {
+      "file": "c/dan/dan.dat",
+      "value": "c\\dan\\dan3.png"
+    },
+    "file(0-169)": {
+      "file": "c/dan/danr.dat",
+      "value": "c\\dan\\danr1.png"
+    },
+    "file(170-184)": {
+      "file": "c/dan/danr.dat",
+      "value": "c\\dan\\danr3.png"
+    },
+    "file(185-202)": {
+      "file": "c/dan/danr.dat",
+      "value": "c\\dan\\danr4.png"
+    },
+    "file(0-69)": {
+      "file": "c/dei/a/cla.dat",
+      "value": "c\\dei\\a\\cla.png"
+    },
+    "file(70-77)": {
+      "file": "c/dei/a/cla.dat",
+      "value": "c\\dei\\a\\cla1.png"
+    },
+    "file(78-83)": {
+      "file": "c/dei/a/cla.dat",
+      "value": "c\\dei\\a\\gro.png"
+    },
+    "file(84-107)": {
+      "file": "c/dei/a/cla.dat",
+      "value": "c\\dei\\a\\zom1.png"
+    },
+    "file(108-117)": {
+      "file": "c/dei/a/cla.dat",
+      "value": "c\\dei\\a\\zom.png"
+    },
+    "file(0-34)": {
+      "file": "c/dei/bir.dat",
+      "value": "c\\dei\\bir.png"
+    },
+    "file(0-27)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\san.png"
+    },
+    "file(28-51)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\san2.png"
+    },
+    "file(52-59)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\ult5.png"
+    },
+    "file(60-68)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\gat.png"
+    },
+    "file(69-88)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\cof.png"
+    },
+    "file(89-96)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\clo.png"
+    },
+    "file(97-101)": {
+      "file": "c/gaa/a/san.dat",
+      "value": "c\\gaa\\a\\clo2.png"
+    },
+    "file(18-32)": {
+      "file": "c/gaa/a/ult.dat",
+      "value": "c\\gaa\\a\\ult2.png"
+    },
+    "file(33-52)": {
+      "file": "c/gaa/a/ult.dat",
+      "value": "c\\gaa\\a\\ult3.png"
+    },
+    "file(53-76)": {
+      "file": "c/gaa/a/ult.dat",
+      "value": "c\\gaa\\a\\ult4.png"
+    },
+    "file(0-99)": {
+      "file": "c/gaa/gaa.dat",
+      "value": "c\\gaa\\gaa.png"
+    },
+    "file(9-17)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\ball.png"
+    },
+    "file(18-21)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\alt.png"
+    },
+    "file(22-51)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\wat4.png"
+    },
+    "file(52-52)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\gurslash.png"
+    },
+    "file(53-60)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\pilla1.png"
+    },
+    "file(61-72)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\drag2.png"
+    },
+    "file(73-84)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\spear.png"
+    },
+    "file(85-99)": {
+      "file": "c/gur/a/cag.dat",
+      "value": "c\\gur\\a\\tra.png"
+    },
+    "file(120-128)": {
+      "file": "c/gur/gur.dat",
+      "value": "c\\gur\\cdart.png"
+    },
+    "file(30-30)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\dra.png"
+    },
+    "file(31-70)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\smo.png"
+    },
+    "file(71-82)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\spa.png"
+    },
+    "file(83-86)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\bal.png"
+    },
+    "file(87-104)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\1.png"
+    },
+    "file(105-110)": {
+      "file": "c/guy/a/bal.dat",
+      "value": "c\\guy\\a\\3.png"
+    },
+    "file(0-149)": {
+      "file": "c/guy/gei.dat",
+      "value": "c\\guy\\gei.png"
+    },
+    "file(150-174)": {
+      "file": "c/guy/gei.dat",
+      "value": "c\\guy\\gei2.png"
+    },
+    "file(175-178)": {
+      "file": "c/guy/gei.dat",
+      "value": "c\\guy\\gei3.png"
+    },
+    "file(0-139)": {
+      "file": "c/guy/gsi.dat",
+      "value": "c\\guy\\gsi.png"
+    },
+    "file(140-164)": {
+      "file": "c/guy/gsi.dat",
+      "value": "c\\guy\\gsi2.png"
+    },
+    "file(165-168)": {
+      "file": "c/guy/gsi.dat",
+      "value": "c\\guy\\gsi3.png"
+    },
+    "file(169-178)": {
+      "file": "c/guy/gsi.dat",
+      "value": "c\\guy\\gsi4.png"
+    },
+    "file(0-15)": {
+      "file": "c/hak/a/mir.dat",
+      "value": "c\\hak\\a\\mir.png"
+    },
+    "file(16-39)": {
+      "file": "c/hak/a/mir.dat",
+      "value": "c\\hak\\a\\mir2.png"
+    },
+    "file(40-57)": {
+      "file": "c/hak/a/mir.dat",
+      "value": "c\\hak\\a\\tor.png"
+    },
+    "file(0-89)": {
+      "file": "c/hak/hak.dat",
+      "value": "c\\hak\\hak.png"
+    },
+    "file(180-194)": {
+      "file": "c/han/han.dat",
+      "value": "c\\han\\han3.png"
+    },
+    "file(20-24)": {
+      "file": "c/has/a/atk.dat",
+      "value": "c\\has\\a\\gat.png"
+    },
+    "file(25-39)": {
+      "file": "c/has/a/atk.dat",
+      "value": "c\\has\\a\\flo.png"
+    },
+    "file(40-79)": {
+      "file": "c/has/a/atk.dat",
+      "value": "c\\has\\a\\smo.png"
+    },
+    "file(80-84)": {
+      "file": "c/has/a/atk.dat",
+      "value": "c\\has\\a\\atk2.png"
+    },
+    "file(100-109)": {
+      "file": "c/has/a/atk.dat",
+      "value": "c\\has\\a\\pil.png"
+    },
+    "file(0-79)": {
+      "file": "c/has/has.dat",
+      "value": "c\\has\\has.png"
+    },
+    "file(80-82)": {
+      "file": "c/has/has.dat",
+      "value": "c\\has\\has2.png"
+    },
+    "file(100-102)": {
+      "file": "c/has/sag.dat",
+      "value": "c\\has\\sag2.png"
+    },
+    "file(4-12)": {
+      "file": "c/hay/a/blo.dat",
+      "value": "c\\hay\\a\\blo2.png"
+    },
+    "file(13-33)": {
+      "file": "c/hay/a/blo.dat",
+      "value": "c\\hay\\a\\blo3.png"
+    },
+    "file(4-7)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla2.png"
+    },
+    "file(12-15)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla4.png"
+    },
+    "file(16-23)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla5.png"
+    },
+    "file(24)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla6.png"
+    },
+    "file(25)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla7.png"
+    },
+    "file(26-27)": {
+      "file": "c/hay/a/sla.dat",
+      "value": "c\\hay\\a\\sla8.png"
+    },
+    "file(120-239)": {
+      "file": "c/hay/clo1.dat",
+      "value": "c\\hay\\hayS.png"
+    },
+    "file(120-125)": {
+      "file": "c/hay/hay.dat",
+      "value": "c\\hay\\hay2.png"
+    },
+    "file(126-145)": {
+      "file": "c/hay/hay.dat",
+      "value": "c\\hay\\hay3.png"
+    },
+    "file(0-49)": {
+      "file": "c/hid/hid.dat",
+      "value": "c\\hid\\hid.png"
+    },
+    "file(50-55)": {
+      "file": "c/hid/hid.dat",
+      "value": "c\\hid\\hid3.png"
+    },
+    "file(56-61)": {
+      "file": "c/hid/hid.dat",
+      "value": "c\\hid\\hid4.png"
+    },
+    "file(62-126)": {
+      "file": "c/hid/hid.dat",
+      "value": "c\\hid\\hid2.png"
+    },
+    "file(117-128)": {
+      "file": "c/hid/hid.dat",
+      "value": "c\\hid\\hid6.png"
+    },
+    "file(0-59)": {
+      "file": "c/hid/rea.dat",
+      "value": "c\\hid\\rea.png"
+    },
+    "file(60-65)": {
+      "file": "c/hid/rea.dat",
+      "value": "c\\hid\\rea3.png"
+    },
+    "file(66-71)": {
+      "file": "c/hid/rea.dat",
+      "value": "c\\hid\\rea4.png"
+    },
+    "file(72-126)": {
+      "file": "c/hid/rea.dat",
+      "value": "c\\hid\\rea2.png"
+    },
+    "file(127-138)": {
+      "file": "c/hid/rea.dat",
+      "value": "c\\hid\\rea6.png"
+    },
+    "file(20-37)": {
+      "file": "c/hin/a/are.dat",
+      "value": "c\\hin\\a\\are3.png"
+    },
+    "file(38-52)": {
+      "file": "c/hin/a/are.dat",
+      "value": "c\\hin\\a\\are4.png"
+    },
+    "file(53-82)": {
+      "file": "c/hin/a/are.dat",
+      "value": "c\\hin\\a\\winatk1.png"
+    },
+    "file(83-90)": {
+      "file": "c/hin/a/are.dat",
+      "value": "c\\hin\\a\\hincha.png"
+    },
+    "weapon_hp": {
+      "file": "c/hin/a/hincha.dat",
+      "value": "200"
+    },
+    "weapon_drop_hurt": {
+      "file": "c/hin/a/hincha.dat",
+      "value": "35"
+    },
+    "file(0-199)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hin.png"
+    },
+    "file(200-229)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\winatk1.png"
+    },
+    "file(230-242)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hin2.png"
+    },
+    "file(243-246)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hin8.png"
+    },
+    "file(247-376)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hin11.png"
+    },
+    "file(377-406)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hinatapunch.png"
+    },
+    "file(407-412)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hin12.png"
+    },
+    "file(413-444)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\hinatapunch2.png"
+    },
+    "file(445-452)": {
+      "file": "c/hin/hin.dat",
+      "value": "c\\hin\\heavy.png"
+    },
+    "file(0-129)": {
+      "file": "c/hir/hcl.dat",
+      "value": "c\\hir\\hir.png"
+    },
+    "file(8-12)": {
+      "file": "c/ita/a/cro.dat",
+      "value": "c\\ita\\a\\cro2.png"
+    },
+    "file(14-17)": {
+      "file": "c/ita/a/cro.dat",
+      "value": "c\\ita\\a\\cro4.png"
+    },
+    "file(5-19)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\cro6.png"
+    },
+    "file(20-20)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\cro7.png"
+    },
+    "file(21-52)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\cro8.png"
+    },
+    "file(53-61)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\cro9.png"
+    },
+    "file(62-73)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\wat.png"
+    },
+    "file(74-173)": {
+      "file": "c/ita/a/cro2.dat",
+      "value": "c\\ita\\a\\ita.png"
+    },
+    "file(140-279)": {
+      "file": "c/ita/ita.dat",
+      "value": "c\\ita\\ita2.png"
+    },
+    "file(12-18)": {
+      "file": "c/jira/a/mag.dat",
+      "value": "c\\jira\\a\\mag2.png"
+    },
+    "file(19-21)": {
+      "file": "c/jira/a/mag.dat",
+      "value": "c\\jira\\a\\mag3.png"
+    },
+    "file(4-9)": {
+      "file": "c/jira/a/ras.dat",
+      "value": "c\\jira\\a\\ras2.png"
+    },
+    "file(10-15)": {
+      "file": "c/jira/a/ras.dat",
+      "value": "c\\jira\\a\\fir1.png"
+    },
+    "file(28-35)": {
+      "file": "c/jira/a/ras.dat",
+      "value": "c\\jira\\a\\fir4.png"
+    },
+    "file(36-38)": {
+      "file": "c/jira/a/ras.dat",
+      "value": "c\\jira\\a\\fir5.png"
+    },
+    "file(24-59)": {
+      "file": "c/jira/a/toad.dat",
+      "value": "c\\jira\\a\\toad2.png"
+    },
+    "file(60-78)": {
+      "file": "c/jira/a/toad.dat",
+      "value": "c\\jira\\a\\toad3.png"
+    },
+    "file(79-84)": {
+      "file": "c/jira/a/toad.dat",
+      "value": "c\\jira\\a\\toad4.png"
+    },
+    "file(120-135)": {
+      "file": "c/jira/jira.dat",
+      "value": "c\\jira\\jira3.png"
+    },
+    "file(136-171)": {
+      "file": "c/jira/jira.dat",
+      "value": "c\\jira\\jira5.png"
+    },
+    "file(172-201)": {
+      "file": "c/jira/jira.dat",
+      "value": "c\\jira\\jira6.png"
+    },
+    "file(202-231)": {
+      "file": "c/jira/jira.dat",
+      "value": "c\\jira\\jira7.png"
+    },
+    "file(120-127)": {
+      "file": "c/jira/pre.dat",
+      "value": "c\\jira\\pre1.png"
+    },
+    "file(172-189)": {
+      "file": "c/jira/sag.dat",
+      "value": "c\\jira\\sag3.png"
+    },
+    "file(190-194)": {
+      "file": "c/jira/sag.dat",
+      "value": "c\\jira\\sag4.png"
+    },
+    "file(9-20)": {
+      "file": "c/jiro/a/cav.dat",
+      "value": "c\\jiro\\a\\cav2.png"
+    },
+    "file(100-113)": {
+      "file": "c/jiro/jiro.dat",
+      "value": "c\\jiro\\jiro3.png"
+    },
+    "file(114-213)": {
+      "file": "c/jiro/jiro.dat",
+      "value": "c\\jiro\\jiro2.png"
+    },
+    "file(214-227)": {
+      "file": "c/jiro/jiro.dat",
+      "value": "c\\jiro\\jiro3.png"
+    },
+    "file(110-123)": {
+      "file": "c/jiro/jiro1.dat",
+      "value": "c\\jiro\\jiro1.png"
+    },
+    "file(16-21)": {
+      "file": "c/jug/a/pao.dat",
+      "value": "c\\jug\\a\\pao2.png"
+    },
+    "file(22-29)": {
+      "file": "c/jug/a/pao.dat",
+      "value": "c\\jug\\a\\pao3.png"
+    },
+    "file(30-49)": {
+      "file": "c/jug/a/pao.dat",
+      "value": "c\\jug\\a\\pao4.png"
+    },
+    "file(50-61)": {
+      "file": "c/jug/a/pao.dat",
+      "value": "c\\jug\\a\\pao5.png"
+    },
+    "file(120-249)": {
+      "file": "c/jug/jugo.dat",
+      "value": "c\\jug\\jugo_01.png"
+    },
+    "file(250-249)": {
+      "file": "c/jug/jugo.dat",
+      "value": "c\\jug\\jugo_02.png"
+    },
+    "file(60-71)": {
+      "file": "c/kab/a/atk.dat",
+      "value": "c\\kab\\a\\sna.png"
+    },
+    "file(10-14)": {
+      "file": "c/kaka/a/rai.dat",
+      "value": "c\\kaka\\a\\rai2.png"
+    },
+    "file(15-38)": {
+      "file": "c/kaka/a/rai.dat",
+      "value": "c\\kaka\\a\\rai3.png"
+    },
+    "file(39-98)": {
+      "file": "c/kaka/a/rai.dat",
+      "value": "c\\kaka\\a\\clo.png"
+    },
+    "file(99-178)": {
+      "file": "c/kaka/a/rai.dat",
+      "value": "c\\kaka\\a\\cha2.png"
+    },
+    "file(179-185)": {
+      "file": "c/kaka/a/rai.dat",
+      "value": "c\\kaka\\a\\wall.png"
+    },
+    "file(4-83)": {
+      "file": "c/kaku/a/nck.dat",
+      "value": "c\\kaku\\a\\nck3.png"
+    },
+    "file(84-95)": {
+      "file": "c/kaku/a/nck.dat",
+      "value": "c\\kaku\\a\\air.png"
+    },
+    "file(96-110)": {
+      "file": "c/kaku/a/nck.dat",
+      "value": "c\\kaku\\a\\fir.png"
+    },
+    "file(111-114)": {
+      "file": "c/kaku/a/nck.dat",
+      "value": "c\\kaku\\a\\kat.png"
+    },
+    "file(180-196)": {
+      "file": "c/kaku/kakun.dat",
+      "value": "c\\kaku\\kakun2.png"
+    },
+    "file(210-234)": {
+      "file": "c/kaku/kakunck.dat",
+      "value": "c\\kaku\\UCkak2.png"
+    },
+    "file(235-241)": {
+      "file": "c/kaku/kakunck.dat",
+      "value": "c\\kaku\\UCkak3.png"
+    },
+    "file(242-261)": {
+      "file": "c/kaku/kakunck.dat",
+      "value": "c\\kaku\\t2.png"
+    },
+    "file(80-89)": {
+      "file": "c/kaku/maskair.dat",
+      "value": "c\\kaku\\maskair2.png"
+    },
+    "file(70-89)": {
+      "file": "c/kan/a/kar.dat",
+      "value": "c\\kan\\a\\kar2.png"
+    },
+    "file(90-93)": {
+      "file": "c/kan/a/kar.dat",
+      "value": "c\\kan\\a\\kar3.png"
+    },
+    "file(12-50)": {
+      "file": "c/kan/a/san.dat",
+      "value": "c\\kan\\a\\san2.png"
+    },
+    "file(110-113)": {
+      "file": "c/kan/kan.dat",
+      "value": "c\\kan\\kan2.png"
+    },
+    "file(114-119)": {
+      "file": "c/kan/kan.dat",
+      "value": "c\\kan\\kan3.png"
+    },
+    "file(10-19)": {
+      "file": "c/kar/a/cha.dat",
+      "value": "c\\kar\\a\\cha1.png"
+    },
+    "file(38-59)": {
+      "file": "c/kar/a/cha.dat",
+      "value": "c\\kar\\a\\cha3.png"
+    },
+    "file(120-124)": {
+      "file": "c/kar/a/jug.dat",
+      "value": "c\\kar\\a\\jug.png"
+    },
+    "file(120-134)": {
+      "file": "c/kar/kar.dat",
+      "value": "c\\kar\\kar2.png"
+    },
+    "file(135-152)": {
+      "file": "c/kar/kar.dat",
+      "value": "c\\kar\\kar3.png"
+    },
+    "file(153-272)": {
+      "file": "c/kar/kar.dat",
+      "value": "c\\kar\\kar6.png"
+    },
+    "file(24-32)": {
+      "file": "c/kib/a/aka.dat",
+      "value": "c\\kib\\a\\aka3.png"
+    },
+    "file(80-97)": {
+      "file": "c/kib/kib.dat",
+      "value": "c\\kib\\kib2.png"
+    },
+    "file(20-21)": {
+      "file": "c/kid/a/atk.dat",
+      "value": "c\\kid\\a\\spi2.png"
+    },
+    "file(22-24)": {
+      "file": "c/kid/a/atk.dat",
+      "value": "c\\kid\\a\\web.png"
+    },
+    "file(24-33)": {
+      "file": "c/kid/a/spi.dat",
+      "value": "c\\kid\\a\\spark.png"
+    },
+    "file(34-39)": {
+      "file": "c/kid/a/spi.dat",
+      "value": "c\\kid\\a\\spi2.png"
+    },
+    "file(40-59)": {
+      "file": "c/kid/a/spi.dat",
+      "value": "c\\kid\\a\\spider.png"
+    },
+    "file(130-139)": {
+      "file": "c/kid/kid.dat",
+      "value": "c\\kid\\kid4.png"
+    },
+    "file(140-269)": {
+      "file": "c/kid/kid.dat",
+      "value": "c\\kid\\kid3.png"
+    },
+    "file(270-272)": {
+      "file": "c/kid/kid.dat",
+      "value": "c\\kid\\kid4.png"
+    },
+    "file(110-112)": {
+      "file": "c/kid/kid1.dat",
+      "value": "c\\kid\\kid2.png"
+    },
+    "file(80-109)": {
+      "file": "c/kim/kim.dat",
+      "value": "c\\kim\\kim4.png"
+    },
+    "file(110-117)": {
+      "file": "c/kim/kim.dat",
+      "value": "c\\kim\\kim5.png"
+    },
+    "file(90-114)": {
+      "file": "c/kim/kim1.dat",
+      "value": "c\\kim\\kim2.png"
+    },
+    "file(115-116)": {
+      "file": "c/kim/kim1.dat",
+      "value": "c\\kim\\kim6.png"
+    },
+    "file(16-27)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\wat1.png"
+    },
+    "file(28-67)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\wat2.png"
+    },
+    "file(68-68)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\wat3.png"
+    },
+    "file(69-82)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\wav.png"
+    },
+    "file(83-97)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\sha.png"
+    },
+    "file(98-117)": {
+      "file": "c/kis/a/wat.dat",
+      "value": "c\\kis\\a\\sha2.png"
+    },
+    "file(100-114)": {
+      "file": "c/kis/kcl.dat",
+      "value": "c\\kis\\kis2.png"
+    },
+    "file(90-91)": {
+      "file": "c/kis/nck.dat",
+      "value": "c\\kis\\nck2.png"
+    },
+    "file(3-32)": {
+      "file": "c/kon/a/pap.dat",
+      "value": "c\\kon\\a\\pap2.png"
+    },
+    "file(33-38)": {
+      "file": "c/kon/a/pap.dat",
+      "value": "c\\kon\\a\\pap4.png"
+    },
+    "file(39-63)": {
+      "file": "c/kon/a/pap.dat",
+      "value": "c\\kon\\a\\shield.png"
+    },
+    "file(64-75)": {
+      "file": "c/kon/a/pap.dat",
+      "value": "c\\kon\\a\\pap6.png"
+    },
+    "file(76-84)": {
+      "file": "c/kon/a/pap.dat",
+      "value": "c\\kon\\a\\cha.png"
+    },
+    "file(0-53)": {
+      "file": "c/kon/ang.dat",
+      "value": "c\\kon\\ang2.png"
+    },
+    "file(54-68)": {
+      "file": "c/kon/ang.dat",
+      "value": "c\\kon\\ang3.png"
+    },
+    "file(69-77)": {
+      "file": "c/kon/ang.dat",
+      "value": "c\\kon\\ang4.png"
+    },
+    "file(100-135)": {
+      "file": "c/kon/kon.dat",
+      "value": "c\\kon\\kon1.png"
+    },
+    "file(136-141)": {
+      "file": "c/kon/kon.dat",
+      "value": "c\\kon\\kon2.png"
+    },
+    "file(142-145)": {
+      "file": "c/kon/kon.dat",
+      "value": "c\\kon\\cra.png"
+    },
+    "file(3-17)": {
+      "file": "c/lee/a/lee.dat",
+      "value": "c\\lee\\a\\lee2.png"
+    },
+    "file(22-25)": {
+      "file": "c/lee/a/lee.dat",
+      "value": "c\\lee\\a\\lee4.png"
+    },
+    "file(0-159)": {
+      "file": "c/lee/lee.dat",
+      "value": "c\\lee\\lee.png"
+    },
+    "file(160-161)": {
+      "file": "c/lee/lee.dat",
+      "value": "c\\lee\\lee3.png"
+    },
+    "file(40-49)": {
+      "file": "c/min/a/fly.dat",
+      "value": "c\\min\\a\\fla.png"
+    },
+    "file(124-128)": {
+      "file": "c/min/a/kcm.dat",
+      "value": "c\\min\\a\\atk.png"
+    },
+    "file(110-124)": {
+      "file": "c/min/min.dat",
+      "value": "c\\min\\min2.png"
+    },
+    "file(15-15)": {
+      "file": "c/miz/a/shur.dat",
+      "value": "c\\miz\\a\\gen.png"
+    },
+    "file(16-16)": {
+      "file": "c/miz/a/shur.dat",
+      "value": "c\\miz\\a\\gen2.png"
+    },
+    "file(17-17)": {
+      "file": "c/miz/a/shur.dat",
+      "value": "c\\miz\\a\\gen3.png"
+    },
+    "file(18-18)": {
+      "file": "c/miz/a/shur.dat",
+      "value": "c\\miz\\a\\gen4.png"
+    },
+    "file(70-75)": {
+      "file": "c/nar/4tk.dat",
+      "value": "c\\nar\\kyuu.png"
+    },
+    "file(76-131)": {
+      "file": "c/nar/4tk.dat",
+      "value": "c\\nar\\4tk.png"
+    },
+    "file(20-27)": {
+      "file": "c/nar/a/4tk.dat",
+      "value": "c\\nar\\a\\4tk3.png"
+    },
+    "file(40-54)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\atk2.png"
+    },
+    "file(55-60)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\atk3.png"
+    },
+    "file(61-64)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\kyu.png"
+    },
+    "file(65-69)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\kyuu.png"
+    },
+    "file(70-78)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\cha.png"
+    },
+    "file(79-103)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\gan.png"
+    },
+    "file(104-133)": {
+      "file": "c/nar/a/atk.dat",
+      "value": "c\\nar\\a\\gan2.png"
+    },
+    "file(280-419)": {
+      "file": "c/nar/ncl.dat",
+      "value": "c\\nar\\ncl2.png"
+    },
+    "file(420-559)": {
+      "file": "c/nar/ncl.dat",
+      "value": "c\\nar\\ncl2.png"
+    },
+    "file(140-144)": {
+      "file": "c/nar/sna.dat",
+      "value": "c\\nar\\fro.png"
+    },
+    "file(20-52)": {
+      "file": "c/nej/a/are.dat",
+      "value": "c\\nej\\a\\are3.png"
+    },
+    "file(53-56)": {
+      "file": "c/nej/a/are.dat",
+      "value": "c\\nej\\a\\64.png"
+    },
+    "file(57-59)": {
+      "file": "c/nej/a/are.dat",
+      "value": "c\\nej\\a\\128.png"
+    },
+    "file(2-11)": {
+      "file": "c/oro/a/atk.dat",
+      "value": "c\\oro\\a\\gat.png"
+    },
+    "file(16-25)": {
+      "file": "c/oro/a/atk.dat",
+      "value": "c\\oro\\a\\oro.png"
+    },
+    "file(26-45)": {
+      "file": "c/oro/a/atk.dat",
+      "value": "c\\oro\\a\\atk2.png"
+    },
+    "file(120-129)": {
+      "file": "c/oro/oro.dat",
+      "value": "c\\oro\\oro3.png"
+    },
+    "file(130-137)": {
+      "file": "c/oro/oro.dat",
+      "value": "c\\oro\\oro4.png"
+    },
+    "file(110-110)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\abs.png"
+    },
+    "file(111-116)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\chi1.png"
+    },
+    "file(117-122)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\chi2.png"
+    },
+    "file(123-148)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\chi3.png"
+    },
+    "file(149-155)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\chi4.png"
+    },
+    "file(156-165)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\shi1.png"
+    },
+    "file(166-170)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\shi2.png"
+    },
+    "file(171-182)": {
+      "file": "c/pai/a/squ.dat",
+      "value": "c\\pai\\a\\shi3.png"
+    },
+    "file(16-22)": {
+      "file": "c/pai/a/sum.dat",
+      "value": "c\\pai\\a\\rin.png"
+    },
+    "file(23-32)": {
+      "file": "c/pai/a/sum.dat",
+      "value": "c\\pai\\a\\sum2.png"
+    },
+    "file(33-40)": {
+      "file": "c/pai/a/sum.dat",
+      "value": "c\\pai\\a\\wat.png"
+    },
+    "file(41-42)": {
+      "file": "c/pai/a/sum.dat",
+      "value": "c\\pai\\a\\pan.png"
+    },
+    "file(43-54)": {
+      "file": "c/pai/a/sum.dat",
+      "value": "c\\pai\\a\\combo.png"
+    },
+    "file(4-6)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai3.png"
+    },
+    "file(7-19)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai4.png"
+    },
+    "file(20-25)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai5.png"
+    },
+    "file(26-37)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai6.png"
+    },
+    "file(38-128)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai1.png"
+    },
+    "file(129-138)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai7.png"
+    },
+    "file(139-146)": {
+      "file": "c/rai/a/rai.dat",
+      "value": "c\\rai\\a\\rai8.png"
+    },
+    "file(150-164)": {
+      "file": "c/rai/rai.dat",
+      "value": "c\\rai\\rai_1.png"
+    },
+    "file(165-255)": {
+      "file": "c/rai/rai.dat",
+      "value": "c\\rai\\rai_2.png"
+    },
+    "file(35-44)": {
+      "file": "c/sai/a/ink.dat",
+      "value": "c\\sai\\a\\ink2.png"
+    },
+    "file(45-48)": {
+      "file": "c/sai/a/ink.dat",
+      "value": "c\\sai\\a\\god.png"
+    },
+    "file(49-56)": {
+      "file": "c/sai/a/ink.dat",
+      "value": "c\\sai\\a\\gods.png"
+    },
+    "file(57-71)": {
+      "file": "c/sai/a/ink.dat",
+      "value": "c\\sai\\a\\dra.png"
+    },
+    "file(20-39)": {
+      "file": "c/saku/a/atk.dat",
+      "value": "c\\saku\\a\\sna2.png"
+    },
+    "file(140-141)": {
+      "file": "c/saku/saku.dat",
+      "value": "c\\saku\\rage.png"
+    },
+    "file(120-131)": {
+      "file": "c/saku/saku3.dat",
+      "value": "c\\saku\\rage3.png"
+    },
+    "file(70-87)": {
+      "file": "c/saso/Hsa.dat",
+      "value": "c\\saso\\Hsa3.png"
+    },
+    "file(88-101)": {
+      "file": "c/saso/Hsa.dat",
+      "value": "c\\saso\\Hsa2.png"
+    },
+    "file(0-24)": {
+      "file": "c/saso/a/iro.dat",
+      "value": "c\\saso\\a\\iro.png"
+    },
+    "file(25-36)": {
+      "file": "c/saso/a/iro.dat",
+      "value": "c\\saso\\a\\iro2.png"
+    },
+    "file(37-42)": {
+      "file": "c/saso/a/iro.dat",
+      "value": "c\\saso\\a\\iro4.png"
+    },
+    "file(35-40)": {
+      "file": "c/saso/a/pup.dat",
+      "value": "c\\saso\\a\\pup2.png"
+    },
+    "file(40-43)": {
+      "file": "c/saso/a/pup2.dat",
+      "value": "c\\saso\\a\\pup3.png"
+    },
+    "file(32-61)": {
+      "file": "c/sasu/a/chi.dat",
+      "value": "c\\sasu\\a\\chi3.png"
+    },
+    "file(62-65)": {
+      "file": "c/sasu/a/chi.dat",
+      "value": "c\\sasu\\a\\chi4.png"
+    },
+    "file(66-95)": {
+      "file": "c/sasu/a/chi.dat",
+      "value": "c\\sasu\\a\\sna.png"
+    },
+    "file(96-113)": {
+      "file": "c/sasu/a/chi.dat",
+      "value": "c\\sasu\\a\\gen.png"
+    },
+    "file(114-125)": {
+      "file": "c/sasu/a/chi.dat",
+      "value": "c\\sasu\\a\\kat.png"
+    },
+    "file(17-19)": {
+      "file": "c/sasu/a/mss.dat",
+      "value": "c\\sasu\\a\\qui.png"
+    },
+    "file(20-29)": {
+      "file": "c/sasu/a/mss.dat",
+      "value": "c\\sasu\\a\\rai.png"
+    },
+    "file(120-139)": {
+      "file": "c/sasu/cs2.dat",
+      "value": "c\\sasu\\cs22.png"
+    },
+    "file(140-259)": {
+      "file": "c/sasu/cs2.dat",
+      "value": "c\\sasu\\cs2.png"
+    },
+    "file(260-279)": {
+      "file": "c/sasu/cs2.dat",
+      "value": "c\\sasu\\cs22.png"
+    },
+    "file(140-169)": {
+      "file": "c/sasu/mss.dat",
+      "value": "c\\sasu\\sus.png"
+    },
+    "file(170-189)": {
+      "file": "c/sasu/mss.dat",
+      "value": "c\\sasu\\mss3.png"
+    },
+    "file(130-159)": {
+      "file": "c/sasu/sus.dat",
+      "value": "c\\sasu\\sus.png"
+    },
+    "file(3-62)": {
+      "file": "c/shik/a/sha.dat",
+      "value": "c\\shik\\a\\sha1.png"
+    },
+    "file(63-70)": {
+      "file": "c/shik/a/sha.dat",
+      "value": "c\\shik\\a\\sha2.png"
+    },
+    "file(80-93)": {
+      "file": "c/shik/shik.dat",
+      "value": "c\\shik\\shik2.png"
+    },
+    "file(20-34)": {
+      "file": "c/shis/a/gen.dat",
+      "value": "c\\shis\\a\\gen2.png"
+    },
+    "file(35-45)": {
+      "file": "c/shis/a/gen.dat",
+      "value": "c\\shis\\a\\gen3.png"
+    },
+    "file(46)": {
+      "file": "c/shis/a/gen.dat",
+      "value": "c\\shis\\a\\gen4.png"
+    },
+    "file(120-144)": {
+      "file": "c/shis/shis.dat",
+      "value": "c\\shis\\shis2.png"
+    },
+    "file(145-132)": {
+      "file": "c/shis/shis.dat",
+      "value": "c\\shis\\shis3.png"
+    },
+    "file(115-124)": {
+      "file": "c/sui/a/atk.dat",
+      "value": "c\\sui\\a\\atk3.png"
+    },
+    "file(125-174)": {
+      "file": "c/sui/a/atk.dat",
+      "value": "c\\sui\\a\\spla4.png"
+    },
+    "file(175-194)": {
+      "file": "c/sui/a/atk.dat",
+      "value": "c\\sui\\a\\spla5.png"
+    },
+    "file(195-219)": {
+      "file": "c/sui/a/atk.dat",
+      "value": "c\\sui\\a\\spla6.png"
+    },
+    "heavy_walking_frame": {
+      "file": "c/sui/sui.dat",
+      "value": "6"
+    },
+    "heavy_running_frame": {
+      "file": "c/sui/sui.dat",
+      "value": "8"
+    },
+    "file(60-69)": {
+      "file": "c/tay/a/mon.dat",
+      "value": "c\\tay\\a\\bit.png"
+    },
+    "file(38-45)": {
+      "file": "c/tem/a/tem.dat",
+      "value": "c\\tem\\a\\wind3.png"
+    },
+    "file(46-55)": {
+      "file": "c/tem/a/tem.dat",
+      "value": "c\\tem\\a\\wind2.png"
+    },
+    "file(15-16)": {
+      "file": "c/ten/a/ten.dat",
+      "value": "c\\ten\\a\\ten1.png"
+    },
+    "file(17-31)": {
+      "file": "c/ten/a/ten.dat",
+      "value": "c\\ten\\a\\arma.png"
+    },
+    "file(32-51)": {
+      "file": "c/ten/a/ten.dat",
+      "value": "c\\ten\\a\\weps.png"
+    },
+    "file(130-144)": {
+      "file": "c/ten/bash.dat",
+      "value": "c\\ten\\bash2.png"
+    },
+    "file(130-149)": {
+      "file": "c/ten/blade.dat",
+      "value": "c\\ten\\blade.png"
+    },
+    "file(130-169)": {
+      "file": "c/ten/pole.dat",
+      "value": "c\\ten\\ten3.png"
+    },
+    "file(130-135)": {
+      "file": "c/ten/ten.dat",
+      "value": "c\\ten\\ten2.png"
+    },
+    "file(136-175)": {
+      "file": "c/ten/ten.dat",
+      "value": "c\\ten\\ten3.png"
+    },
+    "file(176-185)": {
+      "file": "c/ten/ten.dat",
+      "value": "c\\ten\\ten4.png"
+    },
+    "file(0)": {
+      "file": "c/tobi/a/fox.dat",
+      "value": "c\\tobi\\a\\fox.png"
+    },
+    "file(19-30)": {
+      "file": "c/tobir/a/atk.dat",
+      "value": "c\\tobir\\a\\wat3.png"
+    },
+    "file(31-34)": {
+      "file": "c/tobir/a/atk.dat",
+      "value": "c\\tobir\\a\\wat4.png"
+    },
+    "file(35-74)": {
+      "file": "c/tobir/a/atk.dat",
+      "value": "c\\tobir\\a\\4.png"
+    },
+    "file(90-105)": {
+      "file": "c/tobir/tobir.dat",
+      "value": "c\\tobir\\tobir2.png"
+    },
+    "file(106-109)": {
+      "file": "c/tobir/tobir.dat",
+      "value": "c\\tobir\\tobir3.png"
+    },
+    "file(9-14)": {
+      "file": "c/yag/a/mir.dat",
+      "value": "c\\yag\\a\\mir2.png"
+    },
+    "file(15-21)": {
+      "file": "c/yag/a/mir.dat",
+      "value": "c\\yag\\a\\mir3.png"
+    },
+    "file(22-28)": {
+      "file": "c/yag/a/mir.dat",
+      "value": "c\\yag\\a\\mir4.png"
+    },
+    "file(29-48)": {
+      "file": "c/yag/a/mir.dat",
+      "value": "c\\yag\\a\\mir5.png"
+    },
+    "file(120-147)": {
+      "file": "c/yag/yag.dat",
+      "value": "c\\yag\\yag2.png"
+    },
+    "file(148-159)": {
+      "file": "c/yag/yag.dat",
+      "value": "c\\yag\\yag3.png"
+    },
+    "file(44-58)": {
+      "file": "c/yam/a/tre.dat",
+      "value": "c\\yam\\a\\woo.png"
+    },
+    "file(70-79)": {
+      "file": "c/yam/yam.dat",
+      "value": "c\\yam\\yam2.png"
+    },
+    "file(80-91)": {
+      "file": "c/yam/yam.dat",
+      "value": "c\\yam\\yam3.png"
+    },
+    "file(92-111)": {
+      "file": "c/yam/yam.dat",
+      "value": "c\\yam\\yam5.png"
+    },
+    "file(112-114)": {
+      "file": "c/yam/yam.dat",
+      "value": "c\\yam\\yam4.png"
+    },
+    "file(24-29)": {
+      "file": "c/zab/a/zab.dat",
+      "value": "c\\zab\\a\\dem.png"
+    },
+    "file(30-57)": {
+      "file": "c/zab/a/zab.dat",
+      "value": "c\\zab\\a\\zab4.png"
+    },
+    "file(58-69)": {
+      "file": "c/zab/a/zab.dat",
+      "value": "c\\zab\\a\\dem2.png"
+    },
+    "file(30-31)": {
+      "file": "m/hug/hug.dat",
+      "value": "m\\hug\\pun.png"
+    },
+    "file(30-63)": {
+      "file": "s/0/0.dat",
+      "value": "s\\0\\d0.png"
+    },
+    "file(64-66)": {
+      "file": "s/0/0.dat",
+      "value": "s\\0\\tre.png"
+    },
+    "file(67-67)": {
+      "file": "s/0/0.dat",
+      "value": "s\\0\\scroll.png"
+    },
+    "file(69-73)": {
+      "file": "s/0/0.dat",
+      "value": "s\\0\\laser.png"
+    },
+    "file(30-79)": {
+      "file": "s/1/1.dat",
+      "value": "s\\1\\d1.png"
+    },
+    "file(10-149)": {
+      "file": "s/2/2.dat",
+      "value": "s\\2\\2.png"
+    },
+    "file(15-30)": {
+      "file": "s/3/3.dat",
+      "value": "s\\3\\d3.png"
+    },
+    "file(35-78)": {
+      "file": "s/3/3.dat",
+      "value": "s\\3\\3.png"
+    },
+    "file(14-38)": {
+      "file": "s/4/4.dat",
+      "value": "s\\4\\4.png"
+    },
+    "file(39-39)": {
+      "file": "s/4/4.dat",
+      "value": "s\\4\\circle.png"
+    }
+  }
+}

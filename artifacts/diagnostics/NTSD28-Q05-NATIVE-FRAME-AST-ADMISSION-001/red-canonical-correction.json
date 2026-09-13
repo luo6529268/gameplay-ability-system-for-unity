@@ -1,0 +1,58 @@
+{
+  "fixtures": {
+    "counts": {
+      "native_rejected": 7,
+      "old_ast_different_after_lf_normalization": 19,
+      "old_ast_same_after_lf_normalization": 10,
+      "no_red_payload_count_gate_or_empty_pass": 1
+    },
+    "examples": [
+      {
+        "file": "bmp_interrupt.dat",
+        "firstRow": 3,
+        "unity": "bmp_interrupt.dat\tfield\t0\t0\tnext\t3939",
+        "native": "<end>"
+      },
+      {
+        "file": "caption_fields.dat",
+        "firstRow": 0,
+        "unity": "caption_fields.dat\tframe\t0\t0\t\t63617074696f6e",
+        "native": "caption_fields.dat\tframe\t0\t0\t\t63617074696f6e20776169743a20393939206e6578743a2039"
+      },
+      {
+        "file": "empty_values.dat",
+        "firstRow": 1,
+        "unity": "empty_values.dat\tfield\t0\t-1\tpic\t3c69676e6f7265643e",
+        "native": "empty_values.dat\tfield\t0\t-1\tpic\t"
+      }
+    ]
+  },
+  "corpus": {
+    "counts": {
+      "old_ast_same_after_lf_normalization": 326,
+      "no_red_payload_count_gate_or_empty_pass": 72,
+      "old_ast_different_after_lf_normalization": 4,
+      "native_rejected": 3
+    },
+    "examples": [
+      {
+        "file": "decoded_dat/c/ank/ssnk.dat",
+        "firstRow": 2019,
+        "unity": "decoded_dat/c/ank/ssnk.dat\tfield\t75\t0\t7\t30",
+        "native": "decoded_dat/c/ank/ssnk.dat\tblock\t75\t1\titr\t"
+      },
+      {
+        "file": "decoded_dat/c/rai/rai.dat",
+        "firstRow": 14869,
+        "unity": "decoded_dat/c/rai/rai.dat\tblock\t426\t3\tbdy\t",
+        "native": "decoded_dat/c/rai/rai.dat\tframe\t427\t796\t\t4144"
+      },
+      {
+        "file": "decoded_dat/c/rai/raiT.dat",
+        "firstRow": 43,
+        "unity": "decoded_dat/c/rai/raiT.dat\tblock\t0\t4\tbdy\t",
+        "native": "decoded_dat/c/rai/raiT.dat\tframe\t1\t1\t\t7374616e64696e67"
+      }
+    ]
+  }
+}

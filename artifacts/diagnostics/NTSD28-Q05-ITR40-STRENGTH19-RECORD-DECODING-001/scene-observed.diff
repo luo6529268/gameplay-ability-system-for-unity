@@ -1,0 +1,40 @@
+diff --git a/Assets/NTSD/Scene/NTSD_Battle.unity b/Assets/NTSD/Scene/NTSD_Battle.unity
+index af526256..b15fcfc1 100644
+--- a/Assets/NTSD/Scene/NTSD_Battle.unity
++++ b/Assets/NTSD/Scene/NTSD_Battle.unity
+@@ -1307,7 +1307,7 @@ RectTransform:
+   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+   m_AnchorMin: {x: 0.5, y: 0}
+   m_AnchorMax: {x: 0.5, y: 0}
+-  m_AnchoredPosition: {x: 0.00000045767, y: 122.61}
++  m_AnchoredPosition: {x: 0.00000045767, y: 122.609985}
+   m_SizeDelta: {x: 743.3, y: 161}
+   m_Pivot: {x: 0.5, y: 0.5}
+ --- !u!114 &278066489
+@@ -3815,7 +3815,7 @@ Camera:
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 916859856}
+-  m_Enabled: 1
++  m_Enabled: 0
+   serializedVersion: 2
+   m_ClearFlags: 3
+   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+@@ -6597,7 +6597,7 @@ Canvas:
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 1947371489}
+-  m_Enabled: 1
++  m_Enabled: 0
+   serializedVersion: 3
+   m_RenderMode: 1
+   m_Camera: {fileID: 916859858}
+@@ -7279,7 +7279,7 @@ Camera:
+   m_PrefabInstance: {fileID: 0}
+   m_PrefabAsset: {fileID: 0}
+   m_GameObject: {fileID: 2051450405}
+-  m_Enabled: 1
++  m_Enabled: 0
+   serializedVersion: 2
+   m_ClearFlags: 3
+   m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}

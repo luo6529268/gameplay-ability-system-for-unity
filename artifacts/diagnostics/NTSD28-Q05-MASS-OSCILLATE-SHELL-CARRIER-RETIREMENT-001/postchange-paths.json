@@ -1,0 +1,23 @@
+{
+  "Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs": "6cfe5c911b016cdbb4e6afb4fe1920a35e88c9f8aecfccd3c8c1609dc879b266",
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs": "4b22cc06eca3c4eee3ebe26f4f7ca9a660ef73a8e8733201068b2ae8262803ba",
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs": "7461823ca6db5e70eb2cfdfc22e7ed7c22e17ff81ec31bff1f84f40fbf7c15c6",
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs": "b9edd3a93a772d42e35fd4b697b3700bde6b616a8ff8b4918a91f056f202a5a3",
+  "Assets/NTSD/Scripts/Simulation/Core/NTSDSpec.cs": "dc472efdd8c19bfe1ba20c40ae91ac1472664e8027b42b5f45364c75ea53dcc5",
+  "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterFrameAdvancePass.cs": "98efc3b68dba9d5020b52925e4688953eb476fc33e01826a5ab7f1037f62dbb4",
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldCharacterShellSnapshot.cs": "1441a97e8cb328dbc2c8caa39c34fe96acb1df4509d02af022ae97fa530966d6",
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityBaseShellSnapshot.cs": "7ea45f518c39dc9343954636c3a372a4aba5646e71d21c6949029177fe5cdb33",
+  "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs": "c37cd2a08aa232ab78b66193be4126146e6ac49a6ff58e8cf7fbf182e93c8585",
+  "Assets/NTSD/Scripts/Test/Editor/BattleWorldCharacterShellSnapshotEditorTests.cs": "397dcbb20c2fed12880cdc3aebb1fcca36208d7426dc90adf2a7e28aed6ad1aa",
+  "Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityBaseShellSnapshotEditorTests.cs": "cbbf22fc14b68b90b02c41b280b7ae4d896766ebd2ede03433044bdb0775de60",
+  "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs": "527d63de55843095aeb4e77ca2e9743a7eab5fdd2dba16b56e4163dcc75b309e",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218ContactActionEditorTests.cs": "9bd4add9dcddb48d4a07ad960d702b2237ae0ef0170a58a4296eda3bcc07ad7d",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B4Type0PhysicsCoreEditorTests.cs": "2bd82e8c795be14aa93bb648ed6167681d493dae52d2e1401eada6600c4238c6",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B6NtsdSpecDeadFluteApiRetirementEditorTests.cs": "9e707ab0a4c448bfb7f300e9e1636e4bf9a4c61e8ea7eed119d883ecb2cea5e9",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B9NtsdSpecOscillateProducerRetirementEditorTests.cs": "0c92dd9274fc367413e6e00ddd0732924994543818348cfac3073b257bd5d259",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionGateEditorTests.cs": "f2ab263ed4a03f6b6a8996e46c3237ba5ce8c49e3753d737d3b3b81265c98805",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04MassFrictionPlayProbeEditor.cs": "5bc0f8e7553ddefa06aad0119fb016d772b936ccda005453920122f1d9a95078",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillateConsumerEditorTests.cs": "d9b961d5bfb7b03f79ff365325786f2b158ebece29010bf908446afa8b89e365",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q04OscillatePlayProbeEditor.cs": "5da356bb42e267a34b20add93811cfa7691effa981ed90be87c7a636af89cbfa",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05MassOscillateCarrierEditorTests.cs": "1f4bbfd87ad5bd9c5d6cdee82846c69bf08989630eccd35d3abb94cfdfb29ad4"
+}

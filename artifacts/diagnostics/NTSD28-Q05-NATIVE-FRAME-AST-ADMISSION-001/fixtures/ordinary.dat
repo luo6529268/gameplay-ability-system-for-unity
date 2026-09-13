@@ -1,0 +1,7 @@
+<bmp_begin>
+name: Fixture
+<bmp_end>
+<frame> 0 standing caption words
+pic: 4 wait: 1 next: 2
+bdy: x: 1 y: 2 w: 3 h: 4 bdy_end:
+<frame_end>

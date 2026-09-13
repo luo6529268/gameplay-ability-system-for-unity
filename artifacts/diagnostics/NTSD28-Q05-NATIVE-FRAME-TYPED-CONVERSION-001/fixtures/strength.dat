@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Typed
+type: 1
+<bmp_end>
+<weapon_strength_list>
+entry: 1 caption
+dvx: 1 dvy: 2 fall: 3 arest: 4 vrest: 5 respond: 6 effect: 7 drain: 8 spark: 9 recover: 10 dbdefend: 11 bdefend: 12 injury: 13 zwidth: 14 z: 15 dvz: 16 sound: 17 cover: 18 caughtact: 19
+entry: 2 empty
+<weapon_strength_list_end>
+<frame> 0
+<frame_end>

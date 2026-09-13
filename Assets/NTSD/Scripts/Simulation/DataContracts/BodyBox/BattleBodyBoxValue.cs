@@ -11,25 +11,35 @@ namespace NTSD.Simulation
     public readonly struct BattleBodyBoxValue :
         IEquatable<BattleBodyBoxValue>
     {
-        public BattleBodyBoxValue(int x, int y, int w, int h)
+        private readonly bool geometryMissing;
+
+        public BattleBodyBoxValue(int x, int y, int w, int h, int zWidth = 0, bool hasGeometry = true)
         {
             X = x;
             Y = y;
             W = w;
             H = h;
+            ZWidth = zWidth;
+            geometryMissing = !hasGeometry;
         }
 
         public int X { get; }
         public int Y { get; }
         public int W { get; }
         public int H { get; }
+        public int ZWidth { get; }
+
+        // Legacy default is an explicit zero box; native missing geometry is constructed explicitly.
+        public bool HasGeometry => !geometryMissing;
 
         public bool Equals(BattleBodyBoxValue other)
         {
             return X == other.X &&
                    Y == other.Y &&
                    W == other.W &&
-                   H == other.H;
+                   H == other.H &&
+                   ZWidth == other.ZWidth &&
+                   HasGeometry == other.HasGeometry;
         }
 
         public override bool Equals(object obj)
@@ -46,6 +56,8 @@ namespace NTSD.Simulation
                 hash = hash * 31 + Y;
                 hash = hash * 31 + W;
                 hash = hash * 31 + H;
+                hash = hash * 31 + ZWidth;
+                hash = hash * 31 + (HasGeometry ? 1 : 0);
                 return hash;
             }
         }

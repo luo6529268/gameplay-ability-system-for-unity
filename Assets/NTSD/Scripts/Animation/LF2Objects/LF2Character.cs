@@ -74,9 +74,7 @@ namespace NTSD.Animation.LF2Objects
         public Transform EntityTransform { get; private set; }
         // ========== 物理计算 ==========
 
-        private float _mass = NTSDGlobal.Default.Machanics.Mass;
 
-        internal float MassForFrameAdvance => _mass;
         internal bool InitializedFromOpointForSnapshot => _initializedFromOpoint;
         internal bool PreserveOpointActionZeroForSnapshot =>
             _preserveOpointActionZero;
@@ -86,7 +84,6 @@ namespace NTSD.Animation.LF2Objects
             ILF2Object heldWeapon)
         {
             _heldWeapon = heldWeapon;
-            _mass = state.Mass;
             _deadBlinkCount = state.DeadBlinkCount;
             _initializedFromOpoint = state.InitializedFromOpoint;
             _preserveOpointActionZero = state.PreserveOpointActionZero;
@@ -161,7 +158,6 @@ namespace NTSD.Animation.LF2Objects
                 Runtime,
                 Frame.D,
                 spriteWidthPx,
-                _mass,
                 NTSDGlobal.Gameplay.MinSpeed,
                 NTSDGlobal.Gameplay.Gravity
             );
@@ -1100,7 +1096,6 @@ namespace NTSD.Animation.LF2Objects
             ItrRest?.Reset();
             _hitCounters?.Reset();
 
-            _mass = NTSDSpec.GetMassOrDefault(characterId);
 
             (targetWorld ?? SimulationTickDriver.Instance?.World)?.Register(this);
 
@@ -1127,7 +1122,6 @@ namespace NTSD.Animation.LF2Objects
         {
             WeaponCount = 0;
             FallDamageDiv = 0;
-            TrackerFlag = 0;
             TrackerParent = null;
             HolderCopySlot = 99;
             OwnerId = -1;

@@ -59,15 +59,17 @@ namespace NTSD.Test
             Assert.That(catalog[1], Is.EqualTo(catalog[0]));
             Assert.That(catalog[2], Is.EqualTo(Value(-30)));
 
-            var scalars = new int[1 + 19 * 3];
+            var scalars = new int[1 + 27 * 3];
             Assert.That(catalog.CopyCanonicalScalars(scalars, 0),
                 Is.EqualTo(scalars.Length));
             Assert.That(scalars[0], Is.EqualTo(3));
             Assert.That(scalars[1], Is.EqualTo(1));
             Assert.That(scalars[19], Is.EqualTo(19));
-            Assert.That(scalars[20], Is.EqualTo(1));
-            Assert.That(scalars[39], Is.EqualTo(-30));
-            Assert.That(scalars[57], Is.EqualTo(-12));
+            Assert.That(scalars[15], Is.EqualTo(System.BitConverter.SingleToInt32Bits(10f)));
+            Assert.That(scalars[27], Is.Zero);
+            Assert.That(scalars[28], Is.EqualTo(1));
+            Assert.That(scalars[55], Is.EqualTo(-30));
+            Assert.That(scalars[73], Is.EqualTo(-12));
         }
 
         [Test]

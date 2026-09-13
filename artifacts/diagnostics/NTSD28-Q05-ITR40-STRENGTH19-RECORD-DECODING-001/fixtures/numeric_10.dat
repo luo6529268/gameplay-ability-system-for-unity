@@ -1,0 +1,11 @@
+<bmp_begin>
+name: Q05
+type: 1
+<bmp_end>
+<weapon_strength_list>
+entry: 1
+kind: 1.5 x: 1.5 y: 1.5 w: 1.5 h: 1.5 dvx: 1.5 dvy: 1.5 fall: 1.5 arest: 1.5 vrest: 1.5 respond: 1.5 effect: 1.5 drain: 1.5 spark: 1.5 recover: 1.5 dbdefend: 1.5 bdefend: 1.5 injury: 1.5 zwidth: 1.5 z: 1.5 dvz: 1.5 sound: 1.5 cover: 1.5 caughtact: 1.5 catchingact: 1.5 pickedact: 1.5 pickingact: 1.5 delay: 1.5 poison: 1.5 confus: 1.5 weak: 1.5 manacle: 1.5 join: 1.5 mimic: 1.5 bound: 1.5 facing: 1.5 dx: 1.5 dy: 1.5 dz: 1.5 gain: 1.5
+<weapon_strength_list_end>
+<frame> 0 witness
+itr: kind: 1.5 x: 1.5 y: 1.5 w: 1.5 h: 1.5 dvx: 1.5 dvy: 1.5 fall: 1.5 arest: 1.5 vrest: 1.5 respond: 1.5 effect: 1.5 drain: 1.5 spark: 1.5 recover: 1.5 dbdefend: 1.5 bdefend: 1.5 injury: 1.5 zwidth: 1.5 z: 1.5 dvz: 1.5 sound: 1.5 cover: 1.5 caughtact: 1.5 catchingact: 1.5 pickedact: 1.5 pickingact: 1.5 delay: 1.5 poison: 1.5 confus: 1.5 weak: 1.5 manacle: 1.5 join: 1.5 mimic: 1.5 bound: 1.5 facing: 1.5 dx: 1.5 dy: 1.5 dz: 1.5 gain: 1.5 itr_end:
+<frame_end>
