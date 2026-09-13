@@ -39,6 +39,21 @@ namespace NTSD.Simulation
         public ulong IdentityFingerprint { get; private set; }
         public int CapturedTick { get; private set; }
 
+        internal int CountActiveEntitiesForRestore()
+        {
+            int count = 0;
+            for (int slot = 0; slot < SlotCapacity; slot++)
+            {
+                if (entityRuntimePresent[slot] &&
+                    !entityRuntimes[slot].OidMergeDormant &&
+                    !entityRuntimes[slot].PendingFlushDestroy)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
         internal bool HasCanonicalPayloadStorage
         {
             get

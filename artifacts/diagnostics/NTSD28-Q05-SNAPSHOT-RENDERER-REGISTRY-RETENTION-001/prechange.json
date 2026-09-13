@@ -1,0 +1,21 @@
+{
+  "paths": [
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRendererRegistryEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "6f24ed632788a7f06b07594f9833f31410446ac7b9f08be8f430f9602859fe37"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "sha256": "73dad78fb6498fadaf0b1b6cec2984deaecedb6afea2f7d39f582729179f055f"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRendererRegistryEditorTests.cs",
+      "sha256": null
+    }
+  ]
+}

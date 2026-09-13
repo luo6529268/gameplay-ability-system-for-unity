@@ -1,0 +1,23 @@
+{
+  "contentObjectsEqual": true,
+  "nativeRepeatBytesEqual": true,
+  "nativeSha256": "8e30ea1ed0c476ba941fa8354020fe89eb4ac37226184934039d03956cf97b5c",
+  "unitySha256": "64202582210044cf2186510cfcc1a4a702b5d1030523eb8cf68f357a2d2b4c49",
+  "content": {
+    "policy": "logan-dat-character-images",
+    "scope": "catalog-object-definitions",
+    "profile": "logan-runtime",
+    "rawDefinitionSha256": "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+    "decodeContract": "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+    "semanticSha256": "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407",
+    "catalogFingerprint64": "3900ECBC509557DB",
+    "schemas": {
+      "entityRuntime": 13,
+      "aggregate": 21,
+      "checksum": 24,
+      "characterShell": 2,
+      "entityBaseShell": 2
+    }
+  },
+  "scope": "Three neutral ticks; identity and deterministic native capture only, not full battle alignment"
+}

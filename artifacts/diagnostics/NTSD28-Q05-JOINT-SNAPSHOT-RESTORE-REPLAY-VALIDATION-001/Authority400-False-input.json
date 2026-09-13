@@ -1,0 +1,178 @@
+{
+  "replayed": true,
+  "reason": "None",
+  "stoppedTick": 24,
+  "checkpoint": 2,
+  "contentIdentity": "3900ECBC509557DB",
+  "distinctStates": 8,
+  "trace": [
+    {
+      "tick": 1,
+      "action": 0,
+      "x": 560.0,
+      "y": 0.0,
+      "checksum": "CF47BA9C59CBADB1"
+    },
+    {
+      "tick": 2,
+      "action": 5,
+      "x": 564.0,
+      "y": 0.0,
+      "checksum": "D1DF6D15ADBB0D99"
+    },
+    {
+      "tick": 3,
+      "action": 5,
+      "x": 568.0,
+      "y": 0.0,
+      "checksum": "652CB794B63C9BF9"
+    },
+    {
+      "tick": 4,
+      "action": 5,
+      "x": 571.0,
+      "y": 0.0,
+      "checksum": "5C0CCCE14AF8420B"
+    },
+    {
+      "tick": 5,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "91979196E32BBB31"
+    },
+    {
+      "tick": 6,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "790A0B50A7844831"
+    },
+    {
+      "tick": 7,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "9C7DD3AA2A1BBB76"
+    },
+    {
+      "tick": 8,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "85C5D5B78DC2D4BD"
+    },
+    {
+      "tick": 9,
+      "action": 1,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "C27D60C9F703B220"
+    },
+    {
+      "tick": 10,
+      "action": 1,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "BC354D49F894096C"
+    },
+    {
+      "tick": 11,
+      "action": 1,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "D044E80992BEAAE9"
+    },
+    {
+      "tick": 12,
+      "action": 1,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "09649A6666BCA3E5"
+    },
+    {
+      "tick": 13,
+      "action": 2,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "3C6F4172E1F0E4C7"
+    },
+    {
+      "tick": 14,
+      "action": 2,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "774B98F4FA48E414"
+    },
+    {
+      "tick": 15,
+      "action": 2,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "99F652B8AF22C515"
+    },
+    {
+      "tick": 16,
+      "action": 2,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "D358BCFB4CF72AB3"
+    },
+    {
+      "tick": 17,
+      "action": 3,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "66F7D53D8A582AB7"
+    },
+    {
+      "tick": 18,
+      "action": 3,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "131C5C80DC62FB4E"
+    },
+    {
+      "tick": 19,
+      "action": 3,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "F2255C6F41CFD739"
+    },
+    {
+      "tick": 20,
+      "action": 3,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "66A12E0480CED448"
+    },
+    {
+      "tick": 21,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "41630861FF1D130F"
+    },
+    {
+      "tick": 22,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "5977D48BEEEFB26A"
+    },
+    {
+      "tick": 23,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "199F2147D7B3A354"
+    },
+    {
+      "tick": 24,
+      "action": 0,
+      "x": 573.0,
+      "y": 0.0,
+      "checksum": "C0300FEF888396BA"
+    }
+  ]
+}

@@ -1,4 +1,15 @@
+> **当前恢复游标（2026-09-13）：BATCH-02 / Q05 已限定交付，下一 BATCH-03 / Q06。** NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001、NTSD28-Q05-SNAPSHOT-RETIRED-SHELL-POOL-RETURN-001、NTSD28-Q05-SNAPSHOT-RENDERER-REGISTRY-RETENTION-001 均 VERIFIED / SNAPSHOT_REPLAY_SCOPE_ONLY。实际Logan两profile24tick/22tick重放、slot/pool/错误identity、最终82/82、完整SelfCheck、两次旧内容真实Scene恢复4→4/关闭全0/两帧Stopped/重入通过；CS0，Scene旧SHA/root14/dirtyfalse。三Record共6脚本，仅2个生产snapshot文件，保留Unity/GAS/非战斗。13/21/24/2/2联合schema基线已验证，trace3/raw-source2/50字段保持；正式资源未迁移、六MISSING及MP200/201仍由Q06/后继解决。下一唯一Task **NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001 / READY_READONLY**。禁止computer-use；总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE。以下较早启动语句仅历史，不应重开已验Q05。
+
+> 当前必要修复 `NTSD28-Q05-SNAPSHOT-RENDERER-REGISTRY-RETENTION-001 / IN_PROGRESS / TEST_FIRST`：真实Scene两个Renderer计入ObjectCount但不占战斗槽，原地restore拒绝；准确三脚本保留原注册/活动计数分域。父Q05未关闭，pool修复保持，禁止computer-use。
+
 # NTSD 当前权威恢复入口
+
+> Q05真实恢复验证发现退休shell未归还pool；当前必要修复 `NTSD28-Q05-SNAPSHOT-RETIRED-SHELL-POOL-RETURN-001 / IN_PROGRESS / TEST_FIRST`，准确2脚本。移动回放两profile已过，攻击测试入口需改用既有logic-only executor；禁止computer-use，父验收继续。
+
+> 当前执行 `NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001 / IN_PROGRESS / VALIDATION_IMPLEMENTATION`，准确2个Editor脚本，真实Logan两profile/24tick恢复回放与pool/slot验收；生产规则保持，禁止computer-use，版本13/21/24/2/2未发布。
+
+> **Q05 trace/raw身份与字段限定出口（2026-09-13）：** `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / FOCUSED_TEST_PASS / SAME_CONTENT_CAPTURE_PASS / RAW_PARITY_DIFFERENT`。19脚本，trace v3/raw-source v2/50字段44绑定6MISSING；实际Logan输入native/Unity raw4EFE/semanticDB57/projection3900完整同值，native复跑字节相同。50不同Unity tests、88工具tests、native2F8非默认unit、完整SelfCheck、旧内容真实Play/零新增缺失通过；Scene旧SHA保持，禁止computer-use。已修诊断入口当前MP误作最大MP及首差排序，生产战斗规则未改。真实3tick比较仍7类差异：原6MISSING与tick3 currentMp native200/Unity201（Q06待追实际consumer）。**下一唯一Task `NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001 / READY_FOR_EXACT_PRECHANGE_RECORD`**，完成同版本有意义的restore/replay/slot-pool/重入验收再关Q05；13/21/24/2/2仍未发布，Q05/总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE，正式资源未迁移。
+
 
 > 当前执行 `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / IN_PROGRESS / TEST_FIRST`，准确19脚本（含CLI退出码与独立native字段见证），真实内容根/语义头/trace v3/raw v2/50字段；13/21/24/2/2未发布，禁止computer-use，非战斗/正式资源保持。
 

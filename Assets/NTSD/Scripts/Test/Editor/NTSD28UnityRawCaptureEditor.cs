@@ -10,6 +10,7 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.DatParser;
 using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
 using NTSD.Tools;
 using UnityEditor;
 using UnityEngine;
@@ -80,6 +81,62 @@ namespace NTSD.EditorTools
         internal static string RunLoganScenarioForTests(string runtimeRoot, string scenarioPath, string outputPath)
         {
             return RunScenario(scenarioPath, outputPath, null, null, runtimeRoot);
+        }
+
+        internal static void WithLoganScenarioForReplayTests(
+            string runtimeRoot, string scenarioPath, BattleRuntimeProfile profile, int totalTicks,
+            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify)
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Replay validation requires Edit Mode.");
+            string path = ProjectPath(scenarioPath);
+            var scenario = JsonUtility.FromJson<UnityRawScenario>(File.ReadAllText(path, Encoding.UTF8));
+            ValidateScenario(scenario);
+            if (totalTicks < scenario.ticks || totalTicks > 120)
+                throw new ArgumentOutOfRangeException(nameof(totalTicks));
+            var original = BuildFrameInputs(scenario);
+            var inputs = new FrameInputSet[totalTicks];
+            int[] slots = scenario.combatants.Select(value => value.slot).OrderBy(value => value).ToArray();
+            for (int index = 0; index < inputs.Length; index++)
+                inputs[index] = index < original.Length ? original[index] : new FrameInputSet(index + 1,
+                    slots.Select(slot => new SimulationPlayerInput(slot, SimulationInputButtons.None)).ToArray());
+            using var dataScope = new UnityCurrentDatScope(scenario.combatants.Select(value => value.oid).ToArray(), runtimeRoot);
+            ulong fixtureIdentity = LoganContentIdentity.ForDecodeContract(ComputeFileSha256(path),
+                "NTSD28_Q05_SCENARIO_FIXTURE_V1").CatalogFingerprint;
+            LockstepSessionIdentity identity = dataScope.Catalog.ContentIdentity.CreateLocalValidationSessionIdentity(
+                0x51305UL, unchecked((uint)scenario.seed), fixtureIdentity, slots);
+            SimulationWorld observedWorld;
+            BattleLogicReferencePool observedPool;
+            using (var driverScope = new TemporarySimulationDriverScope())
+            {
+                SimulationTickDriver driver = driverScope.Driver;
+                int capacity = profile == BattleRuntimeProfile.Authority400
+                    ? BattleRuntimeProfilePolicy.AuthorityRuntimeSlotCapacity : BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity;
+                var settings = new BattleRuntimeWorldSettings(profile, capacity,
+                    profile == BattleRuntimeProfile.Authority400 ? capacity : BattleRuntimeProfilePolicy.MobileMaxActiveRuntimeEntities);
+                if (!driver.TryConfigureEmptyDiagnosticWorld(settings, BattleAiExecutionProfile.DataOrientedCanonical, out string reason))
+                    throw new InvalidOperationException(reason);
+                observedWorld = driver.World;
+                observedPool = new BattleLogicReferencePool();
+                observedWorld.BindLogicReferencePool(observedPool);
+                ConfigureWorldAndRoster(observedWorld, dataScope.Configs, scenario, true);
+                observedWorld.PrepareRuntimeDataCatalogForBattle(dataScope.Catalog.Entries
+                    .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                    id => dataScope.Configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+                driver.ApplySettings(new LockstepSimulationSettings
+                {
+                    driveMode = SimulationDriveMode.Manual,
+                    enableFrameChecksum = true,
+                });
+                driver.SetPaused(false);
+                observedWorld.SetLogicOnlyEntityMaterialization(true);
+                dataScope.AssertInputsCurrent();
+                verify(driver, inputs, identity);
+                dataScope.AssertInputsCurrent();
+            }
+            if (observedWorld.ObjectCount != 0 || observedWorld.ClaimedRuntimeSlotCountForDiagnostics != 0 || observedPool.ActiveCount != 0)
+                throw new InvalidOperationException("Replay validation shutdown retained objects=" + observedWorld.ObjectCount +
+                    ", slots=" + observedWorld.ClaimedRuntimeSlotCountForDiagnostics + ", borrowers=" + observedPool.ActiveCount);
         }
 
         internal static string RunScenarioForTests(
@@ -1438,6 +1495,7 @@ namespace NTSD.EditorTools
             public Dictionary<int, LF2CharacterDataWrapper> Configs { get; }
             internal Dictionary<string, object> Content { get; }
             internal bool IsLogan => loganCatalog != null;
+            internal LoganObjectCatalog Catalog => loganCatalog;
 
             internal void AssertInputsCurrent()
             {

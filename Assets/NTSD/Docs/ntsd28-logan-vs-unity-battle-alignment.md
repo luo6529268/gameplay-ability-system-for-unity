@@ -1,5 +1,11 @@
 # NTSD 2.8-Logan 与 Unity 战斗完整对齐总表
 
+> **当前出口（2026-09-13）：Q05 / BATCH-02 已限定交付；下一 BATCH-03 / Q06。** JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION及两个必要快照修复均VERIFIED：实际Logan两profile24tick/22tick重放、slot/pool/身份拒绝、最终82/82、完整SelfCheck、两次旧内容真实Scene恢复4→4/关闭全0/两帧Stopped与重入通过。联合schema13/21/24/2/2基线已验；正式资源未迁移、六MISSING/MP200与201差异及后续视听整场尚未完成。下一唯一Task `NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001 / READY_READONLY`。禁止computer-use，非战斗/Unity-GAS及全部例外保持，总目标ACTIVE。以下较早启动语句为历史，当前队列以0.11/0.13/0.14.4为准。
+
+
+> **Q05 trace/raw身份与字段限定出口（2026-09-13）：** `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / FOCUSED_TEST_PASS / SAME_CONTENT_CAPTURE_PASS / RAW_PARITY_DIFFERENT`。19脚本，trace v3/raw-source v2/50字段44绑定6MISSING；实际Logan输入native/Unity raw4EFE/semanticDB57/projection3900完整同值，native复跑字节相同。50不同Unity tests、88工具tests、native2F8非默认unit、完整SelfCheck、旧内容真实Play/零新增缺失通过；Scene旧SHA保持，禁止computer-use。已修诊断入口当前MP误作最大MP及首差排序，生产战斗规则未改。真实3tick比较仍7类差异：原6MISSING与tick3 currentMp native200/Unity201（Q06待追实际consumer）。**下一唯一Task `NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001 / READY_FOR_EXACT_PRECHANGE_RECORD`**，完成同版本有意义的restore/replay/slot-pool/重入验收再关Q05；13/21/24/2/2仍未发布，Q05/总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE，正式资源未迁移。
+
+
 > **Q05五版本及恢复头部已限定验证（2026-09-13）：** `NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERSION-001 / FOCUSED_TEST_PASS / SCOPED_PLAY_PASS / TRACE_IDENTITY_PENDING`。当前正式代码常量已为 **13/21/24/2/2**，仍INTERMEDIATE_UNPUBLISHED_Q05_WINDOW；修复外层有效而内层旧版仍可恢复的漏洞，复用原发布全子域header predicate。RED11+1→最终287不同测试有通过证据（主286PASS/1旧phaseFAIL经独立`NTSD28-Q05-WORLD-CLOCK-PHASE-FIXTURE-001`定向1PASS闭合），新增23全PASS、完整SelfCheck/CS0/真实暂停World双队列Play tick5对象4→4通过。`NTSD28-Q05-REMAINING-CONTENT-HASH-CONSUMER-AUDIT-001`已VERIFIED_AUDIT_ONLY：未发现额外frame/meta生产hash漏项，明确trace仍strategy-pending/缺完整语义头/49字段。**下一唯一Task `NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / READY_FOR_EXACT_PRECHANGE_RECORD`**，同窗口trace v3/raw/source v2/50字段2F8及真实source/raw/decode/semantic/schema绑定，再完整replay/Play；Q05/总目标ACTIVE/FULL_ALIGNMENT_INCOMPLETE，正式资源未迁移。Scene旧SHA/Foot18既有缺失保持，禁止computer-use及非战斗改动。
 
 
@@ -237,12 +243,12 @@
 | B3 主pass骨架 | **顺序骨架出口通过，整阶段未完全关闭**；`B3_PLACEMENT_EXIT_READY / FULL_CLOSE_DEFERRED` | 多个pass位置、两个hit caller循环及C25多个入口/owner；[B3出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B3-EXIT-GATE-AUDIT-001.md)。 | residual serial、terminal、生成及跨阶段尾部由B4/B5/B7/B8接管；最终逐pass trace待B12。只处理残余，不重排已正确的骨架。 |
 | B4 Frame / Physics / Revival | **多个核心子集已完成，整阶段未完全关闭** | motion、teleport、多项physics与复活gate/queued/normal已有专项；[复活子集出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B4-REVIVAL-EXIT-AUDIT-001.md)。 | 完整资源更新、OPoint复活字段/视觉producer、碎片/terminal及新版内容验证归B7/B8/B10/B11/B12；复活子集出口不是整个B4出口。 |
 | B5 Collision / Hit / Armor / Damage / Combo | **独立规则主线出口通过，整阶段未完全关闭**；`B5_PLACEMENT_EXIT_READY / B5_FULL_CLOSE_DEFERRED` | 大量candidate/hit/armor/damage/rest/combo/credit规则族已验；[B5出口](../../../docs/ai/CHANGE-RECORDS/NTSD28-B5-EXIT-GATE-AUDIT-001.md)允许进入B6。 | 出口审计时未发现额外独立B5首差；catch/resource/content/presentation/lifecycle及最终joint trace仍后置B6/B7/B8/B9/B10/B11/B12。保留后续具名修正，不把出口放行写成整域完成。 |
-| B6 Catch / Held / Weapon / E | **大量子包已完成，整阶段未完成** | catch exact/accounting/caughtact、pickup P1/P2/P3、refill子集、impact、compat selector及Goal17～20退休；见第0.9/5节。 | CPoint27来源和+2F8载体已限定验证；mass/Oscillate载体已清理；GrabbedBy/TrackerFlag载体已清理；ReleaseTick载体现已267/SelfCheck/四例前后Play限定验证；WeaponState载体现已282/SelfCheck/OID124前后Play限定验证；HolderCopy现已863纠正证据/SelfCheck/真实Play限定通过；剩余D-022联合identity/schema/trace/replay、+2F8 producer/consumer与完整资源/技能链仍待。既有退休包不再实施。 |
+| B6 Catch / Held / Weapon / E | **大量子包已完成，整阶段未完成** | catch exact/accounting/caughtact、pickup P1/P2/P3、refill子集、impact、compat selector及Goal17～20退休；见第0.9/5节。 | CPoint27来源和+2F8载体已限定验证；mass/Oscillate载体已清理；GrabbedBy/TrackerFlag载体已清理；ReleaseTick载体现已267/SelfCheck/四例前后Play限定验证；WeaponState载体现已282/SelfCheck/OID124前后Play限定验证；HolderCopy现已863纠正证据/SelfCheck/真实Play限定通过；D-022联合identity/schema/trace/replay已完成Q05限定验收；剩余+2F8 producer/consumer与完整资源/技能链仍待。既有退休包不再实施。 |
 | B7 OPoint / Spawn / Lifecycle | **未完成，已有部分基础与子集** | 部分owner、结构flush、关系清理、previous commit及slot/generation能力已存在。 | OPoint24字段、全部materializer、重复zero-frame、birth visibility、fragment/terminal/reuse及最终关闭联验仍待。 |
 | B8 Stage / BattleFlow / Results | **未完成，存在确认的逻辑差异** | 部分clamp位置、模式/结果设施已存在。 | 存活组与复活资格、80/101/350及continue时点、非例外stage/mode/event需要修改和联验；默认stage.dat部署仍暂缓。 |
 | B9 战斗表现 | **未完成，已有表现设施与限定修复** | publication、central renderer、C01 spark推进及Mesh增长修复已有成果。 | 同Z排序、previous/current插值、custom shadow/bleed/lives/nameplate/combo/earthquake、正式资源与画面验收未闭合。 |
 | B10 Audio | **未完成，已有队列与路由设施** | QueueSound、checksum后publication、播放器和F11/F12输入路由存在。 | native事件时序/channel/voice/BGM/stop/衰减及实际音量命令消费未闭合。 |
-| B11 H-Content | **加载基础已验证，正式迁移未完成**；`LOAD_INFRASTRUCTURE_VERIFIED / MIGRATION_NOT_STARTED` | D-023明确DAT/角色图采用NTSD2.8-Logan；Q02 source/PNG/range/alpha/catalog/原子发布/cache/三caller/关闭基础已交付。 | Q03六DAT/联合字段、Q07引用重绑及分批正式迁移、全内容与视听验收仍待；不能以隔离候选通过宣称B11全域完成。 |
+| B11 H-Content | **加载基础已验证，正式迁移未完成**；`LOAD_INFRASTRUCTURE_VERIFIED / MIGRATION_NOT_STARTED` | D-023明确DAT/角色图采用NTSD2.8-Logan；Q02 source/PNG/range/alpha/catalog/原子发布/cache/三caller/关闭基础已交付。 | Q05已解决六DAT准入及联合字段；剩余Q07引用重绑及分批正式迁移、全内容与视听验收仍待；不能以隔离候选通过宣称B11全域完成。 |
 | B12 全场景parity验收 | **完整集成验收未完成** | 已积累各子包测试、trace和Play证据。 | 同一最终版本、新DAT/图片下的完整角色技能/整场trace/视听/长跑/退出重进尚未完成，不能拼接局部PASS代替。 |
 
 **实施队列规则：** B1/B2已关闭职责移出待实现队列；新发现的具体首差或上表指定触发条件另建复验/修复包，不能整体重开。B3/B5只保留未接管残余和最终联合出口，B4/B6按未闭合子包推进。B7～B11按依赖补齐，B12承担完整集成验收。所有阶段尚未获得“含全部下游依赖与新版内容终验的整域最终证书”，这不抹除B1/B2阶段成果。
@@ -251,7 +257,7 @@
 
 队列标识：`NTSD28-PRIORITY-DEPENDENCIES-20260913`。Q01～Q12是本总表内的稳定工作组ID，**不是新增Change ID，也不代表代码已启动**。具体实现必须拆成最小闭合Task/Change并登记精确路径；不得把一行跨模块工作一次性全部实施。
 
-当前游标：`EXECUTION=ACTIVE / ACTIVE_BATCH=BATCH-02 / ACTIVE_Q=Q05 / LAST_VERIFIED=JOINT-SNAPSHOT-CHECKSUM-VERSION-001:SCOPED / NEXT_TASK=NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001 / CURRENT_VERSIONS=13,21,24,2,2_UNPUBLISHED / FULL_ALIGNMENT_INCOMPLETE`。
+当前游标：`EXECUTION=ACTIVE / ACTIVE_BATCH=BATCH-03 / ACTIVE_Q=Q06 / LAST_VERIFIED=Q05_RESTORE_REPLAY_EXIT / NEXT_TASK=NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001 / CURRENT_VERSIONS=13,21,24,2,2_VALIDATED / FULL_ALIGNMENT_INCOMPLETE`。
 用户已启动总目标，Q01已实际交付；Q02/Q03已满足Q01前置。其余项按硬依赖选择，不再受准备阶段暂停约束。旧包证据保持，不重做已关闭职责。
 
 **选包算法（仅在第0.14节执行暂停已由用户明确解除后适用）：** 先检查R表是否有已触发的回访；有则先处理受影响范围的回访。随后从下表按序号选“硬前置已满足且在当前已启动批次/总目标授权范围内”的第一项。没有满足硬前置的任务才报告具体阻塞。较早项因特定资源/用户范围受阻时，可以推进无关的READY项，必须登记跳过原因；不能以一个局部阻塞冻结全部路线。
@@ -259,11 +265,11 @@
 | 顺位 / ID | 阶段与有界工作组 | 硬前置 | 当前状态 | 本组交付点（不等于整阶段最终完成） | 完成/变化时检查回访 |
 |---|---|---|---|---|---|
 | 01 / Q01 | B11：正式DAT/角色图片接入清单与兼容性检查 | 用户已于2026-09-13启动；Task/Record已建立 | DELIVERED | NTSD28-B11-CONTENT-ENTRY-INVENTORY-001已完成离线清单、实际typed首差、path/hash/GUID/非战斗保留审查；报告见顶部。动态reachability与删除许可未认证，资源未导入。 | R15身份子条件已回访；不关闭B11 |
-| 02 / Q02 | B11：DAT/sprite根与PNG加载前置 | Q01已交付 | DELIVERED_LOAD_INFRASTRUCTURE_ONLY | path/raw PNG/range/alpha/E1/E2/E3及Preparing回访限定VERIFIED；官方1255PNG raw、405DAT/773sheet及330目录证据保持，E3 final40/40/完整SelfCheck/native三caller+menu重进/legacy App回归PASS，CS0/Scene clean/470-40 Ledger PASS。正式6DAT仍由Q03处理，正式切换留Q07。 | R17加载子条件PARTIAL_RETURN；Q07/视听与整域条件仍待 |
+| 02 / Q02 | B11：DAT/sprite根与PNG加载前置 | Q01已交付 | DELIVERED_LOAD_INFRASTRUCTURE_ONLY | path/raw PNG/range/alpha/E1/E2/E3及Preparing回访限定VERIFIED；官方1255PNG raw、405DAT/773sheet及330目录证据保持，E3 final40/40/完整SelfCheck/native三caller+menu重进/legacy App回归PASS，CS0/Scene clean/470-40 Ledger PASS。正式6DAT准入缺口已由Q05 AST/typed接线闭合，正式切换留Q07。 | R17加载子条件PARTIAL_RETURN；Q07/视听与整域条件仍待 |
 | 03 / Q03 | B6/B7/B0：数据及联合字段合同冻结 | Q01/Q02已交付 | DELIVERED_CONTRACT_ONLY | Q03-EXIT-REPORT逐项出口；六DAT九frame、27/9/24+strength19/BDY、numeric37与geometry42、+2F8/mass/reserved/Oscillate、identity/capture/trace合同闭合；实现和运行时验收留Q04～Q07。 | R13/R15合同子条件PARTIAL_RETURN |
 | 04 / Q04 | B6/E/B9：剩余行为退休 | Q03已交付 | DELIVERED_BEHAVIOR_RETIREMENT_ONLY | Mass gate与Oscillate reader各自focused/SelfCheck/Play通过；carrier/base-shell留Q05。 | R13行为PARTIAL_RETURN |
-| 05 / Q05 | D-022联合迁移 | Q03/Q04已交付 | IN_PROGRESS / STEP4_TRACE_NEXT / INTERMEDIATE_UNPUBLISHED | 来源/载体/semantic/guard及剩余hash审计限定闭合；五版本已13/21/24/2/2，并修复内层旧header可恢复漏洞。287不同测试/SelfCheck/scoped Play通过。下一trace v3/raw/source v2/50字段与完整语义头；步骤5完整恢复replay/Play仍待，不发布、不跳Q07。 | R13删除子条件已回访，R15 identity+guard+snapshot版本子条件PARTIAL_RETURN，trace/replay仍待 |
-| 06 / Q06 | B6/B7及资源owner：精确producer/consumer与slot尾部接线 | Q05 | WAIT_DEPENDENCY | 新增frame int/double分reader motion、chp/cmp内容消费；拆包接CPoint资源/settlement、OPoint完整materializer、+2F8 AI、revival reserve/join、HP/baseMax、C25资源/terminal/pieces/生灭。基础数值合同与规则夹具可先验证；mode/frontend和整场证据分别留Q08/Q12。每个子包实际接通即触发回访，不等整组结束。 | R02、R04～R13、R16 |
+| 05 / Q05 | D-022联合迁移 | Q03/Q04已交付 | DELIVERED_JOINT_SCHEMA_AND_REPLAY_ONLY | 来源/载体/semantic/guard/hash、五版本13/21/24/2/2、trace3/raw-source2/50字段及真实Logan两profile恢复回放已验；最终82/SelfCheck/两次真实Scene恢复与关闭重入全0。含退休shell池归还及Renderer注册保留修复，详见JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001报告。正式资源和Q06 consumer未完成。 | R13/Q05载体-schema、R15/Q05身份-版本-replay子条件满足；Q07和后续终验触发条件保持 |
+| 06 / Q06 | B6/B7及资源owner：精确producer/consumer与slot尾部接线 | Q05 | READY_READONLY / FIRST_MP_DIFFERENCE | 第一Task NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001；新增frame int/double分reader motion、chp/cmp内容消费；接收同源neutral trace tick3 currentMp200/201差异（MP bootstrap已校正，实际consumer原因待追）；拆包接CPoint资源/settlement、OPoint完整materializer、+2F8 AI、revival reserve/join、HP/baseMax、C25资源/terminal/pieces/生灭。基础数值合同与规则夹具可先验证；mode/frontend和整场证据分别留Q08/Q12。每个子包实际接通即触发回访，不等整组结束。 | R02、R04～R13、R16 |
 | 07 / Q07 | B11：新版DAT/角色图片分批迁移与内容可用验收 | Q02、Q06（包括Q05版本链） | WAIT_DEPENDENCY | 按Q01闭包分批接入、重绑引用、验证内容fingerprint/normalized值及真实载入；每批复验受影响规则。合格交付点为“该批正式内容可用”，不是全视听/全场景通过。旧资源仅按核对后的精确清单处置，保留UI/配置/用户文件。 | R02、R06～R12、R15、R17、R18 |
 | 08 / Q08 | B8：非例外stage、mode、结果和事件 | Q06 | WAIT_DEPENDENCY | 拆包闭合stage公式/移除、living groups、80/101/350与continue、mode资源规则、F4等effect和KO/world事件；可用明确夹具先验，正式内容验收依赖Q07。无需等待B9结果页面；默认stage.dat暂停单列。 | R02～R05、R07、R10、R11 |
 | 09 / Q09 | B9：正式表现消费与展示验收 | Q07、Q08 | WAIT_DEPENDENCY | 新增frame centerz内容消费；拆包处理同Z排序、post-host snapshot、相邻快照插值及断点、custom shadow/bleed/lives/nameplate/combo/spark/earthquake与资源。按30/60/120采样验证；固定相机等例外保持。 | R01、R08、R14、R16、R17 |
@@ -320,10 +326,10 @@ R01～R18是稳定回访ID，不是重开整个阶段的指令。R15为PARTIAL_R
 | R10 / B5伤害、held与KO，C-10/C-12/C-14、W-01/W-02 | Q06接CPoint/OPoint资源与owner链，Q08接world KO/mode/result，Q10接相关audio | 验damage→HP/MP/score/KO→caughtact→world event的精确顺序与仅一次副作用；补新DAT witness。 | 同tick资源/统计/event trace；已完成held accounting/caughtact/impact不重做，仅补新链。 |
 | R11 / B6 C22，C-13、S-14 | Q06相关catch/impulse producer闭合且Q08最终stage settlement/removal接通 | 回到finalizer入口验证被移除对象不会再finalize、hold/count/三轴与stage前后顺序。 | 已有C22公式与Goal18 impact成果保留；新增整链trace，无新首差不新写finalizer。 |
 | R12 / B6 held/refill/pickup，W-03～W-05、W-08 | Q06完整HP/baseMax/OPoint关系/old-child cleanup可用且Q07相关DAT批次接入 | 在ITR kind2与OPoint kind2的正式union上验pickup、补给、exhaustion、投掷/中断和技能结束；覆盖新nonzero linked stats。 | 自然操作、完整关系/资源/回收trace；复用P1/P2/P3与refill scoped证据，禁止用两个Play样例宣称全union覆盖。 |
-| R13 / B6/E与联合字段，D-05/D-08、W-06、L-08、U-06 | 本次Q04-A mass gate从待办→VERIFIED（14/14/SelfCheck/Play），PARTIAL_RETURN；Oscillate reader也已VERIFIED（28/28/SelfCheck/Play）；Q05 Mass/Oscillate carrier现已890/SelfCheck/scoped Play通过，字段删除子条件PARTIAL_RETURN；GrabbedBy/TrackerFlag carrier也已407/SelfCheck/scoped Play通过；ReleaseTick载体267/SelfCheck/四例前后Play一致已通过（NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001），PARTIAL_RETURN；WeaponState载体282/SelfCheck/OID124前后Play一致已通过（NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001），PARTIAL_RETURN；HolderCopy载体也已限定通过（NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001，863证据经测试纠正闭合/SelfCheck/真实关系Play）；五类载体删除子条件PARTIAL_RETURN，联合schema/replay仍待，按后继分步触发 | 先确认mass/旧字段不再定义行为，再核对reserved实际删除/保留清单、shell/ECS/hash/capture/restore；生产引用清零后裁定NTSDSpec空壳。 | D-022版本化结果与无旧writer证明；0/null/-1断言只证明行为退休，不等于carrier已删除；不能跳过schema验证。 |
+| R13 / B6/E与联合字段，D-05/D-08、W-06、L-08、U-06 | 本次Q04-A mass gate从待办→VERIFIED（14/14/SelfCheck/Play），PARTIAL_RETURN；Oscillate reader也已VERIFIED（28/28/SelfCheck/Play）；Q05 Mass/Oscillate carrier现已890/SelfCheck/scoped Play通过，字段删除子条件PARTIAL_RETURN；GrabbedBy/TrackerFlag carrier也已407/SelfCheck/scoped Play通过；ReleaseTick载体267/SelfCheck/四例前后Play一致已通过（NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001），PARTIAL_RETURN；WeaponState载体282/SelfCheck/OID124前后Play一致已通过（NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001），PARTIAL_RETURN；HolderCopy载体也已限定通过（NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001，863证据经测试纠正闭合/SelfCheck/真实关系Play）；五类载体删除子条件PARTIAL_RETURN，联合schema/replay现已由Q05最终82/SelfCheck/两次真实Scene验收满足，Q07内容与后继消费条件保持，按后继分步触发 | 先确认mass/旧字段不再定义行为，再核对reserved实际删除/保留清单、shell/ECS/hash/capture/restore；生产引用清零后裁定NTSDSpec空壳。 | D-022版本化结果与无旧writer证明；0/null/-1断言只证明行为退休，不等于carrier已删除；不能跳过schema验证。 |
 | R14 / B5 combo/C01 spark与B9表现，C-11/C-12、S-02/P-06/P-11 | Q09正式spark/combo图集和命令消费接通；相关声音由Q10单独触发 | 联验命中/计数/expiry与首末可见帧、host slot、命令顺序和资源gate，逻辑只读。 | 复用已完成combo/caughtact和spark age；补30/60/120画面，不能为显示重写计数规则。 |
-| R15 / B0与所有trace，T-06/R-07/D-08/D-09/U-06 | NTSD28-Q05-SEMANTIC-CONTENT-IDENTITY-001：raw+V2 semantic/cache/pub/local session子条件经82/SelfCheck/独立hash/隔离源menu Play为PARTIAL_RETURN；双OPoint guard已由SNAPSHOT-BOUNDARY-GUARD-001经187/SelfCheck/真实暂停World Play限定回访；相关内容hash审计已完成，snapshot五版本13/21/24/2/2及子域拒绝已限定验证；trace identity/50字段/replay仍待。 Q01身份基线确认、Q05 schema变化、Q07任一内容fingerprint变化 | 更新双端capture/comparator字段可用性、证据identity；同版本比较，旧snapshot拒绝，seed/input重放。 | 明确authority/source/content/schema哈希；不能填零伪造字段相等或跨版本拼接checksum。 |
-| R16 / B3/B7与U-03/U-05/U-08关闭 | **本次Q02返回（E3输入/pool取消也已VERIFIED）：NTSD28-PREPARING-SHUTDOWN-OWNER-CAPTURE-001已VERIFIED，5次Play0残留/两帧仍Stopped；仅该子条件PARTIAL_RETURN**；Q06新增queue/entity/producer、Q09新增publication/renderer或启用worker；Q12终验 | 接入既定十一阶段停止/Join/drain/recycle owner；逐新增模块验退出重进及零残留、Scene dirty基线。 | lifecycle声明、focused与真实enter/exit/re-enter；不得等待整场完成后才给新模块补shutdown，也不得重排顶层关闭顺序。 |
+| R15 / B0与所有trace，T-06/R-07/D-08/D-09/U-06 | NTSD28-Q05-SEMANTIC-CONTENT-IDENTITY-001：raw+V2 semantic/cache/pub/local session子条件经82/SelfCheck/独立hash/隔离源menu Play为PARTIAL_RETURN；双OPoint guard已由SNAPSHOT-BOUNDARY-GUARD-001经187/SelfCheck/真实暂停World Play限定回访；相关内容hash审计已完成，snapshot五版本13/21/24/2/2及子域拒绝已限定验证；trace identity/50字段已由TRACE-RAW-IDENTITY-JOINT-UPGRADE限定验证，同源raw仍6MISSING+MP数值差；Q05完整replay/两profile及真实Scene恢复关闭重入已验，Q07和整场终验待。 Q01身份基线确认、Q05 schema变化、Q07任一内容fingerprint变化 | 更新双端capture/comparator字段可用性、证据identity；同版本比较，旧snapshot拒绝，seed/input重放。 | 明确authority/source/content/schema哈希；不能填零伪造字段相等或跨版本拼接checksum。 |
+| R16 / B3/B7与U-03/U-05/U-08关闭 | **本次Q02返回（E3输入/pool取消也已VERIFIED）：NTSD28-PREPARING-SHUTDOWN-OWNER-CAPTURE-001已VERIFIED，5次Play0残留/两帧仍Stopped；仅该子条件PARTIAL_RETURN**；Q05两个必要snapshot修复已82/SelfCheck/两次实际恢复关闭重入全0，生命周期子条件PARTIAL_RETURN；Q06新增queue/entity/producer、Q09新增publication/renderer或启用worker；Q12终验 | 接入既定十一阶段停止/Join/drain/recycle owner；逐新增模块验退出重进及零残留、Scene dirty基线。 | lifecycle声明、focused与真实enter/exit/re-enter；不得等待整场完成后才给新模块补shutdown，也不得重排顶层关闭顺序。 |
 | R17 / B11内容与B9/B10资源出口，D-01～D-07/P-20/O-05 | Q02加载基础已PARTIAL_RETURN（E3已验证；无正式迁移），Q07每批迁移、Q09图像消费、Q10相关声音消费各自完成 | 对账manifest/引用/GUID/缺失资源、正式像素/音源映射；精确处置经核验旧文件，保留用户资源。非角色图片/WAV未决只标对应行。 | Q07的内容可用与后续视听验证分别出证；不以“都能加载”宣称B11整域已完成。 |
 | R18 / B2～B6整链与B12，I/F/C/W/L全部非例外域 | Q07相关角色技能内容可用即做定向回访，Q12集成冻结后做全量 | 按具体角色/装备/物理按键走输入→动作→生成→命中→结束/回收；覆盖报告过的组合技、持武器、跑攻、跟手和阴影。 | 记录场景、seed、输入/tick、first difference与影像；注入实体/单测不代替自然技能；最终所有未验项逐条关闭。 |
 
@@ -338,15 +344,15 @@ R01～R18是稳定回访ID，不是重开整个阶段的指令。R15为PARTIAL_R
 | 必填字段 | 当前值 |
 |---|---|
 | Goal / 执行许可 | `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / ACTIVE`；用户已要求现在启动，首先执行BATCH-01 |
-| Plan / prepared batch / next | NTSD28-PRIORITY-DEPENDENCIES-20260913 / BATCH-02 / Q05-JOINT-MIGRATION |
-| Active Q / Task / Change | Q05步骤4；JOINT-SNAPSHOT-CHECKSUM-VERSION限定通过，当前13/21/24/2/2未发布；下一NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001，完整trace/replay仍待 |
+| Plan / prepared batch / next | NTSD28-PRIORITY-DEPENDENCIES-20260913 / BATCH-03 / Q06-resource-first-difference |
+| Active Q / Task / Change | Q06 / NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001 / READY_READONLY；Q05三个快照验收与必要修复Record已VERIFIED，六MISSING/MP差异仍待 |
 | Ready returns / waiting | NONE；R15/R17 PARTIAL_RETURN，后续具体条件见0.12；其余WAIT_TRIGGER |
 | 已保护完成项 | B1当前生产职责、B2基础/路由；B3/B5出口与B4/B6/Goal17～20子集证据保留 |
 | 已知内容/schema基线 | Unity旧138为迁移前基线，目标D-023；330新版source定义已可构建，正式资源未部署。当前runtime/aggregate/checksum/character/base为12/20/23/1/1，处于同Q05未发布字段迁移中间态，联合目标13/21/24/2/2 |
 | 当前明确边界 | DAT/角色图片目标已定；旧资源删除集合未冻结；默认stage.dat部署暂停；其他用户例外、音频范围和十一阶段关闭合同保持 |
 | 当前工作树保护 | 保留已有脚本/Scene/文档变化及Foot任务外18旧文件删除、blue/red/yellow新目录；Scene旧精度差异SHA保持，归属pending。不恢复、不清理任务外资源；每次继续重新核对 |
 | 下一步最窄动作 | 读取`NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001`与Q03完整snapshot合同，复用driver已有renderer owner，核对两队列World归属/tick/structural边界后先准确Record/RED；不重做已关身份和载体 |
-| 最近验证 | Q05 semantic身份：75主回归PASS、Visual6+定向1纠正通过；正式330/906 capture、固定向量/独立SHA和LE投影、完整SelfCheck、实际隔离源menu cache命中1/三key同/46资源零残留/borrower0/两帧Stopped；CS0/Scene dirtyfalse/root14/旧SHA；498 Records/53累计脚本账本通过，保护3059=2954同/87既有声明差/18既有缺失，无新缺失。非正式330全场渲染/整技能结论 |
+| 最近验证 | Q05最终82/82、完整SelfCheck、实际Logan两profile24tick恢复后22tick逐值/结构事件重放；两次真实Scene tick5恢复4→4/有序关闭所有borrowers0/两帧Stopped/重入PASS；Console0error/Scene旧SHA/dirtyfalse/root14，保护3059无新增缺失。三Record合计6脚本，仅2生产snapshot文件；正式资源/整场视觉未认证 |
 
 每次实施交付或压缩交接前，必须更新此游标：当前Q/Task/Change、已满足前置的证据路径、当前first difference、内容/schema身份、被触发R列表、明确未做项、下一最小动作。只有对应交付点实际达成才能将Q置为`DELIVERED`；`DELIVERED`不自动更新整阶段ALIGNED。READY读取/待依赖/局部用户方向等待应分开记录，不复制旧历史“全线HOLD”当作新阻塞，也不凭本次文档整理推断未授权的大型实施已获准。
 
@@ -404,11 +410,11 @@ R01～R18是稳定回访ID，不是重开整个阶段的指令。R15为PARTIAL_R
 |---|---|
 | Master goal | `NTSD28-UNITY-BATTLE-REALIGNMENT-001`；定义已准备，剩余campaign仍`FULL_ALIGNMENT_INCOMPLETE` |
 | Execution permission | `ACTIVE`；2026-09-13用户“现在开始启动”覆盖准备暂停，范围保证保持 |
-| Batch states | `BATCH-01 = DELIVERED`；`BATCH-02 = IN_PROGRESS`；`BATCH-03..BATCH-06 = WAIT_DEPENDENCY` |
-| Active batch / Q / Task / Change | BATCH-02 ACTIVE；Q02/Q03/Q04限定交付，Q05 IN_PROGRESS，CPoint27/OPoint24/Geometry接线待回访，本批未完成 |
-| Current entry | BATCH-02 / Q05-A2 / 下一NTSD28-Q05-NATIVE-STRENGTH-TABLE-ADMISSION-001 / READY_FOR_EXACT_PRECHANGE_RECORD |
+| Batch states | `BATCH-01 = DELIVERED`；`BATCH-02 = DELIVERED_SCOPED`；`BATCH-03 = READY`；`BATCH-04..BATCH-06 = WAIT_DEPENDENCY` |
+| Active batch / Q / Task / Change | BATCH-03 / Q06；BATCH-02的Q02～Q05限定出口均满足，新consumer/正式内容及整场终验仍待 |
+| Current entry | BATCH-03 / Q06 / NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001 / READY_READONLY |
 | Q/R mapping | 六批完整覆盖Q01～Q12，无重复归属；R01～R18保留原触发条件 |
-| Next action | 继续同一E2 Change：首段输入绑定已验，扩充staging/停止/提交/UI资源重绑和回收准确写范围并实施；E3缓存caller保持；见0.13游标。总目标未关闭。 |
+| Next action | 核对同源neutral trace tick3 MP200/201首差的实际资源caller/分支/phase；复用Q03/Q05合同，事前准确Record后才实施。不得重开已验版本/字段或跳到Q07。 |
 
 第0.13节“唯一READY_READ_ONLY为Q01”的验证文字和下面准备验证均为启动前历史结果；2026-09-13后续启动指令已覆盖PREPARED_HOLD。启动不改变任何已验证阶段/子包的历史结果。
 
@@ -1819,3 +1825,6 @@ D-01/D-04/D-06、R15/R17的目录输入子条件已有native330/330和Unity39/39
 
 - Q06/B4：新增 `NTSD28-B4-LANDING-DIVISION-EXACTNESS-REVIEW-001`。本包native.tsv landing VX5/3=1.6666666666666667，Unity play-final.json为1.6666666666666666；LF2CharacterDamageStateResolver相关路径乘常量1/3。需要精确复核相关real/generic/weapon caller后按独立Task修复，不全仓盲替换。Q04-A mass gate验收不关闭这项。
 - Q12测试夹具：`NTSD28C06NestedPhysicsProductionEditorTests.FullTick_RecordsNestedPhysicsBeforeRevivalStageBoundsHeldAndSerialRemainder`空World phase[28]期待FrameAdvance而actual Stage；Q04-A相关检查19/20，14项直接相关及完整SelfCheck通过。保留失败并复核当前权威顺序，不为旧index改生产pass。
+### Q05 同内容capture回访（2026-09-13）
+
+NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001已建立真实native/Unity相同Logan DAT+decoder身份。neutral-common-two-entity：seed682973786、stage23、OID2/7、无输入、3ticks；300字段比较43类一致/7类差异，6类为原MISSING。严格首差tick1 runtimeStateCode缺绑定；已绑定数值首差tick3 currentMp native200/Unity201（两slot）。旧Editor把当前MP200当最大值的初始化差异已修到max500，原8类差异/原排序报告保留。剩余MP增量具体规则原因待Q06 resource consumer，不将此诊断限定出口写成战斗对齐。证据见artifacts/diagnostics/NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001/REPORT.md和same-content-comparison.json；Q05先完成步骤5恢复回放验收。

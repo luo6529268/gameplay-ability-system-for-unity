@@ -1,0 +1,20 @@
+{
+  "schema": "ntsd28-logan-trace-comparison-v3",
+  "authority": "synthetic-canonical-authority.trace.jsonl",
+  "unity": "synthetic-canonical-different-content.trace.jsonl",
+  "status": "different",
+  "certificateEligible": false,
+  "expectedTicks": 2,
+  "ticksCompared": 0,
+  "authoritySlotCapacity": 1000,
+  "unitySlotCapacity": 1050,
+  "authorityContentManifestSha256": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "unityContentManifestSha256": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+  "firstDifference": {
+    "domain": "header",
+    "completedTick": 0,
+    "reason": "content-identity-mismatch",
+    "authorityValue": null,
+    "unityValue": null
+  }
+}

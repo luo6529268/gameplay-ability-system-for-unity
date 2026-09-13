@@ -1,0 +1,116 @@
+{
+  "maximumObjects": 2,
+  "spawns": 1,
+  "replay": [
+    {
+      "tick": 3,
+      "expected": "E9444EEA052D8AAD",
+      "actual": "E9444EEA052D8AAD"
+    },
+    {
+      "tick": 4,
+      "expected": "1B6D44CBF099302B",
+      "actual": "1B6D44CBF099302B"
+    },
+    {
+      "tick": 5,
+      "expected": "E7CF41E6D2984DC5",
+      "actual": "E7CF41E6D2984DC5"
+    },
+    {
+      "tick": 6,
+      "expected": "A3AAD3F4CB09731D",
+      "actual": "A3AAD3F4CB09731D"
+    },
+    {
+      "tick": 7,
+      "expected": "3D4FAFB637F03350",
+      "actual": "3D4FAFB637F03350"
+    },
+    {
+      "tick": 8,
+      "expected": "D9FD5750BDE0B594",
+      "actual": "D9FD5750BDE0B594"
+    },
+    {
+      "tick": 9,
+      "expected": "772D70DDE0EA171C",
+      "actual": "772D70DDE0EA171C"
+    },
+    {
+      "tick": 10,
+      "expected": "990183FAF7C61978",
+      "actual": "990183FAF7C61978"
+    },
+    {
+      "tick": 11,
+      "expected": "9D32BFB2BFCCC1D8",
+      "actual": "9D32BFB2BFCCC1D8"
+    },
+    {
+      "tick": 12,
+      "expected": "A5991EF3CD3B0956",
+      "actual": "A5991EF3CD3B0956"
+    },
+    {
+      "tick": 13,
+      "expected": "33C3F5AC948A4C44",
+      "actual": "33C3F5AC948A4C44"
+    },
+    {
+      "tick": 14,
+      "expected": "AFC8B66A9354CEBA",
+      "actual": "AFC8B66A9354CEBA"
+    },
+    {
+      "tick": 15,
+      "expected": "B6C2E77A4B2F5EE4",
+      "actual": "B6C2E77A4B2F5EE4"
+    },
+    {
+      "tick": 16,
+      "expected": "6DEBB3EAA4336BA0",
+      "actual": "6DEBB3EAA4336BA0"
+    },
+    {
+      "tick": 17,
+      "expected": "16E641976A04057D",
+      "actual": "16E641976A04057D"
+    },
+    {
+      "tick": 18,
+      "expected": "8476B6558F086D4E",
+      "actual": "8476B6558F086D4E"
+    },
+    {
+      "tick": 19,
+      "expected": "23DD8CA7DBFFCE20",
+      "actual": "23DD8CA7DBFFCE20"
+    },
+    {
+      "tick": 20,
+      "expected": "30B29E3BE903C0E9",
+      "actual": "30B29E3BE903C0E9"
+    },
+    {
+      "tick": 21,
+      "expected": "3585DB771D776EE4",
+      "actual": "3585DB771D776EE4"
+    },
+    {
+      "tick": 22,
+      "expected": "D1E0B6D040C2096A",
+      "actual": "D1E0B6D040C2096A"
+    },
+    {
+      "tick": 23,
+      "expected": "BA223BFF9100B074",
+      "actual": "BA223BFF9100B074"
+    },
+    {
+      "tick": 24,
+      "expected": "E2629A9F5D1F9714",
+      "actual": "E2629A9F5D1F9714"
+    }
+  ]
+}

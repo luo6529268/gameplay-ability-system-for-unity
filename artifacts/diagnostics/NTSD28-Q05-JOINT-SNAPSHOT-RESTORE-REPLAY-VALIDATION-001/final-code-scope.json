@@ -1,0 +1,33 @@
+{
+  "records": [
+    "NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001",
+    "NTSD28-Q05-SNAPSHOT-RETIRED-SHELL-POOL-RETURN-001",
+    "NTSD28-Q05-SNAPSHOT-RENDERER-REGISTRY-RETENTION-001"
+  ],
+  "paths": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "098acdd3ade40a1854dc25a8796fd377b113263532eaf41b5b8bbf8dde92a942"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs",
+      "sha256": "4abaca732a1711aaf3b6aa2aa245355ad003d9258e10692b826f8347b937cb01"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05LoganReplayEditorTests.cs",
+      "sha256": "f48dac25c93a21de6720dc5bc3f050aedbaf1243cf0dac0770b0395886a5d9a5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRendererRegistryEditorTests.cs",
+      "sha256": "8e1c35648942cf58fa3780e5b5366c182d607894af3501cc04871f8218125e25"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SnapshotRetiredShellPoolEditorTests.cs",
+      "sha256": "266a04e9d91b2b93aaf77be859ffd163463f53d5bf2f1f4c9897296e03d7bf23"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs",
+      "sha256": "44293ba7861183a6b68411a305d5d0ea5200a0d55ab74801935e7d9e990c9b81"
+    }
+  ]
+}

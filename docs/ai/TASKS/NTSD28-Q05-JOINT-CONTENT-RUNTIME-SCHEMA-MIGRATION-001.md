@@ -66,3 +66,14 @@ Definition头部审计 NTSD28-Q05-NATIVE-DEFINITION-HEADER-CONTRACT-AUDIT-001 �
 ## 当前子步骤出口
 
 步骤3hash消费者审计NTSD28-Q05-REMAINING-CONTENT-HASH-CONSUMER-AUDIT-001限定闭合；步骤4五版本NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERSION-001已FOCUSED_TEST_PASS/SCOPED_PLAY_PASS，当前13/21/24/2/2。下一NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001，trace/raw/source identity与50字段未完成，仍INTERMEDIATE_UNPUBLISHED；步骤5完整replay/Play后继，不重做已完成来源/载体/identity/guard。
+
+## 步骤4当前出口
+
+NTSD28-Q05-TRACE-RAW-IDENTITY-JOINT-UPGRADE-001已限定通过：trace v3/raw-source v2/50字段及实际语义身份，50 Unity/88 tools/SelfCheck/实际capture证据；raw仍different，Q06承接MP与6MISSING。下一NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001，步骤5未完成不关闭Q05、不发布或启动Q07。
+
+
+## 最终限定出口（2026-09-13）
+
+VERIFIED / SNAPSHOT_REPLAY_SCOPE_ONLY。最终82/82 focused（job6400c6d4e1fd432cbe7fe837231dad20）、完整SelfCheck、两次真实Scene tick5恢复4→4/有序关闭全0/两帧Stopped及重入PASS，Scene旧SHA/root14/dirtyfalse保持，Console0error。完整证据统一在 artifacts/diagnostics/NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001/REPORT.md；失败及RED保留，不以旧程序集45项代替最终结果。独立pool归还与Renderer注册保留两个修复按各自Record集成；Q05来源/schema/restore出口满足，BATCH-02限定交付。Q06消费者、Q07正式资源、六MISSING/MP首差、后续视听与整场终验保持未完成。禁止computer-use，总目标ACTIVE。
+
+下一唯一Task NTSD28-Q06-RESOURCE-MP-FIRST-DIFFERENCE-AUDIT-001，READY_READONLY；Q06所有生产语义仍按独立Record实施，不进入Q07。

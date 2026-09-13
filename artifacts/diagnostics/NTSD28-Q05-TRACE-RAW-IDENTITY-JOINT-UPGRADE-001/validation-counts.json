@@ -1,0 +1,21 @@
+{
+  "unityDistinctPassed": 50,
+  "unityRuns": [
+    49,
+    1
+  ],
+  "toolSuites": {
+    "trace-full-tests.json": 51,
+    "raw-full-tests.json": 14,
+    "self-test-b0-domain-raw.json": 12,
+    "self-test-b0-domain-comparator.json": 6,
+    "self-test-b2-input-rng-raw.json": 5
+  },
+  "toolTotalPassed": 88,
+  "nativeBindingValues": [
+    -1,
+    0,
+    37
+  ],
+  "scope": "Tooling/capture evidence only; raw result is different and not a parity certificate"
+}

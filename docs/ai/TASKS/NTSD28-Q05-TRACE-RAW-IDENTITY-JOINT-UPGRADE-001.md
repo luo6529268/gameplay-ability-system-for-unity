@@ -11,3 +11,7 @@ READY_FOR_EXACT_PRECHANGE_RECORD，依赖NTSD28-Q05-JOINT-SNAPSHOT-CHECKSUM-VERS
 test-first：旧tag/缺字段/伪semantic/错raw/错decode/跨schema拒绝、新字段nondefault双端source-linked与Unity witness、原6MISSING保持、checker self-tests及实际capture解析/compare（首差如实保留）。正式权威树只读；native诊断在Temp构建且不覆盖正式EXE。编译、相关Unity tests、SelfCheck、ledger及保护清单；父步骤5完整同seed/input恢复回放/slot pool/Play仍随后执行，不能提前Q07。
 
 禁止computer-use，保持Unity/GAS/非战斗/Scene/资源/Gen/Plugins/外部Server与所有例外。无新网络或恢复架构。脚本前准确Record，回滚需批准仅差量。
+
+## 当前限定出口
+
+FOCUSED_TEST_PASS / SAME_CONTENT_CAPTURE_PASS / RAW_PARITY_DIFFERENT / Q05_REPLAY_PENDING。19脚本、50不同Unity测试、88工具tests、native binding/真实同源身份/SelfCheck/旧内容Play通过。真实比较7类差异保留；下一NTSD28-Q05-JOINT-SNAPSHOT-RESTORE-REPLAY-VALIDATION-001，完整报告见同ID artifacts/diagnostics/REPORT.md。

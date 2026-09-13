@@ -260,6 +260,11 @@ namespace NTSD.Simulation
                 failure = BattleStateSnapshotRestoreFailure.PendingEventRestoreFailed;
                 return false;
             }
+            if (ObjectCount != snapshot.Core.ObjectCount)
+            {
+                failure = BattleStateSnapshotRestoreFailure.DerivedStateRebuildFailed;
+                return false;
+            }
 
             failure = BattleStateSnapshotRestoreFailure.None;
             return true;
@@ -292,10 +297,20 @@ namespace NTSD.Simulation
             }
 
             BattleWorldCoreScalarSnapshot core = snapshot.Core;
+            for (int slot = 0; slot < RuntimeSlotCapacity; slot++)
+            {
+                LF2Entity current = _runtimeSlots.GetReadOnlyView(slot).Entity;
+                if (current != null &&
+                    (!ReferenceEquals(current.Renderer, null) || !ReferenceEquals(current.ShadowRenderer, null)) &&
+                    !RetainsLocalShell(snapshot.RuntimeSlots, current, slot))
+                {
+                    failure = BattleStateSnapshotRestoreFailure.EntityShellMismatch;
+                    return false;
+                }
+            }
             if (core.RuntimeProfile != activeRuntimeProfile ||
                 core.RuntimeSlotCapacity != RuntimeSlotCapacity ||
                 core.CollisionBroadphase != CollisionBroadphaseForServices ||
-                core.ObjectCount != snapshot.RuntimeSlots.ClaimedCount ||
                 core.ClaimedRuntimeSlotCount != snapshot.RuntimeSlots.ClaimedCount ||
                 snapshot.RuntimeSlots.SlotCapacity != RuntimeSlotCapacity ||
                 snapshot.EntityRuntime.SlotCapacity != RuntimeSlotCapacity ||
@@ -318,6 +333,15 @@ namespace NTSD.Simulation
             if (!snapshot.EntityRuntime.HasCanonicalPayloadStorage)
             {
                 failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
+                return false;
+            }
+
+            // Alignment contract: NTSD28-Q05-SNAPSHOT-RENDERER-REGISTRY-RETENTION-001.
+            // Registered renderers count as World objects but never claim battle slots.
+            if (!TryCountRetainedRendererRegistrations(snapshot.RuntimeSlots, out int rendererCount) ||
+                core.ObjectCount != snapshot.EntityRuntime.CountActiveEntitiesForRestore() + rendererCount)
+            {
+                failure = BattleStateSnapshotRestoreFailure.WorldConfigurationMismatch;
                 return false;
             }
 
@@ -466,6 +490,17 @@ namespace NTSD.Simulation
             return true;
         }
 
+        private static bool RetainsLocalShell(
+            BattleWorldRuntimeSlotSnapshotBuffer snapshot, LF2Entity entity, int currentSlot)
+        {
+            if (snapshot.TryGetLocalEntityShell(currentSlot, out LF2Entity local) && ReferenceEquals(local, entity))
+                return true;
+            for (int slot = 0; slot < snapshot.SlotCapacity; slot++)
+                if (slot != currentSlot && snapshot.TryGetLocalEntityShell(slot, out local) && ReferenceEquals(local, entity))
+                    return true;
+            return false;
+        }
+
         private bool RestoreSnapshotTopology(
             BattleStateSnapshotBuffer snapshot)
         {
@@ -491,9 +526,12 @@ namespace NTSD.Simulation
                     entity.Renderer);
                 entity.BindRegisteredWorldForSnapshotRestore(null);
                 entity.SetRuntimeSlotIndex(-1);
+                // Alignment contract: NTSD28-Q05-SNAPSHOT-RETIRED-SHELL-POOL-RETURN-001.
+                if (!RetainsLocalShell(runtimeSlots, entity, runtimeSlot))
+                    world.LogicReferencePool.Release(entity);
             }
 
-            objectBucketRegistry.Clear();
+            RemoveEntityBucketItemsForRestore();
             bool requiresShellMaterialization = false;
             for (int runtimeSlot = 0;
                  runtimeSlot < RuntimeSlotCapacity;
@@ -542,7 +580,7 @@ namespace NTSD.Simulation
                     }
                 }
 
-                objectBucketRegistry.Clear();
+                RemoveEntityBucketItemsForRestore();
                 _runtimeSlots.ClearTopologyForSnapshotShellMaterialization();
             }
             if (!_runtimeSlots.TryRestoreSnapshotTopology(runtimeSlots))
@@ -572,7 +610,49 @@ namespace NTSD.Simulation
                 bucket.dirty = true;
             }
 
-            return ObjectCount == runtimeSlots.ClaimedCount;
+            return _runtimeSlots.ClaimedCount == runtimeSlots.ClaimedCount;
+        }
+
+        private bool TryCountRetainedRendererRegistrations(
+            BattleWorldRuntimeSlotSnapshotBuffer snapshot, out int count)
+        {
+            count = 0;
+            for (int bucketIndex = 0; bucketIndex < objectBucketRegistry.OrderedCount; bucketIndex++)
+            {
+                var items = objectBucketRegistry.GetOrderedBucket(bucketIndex).items;
+                for (int index = 0; index < items.Count; index++)
+                {
+                    ISimObject item = items[index];
+                    if (item is LF2Entity)
+                        continue;
+                    if (item is not LF2ObjectRenderer renderer || renderer == null ||
+                        renderer.LogicObject is not LF2Entity owner ||
+                        !ReferenceEquals(owner.Renderer, renderer) ||
+                        !RetainsLocalShell(snapshot, owner, owner.Runtime.SlotIndex))
+                    {
+                        return false;
+                    }
+                    count++;
+                }
+            }
+            return true;
+        }
+
+        private void RemoveEntityBucketItemsForRestore()
+        {
+            for (int bucketIndex = objectBucketRegistry.OrderedCount - 1; bucketIndex >= 0; bucketIndex--)
+            {
+                SimulationObjectBucket bucket = objectBucketRegistry.GetOrderedBucket(bucketIndex);
+                for (int index = bucket.items.Count - 1; index >= 0; index--)
+                {
+                    if (bucket.items[index] is LF2Entity)
+                    {
+                        bucket.items.RemoveAt(index);
+                        bucket.dirty = true;
+                    }
+                }
+                objectBucketRegistry.RemoveIfEmpty(bucket.SimOrder, bucket);
+            }
         }
 
         private bool RestoreCoreScalarState(in BattleWorldCoreScalarSnapshot core)
