@@ -68,7 +68,6 @@ namespace NTSD.Animation.LF2Objects
             task.team = 0;
             task.useExplicitRelationIdentity = true;
             task.relationTeam = owner.RelationTeam;
-            task.holderCopySlot = -1;
             task.pos = new Vector3(
                 owner.Runtime?.XInt ?? Mathf.RoundToInt((float)owner.PS.x),
                 0f,

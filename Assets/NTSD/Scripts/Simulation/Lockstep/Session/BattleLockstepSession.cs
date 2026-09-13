@@ -522,9 +522,9 @@ namespace NTSD.Simulation.Lockstep
                 throw new ArgumentNullException(nameof(destination));
             }
 
+            destination.Invalidate();
             if (protocolErrorLatched || driver.World == null)
             {
-                destination.Invalidate();
                 return false;
             }
             if (driver.CurrentTickIndex != currentTick)

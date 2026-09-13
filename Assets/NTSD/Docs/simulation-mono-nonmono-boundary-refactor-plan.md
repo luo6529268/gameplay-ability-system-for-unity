@@ -679,3 +679,53 @@ USER_HOLD
 3. 建立 B0 Task/Change Record 和代码路径清单。
 4. 先写架构守卫并取得当前基线。
 5. 获得 B0 验证后，才选择 B1；不得直接跳到 asmdef 或大规模 Renderer 移除。
+
+## 19. 外部评审意见记录（2026-09-13，待综合评审）
+
+> 性质：本节为外部架构评审的意见记录，仅供后续综合评审参考。本节不改变本计划
+> 状态（仍为 `DOCUMENTED / IMPLEMENTATION_NOT_STARTED / USER_HOLD`），不构成任何
+> 实施授权，也未修改任何 C#、Scene、Prefab、asmdef 或运行行为。未采纳前，正文
+> 条款维持原文效力。
+>
+> 评审人：Factory Droid（应用户要求记录，供用户后续综合评审）
+> 评审方式：全文通读本计划 + 抽查 4.3 节声称的反向依赖与代码现状
+
+### 19.1 评审结论
+
+方案方向性成立，可作为实施合同冻结。诊断、顺序、风险对冲与反自欺条款均与
+代码现状和既有合同（33 ms 节奏、十一阶段关闭、no-ghost、0GC 预算）一致。
+
+### 19.2 诊断真实性抽查（2026-09-13）
+
+| 4.3 节声明 | 抽查结果 |
+|---|---|
+| SimulationWorld 直接调用 MountRegistry 并传 `entity.Renderer` | 属实（`Simulation/Core/SimulationWorld.cs` 975-976 行 `BindOwnerRuntime(entity.Renderer, ...)`） |
+| BattleLockstepSession 直接持有 `SimulationTickDriver` 具体类型 | 属实（`Simulation/Lockstep/Session/BattleLockstepSession.cs` 7/16 行） |
+| 两个 managed-memory Mono probe 与非 Mono 边界类型同文件并持有 Driver | 属实（`Simulation/Runtime/BattleManagedMemoryBoundary.cs` 411-437 行） |
+
+### 19.3 认可要点
+
+1. L1/L2 分级（2.3）避免过度纯化；L1 完成后 Core 仅剩 `Vector3/Mathf` 等线程
+   安全纯值类型，14.11 的 dedicated worker eligibility 声明在技术上成立。
+2. 第 3 节不可变清单与禁止搭车清单，防止重构携带行为变化。
+3. asmdef 最后实施（第 10 节）并给出原因，规避 public 化失控。
+4. 受控返回路径（6.3）与 generation-aware detach ack（7.4）正确对冲 slot 重用竞态。
+5. 十一阶段关闭按层拆分责任（8.4），与既有合同一致。
+6. 第 17 节"只做 X 不算完成"反清单与第 13 节守卫设计。
+
+### 19.4 建议（状态：PROPOSED，待综合评审决定是否采纳）
+
+| 编号 | 建议 | 建议落点 | 状态 |
+|---|---|---|---|
+| S1 | 兼容壳补"递减推进"硬守卫：每个 LF2Entity 兼容表现属性登记剩余读取者计数，B5 起每次扫描计数必须下降，归零才允许删除该兼容属性。现有 5.4 只有"不得新增"禁止项，缺"必须递减"推进项，兼容层易成为永久债 | 5.4 / 9.6 / B5 | PROPOSED |
+| S2 | 第 1 节补充性能因果定位：本计划只取得 worker 化资格，完成后 Stats/逻辑帧率不会自动提高；Stats 60/120 依赖后续"worker 化 + 热点优化"独立立项，三步三份合同 | 1 | PROPOSED |
+| S3 | B0 架构守卫首选轻量"受控 token scanner + 白名单测试"起步（13 节已允许该选项），Roslyn/AST 作为后期升级，避免守卫工具自研拖延 B0 | 13 / B0 | PROPOSED |
+| S4 | 排期对 B3/B6 预留缓冲：detach-ack 时机与 first-visible tick 的相容性是全文唯一无法预先定量风险的区域（计划已正确推迟到测试决定）；B4 先于 B6 的顺序应保持，以缩小 B6 爆炸半径 | 11 | PROPOSED |
+| S5 | 无需修改文档：18 节已内建"B0 重新盘点、不假设行号有效"；执行时必须作为恢复计划的第一件事，当前代码仍有外部改动流入，此项要当真执行 | 18 | 已内建 |
+| S6 | 第 3 节"固定逻辑频率 30 Hz"与头部 2026-09-02 权威更新（33 ms 正常逻辑间隔为当前权威，旧 30 Hz 表述仅保留为历史约束）存在内部不一致，建议改为 33 ms 语义或显式引用头部说明，避免恢复实施时以旧表述驱动实现 | 3 | PROPOSED |
+
+### 19.6 评审边界声明
+
+- 本节由评审会话按用户要求追加，属文档维护，不触碰脚本，不属于任何
+  Change Record 范围。
+- 建议采纳与否由用户综合评审决定；综合评审完成前，本节不作为实施依据。

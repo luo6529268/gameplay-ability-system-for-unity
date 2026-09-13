@@ -101,12 +101,10 @@ namespace NTSD.Test.Editor
                 world, 9000, 2, LF2ObjectType.Character);
             attacker.RelationTeam = 7;
             attacker.Runtime.OwnerSlotIndex = 11;
-            attacker.HolderCopySlot = 55;
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = parent.Runtime.SlotIndex;
             parent.RelationTeam = 8;
             parent.Runtime.OwnerSlotIndex = 13;
-            parent.HolderCopySlot = 88;
 
             PrepareTarget(target);
             LF2CharacterDataWrapper sourceWrapper = attacker.FrameCache.Wrapper;
@@ -131,7 +129,7 @@ namespace NTSD.Test.Editor
             Assert.That(target.Runtime.Vx, Is.EqualTo(9.0));
             Assert.That(target.Runtime.Vy, Is.EqualTo(10.0));
             Assert.That(target.Runtime.Vz, Is.EqualTo(11.0));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(99));
             Assert.That(target.WeaponCount, Is.EqualTo(73));
             Assert.That(target.Frame.PN, Is.EqualTo(18));
@@ -201,7 +199,6 @@ namespace NTSD.Test.Editor
             target.RelationTeam = 2;
             target.Runtime.OwnerSlotIndex = 44;
             target.Runtime.AnimCounter = 99;
-            target.HolderCopySlot = 66;
             target.WeaponCount = 73;
             target.HitConfirm2 = 7;
             target.Runtime.SpecialHitLatch0EB = false;

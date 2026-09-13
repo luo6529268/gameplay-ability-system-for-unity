@@ -1,6 +1,6 @@
 # Q05 一次协调的内容/runtime/schema迁移
 
-状态 IN_PROGRESS / Q05-A2_CONTENT_MODELS（Q04-A/B限定VERIFIED）。用户总目标及D-022已授权此批；不再询问是否整体切换DAT。已保存115个候选路径inventory；当前脚本变更由Q05-A1准确子Record覆盖，其余候选路径未自动取得修改scope。
+状态 IN_PROGRESS / STEP3_GUARD_NEXT（Q04-A/B限定VERIFIED）。用户总目标及D-022已授权此批；不再询问是否整体切换DAT。已保存115个候选路径inventory；当前脚本变更由Q05-A1准确子Record覆盖，其余候选路径未自动取得修改scope。
 
 ## 必须读取的冻结合同
 
@@ -58,3 +58,7 @@ Definition头部审计 NTSD28-Q05-NATIVE-DEFINITION-HEADER-CONTRACT-AUDIT-001 �
 最新出口：NTSD28-Q05-MASS-OSCILLATE-SHELL-CARRIER-RETIREMENT-001已FOCUSED_TEST_PASS/SCOPED_PLAY_PASS（890/SelfCheck/两probe），Mass/Oscillate存储删除，规则核心主体保持。下一唯一NTSD28-Q05-FIVE-RESERVED-CARRIER-RETIREMENT-001；五reserved、identity/guard/版本/回放仍待，当前不发布中间payload。禁止computer-use。
 
 当前NTSD28-Q05-GRABBEDBY-TRACKERFLAG-CARRIER-RETIREMENT-001已407/SelfCheck/scoped Play限定通过；下一唯一NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001，余WeaponState/HolderCopy及identity/guard/联合版本/回放保留。禁止computer-use。
+
+最新步骤2限定出口：NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001完整清理HolderCopy及task/diagnostic，863有纠正后通过证据、SelfCheck与真实关系Play通过；五类载体和Mass/Oscillate、独立2F8/raw已验。下一唯一NTSD28-Q05-CONTENT-IDENTITY-AND-CAPTURE-BOUNDARY-001，按步骤3身份/双OPoint guard→步骤4联合版本/trace→步骤5回放/Play；本父整体未完成。禁止computer-use，全部例外/未发布窗口保持。
+
+最新步骤3身份限定出口：NTSD28-Q05-SEMANTIC-CONTENT-IDENTITY-001已完成source+decoder SHA/LE、cache/pub/local验证会话接线，82不同focused/完整SelfCheck/独立hash/menu重进Play通过。下一唯一NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001；双OPoint guard、其他存在的frame/metadata内容hash审查、联合版本/trace/回放仍待，不发布中间baseline。禁止computer-use。

@@ -494,12 +494,6 @@ namespace NTSD.Animation.LF2Objects
             set => Runtime.CatcherSlotIndex = value;
         }
 
-        public int HolderCopySlot
-        {
-            get => Runtime.HolderCopySlotIndex;
-            set => Runtime.HolderCopySlotIndex = value;
-        }
-
         public int RelationOwnerSlot
         {
             get => Runtime.RelationOwnerSlotIndex;
@@ -3934,7 +3928,6 @@ namespace NTSD.Animation.LF2Objects
             task.team = sourceTeam;
             task.useExplicitRelationIdentity = true;
             task.relationTeam = sourceTeam;
-            task.holderCopySlot = -1;
             task.spawnerEntityIndex = slotIndex;
         }
 
@@ -4475,7 +4468,6 @@ namespace NTSD.Animation.LF2Objects
             task.team = Team;
             task.relationTeam = RelationTeam != 0 ? RelationTeam : Team;
             task.useExplicitRelationIdentity = true;
-            task.holderCopySlot = -1;
             task.pos = new Vector3((float)x, (float)y, (float)Runtime.Z);
             task.z = (float)Runtime.Z;
             task.dir = Runtime.Dir;

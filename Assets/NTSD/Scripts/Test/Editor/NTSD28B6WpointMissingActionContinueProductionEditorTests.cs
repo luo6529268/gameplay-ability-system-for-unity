@@ -123,7 +123,7 @@ namespace NTSD.Test.Editor
 
         private static ulong NativeCalls(SimulationWorld world) => world.NativeRandom.CaptureScalarState().SynchronizedCalls;
         private static string StateExceptAction(LF2Entity e) => FormattableString.Invariant(
-            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Runtime.ReleaseTick}/{e.Health?.HP}");
+            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponFlightCounter}/{e.Health?.HP}");
 
         private sealed class Generic : LF2Entity
         {
@@ -185,7 +185,6 @@ namespace NTSD.Test.Editor
                 child.Runtime.SetVelocity(12, -8, 6.5);
                 child.Runtime.Zz = 3;
                 child.Runtime.WeaponFlightCounter = 19;
-                child.Runtime.ReleaseTick = 27;
                 if (child.Health != null) child.Health.HP = 100;
                 holder.Runtime.LinkState = 1;
                 holder.Runtime.TargetSlotIndex = slot;

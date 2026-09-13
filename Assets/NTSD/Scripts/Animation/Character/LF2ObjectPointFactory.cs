@@ -53,6 +53,24 @@ namespace NTSD.Animation
         private BattleLogicReferencePool _shutdownReferencePool;
 
         public int PendingTaskCountForDiagnostics => _taskQueue.Count;
+
+        internal bool HasPendingTasksForSnapshot(SimulationWorld world, SimulationWorld fallbackWorld)
+        {
+            for (int index = 0; index < _taskQueue.Count; index++)
+            {
+                if (!_taskQueue.TryPeekAt(index, out LF2TaskBase task))
+                    return true;
+                SimulationWorld owner = task switch
+                {
+                    OPointCreateTask single => single.targetWorld ?? single.parent?.RegisteredWorldForSimulation ?? fallbackWorld,
+                    OPointCreateMultipleTask multiple => multiple.targetWorld ?? multiple.parent?.RegisteredWorldForSimulation ?? fallbackWorld,
+                    _ => null,
+                };
+                if (ReferenceEquals(owner, world))
+                    return true;
+            }
+            return false;
+        }
         public int TaskQueueCapacityForDiagnostics => _taskQueue.Capacity;
         public long RejectedTaskCountForDiagnostics => _taskQueue.RejectedEnqueueCount;
         public long UnknownTaskTypeCountForDiagnostics { get; private set; }

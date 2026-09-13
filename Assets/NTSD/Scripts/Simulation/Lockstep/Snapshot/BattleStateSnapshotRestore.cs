@@ -49,7 +49,6 @@ namespace NTSD.Simulation
             world.RuntimeSlotTableForModules;
         private RuntimeRestStore _runtimeRestStore =>
             world.RuntimeRestStoreForServices;
-        private bool _ticking => world.IsTickingForStructuralWriter;
         private BattleRuntimeProfile activeRuntimeProfile =>
             world.RuntimeProfileForServices;
         private int RuntimeSlotCapacity => world.RuntimeSlotCapacity;
@@ -286,7 +285,7 @@ namespace NTSD.Simulation
                 failure = BattleStateSnapshotRestoreFailure.IdentityMismatch;
                 return false;
             }
-            if (_ticking)
+            if (!world.IsBattleSnapshotBoundaryReady)
             {
                 failure = BattleStateSnapshotRestoreFailure.WorldBusy;
                 return false;

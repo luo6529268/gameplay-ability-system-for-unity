@@ -29,6 +29,7 @@ namespace NTSD.Animation
         public event System.Action PrewarmCompleted;
         public string PublishedVisualContentKey { get; private set; }
         private LoganVisualContentCandidate publishedLoganCandidate;
+        public LoganContentIdentity PublishedLoganContentIdentity => publishedLoganCandidate?.ContentIdentity;
         private int configuredContentGeneration;
         private bool configuredPrewarmRunning;
         private string configuredPrewarmRoot;
@@ -158,6 +159,7 @@ namespace NTSD.Animation
             if (candidate == null || publishedLoganCandidate == null || !IsPrewarmCompleted || spritePrewarmDisposed ||
                 !string.Equals(PublishedVisualContentKey, candidate.SourceCacheKey, StringComparison.Ordinal) ||
                 GameDataManager.TryGetInstance()?.PublishedVisualContentKey != candidate.SourceCacheKey ||
+                GameDataManager.TryGetInstance()?.PublishedLoganContentIdentity?.SemanticFingerprint != candidate.ContentIdentity.SemanticFingerprint ||
                 CharacterUIResourceManager.TryGetInstance()?.PublishedVisualContentKey != candidate.SourceCacheKey ||
                 TotalCharacterFrameConfig.Count != candidate.Catalog.Entries.Count ||
                 publishedOwnedSprites.Any(value => value == null) || publishedOwnedResources.Any(value => value == null))

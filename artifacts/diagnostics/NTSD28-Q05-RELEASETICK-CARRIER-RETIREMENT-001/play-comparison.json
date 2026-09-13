@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "beforeTick": 5,
+  "afterTick": 5,
+  "rows": 4,
+  "all_effective_row_fields_equal": true,
+  "omitted_retired_fields": [
+    "releaseTickAfter",
+    "releaseTickBefore"
+  ],
+  "beforeObjectCount": 4,
+  "afterObjectCount": 4,
+  "releaseCarrierAbsent": true,
+  "source": "Current Unity runtime config, paused real NTSD_Battle world, seed424242 each case; no whole-native-world/physical-input/full-skill claim"
+}

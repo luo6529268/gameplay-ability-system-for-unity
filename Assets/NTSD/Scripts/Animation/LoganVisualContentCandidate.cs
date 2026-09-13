@@ -26,6 +26,7 @@ namespace NTSD.Animation
         private readonly Dictionary<string, string> imageHashes;
 
         public LoganObjectCatalog Catalog { get; }
+        public LoganContentIdentity ContentIdentity => Catalog.ContentIdentity;
         public ReadOnlyCollection<ImageInput> Images { get; }
         public string VisualFingerprint { get; }
         public string SourceCacheKey { get; }
@@ -50,7 +51,7 @@ namespace NTSD.Animation
                 using (var hash = SHA256.Create())
                     VisualFingerprint = Hex(hash.ComputeHash(bytes.ToArray()));
             }
-            SourceCacheKey = catalog.Source.RuntimeRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
+            SourceCacheKey = ContentIdentity.CreateSourceCacheKey(catalog.Source.RuntimeRoot)
                 + "|" + VisualFingerprint;
         }
 
@@ -79,8 +80,10 @@ namespace NTSD.Animation
         /// <summary>Load-time freshness gate. Do not call from a simulation tick.</summary>
         public void AssertInputsCurrent()
         {
-            if (LoganObjectCatalog.Read(Catalog.Source).DefinitionFingerprint != Catalog.DefinitionFingerprint)
-                throw new InvalidDataException("Logan catalog or DAT changed after candidate capture.");
+            LoganObjectCatalog current = LoganObjectCatalog.Read(Catalog.Source);
+            if (current.DefinitionFingerprint != Catalog.DefinitionFingerprint ||
+                current.ContentIdentity.SemanticFingerprint != ContentIdentity.SemanticFingerprint)
+                throw new InvalidDataException("Logan catalog, DAT or decoder contract changed after candidate capture.");
             foreach (ImageInput image in Images)
                 if (!string.Equals(HashFile(image.Path), image.Sha256, StringComparison.Ordinal))
                     throw new InvalidDataException("Logan image changed after candidate capture: " + image.Path);

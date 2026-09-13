@@ -19,8 +19,6 @@ namespace NTSD.Test.Editor
     [Category("NTSD28_B6")]
     public sealed class NTSD28B6LegacyReleaseTickRetirementEditorTests
     {
-        private const int Sentinel = -1;
-
         [Test]
         public void ProductionSources_RetireDynamicReleaseTickWriters()
         {
@@ -33,52 +31,38 @@ namespace NTSD.Test.Editor
             Assert.That(Count(heldWriter, "Runtime.ReleaseTick ="), Is.Zero);
             Assert.That(releaseFlow, Does.Not.Contain("CurrentTickIndex"));
             Assert.That(heldWriter, Does.Not.Contain("CurrentTickIndex"));
-            Assert.That(releaseFlow, Does.Contain("bool stampReleaseTick = false"));
-            Assert.That(heldWriter, Does.Contain("bool stampReleaseTick = false"));
+            Assert.That(releaseFlow, Does.Not.Contain("stampReleaseTick"));
+            Assert.That(heldWriter, Does.Not.Contain("stampReleaseTick"));
         }
 
         [Test]
-        public void ReservedCarrier_CopyFingerprintChecksumAndParityStructureRemain()
+        public void EffectiveReleaseRelation_CopyFingerprintAndResetRemain()
         {
-            var sourceRuntime = new NTSDEntityRuntime();
+            var sourceRuntime = new NTSDEntityRuntime
+            {
+                LinkState = -1,
+                HolderStableId = 7,
+                ThrowFrameGuard = 31,
+            };
             var destinationRuntime = new NTSDEntityRuntime();
-            sourceRuntime.ReleaseTick = -1;
-
             Assert.That(sourceRuntime.TryCopyCanonicalStateTo(destinationRuntime), Is.True);
-            Assert.That(destinationRuntime.ReleaseTick, Is.EqualTo(-1));
-
+            Assert.That(destinationRuntime.LinkState, Is.EqualTo(-1));
+            Assert.That(destinationRuntime.HolderStableId, Is.EqualTo(7));
+            Assert.That(destinationRuntime.ThrowFrameGuard, Is.EqualTo(31));
             BattleRuntimeFingerprint before = BattleRuntimeFingerprint.Compute(sourceRuntime);
-            sourceRuntime.ReleaseTick = 23;
-            BattleRuntimeFingerprint after = BattleRuntimeFingerprint.Compute(sourceRuntime);
-            Assert.That(after.Equals(before), Is.False);
-
+            sourceRuntime.LinkState = 0;
+            Assert.That(BattleRuntimeFingerprint.Compute(sourceRuntime).Equals(before), Is.False);
             sourceRuntime.Reset();
-            Assert.That(sourceRuntime.ReleaseTick, Is.EqualTo(-1));
-
-            string runtime = Source(
-                "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs");
-            string ecs = Source(
-                "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs");
-            string checksum = Source(
-                "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs");
-            string parity = Source(
-                "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs");
-
-            Assert.That(runtime, Does.Contain("public int ReleaseTick = -1;"));
-            Assert.That(runtime, Does.Contain("destination.ReleaseTick = ReleaseTick;"));
-            Assert.That(runtime, Does.Contain("ReleaseTick = -1;"));
-            Assert.That(ecs, Does.Contain("hash.Add(runtime.ReleaseTick);"));
-            Assert.That(checksum, Does.Contain(
-                "builder.AddInt32(runtime?.ReleaseTick ?? -1);"));
-            Assert.That(parity, Does.Contain(
-                "(\"releaseTick\", runtime?.ReleaseTick ?? -1)"));
+            Assert.That(sourceRuntime.LinkState, Is.Zero);
+            Assert.That(sourceRuntime.HolderStableId, Is.EqualTo(-1));
+            Assert.That(sourceRuntime.ThrowFrameGuard, Is.EqualTo(-1));
         }
 
         [TestCase(1, false)]
         [TestCase(2, false)]
         [TestCase(4, false)]
         [TestCase(6, false)]
-        public void RealDvx_ProductionPath_PreservesReleaseTickAndRelation(
+        public void RealDvx_ProductionPath_PreservesReleaseRelation(
             int type,
             bool left)
         {
@@ -90,7 +74,6 @@ namespace NTSD.Test.Editor
             {
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
@@ -103,7 +86,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void GenericKind3_ProductionPath_PreservesReleaseTickAndRelation()
+        public void GenericKind3_ProductionPath_PreservesReleaseRelation()
         {
             using (Scope scope = CreateScope(
                        real: false,
@@ -114,7 +97,6 @@ namespace NTSD.Test.Editor
             {
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Holder.Runtime.TargetSlotIndex, Is.EqualTo(scope.ChildSlot));
@@ -126,7 +108,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void RealKind3_ProductionPath_PreservesReleaseTickAndRelation()
+        public void RealKind3_ProductionPath_PreservesReleaseRelation()
         {
             using (Scope scope = CreateScope(
                        real: true,
@@ -136,7 +118,6 @@ namespace NTSD.Test.Editor
             {
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Holder.Runtime.TargetSlotIndex, Is.EqualTo(scope.ChildSlot));
@@ -149,7 +130,7 @@ namespace NTSD.Test.Editor
 
         [TestCase(122, 1)]
         [TestCase(123, 2)]
-        public void RefillConsume_ProductionPath_PreservesReleaseTickAndExhaustion(
+        public void RefillConsume_ProductionPath_PreservesExhaustion(
             int objectId,
             int decrement)
         {
@@ -171,7 +152,6 @@ namespace NTSD.Test.Editor
                 ulong legacyCalls = scope.World.Rng.CallCount;
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Child.Health.HP, Is.Zero);
                 Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
@@ -183,7 +163,7 @@ namespace NTSD.Test.Editor
 
         [TestCase(true)]
         [TestCase(false)]
-        public void DamagedFrame_ProductionPath_PreservesReleaseTick(bool real)
+        public void DamagedFrame_ProductionPath_ClearsActiveLinks(bool real)
         {
             using (Scope scope = CreateScope(
                        real: real,
@@ -197,14 +177,13 @@ namespace NTSD.Test.Editor
                 scope.Holder.Runtime.Vz = 2;
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
                 Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
             }
         }
 
         [Test]
-        public void NoRelease_ProductionPath_PreservesReleaseTickAndHeldRelation()
+        public void NoRelease_ProductionPath_PreservesHeldRelation()
         {
             using (Scope scope = CreateScope(
                        real: false,
@@ -215,7 +194,6 @@ namespace NTSD.Test.Editor
             {
                 scope.World.HeldObjectProcessAll(7);
 
-                Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(Sentinel));
                 Assert.That(scope.Holder.Runtime.LinkState, Is.EqualTo(1));
                 Assert.That(scope.Child.Runtime.LinkState, Is.EqualTo(-1));
                 Assert.That(scope.Holder.Runtime.TargetSlotIndex, Is.EqualTo(scope.ChildSlot));
@@ -274,7 +252,6 @@ namespace NTSD.Test.Editor
             child.DirectWriteHeldFramePreserveWaitCounter(20);
             if (child.Health != null)
                 child.Health.HP = 100;
-            child.Runtime.ReleaseTick = Sentinel;
             child.Runtime.WeaponFlightCounter = 7;
             child.Runtime.OwnerSlotIndex = 17;
             child.Runtime.CatchSourceSlot90 = 82;
@@ -389,7 +366,7 @@ namespace NTSD.Test.Editor
         {
             if (!File.Exists(Request) || !EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating) return;
             string phase = File.ReadAllText(Request).Trim();
-            if (phase != "RED" && phase != "GREEN") return;
+            if (phase != "GREEN") return;
             var driver = SimulationTickDriver.Instance;
             if (driver?.World == null || driver.CurrentTickIndex < 5) return;
             if (!driver.IsPaused) { driver.SetPaused(true); return; }
@@ -408,9 +385,8 @@ namespace NTSD.Test.Editor
                 if (phase == "GREEN")
                     NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.RunCurrentPlayWitness(world);
                 bool released = report.rows.All(r => r.holderLinkAfter == 0 && r.childLinkAfter == 0);
-                bool reserved = report.rows.All(r => r.releaseTickAfter == -1);
-                bool legacy = report.rows.All(r => r.releaseTickBefore == -1 && r.releaseTickAfter >= 0);
-                report.status = released && (phase == "RED" ? legacy : reserved) ? (phase == "RED" ? "RED_EXPECTED" : "PASS") : "FAIL";
+                report.retiredCarrierAbsent = typeof(NTSDEntityRuntime).GetMember("ReleaseTick").Length == 0;
+                report.status = released && report.retiredCarrierAbsent ? "PASS" : "FAIL";
             }
             catch (Exception e) { report.status = "FAIL"; report.error = e.ToString(); }
             finally
@@ -450,11 +426,10 @@ namespace NTSD.Test.Editor
                 holder.AttachOpointHeldObject(child);
                 holder.FrameDelay = child.FrameDelay = 1000; holder.AttackingCounter = child.AttackingCounter = 9;
                 var row = new Row { sourceOid = sourceOid, sourceAction = action, sourceState = frame.state, childOid = childOid,
-                    initialAction = initialAction, kind = point.kind, weaponAct = point.weaponact, dvx = point.dvx, dvy = point.dvy, dvz = point.dvz,
-                    releaseTickBefore = child.Runtime.ReleaseTick };
+                    initialAction = initialAction, kind = point.kind, weaponAct = point.weaponact, dvx = point.dvx, dvy = point.dvy, dvz = point.dvz };
                 world.NativeRandom.ResetFromSeed(424242);
                 world.HeldObjectProcessAll(world.CurrentTickIndex);
-                row.releaseTickAfter = child.Runtime.ReleaseTick; row.holderLinkAfter = holder.Runtime.LinkState; row.childLinkAfter = child.Runtime.LinkState;
+                row.holderLinkAfter = holder.Runtime.LinkState; row.childLinkAfter = child.Runtime.LinkState;
                 row.childActionAfter = child.Frame.N; row.vx = child.Runtime.Vx; row.vy = child.Runtime.Vy; row.vz = child.Runtime.Vz;
                 row.randomCalls = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
                 report.rows.Add(row);
@@ -469,13 +444,14 @@ namespace NTSD.Test.Editor
         {
             public string phase, status, error;
             public int tick, beforeObjects, afterObjects;
+            public bool retiredCarrierAbsent;
             public List<Row> rows = new List<Row>();
             public string boundary = "Current runtime-config Gaara16/254, RockLee7/255, Sasori51/396,399; production AttachOpointHeldObject setup and HeldObjectProcessAll in paused real NTSD_Battle world. Seed424242 per case; no physical-input or full-skill claim.";
         }
         [Serializable] private sealed class Row
         {
             public int sourceOid, sourceAction, sourceState, childOid, initialAction, kind, weaponAct, dvx, dvy, dvz;
-            public int releaseTickBefore, releaseTickAfter, holderLinkAfter, childLinkAfter, childActionAfter;
+            public int holderLinkAfter, childLinkAfter, childActionAfter;
             public double vx, vy, vz;
             public ulong randomCalls;
         }

@@ -1,0 +1,67 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "fec419879561d4260dbde172d6e2bad081018a3aa2bbe3d09442e6f35c1b39ee"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterLateRuntimeModule.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "d5f04d30235881698baee4dbffa16383e43277890025fbaacb82ad5760b611fd"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "30fbc0ea7a8df0a4c15317be9f2f0328a8b6fe7ab22ac8d36d6a5dd5c3da612f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "2c391e53ddb66e91eb7310446d6e27bcfb909c881bcc13ae73c42f09172b993f"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "4725f98520ed6ce45cbbd31a4fd88408ed481e42173fcf59d439b9003a037d63"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "185ffee3c97b69075215c70ad0c30c50ab605aa8e6aa3b8a938be8615ae0f8b0"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "e2d34e09259f024a58c8f0a4c0bb51b36a6e787595a78072a27c2e118c409ff4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "da0fd6d437b015a0781a84f1e380bd199d2e43d776ec8c29c2a0906f8b71f330"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "1bc30197eef56ace38023c85446986823b4c4ea9fbfddf4982b1c699c1fbfddf"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "482bad71443199cb279aafb282bc96bf06f7e93000736d2259ef229f33d27ae4"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "78909289f3dd0b5dea74d46f832fc7efd4a4be96ef401c4196b9f8639bd5e4d9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/Respawn/BattleRespawnModule.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "d10aa780a15bcbd15f8d4ff4f23c4ad753646b2f073eba753ba9f13200cb6f45"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs",
+    "only_declared_carrier_changes": true,
+    "sha256": "b09a347e9605f52a1970ca309f3d62157c34af9ff190ba43f72f1ece1ab12d18"
+  }
+]

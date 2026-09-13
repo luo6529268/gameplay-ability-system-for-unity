@@ -73,7 +73,6 @@ namespace NTSD.Animation.LF2Objects
             owner.Health.MaxPP = 0;
             owner.Health.PPBound = 0;
             owner.Health.MaxMP = 0;
-            owner.HolderCopySlot = -1;
             owner.OwnerId = -1;
             owner.RelationOwnerSlot = -1;
             owner.OwnerEntityIndex = -1;
@@ -93,7 +92,6 @@ namespace NTSD.Animation.LF2Objects
             owner.ObjectId = task.opoint.oid;
             owner.Team = 0;
             owner.RelationTeam = 0;
-            owner.HolderCopySlot = -1;
             owner.OwnerId = -1;
             owner.RelationOwnerSlot = -1;
             owner.OwnerEntityIndex = task.ownerEntityIndex;

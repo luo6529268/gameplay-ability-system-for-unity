@@ -1,0 +1,412 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.TestTools.TestRunner.Api;
+using UnityEngine;
+
+namespace NTSD.Test.Editor
+{
+    [Category("NTSD28")]
+    [Category("NTSD28_B5")]
+    public sealed class NTSD28B5StandardReducedKnockoutProducerEditorTests
+    {
+        [Test]
+        public void StandardAndReducedLethalHits_IncrementFinalOwnerCreditOnce()
+        {
+            AssertLethalOwnerChain(reduced: false);
+            AssertLethalOwnerChain(reduced: true);
+        }
+
+        [Test]
+        public void RedirectedSource_UsesRedirectOwnerChainBeforePendingConsume()
+        {
+            CreateScope(
+                out SimulationWorld world,
+                out KoCharacter attacker,
+                out KoCharacter source,
+                out KoCharacter credit,
+                out KoCharacter victim);
+            attacker.Runtime.OwnerSlotIndex = -1;
+            attacker.Runtime.Kind4SourceCount92 = 2;
+            attacker.Runtime.CatchSourceSlot90 = source.Runtime.SlotIndex;
+            source.Runtime.OwnerSlotIndex = credit.Runtime.SlotIndex;
+            credit.Runtime.KnockoutCount358 = 12;
+            victim.Health.HP = 10;
+
+            bool applied = world.DamageWriter.ApplyStandardCharacterDamage(
+                world,
+                attacker,
+                victim,
+                victim.HitCounters,
+                DamageInteraction());
+
+            Assert.That(applied, Is.True);
+            Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(13));
+            Assert.That(source.Runtime.KnockoutCount358, Is.Zero);
+            Assert.That(attacker.Runtime.KnockoutCount358, Is.Zero);
+            Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void RejectionMatrix_PreservesExactKnockoutSentinel()
+        {
+            AssertRejected(0, 10, 10, false);
+            AssertRejected(-1, 100, 10, false);
+            AssertRejected(-1, 0, 10, false);
+            AssertRejected(-1, 10, 10, true);
+        }
+
+        [Test]
+        public void HitPlanShadowAndSources_IncludeExactKnockoutObservable()
+        {
+            var hitPlan = new NTSD.Test.BattleHitExecutionPlanEditorTests();
+            hitPlan.ShadowCompare_LethalStandardCharacterDamageWriterEffectMatchesAuthorityState();
+            hitPlan.ShadowCompare_AlternateCharacterDamageWriterEffectMatchesAuthorityState(false);
+            hitPlan.ShadowCompare_AlternateCharacterDamageWriterEffectMatchesAuthorityState(true);
+
+            string damageSource = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs");
+            string hitPlanSource = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs");
+            Assert.That(
+                Count(damageSource, "ApplyNativeStandardHitKnockout("),
+                Is.EqualTo(3));
+            StringAssert.Contains("credit.Runtime.KnockoutCount358++", damageSource);
+            Assert.That(
+                Count(hitPlanSource, "StandardCreditKnockoutCount"),
+                Is.GreaterThanOrEqualTo(5));
+            StringAssert.Contains("projection.StandardCreditKnockoutCount++", hitPlanSource);
+            StringAssert.Contains("holder.KillStat++", damageSource,
+                "Legacy stat retirement is a later package.");
+        }
+
+        private static void AssertLethalOwnerChain(bool reduced)
+        {
+            CreateScope(
+                out SimulationWorld world,
+                out KoCharacter attacker,
+                out KoCharacter source,
+                out KoCharacter credit,
+                out KoCharacter victim);
+            attacker.Runtime.OwnerSlotIndex = source.Runtime.SlotIndex;
+            source.Runtime.OwnerSlotIndex = credit.Runtime.SlotIndex;
+            credit.Runtime.KnockoutCount358 = 7;
+            victim.Health.HP = reduced ? 1 : 10;
+
+            if (reduced)
+            {
+                world.DamageWriter.ApplyAlternateDamage(
+                    world,
+                    attacker,
+                    victim,
+                    victim.HitCounters,
+                    DamageInteraction());
+            }
+            else
+            {
+                Assert.That(
+                    world.DamageWriter.ApplyStandardCharacterDamage(
+                        world,
+                        attacker,
+                        victim,
+                        victim.HitCounters,
+                        DamageInteraction()),
+                    Is.True);
+            }
+
+            Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(8));
+            Assert.That(source.Runtime.KnockoutCount358, Is.Zero);
+            Assert.That(attacker.Runtime.KnockoutCount358, Is.Zero);
+        }
+
+        private static void AssertRejected(
+            int exactGate,
+            int victimHp,
+            int injury,
+            bool missingRedirect)
+        {
+            CreateScope(
+                out SimulationWorld world,
+                out KoCharacter attacker,
+                out KoCharacter source,
+                out KoCharacter credit,
+                out KoCharacter victim);
+            attacker.Runtime.OwnerSlotIndex = source.Runtime.SlotIndex;
+            source.Runtime.OwnerSlotIndex = credit.Runtime.SlotIndex;
+            credit.Runtime.KnockoutCount358 = 17;
+            victim.Runtime.OrdinaryCreditGate2F4 = exactGate;
+            victim.Health.HP = victimHp;
+            if (missingRedirect)
+            {
+                attacker.Runtime.Kind4SourceCount92 = 1;
+                attacker.Runtime.CatchSourceSlot90 = 99;
+            }
+
+            InteractionArea interaction = DamageInteraction();
+            interaction.injury = injury;
+            Assert.That(
+                world.DamageWriter.ApplyStandardCharacterDamage(
+                    world,
+                    attacker,
+                    victim,
+                    victim.HitCounters,
+                    interaction),
+                Is.True);
+            Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(17));
+        }
+
+        private static void CreateScope(
+            out SimulationWorld world,
+            out KoCharacter attacker,
+            out KoCharacter source,
+            out KoCharacter credit,
+            out KoCharacter victim)
+        {
+            world = new SimulationWorld();
+            attacker = Entity(world, 9920, 0);
+            source = Entity(world, 9921, 1);
+            credit = Entity(world, 9922, 2);
+            victim = Entity(world, 9923, 3);
+            victim.Health.HPBound = 100;
+            victim.KillCount = -1;
+            victim.Runtime.OrdinaryCreditGate2F4 = -1;
+            victim.Unk344 = 1;
+        }
+
+        private static KoCharacter Entity(
+            SimulationWorld world,
+            int oid,
+            int slot)
+        {
+            var frames = new List<LF2FrameData>(241);
+            for (int id = 0; id <= 240; id++)
+            {
+                frames.Add(new LF2FrameData
+                {
+                    frameId = id,
+                    state = LF2States.Standing,
+                    wait = 100,
+                    next = id,
+                    pic = 999,
+                });
+            }
+            var entity = new KoCharacter
+            {
+                Name = $"StandardKo{oid}",
+                ObjectId = oid,
+            };
+            entity.ModuleInitialize();
+            entity.SetRequiredRuntimeSlot(slot);
+            entity.FrameCache.Load(new LF2CharacterDataWrapper(
+                oid,
+                new LF2CharacterData
+                {
+                    name = entity.Name,
+                    type_sub = 0,
+                    frames = frames,
+                }));
+            entity.ImmediateFrame(0);
+            entity.Initialize(500, 500);
+            entity.Team = slot + 1;
+            entity.RelationTeam = slot + 1;
+            entity.Runtime.SetPosition(slot * 20, 0, 0);
+            entity.Runtime.SyncIntegerPosition();
+            world.Register(entity);
+            return entity;
+        }
+
+        private static InteractionArea DamageInteraction()
+        {
+            return new InteractionArea
+            {
+                kind = 0,
+                injury = 10,
+                fall = 1,
+                dvx = 1,
+                arest = 10,
+                vrest = 1,
+            };
+        }
+
+        private static string Source(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return File.ReadAllText(Path.GetFullPath(
+                Path.Combine(root ?? string.Empty, relativePath)));
+        }
+
+        private static int Count(string source, string value)
+        {
+            int count = 0;
+            int offset = 0;
+            while ((offset = source.IndexOf(
+                       value,
+                       offset,
+                       StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                offset += value.Length;
+            }
+            return count;
+        }
+
+        private sealed class KoCharacter : LF2Character
+        {
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)LF2ObjectType.Character;
+        }
+    }
+
+    [InitializeOnLoad]
+    internal sealed class NTSD28B5StandardReducedKnockoutRequestRunner : ICallbacks
+    {
+        private const string RequestRelativePath =
+            "Temp/NTSD28-B5-StandardReducedKnockout-v1.request";
+        private const string ResultRelativePath =
+            "Temp/NTSD28-B5-StandardReducedKnockout-v1.result";
+        private const string FocusedTestClass =
+            "NTSD.Test.Editor.NTSD28B5StandardReducedKnockoutProducerEditorTests";
+        private static readonly string RequestPath = ProjectPath(RequestRelativePath);
+        private static readonly string ResultPath = ProjectPath(ResultRelativePath);
+        private static readonly StringBuilder FailureDetails = new StringBuilder(4096);
+        private static NTSD28B5StandardReducedKnockoutRequestRunner activeCallbacks;
+        private static TestRunnerApi activeApi;
+
+        static NTSD28B5StandardReducedKnockoutRequestRunner()
+        {
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (activeCallbacks != null || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating ||
+                EditorApplication.isPlayingOrWillChangePlaymode ||
+                !File.Exists(RequestPath))
+                return;
+            if (File.Exists(ResultPath)) File.Delete(ResultPath);
+            File.Delete(RequestPath);
+            activeCallbacks = new NTSD28B5StandardReducedKnockoutRequestRunner();
+            activeApi = ScriptableObject.CreateInstance<TestRunnerApi>();
+            activeApi.RegisterCallbacks(activeCallbacks);
+            activeApi.Execute(new ExecutionSettings(new Filter
+            {
+                testMode = TestMode.EditMode,
+                testNames = new[] { FocusedTestClass },
+            }) { runSynchronously = false });
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun)
+        {
+            FailureDetails.Clear();
+        }
+
+        public void RunFinished(ITestResultAdaptor result)
+        {
+            string text = $"state={result.ResultState}\npassed={result.PassCount}\n" +
+                $"failed={result.FailCount}\nskipped={result.SkipCount}\n" +
+                $"inconclusive={result.InconclusiveCount}\nmessage={result.Message}\n" +
+                FailureDetails;
+            File.WriteAllText(ResultPath, text, new UTF8Encoding(false));
+            activeApi.UnregisterCallbacks(this);
+            UnityEngine.Object.DestroyImmediate(activeApi);
+            activeApi = null;
+            activeCallbacks = null;
+        }
+
+        public void TestStarted(ITestAdaptor test) { }
+
+        public void TestFinished(ITestResultAdaptor result)
+        {
+            if (result?.Test == null || result.Test.IsSuite || result.FailCount <= 0)
+                return;
+            FailureDetails.Append("--- failure ---\n");
+            FailureDetails.Append("test=").Append(result.FullName).Append('\n');
+            FailureDetails.Append("state=").Append(result.ResultState).Append('\n');
+            FailureDetails.Append("message=").Append(result.Message).Append('\n');
+            FailureDetails.Append("stack=").Append(result.StackTrace).Append('\n');
+        }
+
+        private static string ProjectPath(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return Path.GetFullPath(Path.Combine(root ?? string.Empty, relativePath));
+        }
+    }
+
+    [InitializeOnLoad]
+    internal static class NTSD28B5StandardReducedKnockoutPlayRunner
+    {
+        private const string RequestRelativePath =
+            "Temp/NTSD28-B5-StandardReducedKnockout-Play-v1.request";
+        private const string ResultRelativePath =
+            "Temp/NTSD28-B5-StandardReducedKnockout-Play-v1.result";
+        private static readonly string RequestPath = ProjectPath(RequestRelativePath);
+        private static readonly string ResultPath = ProjectPath(ResultRelativePath);
+        private static bool running;
+
+        static NTSD28B5StandardReducedKnockoutPlayRunner()
+        {
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (running || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating || !File.Exists(RequestPath))
+                return;
+            if (!EditorApplication.isPlaying)
+            {
+                if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                    EditorApplication.EnterPlaymode();
+                return;
+            }
+
+            running = true;
+            File.Delete(RequestPath);
+            if (File.Exists(ResultPath)) File.Delete(ResultPath);
+            try
+            {
+                var tests = new NTSD28B5StandardReducedKnockoutProducerEditorTests();
+                tests.StandardAndReducedLethalHits_IncrementFinalOwnerCreditOnce();
+                tests.RedirectedSource_UsesRedirectOwnerChainBeforePendingConsume();
+                tests.RejectionMatrix_PreservesExactKnockoutSentinel();
+                tests.HitPlanShadowAndSources_IncludeExactKnockoutObservable();
+                File.WriteAllText(ResultPath,
+                    "state=Passed\ncases=4\nroutes=standard,reduced,redirected,rejection,hitPlan\n" +
+                    "exactKnockoutIncrement=1\nsceneMutation=none\n",
+                    new UTF8Encoding(false));
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllText(ResultPath, "state=Failed\n" + exception,
+                    new UTF8Encoding(false));
+            }
+            finally
+            {
+                EditorApplication.delayCall += ExitPlayMode;
+            }
+        }
+
+        private static void ExitPlayMode()
+        {
+            if (EditorApplication.isPlaying) EditorApplication.ExitPlaymode();
+            running = false;
+        }
+
+        private static string ProjectPath(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return Path.GetFullPath(Path.Combine(root ?? string.Empty, relativePath));
+        }
+    }
+}
+#endif

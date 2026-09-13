@@ -1,0 +1,54 @@
+{
+  "utc": "2026-09-13T10:10:52.595133+00:00",
+  "paths": [
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+    "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05WeaponStateCarrierEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+      "sha256": "5cd374b5b88e40dfe4d157ee1d971493a6724b03fefddc211845c1970e2f22a7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+      "sha256": "4aa3c550342fafe479bd6c6a129d4040ffe789e3d2118860afcc5fb7d834c0ab"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+      "sha256": "4e27d122070fd1f954455eab413705c74ea641cbc7997d24d9dd0ffc341554e9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+      "sha256": "549252c0fa9a2812010a75e4f4505320e9a3b53ed12114b88db580efcde07af2"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+      "sha256": "61bfb6d78099d512295cb49be452e1b38a809cf42a94e80e8a33d56b75d97cd5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "sha256": "33210ad5b6ac71454f13a0c5312e383d475bbda01e8b040c75f0b48ec79ab2c4"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+      "sha256": "d7103379f068d8a454fc6f34544cae0db05ce4bdf2213c471149fcfa755efe3d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+      "sha256": "5007aeaa9db109261355e007de97a8e2176b2f5353eb91607d5b9e2ca6b1d350"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+      "sha256": "009cd0076b24fba866f841ddaadd5777566f0d942e64f8d361c1f7cfe9ddc7bb"
+    }
+  ],
+  "status": " M Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md\n M Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md\n M Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs\n M Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs\n M Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponReleaseFlowResolver.cs\n M Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs\n M Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs\n M Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs\n M Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs\n M Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs\n M Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs\n M Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs\n M docs/ai/CHANGE-LEDGER.md\n M docs/ai/CURRENT-AUTHORITY.md\n M docs/ai/STATE.md\n M docs/ai/TASKS/NTSD28-Q05-FIVE-RESERVED-CARRIER-RETIREMENT-001.md\n M docs/ai/TASKS/NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001.md\n M docs/ai/TASKS/NTSD28-Q05-RETIRED-CARRIER-AND-2F8-MIGRATION-001.md\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ReleaseTickCarrierEditorTests.cs\n?? Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ReleaseTickCarrierEditorTests.cs.meta\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content-rerun.jsonl\n?? artifacts/diagnostics/NTSD28-B11-CONTENT-ENTRY-INVENTORY-001/native/authority-content.jsonl\n?? artifacts/diagnostics/NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001/\n?? artifacts/diagnostics/NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001/\n?? docs/ai/CHANGE-RECORDS/NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001.md\n?? docs/ai/TASKS/NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001.md\n"
+}

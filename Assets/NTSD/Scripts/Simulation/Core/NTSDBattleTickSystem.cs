@@ -295,74 +295,82 @@ namespace NTSD.Simulation
             bool simulationWorker,
             FrameInputSet frameInput)
         {
-            if (world == null)
-                return BattleTickCompletion.NotCompleted;
-
-            BattleTickPhaseDiagnostics diagnostics =
-                world.ActiveBattleTickPhaseDiagnosticsForDiagnostics;
-            BattleTickDetailPhaseDiagnostics detailDiagnostics =
-                world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
-            diagnostics?.BeginTick(tickIndex);
-            detailDiagnostics?.BeginTick(tickIndex);
-            world.BeginDataObjectTypeTickCache(tickIndex);
+            world?.EnterSnapshotTickBoundary();
             try
             {
-                diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
-                if (world.Runtime?.Flow != null)
-                    world.Runtime.Flow.HumanInputPolledExternally = false;
-                world.PendingSounds.Clear();
-                world.AdvanceBattleFlowTick(tickIndex);
-                diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
-                diagnostics?.BeginPhase(BattleTickPhase.NativeSparkAdvance);
-                AdvanceNativeSparks();
-                diagnostics?.EndPhase(BattleTickPhase.NativeSparkAdvance);
-                // Alignment contract: CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001.
-                // C++ runs the complete world tick before processing Results host input.
-                bool resultsActiveAtTickStart =
-                    world.Runtime?.Results?.IsActive == true;
-
-                bool stepWaitGate = PrepareBattleStepGateForTick();
-                if (!resultsActiveAtTickStart &&
-                    (!stepWaitGate || world.NeedClearInput))
-                {
-                    diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
-                    PollHumanInput(tickIndex);
-                    diagnostics?.EndPhase(BattleTickPhase.HumanInput);
-                }
-                if (!stepWaitGate &&
-                    (resultsActiveAtTickStart || !world.NeedClearInput))
-                {
-                    diagnostics?.BeginPhase(BattleTickPhase.CharacterInput);
-                    NativeProducerSampleAndInputRoute(tickIndex);
-                    diagnostics?.EndPhase(BattleTickPhase.CharacterInput);
-                }
-                if (!RunFrameAdvancePhase(
-                        tickIndex,
-                        diagnostics,
-                        allowBattleEntryInputClear: !resultsActiveAtTickStart))
-                {
+                if (world == null)
                     return BattleTickCompletion.NotCompleted;
+
+                BattleTickPhaseDiagnostics diagnostics =
+                    world.ActiveBattleTickPhaseDiagnosticsForDiagnostics;
+                BattleTickDetailPhaseDiagnostics detailDiagnostics =
+                    world.ActiveBattleTickDetailPhaseDiagnosticsForDiagnostics;
+                diagnostics?.BeginTick(tickIndex);
+                detailDiagnostics?.BeginTick(tickIndex);
+                world.BeginDataObjectTypeTickCache(tickIndex);
+                try
+                {
+                    diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
+                    if (world.Runtime?.Flow != null)
+                        world.Runtime.Flow.HumanInputPolledExternally = false;
+                    world.PendingSounds.Clear();
+                    world.AdvanceBattleFlowTick(tickIndex);
+                    diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
+                    diagnostics?.BeginPhase(BattleTickPhase.NativeSparkAdvance);
+                    AdvanceNativeSparks();
+                    diagnostics?.EndPhase(BattleTickPhase.NativeSparkAdvance);
+                    // Alignment contract: CLIENT-CPP-RESULTS-SCENE-HOST-TICK-ALIGNMENT-001.
+                    // C++ runs the complete world tick before processing Results host input.
+                    bool resultsActiveAtTickStart =
+                        world.Runtime?.Results?.IsActive == true;
+
+                    bool stepWaitGate = PrepareBattleStepGateForTick();
+                    if (!resultsActiveAtTickStart &&
+                        (!stepWaitGate || world.NeedClearInput))
+                    {
+                        diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
+                        PollHumanInput(tickIndex);
+                        diagnostics?.EndPhase(BattleTickPhase.HumanInput);
+                    }
+                    if (!stepWaitGate &&
+                        (resultsActiveAtTickStart || !world.NeedClearInput))
+                    {
+                        diagnostics?.BeginPhase(BattleTickPhase.CharacterInput);
+                        NativeProducerSampleAndInputRoute(tickIndex);
+                        diagnostics?.EndPhase(BattleTickPhase.CharacterInput);
+                    }
+                    if (!RunFrameAdvancePhase(
+                            tickIndex,
+                            diagnostics,
+                            allowBattleEntryInputClear: !resultsActiveAtTickStart))
+                    {
+                        return BattleTickCompletion.NotCompleted;
+                    }
+                    RunInteractionPhase(tickIndex, diagnostics);
+                    return RunPresentationAndCleanupPhase(
+                        tickIndex,
+                        buildPresentation,
+                        simulationWorker,
+                        stepWaitGate,
+                        diagnostics,
+                        resultsActiveAtTickStart,
+                        frameInput != null && frameInput.TickIndex == tickIndex
+                            ? frameInput
+                            : null)
+                        ? BattleTickCompletion.FullReturn
+                        : BattleTickCompletion.NotCompleted;
                 }
-                RunInteractionPhase(tickIndex, diagnostics);
-                return RunPresentationAndCleanupPhase(
-                    tickIndex,
-                    buildPresentation,
-                    simulationWorker,
-                    stepWaitGate,
-                    diagnostics,
-                    resultsActiveAtTickStart,
-                    frameInput != null && frameInput.TickIndex == tickIndex
-                        ? frameInput
-                        : null)
-                    ? BattleTickCompletion.FullReturn
-                    : BattleTickCompletion.NotCompleted;
+                finally
+                {
+                    world.EndDataObjectTypeTickCache();
+                    detailDiagnostics?.EndTick();
+                    diagnostics?.EndTick();
+                    world.RefreshBattleEcsShadowAfterTick(tickIndex);
+                }
             }
             finally
             {
-                world.EndDataObjectTypeTickCache();
-                detailDiagnostics?.EndTick();
-                diagnostics?.EndTick();
-                world.RefreshBattleEcsShadowAfterTick(tickIndex);
+                world?.ExitSnapshotTickBoundary();
             }
         }
 

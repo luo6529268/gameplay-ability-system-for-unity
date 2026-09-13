@@ -1,0 +1,58 @@
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:383:        public int WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1008:            destination.WeaponState = WeaponState;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1183:            WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12625:                           weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12689:                           weapon.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19416:            characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19428:            Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23002:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23008:                    Expect(weapon.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23034:                mismatch.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23041:                       mismatch.Runtime.WeaponState == 0 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23060:            missingDefinition.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23064:                   missingDefinition.Runtime.WeaponState == 0,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23092:                nativeThrow.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23101:                nativeLight.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27200:                    light.Runtime.WeaponState = 4321;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27204:                           light.Runtime.WeaponState == 4321,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27219:                    lightFiniteImpact.Runtime.WeaponState = 4322;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27224:                           lightFiniteImpact.Runtime.WeaponFlightCounter == 17 && lightFiniteImpact.Runtime.WeaponState == 4322,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27230:                    heavy.Runtime.WeaponState = 4323;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27234:                           heavy.Runtime.WeaponState == 4323,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27242:                    heavyBounce.Runtime.WeaponState = 4324;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27247:                           heavyBounce.Runtime.WeaponFlightCounter == 19 && heavyBounce.Runtime.WeaponState == 4324,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27257:                    thrown.Runtime.WeaponState = 4325;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27261:                           thrown.Runtime.WeaponState == 4325,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27297:                    drink.Runtime.WeaponState = 4326;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27305:                           drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:478:            Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1148:            hash.Add(runtime.WeaponState); hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:634:            builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1207:                ("weaponState", isDefault ? 0 : runtime.WeaponState));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:182:            Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:50:                "the parallel WeaponState resolver is retired");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:52:                Regex.Matches(frameLogic, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:54:                "frame logic must not mutate the reserved WeaponState carrier");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:56:                Regex.Matches(heldState, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:58:                "held/drop/throw logic must not mutate the reserved WeaponState carrier");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:60:                Regex.Matches(weaponBase, @"Runtime\.WeaponState\s*=").Count,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:62:                "WeaponState remains only as the Reset-time reserved zero");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:63:            StringAssert.Contains("Runtime.WeaponState = 0;", weaponBase);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:137:            weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:152:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:214:                followState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:220:                throwState = followScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:227:                    dropState = dropScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:238:                damagedState = damagedScope.Weapon.Runtime.WeaponState;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:277:                WeaponState = 0,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:281:                WeaponState = 777,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:284:            Assert.That(copied.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:293:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:309:                Assert.That(snapshotCopy.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:316:                weapon.Runtime.WeaponState = 777;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:322:                weapon.Runtime.WeaponState = 0;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:365:                        reservedWeaponState = weapon.Runtime.WeaponState,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:369:                    Assert.That(weapon.Runtime.WeaponState, Is.Zero);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:562:                return "tick1 checksum: reserved WeaponState changed to " +
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs:565:                return "tick2 checksum: reserved WeaponState changed to " +
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointMissingActionContinueProductionEditorTests.cs:126:            $"{e.Runtime.Dir}/{e.FrameDelay}/{e.Trans?.WaitCounter}/{e.Runtime.X}/{e.Runtime.Y}/{e.Runtime.Z}/{e.Runtime.XInt}/{e.Runtime.YInt}/{e.Runtime.ZInt}/{e.Runtime.Zz}/{e.Runtime.Vx}/{e.Runtime.Vy}/{e.Runtime.Vz}/{e.Runtime.LinkState}/{e.Runtime.HolderStableId}/{e.Runtime.WeaponState}/{e.Runtime.WeaponFlightCounter}/{e.Health?.HP}");

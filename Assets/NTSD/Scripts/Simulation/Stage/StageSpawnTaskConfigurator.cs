@@ -96,7 +96,6 @@ namespace NTSD.Simulation
             task.requiredRuntimeSlot = requiredRuntimeSlot;
             task.ownerEntityIndex = requiredRuntimeSlot;
             task.relationTeam = 2;
-            task.holderCopySlot = -1;
             task.useExplicitRelationIdentity = true;
             task.pos = new Vector3(spawnX, spawnY, 0f);
             task.z = spawnZ;

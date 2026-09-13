@@ -19,6 +19,7 @@ namespace NTSD.Animation
             new Dictionary<int, List<ObjectDefinition>>();
         private Dictionary<int, int> objectRegistryIndices = new Dictionary<int, int>();
         public string PublishedVisualContentKey { get; private set; }
+        public LoganContentIdentity PublishedLoganContentIdentity { get; private set; }
 
         internal sealed class PreparedObjectPublication
         {
@@ -27,6 +28,7 @@ namespace NTSD.Animation
             internal Dictionary<int, List<ObjectDefinition>> Types;
             internal Dictionary<int, int> RegistryIndices;
             internal string SourceKey;
+            internal LoganContentIdentity ContentIdentity;
         }
 
         internal PreparedObjectPublication PrepareObjectPublication(LoganVisualContentCandidate candidate)
@@ -37,7 +39,8 @@ namespace NTSD.Animation
                 Objects = new Dictionary<int, ObjectDefinition>(candidate.Catalog.Entries.Count),
                 Types = new Dictionary<int, List<ObjectDefinition>>(),
                 RegistryIndices = new Dictionary<int, int>(candidate.Catalog.Entries.Count),
-                SourceKey = candidate.SourceCacheKey
+                SourceKey = candidate.SourceCacheKey,
+                ContentIdentity = candidate.ContentIdentity
             };
             if (cachedConfig != null)
                 state.Config.backgrounds = cachedConfig.backgrounds;
@@ -66,6 +69,7 @@ namespace NTSD.Animation
             objectsByTypeLookup = state.Types;
             objectRegistryIndices = state.RegistryIndices;
             PublishedVisualContentKey = state.SourceKey;
+            PublishedLoganContentIdentity = state.ContentIdentity;
         }
 
         public int GetObjectRegistryIndex(int id)

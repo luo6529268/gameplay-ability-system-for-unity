@@ -84,8 +84,8 @@ namespace NTSD.Test.Editor
                 Count(hitPlanSource, "StandardCreditKnockoutCount"),
                 Is.GreaterThanOrEqualTo(5));
             StringAssert.Contains("projection.StandardCreditKnockoutCount++", hitPlanSource);
-            StringAssert.Contains("holder.KillStat++", damageSource,
-                "Legacy stat retirement is a later package.");
+            StringAssert.DoesNotContain("holder.KillStat++", damageSource,
+                "HolderCopy-derived legacy stats were retired; native knockout credit remains.");
         }
 
         private static void AssertLethalOwnerChain(bool reduced)
@@ -179,7 +179,6 @@ namespace NTSD.Test.Editor
             victim.KillCount = -1;
             victim.Runtime.OrdinaryCreditGate2F4 = -1;
             victim.Unk344 = 1;
-            attacker.HolderCopySlot = credit.Runtime.SlotIndex;
         }
 
         private static KoCharacter Entity(

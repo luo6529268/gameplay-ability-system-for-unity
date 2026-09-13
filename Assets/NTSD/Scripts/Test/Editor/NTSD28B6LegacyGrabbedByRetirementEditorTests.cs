@@ -179,9 +179,9 @@ namespace NTSD.Test.Editor
             Assert.That(typeof(LF2Entity).GetMember("GrabbedBy"), Is.Empty);
             Assert.That(typeof(LF2Entity).GetMember("TrackerFlag"), Is.Empty);
             Assert.That(parent.TrackerParent, Is.Null); Assert.That(child.TrackerParent, Is.Null);
-            Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
-            Assert.That(parent.Runtime.ReleaseTick, Is.EqualTo(-1)); Assert.That(child.Runtime.ReleaseTick, Is.EqualTo(-1));
-            Assert.That(parent.HolderCopySlot, Is.EqualTo(99)); Assert.That(child.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSDEntityRuntime).GetMember("WeaponState"), Is.Empty);
+            Assert.That(typeof(NTSDEntityRuntime).GetMember("ReleaseTick"), Is.Empty);
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True); Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
         }
 
         [Serializable]
@@ -191,7 +191,7 @@ namespace NTSD.Test.Editor
             public int startTick, endTick, beforeObjects, afterObjects;
             public int opointSourceOid, opointSourceAction, opointChildAction;
             public bool opointReservedAndLifecycle;
-            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponState0;ReleaseTick-1;currentCharacterAndSpecialAttackHolderCopy99";
+            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponStateAbsent;ReleaseTickAbsent;HolderCopyAbsent";
             public string scope = "Existing G16 actual pickup/replacement driver witnesses plus current OPoint kind2 ->213 PostInitLiving seam in live world, explicit action injection, full tick and unregister lifecycle; no physical input/full skill emission claim.";
         }
     }

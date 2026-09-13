@@ -1,0 +1,42 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "sha256": "ea33cbda0321e567ffb82b823fa5701c3410771bbdd4154f12f1b0976d364186"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "sha256": "a44a474aa326d1cb5b1b0cbfa9ab6be199ca3250ee46ad10d6f9475061edb843"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+    "sha256": "6c26d6a983a11caa4c0b6a39c68033f27bbb31f6d861e1743ae6b111f422e2a3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "sha256": "641cea6989a0a61f6c87ebe76d7556810dde419d952e66ecf55d29d4c82b85fc"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+    "sha256": "3baf41b163bea06e73fcff1cc2b912a66b3a861c2e2e804df6af5dbba59f761e"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "sha256": "2f2e29cb7c311512a758f214c8e238176cf237ba342d42af6d993d18b3b05fd9"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+    "sha256": "95d20f5ed89e76232ba1439dbae35657158c36bd9641a248aa9f6921d8efbac3"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyWeaponStateRetirementProductionEditorTests.cs",
+    "sha256": "7e195d38a881ff96b6101f5f6586f0c3515cf0c1c05ee7a3d710e58a395a3eac"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "sha256": "3ee5578dfd09f42c70b2bb5b0d8b1a184821b8680a0005f6a55399389ac79721"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05WeaponStateCarrierEditorTests.cs",
+    "sha256": "1b4c71ffadec82e46ca7eac193cd4bb5769453e5c091e1b5484e8266cde1c34b"
+  }
+]

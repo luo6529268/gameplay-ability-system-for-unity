@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using MoreMountains.Tools;
 using NTSD.App;
@@ -1466,6 +1466,7 @@ namespace NTSD.Simulation
                 }
                 CompleteShutdownStage(BattleRuntimeShutdownStage.WorldLogicCleared);
 
+                _world?.BindSnapshotHostBusyObserver(null);
                 _world = null;
                 _localFrameInputProvider.BindWorld(null);
                 _battleTickSystem = null;
@@ -2092,6 +2093,17 @@ namespace NTSD.Simulation
             return stepped;
         }
 
+        private bool IsSnapshotHostBusy(SimulationWorld observedWorld)
+        {
+            if (!ReferenceEquals(_world, observedWorld) || _simulationWorkerTickInFlight ||
+                _simulationWorkerPresentationAwaitingAcknowledgement ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopping ||
+                lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return true;
+            LF2ObjectPointFactory owner = _battleObjectPointFactory ?? LF2ObjectPointFactory.TryGetInstance();
+            return owner != null && owner.HasPendingTasksForSnapshot(observedWorld, _world);
+        }
+
         public bool TryRestoreBattleStateSnapshot(
             LockstepSessionIdentity identity,
             BattleStateSnapshotBuffer snapshot,
@@ -2103,12 +2115,17 @@ namespace NTSD.Simulation
                 failure = BattleStateSnapshotRestoreFailure.WorldConfigurationMismatch;
                 return false;
             }
-            StopDedicatedSimulationWorker();
             if (_world == null)
             {
                 failure = BattleStateSnapshotRestoreFailure.WorldConfigurationMismatch;
                 return false;
             }
+            if (!_world.IsBattleSnapshotBoundaryReady)
+            {
+                failure = BattleStateSnapshotRestoreFailure.WorldBusy;
+                return false;
+            }
+            StopDedicatedSimulationWorker();
             if (!_world.TryRestoreBattleStateSnapshot(identity, snapshot, out failure))
             {
                 return false;
@@ -2288,7 +2305,9 @@ namespace NTSD.Simulation
             if (_world != null)
                 BattleCentralRenderSystem.ResetRuntime();
             _world?.BattlePresentation.Reset();
+            _world?.BindSnapshotHostBusyObserver(null);
             _world = nextWorld;
+            _world.BindSnapshotHostBusyObserver(IsSnapshotHostBusy);
             _localFrameInputProvider.BindWorld(_world);
             _presentationBackendMode = presentationMode;
             _aiExecutionProfile = aiExecutionProfile;

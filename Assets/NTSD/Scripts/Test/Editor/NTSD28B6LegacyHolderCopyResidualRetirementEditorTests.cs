@@ -91,7 +91,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void ReservedCarrierStructure_RemainsPresent()
+        public void RetiredCarrierStructure_IsAbsent()
         {
             string runtime = Source(
                 "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs");
@@ -106,25 +106,25 @@ namespace NTSD.Test.Editor
             string hitPlan = Source(
                 "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs");
 
-            Assert.That(runtime, Does.Contain("public int HolderCopySlotIndex = 99;"));
+            Assert.That(runtime, Does.Not.Contain("public int HolderCopySlotIndex = 99;"));
             Assert.That(runtime,
-                Does.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
-            Assert.That(runtime, Does.Contain("HolderCopySlotIndex = 99;"));
-            Assert.That(task, Does.Contain("public int holderCopySlot = -1;"));
-            Assert.That(task, Does.Contain("holderCopySlot = -1;"));
-            Assert.That(ecs, Does.Contain("HolderCopySlot = new int[capacity];"));
+                Does.Not.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
+            Assert.That(runtime, Does.Not.Contain("HolderCopySlotIndex = 99;"));
+            Assert.That(task, Does.Not.Contain("public int holderCopySlot = -1;"));
+            Assert.That(task, Does.Not.Contain("holderCopySlot = -1;"));
+            Assert.That(ecs, Does.Not.Contain("HolderCopySlot = new int[capacity];"));
             Assert.That(ecs,
-                Does.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
+                Does.Not.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
             Assert.That(ecs,
-                Does.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
+                Does.Not.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
             Assert.That(checksum,
-                Does.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
+                Does.Not.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
             Assert.That(parity,
-                Does.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
+                Does.Not.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
             Assert.That(hitPlan,
-                Does.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
+                Does.Not.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
             Assert.That(hitPlan,
-                Does.Contain("if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;"));
+                Does.Not.Contain("if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;"));
         }
 
         [TestCase(false, 99)]
@@ -133,28 +133,27 @@ namespace NTSD.Test.Editor
         [TestCase(true, -1)]
         [TestCase(false, 55)]
         [TestCase(true, 55)]
-        public void HeldRelation_PreservesHolderCopySentinel(bool opoint, int initialCopy)
+        public void HeldRelation_PreservesIndependentOwner(bool opoint, int initialOwner)
         {
             var holder = new LF2Character();
             LF2Entity child = opoint
                 ? (LF2Entity)new LF2OtherObject()
                 : new LF2Weapon();
             holder.Runtime.SlotIndex = 0;
-            holder.HolderCopySlot = 73;
             child.Runtime.SlotIndex = 77;
-            child.HolderCopySlot = initialCopy;
+            child.Runtime.OwnerSlotIndex = initialOwner;
 
             if (child is LF2Weapon weapon)
                 weapon.SetWeaponType(1);
 
-            int holderCopyBefore = child.HolderCopySlot;
             var resolver = new LF2CharacterWeaponLinkResolver(holder);
             if (opoint)
                 resolver.AttachOpointHeldObject(child);
             else
                 resolver.HoldWeapon(child);
 
-            Assert.That(child.HolderCopySlot, Is.EqualTo(holderCopyBefore));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+            Assert.That(child.Runtime.OwnerSlotIndex, Is.EqualTo(initialOwner));
             Assert.That(holder.Runtime.TargetSlotIndex,
                 Is.EqualTo(child.Runtime.SlotIndex));
             Assert.That(holder.Runtime.HeldWeaponStableId,

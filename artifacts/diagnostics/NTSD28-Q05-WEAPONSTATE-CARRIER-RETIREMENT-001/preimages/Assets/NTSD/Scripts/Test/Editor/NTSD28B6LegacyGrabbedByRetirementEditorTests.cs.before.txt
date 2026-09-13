@@ -1,0 +1,199 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using NTSD.Simulation;
+using UnityEditor;
+using UnityEngine;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NUnit.Framework;
+
+namespace NTSD.Test.Editor
+{
+    [Category("NTSD28")]
+    [Category("NTSD28_B6")]
+    public sealed class NTSD28B6LegacyGrabbedByRetirementEditorTests
+    {
+        [TestCase(false)]
+        [TestCase(true)]
+        public void GenericHoldAndOpoint_KeepCanonicalRelationThroughoutRelease(bool opoint)
+        {
+            var holder = new LF2Character();
+            var child = new LF2OtherObject();
+            holder.Runtime.SlotIndex = 0;
+            child.Runtime.SlotIndex = 77;
+            var resolver = new LF2CharacterWeaponLinkResolver(holder);
+            if (opoint)
+                resolver.AttachOpointHeldObject(child);
+            else
+                resolver.HoldWeapon(child);
+            Assert.That(holder.Runtime.LinkState, Is.EqualTo(1));
+            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(77));
+            Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(child.Runtime.HolderStableId, Is.Zero);
+            typeof(LF2CharacterWeaponLinkResolver).GetMethod("ClearReleasedHeldObject",
+                BindingFlags.NonPublic | BindingFlags.Instance).Invoke(resolver,
+                new object[] { child, false });
+            Assert.That(holder.Runtime.LinkState, Is.Zero);
+            Assert.That(child.Runtime.LinkState, Is.Zero);
+            Assert.That(holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
+        }
+
+        [TestCase(1, 1, -1)]
+        [TestCase(2, 2, -2)]
+        [TestCase(4, 4, -1)]
+        [TestCase(6, 6, -1)]
+        public void WeaponHold_PreservesCanonicalRelationWithoutSignedMirror(
+            int type, int expectedHolderLink, int expectedChildLink)
+        {
+            var holder = new LF2Character();
+            var child = new LF2Weapon();
+            child.SetWeaponType(type);
+            holder.Runtime.SlotIndex = 0;
+            child.Runtime.SlotIndex = 399;
+            var resolver = new LF2CharacterWeaponLinkResolver(holder);
+            resolver.HoldWeapon(child);
+            Assert.That(holder.Runtime.LinkState, Is.EqualTo(expectedHolderLink));
+            Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(399));
+            Assert.That(child.Runtime.LinkState, Is.EqualTo(expectedChildLink));
+            Assert.That(child.Runtime.HolderStableId, Is.Zero);
+        }
+    }
+}
+namespace NTSD.Test.Editor
+{
+    [InitializeOnLoad]
+    internal static class Goal20RelationRetirementPlayProbe
+    {
+        private const string Request = "Temp/Goal20_R12_Play.request";
+        static Goal20RelationRetirementPlayProbe() { EditorApplication.update += Poll; }
+
+        private static void Poll()
+        {
+            if (!File.Exists(Request) || File.ReadAllText(Request).Trim() != "run" ||
+                !EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating)
+                return;
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver?.World == null || driver.CurrentTickIndex < 5)
+                return;
+            if (!driver.IsPaused) { driver.SetPaused(true); return; }
+            if (driver.DedicatedSimulationWorkerTickInFlightForDiagnostics)
+                return;
+            File.WriteAllText(Request, "running");
+            var report = new PlayReport { startTick = driver.CurrentTickIndex };
+            SimulationWorld world = driver.World;
+            int before = world.ObjectCount;
+            NTSD28NativeRandomState random = world.NativeRandom.CaptureState();
+            uint seed = world.NativeRandom.CaptureScalarState().TableSeed;
+            try
+            {
+                var type = typeof(NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests).Assembly
+                    .GetType("NTSD.Test.Editor.NTSD28B6Kind2PickupAtomicPlayProbe", true);
+                object originalReport = Activator.CreateInstance(type.GetNestedType("Report", BindingFlags.NonPublic), true);
+                MethodInfo run = type.GetMethod("RunWitness", BindingFlags.NonPublic | BindingFlags.Static);
+                run.Invoke(null, new object[] { driver, originalReport, false });
+                world.SetStructuralEventSinkForDiagnostics(null, driver.CurrentTickIndex, "goal20-between");
+                run.Invoke(null, new object[] { driver, originalReport, true });
+                world.SetStructuralEventSinkForDiagnostics(null, driver.CurrentTickIndex, "goal20-after-pickup");
+                report.g16Witness = JsonUtility.ToJson(originalReport, true);
+                RunCurrentOpointRelation(driver, report);
+                report.status = "PASS";
+            }
+            catch (Exception e) { report.status = "FAIL"; report.error = e.ToString(); }
+            finally
+            {
+                world.SetStructuralEventSinkForDiagnostics(null, driver.CurrentTickIndex, "goal20-end");
+                world.NativeRandom.ResetFromSeed(seed);
+                world.NativeRandom.Restore(random);
+                report.endTick = driver.CurrentTickIndex;
+                report.beforeObjects = before;
+                report.afterObjects = world.ObjectCount;
+                if (report.beforeObjects != report.afterObjects) { report.status = "FAIL"; report.error += " Object count changed."; }
+                File.WriteAllText("Temp/Goal20_R12_PlayResult.json", JsonUtility.ToJson(report, true));
+                File.WriteAllText(Request, "done");
+                EditorApplication.delayCall += EditorApplication.ExitPlaymode;
+            }
+        }
+
+        private static void RunCurrentOpointRelation(SimulationTickDriver driver, PlayReport report)
+        {
+            SimulationWorld world = driver.World;
+            LF2CharacterDataWrapper source = null;
+            LF2FrameData frame = null;
+            int sourceOid = -1;
+            foreach (ObjectDefinition definition in world.RuntimeDataCatalog.ObjectDefinitions)
+            {
+                if (definition.type != 0) continue;
+                var data = world.RuntimeCharacterConfigs.Resolve(definition.id);
+                var candidate = data?.characterData?.frames?.FirstOrDefault(f => f.opoint != null && f.opoint.Value.Kind == 2 && f.opoint.Value.Oid == 213);
+                if (candidate == null) continue;
+                source = data; frame = candidate; sourceOid = definition.id; break;
+            }
+            if (frame == null) throw new InvalidOperationException("No current OPoint kind2 -> OID213 row.");
+            int parentSlot = Enumerable.Range(0, 20).First(i => world.FindEntityByRuntimeSlotForQuery(i) == null);
+            int childSlot = Enumerable.Range(20, 380).Reverse().First(i => world.FindEntityByRuntimeSlotForQuery(i) == null);
+            var parent = new LF2Character { ObjectId = sourceOid, Name = "Goal20CurrentOpointParent" };
+            var child = new LF2SpecialAttack { ObjectId = 213, Name = "Goal20CurrentOpointChild" };
+            bool parentRegistered = false, childRegistered = false;
+            try
+            {
+                parent.ModuleInitialize();
+                parent.FrameCache.Load(source);
+                parent.SetRequiredRuntimeSlot(parentSlot); world.Register(parent); parentRegistered = true;
+                parent.Initialize(500, 500); parent.ImmediateFrame(frame.frameId);
+                child.FrameCache.Load(world.RuntimeCharacterConfigs.Resolve(213));
+                child.SetRequiredRuntimeSlot(childSlot); world.Register(child); childRegistered = true;
+                child.ImmediateFrame(frame.opoint.Value.Action);
+                parent.FrameDelay = child.FrameDelay = 1000;
+                parent.AttackingCounter = child.AttackingCounter = 9;
+                parent.Team = 3; parent.RelationTeam = 3;
+                parent.Runtime.SetPosition(200, 0, world.Runtime.Stage.ZMin + 50);
+                parent.Runtime.SyncIntegerPosition();
+                BattleLogicEntityFactory.PostInitLiving(child, parent, BattleObjectPointValueAdapter.ToLegacyTask(frame.opoint.Value), 3, 0, false);
+                report.opointSourceOid = sourceOid; report.opointSourceAction = frame.frameId;
+                report.opointChildAction = frame.opoint.Value.Action;
+                Assert.That(parent.Runtime.LinkState, Is.EqualTo(1));
+                Assert.That(parent.Runtime.TargetSlotIndex, Is.EqualTo(childSlot));
+                Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+                Assert.That(child.Runtime.HolderStableId, Is.EqualTo(parentSlot));
+                CheckReserved(parent, child);
+                Assert.That(driver.StepOneTick(ignorePaused: true, buildPresentation: false), Is.True);
+                CheckReserved(parent, child);
+                world.Unregister(child); childRegistered = false;
+                Assert.That(parent.Runtime.LinkState, Is.Zero);
+                CheckReserved(parent, child);
+                report.opointReservedAndLifecycle = true;
+            }
+            finally
+            {
+                if (childRegistered) world.Unregister(child);
+                if (parentRegistered) world.Unregister(parent);
+            }
+        }
+
+        private static void CheckReserved(LF2Entity parent, LF2Entity child)
+        {
+            Assert.That(typeof(LF2Entity).GetMember("GrabbedBy"), Is.Empty);
+            Assert.That(typeof(LF2Entity).GetMember("TrackerFlag"), Is.Empty);
+            Assert.That(parent.TrackerParent, Is.Null); Assert.That(child.TrackerParent, Is.Null);
+            Assert.That(parent.Runtime.WeaponState, Is.Zero); Assert.That(child.Runtime.WeaponState, Is.Zero);
+            Assert.That(typeof(NTSDEntityRuntime).GetMember("ReleaseTick"), Is.Empty);
+            Assert.That(parent.HolderCopySlot, Is.EqualTo(99)); Assert.That(child.HolderCopySlot, Is.EqualTo(99));
+        }
+
+        [Serializable]
+        private sealed class PlayReport
+        {
+            public string status, error, g16Witness;
+            public int startTick, endTick, beforeObjects, afterObjects;
+            public int opointSourceOid, opointSourceAction, opointChildAction;
+            public bool opointReservedAndLifecycle;
+            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponState0;ReleaseTickAbsent;currentCharacterAndSpecialAttackHolderCopy99";
+            public string scope = "Existing G16 actual pickup/replacement driver witnesses plus current OPoint kind2 ->213 PostInitLiving seam in live world, explicit action injection, full tick and unregister lifecycle; no physical input/full skill emission claim.";
+        }
+    }
+}
+#endif

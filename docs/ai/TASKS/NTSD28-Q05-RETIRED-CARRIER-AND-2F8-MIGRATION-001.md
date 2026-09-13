@@ -1,6 +1,6 @@
 # Q05 退休载体与独立+2F8迁移
 
-状态 IN_PROGRESS / FIVE_RESERVED_NEXT。前置Q05步骤1内容/来源已限定验证；从父NTSD28-Q05-JOINT-CONTENT-RUNTIME-SCHEMA-MIGRATION-001步骤2继续，不重做Q03审计或Q04退休行为。
+状态 FOCUSED_TEST_PASS / SCOPED_STEP2_EXIT / JOINT_SCHEMA_PENDING。前置Q05步骤1内容/来源已限定验证；从父NTSD28-Q05-JOINT-CONTENT-RUNTIME-SCHEMA-MIGRATION-001步骤2继续，不重做Q03审计或Q04退休行为。
 
 先读取Q03 JOINT-FIELD-MATRIX、VERSION-IDENTITY-AND-CAPTURE-CONTRACT、OPOINT-AND-HELD-DEPTH-CONTRACT及Q05 prechange-reference-inventory.json。矩阵路径/行号只辅助定位，按当前真实partial/消费者收敛准确code-path与Change Record；115候选不是批量写入授权。
 
@@ -21,3 +21,9 @@
 最新出口：NTSD28-Q05-MASS-OSCILLATE-SHELL-CARRIER-RETIREMENT-001已FOCUSED_TEST_PASS/SCOPED_PLAY_PASS（890/SelfCheck/两probe），Mass/Oscillate存储删除，规则核心主体保持。下一唯一NTSD28-Q05-FIVE-RESERVED-CARRIER-RETIREMENT-001；五reserved、identity/guard/版本/回放仍待，当前不发布中间payload。禁止computer-use。
 
 当前NTSD28-Q05-GRABBEDBY-TRACKERFLAG-CARRIER-RETIREMENT-001已407/SelfCheck/scoped Play限定通过；下一唯一NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001，余WeaponState/HolderCopy及identity/guard/联合版本/回放保留。禁止computer-use。
+
+最新限定出口：NTSD28-Q05-RELEASETICK-CARRIER-RETIREMENT-001已267/SelfCheck/四例Play前后同值，字段/无效参数删除，真实关系保持。下一唯一NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001，随后HolderCopy及父identity/OPoint guard/统一版本/回放；禁止computer-use。
+
+最新限定出口：NTSD28-Q05-WEAPONSTATE-CARRIER-RETIREMENT-001已282/SelfCheck/OID124两次pre-frame前后Play一致；真实state接口保持。下一唯一NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001；五类只剩HolderCopy，父identity/双OPoint guard/版本/回放未完，禁止computer-use。
+
+最新步骤2限定出口：NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001完整清理HolderCopy及task/diagnostic，863有纠正后通过证据、SelfCheck与真实关系Play通过；五类载体和Mass/Oscillate、独立2F8/raw已验。下一唯一NTSD28-Q05-CONTENT-IDENTITY-AND-CAPTURE-BOUNDARY-001，按步骤3身份/双OPoint guard→步骤4联合版本/trace→步骤5回放/Play；本父整体未完成。禁止computer-use，全部例外/未发布窗口保持。

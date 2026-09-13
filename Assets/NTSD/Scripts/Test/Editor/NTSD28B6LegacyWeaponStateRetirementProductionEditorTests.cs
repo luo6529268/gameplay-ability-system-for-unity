@@ -51,16 +51,15 @@ namespace NTSD.Test.Editor
             Assert.That(
                 Regex.Matches(frameLogic, @"Runtime\.WeaponState\s*=").Count,
                 Is.Zero,
-                "frame logic must not mutate the reserved WeaponState carrier");
+                "frame logic must not mutate the retired WeaponState carrier");
             Assert.That(
                 Regex.Matches(heldState, @"Runtime\.WeaponState\s*=").Count,
                 Is.Zero,
-                "held/drop/throw logic must not mutate the reserved WeaponState carrier");
+                "held/drop/throw logic must not mutate the retired WeaponState carrier");
             Assert.That(
                 Regex.Matches(weaponBase, @"Runtime\.WeaponState\s*=").Count,
-                Is.EqualTo(1),
-                "WeaponState remains only as the Reset-time reserved zero");
-            StringAssert.Contains("Runtime.WeaponState = 0;", weaponBase);
+                Is.Zero,
+                "WeaponState no longer has a runtime carrier or reset writer");
         }
 
         [Test]
@@ -134,7 +133,6 @@ namespace NTSD.Test.Editor
             weapon.Runtime.SyncIntegerPosition();
             target.Runtime.SyncIntegerPosition();
             weapon.Runtime.Vx = 30.0;
-            weapon.Runtime.WeaponState = 0;
 
             world.Register(weapon);
             world.Register(target);
@@ -149,7 +147,6 @@ namespace NTSD.Test.Editor
                         frame = weapon.Frame.N,
                         state = weapon.Frame.D?.state ?? -1,
                         hitFa = weapon.Frame.D?.hit_Fa ?? -1,
-                        reservedWeaponState = weapon.Runtime.WeaponState,
                         vx = weapon.Runtime.Vx,
                         vy = weapon.Runtime.Vy,
                         vz = weapon.Runtime.Vz,
@@ -183,8 +180,6 @@ namespace NTSD.Test.Editor
                            observations[1].state == LF2States.WeaponThrowing &&
                            observations[0].hitFa == 12 &&
                            observations[1].hitFa == 12 &&
-                           observations[0].reservedWeaponState == 0 &&
-                           observations[1].reservedWeaponState == 0 &&
                            Nearly(observations[0].vx, 14.0) &&
                            Nearly(observations[1].vx, 14.0);
             Assert.That(
@@ -195,7 +190,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void HeldFollowThrowDropAndDamagedDrop_KeepReservedCarrierZero()
+        public void HeldFollowThrowDropAndDamagedDrop_KeepActualFrameAndRelations()
         {
             HeldScope followScope = CreateHeldScope(LF2States.WeaponOnHand, frameId: 0);
             HeldScope damagedScope = CreateHeldScope(LF2States.Falling, frameId: 0);
@@ -211,20 +206,30 @@ namespace NTSD.Test.Editor
                     followScope.Holder,
                     new BattleWeaponPointValue(1, 0, 0, 0, 0, 40, 0, 0, 0),
                     Vector3.zero);
-                followState = followScope.Weapon.Runtime.WeaponState;
+                followState = followScope.Weapon.Frame.D?.state ?? -1;
+                Assert.That(followScope.Holder.Runtime.LinkState, Is.Not.Zero);
+                Assert.That(followScope.Weapon.Runtime.LinkState, Is.EqualTo(-1));
 
                 WeaponActResult thrownResult = followScope.Weapon.Act(
                     followScope.Holder,
                     new BattleWeaponPointValue(1, 0, 0, 0, 0, 40, 12, -4, 0),
                     Vector3.zero);
-                throwState = followScope.Weapon.Runtime.WeaponState;
+                throwState = followScope.Weapon.Frame.D?.state ?? -1;
                 thrown = thrownResult.Thrown;
+                Assert.That(followScope.Holder.Runtime.LinkState, Is.Zero);
+                Assert.That(followScope.Weapon.Runtime.LinkState, Is.Zero);
+                Assert.That(followScope.Weapon.Runtime.Vx, Is.EqualTo(12));
+                Assert.That(followScope.Weapon.Runtime.Vy, Is.EqualTo(-4));
 
                 HeldScope dropScope = CreateHeldScope(LF2States.WeaponOnHand, frameId: 0);
                 try
                 {
                     dropScope.Weapon.Drop(3.0, -2.0);
-                    dropState = dropScope.Weapon.Runtime.WeaponState;
+                    dropState = dropScope.Weapon.Frame.D?.state ?? -1;
+                    Assert.That(dropScope.Holder.Runtime.LinkState, Is.Zero);
+                    Assert.That(dropScope.Weapon.Runtime.LinkState, Is.Zero);
+                    Assert.That(dropScope.Weapon.Runtime.Vx, Is.EqualTo(1));
+                    Assert.That(dropScope.Weapon.Runtime.Vy, Is.EqualTo(-2));
                 }
                 finally
                 {
@@ -235,8 +240,10 @@ namespace NTSD.Test.Editor
                     damagedScope.Holder,
                     new BattleWeaponPointValue(1, 0, 0, 0, 0, 0, 0, 0, 0),
                     Vector3.zero);
-                damagedState = damagedScope.Weapon.Runtime.WeaponState;
+                damagedState = damagedScope.Weapon.Frame.D?.state ?? -1;
                 forceDropped = damagedResult.ForceDrop;
+                Assert.That(damagedScope.Holder.Runtime.LinkState, Is.Zero);
+                Assert.That(damagedScope.Weapon.Runtime.LinkState, Is.Zero);
             }
             finally
             {
@@ -245,43 +252,41 @@ namespace NTSD.Test.Editor
             }
 
             WriteJson(
-                "Temp/Goal20_R3_HeldCarrier.json",
-                new HeldCarrierReport
+                "Temp/Goal20_R3_HeldFrames.json",
+                new HeldFrameReport
                 {
-                    follow = followState,
-                    thrown = throwState,
-                    drop = dropState,
-                    damagedDrop = damagedState,
+                    followFrameState = followState,
+                    thrownFrameState = throwState,
+                    dropFrameState = dropState,
+                    damagedDropFrameState = damagedState,
                     thrownResult = thrown,
                     forceDroppedResult = forceDropped,
                 });
 
             Assert.That(
-                followState == 0 &&
-                throwState == 0 &&
-                dropState == 0 &&
-                damagedState == 0 &&
+                followState == LF2States.WeaponThrowing &&
+                throwState == LF2States.WeaponThrowing &&
                 thrown &&
                 forceDropped,
                 Is.True,
-                $"held carrier states follow={followState}, throw={throwState}, " +
+                $"held actual frame states follow={followState}, throw={throwState}, " +
                 $"drop={dropState}, damagedDrop={damagedState}; " +
                 $"thrown={thrown}, forceDropped={forceDropped}");
         }
 
         [Test]
-        public void ReservedCarrier_RemainsInCanonicalCopyChecksumParityAndSnapshot()
+        public void ActualFlightCounter_RemainsInCanonicalCopyChecksumParityAndSnapshot()
         {
             var source = new NTSDEntityRuntime
             {
-                WeaponState = 0,
+                WeaponFlightCounter = 0,
             };
             var copied = new NTSDEntityRuntime
             {
-                WeaponState = 777,
+                WeaponFlightCounter = 777,
             };
             Assert.That(source.TryCopyCanonicalStateTo(copied), Is.True);
-            Assert.That(copied.WeaponState, Is.Zero);
+            Assert.That(copied.WeaponFlightCounter, Is.Zero);
 
             SimulationWorld world = new SimulationWorld();
             var weapon = new LF2Weapon { ObjectId = 124, Name = "R3CarrierSurface" };
@@ -290,7 +295,7 @@ namespace NTSD.Test.Editor
             world.Register(weapon);
             try
             {
-                weapon.Runtime.WeaponState = 0;
+                weapon.Runtime.WeaponFlightCounter = 0;
 
                 var identity = new LockstepSessionIdentity(
                     LockstepSessionIdentity.CurrentSchemaVersion,
@@ -306,20 +311,21 @@ namespace NTSD.Test.Editor
                     Is.True);
                 var snapshotCopy = new NTSDEntityRuntime();
                 Assert.That(snapshot.TryCopyEntityRuntime(3, snapshotCopy), Is.True);
-                Assert.That(snapshotCopy.WeaponState, Is.Zero);
+                Assert.That(snapshotCopy.WeaponFlightCounter, Is.Zero);
                 Assert.That(
                     snapshot.SchemaVersion,
                     Is.EqualTo(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion));
 
+                Assert.That(world.CaptureParityFrameSnapshot(3).ToJson().Contains("\"weaponState\":"), Is.False);
                 string parityZero = world.CaptureParityFrameSnapshot(3).OverallChecksum;
                 ulong checksumZero = world.CaptureRuntimeChecksum64(3, null);
-                weapon.Runtime.WeaponState = 777;
+                weapon.Runtime.WeaponFlightCounter = 777;
                 string parityChanged = world.CaptureParityFrameSnapshot(3).OverallChecksum;
                 ulong checksumChanged = world.CaptureRuntimeChecksum64(3, null);
                 Assert.That(checksumChanged, Is.Not.EqualTo(checksumZero));
                 Assert.That(parityChanged, Is.Not.EqualTo(parityZero));
 
-                weapon.Runtime.WeaponState = 0;
+                weapon.Runtime.WeaponFlightCounter = 0;
                 Assert.That(
                     world.CaptureParityFrameSnapshot(3).OverallChecksum,
                     Is.EqualTo(parityZero));
@@ -362,11 +368,10 @@ namespace NTSD.Test.Editor
                     weapon.RunFrameLogicBeforeAdvance();
                     rows.Add(new RuntimeObservation { tick = tick, frame = weapon.Frame.N,
                         state = weapon.Frame.D.state, hitFa = weapon.Frame.D.hit_Fa,
-                        reservedWeaponState = weapon.Runtime.WeaponState,
                         vx = weapon.Runtime.Vx, vy = weapon.Runtime.Vy, vz = weapon.Runtime.Vz,
                         targetSlot = weapon.ObjectAiTargetSlot3F8,
                         synchronizedRngCalls = world.NativeRandom.CaptureScalarState().SynchronizedCalls });
-                    Assert.That(weapon.Runtime.WeaponState, Is.Zero);
+                    Assert.That(typeof(NTSDEntityRuntime).GetMember("WeaponState"), Is.Empty);
                     Assert.That(weapon.Frame.D.state, Is.EqualTo(1002));
                     Assert.That(weapon.Frame.D.hit_Fa, Is.EqualTo(12));
                     Assert.That(weapon.Runtime.Vx, Is.EqualTo(14));
@@ -558,12 +563,6 @@ namespace NTSD.Test.Editor
         {
             if (observations == null || observations.Count < 2)
                 return "missing tick observations";
-            if (observations[0].reservedWeaponState != 0)
-                return "tick1 checksum: reserved WeaponState changed to " +
-                       observations[0].reservedWeaponState;
-            if (observations[1].reservedWeaponState != 0)
-                return "tick2 checksum: reserved WeaponState changed to " +
-                       observations[1].reservedWeaponState;
             if (!Nearly(observations[0].vx, 14.0))
                 return $"tick1 motion: Vx={observations[0].vx} expected 14";
             if (!Nearly(observations[1].vx, 14.0))
@@ -579,7 +578,7 @@ namespace NTSD.Test.Editor
                 return "missing";
             RuntimeObservation value = observations[index];
             return $"frame={value.frame},state={value.state},hitFa={value.hitFa}," +
-                   $"reserved={value.reservedWeaponState},vx={value.vx},checksum={value.checksum}";
+                   $"vx={value.vx},checksum={value.checksum}";
         }
 
         private static bool Nearly(double left, double right)
@@ -647,7 +646,6 @@ namespace NTSD.Test.Editor
             public int frame;
             public int state;
             public int hitFa;
-            public int reservedWeaponState;
             public double vx, vy, vz;
             public int targetSlot;
             public ulong synchronizedRngCalls;
@@ -655,12 +653,12 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
-        private sealed class HeldCarrierReport
+        private sealed class HeldFrameReport
         {
-            public int follow;
-            public int thrown;
-            public int drop;
-            public int damagedDrop;
+            public int followFrameState;
+            public int thrownFrameState;
+            public int dropFrameState;
+            public int damagedDropFrameState;
             public bool thrownResult;
             public bool forceDroppedResult;
         }

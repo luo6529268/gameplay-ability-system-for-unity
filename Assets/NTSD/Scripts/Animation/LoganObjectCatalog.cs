@@ -42,6 +42,7 @@ namespace NTSD.Animation
         public string CatalogSha256 { get; }
         /// <summary>Only catalog and object DAT inputs; image/audio identity belongs to complete publication.</summary>
         public string DefinitionFingerprint { get; }
+        public LoganContentIdentity ContentIdentity { get; }
         public string SourceCacheKey { get; }
 
         private LoganObjectCatalog(BattleContentSource source, byte[] catalogBytes, List<Entry> entries)
@@ -65,8 +66,8 @@ namespace NTSD.Animation
                 }
                 DefinitionFingerprint = Hash(bytes.ToArray());
             }
-            SourceCacheKey = source.RuntimeRoot.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar)
-                + "|" + DefinitionFingerprint;
+            ContentIdentity = LoganContentIdentity.FromDefinitionFingerprint(DefinitionFingerprint);
+            SourceCacheKey = ContentIdentity.CreateSourceCacheKey(source.RuntimeRoot);
         }
 
         public static LoganObjectCatalog Read(BattleContentSource source)

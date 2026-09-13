@@ -235,9 +235,9 @@ namespace NTSD.Animation.LF2Objects
             _heldStateResolver.ApplyHeldWPointSync(holder, holderWPoint, holdpoint, heldWPoint);
         }
 
-        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder, bool stampReleaseTick = false)
+        internal void ReleaseHeldWeaponRuntimeInternal(LF2Entity holder)
         {
-            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder, stampReleaseTick);
+            _releaseFlowResolver.ReleaseHeldWeaponRuntime(holder);
         }
 
         internal void ReleaseHeldWeaponForConsumeInternal(LF2Entity holder)
@@ -465,7 +465,6 @@ namespace NTSD.Animation.LF2Objects
             Health.MaxMP = 0;
             ShotCount = 0;
             PickerStableId = -1;
-            HolderCopySlot = -1;
             OwnerId = -1;
             RelationOwnerSlot = -1;
             OwnerEntityIndex = -1;
@@ -475,7 +474,6 @@ namespace NTSD.Animation.LF2Objects
             Runtime.TargetSlotIndex = -1;
             Runtime.HeldWeaponStableId = -1;
             Runtime.HolderStableId = -1;
-            Runtime.WeaponState = 0;
             ResetSpark();
             ResetStableId();
         }

@@ -79,7 +79,6 @@ namespace NTSD.Test.Editor
             }
             ulong legacyBefore = scope.World.Rng.CallCount;
             ulong nativeBefore = scope.World.NativeRandom.CaptureScalarState().SynchronizedCalls;
-            int releaseTickBefore = scope.Child.Runtime.ReleaseTick;
             scope.World.HeldObjectProcessAll(7);
             Assert.That(scope.Child.Frame.N, Is.EqualTo(expectedFrame));
             Assert.That(scope.Child.Runtime.Vx, Is.EqualTo(kind3 ? 70 : left ? -70 : 70));
@@ -87,7 +86,6 @@ namespace NTSD.Test.Editor
             Assert.That(scope.Child.Runtime.Vz, Is.EqualTo(kind3 ? 9 : -9));
             Assert.That(scope.World.Rng.CallCount - legacyBefore, Is.EqualTo(type == 2 && !kind3 ? 1UL : 0UL));
             Assert.That(scope.World.NativeRandom.CaptureScalarState().SynchronizedCalls - nativeBefore, Is.EqualTo(kind3 ? (type == 2 ? 5UL : 4UL) : 0UL));
-            Assert.That(scope.Child.Runtime.ReleaseTick, Is.EqualTo(releaseTickBefore));
             Assert.That(scope.Child.Runtime.LinkState, Is.Zero);
             Assert.That(scope.Holder.Runtime.LinkState, Is.Zero);
             Assert.That(scope.Holder.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
@@ -138,7 +136,6 @@ namespace NTSD.Test.Editor
                 Child.DirectWriteHeldFramePreserveWaitCounter(20);
                 if (Child.Health != null) Child.Health.HP = 100;
                 Child.Runtime.WeaponFlightCounter = 7;
-                Child.Runtime.ReleaseTick = 99;
                 Child.Runtime.OwnerSlotIndex = 17;
                 Child.Runtime.CatchSourceSlot90 = 82;
                 Child.Runtime.Vz = 6.5;

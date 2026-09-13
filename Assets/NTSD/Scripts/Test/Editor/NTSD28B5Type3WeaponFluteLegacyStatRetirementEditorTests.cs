@@ -139,7 +139,6 @@ namespace NTSD.Test.Editor
             TypedCharacter attacker = Entity(world, 9960, 0, LF2ObjectType.Character);
             TypedCharacter target = Entity(world, 9961, 1, LF2ObjectType.Character);
             TypedCharacter holder = Entity(world, 9962, 2, LF2ObjectType.Character);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             holder.ComboCountAtk = 41;
             target.KillCount = -1;
             target.Unk344 = 1;

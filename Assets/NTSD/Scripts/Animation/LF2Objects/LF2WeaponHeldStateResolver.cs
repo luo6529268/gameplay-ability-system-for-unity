@@ -132,7 +132,7 @@ namespace NTSD.Animation.LF2Objects
             if (stampSpawnerSlot)
                 weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
             weapon.PS.zz = 0;
-            weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
+            weapon.ReleaseHeldWeaponRuntimeInternal(holder);
             // Alignment contract: NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001.
             if (wpoint.Kind == 3)
                 weapon.OnThrownInternal();

@@ -1,0 +1,18 @@
+[
+  {
+    "file": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.cs",
+    "only_unused_parameter_removed": true
+  },
+  {
+    "file": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponHeldStateResolver.cs",
+    "only_unused_parameter_removed": true
+  },
+  {
+    "file": "Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponReleaseFlowResolver.cs",
+    "only_unused_parameter_removed": true
+  },
+  {
+    "file": "Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleHeldObjectWriter.cs",
+    "only_unused_parameter_removed": true
+  }
+]

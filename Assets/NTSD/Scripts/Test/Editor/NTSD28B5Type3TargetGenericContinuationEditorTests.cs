@@ -31,7 +31,7 @@ namespace NTSD.Test.Editor
             Assert.That(target.RelationTeam, Is.EqualTo(7));
             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(11));
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(0));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.EqualTo(7));
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.KnockbackVx, Is.Zero);
@@ -166,7 +166,6 @@ namespace NTSD.Test.Editor
             target.RelationTeam = 2;
             target.Runtime.OwnerSlotIndex = 44;
             target.Runtime.AnimCounter = 99;
-            target.HolderCopySlot = 66;
             target.HitConfirm2 = 7;
             target.Runtime.SpecialHitLatch0EB = false;
             target.KnockbackVx = 5.0;

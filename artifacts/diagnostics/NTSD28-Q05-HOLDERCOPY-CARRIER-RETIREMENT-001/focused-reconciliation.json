@@ -1,0 +1,17 @@
+{
+  "firstTotal": 863,
+  "firstPassed": 859,
+  "firstFailed": 4,
+  "firstRetryTotal": 27,
+  "firstRetryPassed": 26,
+  "firstRetryFailed": 1,
+  "finalRetryTotal": 1,
+  "finalRetryPassed": 1,
+  "resolved": {
+    "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.ProductionSources_ContainNoScopedKillCountBinding": "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.ProductionSources_ContainNoScopedKillCountBinding",
+    "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.ReducedAndCpointDamage_LegacyStatsEligibilityReadsExactGate": "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.ReducedStatsRetired_CpointKeepsNativeKnockoutGate",
+    "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.StandardDamage_LegacyStatsEligibilityReadsExactGate": "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.StandardDamage_DoesNotCreditRetiredHolderStats",
+    "NTSD.Test.Editor.NTSD28B5StandardReducedKnockoutProducerEditorTests.HitPlanShadowAndSources_IncludeExactKnockoutObservable": "NTSD.Test.Editor.NTSD28B5StandardReducedKnockoutProducerEditorTests.HitPlanShadowAndSources_IncludeExactKnockoutObservable"
+  },
+  "result": "863 distinct cases have passing evidence after documented test corrections; no fresh single-run863green claim"
+}

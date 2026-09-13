@@ -223,7 +223,6 @@ namespace NTSD.Simulation
             task.team = 0;
             task.useExplicitRelationIdentity = true;
             task.relationTeam = entity.RelationTeam;
-            task.holderCopySlot = -1;
             task.spawnerEntityIndex = entity.Runtime?.SlotIndex ?? -1;
             task.pos = new Vector3(
                 entity.GetRuntimeXInt(),

@@ -450,8 +450,6 @@ namespace NTSD.Test.Editor
                 "R8C04_CharacterVictim", oid++, null, true));
             ConfigurePair(fixtures.characterAttacker, fixtures.characterVictim, 100000);
             fixtures.characterHolder.SetPosition(105000, 0, 0);
-            fixtures.characterAttacker.HolderCopySlot =
-                fixtures.characterHolder.Runtime.SlotIndex;
             fixtures.characterVictim.Health.HP = 5;
             fixtures.characterVictim.Health.HPBound = 100;
             fixtures.characterVictim.Health.HP3 = 100;

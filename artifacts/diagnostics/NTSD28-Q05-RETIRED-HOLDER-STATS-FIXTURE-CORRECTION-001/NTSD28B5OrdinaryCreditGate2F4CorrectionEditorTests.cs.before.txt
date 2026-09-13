@@ -1,0 +1,888 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
+
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
+using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.TestTools.TestRunner.Api;
+using UnityEngine;
+
+namespace NTSD.Test.Editor
+{
+    [Category("NTSD28")]
+    [Category("NTSD28_B5")]
+    public sealed class NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests
+    {
+        private const int ParentSlot = 50;
+
+        [Test]
+        public void StandardDamage_LegacyStatsEligibilityReadsExactGate()
+        {
+            RunStandardDamageCase(
+                legacyKillCount: 7,
+                exactGate: -1,
+                expectedHolderCombo: 10,
+                expectedHolderKills: 1);
+            RunStandardDamageCase(
+                legacyKillCount: -1,
+                exactGate: 0,
+                expectedHolderCombo: 0,
+                expectedHolderKills: 0);
+        }
+
+        [Test]
+        public void ReducedAndCpointDamage_LegacyStatsEligibilityReadsExactGate()
+        {
+            RunReducedDamageCase(
+                legacyKillCount: 7,
+                exactGate: -1,
+                expectedHolderCombo: 1,
+                expectedHolderKills: 1);
+            RunReducedDamageCase(
+                legacyKillCount: -1,
+                exactGate: 0,
+                expectedHolderCombo: 0,
+                expectedHolderKills: 0);
+            RunCpointDamageCase(
+                legacyKillCount: 7,
+                exactGate: -1,
+                expectedHolderKills: 1);
+            RunCpointDamageCase(
+                legacyKillCount: -1,
+                exactGate: 0,
+                expectedHolderKills: 0);
+        }
+
+        [Test]
+        public void CharacterRecovery_DataAndLegacyThresholdReadExactGate()
+        {
+            AssertRecoveryCase(
+                useDerivedLegacyPath: false,
+                legacyKillCount: 7,
+                exactGate: -1,
+                expectIncrease: true);
+            AssertRecoveryCase(
+                useDerivedLegacyPath: false,
+                legacyKillCount: -1,
+                exactGate: 0,
+                expectIncrease: false);
+            AssertRecoveryCase(
+                useDerivedLegacyPath: true,
+                legacyKillCount: 7,
+                exactGate: -1,
+                expectIncrease: true);
+            AssertRecoveryCase(
+                useDerivedLegacyPath: true,
+                legacyKillCount: -1,
+                exactGate: 0,
+                expectIncrease: false);
+        }
+
+        [TestCase("Legacy", -1, 149, 151)]
+        [TestCase("Legacy", -1, 150, 152)]
+        [TestCase("Legacy", -1, 151, 153)]
+        [TestCase("Legacy", 0, 149, 151)]
+        [TestCase("Legacy", 0, 150, 152)]
+        [TestCase("Legacy", 0, 151, 151)]
+        [TestCase("Ecs", -1, 149, 151)]
+        [TestCase("Ecs", -1, 150, 152)]
+        [TestCase("Ecs", -1, 151, 153)]
+        [TestCase("Ecs", 0, 149, 151)]
+        [TestCase("Ecs", 0, 150, 152)]
+        [TestCase("Ecs", 0, 151, 151)]
+        [TestCase("Derived", -1, 149, 151)]
+        [TestCase("Derived", -1, 150, 152)]
+        [TestCase("Derived", -1, 151, 153)]
+        [TestCase("Derived", 0, 149, 151)]
+        [TestCase("Derived", 0, 150, 152)]
+        [TestCase("Derived", 0, 151, 151)]
+        public void CharacterRecovery_PpThresholdBoundary(
+            string path,
+            int exactGate,
+            int initialPp,
+            int expectedPp)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleEcsCharacterRecoveryPassForDiagnostics(
+                path == "Legacy"
+                    ? BattleEcsCharacterRecoveryPassMode.Legacy
+                    : BattleEcsCharacterRecoveryPassMode.DataOriented);
+            LF2Character entity = path == "Derived"
+                ? new DerivedRecoveryCharacter()
+                : new LF2Character();
+            InitializeCharacter(entity, 9850, 0);
+            world.Register(entity);
+            try
+            {
+                entity.Health.HP = 400;
+                entity.Health.HPBound = 400;
+                entity.Health.PP = initialPp;
+                entity.HitStun = 0;
+                entity.KillCount = exactGate == -1 ? 7 : -1;
+                entity.Runtime.OrdinaryCreditGate2F4 = exactGate;
+
+                world.LateEntityUpdateAll(3);
+
+                BattleEcsCharacterRecoveryPassDiagnostics diagnostics =
+                    world.BattleEcsCharacterRecoveryPassDiagnosticsForDiagnostics;
+                Assert.That(diagnostics.ExactCharacterCount,
+                    Is.EqualTo(path == "Ecs" ? 1 : 0),
+                    $"recovery route={path}");
+                Assert.That(diagnostics.CompatibilityFallbackCount,
+                    Is.EqualTo(path == "Ecs" ? 0 : 1),
+                    $"recovery route={path}");
+                Assert.That(entity.Health.PP, Is.EqualTo(expectedPp),
+                    $"PP threshold boundary: path={path}, gate={exactGate}, initialPP={initialPp}, expectedPP={expectedPp}, actualPP={entity.Health.PP}");
+                Assert.That(entity.Health.HP, Is.EqualTo(400));
+                Assert.That(entity.Health.HPBound, Is.EqualTo(400));
+            }
+            finally
+            {
+                world.Unregister(entity);
+            }
+        }
+
+        [Test]
+        public void LogicOpoint_PropagatesExactGateOnlyForType0Children()
+        {
+            LF2Entity fallbackChild = SpawnLogicChild(
+                childOid: 9901,
+                childType: LF2ObjectType.Character,
+                parentGate: -1,
+                parentKillCount: 7);
+            Assert.That(fallbackChild.Runtime.OrdinaryCreditGate2F4,
+                Is.EqualTo(ParentSlot));
+            Assert.That(fallbackChild.KillCount, Is.EqualTo(-1));
+
+            LF2Entity inheritedChild = SpawnLogicChild(
+                childOid: 9902,
+                childType: LF2ObjectType.Character,
+                parentGate: 3,
+                parentKillCount: -1);
+            Assert.That(inheritedChild.Runtime.OrdinaryCreditGate2F4,
+                Is.EqualTo(3));
+            Assert.That(inheritedChild.KillCount, Is.EqualTo(-1));
+
+            LF2Entity nonType0Child = SpawnLogicChild(
+                childOid: 9903,
+                childType: LF2ObjectType.SpecialAttack,
+                parentGate: 4,
+                parentKillCount: 7);
+            Assert.That(nonType0Child.Runtime.OrdinaryCreditGate2F4,
+                Is.EqualTo(-1));
+            Assert.That(nonType0Child.KillCount, Is.EqualTo(-1));
+
+            AssertTwoHopLogicPropagation();
+        }
+
+        [Test]
+        public void ProductionSources_ContainNoScopedKillCountBinding()
+        {
+            string damage = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs");
+            string cpoint = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs");
+            string hitPlan = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs");
+            string entity = Source(
+                "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs");
+            string recovery = Source(
+                "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterRecoveryPass.cs");
+            string presentationFactory = Source(
+                "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs");
+            string logicFactory = Source(
+                "Assets/NTSD/Scripts/Simulation/Runtime/BattleLogicEntityFactory.cs");
+
+            Assert.That(Count(damage, "victim.KillCount == -1"), Is.Zero);
+            Assert.That(Count(cpoint, "victim.KillCount == -1"), Is.Zero);
+            Assert.That(Count(hitPlan, "target.KillCount == -1"), Is.Zero,
+                "The later flute legacy-stat retirement package removes the final HitPlan binding.");
+            StringAssert.DoesNotContain(
+                "if (KillCount != -1 && Health.PP >=",
+                entity);
+            StringAssert.DoesNotContain(
+                "entity.KillCount != -1 &&",
+                recovery);
+            StringAssert.DoesNotContain("parent.KillCount", presentationFactory);
+            StringAssert.DoesNotContain("parent.KillCount", logicFactory);
+
+            Assert.That(
+                Count(damage, "victim.Runtime.OrdinaryCreditGate2F4 == -1"),
+                Is.EqualTo(5));
+            Assert.That(
+                Count(hitPlan, "target.Runtime.OrdinaryCreditGate2F4 == -1"),
+                Is.EqualTo(4));
+            Assert.That(
+                Count(hitPlan, "target?.Runtime?.OrdinaryCreditGate2F4 == -1"),
+                Is.EqualTo(1));
+            StringAssert.Contains(
+                "Runtime.OrdinaryCreditGate2F4 != -1",
+                entity);
+            StringAssert.Contains(
+                "entity.Runtime.OrdinaryCreditGate2F4 != -1",
+                recovery);
+            StringAssert.Contains(
+                "living.Runtime.OrdinaryCreditGate2F4",
+                presentationFactory);
+            StringAssert.Contains(
+                "living.Runtime.OrdinaryCreditGate2F4",
+                logicFactory);
+        }
+
+        private static void RunStandardDamageCase(
+            int legacyKillCount,
+            int exactGate,
+            int expectedHolderCombo,
+            int expectedHolderKills)
+        {
+            CreateDamageScope(
+                legacyKillCount,
+                exactGate,
+                out SimulationWorld world,
+                out GateCharacter attacker,
+                out GateCharacter victim,
+                out GateCharacter holder);
+
+            bool applied = world.DamageWriter.ApplyStandardCharacterDamage(
+                world,
+                attacker,
+                victim,
+                victim.HitCounters,
+                DamageInteraction());
+
+            Assert.That(applied, Is.True);
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(expectedHolderCombo));
+            Assert.That(holder.KillStat, Is.EqualTo(expectedHolderKills));
+            Assert.That(victim.Runtime.OrdinaryCreditGate2F4, Is.EqualTo(exactGate));
+            Assert.That(victim.KillCount, Is.EqualTo(legacyKillCount));
+        }
+
+        private static void RunReducedDamageCase(
+            int legacyKillCount,
+            int exactGate,
+            int expectedHolderCombo,
+            int expectedHolderKills)
+        {
+            CreateDamageScope(
+                legacyKillCount,
+                exactGate,
+                out SimulationWorld world,
+                out GateCharacter attacker,
+                out GateCharacter victim,
+                out GateCharacter holder);
+            victim.Health.HP = 1;
+
+            world.DamageWriter.ApplyAlternateDamage(
+                world,
+                attacker,
+                victim,
+                victim.HitCounters,
+                DamageInteraction());
+
+            Assert.That(holder.ComboCountAtk, Is.EqualTo(expectedHolderCombo));
+            Assert.That(holder.KillStat, Is.EqualTo(expectedHolderKills));
+            Assert.That(victim.Runtime.OrdinaryCreditGate2F4, Is.EqualTo(exactGate));
+            Assert.That(victim.KillCount, Is.EqualTo(legacyKillCount));
+        }
+
+        private static void RunCpointDamageCase(
+            int legacyKillCount,
+            int exactGate,
+            int expectedHolderKills)
+        {
+            CreateDamageScope(
+                legacyKillCount,
+                exactGate,
+                out SimulationWorld world,
+                out GateCharacter attacker,
+                out GateCharacter victim,
+                out GateCharacter holder);
+            MethodInfo apply = typeof(BattleCpointWriter).GetMethod(
+                "ApplyHeldInjury",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(apply, Is.Not.Null);
+
+            apply.Invoke(
+                new BattleCpointWriter(),
+                new object[] { world, attacker, victim, 10, 0 });
+
+            Assert.That(
+                attacker.Runtime.KnockoutCount358,
+                Is.EqualTo(expectedHolderKills));
+            Assert.That(attacker.Runtime.InputScoreTotal348, Is.EqualTo(10));
+            Assert.That(holder.KillStat, Is.Zero);
+            Assert.That(holder.ComboCountAtk, Is.Zero);
+            Assert.That(victim.Runtime.OrdinaryCreditGate2F4, Is.EqualTo(exactGate));
+            Assert.That(victim.KillCount, Is.EqualTo(legacyKillCount));
+        }
+
+        private static void CreateDamageScope(
+            int legacyKillCount,
+            int exactGate,
+            out SimulationWorld world,
+            out GateCharacter attacker,
+            out GateCharacter victim,
+            out GateCharacter holder)
+        {
+            world = new SimulationWorld();
+            attacker = DamageEntity(world, 9800, 0, LF2ObjectType.Character);
+            victim = DamageEntity(world, 9801, 1, LF2ObjectType.Character);
+            holder = DamageEntity(world, 9802, 2, LF2ObjectType.Character);
+            victim.Health.HP = 10;
+            victim.Health.HPBound = 100;
+            victim.KillCount = legacyKillCount;
+            victim.Runtime.OrdinaryCreditGate2F4 = exactGate;
+            holder.ComboCountAtk = 0;
+            holder.KillStat = 0;
+        }
+
+        private static void AssertRecoveryCase(
+            bool useDerivedLegacyPath,
+            int legacyKillCount,
+            int exactGate,
+            bool expectIncrease)
+        {
+            var world = new SimulationWorld();
+            LF2Character entity = useDerivedLegacyPath
+                ? new DerivedRecoveryCharacter()
+                : new LF2Character();
+            InitializeCharacter(entity, 9850, 0);
+            world.Register(entity);
+            entity.Health.HP = 400;
+            entity.Health.HPBound = 500;
+            entity.Health.PP = 200;
+            entity.HitStun = 0;
+            entity.KillCount = legacyKillCount;
+            entity.Runtime.OrdinaryCreditGate2F4 = exactGate;
+
+            world.LateEntityUpdateAll(12);
+
+            Assert.That(
+                entity.Health.PP,
+                expectIncrease ? Is.GreaterThan(200) : Is.EqualTo(200),
+                $"legacyPath={useDerivedLegacyPath}, kill={legacyKillCount}, gate={exactGate}");
+        }
+
+        private static LF2Entity SpawnLogicChild(
+            int childOid,
+            LF2ObjectType childType,
+            int parentGate,
+            int parentKillCount)
+        {
+            SimulationWorld world = CreateOpointWorld(
+                Child(childOid, childType));
+            ProbeOther parent = CreateParent(
+                childOid,
+                FrameWithOpoint(childOid),
+                parentGate,
+                parentKillCount);
+            RegisterParent(world, parent);
+
+            world.LateEntityUpdateAll(1);
+
+            LF2Entity child = world.FindEntityByRuntimeSlotForQuery(51);
+            Assert.That(child, Is.Not.Null);
+            Assert.That(child.OwnerEntityIndex, Is.EqualTo(7));
+            return child;
+        }
+
+        private static void AssertTwoHopLogicPropagation()
+        {
+            const int firstOid = 9904;
+            const int secondOid = 9905;
+            LF2FrameData firstFrame = FrameWithOpoint(secondOid);
+            SimulationWorld world = CreateOpointWorld(
+                Child(firstOid, LF2ObjectType.Character, firstFrame),
+                Child(secondOid, LF2ObjectType.Character));
+            ProbeOther root = CreateParent(
+                firstOid,
+                FrameWithOpoint(firstOid),
+                parentGate: -1,
+                parentKillCount: 7);
+            RegisterParent(world, root);
+
+            world.LateEntityUpdateAll(2);
+            LF2Entity first = world.FindEntityByRuntimeSlotForQuery(51);
+            Assert.That(first, Is.Not.Null);
+            Assert.That(first.Runtime.OrdinaryCreditGate2F4, Is.EqualTo(ParentSlot));
+            first.AttackingCounter = 0;
+            first.FrameDelay = 0;
+            first.Frame.D = firstFrame;
+            first.Frame.N = 0;
+            first.Runtime.Frame = 0;
+            world.StructuralWriter.ProcessLateOpointSegment(
+                world.LogicObjectPointRuntime,
+                first,
+                3);
+
+            LF2Entity second = world.FindEntityByRuntimeSlotForQuery(52);
+            Assert.That(second, Is.Not.Null);
+            Assert.That(second.Runtime.OrdinaryCreditGate2F4,
+                Is.EqualTo(ParentSlot));
+            Assert.That(first.KillCount, Is.EqualTo(-1));
+            Assert.That(second.KillCount, Is.EqualTo(-1));
+        }
+
+        private static GateCharacter DamageEntity(
+            SimulationWorld world,
+            int oid,
+            int slot,
+            LF2ObjectType type)
+        {
+            var entity = new GateCharacter(type);
+            InitializeCharacter(entity, oid, slot);
+            world.Register(entity);
+            entity.Team = slot + 1;
+            entity.RelationTeam = slot + 1;
+            entity.Unk344 = 1;
+            return entity;
+        }
+
+        private static void InitializeCharacter(
+            LF2Character entity,
+            int oid,
+            int slot)
+        {
+            var frames = new List<LF2FrameData>(241);
+            for (int id = 0; id <= 240; id++)
+            {
+                frames.Add(new LF2FrameData
+                {
+                    frameId = id,
+                    state = LF2States.Standing,
+                    wait = 100,
+                    next = id,
+                    pic = 999,
+                });
+            }
+            entity.Name = $"Gate2F4_{oid}";
+            entity.ObjectId = oid;
+            entity.ModuleInitialize();
+            entity.SetRequiredRuntimeSlot(slot);
+            entity.FrameCache.Load(new LF2CharacterDataWrapper(
+                oid,
+                new LF2CharacterData
+                {
+                    name = entity.Name,
+                    type_sub = 0,
+                    frames = frames,
+                }));
+            entity.ImmediateFrame(0);
+            entity.Initialize(500, 500);
+            entity.Runtime.SetPosition(slot * 20, 0, 0);
+            entity.Runtime.SyncIntegerPosition();
+        }
+
+        private static InteractionArea DamageInteraction()
+        {
+            return new InteractionArea
+            {
+                kind = 0,
+                injury = 10,
+                fall = 1,
+                dvx = 1,
+                arest = 10,
+                vrest = 1,
+            };
+        }
+
+        private static ProbeOther CreateParent(
+            int oid,
+            LF2FrameData frame,
+            int parentGate,
+            int parentKillCount)
+        {
+            var parent = new ProbeOther(oid, frame)
+            {
+                OwnerEntityIndex = 7,
+                KillCount = parentKillCount,
+            };
+            parent.Runtime.OrdinaryCreditGate2F4 = parentGate;
+            return parent;
+        }
+
+        private static void RegisterParent(
+            SimulationWorld world,
+            ProbeOther parent)
+        {
+            parent.SetRequiredRuntimeSlot(ParentSlot);
+            world.Register(parent);
+            Assert.That(parent.Runtime.SlotIndex, Is.EqualTo(ParentSlot));
+        }
+
+        private static ChildDefinition Child(
+            int oid,
+            LF2ObjectType type,
+            LF2FrameData frame = null)
+        {
+            return new ChildDefinition(
+                oid,
+                type,
+                frame ?? FrameWithoutOpoint());
+        }
+
+        private static SimulationWorld CreateOpointWorld(
+            params ChildDefinition[] children)
+        {
+            var wrappers = new Dictionary<int, LF2CharacterDataWrapper>();
+            var definitions = new List<ObjectDefinition>(children.Length);
+            for (int index = 0; index < children.Length; index++)
+            {
+                ChildDefinition child = children[index];
+                var data = new LF2CharacterData
+                {
+                    name = $"Gate2F4Child{child.Oid}",
+                    type_sub = (int)child.Type,
+                    frames = new List<LF2FrameData> { child.Frame },
+                };
+                wrappers.Add(
+                    child.Oid,
+                    new LF2CharacterDataWrapper(child.Oid, data));
+                definitions.Add(new ObjectDefinition(
+                    child.Oid,
+                    (int)child.Type,
+                    "gate-2f4-opoint.dat"));
+            }
+
+            var resolver = new RuntimeCharacterConfigResolver(
+                oid => wrappers.TryGetValue(
+                    oid,
+                    out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            var world = new SimulationWorld(resolver);
+            world.SetLogicOnlyEntityMaterialization(true);
+            world.PrepareRuntimeDataCatalogForBattle(
+                definitions,
+                oid => wrappers.TryGetValue(
+                    oid,
+                    out LF2CharacterDataWrapper wrapper)
+                    ? wrapper
+                    : null);
+            return world;
+        }
+
+        private static LF2FrameData FrameWithOpoint(int childOid)
+        {
+            LF2FrameData frame = FrameWithoutOpoint();
+            frame.opoint = new ObjectPoint
+            {
+                oid = childOid,
+                kind = 1,
+                action = 0,
+                x = 10,
+                y = 20,
+                dvx = 3,
+                dvy = -2,
+                facing = 0,
+            };
+            return frame;
+        }
+
+        private static LF2FrameData FrameWithoutOpoint()
+        {
+            return new LF2FrameData
+            {
+                frameId = 0,
+                state = LF2States.Standing,
+                wait = 10000,
+                next = 0,
+                pic = 999,
+                centerx = 39,
+                centery = 79,
+            };
+        }
+
+        private static string Source(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return File.ReadAllText(Path.GetFullPath(
+                Path.Combine(root ?? string.Empty, relativePath)));
+        }
+
+        private static int Count(string source, string value)
+        {
+            int count = 0;
+            int offset = 0;
+            while ((offset = source.IndexOf(
+                       value,
+                       offset,
+                       StringComparison.Ordinal)) >= 0)
+            {
+                count++;
+                offset += value.Length;
+            }
+            return count;
+        }
+
+        private sealed class GateCharacter : LF2Character
+        {
+            private readonly LF2ObjectType type;
+
+            internal GateCharacter(LF2ObjectType type)
+            {
+                this.type = type;
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)type;
+        }
+
+        private sealed class DerivedRecoveryCharacter : LF2Character
+        {
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)LF2ObjectType.Character;
+        }
+
+        private sealed class ProbeOther : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
+            internal override bool UsesDynamicRuntimeSlot() => true;
+
+            internal ProbeOther(int oid, LF2FrameData frame)
+            {
+                Name = $"Gate2F4Parent{oid}";
+                ObjectId = oid;
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                Health.HP = 500;
+                Health.HPBound = 500;
+                Health.HP3 = 500;
+                Health.PP = 500;
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+                FrameCache.Load(new LF2CharacterDataWrapper(
+                    oid,
+                    new LF2CharacterData
+                    {
+                        name = Name,
+                        type_sub = (int)LF2ObjectType.Other,
+                        frames = new List<LF2FrameData> { frame },
+                    }));
+                Frame.D = frame;
+                Frame.N = 0;
+                Frame.PN = 0;
+                Frame.Prev = 0;
+                Frame.Prev2 = 0;
+                Runtime.Frame = 0;
+                Runtime.PrevFrame2 = 0;
+                Runtime.SetPosition(100, 0, 250);
+                Runtime.SyncIntegerPosition();
+                PS.dir = "right";
+                AttackingCounter = 0;
+                FrameDelay = 0;
+                HitStun = 0;
+            }
+
+            internal override void RunLateTailBeforePrevFrame()
+            {
+                AttackingCounter = 1;
+            }
+
+            public override void Reset()
+            {
+            }
+
+            public override void Init(
+                LF2TaskBase task,
+                LF2ObjectRenderer renderer)
+            {
+            }
+        }
+
+        private sealed class ChildDefinition
+        {
+            internal ChildDefinition(
+                int oid,
+                LF2ObjectType type,
+                LF2FrameData frame)
+            {
+                Oid = oid;
+                Type = type;
+                Frame = frame;
+            }
+
+            internal int Oid { get; }
+            internal LF2ObjectType Type { get; }
+            internal LF2FrameData Frame { get; }
+        }
+    }
+
+    [InitializeOnLoad]
+    internal sealed class NTSD28B5OrdinaryCreditGate2F4RequestRunner : ICallbacks
+    {
+        private const string RequestRelativePath =
+            "Temp/NTSD28-B5-OrdinaryCreditGate2F4-v1.request";
+        private const string ResultRelativePath =
+            "Temp/NTSD28-B5-OrdinaryCreditGate2F4-v1.result";
+        private const string FocusedTestClass =
+            "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests";
+
+        private static readonly string RequestPath = ProjectPath(RequestRelativePath);
+        private static readonly string ResultPath = ProjectPath(ResultRelativePath);
+        private static readonly StringBuilder FailureDetails = new StringBuilder(4096);
+        private static NTSD28B5OrdinaryCreditGate2F4RequestRunner activeCallbacks;
+        private static TestRunnerApi activeApi;
+
+        static NTSD28B5OrdinaryCreditGate2F4RequestRunner()
+        {
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (activeCallbacks != null || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating ||
+                EditorApplication.isPlayingOrWillChangePlaymode ||
+                !File.Exists(RequestPath))
+            {
+                return;
+            }
+            if (File.Exists(ResultPath))
+                File.Delete(ResultPath);
+            File.Delete(RequestPath);
+            activeCallbacks = new NTSD28B5OrdinaryCreditGate2F4RequestRunner();
+            activeApi = ScriptableObject.CreateInstance<TestRunnerApi>();
+            activeApi.RegisterCallbacks(activeCallbacks);
+            activeApi.Execute(new ExecutionSettings(new Filter
+            {
+                testMode = TestMode.EditMode,
+                testNames = new[] { FocusedTestClass },
+            })
+            {
+                runSynchronously = false,
+            });
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun)
+        {
+            FailureDetails.Clear();
+        }
+
+        public void RunFinished(ITestResultAdaptor result)
+        {
+            string text =
+                $"state={result.ResultState}\n" +
+                $"passed={result.PassCount}\n" +
+                $"failed={result.FailCount}\n" +
+                $"skipped={result.SkipCount}\n" +
+                $"inconclusive={result.InconclusiveCount}\n" +
+                $"message={result.Message}\n" +
+                FailureDetails;
+            File.WriteAllText(ResultPath, text, new UTF8Encoding(false));
+            activeApi.UnregisterCallbacks(this);
+            UnityEngine.Object.DestroyImmediate(activeApi);
+            activeApi = null;
+            activeCallbacks = null;
+        }
+
+        public void TestStarted(ITestAdaptor test)
+        {
+        }
+
+        public void TestFinished(ITestResultAdaptor result)
+        {
+            if (result?.Test == null || result.Test.IsSuite || result.FailCount <= 0)
+                return;
+            FailureDetails.Append("--- failure ---\n");
+            FailureDetails.Append("test=").Append(result.FullName).Append('\n');
+            FailureDetails.Append("state=").Append(result.ResultState).Append('\n');
+            FailureDetails.Append("message=").Append(result.Message).Append('\n');
+            FailureDetails.Append("stack=").Append(result.StackTrace).Append('\n');
+        }
+
+        private static string ProjectPath(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return Path.GetFullPath(Path.Combine(root ?? string.Empty, relativePath));
+        }
+    }
+
+    [InitializeOnLoad]
+    internal static class NTSD28B5OrdinaryCreditGate2F4PlayRunner
+    {
+        private const string RequestRelativePath =
+            "Temp/NTSD28-B5-OrdinaryCreditGate2F4-Play-v1.request";
+        private const string ResultRelativePath =
+            "Temp/NTSD28-B5-OrdinaryCreditGate2F4-Play-v1.result";
+        private static readonly string RequestPath = ProjectPath(RequestRelativePath);
+        private static readonly string ResultPath = ProjectPath(ResultRelativePath);
+        private static bool running;
+
+        static NTSD28B5OrdinaryCreditGate2F4PlayRunner()
+        {
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (running || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating || !File.Exists(RequestPath))
+            {
+                return;
+            }
+            if (!EditorApplication.isPlaying)
+            {
+                if (!EditorApplication.isPlayingOrWillChangePlaymode)
+                    EditorApplication.EnterPlaymode();
+                return;
+            }
+
+            running = true;
+            File.Delete(RequestPath);
+            if (File.Exists(ResultPath))
+                File.Delete(ResultPath);
+            try
+            {
+                var tests =
+                    new NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests();
+                tests.StandardDamage_LegacyStatsEligibilityReadsExactGate();
+                tests.ReducedAndCpointDamage_LegacyStatsEligibilityReadsExactGate();
+                tests.CharacterRecovery_DataAndLegacyThresholdReadExactGate();
+                tests.LogicOpoint_PropagatesExactGateOnlyForType0Children();
+                tests.ProductionSources_ContainNoScopedKillCountBinding();
+                File.WriteAllText(
+                    ResultPath,
+                    "state=Passed\ncases=5\n" +
+                    "damageGates=standard,reduced,cpoint\n" +
+                    "recovery=data,legacy\nopoint=type0,nonType0,twoHop\n" +
+                    "sceneMutation=none\n",
+                    new UTF8Encoding(false));
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllText(
+                    ResultPath,
+                    "state=Failed\n" + exception,
+                    new UTF8Encoding(false));
+            }
+            finally
+            {
+                EditorApplication.delayCall += ExitPlayMode;
+            }
+        }
+
+        private static void ExitPlayMode()
+        {
+            if (EditorApplication.isPlaying)
+                EditorApplication.ExitPlaymode();
+            running = false;
+        }
+
+        private static string ProjectPath(string relativePath)
+        {
+            string root = Directory.GetParent(Application.dataPath)?.FullName;
+            return Path.GetFullPath(Path.Combine(root ?? string.Empty, relativePath));
+        }
+    }
+}
+#endif

@@ -191,7 +191,6 @@ namespace NTSD.Test.Editor
 
                 catcher.SetPrev2(100);
                 victim.SetPrev2(130);
-                catcher.HolderCopySlot = holderSlot;
                 catcher.AttackingCounter = 0;
                 catcher.FrameDelay = 0;
                 victim.FrameDelay = 0;

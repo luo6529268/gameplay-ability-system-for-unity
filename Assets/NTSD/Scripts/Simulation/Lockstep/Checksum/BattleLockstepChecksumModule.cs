@@ -534,12 +534,10 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? -1 : runtime.CaughtSlotIndex);
             builder.AddInt32(isDefault ? 0 : runtime.CatchingStateTU);
             builder.AddInt32(isDefault ? -1 : runtime.HeldWeaponStableId);
-            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
             builder.AddInt32(isDefault ? -1 : runtime.HolderStableId);
             builder.AddInt32(isDefault ? 0 : runtime.LinkState);
             builder.AddInt32(isDefault ? -1 : runtime.PickerStableId);
             builder.AddInt32(isDefault ? 0 : runtime.PickupCount);
-            builder.AddInt32(runtime?.ReleaseTick ?? -1);
             builder.AddInt32(isDefault ? -1 : runtime.TargetSlotIndex);
             builder.AddInt32(isDefault ? -1 : runtime.ThrowFrameGuard);
 
@@ -632,7 +630,6 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? -1 : runtime.Unk360);
             builder.AddInt32(isDefault ? -1000 : runtime.Unk3FC);
             builder.AddInt32(isDefault ? -1000 : runtime.Unk400);
-            builder.AddInt32(isDefault ? 0 : runtime.WeaponState);
         }
 
         private void AppendNativeInputProxy(NTSD28InputProxyBlock proxy)

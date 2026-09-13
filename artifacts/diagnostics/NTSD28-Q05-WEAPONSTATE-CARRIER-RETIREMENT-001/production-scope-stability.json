@@ -1,0 +1,22 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "only_retired_storage_or_projection_removed": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+    "only_retired_storage_or_projection_removed": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+    "only_retired_storage_or_projection_removed": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+    "only_retired_storage_or_projection_removed": true
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+    "only_retired_storage_or_projection_removed": true
+  }
+]

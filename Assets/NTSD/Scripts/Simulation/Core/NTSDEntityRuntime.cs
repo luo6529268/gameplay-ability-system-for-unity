@@ -121,7 +121,6 @@ namespace NTSD.Simulation
         public int CatcherSlotIndex = -1;
         public int HeldWeaponStableId = -1;
         public int ThrowFrameGuard = -1;
-        public int ReleaseTick = -1;
         public int CaughtDuration;
         public int PickupCount;
         public int CaughtFrontFlag = 1;
@@ -229,7 +228,6 @@ namespace NTSD.Simulation
         public int RuntimeArmorHp118;
         public int ArmorRecoveryTimer11C = -1;
         public int HolderStableId = -1;
-        public int HolderCopySlotIndex = 99;
         public int PickerStableId = -1;
         public int ObjectAiTargetSlot3F8
         {
@@ -381,7 +379,6 @@ namespace NTSD.Simulation
         public int FallDamageDiv;
         public int WeaponFlightCounter;
         public int WeaponDropHurt;
-        public int WeaponState;
         public int Blink;
         public int HitCandidateCount;
         public int HitCandidateNearestDistance = 1000;
@@ -819,7 +816,6 @@ namespace NTSD.Simulation
             destination.CatcherSlotIndex = CatcherSlotIndex;
             destination.HeldWeaponStableId = HeldWeaponStableId;
             destination.ThrowFrameGuard = ThrowFrameGuard;
-            destination.ReleaseTick = ReleaseTick;
             destination.CaughtDuration = CaughtDuration;
             destination.PickupCount = PickupCount;
             destination.CaughtFrontFlag = CaughtFrontFlag;
@@ -930,7 +926,6 @@ namespace NTSD.Simulation
             destination.RuntimeArmorHp118 = RuntimeArmorHp118;
             destination.ArmorRecoveryTimer11C = ArmorRecoveryTimer11C;
             destination.HolderStableId = HolderStableId;
-            destination.HolderCopySlotIndex = HolderCopySlotIndex;
             destination.PickerStableId = PickerStableId;
             destination.AiControlled = AiControlled;
             destination.X = X;
@@ -1007,7 +1002,6 @@ namespace NTSD.Simulation
             destination.FallDamageDiv = FallDamageDiv;
             destination.WeaponFlightCounter = WeaponFlightCounter;
             destination.WeaponDropHurt = WeaponDropHurt;
-            destination.WeaponState = WeaponState;
             destination.Blink = Blink;
             destination.HitCandidateCount = HitCandidateCount;
             destination.HitCandidateNearestDistance = HitCandidateNearestDistance;
@@ -1056,7 +1050,6 @@ namespace NTSD.Simulation
             CatcherSlotIndex = -1;
             HeldWeaponStableId = -1;
             ThrowFrameGuard = -1;
-            ReleaseTick = -1;
             CaughtDuration = 0;
             PickupCount = 0;
             CaughtFrontFlag = 1;
@@ -1109,7 +1102,6 @@ namespace NTSD.Simulation
             ResetNativeResourceDisplayCarriers();
             ResetNativeReactionStatusCarriers();
             HolderStableId = -1;
-            HolderCopySlotIndex = 99;
             PickerStableId = -1;
             AiControlled = false;
             X = 0f;
@@ -1183,7 +1175,6 @@ namespace NTSD.Simulation
             FallDamageDiv = 0;
             WeaponFlightCounter = 0;
             WeaponDropHurt = 0;
-            WeaponState = 0;
             Blink = 0;
             HitCandidateCount = 0;
             HitCandidateNearestDistance = 1000;

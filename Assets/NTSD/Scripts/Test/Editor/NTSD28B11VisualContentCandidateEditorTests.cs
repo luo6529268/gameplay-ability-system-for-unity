@@ -129,10 +129,12 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void FormalCandidate_StillRejectsUnresolvedSixDatFiles()
+        public void FormalCandidate_Captures330DefinitionsAnd906ReferencedImages()
         {
-            var failure = Assert.Throws<AggregateException>(() => Capture(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime"));
-            Assert.That(failure.InnerExceptions.Count, Is.EqualTo(6));
+            var candidate = (LoganVisualContentCandidate)Capture(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime");
+            Assert.That(candidate.Catalog.Entries.Count, Is.EqualTo(330));
+            Assert.That(candidate.Images.Count, Is.EqualTo(906));
+            Verify(candidate);
         }
     }
 }

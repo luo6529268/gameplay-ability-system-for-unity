@@ -328,7 +328,7 @@ namespace NTSD.Test.Editor
                         (item.facing == 0 ? "right" : "left") &&
                     child.AttackExempt == 6 &&
                     child.Team == 0 && child.RelationTeam == 0 &&
-                    child.HolderCopySlot == 99 && child.KillCount == -1,
+                    child.KillCount == -1,
                     $"Live state9996 child {index} field/RNG ordering mismatch.");
                 children[index] = Child(child);
             }

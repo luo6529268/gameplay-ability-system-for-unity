@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "rows": 2,
+  "effective_observations_identical": true,
+  "omitted_retired_fields": [
+    "reservedWeaponState"
+  ],
+  "beforeObjects": 4,
+  "afterObjects": 4,
+  "scope": "OID124 action40 / state1002 / hit_Fa12, current RuntimeCharacterConfigs, two explicit pre-frame-advance calls, seed424242; no full tick/physical input/native world checksum claim"
+}

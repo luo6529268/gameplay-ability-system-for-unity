@@ -86,6 +86,37 @@ namespace NTSD.Simulation
         private BattleLogicReferencePool logicReferencePool;
         private readonly BattleLogicEntityFactory logicEntityFactory;
         private readonly BattleLogicObjectPointRuntime logicObjectPointRuntime;
+        private int snapshotTickBoundaryDepth;
+        private Func<SimulationWorld, bool> snapshotHostBusyObserver;
+
+        internal void BindSnapshotHostBusyObserver(Func<SimulationWorld, bool> observer)
+        {
+            snapshotHostBusyObserver = observer;
+        }
+
+        internal void EnterSnapshotTickBoundary() => System.Threading.Interlocked.Increment(ref snapshotTickBoundaryDepth);
+        internal void ExitSnapshotTickBoundary() => System.Threading.Interlocked.Decrement(ref snapshotTickBoundaryDepth);
+
+        internal bool IsBattleSnapshotBoundaryReady
+        {
+            get
+            {
+                // Alignment contract: NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001.
+                if (System.Threading.Volatile.Read(ref snapshotTickBoundaryDepth) != 0 || _ticking ||
+                    battleStructuralWriter.IsPlaybackActiveForSnapshot ||
+                    !battleStructuralWriter.AcceptingStructuralCreatesForDiagnostics ||
+                    !logicObjectPointRuntime.AcceptingSpawnRequestsForDiagnostics)
+                    return false;
+                if (snapshotHostBusyObserver != null && snapshotHostBusyObserver(this))
+                    return false;
+                if (logicObjectPointRuntime.PendingTaskCountForDiagnostics != 0)
+                    return false;
+                if (snapshotHostBusyObserver != null)
+                    return true;
+                LF2ObjectPointFactory existing = LF2ObjectPointFactory.TryGetInstance();
+                return existing == null || !existing.HasPendingTasksForSnapshot(this, SimulationTickDriver.Instance?.World);
+            }
+        }
         private readonly BattleLockstepChecksumModule lockstepChecksumModule;
         private readonly BattleWorldCoreScalarSnapshotModule
             battleWorldCoreScalarSnapshotModule;
@@ -870,6 +901,8 @@ namespace NTSD.Simulation
                 throw new ArgumentNullException(nameof(destination));
 
             destination.Invalidate();
+            if (!IsBattleSnapshotBoundaryReady)
+                return false;
             BattleWorldCoreScalarSnapshot core =
                 CaptureWorldCoreScalarSnapshot(identity);
             if (!TryCaptureWorldRosterResultsSnapshot(

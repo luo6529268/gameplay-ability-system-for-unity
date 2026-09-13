@@ -21,7 +21,7 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests
     {
         [Test]
-        public void Kind9Actual_PreservesTargetHolderCopySentinel()
+        public void Kind9Actual_PreservesEffectiveRelationsWithoutHolderCopy()
         {
             var world = new SimulationWorld();
             TypedCharacter attacker = Register(
@@ -36,8 +36,6 @@ namespace NTSD.Test.Editor
                     LF2ObjectType.SpecialAttack),
                 1,
                 2);
-            attacker.HolderCopySlot = 77;
-            target.HolderCopySlot = 99;
             target.Runtime.SetVelocity(2, 3, 4);
             target.KnockbackVx = 5;
             target.KnockbackVy = 6;
@@ -50,18 +48,18 @@ namespace NTSD.Test.Editor
                 new InteractionArea { kind = 9, effect = 0 });
 
             Assert.That(applied, Is.True);
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.RelationTeam, Is.EqualTo(7));
             Assert.That(target.Frame.N, Is.EqualTo(30));
             Assert.That(target.Runtime.AnimCounter, Is.Zero);
             Assert.That(target.Runtime.Vx, Is.Zero);
             Assert.That(target.Runtime.Vy, Is.Zero);
             Assert.That(target.Runtime.Vz, Is.Zero);
-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(77));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
         }
 
         [Test]
-        public void Kind9HitPlan_PreservesTargetHolderCopySentinel()
+        public void Kind9HitPlan_PreservesEffectiveRelationsWithoutHolderCopy()
         {
             new NTSD.Test.BattleHitExecutionPlanEditorTests()
                 .ShadowCompare_Type3Kind9WriterEffectMatchesAuthorityState(
@@ -90,11 +88,11 @@ namespace NTSD.Test.Editor
             StringAssert.DoesNotContain(
                 "projection.TargetHolderCopySlot = attackerSlot;",
                 hitPlan,
-                "Retired pickup paths must preserve the reserved HolderCopy carrier.");
+                "Retired pickup paths must not write a HolderCopy carrier.");
         }
 
         [Test]
-        public void ExistingSelfCheckType3Contract_PreservesTargetHolderCopySentinel()
+        public void ExistingSelfCheckType3Contract_PreservesEffectiveRelationsWithoutHolderCopy()
         {
             MethodInfo method = typeof(BattleRuntimeSelfCheck).GetMethod(
                 "CheckSpecialAttackHitResolveAuditContracts",
@@ -313,13 +311,13 @@ namespace NTSD.Test.Editor
             {
                 var tests =
                     new NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests();
-                tests.Kind9Actual_PreservesTargetHolderCopySentinel();
-                tests.Kind9HitPlan_PreservesTargetHolderCopySentinel();
+                tests.Kind9Actual_PreservesEffectiveRelationsWithoutHolderCopy();
+                tests.Kind9HitPlan_PreservesEffectiveRelationsWithoutHolderCopy();
                 tests.Type3ProductionSources_ContainNoLegacyHolderCopyWriter();
                 File.WriteAllText(
                     ResultPath,
                     "state=Passed\ncases=3\n" +
-                    "targetHolderCopy=99\nsourceHolderCopy=77\n" +
+                    "holderCopyCarrierAbsent=" + (typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0).ToString() + "\n" +
                     "type3ExtraAssignments=0\nsceneMutation=none\n",
                     new UTF8Encoding(false));
             }

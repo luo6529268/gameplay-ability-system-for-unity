@@ -1,0 +1,29 @@
+# Q05 解码语义身份接线限定交付
+
+FOCUSED_TEST_PASS / SCOPED_PUBLICATION_PLAY_PASS / JOINT_SCHEMA_PENDING。父Q05步骤3仍IN_PROGRESS，下一双OPoint snapshot边界，总目标FULL_ALIGNMENT_INCOMPLETE。
+
+## 实现
+
+准确7脚本：新增不可变LoganContentIdentity，接入LoganObjectCatalog/LoganVisualContentCandidate、CharacterAnimtorManager与GameDataManager的既有发布事务，新身份测试与Atomic测试。另一个独立test-only Record更正一份旧Visual测试，总计本轮8脚本，累计差量53与已声明范围一致。
+
+raw DefinitionFingerprint及VisualFingerprint原算法全文保持（raw-fingerprint-stability.json）；新增固定ASCII NTSD28_LOGAN_DAT_SEMANTICS_V2 + NUL + raw32 bytes的SHA256，保留完整raw/tag/semantic，首8字节little-endian ulong零→1。Catalog与candidate缓存键纳入semantic，candidate仍含raw visual指纹；输入新鲜度检查也比当前decoder semantic，旧版本缓存不复用。没有另建缓存或改变资源解析路径。
+
+Character manager直接从已有published candidate投影身份；GameDataManager的prepared publication附带同一个immutable identity并在现有无await引用交换中提交，不增加新生命周期owner。成功/失败/取消后所有已发布视图保持一致，Atomic测试从真正已发布owner创建本地验证Session，StrictDelayedInputBuffer拒绝不同内容的packet。复用协议布局1与现有constructor，不修改外部Server或既有合成fixture调用方，不声称所有外部会话自动接线。
+
+## 实测证据
+
+- RED job26d40718cfd74552a9d59faf65090a6f：14项全部缺身份API失败。原始job JSON保留；NUnit结果文件随后被夹具测试更新，未把其他XML冒充RED。首次PNG方法名不匹配未算测试；准确NativePng夹具恢复job b592858e4b504ff5a953f593b89ae1ec 1PASS，恢复Temp夹具。读取中文失败消息的默认GBK输出问题以Python -X utf8读取同job解决，没有重启任务。
+- 主回归job5d9d23f3373345758fb736fb6869bfe7：75/75 PASS，0skipped。包括16项新测试、正式catalog、原子发布、来源cache/caller、StrictDelayedInputBuffer、snapshot restore；精确选择test-selection.json，结果green-results.xml。新增两个集成检查在生产后补充，初始RED为14项，不虚称16全部先RED。
+- 冻结3向量、大小写规范、非法hash/tag、LE和零保护、同raw换decoder、改DAT/换root、模拟旧decoder candidate拒绝、本地session不匹配均通过。独立Python复算正式与Play源的SHA256/LE投影一致。
+- 正式330定义、906个实际引用图片输入capture通过且freshness通过；rawDefinition=4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C，rawVisual=1A81ED6000C49CAF9F29CBB786B69DA8BC914DC416383B09CD5E2D479912B8A4，semantic=DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407，CatalogFingerprint=0x3900ECBC509557DB。见formal-content-identity.json/independent-python-identity.json。906是candidate实际引用集合，非全部1255 PNG本轮重新解码或渲染验收。
+- 补充Visual类job0d9e6e3e705a4cc5a2cc276bcac5e52f：7=6PASS/1过期六DAT异常断言FAIL。独立NTSD28-Q05-FORMAL-VISUAL-CANDIDATE-ADMISSION-FIXTURE-001更正已被Q05来源工作解决的旧预期，jobc52513bdf4ac4c76a2439255e196699e仅该formal用例1PASS。首次namespace过滤不匹配不算覆盖；Temp palette夹具用现有Generate-Fixtures.py恢复，28valid/16invalid，未触碰Assets资源。主要75+补充6+定向1共82不同focused有通过证据，不冒称单次82全绿。
+- 完整SelfCheck request2026-09-13T10:58:32.064184Z→结果10:59:15Z PASS，结果mtime晚于请求，旧PASS另存NOT-CURRENT。
+- 实际menu Play runId Q05-Semantic-Menu-20260913-1100：沿既有NTSD28_B11_SourceCaller.request.json入口、BeforeSceneLoad临时GameConfig clone，用隔离native格式源IDs0/2/50/52。World4，cache命中1，三个published keys相同；shutdown RuntimeMapCleared，池borrower0，46跟踪资源全释放、两帧保持Stopped，自动退出Play。独立Python按实际catalog.csv和DAT bytes重建raw BinaryWriter字节及V2 SHA，匹配Play sourceKey中的F4949F7C9BE7229E86704B83E3EC77D95724C74F689D7D6F5AD7BF52339B4D88。见play-result.json/play-independent-identity.json。此为实际调用/发布/卸载验证，非正式330角色全场渲染、物理按键或整技能parity。
+- 实际工具为现有Unity2022.3.62f3桥接refresh_unity/run_tests/get_test_job/get_editor_state/read_console及request机制；未使用computer-use/第二Editor。最终CS0、Scene dirtyfalse/root14，Scene SHA a96e11064f1bd054d9d5547fe8f02c702d971b3972d55754886d75b2dce9d28f不变。SelfCheck有预期故障日志，不声称Console所有error为0。
+- 保护3059维持2954同/87既有声明差异/18既有Foot缺失，无新缺失；本包所改旧文件此前已是保护基线差异或Q02后新增。git diff --check PASS，Tools/Validate-ChangeLedger.ps1 -RepositoryRoot $PWD.Path PASS：498 Records/53累计差量脚本，ledger-final.txt保存。未提交/推送/部署正式资源，现有用户工作保持。
+
+## 下一入口与限制
+
+NTSD28-Q05-OPOINT-SNAPSHOT-BOUNDARY-GUARD-001：复用当前World/driver已有两个OPoint owner，非tick/非structural播放且属于本World的队列为空才允许capture/restore，拒绝不Flush/丢任务/创建singleton。之后仍检查其他存在的frame/metadata内容hash，协同entity13/aggregate21/checksum24/character2/base2、trace/raw版本与2F8第50字段；旧6MISSING不可无证据晋升，再做旧版本拒绝与新snapshot回放/Play。
+
+本包完成source+decode身份、现有cache/pub/local validation子条件，未完成所有trace/header/hash消费或双队列guard，不关闭父Q05/R15。当前12/20/23/1/1是未发布中间态；Q07正式DAT/角色图片迁移未执行，2F8等新消费在Q06。Unity/GAS/非战斗、33ms/3ms、十一阶段、stage.dat USER_HOLD及例外保持，禁止computer-use。

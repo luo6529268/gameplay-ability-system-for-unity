@@ -1,0 +1,47 @@
+{
+  "paths": [
+    "Assets/NTSD/Scripts/Animation/LF2Tasks/LF2TaskRingBuffer.cs",
+    "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+    "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+    "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+    "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05OpointSnapshotBoundaryEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Tasks/LF2TaskRingBuffer.cs",
+      "sha256": "a0d646e419344f75cbfdf7c0850b6020b385e70bdd59986ed4b30818f394fd03"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/LF2ObjectPointFactory.cs",
+      "sha256": "f176bad72159365b14fb6d043d339e3cca121379b7860bd3568ffb6993037b02"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs",
+      "sha256": "affc30ec3e7a7496d4ab98c0f151d3ad3ef1b2709c5f7fc39cc0f44c9119745d"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs",
+      "sha256": "cb5a140a2af1a609eb74c99f5d8270c013107477bf927f9d8dbbf2ce8dab73cf"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleStructuralWriter.cs",
+      "sha256": "7dd8d021c8a8edc8dfc58def195f6666c6d6929fdccadcaa5d34f3d7b747f33e"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+      "sha256": "e8d3e7b3cc75a3a1e84cd964e53e9d32c74127adc48b5d9d225bc72c1b2b729e"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs",
+      "sha256": "b273df5504e92e50daa48cd8dd254cd61edf1e5cba49227185e47de2437c8416"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Session/BattleLockstepSession.cs",
+      "sha256": "b7e70ada3fd1c1541d002652ccea919bd1eb48064d1289a9097f21ff5f33d276"
+    }
+  ]
+}

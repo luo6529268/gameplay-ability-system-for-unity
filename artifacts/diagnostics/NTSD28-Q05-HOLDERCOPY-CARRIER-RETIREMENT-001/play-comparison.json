@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "startTick": 5,
+  "endTick": 9,
+  "beforeObjects": 4,
+  "afterObjects": 4,
+  "opointPassed": true,
+  "g16Cases": [
+    {
+      "name": "oid120_type1",
+      "status": "PASS"
+    },
+    {
+      "name": "type2_state2004_replacement",
+      "status": "PASS"
+    }
+  ],
+  "g16EffectiveWitnessesIdentical": true,
+  "removedDiagnosticKeys": [
+    "holderCopy"
+  ],
+  "differences": [],
+  "boundary": "Only populated witnesses and root report are evidence; embedded outer G16 status/cleanup/counters are unpopulated defaults, not a separate full G16 run."
+}

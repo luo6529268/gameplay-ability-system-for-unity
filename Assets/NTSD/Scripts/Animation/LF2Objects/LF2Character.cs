@@ -1099,8 +1099,6 @@ namespace NTSD.Animation.LF2Objects
 
             (targetWorld ?? SimulationTickDriver.Instance?.World)?.Register(this);
 
-            if (!_initializedFromOpoint)
-                HolderCopySlot = 99;
         }
 
         public void Initialize(int maxHp, int maxMp)
@@ -1123,7 +1121,6 @@ namespace NTSD.Animation.LF2Objects
             WeaponCount = 0;
             FallDamageDiv = 0;
             TrackerParent = null;
-            HolderCopySlot = 99;
             OwnerId = -1;
             RelationOwnerSlot = -1;
             OwnerEntityIndex = -1;

@@ -19,12 +19,11 @@ namespace NTSD.Test.Editor
     [Category("NTSD28_B5")]
     public sealed class NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests
     {
-        [TestCase(-1, 7, 0)]
-        [TestCase(0, 7, 0)]
-        [TestCase(77, 5, 77)]
+        [TestCase(-1, 0)]
+        [TestCase(0, 0)]
+        [TestCase(77, 77)]
         public void LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(
             int holderStableId,
-            int holderCopySlot,
             int expectedSlot)
         {
             TypedCharacter attacker = CreateEntity(
@@ -34,7 +33,6 @@ namespace NTSD.Test.Editor
                 Frame());
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = holderStableId;
-            attacker.HolderCopySlot = holderCopySlot;
 
             Assert.That(
                 attacker.ResolveReleaseNeutralHolderSlotOrImplicitZero(),
@@ -42,7 +40,7 @@ namespace NTSD.Test.Editor
             Assert.That(
                 attacker.ResolveReleaseNegativeLinkHolderSlotOrImplicitZero(),
                 Is.EqualTo(expectedSlot));
-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(holderCopySlot));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
         }
 
         [Test]
@@ -71,7 +69,6 @@ namespace NTSD.Test.Editor
                 2);
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = exactHolder.Runtime.SlotIndex;
-            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
 
             BattleHitCandidatePairSnapshot snapshot =
                 BattleHitCandidatePairSnapshotFactory.Capture(
@@ -82,7 +79,7 @@ namespace NTSD.Test.Editor
             Assert.That(snapshot.Valid, Is.True);
             Assert.That(snapshot.LinkedHolderPresent, Is.True);
             Assert.That(snapshot.LinkedHolderBattleGroup, Is.EqualTo(17));
-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
         }
 
         [Test]
@@ -124,7 +121,6 @@ namespace NTSD.Test.Editor
             exactHolder.Runtime.TargetSlotIndex = attacker.Runtime.SlotIndex;
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = exactHolder.Runtime.SlotIndex;
-            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
 
             InteractionArea resolved = BruteForceSceneQuery.ResolveRuntimeItrForPair(
                 attacker,
@@ -139,7 +135,7 @@ namespace NTSD.Test.Editor
             Assert.That(resolved.injury, Is.EqualTo(77));
             Assert.That(zeroAttackerHpOnConsume, Is.False);
             Assert.That(releaseHeavyHeldTargetOnConsume, Is.False);
-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
         }
 
         private static TypedCharacter CreateHolder(
@@ -363,16 +359,16 @@ namespace NTSD.Test.Editor
             {
                 var tests =
                     new NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests();
-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(-1, 7, 0);
-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(0, 7, 0);
-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(77, 5, 77);
+                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(-1, 0);
+                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(0, 0);
+                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(77, 77);
                 tests.FrozenPair_UsesExactHighSlotHolderGroupNotRootCopyGroup();
                 tests.Kind5Replacement_UsesExactHolderFrameNotRootCopyFrame();
                 File.WriteAllText(
                     ResultPath,
                     "state=Passed\ncases=5\n" +
                     "exactSlots=implicit0,slot0,slot77\n" +
-                    "holderCopyUnchanged=true\nsceneMutation=none\n",
+                    "holderCopyCarrierAbsent=" + (typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0).ToString() + "\nsceneMutation=none\n",
                     new UTF8Encoding(false));
             }
             catch (Exception exception)

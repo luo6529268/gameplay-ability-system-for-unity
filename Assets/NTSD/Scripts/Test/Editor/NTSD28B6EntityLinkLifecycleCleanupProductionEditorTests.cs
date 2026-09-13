@@ -283,7 +283,6 @@ namespace NTSD.Test.Editor
 
         private static void SetExcludedSentinels(LF2Character entity, int seed)
         {
-            entity.HolderCopySlot = seed;
             entity.Runtime.Kind4SourceCount92 = seed + 100;
             entity.Runtime.OwnerSlotIndex = seed + 200;
             entity.Runtime.SpawnerSlotIndex = seed + 300;
@@ -294,7 +293,7 @@ namespace NTSD.Test.Editor
 
         private static void AssertExcludedSentinels(LF2Character entity, int seed)
         {
-            Assert.That(entity.HolderCopySlot, Is.EqualTo(seed));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(entity.Runtime.Kind4SourceCount92, Is.EqualTo(seed + 100));
             Assert.That(entity.Runtime.OwnerSlotIndex, Is.EqualTo(seed + 200));
             Assert.That(entity.Runtime.SpawnerSlotIndex, Is.EqualTo(seed + 300));

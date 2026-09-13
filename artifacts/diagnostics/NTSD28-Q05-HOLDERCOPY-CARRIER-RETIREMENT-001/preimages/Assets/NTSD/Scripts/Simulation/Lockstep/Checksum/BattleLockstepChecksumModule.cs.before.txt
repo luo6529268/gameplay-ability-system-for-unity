@@ -1,0 +1,760 @@
+using System;
+using System.Collections.Generic;
+using NTSD.Animation.LF2Objects;
+
+namespace NTSD.Simulation
+{
+    /// <summary>
+    /// Allocation-free deterministic checksum writer used by the fixed-tick path.
+    /// Diagnostic canonical JSON snapshots remain a separate, explicitly requested path.
+    /// </summary>
+    internal struct BattleChecksum64Builder
+    {
+        private const ulong Offset = 14695981039346656037UL;
+        private const ulong Prime = 1099511628211UL;
+
+        private ulong value;
+
+        public void Reset()
+        {
+            value = Offset;
+        }
+
+        public void AddBoolean(bool item)
+        {
+            AddByte(item ? (byte)1 : (byte)0);
+        }
+
+        public void AddByte(byte item)
+        {
+            value = (value ^ item) * Prime;
+        }
+
+        public void AddInt32(int item)
+        {
+            AddUInt32(unchecked((uint)item));
+        }
+
+        public void AddUInt32(uint item)
+        {
+            AddByte((byte)item);
+            AddByte((byte)(item >> 8));
+            AddByte((byte)(item >> 16));
+            AddByte((byte)(item >> 24));
+        }
+
+        public void AddInt64(long item)
+        {
+            AddUInt64(unchecked((ulong)item));
+        }
+
+        public void AddUInt64(ulong item)
+        {
+            AddUInt32((uint)item);
+            AddUInt32((uint)(item >> 32));
+        }
+
+        public void AddSingle(float item)
+        {
+            AddInt32(BitConverter.SingleToInt32Bits(item));
+        }
+
+        public void AddDouble(double item)
+        {
+            AddInt64(BitConverter.DoubleToInt64Bits(item));
+        }
+
+        public void AddIntArray(int[] items)
+        {
+            int count = items?.Length ?? 0;
+            AddInt32(count);
+            for (int index = 0; index < count; index++)
+                AddInt32(items[index]);
+        }
+
+        public void AddIntList(IReadOnlyList<int> items)
+        {
+            int count = items?.Count ?? 0;
+            AddInt32(count);
+            for (int index = 0; index < count; index++)
+                AddInt32(items[index]);
+        }
+
+        public void AddStringOrdinal(string item)
+        {
+            int count = item?.Length ?? 0;
+            AddInt32(count);
+            for (int index = 0; index < count; index++)
+                AddUInt32(item[index]);
+        }
+
+        public void AddNormalizedSoundCue(string cue)
+        {
+            if (string.IsNullOrEmpty(cue))
+            {
+                AddInt32(0);
+                return;
+            }
+
+            int first = 0;
+            int last = cue.Length - 1;
+            while (first <= last && char.IsWhiteSpace(cue[first]))
+                first++;
+            while (last >= first && char.IsWhiteSpace(cue[last]))
+                last--;
+
+            int identifierStart = first;
+            for (int index = first; index <= last; index++)
+            {
+                char current = cue[index];
+                if (current == '/' || current == '\\')
+                    identifierStart = index + 1;
+            }
+
+            const string prefix = "snddata_";
+            if (last - identifierStart + 1 >= prefix.Length)
+            {
+                bool matchesPrefix = true;
+                for (int index = 0; index < prefix.Length; index++)
+                {
+                    if (char.ToLowerInvariant(cue[identifierStart + index]) != prefix[index])
+                    {
+                        matchesPrefix = false;
+                        break;
+                    }
+                }
+
+                if (matchesPrefix)
+                    identifierStart += prefix.Length;
+            }
+
+            int length = Math.Max(0, last - identifierStart + 1);
+            AddInt32(length);
+            for (int index = identifierStart; index <= last; index++)
+                AddUInt32(char.ToLowerInvariant(cue[index]));
+        }
+
+        public ulong Complete()
+        {
+            ulong result = value;
+            result ^= result >> 33;
+            result *= 0xff51afd7ed558ccdUL;
+            result ^= result >> 33;
+            result *= 0xc4ceb9fe1a85ec53UL;
+            result ^= result >> 33;
+            return result;
+        }
+    }
+
+    /// <summary>
+    /// Match-owned lockstep checksum module. It reads the current simulation truth
+    /// directly and never constructs canonical object graphs on the battle hot path.
+    /// </summary>
+    internal sealed class BattleLockstepChecksumModule
+    {
+        internal const int CurrentSchemaVersion = 23;
+        private BattleChecksum64Builder builder;
+
+        public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
+        {
+            if (world == null)
+                return 0UL;
+
+            builder.Reset();
+            builder.AddInt32(CurrentSchemaVersion);
+            builder.AddInt32(tickIndex);
+            AppendInput(frameInput, tickIndex);
+            AppendMetadata(world, tickIndex);
+            AppendWorld(world);
+            AppendSlots(world);
+            AppendRest(world.RuntimeRestStoreForServices, ref builder);
+            AppendStats(world);
+            AppendEvents(world.PendingSounds);
+            return builder.Complete();
+        }
+
+        internal static ulong CaptureRestProjectionChecksum(RuntimeRestStore store)
+        {
+            if (store == null)
+                return 0UL;
+
+            var restBuilder = new BattleChecksum64Builder();
+            restBuilder.Reset();
+            AppendRest(store, ref restBuilder);
+            return restBuilder.Complete();
+        }
+
+        private static void AppendRest(
+            RuntimeRestStore store,
+            ref BattleChecksum64Builder target)
+        {
+            target.AddInt32(store.LogicalCapacity);
+            target.AddInt32(store.ARestEntryCount);
+            foreach (RuntimeRestStore.ARestEntry entry in
+                     store.EnumerateCanonicalARestEntries())
+            {
+                target.AddInt32(entry.AttackerSlot);
+                target.AddInt32(entry.Value);
+            }
+
+            target.AddInt32(store.VRestEntryCount);
+            target.AddInt32(store.VRestRowCount);
+            ulong unorderedEntries = 0UL;
+            foreach (RuntimeRestStore.VRestEntry entry in
+                     store.EnumerateCanonicalVRestEntries())
+            {
+                unorderedEntries ^= MixRestEntry(
+                    entry.VictimSlot,
+                    entry.AttackerSlot,
+                    entry.Value);
+            }
+
+            target.AddUInt64(unorderedEntries);
+        }
+
+        private static ulong MixRestEntry(
+            int victimSlot,
+            int attackerSlot,
+            int value)
+        {
+            unchecked
+            {
+                ulong mixed = (uint)victimSlot;
+                mixed = (mixed << 32) | (uint)attackerSlot;
+                mixed ^= (ulong)(uint)value * 0x9e3779b185ebca87UL;
+                mixed ^= mixed >> 30;
+                mixed *= 0xbf58476d1ce4e5b9UL;
+                mixed ^= mixed >> 27;
+                mixed *= 0x94d049bb133111ebUL;
+                mixed ^= mixed >> 31;
+                return mixed;
+            }
+        }
+
+        private void AppendInput(FrameInputSet frameInput, int tickIndex)
+        {
+            if (frameInput == null)
+            {
+                builder.AddInt32(tickIndex);
+                builder.AddInt32(0);
+                return;
+            }
+
+            builder.AddInt32(frameInput.TickIndex);
+            IReadOnlyList<SimulationPlayerInput> players = frameInput.Players;
+            int count = players?.Count ?? 0;
+            builder.AddInt32(count);
+            for (int index = 0; index < count; index++)
+            {
+                SimulationPlayerInput player = players[index];
+                builder.AddInt32(player.PlayerSlot);
+                builder.AddByte((byte)player.Buttons);
+                builder.AddByte((byte)player.PressedButtons);
+                builder.AddByte((byte)player.ReleasedButtons);
+            }
+        }
+
+        private void AppendMetadata(SimulationWorld world, int tickIndex)
+        {
+            builder.AddInt32((int)world.RuntimeProfileForServices);
+            builder.AddInt32(tickIndex);
+            builder.AddInt32(world.MaxRuntimeSlotsForServices);
+            builder.AddInt32(world.ClaimedRuntimeSlotCountForServices);
+            builder.AddInt32(world.ObjectCount);
+            builder.AddBoolean(world.OneTuInput);
+            builder.AddUInt32(world.Rng?.State ?? 0U);
+            builder.AddUInt64(world.Rng?.CallCount ?? 0UL);
+            NTSD28NativeRandomScalarState nativeRandom =
+                world.NativeRandom?.CaptureScalarState() ?? default;
+            builder.AddUInt32(nativeRandom.CrtState);
+            builder.AddUInt64(nativeRandom.CrtCalls);
+            builder.AddUInt32(nativeRandom.TableSeed);
+            builder.AddInt32(nativeRandom.SynchronizedCounter);
+            builder.AddInt32(nativeRandom.SynchronizedIndex);
+            builder.AddUInt64(nativeRandom.SynchronizedCalls);
+            builder.AddUInt32(nativeRandom.LastSynchronizedCallSite);
+            builder.AddUInt64(nativeRandom.SynchronizedTableHash);
+        }
+
+        private void AppendWorld(SimulationWorld world)
+        {
+            BattleRuntimeState battle = world.Runtime;
+            BattleMatchRuntimeState match = battle?.Match;
+            BattleStageRuntimeState stage = battle?.Stage;
+            BattleFlowRuntimeState flow = battle?.Flow;
+            BattleResultsRuntimeState results = battle?.Results;
+            BattleRosterRuntimeState roster = battle?.Roster;
+            BattleStageProgressionState progression = battle?.StageProgression;
+
+            builder.AddInt32(match?.LocalGameModeId ?? 0);
+            builder.AddInt32(match?.BattleGameModeId ?? 0);
+            builder.AddInt32(match?.BackgroundId ?? -1);
+            builder.AddInt32(match?.Difficulty ?? 2);
+            builder.AddInt32(match?.StageIdx ?? 0);
+            builder.AddInt32(match?.RandomStage ?? 0);
+            builder.AddInt32(match?.RuntimeStageCount ?? 0);
+            builder.AddInt32(match?.Seed ?? 0);
+            builder.AddBoolean(match?.PpMode ?? true);
+
+            builder.AddInt32(stage?.StageWidthPx ?? 800);
+            builder.AddInt32(stage?.ZMin ?? 180);
+            builder.AddInt32(stage?.ZMax ?? 350);
+            builder.AddInt32(stage?.BoundRight ?? 800);
+            builder.AddInt32(stage?.XMaxOverride ?? 0);
+            builder.AddInt32(stage?.CameraMaxOverride ?? 0);
+            builder.AddInt32(world.ReleaseCameraX);
+            builder.AddInt32(world.ReleaseCameraVelocityForServices);
+
+            builder.AddInt32(flow?.CurrentTickIndex ?? 0);
+            builder.AddInt32(flow?.AiPhaseGate ?? 0);
+            builder.AddInt32(flow?.InputPhase ?? 0);
+            builder.AddInt32(flow?.FrameMod12 ?? 0);
+            builder.AddInt32(flow?.FrameToggle ?? 0);
+            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase12 ?? 0);
+            builder.AddInt32(battle?.NativeWorldClock?.ResourcePhase3 ?? 0);
+            builder.AddUInt64(battle?.NativeWorldClock?.FrameSequence ?? 0UL);
+            builder.AddInt32(flow?.AiDifficulty ?? 0);
+            builder.AddInt32(flow?.AiRand3 ?? 0);
+            builder.AddInt32(flow?.AiRand5 ?? 0);
+            builder.AddInt32(flow?.AiRand15 ?? 0);
+            builder.AddInt32(flow?.AiRand20 ?? 0);
+            builder.AddInt32(flow?.AiMoveMode ?? 0);
+            builder.AddInt32(flow?.AiStageTargetX ?? 0);
+            builder.AddInt32(flow?.BattleExitCountdown ?? 0);
+            builder.AddInt32(flow?.RouteOutRequest ?? 0);
+            builder.AddInt32(flow?.InitStatsRequest ?? 0);
+            builder.AddInt32(flow?.Mode2Request ?? 0);
+            builder.AddInt32(flow?.BattleStepMode ?? 0);
+            builder.AddInt32(flow?.BattleStepGate ?? 0);
+            builder.AddInt32(flow?.DjaGuardGlobal44F224 ?? 0);
+            builder.AddBoolean(flow?.HumanInputPolledExternally ?? false);
+            builder.AddBoolean(flow?.NeedClearInput ?? false);
+
+            NTSD28NativeFunctionKeySessionState functionKeys = battle?.FunctionKeys;
+            builder.AddInt32(functionKeys?.LockState ?? 0);
+            builder.AddBoolean(functionKeys?.HitResourceEnabled ?? true);
+            builder.AddUInt32(functionKeys?.F6EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F7EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F8EventCount ?? 0);
+            builder.AddUInt32(functionKeys?.F9EventCount ?? 0);
+            builder.AddBoolean(functionKeys?.PendingFullMp ?? false);
+            builder.AddByte((byte)(functionKeys?.PendingObjectCommand ??
+                NTSD28NativeFunctionKeyPendingObjectCommand.None));
+            builder.AddByte(functionKeys?.QueuedEventByte ?? 0);
+            builder.AddByte(functionKeys?.LastAcceptedEventByte ?? 0);
+
+            NTSD28HitResourceRulesRuntimeState hitResourceRules =
+                battle?.NativeHitResourceRules;
+            builder.AddInt32(hitResourceRules?.ActiveModeHitGroupGate18 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeHitGroupGate18);
+            builder.AddInt32(hitResourceRules?.ActiveModeAttackingPercent1C ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultActiveModeAttackingPercent1C);
+            builder.AddInt32(hitResourceRules?.AttackerInjuryMpPercent34 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultAttackerInjuryMpPercent34);
+            builder.AddInt32(hitResourceRules?.TargetInjuryMpPercent38 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultTargetInjuryMpPercent38);
+            builder.AddInt32(hitResourceRules?.NegativeEnvironmentDamage90 ??
+                NTSD28HitResourceRulesRuntimeState
+                    .DefaultNegativeEnvironmentDamage90);
+            NTSD28NativeComboRuntimeState nativeCombo = battle?.NativeCombo;
+            builder.AddBoolean(nativeCombo?.RecordPresent ??
+                NTSD28NativeComboRuntimeState.DefaultRecordPresent);
+            builder.AddInt32(nativeCombo?.Bound ??
+                NTSD28NativeComboRuntimeState.DefaultBound);
+            builder.AddInt32(nativeCombo?.Facing ??
+                NTSD28NativeComboRuntimeState.DefaultFacing);
+            builder.AddInt32(nativeCombo?.Respond ??
+                NTSD28NativeComboRuntimeState.DefaultRespond);
+            builder.AddInt32(nativeCombo?.CaughtAct ??
+                NTSD28NativeComboRuntimeState.DefaultCaughtAct);
+            NTSD28StandardHitRestRuntimeState standardHitRest =
+                battle?.NativeStandardHitRest;
+            builder.AddInt32(standardHitRest?.TimingReduction4A9FF4 ??
+                NTSD28StandardHitRestRuntimeState
+                    .DefaultTimingReduction4A9FF4);
+
+            BattleSlotRuntimeState[] rosterSlots = roster?.Slots;
+            builder.AddInt32(roster?.ActiveSlotCount ?? 0);
+            for (int index = 0; index < 8; index++)
+            {
+                BattleSlotRuntimeState slot = rosterSlots != null && index < rosterSlots.Length
+                    ? rosterSlots[index]
+                    : null;
+                builder.AddBoolean(slot?.Active ?? false);
+                builder.AddBoolean(slot != null && slot.Active && !slot.IsHuman);
+                builder.AddInt32(slot?.CharacterId ?? -1);
+                builder.AddInt32(slot?.Team ?? 1);
+                builder.AddInt32(slot?.RuntimeSlotIndex ?? -1);
+            }
+
+            builder.AddInt32(results?.Phase ?? 0);
+            builder.AddInt32(results?.Timer ?? 0);
+            builder.AddInt32(results?.Winner ?? -1);
+            builder.AddBoolean(results?.HadBoth ?? false);
+            builder.AddInt32(results?.BattleEndPhase ?? 0);
+            builder.AddInt32(results?.PendingWinner ?? -2);
+            builder.AddInt32(results?.TeamCount ?? 0);
+            builder.AddIntArray(results?.TeamIds);
+            builder.AddInt32(results?.PendingHostAction ?? 0);
+            builder.AddInt32(results?.Cursor ?? 6);
+            builder.AddInt32(results?.SettingsCursor ?? 2);
+            builder.AddInt32(results?.TableCursor ?? 10);
+            builder.AddInt32(results?.TableSide ?? 0);
+            builder.AddInt32(results?.ResultSubcursor ?? 2);
+            builder.AddIntArray(results?.ResultMultiplier);
+            AppendFixedMatrix(results?.ResultRow1Values, 2, 11);
+            AppendFixedMatrix(results?.ResultRow2Values, 2, 11);
+            AppendFixedMatrix(results?.ResultCommittedTotal, 2, 11);
+            AppendFixedMatrix(results?.ResultCommittedHp, 2, 11);
+            builder.AddIntArray(results?.ResultSelectedTroop);
+            builder.AddIntArray(results?.ResultSelectedIcon);
+            builder.AddIntArray(results?.ResultTableTop);
+            builder.AddIntArray(results?.ResultTableBottom);
+            builder.AddInt32(results?.ResultTableSavedTop ?? -1);
+            builder.AddInt32(results?.ResultTableSavedBottom ?? -1);
+            AppendFixedMatrix(results?.ResultBackupRow1Values, 2, 11);
+            AppendFixedMatrix(results?.ResultBackupRow2Values, 2, 11);
+
+            builder.AddBoolean(battle?.ReserveOwnerValid ?? false);
+            AppendFixedMatrix(battle?.ReserveCommittedTotal, 2, 11);
+            AppendFixedMatrix(battle?.ReserveCommittedHp, 2, 11);
+
+            builder.AddInt32(progression?.StageSeriesIdx ?? 0);
+            builder.AddInt32(progression?.WaveIdx ?? -1);
+            builder.AddInt32(progression?.Round ?? 0);
+            builder.AddInt32(progression?.RoundMax ?? 0);
+            builder.AddBoolean(battle?.StageProgressionValid ?? false);
+            builder.AddInt32(battle?.StageSpawnWaveApplied ?? -1);
+            builder.AddInt32(battle?.StageSpawnWaveDeferredEntryApplied ?? -1);
+            builder.AddInt32(battle?.StageSpawnRuntimeWave ?? -1);
+            builder.AddIntList(battle?.StageSpawnRuntimeTargetTotal);
+            builder.AddIntList(battle?.StageSpawnRuntimeEntryCount);
+            builder.AddIntList(battle?.StageSpawnRuntimeSpawnedTotal);
+
+            IReadOnlyList<int[]> runtimeSlots = battle?.StageSpawnRuntimeSlots;
+            int runtimeSlotListCount = runtimeSlots?.Count ?? 0;
+            builder.AddInt32(runtimeSlotListCount);
+            for (int index = 0; index < runtimeSlotListCount; index++)
+                builder.AddIntArray(runtimeSlots[index]);
+        }
+
+        private void AppendFixedMatrix(int[,] matrix, int rows, int columns)
+        {
+            bool valid = matrix != null &&
+                         matrix.GetLength(0) == rows &&
+                         matrix.GetLength(1) == columns;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                    builder.AddInt32(valid ? matrix[row, column] : 0);
+            }
+        }
+
+        private void AppendSlots(SimulationWorld world)
+        {
+            RuntimeSlotTable slots = world.RuntimeSlotsForServices;
+            int logicalCapacity = slots.LogicalCapacity;
+            builder.AddInt32(logicalCapacity);
+            for (int runtimeSlot = 0; runtimeSlot < logicalCapacity; runtimeSlot++)
+            {
+                RuntimeSlotTable.ReadOnlySlotView view = slots.GetReadOnlyView(runtimeSlot);
+                LF2Entity entity = view.Entity;
+                NTSDEntityRuntime runtime = entity?.Runtime ?? view.RawRuntime;
+                bool projectRawState = runtime != null;
+
+                builder.AddInt32(runtimeSlot);
+                builder.AddBoolean(view.Claimed);
+                builder.AddUInt32(view.Generation);
+                builder.AddInt32(entity?.FrameCache?.Wrapper != null
+                    ? entity.FrameCache.Wrapper.characterId
+                    : entity?.ObjectId ?? -1);
+                builder.AddInt32(runtime?.StableId ?? 0);
+                AppendEntityRuntime(world, entity, runtimeSlot, runtime, projectRawState);
+            }
+        }
+
+        private void AppendEntityRuntime(
+            SimulationWorld world,
+            LF2Entity entity,
+            int runtimeSlot,
+            NTSDEntityRuntime runtime,
+            bool projectRawState)
+        {
+            bool isDefault = entity == null && !projectRawState;
+            bool active = entity != null && world.IsActiveForCurrentPassInternal(entity);
+
+            builder.AddBoolean(active);
+            builder.AddBoolean(runtime?.AiControlled ?? false);
+            builder.AddInt32(entity?.GetCurrentDataObjectTypeForSimulation() ?? -1);
+            builder.AddInt32(isDefault ? -1 : runtime.ObjectId);
+            builder.AddInt32(isDefault ? 0 : runtime.EntityType);
+            builder.AddInt32(isDefault ? 0 : runtime.ObjType);
+            builder.AddInt32(runtime?.OwnerStableId ?? -1);
+            builder.AddInt32(runtimeSlot);
+            builder.AddInt32(isDefault ? 0 : runtime.Team);
+            builder.AddInt32(runtime?.RelationTeam ?? 0);
+
+            builder.AddInt32(isDefault || runtime.Dir == "right" ? 0 : 1);
+            builder.AddInt32(isDefault ? 0 : (int)runtime.RenderOffsetX);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Type3VisualZOffset);
+            builder.AddDouble(isDefault ? 0.0 : runtime.X);
+            builder.AddInt32(isDefault ? 0 : runtime.XInt);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Y);
+            builder.AddInt32(isDefault ? 0 : runtime.YInt);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Z);
+            builder.AddInt32(isDefault ? 0 : runtime.ZInt);
+
+            builder.AddInt32(isDefault ? 0 : runtime.Fall);
+            builder.AddInt32(isDefault ? 0 : runtime.HitCount);
+            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVx);
+            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVy);
+            builder.AddDouble(isDefault ? 0.1 : runtime.KnockbackVz);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Vx);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Vy);
+            builder.AddDouble(isDefault ? 0.0 : runtime.Vz);
+
+            builder.AddInt32(isDefault ? 0 : runtime.AnimCounter);
+            builder.AddInt32(isDefault ? 0 : runtime.AnimSub);
+            builder.AddInt32(isDefault ? 0 : runtime.AttackingCounter);
+            builder.AddInt32(isDefault ? 0 : runtime.Frame);
+            builder.AddInt32(isDefault ? 0 : runtime.FrameDelay);
+            builder.AddInt32(isDefault ? 0 : runtime.FrameWaitCounter);
+            builder.AddInt32(isDefault ? 0 : runtime.HitStateCount);
+            builder.AddInt32(isDefault ? 0 : runtime.HitStop);
+            builder.AddInt32(isDefault ? 0 : entity?.Frame?.Prev ?? 0);
+            builder.AddInt32(isDefault ? 0 : runtime.PrevFrame2);
+            builder.AddInt32(isDefault ? 0 : runtime.WaitCounter);
+
+            builder.AddInt32(isDefault ? -1 : runtime.CatcherSlotIndex);
+            builder.AddInt32(isDefault ? 0 : runtime.CaughtDuration);
+            builder.AddInt32(isDefault ? -1 : runtime.CaughtSlotIndex);
+            builder.AddInt32(isDefault ? 0 : runtime.CatchingStateTU);
+            builder.AddInt32(isDefault ? -1 : runtime.HeldWeaponStableId);
+            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
+            builder.AddInt32(isDefault ? -1 : runtime.HolderStableId);
+            builder.AddInt32(isDefault ? 0 : runtime.LinkState);
+            builder.AddInt32(isDefault ? -1 : runtime.PickerStableId);
+            builder.AddInt32(isDefault ? 0 : runtime.PickupCount);
+            builder.AddInt32(isDefault ? -1 : runtime.TargetSlotIndex);
+            builder.AddInt32(isDefault ? -1 : runtime.ThrowFrameGuard);
+
+            builder.AddInt32(isDefault ? 0 : runtime.TransientMp);
+            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp2);
+            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp3);
+            builder.AddInt32(isDefault ? 1000 : runtime.TransientMp4);
+
+            builder.AddInt32(isDefault ? 0 : runtime.ComboCountAtk);
+            builder.AddInt32(isDefault ? 0 : runtime.ComboCountVic);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeComboHitCount1E0);
+            builder.AddUInt64(isDefault ? 0UL : runtime.NativeComboHitLastTick1E4);
+            builder.AddInt32(isDefault ? 0 : runtime.FallDamageDiv);
+            builder.AddInt32(isDefault ? 500 : runtime.HP);
+            builder.AddInt32(isDefault ? 500 : runtime.HP3);
+            builder.AddInt32(isDefault ? 500 : runtime.HPBound);
+            builder.AddInt32(isDefault ? -1 : runtime.KillCount);
+            builder.AddInt32(isDefault ? 0 : runtime.KillStat);
+            builder.AddInt32(isDefault ? 500 : runtime.PP);
+            builder.AddInt32(isDefault ? 0 : runtime.RespawnCount);
+            builder.AddInt32(isDefault ? -1 : runtime.SpawnerSlotIndex);
+            builder.AddInt32(isDefault ? -1 : runtime.ObjectAiExcludedGroupSourceSlot2F8);
+            builder.AddInt32(isDefault ? 0 : runtime.Unk344);
+            builder.AddInt32(isDefault ? 0 : runtime.WeaponCount);
+
+            builder.AddByte(runtime?.CdAttack ?? 0);
+            builder.AddByte(runtime?.CdDefend ?? 0);
+            builder.AddByte(runtime?.CdDefendLock ?? 0);
+            builder.AddByte(runtime?.CdDown ?? 0);
+            builder.AddByte(runtime?.CdJump ?? 0);
+            builder.AddByte(runtime?.CdLeft ?? 0);
+            builder.AddByte(runtime?.CdRight ?? 0);
+            builder.AddByte(runtime?.CdUp ?? 0);
+            builder.AddByte(runtime?.ComboDda ?? 0);
+            builder.AddByte(runtime?.ComboDdj ?? 0);
+            builder.AddByte(runtime?.ComboDja ?? 0);
+            builder.AddByte(runtime?.ComboDla ?? 0);
+            builder.AddByte(runtime?.ComboDlj ?? 0);
+            builder.AddByte(runtime?.ComboDra ?? 0);
+            builder.AddByte(runtime?.ComboDrj ?? 0);
+            builder.AddByte(runtime?.ComboDua ?? 0);
+            builder.AddByte(runtime?.ComboDuj ?? 0);
+            builder.AddIntArray(isDefault ? null : runtime.InputHistory);
+            builder.AddByte(runtime?.KeyAttack ?? 0);
+            builder.AddByte(runtime?.KeyDefend ?? 0);
+            builder.AddByte(runtime?.KeyDown ?? 0);
+            builder.AddByte(runtime?.KeyJump ?? 0);
+            builder.AddByte(runtime?.KeyLeft ?? 0);
+            builder.AddByte(runtime?.KeyRight ?? 0);
+            builder.AddByte(runtime?.KeyUp ?? 0);
+            builder.AddByte(runtime?.PrevAttack ?? 0);
+            builder.AddByte(runtime?.PrevDefend ?? 0);
+            builder.AddByte(runtime?.PrevDown ?? 0);
+            builder.AddByte(runtime?.PrevJump ?? 0);
+            builder.AddByte(runtime?.PrevLeft ?? 0);
+            builder.AddByte(runtime?.PrevRight ?? 0);
+            builder.AddByte(runtime?.PrevUp ?? 0);
+            builder.AddInt32(runtime?.InputProxyCounter14C ?? 0);
+            builder.AddInt32(runtime?.InputProxySourceSlot178 ?? -1);
+            builder.AddInt32(runtime?.InputProxyEnabled17C ?? 0);
+            AppendNativeInputProxy(runtime?.NativeInputProxy);
+            AppendNativeActionCarriers(runtime, isDefault);
+            AppendNativeResourceDisplayCarriers(runtime, isDefault);
+            AppendNativeReactionStatusCarriers(runtime, isDefault);
+
+            builder.AddInt32(isDefault ? 0 : runtime.Blink);
+            builder.AddInt32(isDefault ? 0 : runtime.HP2Orig);
+            builder.AddInt32(isDefault ? 0 : runtime.HPOrig);
+            builder.AddInt32(isDefault ? 0 : runtime.PpDisplay);
+
+            builder.AddInt32(isDefault ? 0 : runtime.AttackExempt);
+            builder.AddBoolean(runtime?.ZBoundNegative ?? false);
+            builder.AddBoolean(runtime?.ZBoundPositive ?? false);
+            builder.AddBoolean(runtime?.XBoundNegative ?? false);
+            builder.AddBoolean(runtime?.XBoundPositive ?? false);
+            builder.AddInt32(runtime?.CatchTimer ?? 0);
+            builder.AddInt32(isDefault ? 0 : runtime.HealTimer);
+            builder.AddInt32(isDefault ? 0 : runtime.HitConfirmEa);
+            builder.AddInt32(isDefault ? 0 : runtime.HitConfirm2);
+            builder.AddBoolean(!isDefault && runtime.SpecialHitLatch0EB);
+            builder.AddInt32(runtime?.RenderPicOffset ?? 0);
+            builder.AddInt32(runtime?.WeaponFlightCounter ?? 0);
+            builder.AddInt32(runtime?.TransformOriginalObjectId ?? -1);
+            builder.AddInt32(isDefault ? -1 : runtime.Unk328);
+            builder.AddInt32(isDefault ? -1 : runtime.Unk32C);
+            builder.AddInt32(isDefault ? 0 : runtime.Unk330);
+            builder.AddInt32(isDefault ? 0 : runtime.Unk334);
+            builder.AddInt32(isDefault ? 0 : runtime.Unk338);
+            builder.AddInt32(runtime?.TransformTargetObjectId ?? -1);
+            builder.AddInt32(isDefault ? -1 : runtime.Unk360);
+            builder.AddInt32(isDefault ? -1000 : runtime.Unk3FC);
+            builder.AddInt32(isDefault ? -1000 : runtime.Unk400);
+        }
+
+        private void AppendNativeInputProxy(NTSD28InputProxyBlock proxy)
+        {
+            for (int index = 0; index < 3; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.EdgeWindow[index]);
+            builder.AddByte(proxy?.DefendReentryCooldown ?? 0);
+            for (int index = 3; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.EdgeWindow[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.Previous[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.InputKeyCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.Current[index]);
+            for (int index = 0; index < NTSD28InputProxyBlock.ComboStateCount; index++)
+                builder.AddByte(proxy == null ? (byte)0 : proxy.ComboState[index]);
+            builder.AddByte(proxy?.ProxyTail ?? 0);
+        }
+
+        private void AppendNativeActionCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.InputActionLock130);
+            builder.AddInt32(isDefault ? 0 : runtime.InputLastAction144);
+            builder.AddInt32(isDefault ? 0 : runtime.InputRemapState138);
+            byte[] remap = isDefault ? null : runtime.InputRemapIndices13C;
+            bool hasCanonicalRemap =
+                remap != null &&
+                remap.Length == NTSDEntityRuntime.NativeInputRemapCount;
+            for (int index = 0;
+                 index < NTSDEntityRuntime.NativeInputRemapCount;
+                 index++)
+            {
+                builder.AddByte(hasCanonicalRemap
+                    ? remap[index]
+                    : (byte)index);
+            }
+            builder.AddInt32(isDefault ? 0 : runtime.BoundState198);
+            builder.AddInt32(isDefault ? 0 : runtime.InputGlobalRecordState20);
+            builder.AddInt32(isDefault ? 0 : runtime.InputModeCostMultiplier30);
+            builder.AddInt32(isDefault ? 0 : runtime.InputDoubleCost19C);
+            builder.AddInt32(isDefault ? 0 : runtime.InputCostWaived1B4);
+            builder.AddInt32(isDefault ? 0 : runtime.InputSpecialGate194);
+            builder.AddInt32(isDefault ? 0 : runtime.InputModeFallbackActionB8);
+            builder.AddBoolean(isDefault || runtime.InputLocalResourceEnabled49D034);
+            builder.AddInt32(isDefault ? 0 : runtime.InputHpConsumedTotal34C);
+            builder.AddInt32(isDefault ? 0 : runtime.InputMpConsumedTotal350);
+            builder.AddBoolean(!isDefault && runtime.FeatureGate4A8428);
+            builder.AddInt32(isDefault ? -1 : runtime.InputLinkedDefinitionId324);
+            builder.AddInt32(isDefault ? 0 : runtime.EnvironmentState320);
+            builder.AddInt32(isDefault ? 0 : runtime.CollisionYReference);
+        }
+
+        private void AppendNativeResourceDisplayCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.WeakTimer12C);
+            builder.AddInt32(isDefault ? 0 : runtime.MpRegenBonusTimer1A4);
+            builder.AddInt32(isDefault ? 0 : runtime.EffectiveMaxRegenDouble1A8);
+            builder.AddInt32(isDefault ? 0 : runtime.HpRegenDouble1AC);
+            builder.AddInt32(isDefault ? 0 : runtime.FullRestoreTimer1B0);
+            builder.AddInt32(isDefault ? -1 : runtime.OrdinaryCreditGate2F4);
+            builder.AddInt32(isDefault ? 0 : runtime.IncomingDamageScale340);
+            builder.AddInt32(isDefault ? 100 : runtime.ModeDamageScalePercent);
+            builder.AddInt32(isDefault ? 0 : runtime.InputScoreTotal348);
+            builder.AddInt32(isDefault ? 0 : runtime.KnockoutCount358);
+            builder.AddInt32(isDefault ? -1 : runtime.CatchSourceSlot90);
+            builder.AddInt32(isDefault ? 0 : runtime.Kind4SourceCount92);
+            builder.AddInt32(isDefault ? -1 : runtime.EnvironmentSourceSlot160);
+            builder.AddInt32(isDefault ? -1 : runtime.ImpactSourceSlot164);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayScore1F0);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayScoreStep1F4);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageTotal1F8);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayDamageStep1FC);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHp200);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayCurrentHpStep204);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHp208);
+            builder.AddInt32(isDefault ? 0 : runtime.DisplayEffectiveMaxHpStep20C);
+        }
+
+        private void AppendNativeReactionStatusCarriers(
+            NTSDEntityRuntime runtime,
+            bool isDefault)
+        {
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDx1C0);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDy1C4);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusDz1C8);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusGain1CC);
+            builder.AddInt32(isDefault ? 0 : runtime.StatusHitFacing1D0);
+            builder.AddInt32(isDefault ? 191 : runtime.StatusPickedAction1D4);
+            builder.AddInt32(isDefault ? 185 : runtime.StatusPickingAction1D8);
+            builder.AddInt32(isDefault ? 0 : runtime.HitResourceSuppression15C);
+            builder.AddInt32(isDefault ? 0 : runtime.HitResourceInjuryDouble1A0);
+            builder.AddInt32(isDefault ? 0 : runtime.DelayTimer134);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinTimer148);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonTimer120);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonType124);
+            builder.AddInt32(isDefault ? 0 : runtime.PoisonStrength128);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinOverrideActive170);
+            builder.AddInt32(isDefault ? 0 : runtime.JoinOriginalBattleGroup174);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeComputerState1B8);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeTimer1BC);
+            builder.AddInt32(isDefault ? 0 : runtime.RuntimeArmorHp118);
+            builder.AddInt32(isDefault ? -1 : runtime.ArmorRecoveryTimer11C);
+        }
+
+        private void AppendStats(SimulationWorld world)
+        {
+            builder.AddIntArray(world.DamageStats);
+            builder.AddIntArray(world.KillStats);
+        }
+
+        private void AppendEvents(IReadOnlyList<PendingSoundEvent> sounds)
+        {
+            int count = sounds?.Count ?? 0;
+            builder.AddInt32(count);
+            for (int index = 0; index < count; index++)
+            {
+                PendingSoundEvent sound = sounds[index];
+                builder.AddNormalizedSoundCue(sound.Cue);
+                builder.AddInt32(sound.Tick);
+                builder.AddInt32(sound.WorldX);
+            }
+        }
+    }
+}

@@ -134,7 +134,6 @@ namespace NTSD.Test.Editor
                 encodedObserver.Runtime.CatcherSlotIndex = 91;
                 encodedObserver.Runtime.CaughtDuration = 88;
                 encodedObserver.Runtime.OwnerSlotIndex = 17;
-                encodedObserver.HolderCopySlot = 29;
                 plainObserver.Runtime.CatchSourceSlot90 = childSlot;
                 plainObserver.Runtime.CatcherSlotIndex = childSlot;
                 plainObserver.Runtime.CaughtDuration = 99;
@@ -150,7 +149,7 @@ namespace NTSD.Test.Editor
                 Assert.That(encodedObserver.Runtime.CatcherSlotIndex, Is.EqualTo(91));
                 Assert.That(encodedObserver.Runtime.CaughtDuration, Is.Zero);
                 Assert.That(encodedObserver.Runtime.OwnerSlotIndex, Is.EqualTo(17));
-                Assert.That(encodedObserver.HolderCopySlot, Is.EqualTo(29));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(plainObserver.Runtime.CatchSourceSlot90, Is.EqualTo(-1));
                 Assert.That(plainObserver.Runtime.CatcherSlotIndex, Is.EqualTo(-1));
                 Assert.That(plainObserver.Runtime.CaughtDuration, Is.Zero);

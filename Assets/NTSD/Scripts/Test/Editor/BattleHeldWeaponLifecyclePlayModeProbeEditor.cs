@@ -213,8 +213,7 @@ namespace NTSD.Test.Editor
                 $"holder={holder.Runtime.LinkState}, weapon={weapon.Runtime.LinkState}");
             Require(holder.Runtime.TargetSlotIndex == weaponSlot &&
                     holder.Runtime.HeldWeaponStableId == weaponSlot &&
-                    weapon.Runtime.HolderStableId == holderSlot &&
-                    weapon.HolderCopySlot == holderSlot,
+                    weapon.Runtime.HolderStableId == holderSlot,
                 $"type {spec.DataType} pickup slot relationship mismatch");
             Require(holder.Runtime.PickupCount == 1 &&
                     holder.AttackingCounter == 0 &&
@@ -278,8 +277,7 @@ namespace NTSD.Test.Editor
                     holder.Runtime.HeldWeaponStableId == -1 &&
                     holder.Runtime.TargetSlotIndex == weaponSlot &&
                     weapon.Runtime.LinkState == 0 &&
-                    weapon.Runtime.HolderStableId == holderSlot &&
-                    weapon.HolderCopySlot == holderSlot,
+                    weapon.Runtime.HolderStableId == holderSlot,
                 $"type {spec.DataType} throw relationship teardown mismatch");
             Require(weapon.FrameDelay == 9 &&
                     weapon.SpawnerEntityIndex == expectedSpawner &&

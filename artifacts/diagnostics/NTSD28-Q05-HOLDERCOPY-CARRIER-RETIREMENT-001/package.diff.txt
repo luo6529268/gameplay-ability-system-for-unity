@@ -1,0 +1,1240 @@
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs
+@@ -1101,5 +1101,4 @@
+ 
+             if (!_initializedFromOpoint)
+-                HolderCopySlot = 99;
+         }
+ 
+@@ -1124,5 +1123,4 @@
+             FallDamageDiv = 0;
+             TrackerParent = null;
+-            HolderCopySlot = 99;
+             OwnerId = -1;
+             RelationOwnerSlot = -1;
+
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterLateRuntimeModule.cs
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterLateRuntimeModule.cs
+@@ -69,5 +69,4 @@
+             task.useExplicitRelationIdentity = true;
+             task.relationTeam = owner.RelationTeam;
+-            task.holderCopySlot = -1;
+             task.pos = new Vector3(
+                 owner.Runtime?.XInt ?? Mathf.RoundToInt((float)owner.PS.x),
+
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+@@ -495,9 +495,4 @@
+         }
+ 
+-        public int HolderCopySlot
+-        {
+-            get => Runtime.HolderCopySlotIndex;
+-            set => Runtime.HolderCopySlotIndex = value;
+-        }
+ 
+         public int RelationOwnerSlot
+@@ -3935,5 +3930,4 @@
+             task.useExplicitRelationIdentity = true;
+             task.relationTeam = sourceTeam;
+-            task.holderCopySlot = -1;
+             task.spawnerEntityIndex = slotIndex;
+         }
+@@ -4476,5 +4470,4 @@
+             task.relationTeam = RelationTeam != 0 ? RelationTeam : Team;
+             task.useExplicitRelationIdentity = true;
+-            task.holderCopySlot = -1;
+             task.pos = new Vector3((float)x, (float)y, (float)Runtime.Z);
+             task.z = (float)Runtime.Z;
+
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs
+@@ -74,5 +74,4 @@
+             owner.Health.PPBound = 0;
+             owner.Health.MaxMP = 0;
+-            owner.HolderCopySlot = -1;
+             owner.OwnerId = -1;
+             owner.RelationOwnerSlot = -1;
+@@ -94,5 +93,4 @@
+             owner.Team = 0;
+             owner.RelationTeam = 0;
+-            owner.HolderCopySlot = -1;
+             owner.OwnerId = -1;
+             owner.RelationOwnerSlot = -1;
+
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs
+@@ -466,5 +466,4 @@
+             ShotCount = 0;
+             PickerStableId = -1;
+-            HolderCopySlot = -1;
+             OwnerId = -1;
+             RelationOwnerSlot = -1;
+
+--- Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs
++++ Assets/NTSD/Scripts/Animation/LF2Tasks/OPointCreateTask.cs
+@@ -48,5 +48,4 @@
+         public bool useExplicitRelationIdentity;
+         public int relationTeam = 0;
+-        public int holderCopySlot = -1;
+         public int frameDelay = 0;
+         public int attackExempt = 0;
+@@ -92,5 +91,4 @@
+             useExplicitRelationIdentity = false;
+             relationTeam = 0;
+-            holderCopySlot = -1;
+             frameDelay = 0;
+             attackExempt = 0;
+
+--- Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
++++ Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
+@@ -229,5 +229,4 @@
+         public int ArmorRecoveryTimer11C = -1;
+         public int HolderStableId = -1;
+-        public int HolderCopySlotIndex = 99;
+         public int PickerStableId = -1;
+         public int ObjectAiTargetSlot3F8
+@@ -928,5 +927,4 @@
+             destination.ArmorRecoveryTimer11C = ArmorRecoveryTimer11C;
+             destination.HolderStableId = HolderStableId;
+-            destination.HolderCopySlotIndex = HolderCopySlotIndex;
+             destination.PickerStableId = PickerStableId;
+             destination.AiControlled = AiControlled;
+@@ -1105,5 +1103,4 @@
+             ResetNativeReactionStatusCarriers();
+             HolderStableId = -1;
+-            HolderCopySlotIndex = 99;
+             PickerStableId = -1;
+             AiControlled = false;
+
+--- Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs
++++ Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs
+@@ -351,5 +351,4 @@
+             LinkState = new int[capacity];
+             HolderStableId = new int[capacity];
+-            HolderCopySlot = new int[capacity];
+             TargetSlot = new int[capacity];
+             CaughtSlot = new int[capacity];
+@@ -361,5 +360,4 @@
+         internal readonly int[] LinkState;
+         internal readonly int[] HolderStableId;
+-        internal readonly int[] HolderCopySlot;
+         internal readonly int[] TargetSlot;
+         internal readonly int[] CaughtSlot;
+@@ -719,5 +717,4 @@
+             Links.LinkState[slot] = runtime.LinkState;
+             Links.HolderStableId[slot] = runtime.HolderStableId;
+-            Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;
+             Links.TargetSlot[slot] = runtime.TargetSlotIndex;
+             Links.CaughtSlot[slot] = runtime.CaughtSlotIndex;
+@@ -770,5 +767,5 @@
+             Input.History3[slot] = Input.History4[slot] = Input.History5[slot] = 0;
+             Links.LinkState[slot] = Links.HolderStableId[slot] = 0;
+-            Links.HolderCopySlot[slot] = Links.TargetSlot[slot] = 0;
++            Links.TargetSlot[slot] = 0;
+             Links.CaughtSlot[slot] = Links.CatcherSlot[slot] = 0;
+             Links.HeldWeaponStableId[slot] = Links.PickerStableId[slot] = 0;
+@@ -949,5 +946,4 @@
+             if (Links.LinkState[slot] != runtime.LinkState ||
+                 Links.HolderStableId[slot] != runtime.HolderStableId ||
+-                Links.HolderCopySlot[slot] != runtime.HolderCopySlotIndex ||
+                 Links.TargetSlot[slot] != runtime.TargetSlotIndex ||
+                 Links.CaughtSlot[slot] != runtime.CaughtSlotIndex ||
+@@ -1117,5 +1113,5 @@
+             hash.Add(runtime.KeyLeft); hash.Add(runtime.KeyRight); hash.Add(runtime.KeyAttack);
+             hash.Add(runtime.KeyJump); hash.Add(runtime.KeyDefend);
+-            hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);
++            hash.Add(runtime.HolderStableId);
+             hash.Add(runtime.PickerStableId); hash.Add(runtime.AiControlled);
+             hash.Add(runtime.X); hash.Add(runtime.Y); hash.Add(runtime.Z);
+
+--- Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
++++ Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+@@ -2445,5 +2445,4 @@
+                 TargetImpactSourceSlot164 = target?.Runtime?.ImpactSourceSlot164 ?? int.MinValue,
+                 TargetHolderSlot = target?.Runtime?.HolderStableId ?? int.MinValue,
+-                TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,
+                 TargetOwnerSlot = target?.Runtime?.OwnerSlotIndex ?? int.MinValue,
+                 TargetRelationTeam = target?.Runtime?.RelationTeam ?? int.MinValue,
+@@ -5933,5 +5932,5 @@
+                 expected.TargetImpactSourceSlot164 != actual.TargetImpactSourceSlot164) mask |= 1UL << 31;
+             if (expected.TargetHolderSlot != actual.TargetHolderSlot) mask |= 1UL << 32;
+-            if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;
++            // Alignment contract: NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001; bit 33 stays retired.
+             if (expected.TargetRelationTeam != actual.TargetRelationTeam ||
+                 expected.TargetOwnerSlot != actual.TargetOwnerSlot) mask |= 1UL << 34;
+@@ -6249,5 +6248,4 @@
+             internal int TargetImpactSourceSlot164;
+             internal int TargetHolderSlot;
+-            internal int TargetHolderCopySlot;
+             internal int TargetOwnerSlot;
+             internal int TargetRelationTeam;
+
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs
+@@ -535,5 +535,4 @@
+             builder.AddInt32(isDefault ? 0 : runtime.CatchingStateTU);
+             builder.AddInt32(isDefault ? -1 : runtime.HeldWeaponStableId);
+-            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
+             builder.AddInt32(isDefault ? -1 : runtime.HolderStableId);
+             builder.AddInt32(isDefault ? 0 : runtime.LinkState);
+
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs
+@@ -1051,5 +1051,4 @@
+                 ("grabbedTimer", 0),
+                 ("heldWeaponSlot", isDefault ? -1 : runtime.HeldWeaponStableId),
+-                ("holderCopy", isDefault ? 99 : runtime.HolderCopySlotIndex),
+                 ("holderIdx", isDefault ? -1 : runtime.HolderStableId),
+                 ("linkState", isDefault ? 0 : runtime.LinkState),
+
+--- Assets/NTSD/Scripts/Simulation/Passes/Respawn/BattleRespawnModule.cs
++++ Assets/NTSD/Scripts/Simulation/Passes/Respawn/BattleRespawnModule.cs
+@@ -224,5 +224,4 @@
+             task.useExplicitRelationIdentity = true;
+             task.relationTeam = entity.RelationTeam;
+-            task.holderCopySlot = -1;
+             task.spawnerEntityIndex = entity.Runtime?.SlotIndex ?? -1;
+             task.pos = new Vector3(
+
+--- Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs
++++ Assets/NTSD/Scripts/Simulation/Stage/StageSpawnTaskConfigurator.cs
+@@ -97,5 +97,4 @@
+             task.ownerEntityIndex = requiredRuntimeSlot;
+             task.relationTeam = 2;
+-            task.holderCopySlot = -1;
+             task.useExplicitRelationIdentity = true;
+             task.pos = new Vector3(spawnX, spawnY, 0f);
+
+--- Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
++++ Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+@@ -2581,6 +2581,5 @@
+             var defaultRuntime = new NTSDEntityRuntime();
+             defaultRuntime.Reset();
+-            Expect(defaultRuntime.HolderCopySlotIndex == 99 &&
+-                   Nearly(defaultRuntime.KnockbackVx, 0.1) &&
++            Expect(Nearly(defaultRuntime.KnockbackVx, 0.1) &&
+                    Nearly(defaultRuntime.KnockbackVy, 0.1) &&
+                    Nearly(defaultRuntime.KnockbackVz, 0.1) &&
+@@ -11525,5 +11524,4 @@
+             catcher.AttackingCounter = 0;
+             catcher.FrameDelay = 0;
+-            catcher.HolderCopySlot = holder.Runtime.SlotIndex;
+             holder.KillStat = 0;
+             holder.ComboCountAtk = 41;
+@@ -11746,5 +11744,4 @@
+                     victimData);
+                 world.Register(holder);
+-                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+                 holder.KillStat = 17;
+                 holder.ComboCountAtk = 19;
+@@ -11752,5 +11749,4 @@
+             else
+             {
+-                attacker.HolderCopySlot = -1;
+             }
+ 
+@@ -12516,5 +12512,4 @@
+             heldWeapon.Runtime.LinkState = -1;
+             heldWeapon.Runtime.HolderStableId = holderSlot;
+-            heldWeapon.HolderCopySlot = holderSlot;
+ 
+             // Keep the holder's Prev2 wpoint/ITR data available for kind5 replacement, but do not let
+@@ -12926,5 +12921,4 @@
+             held.Runtime.LinkState = -1;
+             held.Runtime.HolderStableId = 10;
+-            held.HolderCopySlot = 10;
+ 
+             bool ran = world.HeldObjectWriter.RunStep12(
+@@ -12942,8 +12936,4 @@
+                    held.Runtime.LinkState == 0 &&
+                    held.Runtime.HolderStableId == 10 &&
+-                   held.HolderCopySlot == 10 &&
+-                   Nearly(held.Runtime.Zz, 0f),
+-                $"BATTLE-AUDIT9-LP-01: generic held {label} must preserve authority target/holder indices " +
+-                "and clear only active link state");
+ 
+             held.Reset();
+@@ -13004,5 +12994,4 @@
+             int holderSlot = holder.Runtime.SlotIndex;
+             int weaponSlot = weapon.Runtime.SlotIndex;
+-            int holderCopyBeforeRelease = weapon.HolderCopySlot;
+             holder.Runtime.ThrowFrameGuard = 31;
+             bool consume = label == "Consume";
+@@ -13035,11 +13024,10 @@
+                 $"target={expectedTargetSlot}, holder={expectedHolderSlot}, and no Unity-only Zz release offset; " +
+                 $"actual target={holder.Runtime.TargetSlotIndex}, " +
+-                $"holder={weapon.Runtime.HolderStableId}, holderCopy={weapon.HolderCopySlot}, zz={weapon.Runtime.Zz}, " +
++                $"holder={weapon.Runtime.HolderStableId}, zz={weapon.Runtime.Zz}, " +
+                 $"holderLink={holder.Runtime.LinkState}, heldSlot={holder.Runtime.HeldWeaponStableId}, " +
+                 $"throwGuard={holder.Runtime.ThrowFrameGuard}, weaponLink={weapon.Runtime.LinkState}");
+             if (consume)
+             {
+-                Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
+-                    "BATTLE-AUDIT9-LP-05: consume release must preserve the reserved HolderCopy carrier");
++                Expect(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, "retired HolderCopy carrier must be absent");
+                 Expect(world.Rng.CallCount == consumeRngCallsBefore + 1 &&
+                        weapon.Health.HP == 0 &&
+@@ -13055,6 +13043,5 @@
+             }
+             if (forceDrop)
+-                Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
+-                    "BATTLE-AUDIT9-LP-05: ForceDrop must preserve the reserved HolderCopy carrier");
++                Expect(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, "retired HolderCopy carrier must be absent");
+ 
+             weapon.Reset();
+@@ -13129,5 +13116,4 @@
+             held.Runtime.LinkState = -1;
+             held.Runtime.HolderStableId = holderSlot;
+-            held.HolderCopySlot = holderSlot;
+             held.AttackingCounter = 9;
+             held.ItrRest.Arest = 11;
+@@ -14349,5 +14335,4 @@
+             world.Register(attacker);
+             world.Register(victim);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             attacker.Runtime.EnvironmentState320 = environmentState;
+             attacker.WeaponCount = 0;
+@@ -14831,5 +14816,4 @@
+                    target.Runtime.HolderStableId == pickerSlot &&
+                    target.Runtime.OwnerSlotIndex == pickerSlot &&
+-                   target.HolderCopySlot == 99 &&
+                    picker.Runtime.PickupCount == 1 &&
+                    picker.AttackingCounter == 0 &&
+@@ -15142,5 +15126,4 @@
+                     world.Register(victim);
+                     world.AdvanceBattleFlowTick(tick);
+-                    attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+                     victim.Health.HP = 100;
+                     victim.Health.HPBound = 100;
+@@ -17919,5 +17902,4 @@
+                 FlowSelfCheckEntity holder = Attacker(world, "SelfCheck_R4Hit03_LethalHolder");
+                 FlowSelfCheckEntity attacker = Attacker(world, "SelfCheck_R4Hit03_LethalAttacker");
+-                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+                 AlternateDamageSelfCheckWeapon victim = Weapon(
+                     world,
+@@ -18569,6 +18551,4 @@
+                 identity = victim.FrameCache.Wrapper;
+                 attacker.RelationTeam = 17;
+-                attacker.HolderCopySlot = 23;
+-                victim.HolderCopySlot = 99;
+                 victim.AttackingCounter = 8;
+                 victim.KnockbackVx = 1.0;
+@@ -18578,11 +18558,10 @@
+                 Expect(victim.Hit(new InteractionArea { kind = 9, effect = 0 }, attacker) &&
+                        ReferenceEquals(identity, victim.FrameCache.Wrapper) &&
+-                       victim.RelationTeam == 17 && victim.HolderCopySlot == 99 &&
+-                       victim.HitConfirm2 == 0 && victim.Runtime.SpecialHitLatch0EB &&
++                       victim.RelationTeam == 17 && victim.HitConfirm2 == 0 && victim.Runtime.SpecialHitLatch0EB &&
+                        victim.Frame.N == 30 && victim.AttackingCounter == 0 &&
+                        Nearly(victim.KnockbackVx, 0.0) && Nearly(victim.KnockbackVy, 0.0) && Nearly(victim.KnockbackVz, 0.0) &&
+                        Nearly(victim.Runtime.Vx, 0.0) && Nearly(victim.Runtime.Vy, 0.0) && Nearly(victim.Runtime.Vz, 0.0) &&
+                        victim.Runtime.AnimCounter == attacker.Runtime.SlotIndex,
+-                    "BATTLE-C31: ordinary type3 kind9 must copy relation, preserve HolderCopy, and reset motion without replacing CharData");
++                    "BATTLE-C31: ordinary type3 kind9 must copy relation, and reset motion without replacing CharData");
+             }
+ 
+@@ -18921,5 +18900,4 @@
+             world.Register(victim);
+ 
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+             attacker.Runtime.LinkState = -1;
+@@ -19661,5 +19639,4 @@
+             attacker.Team = 1;
+             attacker.RelationTeam = 1;
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             holder.KillStat = 17;
+             holder.ComboCountAtk = 19;
+@@ -21633,5 +21610,4 @@
+             mixedAttacker.Runtime.LinkState = -1;
+             mixedAttacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+-            mixedAttacker.HolderCopySlot = 99;
+             pollutionWorld.CaptureCollisionFrameSnapshotsAll();
+ 
+@@ -21678,6 +21654,5 @@
+                 $"holderGroup={(mixedCandidates.Count > 0 ? mixedCandidates[0].PairSnapshot.LinkedHolderBattleGroup : -1)}, " +
+                 $"targetGroup={mixedTarget.RelationTeam}, " +
+-                $"holderSlot={mixedAttacker.Runtime.HolderStableId}, " +
+-                $"rootCopy={mixedAttacker.HolderCopySlot}");
++                $"holderSlot={mixedAttacker.Runtime.HolderStableId}");
+ 
+             AssertCollisionAuditGeometryCandidate(
+@@ -23875,6 +23850,6 @@
+             defaults.Reset();
+             Expect(Nearly(defaults.KnockbackVx, 0.1) && Nearly(defaults.KnockbackVy, 0.1) &&
+-                   Nearly(defaults.KnockbackVz, 0.1) && defaults.HolderCopySlotIndex == 99,
+-                "LC-04: runtime reset defaults must retain knockback 0.1 and HolderCopy 99");
++                   Nearly(defaults.KnockbackVz, 0.1),
++                "LC-04: runtime reset defaults must retain knockback 0.1");
+ 
+             var pooledCharacter = new LF2Character();
+@@ -25723,6 +25698,5 @@
+                        child.Team == 0 && child.RelationTeam == 0 &&
+                        child.OwnerId == -1 && child.RelationOwnerSlot == -1 &&
+-                       child.OwnerEntityIndex == -1 && child.HolderCopySlot == -1 &&
+-                       child.KillCount == -1,
++                       child.OwnerEntityIndex == -1 && child.KillCount == -1,
+                     $"GT-11: state9996 child {spawnIndex} must keep direct-reset relation defaults");
+                 Expect(child.Runtime.ObjType == 1 &&
+@@ -27969,5 +27943,4 @@
+             attacker.Runtime.LinkState = 0;
+             attacker.Runtime.HolderStableId = -1;
+-            attacker.HolderCopySlot = -1;
+             attacker.AttackExempt = 0;
+             attacker.FrameDelay = 0;
+@@ -28278,5 +28251,4 @@
+                 partner.KnockbackVy = -4.5;
+                 partner.KnockbackVz = 2.5;
+-                partner.HolderCopySlot = 3;
+                 partner.Frame.PN = 71;
+                 partner.Frame.Prev = 72;
+@@ -28312,6 +28284,5 @@
+                 Expect(partner.FrameDelay == 0 &&
+                        Nearly(partner.KnockbackVx, 0.1) && Nearly(partner.KnockbackVy, 0.1) &&
+-                       Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&
+-                       partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
++                       Nearly(partner.KnockbackVz, 0.1) && partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
+                        partner.Frame.Prev2D == null && HasFormalOid5152PartnerEffectDefaults(partner),
+                     "mirrored split partner must use formal Entity::reset defaults before M-1 contract writes");
+@@ -28386,5 +28357,4 @@
+                 partner.KnockbackVy = -3.5;
+                 partner.KnockbackVz = 1.5;
+-                partner.HolderCopySlot = 4;
+                 partner.Frame.PN = 81;
+                 partner.Frame.Prev = 82;
+@@ -28437,6 +28407,5 @@
+                 Expect(partner.FrameDelay == 0 &&
+                        Nearly(partner.KnockbackVx, 0.1) && Nearly(partner.KnockbackVy, 0.1) &&
+-                       Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&
+-                       partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
++                       Nearly(partner.KnockbackVz, 0.1) && partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
+                        partner.Frame.Prev2D == null && HasFormalOid5152PartnerEffectDefaults(partner),
+                     "split partner must use formal Entity::reset defaults before M-1 contract writes");
+@@ -29122,5 +29091,4 @@
+                 17);
+ 
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             victim.Health.HP = 70;
+             victim.Health.HPBound = 100;
+@@ -29686,6 +29654,4 @@
+             naruto.Team = 1;
+             naruto.RelationTeam = 7;
+-            const int parentHolderCopySentinel = 23;
+-            naruto.HolderCopySlot = parentHolderCopySentinel;
+             naruto.Health.PP = 500;
+             naruto.SetRuntimeSlotIndex(0);
+@@ -29792,9 +29758,8 @@
+                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
+                             if (relationCheckedStableIds.Add(entity.StableId))
+-                                relationMatches &= entity.HolderCopySlot == 99;
+                             allOpointRelationIdentitiesMatch &= relationMatches;
+                             if (!relationMatches && relationMismatchTrace.Count < 12)
+                                 relationMismatchTrace.Add(
+-                                    $"t{tick}/s{slot}/oid205:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
++                                    $"t{tick}/s{slot}/oid205:team{entity.Team}/rel{entity.RelationTeam}");
+                             poisonFrames.Add(entity.Frame?.N ?? -1);
+                         }
+@@ -29805,9 +29770,8 @@
+                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
+                             if (relationCheckedStableIds.Add(entity.StableId))
+-                                relationMatches &= entity.HolderCopySlot == 99;
+                             allOpointRelationIdentitiesMatch &= relationMatches;
+                             if (!relationMatches && relationMismatchTrace.Count < 12)
+                                 relationMismatchTrace.Add(
+-                                    $"t{tick}/s{slot}/oid204:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
++                                    $"t{tick}/s{slot}/oid204:team{entity.Team}/rel{entity.RelationTeam}");
+                             windFrames.Add(entity.Frame?.N ?? -1);
+                             if (entity.Frame?.N == 147)
+@@ -29820,9 +29784,8 @@
+                                 entity.Team == naruto.Team && entity.RelationTeam == naruto.RelationTeam;
+                             if (relationCheckedStableIds.Add(entity.StableId))
+-                                relationMatches &= entity.HolderCopySlot == 99;
+                             allOpointRelationIdentitiesMatch &= relationMatches;
+                             if (!relationMatches && relationMismatchTrace.Count < 12)
+                                 relationMismatchTrace.Add(
+-                                    $"t{tick}/s{slot}/oid33:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
++                                    $"t{tick}/s{slot}/oid33:team{entity.Team}/rel{entity.RelationTeam}");
+                             cloneRuntimeSlots.Add(entity.Runtime.SlotIndex);
+                             cloneStableIds.Add(entity.StableId);
+@@ -29904,5 +29867,5 @@
+                     "Naruto oid205/204/33 opoints must use the authority dynamic runtime range 50..399");
+                 Expect(allOpointRelationIdentitiesMatch,
+-                    $"Naruto oid205/204/33 opoints must inherit Team/RelationTeam and preserve reserved HolderCopy99 " +
++                    $"Naruto oid205/204/33 opoints must inherit Team/RelationTeam " +
+                     $"without copying the spawner carrier; expected={naruto.Team}/{naruto.RelationTeam}/99; " +
+                     $"mismatches={string.Join(",", relationMismatchTrace)}");
+@@ -31166,6 +31129,4 @@
+                 Expect(spawned.Team == 2 && spawned.RelationTeam == 2 &&
+                        spawned.Unk344 == 2 && spawned.HitStun == 20 &&
+-                       spawned.HolderCopySlot == 99,
+-                    "stage immediate character spawn must apply team, Unk344, init and reserved HolderCopy contracts");
+                 Expect(spawned.AiControlled,
+                     "stage/opoint character spawns must be AI-controlled by default");
+@@ -31275,5 +31236,5 @@
+             SimulationWorld.ApplyStageSpawnRuntimeContract(character, 300);
+             Expect(character.Team == 2 && character.RelationTeam == 2 &&
+-                   character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 99,
++                   character.Unk344 == 2 && character.HitStun == 20,
+                 "stage character contract must map Unk364 to RelationTeam=2 and use character init semantics");
+ 
+@@ -32935,8 +32896,4 @@
+                              entity.OwnerEntityIndex == 20 &&
+                              HasCanonicalActiveOwnerSnapshot(successWorld, 20, entity, 20) &&
+-                             entity.HolderCopySlot == 99 &&
+-                           entity.Health.HP == 50 && entity.Health.HPBound == 50 &&
+-                           entity.Health.HP3 == 50 && entity.Health.PP == 500,
+-                        "RESULT-RESERVE-05: success must materialize the exact side0 character reserve contract in lowest slot20");
+                     Expect(successWorld.Rng.CallCount == 1 &&
+                            successResults.ResultCommittedTotal[0, 0] == 0 &&
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleCollisionHitDamagePlayModeProbeEditor.cs
+@@ -451,6 +451,4 @@
+             ConfigurePair(fixtures.characterAttacker, fixtures.characterVictim, 100000);
+             fixtures.characterHolder.SetPosition(105000, 0, 0);
+-            fixtures.characterAttacker.HolderCopySlot =
+-                fixtures.characterHolder.Runtime.SlotIndex;
+             fixtures.characterVictim.Health.HP = 5;
+             fixtures.characterVictim.Health.HPBound = 100;
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs
+@@ -180,5 +180,4 @@
+ 
+             fixtures.noCount.Runtime.LinkState = 7;
+-            fixtures.noCount.HolderCopySlot = 123;
+             fixtures.noCount.Runtime.TargetSlotIndex = 124;
+ 
+@@ -222,7 +221,4 @@
+                 fixtures.noCount.RelationTeam == NoCountRelation &&
+                 fixtures.noCount.Runtime.LinkState == 7 &&
+-                fixtures.noCount.HolderCopySlot == 123 &&
+-                fixtures.noCount.Runtime.TargetSlotIndex == 124,
+-                "no-count respawn wrote relation/link/holder/target outside C++ writers.");
+             states.Add(State(
+                 "after-no-count-respawn",
+@@ -246,7 +242,4 @@
+             Require(
+                 fixtures.stored.Runtime.LinkState == 8 &&
+-                fixtures.stored.HolderCopySlot == 125 &&
+-                fixtures.stored.Runtime.TargetSlotIndex == 126,
+-                "stored-count respawn wrote link/holder/target outside C++ writers.");
+ 
+             LF2Entity respawnEffect = FindRespawnEffect(storedSlot);
+@@ -363,5 +356,4 @@
+             fixtures.stored.HitStun = 3;
+             fixtures.stored.Runtime.LinkState = 8;
+-            fixtures.stored.HolderCopySlot = 125;
+             fixtures.stored.Runtime.TargetSlotIndex = 126;
+             fixtures.stored.SetPosition(77, -12, 19, true);
+@@ -585,5 +577,4 @@
+                 relation = entity.RelationTeam,
+                 link = entity.Runtime?.LinkState ?? 0,
+-                holder = entity.HolderCopySlot,
+                 target = entity.Runtime?.TargetSlotIndex ?? -1,
+             };
+@@ -788,5 +779,4 @@
+             public int relation;
+             public int link;
+-            public int holder;
+             public int target;
+         }
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleGrabCpointLinkPlayModeProbeEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleGrabCpointLinkPlayModeProbeEditor.cs
+@@ -192,5 +192,4 @@
+                 catcher.SetPrev2(100);
+                 victim.SetPrev2(130);
+-                catcher.HolderCopySlot = holderSlot;
+                 catcher.AttackingCounter = 0;
+                 catcher.FrameDelay = 0;
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleHeldWeaponLifecyclePlayModeProbeEditor.cs
+@@ -215,6 +215,4 @@
+                     holder.Runtime.HeldWeaponStableId == weaponSlot &&
+                     weapon.Runtime.HolderStableId == holderSlot &&
+-                    weapon.HolderCopySlot == holderSlot,
+-                $"type {spec.DataType} pickup slot relationship mismatch");
+             Require(holder.Runtime.PickupCount == 1 &&
+                     holder.AttackingCounter == 0 &&
+@@ -280,6 +278,4 @@
+                     weapon.Runtime.LinkState == 0 &&
+                     weapon.Runtime.HolderStableId == holderSlot &&
+-                    weapon.HolderCopySlot == holderSlot,
+-                $"type {spec.DataType} throw relationship teardown mismatch");
+             Require(weapon.FrameDelay == 9 &&
+                     weapon.SpawnerEntityIndex == expectedSpawner &&
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs
+@@ -1924,5 +1924,4 @@
+             itr.arest = 2;
+             itr.vrest = 3;
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+             target.Health.HP = 10;
+@@ -2222,5 +2221,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+             target.DirectWriteFramePreserveWaitCounter(defendFrame.frameId);
+@@ -3718,6 +3716,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            attacker.HolderCopySlot = 77;
+-            target.HolderCopySlot = 99;
+             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+             target.KnockbackVx = 5.0;
+@@ -3769,5 +3765,5 @@
+             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.Zero);
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -3874,5 +3870,5 @@
+             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.Zero);
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -3933,7 +3929,5 @@
+                 hasItr: false,
+                 hasBody: false);
+-            holder.HolderCopySlot = 88;
+             holder.FrameDelay = 11;
+-            attacker.HolderCopySlot = 77;
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
+@@ -3983,5 +3977,5 @@
+             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(holder.Runtime.OwnerSlotIndex));
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(holder.Runtime.SlotIndex));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.Zero);
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -4033,8 +4027,6 @@
+                 2,
+                 10);
+-            attacker.HolderCopySlot = 77;
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = 999;
+-            target.HolderCopySlot = 66;
+             var itr = new InteractionArea
+             {
+@@ -4077,5 +4069,5 @@
+             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
+             Assert.That(target.FrameDelay, Is.EqualTo(-3));
+@@ -4147,5 +4139,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            holder.HolderCopySlot = 88;
+             if (heldByCharacter)
+             {
+@@ -4833,5 +4824,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             target.Frame.D.state = targetState;
+             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+@@ -4877,8 +4867,5 @@
+             {
+                 Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+-                Assert.That(
+-                    target.HolderCopySlot,
+-                    Is.EqualTo(99),
+-                    "Authority type3 kind9 has no legacy HolderCopy write.");
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(target.AttackingCounter, Is.Zero);
+                 Assert.That(target.Runtime.Vx, Is.Zero);
+@@ -4893,5 +4880,5 @@
+             {
+                 Assert.That(target.RelationTeam, Is.EqualTo(2));
+-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(target.AttackingCounter, Is.EqualTo(9));
+                 Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
+@@ -4944,5 +4931,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             target.Frame.D.state = targetState;
+             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
+@@ -4985,5 +4971,5 @@
+             // type-3 writer; the native generic continuation preserves this
+             // legacy-only shadow field instead of running the kind=9 copier.
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.Zero);
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -5160,5 +5146,4 @@
+                 2,
+                 10);
+-            attacker.HolderCopySlot = 77;
+             var itr = new InteractionArea
+             {
+@@ -5223,5 +5208,5 @@
+             Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
+             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.Zero);
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -5328,5 +5313,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            holder.HolderCopySlot = 88;
+             LF2SpecialAttack d1Source = CreateSpecialAttackEntity(
+                 world,
+@@ -5339,5 +5323,4 @@
+             d1Wrapper.characterData.weapon_hp = 17;
+             d1Source.WeaponCount = 17;
+-            attacker.HolderCopySlot = 77;
+             if (heldByCharacter)
+             {
+@@ -5410,5 +5393,5 @@
+             {
+                 Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             }
+             else
+@@ -5416,5 +5399,5 @@
+                 Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
+                 Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
+-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             }
+             Assert.That(target.HitConfirm2, Is.Zero);
+@@ -5552,6 +5535,4 @@
+                 target.Frame.D.state = LF2States.WeaponThrowing;
+ 
+-            attacker.HolderCopySlot = 77;
+-            holder.HolderCopySlot = 88;
+             if (heldByCharacter)
+             {
+@@ -5797,5 +5778,5 @@
+             Assert.That(scenario.CharacterAttacker.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
+             Assert.That(scenario.CharacterVictim.Runtime.HolderStableId, Is.EqualTo(-1));
+-            Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(scenario.CharacterAttacker.Runtime.PickupCount, Is.EqualTo(2));
+         }
+@@ -5905,5 +5886,4 @@
+                 hasItr: false,
+                 hasBody: false);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+             holder.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
+@@ -6062,5 +6042,4 @@
+             itr.injury = 50;
+             itr.vrest = 7;
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             target.Health.HP = 20;
+             target.Health.HPBound = 100;
+@@ -6633,5 +6612,4 @@
+             scenario.CharacterAttacker.Runtime.HolderStableId =
+                 holder.Runtime.SlotIndex;
+-            scenario.CharacterAttacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             scenario.CharacterVictim.Runtime.LinkState = 2;
+             scenario.CharacterVictim.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
+
+--- Assets/NTSD/Scripts/Test/Editor/BattleRandomWeaponLateEffectPlayModeProbeEditor.cs
++++ Assets/NTSD/Scripts/Test/Editor/BattleRandomWeaponLateEffectPlayModeProbeEditor.cs
+@@ -329,6 +329,4 @@
+                     child.AttackExempt == 6 &&
+                     child.Team == 0 && child.RelationTeam == 0 &&
+-                    child.HolderCopySlot == 99 && child.KillCount == -1,
+-                    $"Live state9996 child {index} field/RNG ordering mismatch.");
+                 children[index] = Child(child);
+             }
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs
+@@ -20,10 +20,9 @@
+     public sealed class NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests
+     {
+-        [TestCase(-1, 7, 0)]
+-        [TestCase(0, 7, 0)]
+-        [TestCase(77, 5, 77)]
++        [TestCase(-1, 0)]
++        [TestCase(0, 0)]
++        [TestCase(77, 77)]
+         public void LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(
+             int holderStableId,
+-            int holderCopySlot,
+             int expectedSlot)
+         {
+@@ -35,5 +34,4 @@
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = holderStableId;
+-            attacker.HolderCopySlot = holderCopySlot;
+ 
+             Assert.That(
+@@ -43,5 +41,5 @@
+                 attacker.ResolveReleaseNegativeLinkHolderSlotOrImplicitZero(),
+                 Is.EqualTo(expectedSlot));
+-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(holderCopySlot));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+         }
+ 
+@@ -72,5 +70,4 @@
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = exactHolder.Runtime.SlotIndex;
+-            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
+ 
+             BattleHitCandidatePairSnapshot snapshot =
+@@ -83,5 +80,5 @@
+             Assert.That(snapshot.LinkedHolderPresent, Is.True);
+             Assert.That(snapshot.LinkedHolderBattleGroup, Is.EqualTo(17));
+-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+         }
+ 
+@@ -125,5 +122,4 @@
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = exactHolder.Runtime.SlotIndex;
+-            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
+ 
+             InteractionArea resolved = BruteForceSceneQuery.ResolveRuntimeItrForPair(
+@@ -140,5 +136,5 @@
+             Assert.That(zeroAttackerHpOnConsume, Is.False);
+             Assert.That(releaseHeavyHeldTargetOnConsume, Is.False);
+-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+         }
+ 
+@@ -364,7 +360,7 @@
+                 var tests =
+                     new NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests();
+-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(-1, 7, 0);
+-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(0, 7, 0);
+-                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(77, 5, 77);
++                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(-1, 0);
++                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(0, 0);
++                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(77, 77);
+                 tests.FrozenPair_UsesExactHighSlotHolderGroupNotRootCopyGroup();
+                 tests.Kind5Replacement_UsesExactHolderFrameNotRootCopyFrame();
+@@ -373,5 +369,5 @@
+                     "state=Passed\ncases=5\n" +
+                     "exactSlots=implicit0,slot0,slot77\n" +
+-                    "holderCopyUnchanged=true\nsceneMutation=none\n",
++                    "holderCopyCarrierAbsent=" + (typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0).ToString() + "\nsceneMutation=none\n",
+                     new UTF8Encoding(false));
+             }
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs
+@@ -337,5 +337,4 @@
+             victim = DamageEntity(world, 9801, 1, LF2ObjectType.Character);
+             holder = DamageEntity(world, 9802, 2, LF2ObjectType.Character);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             victim.Health.HP = 10;
+             victim.Health.HPBound = 100;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceAttackerResolverEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5ResourceAttackerResolverEditorTests.cs
+@@ -114,5 +114,4 @@
+             attacker.Runtime.OwnerStableId = 1;
+             attacker.Runtime.HolderStableId = 1;
+-            attacker.Runtime.HolderCopySlotIndex = 1;
+             attacker.Runtime.RelationOwnerSlotIndex = 1;
+ 
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardReducedKnockoutProducerEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5StandardReducedKnockoutProducerEditorTests.cs
+@@ -180,5 +180,4 @@
+             victim.Runtime.OrdinaryCreditGate2F4 = -1;
+             victim.Unk344 = 1;
+-            attacker.HolderCopySlot = credit.Runtime.SlotIndex;
+         }
+ 
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs
+@@ -102,10 +102,8 @@
+             attacker.RelationTeam = 7;
+             attacker.Runtime.OwnerSlotIndex = 11;
+-            attacker.HolderCopySlot = 55;
+             attacker.Runtime.LinkState = -1;
+             attacker.Runtime.HolderStableId = parent.Runtime.SlotIndex;
+             parent.RelationTeam = 8;
+             parent.Runtime.OwnerSlotIndex = 13;
+-            parent.HolderCopySlot = 88;
+ 
+             PrepareTarget(target);
+@@ -132,5 +130,5 @@
+             Assert.That(target.Runtime.Vy, Is.EqualTo(10.0));
+             Assert.That(target.Runtime.Vz, Is.EqualTo(11.0));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(99));
+             Assert.That(target.WeaponCount, Is.EqualTo(73));
+@@ -202,5 +200,4 @@
+             target.Runtime.OwnerSlotIndex = 44;
+             target.Runtime.AnimCounter = 99;
+-            target.HolderCopySlot = 66;
+             target.WeaponCount = 73;
+             target.HitConfirm2 = 7;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs
+@@ -22,5 +22,5 @@
+     {
+         [Test]
+-        public void Kind9Actual_PreservesTargetHolderCopySentinel()
++        public void Kind9Actual_PreservesEffectiveRelationsWithoutHolderCopy()
+         {
+             var world = new SimulationWorld();
+@@ -37,6 +37,4 @@
+                 1,
+                 2);
+-            attacker.HolderCopySlot = 77;
+-            target.HolderCopySlot = 99;
+             target.Runtime.SetVelocity(2, 3, 4);
+             target.KnockbackVx = 5;
+@@ -51,5 +49,5 @@
+ 
+             Assert.That(applied, Is.True);
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.RelationTeam, Is.EqualTo(7));
+             Assert.That(target.Frame.N, Is.EqualTo(30));
+@@ -58,9 +56,9 @@
+             Assert.That(target.Runtime.Vy, Is.Zero);
+             Assert.That(target.Runtime.Vz, Is.Zero);
+-            Assert.That(attacker.HolderCopySlot, Is.EqualTo(77));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+         }
+ 
+         [Test]
+-        public void Kind9HitPlan_PreservesTargetHolderCopySentinel()
++        public void Kind9HitPlan_PreservesEffectiveRelationsWithoutHolderCopy()
+         {
+             new NTSD.Test.BattleHitExecutionPlanEditorTests()
+@@ -91,9 +89,9 @@
+                 "projection.TargetHolderCopySlot = attackerSlot;",
+                 hitPlan,
+-                "Retired pickup paths must preserve the reserved HolderCopy carrier.");
++                "Retired pickup paths must not write a HolderCopy carrier.");
+         }
+ 
+         [Test]
+-        public void ExistingSelfCheckType3Contract_PreservesTargetHolderCopySentinel()
++        public void ExistingSelfCheckType3Contract_PreservesEffectiveRelationsWithoutHolderCopy()
+         {
+             MethodInfo method = typeof(BattleRuntimeSelfCheck).GetMethod(
+@@ -314,11 +312,11 @@
+                 var tests =
+                     new NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests();
+-                tests.Kind9Actual_PreservesTargetHolderCopySentinel();
+-                tests.Kind9HitPlan_PreservesTargetHolderCopySentinel();
++                tests.Kind9Actual_PreservesEffectiveRelationsWithoutHolderCopy();
++                tests.Kind9HitPlan_PreservesEffectiveRelationsWithoutHolderCopy();
+                 tests.Type3ProductionSources_ContainNoLegacyHolderCopyWriter();
+                 File.WriteAllText(
+                     ResultPath,
+                     "state=Passed\ncases=3\n" +
+-                    "targetHolderCopy=99\nsourceHolderCopy=77\n" +
++                    "holderCopyCarrierAbsent=" + (typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0).ToString() + "\n" +
+                     "type3ExtraAssignments=0\nsceneMutation=none\n",
+                     new UTF8Encoding(false));
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs
+@@ -32,5 +32,5 @@
+             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(11));
+             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(0));
+-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(target.HitConfirm2, Is.EqualTo(7));
+             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+@@ -167,5 +167,4 @@
+             target.Runtime.OwnerSlotIndex = 44;
+             target.Runtime.AnimCounter = 99;
+-            target.HolderCopySlot = 66;
+             target.HitConfirm2 = 7;
+             target.Runtime.SpecialHitLatch0EB = false;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs
+@@ -140,5 +140,4 @@
+             TypedCharacter target = Entity(world, 9961, 1, LF2ObjectType.Character);
+             TypedCharacter holder = Entity(world, 9962, 2, LF2ObjectType.Character);
+-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+             holder.ComboCountAtk = 41;
+             target.KillCount = -1;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs
+@@ -284,5 +284,4 @@
+         private static void SetExcludedSentinels(LF2Character entity, int seed)
+         {
+-            entity.HolderCopySlot = seed;
+             entity.Runtime.Kind4SourceCount92 = seed + 100;
+             entity.Runtime.OwnerSlotIndex = seed + 200;
+@@ -295,5 +294,5 @@
+         private static void AssertExcludedSentinels(LF2Character entity, int seed)
+         {
+-            Assert.That(entity.HolderCopySlot, Is.EqualTo(seed));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(entity.Runtime.Kind4SourceCount92, Is.EqualTo(seed + 100));
+             Assert.That(entity.Runtime.OwnerSlotIndex, Is.EqualTo(seed + 200));
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs
+@@ -32,5 +32,4 @@
+                 new List<LF2FrameData> { Frame(0, LF2States.Standing, null) },
+                 0);
+-            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
+             catcher.Runtime.OwnerSlotIndex = -1;
+             catcher.FallDamageDiv = 200;
+@@ -264,5 +263,4 @@
+                 new List<LF2FrameData> { Frame(0, LF2States.Standing, null) },
+                 0);
+-            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
+             victim.Health.HP = 20;
+             victim.Runtime.OrdinaryCreditGate2F4 = -1;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs
+@@ -136,7 +136,5 @@
+                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
+                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
+-                Assert.That(scenario.Target.HolderCopySlot,
+-                    Is.EqualTo(733),
+-                    "HolderCopySlot is outside the shared kind2 transaction.");
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(scenario.Attacker.Runtime.PickupCount, Is.EqualTo(6));
+                 Assert.That(scenario.Attacker.AttackingCounter, Is.Zero);
+@@ -183,5 +181,4 @@
+                 int oldLink = scenario.OldChild.Runtime.LinkState;
+                 int oldHolder = scenario.OldChild.Runtime.HolderStableId;
+-                int oldHolderCopy = scenario.OldChild.HolderCopySlot;
+                 int oldOwner = scenario.OldChild.Runtime.OwnerSlotIndex;
+                 int oldTarget = scenario.OldChild.Runtime.TargetSlotIndex;
+@@ -208,9 +205,9 @@
+                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
+                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
+-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+ 
+                 Assert.That(scenario.OldChild.Runtime.LinkState, Is.EqualTo(oldLink));
+                 Assert.That(scenario.OldChild.Runtime.HolderStableId, Is.EqualTo(oldHolder));
+-                Assert.That(scenario.OldChild.HolderCopySlot, Is.EqualTo(oldHolderCopy));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(scenario.OldChild.Runtime.OwnerSlotIndex, Is.EqualTo(oldOwner));
+                 Assert.That(scenario.OldChild.Runtime.TargetSlotIndex, Is.EqualTo(oldTarget));
+@@ -263,5 +260,4 @@
+                 int targetHolderBefore = scenario.Target.Runtime.HolderStableId;
+                 int targetOwnerBefore = scenario.Target.Runtime.OwnerSlotIndex;
+-                int targetHolderCopyBefore = scenario.Target.HolderCopySlot;
+ 
+                 scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(mode);
+@@ -279,6 +275,5 @@
+                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
+                     Is.EqualTo(targetOwnerBefore));
+-                Assert.That(scenario.Target.HolderCopySlot,
+-                    Is.EqualTo(targetHolderCopyBefore));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(scenario.Target.Runtime.WeaponFlightCounter, Is.EqualTo(31));
+ 
+@@ -339,5 +334,5 @@
+                 Assert.That(scenario.Target.Runtime.HolderStableId, Is.EqualTo(-1));
+                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex, Is.EqualTo(91));
+-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+ 
+                 if (scenario.Attacker is LF2Character character)
+@@ -395,6 +390,6 @@
+                     Is.EqualTo(6),
+                     "The second candidate sees the first relation write.");
+-                Assert.That(scenario.FirstTarget.HolderCopySlot, Is.EqualTo(733));
+-                Assert.That(scenario.SecondTarget.HolderCopySlot, Is.EqualTo(733));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+ 
+                 if (scenario.Attacker is LF2Character character)
+@@ -574,5 +569,5 @@
+                 Assert.That(scenario.Attacker.Runtime.PickupCount, Is.EqualTo(6));
+                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex, Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
+-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 if (scenario.Attacker is LF2Character character)
+                     Assert.That(character.HeldWeaponReferenceInternal, Is.SameAs(scenario.Target));
+@@ -907,5 +902,4 @@
+             weapon.Runtime.TargetSlotIndex = -1;
+             weapon.Runtime.HeldWeaponStableId = -1;
+-            weapon.HolderCopySlot = 733;
+             weapon.RefreshRuntimeSnapshot();
+             return weapon;
+@@ -947,5 +941,4 @@
+             target.Runtime.TargetSlotIndex = -1;
+             target.Runtime.HeldWeaponStableId = -1;
+-            target.HolderCopySlot = 733;
+             target.RefreshRuntimeSnapshot();
+             return target;
+@@ -971,5 +964,4 @@
+             oldChild.Runtime.LinkState = -relation;
+             oldChild.Runtime.HolderStableId = attacker.Runtime.SlotIndex;
+-            oldChild.HolderCopySlot = 73;
+             oldChild.Runtime.OwnerSlotIndex = 91;
+             oldChild.Runtime.TargetSlotIndex = 22;
+@@ -1339,5 +1331,5 @@
+                     settled.parent == row.holderSlot && settled.group == 3, "Physical owner/link/group mismatch.");
+                 Require(settled.counter == 0 && settled.action == (replacement ? 116 : 115), "Pickup tail/action mismatch.");
+-                Require(settled.holderCopy == 99, "Pickup wrote the legacy holder mirror.");
++                Require(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, "Retired holder mirror is still present.");
+                 Require(row.live && row.heldReferenceMatches && row.freeEvents == 0, "Live relation or no-free invariant failed.");
+                 if (replacement)
+@@ -1378,5 +1370,4 @@
+             child.RelationTeam = 8;
+             child.Runtime.OwnerSlotIndex = 27;
+-            child.Runtime.HolderCopySlotIndex = 99;
+             child.Runtime.SetPosition(holder.Runtime.X, 0, holder.Runtime.Z);
+             child.Runtime.SetVelocity(0, 0, 0);
+@@ -1406,5 +1397,4 @@
+                 group = target.RelationTeam, action = holder.Frame.N, counter = holder.AttackingCounter,
+                 targetAction = target.Frame.N, weaponHp = target.Runtime.WeaponFlightCounter,
+-                holderCopy = target.HolderCopySlot,
+                 holderX = holder.Runtime.X, holderY = holder.Runtime.Y, holderZ = holder.Runtime.Z,
+                 targetX = target.Runtime.X, targetY = target.Runtime.Y, targetZ = target.Runtime.Z,
+@@ -1520,5 +1510,5 @@
+         {
+             public int holderRelation, targetRelation, count, owner, holderChild, parent, group, action, counter;
+-            public int targetAction, weaponHp, holderCopy;
++            public int targetAction, weaponHp;
+             public int holderOwner;
+             public double holderX, holderY, holderZ, targetX, targetY, targetZ;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs
+@@ -182,5 +182,5 @@
+             Assert.That(typeof(NTSDEntityRuntime).GetMember("WeaponState"), Is.Empty);
+             Assert.That(typeof(NTSDEntityRuntime).GetMember("ReleaseTick"), Is.Empty);
+-            Assert.That(parent.HolderCopySlot, Is.EqualTo(99)); Assert.That(child.HolderCopySlot, Is.EqualTo(99));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True); Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+         }
+ 
+@@ -192,5 +192,5 @@
+             public int opointSourceOid, opointSourceAction, opointChildAction;
+             public bool opointReservedAndLifecycle;
+-            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponStateAbsent;ReleaseTickAbsent;currentCharacterAndSpecialAttackHolderCopy99";
++            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponStateAbsent;ReleaseTickAbsent;HolderCopyAbsent";
+             public string scope = "Existing G16 actual pickup/replacement driver witnesses plus current OPoint kind2 ->213 PostInitLiving seam in live world, explicit action injection, full tick and unregister lifecycle; no physical input/full skill emission claim.";
+         }
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs
+@@ -92,5 +92,5 @@
+ 
+         [Test]
+-        public void ReservedCarrierStructure_RemainsPresent()
++        public void RetiredCarrierStructure_IsAbsent()
+         {
+             string runtime = Source(
+@@ -107,23 +107,23 @@
+                 "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs");
+ 
+-            Assert.That(runtime, Does.Contain("public int HolderCopySlotIndex = 99;"));
++            Assert.That(runtime, Does.Not.Contain("public int HolderCopySlotIndex = 99;"));
+             Assert.That(runtime,
+-                Does.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
+-            Assert.That(runtime, Does.Contain("HolderCopySlotIndex = 99;"));
+-            Assert.That(task, Does.Contain("public int holderCopySlot = -1;"));
+-            Assert.That(task, Does.Contain("holderCopySlot = -1;"));
+-            Assert.That(ecs, Does.Contain("HolderCopySlot = new int[capacity];"));
++                Does.Not.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
++            Assert.That(runtime, Does.Not.Contain("HolderCopySlotIndex = 99;"));
++            Assert.That(task, Does.Not.Contain("public int holderCopySlot = -1;"));
++            Assert.That(task, Does.Not.Contain("holderCopySlot = -1;"));
++            Assert.That(ecs, Does.Not.Contain("HolderCopySlot = new int[capacity];"));
+             Assert.That(ecs,
+-                Does.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
++                Does.Not.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
+             Assert.That(ecs,
+-                Does.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
++                Does.Not.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
+             Assert.That(checksum,
+-                Does.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
++                Does.Not.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
+             Assert.That(parity,
+-                Does.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
++                Does.Not.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
+             Assert.That(hitPlan,
+-                Does.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
++                Does.Not.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
+             Assert.That(hitPlan,
+-                Does.Contain("if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;"));
++                Does.Not.Contain("if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;"));
+         }
+ 
+@@ -134,5 +134,5 @@
+         [TestCase(false, 55)]
+         [TestCase(true, 55)]
+-        public void HeldRelation_PreservesHolderCopySentinel(bool opoint, int initialCopy)
++        public void HeldRelation_PreservesIndependentOwner(bool opoint, int initialOwner)
+         {
+             var holder = new LF2Character();
+@@ -141,12 +141,10 @@
+                 : new LF2Weapon();
+             holder.Runtime.SlotIndex = 0;
+-            holder.HolderCopySlot = 73;
+             child.Runtime.SlotIndex = 77;
+-            child.HolderCopySlot = initialCopy;
++            child.Runtime.OwnerSlotIndex = initialOwner;
+ 
+             if (child is LF2Weapon weapon)
+                 weapon.SetWeaponType(1);
+ 
+-            int holderCopyBefore = child.HolderCopySlot;
+             var resolver = new LF2CharacterWeaponLinkResolver(holder);
+             if (opoint)
+@@ -155,5 +153,6 @@
+                 resolver.HoldWeapon(child);
+ 
+-            Assert.That(child.HolderCopySlot, Is.EqualTo(holderCopyBefore));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
++            Assert.That(child.Runtime.OwnerSlotIndex, Is.EqualTo(initialOwner));
+             Assert.That(holder.Runtime.TargetSlotIndex,
+                 Is.EqualTo(child.Runtime.SlotIndex));
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointKind3ReleaseProductionEditorTests.cs
+@@ -186,5 +186,5 @@
+             Assert.That(scope.Child.Runtime.CaughtDuration, Is.EqualTo(23));
+             Assert.That(scope.Child.Runtime.OwnerSlotIndex, Is.EqualTo(17));
+-            Assert.That(scope.Child.HolderCopySlot, Is.EqualTo(29));
++            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+             Assert.That(scope.World.ObjectCount, Is.EqualTo(objectCount));
+             Assert.That(scope.World.TryGetRuntimeSlotReadOnlyViewForDiagnostics(
+@@ -264,5 +264,4 @@
+             child.Runtime.HolderStableId = holderSlot;
+             child.Runtime.OwnerSlotIndex = 17;
+-            child.HolderCopySlot = 29;
+             child.Runtime.CatchSourceSlot90 = 82;
+             child.Runtime.CaughtSlotIndex = 81;
+
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointTerminalStructuralProductionEditorTests.cs
+@@ -135,5 +135,4 @@
+                 encodedObserver.Runtime.CaughtDuration = 88;
+                 encodedObserver.Runtime.OwnerSlotIndex = 17;
+-                encodedObserver.HolderCopySlot = 29;
+                 plainObserver.Runtime.CatchSourceSlot90 = childSlot;
+                 plainObserver.Runtime.CatcherSlotIndex = childSlot;
+@@ -151,5 +150,5 @@
+                 Assert.That(encodedObserver.Runtime.CaughtDuration, Is.Zero);
+                 Assert.That(encodedObserver.Runtime.OwnerSlotIndex, Is.EqualTo(17));
+-                Assert.That(encodedObserver.HolderCopySlot, Is.EqualTo(29));
++                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                 Assert.That(plainObserver.Runtime.CatchSourceSlot90, Is.EqualTo(-1));
+                 Assert.That(plainObserver.Runtime.CatcherSlotIndex, Is.EqualTo(-1));

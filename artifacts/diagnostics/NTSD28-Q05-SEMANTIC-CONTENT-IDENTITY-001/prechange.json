@@ -1,0 +1,34 @@
+{
+  "utc": "2026-09-13T10:45:19.221560+00:00",
+  "paths": [
+    "Assets/NTSD/Scripts/Animation/LoganContentIdentity.cs",
+    "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+    "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+    "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+    "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05SemanticContentIdentityEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganObjectCatalog.cs",
+      "sha256": "eb391d76c769f563dca101f15bbfb6d98432c52be1d48aa2d1d8fbe9a847c761"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs",
+      "sha256": "3030af506adce89fc0e416031cbda877435f465602e10470d20db3c736c294d5"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs",
+      "sha256": "3cce74e6493fa5e6dff238952e4f3b69bacc7961adab8e8763260b7ebdc8c7e7"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/GameDataManager.cs",
+      "sha256": "bf9c73347f2c262e0504c0389be2da798daf3678cbdda2d0709318ab04929e81"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B11AtomicPublicationEditorTests.cs",
+      "sha256": "68f719ae9b2039e3180a89baf9556543dcb2f6168cec6f02e477b337c34367ca"
+    }
+  ]
+}

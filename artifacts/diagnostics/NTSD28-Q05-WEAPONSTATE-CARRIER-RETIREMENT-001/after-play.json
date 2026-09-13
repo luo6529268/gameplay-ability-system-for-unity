@@ -1,0 +1,37 @@
+{
+    "status": "PASS",
+    "error": "",
+    "scene": "NTSD_Battle",
+    "beforeObjects": 4,
+    "afterObjects": 4,
+    "weaponSlot": 399,
+    "targetSlot": 2,
+    "ticks": [
+        {
+            "tick": 1,
+            "frame": 40,
+            "state": 1002,
+            "hitFa": 12,
+            "vx": 14.0,
+            "vy": 0.0,
+            "vz": 0.0,
+            "targetSlot": 2,
+            "synchronizedRngCalls": 0,
+            "checksum": ""
+        },
+        {
+            "tick": 2,
+            "frame": 40,
+            "state": 1002,
+            "hitFa": 12,
+            "vx": 14.0,
+            "vy": 0.0,
+            "vz": 0.0,
+            "targetSlot": 2,
+            "synchronizedRngCalls": 0,
+            "checksum": ""
+        }
+    ],
+    "seed": 424242,
+    "boundary": "Current runtime OID124/action40 and current OID7/action0 in real NTSD_Battle world; two explicit pre-frame-advance calls, no full-tick/physics or physical input claim."
+}

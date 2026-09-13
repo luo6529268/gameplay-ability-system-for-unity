@@ -47,7 +47,6 @@ namespace NTSD.Animation.LF2Tasks
         public int trackedTargetSlot = -1;
         public bool useExplicitRelationIdentity;
         public int relationTeam = 0;
-        public int holderCopySlot = -1;
         public int frameDelay = 0;
         public int attackExempt = 0;
         public ReleaseSpawnSemantic releaseSpawnSemantic;
@@ -91,7 +90,6 @@ namespace NTSD.Animation.LF2Tasks
             trackedTargetSlot = -1;
             useExplicitRelationIdentity = false;
             relationTeam = 0;
-            holderCopySlot = -1;
             frameDelay = 0;
             attackExempt = 0;
             releaseSpawnSemantic = ReleaseSpawnSemantic.None;

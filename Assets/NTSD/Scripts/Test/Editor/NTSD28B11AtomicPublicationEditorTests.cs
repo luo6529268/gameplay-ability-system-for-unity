@@ -123,6 +123,10 @@ namespace NTSD.Test
             Assert.That(Key(manager), Is.EqualTo(candidate.SourceCacheKey));
             Assert.That(Key(data), Is.EqualTo(candidate.SourceCacheKey));
             Assert.That(Key(ui), Is.EqualTo(candidate.SourceCacheKey));
+            Assert.That(manager.PublishedLoganContentIdentity, Is.SameAs(candidate.ContentIdentity));
+            Assert.That(data.PublishedLoganContentIdentity, Is.SameAs(candidate.ContentIdentity));
+            var session = manager.PublishedLoganContentIdentity.CreateLocalValidationSessionIdentity(42, 424242, 99, new[] { 0 });
+            Assert.That(session.CatalogFingerprint, Is.EqualTo(candidate.ContentIdentity.CatalogFingerprint));
             Assert.That(manager.GetCharacterConfig(56), Is.Not.Null);
             Assert.That(data.GetObjectById(56), Is.Not.Null);
             Assert.That(data.GetObjectsByType(0).Count, Is.EqualTo(1));

@@ -31,7 +31,6 @@ namespace NTSD.Test
                 LF2ObjectType.Character,
                 new List<LF2FrameData> { Frame(0, LF2States.Standing, null) },
                 0);
-            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
             catcher.Runtime.OwnerSlotIndex = -1;
             catcher.FallDamageDiv = 200;
             victim.Runtime.IncomingDamageScale340 = 0;
@@ -263,7 +262,6 @@ namespace NTSD.Test
                 LF2ObjectType.Character,
                 new List<LF2FrameData> { Frame(0, LF2States.Standing, null) },
                 0);
-            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
             victim.Health.HP = 20;
             victim.Runtime.OrdinaryCreditGate2F4 = -1;
             SetLegacySentinels(world, legacyHolder, victim);

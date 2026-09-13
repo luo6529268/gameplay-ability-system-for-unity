@@ -1050,12 +1050,10 @@ namespace NTSD.Simulation
                 ("escapeCounter", isDefault ? 0 : runtime.CatchingStateTU),
                 ("grabbedTimer", 0),
                 ("heldWeaponSlot", isDefault ? -1 : runtime.HeldWeaponStableId),
-                ("holderCopy", isDefault ? 99 : runtime.HolderCopySlotIndex),
                 ("holderIdx", isDefault ? -1 : runtime.HolderStableId),
                 ("linkState", isDefault ? 0 : runtime.LinkState),
                 ("pickerIdx", isDefault ? -1 : runtime.PickerStableId),
                 ("pickupCount", isDefault ? 0 : runtime.PickupCount),
-                ("releaseTick", runtime?.ReleaseTick ?? -1),
                 ("stuckVictimSlot", -1),
                 ("targetIdx", isDefault ? -1 : runtime.TargetSlotIndex),
                 ("throwFrameGuard", isDefault ? -1 : runtime.ThrowFrameGuard));
@@ -1204,8 +1202,7 @@ namespace NTSD.Simulation
                 ("unk33C", runtime?.TransformTargetObjectId ?? -1),
                 ("unk360", isDefault ? -1 : runtime.Unk360),
                 ("unk3FC", isDefault ? -1000 : runtime.Unk3FC),
-                ("unk400", isDefault ? -1000 : runtime.Unk400),
-                ("weaponState", isDefault ? 0 : runtime.WeaponState));
+                ("unk400", isDefault ? -1000 : runtime.Unk400));
 
             return DictionaryOf(
                 ("frame", frame),

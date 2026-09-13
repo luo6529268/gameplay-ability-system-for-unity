@@ -145,6 +145,10 @@ namespace NTSD.Simulation.Ecs
         private int authorityOrdinal;
         private int playbackTickOverride;
         private int playbackTickOverrideDepth;
+        private int snapshotMutationDepth;
+        internal bool IsPlaybackActiveForSnapshot =>
+            System.Threading.Volatile.Read(ref snapshotMutationDepth) != 0 ||
+            System.Threading.Volatile.Read(ref playbackTickOverrideDepth) != 0;
         private long commandCount;
         private long spawnCount;
         private long registerCount;
@@ -240,27 +244,35 @@ namespace NTSD.Simulation.Ecs
             OPointCreateTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
-            if (!acceptingStructuralCreates)
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
             {
-                shutdownRejectedCreateCount++;
-                return null;
-            }
-            if (factory == null || task == null)
-                return null;
+                if (!acceptingStructuralCreates)
+                {
+                    shutdownRejectedCreateCount++;
+                    return null;
+                }
+                if (factory == null || task == null)
+                    return null;
 
-            task.targetWorld = world;
-            RuntimeEntityHandle source = ResolveSource(task.parent);
-            BattleStructuralCommand command = Record(
-                BattleStructuralCommandType.Spawn,
-                boundary,
-                source,
-                task.requiredRuntimeSlot,
-                task.opoint.oid);
-            lastSpawnBoundary = boundary;
-            lastSpawnAuthorityOrdinal = command.AuthorityOrdinal;
-            lastSpawnSource = source;
-            spawnCount++;
-            return factory.MaterializeObjectForStructuralWriter(task);
+                task.targetWorld = world;
+                RuntimeEntityHandle source = ResolveSource(task.parent);
+                BattleStructuralCommand command = Record(
+                    BattleStructuralCommandType.Spawn,
+                    boundary,
+                    source,
+                    task.requiredRuntimeSlot,
+                    task.opoint.oid);
+                lastSpawnBoundary = boundary;
+                lastSpawnAuthorityOrdinal = command.AuthorityOrdinal;
+                lastSpawnSource = source;
+                spawnCount++;
+                return factory.MaterializeObjectForStructuralWriter(task);
+            }
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void SpawnMultiple(
@@ -268,90 +280,130 @@ namespace NTSD.Simulation.Ecs
             OPointCreateMultipleTask task,
             BattleStructuralPlaybackBoundary boundary)
         {
-            if (!acceptingStructuralCreates)
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
             {
-                shutdownRejectedCreateCount++;
-                return;
-            }
-            if (factory == null || task == null)
-                return;
+                if (!acceptingStructuralCreates)
+                {
+                    shutdownRejectedCreateCount++;
+                    return;
+                }
+                if (factory == null || task == null)
+                    return;
 
-            task.targetWorld = world;
-            RuntimeEntityHandle source = ResolveSource(task.parent);
-            BattleStructuralCommand command = Record(
-                BattleStructuralCommandType.SpawnMultiple,
-                boundary,
-                source,
-                -1,
-                task.opoint.oid);
-            lastSpawnBoundary = boundary;
-            lastSpawnAuthorityOrdinal = command.AuthorityOrdinal;
-            lastSpawnSource = source;
-            spawnCount++;
-            factory.MaterializeMultipleObjectsForStructuralWriter(task);
+                task.targetWorld = world;
+                RuntimeEntityHandle source = ResolveSource(task.parent);
+                BattleStructuralCommand command = Record(
+                    BattleStructuralCommandType.SpawnMultiple,
+                    boundary,
+                    source,
+                    -1,
+                    task.opoint.oid);
+                lastSpawnBoundary = boundary;
+                lastSpawnAuthorityOrdinal = command.AuthorityOrdinal;
+                lastSpawnSource = source;
+                spawnCount++;
+                factory.MaterializeMultipleObjectsForStructuralWriter(task);
+            }
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void Register(ISimObject obj)
         {
-            if (!acceptingStructuralCreates)
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
             {
-                shutdownRejectedCreateCount++;
-                return;
+                if (!acceptingStructuralCreates)
+                {
+                    shutdownRejectedCreateCount++;
+                    return;
+                }
+                Record(
+                    BattleStructuralCommandType.Register,
+                    BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
+                    ResolveSource(obj as LF2Entity),
+                    obj is LF2Entity entity ? entity.RequiredRuntimeSlot : -1,
+                    obj is LF2Entity living ? living.ObjectId : -1);
+                registerCount++;
+                world.RegisterCoreFromStructuralWriter(obj);
             }
-            Record(
-                BattleStructuralCommandType.Register,
-                BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
-                ResolveSource(obj as LF2Entity),
-                obj is LF2Entity entity ? entity.RequiredRuntimeSlot : -1,
-                obj is LF2Entity living ? living.ObjectId : -1);
-            registerCount++;
-            world.RegisterCoreFromStructuralWriter(obj);
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void Unregister(ISimObject obj)
         {
-            BattleStructuralPlaybackBoundary boundary =
-                world.IsTickingForStructuralWriter
-                    ? BattleStructuralPlaybackBoundary.DeferredUnregisterFree
-                    : BattleStructuralPlaybackBoundary.CurrentEntityImmediate;
-            Record(
-                BattleStructuralCommandType.Unregister,
-                boundary,
-                ResolveSource(obj as LF2Entity),
-                obj is LF2Entity entity ? entity.Runtime?.SlotIndex ?? -1 : -1,
-                obj is LF2Entity living ? living.ObjectId : -1);
-            unregisterCount++;
-            world.UnregisterCoreFromStructuralWriter(obj);
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
+            {
+                BattleStructuralPlaybackBoundary boundary =
+                    world.IsTickingForStructuralWriter
+                        ? BattleStructuralPlaybackBoundary.DeferredUnregisterFree
+                        : BattleStructuralPlaybackBoundary.CurrentEntityImmediate;
+                Record(
+                    BattleStructuralCommandType.Unregister,
+                    boundary,
+                    ResolveSource(obj as LF2Entity),
+                    obj is LF2Entity entity ? entity.Runtime?.SlotIndex ?? -1 : -1,
+                    obj is LF2Entity living ? living.ObjectId : -1);
+                unregisterCount++;
+                world.UnregisterCoreFromStructuralWriter(obj);
+            }
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void Free(LF2Entity entity)
         {
-            if (entity == null)
-                return;
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
+            {
+                if (entity == null)
+                    return;
 
-            Record(
-                BattleStructuralCommandType.Free,
-                BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
-                ResolveSource(entity),
-                entity.Runtime?.SlotIndex ?? -1,
-                entity.ObjectId);
-            freeCount++;
-            entity.FreeEntityLikeExeCoreForStructuralWriter();
+                Record(
+                    BattleStructuralCommandType.Free,
+                    BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
+                    ResolveSource(entity),
+                    entity.Runtime?.SlotIndex ?? -1,
+                    entity.ObjectId);
+                freeCount++;
+                entity.FreeEntityLikeExeCoreForStructuralWriter();
+            }
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void Destroy(LF2Entity entity)
         {
-            if (entity == null)
-                return;
+            System.Threading.Interlocked.Increment(ref snapshotMutationDepth);
+            try
+            {
+                if (entity == null)
+                    return;
 
-            Record(
-                BattleStructuralCommandType.Destroy,
-                BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
-                ResolveSource(entity),
-                entity.Runtime?.SlotIndex ?? -1,
-                entity.ObjectId);
-            destroyCount++;
-            entity.DestroyEntityLikeExeCoreForStructuralWriter();
+                Record(
+                    BattleStructuralCommandType.Destroy,
+                    BattleStructuralPlaybackBoundary.CurrentEntityImmediate,
+                    ResolveSource(entity),
+                    entity.Runtime?.SlotIndex ?? -1,
+                    entity.ObjectId);
+                destroyCount++;
+                entity.DestroyEntityLikeExeCoreForStructuralWriter();
+            }
+            finally
+            {
+                System.Threading.Interlocked.Decrement(ref snapshotMutationDepth);
+            }
         }
 
         internal void RecordGenerationClaim(LF2Entity entity, int slot)

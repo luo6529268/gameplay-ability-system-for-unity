@@ -1,0 +1,16 @@
+[
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+  "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponReleaseFlowResolver.cs",
+  "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs",
+  "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs",
+  "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs",
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs",
+  "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyGrabbedByRetirementEditorTests.cs",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B6LegacyReleaseTickRetirementEditorTests.cs",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointDvxWeaponHpPreservationProductionEditorTests.cs",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05ReleaseTickCarrierEditorTests.cs"
+]

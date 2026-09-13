@@ -1923,7 +1923,6 @@ namespace NTSD.Test
             itr.effect = 0;
             itr.arest = 2;
             itr.vrest = 3;
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             target.Health.HP = 10;
             target.Health.HPBound = 100;
@@ -2221,7 +2220,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             target.DirectWriteFramePreserveWaitCounter(defendFrame.frameId);
             target.RefreshRuntimeSnapshot();
@@ -3717,8 +3715,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = 77;
-            target.HolderCopySlot = 99;
             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
             target.KnockbackVx = 5.0;
             target.KnockbackVy = 6.0;
@@ -3768,7 +3764,7 @@ namespace NTSD.Test
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
@@ -3873,7 +3869,7 @@ namespace NTSD.Test
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
@@ -3932,9 +3928,7 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            holder.HolderCopySlot = 88;
             holder.FrameDelay = 11;
-            attacker.HolderCopySlot = 77;
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
             attacker.FrameCache.Wrapper.characterData.weapon_broken_sound =
@@ -3982,7 +3976,7 @@ namespace NTSD.Test
             Assert.That(target.RelationTeam, Is.EqualTo(holder.RelationTeam));
             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(holder.Runtime.OwnerSlotIndex));
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(holder.Runtime.SlotIndex));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
@@ -4032,10 +4026,8 @@ namespace NTSD.Test
                 1,
                 2,
                 10);
-            attacker.HolderCopySlot = 77;
             attacker.Runtime.LinkState = -1;
             attacker.Runtime.HolderStableId = 999;
-            target.HolderCopySlot = 66;
             var itr = new InteractionArea
             {
                 kind = 0,
@@ -4076,7 +4068,7 @@ namespace NTSD.Test
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
             Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
             Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
         }
@@ -4146,7 +4138,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            holder.HolderCopySlot = 88;
             if (heldByCharacter)
             {
                 attacker.Runtime.LinkState = -1;
@@ -4832,7 +4823,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             target.Frame.D.state = targetState;
             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
             target.KnockbackVx = 5.0;
@@ -4876,10 +4866,7 @@ namespace NTSD.Test
             if (expectRelationCopy)
             {
                 Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-                Assert.That(
-                    target.HolderCopySlot,
-                    Is.EqualTo(99),
-                    "Authority type3 kind9 has no legacy HolderCopy write.");
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(target.AttackingCounter, Is.Zero);
                 Assert.That(target.Runtime.Vx, Is.Zero);
                 Assert.That(target.Runtime.Vy, Is.Zero);
@@ -4892,7 +4879,7 @@ namespace NTSD.Test
             else
             {
                 Assert.That(target.RelationTeam, Is.EqualTo(2));
-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(target.AttackingCounter, Is.EqualTo(9));
                 Assert.That(target.Runtime.Vx, Is.EqualTo(2.0));
                 Assert.That(target.Runtime.Vy, Is.EqualTo(3.0));
@@ -4943,7 +4930,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             target.Frame.D.state = targetState;
             target.Runtime.SetVelocity(2.0, 3.0, 4.0);
             target.KnockbackVx = 5.0;
@@ -4984,7 +4970,7 @@ namespace NTSD.Test
             // kind=9 is converted to kind=0 for state 1002/2000 before the
             // type-3 writer; the native generic continuation preserves this
             // legacy-only shadow field instead of running the kind=9 copier.
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
@@ -5159,7 +5145,6 @@ namespace NTSD.Test
                 1,
                 2,
                 10);
-            attacker.HolderCopySlot = 77;
             var itr = new InteractionArea
             {
                 kind = 0,
@@ -5222,7 +5207,7 @@ namespace NTSD.Test
             Assert.That(target.Frame.Prev, Is.EqualTo(40));
             Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
             Assert.That(target.RelationTeam, Is.EqualTo(attacker.RelationTeam));
-            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
             Assert.That(target.AttackingCounter, Is.Zero);
@@ -5327,7 +5312,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            holder.HolderCopySlot = 88;
             LF2SpecialAttack d1Source = CreateSpecialAttackEntity(
                 world,
                 "HitPlanType3D1Source",
@@ -5338,7 +5322,6 @@ namespace NTSD.Test
             d1Wrapper = d1Source.FrameCache.Wrapper;
             d1Wrapper.characterData.weapon_hp = 17;
             d1Source.WeaponCount = 17;
-            attacker.HolderCopySlot = 77;
             if (heldByCharacter)
             {
                 attacker.Runtime.LinkState = -1;
@@ -5409,13 +5392,13 @@ namespace NTSD.Test
             if (heldByCharacter)
             {
                 Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             }
             else
             {
                 Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(attacker.Runtime.OwnerSlotIndex));
                 Assert.That(target.Runtime.AnimCounter, Is.EqualTo(attacker.Runtime.SlotIndex));
-                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             }
             Assert.That(target.HitConfirm2, Is.Zero);
             Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
@@ -5551,8 +5534,6 @@ namespace NTSD.Test
             if (sourceKind == 9 && effect == 20)
                 target.Frame.D.state = LF2States.WeaponThrowing;
 
-            attacker.HolderCopySlot = 77;
-            holder.HolderCopySlot = 88;
             if (heldByCharacter)
             {
                 attacker.Runtime.LinkState = -1;
@@ -5796,7 +5777,7 @@ namespace NTSD.Test
             Assert.That(scenario.CharacterAttacker.Runtime.TargetSlotIndex, Is.EqualTo(-1));
             Assert.That(scenario.CharacterAttacker.Runtime.HeldWeaponStableId, Is.EqualTo(-1));
             Assert.That(scenario.CharacterVictim.Runtime.HolderStableId, Is.EqualTo(-1));
-            Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.EqualTo(99));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(scenario.CharacterAttacker.Runtime.PickupCount, Is.EqualTo(2));
         }
 
@@ -5904,7 +5885,6 @@ namespace NTSD.Test
                 1000,
                 hasItr: false,
                 hasBody: false);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             attacker.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             holder.Runtime.OwnerSlotIndex = holder.Runtime.SlotIndex;
             target.KillCount = -1;
@@ -6061,7 +6041,6 @@ namespace NTSD.Test
             itr.kind = 16;
             itr.injury = 50;
             itr.vrest = 7;
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             target.Health.HP = 20;
             target.Health.HPBound = 100;
             target.FallDamageDiv = 200;
@@ -6632,7 +6611,6 @@ namespace NTSD.Test
             scenario.CharacterAttacker.Runtime.LinkState = -1;
             scenario.CharacterAttacker.Runtime.HolderStableId =
                 holder.Runtime.SlotIndex;
-            scenario.CharacterAttacker.HolderCopySlot = holder.Runtime.SlotIndex;
             scenario.CharacterVictim.Runtime.LinkState = 2;
             scenario.CharacterVictim.Runtime.TargetSlotIndex = heldTarget.Runtime.SlotIndex;
             heldTarget.Runtime.LinkState = -2;

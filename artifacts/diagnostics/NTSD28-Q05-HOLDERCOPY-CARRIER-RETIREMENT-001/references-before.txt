@@ -1,0 +1,241 @@
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:1103:                HolderCopySlot = 99;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Character.cs:1126:            HolderCopySlot = 99;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2CharacterLateRuntimeModule.cs:71:            task.holderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Tasks\OPointCreateTask.cs:50:        public int holderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Tasks\OPointCreateTask.cs:94:            holderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:497:        public int HolderCopySlot
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:499:            get => Runtime.HolderCopySlotIndex;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:500:            set => Runtime.HolderCopySlotIndex = value;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:3937:            task.holderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2Entity.cs:4478:            task.holderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:76:            owner.HolderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2OtherObject.Lifecycle.partial.cs:96:            owner.HolderCopySlot = -1;
+Assets/NTSD/Scripts\Animation\LF2Objects\LF2WeaponBase.cs:468:            HolderCopySlot = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:2583:            Expect(defaultRuntime.HolderCopySlotIndex == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:11527:            catcher.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:11748:                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:11754:                attacker.HolderCopySlot = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12518:            heldWeapon.HolderCopySlot = holderSlot;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12928:            held.HolderCopySlot = 10;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:12944:                   held.HolderCopySlot == 10 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13006:            int holderCopyBeforeRelease = weapon.HolderCopySlot;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13037:                $"holder={weapon.Runtime.HolderStableId}, holderCopy={weapon.HolderCopySlot}, zz={weapon.Runtime.Zz}, " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13042:                Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13043:                    "BATTLE-AUDIT9-LP-05: consume release must preserve the reserved HolderCopy carrier");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13057:                Expect(weapon.HolderCopySlot == holderCopyBeforeRelease,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13058:                    "BATTLE-AUDIT9-LP-05: ForceDrop must preserve the reserved HolderCopy carrier");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:13131:            held.HolderCopySlot = holderSlot;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:14351:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:14833:                   target.HolderCopySlot == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:15144:                    attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:17921:                attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:18571:                attacker.HolderCopySlot = 23;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:18572:                victim.HolderCopySlot = 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:18580:                       victim.RelationTeam == 17 && victim.HolderCopySlot == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:18586:                    "BATTLE-C31: ordinary type3 kind9 must copy relation, preserve HolderCopy, and reset motion without replacing CharData");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:18923:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:19663:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:21635:            mixedAttacker.HolderCopySlot = 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:21681:                $"rootCopy={mixedAttacker.HolderCopySlot}");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23877:                   Nearly(defaults.KnockbackVz, 0.1) && defaults.HolderCopySlotIndex == 99,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:23878:                "LC-04: runtime reset defaults must retain knockback 0.1 and HolderCopy 99");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:25725:                       child.OwnerEntityIndex == -1 && child.HolderCopySlot == -1 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:27971:            attacker.HolderCopySlot = -1;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:28280:                partner.HolderCopySlot = 3;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:28314:                       Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:28388:                partner.HolderCopySlot = 4;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:28439:                       Nearly(partner.KnockbackVz, 0.1) && partner.HolderCopySlot == 99 &&
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29124:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29688:            const int parentHolderCopySentinel = 23;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29689:            naruto.HolderCopySlot = parentHolderCopySentinel;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29794:                                relationMatches &= entity.HolderCopySlot == 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29798:                                    $"t{tick}/s{slot}/oid205:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29807:                                relationMatches &= entity.HolderCopySlot == 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29811:                                    $"t{tick}/s{slot}/oid204:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29822:                                relationMatches &= entity.HolderCopySlot == 99;
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29826:                                    $"t{tick}/s{slot}/oid33:team{entity.Team}/rel{entity.RelationTeam}/holder{entity.HolderCopySlot}");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:29906:                    $"Naruto oid205/204/33 opoints must inherit Team/RelationTeam and preserve reserved HolderCopy99 " +
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:31168:                       spawned.HolderCopySlot == 99,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:31169:                    "stage immediate character spawn must apply team, Unk344, init and reserved HolderCopy contracts");
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:31277:                   character.Unk344 == 2 && character.HitStun == 20 && character.HolderCopySlot == 99,
+Assets/NTSD/Scripts\Test\BattleRuntimeSelfCheck.cs:32937:                             entity.HolderCopySlot == 99 &&
+Assets/NTSD/Scripts\Simulation\Stage\StageSpawnTaskConfigurator.cs:99:            task.holderCopySlot = -1;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:231:        public int HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:930:            destination.HolderCopySlotIndex = HolderCopySlotIndex;
+Assets/NTSD/Scripts\Simulation\Core\NTSDEntityRuntime.cs:1107:            HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:182:            fixtures.noCount.HolderCopySlot = 123;
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:224:                fixtures.noCount.HolderCopySlot == 123 &&
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:248:                fixtures.stored.HolderCopySlot == 125 &&
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:365:            fixtures.stored.HolderCopySlot = 125;
+Assets/NTSD/Scripts\Test\Editor\BattleDeathRespawnAiIntegerPlayModeProbeEditor.cs:587:                holder = entity.HolderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\BattleCollisionHitDamagePlayModeProbeEditor.cs:453:            fixtures.characterAttacker.HolderCopySlot =
+Assets/NTSD/Scripts\Simulation\Passes\Respawn\BattleRespawnModule.cs:226:            task.holderCopySlot = -1;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:1926:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:2224:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3720:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3721:            target.HolderCopySlot = 99;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3771:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3876:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3935:            holder.HolderCopySlot = 88;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3937:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:3985:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4035:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4038:            target.HolderCopySlot = 66;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4079:            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4149:            holder.HolderCopySlot = 88;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4835:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4880:                    target.HolderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4882:                    "Authority type3 kind9 has no legacy HolderCopy write.");
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4895:                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4946:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:4987:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5162:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5225:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5330:            holder.HolderCopySlot = 88;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5341:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5412:                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5418:                Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5554:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5555:            holder.HolderCopySlot = 88;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5799:            Assert.That(scenario.CharacterVictim.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:5907:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:6064:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHitExecutionPlanEditorTests.cs:6635:            scenario.CharacterAttacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:217:                    weapon.HolderCopySlot == holderSlot,
+Assets/NTSD/Scripts\Test\Editor\BattleHeldWeaponLifecyclePlayModeProbeEditor.cs:282:                    weapon.HolderCopySlot == holderSlot,
+Assets/NTSD/Scripts\Test\Editor\BattleGrabCpointLinkPlayModeProbeEditor.cs:194:                catcher.HolderCopySlot = holderSlot;
+Assets/NTSD/Scripts\Test\Editor\BattleRandomWeaponLateEffectPlayModeProbeEditor.cs:331:                    child.HolderCopySlot == 99 && child.KillCount == -1,
+Assets/NTSD/Scripts\Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:2447:                TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,
+Assets/NTSD/Scripts\Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:5935:            if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;
+Assets/NTSD/Scripts\Simulation\Ecs\Hit\BattleEcsHitExecutionPlan.cs:6251:            internal int TargetHolderCopySlot;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:353:            HolderCopySlot = new int[capacity];
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:363:        internal readonly int[] HolderCopySlot;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:721:            Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:772:            Links.HolderCopySlot[slot] = Links.TargetSlot[slot] = 0;
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:951:                Links.HolderCopySlot[slot] != runtime.HolderCopySlotIndex ||
+Assets/NTSD/Scripts\Simulation\Ecs\Core\BattleEcsWorld.cs:1119:            hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleParitySnapshot.cs:1053:                ("holderCopy", isDefault ? 99 : runtime.HolderCopySlotIndex),
+Assets/NTSD/Scripts\Simulation\Lockstep\Checksum\BattleLockstepChecksumModule.cs:537:            builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:25:        public void LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:27:            int holderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:37:            attacker.HolderCopySlot = holderCopySlot;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:45:            Assert.That(attacker.HolderCopySlot, Is.EqualTo(holderCopySlot));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:74:            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:85:            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:127:            attacker.HolderCopySlot = rootCopy.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:142:            Assert.That(attacker.HolderCopySlot, Is.EqualTo(5));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:366:                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(-1, 7, 0);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:367:                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(0, 7, 0);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:368:                tests.LinkedHolderHelpers_UseExactParentAndNeverHolderCopy(77, 5, 77);
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Kind5LinkedParentSlotCorrectionEditorTests.cs:375:                    "holderCopyUnchanged=true\nsceneMutation=none\n",
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.cs:339:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5ResourceAttackerResolverEditorTests.cs:116:            attacker.Runtime.HolderCopySlotIndex = 1;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5StandardReducedKnockoutProducerEditorTests.cs:182:            attacker.HolderCopySlot = credit.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3KindCatalogTransformEditorTests.cs:104:            attacker.HolderCopySlot = 55;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3KindCatalogTransformEditorTests.cs:109:            parent.HolderCopySlot = 88;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3KindCatalogTransformEditorTests.cs:134:            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3KindCatalogTransformEditorTests.cs:204:            target.HolderCopySlot = 66;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:21:    public sealed class NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:24:        public void Kind9Actual_PreservesTargetHolderCopySentinel()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:29:                CreateEntity("Type3HolderCopyAttacker", 9800,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:35:                CreateEntity("Type3HolderCopyTarget", 9801,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:39:            attacker.HolderCopySlot = 77;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:40:            target.HolderCopySlot = 99;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:53:            Assert.That(target.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:60:            Assert.That(attacker.HolderCopySlot, Is.EqualTo(77));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:64:        public void Kind9HitPlan_PreservesTargetHolderCopySentinel()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:74:        public void Type3ProductionSources_ContainNoLegacyHolderCopyWriter()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:82:                "target.HolderCopySlot = source.HolderCopySlot;",
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:85:                "projection.TargetHolderCopySlot = attacker.HolderCopySlot;",
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:88:                "projection.TargetHolderCopySlot = relationSource.HolderCopySlot;",
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:91:                "projection.TargetHolderCopySlot = attackerSlot;",
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:93:                "Retired pickup paths must preserve the reserved HolderCopy carrier.");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:97:        public void ExistingSelfCheckType3Contract_PreservesTargetHolderCopySentinel()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:187:    internal sealed class NTSD28B5Type3HolderCopyRetirementRequestRunner : ICallbacks
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:190:            "Temp/NTSD28-B5-Type3HolderCopyRetirement-v1.request";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:192:            "Temp/NTSD28-B5-Type3HolderCopyRetirement-v1.result";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:194:            "NTSD.Test.Editor.NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:200:        private static NTSD28B5Type3HolderCopyRetirementRequestRunner activeCallbacks;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:203:        static NTSD28B5Type3HolderCopyRetirementRequestRunner()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:220:            activeCallbacks = new NTSD28B5Type3HolderCopyRetirementRequestRunner();
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:279:    internal static class NTSD28B5Type3HolderCopyRetirementPlayRunner
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:282:            "Temp/NTSD28-B5-Type3HolderCopyRetirement-Play-v1.request";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:284:            "Temp/NTSD28-B5-Type3HolderCopyRetirement-Play-v1.result";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:289:        static NTSD28B5Type3HolderCopyRetirementPlayRunner()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:315:                    new NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests();
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:316:                tests.Kind9Actual_PreservesTargetHolderCopySentinel();
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:317:                tests.Kind9HitPlan_PreservesTargetHolderCopySentinel();
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:318:                tests.Type3ProductionSources_ContainNoLegacyHolderCopyWriter();
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3LegacyHolderCopyWriterRetirementEditorTests.cs:322:                    "targetHolderCopy=99\nsourceHolderCopy=77\n" +
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3TargetGenericContinuationEditorTests.cs:34:            Assert.That(target.HolderCopySlot, Is.EqualTo(66));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3TargetGenericContinuationEditorTests.cs:169:            target.HolderCopySlot = 66;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B5Type3WeaponFluteLegacyStatRetirementEditorTests.cs:142:            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointKind3ReleaseProductionEditorTests.cs:188:            Assert.That(scope.Child.HolderCopySlot, Is.EqualTo(29));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointKind3ReleaseProductionEditorTests.cs:266:            child.HolderCopySlot = 29;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:138:                Assert.That(scenario.Target.HolderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:140:                    "HolderCopySlot is outside the shared kind2 transaction.");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:185:                int oldHolderCopy = scenario.OldChild.HolderCopySlot;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:210:                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:214:                Assert.That(scenario.OldChild.HolderCopySlot, Is.EqualTo(oldHolderCopy));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:265:                int targetHolderCopyBefore = scenario.Target.HolderCopySlot;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:281:                Assert.That(scenario.Target.HolderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:282:                    Is.EqualTo(targetHolderCopyBefore));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:341:                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:397:                Assert.That(scenario.FirstTarget.HolderCopySlot, Is.EqualTo(733));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:398:                Assert.That(scenario.SecondTarget.HolderCopySlot, Is.EqualTo(733));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:576:                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:909:            weapon.HolderCopySlot = 733;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:949:            target.HolderCopySlot = 733;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:973:            oldChild.HolderCopySlot = 73;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:1341:                Require(settled.holderCopy == 99, "Pickup wrote the legacy holder mirror.");
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:1380:            child.Runtime.HolderCopySlotIndex = 99;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:1408:                holderCopy = target.HolderCopySlot,
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6Kind2PickupAtomicProductionIntegrationEditorTests.cs:1522:            public int targetAction, weaponHp, holderCopy;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs:34:            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs:266:            catcher.HolderCopySlot = legacyHolder.Runtime.SlotIndex;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs:286:            entity.HolderCopySlot = seed;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6EntityLinkLifecycleCleanupProductionEditorTests.cs:297:            Assert.That(entity.HolderCopySlot, Is.EqualTo(seed));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:15:    public sealed class NTSD28B6LegacyHolderCopyResidualRetirementEditorTests
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:18:        public void ProductionSources_RetireHolderCopyBehaviorReadersAndWriters()
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:50:                Does.Not.Contain("living.HolderCopySlot = parent.HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:52:                Does.Not.Contain("HolderCopySlot = task.holderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:54:                Does.Not.Contain("HolderCopySlot = task.parent.HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:56:                Does.Not.Contain("task.holderCopySlot = HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:58:                Does.Not.Contain("held.HolderCopySlot = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:60:                Does.Not.Contain("held.HolderCopySlot = _character.Runtime?.SlotIndex ?? -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:62:                Does.Not.Contain("held.HolderCopySlot = _character.HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:64:                Does.Not.Contain("HolderCopySlot = holderEntity?.Runtime?.SlotIndex ?? -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:66:                Does.Not.Contain("HolderCopySlot = task.holderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:68:                Does.Not.Contain("HolderCopySlot = task.parent.HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:70:                Does.Not.Contain("weapon.HolderCopySlot = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:72:                Does.Not.Contain("task.holderCopySlot = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:74:                Does.Not.Contain("spawned.HolderCopySlot = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:76:                Does.Not.Contain("partner.HolderCopySlot = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:78:                Does.Not.Contain("entity.HolderCopySlot = requiredRuntimeSlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:80:                Does.Not.Contain("entity.HolderCopySlot = entity.Runtime?.SlotIndex ?? -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:82:                Does.Not.Contain("living.HolderCopySlot = parent.HolderCopySlot;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:84:                Does.Not.Contain("ResolveHolderCopyEntity"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:86:                Does.Not.Contain("ResolveHolderCopyEntity"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:88:                Does.Not.Contain("ResolveHolderCopyEntity("));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:90:                Does.Not.Contain("int holderSlot = attacker?.HolderCopySlot ?? -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:109:            Assert.That(runtime, Does.Contain("public int HolderCopySlotIndex = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:111:                Does.Contain("destination.HolderCopySlotIndex = HolderCopySlotIndex;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:112:            Assert.That(runtime, Does.Contain("HolderCopySlotIndex = 99;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:113:            Assert.That(task, Does.Contain("public int holderCopySlot = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:114:            Assert.That(task, Does.Contain("holderCopySlot = -1;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:115:            Assert.That(ecs, Does.Contain("HolderCopySlot = new int[capacity];"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:117:                Does.Contain("Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:119:                Does.Contain("hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:121:                Does.Contain("builder.AddInt32(isDefault ? 99 : runtime.HolderCopySlotIndex);"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:123:                Does.Contain("(\"holderCopy\", isDefault ? 99 : runtime.HolderCopySlotIndex),"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:125:                Does.Contain("TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:127:                Does.Contain("if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;"));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:136:        public void HeldRelation_PreservesHolderCopySentinel(bool opoint, int initialCopy)
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:143:            holder.HolderCopySlot = 73;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:145:            child.HolderCopySlot = initialCopy;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:150:            int holderCopyBefore = child.HolderCopySlot;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyHolderCopyResidualRetirementEditorTests.cs:157:            Assert.That(child.HolderCopySlot, Is.EqualTo(holderCopyBefore));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:184:            Assert.That(parent.HolderCopySlot, Is.EqualTo(99)); Assert.That(child.HolderCopySlot, Is.EqualTo(99));
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6LegacyGrabbedByRetirementEditorTests.cs:194:            public string reservedContract = "GrabbedByAbsent;TrackerFlagAbsent;TrackerParentNull;WeaponStateAbsent;ReleaseTickAbsent;currentCharacterAndSpecialAttackHolderCopy99";
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointTerminalStructuralProductionEditorTests.cs:137:                encodedObserver.HolderCopySlot = 29;
+Assets/NTSD/Scripts\Test\Editor\NTSD28B6WpointTerminalStructuralProductionEditorTests.cs:153:                Assert.That(encodedObserver.HolderCopySlot, Is.EqualTo(29));

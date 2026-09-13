@@ -70,6 +70,17 @@ namespace NTSD.Animation.LF2Tasks
             return true;
         }
 
+        internal bool TryPeekAt(int offset, out LF2TaskBase task)
+        {
+            if (offset < 0 || offset >= count)
+            {
+                task = null;
+                return false;
+            }
+            task = items[(head + offset) % items.Length];
+            return true;
+        }
+
         public bool TryDequeue(out LF2TaskBase task)
         {
             if (count == 0)

@@ -350,7 +350,6 @@ namespace NTSD.Simulation.Ecs
         {
             LinkState = new int[capacity];
             HolderStableId = new int[capacity];
-            HolderCopySlot = new int[capacity];
             TargetSlot = new int[capacity];
             CaughtSlot = new int[capacity];
             CatcherSlot = new int[capacity];
@@ -360,7 +359,6 @@ namespace NTSD.Simulation.Ecs
 
         internal readonly int[] LinkState;
         internal readonly int[] HolderStableId;
-        internal readonly int[] HolderCopySlot;
         internal readonly int[] TargetSlot;
         internal readonly int[] CaughtSlot;
         internal readonly int[] CatcherSlot;
@@ -718,7 +716,6 @@ namespace NTSD.Simulation.Ecs
         {
             Links.LinkState[slot] = runtime.LinkState;
             Links.HolderStableId[slot] = runtime.HolderStableId;
-            Links.HolderCopySlot[slot] = runtime.HolderCopySlotIndex;
             Links.TargetSlot[slot] = runtime.TargetSlotIndex;
             Links.CaughtSlot[slot] = runtime.CaughtSlotIndex;
             Links.CatcherSlot[slot] = runtime.CatcherSlotIndex;
@@ -769,7 +766,7 @@ namespace NTSD.Simulation.Ecs
             Input.History0[slot] = Input.History1[slot] = Input.History2[slot] = 0;
             Input.History3[slot] = Input.History4[slot] = Input.History5[slot] = 0;
             Links.LinkState[slot] = Links.HolderStableId[slot] = 0;
-            Links.HolderCopySlot[slot] = Links.TargetSlot[slot] = 0;
+            Links.TargetSlot[slot] = 0;
             Links.CaughtSlot[slot] = Links.CatcherSlot[slot] = 0;
             Links.HeldWeaponStableId[slot] = Links.PickerStableId[slot] = 0;
             runtimeFingerprints[slot] = default;
@@ -948,7 +945,6 @@ namespace NTSD.Simulation.Ecs
         {
             if (Links.LinkState[slot] != runtime.LinkState ||
                 Links.HolderStableId[slot] != runtime.HolderStableId ||
-                Links.HolderCopySlot[slot] != runtime.HolderCopySlotIndex ||
                 Links.TargetSlot[slot] != runtime.TargetSlotIndex ||
                 Links.CaughtSlot[slot] != runtime.CaughtSlotIndex ||
                 Links.CatcherSlot[slot] != runtime.CatcherSlotIndex ||
@@ -1100,7 +1096,7 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.LinkState); hash.Add(runtime.TargetSlotIndex);
             hash.Add(runtime.CaughtSlotIndex); hash.Add(runtime.CatcherSlotIndex);
             hash.Add(runtime.HeldWeaponStableId); hash.Add(runtime.ThrowFrameGuard);
-            hash.Add(runtime.ReleaseTick); hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);
+            hash.Add(runtime.CaughtDuration); hash.Add(runtime.PickupCount);
             hash.Add(runtime.CaughtFrontFlag); hash.Add(runtime.CatchingStateTU);
             hash.Add(runtime.JumpAttackLock); hash.Add(runtime.AnimCounter); hash.Add(runtime.AnimSub);
             hash.Add(runtime.LateSpecialTargetX); hash.Add(runtime.LateSpecialTargetZ);
@@ -1116,7 +1112,7 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.PrevAttack); hash.Add(runtime.KeyUp); hash.Add(runtime.KeyDown);
             hash.Add(runtime.KeyLeft); hash.Add(runtime.KeyRight); hash.Add(runtime.KeyAttack);
             hash.Add(runtime.KeyJump); hash.Add(runtime.KeyDefend);
-            hash.Add(runtime.HolderStableId); hash.Add(runtime.HolderCopySlotIndex);
+            hash.Add(runtime.HolderStableId);
             hash.Add(runtime.PickerStableId); hash.Add(runtime.AiControlled);
             hash.Add(runtime.X); hash.Add(runtime.Y); hash.Add(runtime.Z);
             hash.Add(runtime.XInt); hash.Add(runtime.YInt); hash.Add(runtime.ZInt);
@@ -1145,7 +1141,7 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.Unk360); hash.Add(runtime.Unk3FC); hash.Add(runtime.Unk400);
             hash.Add(runtime.ShotCount); hash.Add(runtime.WeaponCount); hash.Add(runtime.FallDamageDiv);
             hash.Add(runtime.WeaponFlightCounter); hash.Add(runtime.WeaponDropHurt);
-            hash.Add(runtime.WeaponState); hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);
+            hash.Add(runtime.Blink); hash.Add(runtime.HitCandidateCount);
             hash.Add(runtime.HitCandidateNearestDistance); hash.Add(runtime.HitCandidateKind1Distance);
             hash.Add(runtime.HitCandidateExtraDistance); hash.Add(runtime.TransientMp);
             hash.Add(runtime.TransientMp2); hash.Add(runtime.TransientMp3); hash.Add(runtime.TransientMp4);

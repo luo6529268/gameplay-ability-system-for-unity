@@ -24,13 +24,13 @@ namespace NTSD.Test.Editor
         private const int ParentSlot = 50;
 
         [Test]
-        public void StandardDamage_LegacyStatsEligibilityReadsExactGate()
+        public void StandardDamage_DoesNotCreditRetiredHolderStats()
         {
             RunStandardDamageCase(
                 legacyKillCount: 7,
                 exactGate: -1,
-                expectedHolderCombo: 10,
-                expectedHolderKills: 1);
+                expectedHolderCombo: 0,
+                expectedHolderKills: 0);
             RunStandardDamageCase(
                 legacyKillCount: -1,
                 exactGate: 0,
@@ -39,13 +39,13 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void ReducedAndCpointDamage_LegacyStatsEligibilityReadsExactGate()
+        public void ReducedStatsRetired_CpointKeepsNativeKnockoutGate()
         {
             RunReducedDamageCase(
                 legacyKillCount: 7,
                 exactGate: -1,
-                expectedHolderCombo: 1,
-                expectedHolderKills: 1);
+                expectedHolderCombo: 0,
+                expectedHolderKills: 0);
             RunReducedDamageCase(
                 legacyKillCount: -1,
                 exactGate: 0,
@@ -54,11 +54,11 @@ namespace NTSD.Test.Editor
             RunCpointDamageCase(
                 legacyKillCount: 7,
                 exactGate: -1,
-                expectedHolderKills: 1);
+                expectedKnockouts: 1);
             RunCpointDamageCase(
                 legacyKillCount: -1,
                 exactGate: 0,
-                expectedHolderKills: 0);
+                expectedKnockouts: 0);
         }
 
         [Test]
@@ -216,7 +216,7 @@ namespace NTSD.Test.Editor
 
             Assert.That(
                 Count(damage, "victim.Runtime.OrdinaryCreditGate2F4 == -1"),
-                Is.EqualTo(5));
+                Is.EqualTo(3));
             Assert.That(
                 Count(hitPlan, "target.Runtime.OrdinaryCreditGate2F4 == -1"),
                 Is.EqualTo(4));
@@ -296,7 +296,7 @@ namespace NTSD.Test.Editor
         private static void RunCpointDamageCase(
             int legacyKillCount,
             int exactGate,
-            int expectedHolderKills)
+            int expectedKnockouts)
         {
             CreateDamageScope(
                 legacyKillCount,
@@ -316,7 +316,7 @@ namespace NTSD.Test.Editor
 
             Assert.That(
                 attacker.Runtime.KnockoutCount358,
-                Is.EqualTo(expectedHolderKills));
+                Is.EqualTo(expectedKnockouts));
             Assert.That(attacker.Runtime.InputScoreTotal348, Is.EqualTo(10));
             Assert.That(holder.KillStat, Is.Zero);
             Assert.That(holder.ComboCountAtk, Is.Zero);
@@ -336,7 +336,6 @@ namespace NTSD.Test.Editor
             attacker = DamageEntity(world, 9800, 0, LF2ObjectType.Character);
             victim = DamageEntity(world, 9801, 1, LF2ObjectType.Character);
             holder = DamageEntity(world, 9802, 2, LF2ObjectType.Character);
-            attacker.HolderCopySlot = holder.Runtime.SlotIndex;
             victim.Health.HP = 10;
             victim.Health.HPBound = 100;
             victim.KillCount = legacyKillCount;
@@ -846,8 +845,8 @@ namespace NTSD.Test.Editor
             {
                 var tests =
                     new NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests();
-                tests.StandardDamage_LegacyStatsEligibilityReadsExactGate();
-                tests.ReducedAndCpointDamage_LegacyStatsEligibilityReadsExactGate();
+                tests.StandardDamage_DoesNotCreditRetiredHolderStats();
+                tests.ReducedStatsRetired_CpointKeepsNativeKnockoutGate();
                 tests.CharacterRecovery_DataAndLegacyThresholdReadExactGate();
                 tests.LogicOpoint_PropagatesExactGateOnlyForType0Children();
                 tests.ProductionSources_ContainNoScopedKillCountBinding();

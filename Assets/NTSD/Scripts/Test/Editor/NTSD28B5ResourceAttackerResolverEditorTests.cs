@@ -113,7 +113,6 @@ namespace NTSD.Test.Editor
             attacker.Runtime.OwnerSlotIndex = -1;
             attacker.Runtime.OwnerStableId = 1;
             attacker.Runtime.HolderStableId = 1;
-            attacker.Runtime.HolderCopySlotIndex = 1;
             attacker.Runtime.RelationOwnerSlotIndex = 1;
 
             LF2Entity resolved = BattleDamageWriter

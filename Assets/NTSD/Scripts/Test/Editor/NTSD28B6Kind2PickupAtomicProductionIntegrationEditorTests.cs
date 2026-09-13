@@ -135,9 +135,7 @@ namespace NTSD.Test.Editor
                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
-                Assert.That(scenario.Target.HolderCopySlot,
-                    Is.EqualTo(733),
-                    "HolderCopySlot is outside the shared kind2 transaction.");
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(scenario.Attacker.Runtime.PickupCount, Is.EqualTo(6));
                 Assert.That(scenario.Attacker.AttackingCounter, Is.Zero);
                 Assert.That(scenario.Attacker.Runtime.Frame,
@@ -182,7 +180,6 @@ namespace NTSD.Test.Editor
 
                 int oldLink = scenario.OldChild.Runtime.LinkState;
                 int oldHolder = scenario.OldChild.Runtime.HolderStableId;
-                int oldHolderCopy = scenario.OldChild.HolderCopySlot;
                 int oldOwner = scenario.OldChild.Runtime.OwnerSlotIndex;
                 int oldTarget = scenario.OldChild.Runtime.TargetSlotIndex;
                 int oldHeld = scenario.OldChild.Runtime.HeldWeaponStableId;
@@ -207,11 +204,11 @@ namespace NTSD.Test.Editor
                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
                     Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
 
                 Assert.That(scenario.OldChild.Runtime.LinkState, Is.EqualTo(oldLink));
                 Assert.That(scenario.OldChild.Runtime.HolderStableId, Is.EqualTo(oldHolder));
-                Assert.That(scenario.OldChild.HolderCopySlot, Is.EqualTo(oldHolderCopy));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(scenario.OldChild.Runtime.OwnerSlotIndex, Is.EqualTo(oldOwner));
                 Assert.That(scenario.OldChild.Runtime.TargetSlotIndex, Is.EqualTo(oldTarget));
                 Assert.That(scenario.OldChild.Runtime.HeldWeaponStableId, Is.EqualTo(oldHeld));
@@ -262,7 +259,6 @@ namespace NTSD.Test.Editor
                 int targetRelationBefore = scenario.Target.Runtime.LinkState;
                 int targetHolderBefore = scenario.Target.Runtime.HolderStableId;
                 int targetOwnerBefore = scenario.Target.Runtime.OwnerSlotIndex;
-                int targetHolderCopyBefore = scenario.Target.HolderCopySlot;
 
                 scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(mode);
                 Consume(scenario);
@@ -278,8 +274,7 @@ namespace NTSD.Test.Editor
                     Is.EqualTo(targetHolderBefore));
                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex,
                     Is.EqualTo(targetOwnerBefore));
-                Assert.That(scenario.Target.HolderCopySlot,
-                    Is.EqualTo(targetHolderCopyBefore));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 Assert.That(scenario.Target.Runtime.WeaponFlightCounter, Is.EqualTo(31));
 
                 if (scenario.Attacker is LF2Character character)
@@ -338,7 +333,7 @@ namespace NTSD.Test.Editor
                 Assert.That(scenario.Target.Runtime.LinkState, Is.Zero);
                 Assert.That(scenario.Target.Runtime.HolderStableId, Is.EqualTo(-1));
                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex, Is.EqualTo(91));
-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
 
                 if (scenario.Attacker is LF2Character character)
                     Assert.That(character.GetHeldWeapon(), Is.Null);
@@ -394,8 +389,8 @@ namespace NTSD.Test.Editor
                 Assert.That(scenario.Attacker.Runtime.PickupCount,
                     Is.EqualTo(6),
                     "The second candidate sees the first relation write.");
-                Assert.That(scenario.FirstTarget.HolderCopySlot, Is.EqualTo(733));
-                Assert.That(scenario.SecondTarget.HolderCopySlot, Is.EqualTo(733));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
 
                 if (scenario.Attacker is LF2Character character)
                     Assert.That(character.GetHeldWeapon(), Is.SameAs(scenario.SecondTarget));
@@ -573,7 +568,7 @@ namespace NTSD.Test.Editor
                 Assert.That(scenario.Attacker.AttackingCounter, Is.Zero);
                 Assert.That(scenario.Attacker.Runtime.PickupCount, Is.EqualTo(6));
                 Assert.That(scenario.Target.Runtime.OwnerSlotIndex, Is.EqualTo(scenario.Attacker.Runtime.SlotIndex));
-                Assert.That(scenario.Target.HolderCopySlot, Is.EqualTo(733));
+                Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
                 if (scenario.Attacker is LF2Character character)
                     Assert.That(character.HeldWeaponReferenceInternal, Is.SameAs(scenario.Target));
                 AssertPlanModeResult(scenario, mode, 1);
@@ -906,7 +901,6 @@ namespace NTSD.Test.Editor
             weapon.Runtime.OwnerSlotIndex = 91;
             weapon.Runtime.TargetSlotIndex = -1;
             weapon.Runtime.HeldWeaponStableId = -1;
-            weapon.HolderCopySlot = 733;
             weapon.RefreshRuntimeSnapshot();
             return weapon;
         }
@@ -946,7 +940,6 @@ namespace NTSD.Test.Editor
             target.Runtime.OwnerSlotIndex = 91;
             target.Runtime.TargetSlotIndex = -1;
             target.Runtime.HeldWeaponStableId = -1;
-            target.HolderCopySlot = 733;
             target.RefreshRuntimeSnapshot();
             return target;
         }
@@ -970,7 +963,6 @@ namespace NTSD.Test.Editor
             attacker.Runtime.HeldWeaponStableId = oldChild.Runtime.SlotIndex;
             oldChild.Runtime.LinkState = -relation;
             oldChild.Runtime.HolderStableId = attacker.Runtime.SlotIndex;
-            oldChild.HolderCopySlot = 73;
             oldChild.Runtime.OwnerSlotIndex = 91;
             oldChild.Runtime.TargetSlotIndex = 22;
             oldChild.Runtime.HeldWeaponStableId = 88;
@@ -1338,7 +1330,7 @@ namespace NTSD.Test.Editor
                 Require(settled.owner == row.holderSlot && settled.holderChild == row.targetSlot &&
                     settled.parent == row.holderSlot && settled.group == 3, "Physical owner/link/group mismatch.");
                 Require(settled.counter == 0 && settled.action == (replacement ? 116 : 115), "Pickup tail/action mismatch.");
-                Require(settled.holderCopy == 99, "Pickup wrote the legacy holder mirror.");
+                Require(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, "Retired holder mirror is still present.");
                 Require(row.live && row.heldReferenceMatches && row.freeEvents == 0, "Live relation or no-free invariant failed.");
                 if (replacement)
                 {
@@ -1377,7 +1369,6 @@ namespace NTSD.Test.Editor
             child.Team = 8;
             child.RelationTeam = 8;
             child.Runtime.OwnerSlotIndex = 27;
-            child.Runtime.HolderCopySlotIndex = 99;
             child.Runtime.SetPosition(holder.Runtime.X, 0, holder.Runtime.Z);
             child.Runtime.SetVelocity(0, 0, 0);
             child.Runtime.SyncIntegerPosition();
@@ -1405,7 +1396,6 @@ namespace NTSD.Test.Editor
                 holderChild = holder.Runtime.TargetSlotIndex, parent = target.Runtime.HolderStableId,
                 group = target.RelationTeam, action = holder.Frame.N, counter = holder.AttackingCounter,
                 targetAction = target.Frame.N, weaponHp = target.Runtime.WeaponFlightCounter,
-                holderCopy = target.HolderCopySlot,
                 holderX = holder.Runtime.X, holderY = holder.Runtime.Y, holderZ = holder.Runtime.Z,
                 targetX = target.Runtime.X, targetY = target.Runtime.Y, targetZ = target.Runtime.Z,
                 holderOwner = holder.Runtime.OwnerSlotIndex,
@@ -1519,7 +1509,7 @@ namespace NTSD.Test.Editor
         [Serializable] private sealed class PairState
         {
             public int holderRelation, targetRelation, count, owner, holderChild, parent, group, action, counter;
-            public int targetAction, weaponHp, holderCopy;
+            public int targetAction, weaponHp;
             public int holderOwner;
             public double holderX, holderY, holderZ, targetX, targetY, targetZ;
         }

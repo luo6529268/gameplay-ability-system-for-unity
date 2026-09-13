@@ -179,7 +179,6 @@ namespace NTSD.Test.Editor
                 fixtures.noCount));
 
             fixtures.noCount.Runtime.LinkState = 7;
-            fixtures.noCount.HolderCopySlot = 123;
             fixtures.noCount.Runtime.TargetSlotIndex = 124;
 
             int noCountSlot = fixtures.noCount.Runtime.SlotIndex;
@@ -221,7 +220,6 @@ namespace NTSD.Test.Editor
             Require(
                 fixtures.noCount.RelationTeam == NoCountRelation &&
                 fixtures.noCount.Runtime.LinkState == 7 &&
-                fixtures.noCount.HolderCopySlot == 123 &&
                 fixtures.noCount.Runtime.TargetSlotIndex == 124,
                 "no-count respawn wrote relation/link/holder/target outside C++ writers.");
             states.Add(State(
@@ -245,7 +243,6 @@ namespace NTSD.Test.Editor
                 "stored-count respawn post-state mismatch.");
             Require(
                 fixtures.stored.Runtime.LinkState == 8 &&
-                fixtures.stored.HolderCopySlot == 125 &&
                 fixtures.stored.Runtime.TargetSlotIndex == 126,
                 "stored-count respawn wrote link/holder/target outside C++ writers.");
 
@@ -362,7 +359,6 @@ namespace NTSD.Test.Editor
             fixtures.stored.AttackingCounter = 9;
             fixtures.stored.HitStun = 3;
             fixtures.stored.Runtime.LinkState = 8;
-            fixtures.stored.HolderCopySlot = 125;
             fixtures.stored.Runtime.TargetSlotIndex = 126;
             fixtures.stored.SetPosition(77, -12, 19, true);
 
@@ -584,7 +580,6 @@ namespace NTSD.Test.Editor
                 prevJump = entity.Runtime?.PrevJump ?? 0,
                 relation = entity.RelationTeam,
                 link = entity.Runtime?.LinkState ?? 0,
-                holder = entity.HolderCopySlot,
                 target = entity.Runtime?.TargetSlotIndex ?? -1,
             };
         }
@@ -787,7 +782,6 @@ namespace NTSD.Test.Editor
             public int prevJump;
             public int relation;
             public int link;
-            public int holder;
             public int target;
         }
     }

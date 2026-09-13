@@ -18,7 +18,7 @@ namespace NTSD.Animation.LF2Objects
             ClearWeaponHolderRuntime(clearHolderSlot: !preserveRuntimeOwnerFields);
         }
 
-        public void ReleaseHeldWeaponRuntime(LF2Entity holder, bool stampReleaseTick = false)
+        public void ReleaseHeldWeaponRuntime(LF2Entity holder)
         {
             ClearReleasedLinks(holder);
         }

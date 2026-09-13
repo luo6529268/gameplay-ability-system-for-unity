@@ -1,0 +1,159 @@
+--- 
++++ 
+@@ -12623,5 +12623,4 @@
+                 {
+                     Expect(weapon.Frame.N == 40 &&
+-                           weapon.Runtime.WeaponState == 0 &&
+                            Nearly(weapon.Runtime.Vx, 8.0) && Nearly(weapon.Runtime.Vy, -3.0),
+                         "BATTLE-AUDIT3-12: world-level real LF2Weapon damaged release must continue into dvx throw");
+@@ -12686,6 +12685,5 @@
+                 {
+                     Expect(weapon.Frame.N >= 0 && weapon.Frame.N < 6 &&
+-                           weapon.FrameDelay == 7 &&
+-                           weapon.Runtime.WeaponState == 0,
++                           weapon.FrameDelay == 7,
+                         "R5-HOLD-001: world-level real type2 throw must select a random frame and retain the copied holder FrameDelay");
+                     Expect(Nearly(weapon.Runtime.Vx, 9.0) && Nearly(weapon.Runtime.Vy, -4.0) &&
+@@ -19414,5 +19412,4 @@
+             characterWorld.Register(characterVictim);
+             PrepareAlternateEntry(characterAttacker, characterVictim);
+-            characterAttacker.Runtime.WeaponState = LF2States.WeaponThrowing;
+             characterAttacker.Runtime.Vz = 6.0;
+ 
+@@ -19426,6 +19423,6 @@
+                    Nearly(characterAttacker.Runtime.Vz, -4.0),
+                 "state1002 alternate tail must update frame and reflected velocity on a real weapon");
+-            Expect(characterAttacker.Runtime.WeaponState == LF2States.WeaponThrowing,
+-                "state1002 alternate tail must not rewrite the independent runtime weapon state");
++            Expect(typeof(NTSDEntityRuntime).GetMember("WeaponState").Length == 0,
++                "state1002 alternate tail must not require a parallel runtime weapon state");
+ 
+             var sharedWorld = new SimulationWorld();
+@@ -23000,5 +22997,4 @@
+                     stateData,
+                     0);
+-                weapon.Runtime.WeaponState = 0;
+                 weapon.Runtime.Vx = 8.0;
+ 
+@@ -23006,9 +23002,8 @@
+                 {
+                     weapon.RunFrameLogicBeforeAdvance();
+-                    Expect(weapon.Runtime.WeaponState == 0 &&
+-                           weapon.Frame.D?.state == LF2States.WeaponThrowing &&
++                    Expect(weapon.Frame.D?.state == LF2States.WeaponThrowing &&
+                            Nearly(weapon.Runtime.Vx, 8.0),
+                         $"FL-WEAPON-STATE: type{weaponTypes[i]} actual frame state1002 " +
+-                        $"must keep reserved carrier zero and Vx unchanged at tick{tick}");
++                        $"must keep the actual frame state and Vx unchanged at tick{tick}");
+                 }
+             }
+@@ -23032,5 +23027,4 @@
+                     mismatchData,
+                     0);
+-                mismatch.Runtime.WeaponState = 0;
+                 mismatch.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
+                 mismatch.AttackingCounter = 23;
+@@ -23039,9 +23033,8 @@
+ 
+                 Expect(mismatch.Frame.N == 40 &&
+-                       mismatch.Runtime.WeaponState == 0 &&
+                        Nearly(mismatch.Runtime.Vx, NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0) &&
+                        mismatch.AttackingCounter == 23,
+                     $"R-FL-02: a type1 CLR weapon shell with current {boomerangCurrentTypes[i]} DAT must " +
+-                    "enter raw frame40 without changing weapon state, velocity, or attacking");
++                    "enter raw frame40 without changing velocity or attacking");
+             }
+ 
+@@ -23058,9 +23051,7 @@
+                 missingDefinitionData,
+                 0);
+-            missingDefinition.Runtime.WeaponState = 0;
+             missingDefinition.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
+             missingDefinition.RunFrameLogicBeforeAdvance();
+-            Expect(missingDefinition.Frame.N == 0 &&
+-                   missingDefinition.Runtime.WeaponState == 0,
++            Expect(missingDefinition.Frame.N == 0,
+                 "R-FL-02: missing current object definition must fall back to the type1 runtime identity and not enter frame40");
+ 
+@@ -23090,5 +23081,4 @@
+                 nativeThrow.BindData(
+                     "SelfCheck_RFL02_NativeThrow", 683, (int)LF2ObjectType.ThrowWeapon, nativeThrowData, 0);
+-                nativeThrow.Runtime.WeaponState = 0;
+                 nativeThrow.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
+                 nativeThrow.RunFrameLogicBeforeAdvance();
+@@ -23099,5 +23089,4 @@
+                 nativeLight.BindData(
+                     "SelfCheck_RFL02_NativeLight", 684, (int)LF2ObjectType.LightWeapon, nativeLightData, 0);
+-                nativeLight.Runtime.WeaponState = 0;
+                 nativeLight.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
+                 nativeLight.RunFrameLogicBeforeAdvance();
+@@ -27198,9 +27187,7 @@
+                         runtimeCharacterConfigs, lightOid, false);
+                     light.Runtime.WeaponFlightCounter = 20;
+-                    light.Runtime.WeaponState = 4321;
+                     RunTransformedLandingPasses(light, 5.0, 8.0, 1);
+                     Expect(light.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.LightWeapon &&
+-                           light.Frame.N == 70 && light.Runtime.WeaponFlightCounter == 17 &&
+-                           light.Runtime.WeaponState == 4321,
++                           light.Frame.N == 70 && light.Runtime.WeaponFlightCounter == 17,
+                         "state4000 transform must dispatch type1 landing to frame70 and subtract weapon_drop_hurt durability");
+                     Expect(Nearly(light.Runtime.Vx, 4.0) && Nearly(light.Runtime.Vy, 0.0) && light.WeaponCount == 0,
+@@ -27217,10 +27204,9 @@
+                         runtimeCharacterConfigs, lightOid, false);
+                     lightFiniteImpact.Runtime.WeaponFlightCounter = 20;
+-                    lightFiniteImpact.Runtime.WeaponState = 4322;
+                     lightFiniteImpact.SwitchDir("right");
+                     RunTransformedLandingPasses(lightFiniteImpact, 10.0, 8.0, 12);
+                     Expect(lightFiniteImpact.Frame.N == 70 && Nearly(lightFiniteImpact.Runtime.Vy, 0.0) &&
+                            Nearly(lightFiniteImpact.Runtime.Vx, 4.0) && lightFiniteImpact.Runtime.Dir == "right" &&
+-                           lightFiniteImpact.Runtime.WeaponFlightCounter == 17 && lightFiniteImpact.Runtime.WeaponState == 4322,
++                           lightFiniteImpact.Runtime.WeaponFlightCounter == 17,
+                         "NTSD28 F04: finite type1 state1002 impact must settle on frame70 without bounce/flip and consume durability");
+ 
+@@ -27228,9 +27214,7 @@
+                         runtimeCharacterConfigs, heavyOid, false);
+                     heavy.Runtime.WeaponFlightCounter = 20;
+-                    heavy.Runtime.WeaponState = 4323;
+                     RunTransformedLandingPasses(heavy, 5.0, 8.0, 2);
+                     Expect(heavy.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.HeavyWeapon &&
+-                           heavy.Frame.N == 20 && heavy.Runtime.WeaponFlightCounter == 15 &&
+-                           heavy.Runtime.WeaponState == 4323,
++                           heavy.Frame.N == 20 && heavy.Runtime.WeaponFlightCounter == 15,
+                         "state4000 transform must dispatch low-speed type2 landing to frame20 and consume 1+drop durability");
+                     Expect(Nearly(heavy.Runtime.Vx, 4.0) && Nearly(heavy.Runtime.Vy, 0.0) && heavy.WeaponCount == 0,
+@@ -27240,10 +27224,9 @@
+                         runtimeCharacterConfigs, heavyOid, false);
+                     heavyBounce.Runtime.WeaponFlightCounter = 20;
+-                    heavyBounce.Runtime.WeaponState = 4324;
+                     heavyBounce.SwitchDir("right");
+                     RunTransformedLandingPasses(heavyBounce, 10.0, 8.0, 13);
+                     Expect(heavyBounce.Frame.N == 0 && Nearly(heavyBounce.Runtime.Vy, -5.0) &&
+                            Nearly(heavyBounce.Runtime.Vx, 4.0) && heavyBounce.Runtime.Dir == "right" &&
+-                           heavyBounce.Runtime.WeaponFlightCounter == 19 && heavyBounce.Runtime.WeaponState == 4324,
++                           heavyBounce.Runtime.WeaponFlightCounter == 19,
+                         $"transformed type2 high-speed landing must preserve frame0, bounce -5, consume one durability, " +
+                         $"then let late state2000 face final vx; frame={heavyBounce.Frame.N}, vx={heavyBounce.Runtime.Vx}, " +
+@@ -27255,9 +27238,7 @@
+                         runtimeCharacterConfigs, throwOid, false);
+                     thrown.Runtime.WeaponFlightCounter = 20;
+-                    thrown.Runtime.WeaponState = 4325;
+                     RunTransformedLandingPasses(thrown, 10.0, 8.0, 3);
+                     Expect(thrown.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.ThrowWeapon &&
+-                           thrown.Frame.N == 0 && thrown.Runtime.WeaponFlightCounter == 15 &&
+-                           thrown.Runtime.WeaponState == 4325,
++                           thrown.Frame.N == 0 && thrown.Runtime.WeaponFlightCounter == 15,
+                         $"state4000 transform must dispatch high-speed type4 landing to frame0 and subtract drop durability; " +
+                         $"frame={thrown.Frame.N}, runtimeFrame={thrown.Runtime.Frame}, durability={thrown.Runtime.WeaponFlightCounter}, " +
+@@ -27295,5 +27276,4 @@
+                         runtimeCharacterConfigs, drinkOid, true);
+                     drink.Runtime.WeaponFlightCounter = 20;
+-                    drink.Runtime.WeaponState = 4326;
+                     drink.Health.HP = 0;
+                     bool drinkSurvivedLateCleanup = RunTransformedLandingPasses(drink, 5.0, 8.0, 4);
+@@ -27303,5 +27283,5 @@
+                     Expect(drink.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Drink &&
+                            drink.Frame.N == 70 && drink.Runtime.WeaponFlightCounter == 0 &&
+-                           drink.Runtime.WeaponState == 4326 && !drinkSurvivedLateCleanup,
++                           !drinkSurvivedLateCleanup,
+                         "state8000 transform must dispatch type6 landing, mark durability -1, then run same-pass weapon cleanup");
+                     Expect(Nearly(drink.Runtime.Vx, 5.6) && Nearly(drink.Runtime.Vy, 0.0) && drink.WeaponCount == 0,

@@ -185,7 +185,7 @@ namespace NTSD.Test.Editor
             Assert.That(scope.Child.Runtime.CaughtSlotIndex, Is.EqualTo(81));
             Assert.That(scope.Child.Runtime.CaughtDuration, Is.EqualTo(23));
             Assert.That(scope.Child.Runtime.OwnerSlotIndex, Is.EqualTo(17));
-            Assert.That(scope.Child.HolderCopySlot, Is.EqualTo(29));
+            Assert.That(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, Is.True);
             Assert.That(scope.World.ObjectCount, Is.EqualTo(objectCount));
             Assert.That(scope.World.TryGetRuntimeSlotReadOnlyViewForDiagnostics(
                 scope.ChildSlot, out RuntimeSlotTable.ReadOnlySlotView after), Is.True);
@@ -263,7 +263,6 @@ namespace NTSD.Test.Editor
             child.Runtime.LinkState = -1;
             child.Runtime.HolderStableId = holderSlot;
             child.Runtime.OwnerSlotIndex = 17;
-            child.HolderCopySlot = 29;
             child.Runtime.CatchSourceSlot90 = 82;
             child.Runtime.CaughtSlotIndex = 81;
             child.Runtime.CaughtDuration = 23;

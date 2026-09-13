@@ -199,7 +199,7 @@ namespace NTSD.Simulation.Ecs
             else if (holder.Runtime.KeyUp == 0 && holder.Runtime.KeyDown != 0)
                 held.Runtime.Vz = wpoint.Dvz;
             held.Runtime.Zz = 0f;
-            ClearLinks(holder, held, stampReleaseTick: true);
+            ClearLinks(holder, held);
         }
 
         private void DropRandomly(
@@ -208,9 +208,9 @@ namespace NTSD.Simulation.Ecs
             BattleWeaponPointValue wpoint)
         {
             if (held is LF2WeaponBase weapon)
-                weapon.ReleaseHeldWeaponRuntimeInternal(holder, stampReleaseTick: true);
+                weapon.ReleaseHeldWeaponRuntimeInternal(holder);
             else
-                ClearLinks(holder, held, stampReleaseTick: true);
+                ClearLinks(holder, held);
 
             // Alignment contract: NTSD28-B6-WPOINT-KIND3-RELEASE-PRODUCTION-001.
             var random = holder.Match.NativeRandom;
@@ -226,8 +226,7 @@ namespace NTSD.Simulation.Ecs
 
         private void ClearLinks(
             LF2Entity holder,
-            LF2Entity held,
-            bool stampReleaseTick = false)
+            LF2Entity held)
         {
             holder.Runtime.LinkState = 0;
             if (holder.Runtime.HeldWeaponStableId == held.Runtime.SlotIndex)

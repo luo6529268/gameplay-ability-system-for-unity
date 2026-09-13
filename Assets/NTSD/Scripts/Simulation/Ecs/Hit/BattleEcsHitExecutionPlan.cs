@@ -2444,7 +2444,6 @@ namespace NTSD.Simulation.Ecs
                 TargetEnvironmentState320 = target?.Runtime?.EnvironmentState320 ?? int.MinValue,
                 TargetImpactSourceSlot164 = target?.Runtime?.ImpactSourceSlot164 ?? int.MinValue,
                 TargetHolderSlot = target?.Runtime?.HolderStableId ?? int.MinValue,
-                TargetHolderCopySlot = target?.Runtime?.HolderCopySlotIndex ?? int.MinValue,
                 TargetOwnerSlot = target?.Runtime?.OwnerSlotIndex ?? int.MinValue,
                 TargetRelationTeam = target?.Runtime?.RelationTeam ?? int.MinValue,
                 TargetWeaponFlightCounter = target?.Runtime?.WeaponFlightCounter ?? int.MinValue,
@@ -5932,7 +5931,7 @@ namespace NTSD.Simulation.Ecs
                     actual.TargetCatchSourceSlot90 ||
                 expected.TargetImpactSourceSlot164 != actual.TargetImpactSourceSlot164) mask |= 1UL << 31;
             if (expected.TargetHolderSlot != actual.TargetHolderSlot) mask |= 1UL << 32;
-            if (expected.TargetHolderCopySlot != actual.TargetHolderCopySlot) mask |= 1UL << 33;
+            // Alignment contract: NTSD28-Q05-HOLDERCOPY-CARRIER-RETIREMENT-001; bit 33 stays retired.
             if (expected.TargetRelationTeam != actual.TargetRelationTeam ||
                 expected.TargetOwnerSlot != actual.TargetOwnerSlot) mask |= 1UL << 34;
             if (expected.TargetWeaponFlightCounter != actual.TargetWeaponFlightCounter) mask |= 1UL << 35;
@@ -6248,7 +6247,6 @@ namespace NTSD.Simulation.Ecs
             internal int TargetEnvironmentState320;
             internal int TargetImpactSourceSlot164;
             internal int TargetHolderSlot;
-            internal int TargetHolderCopySlot;
             internal int TargetOwnerSlot;
             internal int TargetRelationTeam;
             internal int TargetWeaponFlightCounter;
