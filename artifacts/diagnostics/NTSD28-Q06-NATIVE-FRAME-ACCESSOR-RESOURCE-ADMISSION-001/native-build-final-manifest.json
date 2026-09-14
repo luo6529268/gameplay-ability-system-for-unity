@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "63D11E165D5F8EDF52FEC2773DA16C320C26F8F377FD5FEA3A7344B1C3F96E00",
+  "captureBinarySha256": "F2E543141E65AD09D2F2A735D54C4A9319F364E0D8B3C0A40BCABCA8430A6641",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q06ZeroFrame\\native_zero_frame_witness.exe",
+  "authorityWriteAllowed": false
+}

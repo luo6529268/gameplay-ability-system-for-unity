@@ -1,0 +1,43 @@
+{
+  "status": "VERIFIED_WEAPON_PIECE_ADMISSION_SCOPE_ONLY",
+  "productionFiles": 3,
+  "testFiles": 1,
+  "sourceCases": 1800,
+  "unityEndpointCases": 5152,
+  "focusedInitial": {
+    "total": 13,
+    "passed": 2,
+    "failed": 11
+  },
+  "focusedAfterAdmission": {
+    "total": 20,
+    "passed": 20
+  },
+  "focusedAfterRenderBinding": {
+    "total": 12,
+    "passed": 12
+  },
+  "newDistinctFocusedTests": 15,
+  "existingDistinctFocusedTests": 5,
+  "selfCheckFinal": "PASS",
+  "playVectors": 172,
+  "renderPoolExhaustionCases": 1,
+  "sceneBuiltinCases": 4,
+  "sceneObjectsBefore": 4,
+  "sceneObjectsAfter": 4,
+  "fixturePlaySceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "formalContentDeployed": false,
+  "schema": [
+    15,
+    23,
+    26,
+    2,
+    2
+  ],
+  "rawBound": 47,
+  "rawMissing": 3,
+  "shutdownAllZero": true,
+  "remainedStoppedAfterTwoFrames": true
+}

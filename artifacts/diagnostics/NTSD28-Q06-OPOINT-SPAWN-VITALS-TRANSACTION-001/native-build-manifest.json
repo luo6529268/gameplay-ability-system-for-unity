@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "7A297A274FF0B3414AA6AE366E7E99C25C81963E887BB2021E0B297C5F7244AD",
+  "captureBinarySha256": "D4D816FD2C0D3AE1DFCAF36F9268078E2AA386D6879F388B003021CE6D2CE001",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q06SpawnVitals\\opoint_spawn_vitals_witness.exe",
+  "authorityWriteAllowed": false
+}

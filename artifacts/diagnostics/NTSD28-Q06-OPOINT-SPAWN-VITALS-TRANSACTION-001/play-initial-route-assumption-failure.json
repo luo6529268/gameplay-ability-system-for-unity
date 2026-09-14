@@ -1,0 +1,51 @@
+{
+  "status": "FAIL",
+  "error": "NUnit.Framework.AssertionException:   Expected: True\r\n  But was:  False\r\n\r\n  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00044] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression) [0x00001] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.NTSD28Q06SpawnVitalsPlayProbe.Poll () [0x0022d] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06SpawnVitalsEditorTests.cs:216 ",
+  "scope": "Current legacy-content real Scene; full logic and renderer materializers each spawn twice, canonical birth values checked before any tick, children released and World checksum restored. No natural skill or formal sprite parity claim.",
+  "tick": 5,
+  "objectsBefore": 4,
+  "objectsAfter": 0,
+  "restored": true,
+  "births": [
+    {
+      "route": 0,
+      "ordinal": 0,
+      "slot": 50,
+      "values": [
+        101,
+        101,
+        101,
+        103,
+        103,
+        101,
+        101,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "route": 0,
+      "ordinal": 1,
+      "slot": 50,
+      "values": [
+        201,
+        201,
+        201,
+        103,
+        103,
+        201,
+        201,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

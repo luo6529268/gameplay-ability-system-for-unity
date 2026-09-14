@@ -1,0 +1,16 @@
+{
+  "rows": 1800,
+  "repeatIdentical": true,
+  "stdoutSha256": "8bb6b14a58316b0e198029f09f3382c2891e8067e30805645d1c078fbf451243",
+  "phase0": 900,
+  "phase1": 900,
+  "frameErrors": 0,
+  "lifecycleFailures": 0,
+  "diagnosticMessages": 0,
+  "assertions": 17286,
+  "admissionAndSlotAssertions": "PASS",
+  "missingCatalogAndNoSlotVariantRng": "PASS",
+  "finalBuildRepeatIdentical": true,
+  "finalBuildWarnings": 0,
+  "epochProjectionOnlyCorrection": true
+}

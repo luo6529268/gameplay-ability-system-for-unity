@@ -1151,6 +1151,10 @@ namespace NTSD.Simulation.Ecs
             hash.Add(runtime.HPLost); hash.Add(runtime.MP); hash.Add(runtime.MPMax);
             hash.Add(runtime.PP); hash.Add(runtime.PPMax); hash.Add(runtime.PPBound);
             hash.Add(runtime.PpDisplay);
+            hash.Add(runtime.NativeSoundActionLatch);
+            hash.Add(runtime.NativeRuntimeStateCode);
+            hash.Add(runtime.NativeLifecycleResolutionPending);
+            hash.Add(runtime.NativeLifecycleCode);
             return hash.ToFingerprint();
         }
 

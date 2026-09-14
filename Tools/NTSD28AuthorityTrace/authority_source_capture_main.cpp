@@ -203,7 +203,7 @@ std::string capture_content_json(const Bytes28& raw) {
         "\"profile\":\"logan-runtime\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
         "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
         "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
-        "\",\"schemas\":{\"entityRuntime\":13,\"aggregate\":21,\"checksum\":24,"
+        "\",\"schemas\":{\"entityRuntime\":15,\"aggregate\":23,\"checksum\":26,"
         "\"characterShell\":2,\"entityBaseShell\":2}}";
 }
 

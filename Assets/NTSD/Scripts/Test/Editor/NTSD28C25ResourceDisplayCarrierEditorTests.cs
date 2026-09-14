@@ -27,11 +27,11 @@ namespace NTSD.Test.Editor
         {
             Assert.That(
                 BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(12));
+                Is.EqualTo(15));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(20));
-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
                 Is.EqualTo(23));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+                Is.EqualTo(26));
         }
 
         [Test]

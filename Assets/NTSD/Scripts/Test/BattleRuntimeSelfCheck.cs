@@ -233,7 +233,7 @@ namespace NTSD.Test
                 CheckKind15CharacterWhirlwind();
                 CheckKind16UnsupportedNoMutation();
                 CheckEffectActionOverride();
-                CheckLateDeathBounceFrame();
+                CheckDeadCharacterLatePassDoesNotInjectBounce();
                 CheckComboWrappersCharacterFrameJumps();
                 CheckComboLocalShadowCommitContracts();
                 CheckStaggeredNarutoDefendDownJumpInput();
@@ -20346,10 +20346,11 @@ itr_end:
             QueuedBoundarySelfCheckWeapon directBrokenWeapon = CreateQueuedBoundaryWeapon();
             bool completedBrokenCleanup = directBrokenWeapon.TryRunLatePostOpointCleanupPhase();
 
-            Expect(completedBrokenCleanup && directBrokenWeapon.Runtime.PendingFlushDestroy,
-                "the real weapon late cleanup phase must mark a depleted destroyable weapon for deferred destroy");
+            Expect(completedBrokenCleanup && directBrokenWeapon.Runtime.NativeLifecycleResolutionPending &&
+                   directBrokenWeapon.Runtime.NativeLifecycleCode == 1000,
+                "the weapon break phase must arm native lifecycle removal after fragment generation");
             Expect(GetQueuedObjectPointTaskCount(factory) == 0,
-                "GT-07: depleted real-weapon cleanup must not queue fragments absent from the C# authority branch");
+                "an unregistered break subphase must not publish fragment tasks without a World");
 
             factory.FlushTasks();
             Expect(GetQueuedObjectPointTaskCount(factory) == 0,
@@ -20358,31 +20359,63 @@ itr_end:
             directBrokenWeapon.TryRunLatePostOpointCleanupPhase();
             factory.FlushTasks();
             Expect(GetQueuedObjectPointTaskCount(factory) == 0,
-                "repeating depleted weapon cleanup must not publish non-authority fragments");
+                "repeating cleanup after weapon HP was zeroed must not publish another break");
 
             var brokenWorld = new SimulationWorld();
             QueuedBoundarySelfCheckWeapon brokenWeapon = CreateQueuedBoundaryWeapon();
-            brokenWorld.Register(brokenWeapon);
-            int brokenSlot = brokenWeapon.Runtime.SlotIndex;
-            int brokenSoundCountBefore = brokenWorld.PendingSounds.Count;
+            // Alignment contract: NTSD28-Q06-WEAPON-BREAK-SELF-CHECK-FIXTURE-001.
+            var fragmentData = new LF2CharacterData
+            {
+                frames = new List<LF2FrameData> { Frame(0, 0, 100, 0, 39, 79) },
+            };
+            var fragmentWrapper = new LF2CharacterDataWrapper(999, fragmentData);
+            brokenWorld.SetLogicOnlyEntityMaterialization(true);
+            brokenWorld.PrepareRuntimeDataCatalogForBattle(new[]
+            {
+                new ObjectDefinition(100, 1, "SelfCheck_Weapon.dat"),
+                new ObjectDefinition(999, 3, "SelfCheck_Piece.dat"),
+            }, oid => oid == 100 ? brokenWeapon.FrameCache.Wrapper : fragmentWrapper);
+            try
+            {
+                brokenWorld.Register(brokenWeapon);
+                int brokenSlot = brokenWeapon.Runtime.SlotIndex;
+                int brokenSoundCountBefore = brokenWorld.PendingSounds.Count;
 
-            brokenWorld.LateEntityUpdateAll(2);
+                brokenWorld.LateEntityUpdateAll(2);
 
-            LF2Entity brokenSlotEntity = brokenWorld.FindEntityByRuntimeSlotIncludingPending(brokenSlot);
-            LF2Entity brokenQueryEntity = brokenWorld.FindEntityByRuntimeSlotForQuery(brokenSlot);
-            Expect(brokenWeapon.PendingDestroyObserved && brokenWeapon.TransitDestroyCount == 0 &&
-                   brokenSlotEntity == null && brokenQueryEntity == null && brokenWorld.ObjectCount == 0,
-                $"the full late pass must plain-free the depleted weapon without a virtual destroy; " +
-                $"pendingObserved={brokenWeapon.PendingDestroyObserved}, transitDestroyCount={brokenWeapon.TransitDestroyCount}, " +
-                $"slotEntity={brokenSlotEntity?.Name ?? "null"}, queryEntity={brokenQueryEntity?.Name ?? "null"}, " +
-                $"objectCount={brokenWorld.ObjectCount}");
-            Expect(brokenWorld.PendingSounds.Count == brokenSoundCountBefore + 1 &&
-                   brokenWorld.PendingSounds[brokenSoundCountBefore].Cue == "SelfCheck_GT07_Broken",
-                $"the depleted weapon plain-free path must queue only its authority broken sound once; " +
-                $"soundCount={brokenWorld.PendingSounds.Count}, " +
-                $"cue={(brokenWorld.PendingSounds.Count > brokenSoundCountBefore ? brokenWorld.PendingSounds[brokenSoundCountBefore].Cue : "missing")}");
-            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
-                "the full depleted-weapon plain-free path must not create extra effect or fragment tasks");
+                LF2Entity brokenSlotEntity = brokenWorld.FindEntityByRuntimeSlotIncludingPending(brokenSlot);
+                LF2Entity brokenQueryEntity = brokenWorld.FindEntityByRuntimeSlotForQuery(brokenSlot);
+                Expect(brokenWeapon.PendingDestroyObserved && brokenWeapon.TransitDestroyCount == 0 &&
+                       brokenSlotEntity == null && brokenQueryEntity == null && brokenWorld.ObjectCount == 5,
+                    $"the full late pass must create five OID999 pieces then plain-free OID100 without a virtual destroy; " +
+                    $"pendingObserved={brokenWeapon.PendingDestroyObserved}, transitDestroyCount={brokenWeapon.TransitDestroyCount}, " +
+                    $"slotEntity={brokenSlotEntity?.Name ?? "null"}, queryEntity={brokenQueryEntity?.Name ?? "null"}, " +
+                    $"objectCount={brokenWorld.ObjectCount}");
+                Expect(brokenWorld.PendingSounds.Count == brokenSoundCountBefore + 1 &&
+                       brokenWorld.PendingSounds[brokenSoundCountBefore].Cue == "SelfCheck_GT07_Broken",
+                    $"the depleted weapon plain-free path must queue only its authority broken sound once; " +
+                    $"soundCount={brokenWorld.PendingSounds.Count}, " +
+                    $"cue={(brokenWorld.PendingSounds.Count > brokenSoundCountBefore ? brokenWorld.PendingSounds[brokenSoundCountBefore].Cue : "missing")}");
+                Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                    "native fragments must be materialized immediately without pending publication tasks");
+
+                int fragmentCount = 0;
+                for (int slot = 50; slot < brokenWorld.RuntimeSlotCapacityForDiagnostics; slot++)
+                {
+                    LF2Entity fragment = brokenWorld.FindEntityByRuntimeSlotForQuery(slot);
+                    if (fragment == null) continue;
+                    Expect(fragment.ObjectId == 999 && fragment.Health.HP == 500 && fragment.Health.PP == 500,
+                        "OID100 native pieces must retain generic initialized HP/MP500");
+                    fragmentCount++;
+                }
+                Expect(fragmentCount == 5, "OID100 must generate all five builtin pieces");
+            }
+            finally
+            {
+                brokenWorld.BeginBattleShutdown();
+                Expect(brokenWorld.TryShutdownAndClearLogicState(out _, out string reason),
+                    "weapon piece fixture shutdown must clear every child: " + reason);
+            }
 
             QueuedBoundaryTransitionSelfCheckEntity directTransition = CreateQueuedBoundaryTransitionEntity();
             directTransition.RunLateTailBeforePrevFrame();
@@ -25217,6 +25250,11 @@ itr_end:
                 [801] = (int)LF2ObjectType.Other,
                 [802] = (int)LF2ObjectType.Character,
             };
+            for (int type = 1; type <= 6; type++)
+            {
+                types[810 + type] = type;
+                types[820 + type] = type;
+            }
             RuntimeCharacterConfigResolver runtimeCharacterConfigs = null;
 
             using (new TemporaryRuntimeObjectConfigs(types, wrappers))
@@ -25297,18 +25335,36 @@ itr_end:
                            reverseType3.Runtime.Z == 129.0 && reverseType3.Runtime.ZInt == 129,
                         "GT-05: preframe Z must use current DAT character/non-character/type3 logic-Z bounds for every CLR shell");
 
-                    ApplyRecoveryFixture(realCharacter);
-                    ApplyRecoveryFixture(sharedCharacter);
-                    reverseType3.Health.HP = 100;
-                    reverseType3.Health.HPBound = 101;
-                    reverseType3.Health.PP = 0;
-                    reverseType3.WeaponCount = -1;
-                    reverseType3.RunPreCollisionRecoveryPhase(12);
-                    ExpectRecoveryFixture(realCharacter, "GT-06 real character");
-                    ExpectRecoveryFixture(sharedCharacter, "GT-06 shared character-DAT shell");
-                    Expect(reverseType3.Health.HP == 100 && reverseType3.Health.HPBound == 101 &&
-                           reverseType3.Health.PP == 0 && reverseType3.WeaponCount == -1,
-                        "GT-06: a character CLR shell with current non-character DAT must not regenerate character stats");
+                    var recoveryWorld = new SimulationWorld(runtimeCharacterConfigs);
+                    recoveryWorld.Register(realCharacter);
+                    recoveryWorld.Register(sharedCharacter);
+                    recoveryWorld.Register(reverseType3);
+                    try
+                    {
+                        recoveryWorld.Runtime.NativeWorldClock.ResourcePhase12 = 0;
+                        recoveryWorld.Runtime.NativeWorldClock.ResourcePhase3 = 1;
+                        ApplyRecoveryFixture(realCharacter);
+                        ApplyRecoveryFixture(sharedCharacter);
+                        reverseType3.Health.HP = 100;
+                        reverseType3.Health.HPBound = 101;
+                        reverseType3.Health.PP = 0;
+                        reverseType3.WeaponCount = -1;
+                        reverseType3.RunPreCollisionRecoveryPhase(12);
+                        ExpectRecoveryFixture(realCharacter, "GT-06 real character");
+                        ExpectRecoveryFixture(sharedCharacter, "GT-06 shared character-DAT shell");
+                        Expect(reverseType3.Health.HP == 100 && reverseType3.Health.HPBound == 101 &&
+                               reverseType3.Health.PP == 0 && reverseType3.WeaponCount == -1,
+                            "GT-06: a character CLR shell with current non-character DAT must not regenerate character stats");
+                    }
+                    finally
+                    {
+                        recoveryWorld.Unregister(realCharacter);
+                        recoveryWorld.Unregister(sharedCharacter);
+                        recoveryWorld.Unregister(reverseType3);
+                        recoveryWorld.BeginBattleShutdown();
+                        Expect(recoveryWorld.TryShutdownAndClearLogicState(out _, out string recoveryShutdownReason),
+                            "GT-06 private World cleanup: " + recoveryShutdownReason);
+                    }
 
                     var deathWorld = new SimulationWorld(runtimeCharacterConfigs);
                     var sharedDead = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 9504);
@@ -25326,22 +25382,27 @@ itr_end:
                     sharedDead.Runtime.HeldWeaponStableId = held.Runtime.SlotIndex;
                     held.Runtime.LinkState = -1;
                     held.Runtime.HolderStableId = sharedDead.Runtime.SlotIndex;
-                    sharedDead.Frame.N = 5;
+                    sharedDead.WriteCurrentFrameId(5);
+                    sharedDead.Frame.D = sharedDead.FrameCache.GetNativeFrameDataById(5);
                     sharedDead.Health.HP = 0;
                     sharedDead.Runtime.SetPosition(0.0, 0.0, 100.0);
                     sharedDead.Runtime.SetVelocity(0.0, 0.0, 0.0);
                     sharedDead.Runtime.SyncIntegerPosition();
-                    sharedDead.RunLateDeathOpointPreCleanupPhase();
-                    Expect(sharedDead.Frame.N == 186 && sharedDead.Runtime.Y == -1.0 &&
-                           sharedDead.Runtime.Vy == -3.0 && sharedDead.Runtime.LinkState == 0 &&
-                           held.Runtime.LinkState == 0,
-                        "GT-07: current character-DAT shared shell must run death bounce and drop its held slot link");
-
-                    reverseType3.Frame.N = 5;
+                    reverseType3.WriteCurrentFrameId(5);
+                    reverseType3.Frame.D = reverseType3.FrameCache.GetNativeFrameDataById(5);
+                    reverseType3.Trans.SyncDirectFrameData(0, 0, 5);
                     reverseType3.Health.HP = 0;
-                    reverseType3.RunLateDeathOpointPreCleanupPhase();
+                    deathWorld.Register(reverseType3);
+                    deathWorld.LateEntityUpdateAll(1);
+                    Expect(sharedDead.Frame.N == 5 && sharedDead.Runtime.Y == 0.0 &&
+                           sharedDead.Runtime.Vy == 0.0 && sharedDead.Runtime.LinkState == 1 &&
+                           held.Runtime.LinkState == -1 && held.Runtime.HolderStableId == sharedDead.Runtime.SlotIndex,
+                        "GT-07: C25 must not inject a death bounce or extra held release on current character DAT");
                     Expect(reverseType3.Frame.N == 5,
-                        "GT-07: current non-character DAT must suppress character death logic on a character CLR shell");
+                        "GT-07: current non-character DAT must also avoid extra death behavior on a character CLR shell");
+                    deathWorld.BeginBattleShutdown();
+                    Expect(deathWorld.TryShutdownAndClearLogicState(out _, out string deathShutdownReason),
+                        "GT-07 held fixture shutdown: " + deathShutdownReason);
 
                     for (int dataTypeValue = (int)LF2ObjectType.LightWeapon;
                          dataTypeValue <= (int)LF2ObjectType.Drink;
@@ -25349,16 +25410,18 @@ itr_end:
                     {
                         LF2ObjectType dataType = (LF2ObjectType)dataTypeValue;
                         string label = $"GT-07 current DAT type{dataTypeValue}";
+                        bool nativeBreakable = dataTypeValue == 1 || dataTypeValue == 2 || dataTypeValue == 4 || dataTypeValue == 6;
                         LF2CharacterData cleanupData = BuildGameTickCurrentDatData(
                             $"SelfCheck_GT07_Type{dataTypeValue}", dataType, 0);
 
                         var sharedNonCharacter = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 9600 + dataTypeValue);
                         sharedNonCharacter.BindData(810 + dataTypeValue, cleanupData);
                         sharedNonCharacter.Runtime.WeaponFlightCounter = -1;
-                        Expect(sharedNonCharacter.TryRunLatePostOpointCleanupPhase() &&
-                               sharedNonCharacter.Runtime.WeaponFlightCounter == 0 &&
-                               sharedNonCharacter.Runtime.PendingFlushDestroy,
-                            $"{label}: shared CLR shell must run the authority non-character Unk31C cleanup");
+                        Expect(sharedNonCharacter.TryRunLatePostOpointCleanupPhase() == nativeBreakable &&
+                               sharedNonCharacter.Runtime.WeaponFlightCounter == (nativeBreakable ? 0 : -1) &&
+                               sharedNonCharacter.Runtime.NativeLifecycleResolutionPending == nativeBreakable &&
+                               sharedNonCharacter.Runtime.NativeLifecycleCode == (nativeBreakable ? 1000 : 0),
+                            $"{label}: shared CLR shell must use the native type1/2/4/6 break gate");
 
                         var actualWeapon = new CurrentDatSelfCheckWeapon(dataType);
                         actualWeapon.BindData(
@@ -25380,9 +25443,11 @@ itr_end:
                             actualWeapon.Runtime.HolderStableId = holderProbe.Runtime.SlotIndex;
                         }
 
-                        Expect(actualWeapon.TryRunLatePostOpointCleanupPhase() &&
-                               actualWeapon.Runtime.WeaponFlightCounter == 0 && actualWeapon.Runtime.PendingFlushDestroy,
-                            $"{label}: real LF2Weapon must ignore CLR destroyability/holder gates in the authority cleanup");
+                        Expect(actualWeapon.TryRunLatePostOpointCleanupPhase() == nativeBreakable &&
+                               actualWeapon.Runtime.WeaponFlightCounter == (nativeBreakable ? 0 : -1) &&
+                               actualWeapon.Runtime.NativeLifecycleResolutionPending == nativeBreakable &&
+                               actualWeapon.Runtime.NativeLifecycleCode == (nativeBreakable ? 1000 : 0),
+                            $"{label}: real LF2Weapon must use current DAT type, independently of CLR shell/holder gates");
                         if (holderProbe != null)
                         {
                             Expect(actualWeapon.Runtime.LinkState == -1 &&
@@ -25397,7 +25462,7 @@ itr_end:
                     sharedCharacterCleanup.Runtime.WeaponFlightCounter = -1;
                     Expect(!sharedCharacterCleanup.TryRunLatePostOpointCleanupPhase() &&
                            sharedCharacterCleanup.Runtime.WeaponFlightCounter == -1 &&
-                           !sharedCharacterCleanup.Runtime.PendingFlushDestroy,
+                           !sharedCharacterCleanup.Runtime.NativeLifecycleResolutionPending,
                         "GT-07: current character DAT must remain excluded from non-character Unk31C cleanup");
 
                     var raw4000 = new CurrentDatDispatchSelfCheckEntity(LF2ObjectType.Other, 9507);
@@ -25469,9 +25534,9 @@ itr_end:
         private static void ExpectRecoveryFixture(LF2Entity entity, string label)
         {
             Expect(entity.Health.HP == 101 && entity.Health.HPBound == 101 &&
-                   entity.Health.PP == 4 && entity.ComboCountVic == 0 &&
+                   entity.Health.PP == 0 && entity.ComboCountVic == 0 &&
                    entity.WeaponCount == -1,
-                $"{label}: current character DAT must recover HP/PP without treating negative WeaponCount as environment damage");
+                $"{label}: current character DAT must recover HP while default mode suppresses ordinary MP, without treating negative WeaponCount as environment damage");
         }
 
         private static void CheckGameTickLateExitAndCleanupContracts()
@@ -25491,23 +25556,28 @@ itr_end:
 
             realWorld.LateEntityUpdateAll(40);
 
+            ExpectNativeEncodedLifecycle(realWorld, real, 1100, 0);
             Expect(realWorld.FindEntityByRuntimeSlotIncludingPending(real.Runtime.SlotIndex) == real &&
                    real.Frame.N == 0 && real.HitStun == 0 && realChild.HitStun == 40,
                 "GT-08: frame1100 must reset self while the KillCount-matched child only performs its own late update");
 
             var sharedWorld = new SimulationWorld();
-            var shared = new LateLifecycleSelfCheckEntity(
-                "SelfCheck_GT08_SharedRelay1299",
-                (int)LF2ObjectType.SpecialAttack,
-                1299,
-                BuildLateExitSelfCheckData("SelfCheck_GT08_SharedRelay1299", 9999, 0));
+            var sharedData = BuildLateExitSelfCheckData("SelfCheck_GT08_Shared1299", 0, 1299);
+            var sharedWrapper = new LF2CharacterDataWrapper(782, sharedData);
+            sharedWorld.PrepareRuntimeDataCatalogForBattle(
+                new[] { new ObjectDefinition(782, 3, "SelfCheck_GT08_Shared1299.dat") }, _ => sharedWrapper);
+            var shared = new LF2SpecialAttack { ObjectId = 782 };
+            shared.FrameCache.Load(sharedWrapper);
+            shared.Frame.D = shared.FrameCache.GetNativeFrameDataById(0);
+            shared.Trans.SyncDirectFrameData(0, 1299, 0);
+            shared.Health.HP = 100;
+            shared.Health.HPBound = 100;
+            shared.HitStun = 5;
             sharedWorld.Register(shared);
 
             sharedWorld.LateEntityUpdateAll(41);
 
-            Expect(shared.TransitDestroyCount == 0 && shared.Frame.N == 0 && shared.HitStun == -199 &&
-                   sharedWorld.FindEntityByRuntimeSlotIncludingPending(shared.Runtime.SlotIndex) == shared,
-                "GT-08: shared-DAT frame1299 relay must run before the generic >=400 release boundary");
+            ExpectNativeEncodedLifecycle(sharedWorld, shared, 1299, 4);
 
             LF2CharacterData currentDatRelayData = BuildLateExitSelfCheckData(
                 "SelfCheck_GT08_CurrentDatRelay1200",
@@ -25521,9 +25591,7 @@ itr_end:
 
             currentDatWorld.LateEntityUpdateAll(42);
 
-            Expect(currentDatShell.Frame.N == 0 && currentDatShell.HitStun == -100 &&
-                   currentDatWorld.FindEntityByRuntimeSlotIncludingPending(currentDatShell.Runtime.SlotIndex) == currentDatShell,
-                "GT-08: current-character-DAT shell frame1200 relay must preserve the entity and reset frame0");
+            ExpectNativeEncodedLifecycle(currentDatWorld, currentDatShell, 1200, 0);
 
             LF2CharacterData state9998Data = new LF2CharacterData
             {
@@ -25575,10 +25643,11 @@ itr_end:
             int state9998ObjectCountAfterCleanup = state9998World.ObjectCount;
             int state9998SoundCountAfterCleanup = state9998World.PendingSounds.Count;
             Expect(state9998.TransitDestroyCount == 0 &&
-                   state9998ReleasedSlotEntity == null && state9998ReleasedQueryEntity == null &&
-                   state9998ObjectCountAfterCleanup == state9998ObjectCountBeforeCleanup - 1 &&
+                   state9998ReleasedSlotEntity == state9998 && state9998ReleasedQueryEntity == state9998 &&
+                   state9998.Frame.N == 1 && state9998.Frame.D?.state == 9998 &&
+                   state9998ObjectCountAfterCleanup == state9998ObjectCountBeforeCleanup &&
                    state9998SoundCountAfterCleanup == state9998SoundCountBeforeCleanup,
-                $"GT-09: post-frame-advance state9998 cleanup must directly free the entity on the next tick " +
+                $"GT-09: state9998 alone must retain the entity after the following serial pass " +
                 $"without a virtual destroy event or sound; destroyCount={state9998.TransitDestroyCount}, " +
                 $"slotEntity={state9998ReleasedSlotEntity?.Name ?? "null"}, " +
                 $"queryEntity={state9998ReleasedQueryEntity?.Name ?? "null"}, " +
@@ -25637,6 +25706,20 @@ itr_end:
                     Frame(0, state, 0, next, 39, 79),
                 },
             };
+        }
+
+        private static void ExpectNativeEncodedLifecycle(SimulationWorld world, LF2Entity entity, int code, int renderPhase)
+        {
+            // Alignment contract: NTSD28-Q06-GT08-LIFECYCLE-FIXTURE-REBASELINE-001.
+            Expect(world.FindEntityByRuntimeSlotIncludingPending(entity.Runtime.SlotIndex) == entity &&
+                   entity.Frame.N == 0 && entity.Frame.D?.frameId == 0 && entity.Frame.Prev == code &&
+                   entity.Runtime.PrevFrame2 == 0 && entity.Frame.Prev2D?.frameId == 0 &&
+                   entity.Trans.WaitCounter == 0 && entity.Runtime.NativeRuntimeStateCode == 1100 - code &&
+                   entity.HitStun == renderPhase && !entity.Runtime.NativeLifecycleResolutionPending &&
+                   entity.Runtime.NativeLifecycleCode == 0 && world.PendingSounds.Count == 0,
+                $"GT-08 native code {code}: preserve entity/latch/render phase, commit previous action, reset current/collision and consume pending; " +
+                $"action={entity.Frame.N}, previous={entity.Frame.Prev}, latch={entity.Trans.WaitCounter}, " +
+                $"state={entity.Runtime.NativeRuntimeStateCode}, render={entity.HitStun}");
         }
 
         private static void CheckLateState9996FullSuccessContract()
@@ -27197,19 +27280,21 @@ itr_end:
                     Expect(Nearly(heavy.Runtime.Vx, 4.0) && Nearly(heavy.Runtime.Vy, 0.0) && heavy.WeaponCount == 0,
                         "type2 transformed landing must stop on frame20 and clear WeaponCount outside state12");
 
-                    TransformedLandingSelfCheckEntity heavyBounce = CreateTransformedLandingShell(
-                        runtimeCharacterConfigs, heavyOid, false);
-                    heavyBounce.Runtime.WeaponFlightCounter = 20;
-                    heavyBounce.SwitchDir("right");
-                    RunTransformedLandingPasses(heavyBounce, 10.0, 8.0, 13);
-                    Expect(heavyBounce.Frame.N == 0 && Nearly(heavyBounce.Runtime.Vy, -5.0) &&
-                           Nearly(heavyBounce.Runtime.Vx, 4.0) && heavyBounce.Runtime.Dir == "right" &&
-                           heavyBounce.Runtime.WeaponFlightCounter == 19,
-                        $"transformed type2 high-speed landing must preserve frame0, bounce -5, consume one durability, " +
-                        $"then let late state2000 face final vx; frame={heavyBounce.Frame.N}, vx={heavyBounce.Runtime.Vx}, " +
-                        $"vy={heavyBounce.Runtime.Vy}, y={heavyBounce.Runtime.Y}, dir={heavyBounce.Runtime.Dir}, " +
-                        $"durability={heavyBounce.Runtime.WeaponFlightCounter}, weaponCount={heavyBounce.WeaponCount}, " +
-                        "inputLandingVy=10, inputVx=8");
+                    foreach (string initialDirection in new[] { "right", "left" })
+                    {
+                        TransformedLandingSelfCheckEntity heavyBounce = CreateTransformedLandingShell(
+                            runtimeCharacterConfigs, heavyOid, false);
+                        heavyBounce.Runtime.WeaponFlightCounter = 20;
+                        heavyBounce.SwitchDir(initialDirection);
+                        RunTransformedLandingPasses(heavyBounce, 10.0, 8.0, 13);
+                        string expectedDirection = initialDirection == "right" ? "left" : "right";
+                        Expect(heavyBounce.Frame.N == 0 && Nearly(heavyBounce.Runtime.Vy, -5.0) &&
+                               Nearly(heavyBounce.Runtime.Vx, 4.0) && heavyBounce.Runtime.Dir == expectedDirection &&
+                               heavyBounce.Runtime.WeaponFlightCounter == 19,
+                            $"native type2 hard landing must retain its physical facing flip through C25; " +
+                            $"frame={heavyBounce.Frame.N}, vx={heavyBounce.Runtime.Vx}, vy={heavyBounce.Runtime.Vy}, " +
+                            $"initialDir={initialDirection}, dir={heavyBounce.Runtime.Dir}, durability={heavyBounce.Runtime.WeaponFlightCounter}");
+                    }
 
                     TransformedLandingSelfCheckEntity thrown = CreateTransformedLandingShell(
                         runtimeCharacterConfigs, throwOid, false);
@@ -29261,41 +29346,43 @@ itr_end:
             }
         }
 
-        private static void CheckLateDeathBounceFrame()
+        private static void CheckDeadCharacterLatePassDoesNotInjectBounce()
         {
             var world = new SimulationWorld();
-            LF2CharacterData data = BuildDeathBounceCharacterData("SelfCheck_DeathBounce");
-            LF2Character victim = CreateCharacter("SelfCheck_DeathBounceVictim", 1, data);
+            LF2CharacterData data = BuildDeathBounceCharacterData("SelfCheck_NoExtraDeathBounce");
+            foreach (LF2FrameData frame in data.frames)
+            {
+                frame.wait = 100;
+                frame.next = 0;
+            }
+            var wrapper = new LF2CharacterDataWrapper(1, data);
+            world.PrepareRuntimeDataCatalogForBattle(new[] { new ObjectDefinition(1, 0, "no-extra-death.dat") }, _ => wrapper);
+            LF2Character victim = CreateCharacter("SelfCheck_NoExtraDeathBounce", 1, data);
             world.Register(victim);
-
-            victim.ImmediateFrame(5);
-            victim.Health.HP = 0;
-            victim.Runtime.SetPosition(12.0, 0.0, 3.0);
-            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
-            victim.Runtime.SyncIntegerPosition();
-            victim.KnockbackVy = 0f;
-
-            victim.RunLateDeathOpointPreCleanupPhase();
-
-            Expect(victim.Frame.N == 186,
-                "late death bounce should force frame 186 for dead lying character in frame<12");
-            Expect(victim.GetRuntimeYInt() == -1 &&
-                   Mathf.Approximately((float)victim.Runtime.Y, -1f) &&
-                   Mathf.Approximately((float)victim.Runtime.Vy, -3f) &&
-                   Mathf.Approximately((float)victim.KnockbackVy, -3f),
-                "late death bounce should set y/yInt to -1 and vy/knockbackVy to -3");
-
-            victim.ImmediateFrame(212);
-            victim.Health.HP = 0;
-            victim.Runtime.SetPosition(12.0, 0.0, 3.0);
-            victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
-            victim.Runtime.SyncIntegerPosition();
-            victim.KnockbackVy = 0f;
-
-            victim.RunLateDeathOpointPreCleanupPhase();
-
-            Expect(victim.Frame.N == 186,
-                "late death bounce should re-launch grounded death frame 212");
+            try
+            {
+                foreach (int action in new[] { 5, 212 })
+                {
+                    victim.ImmediateFrame(action);
+                    victim.Trans.SyncDirectFrameData(100, 0, action);
+                    victim.Health.HP = 0;
+                    victim.Runtime.HP2Orig = 1;
+                    victim.Runtime.SetPosition(12.0, 0.0, 3.0);
+                    victim.Runtime.SetVelocity(0.0, 0.0, 0.0);
+                    victim.Runtime.SyncIntegerPosition();
+                    victim.KnockbackVy = 0.0;
+                    world.LateEntityUpdateAll(1);
+                    Expect(victim.Frame.N == action && victim.Runtime.Y == 0.0 && victim.Runtime.YInt == 0 &&
+                           victim.Runtime.Vy == 0.0 && victim.KnockbackVy == 0.0,
+                        $"native C25 must keep dead action {action} without adding motion; " +
+                        $"action={victim.Frame.N}, y={victim.Runtime.Y}, vy={victim.Runtime.Vy}");
+                }
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Expect(world.TryShutdownAndClearLogicState(out _, out string reason), "dead fixture shutdown: " + reason);
+            }
         }
 
         private static void CheckComboWrappersCharacterFrameJumps()
@@ -35456,10 +35543,12 @@ itr_end:
                 ItrRest = new LF2ItrRestTracker();
                 PS.BindRuntime(Runtime);
                 Trans = new FrameTransistor(this);
-                Frame.N = LF2FrameCache.MaxFrameIdExclusive;
+                Frame.N = 1000;
                 Frame.PN = 0;
                 Frame.D = null;
-                Runtime.Frame = LF2FrameCache.MaxFrameIdExclusive;
+                Runtime.Frame = 1000;
+                Runtime.NativeLifecycleResolutionPending = true;
+                Runtime.NativeLifecycleCode = 1000;
             }
 
             protected override bool DestroyEvent()
@@ -35616,7 +35705,7 @@ itr_end:
             internal override bool TryRunLatePostOpointCleanupPhase()
             {
                 bool completed = base.TryRunLatePostOpointCleanupPhase();
-                PendingDestroyObserved |= Runtime.PendingFlushDestroy;
+                PendingDestroyObserved |= Runtime.NativeLifecycleResolutionPending && Runtime.NativeLifecycleCode == 1000;
                 return completed;
             }
 

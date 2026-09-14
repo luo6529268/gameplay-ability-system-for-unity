@@ -1,0 +1,212 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameTransactionEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameTransactionEditorTests.cs current
+@@ -0,0 +1,209 @@
++#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
++using System;
++using System.Collections.Generic;
++using System.Globalization;
++using System.IO;
++using System.Linq;
++using Newtonsoft.Json;
++using NTSD.Animation;
++using NTSD.Animation.LF2Objects;
++using NTSD.Simulation;
++using NTSD.Simulation.Ecs;
++using NUnit.Framework;
++
++namespace NTSD.Test
++{
++    public sealed class NTSD28Q06NativeFrameTransactionEditorTests
++    {
++        private const string Witness = "artifacts/diagnostics/NTSD28-Q06-NATIVE-FRAME-STEP-LIFECYCLE-SOURCE-WITNESS-001/frame-step.tsv";
++        private const string Output = "artifacts/diagnostics/NTSD28-Q06-NATIVE-FRAME-TRANSACTION-INTEGRATION-001";
++
++        [TestCase("lookup")]
++        [TestCase("next")]
++        [TestCase("counter")]
++        [TestCase("cost")]
++        [TestCase("modifiers")]
++        [TestCase("gates")]
++        [TestCase("terminal14")]
++        [TestCase("type3")]
++        [TestCase("already212")]
++        public void NativeFrameCoreMatchesOriginalWorldFunction(string group)
++        {
++            string[] lines = File.ReadAllLines(Witness);
++            string[] columns = lines[0].Split('\t');
++            int cases = 0;
++            var differences = new List<object>();
++            foreach (string line in lines.Skip(1))
++            {
++                string[] values = line.Split('\t');
++                if (values[0] != group) continue;
++                var row = new Dictionary<string, string>();
++                for (int index = 0; index < columns.Length; index++) row.Add(columns[index], values[index]);
++                using (var fixture = new Fixture(row))
++                {
++                    var entity = fixture.Entity;
++                    entity.BeginNativeC25FrameTickForWorldPass();
++                    try { entity.RunNativeC25FrameBodyForWorldPass(); }
++                    finally { entity.EndNativeC25FrameTickForWorldPass(); }
++                    var actual = new Dictionary<string, double>
++                    {
++                        ["actionOut"] = entity.Frame.N, ["latchOut"] = entity.Trans.WaitCounter,
++                        ["counterOut"] = entity.AttackingCounter, ["facingOut"] = entity.Runtime.IsFacingLeft ? 1 : 0,
++                        ["hpOut"] = entity.Health.HP, ["mpOut"] = entity.Health.PP, ["boundOut"] = entity.Health.HPBound,
++                        ["hpConsumed"] = entity.Runtime.InputHpConsumedTotal34C, ["mpConsumed"] = entity.Runtime.InputMpConsumedTotal350,
++                        ["vxOut"] = entity.Runtime.Vx, ["vyOut"] = entity.Runtime.Vy, ["vzOut"] = entity.Runtime.Vz,
++                        ["soundLatchOut"] = entity.Runtime.NativeSoundActionLatch, ["audioCount"] = fixture.World.PendingSounds.Count,
++                        ["pendingOut"] = entity.Runtime.NativeLifecycleResolutionPending ? 1 : 0,
++                        ["codeOut"] = entity.Runtime.NativeLifecycleCode,
++                    };
++                    entity.ResolveNativeC25LifecycleForWorldPass();
++                    var survivor = fixture.World.FindEntityByRuntimeSlotForQuery(int.Parse(row["slot"], CultureInfo.InvariantCulture));
++                    actual["survives"] = survivor != null ? 1 : 0;
++                    actual["finalAction"] = survivor?.Frame.N ?? -9999;
++                    actual["finalLatch"] = survivor?.Trans.WaitCounter ?? -9999;
++                    actual["finalCollisionAction"] = survivor?.Runtime.PrevFrame2 ?? -9999;
++                    actual["finalPrevious078"] = survivor?.Frame.Prev ?? -9999;
++                    actual["finalStateCode"] = survivor?.Runtime.NativeRuntimeStateCode ?? -9999;
++                    foreach (var pair in actual)
++                    {
++                        double expected = double.Parse(row[pair.Key], CultureInfo.InvariantCulture);
++                        if (pair.Value != expected)
++                            differences.Add(new { caseIndex = cases, field = pair.Key, expected, actual = pair.Value, input = row });
++                    }
++                }
++                cases++;
++            }
++            Directory.CreateDirectory(Output);
++            File.WriteAllText(Path.Combine(Output, group + "-core.json"), JsonConvert.SerializeObject(
++                new { group, cases, differenceCount = differences.Count, differences }, Formatting.Indented));
++            Assert.That(cases, Is.GreaterThan(0));
++            Assert.That(differences.Count, Is.Zero, group + " original World frame differences; see artifact.");
++        }
++
++        [TestCase(857, 857)]
++        [TestCase(998, 998)]
++        [TestCase(999, 0)]
++        [TestCase(1000, -1)]
++        [TestCase(1101, 0)]
++        public void ActualLatePassConsumesTerminalAfterPreviousActionCommit(int next, int expectedAction)
++        {
++            foreach (var mode in new[] { BattleEcsCharacterFrameTickPassMode.Legacy, BattleEcsCharacterFrameTickPassMode.DataOriented })
++            using (var fixture = new Fixture(FindRow("next", ("next", next), ("type", 0), ("y", 0), ("yref", 0))))
++            {
++                fixture.World.ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(mode);
++                fixture.Entity.HitStun = 5;
++                fixture.World.LateEntityUpdateAll(1);
++                var entity = fixture.World.FindEntityByRuntimeSlotForQuery(0);
++                if (expectedAction < 0)
++                {
++                    Assert.That(entity, Is.Null);
++                    Assert.That(fixture.World.ObjectCount, Is.Zero);
++                    continue;
++                }
++                Assert.That(entity.Frame.N, Is.EqualTo(expectedAction));
++                Assert.That(entity.Frame.Prev, Is.EqualTo(next == 999 ? 0 : next));
++                Assert.That(entity.Runtime.NativeLifecycleResolutionPending, Is.False);
++                Assert.That(entity.Runtime.NativeLifecycleCode, Is.Zero);
++                Assert.That(entity.HitStun, Is.EqualTo(4), "Encoded scripted state must not replace render phase.");
++                Assert.That(entity.Runtime.NativeRuntimeStateCode, Is.EqualTo(next == 1101 ? -1 : 0));
++                if (next == 1101)
++                {
++                    Assert.That(entity.Trans.WaitCounter, Is.Zero);
++                    Assert.That(entity.Runtime.PrevFrame2, Is.Zero);
++                }
++            }
++        }
++
++        [Test]
++        public void ActualLateCostFallbackPreservesItsLatchAndOriginalSound()
++        {
++            foreach (var mode in new[] { BattleEcsCharacterFrameTickPassMode.Legacy, BattleEcsCharacterFrameTickPassMode.DataOriented })
++            using (var fixture = new Fixture(FindRow("cost", ("destMp", -9), ("destHp", 0), ("mp", 8), ("hp", 10), ("fallback", 1101))))
++            {
++                fixture.World.ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(mode);
++                fixture.World.LateEntityUpdateAll(1);
++                var entity = fixture.World.FindEntityByRuntimeSlotForQuery(0);
++                Assert.That(entity.Frame.N, Is.Zero);
++                Assert.That(entity.Frame.Prev, Is.EqualTo(1101));
++                Assert.That(entity.Trans.WaitCounter, Is.EqualTo(1101));
++                Assert.That(entity.Runtime.PrevFrame2, Is.Zero);
++                Assert.That(entity.Runtime.NativeRuntimeStateCode, Is.EqualTo(-1));
++                Assert.That(entity.Health.PP, Is.EqualTo(8));
++                Assert.That(entity.Runtime.NativeSoundActionLatch, Is.EqualTo(7));
++                Assert.That(fixture.World.PendingSounds.Select(s => s.Cue), Is.EqualTo(new[] { "current.wav", "destination.wav" }));
++            }
++        }
++
++        private static Dictionary<string, string> FindRow(string group, params (string key, int value)[] conditions)
++        {
++            string[] lines = File.ReadAllLines(Witness);
++            string[] columns = lines[0].Split('\t');
++            foreach (string line in lines.Skip(1))
++            {
++                string[] values = line.Split('\t');
++                if (values[0] != group) continue;
++                var row = columns.Select((c, i) => (c, value: values[i])).ToDictionary(x => x.c, x => x.value);
++                if (conditions.All(c => int.Parse(row[c.key], CultureInfo.InvariantCulture) == c.value)) return row;
++            }
++            throw new InvalidOperationException("Original witness row not found.");
++        }
++
++        internal sealed class Fixture : IDisposable
++        {
++            internal readonly SimulationWorld World;
++            internal readonly LF2Character Entity;
++
++            internal Fixture(Dictionary<string, string> row)
++            {
++                int I(string name) => int.Parse(row[name], CultureInfo.InvariantCulture);
++                var data = new LF2CharacterData { recmp = I("recmp"), jump_height = -9.5f, jump_distance = 4.25f, jump_distancez = 2.5f };
++                if (I("declared") != 0)
++                {
++                    var current = new LF2FrameData
++                    {
++                        frameId = I("action"), state = I("state"), wait = I("wait"), next = I("next"),
++                        hit_a = I("drain"), hit_d = I("hitD"), sound = "current.wav", UsesLoganFrameNumbers = true,
++                    };
++                    if (I("cpoint") != 0) current.cpoint = new CatchPoint { kind = 2 };
++                    current.SealFrameSounds(new[] { "current.wav" });
++                    data.frames.Add(current);
++                }
++                if (I("action") != 7 || I("declared") == 0)
++                {
++                    var destination = new LF2FrameData { frameId = 7, wait = 0, next = I("fallback"), hp = I("destHp"), mp = I("destMp"), sound = "destination.wav", UsesLoganFrameNumbers = true };
++                    destination.SealFrameSounds(new[] { "destination.wav" });
++                    data.frames.Add(destination);
++                }
++                var wrapper = new LF2CharacterDataWrapper(77, data);
++                World = new SimulationWorld();
++                World.PrepareRuntimeDataCatalogForBattle(new[] { new ObjectDefinition(77, I("type"), "native-frame-fixture.dat") }, _ => wrapper);
++                World.Runtime.FunctionKeys.ResetForBattle(I("local") != 0);
++                Entity = new LF2Character { ObjectId = 77 };
++                Entity.FrameCache.Load(wrapper);
++                Entity.SetRequiredRuntimeSlot(I("slot"));
++                World.Register(Entity);
++                Entity.Frame.N = I("action"); Entity.Runtime.Frame = I("action");
++                Entity.Frame.D = Entity.FrameCache.GetNativeFrameDataById(I("action"));
++                Entity.Frame.Prev = 45; Entity.Frame.Prev2 = 44; Entity.Runtime.PrevFrame2 = 44;
++                Entity.Frame.Prev2D = Entity.FrameCache.GetNativeFrameDataById(44);
++                Entity.Trans.SyncDirectFrameData(Entity.Frame.D?.wait ?? 0, Entity.Frame.D?.next ?? 0, I("latch"));
++                Entity.AttackingCounter = I("counter"); Entity.Runtime.Dir = I("facing") != 0 ? "left" : "right";
++                Entity.Health.HP = I("hp"); Entity.Health.PP = I("mp"); Entity.Health.HPBound = 200;
++                Entity.Runtime.InputModeCostMultiplier30 = I("mode"); Entity.Runtime.InputDoubleCost19C = I("doubleCost");
++                Entity.Runtime.InputCostWaived1B4 = I("waived"); Entity.Runtime.LinkState = I("link"); Entity.FrameDelay = I("hold");
++                Entity.Runtime.HP2Orig = I("lives"); Entity.Runtime.RespawnCount = I("queuedHp");
++                Entity.Runtime.Y = I("y"); Entity.Runtime.YInt = I("y"); Entity.Runtime.CollisionYReference = I("yref");
++                Entity.Runtime.Vx = 1.25; Entity.Runtime.Vy = 2.25; Entity.Runtime.Vz = 3.25;
++                Entity.Runtime.KeyRight = 1; Entity.Runtime.KeyUp = 1;
++                Entity.Runtime.NativeSoundActionLatch = -1;
++            }
++
++            public void Dispose()
++            {
++                World.BeginBattleShutdown();
++                Assert.That(World.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
++            }
++        }
++    }
++}
++#endif

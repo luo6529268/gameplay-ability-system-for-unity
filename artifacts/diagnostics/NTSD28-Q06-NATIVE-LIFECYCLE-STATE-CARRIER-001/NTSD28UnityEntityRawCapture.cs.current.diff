@@ -1,0 +1,44 @@
+--- Assets/NTSD/Scripts/Simulation/Diagnostics/NTSD28UnityEntityRawCapture.cs before
++++ Assets/NTSD/Scripts/Simulation/Diagnostics/NTSD28UnityEntityRawCapture.cs current
+@@ -7,7 +7,7 @@
+     {
+         public const string Schema = "ntsd28-unity-entity-raw-capture-v2";
+         public const int FieldCount = 50;
+-        public const int VerifiedBindingCount = 44;
++        public const int VerifiedBindingCount = 47;
+ 
+         public static readonly string[] CandidateBindings =
+         {
+@@ -15,12 +15,9 @@
+ 
+         public static readonly string[] MissingBindings =
+         {
+-            "combat.runtimeStateCode",
+             "combat.platformSourceSlot",
+             "combat.environmentState",
+             "combat.environmentSourceSlot",
+-            "lifecycle.resolutionPending",
+-            "lifecycle.code",
+         };
+ 
+         public static string CaptureTickJson(
+@@ -104,7 +101,7 @@
+                     ("platformSourceSlot", null),
+                     ("renderPhase", runtime.HitStop),
+                     ("runtimeArmorHp", runtime.RuntimeArmorHp118),
+-                    ("runtimeStateCode", null),
++                    ("runtimeStateCode", runtime.NativeRuntimeStateCode),
+                     ("specialHitLatch0eb", runtime.SpecialHitLatch0EB),
+                     ("weaponHp", runtime.WeaponFlightCounter))),
+                 ("frame", (object)DictionaryOf(
+@@ -123,8 +120,8 @@
+                     ("ownerSlot", runtime.OwnerSlotIndex),
+                     ("participantClass", runtime.Unk344))),
+                 ("lifecycle", (object)DictionaryOf(
+-                    ("code", null),
+-                    ("resolutionPending", null))),
++                    ("code", runtime.NativeLifecycleCode),
++                    ("resolutionPending", runtime.NativeLifecycleResolutionPending))),
+                 ("motion", (object)DictionaryOf(
+                     ("x", runtime.Vx),
+                     ("y", runtime.Vy),

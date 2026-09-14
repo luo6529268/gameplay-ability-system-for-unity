@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Real current-content Scene, injected neutral production tick and explicit HP mode/weak/double checks; full World restored. Existing Q05 probe handles ordered cleanup separately.",
+  "tickBefore": 11,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "phaseAfterTick": 0,
+  "defaultHp": 101,
+  "allowedModeHp": 101,
+  "weakHp": 100,
+  "weakMp": 500,
+  "doubledHp": 102,
+  "hasStats": false,
+  "restored": true
+}

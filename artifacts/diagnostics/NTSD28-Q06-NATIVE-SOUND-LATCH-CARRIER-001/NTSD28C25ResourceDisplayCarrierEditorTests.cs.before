@@ -1,0 +1,161 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NUnit.Framework;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class NTSD28C25ResourceDisplayCarrierEditorTests
+    {
+        [Test]
+        public void DefaultsAndReset_MatchNativeCarrierContract()
+        {
+            var runtime = new NTSDEntityRuntime();
+            AssertDefaults(runtime);
+
+            MutateAll(runtime, 31);
+            runtime.Reset();
+
+            AssertDefaults(runtime);
+        }
+
+        [Test]
+        public void SnapshotAndChecksumSchemas_AdvanceForC25ResourceDisplayState()
+        {
+            Assert.That(
+                BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(13));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(21));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+                Is.EqualTo(24));
+        }
+
+        [Test]
+        public void EveryCarrier_ChangesLockstepChecksum()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character();
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            NTSDEntityRuntime runtime = entity.Runtime;
+            string baseline = world.CaptureParityFrameSnapshot(1).OverallChecksum;
+            var cases = new List<(string Name, Action Set, Action Reset)>
+            {
+                Case(nameof(runtime.WeakTimer12C), () => runtime.WeakTimer12C = 1, () => runtime.WeakTimer12C = 0),
+                Case(nameof(runtime.MpRegenBonusTimer1A4), () => runtime.MpRegenBonusTimer1A4 = 2, () => runtime.MpRegenBonusTimer1A4 = 0),
+                Case(nameof(runtime.EffectiveMaxRegenDouble1A8), () => runtime.EffectiveMaxRegenDouble1A8 = 3, () => runtime.EffectiveMaxRegenDouble1A8 = 0),
+                Case(nameof(runtime.HpRegenDouble1AC), () => runtime.HpRegenDouble1AC = 4, () => runtime.HpRegenDouble1AC = 0),
+                Case(nameof(runtime.FullRestoreTimer1B0), () => runtime.FullRestoreTimer1B0 = 5, () => runtime.FullRestoreTimer1B0 = 0),
+                Case(nameof(runtime.OrdinaryCreditGate2F4), () => runtime.OrdinaryCreditGate2F4 = 6, () => runtime.OrdinaryCreditGate2F4 = -1),
+                Case(nameof(runtime.IncomingDamageScale340), () => runtime.IncomingDamageScale340 = 7, () => runtime.IncomingDamageScale340 = 0),
+                Case(nameof(runtime.ModeDamageScalePercent), () => runtime.ModeDamageScalePercent = 80, () => runtime.ModeDamageScalePercent = 100),
+                Case(nameof(runtime.InputScoreTotal348), () => runtime.InputScoreTotal348 = 9, () => runtime.InputScoreTotal348 = 0),
+                Case(nameof(runtime.KnockoutCount358), () => runtime.KnockoutCount358 = 10, () => runtime.KnockoutCount358 = 0),
+                Case(nameof(runtime.CatchSourceSlot90), () => runtime.CatchSourceSlot90 = 11, () => runtime.CatchSourceSlot90 = -1),
+                Case(nameof(runtime.EnvironmentSourceSlot160), () => runtime.EnvironmentSourceSlot160 = 12, () => runtime.EnvironmentSourceSlot160 = -1),
+                Case(nameof(runtime.ImpactSourceSlot164), () => runtime.ImpactSourceSlot164 = 13, () => runtime.ImpactSourceSlot164 = -1),
+                Case(nameof(runtime.DisplayScore1F0), () => runtime.DisplayScore1F0 = 14, () => runtime.DisplayScore1F0 = 0),
+                Case(nameof(runtime.DisplayScoreStep1F4), () => runtime.DisplayScoreStep1F4 = 15, () => runtime.DisplayScoreStep1F4 = 0),
+                Case(nameof(runtime.DisplayDamageTotal1F8), () => runtime.DisplayDamageTotal1F8 = 16, () => runtime.DisplayDamageTotal1F8 = 0),
+                Case(nameof(runtime.DisplayDamageStep1FC), () => runtime.DisplayDamageStep1FC = 17, () => runtime.DisplayDamageStep1FC = 0),
+                Case(nameof(runtime.DisplayCurrentHp200), () => runtime.DisplayCurrentHp200 = 18, () => runtime.DisplayCurrentHp200 = 0),
+                Case(nameof(runtime.DisplayCurrentHpStep204), () => runtime.DisplayCurrentHpStep204 = 19, () => runtime.DisplayCurrentHpStep204 = 0),
+                Case(nameof(runtime.DisplayEffectiveMaxHp208), () => runtime.DisplayEffectiveMaxHp208 = 20, () => runtime.DisplayEffectiveMaxHp208 = 0),
+                Case(nameof(runtime.DisplayEffectiveMaxHpStep20C), () => runtime.DisplayEffectiveMaxHpStep20C = 21, () => runtime.DisplayEffectiveMaxHpStep20C = 0),
+            };
+
+            for (int index = 0; index < cases.Count; index++)
+            {
+                cases[index].Set();
+                string changed = world.CaptureParityFrameSnapshot(1).OverallChecksum;
+                Assert.That(changed, Is.Not.EqualTo(baseline), cases[index].Name);
+                cases[index].Reset();
+                Assert.That(
+                    world.CaptureParityFrameSnapshot(1).OverallChecksum,
+                    Is.EqualTo(baseline),
+                    cases[index].Name + " reset");
+            }
+        }
+
+        [Test]
+        public void ParityJson_ProjectsIndependentNativeResourceDisplayGroup()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character();
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            MutateAll(entity.Runtime, 41);
+
+            string json = world.CaptureParityFrameSnapshot(1).ToJson(full: true);
+
+            Assert.That(json, Does.Contain("\"nativeResourceDisplay\""));
+            Assert.That(json, Does.Contain("\"weakTimer12C\":41"));
+            Assert.That(json, Does.Contain("\"ordinaryCreditGate2F4\":46"));
+            Assert.That(json, Does.Contain("\"modeDamageScalePercent\":48"));
+            Assert.That(json, Does.Contain("\"displayEffectiveMaxHpStep20C\":61"));
+        }
+
+        private static (string Name, Action Set, Action Reset) Case(
+            string name,
+            Action set,
+            Action reset)
+        {
+            return (name, set, reset);
+        }
+
+        private static void MutateAll(NTSDEntityRuntime runtime, int seed)
+        {
+            runtime.WeakTimer12C = seed;
+            runtime.MpRegenBonusTimer1A4 = seed + 1;
+            runtime.EffectiveMaxRegenDouble1A8 = seed + 2;
+            runtime.HpRegenDouble1AC = seed + 3;
+            runtime.FullRestoreTimer1B0 = seed + 4;
+            runtime.OrdinaryCreditGate2F4 = seed + 5;
+            runtime.IncomingDamageScale340 = seed + 6;
+            runtime.ModeDamageScalePercent = seed + 7;
+            runtime.InputScoreTotal348 = seed + 8;
+            runtime.KnockoutCount358 = seed + 9;
+            runtime.CatchSourceSlot90 = seed + 10;
+            runtime.EnvironmentSourceSlot160 = seed + 11;
+            runtime.ImpactSourceSlot164 = seed + 12;
+            runtime.DisplayScore1F0 = seed + 13;
+            runtime.DisplayScoreStep1F4 = seed + 14;
+            runtime.DisplayDamageTotal1F8 = seed + 15;
+            runtime.DisplayDamageStep1FC = seed + 16;
+            runtime.DisplayCurrentHp200 = seed + 17;
+            runtime.DisplayCurrentHpStep204 = seed + 18;
+            runtime.DisplayEffectiveMaxHp208 = seed + 19;
+            runtime.DisplayEffectiveMaxHpStep20C = seed + 20;
+        }
+
+        private static void AssertDefaults(NTSDEntityRuntime runtime)
+        {
+            Assert.That(runtime.WeakTimer12C, Is.Zero);
+            Assert.That(runtime.MpRegenBonusTimer1A4, Is.Zero);
+            Assert.That(runtime.EffectiveMaxRegenDouble1A8, Is.Zero);
+            Assert.That(runtime.HpRegenDouble1AC, Is.Zero);
+            Assert.That(runtime.FullRestoreTimer1B0, Is.Zero);
+            Assert.That(runtime.OrdinaryCreditGate2F4, Is.EqualTo(-1));
+            Assert.That(runtime.IncomingDamageScale340, Is.Zero);
+            Assert.That(runtime.ModeDamageScalePercent, Is.EqualTo(100));
+            Assert.That(runtime.InputScoreTotal348, Is.Zero);
+            Assert.That(runtime.KnockoutCount358, Is.Zero);
+            Assert.That(runtime.CatchSourceSlot90, Is.EqualTo(-1));
+            Assert.That(runtime.EnvironmentSourceSlot160, Is.EqualTo(-1));
+            Assert.That(runtime.ImpactSourceSlot164, Is.EqualTo(-1));
+            Assert.That(runtime.DisplayScore1F0, Is.Zero);
+            Assert.That(runtime.DisplayScoreStep1F4, Is.Zero);
+            Assert.That(runtime.DisplayDamageTotal1F8, Is.Zero);
+            Assert.That(runtime.DisplayDamageStep1FC, Is.Zero);
+            Assert.That(runtime.DisplayCurrentHp200, Is.Zero);
+            Assert.That(runtime.DisplayCurrentHpStep204, Is.Zero);
+            Assert.That(runtime.DisplayEffectiveMaxHp208, Is.Zero);
+            Assert.That(runtime.DisplayEffectiveMaxHpStep20C, Is.Zero);
+        }
+    }
+}
+#endif

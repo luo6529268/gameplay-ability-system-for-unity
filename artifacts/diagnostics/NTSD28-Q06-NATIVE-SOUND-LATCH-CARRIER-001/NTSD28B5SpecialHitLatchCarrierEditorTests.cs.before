@@ -1,0 +1,122 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
+using NUnit.Framework;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class NTSD28B5SpecialHitLatchCarrierEditorTests
+    {
+        [Test]
+        public void Lifecycle_DefaultFalse_InputResetPreserves_FullResetClears()
+        {
+            var runtime = new NTSDEntityRuntime();
+            Assert.That(runtime.SpecialHitLatch0EB, Is.False);
+
+            runtime.SpecialHitLatch0EB = true;
+            runtime.ResetInputState();
+            Assert.That(runtime.SpecialHitLatch0EB, Is.True);
+
+            runtime.Reset();
+            Assert.That(runtime.SpecialHitLatch0EB, Is.False);
+        }
+
+        [Test]
+        public void CanonicalCopy_PreservesLatchWithoutAliasingHitConfirm2()
+        {
+            var source = new NTSDEntityRuntime
+            {
+                SpecialHitLatch0EB = true,
+                HitConfirm2 = 7,
+            };
+            var destination = new NTSDEntityRuntime();
+
+            Assert.That(source.TryCopyCanonicalStateTo(destination), Is.True);
+            Assert.That(destination.SpecialHitLatch0EB, Is.True);
+            Assert.That(destination.HitConfirm2, Is.EqualTo(7));
+
+            source.SpecialHitLatch0EB = false;
+            Assert.That(destination.SpecialHitLatch0EB, Is.True);
+        }
+
+        [Test]
+        public void EntityRuntimeSnapshot_RoundTripsLatch()
+        {
+            SimulationWorld world = World(out LF2Character entity);
+            entity.Runtime.SpecialHitLatch0EB = true;
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var snapshot = new BattleWorldEntityRuntimeSnapshotBuffer(
+                world.MaxRuntimeSlotsForServices);
+
+            Assert.That(snapshot.TryCapture(
+                world.RuntimeSlotTableForModules,
+                identity,
+                19), Is.True);
+            entity.Runtime.SpecialHitLatch0EB = false;
+            Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
+
+            Assert.That(entity.Runtime.SpecialHitLatch0EB, Is.True);
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
+        }
+
+        [Test]
+        public void ChecksumAndParity_TrackLatch()
+        {
+            SimulationWorld world = World(out LF2Character entity);
+            ulong checksumBefore = world.CaptureRuntimeChecksum64(0, null);
+            BattleParityFrameSnapshot parityBefore = world.CaptureParityFrameSnapshot(
+                0,
+                FrameInputSet.Empty(0));
+
+            entity.Runtime.SpecialHitLatch0EB = true;
+            ulong checksumAfter = world.CaptureRuntimeChecksum64(0, null);
+            BattleParityFrameSnapshot parityAfter = world.CaptureParityFrameSnapshot(
+                0,
+                FrameInputSet.Empty(0));
+
+            Assert.That(checksumAfter, Is.Not.EqualTo(checksumBefore));
+            Assert.That(parityAfter.Hashes.Overall, Is.Not.EqualTo(parityBefore.Hashes.Overall));
+        }
+
+        [Test]
+        public void WarmCopyAndChecksum_AllocateZero_AndSchemasAdvance()
+        {
+            var source = new NTSDEntityRuntime { SpecialHitLatch0EB = true };
+            var destination = new NTSDEntityRuntime();
+            SimulationWorld world = World(out LF2Character entity);
+            entity.Runtime.SpecialHitLatch0EB = true;
+            source.TryCopyCanonicalStateTo(destination);
+            world.CaptureRuntimeChecksum64(0, null);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            ulong checksum = 0;
+            for (int index = 0; index < 4096; index++)
+            {
+                source.TryCopyCanonicalStateTo(destination);
+                checksum ^= world.CaptureRuntimeChecksum64(index, null);
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(destination.SpecialHitLatch0EB, Is.True);
+            Assert.That(checksum, Is.Not.Zero);
+            Assert.That(allocated, Is.Zero);
+            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(13));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(21));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(24));
+        }
+
+        private static SimulationWorld World(out LF2Character entity)
+        {
+            var world = new SimulationWorld();
+            entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(3);
+            world.Register(entity);
+            return world;
+        }
+    }
+}
+#endif

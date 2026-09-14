@@ -1,0 +1,26 @@
+--- Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs before
++++ Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs after
+@@ -333,6 +333,7 @@
+         public int RenderPicOffset;
+         public int WaitCounter;
+         public int FrameWaitCounter;
++        public int NativeSoundActionLatch = -1;
+         public int NextFrame;
+         public int AttackingCounter;
+         public int FrameDelay;
+@@ -965,6 +966,7 @@
+             destination.RenderPicOffset = RenderPicOffset;
+             destination.WaitCounter = WaitCounter;
+             destination.FrameWaitCounter = FrameWaitCounter;
++            destination.NativeSoundActionLatch = NativeSoundActionLatch;
+             destination.NextFrame = NextFrame;
+             destination.AttackingCounter = AttackingCounter;
+             destination.FrameDelay = FrameDelay;
+@@ -1137,6 +1139,7 @@
+             RenderPicOffset = 0;
+             WaitCounter = 0;
+             FrameWaitCounter = 0;
++            NativeSoundActionLatch = -1;
+             NextFrame = 0;
+             AttackingCounter = 0;
+             FrameDelay = 0;

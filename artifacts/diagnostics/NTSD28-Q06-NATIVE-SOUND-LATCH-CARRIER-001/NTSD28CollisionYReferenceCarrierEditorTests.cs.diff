@@ -1,0 +1,26 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs after
+@@ -55,7 +55,7 @@
+             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
+ 
+             Assert.That(entity.Runtime.CollisionYReference, Is.EqualTo(-33));
+-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
++            Assert.That(snapshot.SchemaVersion, Is.EqualTo(14));
+         }
+ 
+         [Test]
+@@ -84,11 +84,11 @@
+         public void SnapshotAndChecksumSchemas_AdvanceForCollisionReference()
+         {
+             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(13));
++                Is.EqualTo(14));
+             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(21));
++                Is.EqualTo(22));
+             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+-                Is.EqualTo(24));
++                Is.EqualTo(25));
+         }
+ 
+         [Test]

@@ -107,7 +107,7 @@ namespace NTSD.Test
             Assert.That(entity.Runtime.InputRemapIndices13C, Is.EqualTo(expectedRemap));
             Assert.That(entity.Runtime.InputRemapIndices13C,
                 Is.Not.SameAs(expectedRemap));
-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(15));
         }
 
         [Test]
@@ -271,11 +271,11 @@ namespace NTSD.Test
         public void SnapshotAndChecksumSchemas_AreNativeActionCarrierVersions()
         {
             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(13));
+                Is.EqualTo(15));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(21));
+                Is.EqualTo(23));
             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
-                Is.EqualTo(24));
+                Is.EqualTo(26));
         }
 
         private static void FillCarriers(NTSDEntityRuntime runtime, int seed)

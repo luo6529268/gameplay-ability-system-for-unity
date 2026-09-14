@@ -1,0 +1,13 @@
+GT08部分已VERIFIED_TEST_ONLY（17/17与完整SelfCheck越过）。GT09已独立转交STATE9998源码见证/retirement；下一C25-DEAD-CHARACTER-EXTRA-BOUNCE-AUDIT。以下为原任务范围，不能再次执行旧GT08修复。
+
+# GT08/GT09晚帧生命周期夹具重新核验
+
+READY_SOURCE_AND_FIXTURE_MAPPING。当前完整SelfCheck首差异为CheckGameTickLateExitAndCleanupContracts（约25568）共享CLR frame1299预期HitStun=-199；正式encoded reset写NativeRuntimeStateCode=1100-code，不能写render_phase/HitStun。最新FAIL见NTSD28-Q06-NATIVE-WEAPON-PIECE-TRANSACTION-001/SelfCheck-gt08-next-fail.result。前武器破碎、LC02、GT07当前DAT矩阵已在此轮顺序通过，不回退已修断言。
+
+先读原frame_step_lifecycle_witness 2676矩阵与native battle_world resolve_pending_lifecycle；逐项核对本方法和LateLifecycleSelfCheckEntity、SelfCheckCharacterDatShell的真实调用方式。前者可能只通过mock SimFrameTick写Frame.N，没有生产Native pending标记；不得简单改预期数字，必须区分producer测试与cleanup consumer夹具并明确前置。此方法还有GT09 state9998生成tick/次tick清理及旧>=400/857边界，需完整阅读而不是修首断言后无目标追逐。脚本修改前建立独立准确Change Record，不能把这些修改塞回武器fragment Record。
+
+只有源证据可裁决真实行为；明确当前DAT type/定义catalog、帧四镜像、latch/counter、Native state/code/pending、render_phase、关系和sound副作用；必要时补原函数向量。保留原失败，先目标检查后完整SelfCheck。若发现生产缺口，另建准确行为Record，不迁就旧C#期望。两已知旧fixture问题应避免重犯：857在Native域合法；空SimFrameTick不会自动产生lifecycle pending。
+
+后续优先级：本Task先闭合完整SelfCheck新基线；然后Native武器Spawn admission边缘（OID0、声明/缺失999、非法action、capacity/pool失败和高低slot当tick参与）原函数补证；再回FRAME-TRANSACTION-INTEGRATION完整driver/其余caller。正式Q07资源仍未迁移，Q06及总目标ACTIVE。
+
+当前碎片六脚本已实现两阶段，49联合+两profile各157/762片与实际3/50片0差异；实际旧内容Scene DataOriented完整Late pass两materializer×healthy/broken四向量已PASS，恢复4→4/checksum通过。此非整个input/physics tick、非正式图片表现验收。用户HUDBg x30/bcd1047b…保持；禁止computer-use及非战斗/框架改动。

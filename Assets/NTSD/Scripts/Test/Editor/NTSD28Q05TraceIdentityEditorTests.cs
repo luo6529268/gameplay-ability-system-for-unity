@@ -116,8 +116,8 @@ namespace NTSD.Test
                 Assert.That(field, Is.Not.Null);
                 Assert.That((int)field, Is.EqualTo(value));
                 Assert.That((int)capture["bindingStatus"]["fieldCount"], Is.EqualTo(50));
-                Assert.That((int)capture["bindingStatus"]["verifiedCount"], Is.EqualTo(44));
-                Assert.That((int)capture["bindingStatus"]["missingCount"], Is.EqualTo(6));
+                Assert.That((int)capture["bindingStatus"]["verifiedCount"], Is.EqualTo(47));
+                Assert.That((int)capture["bindingStatus"]["missingCount"], Is.EqualTo(3));
                 Assert.That((string)capture["schema"], Is.EqualTo("ntsd28-unity-entity-raw-capture-v2"));
             }
             finally
@@ -143,9 +143,9 @@ namespace NTSD.Test
             Assert.That(content["catalogFingerprint64"], Is.EqualTo("3900ECBC509557DB"));
             Assert.That(content["profile"], Is.EqualTo("logan-runtime"));
             var schemas = (IDictionary)content["schemas"];
-            Assert.That(schemas["entityRuntime"], Is.EqualTo(13));
-            Assert.That(schemas["aggregate"], Is.EqualTo(21));
-            Assert.That(schemas["checksum"], Is.EqualTo(24));
+            Assert.That(schemas["entityRuntime"], Is.EqualTo(15));
+            Assert.That(schemas["aggregate"], Is.EqualTo(23));
+            Assert.That(schemas["checksum"], Is.EqualTo(26));
             Assert.That(schemas["characterShell"], Is.EqualTo(2));
             Assert.That(schemas["entityBaseShell"], Is.EqualTo(2));
         }

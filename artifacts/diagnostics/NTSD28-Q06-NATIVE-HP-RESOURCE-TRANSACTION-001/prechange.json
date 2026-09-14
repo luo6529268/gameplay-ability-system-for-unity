@@ -1,0 +1,32 @@
+{
+  "paths": [
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterRecoveryPass.cs",
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs",
+    "Tools/NTSD28AuthorityTrace/resource_hp_contract_witness.cpp"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+      "sha256": "ecfbbc34622bb974a81402ddb3f2c6a5622724e790642341a28828dc9bb68cee"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterRecoveryPass.cs",
+      "sha256": "b74d72aae86f6fc572e12b6b3587ca024e0fd689eec7d0104c26db7051f51e1c"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "c0b22cfc210bd77179dd512d940e7fdd22d86692fac89c49bf779991000d8a49"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs",
+      "sha256": null
+    },
+    {
+      "path": "Tools/NTSD28AuthorityTrace/resource_hp_contract_witness.cpp",
+      "sha256": null
+    }
+  ],
+  "sceneSha256": "bcd1047bf912c6a4a8bc9f3a76eaf3fa954211ad064e0402b1c01bf3ba0e9fb6"
+}

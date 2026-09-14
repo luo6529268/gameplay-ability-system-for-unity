@@ -1,0 +1,12 @@
+--- Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs before
++++ Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs current
+@@ -1152,6 +1152,9 @@
+             hash.Add(runtime.PP); hash.Add(runtime.PPMax); hash.Add(runtime.PPBound);
+             hash.Add(runtime.PpDisplay);
+             hash.Add(runtime.NativeSoundActionLatch);
++            hash.Add(runtime.NativeRuntimeStateCode);
++            hash.Add(runtime.NativeLifecycleResolutionPending);
++            hash.Add(runtime.NativeLifecycleCode);
+             return hash.ToFingerprint();
+         }
+ 

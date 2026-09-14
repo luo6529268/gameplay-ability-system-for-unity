@@ -1,0 +1,11 @@
+--- Tools/NTSD28Parity/TraceContentIdentity.cs before
++++ Tools/NTSD28Parity/TraceContentIdentity.cs after
+@@ -17,7 +17,7 @@
+     ];
+     private static readonly IReadOnlyDictionary<string, int> Schemas = new Dictionary<string, int>
+     {
+-        ["entityRuntime"] = 13, ["aggregate"] = 21, ["checksum"] = 24,
++        ["entityRuntime"] = 14, ["aggregate"] = 22, ["checksum"] = 25,
+         ["characterShell"] = 2, ["entityBaseShell"] = 2,
+     };
+ 

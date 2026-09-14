@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Current legacy-content real Scene, two injected neutral production ticks; four display values and preserved sources, full checksum restored. Birth initialization and post-display are pending.",
+  "tickBefore": 5,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "first": [
+    13,
+    26,
+    499,
+    498
+  ],
+  "second": [
+    10,
+    32,
+    500,
+    500
+  ],
+  "restored": true
+}

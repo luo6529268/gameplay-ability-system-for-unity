@@ -1,0 +1,11 @@
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs before
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs current
+@@ -10,7 +10,7 @@
+     /// </summary>
+     public sealed class BattleWorldEntityRuntimeSnapshotBuffer
+     {
+-        public const int CurrentSchemaVersion = 14;
++        public const int CurrentSchemaVersion = 15;
+ 
+         private readonly bool[] entityRuntimePresent;
+         private readonly bool[] rawRuntimePresent;

@@ -5,6 +5,34 @@ namespace NTSD.Simulation.Tests
 {
     public sealed class NTSD28UnityEntityRawCaptureEditorTests
     {
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(3)]
+        [TestCase(4)]
+        [TestCase(5)]
+        [TestCase(6)]
+        public void RawObjectTypeUsesFullCurrentDefinitionType(int type)
+        {
+            var world = new SimulationWorld();
+            var wrapper = new NTSD.Animation.LF2CharacterDataWrapper(777, new NTSD.Animation.LF2CharacterData());
+            world.PrepareRuntimeDataCatalogForBattle(new[] { new NTSD.Animation.ObjectDefinition(777, type, "raw-type.dat") }, _ => wrapper);
+            var entity = new NTSD.Animation.LF2Objects.LF2Character { ObjectId = 777 };
+            entity.FrameCache.Load(wrapper);
+            world.Register(entity);
+            try
+            {
+                string json = NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1);
+                Assert.That(json, Does.Contain("\"objectType\":" + type));
+                Assert.That(entity.Runtime.ObjType, Is.EqualTo(type == 0 ? 0 : 1));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
         [NUnit.Framework.Test]
         public void CaptureTickJson_ProjectsBoundValuesAndKeepsMissingNull()
         {
@@ -58,9 +86,9 @@ namespace NTSD.Simulation.Tests
 
             Assert.That(second, Is.EqualTo(first));
             Assert.That(first, Does.Contain("\"fieldCount\":50"));
-            Assert.That(first, Does.Contain("\"verifiedCount\":44"));
+            Assert.That(first, Does.Contain("\"verifiedCount\":47"));
             Assert.That(first, Does.Contain("\"candidateCount\":0"));
-            Assert.That(first, Does.Contain("\"missingCount\":6"));
+            Assert.That(first, Does.Contain("\"missingCount\":3"));
             Assert.That(first, Does.Contain("\"allocationEpoch\":1"));
             Assert.That(first, Does.Contain("\"objectId\":99"));
             Assert.That(first, Does.Contain("\"battleGroup\":13"));
@@ -98,9 +126,9 @@ namespace NTSD.Simulation.Tests
             Assert.That(first, Does.Contain("\"armorRecoveryTimer\":-1"));
             Assert.That(first, Does.Contain("\"environmentState\":null"));
             Assert.That(first, Does.Not.Contain("\"environmentState\":-3"));
-            Assert.That(first, Does.Contain("\"resolutionPending\":null"));
+            Assert.That(first, Does.Contain("\"resolutionPending\":false"));
             Assert.That(first, Does.Not.Contain("\"resolutionPending\":true"));
-            Assert.That(first, Does.Contain("\"runtimeStateCode\":null"));
+            Assert.That(first, Does.Contain("\"runtimeStateCode\":0"));
             Assert.That(first, Does.Contain(
                 "\"evidenceClass\":\"UNITY_RAW_BINDING_DIAGNOSTIC_ONLY\""));
             Assert.That(first, Does.Contain("\"certificateEligible\":false"));
@@ -133,7 +161,7 @@ namespace NTSD.Simulation.Tests
                 Has.Length.EqualTo(0));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
-                Has.Length.EqualTo(6));
+                Has.Length.EqualTo(3));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
                 Does.Not.Contain("combat.collisionYReference"));
@@ -193,7 +221,7 @@ namespace NTSD.Simulation.Tests
                 Does.Not.Contain("lifecycle.resolutionPending"));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
-                Does.Contain("lifecycle.resolutionPending"));
+                Does.Not.Contain("lifecycle.resolutionPending"));
             Assert.That(
                 NTSD28UnityEntityRawCapture.CandidateBindings,
                 Is.Empty);

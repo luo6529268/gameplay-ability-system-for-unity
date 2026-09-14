@@ -1,0 +1,13 @@
+{
+  "hpPackageUnchanged": {
+    "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs": true,
+    "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterRecoveryPass.cs": true,
+    "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs": true,
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs": true,
+    "Tools/NTSD28AuthorityTrace/resource_hp_contract_witness.cpp": true,
+    "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs": true
+  },
+  "sceneSha256": "bcd1047bf912c6a4a8bc9f3a76eaf3fa954211ad064e0402b1c01bf3ba0e9fb6",
+  "newScript": "Tools/NTSD28AuthorityTrace/resource_display_post_contract_witness.cpp",
+  "newScriptSha256": "60990d03bbc4d129768c9c09fa15ad21ee53388875f4e08f1e79652465c42588"
+}

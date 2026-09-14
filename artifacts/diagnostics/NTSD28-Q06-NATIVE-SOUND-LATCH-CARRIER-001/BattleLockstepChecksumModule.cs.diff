@@ -1,0 +1,19 @@
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs before
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs after
+@@ -152,7 +152,7 @@
+     /// </summary>
+     internal sealed class BattleLockstepChecksumModule
+     {
+-        internal const int CurrentSchemaVersion = 24;
++        internal const int CurrentSchemaVersion = 25;
+         private BattleChecksum64Builder builder;
+ 
+         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
+@@ -523,6 +523,7 @@
+             builder.AddInt32(isDefault ? 0 : runtime.Frame);
+             builder.AddInt32(isDefault ? 0 : runtime.FrameDelay);
+             builder.AddInt32(isDefault ? 0 : runtime.FrameWaitCounter);
++            builder.AddInt32(isDefault ? -1 : runtime.NativeSoundActionLatch);
+             builder.AddInt32(isDefault ? 0 : runtime.HitStateCount);
+             builder.AddInt32(isDefault ? 0 : runtime.HitStop);
+             builder.AddInt32(isDefault ? 0 : entity?.Frame?.Prev ?? 0);

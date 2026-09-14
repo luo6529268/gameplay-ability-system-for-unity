@@ -1,0 +1,794 @@
+{
+  "status": "FAIL",
+  "error": "System.NullReferenceException: Object reference not set to an instance of an object\r\n  at NTSD.Simulation.Ecs.BattleNativeWeaponPieceWriter.InitializeBirth (NTSD.Animation.LF2Objects.LF2Entity entity, NTSD.Animation.LF2Tasks.OPointCreateTask task) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleNativeWeaponPieceWriter.cs:129 \r\n  at NTSD.Animation.LF2ObjectPointFactory.MaterializeObjectForStructuralWriter (NTSD.Animation.LF2Tasks.OPointCreateTask task) [0x003e8] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\LF2ObjectPointFactory.cs:544 \r\n  at NTSD.Animation.LF2ObjectPointFactory.NTSD.Simulation.Ecs.IBattleObjectPointStructuralMaterializer.MaterializeObjectForStructuralWriter (NTSD.Animation.LF2Tasks.OPointCreateTask task) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\Character\\LF2ObjectPointFactory.cs:587 \r\n  at NTSD.Simulation.Ecs.BattleStructuralWriter.Spawn (NTSD.Simulation.Ecs.IBattleObjectPointStructuralMaterializer factory, NTSD.Animation.LF2Tasks.OPointCreateTask task, NTSD.Simulation.Ecs.BattleStructuralPlaybackBoundary boundary) [0x000a4] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleStructuralWriter.cs:270 \r\n  at NTSD.Simulation.Ecs.BattleNativeWeaponPieceWriter.Spawn (NTSD.Simulation.SimulationWorld world, NTSD.Simulation.Ecs.IBattleObjectPointStructuralMaterializer factory, System.Int32 slot, System.Int32 oid, System.Int32 action, System.Int32 x, System.Int32 y, System.Int32 z, System.Int32 vx, System.Int32 vy, System.Int32 vz, System.Int32 owner, System.Int32 group, System.Boolean facingLeft) [0x0012a] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleNativeWeaponPieceWriter.cs:113 \r\n  at NTSD.Simulation.Ecs.BattleNativeWeaponPieceWriter.Materialize (NTSD.Animation.LF2Objects.LF2Entity source) [0x003ee] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Ecs\\Writers\\BattleNativeWeaponPieceWriter.cs:72 \r\n  at NTSD.Animation.LF2Objects.LF2Entity.TryRunLatePostOpointCleanupPhase () [0x00096] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2Entity.cs:4206 \r\n  at NTSD.Animation.LF2Objects.LF2WeaponBase.TryRunLatePostOpointCleanupPhase () [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Animation\\LF2Objects\\LF2WeaponBase.cs:582 \r\n  at NTSD.Simulation.BattleLateEntityLifecycleModule.Run (System.Int32 tickIndex) [0x0051f] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Passes\\LateLifecycle\\BattleLateEntityLifecycleModule.cs:280 \r\n  at NTSD.Simulation.SimulationPassPipeline.RunLateEntityLifecycle (System.Int32 tickIndex) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationPassPipeline.cs:79 \r\n  at NTSD.Simulation.SimulationWorld.LateEntityUpdateAll (System.Int32 tickIndex) [0x00000] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\SimulationWorld.cs:3310 \r\n  at NTSD.Simulation.NTSDBattleTickSystem.LateEntityUpdate (System.Int32 tickIndex) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs:715 \r\n  at NTSD.Simulation.NTSDBattleTickSystem.RunPresentationAndCleanupPhase (System.Int32 tickIndex, System.Boolean buildPresentation, System.Boolean simulationWorker, System.Boolean stepWaitGate, NTSD.Simulation.BattleTickPhaseDiagnostics diagnostics, System.Boolean resultsActiveAtTickStart, NTSD.Simulation.FrameInputSet frameInput) [0x0009a] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs:512 \r\n  at NTSD.Simulation.NTSDBattleTickSystem.RunTick (System.Int32 tickIndex, System.Boolean buildPresentation, System.Boolean simulationWorker, NTSD.Simulation.FrameInputSet frameInput) [0x001fa] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs:350 \r\n  at NTSD.Simulation.NTSDBattleTickSystem.RunReleaseTick (System.Int32 tickIndex, System.Boolean buildPresentation, NTSD.Simulation.FrameInputSet frameInput) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs:274 \r\n  at NTSD.Simulation.NTSDBattleTickSystem.RunReleaseTick (System.Int32 tickIndex, System.Boolean buildPresentation) [0x00001] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Simulation\\Core\\NTSDBattleTickSystem.cs:263 \r\n  at NTSD.Test.NTSD28Q06WeaponPieceAdmissionPlayProbe.Poll () [0x002f0] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06WeaponPieceAdmissionEditorTests.cs:310 ",
+  "vectors": [
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 0,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 1,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 2,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 4,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 5,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": true,
+      "type": 6,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": true,
+      "type": 3,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 0,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 0,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 0,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 0,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 998,
+      "declared999": 0,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 998,
+      "declared999": 0,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 998,
+      "declared999": 1,
+      "source": 20,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 998,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 999,
+      "declared999": 0,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 999,
+      "declared999": 0,
+      "source": 70,
+      "alive": 0
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 999,
+      "declared999": 1,
+      "source": 20,
+      "alive": 0
+    },
+    {
+      "logicOnly": false,
+      "type": 0,
+      "action": 999,
+      "declared999": 1,
+      "source": 70,
+      "alive": 2
+    }
+  ],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Play, isolated DAT fixture worlds, both production materializers/full NTSDBattleTickSystem, types0..6 and OID0 high/low slots. Not formal sprites or physical inputs."
+}

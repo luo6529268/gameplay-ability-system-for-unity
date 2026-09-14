@@ -1,0 +1,17 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28C25ResourceDisplayCarrierEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28C25ResourceDisplayCarrierEditorTests.cs current
+@@ -27,11 +27,11 @@
+         {
+             Assert.That(
+                 BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(14));
++                Is.EqualTo(15));
+             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(22));
++                Is.EqualTo(23));
+             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+-                Is.EqualTo(25));
++                Is.EqualTo(26));
+         }
+ 
+         [Test]

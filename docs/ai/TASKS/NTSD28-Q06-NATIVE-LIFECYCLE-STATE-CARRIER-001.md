@@ -1,0 +1,27 @@
+> 当前下一Task NTSD28-Q06-NATIVE-WEAPON-PIECE-TRANSACTION-001。生命周期三字段和Module消费已接（386/实际Play限定通过），private shadow/旧857已移除；完整SelfCheck因旧break观察断言失败且fragment未实施，父任务不关闭。以下早期“待载体/Module未改”保留历史，不重做。
+
+# 原版生命周期状态载体前置
+
+READY_FOR_EXACT_PRECHANGE_RECORD。这是进行中的FRAME-TRANSACTION-INTEGRATION必要数据/消费前置，不是另开总目标或放弃完整frame任务。先读取CURRENT-AUTHORITY最新游标及父Change Record；当前正式C25 core已写且2676原函数向量逐字段通过，Module仍旧857/HitStun处理，当前状态不得发布为完整frame对齐。
+
+## 已确定的源事实
+
+EntityState28包含runtime_state_code默认0、lifecycle_resolution_pending默认false、lifecycle_code默认0。step_frames_range只在post-cost action<0/>=999时arm pending/code；入口有pending则跳过。materialize_weapon_piece_fragments对type1/2/4/6且weapon_hp<0置pending true/code1000。resolve_pending_lifecycles_range处理11xx/12xx：runtime_state_code=1100-code、currentaction=0、tick_action_snapshot=0、pending/code清零，action_latch保留；其它终止despawn。definition transition成功会清pending/code，fusion/出生初始化按正式调用链核对。
+
+特别：runtime_state_code不是render_phase_008。battle_world.cpp:4963注释和native_ai_tests明确不能别名；唯一正式生产writer为encoded reset，source其它consumer搜索只见输出/diagnostic，不能把它解释为受击/AI拒绝状态。Unity目前RawCapture的combat.runtimeStateCode为null，旧HandleFrameTickExit写HitStun会误改render_phase。应使用无伪造ABI后缀的独立NativeRuntimeStateCode（名称可按邻近风格精确决定），保留HitStun由既有reaction/复活/命中owner维护。
+
+## 必需实施合同
+
+建议在NTSDEntityRuntime加入三项独立字段（NativeRuntimeStateCode、NativeLifecycleResolutionPending、NativeLifecycleCode），明确新建/Reset/canonical copy、ECS fingerprint、full checksum/parity、claimed/raw snapshot和旧版本拒绝；若按此持久payload实施，联合entity15/aggregate23/checksum26，两个shell2/2不变。先准确列全部工具metadata与schema/raw绑定测试路径再Record，不仅修改常量。当前14/22/25/2/2是已验证前一版本，旧证据保留。
+
+父LF2Entity刚加入的private nativeC25FrameTerminalPending仍是未接Module的中间设计。引入持久字段后以Runtime pending/code替代该私有影子，Begin/End不得清除真实pending；End(out)可以读取结果并只清C25 ephemeral marker。capture/replay能保留pending状态，source pending入口不得再次消费帧/成本/声音。不要保留两套结果真值。
+
+Raw50形状可保持，但将三项已有MISSING绑定到真实字段后应准确同步verifiedCount47/missingCount3及相关测试；映射已验证与完整规则已对齐分开。剩余environment/platform三项不伪造。native wrapper原字段已存在，仅Unity联合版本header需同步；trace3/raw2是否保持按契约形状检查，不盲升或盲冻结。Native字段binding、新旧checksumhistory/snapshotheader拒绝、两profileclaimed/raw恢复回放及zero-alloc必须运行。
+
+## 自动返回父事务
+
+载体建好立即返回FRAME-TRANSACTION-INTEGRATION接consumer：正常framecore/weapon-piece owner写pending/code，Module按原OPoint→state18 particles→previous078→weapon fragments→lifecycle顺序消费。pending时仅普通frame-zero OPoint被拒绝；state18函数没有统一pending早退，声明999仍可有有效current state，不能提前free跳过该分支。
+
+当前旧Handle的负LinkState释放保护由source framebody不arm pending保证；真正已arm的pending（例如持有的broken weapon）应按源lifecycle关系安全删除，不能再次以负link无条件保活。编码重置不能抹action_latch，要清collision frame镜像并保留driver之前提交的078。broken weapon缺fragment producer仍属于父未完成出口，不能只播放broken_sound就当已补齐。
+
+禁止computer-use，非战斗/Unity-GAS/Scene/资源/外部Server/Gen/Plugins不动；用户HUDBg x30保持。确切脚本变更前新建Record。当前不需要用户再次批准继续已授权战斗对齐。

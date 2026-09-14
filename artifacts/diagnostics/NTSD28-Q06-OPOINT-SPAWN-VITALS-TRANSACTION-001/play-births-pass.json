@@ -1,0 +1,93 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Current legacy-content real Scene; paused idle materialization mode selected per route and restored; full logic and renderer materializers each spawn twice, canonical birth values checked before any tick, children released and World checksum restored. No natural skill or formal sprite parity claim.",
+  "tick": 5,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "restored": true,
+  "originalLogicOnly": true,
+  "restoredLogicOnly": true,
+  "births": [
+    {
+      "route": 0,
+      "ordinal": 0,
+      "slot": 50,
+      "values": [
+        101,
+        101,
+        101,
+        103,
+        103,
+        101,
+        101,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "route": 0,
+      "ordinal": 1,
+      "slot": 50,
+      "values": [
+        201,
+        201,
+        201,
+        103,
+        103,
+        201,
+        201,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "route": 1,
+      "ordinal": 0,
+      "slot": 50,
+      "values": [
+        101,
+        101,
+        101,
+        103,
+        103,
+        101,
+        101,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "route": 1,
+      "ordinal": 1,
+      "slot": 50,
+      "values": [
+        201,
+        201,
+        201,
+        103,
+        103,
+        201,
+        201,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ]
+}

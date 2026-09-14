@@ -1,0 +1,123 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
+using NUnit.Framework;
+
+namespace NTSD.Test
+{
+    public sealed class NTSD28B5HitResourceSuppressionCarrierEditorTests
+    {
+        [Test]
+        public void RuntimeLifecycle_DefaultsZero_PreservesInputReset_AndClearsFullReset()
+        {
+            var runtime = new NTSDEntityRuntime();
+            Assert.That(runtime.HitResourceSuppression15C, Is.Zero);
+
+            runtime.HitResourceSuppression15C = 1;
+            runtime.ResetInputState();
+            Assert.That(runtime.HitResourceSuppression15C, Is.EqualTo(1));
+
+            runtime.Reset();
+            Assert.That(runtime.HitResourceSuppression15C, Is.Zero);
+        }
+
+        [Test]
+        public void CanonicalCopy_PreservesSuppression()
+        {
+            var source = new NTSDEntityRuntime
+            {
+                HitResourceSuppression15C = 1,
+            };
+            var destination = new NTSDEntityRuntime();
+
+            Assert.That(source.TryCopyCanonicalStateTo(destination), Is.True);
+            Assert.That(destination.HitResourceSuppression15C, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void EntityRuntimeSnapshot_RoundTripsSuppression()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(3);
+            world.Register(entity);
+            entity.Runtime.HitResourceSuppression15C = 1;
+            var snapshot = new BattleWorldEntityRuntimeSnapshotBuffer(
+                world.MaxRuntimeSlotsForServices);
+
+            Assert.That(snapshot.TryCapture(
+                world.RuntimeSlotTableForModules,
+                StrictDelayedInputBufferEditorTests.CreateIdentity(),
+                19), Is.True);
+            entity.Runtime.Reset();
+            Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
+
+            Assert.That(entity.Runtime.HitResourceSuppression15C, Is.EqualTo(1));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(14));
+        }
+
+        [Test]
+        public void Suppression_ChangesChecksumAndAppearsInFullParity()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            ulong baseline = world.CaptureRuntimeChecksum64(1, null);
+
+            entity.Runtime.HitResourceSuppression15C = 1;
+            ulong changed = world.CaptureRuntimeChecksum64(1, null);
+            string parity = world.CaptureParityFrameSnapshot(1)
+                .ToJson(full: true);
+
+            Assert.That(changed, Is.Not.EqualTo(baseline));
+            Assert.That(parity,
+                Does.Contain("\"hitResourceSuppression15C\":1"));
+        }
+
+        [Test]
+        public void SnapshotAndChecksumSchemas_AdvanceForSuppressionCarrier()
+        {
+            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(14));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(22));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+                Is.EqualTo(25));
+        }
+
+        [Test]
+        public void WarmCopyAndChecksum_DoNotAllocate()
+        {
+            var source = new NTSDEntityRuntime
+            {
+                HitResourceSuppression15C = 1,
+            };
+            var destination = new NTSDEntityRuntime();
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            entity.Runtime.HitResourceSuppression15C = 1;
+            _ = source.TryCopyCanonicalStateTo(destination);
+            _ = world.CaptureRuntimeChecksum64(0, null);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            ulong checksum = 0;
+            for (int index = 0; index < 4096; index++)
+            {
+                source.TryCopyCanonicalStateTo(destination);
+                checksum ^= world.CaptureRuntimeChecksum64(index, null);
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(destination.HitResourceSuppression15C, Is.EqualTo(1));
+            Assert.That(checksum, Is.Not.Zero);
+            Assert.That(allocated, Is.Zero);
+        }
+    }
+}
+#endif

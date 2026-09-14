@@ -1,0 +1,316 @@
+{
+  "manifest": {
+    "schema": "ntsd28-authority-source-capture-build/2.0",
+    "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+    "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+    "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+    "captureRunnerSourceSha256": "C1C6ED27521E62713DB4D61BF691AF5BCAF92401CABE505ABC29DCD145147A8C",
+    "captureBinarySha256": "CFE62A8A52E604765E6DDFDE9E76ACF3A6B7DCEA46F7F40E4A81A184F1E02EC2",
+    "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+    "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q05Trace\\build\\ntsd28_authority_source_capture.exe",
+    "authorityWriteAllowed": false
+  },
+  "sourceFileCount": 75,
+  "sourceFiles": [
+    {
+      "path": "ntsd28_core/include/ntsd28/armor_resolution.h",
+      "sha256": "25becb11dab9c69d1a704c4a2c5c1f060241e574973dde38c23191e08467aa72"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/background_definition.h",
+      "sha256": "d1fec33326a57e1d243f0fc3f1482be00a0b68a1c70b4e45e8d13727e8d8fd00"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/battle_flow.h",
+      "sha256": "1ab92309cc5e9f548d171def9e149bccd98d3b7ffc12678b49d3e3de0f1f9921"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/battle_world.h",
+      "sha256": "8287ec804b928c34711dae4ae6561a924426965e45f921dd5d085f08f093037b"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/collision_geometry.h",
+      "sha256": "c2ce795fed8bdccd9be4e16bf969b9feb02c2de238f902939369665889b5e6fe"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/combat_records.h",
+      "sha256": "b75533bdb48d81ab21b1cea7dbdd014f542c6cef53ff3a94aec3acf1eb18b5a1"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/damage_resolution.h",
+      "sha256": "c4fc791c316bc2cb8c9217683c5af56190e41630fa63e165280ffe051e82a7c4"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/dat_document.h",
+      "sha256": "f98d23a6271c7156b36f0460f68c1090af02f051fb9edff8c1283e001078cbfd"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/dat_parser.h",
+      "sha256": "85600d20198855940a4b9b2afc81126bcf0ec3cee91ebd688797d19c7913dac4"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/defense_resolution.h",
+      "sha256": "6dad6bb061888fe44e6d001a4cbe98f33c9d31b7b0f0dc17b50eb1b25cf31047"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/engine_profile.h",
+      "sha256": "0e684e4f014ebfdb1658c751930f6cb6a5da457b56ee3a48c901f455a280443f"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/frame_machine.h",
+      "sha256": "31431a54a1c6569dfe8e30a1a37cd80f88f9360c6d9d8ab52c9a69fe1ca60dad"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/frame_motion.h",
+      "sha256": "687b3d8d03d2b19ae5a88bcb19a6625afa60b97219f02e29a96913cc184d3be3"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/fusion_catalog.h",
+      "sha256": "a3e858f143124f70e0193af53769a9597f394e59f31b0604afa93aecc7dc11f9"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/hit_candidates.h",
+      "sha256": "67115485624736dfe615def937e0f910b801987074ee8707759119326fba73ec"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/hit_response.h",
+      "sha256": "258eeb00a11075f8687d215385e8c4ffb17177ef9dc40343de499a7d4557bf48"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/input_routing.h",
+      "sha256": "380b7597144dead54d6592dd2d8d7d8883144b2d4a4baebe993112a00da6ed58"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/input_state.h",
+      "sha256": "ac2cd6d7905bd4788c3c86e45312827e6ae7ff6c02108f320ec073931e312b47"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/kind_catalog.h",
+      "sha256": "f1930b7f41cb5a97d642c866fff9189b61098cafa2847e6db617832620978072"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/minibar_catalog.h",
+      "sha256": "a0092d049f6ab7d62b2a9b41c2351c87cfe610dc093dd157527a056ecd193ae7"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/native_ai.h",
+      "sha256": "dfcf326443ed77b1952929892c65f83713fa5abddb111c82d0e957d4c80c2e4b"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/native_combo_hud.h",
+      "sha256": "aa6cc42a8b80ecb00339e7c8ef4d64c2f21be70080d6d3ab205997bd5b5e83ab"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/native_frame_hud.h",
+      "sha256": "bf1783e5369efff1f4a0d5d6e1a1e21955511ec717f1df8cfdf6a031b135d257"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/native_random.h",
+      "sha256": "4776b947299ebc35b0dfead8fdd7d25e655c6fc9f5a36e1b4c129123f22bec47"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/native_resource_catalog.h",
+      "sha256": "148ca4b3d0353e3b6b03e180b47583c03dd4b43a941c3242ff0415b808baf04c"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/object_catalog.h",
+      "sha256": "6f22b0466fb0a4220e2cf451a72eb81de370788b2b09fa48828ca2326adb1905"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/object_spawning.h",
+      "sha256": "4bb251f30100ce58b87c3b9bff81271ec79486c39511decfe2a6a57eb0bedece"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/physics_integrator.h",
+      "sha256": "d083212906ac4e0778d12c84a7fe63c6702f2b700f461cd33860ae5e5cb1d12e"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/render_snapshot.h",
+      "sha256": "9dd044c5b4b77811bb87677b13687e54cc607ed2804e8e18e3a31711848d6473"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/simulation_tick_driver.h",
+      "sha256": "fa21d4ccea117a7cf01d71370fb3b62c6e9e0e702defbafcbc84dfc8787d152a"
+    },
+    {
+      "path": "ntsd28_core/include/ntsd28/system_battle_tables.h",
+      "sha256": "29dffc3a1fcc56ee69a46605634b264fc27b1eb0d0a2dc3b8ff57a212b8d7c0e"
+    },
+    {
+      "path": "ntsd28_core/src/data/dat_document.cpp",
+      "sha256": "e895d1f3f8fa5c0de1a17adf634d972ae86ead4a5db6fc9c17e995f853193c09"
+    },
+    {
+      "path": "ntsd28_core/src/data/dat_parser.cpp",
+      "sha256": "cf5e81b2f353c4c766de91b88a27b62ab3f405e94b1016912491c45abc38c13a"
+    },
+    {
+      "path": "ntsd28_core/src/data/fusion_catalog.cpp",
+      "sha256": "586ae115842b81b5f6d0f5f6d1c2e3e319f33e8447523825307a6828292eaa92"
+    },
+    {
+      "path": "ntsd28_core/src/data/kind_catalog.cpp",
+      "sha256": "8f66035d91fdb8db900316d4d63de52f6a7248643074d26f1ddac4f650edd739"
+    },
+    {
+      "path": "ntsd28_core/src/data/minibar_catalog.cpp",
+      "sha256": "db92de77acbc7afbb54aaf3c7d2fb6346e4b3f145eea658452b8702db27a386a"
+    },
+    {
+      "path": "ntsd28_core/src/data/object_catalog.cpp",
+      "sha256": "790cb69bc390d22fe27ab0c12639fb0171ac4ae176d4924e2f171edf0a9c8cd7"
+    },
+    {
+      "path": "ntsd28_core/src/rendering/background_definition.cpp",
+      "sha256": "65db516894e9eb0d2eb4dd44d84dd5b10648c646cc17daa9a12d654655fe914a"
+    },
+    {
+      "path": "ntsd28_core/src/rendering/native_combo_hud.cpp",
+      "sha256": "a34ce601b134b06a7e2f0027608c745405ae803e27bc9beb0d584335c31ee4dd"
+    },
+    {
+      "path": "ntsd28_core/src/rendering/native_frame_hud.cpp",
+      "sha256": "1beac0e38b7ed12c0c95789db527d471c0a9b362377bd278d8d940bd9669b0a7"
+    },
+    {
+      "path": "ntsd28_core/src/rendering/native_resource_catalog.cpp",
+      "sha256": "3b87b8944d27ae0af8e7b344a2defb28f53896172e95c77ce69dec758d313560"
+    },
+    {
+      "path": "ntsd28_core/src/rendering/render_snapshot.cpp",
+      "sha256": "bc19bbf00c6e75da8d6214b89d873733dd6d2527cac6b4c33479a9ef1aa2aaff"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/armor_resolution.cpp",
+      "sha256": "dca921e78fa78122616c64384bac4b13a1a64d7db4f4714827f57c2c1fc106fd"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/battle_flow.cpp",
+      "sha256": "7bed51e35576e9f0554050778f5153d520b2756f9426477e8ebf2e421f5676af"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/battle_world.cpp",
+      "sha256": "eb37e8ec1186bf0349a3b3b5759666c3a8f44f0e1640c159e06f805189fbccb1"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/collision_geometry.cpp",
+      "sha256": "262b31261ca4747dfbe8117ee365e853b0591fc4aa05edfd7f618cd75206d806"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/combat_records.cpp",
+      "sha256": "070453131ddc189c51988f2169cac1efaf3c223e512a000965d2fd8e11ed5991"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/damage_resolution.cpp",
+      "sha256": "9041e1623e1c48498035304d49c659da4bf220f11f319de7480a4d64f6d95b91"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/defense_resolution.cpp",
+      "sha256": "4291979f14b5d8177760d9579d526381a9a2d023eff693a6eb55787d66deed5e"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/frame_machine.cpp",
+      "sha256": "0a7c312806fda33b106006f151e3ad3223c76d68acb1c65cbab75662dfbc06ff"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/frame_motion.cpp",
+      "sha256": "c83eeb02ebf2e1c9337258f4abedf535470e65cfa6861301affe703fba7499f3"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/hit_candidates.cpp",
+      "sha256": "4168c78a23849eaa17dd749002b89dd335841db6ceca8b04fae8356b10f1b905"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/hit_response.cpp",
+      "sha256": "17597f8c16b3143c11506d8beaebd257c152be057706759b12d316f52879649e"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/input_routing.cpp",
+      "sha256": "b8ef8604c76cbe15d0835144a9012fe2d0151984ceacb7d246eefbb0e64e55c4"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/native_ai.cpp",
+      "sha256": "61ba9b2c32d0dcfcb157d8946b7f0f4fd43b7c0446ee6e6df996e857af665d6e"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/native_random.cpp",
+      "sha256": "32cf43c9f9652f3098e5deeed742862d71750865177c719c01f50d79c737be01"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/object_spawning.cpp",
+      "sha256": "53f49dc676802db67b740510b54aa7ae83e617faeef293f64d55fbd924535888"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/physics_integrator.cpp",
+      "sha256": "c5eeaa493a53a58c8f299e61f2f024d95e0e4502a9c93d3f2e7a7540cf668b9a"
+    },
+    {
+      "path": "ntsd28_core/src/simulation/simulation_tick_driver.cpp",
+      "sha256": "4aa2ca63bdffb0d9c7d2148354c70be8ea28697969ceda2693ebc247a8bc2187"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/audio_backend.h",
+      "sha256": "be22e699f9a97ca02ed28fd93a140dfcdd0710099bbb1b0607bd0c92587b63d0"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/d3d11_renderer.h",
+      "sha256": "53c4b8f6eade1a8d48a0a4ff61a24a55e72db3f6d387f58434bd7e16a24212e3"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/game_session_lfr.h",
+      "sha256": "197c037dc28cd5580a95d9da4d0539f5546aab849dc6567e4019070006b4c696"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/game_session.h",
+      "sha256": "4d1c6284fdf20070d43698a830628682cfc4cd70443034bc1412c7dc6506c7fc"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/lfr_recorder.h",
+      "sha256": "8416d9c7db9cdaa26d8ffbb38b47fd84012f053b8909de6e13b5a6b3d6fd7c35"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/loading_render_snapshot.h",
+      "sha256": "4db6c97710b7cfdc818371935cb685b958368ebbd905afa324aa8d0f3ff3e805"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/native_function_keys.h",
+      "sha256": "0977e918cbfa1aba9225f7d66bea1add6a59e309deee5f7561617427a26476db"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/presentation_interpolation.h",
+      "sha256": "10c2be925abc9cead3384bb409cd545b1858416ed04664a80bc18de319869c25"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/recording_application.h",
+      "sha256": "9971bfafb25bc9d82b812c6c72bf92c45d96bfdda9acd41e56c3d757fbb7166f"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/scenario28.h",
+      "sha256": "69410a2272485fc0b0237c3fec14674c0b58eae8a0b21c6fac33a331a48e6443"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/selection_flow.h",
+      "sha256": "cb93bb134ee68fdaa6558d797c12ac612064e93e05840528abb97dd37db01649"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/selection_render_snapshot.h",
+      "sha256": "cabd48cb6bee606fd3a041947083ebabdab7fa8f2bd491f190e736a6a24afa54"
+    },
+    {
+      "path": "ntsd28_playable/include/ntsd28_playable/win32_input_bindings.h",
+      "sha256": "1a5ac00ed937ba06874036badcc9dca81081ed1502efab90674a13603ff2c862"
+    },
+    {
+      "path": "ntsd28_playable/src/game_session.cpp",
+      "sha256": "9ccb6e12a97fcb9ff95df2fe95bc33f24c0ac32e9f956e41d23e4c14165e4189"
+    },
+    {
+      "path": "ntsd28_playable/src/scenario28.cpp",
+      "sha256": "05fb06ec19fe212c6f464648d365702c394ec63056e7fc02d52820a163bfeb5a"
+    },
+    {
+      "path": "ntsd28_playable/src/selection_flow.cpp",
+      "sha256": "e44b6358a0382f61de9da5d523e37b712ef1707e86b6adf5b2dd97308cdc1aa7"
+    }
+  ]
+}

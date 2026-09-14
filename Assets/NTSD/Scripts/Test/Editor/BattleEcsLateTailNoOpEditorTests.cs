@@ -166,6 +166,8 @@ namespace NTSD.Test
             SimulationWorld world = CreateWorld(forceLegacy: true);
             world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
             CreateCharacter<LF2Character>(world, 801, previousState: 0);
+            world.Runtime.NativeWorldClock.ResourcePhase12 = 1;
+            world.Runtime.NativeWorldClock.ResourcePhase3 = 1;
 
             world.LateEntityUpdateAll(5);
 
@@ -199,7 +201,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void DeadExactCharacter_FailsClosedToAuthorityDeathOpoint()
+        public void DeadExactCharacterDoesNotHaveAnExtraDeathPrelude()
         {
             SimulationWorld world = CreateWorld(forceLegacy: true);
             world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
@@ -209,11 +211,11 @@ namespace NTSD.Test
 
             world.LateEntityUpdateAll(5);
 
-            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.EqualTo(1));
         }
 
         [Test]
-        public void DerivedCharacter_PreservesAllLateCommonVirtualCalls()
+        public void DerivedCharacter_PreservesRemainingLateCommonVirtualCalls()
         {
             SimulationWorld world = CreateWorld(forceLegacy: true);
             world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
@@ -224,11 +226,10 @@ namespace NTSD.Test
 
             Assert.That(world.LastLateStateSpecialNoOpSkipCountForDiagnostics, Is.Zero);
             Assert.That(world.LastLateRecoveryNoOpSkipCountForDiagnostics, Is.Zero);
-            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.Zero);
+            Assert.That(world.LastLateDeathOpointNoOpSkipCountForDiagnostics, Is.EqualTo(1));
             Assert.That(world.LastLateCleanupNoOpSkipCountForDiagnostics, Is.Zero);
             Assert.That(character.StateSpecialCallCount, Is.Zero);
             Assert.That(character.RecoveryCallCount, Is.EqualTo(1));
-            Assert.That(character.DeathOpointCallCount, Is.EqualTo(1));
             Assert.That(character.CleanupCallCount, Is.EqualTo(1));
         }
 
@@ -239,6 +240,8 @@ namespace NTSD.Test
             world.ForceLegacyLateCommonNoOpGatesForDiagnostics = false;
             for (int i = 0; i < 32; i++)
                 CreateCharacter<LF2Character>(world, 900 + i, previousState: 0);
+            world.Runtime.NativeWorldClock.ResourcePhase12 = 1;
+            world.Runtime.NativeWorldClock.ResourcePhase3 = 1;
 
             world.LateEntityUpdateAll(5);
             long before = GC.GetAllocatedBytesForCurrentThread();
@@ -322,7 +325,6 @@ namespace NTSD.Test
             internal int TailCallCount { get; private set; }
             internal int StateSpecialCallCount { get; private set; }
             internal int RecoveryCallCount { get; private set; }
-            internal int DeathOpointCallCount { get; private set; }
             internal int CleanupCallCount { get; private set; }
 
             public override void RunStateSpecialPreCollision()
@@ -335,12 +337,6 @@ namespace NTSD.Test
             {
                 RecoveryCallCount++;
                 base.RunPreCollisionRecoveryPhase(tickIndex);
-            }
-
-            internal override void RunLateDeathOpointPreCleanupPhase()
-            {
-                DeathOpointCallCount++;
-                base.RunLateDeathOpointPreCleanupPhase();
             }
 
             internal override bool TryRunLatePostOpointCleanupPhase()

@@ -1,0 +1,290 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
+using NUnit.Framework;
+using UnityEditor;
+
+namespace NTSD.Test
+{
+    public sealed class NTSD28Q06NativeHpResourceEditorTests
+    {
+        private const string Witness = "artifacts/diagnostics/NTSD28-Q06-NATIVE-HP-RESOURCE-TRANSACTION-001/native-hp.tsv";
+
+        [Test]
+        public void FullHpTransactionMatchesOriginalMemberFunction()
+        {
+            var apply = Resolve();
+            Assert.That(File.Exists(Witness), Is.True);
+            int count = 0;
+            foreach (string line in File.ReadLines(Witness).Skip(1))
+            {
+                int[] v = line.Split('\t').Select(value => int.Parse(value, CultureInfo.InvariantCulture)).ToArray();
+                var entity = new ProbeCharacter { DataType = v[0] };
+                Configure(entity, v[5], v[6], v[7] != 0, v[8]);
+                entity.Health.HP = v[1]; entity.Health.HPBound = v[2]; entity.Health.HP3 = v[3]; entity.Health.PP = v[4];
+                entity.Runtime.WeakTimer12C = v[9];
+                entity.Runtime.EffectiveMaxRegenDouble1A8 = v[10];
+                entity.Runtime.HpRegenDouble1AC = v[11];
+                entity.Runtime.Frame = v[14] == 0 ? 9999 : 0;
+                entity.Runtime.PendingFlushDestroy = v[15] != 0;
+                apply(entity, v[13], v[12]);
+                Assert.That(new[] { entity.Health.HP, entity.Health.HPBound, entity.Health.PP },
+                    Is.EqualTo(new[] { v[16], v[17], v[18] }), "Native HP vector " + count + ": " + line);
+                Assert.That(entity.Health.HP3, Is.EqualTo(v[3]));
+                count++;
+            }
+            Assert.That(count, Is.GreaterThan(3000));
+            TestContext.WriteLine("Original HP vectors compared: " + count);
+        }
+
+        [TestCase(false, 0, 1, 109, 205)]
+        [TestCase(true, 0, 1, 109, 205)]
+        [TestCase(false, 1, 12, 100, 200)]
+        [TestCase(true, 1, 12, 100, 200)]
+        [TestCase(false, 0, 12, 109, 205)]
+        [TestCase(true, 0, 12, 109, 205)]
+        public void BothCallersUseWorldHpPhaseAndIgnoreObsoleteStepWait(bool optimized, int phase, int tick, int hp, int bound)
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 31993 };
+            var wrapper = Configure(entity, 2, 3, true, 7);
+            world.PrepareRuntimeDataCatalogForBattle(new[] { new ObjectDefinition(31993, 0, "hp-fixture.dat") }, _ => wrapper);
+            world.Register(entity);
+            try
+            {
+                world.Runtime.NativeWorldClock.ResourcePhase12 = phase;
+                world.Runtime.NativeWorldClock.ResourcePhase3 = 1;
+                world.Runtime.Flow.BattleStepMode = 1;
+                world.Runtime.Flow.BattleStepGate = 0;
+                entity.Health.HP = 100; entity.Health.HPBound = 200; entity.Health.PP = 100;
+                if (optimized) new BattleEcsCharacterRecoveryPass(world).Execute(entity, tick);
+                else entity.RunPreCollisionRecoveryPhase(tick);
+                Assert.That(entity.Health.HP, Is.EqualTo(hp));
+                Assert.That(entity.Health.HPBound, Is.EqualTo(bound));
+                Assert.That(entity.Health.PP, Is.EqualTo(100));
+            }
+            finally { Stop(world); }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(true, false)]
+        [TestCase(false, true)]
+        [TestCase(true, true)]
+        public void IneligibleEntityCannotEnterIntermediateNegativeEnvironmentTransaction(bool optimized, bool pending)
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 31993 };
+            var wrapper = Configure(entity, 2, 3, true, 7);
+            world.PrepareRuntimeDataCatalogForBattle(new[] { new ObjectDefinition(31993, 0, "hp-eligibility.dat") }, _ => wrapper);
+            world.Register(entity);
+            try
+            {
+                entity.Health.HP = 100; entity.Health.HPBound = 200; entity.Health.PP = 100;
+                entity.Runtime.EnvironmentState320 = -1;
+                entity.Runtime.Frame = pending ? 0 : 7; // Missing in-range frame must not use the cache's empty sentinel.
+                entity.Runtime.PendingFlushDestroy = pending;
+                if (optimized) new BattleEcsCharacterRecoveryPass(world).Execute(entity, 12);
+                else entity.RunPreCollisionRecoveryPhase(12);
+                Assert.That(new[] { entity.Health.HP, entity.Health.HPBound, entity.Health.PP }, Is.EqualTo(new[] { 100, 200, 100 }));
+                Assert.That(entity.Runtime.InputHpConsumedTotal34C, Is.Zero);
+            }
+            finally { Stop(world); }
+        }
+
+        [Test]
+        public void HpReadsCurrentFrameAndDoesNotClampBeforeDisplay()
+        {
+            var apply = Resolve();
+            var entity = new ProbeCharacter();
+            Configure(entity, 4, 0, true, 7);
+            entity.Frame.D = new LF2FrameData { frameId = 55, chp = -100 };
+            entity.Health.HP = 199; entity.Health.HPBound = 200;
+            apply(entity, 0, 1);
+            Assert.That(entity.Health.HP, Is.EqualTo(210));
+            Assert.That(entity.Health.HPBound, Is.EqualTo(202));
+        }
+
+        [Test]
+        public void WarmHpTransactionHasNoAllocations()
+        {
+            var apply = Resolve();
+            var entity = new ProbeCharacter();
+            Configure(entity, 2, 3, true, 7);
+            for (int i = 0; i < 16; i++) { entity.Health.HP = 100; entity.Health.HPBound = 200; apply(entity, 0, 0); }
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int i = 0; i < 128; i++) { entity.Health.HP = 100; entity.Health.HPBound = 200; apply(entity, 0, 0); }
+            Assert.That(GC.GetAllocatedBytesForCurrentThread() - before, Is.Zero);
+        }
+
+        [TestCase(BattleRuntimeProfile.Authority400)]
+        [TestCase(BattleRuntimeProfile.MobileExtended)]
+        public void ActualLoganHurtCharactersMatchNativeDefaultModeThroughTwelveTicks(BattleRuntimeProfile profile)
+        {
+            string[] native = File.ReadAllLines("artifacts/diagnostics/NTSD28-Q06-NATIVE-HP-RESOURCE-TRANSACTION-001/hurt-default-hp12.raw.jsonl");
+            var header = JObject.Parse(native[0]);
+            var observed = new List<object>();
+            NTSD.EditorTools.NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime",
+                NTSD.EditorTools.NTSD28UnityRawCaptureEditor.DefaultScenario, profile, 12, (driver, inputs, identity) =>
+            {
+                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo((string)header["content"]["catalogFingerprint64"]));
+                for (int slot = 0; slot < 2; slot++) driver.World.FindEntityByRuntimeSlotForQuery(slot).Health.HP = 100;
+                for (int tick = 1; tick <= 12; tick++)
+                {
+                    Assert.That(driver.StepOneTick(inputs[tick - 1], true, false), Is.True);
+                    var expected = (JArray)JObject.Parse(native[tick])["entities"];
+                    var hp = new int[2];
+                    for (int slot = 0; slot < 2; slot++)
+                    {
+                        var entity = driver.World.FindEntityByRuntimeSlotForQuery(slot);
+                        hp[slot] = entity.Health.HP;
+                        Assert.That(hp[slot], Is.EqualTo((int)expected[slot]["vitals"]["currentHp"]), "tick=" + tick + " slot=" + slot);
+                        Assert.That(entity.Health.HPBound, Is.EqualTo((int)expected[slot]["vitals"]["effectiveMaxHp"]));
+                        Assert.That(entity.Health.PP, Is.EqualTo((int)expected[slot]["vitals"]["currentMp"]));
+                    }
+                    observed.Add(new { tick, hp });
+                }
+            });
+            File.WriteAllText("artifacts/diagnostics/NTSD28-Q06-NATIVE-HP-RESOURCE-TRANSACTION-001/" + profile + "-hurt-comparison.json",
+                JsonConvert.SerializeObject(observed, Formatting.Indented));
+        }
+
+        private static Action<LF2Entity, int, int> Resolve()
+        {
+            var method = typeof(BattleRecoveryStatusWriter).GetMethod("ApplyHpRecovery", BindingFlags.Static | BindingFlags.NonPublic,
+                null, new[] { typeof(LF2Entity), typeof(int), typeof(int) }, null);
+            Assert.That(method, Is.Not.Null, "Complete immutable-input HP transaction missing.");
+            return (Action<LF2Entity, int, int>)Delegate.CreateDelegate(typeof(Action<LF2Entity, int, int>), method);
+        }
+
+        private static LF2CharacterDataWrapper Configure(LF2Entity entity, int hp, int dhp, bool hasStats, int chp)
+        {
+            var fields = new List<KeyValuePair<string, string>>();
+            if (hasStats)
+            {
+                fields.Add(new KeyValuePair<string, string>("regen_hp", hp.ToString(CultureInfo.InvariantCulture)));
+                fields.Add(new KeyValuePair<string, string>("regen_dhp", dhp.ToString(CultureInfo.InvariantCulture)));
+                fields.Add(new KeyValuePair<string, string>("max_mp", "500"));
+            }
+            var data = new LF2CharacterData { NativeMetadata = new LoganDefinitionMetadata(
+                new LoganDefinitionFieldSet(Array.Empty<KeyValuePair<string, string>>()), new LoganDefinitionFieldSet(fields)) };
+            var frame = new LF2FrameData { frameId = 0, wait = 100, next = 0, chp = chp };
+            data.frames.Add(frame);
+            var wrapper = new LF2CharacterDataWrapper(31993, data);
+            entity.FrameCache.Load(wrapper); entity.Frame.D = frame; entity.Runtime.Frame = 0;
+            return wrapper;
+        }
+
+        private static void Stop(SimulationWorld world)
+        {
+            world.BeginBattleShutdown();
+            Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+        }
+
+        private sealed class ProbeCharacter : LF2Character
+        {
+            internal int DataType;
+            public override int GetCurrentDataObjectTypeForSimulation() => DataType;
+        }
+    }
+
+    [InitializeOnLoad]
+    internal static class NTSD28Q06HpPlayProbe
+    {
+        private const string Request = "Temp/NTSD28_Q06_HpPlay.request";
+        private const string Result = "Temp/NTSD28_Q06_HpPlay.result.json";
+        static NTSD28Q06HpPlayProbe() { EditorApplication.update += Poll; }
+
+        private static void Poll()
+        {
+            if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
+                !File.Exists(Request) || File.ReadAllText(Request).Trim() != "run") return;
+            var driver = SimulationTickDriver.Instance;
+            var world = driver?.World;
+            if (world == null || driver.CurrentTickIndex < 11 || !world.IsBattleSnapshotBoundaryReady) return;
+            if (!driver.IsPaused && world.NativeResourcePhase12 != 11) return;
+            if (!driver.IsPaused) { driver.SetPaused(true); return; }
+            File.WriteAllText(Request, "running");
+            var report = new Report { tickBefore = driver.CurrentTickIndex, objectsBefore = world.ObjectCount };
+            try
+            {
+                LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(0);
+                Assert.That(entity?.Renderer, Is.Not.Null);
+                var metadata = entity.FrameCache.Wrapper.characterData.NativeMetadata;
+                report.hasStats = metadata?.HasStatsRecord == true;
+                Assert.That(metadata?.Stats.Int32OrDefault("regen_hp", 0) ?? 0, Is.Zero);
+                Assert.That(metadata?.Stats.Int32OrDefault("regen_dhp", 0) ?? 0, Is.Zero);
+                Assert.That(entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).chp, Is.Zero);
+                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
+                var saved = world.CreateBattleStateSnapshotBufferForBootstrap();
+                Assert.That(world.TryCaptureBattleStateSnapshot(identity, report.tickBefore, saved), Is.True);
+                var checkInput = new FrameInputSet(report.tickBefore, Array.Empty<SimulationPlayerInput>());
+                string checksum = world.CaptureLockstepChecksumSnapshot(report.tickBefore, checkInput).OverallChecksum;
+                try
+                {
+                    entity.Health.HP = 100; entity.Health.HPBound = 500; entity.Health.HP3 = 500; entity.Health.PP = 200;
+                    entity.Runtime.WeakTimer12C = 0;
+                    entity.Runtime.HpRegenDouble1AC = 0;
+                    entity.Runtime.EffectiveMaxRegenDouble1A8 = 0;
+                    entity.Runtime.EnvironmentState320 = 0;
+                    var frame = new FrameInputSet(report.tickBefore + 1, new[]
+                    {
+                        new SimulationPlayerInput(0, SimulationInputButtons.None),
+                        new SimulationPlayerInput(1, SimulationInputButtons.None),
+                    });
+                    Assert.That(driver.StepOneTick(frame, true, true), Is.True);
+                    report.phaseAfterTick = world.NativeResourcePhase12;
+                    Assert.That(report.phaseAfterTick, Is.Zero);
+                    report.defaultHp = entity.Health.HP;
+                    Assert.That(report.defaultHp, Is.EqualTo(report.hasStats ? 100 : 101));
+                    entity.Health.HP = 100;
+                    BattleRecoveryStatusWriter.ApplyHpRecovery(entity, 0, 0);
+                    report.allowedModeHp = entity.Health.HP;
+                    Assert.That(report.allowedModeHp, Is.EqualTo(101));
+                    entity.Health.HP = 100; entity.Health.PP = 499;
+                    entity.Runtime.WeakTimer12C = 1;
+                    BattleRecoveryStatusWriter.ApplyHpRecovery(entity, 0, 1);
+                    report.weakHp = entity.Health.HP; report.weakMp = entity.Health.PP;
+                    Assert.That(report.weakHp, Is.EqualTo(100));
+                    Assert.That(report.weakMp, Is.EqualTo(500));
+                    entity.Runtime.WeakTimer12C = 0;
+                    entity.Runtime.HpRegenDouble1AC = 1;
+                    BattleRecoveryStatusWriter.ApplyHpRecovery(entity, 0, 0);
+                    report.doubledHp = entity.Health.HP;
+                    Assert.That(report.doubledHp, Is.EqualTo(102));
+                }
+                finally
+                {
+                    Assert.That(driver.TryRestoreBattleStateSnapshot(identity, saved, out var failure), Is.True, failure.ToString());
+                    Assert.That(world.CaptureLockstepChecksumSnapshot(report.tickBefore, checkInput).OverallChecksum, Is.EqualTo(checksum));
+                    report.restored = true;
+                }
+                report.objectsAfter = world.ObjectCount;
+                Assert.That(report.objectsAfter, Is.EqualTo(report.objectsBefore));
+                report.status = "PASS";
+            }
+            catch (Exception error) { report.status = "FAIL"; report.error = error.ToString(); }
+            File.WriteAllText(Result, JsonConvert.SerializeObject(report, Formatting.Indented));
+            File.WriteAllText(Request, "done");
+        }
+
+        private sealed class Report
+        {
+            public string status, error;
+            public string scope = "Real current-content Scene, injected neutral production tick and explicit HP mode/weak/double checks; full World restored. Existing Q05 probe handles ordered cleanup separately.";
+            public int tickBefore, objectsBefore, objectsAfter, phaseAfterTick, defaultHp, allowedModeHp, weakHp, weakMp, doubledHp;
+            public bool hasStats, restored;
+        }
+    }
+}
+#endif

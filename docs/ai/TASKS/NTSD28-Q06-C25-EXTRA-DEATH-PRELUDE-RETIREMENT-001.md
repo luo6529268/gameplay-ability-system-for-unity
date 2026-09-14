@@ -1,0 +1,13 @@
+VERIFIED / EXTRA_DEATH_PRELUDE_REMOVAL_ONLY，6480原源、四配置各3240/64联合全PASS、独立SelfCheck目标及真实HP0-kind2持有C25/4→4 checksum/关闭全0两帧Stopped。完整SelfCheck仍type2落地方向FAIL，整体Q06/总目标不关闭。
+
+
+
+# 退休C25额外死亡前置处理
+
+IN_PROGRESS / TEST_FIRST。准确八脚本：LF2Entity退休RunLateDeathOpointPreCleanupPhase与私有DropHeldObjectForCurrentDatDeath/EnterCurrentDatDeathBounceFrame；LF2Character退休无其它调用者的override和ForceDropHeldWeaponForLateDeathInternal包装（通用ForceReleaseHeldObjectReference保留）；Module退休该生产调用及CanSkipExactCharacterDeathOpoint，保留已有snapshot/profile API和诊断阶段数值，原DeathOpointNoOp计数改为退休区段经过槽位数，不注入规则；SimulationWorld仅移除内部self-check probe的obsolete override，保留原数组9/10列为0表示退休事件，禁止改通用World架构。
+
+三个旧测试文件因钩子移除同步迁移：SelfCheck GT07/CheckLateDeathBounceFrame改实际Late pass验证不强制弹起/不额外释放，不能只改数字而继续调用旧helper；LateTail derived probe移除obsolete hook/计数，保留其余virtual职责；SnapshotBoundary旧事件计数改0但snapshot模式及索引不变。新Editor测试原phase0向量的动作/位置/速度/关系在实际C25后保持，计数/render/resource等额外C25职责不拿两端点假装完整driver；完整source phase1用于保留真实physics/WPoint职责。两帧后端、真实Character/共享当前DAT外壳覆盖，原6480 witness不重写expected。
+
+风险：旧death emitter导致HP0帧0/5/212额外186和丢武器；移除后应由正常hit/physics/WPoint/terminal决定动作和关系。上述真实writer不在本Record内，不修改。无新字段/schema/服务/队列或shutdown阶段，仍用既有明确terminal及有序关闭回收。实体不因单纯HP0被伪造动作，不等于禁止正常死亡反应。
+
+验收：现有state9998 type0 RED48差异保留，新向量先RED；编译0、new/core/weapon/late/snapshot focused、完整SelfCheck新首差异、真实Scene HP0帧/绑定关系存活/快照恢复及关闭全0。资源15/23/26/2/2与raw47/3不改；DAT/图片/Scene/非战斗/Unity-GAS框架/Server/Gen/Plugins不动。回滚仅上述差量且须批准，现有用户改动保留。

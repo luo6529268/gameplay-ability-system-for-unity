@@ -1,0 +1,112 @@
+{
+  "Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs": {
+    "sha256": "4aec055a4e2e0d004912f9fd237ed1fa403cde1c810c5c5d4194855e22d8138c",
+    "addedLines": 3,
+    "removedLines": 0
+  },
+  "Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs": {
+    "sha256": "67093c1c87fac559c63b241efc543768d83c527364d07ee5674d5fed60c8dc7b",
+    "addedLines": 1,
+    "removedLines": 0
+  },
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs": {
+    "sha256": "ed2dd53871a59bc0b56f5616fe4606c7a9ae20a9fb235efbedc587e077380127",
+    "addedLines": 2,
+    "removedLines": 1
+  },
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs": {
+    "sha256": "327ad7562cbaaea77721ce8b2f3d4dae47590de076e4e79708289b44c83d1ef2",
+    "addedLines": 1,
+    "removedLines": 0
+  },
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs": {
+    "sha256": "15fee650ceacb381ce69a245173fef808dff48a6eaf086d01777e65ba4ff2e15",
+    "addedLines": 1,
+    "removedLines": 1
+  },
+  "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs": {
+    "sha256": "3c7eb62218ce1f4767b3ef61b1d565073b5d8dabb0bca795282e628cba1e9393",
+    "addedLines": 1,
+    "removedLines": 1
+  },
+  "Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp": {
+    "sha256": "bc2ee20dbff970c25660ba13f33bde615de0250308692de3f1f2344c9aac4adf",
+    "addedLines": 1,
+    "removedLines": 1
+  },
+  "Tools/NTSD28Parity/TraceContentIdentity.cs": {
+    "sha256": "66cb790cc0a1371cc6e4a237d5443f6c6a10ca43b7e1f2f7737345644ba2aa63",
+    "addedLines": 1,
+    "removedLines": 1
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeSoundLatchEditorTests.cs": {
+    "sha256": "e507926e9d1418e06334c30d678988519d793b884a5614cb325f2c888628aa49",
+    "addedLines": 196,
+    "removedLines": 0
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B4StatusMotionCarrierEditorTests.cs": {
+    "sha256": "a2f997386d805af1e00401aaf0c6fb5439f0f99786ef8336d35d534cca2caf3e",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitResourceSuppressionCarrierEditorTests.cs": {
+    "sha256": "d494f18b011e5312cae3975bc3c17c7be25aa6c6b7be031037534296d350e594",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4SourceCountCarrierEditorTests.cs": {
+    "sha256": "497a968e0e0cd692223ed4f65f9590f92c8fe2c190794101a3ea0bf431118c48",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs": {
+    "sha256": "3233c108ed737d0db7c65d4a7b722ed0fad605ce2c07c11b02e7b17d19ae3487",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs": {
+    "sha256": "fc62c204de7d09c359459f633af138d01d541da000aea6b70f135cf3f66687f7",
+    "addedLines": 2,
+    "removedLines": 2
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FJStateCarrierEditorTests.cs": {
+    "sha256": "8fb215b6f134a41398d040f5d3b6e6d70f1dd53e6bfc7083408c2eb805d7171d",
+    "addedLines": 3,
+    "removedLines": 3
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28C25ResourceDisplayCarrierEditorTests.cs": {
+    "sha256": "855a16cc03dfc8ae3e2872f24e6fef45ddd9500c409020c1124077578c045fc1",
+    "addedLines": 3,
+    "removedLines": 3
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28CollisionYReferenceCarrierEditorTests.cs": {
+    "sha256": "eef7e49a09ed3b82e8d7ca4ae5bee9ad8c5dfb2703a839f53a144e51c57f57d3",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28EnvironmentStateCarrierEditorTests.cs": {
+    "sha256": "0172ed63e0caf049cccda47515cece8deb4cb3538fb60543f9e7b78b3dcc02e3",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs": {
+    "sha256": "ed721eafe6ca6479677eabecc5043eb09420ddfde76ee059f5f49f4cdefc5bbf",
+    "addedLines": 4,
+    "removedLines": 4
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeFunctionKeySessionStateEditorTests.cs": {
+    "sha256": "60322a6080f1e11cf61c3b4cc60c6dbc74b801c51083230a6f74187faecf1f89",
+    "addedLines": 2,
+    "removedLines": 2
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05JointSnapshotVersionEditorTests.cs": {
+    "sha256": "eab448ec88f9ee9b949328fdd070c4a7339d194d49ff861e057c479e9164f0fc",
+    "addedLines": 9,
+    "removedLines": 8
+  },
+  "Assets/NTSD/Scripts/Test/Editor/NTSD28Q05TraceIdentityEditorTests.cs": {
+    "sha256": "5da97c996cb51cccebb6a778592fb111837ca7cc87f8e23544456e7acafcc778",
+    "addedLines": 3,
+    "removedLines": 3
+  }
+}

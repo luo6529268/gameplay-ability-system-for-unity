@@ -1,0 +1,154 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System.Collections;
+using System.IO;
+using System.Reflection;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using UnityEngine;
+
+namespace NTSD.Test
+{
+    public sealed class NTSD28Q05TraceIdentityEditorTests
+    {
+        [Test]
+        public void ConstructorFailureAfterTemporaryPublicationRestoresManagers()
+        {
+            bool ownsData = !GameDataManager.HasInstance;
+            bool ownsAnimation = !CharacterAnimtorManager.HasInstance;
+            var data = GameDataManager.Instance;
+            var animation = CharacterAnimtorManager.Instance;
+            if (ownsData) data.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            if (ownsAnimation) animation.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var configField = typeof(GameDataManager).GetField("cachedConfig", flags);
+            var registryField = typeof(GameDataManager).GetField("objectRegistryIndices", flags);
+            var framesField = typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", flags);
+            object config = configField.GetValue(data), registry = registryField.GetValue(data), frames = framesField.GetValue(animation);
+            object identity = data.PublishedLoganContentIdentity;
+            try
+            {
+                var scope = typeof(NTSD.EditorTools.NTSD28UnityRawCaptureEditor)
+                    .GetNestedType("UnityCurrentDatScope", BindingFlags.NonPublic);
+                var constructor = scope.GetConstructors(BindingFlags.Instance | BindingFlags.Public)[0];
+                // Null requested IDs fail in LoadRequestedConfigs after the temporary publication begins.
+                var error = Assert.Throws<TargetInvocationException>(() => constructor.Invoke(new object[] { null, null }));
+                Assert.That(error.InnerException, Is.InstanceOf<System.ArgumentNullException>());
+                Assert.That(configField.GetValue(data), Is.SameAs(config));
+                Assert.That(registryField.GetValue(data), Is.SameAs(registry));
+                Assert.That(framesField.GetValue(animation), Is.SameAs(frames));
+                Assert.That(data.PublishedLoganContentIdentity, Is.SameAs(identity));
+            }
+            finally
+            {
+                if (ownsAnimation) UnityEngine.Object.DestroyImmediate(animation.gameObject);
+                if (ownsData) UnityEngine.Object.DestroyImmediate(data.gameObject);
+            }
+        }
+
+        [Test]
+        public void FormalLoganCaptureUsesActualInputsAndRestoresExistingManagerReferences()
+        {
+            const string root = "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime";
+            bool ownsData = !GameDataManager.HasInstance;
+            bool ownsAnimation = !CharacterAnimtorManager.HasInstance;
+            var data = GameDataManager.Instance;
+            var animation = CharacterAnimtorManager.Instance;
+            if (ownsData) data.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            if (ownsAnimation) animation.gameObject.hideFlags = HideFlags.HideAndDontSave;
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            var configField = typeof(GameDataManager).GetField("cachedConfig", flags);
+            var objectsField = typeof(GameDataManager).GetField("objectLookup", flags);
+            var registryField = typeof(GameDataManager).GetField("objectRegistryIndices", flags);
+            var framesField = typeof(CharacterAnimtorManager).GetField("TotalCharacterFrameConfig", flags);
+            object config = configField.GetValue(data), objects = objectsField.GetValue(data);
+            object registry = registryField.GetValue(data), frames = framesField.GetValue(animation);
+            string key = data.PublishedVisualContentKey;
+            object published = data.PublishedLoganContentIdentity;
+            try
+            {
+                string output = Path.GetFullPath("Temp/NTSD28Q05Trace/unity-formal.raw.jsonl");
+                NTSD.EditorTools.NTSD28UnityRawCaptureEditor.RunLoganScenarioForTests(root,
+                    NTSD.EditorTools.NTSD28UnityRawCaptureEditor.DefaultScenario, output);
+                var lines = File.ReadAllLines(output);
+                var header = JObject.Parse(lines[0]);
+                var catalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(root));
+                Assert.That((string)header["content"]["rawDefinitionSha256"], Is.EqualTo(catalog.DefinitionFingerprint));
+                Assert.That((string)header["content"]["semanticSha256"], Is.EqualTo(catalog.ContentIdentity.SemanticFingerprint));
+                Assert.That((string)header["content"]["profile"], Is.EqualTo("logan-runtime"));
+                Assert.That((string)header["schema"], Is.EqualTo("ntsd28-unity-raw-capture-v2"));
+                Assert.That(lines.Length, Is.EqualTo((int)header["expectedTickCount"] + 1));
+                var firstTick = JObject.Parse(lines[1]);
+                Assert.That((int)firstTick["entities"][0]["vitals"]["baseMaxMp"], Is.EqualTo(500));
+                Assert.That((int)firstTick["entities"][0]["vitals"]["currentMp"], Is.EqualTo(200));
+                Assert.That(configField.GetValue(data), Is.SameAs(config));
+                Assert.That(objectsField.GetValue(data), Is.SameAs(objects));
+                Assert.That(registryField.GetValue(data), Is.SameAs(registry));
+                Assert.That(framesField.GetValue(animation), Is.SameAs(frames));
+                Assert.That(data.PublishedVisualContentKey, Is.EqualTo(key));
+                Assert.That(data.PublishedLoganContentIdentity, Is.SameAs(published));
+            }
+            finally
+            {
+                if (ownsAnimation) UnityEngine.Object.DestroyImmediate(animation.gameObject);
+                if (ownsData) UnityEngine.Object.DestroyImmediate(data.gameObject);
+            }
+        }
+
+        [TestCase(-1)]
+        [TestCase(0)]
+        [TestCase(37)]
+        public void RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(int value)
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2OtherObject();
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            try
+            {
+                entity.Runtime.ObjectAiExcludedGroupSourceSlot2F8 = value;
+                entity.Runtime.SpawnerSlotIndex = 19;
+                entity.Runtime.OwnerSlotIndex = 21;
+                var capture = JObject.Parse(NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1));
+                JToken field = capture["entities"][0]["combat"]["objectAiExcludedGroupSourceSlot"];
+                Assert.That(field, Is.Not.Null);
+                Assert.That((int)field, Is.EqualTo(value));
+                Assert.That((int)capture["bindingStatus"]["fieldCount"], Is.EqualTo(50));
+                Assert.That((int)capture["bindingStatus"]["verifiedCount"], Is.EqualTo(44));
+                Assert.That((int)capture["bindingStatus"]["missingCount"], Is.EqualTo(6));
+                Assert.That((string)capture["schema"], Is.EqualTo("ntsd28-unity-entity-raw-capture-v2"));
+            }
+            finally
+            {
+                entity.UnregisterFromWorld();
+                entity.Reset();
+            }
+        }
+
+        [Test]
+        public void TraceIdentityUsesFrozenSemanticBytesAndCurrentJointSchemas()
+        {
+            var type = typeof(NTSD.EditorTools.NTSD28UnityRawCaptureEditor).Assembly
+                .GetType("NTSD.EditorTools.NTSD28TraceContentIdentity");
+            Assert.That(type, Is.Not.Null);
+            var method = type.GetMethod("FromLoganRaw", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            var content = (IDictionary)method.Invoke(null, new object[]
+            {
+                "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C"
+            });
+            Assert.That(content["semanticSha256"], Is.EqualTo("DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407"));
+            Assert.That(content["catalogFingerprint64"], Is.EqualTo("3900ECBC509557DB"));
+            Assert.That(content["profile"], Is.EqualTo("logan-runtime"));
+            var schemas = (IDictionary)content["schemas"];
+            Assert.That(schemas["entityRuntime"], Is.EqualTo(14));
+            Assert.That(schemas["aggregate"], Is.EqualTo(22));
+            Assert.That(schemas["checksum"], Is.EqualTo(25));
+            Assert.That(schemas["characterShell"], Is.EqualTo(2));
+            Assert.That(schemas["entityBaseShell"], Is.EqualTo(2));
+        }
+    }
+}
+#endif

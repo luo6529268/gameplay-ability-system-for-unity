@@ -17,7 +17,7 @@ internal static class TraceContentIdentity
     ];
     private static readonly IReadOnlyDictionary<string, int> Schemas = new Dictionary<string, int>
     {
-        ["entityRuntime"] = 13, ["aggregate"] = 21, ["checksum"] = 24,
+        ["entityRuntime"] = 15, ["aggregate"] = 23, ["checksum"] = 26,
         ["characterShell"] = 2, ["entityBaseShell"] = 2,
     };
 

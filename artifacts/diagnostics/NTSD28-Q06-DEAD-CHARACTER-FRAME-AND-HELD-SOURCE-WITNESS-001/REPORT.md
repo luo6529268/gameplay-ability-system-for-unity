@@ -1,0 +1,7 @@
+# 死亡角色帧/持有原函数见证
+
+VERIFIED / SOURCE_MODEL_DIAGNOSTIC_ONLY。单一runner未修改原源码，正式EXE及75源码manifest由build-manifest.json确认。3240个frame/lifecycle端点与3240完整SimulationTickDriver28.step分别输出；绝不把前者称完整C25。动作边界、state0/12/14、HP-1/0/500、ground/air/landing、无持有/轻/重/显式WPoint释放、render0/3全组合。source birth HP500后设置当前HP，模拟已有实体HP变化。
+
+3240frame端点的action/position/motion/active relation及child身份均保持。完整tick有1716次动作变化和384次显式WPoint配置释放，其它关系保持；未逐例归因全部动作变化，不宣称此无ITR场景跑了新hit。原hit_response180/186与physics state12路径已读，其生产职责保留。
+
+6480行stdout重复字节一致，validation.json记录哈希及原消息：2160 dead type0 input suppressed，240 terminal primary remains for native result handling；frame/lifecycle错误检查均通过。源runner6993847C8714FEBEFF171FF406547997EFABCD3EEE9882DB8F589FC37192DE83，binary657B6F879946280F20FA369E5F938FCC577693236CB80CB272708D5D7E6D5184。源模型不替代正式EXE屏幕验收。

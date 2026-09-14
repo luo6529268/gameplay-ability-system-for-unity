@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Legacy-content real Scene, current descriptor state9998 fed to actual SerialTickAll; no shared DAT mutation, checksum restore. Does not certify full input/physics tick or HP0 frame behavior.",
+  "tick": 5,
+  "before": 4,
+  "after": 4,
+  "stateAfterSerial": 9998,
+  "survived": true,
+  "restored": true
+}

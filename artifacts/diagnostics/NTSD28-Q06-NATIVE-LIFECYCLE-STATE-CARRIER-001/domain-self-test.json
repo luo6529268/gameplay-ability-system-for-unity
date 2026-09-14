@@ -1,0 +1,90 @@
+{
+  "schema": "ntsd28-logan-b0-domain-raw-self-test-v1",
+  "passed": true,
+  "cases": [
+    {
+      "name": "descriptor",
+      "expectedStatus": "descriptor-valid",
+      "actualStatus": "descriptor-valid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-valid",
+      "expectedStatus": "valid-b0-domain-raw",
+      "actualStatus": "valid-b0-domain-raw",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "unity-valid",
+      "expectedStatus": "valid-b0-domain-raw",
+      "actualStatus": "valid-b0-domain-raw",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "truncated",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "extra-tick",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "forged-stream-availability",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "input-mask-outside-seven-actions",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "rng-call-delta-forged",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "occupants-not-ascending",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "forged-lifecycle-delta",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "occupant-changed-without-epoch",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "available-stream-null-total",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "reason": null,
+      "passed": true
+    }
+  ]
+}

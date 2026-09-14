@@ -1,0 +1,16 @@
+{
+  "native-vitals.tsv": {
+    "rows": 3716,
+    "sha256": "f1023cfaa48fc456d7c2767d2eed55daf6fa3a68484c05a956c89da354731026",
+    "repeatMatches": true,
+    "exitCode": 0,
+    "stderr": ""
+  },
+  "native-actual.tsv": {
+    "rows": 329,
+    "sha256": "7ed4277f6bc5d8e9843273075d4a455b9f25e70504ef5c7e95a73e60eac53de5",
+    "repeatMatches": true,
+    "exitCode": 0,
+    "stderr": "Skipped oid=0: native ObjectSpawnPlanner28 ignores non-positive opoint oid\r\n"
+  }
+}

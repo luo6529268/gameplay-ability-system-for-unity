@@ -6,20 +6,31 @@ namespace NTSD.Simulation.Ecs
 {
     internal static class BattleRecoveryStatusWriter
     {
+        // GameSession28's unprojected/default mode; Q08 supplies the selected record value.
+        internal const int DefaultSelectedModeMpRegenGate2C = 1;
+        internal const int DefaultSelectedModeHpRegenGate28 = 1;
+
+        internal static bool CanEnterNativeResource(LF2Entity entity)
+        {
+            return entity?.Runtime != null && entity.Health != null &&
+                entity.GetCurrentDataObjectTypeForSimulation() == 0 &&
+                !entity.Runtime.OidMergeDormant && !entity.Runtime.PendingFlushDestroy &&
+                !entity.Runtime.NativeLifecycleResolutionPending &&
+                entity.FrameCache?.HasNativeFrame(entity.Runtime.Frame) == true;
+        }
+
         internal static void ApplyHpRecovery(
             LF2Entity entity,
-            bool periodHp,
-            bool stepWaitGate)
+            int resourcePhase12,
+            int selectedModeDefaultHpRegenGate28)
         {
-            if (!periodHp || stepWaitGate ||
-                entity.Health.HP <= 0 ||
+            // Alignment contract: NTSD28-Q06-NATIVE-HP-RESOURCE-TRANSACTION-001.
+            if (resourcePhase12 != 0 || !CanEnterNativeResource(entity) || entity.Health.HP <= 0 ||
                 entity.Health.HP >= entity.Health.HPBound)
             {
                 return;
             }
 
-            // Alignment contract: NTSD28-B5-RECOVERY-STATUS-CONSUMERS-NO-STATS-001.
-            // C25c consumes these timers before their C25h decrement.
             if (entity.Runtime.WeakTimer12C > 0)
             {
                 if (entity.Health.PP < entity.Health.HP3)
@@ -27,26 +38,108 @@ namespace NTSD.Simulation.Ecs
                 return;
             }
 
-            entity.Health.HP += entity.Runtime.HpRegenDouble1AC > 0 ? 2 : 1;
+            var metadata = entity.FrameCache.Wrapper?.characterData?.NativeMetadata;
+            var stats = metadata?.Stats;
+            int maxRegen = stats?.Int32OrDefault("regen_dhp", 0) ?? 0;
+            if (maxRegen > 0 && maxRegen < 6)
+            {
+                int delta = entity.Runtime.EffectiveMaxRegenDouble1A8 > 0 ? maxRegen * 2 : maxRegen;
+                entity.Health.HPBound = unchecked(entity.Health.HPBound + delta);
+            }
+
+            int hpRegen = stats?.Int32OrDefault("regen_hp", 0) ?? 0;
+            if (hpRegen > 0 && hpRegen < 5)
+            {
+                int delta = entity.Runtime.HpRegenDouble1AC > 0 ? hpRegen * 2 : hpRegen;
+                entity.Health.HP = unchecked(entity.Health.HP + delta);
+            }
+
+            int chp = entity.FrameCache.GetNativeFrameDataById(entity.Runtime.Frame).chp;
+            if (chp != 0)
+            {
+                entity.Health.HP = unchecked(entity.Health.HP + chp);
+                entity.Health.HPBound = unchecked(entity.Health.HPBound + chp / 3);
+            }
+            else if (metadata?.HasStatsRecord != true ||
+                     (hpRegen != -1 && selectedModeDefaultHpRegenGate28 != 1))
+            {
+                entity.Health.HP = unchecked(entity.Health.HP + (entity.Runtime.HpRegenDouble1AC > 0 ? 2 : 1));
+            }
         }
 
-        internal static void ApplyMpRecovery(LF2Entity entity)
+        internal static void ApplyMpRecovery(
+            LF2Entity entity,
+            int resourcePhase3,
+            int selectedModeMpRegenGate2C,
+            bool negativeMpRegenEnabled)
         {
-            if (entity.Runtime.WeakTimer12C > 0)
+            // Alignment contract: NTSD28-Q06-NATIVE-MP-RESOURCE-TRANSACTION-001.
+            if (resourcePhase3 != 0 || !CanEnterNativeResource(entity))
+            {
                 return;
+            }
 
-            int hpForRate = Math.Min(
-                entity.Health.HP,
-                NTSDGlobal.Gameplay.PpRecoverCap);
-            if (entity.ObjectId == 51 || entity.ObjectId == 52)
-                hpForRate /= 2;
+            NTSDEntityRuntime runtime = entity.Runtime;
+            var metadata = entity.FrameCache.Wrapper?.characterData?.NativeMetadata;
+            var stats = metadata?.Stats;
+            int frameCmp = entity.FrameCache.GetNativeFrameDataById(runtime.Frame).cmp;
+            if (frameCmp != 0)
+            {
+                if (runtime.InputDoubleCost19C > 0)
+                    frameCmp >>= 1;
+                entity.Health.PP = unchecked(entity.Health.PP + frameCmp);
+            }
 
-            int delta =
-                ((NTSDGlobal.Gameplay.PpRecoverCap - hpForRate) /
-                 NTSDGlobal.Gameplay.PpRecoverHpRateDivisor) + 1;
-            if (entity.Runtime.MpRegenBonusTimer1A4 > 0)
+            int regen = stats?.Int32OrDefault("regen_mp", 0) ?? 0;
+            int threshold = runtime.OrdinaryCreditGate2F4 == -1 ? 500 : 150;
+            bool thresholdRequired = regen >= 0 || regen < -6;
+            bool boundException = metadata?.HasStatsRecord == true && stats.Int32OrDefault("bound", 0) == 1;
+            if (regen == -1 || (thresholdRequired && entity.Health.PP > threshold) ||
+                (!boundException && runtime.HitStop < 0) || runtime.WeakTimer12C > 0)
+            {
+                return;
+            }
+
+            int basis = Math.Min(entity.Health.HP, 500);
+            switch (regen)
+            {
+                case -2: case 10:
+                    basis = 500;
+                    break;
+                case -3: case 1: case 11:
+                    basis = 375;
+                    break;
+                case -4: case 2: case 12:
+                    basis /= 2;
+                    break;
+                case -5: case 3: case 13:
+                    basis /= 4;
+                    break;
+                case -6: case 4: case 14:
+                    basis /= 8;
+                    break;
+                default:
+                    int objectId = LF2Entity.ResolveCurrentDataObjectId(entity);
+                    if (objectId == 51 || objectId == 52)
+                        basis /= 2;
+                    break;
+            }
+
+            int delta = (500 - basis) / 100 + 1;
+            if (runtime.MpRegenBonusTimer1A4 > 0)
                 delta++;
-            entity.Health.PP += delta;
+            int mp = entity.Health.PP;
+            if (regen >= 0)
+            {
+                if (selectedModeMpRegenGate2C != 1)
+                    mp = unchecked(mp + delta);
+            }
+            else if (regen < -6)
+                mp = unchecked(mp + delta);
+            else if (mp > 0 && negativeMpRegenEnabled)
+                mp = unchecked(mp - delta);
+
+            entity.Health.PP = Math.Min(500, Math.Max(0, mp));
         }
     }
 }

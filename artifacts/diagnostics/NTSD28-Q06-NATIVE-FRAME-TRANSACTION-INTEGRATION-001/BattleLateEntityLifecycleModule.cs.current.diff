@@ -1,0 +1,263 @@
+--- Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs before
++++ Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs current
+@@ -204,6 +204,107 @@
+                         BattleTickDetailPhase.LateEntityFrameTick);
+ 
+                     detailDiagnostics?.BeginPhase(
++                        BattleTickDetailPhase.LateEntityDeathOpoint);
++                    if (obj.Runtime.NativeLifecycleResolutionPending || CanSkipExactCharacterDeathOpoint(obj))
++                    {
++                        LastDeathOpointNoOpSkipCountForDiagnostics++;
++                    }
++                    else
++                    {
++                        obj.RunLateDeathOpointPreCleanupPhase();
++                        if (!world.IsActiveForCurrentPassInternal(obj))
++                        {
++                            detailDiagnostics?.EndPhase(
++                                BattleTickDetailPhase.LateEntityDeathOpoint);
++                            continue;
++                        }
++                    }
++                    if (RuntimeSnapshotModeForDiagnostics ==
++                        BattleLateRuntimeSnapshotMode.LegacyThree)
++                    {
++                        RefreshRuntimeSnapshot(
++                            obj,
++                            BattleLateRuntimeSnapshotStage.DeathOpoint,
++                            detailDiagnostics);
++                    }
++                    detailDiagnostics?.EndPhase(
++                        BattleTickDetailPhase.LateEntityDeathOpoint);
++
++                    detailDiagnostics?.BeginPhase(
++                        BattleTickDetailPhase.LateEntityOpointProcess);
++                    LF2FrameData opointFrame = obj.Frame?.D;
++                    bool frameHasOpoint = !obj.Runtime.NativeLifecycleResolutionPending && opointFrame != null &&
++                        ((opointFrame.opoints != null &&
++                          opointFrame.opoints.Count > 0) ||
++                         opointFrame.opoint.HasValue);
++                    if (frameHasOpoint && !opointFactoryResolved)
++                    {
++                        opointFactory =
++                            world.ResolveLateObjectPointStructuralMaterializerForModule();
++                        opointFactoryResolved = true;
++                        LastOpointFactoryResolveCountForDiagnostics++;
++                    }
++                    bool processedOpoint = false;
++                    if (opointFactory != null && frameHasOpoint)
++                    {
++                        world.StructuralWriter.ProcessLateOpointSegment(
++                            opointFactory,
++                            obj,
++                            tickIndex);
++                        processedOpoint = true;
++                    }
++                    if (processedOpoint &&
++                        !world.IsActiveForCurrentPassInternal(obj))
++                    {
++                        detailDiagnostics?.EndPhase(
++                            BattleTickDetailPhase.LateEntityOpointProcess);
++                        continue;
++                    }
++                    detailDiagnostics?.EndPhase(
++                        BattleTickDetailPhase.LateEntityOpointProcess);
++
++                    int previousActionBeforeCommit = obj.Frame?.Prev ?? 0;
++                    if (obj.RunNativeC25State18BrokenWeaponParticles())
++                    {
++                        FlushQueuedObjectPointTasks(
++                            ref opointFactory,
++                            ref opointFactoryResolved);
++                        if (!world.IsActiveForCurrentPassInternal(obj))
++                            continue;
++                    }
++                    detailDiagnostics?.BeginPhase(
++                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
++                    obj.MirrorLatePrevFrame();
++                    detailDiagnostics?.EndPhase(
++                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
++
++                    detailDiagnostics?.BeginPhase(
++                        BattleTickDetailPhase.LateEntityCleanup);
++                    bool completedLateCleanup;
++                    if (CanSkipExactCharacterCleanup(obj))
++                    {
++                        LastCleanupNoOpSkipCountForDiagnostics++;
++                        completedLateCleanup = false;
++                    }
++                    else
++                    {
++                        completedLateCleanup =
++                            obj.TryRunLatePostOpointCleanupPhase();
++                    }
++                    detailDiagnostics?.EndPhase(
++                        BattleTickDetailPhase.LateEntityCleanup);
++                    if (completedLateCleanup)
++                    {
++                        detailDiagnostics?.BeginPhase(
++                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
++                        FlushQueuedObjectPointTasks(
++                            ref opointFactory,
++                            ref opointFactoryResolved);
++                        detailDiagnostics?.EndPhase(
++                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
++                    }
++
++                    detailDiagnostics?.BeginPhase(
+                         BattleTickDetailPhase.LateEntityFrameExit);
+                     bool exitedLateFrameTick = HandleFrameTickExit(
+                         obj,
+@@ -223,107 +324,7 @@
+                     detailDiagnostics?.EndPhase(
+                         BattleTickDetailPhase.LateEntityFrameExit);
+ 
+-                    detailDiagnostics?.BeginPhase(
+-                        BattleTickDetailPhase.LateEntityDeathOpoint);
+-                    if (CanSkipExactCharacterDeathOpoint(obj))
+-                    {
+-                        LastDeathOpointNoOpSkipCountForDiagnostics++;
+-                    }
+-                    else
+-                    {
+-                        obj.RunLateDeathOpointPreCleanupPhase();
+-                        if (!world.IsActiveForCurrentPassInternal(obj))
+-                        {
+-                            detailDiagnostics?.EndPhase(
+-                                BattleTickDetailPhase.LateEntityDeathOpoint);
+-                            continue;
+-                        }
+-                    }
+-                    if (RuntimeSnapshotModeForDiagnostics ==
+-                        BattleLateRuntimeSnapshotMode.LegacyThree)
+-                    {
+-                        RefreshRuntimeSnapshot(
+-                            obj,
+-                            BattleLateRuntimeSnapshotStage.DeathOpoint,
+-                            detailDiagnostics);
+-                    }
+-                    detailDiagnostics?.EndPhase(
+-                        BattleTickDetailPhase.LateEntityDeathOpoint);
+-
+-                    detailDiagnostics?.BeginPhase(
+-                        BattleTickDetailPhase.LateEntityOpointProcess);
+-                    LF2FrameData opointFrame = obj.Frame?.D;
+-                    bool frameHasOpoint = opointFrame != null &&
+-                        ((opointFrame.opoints != null &&
+-                          opointFrame.opoints.Count > 0) ||
+-                         opointFrame.opoint.HasValue);
+-                    if (frameHasOpoint && !opointFactoryResolved)
+-                    {
+-                        opointFactory =
+-                            world.ResolveLateObjectPointStructuralMaterializerForModule();
+-                        opointFactoryResolved = true;
+-                        LastOpointFactoryResolveCountForDiagnostics++;
+-                    }
+-                    bool processedOpoint = false;
+-                    if (opointFactory != null && frameHasOpoint)
+-                    {
+-                        world.StructuralWriter.ProcessLateOpointSegment(
+-                            opointFactory,
+-                            obj,
+-                            tickIndex);
+-                        processedOpoint = true;
+-                    }
+-                    if (processedOpoint &&
+-                        !world.IsActiveForCurrentPassInternal(obj))
+-                    {
+-                        detailDiagnostics?.EndPhase(
+-                            BattleTickDetailPhase.LateEntityOpointProcess);
+-                        continue;
+-                    }
+-                    detailDiagnostics?.EndPhase(
+-                        BattleTickDetailPhase.LateEntityOpointProcess);
+-
+-                    int previousActionBeforeCommit = obj.Frame?.Prev ?? 0;
+-                    if (obj.RunNativeC25State18BrokenWeaponParticles())
+-                    {
+-                        FlushQueuedObjectPointTasks(
+-                            ref opointFactory,
+-                            ref opointFactoryResolved);
+-                        if (!world.IsActiveForCurrentPassInternal(obj))
+-                            continue;
+-                    }
+-                    detailDiagnostics?.BeginPhase(
+-                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
+-                    obj.MirrorLatePrevFrame();
+-                    detailDiagnostics?.EndPhase(
+-                        BattleTickDetailPhase.LateEntityPrevFrameMirror);
+-
+-                    detailDiagnostics?.BeginPhase(
+-                        BattleTickDetailPhase.LateEntityCleanup);
+-                    bool completedLateCleanup;
+-                    if (CanSkipExactCharacterCleanup(obj))
+-                    {
+-                        LastCleanupNoOpSkipCountForDiagnostics++;
+-                        completedLateCleanup = false;
+-                    }
+-                    else
+-                    {
+-                        completedLateCleanup =
+-                            obj.TryRunLatePostOpointCleanupPhase();
+-                    }
+-                    detailDiagnostics?.EndPhase(
+-                        BattleTickDetailPhase.LateEntityCleanup);
+-                    if (completedLateCleanup)
+-                    {
+-                        detailDiagnostics?.BeginPhase(
+-                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
+-                        FlushQueuedObjectPointTasks(
+-                            ref opointFactory,
+-                            ref opointFactoryResolved);
+-                        detailDiagnostics?.EndPhase(
+-                            BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
+-                        continue;
+-                    }
++
+ 
+                     detailDiagnostics?.BeginPhase(
+                         BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
+@@ -954,36 +955,14 @@
+             LF2Entity entity,
+             BattleTickDetailPhaseDiagnostics diagnostics)
+         {
+-            if (entity?.Frame == null)
++            if (entity?.Runtime?.NativeLifecycleResolutionPending != true)
+                 return false;
+-
+-            int frameId = entity.Frame.N;
+-            int frameGroup = frameId / 100;
+-            if (frameGroup == 11 || frameGroup == 12)
+-            {
+-                entity.HitStun = 1100 - frameId;
+-                entity.DirectWriteFramePreserveWaitCounter(0);
+-                RefreshRuntimeSnapshot(
+-                    entity,
+-                    BattleLateRuntimeSnapshotStage.FrameExit,
+-                    diagnostics);
+-                return true;
+-            }
+-
+-            if (frameId < 0 ||
+-                frameId >= LF2FrameCache.MaxFrameIdExclusive)
+-            {
+-                // Alignment contract: NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001.
+-                if (world.IsActiveForCurrentPassInternal(entity) &&
+-                    entity.Runtime != null && entity.Runtime.LinkState < 0)
+-                    return true;
+-
+-                entity.FreeEntityLikeExe();
+-                return true;
+-            }
+-
+-            return false;
+-        }
++            bool handled = entity.ResolveNativeC25LifecycleForWorldPass();
++            if (world.IsActiveForCurrentPassInternal(entity))
++                RefreshRuntimeSnapshot(entity, BattleLateRuntimeSnapshotStage.FrameExit, diagnostics);
++            return handled;
++        }
++
+     }
+ 
+     internal static class BattleNativeArmorRecoveryKernel

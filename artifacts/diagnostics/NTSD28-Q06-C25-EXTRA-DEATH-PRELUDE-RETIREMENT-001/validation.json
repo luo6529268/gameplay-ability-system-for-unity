@@ -1,0 +1,21 @@
+{
+  "job": "255c8e9414994fa9b027aa492eb4d1ed",
+  "total": 64,
+  "passed": 64,
+  "failed": 0,
+  "durationSeconds": 85.6953489,
+  "classes": {
+    "NTSD.Test.BattleEcsLateTailNoOpEditorTests": 14,
+    "NTSD.Test.LateRuntimeSnapshotBoundaryEditorTests": 16,
+    "NTSD.Test.NTSD28Q06DeadCharacterPreludeEditorTests": 5,
+    "NTSD.Test.NTSD28Q06NativeFrameTransactionEditorTests": 17,
+    "NTSD.Test.NTSD28Q06NativeWeaponPieceEditorTests": 5,
+    "NTSD.Test.NTSD28Q06State9998LifetimeEditorTests": 7
+  },
+  "sourceFrameCases": 3240,
+  "unityConfigurations": 4,
+  "signatureAndRngDifferences": 0,
+  "play": "PASS_HP0_KIND2_C25_4_TO_4_CHECKSUM",
+  "shutdown": "ALL_ZERO_TWO_FRAMES_STOPPED",
+  "fullSelfCheck": "FAIL_EXISTING_TYPE2_LANDING_FACING"
+}

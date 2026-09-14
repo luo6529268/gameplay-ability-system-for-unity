@@ -1,0 +1,126 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using NUnit.Framework;
+
+using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
+
+namespace NTSD.Test.Editor
+{
+    public sealed class NTSD28C23C24WorldClockEditorTests
+    {
+        [Test]
+        public void FullTicks_AdvanceNativeResourcePhasesAndFrameSequenceExactlyOnce()
+        {
+            var world = new SimulationWorld();
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            Assert.That(world.NativeResourcePhase12, Is.Zero);
+            Assert.That(world.NativeResourcePhase3, Is.Zero);
+            Assert.That(world.NativeFrameSequence, Is.Zero);
+
+            tickSystem.RunReleaseTick(1, buildPresentation: false);
+            Assert.That(world.NativeResourcePhase12, Is.EqualTo(1));
+            Assert.That(world.NativeResourcePhase3, Is.EqualTo(1));
+            Assert.That(world.NativeFrameSequence, Is.EqualTo(1UL));
+
+            for (int tick = 2; tick <= 12; tick++)
+                tickSystem.RunReleaseTick(tick, buildPresentation: false);
+
+            Assert.That(world.NativeResourcePhase12, Is.Zero);
+            Assert.That(world.NativeResourcePhase3, Is.Zero);
+            Assert.That(world.NativeFrameSequence, Is.EqualTo(12UL));
+        }
+
+        [Test]
+        public void InputClearPartialTick_DoesNotCommitC23OrC24()
+        {
+            var world = new SimulationWorld();
+            world.SetNeedClearInput(true);
+
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                1,
+                buildPresentation: false);
+
+            Assert.That(world.NativeResourcePhase12, Is.Zero);
+            Assert.That(world.NativeResourcePhase3, Is.Zero);
+            Assert.That(world.NativeFrameSequence, Is.Zero);
+        }
+
+        [Test]
+        public void FullTick_RecordsC23AndC24BeforeC25Skeleton()
+        {
+            var world = new SimulationWorld();
+            BattleTickPhaseDiagnostics diagnostics =
+                world.EnableBattleTickPhaseDiagnosticsForDiagnostics();
+
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                1,
+                buildPresentation: false);
+
+            int boundsIndex = -1;
+            for (int index = 0; diagnostics.TryGetLastPhaseAt(index, out BattleTickPhase phase); index++)
+            {
+                if (phase != BattleTickPhase.PreFrameBounds)
+                    continue;
+                Assert.That(boundsIndex, Is.EqualTo(-1), "The tail must occur once per complete tick.");
+                boundsIndex = index;
+            }
+            Assert.That(boundsIndex, Is.GreaterThanOrEqualTo(0));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 1), Is.EqualTo(BattleTickPhase.FramePostProcess));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 2), Is.EqualTo(BattleTickPhase.NativeResourceTick));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 3), Is.EqualTo(BattleTickPhase.NativeFrameTick));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 4), Is.EqualTo(BattleTickPhase.LateEntityUpdate));
+            Assert.That(PhaseAt(diagnostics, boundsIndex + 5), Is.EqualTo(BattleTickPhase.FrameAdvance));
+            Assert.That(diagnostics.LastPhaseSequenceCount, Is.EqualTo(33));
+        }
+
+        [Test]
+        public void RuntimeReset_ClearsNativeWorldClock()
+        {
+            var runtime = new BattleRuntimeState();
+            runtime.NativeWorldClock.ResourcePhase12 = 7;
+            runtime.NativeWorldClock.ResourcePhase3 = 2;
+            runtime.NativeWorldClock.FrameSequence = 99UL;
+
+            runtime.Reset();
+
+            Assert.That(runtime.NativeWorldClock.ResourcePhase12, Is.Zero);
+            Assert.That(runtime.NativeWorldClock.ResourcePhase3, Is.Zero);
+            Assert.That(runtime.NativeWorldClock.FrameSequence, Is.Zero);
+        }
+
+        [Test]
+        public void CoreSnapshotAndChecksum_CaptureAllNativeClockFields()
+        {
+            var world = new SimulationWorld();
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            ulong before = world.CaptureRuntimeChecksum64(0, null);
+
+            world.Runtime.NativeWorldClock.ResourcePhase12 = 7;
+            world.Runtime.NativeWorldClock.ResourcePhase3 = 2;
+            world.Runtime.NativeWorldClock.FrameSequence = 99UL;
+            var snapshot = new BattleWorldCoreScalarSnapshot(world, identity);
+            ulong after = world.CaptureRuntimeChecksum64(0, null);
+
+            Assert.That(snapshot.NativeClock.ResourcePhase12, Is.EqualTo(7));
+            Assert.That(snapshot.NativeClock.ResourcePhase3, Is.EqualTo(2));
+            Assert.That(snapshot.NativeClock.FrameSequence, Is.EqualTo(99UL));
+            Assert.That(after, Is.Not.EqualTo(before));
+            Assert.That(BattleWorldCoreScalarSnapshot.CurrentSchemaVersion, Is.EqualTo(11));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(22));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(25));
+        }
+
+        private static BattleTickPhase PhaseAt(
+            BattleTickPhaseDiagnostics diagnostics,
+            int index)
+        {
+            Assert.That(
+                diagnostics.TryGetLastPhaseAt(index, out BattleTickPhase phase),
+                Is.True);
+            return phase;
+        }
+    }
+}
+#endif

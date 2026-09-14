@@ -1,0 +1,24 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28B5SpecialHitLatchCarrierEditorTests.cs current
+@@ -60,7 +60,7 @@
+             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
+ 
+             Assert.That(entity.Runtime.SpecialHitLatch0EB, Is.True);
+-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(14));
++            Assert.That(snapshot.SchemaVersion, Is.EqualTo(15));
+         }
+ 
+         [Test]
+@@ -104,9 +104,9 @@
+             Assert.That(destination.SpecialHitLatch0EB, Is.True);
+             Assert.That(checksum, Is.Not.Zero);
+             Assert.That(allocated, Is.Zero);
+-            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(14));
+-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(22));
+-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(25));
++            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(15));
++            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(23));
++            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(26));
+         }
+ 
+         private static SimulationWorld World(out LF2Character entity)

@@ -250,8 +250,8 @@ namespace NTSD.Test.Editor
             ulong after = world.CaptureRuntimeChecksum64(0, null);
 
             Assert.That(BattleWorldCoreScalarSnapshot.CurrentSchemaVersion, Is.EqualTo(11));
-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(21));
-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(24));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(23));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(26));
             Assert.That(snapshot.FunctionKeys.LockState, Is.EqualTo(2));
             Assert.That(snapshot.FunctionKeys.HitResourceEnabled, Is.False);
             Assert.That(snapshot.FunctionKeys.F6EventCount, Is.EqualTo(11U));

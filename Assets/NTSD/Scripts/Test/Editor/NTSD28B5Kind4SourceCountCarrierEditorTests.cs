@@ -61,7 +61,7 @@ namespace NTSD.Test.Editor
             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
 
             Assert.That(entity.Runtime.Kind4SourceCount92, Is.EqualTo(0x9876));
-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(15));
         }
 
         [Test]
@@ -105,9 +105,9 @@ namespace NTSD.Test.Editor
             Assert.That(destination.Kind4SourceCount92, Is.EqualTo(0xFFFF));
             Assert.That(checksum, Is.Not.Zero);
             Assert.That(allocated, Is.Zero);
-            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(13));
-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(21));
-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(24));
+            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(15));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(23));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(26));
         }
 
         private static SimulationWorld World(out LF2Character entity)

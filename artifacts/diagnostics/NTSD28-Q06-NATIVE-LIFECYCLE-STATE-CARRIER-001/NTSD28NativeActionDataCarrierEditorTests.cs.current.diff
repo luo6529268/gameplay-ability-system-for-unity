@@ -1,0 +1,26 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28NativeActionDataCarrierEditorTests.cs current
+@@ -107,7 +107,7 @@
+             Assert.That(entity.Runtime.InputRemapIndices13C, Is.EqualTo(expectedRemap));
+             Assert.That(entity.Runtime.InputRemapIndices13C,
+                 Is.Not.SameAs(expectedRemap));
+-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(14));
++            Assert.That(snapshot.SchemaVersion, Is.EqualTo(15));
+         }
+ 
+         [Test]
+@@ -271,11 +271,11 @@
+         public void SnapshotAndChecksumSchemas_AreNativeActionCarrierVersions()
+         {
+             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(14));
++                Is.EqualTo(15));
+             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+-                Is.EqualTo(22));
++                Is.EqualTo(23));
+             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+-                Is.EqualTo(25));
++                Is.EqualTo(26));
+         }
+ 
+         private static void FillCarriers(NTSDEntityRuntime runtime, int seed)

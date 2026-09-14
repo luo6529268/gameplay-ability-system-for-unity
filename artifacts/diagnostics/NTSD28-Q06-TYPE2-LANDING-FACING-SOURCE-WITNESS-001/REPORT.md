@@ -1,0 +1,9 @@
+# type2落地方向原函数结果
+
+VERIFIED / SOURCE_MODEL_DIAGNOSTIC_ONLY。一个runner调用未修改的BattleWorld28::step_physics及完整SimulationTickDriver28::step，输入是已绑定最终type2 definition，不能据此声明同tick变身时序已验证。
+
+state1000/1002/2000、初始双朝向、vx-8/0/8、vy5/9/9+epsilon/10、Y-1/0/-10、collisionYRef0/-5/3，共648组输入×两个端点=1296行。所有实体存活，原frame/lifecycle错误检查通过、无diagnostic。648对输出的facing完全相同，完整tick没有state2000按vx覆盖物理朝向。
+
+原失败场景：初始right，state2000，Y-1，Vy10，Vx8，reference0，运行时weaponHP20。物理端点及完整tick均frame0、VX4/VY-5、weaponHP19、facingLeft=true；完整tick只是frameCounter从0推进1。物理源码严格Vy>9时翻面，battle_world应用翻面；旧Unity自检期待随后再right不成立。
+
+两次stdout字节一致，validation.json记录hash/原例。正式EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033、75源manifest07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F由构建器核验。runnerCF355F5D471DB1A38C4527A26D6B4C7C3166F59C9A6E9BA35D12D9D9A644DF11，binaryF4C855F25A66F8F871076A86C70C1A04DE8D9F4190F94FB9650ACC32D55F2936。首次runner命名/API实参错误日志保留，修正真实header后构建0。源码/正式EXE未改，诊断不替代画面验收。

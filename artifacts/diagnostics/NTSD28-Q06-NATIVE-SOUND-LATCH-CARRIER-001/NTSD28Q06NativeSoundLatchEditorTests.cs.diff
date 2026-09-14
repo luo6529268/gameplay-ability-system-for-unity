@@ -1,0 +1,199 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeSoundLatchEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeSoundLatchEditorTests.cs after
+@@ -0,0 +1,196 @@
++#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
++using System;
++using System.Reflection;
++using System.IO;
++using Newtonsoft.Json;
++using UnityEditor;
++using NTSD.Animation.LF2Objects;
++using NTSD.Simulation;
++using NTSD.Simulation.Ecs;
++using NUnit.Framework;
++
++namespace NTSD.Test
++{
++    public sealed class NTSD28Q06NativeSoundLatchEditorTests
++    {
++        internal static FieldInfo Field()
++        {
++            var field = typeof(NTSDEntityRuntime).GetField("NativeSoundActionLatch");
++            Assert.That(field, Is.Not.Null, "Original sound_action_latch needs independent recoverable storage.");
++            return field;
++        }
++
++        [Test]
++        public void NewAndResetRuntimeUseNativeMinusOneDefault()
++        {
++            var field = Field();
++            var runtime = new NTSDEntityRuntime();
++            Assert.That(field.GetValue(runtime), Is.EqualTo(-1));
++            field.SetValue(runtime, 998);
++            runtime.Reset();
++            Assert.That(field.GetValue(runtime), Is.EqualTo(-1));
++        }
++
++        [TestCase(-1)]
++        [TestCase(0)]
++        [TestCase(998)]
++        public void CanonicalCopyPreservesIndependentSoundLatch(int action)
++        {
++            var field = Field();
++            var source = new NTSDEntityRuntime { WaitCounter = 17, Frame = 19 };
++            var destination = new NTSDEntityRuntime();
++            field.SetValue(source, action);
++            Assert.That(source.TryCopyCanonicalStateTo(destination), Is.True);
++            Assert.That(field.GetValue(destination), Is.EqualTo(action));
++            Assert.That(destination.WaitCounter, Is.EqualTo(17));
++            Assert.That(destination.Frame, Is.EqualTo(19));
++            long before = GC.GetAllocatedBytesForCurrentThread();
++            for (int index = 0; index < 128; index++) source.TryCopyCanonicalStateTo(destination);
++            Assert.That(GC.GetAllocatedBytesForCurrentThread() - before, Is.Zero);
++        }
++
++        [TestCase(BattleRuntimeProfile.Authority400)]
++        [TestCase(BattleRuntimeProfile.MobileExtended)]
++        public void ClaimedAndRawStateRestoreWithChecksumAndFingerprint(BattleRuntimeProfile profile)
++        {
++            var field = Field();
++            var world = new SimulationWorld(profile, profile == BattleRuntimeProfile.Authority400 ? 400 : 1050);
++            var entity = new LF2Character();
++            entity.SetRequiredRuntimeSlot(3);
++            world.Register(entity);
++            try
++            {
++                int rawSlot = world.RuntimeSlotCapacity - 1;
++                var raw = world.RuntimeSlotTableForModules.GetRawRuntime(rawSlot);
++                string baseline = world.CaptureLockstepChecksumSnapshot(0).OverallChecksum;
++                var fingerprint = BattleRuntimeFingerprint.Compute(entity.Runtime);
++                field.SetValue(entity.Runtime, 857);
++                string claimedOnly = world.CaptureLockstepChecksumSnapshot(0).OverallChecksum;
++                field.SetValue(raw, 998);
++                Assert.That(BattleRuntimeFingerprint.Compute(entity.Runtime), Is.Not.EqualTo(fingerprint));
++                string expected = world.CaptureLockstepChecksumSnapshot(0).OverallChecksum;
++                Assert.That(expected, Is.Not.EqualTo(baseline));
++                Assert.That(expected, Is.Not.EqualTo(claimedOnly), "Raw slot latch must affect the checksum independently.");
++                if (profile == BattleRuntimeProfile.Authority400)
++                    Assert.That(world.CaptureParityFrameSnapshot(0).ToJson(full: true), Does.Contain("\"soundActionLatch\":857"));
++                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
++                var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
++                Assert.That(world.TryCaptureBattleStateSnapshot(identity, 0, snapshot), Is.True);
++                field.SetValue(entity.Runtime, -1);
++                field.SetValue(raw, -1);
++                Assert.That(world.TryRestoreBattleStateSnapshot(identity, snapshot, out var failure), Is.True, failure.ToString());
++                Assert.That(field.GetValue(entity.Runtime), Is.EqualTo(857));
++                Assert.That(field.GetValue(world.RuntimeSlotTableForModules.GetRawRuntime(rawSlot)), Is.EqualTo(998));
++                Assert.That(world.CaptureLockstepChecksumSnapshot(0).OverallChecksum, Is.EqualTo(expected));
++            }
++            finally
++            {
++                world.BeginBattleShutdown();
++                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
++            }
++        }
++
++        [TestCase(false)]
++        [TestCase(true)]
++        public void PreviousPayloadVersionRejectsWithoutWorldMutation(bool entityPayload)
++        {
++            var world = new SimulationWorld();
++            try
++            {
++                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
++                var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
++                Assert.That(world.TryCaptureBattleStateSnapshot(identity, 0, snapshot), Is.True);
++                object payload = entityPayload ? (object)snapshot.EntityRuntime : snapshot;
++                payload.GetType().GetProperty("SchemaVersion").SetValue(payload, entityPayload ? 13 : 21);
++                string before = world.CaptureLockstepChecksumSnapshot(0).OverallChecksum;
++                Assert.That(world.TryRestoreBattleStateSnapshot(identity, snapshot, out _), Is.False);
++                Assert.That(world.CaptureLockstepChecksumSnapshot(0).OverallChecksum, Is.EqualTo(before));
++            }
++            finally
++            {
++                world.BeginBattleShutdown();
++                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
++            }
++        }
++    }
++    [InitializeOnLoad]
++    internal static class NTSD28Q06NativeSoundLatchPlayProbe
++    {
++        private const string Request = "Temp/NTSD28_Q06_NativeSoundLatchPlay.request";
++        private const string Result = "Temp/NTSD28_Q06_NativeSoundLatchPlay.result.json";
++
++        static NTSD28Q06NativeSoundLatchPlayProbe()
++        {
++            EditorApplication.update += Poll;
++        }
++
++        private static void Poll()
++        {
++            if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
++                !File.Exists(Request) || File.ReadAllText(Request).Trim() != "run")
++                return;
++            var driver = SimulationTickDriver.Instance;
++            var world = driver?.World;
++            if (world == null || driver.CurrentTickIndex < 5 || !world.IsBattleSnapshotBoundaryReady)
++                return;
++            if (!driver.IsPaused)
++            {
++                driver.SetPaused(true);
++                return;
++            }
++            File.WriteAllText(Request, "running");
++            var report = new Report { tick = driver.CurrentTickIndex, objectsBefore = world.ObjectCount };
++            try
++            {
++                var entity = world.FindEntityByRuntimeSlotForQuery(0);
++                Assert.That(entity?.Renderer, Is.Not.Null);
++                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
++                var saved = world.CreateBattleStateSnapshotBufferForBootstrap();
++                Assert.That(world.TryCaptureBattleStateSnapshot(identity, report.tick, saved), Is.True);
++                var input = new FrameInputSet(report.tick, Array.Empty<SimulationPlayerInput>());
++                string originalChecksum = world.CaptureLockstepChecksumSnapshot(report.tick, input).OverallChecksum;
++                try
++                {
++                    entity.Runtime.NativeSoundActionLatch = 857;
++                    var modified = world.CreateBattleStateSnapshotBufferForBootstrap();
++                    Assert.That(world.TryCaptureBattleStateSnapshot(identity, report.tick, modified), Is.True);
++                    string modifiedChecksum = world.CaptureLockstepChecksumSnapshot(report.tick, input).OverallChecksum;
++                    entity.Runtime.NativeSoundActionLatch = -1;
++                    Assert.That(driver.TryRestoreBattleStateSnapshot(identity, modified, out var failure), Is.True, failure.ToString());
++                    var restored = world.FindEntityByRuntimeSlotForQuery(0);
++                    Assert.That(restored, Is.SameAs(entity));
++                    Assert.That(restored.Runtime.NativeSoundActionLatch, Is.EqualTo(857));
++                    Assert.That(world.CaptureLockstepChecksumSnapshot(report.tick, input).OverallChecksum, Is.EqualTo(modifiedChecksum));
++                    report.soundLatch = restored.Runtime.NativeSoundActionLatch;
++                    report.frameAction = restored.Frame.N;
++                    report.modifiedChecksumRestored = true;
++                }
++                finally
++                {
++                    Assert.That(driver.TryRestoreBattleStateSnapshot(identity, saved, out var failure), Is.True, failure.ToString());
++                    Assert.That(world.CaptureLockstepChecksumSnapshot(report.tick, input).OverallChecksum, Is.EqualTo(originalChecksum));
++                    report.originalChecksumRestored = true;
++                }
++                report.objectsAfter = world.ObjectCount;
++                Assert.That(report.objectsAfter, Is.EqualTo(report.objectsBefore));
++                report.status = "PASS";
++            }
++            catch (Exception error)
++            {
++                report.status = "FAIL";
++                report.error = error.ToString();
++            }
++            File.WriteAllText(Result, JsonConvert.SerializeObject(report, Formatting.Indented));
++            File.WriteAllText(Request, "done");
++        }
++
++        private sealed class Report
++        {
++            public string status, error;
++            public string scope = "Current-content real Scene paused sound latch carrier restore only; sound producer is not integrated yet.";
++            public int tick, objectsBefore, objectsAfter, soundLatch, frameAction;
++            public bool modifiedChecksumRestored, originalChecksumRestored;
++        }
++    }
++}
++#endif

@@ -1,0 +1,13 @@
+--- Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs before
++++ Assets/NTSD/Scripts/Test/Editor/NTSD28C23C24WorldClockEditorTests.cs current
+@@ -108,8 +108,8 @@
+             Assert.That(snapshot.NativeClock.FrameSequence, Is.EqualTo(99UL));
+             Assert.That(after, Is.Not.EqualTo(before));
+             Assert.That(BattleWorldCoreScalarSnapshot.CurrentSchemaVersion, Is.EqualTo(11));
+-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(22));
+-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(25));
++            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(23));
++            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(26));
+         }
+ 
+         private static BattleTickPhase PhaseAt(

@@ -1,0 +1,134 @@
+{
+  "sameContentIdentity": true,
+  "content": {
+    "catalogFingerprint64": "3900ECBC509557DB",
+    "decodeContract": "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+    "policy": "logan-dat-character-images",
+    "profile": "logan-runtime",
+    "rawDefinitionSha256": "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+    "schemas": {
+      "aggregate": 21,
+      "characterShell": 2,
+      "checksum": 24,
+      "entityBaseShell": 2,
+      "entityRuntime": 13
+    },
+    "scope": "catalog-object-definitions",
+    "semanticSha256": "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407"
+  },
+  "unityHeader": {
+    "bindingStatus": {
+      "candidate": [],
+      "candidateCount": 0,
+      "fieldCount": 50,
+      "missing": [
+        "combat.runtimeStateCode",
+        "combat.platformSourceSlot",
+        "combat.environmentState",
+        "combat.environmentSourceSlot",
+        "lifecycle.resolutionPending",
+        "lifecycle.code"
+      ],
+      "missingCount": 6,
+      "verifiedCount": 44
+    },
+    "certificateEligible": false,
+    "content": {
+      "catalogFingerprint64": "3900ECBC509557DB",
+      "decodeContract": "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+      "policy": "logan-dat-character-images",
+      "profile": "logan-runtime",
+      "rawDefinitionSha256": "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+      "schemas": {
+        "aggregate": 21,
+        "characterShell": 2,
+        "checksum": 24,
+        "entityBaseShell": 2,
+        "entityRuntime": 13
+      },
+      "scope": "catalog-object-definitions",
+      "semanticSha256": "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407"
+    },
+    "evidenceClass": "UNITY_CURRENT_RUNTIME_DIAGNOSTIC_ONLY",
+    "expectedTickCount": 3,
+    "exporterSourceSha256": "44293BA7861183A6B68411A305D5D0EA5200A0D55AB74801935E7D9E990C9B81",
+    "firstCompletedTick": 1,
+    "formalAuthorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+    "kind": "header",
+    "runtimeAssemblySha256": "2F3E9AD0D8BA88739DE00ED7295F782F2E1B0129E40BF78F7B54642F0D1872F9",
+    "scenarioDataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+    "scenarioFileSha256": "D8F9DCC1A95188AE4326BCE40B4FC7BD0B8B567EF0050682FFFE2B583FB04EDF",
+    "scenarioId": "neutral-common-two-entity",
+    "scenarioReferenceExeSha256": "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B",
+    "schema": "ntsd28-unity-raw-capture-v2",
+    "slotCapacity": 400,
+    "unityAssemblySha256": "E06F4E002B4D0DB93B6D26EEA534C2B464186548DF2CD89596D13AC6A7E3FD68"
+  },
+  "nativeHeader": {
+    "kind": "header",
+    "schema": "ntsd28-authority-source-capture-v2",
+    "content": {
+      "policy": "logan-dat-character-images",
+      "scope": "catalog-object-definitions",
+      "profile": "logan-runtime",
+      "rawDefinitionSha256": "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+      "decodeContract": "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+      "semanticSha256": "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407",
+      "catalogFingerprint64": "3900ECBC509557DB",
+      "schemas": {
+        "entityRuntime": 13,
+        "aggregate": 21,
+        "checksum": 24,
+        "characterShell": 2,
+        "entityBaseShell": 2
+      }
+    },
+    "certificateEligible": false,
+    "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+    "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+    "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+    "captureRunnerSourceSha256": "C1C6ED27521E62713DB4D61BF691AF5BCAF92401CABE505ABC29DCD145147A8C",
+    "captureBinarySha256": "CFE62A8A52E604765E6DDFDE9E76ACF3A6B7DCEA46F7F40E4A81A184F1E02EC2",
+    "scenarioReferenceExeSha256": "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B",
+    "scenarioDataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+    "scenarioId": "mode-gate-1.scenario",
+    "firstCompletedTick": 1,
+    "expectedTickCount": 3,
+    "slotCapacity": 1000
+  },
+  "ticks": [
+    {
+      "tick": 1,
+      "nativeMp": [
+        200,
+        200
+      ],
+      "unityMp": [
+        200,
+        200
+      ]
+    },
+    {
+      "tick": 2,
+      "nativeMp": [
+        200,
+        200
+      ],
+      "unityMp": [
+        200,
+        200
+      ]
+    },
+    {
+      "tick": 3,
+      "nativeMp": [
+        200,
+        200
+      ],
+      "unityMp": [
+        201,
+        201
+      ]
+    }
+  ]
+}

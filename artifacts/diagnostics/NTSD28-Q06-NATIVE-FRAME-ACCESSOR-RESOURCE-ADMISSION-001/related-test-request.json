@@ -1,0 +1,26 @@
+{
+  "mode": "EditMode",
+  "testNames": [
+    "NTSD.Test.BattleLockstepSessionEditorTests",
+    "NTSD.Test.BattleStateSnapshotRestoreEditorTests",
+    "NTSD.Test.Editor.NTSD28B5HitDisplayStepProducerEditorTests",
+    "NTSD.Test.Editor.NTSD28B5NegativeEnvironmentRecoveryProductionEditorTests",
+    "NTSD.Test.Editor.NTSD28B5RecoveryStatusConsumerEditorTests",
+    "NTSD.Test.Editor.NTSD28C25FHJTimerOwnerEditorTests",
+    "NTSD.Test.Editor.NTSD28C25ResourceDisplayCarrierEditorTests",
+    "NTSD.Test.NTSD28Q05LoganReplayEditorTests",
+    "NTSD.Test.NTSD28Q05TraceIdentityEditorTests",
+    "NTSD.Test.NTSD28Q06NativeDisplayEditorTests",
+    "NTSD.Test.NTSD28Q06NativeHpResourceEditorTests",
+    "NTSD.Test.NTSD28Q06NativeMpResourceEditorTests",
+    "NTSD.Test.NTSD28Q06SpawnVitalsEditorTests",
+    "NTSD.Test.Editor.NTSD28B5OrdinaryCreditGate2F4CorrectionEditorTests.LogicOpoint_PropagatesExactGateOnlyForType0Children",
+    "NTSD.Test.Editor.NTSD28B6LegacyTrackerRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28B6LegacyGrabbedByRetirementEditorTests",
+    "NTSD.Test.Editor.NTSD28B0OpointOwnerPropagationProductionEditorTests",
+    "NTSD.Test.NTSD28Q06NativeFrameAccessorEditorTests",
+    "NTSD.Test.Editor.NTSD28NativeType0GroundBuiltinsEditorTests.FrameCache_AddressesFormalAuthorityMaximumAndRejectsExclusiveBoundary"
+  ],
+  "includeDetails": false,
+  "includeFailedTests": true
+}

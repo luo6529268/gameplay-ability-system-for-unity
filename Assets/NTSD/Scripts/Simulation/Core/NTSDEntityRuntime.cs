@@ -333,6 +333,10 @@ namespace NTSD.Simulation
         public int RenderPicOffset;
         public int WaitCounter;
         public int FrameWaitCounter;
+        public int NativeSoundActionLatch = -1;
+        public int NativeRuntimeStateCode;
+        public bool NativeLifecycleResolutionPending;
+        public int NativeLifecycleCode;
         public int NextFrame;
         public int AttackingCounter;
         public int FrameDelay;
@@ -965,6 +969,10 @@ namespace NTSD.Simulation
             destination.RenderPicOffset = RenderPicOffset;
             destination.WaitCounter = WaitCounter;
             destination.FrameWaitCounter = FrameWaitCounter;
+            destination.NativeSoundActionLatch = NativeSoundActionLatch;
+            destination.NativeRuntimeStateCode = NativeRuntimeStateCode;
+            destination.NativeLifecycleResolutionPending = NativeLifecycleResolutionPending;
+            destination.NativeLifecycleCode = NativeLifecycleCode;
             destination.NextFrame = NextFrame;
             destination.AttackingCounter = AttackingCounter;
             destination.FrameDelay = FrameDelay;
@@ -1137,6 +1145,10 @@ namespace NTSD.Simulation
             RenderPicOffset = 0;
             WaitCounter = 0;
             FrameWaitCounter = 0;
+            NativeSoundActionLatch = -1;
+            NativeRuntimeStateCode = 0;
+            NativeLifecycleResolutionPending = false;
+            NativeLifecycleCode = 0;
             NextFrame = 0;
             AttackingCounter = 0;
             FrameDelay = 0;

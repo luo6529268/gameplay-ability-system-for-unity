@@ -1,0 +1,139 @@
+{
+  "status": "ORIGINAL_FUNCTION_WITNESS_PASS",
+  "syntheticCases": 157,
+  "formalCases": 3,
+  "syntheticBirths": 762,
+  "formalBirths": 50,
+  "allRepeatedBytesIdentical": true,
+  "syntheticSha256": "ed67465f042450aab3506e6233f4a40ff88496190931be3f35a61cb3fb12d35e",
+  "formalSha256": "e38a95a71414c3324e8fa75f7fd11d87193c22c7d246bbbb77e29a7e3bb484cc",
+  "formalResults": [
+    {
+      "input": {
+        "oid": 151,
+        "type": 2,
+        "weaponHp": -1,
+        "block": 2,
+        "targets": 2,
+        "freeSlots": -1,
+        "pending": 0,
+        "link": 0,
+        "facing": 1,
+        "team": 1,
+        "sourceSlot": 20,
+        "childType": 3,
+        "maxMp": 700,
+        "stats": 1,
+        "seed": 42
+      },
+      "summary": {
+        "success": true,
+        "triggered": true,
+        "builtinRequested": 15,
+        "builtinSpawned": 15,
+        "requested": 7,
+        "spawned": 7,
+        "unresolved": 0,
+        "noSlot": 0,
+        "audioCount": 1,
+        "weaponHp": 0,
+        "pending": true,
+        "code": 1000
+      },
+      "rng": {
+        "crtBefore": 1975929314,
+        "crtAfter": 1975929314,
+        "crtCalls": 0,
+        "syncCalls": 136,
+        "counter": 136,
+        "index": 136,
+        "tableHash": 6106815020719503704
+      }
+    },
+    {
+      "input": {
+        "oid": 150,
+        "type": 2,
+        "weaponHp": -1,
+        "block": 2,
+        "targets": 2,
+        "freeSlots": -1,
+        "pending": 0,
+        "link": 0,
+        "facing": 1,
+        "team": 1,
+        "sourceSlot": 20,
+        "childType": 3,
+        "maxMp": 700,
+        "stats": 1,
+        "seed": 42
+      },
+      "summary": {
+        "success": true,
+        "triggered": true,
+        "builtinRequested": 13,
+        "builtinSpawned": 13,
+        "requested": 7,
+        "spawned": 7,
+        "unresolved": 0,
+        "noSlot": 0,
+        "audioCount": 1,
+        "weaponHp": 0,
+        "pending": true,
+        "code": 1000
+      },
+      "rng": {
+        "crtBefore": 1975929314,
+        "crtAfter": 1975929314,
+        "crtCalls": 0,
+        "syncCalls": 126,
+        "counter": 126,
+        "index": 126,
+        "tableHash": 6106815020719503704
+      }
+    },
+    {
+      "input": {
+        "oid": 124,
+        "type": 4,
+        "weaponHp": -1,
+        "block": 2,
+        "targets": 2,
+        "freeSlots": -1,
+        "pending": 0,
+        "link": 0,
+        "facing": 1,
+        "team": 1,
+        "sourceSlot": 20,
+        "childType": 3,
+        "maxMp": 700,
+        "stats": 1,
+        "seed": 42
+      },
+      "summary": {
+        "success": true,
+        "triggered": true,
+        "builtinRequested": 3,
+        "builtinSpawned": 3,
+        "requested": 5,
+        "spawned": 5,
+        "unresolved": 0,
+        "noSlot": 0,
+        "audioCount": 1,
+        "weaponHp": 0,
+        "pending": true,
+        "code": 1000
+      },
+      "rng": {
+        "crtBefore": 1975929314,
+        "crtAfter": 1975929314,
+        "crtCalls": 0,
+        "syncCalls": 58,
+        "counter": 58,
+        "index": 58,
+        "tableHash": 6106815020719503704
+      }
+    }
+  ],
+  "noSlotRepeatedVariantCalls": 2
+}

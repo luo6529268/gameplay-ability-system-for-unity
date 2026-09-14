@@ -1647,7 +1647,7 @@ namespace NTSD.Simulation.Ecs
                 action);
         }
 
-        private static int AdjustNativeMpCost(
+        internal static int AdjustNativeMpCost(
             LF2Entity character,
             int rawCost)
         {

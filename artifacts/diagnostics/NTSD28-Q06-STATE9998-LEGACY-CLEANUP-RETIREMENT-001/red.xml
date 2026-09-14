@@ -1,0 +1,78 @@
+<test-suite type="TestSuite" id="9325" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7455" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="2.148449" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="17609" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7447" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="2.084152" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="58092" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17610" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7447" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="1.988344" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17618" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="6909" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="1.894311" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11326" name="NTSD28Q06State9998LifetimeEditorTests" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="1.805731" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11334" name="LateAndSerialLifetimeMatchesOriginalDriver" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:22Z" duration="1.720189" total="7" passed="0" failed="7" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11327" name="LateAndSerialLifetimeMatchesOriginalDriver(0)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(0)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="527631404" result="Failed" start-time="2026-09-13 22:18:20Z" end-time="2026-09-13 22:18:21Z" duration="0.568086" asserts="0"><properties /><failure><message><![CDATA[  0/0/0/0/0 tick1 action/state: 186/0
+0/0/0/0/0 tick2 action/state: 186/0
+0/0/0/0/0 tick3 action/state: 186/0
+0/0/0/0/70 tick1 action/state: 186/0
+0/0/0/0/70 tick2 action/state: 186/0
+0/0/0/0/70 tick3 action/state: 186/0
+0/0/0/-20/0 tick1 action/state: 186/0
+0/0/0/-20/0 tick2 action/state: 186/0
+  Expected: <empty>
+  But was:  < "0/0/0/0/0 tick1 action/state: 186/0", "0/0/0/0/0 tick2 action/state: 186/0", "0/0/0/0/0 tick3 action/state: 186/0", "0/0/0/0/70 tick1 action/state: 186/0", "0/0/0/0/70 tick2 action/state: 186/0", "0/0/0/0/70 tick3 action/state: 186/0", "0/0/0/-20/0 tick1 action/state: 186/0", "0/0/0/-20/0 tick2 action/state: 186/0", "0/0/0/-20/0 tick3 action/state: 186/0", "0/0/0/-20/70 tick1 action/state: 186/0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11328" name="LateAndSerialLifetimeMatchesOriginalDriver(1)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(1)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="687561974" result="Failed" start-time="2026-09-13 22:18:21Z" end-time="2026-09-13 22:18:21Z" duration="0.191836" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11329" name="LateAndSerialLifetimeMatchesOriginalDriver(2)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(2)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="1491201465" result="Failed" start-time="2026-09-13 22:18:21Z" end-time="2026-09-13 22:18:21Z" duration="0.142888" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11330" name="LateAndSerialLifetimeMatchesOriginalDriver(3)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(3)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="1700530214" result="Failed" start-time="2026-09-13 22:18:21Z" end-time="2026-09-13 22:18:21Z" duration="0.189580" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11331" name="LateAndSerialLifetimeMatchesOriginalDriver(4)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(4)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="4382745" result="Failed" start-time="2026-09-13 22:18:21Z" end-time="2026-09-13 22:18:22Z" duration="0.185208" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11332" name="LateAndSerialLifetimeMatchesOriginalDriver(5)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(5)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="892874819" result="Failed" start-time="2026-09-13 22:18:22Z" end-time="2026-09-13 22:18:22Z" duration="0.141573" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case><test-case id="11333" name="LateAndSerialLifetimeMatchesOriginalDriver(6)" fullname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver(6)" methodname="LateAndSerialLifetimeMatchesOriginalDriver" classname="NTSD.Test.NTSD28Q06State9998LifetimeEditorTests" runstate="Runnable" seed="311208843" result="Failed" start-time="2026-09-13 22:18:22Z" end-time="2026-09-13 22:18:22Z" duration="0.194625" asserts="0"><properties /><failure><message><![CDATA[  9998/0/0/0/0 tick1 removed; original alive
+9998/0/0/0/70 tick1 removed; original alive
+9998/0/0/-20/0 tick1 removed; original alive
+9998/0/0/-20/70 tick1 removed; original alive
+9998/0/500/0/0 tick1 removed; original alive
+9998/0/500/0/70 tick1 removed; original alive
+9998/0/500/-20/0 tick1 removed; original alive
+9998/0/500/-20/70 tick1 removed; original alive
+  Expected: <empty>
+  But was:  < "9998/0/0/0/0 tick1 removed; original alive", "9998/0/0/0/70 tick1 removed; original alive", "9998/0/0/-20/0 tick1 removed; original alive", "9998/0/0/-20/70 tick1 removed; original alive", "9998/0/500/0/0 tick1 removed; original alive", "9998/0/500/0/70 tick1 removed; original alive", "9998/0/500/-20/0 tick1 removed; original alive", "9998/0/500/-20/70 tick1 removed; original alive", "9998/1/0/0/0 tick1 removed; original alive", "9998/1/0/0/70 tick1 removed; original alive"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9998LifetimeEditorTests.LateAndSerialLifetimeMatchesOriginalDriver (System.Int32 type) [0x00568] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9998LifetimeEditorTests.cs:82
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

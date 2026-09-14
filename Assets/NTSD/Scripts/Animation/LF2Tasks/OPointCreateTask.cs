@@ -51,6 +51,7 @@ namespace NTSD.Animation.LF2Tasks
         public int attackExempt = 0;
         public ReleaseSpawnSemantic releaseSpawnSemantic;
         public bool releaseOpointSpawn;
+        public bool nativeWeaponPieceSpawn;
         public bool inheritParentRelation;
         public bool deferPresentationToNextTick;
         public bool suppressLateFrameTickThisTick;
@@ -94,6 +95,7 @@ namespace NTSD.Animation.LF2Tasks
             attackExempt = 0;
             releaseSpawnSemantic = ReleaseSpawnSemantic.None;
             releaseOpointSpawn = false;
+            nativeWeaponPieceSpawn = false;
             inheritParentRelation = false;
             deferPresentationToNextTick = false;
             suppressLateFrameTickThisTick = false;

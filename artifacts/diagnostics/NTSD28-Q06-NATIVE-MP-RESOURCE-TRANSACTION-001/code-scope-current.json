@@ -1,0 +1,40 @@
+{
+  "records": [
+    "NTSD28-Q06-NATIVE-MP-RESOURCE-TRANSACTION-001",
+    "NTSD28-Q06-DEFAULT-MP-RECOVERY-FIXTURE-CORRECTION-001"
+  ],
+  "paths": [
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+      "sha256": "ecfbbc34622bb974a81402ddb3f2c6a5622724e790642341a28828dc9bb68cee"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterRecoveryPass.cs",
+      "sha256": "b74d72aae86f6fc572e12b6b3587ca024e0fd689eec7d0104c26db7051f51e1c"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "sha256": "c0b22cfc210bd77179dd512d940e7fdd22d86692fac89c49bf779991000d8a49"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeMpResourceEditorTests.cs",
+      "sha256": "ac1def9edeaf1eb1a9d159514a704156e31fdbc186e3d123ed9350ee8e154f51"
+    },
+    {
+      "path": "Tools/NTSD28AuthorityTrace/resource_mp_contract_witness.cpp",
+      "sha256": "15167a902a1c8b018737e554d94fe78f8b6374997a84124675914e700a456749"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5RecoveryStatusConsumerEditorTests.cs",
+      "sha256": "b3c7851a112d3a14e9aa73ea405a7a9ec591fa6075c489077f5aaff44b83db34"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NegativeEnvironmentRecoveryProductionEditorTests.cs",
+      "sha256": "af2b75a27b7f9b518d3dbbe5797d1bd873eb7e7e47a0cc720a1ffe449f6ac175"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "sha256": "cf861193919254afb39ec82e30619530b69150d4e028f4eaa642c203c23a759c"
+    }
+  ]
+}

@@ -1357,24 +1357,10 @@ namespace NTSD.Animation.LF2Objects
             return GetRuntimeYInt() != 0 ? 212 : 0;
         }
 
-        internal override void RunLateDeathOpointPreCleanupPhase()
-        {
-            base.RunLateDeathOpointPreCleanupPhase();
-        }
-
         internal override void RunLateTailBeforePrevFrame()
         {
             _lateRuntimeModule.RunLateCharacterCleanup();
             base.RunLateTailBeforePrevFrame();
-        }
-
-        internal void ForceDropHeldWeaponForLateDeathInternal()
-        {
-            LF2WeaponBase weapon = GetHeldWeaponBaseInternal();
-            if (weapon == null)
-                return;
-
-            ForceReleaseHeldObjectReference(weapon);
         }
 
         public int caught_cpointkind()

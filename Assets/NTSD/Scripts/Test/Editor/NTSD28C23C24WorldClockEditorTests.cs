@@ -108,8 +108,8 @@ namespace NTSD.Test.Editor
             Assert.That(snapshot.NativeClock.FrameSequence, Is.EqualTo(99UL));
             Assert.That(after, Is.Not.EqualTo(before));
             Assert.That(BattleWorldCoreScalarSnapshot.CurrentSchemaVersion, Is.EqualTo(11));
-            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(21));
-            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(24));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion, Is.EqualTo(23));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion, Is.EqualTo(26));
         }
 
         private static BattleTickPhase PhaseAt(

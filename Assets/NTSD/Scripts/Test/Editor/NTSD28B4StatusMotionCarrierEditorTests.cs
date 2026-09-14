@@ -56,7 +56,7 @@ namespace NTSD.Test
             Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
 
             AssertMutated(entity.Runtime);
-            Assert.That(snapshot.SchemaVersion, Is.EqualTo(13));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(15));
         }
 
         [Test]
@@ -107,11 +107,11 @@ namespace NTSD.Test
         public void SnapshotAndChecksumSchemas_AdvanceForStatusMotionCarriers()
         {
             Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(13));
+                Is.EqualTo(15));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(21));
+                Is.EqualTo(23));
             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
-                Is.EqualTo(24));
+                Is.EqualTo(26));
         }
 
         [Test]

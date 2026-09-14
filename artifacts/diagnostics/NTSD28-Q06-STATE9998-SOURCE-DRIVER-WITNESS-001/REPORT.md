@@ -1,0 +1,9 @@
+# state9998 原完整 tick 结果
+
+VERIFIED / SOURCE_MODEL_FULL_DRIVER_DIAGNOSTIC_ONLY。一个runner直接调用未改的SimulationTickDriver28::step：type0..6、state0/9998、初始停留/从0进入、HP0/500、Y0/-20、slot0/70，共224场景，每场景3完整tick，672行全部存活，action/state与输入定义一致。每tick有一个成功frame事件，lifecycle无错误；重复stdout逐字节一致。
+
+48条diagnostic来自HP0角色输入抑制：slot0与slot70各24条，是正常dead type0 input suppressed提示；完整消息保存在native.jsonl。它们不是frame/lifecycle错误。验证与哈希见validation.json，最终manifest为build-manifest-final.json（此前两轮检查输出保留）。最终source E79A6F1530A5483CC855CF2254A5733F0BD055CD2EDD524D28FC4B0B80854EB5，binary50FD756EC82615F9818CBE6EC60F5B483A19B97D469B1F6888270DA90228DC54。
+
+正式EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033及75源码manifest07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F由构建器确认，未改权威文件。构建分别native-build.log/checked/final，进程退出0；Temp/NTSD28Q06State9998Final/state9998_driver_witness.exe复跑。源码见证不代替正式EXE画面/输入验收。
+
+Unity normal pipeline在C25后调用SerialTickAll，其CleanupState9998Entities曾无条件删除frame.state9998；新retirement Record处理此实测差异，保留其它Serial职责。Unity尾部组合测试另有type0 HP0强制186动作差异，不属于该原见证错误，也不能忽略，已建C25-DEAD-CHARACTER-EXTRA-BOUNCE-AUDIT。

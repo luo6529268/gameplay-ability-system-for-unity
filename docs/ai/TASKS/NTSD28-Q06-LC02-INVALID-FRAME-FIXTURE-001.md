@@ -1,0 +1,7 @@
+当前VERIFIED / TEST_FIXTURE_ONLY：最后完整SelfCheck实际已越过此fixture，停在后续GT08；不表示整套SelfCheck通过。完整运行原FAIL及五次请求/结果见父WEAPON-PIECE-TRANSACTION artifacts。
+
+
+
+# LC02失效帧夹具修正
+
+准确单文件FrameLifecycleDestroyProbeSelfCheckEntity构造的两个857阈值改为显式终止动作1000；LC02原不调用DestroyEvent、不发声音、释放slot断言全部保持。857已经是合法隐式零帧，不能再用作invalid夹具。无生产改动或新关闭职责，原FAIL存WEAPON-PIECE-TRANSACTION artifacts。验收完整SelfCheck，失败按下一首差异记录；回滚仅两个赋值且需批准。

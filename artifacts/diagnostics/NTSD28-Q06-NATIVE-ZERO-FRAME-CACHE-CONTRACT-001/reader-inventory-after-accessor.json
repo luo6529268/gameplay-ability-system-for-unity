@@ -1,0 +1,4064 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3386,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3807,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3824,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3833,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(9);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3844,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(16);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 15167,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(182)) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 16963,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "weapon.Frame.D = weapon.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17469,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17626,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(expectedFrame)) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17708,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(10)) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 18083,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21144,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "(authoredFrame.frameId < 0 || authoredFrame.frameId >= LF2FrameCache.MaxFrameIdExclusive))",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21162,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "semanticFrameId >= LF2FrameCache.MaxFrameIdExclusive ||",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21168,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData semanticFrame = frameCache.GetFrameDataById(semanticFrameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21173,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if (nextFrameId >= 0 && nextFrameId < LF2FrameCache.MaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21178,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "for (int frameId = 0; frameId < LF2FrameCache.MaxFrameIdExclusive; frameId++)",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21180,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = frameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21467,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "int maximumFrameId = LF2FrameCache.MaxFrameIdExclusive - 1;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21481,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData legalMissing = cache.GetFrameDataById(450);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21483,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "cache.GetFrameDataById(maximumFrameId) == highFrame &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21484,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "cache.HasFrame(maximumFrameId) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21486,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!cache.HasFrame(450) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21488,
+    "symbols": [
+      "GetFrameDataById",
+      "MaxFrameIdExclusive"
+    ],
+    "code": "cache.GetFrameDataById(LF2FrameCache.MaxFrameIdExclusive) == null &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21489,
+    "symbols": [
+      "HasFrame",
+      "MaxFrameIdExclusive"
+    ],
+    "code": "!cache.HasFrame(LF2FrameCache.MaxFrameIdExclusive) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21490,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "cache.GetFrameDataById(-1) == null,",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21526,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "character.ImmediateFrame(LF2FrameCache.MaxFrameIdExclusive);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21528,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "LF2FrameCache.MaxFrameIdExclusive);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21533,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.Prev2D = character.FrameCache.GetFrameDataById(450);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21557,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData missing = attacker.FrameCache.GetFrameDataById(450);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23440,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!missing.FrameCache.HasFrame(377) && missing.Frame.D.wait == 1 &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23444,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "int outOfRangeFrame = LF2FrameCache.MaxFrameIdExclusive;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23764,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!reusedCharacter.FrameCache.HasFrame(111),",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23773,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!reusedCharacter.FrameCache.HasFrame(111) &&",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 25633,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "deadCharacter.Frame.D = deadCharacter.FrameCache.GetFrameDataById(14);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 25859,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "missing.Frame.D = missing.FrameCache.GetFrameDataById(1);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 27073,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = entity.FrameCache.GetFrameDataById(expectedFrame);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 27830,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 28484,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Expect(self.Frame.D != null && !self.FrameCache.HasFrame(290) && self.Frame.D.wait == 1,",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 29712,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData target271 = naruto.FrameCache.GetFrameDataById(271);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 29715,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "$\"has271={naruto.FrameCache.HasFrame(271)},targetMp={target271?.mp.ToString() ?? \"null\"},\" +",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 32353,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 32724,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33174,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33378,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33392,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33418,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33445,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33474,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33523,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33565,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33622,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33657,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33769,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33803,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33864,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33876,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33922,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33971,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34027,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34050,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34084,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34114,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34145,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(6);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34202,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35207,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35355,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35371,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(lateTargetFrame);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35440,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35477,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "Frame.N = LF2FrameCache.MaxFrameIdExclusive;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35480,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "Runtime.Frame = LF2FrameCache.MaxFrameIdExclusive;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35567,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35624,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35662,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35817,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6638,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if (entity.Frame != null && (entity.Frame.N < 0 || entity.Frame.N >= LF2FrameCache.MaxFrameIdExclusive))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6669,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.N) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6677,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.Prev2) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6839,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData nextFrame = attacker.GetFrameDataById(activeFrame.next);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6854,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int attackerPrevState = attacker.FrameCache?.GetFrameDataById(attacker.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6855,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int targetPrevState = target.FrameCache?.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 15,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "public const int MaxFrameIdExclusive = 857;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 16,
+    "symbols": [
+      "NativeMaxFrameIdExclusive"
+    ],
+    "code": "public const int NativeMaxFrameIdExclusive = 1000;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 23,
+    "symbols": [
+      "NativeMaxFrameIdExclusive"
+    ],
+    "code": "private readonly LF2FrameData[] _frames = new LF2FrameData[NativeMaxFrameIdExclusive];",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 70,
+    "symbols": [
+      "NativeMaxFrameIdExclusive"
+    ],
+    "code": "if ((uint)frameData.frameId < NativeMaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 87,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "public LF2FrameData GetFrameDataById(int frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 89,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if ((uint)frameId >= MaxFrameIdExclusive) return null;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 93,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "public bool HasFrame(int frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 95,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "return (uint)frameId < MaxFrameIdExclusive && _frames[frameId] != null;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 98,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "public LF2FrameData GetNativeFrameDataById(int frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 100,
+    "symbols": [
+      "NativeMaxFrameIdExclusive"
+    ],
+    "code": "if (Wrapper?.characterData == null || (uint)frameId >= NativeMaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 106,
+    "symbols": [
+      "HasNativeFrame"
+    ],
+    "code": "public bool HasNativeFrame(int frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 108,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "return GetNativeFrameDataById(frameId) != null;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 111,
+    "symbols": [
+      "GetFirstFrameByState"
+    ],
+    "code": "public int GetFirstFrameByState(int targetState)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 113,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "for (int i = 0; i < MaxFrameIdExclusive; i++)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 535,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 923,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache?.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 924,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.Prev2D = FrameCache?.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1070,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1076,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (Frame.N == 0 && !_preserveOpointActionZero && !FrameCache.HasFrame(0))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1079,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1084,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1089,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(Frame.Prev2);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterActionResolver.cs",
+    "line": 113,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (_character.HitConfirmEa > 0 && _character.FrameCache.HasFrame(LF2StandardFrames.SuperPunch))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 51,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData currentFrame = victim.GetFrameDataById(currentFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 52,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData futureFrame = victim.GetFrameDataById(currentFrameId + 6);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 397,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData futureFrame = _victim.GetFrameDataById((_victim.Frame?.N ?? 0) + 6);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 570,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame10 = attacker.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 692,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int prevState = _victim.GetFrameDataById(_victim.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 693,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int prev2State = _victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 135,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (_character.FrameCache.HasFrame(targetFrame))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 162,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "var futureFrame = _character.GetFrameDataById((_character.Frame?.N ?? 0) + 6);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 384,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int prevState = _character.GetFrameDataById(_character.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 385,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int prev2State = _character.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 646,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(attacker.Frame?.N ?? 0) ?? attacker.Frame?.D;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 749,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": ": GetFrameDataById(state.FrameDataId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 752,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": ": GetFrameDataById(state.CollisionFrameDataId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1194,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1195,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1224,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "public virtual LF2FrameData GetFrameDataById(int frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1225,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "=> FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3014,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "FrameCache?.HasFrame(LF2StandardFrames.SuperPunch) == true &&",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3086,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "FrameCache?.HasFrame(LF2StandardFrames.HeavyWeaponThw) == true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3692,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3708,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3725,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache?.HasFrame(frameId) == true",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3726,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "? FrameCache.GetFrameDataById(frameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3782,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4293,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame = GetFrameDataById(Frame?.Prev ?? 0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4341,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData prevFrame = GetFrameDataById(previousAction);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4531,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4542,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4629,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(targetFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4653,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4778,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (FrameCache.HasFrame(Frame.Prev2) && Frame.Prev2D != null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4781,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (FrameCache.HasFrame(Frame.N) && Frame.D != null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4807,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(Frame.N);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5163,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "LF2FrameData sourceNextFrame = FrameCache?.HasFrame(sourceNextFrameId) == true",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5164,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "? FrameCache.GetFrameDataById(sourceNextFrameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5176,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "FrameCache?.GetFrameDataById(Frame?.N ?? 0) ??",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5370,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (frameId >= 0 && !FrameCache.HasFrame(frameId) && !sourceFrameMatches)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5375,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": ": FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5394,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": ": FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5418,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5488,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame = FrameCache?.GetFrameDataById(previousFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5578,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if ((Frame?.N ?? -1) >= LF2FrameCache.MaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6388,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6555,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if (frameAfterTransit < 0 || frameAfterTransit >= LF2FrameCache.MaxFrameIdExclusive || Frame?.D == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6594,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 334,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 526,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 528,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 116,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (action == 0 && !task.preserveActionZero && !owner.FrameCache.HasFrame(0))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 122,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "owner.Frame.D = owner.FrameCache.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 123,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "owner.Frame.Prev2D = owner.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 17,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = owner.FrameCache.GetFrameDataById(targetFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 60,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (frameId >= 0 && owner.FrameCache?.HasFrame(frameId) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 65,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "owner.Frame.D = owner.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 236,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 273,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 277,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 457,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "var nextFrame = GetFrameDataById(activeFrame.next);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 788,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 815,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (action == 0 && !FrameCache.HasFrame(0))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 817,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 819,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 498,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 836,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 838,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 842,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 916,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 920,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 66,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (weapon.FrameCache?.HasFrame(wpoint.WeaponAct) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponInteractionResolver.cs",
+    "line": 108,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (character.FrameCache.HasFrame(jumpFrame))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeHealthBarEditorTests.cs",
+    "line": 423,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+    "line": 7071,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiSensingModule.cs",
+    "line": 1676,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2065,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData currentFrame = target.GetFrameDataById(currentFrameId);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2066,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData futureFrame = target.GetFrameDataById(currentFrameId + 6);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2902,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (target.GetFrameDataById(20) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3013,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "attacker.FrameCache.HasFrame(type3Frame) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3035,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(type3Frame) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3083,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (target.GetFrameDataById(targetFrame) == null ||",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3128,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (attacker.GetFrameDataById(attackerResetAction) == null ||",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3129,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(targetResetAction) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3161,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3162,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3177,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(40) == null ||",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3184,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int replacementState = attacker.GetFrameDataById(40).state;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3190,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(20) != null;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3239,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3240,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3262,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetReplacementFrame = target.GetFrameDataById(replacementFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3263,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3282,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (burningEffect && source.GetFrameDataById(203) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3284,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (freezeEffect && source.GetFrameDataById(200) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3289,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "source.GetFrameDataById(resolvedItr.effect - 6000) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3662,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3664,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3753,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int transformedState = attacker.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3794,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int responseState = target.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4013,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(40)?.state == LF2States.ObjectExpanding)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4076,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4337,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (entity.GetFrameDataById(frameId) == null)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4358,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int action = definitionSource?.GetFrameDataById(actionLatch)?.hit_Uj ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4536,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4537,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4797,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(projection.TargetWaitCounter),",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4798,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(projection.TargetPrevFrame));",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4974,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5109,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5286,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5299,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5382,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!attacker.FrameCache.HasFrame(catchingFrame) ||",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5383,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!target.FrameCache.HasFrame(caughtFrame))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5391,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(catchingFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5392,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = target.GetFrameDataById(caughtFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5447,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData targetFrame = target.GetFrameDataById(projection.TargetFrame);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Stores/BattleFrameMotionStore.cs",
+    "line": 393,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 194,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (character.FrameCache?.HasFrame(targetAction) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 202,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(targetAction);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 833,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": ".GetFrameDataById(costAction);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 851,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (character.FrameCache?.HasFrame(action) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 1570,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int rawCost = character.FrameCache?.GetFrameDataById(action)?.mp ?? 0;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 434,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "attacker.FrameCache?.HasFrame(sourceNextFrameId) == true",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 435,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "? attacker.FrameCache.GetFrameDataById(sourceNextFrameId)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 457,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.FrameCache?.GetFrameDataById(attacker.Frame?.N ?? 0) ??",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 151,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData selectedFrame = attacker.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 186,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 214,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData latchedFrame = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 218,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame = target.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1610,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int victimPrev2State = victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1858,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame = victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1863,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame2 = victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1939,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData latchedFrame = entity.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2031,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "attacker.FrameCache.HasFrame(responseAction) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2246,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previousState = victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2248,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "int previous2State = victim.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 66,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "if (held.FrameCache?.HasFrame(holderWPoint.WeaponAct) != true)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 20,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "LF2FrameData attackerCurrentFrame = attacker.FrameCache.HasFrame(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 24,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "LF2FrameData targetCurrentFrame = target.FrameCache.HasFrame(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 37,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.FrameCache.GetFrameDataById(attacker.Frame.Prev);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 39,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.FrameCache.GetFrameDataById(target.Frame.Prev);",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 129,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!attacker.FrameCache.HasFrame(catchingFrame) ||",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 130,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "!victim.FrameCache.HasFrame(caughtFrame))",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 193,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "? target.GetFrameDataById(target.Frame.N)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 18,
+    "symbols": [
+      "HasNativeFrame"
+    ],
+    "code": "entity.FrameCache?.HasNativeFrame(entity.Runtime.Frame) == true;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 56,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "int chp = entity.FrameCache.GetNativeFrameDataById(entity.Runtime.Frame).chp;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 84,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "int frameCmp = entity.FrameCache.GetNativeFrameDataById(runtime.Frame).cmp;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+    "line": 832,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "return localEntity.GetFrameDataById(frameId) != null;",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs",
+    "line": 916,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData previousFrame = entity.GetFrameDataById(",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs",
+    "line": 974,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "frameId >= LF2FrameCache.MaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/Oid5152/BattleOid5152RuntimeModule.cs",
+    "line": 128,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "partnerFrameId >= LF2FrameCache.MaxFrameIdExclusive)",
+    "pathSuggestsTestOrEditor": false,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1786,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0,",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1793,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1999,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiMoveModeSnapshotEditorTests.cs",
+    "line": 346,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiNearestSpecializedFilterEditorTests.cs",
+    "line": 214,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AirRoleNearestEditorTests.cs",
+    "line": 258,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoACandidateEditorTests.cs",
+    "line": 2048,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoACandidateEditorTests.cs",
+    "line": 2096,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoAShadowEditorTests.cs",
+    "line": 607,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoAShadowEditorTests.cs",
+    "line": 646,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyCharacterHitConsumeEditorTests.cs",
+    "line": 211,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyCharacterHitConsumeEditorTests.cs",
+    "line": 216,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyObjectHitConsumeEditorTests.cs",
+    "line": 227,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsLateTailNoOpEditorTests.cs",
+    "line": 291,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1496,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1620,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1693,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.Frame.D = attacker.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4293,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4297,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.Frame.D = target.GetFrameDataById(historyFrame.frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4320,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4369,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.Frame.D = attacker.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 5139,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(40).state = LF2States.ObjectExpanding;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 5533,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "d1Source.GetFrameDataById(replacementFrame).state = replacementPrevState;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7368,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7436,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "weapon.Frame.D = weapon.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7559,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "specialAttack.Frame.D = specialAttack.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleParityTraceEditor.cs",
+    "line": 349,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "if (entity.GetFrameDataById(probe.targetFrame) == null)",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 289,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(1)));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 1245,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 1295,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CollisionSnapshotRuntimeSyncEditorTests.cs",
+    "line": 14,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(77);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/EarlyFrameAdvanceOptimizationEditorTests.cs",
+    "line": 395,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/EarlyFrameAdvanceOptimizationEditorTests.cs",
+    "line": 401,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 537,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 541,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 608,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/GroundRoleNearestEditorTests.cs",
+    "line": 483,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs",
+    "line": 336,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LooseQuadtreeNearestEditorTests.cs",
+    "line": 494,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiSampleProxyTwoPassEditorTests.cs",
+    "line": 232,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5EffectActionOverrideEditorTests.cs",
+    "line": 165,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData latch = target.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitGroupEligibilityAtomicProductionEditorTests.cs",
+    "line": 533,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5InputHpCostCompatSharedTransactionEditorTests.cs",
+    "line": 226,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind0DirectPostEffectActionEditorTests.cs",
+    "line": 29,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(5).state = previousState;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4AtomicProductionIntegrationEditorTests.cs",
+    "line": 610,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+    "line": 198,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SystemTableAttackerTerminalProductionEditorTests.cs",
+    "line": 260,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 50,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData current = attacker.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 53,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(77).dvx = 123;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 54,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(77).dvz = -456;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 55,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(10).dvx = 10;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 56,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(10).dvz = 7;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 79,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ProjectileFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 80,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).hit_Fj = 0;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 81,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(10).dvx = 550;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 82,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(10).dvz = 7;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 97,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ProjectileFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 98,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).hit_Fj = -1;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 122,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData current = attacker.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 126,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(78).dvx = 321;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 148,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 169,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 170,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(40).state = LF2States.ObjectExpanding;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 132,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 133,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 172,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = state;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 173,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = state;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 174,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(5).hit_Uj = attackerAction;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 175,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(6).hit_Uj = targetAction;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 23,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 24,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 25,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(5).hit_Uj = 71;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 26,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(6).hit_Uj = 72;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 121,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 145,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 148,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 161,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData current = target.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WeaponDurabilityAttackingInjuryProductionEditorTests.cs",
+    "line": 181,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WeaponDurabilityAttackingInjuryProductionEditorTests.cs",
+    "line": 205,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchExactConsumerAndAdvanceOrderProductionEditorTests.cs",
+    "line": 482,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchRelationExactFieldsProductionEditorTests.cs",
+    "line": 491,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.cs",
+    "line": 263,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+    "line": 454,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryCaughtActEventProductionEditorTests.cs",
+    "line": 435,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 42,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Assert.That(scope.Child.FrameCache.HasFrame(action), Is.False);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 281,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Require(!child.FrameCache.HasFrame(literal), \"Current OID123 unexpectedly declares action.\");",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 286,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Require(nextChild.FrameCache.HasFrame(nextHolder.Frame.D.PrimaryWeaponPoint.WeaponAct), \"Next-child valid witness unavailable.\");",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C02C03ProductionPlacementEditorTests.cs",
+    "line": 60,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C04FrameMotionProductionOwnerEditorTests.cs",
+    "line": 161,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 164,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 193,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 250,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportProductionEditorTests.cs",
+    "line": 168,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsPlayModeProbeEditor.cs",
+    "line": 142,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsPlayModeProbeEditor.cs",
+    "line": 165,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "observer.Frame.D = observer.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsProductionEditorTests.cs",
+    "line": 174,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalPlacementPlayModeProbeEditor.cs",
+    "line": 181,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalProductionPlacementEditorTests.cs",
+    "line": 163,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementEditorTests.cs",
+    "line": 100,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementPlayModeProbeEditor.cs",
+    "line": 166,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementEditorTests.cs",
+    "line": 155,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementPlayModeProbeEditor.cs",
+    "line": 232,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+    "line": 93,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+    "line": 131,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(5);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementPlayModeProbeEditor.cs",
+    "line": 145,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementPlayModeProbeEditor.cs",
+    "line": 209,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Frame.D = FrameCache.GetFrameDataById(5);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementEditorTests.cs",
+    "line": 81,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementPlayModeProbeEditor.cs",
+    "line": 142,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+    "line": 77,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+    "line": 88,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 87,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "report.initialHasFrame10 = self.FrameCache.HasFrame(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 174,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 183,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionCloneEditorTests.cs",
+    "line": 482,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionClonePlayModeProbeEditor.cs",
+    "line": 244,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FHJTimerOwnerEditorTests.cs",
+    "line": 373,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25GFrameBodyEditorTests.cs",
+    "line": 166,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(action);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25IArmorRecoveryEditorTests.cs",
+    "line": 145,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25LState18ParticleOwnerEditorTests.cs",
+    "line": 128,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25MPreviousActionCommitEditorTests.cs",
+    "line": 115,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25PHealingOwnerEditorTests.cs",
+    "line": 173,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CooldownWriterExtractionEditorTests.cs",
+    "line": 102,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeComboActionTransactionEditorTests.cs",
+    "line": 679,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeDirectHoldDirectionRoutingEditorTests.cs",
+    "line": 380,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frames[0].frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeInputProducerMigrationEditorTests.cs",
+    "line": 295,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0BuiltinProductionIntegrationEditorTests.cs",
+    "line": 303,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 83,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "Assert.That(LF2FrameCache.MaxFrameIdExclusive, Is.EqualTo(857));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 84,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Assert.That(cache.HasFrame(856), Is.True);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 85,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(856), Is.SameAs(maximum));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 86,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Assert.That(cache.HasFrame(857), Is.False);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 87,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(857), Is.Null);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+    "line": 145,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+    "line": 178,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q03GeometryWitnessEditorTests.cs",
+    "line": 88,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 101,
+    "symbols": [
+      "MaxFrameIdExclusive"
+    ],
+    "code": "Assert.That(LF2FrameCache.MaxFrameIdExclusive, Is.EqualTo(857));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 102,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Assert.That(cache.HasFrame(7), Is.False);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 103,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(7).wait, Is.EqualTo(1));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 104,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(7).frameId, Is.Zero);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 105,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(999), Is.Null);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 106,
+    "symbols": [
+      "HasFrame"
+    ],
+    "code": "Assert.That(cache.HasFrame(999), Is.False);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 107,
+    "symbols": [
+      "GetFirstFrameByState"
+    ],
+    "code": "Assert.That(cache.GetFirstFrameByState(14), Is.EqualTo(-1));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 149,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "var method = typeof(LF2FrameCache).GetMethod(\"GetNativeFrameDataById\", BindingFlags.Public | BindingFlags.Instance);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 200,
+    "symbols": [
+      "GetNativeFrameDataById"
+    ],
+    "code": "var native = entity.FrameCache.GetNativeFrameDataById(action);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeFrameAccessorEditorTests.cs",
+    "line": 201,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(entity.FrameCache.GetFrameDataById(action), Is.Null, \"Legacy boundary is preserved.\");",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs",
+    "line": 227,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).chp, Is.Zero);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeMpResourceEditorTests.cs",
+    "line": 204,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).cmp, Is.Zero);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PooledEntityReuseAllocationEditorTests.cs",
+    "line": 74,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "Assert.That(cache.GetFrameDataById(42), Is.SameAs(data.frames[42]));",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PreInteractionNoOpProofEditorTests.cs",
+    "line": 604,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(currentFrame.frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PreInteractionNoOpProofEditorTests.cs",
+    "line": 610,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.FrameCache.GetFrameDataById(currentFrame.frameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 387,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 4953,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 4990,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "entity.FrameCache.GetFrameDataById(collisionFrameId);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/TeamPartitionGroundNearestEditorTests.cs",
+    "line": 373,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/W06CollisionHitResolveWitnessEditorTests.cs",
+    "line": 185,
+    "symbols": [
+      "GetFrameDataById"
+    ],
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "pathSuggestsTestOrEditor": true,
+    "note": "Reference/declaration candidate, not proof of live reachability"
+  }
+]

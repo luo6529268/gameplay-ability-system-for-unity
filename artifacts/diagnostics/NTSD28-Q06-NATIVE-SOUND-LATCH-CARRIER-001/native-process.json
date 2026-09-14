@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Q06SoundLatch\\authority_sound_latch_capture.exe",
+    "--scenario",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28AuthorityTrace\\Scenarios\\neutral-common-two-entity.json",
+    "--output",
+    "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q06-NATIVE-SOUND-LATCH-CARRIER-001\\native-current.raw.jsonl",
+    "--resource-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--complete-vfs-root",
+    "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+    "--authority-source-manifest-sha256",
+    "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+    "--capture-runner-source-sha256",
+    "BC2EE20DBFF970C25660BA13F33BDE615DE0250308692DE3F1F2344C9AAC4ADF",
+    "--capture-binary-sha256",
+    "680E9C7041A8BFA25954EC46B6A5ABE90A79C10944CBFF81CE418B0DCA70BE9B"
+  ],
+  "exitCode": 0,
+  "stdout": "capture_schema=ntsd28-authority-source-capture-v2\ncapture_ticks=3\ndomain_capture=disabled\nb2_input_rng_capture=disabled\nevidence_class=SOURCE_MODEL_DIAGNOSTIC_ONLY\n",
+  "stderr": ""
+}

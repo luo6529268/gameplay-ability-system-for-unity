@@ -1,0 +1,47 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Real current-content Scene, paused resource owners only at injected857/998/999; old frame/input/movement readers are not migrated or exercised as a full high-action tick. Complete World checksum restored.",
+  "tick": 5,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "restored": true,
+  "rows": [
+    {
+      "optimized": false,
+      "action": 857,
+      "hp": 101,
+      "mp": 100
+    },
+    {
+      "optimized": false,
+      "action": 998,
+      "hp": 101,
+      "mp": 100
+    },
+    {
+      "optimized": false,
+      "action": 999,
+      "hp": 100,
+      "mp": 100
+    },
+    {
+      "optimized": true,
+      "action": 857,
+      "hp": 101,
+      "mp": 100
+    },
+    {
+      "optimized": true,
+      "action": 998,
+      "hp": 101,
+      "mp": 100
+    },
+    {
+      "optimized": true,
+      "action": 999,
+      "hp": 100,
+      "mp": 100
+    }
+  ]
+}

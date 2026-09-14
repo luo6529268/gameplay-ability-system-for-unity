@@ -1,0 +1,28 @@
+{
+  "rows": 1550,
+  "phases": {
+    "0": 775,
+    "1": 775
+  },
+  "repeatIdentical": true,
+  "stdoutSha256": "c323d22a51b8d8c4c864eae06278969ab8014f6c1a3cf15b71564463033326b0",
+  "frameErrors": 0,
+  "lifecycleFailures": 0,
+  "diagnosticMessages": 18,
+  "requestedDistribution": {
+    "0": 1164,
+    "7": 242,
+    "1": 144
+  },
+  "selectedSustainedCases": 144,
+  "assertions": 12759,
+  "selectedSeeds": [
+    2,
+    7,
+    12,
+    17,
+    22,
+    24
+  ],
+  "assertionResult": "PASS"
+}

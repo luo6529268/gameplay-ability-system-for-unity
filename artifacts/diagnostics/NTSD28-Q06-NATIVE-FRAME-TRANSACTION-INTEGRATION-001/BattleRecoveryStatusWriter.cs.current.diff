@@ -1,0 +1,10 @@
+--- Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs before
++++ Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs current
+@@ -15,6 +15,7 @@
+             return entity?.Runtime != null && entity.Health != null &&
+                 entity.GetCurrentDataObjectTypeForSimulation() == 0 &&
+                 !entity.Runtime.OidMergeDormant && !entity.Runtime.PendingFlushDestroy &&
++                !entity.Runtime.NativeLifecycleResolutionPending &&
+                 entity.FrameCache?.HasNativeFrame(entity.Runtime.Frame) == true;
+         }
+ 

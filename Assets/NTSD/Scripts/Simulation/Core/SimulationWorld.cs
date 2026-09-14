@@ -1985,6 +1985,16 @@ namespace NTSD.Simulation
             return FindEntityByRuntimeSlotCurrent(runtimeSlot);
         }
 
+        internal LF2Entity FindEntityByRuntimeSlotForNativeDisplay(int runtimeSlot)
+        {
+            LF2Entity entity = FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
+            // Pending destruction still occupies a native slot; retired/unregistered shells do not.
+            return entity?.Runtime != null && !entity.Runtime.OidMergeDormant &&
+                   !_pendingUnregister.Contains(entity)
+                ? entity
+                : null;
+        }
+
         public void GetAllLivingObjects(List<LF2LivingObject> destination) => queryAndLinkModule.GetAllLivingObjects(destination);
 
         public void GetAllEntities(List<LF2Entity> destination) => queryAndLinkModule.GetAllEntities(destination);
@@ -3141,11 +3151,6 @@ namespace NTSD.Simulation
                         BattleTickDetailPhase.FrameAdvanceRuntimeSnapshot);
                 }
 
-                detailDiagnostics?.BeginPhase(
-                    BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
-                CleanupState9998Entities();
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.FrameAdvanceState9998Cleanup);
                 }
             }
             finally
@@ -3177,20 +3182,6 @@ namespace NTSD.Simulation
                     RefreshRuntimeSnapshot(entity);
                 }
             }
-        }
-
-        private void CleanupState9998Entities()
-        {
-            GetActiveEntitiesByRuntimeSlot(_entityScratch);
-            for (int i = 0; i < _entityScratch.Count; i++)
-            {
-                LF2Entity entity = _entityScratch[i];
-                LF2FrameData frame = entity?.Frame?.D;
-                if (frame == null || frame.state != 9998) continue;
-                entity.FreeEntityLikeExe();
-            }
-
-            _entityScratch.Clear();
         }
 
         public void PostFrameAdvanceDeathCleanupAll(int tickIndex) => passPipeline.RunRespawn(tickIndex);
@@ -3549,6 +3540,9 @@ namespace NTSD.Simulation
                 weapon = new LateRuntimeSnapshotWeaponProbe();
                 weapon.BindData();
                 entity = weapon;
+                // This consumer fixture intentionally omits OID999; full fragment births have separate coverage.
+                PrepareRuntimeDataCatalogForBattle(
+                    new[] { new ObjectDefinition(100, 1, "snapshot-depleted.dat") }, _ => weapon.FrameCache.Wrapper);
             }
             else
             {
@@ -3565,6 +3559,8 @@ namespace NTSD.Simulation
             {
                 int exitFrame = mode == 4 ? 1100 : 1200;
                 entity.WriteCurrentFrameId(exitFrame);
+                entity.Runtime.NativeLifecycleResolutionPending = true;
+                entity.Runtime.NativeLifecycleCode = exitFrame;
             }
 
             BattleTickDetailPhaseDiagnostics diagnostics =
@@ -3589,8 +3585,8 @@ namespace NTSD.Simulation
                 probe?.RecoveryCount ?? 0,
                 probe?.FrameTickCount ?? 0,
                 probe?.FrameTickObservedHp ?? 0,
-                probe?.DeathOpointCount ?? 0,
-                probe?.DeathOpointObservedHp ?? 0,
+                0, // Reserved retired death-prelude count.
+                0, // Reserved retired death-prelude observation.
                 probe?.CleanupCount ?? 0,
                 probe?.TailCount ?? 0,
                 ObjectCount,
@@ -3611,8 +3607,6 @@ namespace NTSD.Simulation
             internal int RecoveryCount { get; private set; }
             internal int FrameTickCount { get; private set; }
             internal int FrameTickObservedHp { get; private set; }
-            internal int DeathOpointCount { get; private set; }
-            internal int DeathOpointObservedHp { get; private set; }
             internal int CleanupCount { get; private set; }
             internal int TailCount { get; private set; }
             public override LF2ObjectType ObjectTypeEnum =>
@@ -3671,15 +3665,14 @@ namespace NTSD.Simulation
                 FrameTickObservedHp = Runtime.HP;
             }
 
-            internal override void RunLateDeathOpointPreCleanupPhase()
-            {
-                DeathOpointCount++;
-                DeathOpointObservedHp = Runtime.HP;
-            }
-
             internal override bool TryRunLatePostOpointCleanupPhase()
             {
                 CleanupCount++;
+                if (cleanupCompleted)
+                {
+                    Runtime.NativeLifecycleResolutionPending = true;
+                    Runtime.NativeLifecycleCode = 1000;
+                }
                 return cleanupCompleted;
             }
 
@@ -3744,7 +3737,7 @@ namespace NTSD.Simulation
             internal override bool TryRunLatePostOpointCleanupPhase()
             {
                 bool completed = base.TryRunLatePostOpointCleanupPhase();
-                PendingDestroyObserved |= Runtime.PendingFlushDestroy;
+                PendingDestroyObserved |= Runtime.NativeLifecycleResolutionPending && Runtime.NativeLifecycleCode == 1000;
                 return completed;
             }
         }

@@ -1,0 +1,23 @@
+{
+  "nativeCases": 224,
+  "nativeTicks": 672,
+  "nativeAlive": 672,
+  "unityCases": 224,
+  "remainingRemovedDifferences": 0,
+  "remainingActionDifferences": 48,
+  "remainingClass": "type0 HP0 C25 beforeSerial=186",
+  "jointTests": {
+    "passed": 28,
+    "total": 29,
+    "job": "561f7edb42924dd08bf739b959c2ba44"
+  },
+  "finalFocused": {
+    "passed": 6,
+    "total": 7,
+    "job": "6084c11db97e4ff1a186d3633c64d774"
+  },
+  "play": "PASS_CURRENT_DESCRIPTOR_SERIAL_READER",
+  "restore": "CHECKSUM_PASS_4_TO_4",
+  "shutdown": "ALL_ZERO_TWO_FRAMES_STOPPED",
+  "selfCheck": "FAIL_TRANSFORMED_TYPE2_LANDING_DIRECTION"
+}

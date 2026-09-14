@@ -98,10 +98,15 @@ namespace NTSD.Simulation.Ecs
             }
 
             exactCharacterCount++;
+            if (!BattleRecoveryStatusWriter.CanEnterNativeResource(entity))
+            {
+                provenNoOpCount++;
+                return BattleEcsCharacterRecoveryResult.ProvenNoOp;
+            }
             bool periodHp =
-                tickIndex % NTSDGlobal.Gameplay.HpRecoverPeriod == 0;
+                world.NativeResourcePhase12 == 0;
             bool periodPp =
-                tickIndex % NTSDGlobal.Gameplay.PpRecoverPeriod == 0;
+                world.NativeResourcePhase3 == 0;
             bool nativeNegativeEnvironment =
                 BattleNegativeEnvironmentRecoveryWriter.IsEligible(
                     world,
@@ -121,28 +126,19 @@ namespace NTSD.Simulation.Ecs
             bool periodHp,
             bool periodPp)
         {
-            BattleFlowRuntimeState flow = world.Runtime?.Flow;
-            bool stepWaitGate =
-                flow != null &&
-                flow.BattleStepMode == 1 &&
-                flow.BattleStepGate != 1;
-
-            BattleRecoveryStatusWriter.ApplyHpRecovery(entity, periodHp, stepWaitGate);
+            if (periodHp)
+                BattleRecoveryStatusWriter.ApplyHpRecovery(entity, world.NativeResourcePhase12,
+                    BattleRecoveryStatusWriter.DefaultSelectedModeHpRegenGate28);
 
             // Alignment contract: NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001.
             BattleNegativeEnvironmentRecoveryWriter.Apply(world, entity);
 
-            if (!periodPp ||
-                (entity.Runtime.OrdinaryCreditGate2F4 != -1 &&
-                 entity.Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit) ||
-                entity.Health.PP >= NTSDGlobal.Gameplay.PpRecoverCap ||
-                entity.HitStun < 0 ||
-                stepWaitGate)
-            {
+            if (!periodPp)
                 return;
-            }
 
-            BattleRecoveryStatusWriter.ApplyMpRecovery(entity);
+            BattleRecoveryStatusWriter.ApplyMpRecovery(entity, world.NativeResourcePhase3,
+                BattleRecoveryStatusWriter.DefaultSelectedModeMpRegenGate2C,
+                world.Runtime?.FunctionKeys?.HitResourceEnabled ?? true);
         }
 
         private void ResetDiagnostics()

@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Real current-content Scene: one injected neutral production tick, explicit mode0/weak checks, full state restored; no physical-input or formal-Logan-visual claim.",
+  "tickBefore": 5,
+  "objectId": 2,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "phaseAfterTick": 0,
+  "defaultModeMp": 200,
+  "allowedModeMp": 201,
+  "weakSuppressedMp": 201,
+  "restored": true
+}

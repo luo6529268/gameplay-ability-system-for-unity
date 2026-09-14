@@ -1,0 +1,14 @@
+{
+  "cases": 224,
+  "rows": 672,
+  "alive": 672,
+  "repeatedBytesEqual": true,
+  "frameEvents": [
+    1
+  ],
+  "messages": {
+    "slot 0 input: dead type-0 input suppressed until positive HP is restored": 24,
+    "slot 70 input: dead type-0 input suppressed until positive HP is restored": 24
+  },
+  "sha256": "640c6655cd5b9999e8415cca106b24abf92e8b7229b4c8f68e8ecf9f380bad40"
+}

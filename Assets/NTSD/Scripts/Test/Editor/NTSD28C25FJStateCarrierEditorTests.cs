@@ -27,11 +27,11 @@ namespace NTSD.Test.Editor
         {
             Assert.That(
                 BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(13));
+                Is.EqualTo(15));
             Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
-                Is.EqualTo(21));
+                Is.EqualTo(23));
             Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
-                Is.EqualTo(24));
+                Is.EqualTo(26));
         }
 
         [Test]
@@ -92,8 +92,8 @@ namespace NTSD.Test.Editor
             Assert.That(parity, Does.Contain("\"armorRecoveryTimer11C\":42"));
             Assert.That(raw, Does.Contain("\"runtimeArmorHp\":41"));
             Assert.That(raw, Does.Contain("\"armorRecoveryTimer\":42"));
-            Assert.That(raw, Does.Contain("\"verifiedCount\":44"));
-            Assert.That(raw, Does.Contain("\"missingCount\":6"));
+            Assert.That(raw, Does.Contain("\"verifiedCount\":47"));
+            Assert.That(raw, Does.Contain("\"missingCount\":3"));
         }
 
         private static (string Name, Action Set, Action Reset) Case(

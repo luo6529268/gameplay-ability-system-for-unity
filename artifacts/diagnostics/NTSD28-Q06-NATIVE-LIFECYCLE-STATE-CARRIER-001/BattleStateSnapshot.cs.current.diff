@@ -1,0 +1,11 @@
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs before
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs current
+@@ -11,7 +11,7 @@
+     /// </summary>
+     public sealed class BattleStateSnapshotBuffer
+     {
+-        public const int CurrentSchemaVersion = 22;
++        public const int CurrentSchemaVersion = 23;
+ 
+         internal BattleStateSnapshotBuffer(
+             BattleWorldRosterResultsSnapshotBuffer rosterResults,

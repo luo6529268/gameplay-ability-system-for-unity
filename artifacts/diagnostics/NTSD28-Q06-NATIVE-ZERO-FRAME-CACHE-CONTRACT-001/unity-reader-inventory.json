@@ -1,0 +1,2718 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3386,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3807,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3824,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3833,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(9);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 3844,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(16);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 15167,
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(182)) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 16963,
+    "code": "weapon.Frame.D = weapon.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17469,
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17626,
+    "code": "ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(expectedFrame)) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 17708,
+    "code": "ReferenceEquals(attacker.Frame.D, attacker.GetFrameDataById(10)) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 18083,
+    "code": "ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21144,
+    "code": "(authoredFrame.frameId < 0 || authoredFrame.frameId >= LF2FrameCache.MaxFrameIdExclusive))",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21162,
+    "code": "semanticFrameId >= LF2FrameCache.MaxFrameIdExclusive ||",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21168,
+    "code": "LF2FrameData semanticFrame = frameCache.GetFrameDataById(semanticFrameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21173,
+    "code": "if (nextFrameId >= 0 && nextFrameId < LF2FrameCache.MaxFrameIdExclusive)",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21178,
+    "code": "for (int frameId = 0; frameId < LF2FrameCache.MaxFrameIdExclusive; frameId++)",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21180,
+    "code": "LF2FrameData frame = frameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21467,
+    "code": "int maximumFrameId = LF2FrameCache.MaxFrameIdExclusive - 1;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21481,
+    "code": "LF2FrameData legalMissing = cache.GetFrameDataById(450);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21483,
+    "code": "cache.GetFrameDataById(maximumFrameId) == highFrame &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21484,
+    "code": "cache.HasFrame(maximumFrameId) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21486,
+    "code": "!cache.HasFrame(450) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21488,
+    "code": "cache.GetFrameDataById(LF2FrameCache.MaxFrameIdExclusive) == null &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21489,
+    "code": "!cache.HasFrame(LF2FrameCache.MaxFrameIdExclusive) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21490,
+    "code": "cache.GetFrameDataById(-1) == null,",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21526,
+    "code": "character.ImmediateFrame(LF2FrameCache.MaxFrameIdExclusive);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21528,
+    "code": "LF2FrameCache.MaxFrameIdExclusive);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21533,
+    "code": "character.Frame.Prev2D = character.FrameCache.GetFrameDataById(450);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 21557,
+    "code": "LF2FrameData missing = attacker.FrameCache.GetFrameDataById(450);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23440,
+    "code": "!missing.FrameCache.HasFrame(377) && missing.Frame.D.wait == 1 &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23444,
+    "code": "int outOfRangeFrame = LF2FrameCache.MaxFrameIdExclusive;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23764,
+    "code": "!reusedCharacter.FrameCache.HasFrame(111),",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 23773,
+    "code": "!reusedCharacter.FrameCache.HasFrame(111) &&",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 25633,
+    "code": "deadCharacter.Frame.D = deadCharacter.FrameCache.GetFrameDataById(14);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 25859,
+    "code": "missing.Frame.D = missing.FrameCache.GetFrameDataById(1);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 27073,
+    "code": "LF2FrameData targetFrame = entity.FrameCache.GetFrameDataById(expectedFrame);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 27830,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 28484,
+    "code": "Expect(self.Frame.D != null && !self.FrameCache.HasFrame(290) && self.Frame.D.wait == 1,",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 29712,
+    "code": "LF2FrameData target271 = naruto.FrameCache.GetFrameDataById(271);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 29715,
+    "code": "$\"has271={naruto.FrameCache.HasFrame(271)},targetMp={target271?.mp.ToString() ?? \"null\"},\" +",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 32353,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 32724,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33174,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33378,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33392,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33418,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33445,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33474,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33523,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33565,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33622,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33657,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33769,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33803,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33864,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33876,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33922,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 33971,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34027,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34050,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34084,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34114,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34145,
+    "code": "Frame.D = FrameCache.GetFrameDataById(6);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 34202,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35207,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35355,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35371,
+    "code": "Frame.D = FrameCache.GetFrameDataById(lateTargetFrame);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35440,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35477,
+    "code": "Frame.N = LF2FrameCache.MaxFrameIdExclusive;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35480,
+    "code": "Runtime.Frame = LF2FrameCache.MaxFrameIdExclusive;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35567,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35624,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35662,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+    "line": 35817,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6638,
+    "code": "if (entity.Frame != null && (entity.Frame.N < 0 || entity.Frame.N >= LF2FrameCache.MaxFrameIdExclusive))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6669,
+    "code": "if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.N) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6677,
+    "code": "if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.Prev2) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6839,
+    "code": "LF2FrameData nextFrame = attacker.GetFrameDataById(activeFrame.next);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6854,
+    "code": "int attackerPrevState = attacker.FrameCache?.GetFrameDataById(attacker.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6855,
+    "code": "int targetPrevState = target.FrameCache?.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 15,
+    "code": "public const int MaxFrameIdExclusive = 857;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 21,
+    "code": "private readonly LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 51,
+    "code": "if ((uint)frameData.frameId < MaxFrameIdExclusive)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 68,
+    "code": "public LF2FrameData GetFrameDataById(int frameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 74,
+    "code": "public bool HasFrame(int frameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 79,
+    "code": "public int GetFirstFrameByState(int targetState)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 535,
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 923,
+    "code": "Frame.D = FrameCache?.GetFrameDataById(action);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 924,
+    "code": "Frame.Prev2D = FrameCache?.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1070,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1076,
+    "code": "if (Frame.N == 0 && !_preserveOpointActionZero && !FrameCache.HasFrame(0))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1079,
+    "code": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1084,
+    "code": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1089,
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(Frame.Prev2);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterActionResolver.cs",
+    "line": 113,
+    "code": "if (_character.HitConfirmEa > 0 && _character.FrameCache.HasFrame(LF2StandardFrames.SuperPunch))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 51,
+    "code": "LF2FrameData currentFrame = victim.GetFrameDataById(currentFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 52,
+    "code": "LF2FrameData futureFrame = victim.GetFrameDataById(currentFrameId + 6);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 397,
+    "code": "LF2FrameData futureFrame = _victim.GetFrameDataById((_victim.Frame?.N ?? 0) + 6);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 570,
+    "code": "LF2FrameData frame10 = attacker.GetFrameDataById(10);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 692,
+    "code": "int prevState = _victim.GetFrameDataById(_victim.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 693,
+    "code": "int prev2State = _victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 135,
+    "code": "if (_character.FrameCache.HasFrame(targetFrame))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 162,
+    "code": "var futureFrame = _character.GetFrameDataById((_character.Frame?.N ?? 0) + 6);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 384,
+    "code": "int prevState = _character.GetFrameDataById(_character.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 385,
+    "code": "int prev2State = _character.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 646,
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(attacker.Frame?.N ?? 0) ?? attacker.Frame?.D;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 749,
+    "code": ": GetFrameDataById(state.FrameDataId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 752,
+    "code": ": GetFrameDataById(state.CollisionFrameDataId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1194,
+    "code": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1195,
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1224,
+    "code": "public virtual LF2FrameData GetFrameDataById(int frameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1225,
+    "code": "=> FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3014,
+    "code": "FrameCache?.HasFrame(LF2StandardFrames.SuperPunch) == true &&",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3086,
+    "code": "FrameCache?.HasFrame(LF2StandardFrames.HeavyWeaponThw) == true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3692,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3708,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3725,
+    "code": "LF2FrameData targetFrame = FrameCache?.HasFrame(frameId) == true",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3726,
+    "code": "? FrameCache.GetFrameDataById(frameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3782,
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4293,
+    "code": "LF2FrameData previousFrame = GetFrameDataById(Frame?.Prev ?? 0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4341,
+    "code": "LF2FrameData prevFrame = GetFrameDataById(previousAction);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4531,
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4542,
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4629,
+    "code": "Frame.D = FrameCache.GetFrameDataById(targetFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4653,
+    "code": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4778,
+    "code": "if (FrameCache.HasFrame(Frame.Prev2) && Frame.Prev2D != null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4781,
+    "code": "if (FrameCache.HasFrame(Frame.N) && Frame.D != null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4807,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(Frame.N);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5163,
+    "code": "LF2FrameData sourceNextFrame = FrameCache?.HasFrame(sourceNextFrameId) == true",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5164,
+    "code": "? FrameCache.GetFrameDataById(sourceNextFrameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5176,
+    "code": "FrameCache?.GetFrameDataById(Frame?.N ?? 0) ??",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5370,
+    "code": "if (frameId >= 0 && !FrameCache.HasFrame(frameId) && !sourceFrameMatches)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5375,
+    "code": ": FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5394,
+    "code": ": FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5418,
+    "code": "if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5488,
+    "code": "LF2FrameData previousFrame = FrameCache?.GetFrameDataById(previousFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5578,
+    "code": "if ((Frame?.N ?? -1) >= LF2FrameCache.MaxFrameIdExclusive)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6388,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6555,
+    "code": "if (frameAfterTransit < 0 || frameAfterTransit >= LF2FrameCache.MaxFrameIdExclusive || Frame?.D == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6594,
+    "code": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 334,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 526,
+    "code": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 528,
+    "code": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 116,
+    "code": "if (action == 0 && !task.preserveActionZero && !owner.FrameCache.HasFrame(0))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 122,
+    "code": "owner.Frame.D = owner.FrameCache.GetFrameDataById(action);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 123,
+    "code": "owner.Frame.Prev2D = owner.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 17,
+    "code": "LF2FrameData targetFrame = owner.FrameCache.GetFrameDataById(targetFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 60,
+    "code": "if (frameId >= 0 && owner.FrameCache?.HasFrame(frameId) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 65,
+    "code": "owner.Frame.D = owner.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 236,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 273,
+    "code": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 277,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 457,
+    "code": "var nextFrame = GetFrameDataById(activeFrame.next);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 788,
+    "code": "if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 815,
+    "code": "if (action == 0 && !FrameCache.HasFrame(0))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 817,
+    "code": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 819,
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 498,
+    "code": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 836,
+    "code": "if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 838,
+    "code": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 842,
+    "code": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 916,
+    "code": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 920,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 66,
+    "code": "if (weapon.FrameCache?.HasFrame(wpoint.WeaponAct) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponInteractionResolver.cs",
+    "line": 108,
+    "code": "if (character.FrameCache.HasFrame(jumpFrame))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/BattleCentralRuntimeHealthBarEditorTests.cs",
+    "line": 423,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Rendering/Editor/ProductionEntityStressEditorTests.cs",
+    "line": 7071,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiSensingModule.cs",
+    "line": 1676,
+    "code": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2065,
+    "code": "LF2FrameData currentFrame = target.GetFrameDataById(currentFrameId);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2066,
+    "code": "LF2FrameData futureFrame = target.GetFrameDataById(currentFrameId + 6);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2902,
+    "code": "if (target.GetFrameDataById(20) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3013,
+    "code": "attacker.FrameCache.HasFrame(type3Frame) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3035,
+    "code": "target.GetFrameDataById(type3Frame) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3083,
+    "code": "if (target.GetFrameDataById(targetFrame) == null ||",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3128,
+    "code": "if (attacker.GetFrameDataById(attackerResetAction) == null ||",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3129,
+    "code": "target.GetFrameDataById(targetResetAction) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3161,
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3162,
+    "code": "int previous2State = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3177,
+    "code": "attacker.GetFrameDataById(40) == null ||",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3184,
+    "code": "int replacementState = attacker.GetFrameDataById(40).state;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3190,
+    "code": "attacker.GetFrameDataById(20) != null;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3239,
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3240,
+    "code": "int previous2State = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3262,
+    "code": "LF2FrameData targetReplacementFrame = target.GetFrameDataById(replacementFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3263,
+    "code": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3282,
+    "code": "if (burningEffect && source.GetFrameDataById(203) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3284,
+    "code": "if (freezeEffect && source.GetFrameDataById(200) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3289,
+    "code": "source.GetFrameDataById(resolvedItr.effect - 6000) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3662,
+    "code": "int previousState = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3664,
+    "code": "int previous2State = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3753,
+    "code": "int transformedState = attacker.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3794,
+    "code": "int responseState = target.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4013,
+    "code": "attacker.GetFrameDataById(40)?.state == LF2States.ObjectExpanding)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4076,
+    "code": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4337,
+    "code": "if (entity.GetFrameDataById(frameId) == null)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4358,
+    "code": "int action = definitionSource?.GetFrameDataById(actionLatch)?.hit_Uj ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4536,
+    "code": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4537,
+    "code": "int previous2State = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4797,
+    "code": "attacker.GetFrameDataById(projection.TargetWaitCounter),",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4798,
+    "code": "attacker.GetFrameDataById(projection.TargetPrevFrame));",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4974,
+    "code": "int previous2State = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5109,
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5286,
+    "code": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5299,
+    "code": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5382,
+    "code": "!attacker.FrameCache.HasFrame(catchingFrame) ||",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5383,
+    "code": "!target.FrameCache.HasFrame(caughtFrame))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5391,
+    "code": "LF2FrameData attackerFrame = attacker.GetFrameDataById(catchingFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5392,
+    "code": "LF2FrameData targetFrame = target.GetFrameDataById(caughtFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5447,
+    "code": "LF2FrameData targetFrame = target.GetFrameDataById(projection.TargetFrame);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Stores/BattleFrameMotionStore.cs",
+    "line": 393,
+    "code": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 194,
+    "code": "if (character.FrameCache?.HasFrame(targetAction) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 202,
+    "code": "character.FrameCache.GetFrameDataById(targetAction);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 833,
+    "code": ".GetFrameDataById(costAction);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 851,
+    "code": "if (character.FrameCache?.HasFrame(action) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs",
+    "line": 1570,
+    "code": "int rawCost = character.FrameCache?.GetFrameDataById(action)?.mp ?? 0;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 434,
+    "code": "attacker.FrameCache?.HasFrame(sourceNextFrameId) == true",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 435,
+    "code": "? attacker.FrameCache.GetFrameDataById(sourceNextFrameId)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 457,
+    "code": "attacker.FrameCache?.GetFrameDataById(attacker.Frame?.N ?? 0) ??",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 151,
+    "code": "LF2FrameData selectedFrame = attacker.GetFrameDataById(action);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 186,
+    "code": "int previousState = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 214,
+    "code": "LF2FrameData latchedFrame = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 218,
+    "code": "LF2FrameData previousFrame = target.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1610,
+    "code": "int victimPrev2State = victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1858,
+    "code": "LF2FrameData previousFrame = victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1863,
+    "code": "LF2FrameData previousFrame2 = victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1939,
+    "code": "LF2FrameData latchedFrame = entity.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2031,
+    "code": "attacker.FrameCache.HasFrame(responseAction) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2246,
+    "code": "int previousState = victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2248,
+    "code": "int previous2State = victim.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 66,
+    "code": "if (held.FrameCache?.HasFrame(holderWPoint.WeaponAct) != true)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 20,
+    "code": "LF2FrameData attackerCurrentFrame = attacker.FrameCache.HasFrame(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 24,
+    "code": "LF2FrameData targetCurrentFrame = target.FrameCache.HasFrame(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 37,
+    "code": "attacker.FrameCache.GetFrameDataById(attacker.Frame.Prev);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+    "line": 39,
+    "code": "target.FrameCache.GetFrameDataById(target.Frame.Prev);",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 129,
+    "code": "!attacker.FrameCache.HasFrame(catchingFrame) ||",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 130,
+    "code": "!victim.FrameCache.HasFrame(caughtFrame))",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleInteractionWriter.cs",
+    "line": 193,
+    "code": "? target.GetFrameDataById(target.Frame.N)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 18,
+    "code": "entity.FrameCache?.HasFrame(entity.Runtime.Frame) == true;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 56,
+    "code": "int chp = entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).chp;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleRecoveryStatusWriter.cs",
+    "line": 84,
+    "code": "int frameCmp = entity.FrameCache.GetFrameDataById(runtime.Frame).cmp;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshotRestore.cs",
+    "line": 832,
+    "code": "return localEntity.GetFrameDataById(frameId) != null;",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs",
+    "line": 916,
+    "code": "LF2FrameData previousFrame = entity.GetFrameDataById(",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs",
+    "line": 974,
+    "code": "frameId >= LF2FrameCache.MaxFrameIdExclusive)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/Oid5152/BattleOid5152RuntimeModule.cs",
+    "line": 128,
+    "code": "partnerFrameId >= LF2FrameCache.MaxFrameIdExclusive)",
+    "testOrEditor": false,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1786,
+    "code": "character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0,",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1793,
+    "code": "character.GetFrameDataById(character.Runtime.Frame)?.hit_j ?? 0;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiDecisionSoAShadowEditorTests.cs",
+    "line": 1999,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiMoveModeSnapshotEditorTests.cs",
+    "line": 346,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiNearestSpecializedFilterEditorTests.cs",
+    "line": 214,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AirRoleNearestEditorTests.cs",
+    "line": 258,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoACandidateEditorTests.cs",
+    "line": 2048,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoACandidateEditorTests.cs",
+    "line": 2096,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoAShadowEditorTests.cs",
+    "line": 607,
+    "code": "shell.Frame.D = shell.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/AiSensingSoAShadowEditorTests.cs",
+    "line": 646,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyCharacterHitConsumeEditorTests.cs",
+    "line": 211,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyCharacterHitConsumeEditorTests.cs",
+    "line": 216,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsEmptyObjectHitConsumeEditorTests.cs",
+    "line": 227,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleEcsLateTailNoOpEditorTests.cs",
+    "line": 291,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1496,
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1620,
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 1693,
+    "code": "attacker.Frame.D = attacker.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4293,
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4297,
+    "code": "target.Frame.D = target.GetFrameDataById(historyFrame.frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4320,
+    "code": "target.Frame.D = target.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 4369,
+    "code": "attacker.Frame.D = attacker.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 5139,
+    "code": "attacker.GetFrameDataById(40).state = LF2States.ObjectExpanding;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 5533,
+    "code": "d1Source.GetFrameDataById(replacementFrame).state = replacementPrevState;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7368,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7436,
+    "code": "weapon.Frame.D = weapon.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs",
+    "line": 7559,
+    "code": "specialAttack.Frame.D = specialAttack.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/BattleParityTraceEditor.cs",
+    "line": 349,
+    "code": "if (entity.GetFrameDataById(probe.targetFrame) == null)",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 289,
+    "code": "character.FrameCache.GetFrameDataById(1)));",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 1245,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CharacterInputLiveSlotLoopEditorTests.cs",
+    "line": 1295,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/CollisionSnapshotRuntimeSyncEditorTests.cs",
+    "line": 14,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(77);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/EarlyFrameAdvanceOptimizationEditorTests.cs",
+    "line": 395,
+    "code": "character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/EarlyFrameAdvanceOptimizationEditorTests.cs",
+    "line": 401,
+    "code": "character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 537,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 541,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/FrameAdvanceRuntimeSnapshotEditorTests.cs",
+    "line": 608,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/GroundRoleNearestEditorTests.cs",
+    "line": 483,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/InProcessLockstepAuthoritySessionEditorTests.cs",
+    "line": 336,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/LooseQuadtreeNearestEditorTests.cs",
+    "line": 494,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28AiSampleProxyTwoPassEditorTests.cs",
+    "line": 232,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5EffectActionOverrideEditorTests.cs",
+    "line": 165,
+    "code": "LF2FrameData latch = target.GetFrameDataById(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5HitGroupEligibilityAtomicProductionEditorTests.cs",
+    "line": 533,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5InputHpCostCompatSharedTransactionEditorTests.cs",
+    "line": 226,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind0DirectPostEffectActionEditorTests.cs",
+    "line": 29,
+    "code": "target.GetFrameDataById(5).state = previousState;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind4AtomicProductionIntegrationEditorTests.cs",
+    "line": 610,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5MultiBodyCandidateProductionEditorTests.cs",
+    "line": 198,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5SystemTableAttackerTerminalProductionEditorTests.cs",
+    "line": 260,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 50,
+    "code": "LF2FrameData current = attacker.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 53,
+    "code": "attacker.GetFrameDataById(77).dvx = 123;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 54,
+    "code": "attacker.GetFrameDataById(77).dvz = -456;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 55,
+    "code": "attacker.GetFrameDataById(10).dvx = 10;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 56,
+    "code": "attacker.GetFrameDataById(10).dvz = 7;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 79,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ProjectileFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 80,
+    "code": "attacker.GetFrameDataById(0).hit_Fj = 0;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 81,
+    "code": "attacker.GetFrameDataById(10).dvx = 550;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 82,
+    "code": "attacker.GetFrameDataById(10).dvz = 7;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 97,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ProjectileFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 98,
+    "code": "attacker.GetFrameDataById(0).hit_Fj = -1;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 122,
+    "code": "LF2FrameData current = attacker.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3AttackerPostHitActionEditorTests.cs",
+    "line": 126,
+    "code": "attacker.GetFrameDataById(78).dvx = 321;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 148,
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 169,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3KindCatalogTransformEditorTests.cs",
+    "line": 170,
+    "code": "attacker.GetFrameDataById(40).state = LF2States.ObjectExpanding;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 132,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 133,
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 172,
+    "code": "attacker.GetFrameDataById(0).state = state;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 173,
+    "code": "target.GetFrameDataById(0).state = state;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 174,
+    "code": "attacker.GetFrameDataById(5).hit_Uj = attackerAction;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3MatchedPairEarlyBranchEditorTests.cs",
+    "line": 175,
+    "code": "target.GetFrameDataById(6).hit_Uj = targetAction;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 23,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 24,
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 25,
+    "code": "attacker.GetFrameDataById(5).hit_Uj = 71;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3PairResetHoldEffectTailEditorTests.cs",
+    "line": 26,
+    "code": "target.GetFrameDataById(6).hit_Uj = 72;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 121,
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 145,
+    "code": "attacker.GetFrameDataById(0).state = LF2States.ObjectFlying;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 148,
+    "code": "target.GetFrameDataById(0).state = LF2States.ObjectExpanding;",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type3TargetGenericContinuationEditorTests.cs",
+    "line": 161,
+    "code": "LF2FrameData current = target.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WeaponDurabilityAttackingInjuryProductionEditorTests.cs",
+    "line": 181,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5WeaponDurabilityAttackingInjuryProductionEditorTests.cs",
+    "line": 205,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchExactConsumerAndAdvanceOrderProductionEditorTests.cs",
+    "line": 482,
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchRelationExactFieldsProductionEditorTests.cs",
+    "line": 491,
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.cs",
+    "line": 263,
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryAccountingCoverProductionEditorTests.cs",
+    "line": 454,
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6HeldInjuryCaughtActEventProductionEditorTests.cs",
+    "line": 435,
+    "code": "LF2FrameData frame = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 42,
+    "code": "Assert.That(scope.Child.FrameCache.HasFrame(action), Is.False);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 281,
+    "code": "Require(!child.FrameCache.HasFrame(literal), \"Current OID123 unexpectedly declares action.\");",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B6WpointMissingActionContinueProductionEditorTests.cs",
+    "line": 286,
+    "code": "Require(nextChild.FrameCache.HasFrame(nextHolder.Frame.D.PrimaryWeaponPoint.WeaponAct), \"Next-child valid witness unavailable.\");",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C02C03ProductionPlacementEditorTests.cs",
+    "line": 60,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C04FrameMotionProductionOwnerEditorTests.cs",
+    "line": 161,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 164,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 193,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportPlayModeProbeEditor.cs",
+    "line": 250,
+    "code": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C05NativeTeleportProductionEditorTests.cs",
+    "line": 168,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsPlayModeProbeEditor.cs",
+    "line": 142,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsPlayModeProbeEditor.cs",
+    "line": 165,
+    "code": "observer.Frame.D = observer.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C06NestedPhysicsProductionEditorTests.cs",
+    "line": 174,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalPlacementPlayModeProbeEditor.cs",
+    "line": 181,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C07RevivalProductionPlacementEditorTests.cs",
+    "line": 163,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementEditorTests.cs",
+    "line": 100,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C08StageDepthPlacementPlayModeProbeEditor.cs",
+    "line": 166,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementEditorTests.cs",
+    "line": 155,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C09HeldRefillPlacementPlayModeProbeEditor.cs",
+    "line": 232,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+    "line": 93,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementEditorTests.cs",
+    "line": 131,
+    "code": "Frame.D = FrameCache.GetFrameDataById(5);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementPlayModeProbeEditor.cs",
+    "line": 145,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C10CollisionActionSnapshotPlacementPlayModeProbeEditor.cs",
+    "line": 209,
+    "code": "Frame.D = FrameCache.GetFrameDataById(5);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementEditorTests.cs",
+    "line": 81,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C11CandidateBuildPlacementPlayModeProbeEditor.cs",
+    "line": 142,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+    "line": 77,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementEditorTests.cs",
+    "line": 88,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 87,
+    "code": "report.initialHasFrame10 = self.FrameCache.HasFrame(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 174,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C12FusionBarrierPlacementPlayModeProbeEditor.cs",
+    "line": 183,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(10);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionCloneEditorTests.cs",
+    "line": 482,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25DefinitionClonePlayModeProbeEditor.cs",
+    "line": 244,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25FHJTimerOwnerEditorTests.cs",
+    "line": 373,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25GFrameBodyEditorTests.cs",
+    "line": 166,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(action);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25IArmorRecoveryEditorTests.cs",
+    "line": 145,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25LState18ParticleOwnerEditorTests.cs",
+    "line": 128,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25MPreviousActionCommitEditorTests.cs",
+    "line": 115,
+    "code": "probe.Frame.D = probe.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28C25PHealingOwnerEditorTests.cs",
+    "line": 173,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28CooldownWriterExtractionEditorTests.cs",
+    "line": 102,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeComboActionTransactionEditorTests.cs",
+    "line": 679,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeDirectHoldDirectionRoutingEditorTests.cs",
+    "line": 380,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frames[0].frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeInputProducerMigrationEditorTests.cs",
+    "line": 295,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0BuiltinProductionIntegrationEditorTests.cs",
+    "line": 303,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 83,
+    "code": "Assert.That(LF2FrameCache.MaxFrameIdExclusive, Is.EqualTo(857));",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 84,
+    "code": "Assert.That(cache.HasFrame(856), Is.True);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 85,
+    "code": "Assert.That(cache.GetFrameDataById(856), Is.SameAs(maximum));",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 86,
+    "code": "Assert.That(cache.HasFrame(857), Is.False);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28NativeType0GroundBuiltinsEditorTests.cs",
+    "line": 87,
+    "code": "Assert.That(cache.GetFrameDataById(857), Is.Null);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+    "line": 145,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Oid5152ProductionSplitEditorTests.cs",
+    "line": 178,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q03GeometryWitnessEditorTests.cs",
+    "line": 88,
+    "code": "entity.Frame.D = entity.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeHpResourceEditorTests.cs",
+    "line": 227,
+    "code": "Assert.That(entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).chp, Is.Zero);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeMpResourceEditorTests.cs",
+    "line": 204,
+    "code": "Assert.That(entity.FrameCache.GetFrameDataById(entity.Runtime.Frame).cmp, Is.Zero);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PooledEntityReuseAllocationEditorTests.cs",
+    "line": 74,
+    "code": "Assert.That(cache.GetFrameDataById(42), Is.SameAs(data.frames[42]));",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PreInteractionNoOpProofEditorTests.cs",
+    "line": 604,
+    "code": "character.FrameCache.GetFrameDataById(currentFrame.frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/PreInteractionNoOpProofEditorTests.cs",
+    "line": 610,
+    "code": "character.FrameCache.GetFrameDataById(currentFrame.frameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 387,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 4953,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/RoleAwareCollisionShadowSelfCheckTests.cs",
+    "line": 4990,
+    "code": "entity.FrameCache.GetFrameDataById(collisionFrameId);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/TeamPartitionGroundNearestEditorTests.cs",
+    "line": 373,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Test/Editor/W06CollisionHitResolveWitnessEditorTests.cs",
+    "line": 185,
+    "code": "character.Frame.D = character.FrameCache.GetFrameDataById(0);",
+    "testOrEditor": true,
+    "status": "INVENTORIED_NOT_MIGRATED"
+  }
+]

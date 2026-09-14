@@ -186,6 +186,8 @@ namespace NTSD.Test.Editor
             int expectedHp)
         {
             var world = new SimulationWorld();
+            world.Runtime.NativeWorldClock.ResourcePhase12 = 1;
+            world.Runtime.NativeWorldClock.ResourcePhase3 = 1;
             LF2Character entity = CreateCharacter(world, 0, 9150 + poisonType, 0);
             entity.Health.HP = hp;
             entity.Runtime.MPMax = baseMaxMp;
@@ -203,7 +205,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void C25h_RenderPhasePreservesNewFifteenButDecaysAction202Write()
+        public void C25h_RenderPhasePreservesNewFifteenAndDecaysPreexistingTwenty()
         {
             var world = new SimulationWorld();
             LF2Character caughtExit = CreateCharacter(
@@ -216,6 +218,9 @@ namespace NTSD.Test.Editor
                 extraFrame: Frame(1, 0, 100, 1));
             LF2Character action202 = CreateCharacter(world, 1, 9161, 0,
                 frameId: 202);
+            action202.HitStun = 20;
+            LF2Character bareAction202 = CreateCharacter(world, 2, 9162, 0,
+                frameId: 202);
             caughtExit.Trans.SyncDirectFrameData(0, 1, 0);
 
             world.LateEntityUpdateAll(1);
@@ -223,6 +228,7 @@ namespace NTSD.Test.Editor
             Assert.That(caughtExit.Frame.N, Is.EqualTo(1));
             Assert.That(caughtExit.HitStun, Is.EqualTo(15));
             Assert.That(action202.HitStun, Is.EqualTo(19));
+            Assert.That(bareAction202.HitStun, Is.Zero);
         }
 
         [Test]

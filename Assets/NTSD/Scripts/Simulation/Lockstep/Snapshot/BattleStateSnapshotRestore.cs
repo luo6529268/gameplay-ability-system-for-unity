@@ -829,11 +829,16 @@ namespace NTSD.Simulation
             if (frameId < 0)
                 return true;
             if (localEntity != null)
-                return localEntity.GetFrameDataById(frameId) != null;
+                return localEntity.FrameCache?.GetNativeFrameDataById(frameId) != null;
 
             LF2CharacterData data = RuntimeDataCatalog.GetCharacterData(
                 state.CurrentDataObjectId);
-            if (data?.frames == null)
+            if (data == null || frameId >= LF2FrameCache.NativeMaxFrameIdExclusive)
+                return false;
+            // Alignment contract: NTSD28-Q06-NATIVE-FRAME-SNAPSHOT-BINDING-001.
+            if (frameId < LF2FrameCache.NativeMaxFrameIdExclusive - 1)
+                return true;
+            if (data.frames == null)
                 return false;
             for (int index = 0; index < data.frames.Count; index++)
             {

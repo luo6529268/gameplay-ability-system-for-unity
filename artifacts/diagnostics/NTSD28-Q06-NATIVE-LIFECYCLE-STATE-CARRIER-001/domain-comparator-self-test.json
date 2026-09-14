@@ -1,0 +1,48 @@
+{
+  "schema": "ntsd28-logan-b0-domain-comparator-self-test-v1",
+  "passed": true,
+  "cases": [
+    {
+      "name": "shared-domains-equal",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "input-difference",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "slot-difference-not-hidden-by-capacity",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "lifecycle-difference",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "invalid-capture-rejected",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "producer-order-rejected",
+      "expected": true,
+      "actual": true,
+      "reason": null,
+      "passed": true
+    }
+  ]
+}

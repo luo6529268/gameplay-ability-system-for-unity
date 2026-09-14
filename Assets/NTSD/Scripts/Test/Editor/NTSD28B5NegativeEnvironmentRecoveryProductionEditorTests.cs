@@ -215,6 +215,7 @@ namespace NTSD.Test.Editor
             LF2Character wrongPhase = Character(phaseWorld, 0, 9986);
             ArrangeVictim(wrongPhase, hp: 50, hpBound: 50);
             phaseWorld.Runtime.NativeWorldClock.ResourcePhase12 = 1;
+            phaseWorld.Runtime.NativeWorldClock.ResourcePhase3 = 1;
             phaseWorld.LateEntityUpdateAll(1);
 
             Assert.That(positive.Health.HP, Is.EqualTo(50));

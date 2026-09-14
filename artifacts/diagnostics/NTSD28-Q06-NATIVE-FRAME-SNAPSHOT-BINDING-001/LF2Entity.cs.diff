@@ -1,0 +1,15 @@
+--- Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs before
++++ Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs after
+@@ -746,10 +746,10 @@
+ 
+             LF2FrameData currentData = state.FrameDataId < 0
+                 ? null
+-                : GetFrameDataById(state.FrameDataId);
++                : FrameCache?.GetNativeFrameDataById(state.FrameDataId);
+             LF2FrameData collisionData = state.CollisionFrameDataId < 0
+                 ? null
+-                : GetFrameDataById(state.CollisionFrameDataId);
++                : FrameCache?.GetNativeFrameDataById(state.CollisionFrameDataId);
+             if ((state.FrameDataId >= 0 && currentData == null) ||
+                 (state.CollisionFrameDataId >= 0 && collisionData == null))
+             {

@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "name": "equal-capture",
+      "passed": true,
+      "reason": null
+    },
+    {
+      "name": "initial-rng-first-difference",
+      "passed": true,
+      "reason": null
+    },
+    {
+      "name": "entity-combo-first-difference",
+      "passed": true,
+      "reason": null
+    },
+    {
+      "name": "malformed-combo-rejected",
+      "passed": true,
+      "reason": null
+    },
+    {
+      "name": "per-call-first-difference",
+      "passed": true,
+      "reason": null
+    }
+  ]
+}

@@ -77,7 +77,10 @@ namespace NTSD.Simulation
                             runtimeSlot);
 
                     if (obj == null)
+                    {
+                        AdvanceNativeDisplay(runtimeSlot);
                         continue;
+                    }
 
                     if (world.HasLateEntityStructuralEventSinkForModule)
                     {
@@ -106,6 +109,7 @@ namespace NTSD.Simulation
                         {
                             detailDiagnostics?.EndPhase(
                                 BattleTickDetailPhase.LateEntityStateSpecial);
+                            AdvanceNativeDisplay(runtimeSlot);
                             continue;
                         }
 
@@ -138,11 +142,14 @@ namespace NTSD.Simulation
                         {
                             detailDiagnostics?.EndPhase(
                                 BattleTickDetailPhase.LateEntityRecovery);
+                            AdvanceNativeDisplay(runtimeSlot);
                             continue;
                         }
                     }
                     detailDiagnostics?.EndPhase(
                         BattleTickDetailPhase.LateEntityRecovery);
+
+                    AdvanceNativeDisplay(runtimeSlot);
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityFrameTick);
@@ -197,41 +204,10 @@ namespace NTSD.Simulation
                         BattleTickDetailPhase.LateEntityFrameTick);
 
                     detailDiagnostics?.BeginPhase(
-                        BattleTickDetailPhase.LateEntityFrameExit);
-                    bool exitedLateFrameTick = HandleFrameTickExit(
-                        obj,
-                        detailDiagnostics);
-                    if (exitedLateFrameTick)
-                    {
-                        if (obj is LF2SpecialAttack)
-                        {
-                            FlushQueuedObjectPointTasks(
-                                ref opointFactory,
-                                ref opointFactoryResolved);
-                        }
-                        detailDiagnostics?.EndPhase(
-                            BattleTickDetailPhase.LateEntityFrameExit);
-                        continue;
-                    }
-                    detailDiagnostics?.EndPhase(
-                        BattleTickDetailPhase.LateEntityFrameExit);
-
-                    detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityDeathOpoint);
-                    if (CanSkipExactCharacterDeathOpoint(obj))
-                    {
-                        LastDeathOpointNoOpSkipCountForDiagnostics++;
-                    }
-                    else
-                    {
-                        obj.RunLateDeathOpointPreCleanupPhase();
-                        if (!world.IsActiveForCurrentPassInternal(obj))
-                        {
-                            detailDiagnostics?.EndPhase(
-                                BattleTickDetailPhase.LateEntityDeathOpoint);
-                            continue;
-                        }
-                    }
+                    // Alignment contract: NTSD28-Q06-C25-EXTRA-DEATH-PRELUDE-RETIREMENT-001.
+                    // Keep the legacy profiling/snapshot boundary; native C25 has no death prelude here.
+                    LastDeathOpointNoOpSkipCountForDiagnostics++;
                     if (RuntimeSnapshotModeForDiagnostics ==
                         BattleLateRuntimeSnapshotMode.LegacyThree)
                     {
@@ -246,7 +222,7 @@ namespace NTSD.Simulation
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityOpointProcess);
                     LF2FrameData opointFrame = obj.Frame?.D;
-                    bool frameHasOpoint = opointFrame != null &&
+                    bool frameHasOpoint = !obj.Runtime.NativeLifecycleResolutionPending && opointFrame != null &&
                         ((opointFrame.opoints != null &&
                           opointFrame.opoints.Count > 0) ||
                          opointFrame.opoint.HasValue);
@@ -315,8 +291,29 @@ namespace NTSD.Simulation
                             ref opointFactoryResolved);
                         detailDiagnostics?.EndPhase(
                             BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
+                    }
+
+                    detailDiagnostics?.BeginPhase(
+                        BattleTickDetailPhase.LateEntityFrameExit);
+                    bool exitedLateFrameTick = HandleFrameTickExit(
+                        obj,
+                        detailDiagnostics);
+                    if (exitedLateFrameTick)
+                    {
+                        if (obj is LF2SpecialAttack)
+                        {
+                            FlushQueuedObjectPointTasks(
+                                ref opointFactory,
+                                ref opointFactoryResolved);
+                        }
+                        detailDiagnostics?.EndPhase(
+                            BattleTickDetailPhase.LateEntityFrameExit);
                         continue;
                     }
+                    detailDiagnostics?.EndPhase(
+                        BattleTickDetailPhase.LateEntityFrameExit);
+
+
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityTailAndQueuedFlush);
@@ -369,6 +366,13 @@ namespace NTSD.Simulation
                 detailDiagnostics?.EndPhase(
                     BattleTickDetailPhase.LateEntityFinalPendingFlush);
             }
+        }
+
+        private void AdvanceNativeDisplay(int runtimeSlot)
+        {
+            // Alignment contract: NTSD28-Q06-NATIVE-DISPLAY-PROGRESSION-001.
+            BattleNativeDisplayWriter.Advance(
+                world.FindEntityByRuntimeSlotForNativeDisplay(runtimeSlot)?.Runtime);
         }
 
         private static void RefreshNativeComputerState(
@@ -839,21 +843,6 @@ namespace NTSD.Simulation
             return false;
         }
 
-        private bool CanSkipExactCharacterDeathOpoint(LF2Entity entity)
-        {
-            if (ForceLegacyCommonNoOpGatesForDiagnostics ||
-                entity?.GetType() != typeof(LF2Character))
-            {
-                return false;
-            }
-
-            return entity.GetCurrentDataObjectTypeForSimulation() !=
-                       (int)LF2ObjectType.Character ||
-                   entity.Health == null ||
-                   entity.Health.HP > 0 ||
-                   entity.Runtime == null;
-        }
-
         private bool CanSkipExactCharacterCleanup(LF2Entity entity)
         {
             if (ForceLegacyCommonNoOpGatesForDiagnostics ||
@@ -940,36 +929,14 @@ namespace NTSD.Simulation
             LF2Entity entity,
             BattleTickDetailPhaseDiagnostics diagnostics)
         {
-            if (entity?.Frame == null)
+            if (entity?.Runtime?.NativeLifecycleResolutionPending != true)
                 return false;
-
-            int frameId = entity.Frame.N;
-            int frameGroup = frameId / 100;
-            if (frameGroup == 11 || frameGroup == 12)
-            {
-                entity.HitStun = 1100 - frameId;
-                entity.DirectWriteFramePreserveWaitCounter(0);
-                RefreshRuntimeSnapshot(
-                    entity,
-                    BattleLateRuntimeSnapshotStage.FrameExit,
-                    diagnostics);
-                return true;
-            }
-
-            if (frameId < 0 ||
-                frameId >= LF2FrameCache.MaxFrameIdExclusive)
-            {
-                // Alignment contract: NTSD28-B6-HELD-NEGATIVE-FRAME-LIFECYCLE-GUARD-PRODUCTION-001.
-                if (world.IsActiveForCurrentPassInternal(entity) &&
-                    entity.Runtime != null && entity.Runtime.LinkState < 0)
-                    return true;
-
-                entity.FreeEntityLikeExe();
-                return true;
-            }
-
-            return false;
+            bool handled = entity.ResolveNativeC25LifecycleForWorldPass();
+            if (world.IsActiveForCurrentPassInternal(entity))
+                RefreshRuntimeSnapshot(entity, BattleLateRuntimeSnapshotStage.FrameExit, diagnostics);
+            return handled;
         }
+
     }
 
     internal static class BattleNativeArmorRecoveryKernel

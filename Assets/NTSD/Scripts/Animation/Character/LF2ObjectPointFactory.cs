@@ -437,7 +437,7 @@ namespace NTSD.Animation
 
         internal LF2Entity MaterializeObjectForStructuralWriter(OPointCreateTask task)
         {
-            if (!_acceptingSpawnRequests)
+            if (!_acceptingSpawnRequests || task == null)
                 return null;
 
             SimulationWorld requestedWorld = task?.targetWorld ?? task?.parent?.Match;
@@ -456,7 +456,7 @@ namespace NTSD.Animation
                                     SimulationTickDriver.Instance?.World;
             // 1. 检查 oid
             int oid = task.opoint.oid;
-            if (oid <= 0) return null;
+            if (oid < 0 || (oid == 0 && !task.nativeWeaponPieceSpawn)) return null;
 
             // 2. 获取对象定义
             var def = ResolveObjectDefinition(world, oid);
@@ -470,6 +470,10 @@ namespace NTSD.Animation
 
             LF2CharacterDataWrapper combatData = ResolveCharacterConfig(world, oid);
             if (combatData?.characterData == null)
+                return null;
+
+            if (task.nativeWeaponPieceSpawn &&
+                !BattleNativeWeaponPieceWriter.IsInitialActionAdmitted(combatData, task.opoint.action))
                 return null;
 
             int objType = def.type;
@@ -488,7 +492,8 @@ namespace NTSD.Animation
 
             // 5. 从逻辑对象池获取逻辑对象
             BattleLogicReferencePool referencePool = ResolveReferencePool(world);
-            ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid);
+            ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid,
+                task.nativeWeaponPieceSpawn ? world : null);
             if (logicObject == null)
             {
                 if (referencePool != null &&
@@ -536,7 +541,9 @@ namespace NTSD.Animation
             if (logicObject is LF2Entity living)
             {
                 // 7. 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
-                PostInitLiving(
+                if (task.nativeWeaponPieceSpawn)
+                    BattleNativeWeaponPieceWriter.InitializeBirth(living, task);
+                else PostInitLiving(
                     living,
                     task.parent,
                     task.opoint,
@@ -791,6 +798,8 @@ namespace NTSD.Animation
             float dvz,
             bool releaseOpointSpawn)
         {
+            BattleSpawnVitalsWriter.Apply(living, op);
+
             if (parent != null)
             {
                 // Inherit the C++ release relation identity from the spawning entity.
@@ -812,15 +821,6 @@ namespace NTSD.Animation
                     living.HitStun = parent.HitStun;
                     living.AiControlled = releaseOpointSpawn;
                 }
-            }
-
-            // oid==5 或 52 特殊 HP 初始化（C++ release 对齐 0x00422694：cmp ecx, 5 / cmp ecx, 34h，检查 data.oid 不是 type）
-            if (op.oid == 5 || op.oid == 52)
-            {
-                living.Health.HP = 10;
-                living.Health.HPBound = 10;
-                living.Health.HP3 = 10;
-                living.Health.PP = 5;
             }
 
             // kind==2 追踪绑定（C++ release 对齐 0x00422729-0x0042277E，无 entity_type 守卫）
@@ -962,12 +962,13 @@ namespace NTSD.Animation
         private static ILF2Object CreateLogicObject(
             BattleLogicReferencePool referencePool,
             int objectType,
-            int oid)
+            int oid,
+            SimulationWorld resetWorld = null)
         {
             // 将 int type 映射到 LF2ObjectType 枚举
             LF2ObjectType objTypeEnum = (LF2ObjectType)objectType;
             // 从逻辑对象池获取对象（池会自动处理 ObjectId 赋值）
-            return referencePool?.Get(objTypeEnum, oid);
+            return referencePool?.Get(objTypeEnum, oid, resetWorld);
         }
 
         private static BattleLogicReferencePool ResolveReferencePool(

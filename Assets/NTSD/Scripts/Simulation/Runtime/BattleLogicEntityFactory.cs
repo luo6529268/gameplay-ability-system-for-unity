@@ -3,6 +3,7 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
 using NTSD.App;
+using NTSD.Simulation.Ecs;
 
 namespace NTSD.Simulation
 {
@@ -35,7 +36,8 @@ namespace NTSD.Simulation
             float spreadDvz = 0f)
         {
             failure = BattleLogicEntityCreationFailure.None;
-            if (task == null || task.opoint.oid <= 0)
+            if (task == null || task.opoint.oid < 0 ||
+                (task.opoint.oid == 0 && !task.nativeWeaponPieceSpawn))
             {
                 failure = BattleLogicEntityCreationFailure.InvalidTask;
                 return null;
@@ -58,6 +60,13 @@ namespace NTSD.Simulation
             }
 
             BattleLogicReferencePool referencePool = world.LogicReferencePool;
+            if (task.nativeWeaponPieceSpawn &&
+                !BattleNativeWeaponPieceWriter.IsInitialActionAdmitted(characterConfig, task.opoint.action))
+            {
+                failure = BattleLogicEntityCreationFailure.InvalidTask;
+                return null;
+            }
+
             ILF2Object logicObject = referencePool?.Get(
                 (LF2ObjectType)definition.type,
                 oid,
@@ -98,7 +107,9 @@ namespace NTSD.Simulation
                 return null;
             }
 
-            PostInitLiving(
+            if (task.nativeWeaponPieceSpawn)
+                BattleNativeWeaponPieceWriter.InitializeBirth(entity, task);
+            else PostInitLiving(
                 entity,
                 task.parent,
                 task.opoint,
@@ -266,6 +277,8 @@ namespace NTSD.Simulation
             if (living == null)
                 return;
 
+            BattleSpawnVitalsWriter.Apply(living, op);
+
             if (parent != null)
             {
                 living.Team = parent.Team;
@@ -284,14 +297,6 @@ namespace NTSD.Simulation
                     living.HitStun = parent.HitStun;
                     living.AiControlled = releaseOpointSpawn;
                 }
-            }
-
-            if (op.oid == 5 || op.oid == 52)
-            {
-                living.Health.HP = 10;
-                living.Health.HPBound = 10;
-                living.Health.HP3 = 10;
-                living.Health.PP = 5;
             }
 
             if (op.kind == 2 && parent != null)

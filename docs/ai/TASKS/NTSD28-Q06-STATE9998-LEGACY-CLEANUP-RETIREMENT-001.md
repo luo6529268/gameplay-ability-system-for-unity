@@ -1,0 +1,11 @@
+后继C25额外death prelude退休后，原type0 HP0的48差异消除，224场景lifetime/state全部通过；64联合/此前真实Serial9998和关闭证据齐全。恢复VERIFIED / NO_EXTRA_STATE9998_SWEEP_ONLY，完整SelfCheck仍独立landing失败，不扩大为全部Serial对齐。
+
+COMPILE_PASS / FOCUSED_PARTIAL / SCOPED_PLAY_PASS。已移除额外删除，224生命周期无删除差异；type0 HP0动作仍失败，下一C25-DEAD-CHARACTER-EXTRA-BOUNCE-AUDIT，完整本事务未关闭。
+
+
+
+# 退休额外state9998删除扫描
+
+IN_PROGRESS / TEST_FIRST。原函数已实测224/672全存活且state/action与输入符合；新runner带frame/lifecycle错误检查复建进行中，需通过后才能关闭。本Record准确五脚本：仅SimulationWorld.SerialTickAll末尾去除CleanupState9998Entities调用及该无其它caller私有扫描；保留其它Serial runtime/snapshot/type3职责和主pass顺序；NTSDBattleTickSystem和LF2OtherObject两处注释删除旧state9998权威声明，保留diagnostic enum数值兼容。SelfCheck GT09次tick期望改持续存活/无销毁事件及sound，与原证据一致。新focused以224原函数场景比较实际Late+Serial邻接前后存活/state；此为Unity尾部组合，对照原完整driver的此项生命周期，不伪称全部字段完整tick已齐。
+
+数据/关闭：无新字段/schema/服务/queue，移除不属于native的过早删除；正常terminal/weapon break及有序shutdown继续按现有入口回收，不能变成不可回收实体。需目标RED、修后focused/已有frame+weapon regression、完整SelfCheck新首差异和真实Scene定向存活/显式回收/恢复关闭。非战斗/框架/资源/Scene不变。源码删除限已声明私有方法与callsite代码，不删除文件。回滚仅本五文件差量且需批准，已有用户改动保留。

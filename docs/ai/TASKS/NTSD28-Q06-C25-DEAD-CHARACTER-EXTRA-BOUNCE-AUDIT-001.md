@@ -1,0 +1,11 @@
+审计与额外前置退休已完成并限定VERIFIED，见6480 source witness及C25-EXTRA-DEATH-PRELUDE-RETIREMENT记录。下一TYPE2-LANDING-FACING-AUDIT，禁止重复旧48差异或恢复被退休hook。
+
+# C25额外死亡弹起与持有关系审计
+
+READY_SOURCE_CALLER_MAPPING。原完整driver state9998 witness 224/672场景中type0 HP0保持frame0或1；Unity实际Late+Serial对照有16case×3tick=48次186动作差异。删除9998扫描后剩余这一个测试类别失败，必须保留失败而不是只认存活。当前首差异在LF2Entity.RunLateDeathOpointPreCleanupPhase：type0/HP<=0先DropHeldObjectForCurrentDatDeath，再current<12或110/111或groundDeathFrame时EnterCurrentDatDeathBounceFrame。实际C25 caller与CanSkipExactCharacterDeathOpoint不可漏；不能只修某个frame0。
+
+先完整追踪当前formal C++ step_frame_slot、physics/hit-response的180/186动作选择、held关系解除/死亡处理、C25 OPoint资格与同tick顺序。source里186显式出现于hit_response和physics，不能凭absence断言全部没有death bounce。使用新增原函数见证扩展type0 HP0/正值、已有受击状态/落地/空中、HP降为0时点、持有双向link及state14等，输出frame/latch/counter、位置速度、关系与sound。已有state9998 witness正常diagnostic只是dead type0输入抑制，不是运行错误。
+
+确认准确production职责后另建Change Record，可能退休额外C25 writer或按原资格修复；不得删除真实hit/physics bounce或原版确有的持有关系释放。不可直接重命名旧C#语义为native。改动前准确paths/数据合同/验证/回滚，禁止非战斗/Unity-GAS框架/资源/Scene修改、禁止computer-use。
+
+随后仍要处理完整SelfCheck最新StateTransformLandingMatrix type2落地方向（GT08已经过去；最新结果见GT08 artifacts/SelfCheck-next-landing-fail.result），另按源码核验；再返回武器OID0/999准入与完整driver slot边缘、父FRAME事务和资源Q07。总目标及Q06保持ACTIVE。

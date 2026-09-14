@@ -1,0 +1,11 @@
+--- Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp before
++++ Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp after
+@@ -203,7 +203,7 @@
+         "\"profile\":\"logan-runtime\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
+         "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
+         "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
+-        "\",\"schemas\":{\"entityRuntime\":13,\"aggregate\":21,\"checksum\":24,"
++        "\",\"schemas\":{\"entityRuntime\":14,\"aggregate\":22,\"checksum\":25,"
+         "\"characterShell\":2,\"entityBaseShell\":2}}";
+ }
+ 

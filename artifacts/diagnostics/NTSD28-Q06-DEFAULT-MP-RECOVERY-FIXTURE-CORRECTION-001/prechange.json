@@ -1,0 +1,21 @@
+{
+  "paths": [
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5RecoveryStatusConsumerEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NegativeEnvironmentRecoveryProductionEditorTests.cs",
+    "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs"
+  ],
+  "files": [
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5RecoveryStatusConsumerEditorTests.cs",
+      "sha256": "887ede85485bf5f965bb3e88c3d72e4afeee8d0532067c302af8862c2f759044"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/Editor/NTSD28B5NegativeEnvironmentRecoveryProductionEditorTests.cs",
+      "sha256": "4c2b51801abab64cbca27641a3d3cff0f226ac8b3e97212c348a745418837bf3"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs",
+      "sha256": "4de8c1b85dd3a1ac882f3c75c948519bb2e95348c080f2f832c84f13cfd3aa69"
+    }
+  ]
+}

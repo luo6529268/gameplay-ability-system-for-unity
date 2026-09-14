@@ -1,0 +1,17 @@
+{
+  "job": "75fe40badce24741a8e0b9a28e4b43ae",
+  "total": 49,
+  "passed": 49,
+  "failed": 0,
+  "durationSeconds": 64.8175753,
+  "executedClasses": {
+    "NTSD.Simulation.Tests.NTSD28UnityEntityRawCaptureEditorTests": 10,
+    "NTSD.Test.NTSD28Q06NativeFrameTransactionEditorTests": 15,
+    "NTSD.Test.NTSD28Q06NativeLifecycleCarrierEditorTests": 7,
+    "NTSD.Test.NTSD28Q06NativeWeaponPieceEditorTests": 5,
+    "NTSD.Test.NTSD28Q06SpawnVitalsEditorTests": 12
+  },
+  "fullSelfCheck": "FAIL_GT08_LIFECYCLE_FIXTURE",
+  "scopedPlay": "PASS_4_VECTORS_4_TO_4_CHECKSUM",
+  "shutdown": "PASS_ALL_ZERO_TWO_FRAMES_STOPPED"
+}

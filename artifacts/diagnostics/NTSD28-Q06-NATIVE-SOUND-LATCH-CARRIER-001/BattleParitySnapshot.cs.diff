@@ -1,0 +1,10 @@
+--- Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs before
++++ Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleParitySnapshot.cs after
+@@ -1035,6 +1035,7 @@
+                 ("frame", isDefault ? 0 : runtime.Frame),
+                 ("frameDelay", isDefault ? 0 : runtime.FrameDelay),
+                 ("frameWaitCounter", isDefault ? 0 : runtime.FrameWaitCounter),
++                ("soundActionLatch", isDefault ? -1 : runtime.NativeSoundActionLatch),
+                 ("hitStateCount", isDefault ? 0 : runtime.HitStateCount),
+                 ("hitStop", isDefault ? 0 : runtime.HitStop),
+                 ("jumpInitPending", false),

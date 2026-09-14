@@ -513,7 +513,7 @@ namespace NTSD.Simulation
             diagnostics?.EndPhase(BattleTickPhase.LateEntityUpdate);
             ExpireNativeComboEntries();
 
-            // The surviving old type-3/state9998 serial body has no proven C25 slot
+            // The surviving old type-3 serial body has no proven C25 slot
             // owner yet. Keep it visible and strictly after the C25 skeleton until its
             // current-authority behavior is either rehomed or removed.
             diagnostics?.BeginPhase(BattleTickPhase.FrameAdvance);

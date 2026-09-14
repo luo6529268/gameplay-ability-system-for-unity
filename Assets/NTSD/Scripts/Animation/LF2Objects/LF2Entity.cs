@@ -746,10 +746,10 @@ namespace NTSD.Animation.LF2Objects
 
             LF2FrameData currentData = state.FrameDataId < 0
                 ? null
-                : GetFrameDataById(state.FrameDataId);
+                : FrameCache?.GetNativeFrameDataById(state.FrameDataId);
             LF2FrameData collisionData = state.CollisionFrameDataId < 0
                 ? null
-                : GetFrameDataById(state.CollisionFrameDataId);
+                : FrameCache?.GetNativeFrameDataById(state.CollisionFrameDataId);
             if ((state.FrameDataId >= 0 && currentData == null) ||
                 (state.CollisionFrameDataId >= 0 && collisionData == null))
             {
@@ -1003,7 +1003,7 @@ namespace NTSD.Animation.LF2Objects
             }
         }
 
-        private int BrokenWeaponFragmentCount(int oid)
+        internal static int BrokenWeaponFragmentCount(int oid)
         {
             if (oid == 101 || oid == 218) return 7;
             if (oid == 100 || oid == 213 || oid == 217) return 5;
@@ -2690,7 +2690,7 @@ namespace NTSD.Animation.LF2Objects
         internal bool TryApplyNativeC25DefinitionTransition()
         {
             LF2FrameData sourceFrame = Frame?.D;
-            if (sourceFrame == null ||
+            if (Runtime.NativeLifecycleResolutionPending || sourceFrame == null ||
                 sourceFrame.state < 8000 ||
                 sourceFrame.state >= 9000)
             {
@@ -2744,6 +2744,9 @@ namespace NTSD.Animation.LF2Objects
             Frame.Prev2D = targetFrame;
             Runtime.PrevFrame2 = targetAction;
             Runtime.RenderPicOffset = 0;
+            Runtime.NativeSoundActionLatch = -1;
+            Runtime.NativeLifecycleResolutionPending = false;
+            Runtime.NativeLifecycleCode = 0;
             RefreshRuntimeSnapshot();
             return true;
         }
@@ -2768,28 +2771,21 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void RunPreCollisionRecoveryPhase(int tickIndex)
         {
-            if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character || Health == null)
+            if (!BattleRecoveryStatusWriter.CanEnterNativeResource(this))
                 return;
 
-            BattleFlowRuntimeState flow = Match?.Runtime?.Flow;
-            bool stepWaitGate = flow != null && flow.BattleStepMode == 1 && flow.BattleStepGate != 1;
-            bool period12 = tickIndex % NTSDGlobal.Gameplay.HpRecoverPeriod == 0;
-            BattleRecoveryStatusWriter.ApplyHpRecovery(this, period12, stepWaitGate);
+            SimulationWorld resourceWorld = RegisteredWorldForSimulation;
+            BattleRecoveryStatusWriter.ApplyHpRecovery(this, resourceWorld?.NativeResourcePhase12 ?? -1,
+                BattleRecoveryStatusWriter.DefaultSelectedModeHpRegenGate28);
 
             // Alignment contract: NTSD28-B5-NEGATIVE-ENVIRONMENT-RECOVERY-PRODUCTION-001.
             BattleNegativeEnvironmentRecoveryWriter.Apply(
                 RegisteredWorldForSimulation,
                 this);
 
-            if (tickIndex % NTSDGlobal.Gameplay.PpRecoverPeriod != 0)
-                return;
-            if (Runtime.OrdinaryCreditGate2F4 != -1 &&
-                Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit)
-                return;
-            if (Health.PP >= NTSDGlobal.Gameplay.PpRecoverCap || HitStun < 0 || stepWaitGate)
-                return;
-
-            BattleRecoveryStatusWriter.ApplyMpRecovery(this);
+            BattleRecoveryStatusWriter.ApplyMpRecovery(this, resourceWorld?.NativeResourcePhase3 ?? -1,
+                BattleRecoveryStatusWriter.DefaultSelectedModeMpRegenGate2C,
+                resourceWorld?.Runtime?.FunctionKeys?.HitResourceEnabled ?? true);
         }
 
         /// <summary>
@@ -4194,76 +4190,21 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
-        internal virtual void RunLateDeathOpointPreCleanupPhase()
-        {
-            if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
-                return;
-            if (Health == null || Health.HP > 0 || Runtime == null)
-                return;
-
-            DropHeldObjectForCurrentDatDeath();
-
-            int frameId = Frame?.N ?? -1;
-            if (frameId < 12 || frameId == 110 || frameId == 111)
-                EnterCurrentDatDeathBounceFrame();
-
-            if (Runtime.YInt == 0 && Runtime.Y == 0.0 && Runtime.Vy == 0.0 && KnockbackVy == 0.0)
-            {
-                int currentFrame = Frame?.N ?? -1;
-                bool groundDeathFrame =
-                    (currentFrame >= 180 && currentFrame <= 189 && currentFrame != 184) ||
-                    (currentFrame >= 212 && currentFrame <= 214);
-                if (groundDeathFrame)
-                    EnterCurrentDatDeathBounceFrame();
-            }
-        }
-
         internal virtual bool TryRunLatePostOpointCleanupPhase()
         {
-            if (GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character || Runtime == null ||
+            int type = GetCurrentDataObjectTypeForSimulation();
+            if ((type != 1 && type != 2 && type != 4 && type != 6) || Runtime == null ||
                 Runtime.WeaponFlightCounter >= 0)
             {
                 return false;
             }
 
             Runtime.WeaponFlightCounter = 0;
+            Runtime.NativeLifecycleResolutionPending = true;
+            Runtime.NativeLifecycleCode = 1000;
             QueueBattleSound(FrameCache?.Wrapper?.characterData?.weapon_broken_sound);
-            Runtime.PendingFlushDestroy = true;
+            BattleNativeWeaponPieceWriter.Materialize(this);
             return true;
-        }
-
-        private void DropHeldObjectForCurrentDatDeath()
-        {
-            if (this is LF2Character character)
-            {
-                character.ForceDropHeldWeaponForLateDeathInternal();
-                return;
-            }
-
-            int holderSlot = Runtime?.SlotIndex ?? -1;
-            int heldSlot = Runtime?.ResolveActiveHeldSlotIndex() ?? -1;
-            LF2Entity held = heldSlot >= 0
-                ? Match?.FindEntityByRuntimeSlotForQuery(heldSlot) ??
-                  Match?.FindEntityByRuntimeSlotIncludingPending(heldSlot)
-                : null;
-
-            Runtime.LinkState = 0;
-            Runtime.TargetSlotIndex = -1;
-            Runtime.HeldWeaponStableId = -1;
-            if (held?.Runtime == null || held.Runtime.HolderStableId != holderSlot)
-                return;
-
-            held.Runtime.LinkState = 0;
-            held.Runtime.HolderStableId = -1;
-        }
-
-        private void EnterCurrentDatDeathBounceFrame()
-        {
-            DirectWriteRawFramePreserveWaitCounter(186);
-            Runtime.Vy = -3.0;
-            KnockbackVy = -3.0;
-            Runtime.Y = -1.0;
-            Runtime.YInt = -1;
         }
 
         internal virtual void RunLateTailBeforePrevFrame()
@@ -4297,8 +4238,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool RunNativeC25State18BrokenWeaponParticles()
         {
-            LF2FrameData previousFrame = GetFrameDataById(Frame?.Prev ?? 0);
-            LF2FrameData currentFrame = Frame?.D;
+            LF2FrameData previousFrame = FrameCache?.GetNativeFrameDataById(Frame?.Prev ?? 0);
+            LF2FrameData currentFrame = FrameCache?.GetNativeFrameDataById(Frame?.N ?? -1);
             if (previousFrame == null || currentFrame == null)
                 return false;
 
@@ -5492,7 +5433,9 @@ namespace NTSD.Animation.LF2Objects
 
         protected virtual void ApplyCommonCaughtExitHitStop(int previousFrameId)
         {
-            LF2FrameData previousFrame = FrameCache?.GetFrameDataById(previousFrameId);
+            LF2FrameData previousFrame = nativeC25FrameTickActive
+                ? FrameCache?.GetNativeFrameDataById(previousFrameId)
+                : FrameCache?.GetFrameDataById(previousFrameId);
             if (previousFrame == null || previousFrame.state != LF2States.Lying)
                 return;
 
@@ -5527,7 +5470,13 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool EndNativeC25FrameTickForWorldPass()
         {
+            return EndNativeC25FrameTickForWorldPass(out _);
+        }
+
+        internal bool EndNativeC25FrameTickForWorldPass(out bool terminalPending)
+        {
             bool armed = renderPhaseTransitionArmedThisTick;
+            terminalPending = Runtime?.NativeLifecycleResolutionPending ?? false;
             renderPhaseTransitionArmedThisTick = false;
             nativeC25FrameTickActive = false;
             return armed;
@@ -6433,6 +6382,9 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool RunNativeC25FrameBodyForWorldPass()
         {
+            if (nativeC25FrameTickActive)
+                return RunNativeC25FrameTransaction();
+
             int dataType = GetCurrentDataObjectTypeForSimulation();
             if (FrameDelay != 0 && dataType != (int)LF2ObjectType.SpecialAttack)
                 return false;
@@ -6585,6 +6537,235 @@ namespace NTSD.Animation.LF2Objects
                 Trans?.SyncWaitCounterFrame(currentFrame);
 
             return true;
+        }
+
+        // Alignment contract: NTSD28-Q06-NATIVE-FRAME-TRANSACTION-INTEGRATION-001.
+        private bool RunNativeC25FrameTransaction()
+        {
+            if (Frame == null || Runtime == null || FrameCache?.Wrapper?.characterData == null ||
+                Runtime.NativeLifecycleResolutionPending)
+                return false;
+
+            int type = GetCurrentDataObjectTypeForSimulation();
+            if (Runtime.LinkState < 0 || (FrameDelay != 0 && type != 3))
+                return false;
+
+            LF2FrameData frame = FrameCache.GetNativeFrameDataById(Frame.N);
+            if (Runtime.SlotIndex >= 0 && Runtime.SlotIndex < 20 && type == 0 &&
+                Health.HP <= 0 && frame?.state == 14 && Runtime.HP2Orig <= 1 && Runtime.RespawnCount <= 0)
+                return false;
+
+            if (type == 3 && frame != null &&
+                !(frame.HasPrimaryCatchPoint && frame.PrimaryCatchPoint.Kind == 2))
+            {
+                if (frame.state == 3007)
+                {
+                    if (Health.HP < 1)
+                    {
+                        Health.HP = 0;
+                        BindNativeC25Action(frame.hit_d == 0 ? 10 : frame.hit_d, false);
+                        AttackingCounter = 0;
+                    }
+                }
+                else if (frame.hit_a > 0)
+                {
+                    Health.HP -= frame.hit_a;
+                    if (Health.HP < 1)
+                    {
+                        Health.HP = 0;
+                        BindNativeC25Action(frame.hit_d, false);
+                    }
+                }
+            }
+
+            int previousAction = Trans.WaitCounter;
+            QueueNativeC25FrameSounds();
+            frame = FrameCache.GetNativeFrameDataById(Frame.N);
+            Frame.D = frame;
+            if (frame == null || frame.wait < 0)
+            {
+                ArmNativeC25TerminalIfNeeded();
+                return false;
+            }
+
+            int fromAction = Frame.N;
+            if (fromAction != Trans.WaitCounter)
+            {
+                AttackingCounter = 0;
+                Trans.SyncWaitCounterFrame(fromAction);
+            }
+            AttackingCounter++;
+            int rawNext = 0;
+            bool selectedDestination = false;
+            if (AttackingCounter > frame.wait)
+            {
+                AttackingCounter = 0;
+                rawNext = frame.next;
+                if (rawNext == 0)
+                {
+                    Trans.SyncWaitCounterFrame(Frame.N);
+                }
+                else
+                {
+                    int target = rawNext;
+                    if (target < 0)
+                    {
+                        target = unchecked(-target);
+                        SwitchDir(Runtime.IsFacingLeft ? "right" : "left");
+                    }
+                    if (target == 999)
+                        target = 0;
+                    if (target >= 1000 || target < 0)
+                    {
+                        BindNativeC25Action(target, false);
+                    }
+                    else
+                    {
+                        BindNativeC25Action(target, true);
+                        if (target == 212 && target != fromAction && rawNext != 999)
+                            ApplyNativeC25JumpInit();
+                        if (rawNext == 999)
+                        {
+                            int resolved = type == 0 && Runtime.YInt != 0 &&
+                                Runtime.CollisionYReference != Runtime.YInt ? 212 : 0;
+                            BindNativeC25Action(resolved, true);
+                        }
+                        selectedDestination = true;
+                    }
+                }
+            }
+
+            if (selectedDestination && Frame.N >= 0 && Frame.N < 999)
+                ApplyCommonCaughtExitHitStop(previousAction);
+            QueueNativeC25FrameSounds();
+            if (selectedDestination && rawNext != 0 && Frame.N >= 0 && Frame.N < 999 &&
+                (Match?.Runtime?.FunctionKeys?.HitResourceEnabled ?? true))
+            {
+                ApplyNativeC25AutomaticCosts(Frame.D);
+            }
+            ArmNativeC25TerminalIfNeeded();
+            if (Frame.N == 110 || Frame.N == 114)
+            {
+                if (registeredWorld != null)
+                    registeredWorld.CharacterInputWriter.SetDefendLock(Runtime, 3);
+                else
+                    Runtime.CdDefendLock = 3;
+            }
+            return true;
+        }
+
+        private void ArmNativeC25TerminalIfNeeded()
+        {
+            if (Frame.N < 0 || Frame.N >= 999)
+            {
+                Runtime.NativeLifecycleResolutionPending = true;
+                Runtime.NativeLifecycleCode = Frame.N;
+            }
+        }
+
+        internal bool ResolveNativeC25LifecycleForWorldPass()
+        {
+            if (Runtime == null || !Runtime.NativeLifecycleResolutionPending)
+                return false;
+            int code = Runtime.NativeLifecycleCode;
+            if (code >= 1100 && code <= 1299)
+            {
+                Runtime.NativeRuntimeStateCode = 1100 - code;
+                BindNativeC25Action(0, false);
+                SyncCollisionSnapshotToCurrentFrame();
+                Runtime.NativeLifecycleResolutionPending = false;
+                Runtime.NativeLifecycleCode = 0;
+            }
+            else if (code < 0 || code >= 999)
+            {
+                FreeEntityLikeExe();
+            }
+            // The source consumes the pending branch even when it rejects an invalid code.
+            return true;
+        }
+
+        private void BindNativeC25Action(int action, bool commitLatch)
+        {
+            WriteCurrentFrameId(action);
+            Frame.D = FrameCache.GetNativeFrameDataById(action);
+            if (Frame.D != null)
+                Trans.SyncDirectFrameData(Frame.D.wait, Frame.D.next, commitLatch ? action : Trans.WaitCounter);
+            else if (commitLatch)
+                Trans.SyncWaitCounterFrame(action);
+        }
+
+        private void ApplyNativeC25AutomaticCosts(LF2FrameData destination)
+        {
+            if (destination == null)
+                return;
+            int fallback = destination.next;
+            int mp = BattleCharacterActionWriter.AdjustNativeMpCost(this, destination.mp);
+            if (mp < 0)
+            {
+                int cost = -mp;
+                if (Health.PP < cost)
+                    BindNativeC25Action(fallback, true);
+                else
+                {
+                    Health.PP -= cost;
+                    Runtime.InputMpConsumedTotal350 += cost;
+                }
+            }
+
+            // The original keeps the first destination even after MP selects its raw fallback.
+            int hp = BattleCharacterActionWriter.AdjustNativeMpCost(this, destination.hp);
+            if (hp < 0)
+            {
+                int cost = -hp;
+                if (Health.HP < cost)
+                    BindNativeC25Action(fallback, true);
+                else
+                {
+                    Health.HP -= cost;
+                    Runtime.InputHpConsumedTotal34C += cost;
+                    Health.HPBound -= cost / 3;
+                }
+            }
+        }
+
+        private void QueueNativeC25FrameSounds()
+        {
+            int action = Frame.N;
+            if (action < 0 || action >= 999 || Runtime.NativeSoundActionLatch == action)
+                return;
+            Runtime.NativeSoundActionLatch = action;
+            LF2FrameData frame = FrameCache.GetNativeFrameDataById(action);
+            if (frame == null)
+                return;
+            if (!frame.UsesLoganFrameNumbers && frame.FrameSounds.Count == 0)
+            {
+                QueueBattleSound(frame.sound);
+                return;
+            }
+            int count = System.Math.Min(20, frame.FrameSounds.Count);
+            for (int index = 0; index < count; index++)
+            {
+                string sound = frame.FrameSounds[index];
+                if (!string.IsNullOrEmpty(sound))
+                    QueueBattleSound(sound);
+            }
+        }
+
+        private void ApplyNativeC25JumpInit()
+        {
+            LF2CharacterData data = FrameCache.Wrapper.characterData;
+            LoganDefinitionFieldSet bmp = data.NativeMetadata?.Bmp;
+            Runtime.Vy = bmp?.Float64OrDefault("jump_height", 0) ?? data.jump_height;
+            double dx = bmp?.Float64OrDefault("jump_distance", 0) ?? data.jump_distance;
+            double dz = bmp?.Float64OrDefault("jump_distancez", 0) ?? data.jump_distancez;
+            if (IsFrameTickRightPressed() && !IsFrameTickLeftPressed())
+                Runtime.Vx = dx;
+            else if (IsFrameTickLeftPressed() && !IsFrameTickRightPressed())
+                Runtime.Vx = -dx;
+            if (IsFrameTickUpPressed() && !IsFrameTickDownPressed())
+                Runtime.Vz = -dz;
+            else if (IsFrameTickDownPressed() && !IsFrameTickUpPressed())
+                Runtime.Vz = dz;
         }
 
         internal bool RunCommonFrameTickFromTransistor()

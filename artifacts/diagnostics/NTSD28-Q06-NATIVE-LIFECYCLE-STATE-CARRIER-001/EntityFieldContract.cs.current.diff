@@ -1,0 +1,22 @@
+--- Tools/NTSD28Parity/EntityFieldContract.cs before
++++ Tools/NTSD28Parity/EntityFieldContract.cs current
+@@ -135,7 +135,7 @@
+         Field("vitals.reviveNextLives", "int32", "EntityState28::revive_next_lives_310", "NTSDEntityRuntime::HPOrig", VerifiedBinding),
+         Field("vitals.reviveNextHp", "int32", "EntityState28::revive_next_hp_314", "NTSDEntityRuntime::RespawnCount", VerifiedBinding),
+ 
+-        Field("combat.runtimeStateCode", "int32", "EntityState28::runtime_state_code", null, MissingBinding),
++        Field("combat.runtimeStateCode", "int32", "EntityState28::runtime_state_code", "NTSDEntityRuntime::NativeRuntimeStateCode", VerifiedBinding),
+         Field("combat.renderPhase", "int32", "EntityState28::render_phase_008", "NTSDEntityRuntime::HitStop / LF2Entity::HitStun", VerifiedBinding),
+         Field("combat.attackerRest", "int32", "EntityState28::attacker_rest", "NTSDEntityRuntime::AttackExempt", VerifiedBinding),
+         Field("combat.collisionYReference", "int32", "EntityState28::collision_y_reference", "NTSDEntityRuntime::CollisionYReference", VerifiedBinding),
+@@ -151,8 +151,8 @@
+         Field("combat.environmentSourceSlot", "int32", "EntityState28::environment_source_slot_160", null, MissingBinding),
+         Field("combat.objectAiExcludedGroupSourceSlot", "int32", "EntityState28::object_ai_excluded_group_source_slot_2f8", "NTSDEntityRuntime::ObjectAiExcludedGroupSourceSlot2F8", VerifiedBinding),
+ 
+-        Field("lifecycle.resolutionPending", "boolean", "EntityState28::lifecycle_resolution_pending", "none", MissingBinding),
+-        Field("lifecycle.code", "int32", "EntityState28::lifecycle_code", null, MissingBinding),
++        Field("lifecycle.resolutionPending", "boolean", "EntityState28::lifecycle_resolution_pending", "NTSDEntityRuntime::NativeLifecycleResolutionPending", VerifiedBinding),
++        Field("lifecycle.code", "int32", "EntityState28::lifecycle_code", "NTSDEntityRuntime::NativeLifecycleCode", VerifiedBinding),
+     ];
+ 
+     internal static object CreateDescriptor()

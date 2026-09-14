@@ -1,0 +1,122 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
+
+using NTSD.Animation.LF2Objects;
+using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
+using NUnit.Framework;
+
+namespace NTSD.Test
+{
+    public sealed class NTSD28CollisionYReferenceCarrierEditorTests
+    {
+        [Test]
+        public void RuntimeLifecycle_DefaultsToZero_InputResetPreserves_FullResetClears()
+        {
+            var runtime = new NTSDEntityRuntime();
+            Assert.That(runtime.CollisionYReference, Is.Zero);
+
+            runtime.CollisionYReference = -17;
+            runtime.ResetInputState();
+            Assert.That(runtime.CollisionYReference, Is.EqualTo(-17));
+
+            runtime.Reset();
+            Assert.That(runtime.CollisionYReference, Is.Zero);
+        }
+
+        [Test]
+        public void CanonicalCopy_PreservesSignedCollisionReference()
+        {
+            var source = new NTSDEntityRuntime { CollisionYReference = -29 };
+            var destination = new NTSDEntityRuntime { CollisionYReference = 41 };
+
+            Assert.That(source.TryCopyCanonicalStateTo(destination), Is.True);
+            Assert.That(destination.CollisionYReference, Is.EqualTo(-29));
+        }
+
+        [Test]
+        public void EntityRuntimeSnapshot_RoundTripsSignedCollisionReference()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(3);
+            world.Register(entity);
+            entity.Runtime.CollisionYReference = -33;
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var snapshot = new BattleWorldEntityRuntimeSnapshotBuffer(
+                world.MaxRuntimeSlotsForServices);
+
+            Assert.That(snapshot.TryCapture(
+                world.RuntimeSlotTableForModules,
+                identity,
+                17), Is.True);
+            entity.Runtime.CollisionYReference = 64;
+            Assert.That(snapshot.TryCopyEntityRuntime(3, entity.Runtime), Is.True);
+
+            Assert.That(entity.Runtime.CollisionYReference, Is.EqualTo(-33));
+            Assert.That(snapshot.SchemaVersion, Is.EqualTo(14));
+        }
+
+        [Test]
+        public void ChecksumParityAndRaw_ExposeSignedCollisionReference()
+        {
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            ulong baseline = world.CaptureRuntimeChecksum64(1, null);
+
+            entity.Runtime.CollisionYReference = -37;
+            ulong changed = world.CaptureRuntimeChecksum64(1, null);
+            string parity = world.CaptureParityFrameSnapshot(1).ToJson(full: true);
+            string raw = NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1);
+
+            Assert.That(changed, Is.Not.EqualTo(baseline));
+            Assert.That(parity, Does.Contain("\"collisionYReference\":-37"));
+            Assert.That(raw, Does.Contain("\"collisionYReference\":-37"));
+            Assert.That(raw, Does.Contain("\"verifiedCount\":44"));
+            Assert.That(raw, Does.Contain("\"missingCount\":6"));
+            Assert.That(raw, Does.Not.Contain("combat.collisionYReference"));
+        }
+
+        [Test]
+        public void SnapshotAndChecksumSchemas_AdvanceForCollisionReference()
+        {
+            Assert.That(BattleWorldEntityRuntimeSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(14));
+            Assert.That(BattleStateSnapshotBuffer.CurrentSchemaVersion,
+                Is.EqualTo(22));
+            Assert.That(BattleLockstepChecksumModule.CurrentSchemaVersion,
+                Is.EqualTo(25));
+        }
+
+        [Test]
+        public void WarmCopyAndChecksum_DoNotAllocate()
+        {
+            var source = new NTSDEntityRuntime { CollisionYReference = -51 };
+            var destination = new NTSDEntityRuntime();
+            var world = new SimulationWorld();
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(0);
+            world.Register(entity);
+            entity.Runtime.CollisionYReference = -51;
+            _ = source.TryCopyCanonicalStateTo(destination);
+            _ = world.CaptureRuntimeChecksum64(0, null);
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            ulong checksum = 0;
+            for (int index = 0; index < 4096; index++)
+            {
+                source.TryCopyCanonicalStateTo(destination);
+                checksum ^= world.CaptureRuntimeChecksum64(index, null);
+            }
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+
+            Assert.That(destination.CollisionYReference, Is.EqualTo(-51));
+            Assert.That(checksum, Is.Not.Zero);
+            Assert.That(allocated, Is.Zero);
+        }
+    }
+}
+#endif

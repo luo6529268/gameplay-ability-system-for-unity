@@ -18,7 +18,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void RecoveryHpZeroStillReachesFrameAndDeath()
+        public void RecoveryHpZeroReachesFrameWithoutExtraDeathPrelude()
         {
             int[] result = Capture(mode: 0);
             AssertRemovedStages(result);
@@ -28,7 +28,7 @@ namespace NTSD.Test
             Assert.That(result[6], Is.EqualTo(1));
             Assert.That(result[7], Is.EqualTo(1));
             Assert.That(result[8], Is.Zero);
-            Assert.That(result[9], Is.EqualTo(1));
+            Assert.That(result[9], Is.Zero);
             Assert.That(result[10], Is.Zero);
         }
 
@@ -101,6 +101,7 @@ namespace NTSD.Test
         [TestCase(5)]
         public void ConsolidatedFrameExitPublishesResetFrameImmediately(int scenario)
         {
+            // The fixture supplies native pending/code; its empty frame probe is not a production frame writer.
             int[] result = Capture(
                 scenario,
                 BattleLateRuntimeSnapshotMode.ConsolidatedFinal);
@@ -113,7 +114,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ConsolidatedRecoveryPreservesHpObservationAtLaterPhases()
+        public void ConsolidatedRecoveryPreservesFrameHpObservation()
         {
             int[] legacy = Capture(
                 0,

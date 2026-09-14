@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "error": null,
+  "scope": "Legacy-content real Scene: full World C25 Late pass, two materializers/current frame backend, broken versus healthy terminal; per-vector checksum restore. Not full input/physics tick or formal sprite parity.",
+  "tick": 5,
+  "objectsBefore": 4,
+  "objectsAfter": 4,
+  "restored": true,
+  "vectors": [
+    {
+      "mode": "DataOriented",
+      "route": 0,
+      "broken": 0,
+      "pieces": 0
+    },
+    {
+      "mode": "DataOriented",
+      "route": 0,
+      "broken": 1,
+      "pieces": 5
+    },
+    {
+      "mode": "DataOriented",
+      "route": 1,
+      "broken": 0,
+      "pieces": 0
+    },
+    {
+      "mode": "DataOriented",
+      "route": 1,
+      "broken": 1,
+      "pieces": 5
+    }
+  ]
+}

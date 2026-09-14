@@ -1,0 +1,11 @@
+--- Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs before
++++ Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCharacterActionWriter.cs current
+@@ -1647,7 +1647,7 @@
+                 action);
+         }
+ 
+-        private static int AdjustNativeMpCost(
++        internal static int AdjustNativeMpCost(
+             LF2Entity character,
+             int rawCost)
+         {

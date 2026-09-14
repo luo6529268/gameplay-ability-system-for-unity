@@ -1,0 +1,165 @@
+{
+  "rows": 1296,
+  "physicalCases": 648,
+  "fullCases": 648,
+  "facingDifferences": 0,
+  "byteIdentical": true,
+  "sha256": "a76f3e6979fb1b6d501cec67718ccc886b5c18d867fa9f2c836af995bfb801ee",
+  "messages": {},
+  "reportedCase": [
+    {
+      "phase": 0,
+      "state": 2000,
+      "facing": 0,
+      "vx": 8,
+      "vy": 10,
+      "y": -1,
+      "reference": 0,
+      "entity": {
+        "slot": 70,
+        "allocationEpoch": 1,
+        "active": true,
+        "identity": {
+          "objectId": 742,
+          "objectType": 2,
+          "controlSlot": 0,
+          "ownerSlot": -1,
+          "battleGroup": 0,
+          "participantClass": 0
+        },
+        "frame": {
+          "action": 0,
+          "actionLatch": 0,
+          "previousAction": 0,
+          "tickActionSnapshot": 0,
+          "frameCounter": 0,
+          "frameState": 2000,
+          "facingLeft": true
+        },
+        "position": {
+          "x": 8,
+          "y": 0,
+          "z": 0,
+          "preciseX": 8,
+          "preciseY": 0,
+          "preciseZ": 0
+        },
+        "motion": {
+          "x": 4,
+          "y": -5,
+          "z": 0
+        },
+        "vitals": {
+          "currentHp": 500,
+          "effectiveMaxHp": 500,
+          "baseMaxHp": 500,
+          "currentMp": 500,
+          "baseMaxMp": 500,
+          "reviveLives": 1,
+          "reviveNextLives": 0,
+          "reviveNextHp": 0
+        },
+        "combat": {
+          "runtimeStateCode": 0,
+          "renderPhase": 0,
+          "attackerRest": 0,
+          "collisionYReference": 0,
+          "platformSourceSlot": 0,
+          "hitReactionTimer": 0,
+          "bdefendAccumulator": 0,
+          "runtimeArmorHp": 0,
+          "armorRecoveryTimer": -1,
+          "motionHoldTimer": 0,
+          "weaponHp": 19,
+          "specialHitLatch0eb": false,
+          "environmentState": 0,
+          "environmentSourceSlot": -1,
+          "objectAiExcludedGroupSourceSlot": -1
+        },
+        "lifecycle": {
+          "resolutionPending": false,
+          "code": 0
+        }
+      },
+      "syncCalls": 0,
+      "messages": []
+    },
+    {
+      "phase": 1,
+      "state": 2000,
+      "facing": 0,
+      "vx": 8,
+      "vy": 10,
+      "y": -1,
+      "reference": 0,
+      "entity": {
+        "slot": 70,
+        "allocationEpoch": 1,
+        "active": true,
+        "identity": {
+          "objectId": 742,
+          "objectType": 2,
+          "controlSlot": 0,
+          "ownerSlot": -1,
+          "battleGroup": 0,
+          "participantClass": 0
+        },
+        "frame": {
+          "action": 0,
+          "actionLatch": 0,
+          "previousAction": 0,
+          "tickActionSnapshot": 0,
+          "frameCounter": 1,
+          "frameState": 2000,
+          "facingLeft": true
+        },
+        "position": {
+          "x": 8,
+          "y": 0,
+          "z": 0,
+          "preciseX": 8,
+          "preciseY": 0,
+          "preciseZ": 0
+        },
+        "motion": {
+          "x": 4,
+          "y": -5,
+          "z": 0
+        },
+        "vitals": {
+          "currentHp": 500,
+          "effectiveMaxHp": 500,
+          "baseMaxHp": 500,
+          "currentMp": 500,
+          "baseMaxMp": 500,
+          "reviveLives": 1,
+          "reviveNextLives": 0,
+          "reviveNextHp": 0
+        },
+        "combat": {
+          "runtimeStateCode": 0,
+          "renderPhase": 0,
+          "attackerRest": 0,
+          "collisionYReference": 0,
+          "platformSourceSlot": 0,
+          "hitReactionTimer": 0,
+          "bdefendAccumulator": 0,
+          "runtimeArmorHp": 0,
+          "armorRecoveryTimer": -1,
+          "motionHoldTimer": 0,
+          "weaponHp": 19,
+          "specialHitLatch0eb": false,
+          "environmentState": 0,
+          "environmentSourceSlot": -1,
+          "objectAiExcludedGroupSourceSlot": -1
+        },
+        "lifecycle": {
+          "resolutionPending": false,
+          "code": 0
+        }
+      },
+      "syncCalls": 0,
+      "messages": []
+    }
+  ]
+}

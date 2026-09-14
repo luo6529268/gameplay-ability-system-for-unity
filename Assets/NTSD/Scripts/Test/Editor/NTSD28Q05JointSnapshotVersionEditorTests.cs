@@ -45,8 +45,10 @@ namespace NTSD.Test
             }
         }
 
-        [Test]
-        public void OldChecksumHistoryIsRejectedBeforeReplayRestoresWorld()
+        [TestCase(23)]
+        [TestCase(24)]
+        [TestCase(25)]
+        public void OldChecksumHistoryIsRejectedBeforeReplayRestoresWorld(int oldVersion)
         {
             FieldInfo singleton = typeof(SimulationTickDriver).BaseType.GetField(
                 "<Instance>k__BackingField", BindingFlags.Static | BindingFlags.NonPublic);
@@ -76,7 +78,7 @@ namespace NTSD.Test
                 var versions = (int[])typeof(LockstepChecksumHistoryRing).GetField(
                     "checksumSchemaVersions", BindingFlags.Instance | BindingFlags.NonPublic)
                     .GetValue(session.ChecksumHistory);
-                versions[0] = 23;
+                versions[0] = oldVersion;
                 ulong before = driver.World.CaptureRuntimeChecksum64(1, frame);
                 Assert.That(session.TryRestoreAndReplay(snapshot), Is.False);
                 Assert.That(session.LastReason, Is.EqualTo(LockstepProtocolReason.ReplayHistoryUnavailable));
@@ -90,9 +92,9 @@ namespace NTSD.Test
             }
         }
 
-        [TestCase(typeof(BattleWorldEntityRuntimeSnapshotBuffer), 13)]
-        [TestCase(typeof(BattleStateSnapshotBuffer), 21)]
-        [TestCase(typeof(BattleLockstepChecksumModule), 24)]
+        [TestCase(typeof(BattleWorldEntityRuntimeSnapshotBuffer), 15)]
+        [TestCase(typeof(BattleStateSnapshotBuffer), 23)]
+        [TestCase(typeof(BattleLockstepChecksumModule), 26)]
         [TestCase(typeof(BattleWorldCharacterShellSnapshotBuffer), 2)]
         [TestCase(typeof(BattleWorldEntityBaseShellSnapshotBuffer), 2)]
         public void JointVersionSetIsExplicit(Type type, int expected)
@@ -162,8 +164,8 @@ namespace NTSD.Test
                 var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
                 var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
                 Assert.That(world.TryCaptureBattleStateSnapshot(identity, 0, snapshot), Is.True);
-                Assert.That(snapshot.SchemaVersion, Is.EqualTo(21));
-                Assert.That(snapshot.EntityRuntime.SchemaVersion, Is.EqualTo(13));
+                Assert.That(snapshot.SchemaVersion, Is.EqualTo(23));
+                Assert.That(snapshot.EntityRuntime.SchemaVersion, Is.EqualTo(15));
                 string expected = world.CaptureLockstepChecksumSnapshot(0).OverallChecksum;
                 ulong expectedFast = world.CaptureRuntimeChecksum64(0, FrameInputSet.Empty(0));
                 character.Runtime.ObjectAiExcludedGroupSourceSlot2F8 = -1;

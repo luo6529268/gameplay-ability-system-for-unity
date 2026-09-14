@@ -18,8 +18,8 @@ namespace NTSD.Test.Editor
         {
             object[][] scenarios =
             {
-                new object[] { "baseline_phase12", 12, 0, 0, 0, 100, 200, 300, 50, -1, 0, 101, 54 },
-                new object[] { "baseline_phase3_pp150", 3, 0, 0, 0, 400, 400, 500, 150, 0, 0, 400, 152 },
+                new object[] { "baseline_phase12", 12, 0, 0, 0, 100, 200, 300, 50, -1, 0, 101, 50 },
+                new object[] { "baseline_phase3_pp150", 3, 0, 0, 0, 400, 400, 500, 150, 0, 0, 400, 150 },
                 new object[] { "weak_below_base", 12, 1, 0, 0, 100, 200, 300, 299, -1, 0, 100, 300 },
                 new object[] { "weak_at_base", 12, 1, 0, 0, 100, 200, 300, 300, -1, 0, 100, 300 },
                 new object[] { "weak_above_base", 12, 1, 0, 0, 100, 200, 300, 301, -1, 0, 100, 301 },
@@ -27,16 +27,16 @@ namespace NTSD.Test.Editor
                 new object[] { "weak_full_hp", 12, 1, 0, 0, 200, 200, 300, 50, -1, 0, 200, 50 },
                 new object[] { "weak_dead_hp", 12, 1, 0, 0, 0, 200, 300, 50, -1, 0, 0, 50 },
                 new object[] { "weak_overrides_both", 12, 1, 1, 1, 100, 200, 300, 50, -1, 0, 100, 51 },
-                new object[] { "hp_double_last_tick", 12, 0, 1, 0, 100, 200, 300, 50, -1, 0, 102, 54 },
-                new object[] { "hp_double_positive", 12, 0, 2, 0, 100, 200, 300, 50, -1, 0, 102, 54 },
-                new object[] { "hp_double_reaches_bound", 12, 0, 1, 0, 198, 200, 300, 50, -1, 0, 200, 54 },
-                new object[] { "hp_double_off_phase", 3, 0, 1, 0, 100, 200, 300, 50, -1, 0, 100, 55 },
-                new object[] { "mp_bonus_last_tick_pp150", 3, 0, 0, 1, 400, 400, 500, 150, 0, 0, 400, 153 },
-                new object[] { "mp_bonus_positive", 3, 0, 0, 2, 100, 200, 300, 50, -1, 0, 100, 56 },
-                new object[] { "mp_bonus_after_hp", 12, 0, 0, 1, 100, 200, 300, 50, -1, 0, 101, 55 },
-                new object[] { "both_bonuses", 12, 0, 1, 1, 100, 200, 300, 50, -1, 0, 102, 55 },
+                new object[] { "hp_double_last_tick", 12, 0, 1, 0, 100, 200, 300, 50, -1, 0, 102, 50 },
+                new object[] { "hp_double_positive", 12, 0, 2, 0, 100, 200, 300, 50, -1, 0, 102, 50 },
+                new object[] { "hp_double_reaches_bound", 12, 0, 1, 0, 198, 200, 300, 50, -1, 0, 200, 50 },
+                new object[] { "hp_double_off_phase", 3, 0, 1, 0, 100, 200, 300, 50, -1, 0, 100, 50 },
+                new object[] { "mp_bonus_last_tick_pp150", 3, 0, 0, 1, 400, 400, 500, 150, 0, 0, 400, 150 },
+                new object[] { "mp_bonus_positive", 3, 0, 0, 2, 100, 200, 300, 50, -1, 0, 100, 50 },
+                new object[] { "mp_bonus_after_hp", 12, 0, 0, 1, 100, 200, 300, 50, -1, 0, 101, 50 },
+                new object[] { "both_bonuses", 12, 0, 1, 1, 100, 200, 300, 50, -1, 0, 102, 50 },
                 new object[] { "off_phase_timers_expire", 1, 1, 1, 1, 100, 200, 300, 50, -1, 0, 100, 50 },
-                new object[] { "negative_timers_preserved", 12, -1, -1, -1, 100, 200, 300, 50, -1, 0, 101, 54 },
+                new object[] { "negative_timers_preserved", 12, -1, -1, -1, 100, 200, 300, 50, -1, 0, 101, 50 },
                 new object[] { "render_negative_blocks_helper", 3, 0, 0, 1, 400, 400, 500, 150, 0, -1, 400, 150 },
                 new object[] { "weak_hp_branch_ignores_render", 12, 1, 0, 1, 100, 200, 300, 299, -1, -1, 100, 300 },
                 new object[] { "mp_bonus_keeps_pp151_gate", 3, 0, 0, 1, 400, 400, 500, 151, 0, 0, 400, 151 },
@@ -93,6 +93,8 @@ namespace NTSD.Test.Editor
                 entity.Runtime.WeakTimer12C = weak;
                 entity.Runtime.HpRegenDouble1AC = hpDouble;
                 entity.Runtime.MpRegenBonusTimer1A4 = mpBonus;
+                world.Runtime.NativeWorldClock.ResourcePhase3 = tick % 3;
+                world.Runtime.NativeWorldClock.ResourcePhase12 = tick % 12;
 
                 world.LateEntityUpdateAll(tick);
 
@@ -162,4 +164,3 @@ namespace NTSD.Test.Editor
     }
 }
 #endif
-

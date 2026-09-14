@@ -13,13 +13,32 @@ namespace NTSD.Animation
     public sealed class LF2FrameCache
     {
         public const int MaxFrameIdExclusive = 857;
+        public const int NativeMaxFrameIdExclusive = 1000;
 
         private static readonly LF2FrameData EmptyFrame = new LF2FrameData();
+        private static readonly LF2FrameData[] NativeZeroFrames;
 
         public LF2CharacterDataWrapper Wrapper { get; private set; }
 
-        private readonly LF2FrameData[] _frames = new LF2FrameData[MaxFrameIdExclusive];
+        private readonly LF2FrameData[] _frames = new LF2FrameData[NativeMaxFrameIdExclusive];
         private readonly ILF2FrameCacheObserver observer;
+
+        static LF2FrameCache()
+        {
+            // Alignment contract: NTSD28-Q06-NATIVE-FRAME-ACCESSOR-RESOURCE-ADMISSION-001.
+            // Prewarm immutable-by-contract definition templates before any cache instance exists.
+            NativeZeroFrames = new LF2FrameData[999];
+            for (int id = 0; id < NativeZeroFrames.Length; id++)
+            {
+                NativeZeroFrames[id] = new LF2FrameData
+                {
+                    frameId = id,
+                    frameName = "<native zero-initialized frame>",
+                    wait = 0,
+                    UsesLoganFrameNumbers = true,
+                };
+            }
+        }
 
         public LF2FrameCache()
         {
@@ -48,7 +67,7 @@ namespace NTSD.Animation
                 {
                     if (frameData == null) continue;
 
-                    if ((uint)frameData.frameId < MaxFrameIdExclusive)
+                    if ((uint)frameData.frameId < NativeMaxFrameIdExclusive)
                     {
                         _frames[frameData.frameId] = frameData;
                     }
@@ -67,18 +86,31 @@ namespace NTSD.Animation
 
         public LF2FrameData GetFrameDataById(int frameId)
         {
-            if ((uint)frameId >= (uint)_frames.Length) return null;
+            if ((uint)frameId >= MaxFrameIdExclusive) return null;
             return _frames[frameId] ?? EmptyFrame;
         }
 
         public bool HasFrame(int frameId)
         {
-            return (uint)frameId < (uint)_frames.Length && _frames[frameId] != null;
+            return (uint)frameId < MaxFrameIdExclusive && _frames[frameId] != null;
+        }
+
+        public LF2FrameData GetNativeFrameDataById(int frameId)
+        {
+            if (Wrapper?.characterData == null || (uint)frameId >= NativeMaxFrameIdExclusive)
+                return null;
+            return _frames[frameId] ??
+                   ((uint)frameId < NativeZeroFrames.Length ? NativeZeroFrames[frameId] : null);
+        }
+
+        public bool HasNativeFrame(int frameId)
+        {
+            return GetNativeFrameDataById(frameId) != null;
         }
 
         public int GetFirstFrameByState(int targetState)
         {
-            for (int i = 0; i < _frames.Length; i++)
+            for (int i = 0; i < MaxFrameIdExclusive; i++)
             {
                 if (_frames[i] != null && _frames[i].state == targetState)
                 {
