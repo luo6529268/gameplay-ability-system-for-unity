@@ -348,7 +348,7 @@ namespace NTSD.Simulation
                 ? spawner.Runtime.XInt - frame.centerx + opoint.X
                 : spawner.Runtime.XInt + frame.centerx - opoint.X;
             int spawnY = spawner.Runtime.YInt - frame.centery + opoint.Y;
-            double spawnZ = spawner.Runtime.Z + 1.0;
+            double spawnZ = spawner.Runtime.ZInt + opoint.Z + 1.0;
 
             task.z = (float)spawnZ;
             task.useDirectRuntimePosition = true;

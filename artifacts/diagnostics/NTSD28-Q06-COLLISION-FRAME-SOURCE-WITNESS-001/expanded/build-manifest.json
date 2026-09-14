@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "9710AEBEE8D54DC229CF2C24E33902257A7767B52347F69F7AB5C1A517034FBD",
+  "captureBinarySha256": "85B8CA1AC2661DB96CE0A8311748334DFBF2224CB22A41D63E7D6968C4A8BD92",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28CollisionFrameSourceExpanded\\collision_frame_lookup_witness.exe",
+  "authorityWriteAllowed": false
+}

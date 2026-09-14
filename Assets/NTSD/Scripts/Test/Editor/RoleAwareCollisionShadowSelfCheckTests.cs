@@ -875,7 +875,7 @@ namespace NTSD.Test
         }
 
         [TestCase(false, false, 0)]
-        [TestCase(false, true, 0)]
+        [TestCase(false, true, 1)]
         [TestCase(true, false, 0)]
         [TestCase(true, true, 1)]
         public void Formal_CachedExactMatchesLegacyForCurrentAndCollisionRoleMatrix(

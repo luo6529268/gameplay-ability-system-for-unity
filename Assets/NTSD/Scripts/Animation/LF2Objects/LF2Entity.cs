@@ -1349,10 +1349,22 @@ namespace NTSD.Animation.LF2Objects
 
         internal void ExecuteNativePhysicsForWorldPass(int tickIndex)
         {
+            if (Runtime?.NativeLifecycleResolutionPending == true || HasUnavailableNativePhysicsFrameForWorldPass())
+            {
+                nativePhysicsCompletedTickForSerial = int.MinValue;
+                return;
+            }
             nativePhysicsCompletedTickForSerial =
                 RunNativePhysicsForWorldPass(tickIndex)
                     ? tickIndex
                     : int.MinValue;
+        }
+
+        internal bool HasUnavailableNativePhysicsFrameForWorldPass()
+        {
+            // Alignment contract: NTSD28-Q06-NATIVE-PHYSICS-MISSING-FRAME-GUARD-001.
+            return Runtime != null && FrameDelay == 0 && Runtime.LinkState >= 0 &&
+                FrameCache?.GetNativeFrameDataById(Frame?.N ?? -1) == null;
         }
 
         internal void MarkNativePhysicsCompletedForWorldPass(int tickIndex)
@@ -4238,42 +4250,7 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool RunNativeC25State18BrokenWeaponParticles()
         {
-            LF2FrameData previousFrame = FrameCache?.GetNativeFrameDataById(Frame?.Prev ?? 0);
-            LF2FrameData currentFrame = FrameCache?.GetNativeFrameDataById(Frame?.N ?? -1);
-            if (previousFrame == null || currentFrame == null)
-                return false;
-
-            // The live Unity host does not yet expose the native global-delay
-            // producer. Its current formal caller is delay-clear; B8 owns the
-            // future dynamic producer without changing this C25l transaction.
-            int count = BattleNativeState18ParticleKernel.ResolvePreRollCount(
-                previousFrame.state,
-                currentFrame.state,
-                0);
-            if (count < 0)
-                count = BattleRandInt(0, 4) == 0 ? 1 : 0;
-            if (count <= 0)
-                return false;
-
-            bool hasEffectResources =
-                ResolveObjectPointFactoryForSimulation() != null &&
-                ResolveRuntimeCharacterConfig(999) != null;
-            if (!hasEffectResources)
-                return false;
-
-            int availableSlots = CountAvailableTransitionEffectSlots();
-            bool spawned = SpawnTransitionEffectBranch2(
-                count,
-                ref availableSlots);
-            if (spawned)
-            {
-                if (Match == null)
-                    RefreshRuntimeSnapshot();
-                else
-                    Match.RefreshLateTransitionRuntimeSnapshot(this);
-            }
-
-            return spawned;
+            return BattleNativeState18ParticleWriter.Materialize(this);
         }
 
         public virtual void MirrorLatePrevFrame()
@@ -4337,30 +4314,6 @@ namespace NTSD.Animation.LF2Objects
                     y,
                     vx,
                     vy);
-                availableSlots--;
-            }
-
-            return availableSlots < initialSlots;
-        }
-
-        private bool SpawnTransitionEffectBranch2(int count, ref int availableSlots)
-        {
-            int initialSlots = availableSlots;
-            for (int n = 0; n < count; n++)
-            {
-                if (availableSlots <= 0)
-                    break;
-
-                double y = Runtime.Y - BattleRandInt(0, 29);
-                double x = Runtime.X + BattleRandInt(0, 59) - 29.0;
-                double vx = Runtime.Vx + BattleRandInt(0, 11) - 5.0;
-                int frameId = 140 + BattleRandInt(0, 1);
-                SpawnTransitionEffect(
-                    frameId,
-                    x,
-                    y,
-                    vx,
-                    -1.0);
                 availableSlots--;
             }
 
@@ -4479,6 +4432,14 @@ namespace NTSD.Animation.LF2Objects
             Frame.D = FrameCache?.GetFrameDataById(frameId);
             if (Frame.D != null)
                 Trans?.SyncDirectFrameData(Frame.D.wait, Frame.D.next, Trans?.WaitCounter ?? 0);
+        }
+
+        internal void DirectWriteNativeRawFramePreserveWaitCounter(int frameId)
+        {
+            if (Frame == null || FrameCache == null)
+                return;
+            // Alignment contract: NTSD28-Q06-KIND2-PICKUP-NATIVE-FRAME-LOOKUP-001.
+            BindNativeC25Action(frameId, false);
         }
 
         internal void DirectWriteHeldFramePreserveWaitCounter(int frameId)
@@ -4723,13 +4684,8 @@ namespace NTSD.Animation.LF2Objects
             if (Frame == null || FrameCache == null)
                 return null;
 
-            if (FrameCache.HasFrame(Frame.Prev2) && Frame.Prev2D != null)
-                return Frame.Prev2D;
-
-            if (FrameCache.HasFrame(Frame.N) && Frame.D != null)
-                return Frame.D;
-
-            return null;
+            // Alignment contract: NTSD28-Q06-COLLISION-FRAME-UNITY-001.
+            return FrameCache.GetNativeFrameDataById(Frame.Prev2);
         }
 
         public virtual void CaptureCollisionFrameSnapshot()
@@ -6839,7 +6795,7 @@ namespace NTSD.Animation.LF2Objects
         internal void ApplyNativeFrameMotionForWorldPass()
         {
             LF2FrameData frame = Frame?.D;
-            if (frame == null || Runtime == null)
+            if (frame == null || Runtime == null || Runtime.NativeLifecycleResolutionPending)
                 return;
 
             bool up = IsFrameTickUpPressed();

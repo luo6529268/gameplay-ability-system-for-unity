@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "D793A346C543C8DC302D009D3A22BFAD082DB5474B8F8DD51DA4842DF495F63D",
+  "captureBinarySha256": "01FCB48AAE9D33DE9487AA32F9F1B7A22C38D3F571A49AD696889B88E7E3BCEE",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28Kind2FrameLookup\\kind2_frame_lookup.exe",
+  "authorityWriteAllowed": false
+}

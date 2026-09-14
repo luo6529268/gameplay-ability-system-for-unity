@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 320,
+  "differences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, synthetic kind3 pair admission/binding only, both factories and actual ShadowCompare; later CPoint/throw/graphics not certified."
+}

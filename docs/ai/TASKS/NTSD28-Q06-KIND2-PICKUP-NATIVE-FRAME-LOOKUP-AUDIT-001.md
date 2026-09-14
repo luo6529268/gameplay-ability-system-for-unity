@@ -1,0 +1,13 @@
+> 审计已完成并由KIND2-PICKUP-NATIVE-FRAME-LOOKUP-001与NATIVE-PHYSICS-MISSING-FRAME-GUARD-001实施验收；以下保留原审计计划。
+
+# Kind2拾取的Native帧读取和holder写帧审计
+
+READY_SOURCE_AND_CALLER_MAP；属于NATIVE-FRAME-RUNTIME-READER-MIGRATION，kind3 paired entry已VERIFIED，不重做。
+
+当前静态入口：BattleInteractionWriter.TryApplyPickup读取target.GetFrameDataById(target.Frame.N)，HitPlan.ProjectPickupWriterEffect读取target.GetFrameDataById(projection.TargetFrame)；两者把targetFrame可用性/PrimaryWeaponPoint.WeaponAct交给已有BattlePickupTransactionPlan。先读当前BattleWorld28.resolve_special_relation_hit的kind2真实分支与Native帧点查，不根据命名断定差异；保留LockedRules投掷表120/124和kind7不支持边界。
+
+同时追plan.SetHolderAction经LF2Entity.DirectWriteRawFramePreserveWaitCounter的缓存绑定：source写原始action，可能需要保持latch/counter且对>=999后继生命周期保留raw值，不能把带准入早退的SetCpointRawFramePreserveWait当无条件写帧。必须将getter和这一原子pickup事务内实际需要的holder写帧一起闭合，避免允许高帧pickup却留下Frame.D=null。优先复用已有精确Native绑定方法；若须新增窄入口，完整声明caller/字段/验证，不能全局替换共享public/legacy setter影响未审计或非战斗调用者。
+
+源数据契约/完整字段读写顺序闭合后再准确Task/Change code-path与RED；当前只有审计Task，不授权任意脚本清理。若无差异就留证进入后继CPoint/throw/direct setter，不制造新架构。source原runner位于Unity Tools，不改正式EXE/源码或Server。
+
+后继CPoint种类1 action/throw源next定义快照、共享raw/cpoint/held setter和input/hit其它Native reader仍待；reader完成后回display其它出生/post，再Q07。用户HUDBg x30/场景hash、所有例外及stage.dat USER_HOLD、raw47/3保持，禁止computer-use、非战斗/Unity-GAS框架改造。

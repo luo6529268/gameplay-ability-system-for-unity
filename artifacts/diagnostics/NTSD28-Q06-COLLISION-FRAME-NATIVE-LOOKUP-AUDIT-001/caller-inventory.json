@@ -1,0 +1,259 @@
+{
+  "utc": "2026-09-14T05:26:27.646000+00:00",
+  "methodNamesAreLexicalLocators": true,
+  "occurrences": [
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1162,
+      "enclosingSignatureStart": "private bool TryGetImmediateSpatialTargets(",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1244,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(in PhysicsState.BattleVolume vol, LF2Entity exclude)",
+      "text": "LF2FrameData targetFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1277,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(in PhysicsState.BattleVolume vol, LF2Entity exclude)",
+      "text": "LF2FrameData targetFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1320,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(LF2Entity attacker, LF2FrameData attackerFrame, InteractionArea itr)",
+      "text": "LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1392,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(",
+      "text": "LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1421,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(",
+      "text": "LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1480,
+      "enclosingSignatureStart": "public List<SceneQueryHit> QueryBodyHits(",
+      "text": "LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 1790,
+      "enclosingSignatureStart": "private bool IsCollisionCandidateAttackerEligible(",
+      "text": "LF2FrameData attackerFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 2185,
+      "enclosingSignatureStart": "private bool TryCollectCollisionCandidatesLoose(int currentTick)",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 2392,
+      "enclosingSignatureStart": "private bool TryCollectCollisionCandidatesRoleAware(int currentTick)",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 3049,
+      "enclosingSignatureStart": "private bool TryValidateRoleAwareFormalBroadphaseInputsFull(",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 4237,
+      "enclosingSignatureStart": "private void BuildShadowBroadphase(int currentTick)",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 5239,
+      "enclosingSignatureStart": "private List<SceneQueryHit> QueryBodyHitsImmediate(LF2Entity attacker, LF2FrameData attackerFrame, InteractionArea itr)",
+      "text": "LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 5261,
+      "enclosingSignatureStart": "private List<SceneQueryHit> QueryBodyHitsImmediate(LF2Entity attacker, LF2FrameData attackerFrame, InteractionArea itr)",
+      "text": "LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 5300,
+      "enclosingSignatureStart": "private void CollectCandidatesForPair(LF2Entity attacker, LF2Entity target)",
+      "text": "LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 5308,
+      "enclosingSignatureStart": "private void CollectCandidatesForPair(LF2Entity attacker, LF2Entity target)",
+      "text": "LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 5577,
+      "enclosingSignatureStart": "private bool RoleAwareFormalExactCacheIsCurrent(",
+      "text": "entity.GetCollisionFrameData(),",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 6111,
+      "enclosingSignatureStart": "internal static InteractionArea ResolveRuntimeItrForPair(",
+      "text": "LF2FrameData holderFrame = holder?.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 6476,
+      "enclosingSignatureStart": "internal static bool RuntimeConsumeItrAllowed(",
+      "text": "LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 6647,
+      "enclosingSignatureStart": "private static bool IsPureTransitionSmoke(LF2Entity entity)",
+      "text": "LF2FrameData frame = entity.GetCollisionFrameData();",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+      "line": 6698,
+      "enclosingSignatureStart": "private static bool ItrAllowed(",
+      "text": "attacker?.GetCollisionFrameData() ?? attackerFrame;",
+      "sha256": "1722f4f95302e8c298f6f714329fc15ae838baca9a9c2eb4b93cb083e2eafdb1"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/BattleHitCandidateSequenceRunner.cs",
+      "line": 51,
+      "enclosingSignatureStart": "internal static bool TryConsumeCaptured(",
+      "text": "LF2FrameData collisionFrame = attacker?.GetCollisionFrameData();",
+      "sha256": "4ff4f2f3e8ecb066ddf9c82aece598b33f00b808e1dc4c4c143afcedba8bf7c3"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 4682,
+      "enclosingSignatureStart": "public virtual LF2FrameData GetCollisionFrameData()",
+      "text": "public virtual LF2FrameData GetCollisionFrameData()",
+      "sha256": "7903dfdcf6cf68c3c62dbd980ae4162de0db83c5a37384d9f1c8dbcf2aac267b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+      "line": 4825,
+      "enclosingSignatureStart": "public virtual int GetCollisionZInt() => GetCollisionZInt(GetCollisionFrameData());",
+      "text": "public virtual int GetCollisionZInt() => GetCollisionZInt(GetCollisionFrameData());",
+      "sha256": "7903dfdcf6cf68c3c62dbd980ae4162de0db83c5a37384d9f1c8dbcf2aac267b"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 679,
+      "enclosingSignatureStart": "internal void CapturePass(",
+      "text": "LF2FrameData frame = attacker.GetCollisionFrameData();",
+      "sha256": "1878c4f999429566ac7bf2cd2fdb64319e7da5d720fc5d6b8e4e0ab1ef372622"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 861,
+      "enclosingSignatureStart": "private void CaptureDataOrientedPass(",
+      "text": "LF2FrameData frame = attacker.GetCollisionFrameData();",
+      "sha256": "1878c4f999429566ac7bf2cd2fdb64319e7da5d720fc5d6b8e4e0ab1ef372622"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 972,
+      "enclosingSignatureStart": "internal bool TryValidateDataOrientedPass(",
+      "text": "LF2FrameData frame = entity.GetCollisionFrameData();",
+      "sha256": "1878c4f999429566ac7bf2cd2fdb64319e7da5d720fc5d6b8e4e0ab1ef372622"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 1860,
+      "enclosingSignatureStart": "private void PreparePreprocessExpectation(",
+      "text": "LF2FrameData frame = attacker.GetCollisionFrameData();",
+      "sha256": "1878c4f999429566ac7bf2cd2fdb64319e7da5d720fc5d6b8e4e0ab1ef372622"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+      "line": 5631,
+      "enclosingSignatureStart": "private static void ProjectRuntimeItr(",
+      "text": "LF2FrameData holderFrame = holder?.GetCollisionFrameData();",
+      "sha256": "1878c4f999429566ac7bf2cd2fdb64319e7da5d720fc5d6b8e4e0ab1ef372622"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+      "line": 44,
+      "enclosingSignatureStart": "internal bool ShouldRunKind1Advance(LF2Entity entity)",
+      "text": "LF2FrameData frame = entity.GetCollisionFrameData();",
+      "sha256": "37cf2f5975713ad44409d9114cf79b9c38c1c9cd50903405aea1b849214aa0f6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+      "line": 59,
+      "enclosingSignatureStart": "internal void RunKind1(",
+      "text": "LF2FrameData catcherFrame = attacker.GetCollisionFrameData();",
+      "sha256": "37cf2f5975713ad44409d9114cf79b9c38c1c9cd50903405aea1b849214aa0f6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+      "line": 75,
+      "enclosingSignatureStart": "internal void RunKind1(",
+      "text": "LF2FrameData victimFrame = victim.GetCollisionFrameData();",
+      "sha256": "37cf2f5975713ad44409d9114cf79b9c38c1c9cd50903405aea1b849214aa0f6"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "line": 28,
+      "enclosingSignatureStart": "internal static BattleHitCandidatePairSnapshot Capture(",
+      "text": "LF2FrameData attackerTickFrame = attacker.GetCollisionFrameData();",
+      "sha256": "a2b37dfc3b802151a7d19c6577335ad5c63568aae1413f177711e2209e990dbb"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs",
+      "line": 29,
+      "enclosingSignatureStart": "internal static BattleHitCandidatePairSnapshot Capture(",
+      "text": "LF2FrameData targetTickFrame = target.GetCollisionFrameData();",
+      "sha256": "a2b37dfc3b802151a7d19c6577335ad5c63568aae1413f177711e2209e990dbb"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Passes/Interaction/BattleInteractionPipeline.cs",
+      "line": 563,
+      "enclosingSignatureStart": "private static bool CanSkipCatchAdvanceParticipant(LF2Entity entity)",
+      "text": "LF2FrameData frame = entity.GetCollisionFrameData();",
+      "sha256": "1b4bd6e82fc8d264ee8471aedfa1404181218e86965d0c38f0979825145123d9"
+    },
+    {
+      "path": "Assets/NTSD/Scripts/Simulation/Passes/Interaction/BattleInteractionPipeline.cs",
+      "line": 701,
+      "enclosingSignatureStart": "private static bool TryProveNeutralPreInteractionParticipant(",
+      "text": "LF2FrameData collisionFrame = character.GetCollisionFrameData();",
+      "sha256": "1b4bd6e82fc8d264ee8471aedfa1404181218e86965d0c38f0979825145123d9"
+    }
+  ],
+  "overrides": []
+}

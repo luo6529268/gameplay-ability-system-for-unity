@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 480,
+  "differences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, synthetic qualification/frozen classification endpoints, both factories/query modes; full-driver bdefend and spark RNG differences remain open."
+}

@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 224,
+  "ticks": 672,
+  "differences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, isolated synthetic high-action/cost worlds; both actual factories and backends, complete three ticks; no image or physical-input certification."
+}

@@ -1,3 +1,5 @@
+> 当前状态 VERIFIED / SCOPED_STATE18_NATIVE_PARTICLE_TRANSACTION；最终证据见同名Record末节。以下保留形成过程，剩余父任务继续。
+
 # C25L state18/19粒子生成事务
 
 READY_UNITY_RED_AND_EXACT_RECORD。父NATIVE-FRAME-TRANSACTION-INTEGRATION最终组合核验定位F08缺口；原C25L owner正确，不重做placement。前置C25L-STATE18-SPAWN-SOURCE-WITNESS已1550/12759、重复输出及mixed OPoint→particles→fragments→lifecycle通过，先读其REPORT/JSON，不重跑旧见证作为实施替代。

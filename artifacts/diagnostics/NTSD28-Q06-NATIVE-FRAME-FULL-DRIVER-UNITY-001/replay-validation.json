@@ -1,0 +1,8 @@
+{
+  "groups": 8,
+  "cases": 32,
+  "replayedTicks": 64,
+  "rawDifferences": 0,
+  "checksumDifferences": 0,
+  "scope": "local restore and fresh empty receiver only; populated receiver epoch preservation remains open"
+}

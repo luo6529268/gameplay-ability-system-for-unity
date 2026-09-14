@@ -1,0 +1,7 @@
+# 无护甲武器受击反应
+
+READY_AFTER_NONCHARACTER_ARMOR_FEEDBACK。原BDEFEND256中64例无armor的types1/2/4/6：Bdefend写入已正确，但Unity仍更改battleGroup2→1、随机动作3（该seed）而原为186、hitReactionTimer0而原80。每例三条raw首差，不属于Bdefend数值本身。
+
+先追原resolve_ordinary_unarmored_standard_hit→resolve_unarmored_reaction及物理/动作副作用，对应BattleDamageWriter.ApplyWeaponDamage的团队更改、随机动作和fall分支；不得为这些夹具把期望186改成旧Unity武器动作。完整tuple/顺序/Native随机和two-factory实现必须一致，准确Record后test-first。当前原例只是state0/ground，应按正式调用补不同state/height/weapon types必要边界。
+
+保持新Runtime.Bdefend owner与已验证C25恢复；不修改默认随机掉落例外。完成后回256及完整driver，不借机全局改BattleRandInt或武器资源。禁止computer-use/非战斗/GAS/Scene/Server改动。

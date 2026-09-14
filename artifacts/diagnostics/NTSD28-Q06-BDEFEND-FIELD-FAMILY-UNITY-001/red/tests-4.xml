@@ -1,0 +1,145 @@
+<test-suite type="TestSuite" id="9531" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7622" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.792668" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18021" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7614" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.648072" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18022" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7614" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.547268" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18030" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7076" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.459357" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11376" name="NTSD28Q06BdefendFieldFamilyEditorTests" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.404468" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11381" name="NativeFieldWritesAndRecoveryMatch" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:26Z" duration="12.302379" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11377" name="NativeFieldWritesAndRecoveryMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="503609669" result="Failed" start-time="2026-09-14 07:06:13Z" end-time="2026-09-14 07:06:16Z" duration="2.883402" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 0 legacy HitStateCount overwritten=45
+case 0 held timer=-7
+case 0 free timer=-7
+case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 1 legacy HitStateCount overwritten=45
+case 1 held timer=-7
+case 1 free timer=-7
+case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 2 legacy HitStateCount overwritten=45
+case 2 held timer=-7
+case 2 free timer=-7
+case 3 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 3 legacy HitStateCount overwritten=45
+case 3 held timer=-7
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 0 legacy HitStateCount overwritten=45", "case 0 held timer=-7", "case 0 free timer=-7", "case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 1 legacy HitStateCount overwritten=45", "case 1 held timer=-7", "case 1 free timer=-7", "case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 2 legacy HitStateCount overwritten=45"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11378" name="NativeFieldWritesAndRecoveryMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="2085880788" result="Failed" start-time="2026-09-14 07:06:16Z" end-time="2026-09-14 07:06:19Z" duration="2.528583" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 0 legacy HitStateCount overwritten=45
+case 0 held timer=-7
+case 0 free timer=-7
+case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 1 legacy HitStateCount overwritten=45
+case 1 held timer=-7
+case 1 free timer=-7
+case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 2 legacy HitStateCount overwritten=45
+case 2 held timer=-7
+case 2 free timer=-7
+case 3 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 3 legacy HitStateCount overwritten=45
+case 3 held timer=-7
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 0 legacy HitStateCount overwritten=45", "case 0 held timer=-7", "case 0 free timer=-7", "case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 1 legacy HitStateCount overwritten=45", "case 1 held timer=-7", "case 1 free timer=-7", "case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 2 legacy HitStateCount overwritten=45"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11379" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="221060274" result="Failed" start-time="2026-09-14 07:06:19Z" end-time="2026-09-14 07:06:23Z" duration="3.713548" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 0 legacy HitStateCount overwritten=45
+case 0 held timer=-7
+case 0 free timer=-7
+case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 1 legacy HitStateCount overwritten=45
+case 1 held timer=-7
+case 1 free timer=-7
+case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 2 legacy HitStateCount overwritten=45
+case 2 held timer=-7
+case 2 free timer=-7
+case 3 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 3 legacy HitStateCount overwritten=45
+case 3 held timer=-7
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 0 legacy HitStateCount overwritten=45", "case 0 held timer=-7", "case 0 free timer=-7", "case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 1 legacy HitStateCount overwritten=45", "case 1 held timer=-7", "case 1 free timer=-7", "case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 2 legacy HitStateCount overwritten=45"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11380" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1707621915" result="Failed" start-time="2026-09-14 07:06:23Z" end-time="2026-09-14 07:06:26Z" duration="3.062412" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 0 legacy HitStateCount overwritten=45
+case 0 held timer=-7
+case 0 free timer=-7
+case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 1 legacy HitStateCount overwritten=45
+case 1 held timer=-7
+case 1 free timer=-7
+case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 2 legacy HitStateCount overwritten=45
+case 2 held timer=-7
+case 2 free timer=-7
+case 3 after slot 1 combat.bdefendAccumulator=-7 expected 45
+case 3 legacy HitStateCount overwritten=45
+case 3 held timer=-7
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 0 legacy HitStateCount overwritten=45", "case 0 held timer=-7", "case 0 free timer=-7", "case 1 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 1 legacy HitStateCount overwritten=45", "case 1 held timer=-7", "case 1 free timer=-7", "case 2 after slot 1 combat.bdefendAccumulator=-7 expected 45", "case 2 legacy HitStateCount overwritten=45"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

@@ -1,0 +1,12 @@
+{
+  "job": "5a104f86aa1147a3921e27253a5fcc8f",
+  "status": "TERMINAL_FAILED",
+  "tests": 24,
+  "passed": 22,
+  "failed": 2,
+  "vectors": 1514,
+  "differences": 24,
+  "remainingField": "combat.weaponHp",
+  "legacyRngDifferences": 0,
+  "pendingPositionDifferences": 0
+}

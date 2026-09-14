@@ -316,6 +316,8 @@ namespace NTSD.Simulation
                     living.Runtime.HolderStableId = parentSlot;
                 }
                 living.Team = parent.Team;
+                if (op.hp > 0)
+                    living.Runtime.WeaponFlightCounter = op.hp;
             }
 
             if (dvz != 0f)

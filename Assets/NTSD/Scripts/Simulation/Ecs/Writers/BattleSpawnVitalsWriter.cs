@@ -14,7 +14,8 @@ namespace NTSD.Simulation.Ecs
             bool lowVitals = point.oid == 5 || point.oid == 52;
             int hp = point.hp > 0 ? point.hp : lowVitals ? 10 : 500;
             int mp = point.mp > 0 ? point.mp : lowVitals ? 5 : 500;
-            var stats = entity.FrameCache?.Wrapper?.characterData?.NativeMetadata?.Stats;
+            var data = entity.FrameCache?.Wrapper?.characterData;
+            var stats = data?.NativeMetadata?.Stats;
             int hpPercent = stats?.Int32OrDefault("ohp", 0) ?? 0;
             int mpPercent = stats?.Int32OrDefault("omp", 0) ?? 0;
             if (hpPercent > 0)
@@ -29,6 +30,12 @@ namespace NTSD.Simulation.Ecs
             entity.Health.MaxMP = stats?.Int32OrDefault("max_mp", mp) ?? mp;
 
             NTSDEntityRuntime runtime = entity.Runtime;
+            // Alignment contract: NTSD28-Q06-OPOINT-WEAPON-HP-BIRTH-001.
+            runtime.WeaponFlightCounter = data?.NativeMetadata?.Bmp.Int32OrDefault("weapon_hp", 0) ?? data?.weapon_hp ?? 0;
+            // Alignment contract: NTSD28-Q06-LATE-OPOINT-DEPTH-AND-LIVES-001.
+            runtime.HP2Orig = 1;
+            runtime.HPOrig = 0;
+            runtime.RespawnCount = 0;
             runtime.DisplayCurrentHp200 = hp;
             runtime.DisplayEffectiveMaxHp208 = hp;
             runtime.DisplayScore1F0 = 0;

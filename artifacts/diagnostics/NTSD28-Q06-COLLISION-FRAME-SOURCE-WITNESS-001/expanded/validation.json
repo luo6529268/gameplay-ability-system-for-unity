@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "cases": 336,
+  "old252BytePrefixUnchanged": true,
+  "newRows": 84,
+  "bothEndpointsCoincidentNewRows": 42,
+  "repeatIdentical": true,
+  "sha256": "43f6713de73a76ba5f2c07c1627bf058ecf9e1706baa93701112200ef1ff7499",
+  "candidatePositive": 96,
+  "activeCatch": 144,
+  "broken": {
+    "0": 336
+  }
+}

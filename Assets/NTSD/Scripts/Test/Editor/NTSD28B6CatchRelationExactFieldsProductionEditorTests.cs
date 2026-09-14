@@ -51,7 +51,7 @@ namespace NTSD.Test
             bool applied = world.InteractionWriter.TryApplyGrab(
                 attacker,
                 target,
-                CreateItr(10, 99, 1),
+                CreateItr(10, 1000, 1),
                 3);
 
             Assert.That(applied, Is.False);
@@ -126,9 +126,9 @@ namespace NTSD.Test
             Assert.That(target.Dirh(), Is.EqualTo(expectedTargetDir));
         }
 
-        [TestCase(99, 20)]
-        [TestCase(10, 99)]
-        [TestCase(99, 98)]
+        [TestCase(1000, 20)]
+        [TestCase(10, 1000)]
+        [TestCase(1000, 1001)]
         public void Kind3MissingAnyRelationFrame_PreservesWholePair(
             int catching,
             int caught)
@@ -343,7 +343,7 @@ namespace NTSD.Test
                 h = 40,
                 zwidth = 20,
                 catchingact = new[] { 10 },
-                caughtact = new[] { 99 },
+                caughtact = new[] { 1000 },
                 respond = -1,
             });
             target.Frame.D.bodies.Add(new BodyBox
@@ -376,7 +376,7 @@ namespace NTSD.Test
         {
             SimulationWorld world = CreateWorld(out TestCharacter attacker, out TestCharacter target);
             InteractionArea success = CreateItr(10, 20, 0);
-            InteractionArea unsupported = CreateItr(10, 99, 0);
+            InteractionArea unsupported = CreateItr(10, 1000, 0);
             Assert.That(world.InteractionWriter.TryApplyGrab(attacker, target, success, 3), Is.True);
             Assert.That(world.InteractionWriter.TryApplyGrab(attacker, target, unsupported, 3), Is.False);
 
@@ -634,9 +634,9 @@ namespace NTSD.Test
                 tests.Kind3SignedActions_FlipOnlyTheirOwnInitialFacing(-10, 20, -1, -1);
                 tests.Kind3SignedActions_FlipOnlyTheirOwnInitialFacing(10, -20, 1, 1);
                 tests.Kind3SignedActions_FlipOnlyTheirOwnInitialFacing(-10, -20, -1, 1);
-                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(99, 20);
-                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(10, 99);
-                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(99, 98);
+                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(1000, 20);
+                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(10, 1000);
+                tests.Kind3MissingAnyRelationFrame_PreservesWholePair(1000, 1001);
                 tests.Kind3MissingActionArrays_DefaultToAuthoredFrameZero();
                 tests.CurrentCriminalFrame340_AppliesAuthored341And130ExactRelation();
                 tests.Kind1CompatibilityPath_KeepsLegacyTimeoutAndDoesNotWriteExactSource();

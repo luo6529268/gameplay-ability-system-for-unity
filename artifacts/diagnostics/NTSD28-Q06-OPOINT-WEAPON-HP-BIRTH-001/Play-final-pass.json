@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 84,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, both actual factories, synthetic DAT weapon_hp and kind2 override only; image and full OPoint field parity not certified."
+}

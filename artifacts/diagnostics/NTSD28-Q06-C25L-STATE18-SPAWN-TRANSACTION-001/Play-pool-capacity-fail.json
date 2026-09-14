@@ -1,0 +1,855 @@
+{
+  "status": "FAIL",
+  "error": "NUnit.Framework.AssertionException:   play 49 children=1 expected 17\nplay 49 missing slot 58\nplay 49 missing slot 59\nplay 49 missing slot 60\nplay 49 missing slot 61\nplay 49 missing slot 62\nplay 49 missing slot 63\nplay 49 missing slot 64\r\n  Expected: <empty>\r\n  But was:  < \"play 49 children=1 expected 17\", \"play 49 missing slot 58\", \"play 49 missing slot 59\", \"play 49 missing slot 60\", \"play 49 missing slot 61\", \"play 49 missing slot 62\", \"play 49 missing slot 63\", \"play 49 missing slot 64\", \"play 49 missing slot 65\", \"play 49 missing slot 66\"... >\r\n\r\n  at NUnit.Framework.Assert.That[TActual] (TActual actual, NUnit.Framework.Constraints.IResolveConstraint expression, System.String message, System.Object[] args) [0x00044] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.NTSD28Q06State18SpawnPlayProbe.Poll () [0x003b5] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06State18SpawnEditorTests.cs:410 ",
+  "results": [
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 2,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 2,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 42,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 42,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 2,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 2,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 42,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 42,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 2,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 2,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 42,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 0,
+      "seed": 42,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 2,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 2,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 42,
+      "composite": 0,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 0,
+      "seed": 42,
+      "composite": 1,
+      "particles": 7
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 18,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 18,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 20,
+      "current": 19,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 2,
+      "composite": 0,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 2,
+      "composite": 1,
+      "particles": 1
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 42,
+      "composite": 0,
+      "particles": 0
+    },
+    {
+      "logicOnly": true,
+      "source": 70,
+      "current": 19,
+      "seed": 42,
+      "composite": 1,
+      "particles": 0
+    },
+    {
+      "logicOnly": false,
+      "source": 20,
+      "current": 0,
+      "seed": 2,
+      "composite": 0,
+      "particles": 7
+    }
+  ],
+  "observations": [
+    {
+      "vector": 0,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 1,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 2,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 3,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 4,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 5,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 6,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 7,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 8,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 9,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 10,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 11,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 12,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 13,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 14,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 15,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 16,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 17,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 18,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 19,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 20,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 21,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 22,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 23,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 24,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 25,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 26,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 27,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 28,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 29,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 30,
+      "logicOnly": true,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 31,
+      "logicOnly": true,
+      "nativeCalls": 108,
+      "expectedCalls": 108,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 32,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 33,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 34,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 35,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 36,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 37,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 38,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 39,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 40,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 41,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 42,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 43,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 44,
+      "logicOnly": true,
+      "nativeCalls": 5,
+      "expectedCalls": 5,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 45,
+      "logicOnly": true,
+      "nativeCalls": 85,
+      "expectedCalls": 85,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 46,
+      "logicOnly": true,
+      "nativeCalls": 1,
+      "expectedCalls": 1,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 47,
+      "logicOnly": true,
+      "nativeCalls": 81,
+      "expectedCalls": 81,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 48,
+      "logicOnly": false,
+      "nativeCalls": 28,
+      "expectedCalls": 28,
+      "rendererActive": 2,
+      "rendererAvailable": 8,
+      "rendererRejected": 0
+    },
+    {
+      "vector": 49,
+      "logicOnly": false,
+      "nativeCalls": 38,
+      "expectedCalls": 108,
+      "rendererActive": 3,
+      "rendererAvailable": 7,
+      "rendererRejected": 2
+    }
+  ],
+  "rendererAvailableBefore": 8,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Play, formal Logan999 DAT in isolated fixture worlds, both factories and full tick. Scene remains old content; sprites and physical inputs not certified."
+}

@@ -61,11 +61,11 @@ namespace NTSD.Test.Editor
                 world,
                 previousState: 18,
                 currentState: 18);
-            ulong before = world.Rng.CallCount;
+            ulong before = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
 
             world.LateEntityUpdateAll(1);
 
-            Assert.That(world.Rng.CallCount - before, Is.EqualTo(1));
+            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls - before, Is.EqualTo(1));
             Assert.That(character.Frame.Prev, Is.EqualTo(character.Frame.N));
         }
 
@@ -77,11 +77,11 @@ namespace NTSD.Test.Editor
                 world,
                 previousState: 18,
                 currentState: LF2States.Standing);
-            ulong before = world.Rng.CallCount;
+            ulong before = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
 
             world.LateEntityUpdateAll(1);
 
-            Assert.That(world.Rng.CallCount - before, Is.Zero);
+            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls - before, Is.Zero);
             Assert.That(character.Frame.Prev, Is.EqualTo(0));
         }
 

@@ -1,0 +1,7 @@
+# Type5普通命中Shadow覆盖检查
+
+READY_DIAGNOSTIC_DETAIL。当前256 Shadow两profile各32额外诊断失败，均type5（无armor16、首type0 16）；错误记录mask=0，尚未区分CurrentTickPlanValid和ObservedWriterEffectCount。不得据mask0写成Shadow通过，也不要直接去掉原断言。
+
+先在现有Bdefend测试同准确Record下输出valid/count及plan failure reason，再追实际Other目标writer是否有预测/观察owner、是否设计为明确fallback。无armor type5的当前raw与Bdefend已正确；armor type0仍依赖反馈事务。若应支持优化路径，另准确Record补入；若正式是fallback契约，提供实际执行/原对照证据并明确范围，不能用unsupported掩盖行为差异。
+
+不提前扩大命中planner架构或shared Kernel/schema。保持其他types与已验证候选/配对，禁止computer-use。

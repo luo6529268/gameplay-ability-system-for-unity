@@ -17,26 +17,21 @@ namespace NTSD.Simulation.Ecs
                 return default;
             }
 
-            LF2FrameData attackerCurrentFrame = attacker.FrameCache.HasFrame(
-                attacker.Frame.N)
-                    ? attacker.Frame.D
-                    : null;
-            LF2FrameData targetCurrentFrame = target.FrameCache.HasFrame(
-                target.Frame.N)
-                    ? target.Frame.D
-                    : null;
+            LF2FrameData attackerCurrentFrame =
+                attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
+            LF2FrameData targetCurrentFrame =
+                target.FrameCache.GetNativeFrameDataById(target.Frame.N);
             LF2FrameData attackerTickFrame = attacker.GetCollisionFrameData();
             LF2FrameData targetTickFrame = target.GetCollisionFrameData();
-            if (attackerCurrentFrame == null || targetCurrentFrame == null ||
-                attackerTickFrame == null || targetTickFrame == null)
+            if (attackerTickFrame == null || targetTickFrame == null)
             {
                 return default;
             }
 
             LF2FrameData attackerPreviousFrame =
-                attacker.FrameCache.GetFrameDataById(attacker.Frame.Prev);
+                attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.Prev);
             LF2FrameData targetPreviousFrame =
-                target.FrameCache.GetFrameDataById(target.Frame.Prev);
+                target.FrameCache.GetNativeFrameDataById(target.Frame.Prev);
 
             int holderSlot =
                 attacker.ResolveReleaseNeutralHolderSlotOrImplicitZero();
@@ -55,8 +50,8 @@ namespace NTSD.Simulation.Ecs
                 target.RelationTeam,
                 attacker.Frame.N,
                 target.Frame.N,
-                attackerCurrentFrame.state,
-                targetCurrentFrame.state,
+                attackerCurrentFrame?.state ?? 0,
+                targetCurrentFrame?.state ?? 0,
                 attackerPreviousFrame?.state ?? 0,
                 targetPreviousFrame?.state ?? 0,
                 attackerTickFrame.state,

@@ -1,0 +1,27 @@
+{
+  "cases": 64,
+  "differences": [
+    "case 66 prev=0 current=18 source=20 seed=682973786 composite=0 legacy RNG consumed",
+    "case 67 prev=0 current=18 source=70 seed=682973786 composite=0 legacy RNG consumed",
+    "case 72 prev=0 current=19 source=20 seed=1 composite=0 legacy RNG consumed",
+    "case 73 prev=0 current=19 source=70 seed=1 composite=0 legacy RNG consumed",
+    "case 78 prev=0 current=19 source=20 seed=1 composite=0 legacy RNG consumed",
+    "case 79 prev=0 current=19 source=70 seed=1 composite=0 legacy RNG consumed",
+    "case 84 prev=0 current=19 source=20 seed=42 composite=0 legacy RNG consumed",
+    "case 85 prev=0 current=19 source=70 seed=42 composite=0 legacy RNG consumed",
+    "case 90 prev=0 current=19 source=20 seed=42 composite=0 legacy RNG consumed",
+    "case 91 prev=0 current=19 source=70 seed=42 composite=0 legacy RNG consumed",
+    "case 96 prev=0 current=19 source=20 seed=682973786 composite=0 legacy RNG consumed",
+    "case 97 prev=0 current=19 source=70 seed=682973786 composite=0 legacy RNG consumed",
+    "case 102 prev=0 current=19 source=20 seed=682973786 composite=0 legacy RNG consumed",
+    "case 103 prev=0 current=19 source=70 seed=682973786 composite=0 legacy RNG consumed",
+    "case 108 prev=18 current=0 source=20 seed=1 composite=0 legacy RNG consumed",
+    "case 109 prev=18 current=0 source=70 seed=1 composite=0 legacy RNG consumed",
+    "case 114 prev=18 current=0 source=20 seed=1 composite=0 legacy RNG consumed",
+    "case 115 prev=18 current=0 source=70 seed=1 composite=0 legacy RNG consumed",
+    "case 120 prev=18 current=0 source=20 seed=42 composite=0 legacy RNG consumed",
+    "case 121 prev=18 current=0 source=70 seed=42 composite=0 legacy RNG consumed",
+    "case 126 prev=18 current=0 source=20 seed=42 composite=0 legacy RNG consumed",
+    "case 127 prev=18 current=0 source=70 seed=42 composite=0 legacy RNG consumed"
+  ]
+}

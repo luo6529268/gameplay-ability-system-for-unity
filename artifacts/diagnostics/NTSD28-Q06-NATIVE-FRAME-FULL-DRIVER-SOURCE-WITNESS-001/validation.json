@@ -1,0 +1,22 @@
+{
+  "cases": 450,
+  "ticks": 1350,
+  "groups": {
+    "next": 168,
+    "high": 48,
+    "cost": 144,
+    "modifiers": 72,
+    "hold": 18
+  },
+  "frameErrors": 0,
+  "lifecycleFailures": 0,
+  "messages": {
+    "slot 0 input: dead type-0 input suppressed until positive HP is restored": 17,
+    "slot 70 input: dead type-0 input suppressed until positive HP is restored": 17
+  },
+  "audioEvents": 934,
+  "nativeCalls": 0,
+  "crtCalls": 0,
+  "repeatAndFirstIdentical": true,
+  "sha256": "e50dbee6628622e08c6deb1697f9aa83887775725b4768f82ab654989db9fce5"
+}

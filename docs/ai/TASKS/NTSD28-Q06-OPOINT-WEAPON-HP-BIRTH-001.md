@@ -1,0 +1,5 @@
+> 当前状态 VERIFIED / OPOINT_WEAPON_HP_BIRTH_AND_KIND2_OVERRIDE_ONLY；最终证据见同名Record末节。以下保留形成过程，剩余父任务继续。
+
+# NTSD28-Q06-OPOINT-WEAPON-HP-BIRTH-001
+
+IN_PROGRESS SOURCE_FIRST / UNITY_WAIT_CURRENT_TEST_TERMINAL。精确范围/前置/验收/回滚见同名Record。当前真实24条weaponHp差异不可当作pending/RNG例外隐藏；父C25L尚不关闭。

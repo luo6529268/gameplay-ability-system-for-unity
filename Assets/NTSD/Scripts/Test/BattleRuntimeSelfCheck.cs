@@ -1776,10 +1776,12 @@ namespace NTSD.Test
                 BattleRuntimeProfile.Authority400,
                 SimulationWorld.AuthorityRuntimeSlotCapacity,
                 CollisionBroadphaseBackend.LooseQuadtree);
+            LF2FrameData invalidImmediateFrame =
+                BuildCollisionAuditFrame(0, LF2States.Standing, null, null);
             LF2Character invalidFirst = CreateInteractionCharacter(
                 "SelfCheck_ImmediateInvalidFirst",
                 37,
-                BuildCollisionAuditData("SelfCheck_ImmediateInvalidFirst", parityTargetFrame));
+                BuildCollisionAuditData("SelfCheck_ImmediateInvalidFirst", invalidImmediateFrame));
             LF2Character orderedAttacker = CreateInteractionCharacter(
                 "SelfCheck_ImmediateOrderedAttacker",
                 1,
@@ -1793,8 +1795,6 @@ namespace NTSD.Test
             orderedTarget.SetRuntimeSlotIndex(3);
             RegisterCollisionAuditPair(immediateOrderWorld, invalidFirst, orderedAttacker, 1, 2);
             immediateOrderWorld.Register(orderedTarget);
-            LF2FrameData invalidImmediateFrame =
-                BuildCollisionAuditFrame(0, LF2States.Standing, null, null);
             SetCollisionAuditFramePair(invalidFirst, invalidImmediateFrame, invalidImmediateFrame);
             SetCollisionAuditFramePair(orderedAttacker, parityAttackerFrame, parityAttackerFrame);
             SetCollisionAuditFramePair(orderedTarget, parityTargetFrame, parityTargetFrame);
@@ -11450,7 +11450,7 @@ namespace NTSD.Test
                 {
                     kind = 3,
                     catchingact = new[] { 10 },
-                    caughtact = new[] { 99 },
+                    caughtact = new[] { 1000 },
                     respond = -1,
                 },
                 3);
@@ -14189,7 +14189,7 @@ namespace NTSD.Test
                 $"C-10/C-11/C-12/C-17: actual/shared standard Character hit snapshots must match; actual={actual}, shared={shared}");
             Expect(actual.Accepted && actual.Hp == 69 && actual.HpBound == 90 && actual.Pp == 77 &&
                    actual.ComboVictim == 31 && actual.ComboAttacker == 0 && actual.DamageStat == 31 &&
-                   actual.HitStateCount == 45 && actual.HitCount == 1 && actual.Fall == 20 &&
+                   actual.Bdefend == 45 && actual.HitCount == 1 && actual.Fall == 20 &&
                    actual.Frame == LF2StandardFrames.Injured && actual.AttackExempt == 4 &&
                    actual.WorldArest == 4 && actual.AttackingCounter == 37,
                 "C-10/C-11/C-12/C-17: injury31 must use integer injury/3, preserve PP/attacking/retired holder stats, write victim/world counters, and mirror ARest");
@@ -14362,7 +14362,7 @@ namespace NTSD.Test
             victim.KillCount = -1;
             victim.Unk344 = 1;
             victim.ComboCountVic = 0;
-            victim.HitStateCount = 0;
+            victim.Runtime.Bdefend = 0;
             victim.HitCount = 0;
             victim.FallCounter = 0;
             victim.AttackingCounter = startingAttackingCounter;
@@ -14394,7 +14394,7 @@ namespace NTSD.Test
                 KillStat = holder.KillStat,
                 KillWorldStat = world.KillStats[1],
                 DamageStat = world.DamageStats[1],
-                HitStateCount = victim.HitStateCount,
+                Bdefend = victim.Runtime.Bdefend,
                 HitCount = victim.HitCount,
                 Fall = victim.FallCounter,
                 Frame = victim.Frame.N,
@@ -14420,7 +14420,7 @@ namespace NTSD.Test
             public int KillStat;
             public int KillWorldStat;
             public int DamageStat;
-            public int HitStateCount;
+            public int Bdefend;
             public int HitCount;
             public int Fall;
             public int Frame;
@@ -14438,7 +14438,7 @@ namespace NTSD.Test
                 return Accepted == other.Accepted && Hp == other.Hp && HpBound == other.HpBound &&
                        Pp == other.Pp && ComboVictim == other.ComboVictim && ComboAttacker == other.ComboAttacker &&
                        KillStat == other.KillStat && KillWorldStat == other.KillWorldStat && DamageStat == other.DamageStat &&
-                       HitStateCount == other.HitStateCount && HitCount == other.HitCount && Fall == other.Fall &&
+                       Bdefend == other.Bdefend && HitCount == other.HitCount && Fall == other.Fall &&
                        Frame == other.Frame && KnockbackX == other.KnockbackX && KnockbackY == other.KnockbackY &&
                        AttackerFrameDelay == other.AttackerFrameDelay && HolderFrameDelay == other.HolderFrameDelay &&
                        AttackExempt == other.AttackExempt && WorldArest == other.WorldArest && VRest == other.VRest &&
@@ -14448,7 +14448,7 @@ namespace NTSD.Test
             public override string ToString()
             {
                 return $"accepted={Accepted},hp={Hp},hpMax={HpBound},pp={Pp},comboV={ComboVictim},comboA={ComboAttacker}," +
-                       $"kill={KillStat}/{KillWorldStat},damage={DamageStat},hitState={HitStateCount},hitCount={HitCount}," +
+                       $"kill={KillStat}/{KillWorldStat},damage={DamageStat},bdefend={Bdefend},hitCount={HitCount}," +
                        $"fall={Fall},frame={Frame},kb=({KnockbackX},{KnockbackY}),delay={AttackerFrameDelay}/{HolderFrameDelay}," +
                        $"rest={AttackExempt}/{WorldArest}/{VRest},attacking={AttackingCounter}";
             }
@@ -18259,7 +18259,7 @@ namespace NTSD.Test
                     effect = 6007,
                 };
                 Expect(victim.Hit(itr, attacker) &&
-                       victim.HitCount == 1 && victim.FallCounter == 5 && victim.HitStateCount == 45 &&
+                       victim.HitCount == 1 && victim.FallCounter == 5 && victim.Runtime.Bdefend == 45 &&
                        attacker.AttackExempt == 2 && attacker.ItrRest.Arest == 2 &&
                        victim.ItrRest.GetVrest(attackerSlot) == 9 &&
                         attacker.FrameDelay == -3 && victim.FrameDelay == -3 &&
@@ -18812,7 +18812,7 @@ namespace NTSD.Test
             victim.SwitchDir("right");
             victim.Health.HP = 500;
             victim.Runtime.PrevFrame2 = 0;
-            victim.HitStateCount = 15;
+            victim.Runtime.Bdefend = 15;
             victim.ImmediateFrame(20);
             Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
                 "legacy oid37 standing heuristic must be retired");
@@ -18931,7 +18931,7 @@ namespace NTSD.Test
             victim.ComboCountVic = 0;
             victim.FallCounter = 0;
             victim.AttackingCounter = 7;
-            victim.HitStateCount = 0;
+            victim.Runtime.Bdefend = 0;
             victim.HitCount = 0;
             victim.AttackExempt = 13;
             victim.Trans.SetWait(victim.Frame.D.wait, 73);
@@ -18965,7 +18965,7 @@ namespace NTSD.Test
             Expect(world.KillStats[1] == 1 && world.DamageStats[1] == 10,
                 "reduced defense damage must update world kill and damage stat slot Unk344=1");
             Expect(victim.FallCounter == 80 && victim.AttackingCounter == 0 &&
-                   victim.HitStateCount == 31 && victim.HitCount == 1,
+                   victim.Runtime.Bdefend == 31 && victim.HitCount == 1,
                 "alternate damage must write lethal fall, attacking, hit-state, and hit-count fields");
             Expect(attacker.FrameDelay == 3 && victim.FrameDelay == -5,
                 "alternate damage must overwrite both attacker and victim frame delays");
@@ -19132,13 +19132,13 @@ namespace NTSD.Test
                 {
                     victim.ImmediateFrame(110);
                     victim.Runtime.PrevFrame2 = 0;
-                    victim.HitStateCount = 0;
+                    victim.Runtime.Bdefend = 0;
                     victim.Trans.SetWait(victim.Frame.D.wait, 47);
                     itr.dvx = 0;
                 },
                 (attacker, victim, itr) => Expect(
                     victim.CurrentFrameId == 111 && victim.Trans.WaitCounter == 47,
-                    "ground frame110 with HitStateCount<=30 must enter frame111 and preserve wait_counter"));
+                    "ground frame110 with Bdefend<=30 must enter frame111 and preserve wait_counter"));
 
             RunAlternateDamageMotionCase(
                 frameData,
@@ -19241,7 +19241,7 @@ namespace NTSD.Test
             victim.Health.HP = 100;
             victim.Health.HPBound = 100;
             victim.Health.HPLost = 7;
-            victim.HitStateCount = 0;
+            victim.Runtime.Bdefend = 0;
             victim.HitCount = 0;
             victim.FrameDelay = 0;
             victim.Runtime.Y = 0f;
@@ -19314,7 +19314,7 @@ namespace NTSD.Test
             victim.Health.HP = 100;
             victim.Health.HPBound = 100;
             victim.Health.HPLost = 7;
-            victim.HitStateCount = 0;
+            victim.Runtime.Bdefend = 0;
             victim.HitCount = 0;
             victim.FrameDelay = 0;
             victim.Runtime.Y = 0f;
@@ -20770,7 +20770,7 @@ itr_end:
                     ? producer.Runtime.XInt - centerX + opX
                     : producer.Runtime.XInt + centerX - opX;
                 int expectedY = producer.Runtime.YInt - centerY + opY;
-                double expectedZ = parentZ + 1.0;
+                double expectedZ = producer.Runtime.ZInt + 1.0;
 
                 world.LateEntityUpdateAll(tick);
                 LF2Entity spawned = FindOidEntity(world, oid);
@@ -20787,7 +20787,9 @@ itr_end:
                 Expect(Nearly(spawned.Runtime.X, expectedX) && spawned.Runtime.XInt == expectedX &&
                        Nearly(spawned.Runtime.Y, expectedY) && spawned.Runtime.YInt == expectedY &&
                        Nearly(spawned.Runtime.Z, expectedZ) && spawned.Runtime.ZInt == (int)expectedZ,
-                    $"BATTLE-AUDIT7-I2: {label} late opoint must derive integer X/Y from the spawner snapshot and preserve double Z+1");
+                    $"BATTLE-AUDIT7-I2: {label} late opoint must derive integer XYZ from the spawner snapshot before the native Z+1 offset");
+                Expect(spawned.Runtime.HP2Orig == 1 && spawned.Runtime.HPOrig == 0 && spawned.Runtime.RespawnCount == 0,
+                    $"BATTLE-AUDIT7-I2: {label} native birth must initialize current/queued lives and queued HP to 1/0/0");
                 double expectedVx = direction == "right" ? opDvx : -opDvx;
                 Expect(Nearly(spawned.Runtime.Vx, expectedVx) &&
                        Nearly(spawned.Runtime.Vy, opDvy) && Nearly(spawned.Runtime.Vz, 0.0),
@@ -21564,8 +21566,18 @@ itr_end:
 
             character.Frame.Prev2 = 450;
             character.Frame.Prev2D = character.FrameCache.GetFrameDataById(450);
-            Expect(character.GetCollisionFrameData() == original,
-                "DATA-01C: collision frame must fall back to an authored current frame when Prev2 is missing");
+            LF2FrameData implicitCollision = character.GetCollisionFrameData();
+            Expect(implicitCollision == character.FrameCache.GetNativeFrameDataById(450) &&
+                   implicitCollision != original && implicitCollision.frameId == 450 &&
+                   implicitCollision.wait == 0 && implicitCollision.bodies.Count == 0,
+                "DATA-01C: collision lookup must use the native implicit snapshot without current-frame fallback");
+            foreach (int unavailableSnapshot in new[] { -1, 999, 1000 })
+            {
+                character.Frame.Prev2 = unavailableSnapshot;
+                character.Frame.Prev2D = original;
+                Expect(character.GetCollisionFrameData() == null,
+                    "DATA-01C: unavailable snapshot must not borrow an authored current frame or stale descriptor");
+            }
 
             LF2FrameData attackFrame = BuildCollisionAuditFrame(
                 0,

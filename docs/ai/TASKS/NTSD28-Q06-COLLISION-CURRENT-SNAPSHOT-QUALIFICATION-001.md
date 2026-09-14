@@ -1,0 +1,23 @@
+> 当前IN_PROGRESS / QUALIFICATION_RUNTIME_PASS_FULL_DRIVER_DEPENDENCIES；3264端点已清零，但4完整driver失败等BDEFEND writer与Spark CRT两子项。下一UNARMORED-BDEFEND-WRITER-AUDIT-001，之后HIT-SPARK-TRANSACTION-AUDIT-001，证据见qualification artifact REPORT。
+
+# 碰撞 current 与 snapshot 准入差异
+
+READY_SOURCE_CONSUMER_AND_QUALIFICATION_MAP。为仍 IN_PROGRESS 的 COLLISION-FRAME-UNITY-001 必要后继，不意味着碰撞帧包关闭。
+
+已知输入：原source expanded336；Unity修复三处reader后原252×4的descriptor/raw/catch全部零差异，仍每组24候选失败，全部current1000且snapshot有itr。完整失败在collision Unity artifact/after-readers，原source成功候选与diagnostics并存。旧kind2/3八组通过、旧pair/group/catch64通过，不替代新端点失败。
+
+原source依据：battle_world.cpp:4622仅snapshot_frame_has_itr决定scan_direction，4630另以current_frame_has_itr决定scan_platform_direction；不是两者共同准入。普通几何4269/4283需snapshot有效；current state通过frame_state_or_zero，缺帧取0。SimulationTickDriver693刚snapshot，初始collection的分离输入是诊断扰动；但候选消费和kind1在之后可遇到current换帧，必须继续查实际writer可达性，不能把diagnostic全部忽略或直接称正式Bug已复现。
+
+首先按source API职责检查下列真实链条，建立准确子Change再改脚本：
+
+- BruteForceSceneQuery.IsCollisionCandidateAttackerEligible：当前帧null直接拒绝 carrier。
+- CollectCandidatesForPair / CollectCandidatesForPairCached：current非null、current itr、target current body门；原普通geometry读取snapshot，平台操作读取current，两职责不能混合。
+- PassesReleaseCoarsePrefilter / Cached：current itr count额外门，缓存与普通路径必须一起修改。
+- RecordOverlappingBodyCandidates / Cached、ItrAllowedCore、TryRecordNearestPathCandidate、AcceptReleaseSelectFlagCandidate / Kind1TowardVictim、Compute/Apply reject flag helpers：targetFrame null早退及state直接解引用，需要按原state0语义逐个证明，不造假frame或fallback snapshot state。
+- RuntimeConsumeItrAllowed当前target null门及current→collision fallback，QueryBodyHits多个overload与immediate门：区分正式消费与兼容调用，避免只修收集漏掉同tick后续消费。
+- BattleHitCandidatePairSnapshotFactory.Capture仍四帧有一null就default；原pair carrier状态查询/零值和冻结时点需要独立原见证，不能靠state均0的collision fixture宣称这些过滤状态已闭合。
+- RoleAwareFormalParticipant/BodyCache的CurrentItrCount/HasCurrentReleaseBody仍参与已有缓存；保持存储布局与观察边界，核对条件改动而不重构空间索引。
+
+追加原见证应覆盖不同current/snapshot的有/无块、非零state effect/group过滤、有效/隐式/缺失frame和逐candidate消费，并至少一条正式driver可达变化；原336不覆盖所有itr kind或pair state，不重复跑它冒充完整证据。保留已有失败；修复后回跑其全部断言而不是将24条列为忽略。
+
+边界：旧共享FrameCache API、其它CPoint raw/throw/held writer、Unity/GAS框架、非战斗、Scene/资源/Server均不改。若发现必要新写入职责先独立Task/Record。禁止computer-use；用户HUDBg x30保留。完成后回当前父包SelfCheck/actual+Shadow/真实Play/关闭验收，再reader剩余→display/post→Q07。

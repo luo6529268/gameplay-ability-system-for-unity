@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "scope": "SOURCE_MODEL_ONLY_NOT_FORMAL_TRANSFORM_OR_FULL_DRIVER_REACHABILITY",
+  "utc": "2026-09-14T05:27:56.149918+00:00",
+  "cases": 252,
+  "assertions": 3780,
+  "candidatePositive": 72,
+  "catchActive": 108,
+  "rawMutations": 0,
+  "rngCalls": 0,
+  "byteIdenticalRepeat": true,
+  "sha256": "fa3586923fc1b51be6437b9da0a6e8c3fe990efc2438eda03ff6f973b1e41897"
+}

@@ -1386,8 +1386,6 @@ namespace NTSD.Animation
                 return _tmpHitResult;
             if (IsPendingFlushDestroy(attacker))
                 return _tmpHitResult;
-            if (GetAuthoredCurrentFrame(attacker) == null)
-                return _tmpHitResult;
 
             LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
@@ -1478,10 +1476,6 @@ namespace NTSD.Animation
 
                 LF2FrameData targetCurrentFrame = GetAuthoredCurrentFrame(target);
                 LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();
-                if (targetCurrentFrame == null)
-                    continue;
-                if (!HasAnyReleaseBody(targetCurrentFrame))
-                    continue;
                 if (!HasAnyReleaseBody(targetCollisionFrame))
                     continue;
                 if (!ImmediateQueryPairAllowed(attacker, target))
@@ -1781,8 +1775,7 @@ namespace NTSD.Animation
         {
             if (attacker == null || attacker.PS == null ||
                 IsPendingFlushDestroy(attacker) ||
-                IsCollisionCandidateSuppressed(attacker, currentTick) ||
-                GetAuthoredCurrentFrame(attacker) == null)
+                IsCollisionCandidateSuppressed(attacker, currentTick))
             {
                 return false;
             }
@@ -5233,8 +5226,6 @@ namespace NTSD.Animation
                 return _tmpHitResult;
             if (IsPendingFlushDestroy(attacker))
                 return _tmpHitResult;
-            if (GetAuthoredCurrentFrame(attacker) == null)
-                return _tmpHitResult;
 
             LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
@@ -5259,8 +5250,6 @@ namespace NTSD.Animation
 
                 LF2FrameData targetCurrentFrame = GetAuthoredCurrentFrame(target);
                 LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();
-                if (targetCurrentFrame == null) continue;
-                if (!HasAnyReleaseBody(targetCurrentFrame)) continue;
                 if (!HasAnyReleaseBody(targetCollisionFrame)) continue;
                 if (!ImmediateQueryPairAllowed(attacker, target))
                     continue;
@@ -5295,10 +5284,9 @@ namespace NTSD.Animation
                 return;
 
             LF2FrameData attackerCurrentFrame = GetAuthoredCurrentFrame(attacker);
-            if (attackerCurrentFrame == null)
-                return;
             LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();
-            if (attackerCurrentFrame?.itrs == null || attackerCurrentFrame.itrs.Count == 0)
+            // Alignment contract: NTSD28-Q06-COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001.
+            if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
                 return;
 
             if (!IsCandidateAttackerCarrierForCurrentTick(attacker))
@@ -5306,7 +5294,7 @@ namespace NTSD.Animation
 
             LF2FrameData targetCurrentFrame = GetAuthoredCurrentFrame(target);
             LF2FrameData targetCollisionFrame = target.GetCollisionFrameData();
-            if (targetCurrentFrame == null || !HasAnyReleaseBody(targetCurrentFrame))
+            if (!HasAnyReleaseBody(targetCollisionFrame))
             {
                 return;
             }
@@ -5387,9 +5375,7 @@ namespace NTSD.Animation
 
             LF2FrameData attackerCurrentFrame = attackerParticipant.CurrentFrame;
             LF2FrameData attackerCollisionFrame = attackerParticipant.CollisionFrame;
-            if (attackerCurrentFrame == null ||
-                attackerParticipant.CurrentItrCount == 0 ||
-                attackerCollisionFrame?.itrs == null ||
+            if (attackerCollisionFrame?.itrs == null ||
                 attackerParticipant.CollisionItrCount == 0)
             {
                 return;
@@ -5399,8 +5385,7 @@ namespace NTSD.Animation
                 return;
 
             LF2FrameData targetCurrentFrame = targetParticipant.CurrentFrame;
-            if (targetCurrentFrame == null ||
-                !targetParticipant.HasCurrentReleaseBody)
+            if (!targetParticipant.HasCollisionReleaseBody)
             {
                 return;
             }
@@ -5452,7 +5437,7 @@ namespace NTSD.Animation
             int itrIndex)
         {
             if (attacker?.PS == null || attackerCollisionFrame == null || itr == null ||
-                target?.PS == null || targetCurrentFrame == null ||
+                target?.PS == null ||
                 targetCollisionFrame?.bodies == null || !IsReleaseItrGeometry(itr))
             {
                 return;
@@ -5513,7 +5498,7 @@ namespace NTSD.Animation
             LF2Entity target = targetParticipant.Entity;
             InteractionArea itr = itrEntry.Itr;
             if (attacker?.PS == null || attackerParticipant.CollisionFrame == null || itr == null ||
-                target?.PS == null || targetCurrentFrame == null ||
+                target?.PS == null ||
                 targetParticipant.CollisionFrame?.bodies == null ||
                 !targetParticipant.HasCollisionReleaseBody || !IsReleaseItrGeometry(itr))
             {
@@ -5642,8 +5627,6 @@ namespace NTSD.Animation
             LF2FrameData attackerCollisionFrame = attackerParticipant.CollisionFrame;
             LF2FrameData targetCurrentFrame = targetParticipant.CurrentFrame;
             if (attacker == null || target == null ||
-                attackerCurrentFrame?.itrs == null ||
-                attackerParticipant.CurrentItrCount == 0 ||
                 attackerCollisionFrame?.itrs == null ||
                 attackerParticipant.CollisionItrCount == 0 ||
                 !targetParticipant.HasCollisionReleaseBody ||
@@ -5737,8 +5720,7 @@ namespace NTSD.Animation
             int itrIndex,
             RuntimeEntityHandle validatedAttackerHandle = default)
         {
-            if (attacker == null || target == null || itr == null ||
-                targetFrame == null)
+            if (attacker == null || target == null || itr == null)
             {
                 return;
             }
@@ -5843,8 +5825,7 @@ namespace NTSD.Animation
             in BattleHitCandidatePairSnapshot pairSnapshot,
             RuntimeEntityHandle validatedAttackerHandle)
         {
-            if (attacker == null || target == null || itr == null ||
-                targetFrame == null)
+            if (attacker == null || target == null || itr == null)
             {
                 return false;
             }
@@ -5855,8 +5836,7 @@ namespace NTSD.Animation
             if (!IsReleaseNearestCandidatePath(itr))
                 return false;
 
-            int targetPrev2State = GetAuthoredPrev2Frame(target)?.state
-                                   ?? targetFrame.state;
+            int targetPrev2State = GetAuthoredPrev2Frame(target)?.state ?? 0;
             if (targetPrev2State == LF2States.WeaponOnGround)
             {
                 bool attackerSpecialOk = GetCurrentDataObjectType(attacker) > 0 && attacker.Runtime.LinkState >= 0;
@@ -6248,7 +6228,7 @@ namespace NTSD.Animation
             LF2FrameData targetFrame,
             int rejectFlag)
         {
-            if (attacker == null || target == null || itr == null || targetFrame == null)
+            if (attacker == null || target == null || itr == null)
                 return false;
 
             int kind = itr.kind;
@@ -6267,11 +6247,11 @@ namespace NTSD.Animation
                         selectFlag = 1;
                     break;
                 case 2:
-                    if (selectFlag != 2 && AcceptReleaseKind2Candidate(attacker, targetFrame.state))
+                    if (selectFlag != 2 && AcceptReleaseKind2Candidate(attacker, targetFrame?.state ?? 0))
                         selectFlag = 1;
                     break;
                 case 7:
-                    if (selectFlag != 2 && AcceptReleaseKind7Candidate(attacker, targetFrame.state))
+                    if (selectFlag != 2 && AcceptReleaseKind7Candidate(attacker, targetFrame?.state ?? 0))
                         selectFlag = 1;
                     break;
             }
@@ -6288,8 +6268,6 @@ namespace NTSD.Animation
             LF2FrameData targetCollisionFrame)
         {
             if (attacker == null || target == null)
-                return false;
-            if (attackerCurrentFrame?.itrs == null || attackerCurrentFrame.itrs.Count == 0)
                 return false;
             if (attackerCollisionFrame?.itrs == null || attackerCollisionFrame.itrs.Count == 0)
                 return false;
@@ -6371,7 +6349,7 @@ namespace NTSD.Animation
 
         private bool AcceptReleaseKind1TowardVictim(LF2Entity attacker, LF2Entity target, LF2FrameData targetFrame)
         {
-            if (attacker?.PS == null || target?.PS == null || targetFrame == null)
+            if (attacker?.PS == null || target?.PS == null)
                 return false;
 
             bool towardVictim = false;
@@ -6382,7 +6360,7 @@ namespace NTSD.Animation
             if (right && attackerX < targetX) towardVictim = true;
             if (left && attackerX >= targetX) towardVictim = true;
 
-            return towardVictim && targetFrame.state == LF2States.Injured2;
+            return towardVictim && (targetFrame?.state ?? 0) == LF2States.Injured2;
         }
 
         private static bool AcceptReleaseKind2Candidate(LF2Entity attacker, int targetState)
@@ -6475,7 +6453,7 @@ namespace NTSD.Animation
 
             LF2FrameData attackerCollisionFrame = attacker.GetCollisionFrameData();
             LF2FrameData targetCurrentFrame = GetAuthoredCurrentFrame(target);
-            if (attackerCollisionFrame == null || targetCurrentFrame == null)
+            if (attackerCollisionFrame == null)
                 return false;
 
             BattleHitCandidatePairSnapshot resolvedPair = pairSnapshot.Valid
@@ -6483,7 +6461,7 @@ namespace NTSD.Animation
                 : BattleHitCandidatePairSnapshotFactory.Capture(attacker, target);
             return ItrAllowedCore(
                 attacker,
-                GetAuthoredCurrentFrame(attacker) ?? attackerCollisionFrame,
+                GetAuthoredCurrentFrame(attacker),
                 attackerCollisionFrame,
                 itr,
                 target,
@@ -6666,18 +6644,18 @@ namespace NTSD.Animation
 
         private static LF2FrameData GetAuthoredCurrentFrame(LF2Entity entity)
         {
-            if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.N) != true)
+            if (entity?.Frame == null)
                 return null;
 
-            return entity.Frame.D;
+            return entity.FrameCache?.GetNativeFrameDataById(entity.Frame.N);
         }
 
         private static LF2FrameData GetAuthoredPrev2Frame(LF2Entity entity)
         {
-            if (entity?.Frame == null || entity.FrameCache?.HasFrame(entity.Frame.Prev2) != true)
+            if (entity?.Frame == null)
                 return null;
 
-            return entity.Frame.Prev2D;
+            return entity.FrameCache?.GetNativeFrameDataById(entity.Frame.Prev2);
         }
 
         private static int GetCurrentDataObjectType(LF2Entity entity)
@@ -6693,9 +6671,9 @@ namespace NTSD.Animation
             LF2FrameData targetFrame)
         {
             LF2FrameData attackerCurrentFrame =
-                GetAuthoredCurrentFrame(attacker) ?? attackerFrame;
+                GetAuthoredCurrentFrame(attacker);
             LF2FrameData attackerCollisionFrame =
-                attacker?.GetCollisionFrameData() ?? attackerFrame;
+                attacker?.GetCollisionFrameData();
             BattleHitCandidatePairSnapshot pairSnapshot =
                 BattleHitCandidatePairSnapshotFactory.Capture(attacker, target);
             return ItrAllowedCore(
@@ -6742,7 +6720,7 @@ namespace NTSD.Animation
             in BattleHitCandidatePairSnapshot pairSnapshot,
             int originalKind)
         {
-            if (attacker == null || itr == null || target == null || targetFrame == null)
+            if (attacker == null || attackerCollisionFrame == null || itr == null || target == null)
                 return false;
 
             int kind = itr.kind;
@@ -6851,8 +6829,8 @@ namespace NTSD.Animation
             InteractionArea itr,
             LF2Entity target)
         {
-            int attackerPrevState = attacker.FrameCache?.GetFrameDataById(attacker.Frame?.Prev ?? 0)?.state ?? 0;
-            int targetPrevState = target.FrameCache?.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;
+            int attackerPrevState = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.Prev ?? 0)?.state ?? 0;
+            int targetPrevState = target.FrameCache?.GetNativeFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;
             int targetType = GetCurrentDataObjectType(target);
 
             if (itr.effect == 4 && targetType == (int)LF2ObjectType.Character)
@@ -6959,7 +6937,7 @@ namespace NTSD.Animation
             LF2FrameData targetFrame,
             int bodyX)
         {
-            if (attacker == null || attackerFrame == null || itr == null || target == null || targetFrame == null)
+            if (attacker == null || itr == null || target == null)
                 return false;
 
             // C++ release 的 collect 分层里，这一段之前已经走过：
@@ -6986,11 +6964,11 @@ namespace NTSD.Animation
             LF2FrameData targetFrame,
             int bodyX)
         {
-            if (attacker == null || itr == null || target == null || targetFrame == null)
+            if (attacker == null || itr == null || target == null)
                 return 2;
 
             int kind = itr.kind;
-            int targetState = targetFrame.state;
+            int targetState = targetFrame?.state ?? 0;
 
             // C++ sub419f80_record_candidate:
             // victim.state==12 && itr.fall<=40 && kind!=10/11 -> reject_flag=2
@@ -7017,11 +6995,10 @@ namespace NTSD.Animation
             LF2FrameData targetFrame,
             int rejectFlag)
         {
-            if (rejectFlag != 0 || attacker == null || target == null || itr == null || targetFrame == null)
+            if (rejectFlag != 0 || attacker == null || target == null || itr == null)
                 return rejectFlag;
 
-            int targetPrev2State = GetAuthoredPrev2Frame(target)?.state
-                                   ?? targetFrame.state;
+            int targetPrev2State = GetAuthoredPrev2Frame(target)?.state ?? 0;
             if (targetPrev2State != LF2States.WeaponOnGround)
                 return rejectFlag;
 

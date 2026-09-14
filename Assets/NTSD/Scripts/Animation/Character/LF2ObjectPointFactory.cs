@@ -311,6 +311,7 @@ namespace NTSD.Animation
                     break;
                 task.opoint = spawnOp;
                 task.parent = spawner;
+                task.targetWorld = spawner.Match;
                 task.team = spawner.Team;
                 // Alignment contract: NTSD28-B0-OPOINT-OWNER-PROPAGATION-PRODUCTION-001.
                 task.ownerEntityIndex = spawner.OwnerEntityIndex;
@@ -362,7 +363,7 @@ namespace NTSD.Animation
                 ? spawner.Runtime.XInt - frame.centerx + op.X
                 : spawner.Runtime.XInt + frame.centerx - op.X;
             int spawnY = spawner.Runtime.YInt - frame.centery + op.Y;
-            double spawnZ = spawner.Runtime.Z + 1.0;
+            double spawnZ = spawner.Runtime.ZInt + op.Z + 1.0;
 
             task.pos = new Vector3(spawnX, spawnY, (float)spawnZ);
             task.z = (float)spawnZ;
@@ -493,7 +494,7 @@ namespace NTSD.Animation
             // 5. 从逻辑对象池获取逻辑对象
             BattleLogicReferencePool referencePool = ResolveReferencePool(world);
             ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid,
-                task.nativeWeaponPieceSpawn ? world : null);
+                world?.RuntimeDataCatalog.GetCharacterConfig(oid) != null ? world : null);
             if (logicObject == null)
             {
                 if (referencePool != null &&
@@ -653,7 +654,8 @@ namespace NTSD.Animation
                 if (EntityModel == null) break;
 
                 BattleLogicReferencePool referencePool = ResolveReferencePool(world);
-                ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid);
+                ILF2Object logicObject = CreateLogicObject(referencePool, objType, oid,
+                    world?.RuntimeDataCatalog.GetCharacterConfig(oid) != null ? world : null);
                 if (logicObject == null)
                 {
                     LF2ObjectPool.Instance.Release(EntityModel);
@@ -840,6 +842,8 @@ namespace NTSD.Animation
                 }
                 // C++ release 0x00422778-0x0042277E：spawned[+364h] = parent[+364h]（team 再次同步）
                 living.Team = parent.Team;
+                if (op.hp > 0)
+                    living.Runtime.WeaponFlightCounter = op.hp;
             }
 
             // 多对象 dvz 侧偏 vx/vz（C++ release 对齐 0x004225DB/0x004225E8-0x00422627）

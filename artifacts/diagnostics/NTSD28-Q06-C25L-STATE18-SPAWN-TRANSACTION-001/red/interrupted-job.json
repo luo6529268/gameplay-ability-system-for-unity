@@ -1,0 +1,24 @@
+{
+  "job": "3ed5e2cc3b8c427b9f44e269bf4e8055",
+  "oldEditorPid": 58092,
+  "oldProcessMissing": true,
+  "replacementEditorPid": 71188,
+  "reason": "External editor exit/restart observed; cause unknown. Temp removed; no final XML. Three complete matrix files retained; fourth result unavailable.",
+  "completedMatrices": [
+    {
+      "file": "Authority400-Legacy-0.json",
+      "cases": 750,
+      "differences": 4306
+    },
+    {
+      "file": "MobileExtended-Legacy-0.json",
+      "cases": 757,
+      "differences": 4915
+    },
+    {
+      "file": "MobileExtended-Legacy-1.json",
+      "cases": 757,
+      "differences": 5006
+    }
+  ]
+}

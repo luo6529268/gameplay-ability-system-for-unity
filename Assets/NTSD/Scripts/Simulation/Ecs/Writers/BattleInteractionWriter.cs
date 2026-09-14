@@ -123,11 +123,10 @@ namespace NTSD.Simulation.Ecs
                 itr.caughtact,
                 ref victimFacesLeft);
 
-            // Alignment contract: NTSD28-B6-CATCH-RELATION-EXACT-FIELDS-PRODUCTION-001.
-            // Both authored frames are preflighted before any paired state is written.
-            if (attacker.FrameCache == null || victim.FrameCache == null ||
-                !attacker.FrameCache.HasFrame(catchingFrame) ||
-                !victim.FrameCache.HasFrame(caughtFrame))
+            // Alignment contract: NTSD28-Q06-KIND3-CATCH-NATIVE-FRAME-LOOKUP-001.
+            LF2FrameData attackerFrame = attacker.FrameCache?.GetNativeFrameDataById(catchingFrame);
+            LF2FrameData victimFrame = victim.FrameCache?.GetNativeFrameDataById(caughtFrame);
+            if (attackerFrame == null || victimFrame == null)
             {
                 return false;
             }
@@ -136,8 +135,8 @@ namespace NTSD.Simulation.Ecs
             victim.Runtime.Vx = 0.0;
             attacker.SwitchDir(attackerFacesLeft ? "left" : "right");
             victim.SwitchDir(victimFacesLeft ? "left" : "right");
-            attacker.SetCpointRawFramePreserveWait(catchingFrame);
-            victim.SetCpointRawFramePreserveWait(caughtFrame);
+            attacker.SetCpointRawFramePreserveWait(catchingFrame, attackerFrame);
+            victim.SetCpointRawFramePreserveWait(caughtFrame, victimFrame);
             attacker.Runtime.X = attackerXInt;
             attacker.Runtime.Y = attackerYInt;
 
@@ -190,7 +189,7 @@ namespace NTSD.Simulation.Ecs
                 return false;
 
             LF2FrameData targetFrame = target.Frame != null
-                ? target.GetFrameDataById(target.Frame.N)
+                ? target.FrameCache?.GetNativeFrameDataById(target.Frame.N)
                 : null;
             var input = new BattlePickupTransactionInput(
                 target.GetCurrentDataObjectTypeForSimulation(),
@@ -242,7 +241,7 @@ namespace NTSD.Simulation.Ecs
                         target.RelationTeam = operation.Value;
                         break;
                     case BattlePickupWriteKind.SetHolderAction:
-                        attacker.DirectWriteRawFramePreserveWaitCounter(operation.Value);
+                        attacker.DirectWriteNativeRawFramePreserveWaitCounter(operation.Value);
                         break;
                     case BattlePickupWriteKind.SetHolderFrameCounter:
                         attacker.AttackingCounter = operation.Value;

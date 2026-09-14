@@ -1,0 +1,118 @@
+<test-suite type="TestSuite" id="9514" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7610" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.525632" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="17987" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7602" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.461915" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17988" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7602" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.368391" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17996" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7064" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.269541" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11359" name="NTSD28Q06CollisionFrameLookupEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.199335" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11364" name="CollisionSnapshotAndCatchMatchOriginal" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:32Z" duration="8.100385" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11360" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1402991795" result="Failed" start-time="2026-09-14 05:34:24Z" end-time="2026-09-14 05:34:26Z" duration="1.782823" asserts="0"><properties /><failure><message><![CDATA[  case 2 slot 0 collision descriptor identity/availability
+case 2 catch slot 0 relation fields differ
+case 3 slot 0 collision descriptor identity/availability
+case 3 catch slot 0 relation fields differ
+case 4 slot 1 collision descriptor identity/availability
+case 4 slot 1 snapshot centerx=0
+case 5 slot 1 collision descriptor identity/availability
+case 5 slot 1 snapshot centerx=0
+case 8 slot 0 collision descriptor identity/availability
+case 8 catch slot 0 relation fields differ
+case 9 slot 0 collision descriptor identity/availability
+case 9 catch slot 0 relation fields differ
+  Expected: <empty>
+  But was:  < "case 2 slot 0 collision descriptor identity/availability", "case 2 catch slot 0 relation fields differ", "case 3 slot 0 collision descriptor identity/availability", "case 3 catch slot 0 relation fields differ", "case 4 slot 1 collision descriptor identity/availability", "case 4 slot 1 snapshot centerx=0", "case 5 slot 1 collision descriptor identity/availability", "case 5 slot 1 snapshot centerx=0", "case 8 slot 0 collision descriptor identity/availability", "case 8 catch slot 0 relation fields differ"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x000fc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:46
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+]]></output></test-case><test-case id="11361" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1436660261" result="Failed" start-time="2026-09-14 05:34:26Z" end-time="2026-09-14 05:34:28Z" duration="1.714156" asserts="0"><properties /><failure><message><![CDATA[  case 2 slot 0 collision descriptor identity/availability
+case 2 catch slot 0 relation fields differ
+case 3 slot 0 collision descriptor identity/availability
+case 3 catch slot 0 relation fields differ
+case 4 slot 1 collision descriptor identity/availability
+case 4 slot 1 snapshot centerx=0
+case 5 slot 1 collision descriptor identity/availability
+case 5 slot 1 snapshot centerx=0
+case 8 slot 0 collision descriptor identity/availability
+case 8 catch slot 0 relation fields differ
+case 9 slot 0 collision descriptor identity/availability
+case 9 catch slot 0 relation fields differ
+  Expected: <empty>
+  But was:  < "case 2 slot 0 collision descriptor identity/availability", "case 2 catch slot 0 relation fields differ", "case 3 slot 0 collision descriptor identity/availability", "case 3 catch slot 0 relation fields differ", "case 4 slot 1 collision descriptor identity/availability", "case 4 slot 1 snapshot centerx=0", "case 5 slot 1 collision descriptor identity/availability", "case 5 slot 1 snapshot centerx=0", "case 8 slot 0 collision descriptor identity/availability", "case 8 catch slot 0 relation fields differ"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x000fc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:46
+]]></stack-trace></failure></test-case><test-case id="11362" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="960133290" result="Failed" start-time="2026-09-14 05:34:28Z" end-time="2026-09-14 05:34:30Z" duration="2.197040" asserts="0"><properties /><failure><message><![CDATA[  case 2 slot 0 collision descriptor identity/availability
+case 2 catch slot 0 relation fields differ
+case 3 slot 0 collision descriptor identity/availability
+case 3 catch slot 0 relation fields differ
+case 4 slot 1 collision descriptor identity/availability
+case 4 slot 1 snapshot centerx=0
+case 5 slot 1 collision descriptor identity/availability
+case 5 slot 1 snapshot centerx=0
+case 8 slot 0 collision descriptor identity/availability
+case 8 catch slot 0 relation fields differ
+case 9 slot 0 collision descriptor identity/availability
+case 9 catch slot 0 relation fields differ
+  Expected: <empty>
+  But was:  < "case 2 slot 0 collision descriptor identity/availability", "case 2 catch slot 0 relation fields differ", "case 3 slot 0 collision descriptor identity/availability", "case 3 catch slot 0 relation fields differ", "case 4 slot 1 collision descriptor identity/availability", "case 4 slot 1 snapshot centerx=0", "case 5 slot 1 collision descriptor identity/availability", "case 5 slot 1 snapshot centerx=0", "case 8 slot 0 collision descriptor identity/availability", "case 8 catch slot 0 relation fields differ"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x000fc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:46
+]]></stack-trace></failure></test-case><test-case id="11363" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1395609120" result="Failed" start-time="2026-09-14 05:34:30Z" end-time="2026-09-14 05:34:32Z" duration="2.299946" asserts="0"><properties /><failure><message><![CDATA[  case 2 slot 0 collision descriptor identity/availability
+case 2 catch slot 0 relation fields differ
+case 3 slot 0 collision descriptor identity/availability
+case 3 catch slot 0 relation fields differ
+case 4 slot 1 collision descriptor identity/availability
+case 4 slot 1 snapshot centerx=0
+case 5 slot 1 collision descriptor identity/availability
+case 5 slot 1 snapshot centerx=0
+case 8 slot 0 collision descriptor identity/availability
+case 8 catch slot 0 relation fields differ
+case 9 slot 0 collision descriptor identity/availability
+case 9 catch slot 0 relation fields differ
+  Expected: <empty>
+  But was:  < "case 2 slot 0 collision descriptor identity/availability", "case 2 catch slot 0 relation fields differ", "case 3 slot 0 collision descriptor identity/availability", "case 3 catch slot 0 relation fields differ", "case 4 slot 1 collision descriptor identity/availability", "case 4 slot 1 snapshot centerx=0", "case 5 slot 1 collision descriptor identity/availability", "case 5 slot 1 snapshot centerx=0", "case 8 slot 0 collision descriptor identity/availability", "case 8 catch slot 0 relation fields differ"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x000fc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:46
+]]></stack-trace></failure><output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:9178 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

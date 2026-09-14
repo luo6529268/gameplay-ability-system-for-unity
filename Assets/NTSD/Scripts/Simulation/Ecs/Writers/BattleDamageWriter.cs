@@ -1203,7 +1203,7 @@ namespace NTSD.Simulation.Ecs
                     attacker);
             }
 
-            victimHitCounters.SetHitStateCount(45);
+            victim.Runtime.Bdefend = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
 
             if (victimHitCounters.Fall == 80)
@@ -1394,7 +1394,7 @@ namespace NTSD.Simulation.Ecs
                 victim.ImmediateFrame(victim.BattleRandInt(0, 16));
             }
 
-            victim.HitStateCount = 45;
+            victim.Runtime.Bdefend = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
             LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
 
@@ -1594,10 +1594,8 @@ namespace NTSD.Simulation.Ecs
             victim.AttackingCounter = 0;
             if (victim.Runtime.RuntimeArmorHp118 <= 0)
             {
-                if (victimHitCounters != null)
-                    victimHitCounters.AddHitStateCount(itr.bdefend);
-                else
-                    victim.HitStateCount += itr.bdefend;
+                victim.Runtime.Bdefend = unchecked(
+                    victim.Runtime.Bdefend + itr.bdefend);
             }
             victim.HitCount++;
             ApplyNativeReducedHitRest(
@@ -1611,12 +1609,11 @@ namespace NTSD.Simulation.Ecs
                 victim.Runtime.PrevFrame2)?.state ?? 0;
             if (victim.GetRuntimeYInt() == 0)
             {
-                int hitStateCount = victimHitCounters?.HitStateCount ??
-                    victim.HitStateCount;
+                int bdefend = victim.Runtime.Bdefend;
                 int actionThreshold = selectedArmor != null
                     ? System.Math.Max(selectedArmor.ratio, 30)
                     : 30;
-                if (hitStateCount > actionThreshold &&
+                if (bdefend > actionThreshold &&
                     victimPrev2State == LF2States.Defending)
                 {
                     victim.DirectWriteFramePreserveWaitCounter(
@@ -1843,7 +1840,7 @@ namespace NTSD.Simulation.Ecs
                     attacker);
             }
 
-            victim.HitStateCount = 45;
+            victim.Runtime.Bdefend = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
 
             if (victim.FallCounter == 80)

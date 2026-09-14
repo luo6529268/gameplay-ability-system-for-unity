@@ -3165,7 +3165,10 @@ namespace NTSD.Simulation
             {
                 foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                 {
-                    if (battleEcsCharacterFrameAdvancePass.TryExecute(
+                    // Alignment contract: NTSD28-Q06-NATIVE-PENDING-PRE-C25-MOTION-GUARD-001.
+                    if (!entity.Runtime.NativeLifecycleResolutionPending &&
+                        !entity.HasUnavailableNativePhysicsFrameForWorldPass() &&
+                        battleEcsCharacterFrameAdvancePass.TryExecute(
                             entity,
                             tickIndex))
                     {

@@ -1,0 +1,231 @@
+<test-suite type="TestSuite" id="9525" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7618" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:17:05Z" duration="40.558713" total="12" passed="0" failed="12" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18009" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7610" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:17:05Z" duration="40.480760" total="12" passed="0" failed="12" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18010" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7610" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:17:05Z" duration="40.390500" total="12" passed="0" failed="12" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18018" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7072" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:17:05Z" duration="40.294854" total="12" passed="0" failed="12" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11370" name="NTSD28Q06CollisionFrameLookupEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:16:38Z" duration="13.107950" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11375" name="CollisionSnapshotAndCatchMatchOriginal" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:16:38Z" duration="13.006483" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11371" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1002279674" result="Failed" start-time="2026-09-14 06:16:25Z" end-time="2026-09-14 06:16:28Z" duration="2.862430" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+]]></output></test-case><test-case id="11372" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="36630128" result="Failed" start-time="2026-09-14 06:16:28Z" end-time="2026-09-14 06:16:31Z" duration="2.942874" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case><test-case id="11373" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1744923167" result="Failed" start-time="2026-09-14 06:16:31Z" end-time="2026-09-14 06:16:34Z" duration="3.116529" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case><test-case id="11374" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="547631043" result="Failed" start-time="2026-09-14 06:16:34Z" end-time="2026-09-14 06:16:38Z" duration="3.976444" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case></test-suite></test-suite><test-suite type="TestFixture" id="11376" name="NTSD28Q06CollisionQualificationEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-09-14 06:16:38Z" end-time="2026-09-14 06:17:05Z" duration="27.119356" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11381" name="DriverCatchFrameChangePreservesQueuedAttack" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:16:38Z" end-time="2026-09-14 06:16:41Z" duration="2.762858" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11377" name="DriverCatchFrameChangePreservesQueuedAttack(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,False)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1162846853" result="Failed" start-time="2026-09-14 06:16:38Z" end-time="2026-09-14 06:16:39Z" duration="0.808369" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 10 RNG counts differ
+caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 998 RNG counts differ
+  Expected: <empty>
+  But was:  < "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 10 RNG counts differ", "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 998 RNG counts differ" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x00464] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:81
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11378" name="DriverCatchFrameChangePreservesQueuedAttack(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,True)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1858188047" result="Failed" start-time="2026-09-14 06:16:39Z" end-time="2026-09-14 06:16:40Z" duration="0.573749" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 10 RNG counts differ
+caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 998 RNG counts differ
+  Expected: <empty>
+  But was:  < "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 10 RNG counts differ", "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 998 RNG counts differ" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x00464] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:81
+]]></stack-trace></failure></test-case><test-case id="11379" name="DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,False)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="434228545" result="Failed" start-time="2026-09-14 06:16:40Z" end-time="2026-09-14 06:16:40Z" duration="0.682490" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 10 RNG counts differ
+caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 998 RNG counts differ
+  Expected: <empty>
+  But was:  < "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 10 RNG counts differ", "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 998 RNG counts differ" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x00464] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:81
+]]></stack-trace></failure></test-case><test-case id="11380" name="DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,True)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1597899225" result="Failed" start-time="2026-09-14 06:16:40Z" end-time="2026-09-14 06:16:41Z" duration="0.595960" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 10 RNG counts differ
+caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45
+caughtAction 998 RNG counts differ
+  Expected: <empty>
+  But was:  < "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 10 RNG counts differ", "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45", "caughtAction 998 RNG counts differ" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x00464] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:81
+]]></stack-trace></failure></test-case></test-suite><test-suite type="ParameterizedMethod" id="11386" name="OriginalQualificationAndFrozenConsumerMatch" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:16:41Z" end-time="2026-09-14 06:17:05Z" duration="24.350717" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11382" name="OriginalQualificationAndFrozenConsumerMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(Authority400,False)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1441199612" result="Failed" start-time="2026-09-14 06:16:41Z" end-time="2026-09-14 06:16:47Z" duration="5.913246" asserts="0"><properties /><failure><message><![CDATA[  case 240 candidates=0 expected 1
+case 240 missing captured pair
+case 242 candidates=0 expected 1
+case 242 missing captured pair
+case 244 candidates=0 expected 1
+case 244 missing captured pair
+case 246 candidates=0 expected 1
+case 246 missing captured pair
+case 248 candidates=0 expected 1
+case 248 missing captured pair
+case 250 candidates=0 expected 1
+case 250 missing captured pair
+case 252 candidates=0 expected 1
+case 252 missing captured pair
+case 254 candidates=0 expected 1
+  Expected: <empty>
+  But was:  < "case 240 candidates=0 expected 1", "case 240 missing captured pair", "case 242 candidates=0 expected 1", "case 242 missing captured pair", "case 244 candidates=0 expected 1", "case 244 missing captured pair", "case 246 candidates=0 expected 1", "case 246 missing captured pair", "case 248 candidates=0 expected 1", "case 248 missing captured pair"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:102
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11383" name="OriginalQualificationAndFrozenConsumerMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(Authority400,True)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1619555183" result="Failed" start-time="2026-09-14 06:16:47Z" end-time="2026-09-14 06:16:52Z" duration="5.476335" asserts="0"><properties /><failure><message><![CDATA[  case 240 candidates=0 expected 1
+case 240 missing captured pair
+case 242 candidates=0 expected 1
+case 242 missing captured pair
+case 244 candidates=0 expected 1
+case 244 missing captured pair
+case 246 candidates=0 expected 1
+case 246 missing captured pair
+case 248 candidates=0 expected 1
+case 248 missing captured pair
+case 250 candidates=0 expected 1
+case 250 missing captured pair
+case 252 candidates=0 expected 1
+case 252 missing captured pair
+case 254 candidates=0 expected 1
+  Expected: <empty>
+  But was:  < "case 240 candidates=0 expected 1", "case 240 missing captured pair", "case 242 candidates=0 expected 1", "case 242 missing captured pair", "case 244 candidates=0 expected 1", "case 244 missing captured pair", "case 246 candidates=0 expected 1", "case 246 missing captured pair", "case 248 candidates=0 expected 1", "case 248 missing captured pair"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:102
+]]></stack-trace></failure></test-case><test-case id="11384" name="OriginalQualificationAndFrozenConsumerMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(MobileExtended,False)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1294462147" result="Failed" start-time="2026-09-14 06:16:52Z" end-time="2026-09-14 06:16:59Z" duration="6.564740" asserts="0"><properties /><failure><message><![CDATA[  case 240 candidates=0 expected 1
+case 240 missing captured pair
+case 242 candidates=0 expected 1
+case 242 missing captured pair
+case 244 candidates=0 expected 1
+case 244 missing captured pair
+case 246 candidates=0 expected 1
+case 246 missing captured pair
+case 248 candidates=0 expected 1
+case 248 missing captured pair
+case 250 candidates=0 expected 1
+case 250 missing captured pair
+case 252 candidates=0 expected 1
+case 252 missing captured pair
+case 254 candidates=0 expected 1
+  Expected: <empty>
+  But was:  < "case 240 candidates=0 expected 1", "case 240 missing captured pair", "case 242 candidates=0 expected 1", "case 242 missing captured pair", "case 244 candidates=0 expected 1", "case 244 missing captured pair", "case 246 candidates=0 expected 1", "case 246 missing captured pair", "case 248 candidates=0 expected 1", "case 248 missing captured pair"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:102
+]]></stack-trace></failure></test-case><test-case id="11385" name="OriginalQualificationAndFrozenConsumerMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(MobileExtended,True)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="609641517" result="Failed" start-time="2026-09-14 06:16:59Z" end-time="2026-09-14 06:17:05Z" duration="6.380360" asserts="0"><properties /><failure><message><![CDATA[  case 240 candidates=0 expected 1
+case 240 missing captured pair
+case 242 candidates=0 expected 1
+case 242 missing captured pair
+case 244 candidates=0 expected 1
+case 244 missing captured pair
+case 246 candidates=0 expected 1
+case 246 missing captured pair
+case 248 candidates=0 expected 1
+case 248 missing captured pair
+case 250 candidates=0 expected 1
+case 250 missing captured pair
+case 252 candidates=0 expected 1
+case 252 missing captured pair
+case 254 candidates=0 expected 1
+  Expected: <empty>
+  But was:  < "case 240 candidates=0 expected 1", "case 240 missing captured pair", "case 242 candidates=0 expected 1", "case 242 missing captured pair", "case 244 candidates=0 expected 1", "case 244 missing captured pair", "case 246 candidates=0 expected 1", "case 246 missing captured pair", "case 248 candidates=0 expected 1", "case 248 missing captured pair"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:102
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

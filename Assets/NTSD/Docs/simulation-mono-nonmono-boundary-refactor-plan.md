@@ -82,7 +82,9 @@ Unity Presentation Adapter
 实施时必须保持：
 
 - C++ release live runtime 的战斗 pass 顺序和可观察结果。
-- 固定逻辑频率 30 Hz。
+- 正常逻辑 cadence 为精确 33 ms；F5 快速 cadence 为精确 3 ms；
+  LocalFreeRun wall-clock debt 最多 2 个当前 cadence interval
+  （19.7-S6 强制统一口径）。
 - 输入边沿、组合键、frame input 消费时点。
 - entity slot、stable id、generation、active/dormant 和销毁时点。
 - OPoint 入队、flush、materialize 和 first-visible tick。
@@ -96,7 +98,7 @@ Unity Presentation Adapter
 
 - 修复角色招式或修改 DAT。
 - 重排战斗 pass。
-- 改变 30 Hz 或输入延迟语义。
+- 改变 33 ms 正常 cadence、3 ms 快速 cadence 或输入延迟语义。
 - 切换 ECS/worker 默认路径。
 - 新增网络、rollback、transport、database 或 Server 行为。
 - 同时进行渲染性能重构、资源格式重构或 UI 改版。
@@ -299,25 +301,48 @@ Presentation -X-> logic Transform writeback
 ### 7.1 Tick Host 端口
 
 ```csharp
-public interface ISimulationTickHost
+// P-1（19.7，已批准落地）：Host 公共端口不暴露可变 SimulationWorld，
+// 拆为最小能力端口；成员在 B1 Task Contract 中按实际调用方定型。
+public interface ISimulationFrameExecutor
 {
-    SimulationWorld World { get; }
     int CurrentTick { get; }
     bool TrySubmitFrameInput(in FrameInputSet input);
     bool TryStepOneTick();
 }
+
+public interface ISimulationChecksumReader
+{
+    bool TryReadChecksum(int tickIndex, out SimulationChecksum checksum);
+}
+
+public interface ISimulationSnapshotPort
+{
+    // 受控快照 Capture / Restore
+}
+
+public interface ISimulationLifecyclePort
+{
+    // Start / Stop / State
+}
 ```
 
-用途：让 Lockstep/Replay 依赖纯接口，不依赖 `SimulationTickDriver` 具体 Mono 类型。
+用途：让 Lockstep/Replay 依赖纯接口，不依赖 `SimulationTickDriver` 具体 Mono
+类型；任何端口不暴露可变 `SimulationWorld` 聚合根（World 访问留在 Host 内部
+编排层）。
 
 ### 7.2 Presentation binding command
 
 ```csharp
+// P-4（19.7，已批准落地）：command 携带完整 epoch 链，仅 entity generation
+// 不足以区分新旧 World。
 public readonly struct PresentationBindingCommand
 {
     public RuntimeEntityHandle Handle { get; }
     public PresentationBindingOperation Operation { get; }
     public int PublicationTick { get; }
+    public int SessionEpoch { get; }
+    public int WorldGeneration { get; }
+    public int PublicationSequence { get; }
 }
 ```
 
@@ -337,15 +362,27 @@ snapshot/checksum。
 ### 7.4 Presentation detach acknowledgment
 
 ```csharp
+// P-4（19.7，已批准落地）：ack 与 command 使用同一套 epoch 链。
 public readonly struct PresentationDetachAck
 {
     public RuntimeEntityHandle Handle { get; }
     public uint Generation { get; }
     public bool Detached { get; }
+    public int SessionEpoch { get; }
+    public int WorldGeneration { get; }
+    public int PublicationSequence { get; }
 }
 ```
 
-ack 必须匹配 slot/generation，旧 generation 不得解除新 occupant 的表现绑定。
+epoch 链比较规则（P-4）：
+
+```text
+SessionEpoch 不匹配      → 整条回调/ack 丢弃
+WorldGeneration 不匹配   → 不访问旧 World
+EntityGeneration 不匹配  → 不解绑新 occupant
+PublicationSequence 过旧 → 不覆盖新 publication
+TickIndex 只用于顺序与诊断，不单独充当对象身份
+```
 
 ### 7.5 诊断端口
 
@@ -389,16 +426,21 @@ Core 注册成功不依赖 Renderer 已经生成；表现可以延迟，但 firs
 ### 8.3 Entity 释放
 
 ```text
-Core 标记 pending unregister
-→ publication 不再包含旧 entity
-→ 发布 DetachPresentation(handle)
-→ Presentation 验证 generation、隐藏并归还 renderer
-→ 返回 detach ack
-→ Registry 完成允许的 slot release/reuse 边界
+Core（权威，P-2 已批准落地）：
+  按权威 tick 完成 pending unregister、slot release、generation 递增；
+  发布生命周期事件（handle + generation + session epoch +
+  world generation + publication sequence）。
+
+Presentation（异步，不回写 Core）：
+  收到 DetachPresentation 后异步 detach 旧 binding；
+  迟到 ack 只回收旧表现资源；
+  epoch 链任一不匹配 → 丢弃该 ack，不触碰新 occupant。
 ```
 
-具体 ack 是否阻塞 slot reuse 必须根据现有 generation/no-ghost 合同通过测试决定，不能凭
-架构偏好改变当前可见 tick。
+Core slot 生命周期不等待表现 ack；no-ghost 合同由 binding table +
+epoch/generation 校验保证（迟到回收不得解绑新 occupant），first-visible
+tick 合同不变。正常模拟中 Presentation 不是模拟生命周期的裁决者；仅有序
+关闭阶段可将"Presentation 已回收"作为关闭后置条件。
 
 ### 8.4 Ordered shutdown
 
@@ -424,14 +466,15 @@ Core 标记 pending unregister
 
 保留为 Mono lifecycle owner。未来调整：
 
-- 实现 `ISimulationTickHost`。
+- 实现 7.1 的最小端口组合（`ISimulationFrameExecutor` 等，P-1）。
 - 把输入、worker、lifecycle、presentation dispatch 组织为明确 adapter 引用。
 - 不把自身实例传入 Lockstep/Core module。
 - 不把 `Update/LateUpdate` 方法迁入 Core。
 
 ### 9.2 `BattleLockstepSession`
 
-- 构造参数从 `SimulationTickDriver` 改为最小 `ISimulationTickHost`/frame execution port。
+- 构造参数从 `SimulationTickDriver` 改为 7.1 的最小端口
+  （`ISimulationFrameExecutor`/`ISimulationChecksumReader` 等，P-1）。
 - session 不查询 GameObject、Scene、Time 或 Mono singleton。
 - 保持相同 tick、journal、checksum 和 input-ready 行为。
 
@@ -478,11 +521,23 @@ Core 标记 pending unregister
   Scene carrier 操作移到 Presentation/Host。
 - `Vector2/Vector3` 在 L1 可暂留；Transform/Scene 引用必须移出。
 
-### 9.9 日志与数学依赖
+### 9.9 日志、线程相关 API 与数学依赖（P-3 已批准落地）
 
-L1 完成后再执行：
+Debug 与线程相关静态 API 前移至 worker 准入范围（B0–B6），不再是"L1 后"：
 
-- `Debug.Log*` 改为 diagnostics sink 或 Host logger。
+- B0 记录现有 `Debug` 债务 baseline（具名，见 13.1）。
+- worker 准入路径（B6 exit 前）：`Time`、`Input`、`UnityEngine.Random`、
+  `Resources`、`Application`、`SystemInfo`、`Object.Instantiate/Destroy` 等
+  主线程限定/进程环境型调用移除或隔离；`Debug` 调用改为 diagnostics sink
+  （7.5）或证明不可达——**硬门**：生产 worker 热路径 `Debug` 调用为 0。
+- **L1 完成定义：Core 对 `UnityEngine.Debug` 的依赖为 0。** `Debug` 即使
+  在当前 Unity 版本可从工作线程调用，仍是 Core → Unity 服务依赖，并可能
+  带来日志锁、字符串分配与不可控 IO，不允许只写成"建议收口"。
+- 允许 B0 inventory 或临时诊断路径记录既有 `Debug` 债务，按 13.1 baseline
+  管理并限期清除。
+
+B7 收窄为纯值/数学收口：
+
 - `Mathf` 可机械替换为行为等价的 `System.Math/MathF` 前，必须覆盖边界/rounding 测试。
 - `Vector2/Vector3` 是否替换为 fixed/int value type，必须以 checksum 和 C++ 数值语义为
   前提，不作为美化任务。
@@ -527,13 +582,13 @@ NTSD.Simulation.Host     NTSD.Simulation.Presentation
 | 批次 | 内容 | 主要文件 | 必跑验证 |
 |---|---|---|---|
 | B0 | 冻结 inventory、依赖图、architecture guards | 文档+Editor tests | compile、guard baseline |
-| B1 | `ISimulationTickHost`，Lockstep 去 concrete Mono | Driver/Lockstep | lockstep、checksum、input |
+| B1 | 7.1 最小端口落地（P-1），Lockstep 去 concrete Mono | Driver/Lockstep | lockstep、checksum、input |
 | B2 | Managed-memory Mono probes 移到 Host/Diagnostics | boundary/probes | benchmark、allocation、Play |
 | B3 | 建立 presentation command/ack/binding table | Contracts/Presentation | generation/no-ghost/central |
 | B4 | Registry/World 去 Renderer/Sprite/MountRegistry | World/Registry/adapter | structural、shutdown、Play |
 | B5 | LF2Entity compatibility binding 收口 | LF2Objects/Rendering | actor/weapon/effect、pool |
-| B6 | Tick publication 与 Unity dispatch 分离 | TickSystem/StageRender | pass order、worker、central |
-| B7 | Debug/Math/Unity value dependency inventory 收口 | Core modules | checksum、rounding、full |
+| B6 | Tick publication 与 Unity dispatch 分离；worker 准入路径线程相关 Unity API 清零（含 Debug 硬门，见 9.9） | TickSystem/StageRender | pass order、worker、central |
+| B7 | 纯值/数学依赖收口（Mathf/Vector 等 L2；Debug 已前移 B0–B6） | Core modules | checksum、rounding、full |
 | B8 | asmdef 强制单向引用 | assembly definitions | clean compile、full tests |
 | B9 | 最终 API/compat façade 清理 | 全部相关层 | full matrix、2-cycle Play |
 
@@ -552,11 +607,14 @@ NTSD.Simulation.Host     NTSD.Simulation.Presentation
 
 未来 B0 先建立只读/测试守卫，建议至少覆盖：
 
-### 13.1 Mono ownership guard
+### 13.1 Mono ownership guard（P-5 已批准落地）
 
 - `Core/Runtime/Passes/Ai/Ecs/Lockstep` 不得声明 `MonoBehaviour`。
-- 允许清单初始只包含 `Host/SimulationTickDriver.cs`。
-- probe 迁移完成后 Runtime Mono allowlist 必须为0。
+- B0 生成具名 current-debt baseline：每条债务记录文件、symbol、owner、
+  目标批次与删除条件；baseline 之后不允许新增债务；
+  不使用宽泛通配 allowlist 掩盖新增违规。
+- B2：移除两个 Runtime Mono probe 债务，Runtime Mono debt 归零。
+- B8：asmdef 强制最终依赖图。
 
 ### 13.2 Forbidden Unity object guard
 
@@ -594,13 +652,25 @@ Resources.Load
 
 仅 B8 启用：验证 assembly reference graph 无 Core→Host/Presentation 边。
 
+### 13.6 Thread-affine / environment API guard（P-5 已批准落地）
+
+- worker 准入路径禁止：`Time`、`Input`、`UnityEngine.Random`、`Resources`、
+  `Application`、`SystemInfo`、`Object.Instantiate`、`Object.Destroy`。
+- 生产 worker 热路径 `Debug` 调用必须为 0（diagnostics sink 或证明不可达）；
+  L1 完成时 Core 对 `UnityEngine.Debug` 依赖为 0（见 9.9）。
+- 禁止反射、service locator、`FindObjectOfType` 绕过依赖方向守卫。
+- publication/command buffer 每 tick 分配守卫：预分配容量之外的新分配即失败。
+- capacity overflow 守卫：buffer 满必须 fail-closed 报错，不得静默扩容。
+- token scanner 不得成为永久终态：Roslyn/AST 或 asmdef 编译期强制是后续
+  升级方向（S3）。
+
 ## 14. 验收矩阵
 
 每批按风险选择，下列是最终 B9 的最低矩阵：
 
 1. Unity compile 0 error。
 2. Mono ownership / forbidden dependency / assembly graph guards 全通过。
-3. 固定30 Hz、pass order、RNG、slot/generation、OPoint focused 全通过。
+3. 精确 33 ms 正常 cadence（F5 3 ms、debt ≤2 interval）、pass order、RNG、slot/generation、OPoint focused 全通过。
 4. AI、collision/hit、worker、checksum、snapshot/restore、lockstep 全达到迁移前基线。
 5. Central Render actor/weapon/effect/shadow/health publication 不新增 ghost 或断批差异。
 6. `BattleRuntimeSelfCheck` 实际执行；任务外 first-failure 单列。
@@ -616,9 +686,12 @@ Resources.Load
 
 - port/command 不得导致每 tick delegate、LINQ、boxing 或临时集合分配。
 - command/publication 使用预分配 buffer、stable slot/generation 和明确容量策略。
-- Unity Object 永远不进入 dedicated simulation worker。
-- Presentation ack 只在主线程产生，Core 只消费纯值副本。
-- 不为边界整洁破坏 current 1000-active、0GC 或30 Hz预算。
+- Unity Object 永远不进入 dedicated simulation worker；`Time/Input/Random/
+  Resources/Application/SystemInfo/Object.Instantiate/Destroy` 等主线程限定
+  API 同样不进入 worker 路径（见 13.6）。
+- Presentation ack 只在主线程产生，Core 只消费纯值副本；正常模拟中 Core
+  slot 生命周期不等待表现 ack（见 8.3）。
+- 不为边界整洁破坏 current 1000-active、0GC 或 33 ms cadence 预算。
 - 若 async resource load 参与 binding，完成回调必须验证 world/session/generation仍有效。
 
 ## 16. 风险与回滚
@@ -728,4 +801,72 @@ USER_HOLD
 
 - 本节由评审会话按用户要求追加，属文档维护，不触碰脚本，不属于任何
   Change Record 范围。
-- 建议采纳与否由用户综合评审决定；综合评审完成前，本节不作为实施依据。
+- 建议采纳与否由用户综合评审决定。
+
+### 19.7 GPT6 综合评审裁定与正文修正清单（2026-09-14）
+
+> 性质：2026-09-14 外部综合评审（GPT6）对本计划全文 + 19.4 节建议 S1–S6 的
+> 裁定记录。总体裁定：**修改后采纳**（三层设计、L1/L2 分级、B0–B9、小批次
+> 迁移、asmdef 最后实施整体合理）。本小节同时列出对正文的修正清单
+> P-1…P-5。R2 复核（2026-09-14，同评审方）裁定 `CORRECTION_SET_APPROVED`：
+> P-1～P-5 与 S1～S6 的**文档正文落地已获批准并于当日执行**（见 19.7.5）；
+> 该批准仅覆盖文档修正，**不构成代码大包实施授权**——代码仍必须按
+> B0→B9 顺序逐批独立立项（Task Contract + Change Record + focused test +
+> 回滚边界）。
+
+#### 19.7.1 对 19.4 节建议 S1–S6 的裁定
+
+| 编号 | 裁定 | 理由与修改 |
+|---|---|---|
+| S1 | 修改后采纳 | 读取者 manifest 正确；"每次扫描必须下降"过于机械（某准备批次可能数量不变）。改为：不得增加；每个 B5 子批声明迁移目标；B5 exit 时生产读取者必须为 0；Editor/测试读取者单列 |
+| S2 | 采纳 | 分层只提供线程与所有权资格，不自动提高 Stats；在第 1 节回链性能方案，并注明现有 worker 仍需资格/重叠/背压测量 |
+| S3 | 修改后采纳 | token scanner 起步可行，但必须排除注释/字符串/测试夹具误报、按目录/namespace/symbol 精确配置、已知债务用具名 baseline（不用宽泛 allowlist），并把 Roslyn/asmdef 写成后续强制升级，scanner 不得成为永久终态 |
+| S4 | 采纳 | B4 先于 B6 顺序正确；补充：先修正 ack 语义（见 P-2），防止 B3 把 Presentation 变成模拟生命周期裁决者 |
+| S5 | 采纳（已内建） | 代码持续变化，B0 必须重新生成 inventory，不照抄 9 月 2/13 日行号 |
+| S6 | 强制采纳 | 统一精确 33 ms、F5 3 ms、两 interval debt；这是权威合同，非可选文字修正 |
+
+#### 19.7.2 新增外部建议 S7–S9
+
+| 编号 | 内容 |
+|---|---|
+| S7 | `ISimulationTickHost` 不暴露 `SimulationWorld`，拆成最小 frame/checksum/snapshot/lifecycle 端口 |
+| S8 | Presentation detach ack 不阻塞正常 slot release；ack 只回收表现资源，并携带 session/world/entity generation |
+| S9 | worker 准入前清除 `Time/Input/Random/Resources/Application/SystemInfo/Object.Instantiate/Destroy` 等线程相关/主线程限定 Unity API；`Vector/Mathf` 可留 L2；`Debug` 线程安全但建议经诊断 sink 收口（非硬准入项） |
+
+#### 19.7.3 正文修正清单（已批准，2026-09-14 落地正文；P-3 按 R2 附加 Debug 硬门）
+
+| 编号 | 正文位置 | 修正内容 |
+|---|---|---|
+| P-1 | 7.1 | `ISimulationTickHost` 移除 `World` 属性，拆为最小 frame executor/checksum/snapshot/lifecycle 端口，不在 Host 公共端口暴露可变聚合根 |
+| P-2 | 8.3 | 实体释放改为非阻塞：Core 按权威 tick 完成 unregister/slot release/generation 递增并发布含 handle+generation+session epoch 的生命周期事件；Presentation 异步 detach，迟到 ack 只回收旧表现资源，不阻塞或修改 Core slot 生命周期。仅有序关闭阶段可将"Presentation 已回收"作为后置条件 |
+| P-3 | 9.9 / B6 / B7 | 线程相关静态 API（`Time/Input/Random/Resources/Application/SystemInfo` 等）清理前移至 worker 准入范围（B0–B6）；B7 收窄为纯值类型、数学舍入与可选 L2 |
+| P-4 | 7.2/7.4 | command/publication/ack 增加 `SessionEpoch`/`WorldGeneration`/`PublicationSequence` 字段（仅 entity generation 不足以区分新旧 World） |
+| P-5 | 13 节守卫 | B0 已知债务进 baseline manifest（具名，不用宽泛 allowlist）；新增禁止反射/service locator 绕过守卫、publication 每 tick allocation 与 capacity overflow 守卫、thread-affine Unity API 守卫 |
+
+#### 19.7.4 关联状态
+
+- 姊妹计划 `BATTLE-PERF-STATS120-ROADMAP-001` 已按本次评审完成 R1 修订
+  （其 Step B 前置引用本清单 P-1…P-5）；
+- 综合评审同时指出本计划头部"2026-09-02 权威更新"与正文第 3 节"30 Hz"
+  的不一致，已由 S6/P-3 关联覆盖（S6 强制采纳，正文修正随 P 清单执行）。
+
+#### 19.7.5 R2 复核与正文落地记录（2026-09-14）
+
+- R2 复核裁定：`CORRECTION_SET_APPROVED`。上轮 24 项发现中 19 项已在 R1
+  入正文、4 项随本次 P-1～P-5 回写、1 项（PERF render/GPU 硬门）在 PERF
+  文档 R2 补齐，遗漏 0 项。
+- 本次正文落地范围：7.1（P-1 端口拆分）、7.2/7.4（P-4 epoch 链 + 比较规则）、
+  8.3（P-2 非阻塞 ack/slot 生命周期）、9.9 与第 11 节 B6/B7 行（P-3 线程
+  API 前移 + Debug 硬门 + B7 收窄）、13.1/13.6（P-5 守卫增强）、第 3/14/15
+  节（S6 33 ms 口径统一）、19.6/19.7 排版修复。
+- **P-3 修改后批准的附加硬边界**：`Debug` 不得只写"建议收口"——worker
+  准入路径（B6 exit 前）必须改为 diagnostics sink（7.5）或证明不可达；
+  生产 worker 热路径 `Debug` 调用为 0；L1 完成定义 = Core 对
+  `UnityEngine.Debug` 依赖为 0。允许 B0 baseline 记录既有 `Debug` 债务。
+  PERF 文档 F9/Step B 的对应不一致由 PERF R2 同步修正。
+- R2 指出的 job 状态过时已修正：`CURRENT-AUTHORITY.md` 第 3 行显示回归
+  job `aa6b0c9f…` 已有终态（FAILED，58/24，XML 归档），测量排队理由更新为
+  与后继活跃任务 `NTSD28-Q06` 协调。
+- 状态：`CORRECTION_SET_APPROVED / BODY_UPDATE_DONE /
+  IMPLEMENTATION_NOT_STARTED / USER_HOLD`。代码实施仍按 B0→B9 分批，须
+  用户逐批批准；头部计划状态行保持 `DOCUMENTED / USER_HOLD` 语义。

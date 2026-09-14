@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 12,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Play, isolated logic-only pending fixtures; full driver and both frame backends. No image or physical-input certification."
+}

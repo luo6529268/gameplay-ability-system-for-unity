@@ -1,0 +1,171 @@
+<test-suite type="TestSuite" id="9531" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7622" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:07Z" duration="11.739276" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18021" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7614" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:07Z" duration="11.610541" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18022" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7614" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:07Z" duration="11.523983" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18030" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7076" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:06Z" duration="11.426147" total="8" passed="0" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11376" name="NTSD28Q06BdefendFieldFamilyEditorTests" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:04Z" duration="9.115877" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11381" name="NativeFieldWritesAndRecoveryMatch" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:09:04Z" duration="9.015860" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11377" name="NativeFieldWritesAndRecoveryMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1637707451" result="Failed" start-time="2026-09-14 07:08:55Z" end-time="2026-09-14 07:08:57Z" duration="2.040014" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11378" name="NativeFieldWritesAndRecoveryMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1589475195" result="Failed" start-time="2026-09-14 07:08:57Z" end-time="2026-09-14 07:08:59Z" duration="2.014221" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11379" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1655282918" result="Failed" start-time="2026-09-14 07:08:59Z" end-time="2026-09-14 07:09:02Z" duration="2.547106" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11380" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="152100769" result="Failed" start-time="2026-09-14 07:09:02Z" end-time="2026-09-14 07:09:04Z" duration="2.306079" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005a4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case></test-suite></test-suite><test-suite type="TestFixture" id="11388" name="NTSD28Q06CollisionQualificationEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-09-14 07:09:04Z" end-time="2026-09-14 07:09:06Z" duration="2.248261" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11393" name="DriverCatchFrameChangePreservesQueuedAttack" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 07:09:04Z" end-time="2026-09-14 07:09:06Z" duration="2.239532" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11389" name="DriverCatchFrameChangePreservesQueuedAttack(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,False)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="355595407" result="Failed" start-time="2026-09-14 07:09:04Z" end-time="2026-09-14 07:09:05Z" duration="0.667984" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+  Expected: <empty>
+  But was:  < "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2", "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x004e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:83
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (initial): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11390" name="DriverCatchFrameChangePreservesQueuedAttack(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,True)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1293930602" result="Failed" start-time="2026-09-14 07:09:05Z" end-time="2026-09-14 07:09:06Z" duration="0.484526" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+  Expected: <empty>
+  But was:  < "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2", "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x004e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:83
+]]></stack-trace></failure></test-case><test-case id="11391" name="DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,False)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1541233795" result="Failed" start-time="2026-09-14 07:09:06Z" end-time="2026-09-14 07:09:06Z" duration="0.531506" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+  Expected: <empty>
+  But was:  < "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2", "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x004e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:83
+]]></stack-trace></failure></test-case><test-case id="11392" name="DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,True)" methodname="DriverCatchFrameChangePreservesQueuedAttack" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="846377359" result="Failed" start-time="2026-09-14 07:09:06Z" end-time="2026-09-14 07:09:06Z" duration="0.458272" asserts="0"><properties /><failure><message><![CDATA[  caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2
+  Expected: <empty>
+  But was:  < "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2", "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean optimized) [0x004e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:83
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

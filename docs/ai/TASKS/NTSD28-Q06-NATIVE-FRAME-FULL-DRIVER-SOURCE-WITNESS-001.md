@@ -1,0 +1,11 @@
+> 当前已VERIFIED限定范围；最终证据见同名Record。父frame离线事务已闭合，epoch已使用World恢复缺口另留Task；下一原Native reader迁移。以下为历史计划。
+
+# Native frame完整driver补充见证
+
+READY_SOURCE_DRIVER_JOIN；父NATIVE-FRAME-TRANSACTION-INTEGRATION仍IN_PROGRESS，六个state18/普通出生/pending关联修复已限定VERIFIED，不再等待旧job。
+
+复用Tools/NTSD28AuthorityTrace/frame_step_lifecycle_witness.cpp的FrameCase输入与2676已通过端点，不重建同一core矩阵。先核对正式GameSession28::step的SimulationTickOptions28及ResourceSystemRules（正式mode28=1，不能以core默认0替代），然后准确单runner Change Record。新增只供诊断的完整SimulationTickDriver28三连续tick矩阵：高action857/998、正负999、1000、1100/1101/1200/1299/1300，正负next、成本不足原destination.next回退及恰好可支付、local/mode/hold资格代表场景；type0/3/武器和高低slot按native有效初值设置。原raw50并额外记录sound latch/事件和两consumed totals，保留source full初始状态，driver写previous078/collision/lifecycle而非runner代写。原输入边沿如使用需明确同Unity逐tick路由。
+
+需将合法当前定义/implicit/terminal初值区分，记录diagnostics和first difference，不把fixture错误当生产规则。跟随现有Build-AuthoritySourceCapture脚本在Unity仓库Temp输出，原source及EXE完全只读；重复运行同seed字节一致。此source见证不是正式EXE晋升或Unity验收。随后的精确Unity测试/真实Play必须通过完整driver接收同初值，覆盖original声音事件顺序和成本fallback编码重置；复用已通过的OPoint→state18→078→fragment→lifecycle组合，不重新证明所有出生边界。
+
+父frame出口完成后回NATIVE-FRAME-RUNTIME-READER-MIGRATION的剩余消费者，普通OPoint具体effect/continuation/defend等见OPoint-REMAINING-CONSUMER-AUDIT，再display/post和Q07。当前不新增持久字段/schema、不改Scene/InputActions/资源/非战斗/框架/Server/Gen/Plugins，不使用computer-use。

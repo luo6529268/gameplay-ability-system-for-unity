@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 800,
+  "differences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, synthetic kind2 live-frame lookup/raw holder binding and following physics; both factories, direct/Shadow; full held lifecycle and images not certified."
+}

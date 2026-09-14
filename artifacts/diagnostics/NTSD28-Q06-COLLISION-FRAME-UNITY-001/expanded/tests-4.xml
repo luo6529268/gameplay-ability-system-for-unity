@@ -1,0 +1,117 @@
+<test-suite type="TestSuite" id="9514" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7610" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="12.409158" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="17987" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7602" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="12.321798" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17988" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7602" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="12.211822" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="17996" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7064" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="12.064236" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11359" name="NTSD28Q06CollisionFrameLookupEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="12.057464" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11364" name="CollisionSnapshotAndCatchMatchOriginal" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:42:05Z" duration="11.956398" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11360" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="230800281" result="Failed" start-time="2026-09-14 05:41:53Z" end-time="2026-09-14 05:41:56Z" duration="2.647843" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (collision): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+]]></output></test-case><test-case id="11361" name="CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(Authority400,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1608684016" result="Failed" start-time="2026-09-14 05:41:56Z" end-time="2026-09-14 05:41:59Z" duration="3.001499" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case><test-case id="11362" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,False)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1551783469" result="Failed" start-time="2026-09-14 05:41:59Z" end-time="2026-09-14 05:42:02Z" duration="2.942206" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case><test-case id="11363" name="CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal(MobileExtended,True)" methodname="CollisionSnapshotAndCatchMatchOriginal" classname="NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests" runstate="Runnable" seed="1484193996" result="Failed" start-time="2026-09-14 05:42:02Z" end-time="2026-09-14 05:42:05Z" duration="3.256422" asserts="0"><properties /><failure><message><![CDATA[  case 12 current=1000 snapshot=0 count=0 expected=1
+case 13 current=1000 snapshot=0 count=0 expected=1
+case 14 current=1000 snapshot=0 count=0 expected=1
+case 15 current=1000 snapshot=0 count=0 expected=1
+case 30 current=1000 snapshot=0 count=0 expected=1
+case 31 current=1000 snapshot=0 count=0 expected=1
+case 32 current=1000 snapshot=0 count=0 expected=1
+case 33 current=1000 snapshot=0 count=0 expected=1
+case 66 current=1000 snapshot=99 count=0 expected=1
+case 67 current=1000 snapshot=99 count=0 expected=1
+case 68 current=1000 snapshot=99 count=0 expected=1
+case 69 current=1000 snapshot=99 count=0 expected=1
+  Expected: <empty>
+  But was:  < "case 12 current=1000 snapshot=0 count=0 expected=1", "case 13 current=1000 snapshot=0 count=0 expected=1", "case 14 current=1000 snapshot=0 count=0 expected=1", "case 15 current=1000 snapshot=0 count=0 expected=1", "case 30 current=1000 snapshot=0 count=0 expected=1", "case 31 current=1000 snapshot=0 count=0 expected=1", "case 32 current=1000 snapshot=0 count=0 expected=1", "case 33 current=1000 snapshot=0 count=0 expected=1", "case 66 current=1000 snapshot=99 count=0 expected=1", "case 67 current=1000 snapshot=99 count=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionFrameLookupEditorTests.CollisionSnapshotAndCatchMatchOriginal (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x0011f] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionFrameLookupEditorTests.cs:48
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

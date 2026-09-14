@@ -1,0 +1,13 @@
+> SOURCE_AND_CALLER_MAP_RECORDED；35调用/7文件、无override，详见同ID artifact REPORT/caller-inventory。原252见证已限定VERIFIED；下一COLLISION-FRAME-UNITY-001。纠正：旧sourceNextFrame指针应保留的表述尚无当前throw变身路径证明，不能作为authority；另见报告。以下历史审计计划保留。
+
+# Native碰撞帧读取及CPoint前置审计
+
+READY_SOURCE_AND_CALLER_MAP，原NATIVE-FRAME-RUNTIME-READER-MIGRATION下一项。kind3和kind2入口、必要missing physics已限定VERIFIED，不重做。
+
+当前明确读取点：LF2Entity.GetCollisionFrameData先HasFrame(Prev2)+Prev2D，再HasFrame(N)+D，仍是旧范围/声明门；BattleCpointWriter.ShouldRunKind1Advance/RunKind1以及碰撞候选/命中等使用此getter。先完整列生产/非战斗/override调用者，追source definition.frame(tick_action_snapshot)和各current-frame消费场景，确认原snapshot缺失时是否允许回退current、definition变化后应使用哪个定义；不能只将HasFrame批量换成HasNativeFrame或盲信缓存指针。
+
+优先闭合高帧/implicit的collision snapshot选择及原定义身份，source有无帧/null/current fallback需逐caller证明。必要提供窄battle入口保持非战斗预览，精确Record再写。引用已验Native snapshot descriptor及C25，不重跑旧全局矩阵代替调用审计。实际collector/HitPlan和CPoint要有同源trace，错误snapshot帧不能偷偷回落current改变命中。
+
+随后BattleCpointWriter.ApplyThrow仍有source next HasFrame/GetFrameDataById（须保留变身前旧定义快照）、共享cpoint raw/current/Prev2及raw/held setter、其余input/hit/生成reader。kind2新DirectWriteNativeRawFramePreserveWaitCounter可复用但只有确认无条件raw写契约的caller可迁；不要用有准入早退的helper替代无条件写。reader后display其它出生/post，再Q07，epoch恢复缺口及用户所有例外保持。
+
+当前是审计Task，没有授权泛化生产路径；禁止computer-use、非战斗/Unity-GAS/Scene/资源/Server/Gen/Plugins改动。

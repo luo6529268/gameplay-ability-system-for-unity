@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 168,
+  "differences": [],
+  "candidateDifferences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, synthetic equal current/snapshot endpoints, both factories and query backends; separated-current candidate differences remain open."
+}

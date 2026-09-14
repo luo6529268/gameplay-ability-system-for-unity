@@ -2477,6 +2477,7 @@ namespace NTSD.Simulation.Ecs
                 TargetFrameDelay = target?.FrameDelay ?? int.MinValue,
                 TargetHitCount = target?.HitCount ?? int.MinValue,
                 TargetHitStateCount = target?.HitStateCount ?? int.MinValue,
+                TargetBdefend = target?.Runtime?.Bdefend ?? int.MinValue,
                 TargetKillStat = world.KillStats != null &&
                                  damageStatIndex > 0 &&
                                  damageStatIndex < world.KillStats.Length
@@ -3544,7 +3545,7 @@ namespace NTSD.Simulation.Ecs
             int attackerState = attacker.GetState();
             ProjectNativeType3AttackerPostHitAction(attacker, ref projection);
 
-            projection.TargetHitStateCount = 45;
+            projection.TargetBdefend = 45;
             ProjectNativeStandardHitRest(
                 attacker,
                 target,
@@ -3706,7 +3707,7 @@ namespace NTSD.Simulation.Ecs
             int attackerState = attacker.GetState();
             ProjectNativeType3AttackerPostHitAction(attacker, ref projection);
 
-            projection.TargetHitStateCount = 45;
+            projection.TargetBdefend = 45;
             ProjectNativeStandardHitRest(
                 attacker,
                 target,
@@ -3983,7 +3984,7 @@ namespace NTSD.Simulation.Ecs
                     : -resolvedItr.dvx;
             }
 
-            projection.TargetHitStateCount = 45;
+            projection.TargetBdefend = 45;
             ProjectNativeStandardHitRest(
                 attacker,
                 target,
@@ -4104,7 +4105,7 @@ namespace NTSD.Simulation.Ecs
                     : -resolvedItr.dvx;
             }
 
-            projection.TargetHitStateCount = 45;
+            projection.TargetBdefend = 45;
             ProjectNativeStandardHitRest(
                 attacker,
                 target,
@@ -4720,7 +4721,7 @@ namespace NTSD.Simulation.Ecs
 
             ProjectNativeType3AttackerPostHitAction(attacker, ref projection);
 
-            projection.TargetHitStateCount = 45;
+            projection.TargetBdefend = 45;
             ProjectNativeStandardHitRest(
                 attacker,
                 target,
@@ -4958,7 +4959,7 @@ namespace NTSD.Simulation.Ecs
 
             projection.TargetAttackingCounter = 0;
             if (projection.TargetRuntimeArmorHp <= 0)
-                projection.TargetHitStateCount += resolvedItr.bdefend;
+                projection.TargetBdefend = unchecked(projection.TargetBdefend + resolvedItr.bdefend);
             projection.TargetHitCount++;
             ProjectNativeReducedHitRest(
                 attacker,
@@ -4977,7 +4978,7 @@ namespace NTSD.Simulation.Ecs
                 int actionThreshold = selectedArmor != null
                     ? Math.Max(selectedArmor.ratio, 30)
                     : 30;
-                if (projection.TargetHitStateCount > actionThreshold &&
+                if (projection.TargetBdefend > actionThreshold &&
                     previous2State == LF2States.Defending)
                 {
                     projection.TargetFrame = LF2StandardFrames.DefendBroken;
@@ -5365,6 +5366,8 @@ namespace NTSD.Simulation.Ecs
                 : 0;
             int attackerFacing = projection.AttackerXInt > projection.TargetXInt ? 1 : 0;
             int targetFacing = 1 - attackerFacing;
+            LF2FrameData attackerFrame;
+            LF2FrameData targetFrame;
             if (strictKind3)
             {
                 if (catchingFrame < 0)
@@ -5378,9 +5381,10 @@ namespace NTSD.Simulation.Ecs
                     targetFacing = 1 - targetFacing;
                 }
 
-                if (attacker.FrameCache == null || target.FrameCache == null ||
-                    !attacker.FrameCache.HasFrame(catchingFrame) ||
-                    !target.FrameCache.HasFrame(caughtFrame))
+                // Alignment contract: NTSD28-Q06-KIND3-CATCH-NATIVE-FRAME-LOOKUP-001.
+                attackerFrame = attacker.FrameCache?.GetNativeFrameDataById(catchingFrame);
+                targetFrame = target.FrameCache?.GetNativeFrameDataById(caughtFrame);
+                if (attackerFrame == null || targetFrame == null)
                 {
                     // The writer returns unsupported, but that is still a fully
                     // projectable no-op effect for shadow comparison.
@@ -5388,8 +5392,11 @@ namespace NTSD.Simulation.Ecs
                 }
             }
 
-            LF2FrameData attackerFrame = attacker.GetFrameDataById(catchingFrame);
-            LF2FrameData targetFrame = target.GetFrameDataById(caughtFrame);
+            else
+            {
+                attackerFrame = attacker.GetFrameDataById(catchingFrame);
+                targetFrame = target.GetFrameDataById(caughtFrame);
+            }
 
             int attackerWAct = attackerFrame?.PrimaryCatchPoint.X ?? 0;
             int targetWAct = targetFrame?.PrimaryCatchPoint.X ?? 0;
@@ -5444,7 +5451,7 @@ namespace NTSD.Simulation.Ecs
             if (kind != 2)
                 return false;
 
-            LF2FrameData targetFrame = target.GetFrameDataById(projection.TargetFrame);
+            LF2FrameData targetFrame = target.FrameCache?.GetNativeFrameDataById(projection.TargetFrame);
             var input = new BattlePickupTransactionInput(
                 projection.TargetDataObjectType,
                 projection.TargetDataObjectId != int.MinValue
@@ -5942,6 +5949,7 @@ namespace NTSD.Simulation.Ecs
                 expected.TargetSpecialHitLatch0EB != actual.TargetSpecialHitLatch0EB ||
                 expected.TargetAnimCounter != actual.TargetAnimCounter ||
                 expected.TargetHitCount != actual.TargetHitCount ||
+                expected.TargetBdefend != actual.TargetBdefend ||
                 expected.TargetHitStateCount != actual.TargetHitStateCount) mask |= 1UL << 37;
             if (expected.TargetHealTimer != actual.TargetHealTimer ||
                 expected.TargetEnvironmentState320 != actual.TargetEnvironmentState320) mask |= 1UL << 38;
@@ -6277,6 +6285,7 @@ namespace NTSD.Simulation.Ecs
             internal int TargetFrameDelay;
             internal int TargetHitCount;
             internal int TargetHitStateCount;
+            internal int TargetBdefend;
             internal int TargetKillStat;
             internal int TargetDamageStat;
             internal int TargetVrestAgainstAttacker;

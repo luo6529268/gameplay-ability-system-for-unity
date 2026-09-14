@@ -1,0 +1,23 @@
+{
+  "cases": 2,
+  "differences": [
+    "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45",
+    "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2",
+    "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45",
+    "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2"
+  ],
+  "plans": [
+    {
+      "caughtAction": 10,
+      "CurrentTickPlanValid": true,
+      "ObservedWriterEffectCount": 2,
+      "LastWriterEffectDifferenceMask": 0
+    },
+    {
+      "caughtAction": 998,
+      "CurrentTickPlanValid": true,
+      "ObservedWriterEffectCount": 2,
+      "LastWriterEffectDifferenceMask": 0
+    }
+  ]
+}

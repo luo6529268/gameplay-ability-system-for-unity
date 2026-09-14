@@ -1,0 +1,81 @@
+<test-suite type="TestSuite" id="9520" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7614" result="Failed" site="Child" start-time="2026-09-14 06:08:44Z" end-time="2026-09-14 06:09:02Z" duration="18.155291" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="17999" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7606" result="Failed" site="Child" start-time="2026-09-14 06:08:44Z" end-time="2026-09-14 06:09:02Z" duration="18.081926" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7606" result="Failed" site="Child" start-time="2026-09-14 06:08:44Z" end-time="2026-09-14 06:09:02Z" duration="17.995908" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18008" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7068" result="Failed" site="Child" start-time="2026-09-14 06:08:45Z" end-time="2026-09-14 06:09:02Z" duration="17.898728" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11371" name="NTSD28Q06CollisionQualificationEditorTests" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:08:45Z" end-time="2026-09-14 06:09:02Z" duration="17.827997" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11376" name="OriginalQualificationAndFrozenConsumerMatch" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 06:08:45Z" end-time="2026-09-14 06:09:02Z" duration="17.727923" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11372" name="OriginalQualificationAndFrozenConsumerMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(Authority400,False)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="590395017" result="Failed" start-time="2026-09-14 06:08:45Z" end-time="2026-09-14 06:08:49Z" duration="4.103506" asserts="0"><properties /><failure><message><![CDATA[  case 0 missing-current eligibility=False
+case 1 missing-current eligibility=False
+case 4 missing-current eligibility=False
+case 5 missing-current eligibility=False
+case 8 missing-current eligibility=False
+case 9 missing-current eligibility=False
+case 12 missing-current eligibility=False
+case 13 missing-current eligibility=False
+case 16 missing-current eligibility=False
+case 17 missing-current eligibility=False
+case 24 missing-current eligibility=False
+case 25 missing-current eligibility=False
+case 28 missing-current eligibility=False
+case 29 candidates=1 expected 0
+case 32 missing-current eligibility=False
+  Expected: <empty>
+  But was:  < "case 0 missing-current eligibility=False", "case 1 missing-current eligibility=False", "case 4 missing-current eligibility=False", "case 5 missing-current eligibility=False", "case 8 missing-current eligibility=False", "case 9 missing-current eligibility=False", "case 12 missing-current eligibility=False", "case 13 missing-current eligibility=False", "case 16 missing-current eligibility=False", "case 17 missing-current eligibility=False"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:42
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (geometry): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11373" name="OriginalQualificationAndFrozenConsumerMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(Authority400,True)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="2085953189" result="Failed" start-time="2026-09-14 06:08:49Z" end-time="2026-09-14 06:08:53Z" duration="3.849786" asserts="0"><properties /><failure><message><![CDATA[  case 0 missing-current eligibility=False
+case 1 missing-current eligibility=False
+case 4 missing-current eligibility=False
+case 5 missing-current eligibility=False
+case 8 missing-current eligibility=False
+case 9 missing-current eligibility=False
+case 12 missing-current eligibility=False
+case 13 missing-current eligibility=False
+case 16 missing-current eligibility=False
+case 17 missing-current eligibility=False
+case 24 missing-current eligibility=False
+case 25 missing-current eligibility=False
+case 28 missing-current eligibility=False
+case 29 candidates=1 expected 0
+case 32 missing-current eligibility=False
+  Expected: <empty>
+  But was:  < "case 0 missing-current eligibility=False", "case 1 missing-current eligibility=False", "case 4 missing-current eligibility=False", "case 5 missing-current eligibility=False", "case 8 missing-current eligibility=False", "case 9 missing-current eligibility=False", "case 12 missing-current eligibility=False", "case 13 missing-current eligibility=False", "case 16 missing-current eligibility=False", "case 17 missing-current eligibility=False"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:42
+]]></stack-trace></failure></test-case><test-case id="11374" name="OriginalQualificationAndFrozenConsumerMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(MobileExtended,False)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="923137249" result="Failed" start-time="2026-09-14 06:08:53Z" end-time="2026-09-14 06:08:57Z" duration="4.735354" asserts="0"><properties /><failure><message><![CDATA[  case 0 missing-current eligibility=False
+case 1 missing-current eligibility=False
+case 4 missing-current eligibility=False
+case 5 missing-current eligibility=False
+case 8 missing-current eligibility=False
+case 9 missing-current eligibility=False
+case 12 missing-current eligibility=False
+case 13 missing-current eligibility=False
+case 16 missing-current eligibility=False
+case 17 missing-current eligibility=False
+case 24 missing-current eligibility=False
+case 25 missing-current eligibility=False
+case 28 missing-current eligibility=False
+case 29 candidates=1 expected 0
+case 32 missing-current eligibility=False
+  Expected: <empty>
+  But was:  < "case 0 missing-current eligibility=False", "case 1 missing-current eligibility=False", "case 4 missing-current eligibility=False", "case 5 missing-current eligibility=False", "case 8 missing-current eligibility=False", "case 9 missing-current eligibility=False", "case 12 missing-current eligibility=False", "case 13 missing-current eligibility=False", "case 16 missing-current eligibility=False", "case 17 missing-current eligibility=False"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:42
+]]></stack-trace></failure></test-case><test-case id="11375" name="OriginalQualificationAndFrozenConsumerMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch(MobileExtended,True)" methodname="OriginalQualificationAndFrozenConsumerMatch" classname="NTSD.Test.NTSD28Q06CollisionQualificationEditorTests" runstate="Runnable" seed="1869490603" result="Failed" start-time="2026-09-14 06:08:57Z" end-time="2026-09-14 06:09:02Z" duration="4.930712" asserts="0"><properties /><failure><message><![CDATA[  case 0 missing-current eligibility=False
+case 1 missing-current eligibility=False
+case 4 missing-current eligibility=False
+case 5 missing-current eligibility=False
+case 8 missing-current eligibility=False
+case 9 missing-current eligibility=False
+case 12 missing-current eligibility=False
+case 13 missing-current eligibility=False
+case 16 missing-current eligibility=False
+case 17 missing-current eligibility=False
+case 24 missing-current eligibility=False
+case 25 missing-current eligibility=False
+case 28 missing-current eligibility=False
+case 29 candidates=1 expected 0
+case 32 missing-current eligibility=False
+  Expected: <empty>
+  But was:  < "case 0 missing-current eligibility=False", "case 1 missing-current eligibility=False", "case 4 missing-current eligibility=False", "case 5 missing-current eligibility=False", "case 8 missing-current eligibility=False", "case 9 missing-current eligibility=False", "case 12 missing-current eligibility=False", "case 13 missing-current eligibility=False", "case 16 missing-current eligibility=False", "case 17 missing-current eligibility=False"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.OriginalQualificationAndFrozenConsumerMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean roleAware) [0x00110] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CollisionQualificationEditorTests.cs:42
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

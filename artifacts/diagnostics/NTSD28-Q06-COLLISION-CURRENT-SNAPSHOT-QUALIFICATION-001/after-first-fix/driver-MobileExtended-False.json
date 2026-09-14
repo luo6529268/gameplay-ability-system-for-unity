@@ -1,0 +1,23 @@
+{
+  "cases": 2,
+  "differences": [
+    "caughtAction 10 after slot 2 combat.bdefendAccumulator=0 expected 45",
+    "caughtAction 10 RNG counts differ",
+    "caughtAction 998 after slot 2 combat.bdefendAccumulator=0 expected 45",
+    "caughtAction 998 RNG counts differ"
+  ],
+  "plans": [
+    {
+      "caughtAction": 10,
+      "CurrentTickPlanValid": true,
+      "ObservedWriterEffectCount": 2,
+      "LastWriterEffectDifferenceMask": 0
+    },
+    {
+      "caughtAction": 998,
+      "CurrentTickPlanValid": true,
+      "ObservedWriterEffectCount": 2,
+      "LastWriterEffectDifferenceMask": 0
+    }
+  ]
+}

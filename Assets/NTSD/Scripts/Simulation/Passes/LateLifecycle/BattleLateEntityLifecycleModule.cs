@@ -255,9 +255,6 @@ namespace NTSD.Simulation
                     int previousActionBeforeCommit = obj.Frame?.Prev ?? 0;
                     if (obj.RunNativeC25State18BrokenWeaponParticles())
                     {
-                        FlushQueuedObjectPointTasks(
-                            ref opointFactory,
-                            ref opointFactoryResolved);
                         if (!world.IsActiveForCurrentPassInternal(obj))
                             continue;
                     }

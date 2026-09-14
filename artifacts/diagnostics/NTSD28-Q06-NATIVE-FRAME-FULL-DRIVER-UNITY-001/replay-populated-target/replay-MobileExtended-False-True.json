@@ -1,0 +1,13 @@
+{
+  "cases": 4,
+  "differences": [
+    "replay 144 tick 2 allocationEpoch=2 expected 1",
+    "replay 144 tick 3 allocationEpoch=2 expected 1",
+    "replay 193 tick 2 allocationEpoch=2 expected 1",
+    "replay 193 tick 3 allocationEpoch=2 expected 1",
+    "replay 276 tick 2 allocationEpoch=2 expected 1",
+    "replay 276 tick 3 allocationEpoch=2 expected 1",
+    "replay 312 tick 2 allocationEpoch=2 expected 1",
+    "replay 312 tick 3 allocationEpoch=2 expected 1"
+  ]
+}

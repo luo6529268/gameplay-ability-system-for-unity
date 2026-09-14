@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "cases": 438,
+  "assertions": 2994,
+  "emitCases": 366,
+  "noEmitCases": 72,
+  "fullCrtRecordsPreserved": true,
+  "sha256": "b5df61136227ffcc17f15947ca22360d1234586ca71aa94907632d5e8eece6f8",
+  "scope": "SOURCE_MODEL_ONLY; all itr.kind0, geometry/current mutations diagnostic"
+}

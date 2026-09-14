@@ -1,0 +1,15 @@
+# 碰撞准入与后继消费原源码见证
+
+VERIFIED / SOURCE_MODEL_ONLY，480端点+2完整SimulationTickDriver样例。
+
+实际构建：Tools/NTSD28AuthorityTrace/Build-AuthoritySourceCapture.ps1 -OutputDirectory Temp/NTSD28CollisionQualificationSource -RunnerSource Tools/NTSD28AuthorityTrace/collision_qualification_witness.cpp -ExecutableName collision_qualification_witness.exe，退出0。源EXE SHA B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033，75文件manifest SHA 07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F保持。
+
+两遍执行均退出0、stderr空，482行逐字节相同，SHA175c1a7ece4067ff782d272fe07ea418bc72742e2a55f3b691537065ea08fb45。validation.json实际3020断言通过。
+
+480端点由current10组合、previous6组合、effect0/20、同组/异组及999声明与否构成。frame0有geometry，10/998/999对应18/13/19但无geometry，450隐式、1000越界。冻结snapshot均0，然后扰动current/previous：273产生候选且eligible、207过滤；冻结pair的current/previous状态以Native查询值或0填写。进一步把current都变1000，原分类结果全部保持，整个端点随机0、collection不改raw。此人为扰动用于函数合同，不声称在刚snapshot的正式collection入口可自然出现。
+
+两个完整driver另证明真实pass顺序：slot0 kind3抓住slot1，使slot1 current变10或998（无itr），slot1仍消费snapshot0的攻击命中slot2。各2候选、1关系命中、1普通命中、无unsupported或diagnostics；slot2HP499，slot1 snapshot0保留；Native0/CRT2。原step使用正常默认资源/掉落选项，无额外stage/fusion。CRT只输出调用数量，未声称完整火花坐标/随机值已验收。
+
+first.jsonl、repeat.jsonl、两个stderr、build-manifest.json、validation.json是本次证据。工具初次JS字符串转义错误发生在执行前，无文件修改；之后正确落盘及实际编译运行，不是C++编译失败。
+
+Unity对应480/336的候选、冻结pair和classification已清零，但完整driver保留bdefend45与火花随机流差异，见COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001报告/任务。原combat_records缺失bdefend取0，battle_world6743显式覆写45，因此不是DAT默认值。该差异不影响本原源码见证有效性，也不允许把Unity整体标记已对齐。

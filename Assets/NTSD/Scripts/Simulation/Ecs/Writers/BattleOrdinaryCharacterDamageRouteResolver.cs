@@ -136,7 +136,7 @@ namespace NTSD.Simulation.Ecs
                     target.Dirh() < 0 ? 1 : 0,
                     target.Frame?.N ?? 0,
                     target.Frame?.D?.state ?? 0,
-                    target.HitStateCount,
+                    target.Runtime.Bdefend,
                     effectiveInjury,
                     true);
             if (match.Decision == BattleType1ArmorMatchDecisionKind.Bypassed ||

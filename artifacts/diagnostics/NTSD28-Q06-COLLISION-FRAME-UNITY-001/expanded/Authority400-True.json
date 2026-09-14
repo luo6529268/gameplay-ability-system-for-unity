@@ -1,0 +1,31 @@
+{
+  "cases": 336,
+  "differences": [],
+  "candidateDifferences": [
+    "case 12 current=1000 snapshot=0 count=0 expected=1",
+    "case 13 current=1000 snapshot=0 count=0 expected=1",
+    "case 14 current=1000 snapshot=0 count=0 expected=1",
+    "case 15 current=1000 snapshot=0 count=0 expected=1",
+    "case 30 current=1000 snapshot=0 count=0 expected=1",
+    "case 31 current=1000 snapshot=0 count=0 expected=1",
+    "case 32 current=1000 snapshot=0 count=0 expected=1",
+    "case 33 current=1000 snapshot=0 count=0 expected=1",
+    "case 66 current=1000 snapshot=99 count=0 expected=1",
+    "case 67 current=1000 snapshot=99 count=0 expected=1",
+    "case 68 current=1000 snapshot=99 count=0 expected=1",
+    "case 69 current=1000 snapshot=99 count=0 expected=1",
+    "case 102 current=1000 snapshot=857 count=0 expected=1",
+    "case 103 current=1000 snapshot=857 count=0 expected=1",
+    "case 104 current=1000 snapshot=857 count=0 expected=1",
+    "case 105 current=1000 snapshot=857 count=0 expected=1",
+    "case 138 current=1000 snapshot=998 count=0 expected=1",
+    "case 139 current=1000 snapshot=998 count=0 expected=1",
+    "case 140 current=1000 snapshot=998 count=0 expected=1",
+    "case 141 current=1000 snapshot=998 count=0 expected=1",
+    "case 174 current=1000 snapshot=999 count=0 expected=1",
+    "case 175 current=1000 snapshot=999 count=0 expected=1",
+    "case 176 current=1000 snapshot=999 count=0 expected=1",
+    "case 177 current=1000 snapshot=999 count=0 expected=1"
+  ],
+  "scope": "Original endpoint contract including explicitly diagnostic separated current/snapshot; full-driver reachability is separate."
+}

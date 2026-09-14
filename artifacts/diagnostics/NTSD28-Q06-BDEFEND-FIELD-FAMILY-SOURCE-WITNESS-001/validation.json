@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "cases": 256,
+  "assertions": 1280,
+  "branches": {
+    "overwrite": 148,
+    "feedbackPreserved": 96,
+    "reducedAdd": 6,
+    "armorHpPreserved": 6
+  },
+  "repeatIdentical": true,
+  "sha256": "6ba2e26f9aa202453f9c2985adf1bfba9c15ad3d1f8f54713450948d9ae7f2cb",
+  "scope": "SOURCE_MODEL_FIELD_WRITES_AND_EXISTING_C25_TIMER_JOIN"
+}

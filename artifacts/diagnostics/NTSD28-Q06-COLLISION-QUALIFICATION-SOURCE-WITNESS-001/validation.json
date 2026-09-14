@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "cases": 480,
+  "driverCases": 2,
+  "assertions": 3020,
+  "candidatePositive": 273,
+  "filtered": 207,
+  "classificationPreservedAfterMissingCurrent": 480,
+  "driverPostCatchHitProven": true,
+  "sha256": "175c1a7ece4067ff782d272fe07ea418bc72742e2a55f3b691537065ea08fb45",
+  "scope": "SOURCE_MODEL_ONLY; qualification null-current mutation diagnostic, driver catch transition live pass"
+}
