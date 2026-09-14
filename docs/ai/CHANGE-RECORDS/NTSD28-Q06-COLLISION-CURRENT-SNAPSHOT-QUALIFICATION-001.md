@@ -38,3 +38,7 @@ RED job465a71b72a0a4b96a3a7c3e782ea5411四组全部FAIL：明确复现current100
 原336四组+新480四组共3264端点候选/pair/raw/classification全部0差异。完整driver四组仍FAIL：8例的bdefend0/45和RNG legacy3/CRT0对源CRT2，HP/caught/current/snapshot与其它raw一致、Shadow2effects/mask0。源45是battle_world无护甲分支显式覆写，非DAT默认；DatHitResolver Spark两次旧随机已定位。下一UNARMORED-BDEFEND-WRITER-AUDIT，再HIT-SPARK-TRANSACTION-AUDIT，最后回当前完整driver。
 
 新SelfCheck06:27:14Z PASS；原70回归69PASS/1旧期望，独立修订后4矩阵PASS；Play480/Renderer2→2/Scene checksum保持；Shutdown06:38:10Z恢复4→4、World/slots/两pool0、两帧Stopped。最终CS0/Editor idle/Scene dirtyfalse/root14/hash bcd1047b…；接口6402由状态文件发现。完整证据见COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001/REPORT.md。资源/非战斗/框架未改，父不标VERIFIED。
+
+后继更新：HIT-SPARK-UNITY-001已限定VERIFIED，旧完整driver四组现PASS/Spark RNG差异清除。当前父记录不关闭，继续非角色反馈→武器反应/type5覆盖→回BDEFEND256；旧96/64/32未在本轮重测。源/测试/Play见spark artifact REPORT。
+
+后继生产进展：NONCHARACTER-ARMOR-FEEDBACK已写前置/反馈并通过684四组、Play2736、自检和本地回放；正式BDEFEND入口现direct192/Shadow208，余64weapon+16type5 guard。完整984余124weapon+108noncharacter reduced，父包保持IN_PROGRESS。下一weapon→type5→reduced后回访。

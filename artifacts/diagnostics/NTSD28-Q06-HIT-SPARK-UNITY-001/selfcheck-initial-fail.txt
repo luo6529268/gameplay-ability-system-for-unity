@@ -1,0 +1,6 @@
+FAIL
+System.InvalidOperationException: kind0 hit record must use the entity with the larger ZInt as owner
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33396 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckKind0HitRecords () [0x000fd] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:14002 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

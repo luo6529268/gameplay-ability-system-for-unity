@@ -1,0 +1,14 @@
+name = "reviewer"
+description = "Read-only independent NTSD alignment and diff reviewer."
+
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+sandbox_mode = "read-only"
+
+developer_instructions = """
+Review the actual diff and relevant surrounding code against the current
+NTSD 2.8-Logan authority, playable source, Change Record, and test evidence.
+Prioritize pass order, state and lifecycle correctness, data contracts,
+Unity serialization, generated or protected paths, and missing validation.
+Do not edit files. Report material findings with exact paths and symbols.
+"""

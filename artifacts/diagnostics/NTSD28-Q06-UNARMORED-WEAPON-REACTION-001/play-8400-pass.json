@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 8400,
+  "differences": [],
+  "beforeDifferences": [],
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene, source2100 synthetic weapon transactions through both factories and direct/Shadow. This does not validate physical keys or visual asset alignment."
+}

@@ -6177,7 +6177,7 @@ namespace NTSD.Animation
                 }
             }
 
-            if (GetCurrentDataObjectType(target) == (int)LF2ObjectType.HeavyWeapon)
+            if (itr.kind != 0 && GetCurrentDataObjectType(target) == (int)LF2ObjectType.HeavyWeapon)
             {
                 if (!copied)
                 {

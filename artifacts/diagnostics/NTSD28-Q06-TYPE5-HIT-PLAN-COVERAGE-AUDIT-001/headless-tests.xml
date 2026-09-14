@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="8.1538172">
+  <test-suite type="TestSuite" id="9576" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7654" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="8.153817" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="18111" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7646" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="7.967724" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="72092" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="18112" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7646" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="7.798673" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="18120" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7108" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="7.627087" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11421" name="NTSD28Q06BdefendFieldFamilyEditorTests" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="7.472590" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="ParameterizedMethod" id="11426" name="NativeFieldWritesAndRecoveryMatch" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 11:53:43Z" end-time="2026-09-14 11:53:51Z" duration="7.467325" total="4" passed="2" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="11422" name="NativeFieldWritesAndRecoveryMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="215971370" result="Passed" start-time="2026-09-14 11:53:44Z" end-time="2026-09-14 11:53:45Z" duration="1.776420" asserts="0">
+                <properties />
+                <output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output>
+              </test-case>
+              <test-case id="11423" name="NativeFieldWritesAndRecoveryMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1767090147" result="Failed" start-time="2026-09-14 11:53:45Z" end-time="2026-09-14 11:53:47Z" duration="1.651542" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 160 Shadow plan/effect differs mask=0
+case 161 Shadow plan/effect differs mask=0
+case 162 Shadow plan/effect differs mask=0
+case 163 Shadow plan/effect differs mask=0
+case 164 Shadow plan/effect differs mask=0
+case 165 Shadow plan/effect differs mask=0
+case 166 Shadow plan/effect differs mask=0
+case 167 Shadow plan/effect differs mask=0
+case 168 Shadow plan/effect differs mask=0
+case 169 Shadow plan/effect differs mask=0
+case 170 Shadow plan/effect differs mask=0
+case 171 Shadow plan/effect differs mask=0
+case 172 Shadow plan/effect differs mask=0
+case 173 Shadow plan/effect differs mask=0
+case 174 Shadow plan/effect differs mask=0
+  Expected: <empty>
+  But was:  < "case 160 Shadow plan/effect differs mask=0", "case 161 Shadow plan/effect differs mask=0", "case 162 Shadow plan/effect differs mask=0", "case 163 Shadow plan/effect differs mask=0", "case 164 Shadow plan/effect differs mask=0", "case 165 Shadow plan/effect differs mask=0", "case 166 Shadow plan/effect differs mask=0", "case 167 Shadow plan/effect differs mask=0", "case 168 Shadow plan/effect differs mask=0", "case 169 Shadow plan/effect differs mask=0"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005f3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:108
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11424" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="224856699" result="Passed" start-time="2026-09-14 11:53:47Z" end-time="2026-09-14 11:53:49Z" duration="2.136776" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="11425" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1308561607" result="Failed" start-time="2026-09-14 11:53:49Z" end-time="2026-09-14 11:53:51Z" duration="1.889858" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 160 Shadow plan/effect differs mask=0
+case 161 Shadow plan/effect differs mask=0
+case 162 Shadow plan/effect differs mask=0
+case 163 Shadow plan/effect differs mask=0
+case 164 Shadow plan/effect differs mask=0
+case 165 Shadow plan/effect differs mask=0
+case 166 Shadow plan/effect differs mask=0
+case 167 Shadow plan/effect differs mask=0
+case 168 Shadow plan/effect differs mask=0
+case 169 Shadow plan/effect differs mask=0
+case 170 Shadow plan/effect differs mask=0
+case 171 Shadow plan/effect differs mask=0
+case 172 Shadow plan/effect differs mask=0
+case 173 Shadow plan/effect differs mask=0
+case 174 Shadow plan/effect differs mask=0
+  Expected: <empty>
+  But was:  < "case 160 Shadow plan/effect differs mask=0", "case 161 Shadow plan/effect differs mask=0", "case 162 Shadow plan/effect differs mask=0", "case 163 Shadow plan/effect differs mask=0", "case 164 Shadow plan/effect differs mask=0", "case 165 Shadow plan/effect differs mask=0", "case 166 Shadow plan/effect differs mask=0", "case 167 Shadow plan/effect differs mask=0", "case 168 Shadow plan/effect differs mask=0", "case 169 Shadow plan/effect differs mask=0"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x005f3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:108
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

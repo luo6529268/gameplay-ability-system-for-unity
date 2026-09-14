@@ -1,0 +1,3 @@
+VERIFIED / SOURCE_MODEL_ONLY。585/14048与两遍SHA c164b073…cf30e完成，下一TYPE5-UNARMORED-UNITY-001完整RED后实现。
+
+IN_PROGRESS / SOURCE_ONLY。585 type5完整普通受击向量，先当前源码证据后Unity/Shadow实现；具体合同见同ID Record。

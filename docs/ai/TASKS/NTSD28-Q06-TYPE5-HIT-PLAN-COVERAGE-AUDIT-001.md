@@ -1,3 +1,9 @@
+> VERIFIED / DECLARED_NO_ARMOR_ORDINARY_TYPE5_SCOPE。证据见TYPE5-UNARMORED-UNITY-001 artifact REPORT。下一TYPE5-MATCHED-PAIR-EARLY-001，再NONCHARACTER-REDUCED-HIT-TRANSACTION-001；全type5领域与总目标仍未关闭。以下为历史过程。
+
+> 新鲜武器修正后回归：BDEFEND两profile direct256均PASS；Shadow各仅16个无armor type5 guard。先完成武器SelfCheck/Play出口，再本Task，再NONCHARACTER-REDUCED-HIT-TRANSACTION-001。
+
+> 更新：当前每profile只剩16个无armor type5观察guard（先前首type0的16个已由前置feedback独立writer观察解决）。完整Bdefend当前direct192/Shadow208。下一步仍需输出valid/count并补对应已有普通type5 writer预测；不能删观察断言。
+
 # Type5普通命中Shadow覆盖检查
 
 READY_DIAGNOSTIC_DETAIL。当前256 Shadow两profile各32额外诊断失败，均type5（无armor16、首type0 16）；错误记录mask=0，尚未区分CurrentTickPlanValid和ObservedWriterEffectCount。不得据mask0写成Shadow通过，也不要直接去掉原断言。

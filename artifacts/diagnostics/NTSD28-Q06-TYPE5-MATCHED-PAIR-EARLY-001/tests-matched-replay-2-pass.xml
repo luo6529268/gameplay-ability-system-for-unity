@@ -1,0 +1,58 @@
+<test-suite type="TestSuite" id="9594" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7666" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.960357" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="18147" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7658" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.894431" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="18148" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7658" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.802920" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="18156" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7120" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.705784" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="11817" name="NTSD28Q06Type5MatchedPairEditorTests" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.635580" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="ParameterizedMethod" id="11825" name="MatchedStateSurvivesLocalSnapshotReplay" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.MatchedStateSurvivesLocalSnapshotReplay" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:14:32Z" duration="145.534794" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="11823" name="MatchedStateSurvivesLocalSnapshotReplay(Authority400)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.MatchedStateSurvivesLocalSnapshotReplay(Authority400)" methodname="MatchedStateSurvivesLocalSnapshotReplay" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="883316996" result="Passed" start-time="2026-09-14 15:12:06Z" end-time="2026-09-14 15:12:48Z" duration="41.935385" asserts="0"><properties /><output><![CDATA[<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:4567 (active clients: 1)
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3005, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3005, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: Command TCS timed out (1 consecutive)
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3006, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3006, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+]]></output></test-case><test-case id="11824" name="MatchedStateSurvivesLocalSnapshotReplay(MobileExtended)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.MatchedStateSurvivesLocalSnapshotReplay(MobileExtended)" methodname="MatchedStateSurvivesLocalSnapshotReplay" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="595408058" result="Passed" start-time="2026-09-14 15:12:48Z" end-time="2026-09-14 15:14:32Z" duration="103.493957" asserts="0"><properties /><output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:7215 (active clients: 1)
+<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: Command TCS timed out (2 consecutive)
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:13125 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

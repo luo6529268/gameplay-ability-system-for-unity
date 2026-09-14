@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "cases": 2100,
+  "assertions": 43202,
+  "traceSHA256": "28cad088cef6941c6b9c27cd4b2f0b5419cb8f47e106accd7078f9757e3eb55a",
+  "groups": {
+    "base": 432,
+    "horizontal": 1296,
+    "post": 72,
+    "resources": 192,
+    "both_left": 36,
+    "vertical": 72
+  },
+  "scope": "Source model only; finalizer after explicit hold release is a separate diagnostic endpoint."
+}

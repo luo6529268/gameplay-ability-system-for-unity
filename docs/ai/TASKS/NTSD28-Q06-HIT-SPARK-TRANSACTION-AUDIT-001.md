@@ -1,3 +1,5 @@
+> SOURCE_AND_CALLER_MAP_RECORDED，源438已验证。纠正旧猜测：普通Character实际从RecordKind0Hit发spark，底部SpawnSpark不在该早返路径；下一HIT-SPARK-UNITY-001，源报告有完整index/armor上下文约束。
+
 > 当前优先级调整：READY_NOW，需先完成Spark事务，才能正确实现96个非角色首type0的feedback-only返回；之后NONCHARACTER-ARMOR-FEEDBACK→UNARMORED-WEAPON-REACTION→回BDEFEND256/完整driver。Bdefend角色字段写入已落地，父仍进行中。下文旧“先Bdefend完成”的顺序被本依赖替代。
 
 # 命中火花事务与随机流

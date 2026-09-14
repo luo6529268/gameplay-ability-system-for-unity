@@ -10,3 +10,9 @@ default_tools_approval_mode = "approve"
 
 [sandbox_workspace_write]
 network_access = true
+
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 2
+default_subagent_model = "gpt-6-astra"
+default_subagent_reasoning_effort = "medium"

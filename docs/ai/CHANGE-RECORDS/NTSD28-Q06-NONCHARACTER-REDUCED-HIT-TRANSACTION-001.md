@@ -1,0 +1,40 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001
+status: IN_PROGRESS
+change-kind: NATIVE_NONCHARACTER_REDUCED_TRANSACTION
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NoncharacterReducedEditorTests.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/BattleHitCandidateSequenceRunner.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+authority: Current formal B1E13AE1 playable reduced route and source843 witness; parent Task contains source/Unity path review.
+evidence: Original108 reduced cases fail; source843 covers damage/resource/motion/hold/action with full DAT/before/output. Exact production paths will be declared after a valid Unity RED.
+-->
+
+# 非角色 reduced Unity 实现
+
+IN_PROGRESS / TEST_FIRST_ONLY。先准确新增单Editor测试文件；实际source843 DAT经现有Parser/Converter加载，三实体依before初始化，保持candidateAction0冻结再设置current/state/关系；source after不是初始化依据。比较raw47/3、extra/rest/spark/两RNG/audio及finalizer；Shadow使用Character pass（attacker DAT0）并要求writer观察1，不能把预测未覆盖当通过。
+
+先初始状态0差异再判断生产缺陷。现有其他未提交脚本保持，不改变Scene/资源/非战斗/Gen/Plugins/Server/schema。测试复用已证夹具构造模式，无新runtime manager/queue或关闭阶段。生产候选三文件SequenceRunner/DamageWriter/HitPlan仅记录在Task，尚未加入本Record写范围。回滚只本新增测试差量，保护用户工作。验收843 direct/Shadow两profile、原984保护、定向SelfCheck/Play/关闭及local replay；未获证据不标完成。source fallback普通尾部的独立算术证明范围另列，不混成完整source verified。
+
+首job268c98f73c8541beace9284394d569b9四FAIL，每组before274（Y256/X18），因整数/precise位置被SyncIntegerPosition归一化。已归档fixture-position-red并仅在before初始化恢复Runtime.XInt/YInt/ZInt，保留precise及原候选。需重跑before0；source独立review可进RED，但固定seed/合成冻结/未启用资源transfer与特殊status仍是边界。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / PRODUCTION_RED_CONFIRMED。新增单Editor fixture接source843。首次job268c98…因integer/precise归一化before274失败（fixture-position-red保留），仅恢复Runtime.XInt/YInt/ZInt修正。第二job256ee489459a428c9e21be219e390c31终态四FAIL：每组843 before0，direct14271差异、Shadow14346差异，production-red目录完整JSON/XML。source独立review可推进该合成矩阵RED，仍明确未激活resource transfer/status/weak/scale、非零reference/其它attacker类型是后续验证边界。下一步在本Record先加入准确SequenceRunner/DamageWriter/HitPlan路径再实施native reduced route传递与完整事务及独立预测，不再重复RED。原parent108小伤害不足以收口；843所有groups及原984保护都需回归。当前无测试job/build/Play运行，本批Unity生产未改。禁止computer-use/非战斗/Scene/资源修改，Q07未部署、总目标ACTIVE。
+补充实施核验点：ApplyNativeHitResourceTransaction目前rg调用仅定义与focused tests，不能凭该helper存在假设生产非零resource transfer已接通；完整原生资源owner/入口消费需核验，843输入为零不证明这项。
+
+生产范围预声明（有效RED已确认）：SequenceRunner.TryConsumeCaptured原dispatch新增仅nativeOrdinary/kind0/Damage/type1..6/UsesReducedHit调用新writer，传原prelude.Route，保持前置/后置/原返回；DamageWriter新增TryApplyNativeNoncharacterReducedHit与reduced响应/post局部helper，复用damage/rest/native resource-owner、credit算法，但不调用角色Alternate或unarmored尾部；HitPlan的NativePreludeObservation/Entry捕获原Route并在CanProjectLegacyWriterEffect/ProjectWriterEffect分流独立reduced预测。root负责前两文件，若委派HitPlan则仅该文件独占且root集成。无新增持久化schema/queue/manager，Entry候选生命周期沿现有reset，不能存跨tick真值。新writer失败不fallback unarmored。非零gain/owner等原843未覆盖，必须补focused/source后才可完整关闭。
+验收先843再原984/相关角色保护、compile/selfcheck/Play两factory及关闭/local replay。回滚仅三文件本批差量，保护既有未提交工作，禁止Scene/非战斗/资源/Gen/Plugins/Server变动。
+
+当前CODE_WRITTEN局部进度：root已修改SequenceRunner原dispatch与DamageWriter.TryApplyNativeNoncharacterReducedHit。type1..6明确gate/原route，reduced HP/MP/armor/durability/credit/gain、水平响应/current阈值/rest/holder copy/post/spark；无unarmored声音/status/RecordKind0Hit。HitPlan由reduced_shadow_writer独占正在实现，未刷新编译或运行测试。resource owner/gate非零gain新增生产使用，原843不覆盖，必须专项验证后收口。无新增生命周期owner或持久schema。
+
+HitPlan worker已完成单文件并交root：NativePreludeObservation.Route→Entry.NativeRoute保留原路由/constructor default；CanProject/Project分流独立reduced预测。root已读实际变更，刷新编译中；worker未运行Unity。明确剩余独立观测缺口：CanProjectNativeNoncharacterReduced对gain非0返回false，需任意resource-owner MP/消费tuple捕获/比较；生产有gain处理，但原843全gain0，不可闭合该非零职责。不可永久保留不覆盖的gate当作完整对齐。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / REDUCED_CORE_PASS_FALLBACK_RED。三生产文件已改：runner原dispatch传prelude.Route，新DamageWriter.TryApplyNativeNoncharacterReducedHit完整reduced；HitPlan保存原NativeRoute并独立预测（worker单文件完成root已读）。刷新编译无CS错误，job843b7b0c7dea469085d07194dda2a170终态四FAIL：843 before0，direct67差异(原14271)，Shadow94(原14346)；681实际reduced行四组全部0差异，剩余仅162fallback子集中的hp_activation/mp_activation/bypass_minus_one。原red和本轮reduced-core-pass-fallback-red均归档。下一步继续修复原命中route到unarmored fallback的明确broken pointer消费，不能HP==-1猜；type3回退音频及Shadow fallback guard未覆盖也需处理，精确必要新增路径先入Record。潜在方式扩展已有LF2Entity.NativeHitCandidateScope瞬时route并确保嵌套恢复/重置，但尚未声明或改该文件本批。新reduced production有非零gain owner处理，Shadow明确gain!=0不预测，需resource owner tuple与非零专项源/运行验证，不能永久跳过；843gain0仅本范围通过。无SelfCheck/Play/原984新回归，未整批关闭。当前无build/test/agent运行，禁止computer-use/非战斗/Scene/资源修改，Q07未部署、总目标ACTIVE。
+
+回退修复预声明：新增准确LF2Entity路径，仅NativeHitCandidateScope加入可空原Route和previousRoute，Dispose恢复嵌套上下文；runner先Resolve再Begin(index,route)，无scope外持久写入，无snapshot/schema/queue/服务变化。DamageWriter的weapon/type5/type3 horizontal后调用统一ApplyNativeBrokenArmorFallback，只有原Route.Kind BrokenFallback且HP==-1才consume，替代首armor+HP推断；动作仍在vertical前可被后续覆盖。移除ApplySpecialAttackDamage中type3无依据的generic effect sound（source非角色该位置仅attacker3自带broken声，既有RecordStandardHurtSounds保留）。HitPlan按Entry原route允许/预测unarmored fallback与broken消费；需scope异常/嵌套focused和type3普通音频回归，不能靠旧oracle守错误。root负责Entity/runner/writer，HitPlan可同worker独占。现有原RED67/94为证，未验后不能关闭。
+
+root已写Entity scope/runner/三处broken helper及type3 generic声移除。既有测试文件新增NativeCandidateRouteRestoresAfterNestedException验证nullable原route、index嵌套和异常unwind恢复。HitPlan同worker独占正在补fallback原route预测，尚未刷新/测试。本批新增Entity瞬时上下文不是逻辑persistent carrier，不参加snapshot，scope结束恢复旧值。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / ALL843_FOCUSED_PASS。root已新增LF2Entity.NativeHitCandidateScope可空原Route/嵌套恢复，runner先Resolve再Begin；DamageWriter weapon/type5/type3水平后按明确BrokenFallback消费、bypass -1保持、type3 generic音效去除；HitPlan已同步原route与独立fallback预测。job46a5d9c9928c4c13b69d75976a1feb87 5/5 PASS：843四组before0/diff0+scope嵌套异常恢复。原回归jobf25fb55daf6941ca8c49a4cbe64d36b1 18项17PASS/1旧type3音频断言FAIL，原984/684early/Bdefend/prelude replay全PASS；独立oracle NTSD28-Q06-TYPE3-NATIVE-AUDIO-ORACLE-001 VERIFIED，单断言修正后job4b866e2569774961ad93f303a054d398 4/4 PASS。所有XML同parent artifact保留。下一必须项非零gain/resource-owner独立捕获/比较与源/Unity向量，现CanProjectNativeNoncharacterReduced明确gain非0拒绝，不能当完成；还需新selfcheck、Play两factory/关闭及本批local replay和必要type3专项音频回归。当前无job/build/agent运行；本批四生产文件+单新fixture及单oracle，未改Scene/资源/非战斗。Scene SHA BCD1047B…0E9FB6保持。总目标ACTIVE/Q07未部署，禁止computer-use。
+
+非零gain测试预声明：原新fixture切换到source owner987子目录，准确恢复before.identity.ownerSlot→Runtime.OwnerSlotIndex，其余MP/MaxMP已逐实体还原；原843通过JSON归档all843-pass。先等待源987独立PASS再跑Unity RED，不修改生产或Shadow直到取得覆盖证据。

@@ -623,58 +623,53 @@ namespace NTSD.Animation.LF2Objects
             _hitRecordLastAdvanceTick[slot] = int.MinValue;
         }
 
-        /// <summary>记录一次 kind 0 命中；由受击对象调用。</summary>
+        private int nativeHitCandidateIndex = -1;
+        internal BattleOrdinaryCharacterDamageRoute? NativeHitRoute { get; private set; }
+
+        internal NativeHitCandidateScope BeginNativeHitCandidate(int index, BattleOrdinaryCharacterDamageRoute? route = null)
+            => new NativeHitCandidateScope(this, index, route);
+
+        internal readonly struct NativeHitCandidateScope : System.IDisposable
+        {
+            private readonly LF2Entity owner;
+            private readonly int previous;
+            private readonly BattleOrdinaryCharacterDamageRoute? previousRoute;
+
+            internal NativeHitCandidateScope(LF2Entity owner, int index, BattleOrdinaryCharacterDamageRoute? route)
+            {
+                this.owner = owner;
+                previous = owner.nativeHitCandidateIndex;
+                previousRoute = owner.NativeHitRoute;
+                owner.nativeHitCandidateIndex = index;
+                owner.NativeHitRoute = route;
+            }
+
+            public void Dispose()
+            {
+                owner.nativeHitCandidateIndex = previous;
+                owner.NativeHitRoute = previousRoute;
+            }
+        }
+
+        internal int ResolveNativeHitCandidateIndex(InteractionArea itr)
+        {
+            if (nativeHitCandidateIndex >= 0)
+                return nativeHitCandidateIndex;
+            var interactions = FrameCache?.GetNativeFrameDataById(Frame?.Prev2 ?? -1)?.itrs;
+            if (interactions != null)
+            {
+                for (int i = 0; i < interactions.Count; i++)
+                    if (ReferenceEquals(interactions[i], itr))
+                        return i;
+            }
+            return 0;
+        }
+
+        /// <summary>记录一次无护甲 kind 0 命中；由受击对象调用。</summary>
         internal void RecordKind0Hit(LF2Entity attacker, InteractionArea itr)
         {
-            if (attacker == null || itr == null)
-                return;
-
-            int attackerZ = attacker.Runtime.ZInt;
-            int victimZ = Runtime.ZInt;
-            int attackerSlot = attacker.Runtime.SlotIndex;
-            int victimSlot = Runtime.SlotIndex;
-            LF2Entity recordOwner = attackerZ > victimZ ||
-                                    (attackerZ == victimZ && attackerSlot > victimSlot)
-                ? attacker
-                : this;
-
-            if (recordOwner.HitRecordCount >= MaxHitRecordSlots)
-                return;
-
-            int sparkPhase = itr.effect == 1 ? 1 : 0;
-            int timer = itr.fall > 60 ? sparkPhase * 20 : sparkPhase * 20 + 10;
-            LF2FrameData attackerFrame = attacker.GetFrameDataById(attacker.Frame?.N ?? 0) ?? attacker.Frame?.D;
-            int attackerCenterX = attackerFrame?.centerx ?? 0;
-            int attackerCenterY = attackerFrame?.centery ?? 0;
-            int attackerX = attacker.Runtime.XInt;
-            int attackerY = attacker.Runtime.YInt;
-            int victimX = Runtime.XInt;
-            int victimY = Runtime.YInt;
-
-            int hitX;
-            if (attacker.Dirh() > 0)
-            {
-                hitX = attackerX - attackerCenterX + itr.x + itr.w;
-                if (hitX > victimX)
-                    hitX = victimX;
-            }
-            else
-            {
-                hitX = attackerX + attackerCenterX - itr.x - itr.w;
-                if (hitX < victimX)
-                    hitX = victimX;
-            }
-
-            int hitYOffset = attackerY + (itr.h / 2) + itr.y - attackerCenterY;
-            int lowerY = victimY - attackerCenterY;
-            if (hitYOffset < lowerY)
-                hitYOffset = (lowerY + hitYOffset) >> 1;
-            else if (hitYOffset > victimY)
-                hitYOffset = (victimY + hitYOffset) >> 1;
-
-            int hitZ = attackerZ + hitYOffset + BattleRandInt(0, 9) - 4;
-            hitX += BattleRandInt(0, 9) - 4;
-            recordOwner.AddHitRecord(timer, hitX, hitZ);
+            BattleNativeHitSparkWriter.Append(RegisteredWorldForSimulation, attacker, this, itr,
+                attacker?.ResolveNativeHitCandidateIndex(itr) ?? 0, null, false, true);
         }
 
         /// <summary>读取指定命中记录年龄。</summary>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-14 11:58:37Z" end-time="2026-09-14 11:59:03Z" duration="26.057748">
+  <test-suite type="TestSuite" id="9582" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7658" result="Failed" site="Child" start-time="2026-09-14 11:58:37Z" end-time="2026-09-14 11:59:03Z" duration="26.057748" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="18123" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7650" result="Failed" site="Child" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:59:03Z" duration="25.822053" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="116044" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="18124" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7650" result="Failed" site="Child" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:59:03Z" duration="25.624522" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="18132" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7112" result="Failed" site="Child" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:59:03Z" duration="25.429613" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11805" name="NTSD28Q06Type5UnarmoredEditorTests" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:59:03Z" duration="25.226858" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="ParameterizedMethod" id="11810" name="Type5CompleteTransactionMatchesSource" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:59:03Z" duration="25.220493" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="11806" name="Type5CompleteTransactionMatchesSource(Authority400,False)" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource(Authority400,False)" methodname="Type5CompleteTransactionMatchesSource" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" seed="1362813672" result="Failed" start-time="2026-09-14 11:58:38Z" end-time="2026-09-14 11:58:44Z" duration="5.814270" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 after slot 1 combat.hitReactionTimer=0 expected 80
+case 0 audio count=2
+case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 1 after slot 1 combat.hitReactionTimer=0 expected 80
+case 1 audio count=2
+case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 2 after slot 1 combat.hitReactionTimer=0 expected 80
+case 2 audio count=2
+case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 3 after slot 1 combat.hitReactionTimer=0 expected 80
+case 3 audio count=2
+case 3 finalized slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.hitReactionTimer=0 expected 80", "case 0 audio count=2", "case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 1 after slot 1 combat.hitReactionTimer=0 expected 80", "case 1 audio count=2", "case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 2 after slot 1 combat.hitReactionTimer=0 expected 80", "case 2 audio count=2", "case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 3 after slot 1 combat.hitReactionTimer=0 expected 80"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00116] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5UnarmoredEditorTests.cs:44
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=3007, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+]]></output>
+              </test-case>
+              <test-case id="11807" name="Type5CompleteTransactionMatchesSource(Authority400,True)" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource(Authority400,True)" methodname="Type5CompleteTransactionMatchesSource" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" seed="1290562384" result="Failed" start-time="2026-09-14 11:58:44Z" end-time="2026-09-14 11:58:50Z" duration="5.895963" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 writer observation count=0
+case 0 after slot 1 combat.hitReactionTimer=0 expected 80
+case 0 audio count=2
+case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 1 writer observation count=0
+case 1 after slot 1 combat.hitReactionTimer=0 expected 80
+case 1 audio count=2
+case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 2 writer observation count=0
+case 2 after slot 1 combat.hitReactionTimer=0 expected 80
+case 2 audio count=2
+case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 0 writer observation count=0", "case 0 after slot 1 combat.hitReactionTimer=0 expected 80", "case 0 audio count=2", "case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 1 writer observation count=0", "case 1 after slot 1 combat.hitReactionTimer=0 expected 80", "case 1 audio count=2", "case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 2 writer observation count=0", "case 2 after slot 1 combat.hitReactionTimer=0 expected 80"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00116] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5UnarmoredEditorTests.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11808" name="Type5CompleteTransactionMatchesSource(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource(MobileExtended,False)" methodname="Type5CompleteTransactionMatchesSource" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" seed="451934094" result="Failed" start-time="2026-09-14 11:58:50Z" end-time="2026-09-14 11:58:57Z" duration="6.610100" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 after slot 1 combat.hitReactionTimer=0 expected 80
+case 0 audio count=2
+case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 1 after slot 1 combat.hitReactionTimer=0 expected 80
+case 1 audio count=2
+case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 2 after slot 1 combat.hitReactionTimer=0 expected 80
+case 2 audio count=2
+case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 3 after slot 1 combat.hitReactionTimer=0 expected 80
+case 3 audio count=2
+case 3 finalized slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 combat.hitReactionTimer=0 expected 80", "case 0 audio count=2", "case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 1 after slot 1 combat.hitReactionTimer=0 expected 80", "case 1 audio count=2", "case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 2 after slot 1 combat.hitReactionTimer=0 expected 80", "case 2 audio count=2", "case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 3 after slot 1 combat.hitReactionTimer=0 expected 80"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00116] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5UnarmoredEditorTests.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11809" name="Type5CompleteTransactionMatchesSource(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource(MobileExtended,True)" methodname="Type5CompleteTransactionMatchesSource" classname="NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests" runstate="Runnable" seed="1505094550" result="Failed" start-time="2026-09-14 11:58:57Z" end-time="2026-09-14 11:59:03Z" duration="6.883751" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 writer observation count=0
+case 0 after slot 1 combat.hitReactionTimer=0 expected 80
+case 0 audio count=2
+case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 1 writer observation count=0
+case 1 after slot 1 combat.hitReactionTimer=0 expected 80
+case 1 audio count=2
+case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80
+case 2 writer observation count=0
+case 2 after slot 1 combat.hitReactionTimer=0 expected 80
+case 2 audio count=2
+case 2 finalized slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 0 writer observation count=0", "case 0 after slot 1 combat.hitReactionTimer=0 expected 80", "case 0 audio count=2", "case 0 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 1 writer observation count=0", "case 1 after slot 1 combat.hitReactionTimer=0 expected 80", "case 1 audio count=2", "case 1 finalized slot 1 combat.hitReactionTimer=0 expected 80", "case 2 writer observation count=0", "case 2 after slot 1 combat.hitReactionTimer=0 expected 80"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5UnarmoredEditorTests.Type5CompleteTransactionMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00116] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5UnarmoredEditorTests.cs:44
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

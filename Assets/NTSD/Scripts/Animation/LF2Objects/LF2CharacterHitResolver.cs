@@ -186,8 +186,6 @@ namespace NTSD.Animation.LF2Objects
                         _character,
                         _character.HitCounters,
                         itr) == true;
-                if (standardDamageSucceeded && itr.kind == 0)
-                    _character.RecordKind0Hit(attacker, itr);
                 return standardDamageSucceeded;
             }
 

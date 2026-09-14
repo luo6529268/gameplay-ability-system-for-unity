@@ -62,7 +62,7 @@ namespace NTSD.Test.Editor
                 },
                 _ => null,
                 BattleHitRecordLifecycleCatalog.Available);
-            entity.AddRecordDuringSimTu = true;
+            entity.AddRecordDuringFrameTick = true;
 
             new NTSDBattleTickSystem(world).RunReleaseTick(
                 1,
@@ -188,7 +188,7 @@ namespace NTSD.Test.Editor
                 RefreshRuntimeSnapshot();
             }
 
-            public bool AddRecordDuringSimTu { get; set; }
+            public bool AddRecordDuringFrameTick { get; set; }
             public int RecordAddedTick { get; private set; } = -1;
 
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
@@ -198,9 +198,9 @@ namespace NTSD.Test.Editor
                 return (int)LF2ObjectType.Other;
             }
 
-            public override void SimTU(int tickIndex)
+            public override void SimFrameTick(int tickIndex)
             {
-                if (!AddRecordDuringSimTu || RecordAddedTick >= 0)
+                if (!AddRecordDuringFrameTick || RecordAddedTick >= 0)
                     return;
 
                 AddHitRecord(0, 30, 40);
@@ -210,7 +210,7 @@ namespace NTSD.Test.Editor
             public override void Reset()
             {
                 ResetSpark();
-                AddRecordDuringSimTu = false;
+                AddRecordDuringFrameTick = false;
                 RecordAddedTick = -1;
             }
 

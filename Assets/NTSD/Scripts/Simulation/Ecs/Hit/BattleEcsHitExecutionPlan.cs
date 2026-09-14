@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using NTSD.App;
 using NTSD.Animation;
@@ -378,6 +378,8 @@ namespace NTSD.Simulation.Ecs
         private long observedDispositionCount;
         private long observedFirstBodyResponseAttemptCount;
         private long observedConsumeEffectsCount;
+        private long nativePreludeObservationCount;
+        internal long NativePreludeObservationCountForDiagnostics => nativePreludeObservationCount;
         private long observedWriterEffectCount;
         private long observedLifecycleEffectCount;
         private long observedDispatchCount;
@@ -460,11 +462,17 @@ namespace NTSD.Simulation.Ecs
 
             if (activePreprocessEntryIndex < 0 ||
                 activePreprocessEntryIndex >= entryCount ||
-                entries[activePreprocessEntryIndex]
-                    .ExpectedReleaseHeavyHeldTargetAfterPreprocess)
+                (entries[activePreprocessEntryIndex].ExpectedReleaseHeavyHeldTargetAfterPreprocess &&
+                 !entries[activePreprocessEntryIndex].NativePreludeObserved))
             {
                 return false;
             }
+
+            if (entries[activePreprocessEntryIndex].NativeFeedbackOnly)
+                return true;
+
+            if (IsNativeNoncharacterReducedRoute(target, entries[activePreprocessEntryIndex].NativeRoute))
+                return CanProjectNativeNoncharacterReduced(attacker, target, resolvedItr);
 
             return CanProjectDamageWriterEffect(
                 attacker,
@@ -563,6 +571,7 @@ namespace NTSD.Simulation.Ecs
             observedDispositionCount = 0;
             observedFirstBodyResponseAttemptCount = 0;
             observedConsumeEffectsCount = 0;
+            nativePreludeObservationCount = 0;
             observedWriterEffectCount = 0;
             observedLifecycleEffectCount = 0;
             observedDispatchCount = 0;
@@ -1300,6 +1309,89 @@ namespace NTSD.Simulation.Ecs
             ResetPendingFirstBodyResponseExpectation();
         }
 
+        internal readonly struct NativePreludeObservation
+        {
+            internal NativePreludeObservation(int entryIndex, int childSlot, ConsumeEffectsSnapshot expected, bool feedbackOnly, BattleOrdinaryCharacterDamageRoute route)
+            {
+                Active = true;
+                EntryIndex = entryIndex;
+                ChildSlot = childSlot;
+                Expected = expected;
+                FeedbackOnly = feedbackOnly;
+                Route = route;
+            }
+
+            internal bool Active { get; }
+            internal int EntryIndex { get; }
+            internal int ChildSlot { get; }
+            internal ConsumeEffectsSnapshot Expected { get; }
+            internal bool FeedbackOnly { get; }
+            internal BattleOrdinaryCharacterDamageRoute Route { get; }
+        }
+
+        internal NativePreludeObservation PrepareNativePreludeObservation(LF2Entity attacker, LF2Entity target,
+            InteractionArea itr, in BattleNativeOrdinaryHitPreludePlan plan)
+        {
+            if (!ShouldObserveLegacyConsumeEffects)
+                return default;
+            if (activePreprocessEntryIndex < 0 || activePreprocessEntryIndex >= entryCount)
+            {
+                RecordObservationFailure(BattleHitExecutionPlanFailureReason.ObservationConsumeEffectsUnexpected,
+                    attacker.Runtime.SlotIndex, -1);
+                return default;
+            }
+
+            int childSlot = target.Runtime.TargetSlotIndex;
+            var expected = CaptureConsumeEffectsSnapshot(attacker, target, childSlot, true);
+            if (plan.RunUnarmoredPrelude)
+            {
+                if (plan.Route.Kind == BattleOrdinaryCharacterDamageRouteKind.UnarmoredType1BrokenFallback)
+                    expected.TargetArmorHp = -1;
+                bool reciprocal = expected.HeldTargetHandle.IsValid && expected.HeldTargetHolderSlot == target.Runtime.SlotIndex;
+                bool release = reciprocal && expected.TargetLinkState == 2 && expected.HeldTargetLinkState == -2;
+                if (release)
+                {
+                    expected.TargetLinkState = 0;
+                    expected.HeldTargetLinkState = 0;
+                    expected.TargetVy = -1.0000000000000258;
+                    var cursor = world.NativeRandom.CaptureSynchronizedCursor();
+                    expected.HeldTargetFrame = cursor.Next(0xECu, 6);
+                    var random = expected.NativeRandom;
+                    expected.NativeRandom = new NTSD28NativeRandomScalarState(random.CrtState, random.CrtCalls, random.TableSeed,
+                        cursor.Counter, cursor.Index, cursor.Calls, cursor.LastCallSite, random.SynchronizedTableHash, random.SynchronizedGeneration);
+                }
+                if (reciprocal && (release || BattleNativeOrdinaryHitPrelude.IsSpecialLinkRestGate(target, itr)))
+                {
+                    expected.AttackerVrestAgainstHeld = 45;
+                    expected.TargetVrestAgainstHeld = 30;
+                    if (childSlot == attacker.Runtime.SlotIndex)
+                        expected.TargetVrestAgainstAttacker = 30;
+                }
+            }
+            return new NativePreludeObservation(activePreprocessEntryIndex, childSlot, expected, plan.FeedbackOnly, plan.Route);
+        }
+
+        internal void ObserveNativePrelude(LF2Entity attacker, LF2Entity target, in NativePreludeObservation observation)
+        {
+            if (!observation.Active)
+                return;
+            var actual = CaptureConsumeEffectsSnapshot(attacker, target, observation.ChildSlot, true);
+            var expected = observation.Expected;
+            ulong differenceMask = DifferenceMask(in expected, in actual);
+            nativePreludeObservationCount++;
+            Entry entry = entries[observation.EntryIndex];
+            entry.NativePreludeObserved = true;
+            entry.NativeFeedbackOnly = observation.FeedbackOnly;
+            entry.NativeRoute = observation.Route;
+            entries[observation.EntryIndex] = entry;
+            if (differenceMask != 0 || Fingerprint(in expected) != Fingerprint(in actual))
+            {
+                lastConsumeEffectsDifferenceMask = differenceMask;
+                RecordObservationFailure(BattleHitExecutionPlanFailureReason.ObservationConsumeEffectsMismatch,
+                    attacker.Runtime.SlotIndex, entry.CandidateOrdinal);
+            }
+        }
+
         internal void PrepareLegacyConsumeEffectsObservation(
             LF2Entity attacker,
             LF2Entity target)
@@ -1509,7 +1601,7 @@ namespace NTSD.Simulation.Ecs
                     target,
                     resolvedItr,
                     disposition,
-                    ref projection))
+                    ref projection, entry.NativeFeedbackOnly, entry.NativeRoute))
             {
                 RecordObservationFailure(
                     BattleHitExecutionPlanFailureReason.ObservationWriterEffectPreStateMismatch,
@@ -2076,7 +2168,7 @@ namespace NTSD.Simulation.Ecs
             LF2Entity target,
             int resolvedKind)
         {
-            if (!CanConsumeProjectedCandidate(attacker, target))
+            if (!CanConsumeProjectedCandidate(attacker, target, resolvedKind != 0))
                 return BattleHitCandidateDisposition.RejectedByConsumeGate;
 
             int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
@@ -2114,7 +2206,7 @@ namespace NTSD.Simulation.Ecs
 
         private static bool CanConsumeProjectedCandidate(
             LF2Entity attacker,
-            LF2Entity target)
+            LF2Entity target, bool checkVrest)
         {
             if (attacker?.Runtime == null || target?.Runtime == null || target == attacker)
                 return false;
@@ -2122,7 +2214,7 @@ namespace NTSD.Simulation.Ecs
                 return false;
 
             int attackerSlot = attacker.Runtime.SlotIndex;
-            return attackerSlot < 0 || target.ItrVrestTest(attackerSlot, true);
+            return !checkVrest || attackerSlot < 0 || target.ItrVrestTest(attackerSlot, true);
         }
 
         private void SkipRemainingEntriesForAttacker(RuntimeEntityHandle attackerHandle)
@@ -2278,7 +2370,7 @@ namespace NTSD.Simulation.Ecs
         private ConsumeEffectsSnapshot CaptureConsumeEffectsSnapshot(
             LF2Entity attacker,
             LF2Entity target,
-            int heldTargetSlot)
+            int heldTargetSlot, bool nativePrelude = false)
         {
             int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
             int targetSlot = target?.Runtime?.SlotIndex ?? -1;
@@ -2297,6 +2389,7 @@ namespace NTSD.Simulation.Ecs
 
             return new ConsumeEffectsSnapshot
             {
+                NativePrelude = nativePrelude,
                 AttackerHandle = attackerHandle,
                 AttackerHp = attacker?.Health?.HP ?? int.MinValue,
                 TargetHandle = targetHandle,
@@ -2315,6 +2408,16 @@ namespace NTSD.Simulation.Ecs
                 HeldTargetHolderSlot = heldTarget?.Runtime?.HolderStableId ?? int.MinValue,
                 HeldTargetFrame = heldTarget?.Frame?.N ?? int.MinValue,
                 HeldTargetVy = heldTarget?.Runtime?.Vy ?? double.NaN,
+                AttackerVrestAgainstHeld = attackerSlot >= 0 && heldTargetSlot >= 0
+                    ? world.GetRawRestVrest(attackerSlot, heldTargetSlot) : int.MinValue,
+                TargetVy = target?.Runtime?.Vy ?? double.NaN,
+                TargetArmorHp = target?.Runtime?.RuntimeArmorHp118 ?? int.MinValue,
+                HeldTargetWaitCounter = heldTarget?.Runtime?.WaitCounter ?? int.MinValue,
+                HeldTargetFrameCounter = heldTarget?.Runtime?.AttackingCounter ?? int.MinValue,
+                HeldTargetPreviousAction = heldTarget?.Frame?.Prev ?? int.MinValue,
+                HeldTargetTickSnapshot = heldTarget?.Runtime?.PrevFrame2 ?? int.MinValue,
+                HeldTargetTargetSlot = heldTarget?.Runtime?.TargetSlotIndex ?? int.MinValue,
+                NativeRandom = world.NativeRandom.CaptureScalarState(),
                 RngState = world.Rng.State,
                 RngCallCount = world.Rng.CallCount,
             };
@@ -2522,6 +2625,9 @@ namespace NTSD.Simulation.Ecs
                 HitRecordZ = lastHitRecordIndex >= 0
                     ? hitRecordOwner.GetHitRecordZ(lastHitRecordIndex)
                     : int.MinValue,
+                NativeWeaponRandom = world.NativeRandom.CaptureScalarState(),
+                RngCrtState = world.NativeRandom.CaptureScalarState().CrtState,
+                RngCrtCalls = world.NativeRandom.CaptureScalarState().CrtCalls,
                 RngState = world.Rng?.State ?? 0,
                 RngCallCount = world.Rng?.CallCount ?? 0,
                 PendingSoundCount = pendingSoundCount,
@@ -2539,10 +2645,19 @@ namespace NTSD.Simulation.Ecs
             LF2Entity target,
             InteractionArea resolvedItr,
             BattleHitCandidateDisposition disposition,
-            ref WriterEffectSnapshot projection)
+            ref WriterEffectSnapshot projection, bool nativeFeedbackOnly = false,
+            BattleOrdinaryCharacterDamageRoute nativeRoute = default)
         {
             if (resolvedItr == null || attacker?.Runtime == null || target?.Runtime == null)
                 return false;
+
+            projection.NativeRoute = nativeRoute;
+            if (nativeFeedbackOnly)
+                return ProjectKind0HitRecord(attacker, target, resolvedItr, ref projection, null, false, false);
+
+            if (disposition == BattleHitCandidateDisposition.Damage &&
+                IsNativeNoncharacterReducedRoute(target, nativeRoute))
+                return ProjectNativeNoncharacterReduced(attacker, target, resolvedItr, nativeRoute, ref projection);
 
             switch (disposition)
             {
@@ -2738,6 +2853,9 @@ namespace NTSD.Simulation.Ecs
                                 ref projection);
                         }
 
+                        if (target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Other)
+                            return ProjectType5UnarmoredDamageWriterEffect(attacker, target, resolvedItr, ref projection);
+
                         if (CanProjectNonConvertedKind9ObjectDamageWriterEffect(
                                 attacker,
                                 target,
@@ -2822,6 +2940,9 @@ namespace NTSD.Simulation.Ecs
                                resolvedItr);
                 }
 
+                if (target.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Other)
+                    return CanProjectType5UnarmoredDamageWriterEffect(attacker, target, resolvedItr);
+
                 return CanProjectNonConvertedKind9ObjectDamageWriterEffect(
                            attacker,
                            target,
@@ -2850,6 +2971,143 @@ namespace NTSD.Simulation.Ecs
                     resolvedItr);
         }
 
+        private static bool CanProjectType5UnarmoredDamageWriterEffect(
+            LF2Entity attacker, LF2Entity target, InteractionArea itr)
+        {
+            if (attacker?.Runtime == null || target?.Runtime == null || target.Health == null ||
+                attacker.Frame == null || itr == null || itr.kind != 0 ||
+                target.GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Other)
+                return false;
+            var attackerData = LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
+            var targetData = LF2HitResolveRuntimeData.ResolveCharacterData(target);
+            if (attackerData == null || targetData == null ||
+                (targetData.armors != null && targetData.armors.Count > 0 &&
+                 !(attacker.NativeHitRoute?.UsesUnarmoredHit ?? false)) ||
+                attacker.ItrRest == null || target.ItrRest == null ||
+                attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame.N) == null)
+                return false;
+            if (CanProjectType3StateSyncDamageWriterEffect(attacker, target, itr))
+                return true;
+            int soundCount = attacker.GetCurrentDataObjectTypeForSimulation() == 3 &&
+                !string.IsNullOrEmpty(attackerData.weapon_broken_sound) ? 1 : 0;
+            return (target.Match ?? attacker.Match)?.BattleBuffersForServices
+                .CanQueueSoundsWithoutRejection(soundCount) == true;
+        }
+
+        private static bool ProjectType5UnarmoredDamageWriterEffect(
+            LF2Entity attacker, LF2Entity target, InteractionArea itr, ref WriterEffectSnapshot projection)
+        {
+            if (!CanProjectType5UnarmoredDamageWriterEffect(attacker, target, itr))
+                return false;
+            if (CanProjectType3StateSyncDamageWriterEffect(attacker, target, itr))
+            {
+                projection.NativeWeaponObserved = true;
+                return ProjectType3StateSyncDamageWriterEffect(attacker, target, itr, ref projection);
+            }
+            // Alignment contract: NTSD28-Q06-TYPE5-UNARMORED-UNITY-001.
+            var world = target.Match ?? attacker.Match;
+            ProjectType3NormalVitalAndStatWrites(attacker, target, itr.injury, ref projection);
+            projection.NativeWeaponObserved = true;
+            projection.TargetBdefend = 45;
+            int timer = unchecked((projection.TargetHp <= 0 ? 80 : projection.TargetFall) + (itr.fall == 0 ? 20 : itr.fall));
+            var previous = target.FrameCache?.GetNativeFrameDataById(target.Frame?.Prev ?? -1);
+            var snapshot = target.FrameCache?.GetNativeFrameDataById(target.Frame?.Prev2 ?? -1);
+            if (previous?.state == 13 || snapshot?.state == 12)
+                timer = 80;
+            bool above = projection.TargetYInt < target.Runtime.CollisionYReference;
+            int directional = projection.TargetFacing == projection.AttackerFacing ? 224 : 222;
+            int action = -1;
+            if (timer > 60)
+                timer = 80;
+            else if (timer > 40)
+            {
+                action = 226;
+                timer = above ? 80 : 60;
+            }
+            else if (timer > 20)
+            {
+                action = directional;
+                timer = above ? 80 : 40;
+            }
+            else if (timer > 0)
+            {
+                action = above ? directional : 220;
+                timer = 20;
+            }
+            projection.TargetFall = timer;
+            if (action >= 0)
+            {
+                projection.TargetFrame = action;
+                projection.TargetRuntimeFrame = action;
+            }
+            if (timer == 80 && projection.TargetLinkState > 0 && HasAuthorityHeldTargetRelation(target))
+            {
+                projection.AttackerVrestAgainstHeld = 45;
+                projection.TargetVrestAgainstHeld = 30;
+            }
+            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)
+            {
+                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
+                if (!string.IsNullOrEmpty(cue))
+                    ProjectQueuedSound(world, cue, projection.AttackerXInt, ref projection);
+            }
+            var frame = attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
+            double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
+            bool stabilized = timer == 80 && projection.TargetVx > -5.0 && projection.TargetVx < 5.0 && itr.dvx == 0;
+            if (!stabilized)
+                projection.TargetKnockbackVz += itr.dvz;
+            if (stabilized)
+                projection.TargetKnockbackVx += sign * 5.0;
+            else if (frame.state == 2000)
+                projection.TargetKnockbackVx += projection.AttackerXInt < projection.TargetXInt ? itr.dvx : -itr.dvx;
+            else
+                projection.TargetKnockbackVx += sign * itr.dvx;
+            projection.TargetHitCount++;
+            ProjectNativeBrokenArmorFallback(ref projection);
+            if (timer == 80)
+            {
+                if (itr.dvy != 0)
+                {
+                    projection.TargetKnockbackVy += itr.dvy;
+                    if ((int)(projection.TargetYInt + projection.TargetKnockbackVy) > 0)
+                        projection.TargetKnockbackVy = 12.0;
+                }
+                else
+                    projection.TargetKnockbackVy -= 7.0;
+                bool front = target.Dirh() < 0 ? projection.TargetKnockbackVx >= 0.0 : projection.TargetKnockbackVx <= 0.0;
+                projection.TargetFrame = front ? 180 : 186;
+                projection.TargetRuntimeFrame = projection.TargetFrame;
+            }
+            ProjectNativeStandardHitRest(attacker, target, itr, ref projection);
+            if (frame.state == 1002)
+            {
+                var cursor = world.NativeRandom.CaptureSynchronizedCursor();
+                action = cursor.Next(0xEEu, 16);
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerVx = -projection.TargetKnockbackVx * 0.5;
+                projection.AttackerVy = -4.0;
+                var rng = projection.NativeWeaponRandom;
+                projection.NativeWeaponRandom = new NTSD28NativeRandomScalarState(rng.CrtState, rng.CrtCalls,
+                    rng.TableSeed, cursor.Counter, cursor.Index, cursor.Calls, cursor.LastCallSite,
+                    rng.SynchronizedTableHash, rng.SynchronizedGeneration);
+            }
+            else if (frame.state == 3000 || (frame.state == 3007 && (frame.cover == 2 || frame.cover == 3)))
+            {
+                action = frame.hit_Fj != 0 ? frame.hit_Fj : 10;
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerAttackingCounter = 0;
+                projection.AttackerVx = 0.0;
+                var selected = attacker.FrameCache.GetNativeFrameDataById(action);
+                if (selected != null)
+                    projection.AttackerVz = selected.dvx;
+            }
+            ProjectNativeEffectActionOverride(attacker, target, itr, ref projection);
+            return ProjectKind0HitRecord(attacker, target, itr, ref projection) &&
+                attacker.Runtime.SlotIndex >= 0 && target.Runtime.SlotIndex >= 0;
+        }
+
         private static bool CanProjectStandardObjectDamageWriterEffect(
             LF2Entity attacker,
             LF2Entity target,
@@ -2871,71 +3129,16 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
-            bool oid100Held =
-                targetOid == 100 && target.Runtime.LinkState < 0;
-            bool skipOid100KnockbackTail =
-                target.Runtime.Vx > -5.0 &&
-                target.Runtime.Vx < 5.0 &&
-                resolvedItr.dvx == 0;
-            bool applyOid100KnockbackTail =
-                oid100Held && !skipOid100KnockbackTail;
-            int attackerState = attacker.GetState();
-            bool attackerState2000 = attackerState == LF2States.HeavyWeaponInSky;
-            bool attackerState1002 = attackerState == LF2States.WeaponThrowing;
-            bool attackerState3000 = attackerState == LF2States.ProjectileFlying;
-            if (attackerState1002 && !HasFramesInRange(attacker, 0, 16))
+            LF2CharacterData attackerData = LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
+            LF2CharacterData targetData = LF2HitResolveRuntimeData.ResolveCharacterData(target);
+            if (attackerData == null || targetData == null || attacker.ItrRest == null || target.ItrRest == null ||
+                attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame.N) == null)
                 return false;
-            int attackerOid = attacker.FrameCache?.Wrapper?.characterId ?? attacker.ObjectId;
-            if (attackerState3000 && attackerOid == 0xD1 &&
-                (IsKarasuType3Oid(targetOid) ||
-                 (targetOid == 0xD1 && target.Frame.N == 40)))
-            {
-                return false;
-            }
-
-            if (targetType == (int)LF2ObjectType.HeavyWeapon)
-            {
-                if (resolvedItr.fall <= 40 &&
-                    target.Runtime.YInt >= 0 &&
-                    resolvedItr.effect != 4)
-                {
-                    if (target.GetFrameDataById(20) == null)
-                        return false;
-                }
-                else if (!HasFramesInRange(target, 0, 6))
-                {
-                    return false;
-                }
-            }
-            else if (!HasFramesInRange(target, 0, 16))
-            {
-                return false;
-            }
-
-            LF2CharacterData attackerData =
-                LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
-            LF2CharacterData targetData =
-                LF2HitResolveRuntimeData.ResolveCharacterData(target);
-            if (attackerData == null || targetData == null ||
-                attacker.ItrRest == null || target.ItrRest == null)
-            {
-                return false;
-            }
-
-            int requiredSounds = targetType == (int)LF2ObjectType.Drink ? 0 : 1;
-            if (attacker.GetCurrentDataObjectTypeForSimulation() ==
-                    (int)LF2ObjectType.SpecialAttack &&
-                !string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
-            {
+            int requiredSounds = attacker.GetCurrentDataObjectTypeForSimulation() == 3 &&
+                !string.IsNullOrEmpty(attackerData.weapon_broken_sound) ? 1 : 0;
+            if (LF2Entity.ResolveCurrentDataObjectId(attacker) == 100 && attacker.Runtime.LinkState < 0)
                 requiredSounds++;
-            }
-            if (!string.IsNullOrWhiteSpace(targetData.weapon_hit_sound))
-                requiredSounds++;
-            if (applyOid100KnockbackTail)
-                requiredSounds++;
-            return target.Match?.BattleBuffersForServices
-                .CanQueueSoundsWithoutRejection(requiredSounds) == true;
+            return target.Match?.BattleBuffersForServices.CanQueueSoundsWithoutRejection(requiredSounds) == true;
         }
 
         private static bool CanProjectNonConvertedKind9ObjectDamageWriterEffect(
@@ -3101,33 +3304,25 @@ namespace NTSD.Simulation.Ecs
         {
             if (attacker?.Runtime == null || target?.Runtime == null ||
                 target.Health == null || resolvedItr == null ||
-                resolvedItr.kind != 0 ||
-                target.GetCurrentDataObjectTypeForSimulation() !=
-                    (int)LF2ObjectType.SpecialAttack)
+                resolvedItr.kind != 0)
             {
                 return false;
             }
 
-            int attackerState = attacker.GetState();
-            int targetState = target.GetState();
+            int targetType = target.GetCurrentDataObjectTypeForSimulation();
+            var targetData = LF2HitResolveRuntimeData.ResolveCharacterData(target);
+            if (targetType != (int)LF2ObjectType.SpecialAttack &&
+                (targetType != (int)LF2ObjectType.Other || targetData == null ||
+                 (targetData.armors != null && targetData.armors.Count > 0)))
+                return false;
+            int attackerState = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1)?.state ?? -1;
+            int targetState = target.FrameCache?.GetNativeFrameDataById(target.Frame?.N ?? -1)?.state ?? -1;
             bool matchingPair =
                 (targetState == LF2States.ObjectFlying &&
                  attackerState == LF2States.ObjectFlying) ||
                 (targetState == LF2States.ObjectExpanding &&
                  attackerState == LF2States.ObjectExpanding);
             if (!matchingPair)
-            {
-                return false;
-            }
-
-            int attackerResetAction = ResolveType3PairResetAction(
-                attacker,
-                attacker.Trans?.WaitCounter ?? attacker.Runtime.WaitCounter);
-            int targetResetAction = ResolveType3PairResetAction(
-                target,
-                target.Trans?.WaitCounter ?? target.Runtime.WaitCounter);
-            if (attacker.GetFrameDataById(attackerResetAction) == null ||
-                target.GetFrameDataById(targetResetAction) == null)
             {
                 return false;
             }
@@ -3412,186 +3607,99 @@ namespace NTSD.Simulation.Ecs
                 target,
                 resolvedItr.injury,
                 ref projection);
-            projection.TargetHitConfirm2 = 1;
-            int durabilityInjury = BattleDamageWriter.ResolveNativeAttackingInjury(
-                targetWorld,
-                attacker,
-                resolvedItr.injury);
+            // Independent native weapon prediction; no production mutation or random commit.
+            projection.NativeWeaponObserved = true;
+            int durabilityInjury = BattleDamageWriter.ResolveNativeAttackingInjury(targetWorld, attacker, resolvedItr.injury);
             projection.TargetWeaponFlightCounter = resolvedItr.bdefend == 100
-                ? -1
-                : projection.TargetWeaponFlightCounter - durabilityInjury;
-            projection.TargetRelationTeam = projection.AttackerRelationTeam;
-
-            if (targetType != (int)LF2ObjectType.HeavyWeapon ||
-                resolvedItr.fall > 40)
+                ? -1 : projection.TargetWeaponFlightCounter - durabilityInjury;
+            projection.TargetBdefend = 45;
+            projection.TargetFall = 80;
+            if (projection.TargetLinkState > 0 && HasAuthorityHeldTargetRelation(target))
             {
-                projection.TargetHitCount++;
-            }
-
-            projection.TargetFall = 0;
-            bool attackerState2000 = attacker.GetState() == LF2States.HeavyWeaponInSky;
-            if (projection.TargetVx > -5.0 &&
-                projection.TargetVx < 5.0 &&
-                resolvedItr.dvx == 0)
-            {
-                projection.TargetKnockbackVx += attackerState2000
-                    ? 5.0
-                    : (attacker.Dirh() > 0 ? 5.0 : -5.0);
-            }
-            else if (attackerState2000 && resolvedItr.dvx != 0)
-            {
-                projection.TargetKnockbackVx +=
-                    projection.AttackerXInt < projection.TargetXInt
-                        ? resolvedItr.dvx
-                        : -resolvedItr.dvx;
-            }
-            else if (targetType == (int)LF2ObjectType.ThrowWeapon ||
-                     targetType == (int)LF2ObjectType.Drink)
-            {
-                double scaled = Math.Abs(projection.TargetVx) * 0.55;
-                if (resolvedItr.dvx > scaled)
-                {
-                    projection.TargetKnockbackVx += attacker.Dirh() > 0
-                        ? resolvedItr.dvx
-                        : -resolvedItr.dvx;
-                }
-                else if (attacker.Dirh() > 0)
-                {
-                    if (projection.TargetKnockbackVx > 0.0)
-                        projection.TargetKnockbackVx += resolvedItr.dvx;
-                    else if (projection.TargetVx < 0.0)
-                        projection.TargetKnockbackVx = -scaled;
-                }
-                else
-                {
-                    if (projection.TargetKnockbackVx < 0.0)
-                        projection.TargetKnockbackVx -= resolvedItr.dvx;
-                    else if (projection.TargetVx > 0.0)
-                        projection.TargetKnockbackVx = -scaled;
-                }
-            }
-            else if (resolvedItr.effect == 22 || resolvedItr.effect == 23)
-            {
-                projection.TargetKnockbackVx +=
-                    projection.TargetXInt <= projection.AttackerXInt
-                        ? resolvedItr.dvx
-                        : -resolvedItr.dvx;
-            }
-            else if (resolvedItr.dvx != 0)
-            {
-                projection.TargetKnockbackVx +=
-                    attacker.Dirh() > 0 ? resolvedItr.dvx : -resolvedItr.dvx;
-            }
-
-            int targetOid = target.FrameCache?.Wrapper?.characterId ?? target.ObjectId;
-            bool applyOid100KnockbackTail =
-                targetOid == 100 && target.Runtime.LinkState < 0 &&
-                !(projection.TargetVx > -5.0 &&
-                  projection.TargetVx < 5.0 &&
-                  resolvedItr.dvx == 0);
-            if (applyOid100KnockbackTail)
-            {
-                projection.TargetKnockbackVx *= 2.5;
-                if (projection.TargetKnockbackVx > 0.0 &&
-                    projection.TargetKnockbackVx < 10.0)
-                {
-                    projection.TargetKnockbackVx = 10.0;
-                }
-                else if (projection.TargetKnockbackVx < 0.0 &&
-                         projection.TargetKnockbackVx > -10.0)
-                {
-                    projection.TargetKnockbackVx = -10.0;
-                }
-            }
-
-            if (targetType != (int)LF2ObjectType.HeavyWeapon ||
-                resolvedItr.fall > 40)
-            {
-                projection.TargetKnockbackVy +=
-                    resolvedItr.dvy != 0 ? resolvedItr.dvy : -7.0;
-                if ((int)(projection.TargetKnockbackVy + projection.TargetYInt) > 0)
-                    projection.TargetKnockbackVy = 12.0;
-            }
-
-            if (projection.TargetLinkState > 0 &&
-                HasAuthorityHeldTargetRelation(target))
-            {
-                projection.HeldTargetVrestAgainstAttacker = 45;
+                projection.AttackerVrestAgainstHeld = 45;
                 projection.TargetVrestAgainstHeld = 30;
             }
-
-            if (targetType != (int)LF2ObjectType.Drink)
+            var attackerFrame = attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
+            double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
+            double motionX = projection.TargetVx;
+            bool stabilized = motionX > -5.0 && motionX < 5.0 && resolvedItr.dvx == 0;
+            bool oid100 = false;
+            if (!stabilized)
+                projection.TargetKnockbackVz += resolvedItr.dvz;
+            if (stabilized)
+                projection.TargetKnockbackVx += sign * 5.0;
+            else if (attackerFrame.state == 2000)
+                projection.TargetKnockbackVx += projection.AttackerXInt < projection.TargetXInt ? resolvedItr.dvx : -resolvedItr.dvx;
+            else if (targetType == 4 || targetType == 6)
             {
-                ProjectQueuedSound(
-                    targetWorld,
-                    ResolveDamageEffectCue(resolvedItr.effect),
-                    attacker.Runtime.XInt,
-                    ref projection);
-            }
-            ProjectStandardHurtCustomSounds(
-                targetWorld,
-                attacker,
-                target,
-                ref projection);
-            if (applyOid100KnockbackTail)
-            {
-                ProjectQueuedSound(
-                    targetWorld,
-                    "SFX_039",
-                    target.Runtime.XInt,
-                    ref projection);
-            }
-
-            int attackerState = attacker.GetState();
-            ProjectNativeType3AttackerPostHitAction(attacker, ref projection);
-
-            projection.TargetBdefend = 45;
-            ProjectNativeStandardHitRest(
-                attacker,
-                target,
-                resolvedItr,
-                ref projection);
-            ProjectActiveHolderFrameDelay(ref projection);
-
-            if (attackerState == LF2States.WeaponThrowing)
-            {
-                int attackerFrame = ProjectBattleRandInt(ref projection, 16);
-                projection.AttackerFrame = attackerFrame;
-                projection.AttackerRuntimeFrame = attackerFrame;
-                projection.AttackerVx = projection.TargetKnockbackVx * -0.5;
-                projection.AttackerVy = -4.0;
-                if (attacker.GetCurrentDataObjectTypeForSimulation() ==
-                        (int)LF2ObjectType.ThrowWeapon &&
-                    targetType == (int)LF2ObjectType.ThrowWeapon)
+                bool inDirection = sign < 0.0 ? projection.TargetKnockbackVx < 0.0 : projection.TargetKnockbackVx > 0.0;
+                if (resolvedItr.dvx > 0.55 * Math.Abs(motionX) || inDirection)
+                    projection.TargetKnockbackVx += sign * resolvedItr.dvx;
+                else if (sign < 0.0 ? motionX > 0.0 : motionX < 0.0)
+                    projection.TargetKnockbackVx = -0.55 * motionX;
+                oid100 = LF2Entity.ResolveCurrentDataObjectId(attacker) == 100 && attacker.Runtime.LinkState < 0;
+                if (oid100)
                 {
-                    projection.AttackerKnockbackVx = -projection.TargetKnockbackVx;
+                    projection.TargetKnockbackVx *= 2.5;
+                    if (projection.TargetKnockbackVx > 0.0 && projection.TargetKnockbackVx < 10.0)
+                        projection.TargetKnockbackVx = 10.0;
+                    else if (projection.TargetKnockbackVx < 0.0 && projection.TargetKnockbackVx > -10.0)
+                        projection.TargetKnockbackVx = -10.0;
                 }
-            }
-
-            if (targetType == (int)LF2ObjectType.HeavyWeapon)
-            {
-                projection.AttackerVrestAgainstAttacker =
-                    resolvedItr.fall <= 40 && resolvedItr.effect != 4 ? 3 : 19;
-                projection.TargetFacing = projection.AttackerFacing;
-                int targetFrame = resolvedItr.fall <= 40 &&
-                                  projection.TargetYInt >= 0 &&
-                                  resolvedItr.effect != 4
-                    ? 20
-                    : ProjectBattleRandInt(ref projection, 6);
-                projection.TargetFrame = targetFrame;
-                projection.TargetRuntimeFrame = targetFrame;
             }
             else
-            {
-                if (targetType == (int)LF2ObjectType.ThrowWeapon ||
-                    targetType == (int)LF2ObjectType.Drink)
-                {
-                    projection.AttackerVrestAgainstAttacker = 30;
-                }
+                projection.TargetKnockbackVx += sign * resolvedItr.dvx;
 
-                int targetFrame = ProjectBattleRandInt(ref projection, 16);
-                projection.TargetFrame = targetFrame;
-                projection.TargetRuntimeFrame = targetFrame;
+            ProjectNativeBrokenArmorFallback(ref projection);
+            if (targetType != 2 || resolvedItr.fall > 40)
+            {
+                projection.TargetHitCount++;
+                if (resolvedItr.dvy != 0)
+                {
+                    projection.TargetKnockbackVy += resolvedItr.dvy;
+                    if ((int)(projection.TargetYInt + projection.TargetKnockbackVy) > 0)
+                        projection.TargetKnockbackVy = 12.0;
+                }
+                else
+                    projection.TargetKnockbackVy -= 7.0;
+                bool front = target.Dirh() < 0 ? projection.TargetKnockbackVx >= 0.0 : projection.TargetKnockbackVx <= 0.0;
+                projection.TargetFrame = front ? 180 : 186;
+                projection.TargetRuntimeFrame = projection.TargetFrame;
+            }
+            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)
+            {
+                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
+                if (!string.IsNullOrEmpty(cue))
+                    ProjectQueuedSound(targetWorld, cue, projection.AttackerXInt, ref projection);
+            }
+            if (oid100)
+                ProjectQueuedSound(targetWorld, "SFX_039", projection.TargetXInt, ref projection);
+            ProjectNativeStandardHitRest(attacker, target, resolvedItr, ref projection);
+            if (attackerFrame.state == 1002)
+            {
+                var cursor = targetWorld.NativeRandom.CaptureSynchronizedCursor();
+                int action = cursor.Next(0xEEu, 16);
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerVx = -projection.TargetKnockbackVx * 0.5;
+                projection.AttackerVy = -4.0;
+                if (attacker.GetCurrentDataObjectTypeForSimulation() == 4 && targetType == 4)
+                    projection.AttackerKnockbackVx = -projection.TargetKnockbackVx;
+                var rng = projection.NativeWeaponRandom;
+                projection.NativeWeaponRandom = new NTSD28NativeRandomScalarState(rng.CrtState, rng.CrtCalls,
+                    rng.TableSeed, cursor.Counter, cursor.Index, cursor.Calls, cursor.LastCallSite,
+                    rng.SynchronizedTableHash, rng.SynchronizedGeneration);
+            }
+            else if (attackerFrame.state == 3000 || (attackerFrame.state == 3007 && (attackerFrame.cover == 2 || attackerFrame.cover == 3)))
+            {
+                int action = attackerFrame.hit_Fj != 0 ? attackerFrame.hit_Fj : 10;
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerAttackingCounter = 0;
+                projection.AttackerVx = 0.0;
+                var selected = attacker.FrameCache.GetNativeFrameDataById(action);
+                if (selected != null)
+                    projection.AttackerVz = selected.dvx;
             }
 
             ProjectNativeEffectActionOverride(
@@ -3670,11 +3778,6 @@ namespace NTSD.Simulation.Ecs
             {
                 projection.TargetFall = 80;
             }
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker.Runtime.XInt,
-                ref projection);
             ProjectStandardHurtCustomSounds(
                 targetWorld,
                 attacker,
@@ -3704,6 +3807,7 @@ namespace NTSD.Simulation.Ecs
                     : -resolvedItr.dvx;
             }
 
+            ProjectNativeBrokenArmorFallback(ref projection);
             int attackerState = attacker.GetState();
             ProjectNativeType3AttackerPostHitAction(attacker, ref projection);
 
@@ -4356,7 +4460,7 @@ namespace NTSD.Simulation.Ecs
             LF2Entity definitionSource,
             int actionLatch)
         {
-            int action = definitionSource?.GetFrameDataById(actionLatch)?.hit_Uj ?? 0;
+            int action = definitionSource?.FrameCache?.GetNativeFrameDataById(actionLatch)?.hit_Uj ?? 0;
             return action == 0 ? 20 : action;
         }
 
@@ -4883,6 +4987,147 @@ namespace NTSD.Simulation.Ecs
                 .CanQueueSoundsWithoutRejection(requiredSounds) == true;
         }
 
+        private static void ProjectNativeBrokenArmorFallback(ref WriterEffectSnapshot projection)
+        {
+            var route = projection.NativeRoute;
+            if (route.Kind != BattleOrdinaryCharacterDamageRouteKind.UnarmoredType1BrokenFallback ||
+                projection.TargetRuntimeArmorHp != -1 || route.Armor == null)
+                return;
+            if (route.Armor.action != 0)
+            {
+                projection.TargetFrame = route.Armor.action;
+                projection.TargetRuntimeFrame = route.Armor.action;
+            }
+            projection.TargetRuntimeArmorHp = 0;
+        }
+
+        private static bool IsNativeNoncharacterReducedRoute(
+            LF2Entity target, BattleOrdinaryCharacterDamageRoute route)
+        {
+            int type = target?.GetCurrentDataObjectTypeForSimulation() ?? -1;
+            return route.UsesReducedHit && type >= 1 && type <= 6;
+        }
+
+        private static bool CanProjectNativeNoncharacterReduced(
+            LF2Entity attacker, LF2Entity target, InteractionArea itr)
+        {
+            // Nonzero gain needs an independently captured resource-owner tuple.
+            return itr != null && itr.kind == 0 && itr.gain == 0 &&
+                attacker?.Runtime != null && target?.Health != null &&
+                attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1) != null;
+        }
+
+        private static bool ProjectNativeNoncharacterReduced(
+            LF2Entity attacker, LF2Entity target, InteractionArea itr,
+            BattleOrdinaryCharacterDamageRoute route, ref WriterEffectSnapshot projection)
+        {
+            if (!CanProjectNativeNoncharacterReduced(attacker, target, itr))
+                return false;
+            var targetWorld = target.Match ?? attacker.Match;
+            var armor = route.Kind == BattleOrdinaryCharacterDamageRouteKind.ReducedType1Armor
+                ? route.Armor : null;
+            var damage = default(BattleReducedHitDamageResult);
+            int type = target.GetCurrentDataObjectTypeForSimulation();
+            if (type != 6)
+            {
+                damage = BattleReducedHitDamageResolver.Resolve(itr.injury, armor != null,
+                    armor?.type ?? 0, armor?.decrease ?? 0, armor?.mp ?? 0,
+                    armor?.hp ?? 0, target.Runtime.IncomingDamageScale340);
+                if (!damage.Supported)
+                    return false;
+                projection.TargetHp = unchecked(projection.TargetHp - damage.HpDamage);
+                projection.TargetHpBound = unchecked(projection.TargetHpBound - damage.HpDamage / 3);
+                projection.TargetPp = unchecked(projection.TargetPp - damage.MpDamage);
+                projection.TargetInputHpConsumedTotal = unchecked(projection.TargetInputHpConsumedTotal + damage.HpDamage);
+                projection.TargetInputMpConsumedTotal = unchecked(projection.TargetInputMpConsumedTotal + damage.MpDamage);
+                ProjectNativeStandardHitCreditAndConsume(target, damage.HpDamage, ref projection);
+            }
+            if (type == 1 || type == 2 || type == 4 || type == 6)
+            {
+                int injury = BattleDamageWriter.ResolveNativeAttackingInjury(targetWorld, attacker, itr.injury);
+                projection.TargetWeaponFlightCounter = itr.bdefend == 100 ? -1 :
+                    unchecked(projection.TargetWeaponFlightCounter - injury);
+            }
+            projection.NativeWeaponObserved = true;
+            projection.TargetRuntimeArmorHp = unchecked(projection.TargetRuntimeArmorHp + damage.RuntimeArmorHpDelta);
+            if (projection.TargetHp <= 0)
+                projection.TargetFall = 80;
+            projection.TargetAttackingCounter = 0;
+            if (projection.TargetRuntimeArmorHp <= 0)
+                projection.TargetBdefend = unchecked(projection.TargetBdefend + itr.bdefend);
+
+            var attackerFrame = attacker.FrameCache.GetNativeFrameDataById(attacker.Frame.N);
+            bool air = projection.TargetYInt > target.Runtime.CollisionYReference;
+            double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
+            double impulse;
+            if (air)
+                impulse = sign * (projection.TargetFall == 80 && projection.TargetVx > -6.0 &&
+                    projection.TargetVx < 6.0 && itr.dvx < 6 ? 6.0 : itr.dvx);
+            else if (projection.TargetFall == 80 && projection.TargetVx > -3.0 &&
+                     projection.TargetVx < 3.0 && itr.dvx == 0)
+                impulse = attackerFrame.state == 2000
+                    ? (projection.AttackerXInt < projection.TargetXInt ? 6.0 : -6.0) : sign;
+            else if (attackerFrame.state == 2000)
+                impulse = projection.AttackerXInt < projection.TargetXInt ? itr.dvx : -itr.dvx;
+            else
+                impulse = sign * itr.dvx / 2.0;
+            projection.TargetKnockbackVx += impulse;
+            projection.TargetHitCount++;
+            if (!air)
+            {
+                int state = target.FrameCache?.GetNativeFrameDataById(target.Frame?.N ?? -1)?.state ?? 0;
+                int threshold = armor == null ? 30 : Math.Max(armor.ratio, 30);
+                if (projection.TargetBdefend > threshold && (state == 7 || state == 70 || state == 75))
+                {
+                    projection.TargetFrame = 112;
+                    projection.TargetRuntimeFrame = 112;
+                }
+                else if (projection.TargetFrame == 110)
+                {
+                    projection.TargetFrame = 111;
+                    projection.TargetRuntimeFrame = 111;
+                }
+            }
+            ProjectNativeReducedHitRest(attacker, target, itr, ref projection, armor);
+            ProjectActiveHolderFrameDelay(ref projection);
+            if (attackerFrame.state == 1002)
+            {
+                var cursor = targetWorld.NativeRandom.CaptureSynchronizedCursor();
+                int action = cursor.Next(0xF3u, 16);
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerVx = -projection.TargetKnockbackVx * 0.5;
+                projection.AttackerVy = -4.0;
+                projection.AttackerVz /= -1.5;
+                var rng = projection.NativeWeaponRandom;
+                projection.NativeWeaponRandom = new NTSD28NativeRandomScalarState(rng.CrtState, rng.CrtCalls,
+                    rng.TableSeed, cursor.Counter, cursor.Index, cursor.Calls, cursor.LastCallSite,
+                    rng.SynchronizedTableHash, rng.SynchronizedGeneration);
+            }
+            else if (attackerFrame.state == 2000)
+            {
+                if ((projection.AttackerXInt > projection.TargetXInt && projection.AttackerVx >= 0.0) ||
+                    (projection.AttackerXInt < projection.TargetXInt && projection.AttackerVx <= 0.0))
+                {
+                    projection.AttackerVx /= 2.5;
+                    projection.AttackerVz /= 2.5;
+                }
+            }
+            else if (attackerFrame.state == 3000 ||
+                     (attackerFrame.state == 3007 && (attackerFrame.cover == 2 || attackerFrame.cover == 3)))
+            {
+                int action = attackerFrame.hit_Fj != 0 ? attackerFrame.hit_Fj : 10;
+                projection.AttackerFrame = action;
+                projection.AttackerRuntimeFrame = action;
+                projection.AttackerAttackingCounter = 0;
+                projection.AttackerVx = 0.0;
+                var selected = attacker.FrameCache.GetNativeFrameDataById(action);
+                if (selected != null)
+                    projection.AttackerVz = selected.dvx;
+            }
+            return ProjectKind0HitRecord(attacker, target, itr, ref projection, armor, true, false);
+        }
+
         private static bool ProjectAlternateCharacterDamageWriterEffect(
             LF2Entity attacker,
             LF2Entity target,
@@ -5096,58 +5341,59 @@ namespace NTSD.Simulation.Ecs
                 attacker,
                 target,
                 resolvedItr,
-                ref projection);
+                ref projection, selectedArmor, true, false);
         }
 
         private static bool ProjectKind0HitRecord(
             LF2Entity attacker,
             LF2Entity target,
             InteractionArea resolvedItr,
-            ref WriterEffectSnapshot projection)
+            ref WriterEffectSnapshot projection,
+            LF2ArmorData selectedArmor = null,
+            bool armorSparkGate = false,
+            bool unarmoredBranch = true)
         {
-            if (projection.HitRecordCount < LF2Entity.MaxHitRecordSlots)
-            {
-                LF2FrameData attackerFrame = attacker.GetFrameDataById(
-                    projection.AttackerFrame) ?? attacker.Frame?.D;
-                if (attackerFrame == null)
-                    return false;
+            // Alignment contract: NTSD28-Q06-HIT-SPARK-UNITY-001.
+            if (resolvedItr.kind != 0 || resolvedItr.spark == -1 ||
+                projection.HitRecordCount >= LF2Entity.MaxHitRecordSlots)
+                return true;
 
-                int hitX;
-                if (attacker.Dirh() > 0)
-                {
-                    hitX = attacker.Runtime.XInt - attackerFrame.centerx +
-                        resolvedItr.x + resolvedItr.w;
-                    if (hitX > target.Runtime.XInt)
-                        hitX = target.Runtime.XInt;
-                }
-                else
-                {
-                    hitX = attacker.Runtime.XInt + attackerFrame.centerx -
-                        resolvedItr.x - resolvedItr.w;
-                    if (hitX < target.Runtime.XInt)
-                        hitX = target.Runtime.XInt;
-                }
+            var attackerFrame = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.Prev2 ?? -1);
+            var targetFrame = target.FrameCache?.GetNativeFrameDataById(target.Frame?.Prev2 ?? -1);
+            if (attackerFrame == null || targetFrame == null)
+                return true;
 
-                int hitYOffset = attacker.Runtime.YInt + (resolvedItr.h / 2) +
-                    resolvedItr.y - attackerFrame.centery;
-                int lowerY = target.Runtime.YInt - attackerFrame.centery;
-                if (hitYOffset < lowerY)
-                    hitYOffset = (lowerY + hitYOffset) >> 1;
-                else if (hitYOffset > target.Runtime.YInt)
-                    hitYOffset = (target.Runtime.YInt + hitYOffset) >> 1;
+            int encoded = armorSparkGate && selectedArmor != null && selectedArmor.spark != 0
+                ? selectedArmor.spark : resolvedItr.spark;
+            int group = unarmoredBranch && resolvedItr.effect == 1
+                ? 1 : attacker.ResolveNativeHitCandidateIndex(resolvedItr);
+            int hitX = attacker.Dirh() > 0
+                ? System.Math.Min(attacker.Runtime.XInt - attackerFrame.centerx + resolvedItr.x + resolvedItr.w, target.Runtime.XInt)
+                : System.Math.Max(attacker.Runtime.XInt + attackerFrame.centerx - resolvedItr.x - resolvedItr.w, target.Runtime.XInt);
+            int hitY = attacker.Runtime.YInt + resolvedItr.h / 2 +
+                (resolvedItr.cover == 0 ? resolvedItr.y : resolvedItr.cover) - attackerFrame.centery;
+            int top = target.Runtime.YInt - attackerFrame.centery;
+            if (hitY < top)
+                hitY = (hitY + top) / 2;
+            else if (hitY > target.Runtime.YInt)
+                hitY = (hitY + target.Runtime.YInt) / 2;
 
-                projection.HitRecordCount++;
-                int sparkPhase = resolvedItr.effect == 1 ? 1 : 0;
-                projection.HitRecordDamage = resolvedItr.fall > 60
-                    ? sparkPhase * 20
-                    : sparkPhase * 20 + 10;
-                projection.HitRecordZ = attacker.Runtime.ZInt + hitYOffset +
-                    ProjectBattleRandInt(ref projection, 9) - 4;
-                projection.HitRecordX = hitX +
-                    ProjectBattleRandInt(ref projection, 9) - 4;
-            }
-
+            projection.HitRecordCount++;
+            projection.HitRecordDamage = encoded >= 100 && encoded < 200
+                ? encoded - 100 : (group * 2 + (resolvedItr.fall <= 60 ? 1 : 0)) * 10;
+            projection.HitRecordZ = target.Runtime.ZInt + hitY + ProjectSparkCrt(ref projection) - 4;
+            projection.HitRecordX = hitX + ProjectSparkCrt(ref projection) - 4;
             return true;
+        }
+
+        private static int ProjectSparkCrt(ref WriterEffectSnapshot projection)
+        {
+            unchecked
+            {
+                projection.RngCrtState = projection.RngCrtState * 214013u + 2531011u;
+            }
+            projection.RngCrtCalls++;
+            return (int)((projection.RngCrtState >> 16) & 0x7FFFu) % 9;
         }
 
         private static void ProjectNativeType3AttackerPostHitAction(
@@ -5543,7 +5789,7 @@ namespace NTSD.Simulation.Ecs
                 projection.AttackerHp = 0;
             }
 
-            if (!entry.ExpectedReleaseHeavyHeldTargetAfterPreprocess)
+            if (entry.NativePreludeObserved || !entry.ExpectedReleaseHeavyHeldTargetAfterPreprocess)
                 return valid;
 
             int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
@@ -5650,7 +5896,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             int targetType = target.GetCurrentDataObjectTypeForSimulation();
-            if (targetType == (int)LF2ObjectType.HeavyWeapon)
+            if (projection.Kind != 0 && targetType == (int)LF2ObjectType.HeavyWeapon)
             {
                 projection.Dvx /= 2;
                 projection.Dvy /= 2;
@@ -5809,6 +6055,26 @@ namespace NTSD.Simulation.Ecs
             Add(ref hash, BitConverter.DoubleToInt64Bits(snapshot.HeldTargetVy));
             Add(ref hash, snapshot.RngState);
             Add(ref hash, snapshot.RngCallCount);
+            if (snapshot.NativePrelude)
+            {
+                Add(ref hash, snapshot.AttackerVrestAgainstHeld);
+                Add(ref hash, BitConverter.DoubleToInt64Bits(snapshot.TargetVy));
+                Add(ref hash, snapshot.TargetArmorHp);
+                Add(ref hash, snapshot.HeldTargetWaitCounter);
+                Add(ref hash, snapshot.HeldTargetFrameCounter);
+                Add(ref hash, snapshot.HeldTargetPreviousAction);
+                Add(ref hash, snapshot.HeldTargetTickSnapshot);
+                Add(ref hash, snapshot.HeldTargetTargetSlot);
+                Add(ref hash, snapshot.NativeRandom.CrtState);
+                Add(ref hash, snapshot.NativeRandom.CrtCalls);
+                Add(ref hash, snapshot.NativeRandom.TableSeed);
+                Add(ref hash, snapshot.NativeRandom.SynchronizedCounter);
+                Add(ref hash, snapshot.NativeRandom.SynchronizedIndex);
+                Add(ref hash, snapshot.NativeRandom.SynchronizedCalls);
+                Add(ref hash, snapshot.NativeRandom.LastSynchronizedCallSite);
+                Add(ref hash, snapshot.NativeRandom.SynchronizedTableHash);
+                Add(ref hash, snapshot.NativeRandom.SynchronizedGeneration);
+            }
             return hash;
         }
 
@@ -5868,6 +6134,24 @@ namespace NTSD.Simulation.Ecs
                 BitConverter.DoubleToInt64Bits(actual.HeldTargetVy)) mask |= 1UL << 11;
             if (expected.RngState != actual.RngState) mask |= 1UL << 12;
             if (expected.RngCallCount != actual.RngCallCount) mask |= 1UL << 13;
+            if (expected.NativePrelude || actual.NativePrelude)
+            {
+                if (expected.NativePrelude != actual.NativePrelude) mask |= 1UL << 19;
+                if (expected.AttackerVrestAgainstHeld != actual.AttackerVrestAgainstHeld) mask |= 1UL << 14;
+                if (BitConverter.DoubleToInt64Bits(expected.TargetVy) != BitConverter.DoubleToInt64Bits(actual.TargetVy)) mask |= 1UL << 15;
+                if (expected.TargetArmorHp != actual.TargetArmorHp) mask |= 1UL << 16;
+                if (expected.HeldTargetWaitCounter != actual.HeldTargetWaitCounter ||
+                    expected.HeldTargetFrameCounter != actual.HeldTargetFrameCounter ||
+                    expected.HeldTargetPreviousAction != actual.HeldTargetPreviousAction ||
+                    expected.HeldTargetTickSnapshot != actual.HeldTargetTickSnapshot ||
+                    expected.HeldTargetTargetSlot != actual.HeldTargetTargetSlot) mask |= 1UL << 17;
+                var er = expected.NativeRandom;
+                var ar = actual.NativeRandom;
+                if (er.CrtState != ar.CrtState || er.CrtCalls != ar.CrtCalls || er.TableSeed != ar.TableSeed ||
+                    er.SynchronizedCounter != ar.SynchronizedCounter || er.SynchronizedIndex != ar.SynchronizedIndex ||
+                    er.SynchronizedCalls != ar.SynchronizedCalls || er.LastSynchronizedCallSite != ar.LastSynchronizedCallSite ||
+                    er.SynchronizedTableHash != ar.SynchronizedTableHash || er.SynchronizedGeneration != ar.SynchronizedGeneration) mask |= 1UL << 18;
+            }
             return mask;
         }
 
@@ -6011,8 +6295,20 @@ namespace NTSD.Simulation.Ecs
                 expected.HeldTargetRuntimeFrame != actual.HeldTargetRuntimeFrame ||
                 BitConverter.DoubleToInt64Bits(expected.HeldTargetVy) !=
                 BitConverter.DoubleToInt64Bits(actual.HeldTargetVy)) mask |= 1UL << 61;
+            if (expected.NativeWeaponObserved)
+            {
+                var er = expected.NativeWeaponRandom;
+                var ar = actual.NativeWeaponRandom;
+                if (er.TableSeed != ar.TableSeed || er.SynchronizedCounter != ar.SynchronizedCounter ||
+                    er.SynchronizedIndex != ar.SynchronizedIndex || er.SynchronizedCalls != ar.SynchronizedCalls ||
+                    er.LastSynchronizedCallSite != ar.LastSynchronizedCallSite ||
+                    er.SynchronizedTableHash != ar.SynchronizedTableHash || er.SynchronizedGeneration != ar.SynchronizedGeneration)
+                    mask |= 1UL << 62;
+            }
             if (expected.RngState != actual.RngState ||
                 expected.RngCallCount != actual.RngCallCount ||
+                expected.RngCrtState != actual.RngCrtState ||
+                expected.RngCrtCalls != actual.RngCrtCalls ||
                 expected.HitRecordOwnerHandle != actual.HitRecordOwnerHandle ||
                 expected.HitRecordCount != actual.HitRecordCount ||
                 expected.HitRecordDamage != actual.HitRecordDamage ||
@@ -6167,8 +6463,9 @@ namespace NTSD.Simulation.Ecs
             internal uint RngGeneration;
         }
 
-        private struct ConsumeEffectsSnapshot
+        internal struct ConsumeEffectsSnapshot
         {
+            internal bool NativePrelude;
             internal RuntimeEntityHandle AttackerHandle;
             internal int AttackerHp;
             internal RuntimeEntityHandle TargetHandle;
@@ -6183,6 +6480,15 @@ namespace NTSD.Simulation.Ecs
             internal double HeldTargetVy;
             internal uint RngState;
             internal ulong RngCallCount;
+            internal int AttackerVrestAgainstHeld;
+            internal double TargetVy;
+            internal int TargetArmorHp;
+            internal int HeldTargetWaitCounter;
+            internal int HeldTargetFrameCounter;
+            internal int HeldTargetPreviousAction;
+            internal int HeldTargetTickSnapshot;
+            internal int HeldTargetTargetSlot;
+            internal NTSD28NativeRandomScalarState NativeRandom;
         }
 
         private struct LifecycleEffectSnapshot
@@ -6305,6 +6611,11 @@ namespace NTSD.Simulation.Ecs
             internal int HitRecordDamage;
             internal int HitRecordX;
             internal int HitRecordZ;
+            internal bool NativeWeaponObserved;
+            internal NTSD28NativeRandomScalarState NativeWeaponRandom;
+            internal BattleOrdinaryCharacterDamageRoute NativeRoute;
+            internal uint RngCrtState;
+            internal ulong RngCrtCalls;
             internal uint RngState;
             internal ulong RngCallCount;
             internal int PendingSoundCount;
@@ -6369,6 +6680,9 @@ namespace NTSD.Simulation.Ecs
                     BattleFirstBodyResponseKind.None;
                 ObservedFirstBodyResponseKind =
                     BattleFirstBodyResponseKind.None;
+                NativePreludeObserved = false;
+                NativeFeedbackOnly = false;
+                NativeRoute = default;
                 ConsumeEffectsObserved = false;
                 ExpectedConsumeEffectsFingerprint = 0;
                 ObservedConsumeEffectsFingerprint = 0;
@@ -6390,6 +6704,9 @@ namespace NTSD.Simulation.Ecs
             private int ItrKind { get; }
             internal ulong SourceItrFingerprint { get; }
             internal ulong RecordedItrFingerprint { get; }
+            internal bool NativePreludeObserved { get; set; }
+            internal bool NativeFeedbackOnly { get; set; }
+            internal BattleOrdinaryCharacterDamageRoute NativeRoute { get; set; }
             internal bool ZeroAttackerHpOnConsume { get; }
             internal bool ReleaseHeavyHeldTargetOnConsume { get; }
             internal BattleHitCandidatePairSnapshot PairSnapshot { get; }

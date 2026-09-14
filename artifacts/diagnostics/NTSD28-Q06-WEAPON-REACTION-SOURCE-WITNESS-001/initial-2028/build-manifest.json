@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "BC05B995F5B9C57E2281FBE3E6EA5AEA8AA2303E05030FD336B2DAFCCF19DE2B",
+  "captureBinarySha256": "18C11E6AD4FEAA72C096809AC44FE3AFA0C2305AE31F7B46AB956FFA86D21F45",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28WeaponReaction\\weapon_reaction_witness.exe",
+  "authorityWriteAllowed": false
+}

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "SOURCE_MODEL_ONLY",
+  "cases": 138,
+  "checks": 78933,
+  "groups": {
+    "matched": 72,
+    "different_latch_owners": 2,
+    "nonreciprocal_parent": 2,
+    "matched_rest_hold": 24,
+    "cross": 2,
+    "current900": 2,
+    "snapshot_not_current": 2,
+    "priority": 16,
+    "normal_frame_reference": 12,
+    "normal_child": 4
+  },
+  "branches": {
+    "matched": 104,
+    "normal": 20,
+    "body": 2,
+    "rest": 4,
+    "feedback": 8
+  },
+  "sha256": "f68655babcbb106920ec9fc9fa29a69160692acd1be27209c969715041b2c8be",
+  "bytes": 2294742,
+  "sourceOnlyFields": [
+    "extra.yResolved"
+  ],
+  "notCovered": [
+    "other target types",
+    "nonzero armor/broken fallback",
+    "special effects",
+    "full spark geometry",
+    "real EXE input",
+    "Unity runtime"
+  ]
+}

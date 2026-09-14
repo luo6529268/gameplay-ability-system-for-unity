@@ -1,0 +1,163 @@
+<test-suite type="TestSuite" id="9600" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7670" result="Failed" site="Child" start-time="2026-09-14 15:48:04Z" end-time="2026-09-14 15:49:00Z" duration="55.381660" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18159" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7662" result="Failed" site="Child" start-time="2026-09-14 15:48:04Z" end-time="2026-09-14 15:49:00Z" duration="55.304706" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18160" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7662" result="Failed" site="Child" start-time="2026-09-14 15:48:05Z" end-time="2026-09-14 15:49:00Z" duration="55.214369" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18168" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7124" result="Failed" site="Child" start-time="2026-09-14 15:48:05Z" end-time="2026-09-14 15:49:00Z" duration="55.118032" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11679" name="NTSD28Q06NoncharacterReducedEditorTests" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 15:48:05Z" end-time="2026-09-14 15:49:00Z" duration="55.050313" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11684" name="FullReducedTransactionAndGuardsMatch" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 15:48:05Z" end-time="2026-09-14 15:49:00Z" duration="54.950225" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11680" name="FullReducedTransactionAndGuardsMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch(Authority400,False)" methodname="FullReducedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" seed="1923466980" result="Failed" start-time="2026-09-14 15:48:05Z" end-time="2026-09-14 15:48:18Z" duration="13.136264" asserts="0"><properties /><failure><message><![CDATA[  case 24 before slot 1 position.y=0 expected -5
+case 25 before slot 1 position.y=0 expected -5
+case 26 before slot 1 position.y=0 expected -5
+case 27 before slot 1 position.y=0 expected -5
+case 28 before slot 1 position.y=0 expected -5
+case 29 before slot 1 position.y=0 expected -5
+case 30 before slot 1 position.y=0 expected -5
+case 31 before slot 1 position.y=0 expected -5
+case 32 before slot 1 position.y=0 expected -5
+case 33 before slot 1 position.y=0 expected -5
+  Expected: <empty>
+  But was:  < "case 24 before slot 1 position.y=0 expected -5", "case 25 before slot 1 position.y=0 expected -5", "case 26 before slot 1 position.y=0 expected -5", "case 27 before slot 1 position.y=0 expected -5", "case 28 before slot 1 position.y=0 expected -5", "case 29 before slot 1 position.y=0 expected -5", "case 30 before slot 1 position.y=0 expected -5", "case 31 before slot 1 position.y=0 expected -5", "case 32 before slot 1 position.y=0 expected -5", "case 33 before slot 1 position.y=0 expected -5"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NoncharacterReducedEditorTests.cs:51
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=1002, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=2000, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:2585 (active clients: 1)
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+]]></output></test-case><test-case id="11681" name="FullReducedTransactionAndGuardsMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch(Authority400,True)" methodname="FullReducedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" seed="101172400" result="Failed" start-time="2026-09-14 15:48:18Z" end-time="2026-09-14 15:48:31Z" duration="13.077562" asserts="0"><properties /><failure><message><![CDATA[  case 24 before slot 1 position.y=0 expected -5
+case 25 before slot 1 position.y=0 expected -5
+case 26 before slot 1 position.y=0 expected -5
+case 27 before slot 1 position.y=0 expected -5
+case 28 before slot 1 position.y=0 expected -5
+case 29 before slot 1 position.y=0 expected -5
+case 30 before slot 1 position.y=0 expected -5
+case 31 before slot 1 position.y=0 expected -5
+case 32 before slot 1 position.y=0 expected -5
+case 33 before slot 1 position.y=0 expected -5
+  Expected: <empty>
+  But was:  < "case 24 before slot 1 position.y=0 expected -5", "case 25 before slot 1 position.y=0 expected -5", "case 26 before slot 1 position.y=0 expected -5", "case 27 before slot 1 position.y=0 expected -5", "case 28 before slot 1 position.y=0 expected -5", "case 29 before slot 1 position.y=0 expected -5", "case 30 before slot 1 position.y=0 expected -5", "case 31 before slot 1 position.y=0 expected -5", "case 32 before slot 1 position.y=0 expected -5", "case 33 before slot 1 position.y=0 expected -5"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NoncharacterReducedEditorTests.cs:51
+]]></stack-trace></failure></test-case><test-case id="11682" name="FullReducedTransactionAndGuardsMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch(MobileExtended,False)" methodname="FullReducedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" seed="1882432535" result="Failed" start-time="2026-09-14 15:48:31Z" end-time="2026-09-14 15:48:45Z" duration="14.298471" asserts="0"><properties /><failure><message><![CDATA[  case 24 before slot 1 position.y=0 expected -5
+case 25 before slot 1 position.y=0 expected -5
+case 26 before slot 1 position.y=0 expected -5
+case 27 before slot 1 position.y=0 expected -5
+case 28 before slot 1 position.y=0 expected -5
+case 29 before slot 1 position.y=0 expected -5
+case 30 before slot 1 position.y=0 expected -5
+case 31 before slot 1 position.y=0 expected -5
+case 32 before slot 1 position.y=0 expected -5
+case 33 before slot 1 position.y=0 expected -5
+  Expected: <empty>
+  But was:  < "case 24 before slot 1 position.y=0 expected -5", "case 25 before slot 1 position.y=0 expected -5", "case 26 before slot 1 position.y=0 expected -5", "case 27 before slot 1 position.y=0 expected -5", "case 28 before slot 1 position.y=0 expected -5", "case 29 before slot 1 position.y=0 expected -5", "case 30 before slot 1 position.y=0 expected -5", "case 31 before slot 1 position.y=0 expected -5", "case 32 before slot 1 position.y=0 expected -5", "case 33 before slot 1 position.y=0 expected -5"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NoncharacterReducedEditorTests.cs:51
+]]></stack-trace></failure><output><![CDATA[<b><color=#cc7a00>MCP-FOR-UNITY</color></b>: Command TCS timed out (1 consecutive)
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client handler exited (remaining clients: 0)
+]]></output></test-case><test-case id="11683" name="FullReducedTransactionAndGuardsMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch(MobileExtended,True)" methodname="FullReducedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests" runstate="Runnable" seed="7801415" result="Failed" start-time="2026-09-14 15:48:45Z" end-time="2026-09-14 15:49:00Z" duration="14.328562" asserts="0"><properties /><failure><message><![CDATA[  case 24 before slot 1 position.y=0 expected -5
+case 25 before slot 1 position.y=0 expected -5
+case 26 before slot 1 position.y=0 expected -5
+case 27 before slot 1 position.y=0 expected -5
+case 28 before slot 1 position.y=0 expected -5
+case 29 before slot 1 position.y=0 expected -5
+case 30 before slot 1 position.y=0 expected -5
+case 31 before slot 1 position.y=0 expected -5
+case 32 before slot 1 position.y=0 expected -5
+case 33 before slot 1 position.y=0 expected -5
+  Expected: <empty>
+  But was:  < "case 24 before slot 1 position.y=0 expected -5", "case 25 before slot 1 position.y=0 expected -5", "case 26 before slot 1 position.y=0 expected -5", "case 27 before slot 1 position.y=0 expected -5", "case 28 before slot 1 position.y=0 expected -5", "case 29 before slot 1 position.y=0 expected -5", "case 30 before slot 1 position.y=0 expected -5", "case 31 before slot 1 position.y=0 expected -5", "case 32 before slot 1 position.y=0 expected -5", "case 33 before slot 1 position.y=0 expected -5"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NoncharacterReducedEditorTests.FullReducedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NoncharacterReducedEditorTests.cs:51
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

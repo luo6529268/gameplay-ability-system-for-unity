@@ -1,0 +1,8 @@
+FAIL
+System.InvalidOperationException: R4-HIT-02C type1: normal weapon victim must retain raw 180/186 then raw final-frame side effects; frame=1/1, pn=71, attacking=29, wait=17, rngDelta=1, hitConfirm2=1, relation=13, selfVrest=0
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33402 
+  at NTSD.Test.BattleRuntimeSelfCheck.<CheckWeaponVictimRawFrameWriterContract>g__Verify|217_2 (System.String label, System.Int32 weaponType, System.Int32 victimY, System.Int32 expectedFixedFrame, System.Int32 randomUpperExclusive, System.Int32 expectedAttackerSelfVrest) [0x00190] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:17472 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckWeaponVictimRawFrameWriterContract () [0x00004] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:17489 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckAudit4ArchitectDefectContracts () [0x00019] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:16182 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

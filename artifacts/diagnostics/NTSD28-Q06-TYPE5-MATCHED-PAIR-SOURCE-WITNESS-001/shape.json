@@ -1,0 +1,48 @@
+{
+  "status": "final-shape",
+  "expectedCases": 138,
+  "rowKeys": [
+    "index",
+    "group",
+    "params",
+    "before",
+    "status",
+    "message",
+    "matched",
+    "releasedSlot",
+    "after",
+    "audio",
+    "crt",
+    "native",
+    "afterReleasedHoldFinalize"
+  ],
+  "parameterNotes": {
+    "dat": "Three exact parser input strings, slot ordered; ids/types from before.raw[slot].identity",
+    "candidateAttackerAction": 91,
+    "latchUj": "attacker and third; target uses targetLatchUj",
+    "relation": {
+      "0": "zero attacker link",
+      "1": "positive attacker link",
+      "2": "negative attacker link, existing reciprocal parent2",
+      "3": "negative attacker link, absent parent9",
+      "4": "negative attacker link, existing nonreciprocal parent2"
+    },
+    "childRelation": {
+      "0": "no target child",
+      "1": "target positive link, reciprocal child2",
+      "2": "target positive link, child2 parent9 mismatch"
+    },
+    "recover": "3 isolates hold routing, 0 tests standard-rest hold overwrite"
+  },
+  "setupOrder": [
+    "Spawn slots0/1/2 in frame0 using params.dat, raw identity, and starting positions (100,0,200)/(110,0,200)/(10000,0,200).",
+    "Set attacker action91, snapshot actions, rebuild geometry; assert exactly one attacker candidate.",
+    "Apply before.raw/before.extra/rest fixture input, including final current/latch/previous/snapshot and post-freeze targetY. Do not rebuild candidate after applying these inputs.",
+    "Call resolve_ordinary_unarmored_standard_hit(0,0).",
+    "Capture after and audio/RNG call arrays; set all three motionHoldTimer0 and call finalize_horizontal_hit_impulses; capture final."
+  ],
+  "sourceOnlyFields": [
+    "extra.yResolved"
+  ],
+  "beforeIs": "Explicit synthetic fixture input, not default spawn behavior proof."
+}

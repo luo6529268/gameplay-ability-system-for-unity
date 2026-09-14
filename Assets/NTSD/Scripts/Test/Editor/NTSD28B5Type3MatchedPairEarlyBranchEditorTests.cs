@@ -144,7 +144,7 @@ namespace NTSD.Test.Editor
             Assert.That(target.Health.HP, Is.EqualTo(490));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.HitRecordCount, Is.EqualTo(1));
-            Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
+            Assert.That(world.PendingSounds.Count, Is.Zero);
         }
 
         private static InteractionArea DamageInteraction()

@@ -1,0 +1,6 @@
+FAIL
+System.InvalidOperationException: BATTLE-AUDIT7-I1: production candidate preprocess must halve only type2/IronBall dvx/dvy with integer truncation
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33403 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckAudit7IronBallPreprocessContracts () [0x000c4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:19712 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

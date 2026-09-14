@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "cases": 984,
+  "assertions": 5108,
+  "traceSHA256": "12323954821eceea6cfc7aa3155ae66102c4389f4fdb47813dd8febc374c0a4a",
+  "scopes": {
+    "rest_reject_after_prelude": 198,
+    "feedback": 210,
+    "unsupported_after_prelude": 180,
+    "feedback_skips_first_body": 24,
+    "reduced_rest_reject_unchanged": 96
+  },
+  "statuses": {
+    "0": 510,
+    "1": 294,
+    "2": 180
+  },
+  "scope": "Source model only; includes type1 bypass/active and defense priority/rest-result fallback; frozen candidate diagnostic state, no Unity parity claim."
+}

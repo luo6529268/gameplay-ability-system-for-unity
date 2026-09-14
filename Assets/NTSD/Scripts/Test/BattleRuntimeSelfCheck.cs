@@ -13985,6 +13985,12 @@ namespace NTSD.Test
             };
             var attacker = CreateCharacter("SelfCheck_HitRecordAttacker", 1, frameData);
             var victim = CreateCharacter("SelfCheck_HitRecordVictim", 2, frameData);
+            var sparkWorld = new SimulationWorld();
+            sparkWorld.NativeRandom.ResetFromSeed(42);
+            void RecordHit(InteractionArea itr)
+            {
+                BattleNativeHitSparkWriter.Append(sparkWorld, attacker, victim, itr, 0, null, false, true);
+            }
             attacker.SwitchDir("right");
             attacker.Runtime.XInt = 100;
             attacker.Runtime.YInt = -20;
@@ -13995,7 +14001,7 @@ namespace NTSD.Test
             victim.Runtime.ZInt = 20;
             attacker.SetRuntimeSlotIndex(8);
             victim.SetRuntimeSlotIndex(3);
-            victim.RecordKind0Hit(attacker, new InteractionArea
+            RecordHit( new InteractionArea
             {
                 kind = 0, x = 5, y = 7, w = 30, h = 20, fall = 61, effect = 0
             });
@@ -14005,12 +14011,12 @@ namespace NTSD.Test
                 "effect=0 and fall>60 must create timer 0");
             Expect(attacker.GetHitRecordX(0) >= 91 && attacker.GetHitRecordX(0) <= 99,
                 "kind0 hit record X must use the integer frame/itr formula plus [-4,4] RNG");
-            Expect(attacker.GetHitRecordZ(0) >= -27 && attacker.GetHitRecordZ(0) <= -19,
-                "kind0 hit record Z must use the integer frame/itr formula plus [-4,4] RNG");
+            Expect(attacker.GetHitRecordZ(0) >= -37 && attacker.GetHitRecordZ(0) <= -29,
+                "kind0 hit record screen Y must include target Z plus [-4,4] CRT jitter");
 
             attacker.Runtime.ZInt = 10;
             victim.Runtime.ZInt = 20;
-            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 0 });
+            RecordHit( new InteractionArea { kind = 0, fall = 60, effect = 0 });
             Expect(victim.HitRecordCount == 1 && victim.GetHitRecordAge(0) == 10,
                 "effect=0 and fall<=60 must create timer 10 on the larger-Z victim");
 
@@ -14018,25 +14024,25 @@ namespace NTSD.Test
             victim.Runtime.ZInt = 15;
             attacker.SetRuntimeSlotIndex(9);
             victim.SetRuntimeSlotIndex(2);
-            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 61, effect = 1 });
+            RecordHit( new InteractionArea { kind = 0, fall = 61, effect = 1 });
             Expect(attacker.HitRecordCount == 2 && attacker.GetHitRecordAge(1) == 20,
                 "equal ZInt must use the larger runtime slot owner; effect=1/fall>60 timer must be 20");
 
             attacker.SetRuntimeSlotIndex(2);
             victim.SetRuntimeSlotIndex(9);
-            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 1 });
+            RecordHit( new InteractionArea { kind = 0, fall = 60, effect = 1 });
             Expect(victim.HitRecordCount == 2 && victim.GetHitRecordAge(1) == 30,
                 "equal ZInt must use the larger runtime slot owner; effect=1/fall<=60 timer must be 30");
 
             attacker.Runtime.ZInt = 10;
             victim.Runtime.ZInt = 20;
             for (int i = victim.HitRecordCount; i < LF2Entity.MaxHitRecordSlots; i++)
-                victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 60, effect = 0 });
+                RecordHit( new InteractionArea { kind = 0, fall = 60, effect = 0 });
 
             int tailAge = victim.GetHitRecordAge(LF2Entity.MaxHitRecordSlots - 1);
             int tailX = victim.GetHitRecordX(LF2Entity.MaxHitRecordSlots - 1);
             int tailZ = victim.GetHitRecordZ(LF2Entity.MaxHitRecordSlots - 1);
-            victim.RecordKind0Hit(attacker, new InteractionArea { kind = 0, fall = 61, effect = 1 });
+            RecordHit( new InteractionArea { kind = 0, fall = 61, effect = 1 });
             Expect(victim.HitRecordCount == LF2Entity.MaxHitRecordSlots,
                 "kind0 hit records must not grow beyond 10 slots");
             Expect(victim.GetHitRecordAge(LF2Entity.MaxHitRecordSlots - 1) == tailAge &&
@@ -14958,13 +14964,15 @@ namespace NTSD.Test
                 dvx = 1,
                 arest = 4,
                 vrest = 5,
-            }, attacker) && weapon.HitConfirm2 == 1,
-                "BATTLE-AUDIT7-F7: weapon production Hit must expose HitConfirm2 during interaction");
+            }, attacker) && weapon.HitConfirm2 == 0,
+                "BATTLE-AUDIT7-F7: native weapon Hit must preserve HitConfirm2 without a legacy victim-tail write");
             Expect(special.Hit(new InteractionArea { kind = 9 }, attacker) &&
                    special.HitConfirm2 == 0 &&
                    special.Runtime.SpecialHitLatch0EB,
                 "BATTLE-AUDIT7-F7: type3 production Hit must expose the persistent special-hit latch without aliasing HitConfirm2");
 
+            // Explicit legacy carrier input keeps the independent C25 clearing check.
+            weapon.HitConfirm2 = 1;
             weapon.Runtime.TransientMp = 31;
             weapon.Runtime.TransientMp2 = 32;
             weapon.Runtime.TransientMp3 = 33;
@@ -16501,8 +16509,10 @@ namespace NTSD.Test
                    target.ComboCountVic == 31 &&
                    world.DamageStats[1] == 41 &&
                    target.Runtime.WeaponFlightCounter == 67 &&
-                   target.HitConfirm2 == 1,
-                "R8-HIT-005: SpecialAttack CLR shell with current weapon DAT must use weapon vital/durability/tail");
+                   target.HitConfirm2 == 0 &&
+                   target.RelationTeam == 2 &&
+                   target.FallCounter == 80,
+                "R8-HIT-005: SpecialAttack CLR shell with current weapon DAT must use native weapon vital/durability/reaction and preserve hit-confirm/team");
         }
 
         private static void CheckCurrentOtherDatOnWeaponShell(
@@ -17235,8 +17245,8 @@ namespace NTSD.Test
                 ironBall.Runtime.Y = 0.75;
                 ironBall.Runtime.YInt = -1;
                 Expect(ironBall.Hit(Itr(fall: 40, injury: 0), attacker) &&
-                       ironBall.Frame.N >= 0 && ironBall.Frame.N < 6 && ironBall.Frame.N != 20,
-                    "BATTLE-C26: heavy non-knockback frame gate must read YInt=-1 rather than fractional Runtime.Y=0.75");
+                       ironBall.Frame.N == 0,
+                    "BATTLE-C26: native heavy low-fall response must preserve its action independently of height");
             }
 
             {
@@ -17253,16 +17263,16 @@ namespace NTSD.Test
                 int attackerSlot = attacker.Runtime.SlotIndex;
                 Expect(heavy.Hit(Itr(fall: 40, vrest: 11), attacker) &&
                        heavy.ItrRest.GetVrest(attackerSlot) == 11 &&
-                       attacker.ItrRest.GetVrest(attackerSlot) == 3,
-                    "BATTLE-C27: IronBall must preserve authored victim vrest and write attacker self rest=3");
+                       attacker.ItrRest.GetVrest(attackerSlot) == 0,
+                    "BATTLE-C27: IronBall must preserve authored victim vrest and omit the legacy attacker self rest");
 
                 var heavy19World = new SimulationWorld();
                 attacker = Attacker(heavy19World, "SelfCheck_C27_Heavy19Attacker");
                 heavy = Weapon(heavy19World, "SelfCheck_C27_Heavy19", 987, 2);
                 attackerSlot = attacker.Runtime.SlotIndex;
                 Expect(heavy.Hit(Itr(fall: 40, effect: 4), attacker) &&
-                       attacker.ItrRest.GetVrest(attackerSlot) == 19,
-                    "BATTLE-C27: IronBall effect4 must write attacker self rest=19");
+                       attacker.ItrRest.GetVrest(attackerSlot) == 0,
+                    "BATTLE-C27: IronBall effect4 must omit the legacy attacker self rest");
 
                 var heldWorld = new SimulationWorld();
                 FlowSelfCheckEntity holder = Attacker(heldWorld, "SelfCheck_C27_HeldAttackHolder");
@@ -17272,9 +17282,9 @@ namespace NTSD.Test
                 attacker.Runtime.HolderStableId = holder.Runtime.SlotIndex;
                 attackerSlot = attacker.Runtime.SlotIndex;
                 Expect(heavy.Hit(Itr(fall: 40), attacker) &&
-                       holder.ItrRest.GetVrest(attackerSlot) == 3 &&
+                       holder.ItrRest.GetVrest(attackerSlot) == 0 &&
                        attacker.ItrRest.GetVrest(attackerSlot) == 0,
-                    "BATTLE-C27: a linked attacker hitting IronBall must write the holder row, not self row");
+                    "BATTLE-C27: native weapon hit must preserve the holder and attacker self-rest rows");
 
                 foreach (int type in new[] { 4, 6 })
                 {
@@ -17284,8 +17294,8 @@ namespace NTSD.Test
                     attackerSlot = attacker.Runtime.SlotIndex;
                     Expect(flying.Hit(Itr(vrest: 12), attacker) &&
                            flying.ItrRest.GetVrest(attackerSlot) == 12 &&
-                           attacker.ItrRest.GetVrest(attackerSlot) == 30,
-                        $"BATTLE-C27: type{type} must preserve victim vrest and write attacker self rest=30");
+                           attacker.ItrRest.GetVrest(attackerSlot) == 0,
+                        $"BATTLE-C27: type{type} must preserve victim vrest and omit the legacy attacker self rest");
                 }
             }
 
@@ -17298,11 +17308,9 @@ namespace NTSD.Test
                     "SFX_C28_BROKEN");
                 AlternateDamageSelfCheckWeapon victim = Weapon(world, "SelfCheck_C28_Type1", 995, 1, "SFX_C28_HIT");
                 Expect(victim.Hit(Itr(effect: 1), attacker) &&
-                       world.PendingSounds.Count == 3 &&
-                       world.PendingSounds[0].Cue == "SFX_002" &&
-                       world.PendingSounds[1].Cue == "SFX_C28_BROKEN" &&
-                       world.PendingSounds[2].Cue == "SFX_C28_HIT",
-                    "BATTLE-C28: type1 sound order must be effect cue, attacker type3 broken cue, victim hit cue");
+                       world.PendingSounds.Count == 1 &&
+                       world.PendingSounds[0].Cue == "SFX_C28_BROKEN",
+                    "BATTLE-C28: native type1 hit must emit only the attacker type3 broken cue");
 
                 var flyingBWorld = new SimulationWorld();
                 attacker = Attacker(
@@ -17312,10 +17320,9 @@ namespace NTSD.Test
                     "SFX_C28_BROKEN");
                 victim = Weapon(flyingBWorld, "SelfCheck_C28_Type6", 996, 6, "SFX_C28_HIT");
                 Expect(victim.Hit(Itr(effect: 1), attacker) &&
-                       flyingBWorld.PendingSounds.Count == 2 &&
-                       flyingBWorld.PendingSounds[0].Cue == "SFX_C28_BROKEN" &&
-                       flyingBWorld.PendingSounds[1].Cue == "SFX_C28_HIT",
-                    "BATTLE-C28: type6 reaction-only hurt must omit the lead damage-effect cue");
+                       flyingBWorld.PendingSounds.Count == 1 &&
+                       flyingBWorld.PendingSounds[0].Cue == "SFX_C28_BROKEN",
+                    "BATTLE-C28: native type6 reaction must emit only the attacker type3 broken cue");
             }
 
             {
@@ -17340,7 +17347,7 @@ namespace NTSD.Test
                 int attackerSlot = attacker.Runtime.SlotIndex;
                 Expect(currentDat.Hit(Itr(vrest: 9), attacker) &&
                        currentDat.ItrRest.GetVrest(attackerSlot) == 9 &&
-                       attacker.ItrRest.GetVrest(attackerSlot) == 30,
+                       attacker.ItrRest.GetVrest(attackerSlot) == 0,
                     "BATTLE-C27: actual/shared weapon hurt must branch on current DAT type, not pool CLR type");
 
                 var state3000World = new SimulationWorld();
@@ -17418,9 +17425,7 @@ namespace NTSD.Test
                 string label,
                 int weaponType,
                 int victimY,
-                int expectedFixedFrame,
-                int randomUpperExclusive,
-                int expectedAttackerSelfVrest)
+                int expectedFrame)
             {
                 var world = new SimulationWorld();
                 world.Rng.Seed(seed);
@@ -17443,12 +17448,8 @@ namespace NTSD.Test
                     victim.Frame.D.next,
                     preservedWaitCounter);
 
-                var expectedRng = new DeterministicRng(seed);
-                int expectedFrame = expectedFixedFrame;
-                if (randomUpperExclusive > 0)
-                    expectedFrame = expectedRng.NextInt(0, randomUpperExclusive);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                int preservedTeam = victim.RelationTeam;
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
 
                 int attackerSlot = attacker.Runtime.SlotIndex;
                 ulong rngBefore = world.Rng.CallCount;
@@ -17470,21 +17471,23 @@ namespace NTSD.Test
                        victim.Frame.PN == preservedPn &&
                        victim.AttackingCounter == preservedAttackingCounter &&
                        victim.Trans.WaitCounter == preservedWaitCounter &&
-                       rngDelta == expectedRng.CallCount &&
-                       victim.HitConfirm2 == 1 &&
-                       victim.RelationTeam == attacker.RelationTeam &&
-                       attacker.ItrRest.GetVrest(attackerSlot) == expectedAttackerSelfVrest,
-                    $"R4-HIT-02C {label}: normal weapon victim must retain raw 180/186 then raw final-frame side effects; " +
+                       rngDelta == 0 &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2 &&
+                       victim.HitConfirm2 == 0 &&
+                       victim.RelationTeam == preservedTeam &&
+                       attacker.ItrRest.GetVrest(attackerSlot) == 0 &&
+                       victim.FallCounter == 80,
+                    $"R4-HIT-02C {label}: native weapon victim must preserve team/counters, retain reaction80 and omit the legacy random tail; " +
                     $"frame={victim.Frame.N}/{victim.Runtime.Frame}, pn={victim.Frame.PN}, attacking={victim.AttackingCounter}, " +
                     $"wait={victim.Trans.WaitCounter}, rngDelta={rngDelta}, hitConfirm2={victim.HitConfirm2}, " +
                     $"relation={victim.RelationTeam}, selfVrest={attacker.ItrRest.GetVrest(attackerSlot)}");
             }
 
-            Verify("type1", 1, 0, -1, 16, 0);
-            Verify("type4", 4, 0, -1, 16, 30);
-            Verify("type6", 6, 0, -1, 16, 30);
-            Verify("type2-ground", 2, 0, 20, 0, 3);
-            Verify("type2-air", 2, -1, -1, 6, 3);
+            Verify("type1", 1, 0, 186);
+            Verify("type4", 4, 0, 186);
+            Verify("type6", 6, 0, 186);
+            Verify("type2-ground", 2, 0, 0);
+            Verify("type2-air", 2, -1, 0);
         }
 
         private static void CheckWeaponAttackerRawFrameAndOrderingContract()
@@ -17614,10 +17617,9 @@ namespace NTSD.Test
                 victim.KnockbackVx = 8.0;
                 PrepareAttacker(attacker);
                 world.Rng.Seed(seed);
-                var expectedRng = new DeterministicRng(seed);
-                int expectedFrame = expectedRng.NextInt(0, 16);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                var expectedNative = world.NativeRandom.CaptureSynchronizedCursor();
+                int expectedFrame = expectedNative.Next(0xEEu, 16);
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
                 bool accepted = Hit(victim, attacker);
 
                 Expect(accepted &&
@@ -17630,7 +17632,12 @@ namespace NTSD.Test
                        Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
                        Nearly(attacker.Runtime.Vy, -4.0) &&
                        Nearly(attacker.Runtime.Vz, 5.0) &&
-                       world.Rng.CallCount == expectedRng.CallCount,
+                       world.Rng.CallCount == 0 &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedCalls == expectedNative.Calls &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedCounter == expectedNative.Counter &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedIndex == expectedNative.Index &&
+                       world.NativeRandom.CaptureScalarState().LastSynchronizedCallSite == 0xEEu &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
                     $"R4-HIT-02D state1002: raw random16 must preserve PN/attacking/wait before Vx/Vy response; " +
                     $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
                     $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
@@ -17656,11 +17663,10 @@ namespace NTSD.Test
                 victim.KnockbackVx = 8.0;
                 PrepareAttacker(attacker);
                 world.Rng.Seed(seed);
-                var expectedRng = new DeterministicRng(seed);
-                int expectedAttackerFrame = expectedRng.NextInt(0, 16);
-                int expectedVictimFrame = expectedRng.NextInt(0, 16);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                var expectedNative = world.NativeRandom.CaptureSynchronizedCursor();
+                int expectedAttackerFrame = expectedNative.Next(0xEEu, 16);
+                const int expectedVictimFrame = 186;
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
                 bool accepted = Hit(victim, attacker);
 
                 Expect(accepted &&
@@ -17672,7 +17678,12 @@ namespace NTSD.Test
                        Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
                        Nearly(attacker.Runtime.Vy, -4.0) &&
                        Nearly(attacker.KnockbackVx, -victim.KnockbackVx) &&
-                       world.Rng.CallCount == expectedRng.CallCount,
+                       world.Rng.CallCount == 0 &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedCalls == expectedNative.Calls &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedCounter == expectedNative.Counter &&
+                       world.NativeRandom.CaptureScalarState().SynchronizedIndex == expectedNative.Index &&
+                       world.NativeRandom.CaptureScalarState().LastSynchronizedCallSite == 0xEEu &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
                     $"R4-HIT-02D type4 state1002: raw response must preserve side effects and type4 knockback; " +
                     $"attackerFrame={attacker.Frame.N}, victimFrame={victim.Frame.N}, pn={attacker.Frame.PN}, " +
                     $"attacking={attacker.AttackingCounter}, wait={attacker.Trans.WaitCounter}, " +
@@ -17698,8 +17709,7 @@ namespace NTSD.Test
                 PrepareAttacker(attacker);
                 world.Rng.Seed(seed);
                 var expectedRng = new DeterministicRng(seed);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
                 bool accepted = Hit(victim, attacker);
 
                 Expect(accepted &&
@@ -17712,8 +17722,9 @@ namespace NTSD.Test
                        Nearly(attacker.Runtime.Vx, 0.0) &&
                        Nearly(attacker.Runtime.Vy, 6.0) &&
                        Nearly(attacker.Runtime.Vz, 9.0) &&
-                       world.Rng.CallCount == expectedRng.CallCount,
-                    $"R4-HIT-02D state3000: pre-knockdown raw10 must preserve PN/wait/Vy and retain explicit attacking/Vx/Vz writes; " +
+                       world.Rng.CallCount == expectedRng.CallCount &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
+                    $"R4-HIT-02D state3000: post-rest raw10 must preserve PN/wait/Vy and retain explicit attacking/Vx/Vz writes; " +
                     $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
                     $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
                     $"rng={world.Rng.CallCount}");
@@ -17739,9 +17750,8 @@ namespace NTSD.Test
                 PrepareAttacker(attacker);
                 world.Rng.Seed(seed);
                 var expectedRng = new DeterministicRng(seed);
-                int expectedFrame = expectedRng.NextInt(0, 16);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                const int expectedFrame = 10;
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
                 bool accepted = Hit(victim, attacker);
 
                 Expect(accepted &&
@@ -17749,11 +17759,12 @@ namespace NTSD.Test
                        attacker.Frame.PN == preservedPn &&
                        attacker.AttackingCounter == 0 &&
                        attacker.Trans.WaitCounter == preservedWaitCounter &&
-                       Nearly(attacker.Runtime.Vx, -(victim.KnockbackVx * 0.5)) &&
-                       Nearly(attacker.Runtime.Vy, -4.0) &&
+                       Nearly(attacker.Runtime.Vx, 0.0) &&
+                       Nearly(attacker.Runtime.Vy, 6.0) &&
                        Nearly(attacker.Runtime.Vz, 11.0) &&
-                       world.Rng.CallCount == expectedRng.CallCount,
-                    $"R4-HIT-02D order witness: C++ must evaluate state3000 before victim knockdown and state1002 after it; " +
+                       world.Rng.CallCount == expectedRng.CallCount &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
+                    $"R4-HIT-02D order witness: native post reads state once; state3000 selecting state1002 must not execute a second random post; " +
                     $"frame={attacker.Frame.N}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
                     $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
                     $"rng={world.Rng.CallCount}");
@@ -17779,8 +17790,7 @@ namespace NTSD.Test
                 PrepareAttacker(attacker);
                 world.Rng.Seed(seed);
                 var expectedRng = new DeterministicRng(seed);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
                 bool accepted = Hit(victim, attacker);
 
                 Expect(accepted &&
@@ -17792,7 +17802,8 @@ namespace NTSD.Test
                        Nearly(attacker.Runtime.Vx, 0.0) &&
                        Nearly(attacker.Runtime.Vy, 6.0) &&
                        Nearly(attacker.Runtime.Vz, 9.0) &&
-                       world.Rng.CallCount == expectedRng.CallCount,
+                       world.Rng.CallCount == expectedRng.CallCount &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
                     $"R4-HIT-02D {label}: state3000 attacker post-hit must not depend on victim OID/frame; " +
                     $"frame={attacker.Frame.N}/{attacker.Runtime.Frame}, pn={attacker.Frame.PN}, attacking={attacker.AttackingCounter}, " +
                     $"wait={attacker.Trans.WaitCounter}, velocity={attacker.Runtime.Vx}/{attacker.Runtime.Vy}/{attacker.Runtime.Vz}, " +
@@ -18032,8 +18043,7 @@ namespace NTSD.Test
                 string label,
                 int weaponType,
                 int victimY,
-                int fixedFrame,
-                int randomUpperExclusive)
+                int expectedFrame)
             {
                 var world = new SimulationWorld();
                 world.Rng.Seed(seed);
@@ -18058,12 +18068,8 @@ namespace NTSD.Test
                     victim.Frame.D.next,
                     preservedWaitCounter);
 
-                var expectedRng = new DeterministicRng(seed);
-                int expectedFrame = fixedFrame;
-                if (randomUpperExclusive > 0)
-                    expectedFrame = expectedRng.NextInt(0, randomUpperExclusive);
-                expectedRng.NextInt(0, 9);
-                expectedRng.NextInt(0, 9);
+
+                ulong crtBefore = world.NativeRandom.CaptureScalarState().CrtCalls;
 
                 bool accepted = victim.Hit(new InteractionArea
                 {
@@ -18076,8 +18082,8 @@ namespace NTSD.Test
                 }, attacker);
 
                 Expect(accepted &&
-                       victim.HitConfirm2 == 1 &&
-                       victim.RelationTeam == attacker.RelationTeam &&
+                       victim.HitConfirm2 == 0 &&
+                       victim.RelationTeam == -23 &&
                        victim.Frame.N == expectedFrame &&
                        victim.Runtime.Frame == expectedFrame &&
                        ReferenceEquals(victim.Frame.D, victim.GetFrameDataById(expectedFrame)) &&
@@ -18085,17 +18091,18 @@ namespace NTSD.Test
                        victim.AttackingCounter == preservedAttackingCounter &&
                        victim.Trans.WaitCounter == preservedWaitCounter &&
                        victim.Runtime.WeaponFlightCounter == 99 &&
-                       world.Rng.CallCount == expectedRng.CallCount,
-                    $"R4-HIT-004 {label}: normal weapon tail must own final hit-confirm/relation after the hurt path; " +
+                       world.Rng.CallCount == 0 &&
+                       world.NativeRandom.CaptureScalarState().CrtCalls - crtBefore == 2,
+                    $"R4-HIT-004 {label}: native weapon response must preserve hit-confirm/relation with no legacy random tail; " +
                     $"confirm={victim.HitConfirm2}, relation={victim.RelationTeam}, frame={victim.Frame.N}/{victim.Runtime.Frame}, " +
                     $"pn={victim.Frame.PN}, attacking={victim.AttackingCounter}, wait={victim.Trans.WaitCounter}, " +
                     $"flight={victim.Runtime.WeaponFlightCounter}, rng={world.Rng.CallCount}");
             }
 
-            Verify("type1", 1, 0, -1, 16);
-            Verify("type2-ground", 2, 0, 20, 0);
-            Verify("type4", 4, 0, -1, 16);
-            Verify("type6", 6, 0, -1, 16);
+            Verify("type1", 1, 0, 186);
+            Verify("type2-ground", 2, 0, 0);
+            Verify("type4", 4, 0, 186);
+            Verify("type6", 6, 0, 186);
         }
 
         private static void CheckSpecialAttackHitResolveAuditContracts()
@@ -19702,11 +19709,11 @@ namespace NTSD.Test
                 authoredItr,
                 out bool zeroIronBallAttackerHp,
                 out bool releaseIronBallHeldTarget);
-            Expect(!ReferenceEquals(ironBallItr, authoredItr) &&
-                   ironBallItr.dvx == 3 && ironBallItr.dvy == -2 &&
+            Expect(ReferenceEquals(ironBallItr, authoredItr) &&
+                   ironBallItr.dvx == 7 && ironBallItr.dvy == -5 &&
                    ironBallItr.kind == 0 && ironBallItr.injury == 13 &&
                    !zeroIronBallAttackerHp && !releaseIronBallHeldTarget,
-                "BATTLE-AUDIT7-I1: production candidate preprocess must halve only type2/IronBall dvx/dvy with integer truncation");
+                "BATTLE-AUDIT7-I1: native kind0 candidate preprocessing must preserve heavy target dvx/dvy");
             Expect(authoredItr.dvx == 7 && authoredItr.dvy == -5 &&
                    authoredItr.kind == 0 && authoredItr.injury == 13,
                 "BATTLE-AUDIT7-I1: type2 runtime preprocessing must not mutate authored itr data");
@@ -19721,7 +19728,7 @@ namespace NTSD.Test
             Expect(ReferenceEquals(drinkItr, authoredItr) &&
                    drinkItr.dvx == 7 && drinkItr.dvy == -5 &&
                    !zeroDrinkAttackerHp && !releaseDrinkHeldTarget,
-                "BATTLE-AUDIT7-I1: type6/Drink must not receive the type2 IronBall knockback reduction");
+                "BATTLE-AUDIT7-I1: type6/Drink must preserve authored knockback values");
             Expect(world.Rng.CallCount == callsBefore,
                 "BATTLE-AUDIT7-I1: shared type2/type6 preprocessing must not consume battle RNG");
         }

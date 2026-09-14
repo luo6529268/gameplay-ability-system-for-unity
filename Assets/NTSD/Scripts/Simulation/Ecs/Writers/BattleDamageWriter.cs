@@ -1105,6 +1105,8 @@ namespace NTSD.Simulation.Ecs
                         .ReducedType1Armor
                         ? route.Armor
                         : null);
+                BattleNativeHitSparkWriter.Append(world, attacker, victim, itr,
+                    attacker.ResolveNativeHitCandidateIndex(itr), route.Armor, true, false);
                 return true;
             }
 
@@ -1220,6 +1222,7 @@ namespace NTSD.Simulation.Ecs
                 livingVictim.Attacker = livingAttacker;
             }
 
+            victim.RecordKind0Hit(attacker, itr);
             return true;
         }
 
@@ -1256,8 +1259,6 @@ namespace NTSD.Simulation.Ecs
             bool flyingLike = flyingA || flyingB;
             bool damageableWeapon = lightThrow || heavyLike || flyingLike;
             bool normalVitalWeapon = lightThrow || heavyLike || flyingA;
-            if (!flyingB)
-                LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
             if (normalVitalWeapon)
             {
                 int effectiveInjury = ResolveNativeUnarmoredHpInjury(
@@ -1298,111 +1299,117 @@ namespace NTSD.Simulation.Ecs
                     victim.Runtime.WeaponFlightCounter -= durabilityInjury;
             }
 
-            // Alignment contract R4-HIT-004: normal weapon type tails own the first
-            // hit-confirm/relation writes after the C++ hurt/reaction path completes.
-            if (!damageableWeapon)
-                victim.RelationTeam = attacker.RelationTeam;
-            if (victimType != (int)LF2ObjectType.HeavyWeapon || itr.fall > 40)
+            // Alignment contract: NTSD28-Q06-UNARMORED-WEAPON-REACTION-001.
+            // Native weapon reactions retain timer 80 and do not transfer team or roll a victim action.
+            victim.Runtime.Bdefend = 45;
+            victim.FallCounter = 80;
+            if (victim.Runtime.LinkState > 0)
+            {
+                int childSlot = victim.Runtime.TargetSlotIndex;
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(childSlot);
+                if (child?.Runtime?.HolderStableId == victim.Runtime.SlotIndex)
+                {
+                    attacker.ItrRest?.SetVrest(childSlot, 45);
+                    victim.ItrRest?.SetVrest(childSlot, 30);
+                }
+            }
+            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)
+            {
+                string sound = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
+                if (!string.IsNullOrEmpty(sound))
+                    attacker.QueueBattleSound(sound);
+            }
+
+            ArmNativeUnarmoredHitMotion(victim.Runtime, attacker.Runtime, itr);
+            ApplyNativeUnarmoredHorizontalResponse(attacker, victim, itr, flyingLike);
+            if (!heavyLike || itr.fall > 40)
                 victim.HitCount++;
 
-            victim.FallCounter += itr.fall != 0 ? itr.fall : 20;
-            if (damageableWeapon)
-                victim.FallCounter = 80;
-
-            bool knockdown = victim.FallCounter > 60 &&
-                victimType != (int)LF2ObjectType.SpecialAttack;
-            LF2HitResolveRuntimeData.RecordStandardHurtSounds(
-                attacker,
-                victim,
-                itr,
-                knockdown);
-
-            ArmNativeUnarmoredHitMotion(
-                victim.Runtime,
-                attacker.Runtime,
-                itr);
-
-            float defaultDvx = itr.dvx != 0
-                ? attacker.Dirh() * (float)itr.dvx
-                : 0f;
-            bool skipOid100Tail =
-                LF2HitResolveRuntimeData.ShouldSkipOid100KnockbackTail(
-                    victim,
-                    itr,
-                    knockdown);
-            if (flyingLike && !skipOid100Tail)
+            ApplyNativeBrokenArmorFallback(attacker, victim);
+            if (!heavyLike || itr.fall > 40)
             {
-                ApplyFlyingWeaponKnockbackX(attacker, victim, itr);
-            }
-            else
-            {
-                float resolvedDvx =
-                    LF2HitResolveRuntimeData.ResolveStandardDamageKnockbackX(
-                        attacker,
-                        victim,
-                        itr,
-                        knockdown,
-                        defaultDvx);
-                victim.KnockbackVx += resolvedDvx;
-            }
-            if (!skipOid100Tail)
-                LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(victim);
-
-            ApplyNativeType3AttackerPostHitAction(attacker);
-
-            if (knockdown)
-            {
-                if ((!heavyLike &&
-                     victimType != (int)LF2ObjectType.SpecialAttack) ||
-                    itr.fall > 40)
+                if (itr.dvy != 0)
                 {
-                    victim.KnockbackVy += itr.dvy != 0 ? itr.dvy : -7.0;
-                }
-
-                if ((int)(victim.KnockbackVy + victim.GetRuntimeYInt()) > 0)
-                    victim.KnockbackVy = 12.0;
-
-                int hitFrame = victim.Dirh() > 0
-                    ? (victim.KnockbackVx <= 0.0
-                        ? LF2StandardFrames.FallingFront
-                        : LF2StandardFrames.FallingBack)
-                    : (victim.KnockbackVx >= 0.0
-                        ? LF2StandardFrames.FallingFront
-                        : LF2StandardFrames.FallingBack);
-                victim.DirectWriteRawFramePreserveWaitCounter(hitFrame);
-                LF2HitResolveRuntimeData.ApplyKnockdownHeldPairVrest(
-                    victim,
-                    attacker);
-                victim.FallCounter = 0;
-            }
-            else if (heavyLike)
-            {
-                victim.SwitchDir(attacker.Runtime.Dir ?? victim.Runtime.Dir);
-                if (itr.fall <= 40 &&
-                    victim.GetRuntimeYInt() >= 0 &&
-                    itr.effect != 4)
-                {
-                    victim.ImmediateFrame(20);
+                    victim.KnockbackVy += itr.dvy;
+                    if ((int)(victim.GetRuntimeYInt() + victim.KnockbackVy) > 0)
+                        victim.KnockbackVy = 12.0;
                 }
                 else
                 {
-                    victim.ImmediateFrame(victim.BattleRandInt(0, 6));
+                    victim.KnockbackVy -= 7.0;
                 }
-            }
-            else if (lightThrow || flyingLike)
-            {
-                victim.ImmediateFrame(victim.BattleRandInt(0, 16));
+                bool front = victim.Dirh() < 0 ? victim.KnockbackVx >= 0.0 : victim.KnockbackVx <= 0.0;
+                victim.DirectWriteNativeRawFramePreserveWaitCounter(front ? 180 : 186);
             }
 
-            victim.Runtime.Bdefend = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
-            LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
-
-            ApplyWeaponAttackerState1002Response(attacker, victim);
-            ApplyKind0WeaponVictimTail(attacker, victim, itr);
+            ApplyNativeUnarmoredAttackerPostHit(world, attacker, victim);
             ApplyNativeEffectActionOverride(attacker, victim, itr);
             victim.RecordKind0Hit(attacker, itr);
             return true;
+        }
+
+        private static void ApplyNativeUnarmoredHorizontalResponse(
+            LF2Entity attacker, LF2Entity victim, InteractionArea itr, bool flyingLike)
+        {
+            double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
+            double motionX = victim.Runtime.Vx;
+            var frame = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame.N);
+            if (victim.FallCounter == 80 && motionX > -5.0 && motionX < 5.0 && itr.dvx == 0)
+            {
+                victim.KnockbackVx += sign * 5.0;
+            }
+            else if (frame?.state == 2000)
+            {
+                victim.KnockbackVx += attacker.GetRuntimeXInt() < victim.GetRuntimeXInt() ? itr.dvx : -itr.dvx;
+            }
+            else if (flyingLike)
+            {
+                bool inDirection = sign < 0.0 ? victim.KnockbackVx < 0.0 : victim.KnockbackVx > 0.0;
+                if (itr.dvx > 0.55 * System.Math.Abs(motionX) || inDirection)
+                    victim.KnockbackVx += sign * itr.dvx;
+                else if (sign < 0.0 ? motionX > 0.0 : motionX < 0.0)
+                    victim.KnockbackVx = -0.55 * motionX;
+                if (LF2Entity.ResolveCurrentDataObjectId(attacker) == 100 && attacker.Runtime.LinkState < 0)
+                {
+                    victim.KnockbackVx *= 2.5;
+                    if (victim.KnockbackVx > 0.0 && victim.KnockbackVx < 10.0)
+                        victim.KnockbackVx = 10.0;
+                    else if (victim.KnockbackVx < 0.0 && victim.KnockbackVx > -10.0)
+                        victim.KnockbackVx = -10.0;
+                    victim.QueueBattleSound("SFX_039");
+                }
+            }
+            else
+            {
+                victim.KnockbackVx += sign * itr.dvx;
+            }
+        }
+
+        private static void ApplyNativeUnarmoredAttackerPostHit(
+            SimulationWorld world, LF2Entity attacker, LF2Entity victim)
+        {
+            var frame = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame.N);
+            if (frame == null)
+                return;
+            if (frame.state == 1002)
+            {
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(world.NativeRandom.SynchronizedNext(0xEEu, 16));
+                attacker.Runtime.Vx = -victim.KnockbackVx * 0.5;
+                attacker.Runtime.Vy = -4.0;
+                if (attacker.GetCurrentDataObjectTypeForSimulation() == 4 && victim.GetCurrentDataObjectTypeForSimulation() == 4)
+                    attacker.KnockbackVx = -victim.KnockbackVx;
+            }
+            else if (frame.state == 3000 || (frame.state == 3007 && (frame.cover == 2 || frame.cover == 3)))
+            {
+                int action = frame.hit_Fj != 0 ? frame.hit_Fj : 10;
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(action);
+                attacker.AttackingCounter = 0;
+                attacker.Runtime.Vx = 0.0;
+                var selected = attacker.FrameCache.GetNativeFrameDataById(action);
+                if (selected != null)
+                    attacker.Runtime.Vz = selected.dvx;
+            }
         }
 
         internal bool ApplySpecialAttackDamage(
@@ -1452,7 +1459,10 @@ namespace NTSD.Simulation.Ecs
             if (itr.kind != 0)
                 return false;
 
-            if (victimType == (int)LF2ObjectType.SpecialAttack &&
+            var matchedTargetData = LF2HitResolveRuntimeData.ResolveCharacterData(victim);
+            if ((victimType == (int)LF2ObjectType.SpecialAttack ||
+                 (victimType == (int)LF2ObjectType.Other && matchedTargetData != null &&
+                  (matchedTargetData.armors == null || matchedTargetData.armors.Count == 0))) &&
                 TryApplyNativeType3MatchedPairEarlyBranch(
                     world,
                     attacker,
@@ -1462,7 +1472,11 @@ namespace NTSD.Simulation.Ecs
                 return true;
             }
 
-            LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
+            if (victimType == (int)LF2ObjectType.Other)
+            {
+                if (attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1) == null)
+                    return false;
+            }
             int effectiveInjury = ResolveNativeUnarmoredHpInjury(
                 itr.injury,
                 victim.Runtime.IncomingDamageScale340,
@@ -1488,7 +1502,10 @@ namespace NTSD.Simulation.Ecs
                     attacker.Runtime,
                     victim.Runtime);
             }
-            ApplySpecialObjectHurtTail(world, attacker, victim, itr);
+            if (victimType == (int)LF2ObjectType.Other)
+                ApplyNativeType5HurtTail(world, attacker, victim, itr);
+            else
+                ApplySpecialObjectHurtTail(world, attacker, victim, itr);
             if (victimType == (int)LF2ObjectType.SpecialAttack)
                 ApplyKind0Type3Tail(world, attacker, victim, itr);
             ApplyNativeEffectActionOverride(attacker, victim, itr);
@@ -1502,8 +1519,8 @@ namespace NTSD.Simulation.Ecs
             LF2Entity target,
             InteractionArea interaction)
         {
-            int targetState = target.GetState();
-            int attackerState = attacker.GetState();
+            int targetState = target.FrameCache?.GetNativeFrameDataById(target.Frame?.N ?? -1)?.state ?? -1;
+            int attackerState = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1)?.state ?? -1;
             if (!((targetState == LF2States.ObjectFlying &&
                    attackerState == LF2States.ObjectFlying) ||
                   (targetState == LF2States.ObjectExpanding &&
@@ -1516,6 +1533,120 @@ namespace NTSD.Simulation.Ecs
             ApplyNativeType3PairReset(target);
             ApplyNativeType3PairReset(attacker);
             ReleaseNativeType3AttackerMotionHold(world, attacker);
+            return true;
+        }
+
+        private static void ApplyNativeBrokenArmorFallback(LF2Entity attacker, LF2Entity target)
+        {
+            var route = attacker.NativeHitRoute;
+            if (!route.HasValue || route.Value.Kind != BattleOrdinaryCharacterDamageRouteKind.UnarmoredType1BrokenFallback ||
+                target.Runtime.RuntimeArmorHp118 != -1 || route.Value.Armor == null)
+                return;
+            if (route.Value.Armor.action != 0)
+                target.DirectWriteNativeRawFramePreserveWaitCounter(route.Value.Armor.action);
+            target.Runtime.RuntimeArmorHp118++;
+        }
+
+        internal bool TryApplyNativeNoncharacterReducedHit(
+            SimulationWorld world, LF2Entity attacker, LF2Entity target, InteractionArea itr,
+            in BattleOrdinaryCharacterDamageRoute route)
+        {
+            if (world == null || attacker?.Runtime == null || target?.Runtime == null ||
+                target.Health == null || itr == null || itr.kind != 0 || !route.UsesReducedHit)
+                return false;
+            int type = target.GetCurrentDataObjectTypeForSimulation();
+            if (type < 1 || type > 6 || world.GetRawRestVrest(target.Runtime.SlotIndex, attacker.Runtime.SlotIndex) > 0)
+                return false;
+            var frame = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1);
+            if (frame == null)
+                return false;
+            var armor = route.Kind == BattleOrdinaryCharacterDamageRouteKind.ReducedType1Armor ? route.Armor : null;
+            var damage = default(BattleReducedHitDamageResult);
+            if (type != 6)
+            {
+                damage = BattleReducedHitDamageResolver.Resolve(itr.injury, armor != null, armor?.type ?? 0,
+                    armor?.decrease ?? 0, armor?.mp ?? 0, armor?.hp ?? 0, target.Runtime.IncomingDamageScale340);
+                if (!damage.Supported)
+                    return false;
+                target.Health.HP -= damage.HpDamage;
+                target.Health.HPBound -= damage.HpDamage / 3;
+                target.Health.PP -= damage.MpDamage;
+                target.Runtime.InputHpConsumedTotal34C = unchecked(target.Runtime.InputHpConsumedTotal34C + damage.HpDamage);
+                target.Runtime.InputMpConsumedTotal350 = unchecked(target.Runtime.InputMpConsumedTotal350 + damage.MpDamage);
+                ApplyNativeStandardHitCreditAndConsume(world, attacker, target, damage.HpDamage);
+                var resourceAttacker = ResolveNativeHitResourceAttacker(world, attacker.Runtime.SlotIndex);
+                if (resourceAttacker?.Runtime != null)
+                {
+                    // Noncharacter targets skip injury-MP and drain; the resolved character owner can still gain/spend MP.
+                    ApplyNativeHitResourceTransaction(resourceAttacker.Runtime, target.Runtime, 0,
+                        attacker.Runtime.HitResourceSuppression15C, itr.drain, itr.gain,
+                        attacker.Runtime.InputLocalResourceEnabled49D034, 0, 0, resourceAttacker.Health.MaxMP);
+                }
+            }
+            if (type == 1 || type == 2 || type == 4 || type == 6)
+            {
+                target.Runtime.WeaponFlightCounter = unchecked(target.Runtime.WeaponFlightCounter -
+                    ResolveNativeAttackingInjury(world, attacker, itr.injury));
+                if (itr.bdefend == 100)
+                    target.Runtime.WeaponFlightCounter = -1;
+            }
+            target.Runtime.RuntimeArmorHp118 = unchecked(target.Runtime.RuntimeArmorHp118 + damage.RuntimeArmorHpDelta);
+            if (target.Health.HP <= 0)
+                target.FallCounter = 80;
+            target.AttackingCounter = 0;
+            if (target.Runtime.RuntimeArmorHp118 <= 0)
+                target.Runtime.Bdefend = unchecked(target.Runtime.Bdefend + itr.bdefend);
+
+            bool air = target.GetRuntimeYInt() > target.Runtime.CollisionYReference;
+            double sign = attacker.Dirh() < 0 ? -1.0 : 1.0;
+            double impulse;
+            if (air)
+                impulse = sign * (target.FallCounter == 80 && target.Runtime.Vx > -6.0 &&
+                    target.Runtime.Vx < 6.0 && itr.dvx < 6 ? 6.0 : itr.dvx);
+            else if (target.FallCounter == 80 && target.Runtime.Vx > -3.0 && target.Runtime.Vx < 3.0 && itr.dvx == 0)
+                impulse = frame.state == 2000 ? (attacker.GetRuntimeXInt() < target.GetRuntimeXInt() ? 6.0 : -6.0) : sign;
+            else if (frame.state == 2000)
+                impulse = attacker.GetRuntimeXInt() < target.GetRuntimeXInt() ? itr.dvx : -itr.dvx;
+            else
+                impulse = sign * (itr.dvx / 2.0);
+            target.KnockbackVx += impulse;
+            target.HitCount++;
+            if (!air)
+            {
+                var current = target.FrameCache?.GetNativeFrameDataById(target.Frame?.N ?? -1);
+                int state = current?.state ?? 0;
+                int threshold = armor == null ? 30 : System.Math.Max(armor.ratio, 30);
+                if (target.Runtime.Bdefend > threshold && (state == 7 || state == 70 || state == 75))
+                    target.DirectWriteNativeRawFramePreserveWaitCounter(112);
+                else if (target.Frame?.N == 110)
+                    target.DirectWriteNativeRawFramePreserveWaitCounter(111);
+            }
+            ApplyNativeReducedHitRest(world, attacker, target, itr, armor);
+            if (attacker.Runtime.LinkState < 0)
+            {
+                var holder = ResolveActiveHolder(world, attacker);
+                if (holder != null)
+                    holder.FrameDelay = attacker.FrameDelay;
+            }
+            if (frame.state == 1002)
+            {
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(world.NativeRandom.SynchronizedNext(0xF3u, 16));
+                attacker.Runtime.Vx = -target.KnockbackVx * 0.5;
+                attacker.Runtime.Vy = -4.0;
+                attacker.Runtime.Vz /= -1.5;
+            }
+            else if (frame.state == 2000)
+            {
+                if (ShouldDampenNativeReducedState2000(attacker.GetRuntimeXInt(), target.GetRuntimeXInt(), attacker.Runtime.Vx))
+                {
+                    attacker.Runtime.Vx /= 2.5;
+                    attacker.Runtime.Vz /= 2.5;
+                }
+            }
+            else
+                ApplyNativeUnarmoredAttackerPostHit(world, attacker, target);
+            BattleNativeHitSparkWriter.Append(world, attacker, target, itr,
+                attacker.ResolveNativeHitCandidateIndex(itr), armor, true, false);
             return true;
         }
 
@@ -1725,6 +1856,79 @@ namespace NTSD.Simulation.Ecs
                 victim.Runtime.InputHpConsumedTotal34C + effectiveInjury);
         }
 
+        private static void ApplyNativeType5HurtTail(
+            SimulationWorld world, LF2Entity attacker, LF2Entity victim, InteractionArea itr)
+        {
+            // Alignment contract: NTSD28-Q06-TYPE5-UNARMORED-UNITY-001.
+            victim.Runtime.Bdefend = 45;
+            int reaction = unchecked(((victim.Health?.HP ?? 0) <= 0 ? 80 : victim.FallCounter) +
+                (itr.fall == 0 ? 20 : itr.fall));
+            var previous = victim.FrameCache?.GetNativeFrameDataById(victim.Frame?.Prev ?? -1);
+            var snapshot = victim.FrameCache?.GetNativeFrameDataById(victim.Frame?.Prev2 ?? -1);
+            if (previous?.state == 13 || snapshot?.state == 12)
+                reaction = 80;
+            bool above = victim.GetRuntimeYInt() < victim.Runtime.CollisionYReference;
+            int directional = victim.Dirh() == attacker.Dirh() ? 224 : 222;
+            int action = -1;
+            if (reaction > 60)
+                reaction = 80;
+            else if (reaction > 40)
+            {
+                action = 226;
+                reaction = above ? 80 : 60;
+            }
+            else if (reaction > 20)
+            {
+                action = directional;
+                reaction = above ? 80 : 40;
+            }
+            else if (reaction > 0)
+            {
+                action = above ? directional : 220;
+                reaction = 20;
+            }
+            victim.FallCounter = reaction;
+            if (action >= 0)
+                victim.DirectWriteNativeRawFramePreserveWaitCounter(action);
+            if (reaction == 80 && victim.Runtime.LinkState > 0)
+            {
+                int childSlot = victim.Runtime.TargetSlotIndex;
+                var child = world.FindEntityByRuntimeSlotForQuery(childSlot);
+                if (child?.Runtime?.HolderStableId == victim.Runtime.SlotIndex)
+                {
+                    attacker.ItrRest?.SetVrest(childSlot, 45);
+                    victim.ItrRest?.SetVrest(childSlot, 30);
+                }
+            }
+            if (attacker.GetCurrentDataObjectTypeForSimulation() == 3)
+            {
+                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
+                if (!string.IsNullOrEmpty(cue))
+                    attacker.QueueBattleSound(cue);
+            }
+            ArmNativeUnarmoredHitMotion(victim.Runtime, attacker.Runtime, itr);
+            ApplyNativeUnarmoredHorizontalResponse(attacker, victim, itr, false);
+            victim.HitCount++;
+            ApplyNativeBrokenArmorFallback(attacker, victim);
+            if (reaction == 80)
+            {
+                if (itr.dvy != 0)
+                {
+                    victim.KnockbackVy += itr.dvy;
+                    if ((int)(victim.GetRuntimeYInt() + victim.KnockbackVy) > 0)
+                        victim.KnockbackVy = 12.0;
+                }
+                else
+                {
+                    victim.KnockbackVy -= 7.0;
+                }
+                bool front = victim.Dirh() < 0 ? victim.KnockbackVx >= 0.0 : victim.KnockbackVx <= 0.0;
+                victim.DirectWriteNativeRawFramePreserveWaitCounter(front ? 180 : 186);
+            }
+            ApplyNativeStandardHitRest(world, attacker, victim, itr);
+            ApplyNativeUnarmoredAttackerPostHit(world, attacker, victim);
+        }
+
         private static void ApplySpecialObjectHurtTail(
             SimulationWorld world,
             LF2Entity attacker,
@@ -1813,6 +2017,7 @@ namespace NTSD.Simulation.Ecs
             if (!skipOid100Tail)
                 LF2HitResolveRuntimeData.ApplyOid100KnockbackTail(victim);
 
+            ApplyNativeBrokenArmorFallback(attacker, victim);
             ApplyNativeType3AttackerPostHitAction(attacker);
 
             if (knockdown)
@@ -1933,12 +2138,12 @@ namespace NTSD.Simulation.Ecs
             if (entity?.Runtime == null)
                 return;
 
-            LF2FrameData latchedFrame = entity.GetFrameDataById(
+            LF2FrameData latchedFrame = entity.FrameCache?.GetNativeFrameDataById(
                 entity.Trans?.WaitCounter ?? entity.Runtime.WaitCounter);
             int action = latchedFrame?.hit_Uj ?? 0;
             if (action == 0)
                 action = 20;
-            entity.DirectWriteHeldFramePreserveWaitCounter(action);
+            entity.DirectWriteNativeRawFramePreserveWaitCounter(action);
             entity.AttackingCounter = 0;
             entity.KnockbackVx = 0.0;
             entity.KnockbackVy = 0.0;

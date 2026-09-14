@@ -1,0 +1,488 @@
+<test-suite type="TestSuite" id="9554" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7638" result="Failed" site="Child" start-time="2026-09-14 09:15:48Z" end-time="2026-09-14 09:16:32Z" duration="43.494592" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18067" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7630" result="Failed" site="Child" start-time="2026-09-14 09:15:48Z" end-time="2026-09-14 09:16:32Z" duration="43.393434" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="71188" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18068" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7630" result="Failed" site="Child" start-time="2026-09-14 09:15:49Z" end-time="2026-09-14 09:16:32Z" duration="43.298337" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18076" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7092" result="Failed" site="Child" start-time="2026-09-14 09:15:49Z" end-time="2026-09-14 09:16:32Z" duration="43.197215" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11399" name="NTSD28Q06BdefendFieldFamilyEditorTests" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 09:15:49Z" end-time="2026-09-14 09:15:57Z" duration="8.649562" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11404" name="NativeFieldWritesAndRecoveryMatch" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 09:15:49Z" end-time="2026-09-14 09:15:57Z" duration="8.550110" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11400" name="NativeFieldWritesAndRecoveryMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="842633759" result="Failed" start-time="2026-09-14 09:15:49Z" end-time="2026-09-14 09:15:51Z" duration="2.013539" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00578] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11401" name="NativeFieldWritesAndRecoveryMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="466602207" result="Failed" start-time="2026-09-14 09:15:51Z" end-time="2026-09-14 09:15:53Z" duration="1.886949" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00578] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11402" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="1982751406" result="Failed" start-time="2026-09-14 09:15:53Z" end-time="2026-09-14 09:15:55Z" duration="2.332878" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00578] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case><test-case id="11403" name="NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)" methodname="NativeFieldWritesAndRecoveryMatch" classname="NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests" runstate="Runnable" seed="219869393" result="Failed" start-time="2026-09-14 09:15:55Z" end-time="2026-09-14 09:15:57Z" duration="2.208521" asserts="0"><properties /><failure><message><![CDATA[  case 32 after slot 1 identity.battleGroup=1 expected 2
+case 32 after slot 1 frame.action=3 expected 186
+case 32 after slot 1 combat.hitReactionTimer=0 expected 80
+case 33 after slot 1 identity.battleGroup=1 expected 2
+case 33 after slot 1 frame.action=3 expected 186
+case 33 after slot 1 combat.hitReactionTimer=0 expected 80
+case 34 after slot 1 identity.battleGroup=1 expected 2
+case 34 after slot 1 frame.action=3 expected 186
+case 34 after slot 1 combat.hitReactionTimer=0 expected 80
+case 35 after slot 1 identity.battleGroup=1 expected 2
+case 35 after slot 1 frame.action=3 expected 186
+case 35 after slot 1 combat.hitReactionTimer=0 expected 80
+case 36 after slot 1 identity.battleGroup=1 expected 2
+case 36 after slot 1 frame.action=3 expected 186
+case 36 after slot 1 combat.hitReactionTimer=0 expected 80
+  Expected: <empty>
+  But was:  < "case 32 after slot 1 identity.battleGroup=1 expected 2", "case 32 after slot 1 frame.action=3 expected 186", "case 32 after slot 1 combat.hitReactionTimer=0 expected 80", "case 33 after slot 1 identity.battleGroup=1 expected 2", "case 33 after slot 1 frame.action=3 expected 186", "case 33 after slot 1 combat.hitReactionTimer=0 expected 80", "case 34 after slot 1 identity.battleGroup=1 expected 2", "case 34 after slot 1 frame.action=3 expected 186", "case 34 after slot 1 combat.hitReactionTimer=0 expected 80", "case 35 after slot 1 identity.battleGroup=1 expected 2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x00578] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06BdefendFieldFamilyEditorTests.cs:99
+]]></stack-trace></failure></test-case></test-suite></test-suite><test-suite type="TestFixture" id="11664" name="NTSD28Q06PrearmorFeedbackEditorTests" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-14 09:15:57Z" end-time="2026-09-14 09:16:32Z" duration="34.482898" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="ParameterizedMethod" id="11674" name="NativeEarlyReturnTransactionsMatchSource" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests.NativeEarlyReturnTransactionsMatchSource" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-14 09:15:57Z" end-time="2026-09-14 09:16:32Z" duration="34.463248" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="11670" name="NativeEarlyReturnTransactionsMatchSource(Authority400,False)" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests.NativeEarlyReturnTransactionsMatchSource(Authority400,False)" methodname="NativeEarlyReturnTransactionsMatchSource" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" seed="688040038" result="Passed" start-time="2026-09-14 09:15:57Z" end-time="2026-09-14 09:16:05Z" duration="7.858337" asserts="0"><properties /><output><![CDATA[<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=4, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=7, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (active): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+]]></output></test-case><test-case id="11671" name="NativeEarlyReturnTransactionsMatchSource(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests.NativeEarlyReturnTransactionsMatchSource(MobileExtended,False)" methodname="NativeEarlyReturnTransactionsMatchSource" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" seed="1639689041" result="Passed" start-time="2026-09-14 09:16:05Z" end-time="2026-09-14 09:16:14Z" duration="8.365752" asserts="0"><properties /></test-case><test-case id="11672" name="NativeEarlyReturnTransactionsMatchSource(Authority400,True)" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests.NativeEarlyReturnTransactionsMatchSource(Authority400,True)" methodname="NativeEarlyReturnTransactionsMatchSource" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" seed="937140790" result="Passed" start-time="2026-09-14 09:16:14Z" end-time="2026-09-14 09:16:21Z" duration="7.281829" asserts="0"><properties /></test-case><test-case id="11673" name="NativeEarlyReturnTransactionsMatchSource(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests.NativeEarlyReturnTransactionsMatchSource(MobileExtended,True)" methodname="NativeEarlyReturnTransactionsMatchSource" classname="NTSD.Test.NTSD28Q06PrearmorFeedbackEditorTests" runstate="Runnable" seed="1907018860" result="Passed" start-time="2026-09-14 09:16:21Z" end-time="2026-09-14 09:16:32Z" duration="10.869843" asserts="0"><properties /><output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:13118 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

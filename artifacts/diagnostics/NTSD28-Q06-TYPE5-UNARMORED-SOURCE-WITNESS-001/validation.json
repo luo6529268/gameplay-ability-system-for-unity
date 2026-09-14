@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "cases": 585,
+  "assertions": 14048,
+  "sha256": "c164b073b4ee789df121f18dcffe8253d0771c21c37703eca35b2e73d4acf30e",
+  "groups": {
+    "base": 108,
+    "horizontal": 324,
+    "post": 18,
+    "resources": 48,
+    "both_left": 9,
+    "vertical": 18,
+    "tiers": 60
+  },
+  "scope": "Source model only; synthetic frozen candidate and explicit hold release."
+}

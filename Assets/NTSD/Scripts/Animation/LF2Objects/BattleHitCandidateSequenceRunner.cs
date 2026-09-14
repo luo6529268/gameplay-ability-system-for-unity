@@ -100,7 +100,8 @@ namespace NTSD.Animation.LF2Objects
             // NTSD 2.8 checks the persistent special-hit latch after the frozen-pair/vrest gate
             // and aborts the attacker only for character DAT targets, before ITR resolution.
             // Alignment contract: NTSD28-B5-SPECIAL-HIT-LATCH-ATOMIC-PRODUCTION-INTEGRATION-001.
-            bool canConsume = CanConsumeRecordedCandidate(attacker, target);
+            bool ordinaryCandidate = originalItr.kind == 0 || originalItr.kind == 4 || originalItr.kind == 5;
+            bool canConsume = CanConsumeRecordedCandidate(attacker, target, !ordinaryCandidate);
             if (!canConsume)
                 return false;
 
@@ -122,6 +123,10 @@ namespace NTSD.Animation.LF2Objects
                 out bool releaseHeavyHeldTargetOnConsume);
             if (runtimeItr == null)
                 return false;
+
+            bool nativeOrdinary = ordinaryCandidate && runtimeItr.kind == 0;
+            if (ordinaryCandidate && !nativeOrdinary)
+                canConsume = CanConsumeRecordedCandidate(attacker, target);
 
             // Alignment contract: NTSD28-B5-CANDIDATE-EFFECT-TYPE-PRODUCTION-FILTER-001.
             // The release consumer revalidates the resolved runtime ITR before any
@@ -190,7 +195,7 @@ namespace NTSD.Animation.LF2Objects
                 itrIndex,
                 runtimeItr,
                 zeroAttackerHpOnConsume,
-                releaseHeavyHeldTargetOnConsume,
+                releaseHeavyHeldTargetOnConsume && !nativeOrdinary,
                 pairSnapshot);
             BattleHitCandidateDisposition disposition = runtimeItr.kind == 7
                 ? BattleHitCandidateDisposition.Unsupported
@@ -231,15 +236,33 @@ namespace NTSD.Animation.LF2Objects
             if (!LF2HitResolveRuntimeData.IsAttackDisposition(disposition))
                 return false;
 
-            if (BattleFirstBodyResponseWriter
-                    .IsUnarmoredContinuationDisposition(disposition) &&
-                runtimeItr.kind == 0)
+            var prelude = nativeOrdinary ? BattleNativeOrdinaryHitPrelude.Resolve(world, attacker, target, runtimeItr) : default;
+            using var nativeHitScope = attacker.BeginNativeHitCandidate(itrIndex, nativeOrdinary ? prelude.Route : null);
+            if (nativeOrdinary)
+            {
+                var preludeObservation = world.HitExecutionPlanForInteractionModule.PrepareNativePreludeObservation(attacker, target, runtimeItr, in prelude);
+                try
+                {
+                    if (!prelude.RejectBeforePrelude)
+                        BattleNativeOrdinaryHitPrelude.Apply(world, attacker, target, runtimeItr, in prelude);
+                }
+                finally
+                {
+                    world.HitExecutionPlanForInteractionModule.ObserveNativePrelude(attacker, target, in preludeObservation);
+                }
+                if (prelude.RejectBeforePrelude)
+                    return false;
+                if (prelude.RejectAfterPrelude || (!prelude.FeedbackOnly &&
+                    world.GetRawRestVrest(target.Runtime.SlotIndex, attacker.Runtime.SlotIndex) > 0))
+                    return false;
+            }
+            bool feedbackOnly = nativeOrdinary && prelude.FeedbackOnly;
+            if ((!nativeOrdinary || prelude.RunUnarmoredPrelude) && !feedbackOnly &&
+                BattleFirstBodyResponseWriter.IsUnarmoredContinuationDisposition(disposition) && runtimeItr.kind == 0)
             {
                 // Alignment contract:
                 // NTSD28-B5-FIRST-BDY-RESPONSE-ATOMIC-PRODUCTION-INTEGRATION-001.
-                // The native first-current-BDY branch precedes all generic consume
-                // effects and ordinary damage, and a success terminates only this
-                // attacker's remaining candidate sequence.
+                // Unarmored prelude and selected-armor feedback precede this current-BDY response.
                 if (world.ShouldObserveBattleHitExecutionPlanLegacyFirstBodyResponseAttempt)
                 {
                     world.PrepareBattleHitExecutionPlanLegacyFirstBodyResponseAttemptObservation(
@@ -323,7 +346,13 @@ namespace NTSD.Animation.LF2Objects
             int nativeComboAttackerSlot = attacker.Runtime?.SlotIndex ?? -1;
             int nativeComboTargetSlot = target.Runtime?.SlotIndex ?? -1;
             consumer.BeforeDispatch(itrIndex);
-            bool dispatched = disposition == BattleHitCandidateDisposition.Kind8
+            bool dispatched = feedbackOnly
+                ? BattleNativeOrdinaryHitPrelude.AppendFeedback(world, attacker, target, runtimeItr, itrIndex, in prelude)
+                : nativeOrdinary && runtimeItr.kind == 0 && disposition == BattleHitCandidateDisposition.Damage &&
+                  prelude.Route.UsesReducedHit && target.GetCurrentDataObjectTypeForSimulation() >= 1 &&
+                  target.GetCurrentDataObjectTypeForSimulation() <= 6
+                ? world.DamageWriter.TryApplyNativeNoncharacterReducedHit(world, attacker, target, runtimeItr, prelude.Route)
+                : disposition == BattleHitCandidateDisposition.Kind8
                 ? BattleKind8ControlRelationWriter.TryApply(
                     world,
                     attacker,
@@ -370,7 +399,8 @@ namespace NTSD.Animation.LF2Objects
 
         private static bool CanConsumeRecordedCandidate(
             LF2Entity attacker,
-            LF2Entity target)
+            LF2Entity target,
+            bool checkVrest = true)
         {
             if (target == null || target == attacker || target.Runtime == null)
                 return false;
@@ -378,7 +408,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             int attackerSlot = attacker.Runtime?.SlotIndex ?? -1;
-            return attackerSlot < 0 || target.ItrVrestTest(attackerSlot, true);
+            return !checkVrest || attackerSlot < 0 || target.ItrVrestTest(attackerSlot, true);
         }
 
         private static void ObserveSimpleWriterBefore(

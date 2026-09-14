@@ -1,0 +1,130 @@
+<test-suite type="TestSuite" id="9591" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7664" result="Failed" site="Child" start-time="2026-09-14 14:56:57Z" end-time="2026-09-14 14:57:12Z" duration="14.606504" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18141" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7656" result="Failed" site="Child" start-time="2026-09-14 14:56:57Z" end-time="2026-09-14 14:57:12Z" duration="14.517417" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18142" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7656" result="Failed" site="Child" start-time="2026-09-14 14:56:57Z" end-time="2026-09-14 14:57:12Z" duration="14.424867" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18150" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7118" result="Failed" site="Child" start-time="2026-09-14 14:56:57Z" end-time="2026-09-14 14:57:12Z" duration="14.332853" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11814" name="NTSD28Q06Type5MatchedPairEditorTests" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 14:56:57Z" end-time="2026-09-14 14:57:12Z" duration="14.274939" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11819" name="FullMatchedTransactionAndGuardsMatch" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 14:56:58Z" end-time="2026-09-14 14:57:12Z" duration="14.172906" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11815" name="FullMatchedTransactionAndGuardsMatch(Authority400,False)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch(Authority400,False)" methodname="FullMatchedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="138931115" result="Failed" start-time="2026-09-14 14:56:58Z" end-time="2026-09-14 14:57:02Z" duration="3.978784" asserts="0"><properties /><failure><message><![CDATA[  case 0 before slot 0 vitals.baseMaxMp=500 expected 400
+case 0 before slot 1 vitals.baseMaxMp=500 expected 410
+case 0 before slot 2 vitals.baseMaxMp=500 expected 420
+case 1 before slot 0 vitals.baseMaxMp=500 expected 400
+case 1 before slot 1 vitals.baseMaxMp=500 expected 410
+case 1 before slot 2 vitals.baseMaxMp=500 expected 420
+case 2 before slot 0 vitals.baseMaxMp=500 expected 400
+case 2 before slot 1 vitals.baseMaxMp=500 expected 410
+case 2 before slot 2 vitals.baseMaxMp=500 expected 420
+case 3 before slot 0 vitals.baseMaxMp=500 expected 400
+  Expected: <empty>
+  But was:  < "case 0 before slot 0 vitals.baseMaxMp=500 expected 400", "case 0 before slot 1 vitals.baseMaxMp=500 expected 410", "case 0 before slot 2 vitals.baseMaxMp=500 expected 420", "case 1 before slot 0 vitals.baseMaxMp=500 expected 400", "case 1 before slot 1 vitals.baseMaxMp=500 expected 410", "case 1 before slot 2 vitals.baseMaxMp=500 expected 420", "case 2 before slot 0 vitals.baseMaxMp=500 expected 400", "case 2 before slot 1 vitals.baseMaxMp=500 expected 410", "case 2 before slot 2 vitals.baseMaxMp=500 expected 420", "case 3 before slot 0 vitals.baseMaxMp=500 expected 400"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5MatchedPairEditorTests.cs:50
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:14688 (active clients: 1)
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3005, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3005, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3006, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=3006, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=1, itrs=0, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 0 (fixture): pic=0, state=0, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+<color=cyan>[Converter] 帧 900 (fixture): pic=0, state=451, wait=100, next=0, bodies=0, itrs=1, wpoints=0, opoint=无, 属性数=6</color>
+]]></output></test-case><test-case id="11816" name="FullMatchedTransactionAndGuardsMatch(Authority400,True)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch(Authority400,True)" methodname="FullMatchedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="1145774848" result="Failed" start-time="2026-09-14 14:57:02Z" end-time="2026-09-14 14:57:05Z" duration="3.309938" asserts="0"><properties /><failure><message><![CDATA[  case 0 before slot 0 vitals.baseMaxMp=500 expected 400
+case 0 before slot 1 vitals.baseMaxMp=500 expected 410
+case 0 before slot 2 vitals.baseMaxMp=500 expected 420
+case 1 before slot 0 vitals.baseMaxMp=500 expected 400
+case 1 before slot 1 vitals.baseMaxMp=500 expected 410
+case 1 before slot 2 vitals.baseMaxMp=500 expected 420
+case 2 before slot 0 vitals.baseMaxMp=500 expected 400
+case 2 before slot 1 vitals.baseMaxMp=500 expected 410
+case 2 before slot 2 vitals.baseMaxMp=500 expected 420
+case 3 before slot 0 vitals.baseMaxMp=500 expected 400
+  Expected: <empty>
+  But was:  < "case 0 before slot 0 vitals.baseMaxMp=500 expected 400", "case 0 before slot 1 vitals.baseMaxMp=500 expected 410", "case 0 before slot 2 vitals.baseMaxMp=500 expected 420", "case 1 before slot 0 vitals.baseMaxMp=500 expected 400", "case 1 before slot 1 vitals.baseMaxMp=500 expected 410", "case 1 before slot 2 vitals.baseMaxMp=500 expected 420", "case 2 before slot 0 vitals.baseMaxMp=500 expected 400", "case 2 before slot 1 vitals.baseMaxMp=500 expected 410", "case 2 before slot 2 vitals.baseMaxMp=500 expected 420", "case 3 before slot 0 vitals.baseMaxMp=500 expected 400"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5MatchedPairEditorTests.cs:50
+]]></stack-trace></failure></test-case><test-case id="11817" name="FullMatchedTransactionAndGuardsMatch(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch(MobileExtended,False)" methodname="FullMatchedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="1709287279" result="Failed" start-time="2026-09-14 14:57:05Z" end-time="2026-09-14 14:57:08Z" duration="3.425074" asserts="0"><properties /><failure><message><![CDATA[  case 0 before slot 0 vitals.baseMaxMp=500 expected 400
+case 0 before slot 1 vitals.baseMaxMp=500 expected 410
+case 0 before slot 2 vitals.baseMaxMp=500 expected 420
+case 1 before slot 0 vitals.baseMaxMp=500 expected 400
+case 1 before slot 1 vitals.baseMaxMp=500 expected 410
+case 1 before slot 2 vitals.baseMaxMp=500 expected 420
+case 2 before slot 0 vitals.baseMaxMp=500 expected 400
+case 2 before slot 1 vitals.baseMaxMp=500 expected 410
+case 2 before slot 2 vitals.baseMaxMp=500 expected 420
+case 3 before slot 0 vitals.baseMaxMp=500 expected 400
+  Expected: <empty>
+  But was:  < "case 0 before slot 0 vitals.baseMaxMp=500 expected 400", "case 0 before slot 1 vitals.baseMaxMp=500 expected 410", "case 0 before slot 2 vitals.baseMaxMp=500 expected 420", "case 1 before slot 0 vitals.baseMaxMp=500 expected 400", "case 1 before slot 1 vitals.baseMaxMp=500 expected 410", "case 1 before slot 2 vitals.baseMaxMp=500 expected 420", "case 2 before slot 0 vitals.baseMaxMp=500 expected 400", "case 2 before slot 1 vitals.baseMaxMp=500 expected 410", "case 2 before slot 2 vitals.baseMaxMp=500 expected 420", "case 3 before slot 0 vitals.baseMaxMp=500 expected 400"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5MatchedPairEditorTests.cs:50
+]]></stack-trace></failure></test-case><test-case id="11818" name="FullMatchedTransactionAndGuardsMatch(MobileExtended,True)" fullname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch(MobileExtended,True)" methodname="FullMatchedTransactionAndGuardsMatch" classname="NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests" runstate="Runnable" seed="1461033800" result="Failed" start-time="2026-09-14 14:57:08Z" end-time="2026-09-14 14:57:12Z" duration="3.341866" asserts="0"><properties /><failure><message><![CDATA[  case 0 before slot 0 vitals.baseMaxMp=500 expected 400
+case 0 before slot 1 vitals.baseMaxMp=500 expected 410
+case 0 before slot 2 vitals.baseMaxMp=500 expected 420
+case 1 before slot 0 vitals.baseMaxMp=500 expected 400
+case 1 before slot 1 vitals.baseMaxMp=500 expected 410
+case 1 before slot 2 vitals.baseMaxMp=500 expected 420
+case 2 before slot 0 vitals.baseMaxMp=500 expected 400
+case 2 before slot 1 vitals.baseMaxMp=500 expected 410
+case 2 before slot 2 vitals.baseMaxMp=500 expected 420
+case 3 before slot 0 vitals.baseMaxMp=500 expected 400
+  Expected: <empty>
+  But was:  < "case 0 before slot 0 vitals.baseMaxMp=500 expected 400", "case 0 before slot 1 vitals.baseMaxMp=500 expected 410", "case 0 before slot 2 vitals.baseMaxMp=500 expected 420", "case 1 before slot 0 vitals.baseMaxMp=500 expected 400", "case 1 before slot 1 vitals.baseMaxMp=500 expected 410", "case 1 before slot 2 vitals.baseMaxMp=500 expected 420", "case 2 before slot 0 vitals.baseMaxMp=500 expected 400", "case 2 before slot 1 vitals.baseMaxMp=500 expected 410", "case 2 before slot 2 vitals.baseMaxMp=500 expected 420", "case 3 before slot 0 vitals.baseMaxMp=500 expected 400"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type5MatchedPairEditorTests.FullMatchedTransactionAndGuardsMatch (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean shadow) [0x0012e] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type5MatchedPairEditorTests.cs:50
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

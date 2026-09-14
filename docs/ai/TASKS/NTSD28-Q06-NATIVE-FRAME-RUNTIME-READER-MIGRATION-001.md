@@ -1,3 +1,7 @@
+> 最新恢复：前置/反馈四生产路径与运行门已过，父包因damage依赖保持IN_PROGRESS；下一UNARMORED-WEAPON-REACTION-001，然后type5和noncharacter reduced，之后回reader/display。
+
+> 当前Spark原438/2994已证，下一HIT-SPARK-UNITY-001（RecordKind0Hit真实入口/index与hit前armor上下文）；之后feedback/weapon/type5→回父256/full driver，所有待验保持。
+
 > 当前字段已写但父包IN_PROGRESS。新依赖顺序：HIT-SPARK-TRANSACTION-AUDIT→NONCHARACTER-ARMOR-FEEDBACK→UNARMORED-WEAPON-REACTION/TYPE5-HIT-PLAN-COVERAGE→回256及完整driver。反馈只调用spark即返回，所以Spark是必要前置，不是跳过Bdefend验收。
 
 > 当前Bdefend源256已VERIFIED，下一BDEFEND-FIELD-FAMILY-UNITY-001：actual/armor reader/Shadow同字段，非角色首type0反馈和signed add不能泛化。之后Spark事务，再回父完整driver，资源Q07仍后置。
@@ -65,3 +69,5 @@ Native零模板是进程级只读约定的定义数据，不得通过修改返�
 - `FrameTransistor`持有运行时wait/next覆盖，不能每tick无条件重绑并重置，必须追踪实际writer。source类型3HP drain、终局state14保持、hold、转场成本与111x/12xx旧special handling均要以实际C25及lifecycle调用链判断归属。
 
 以上为源代码观察，尚无新原函数完整World向量或高位动作完整Play结果，不标记已对齐；快照子包只恢复descriptor与checksum。禁止由此条直接批量替换全部857。
+
+当前恢复：HIT-SPARK-UNITY-001已限定VERIFIED，下一NONCHARACTER-ARMOR-FEEDBACK-001；本umbrella仍IN_PROGRESS，不重做已过source438/34测试。

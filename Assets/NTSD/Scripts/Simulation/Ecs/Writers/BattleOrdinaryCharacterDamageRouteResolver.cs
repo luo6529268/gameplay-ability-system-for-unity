@@ -56,6 +56,14 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity target,
             InteractionArea interaction)
+            => ResolveCore(world, attacker, target, interaction, false);
+
+        internal static BattleOrdinaryCharacterDamageRoute ResolveForNativeEntry(
+            SimulationWorld world, LF2Entity attacker, LF2Entity target, InteractionArea interaction)
+            => ResolveCore(world, attacker, target, interaction, true);
+
+        private static BattleOrdinaryCharacterDamageRoute ResolveCore(
+            SimulationWorld world, LF2Entity attacker, LF2Entity target, InteractionArea interaction, bool nativeEntry)
         {
             LF2CharacterData attackerData =
                 LF2HitResolveRuntimeData.ResolveCharacterData(attacker);
@@ -64,8 +72,8 @@ namespace NTSD.Simulation.Ecs
             if (world == null || attacker?.Runtime == null ||
                 target?.Runtime == null || target.Health == null ||
                 interaction == null || attackerData == null || targetData == null ||
-                target.GetCurrentDataObjectTypeForSimulation() !=
-                    (int)LF2ObjectType.Character)
+                (!nativeEntry && target.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character))
             {
                 return Result(
                     BattleOrdinaryCharacterDamageRouteKind.Unsupported,
@@ -93,7 +101,10 @@ namespace NTSD.Simulation.Ecs
                     target.Frame?.D?.state ?? 0,
                     target.Health.HP,
                     attackerData.type_sub);
-            if (defense.Decision == BattleOrdinaryDefenseDecisionKind.Applies)
+            bool firstArmorIsType1 = targetData.armors != null && targetData.armors.Count > 0 && targetData.armors[0]?.type == 1;
+            bool reducedResultRetainsDefense = !nativeEntry || firstArmorIsType1 ||
+                world.GetRawRestVrest(target.Runtime.SlotIndex, attacker.Runtime.SlotIndex) == 0;
+            if (defense.Decision == BattleOrdinaryDefenseDecisionKind.Applies && reducedResultRetainsDefense)
             {
                 return Result(
                     BattleOrdinaryCharacterDamageRouteKind.ReducedDefense,
@@ -118,6 +129,9 @@ namespace NTSD.Simulation.Ecs
                     armor,
                     interaction.injury);
             }
+
+            if (nativeEntry && target.FrameCache?.GetNativeFrameDataById(target.Frame?.N ?? -1) == null)
+                return Result(BattleOrdinaryCharacterDamageRouteKind.Unsupported, armor, interaction.injury);
 
             int activeModePercent = world.Runtime?.NativeHitResourceRules?.
                 ActiveModeAttackingPercent1C ??

@@ -30,3 +30,7 @@ RED e237d2773ed24bf89f43cfd848ae9b4e四组失败，raw before无首差，原Bdef
 ## 当前非关闭检查点
 
 字段修复已写、角色/普通type3/5原字段吻合，当前完整driver bdefend已清，只剩Spark RNG；但256仍被96feedback、64weapon reaction及32type5 Shadow guard首差阻止。SelfCheck旧观测经独立Record纠正，07:18:42Z完整PASS，未新增Play。本包保持IN_PROGRESS。优先级改为Spark→非角色armor feedback→weapon reaction/type5 plan→回256/full driver。准确证据和数量见同ID artifact REPORT，不豁免任何失败。
+
+后继更新：HIT-SPARK-UNITY-001已限定VERIFIED，旧完整driver四组现PASS/Spark RNG差异清除。当前父记录不关闭，继续非角色反馈→武器反应/type5覆盖→回BDEFEND256；旧96/64/32未在本轮重测。源/测试/Play见spark artifact REPORT。
+
+后继生产进展：NONCHARACTER-ARMOR-FEEDBACK已写前置/反馈并通过684四组、Play2736、自检和本地回放；正式BDEFEND入口现direct192/Shadow208，余64weapon+16type5 guard。完整984余124weapon+108noncharacter reduced，父包保持IN_PROGRESS。下一weapon→type5→reduced后回访。

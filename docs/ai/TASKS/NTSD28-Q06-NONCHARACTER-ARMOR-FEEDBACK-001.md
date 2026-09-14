@@ -1,3 +1,9 @@
+> IN_PROGRESS / PRELUDE_FEEDBACK_RUNTIME_PASS_DAMAGE_DEPENDENCIES_OPEN。四生产路径已实现，684契约/direct-Shadow/两factory Play2736/SelfCheck/本地回放已过；完整984仍232 damage案例未过。下一执行weapon→type5覆盖→noncharacter reduced后回来，不重复此批已过职责。详细状态见同ID artifact REPORT，以下TEST_ONLY/RED状态均为历史。
+
+> IN_PROGRESS / RED_CONFIRMED_BEFORE_INPUT_MATCHED。source984/5108已VERIFIED；Unity两profile各984 before0、after4641/712case。下一唯一动作是按照同ID artifact REPORT落实正式ordinary hit入口顺序与准确生产code-path，然后实施。当前Record只授权到新增测试脚本，不要误以为生产已写。
+
+> READY_SOURCE_ORDER_AND_EXACT_RECORD。前置HIT-SPARK-UNITY-001已VERIFIED；公共Append可用，scope同时服务Shadow与actual。下一步只核本Task原前置及准确code-path，建立新Record，禁止扩成所有armor统一早返。
+
 # 非角色所选护甲反馈路径
 
 READY_AFTER_HIT_SPARK_TRANSACTION。BDEFEND字段原256中96例target types1..6、首armor type0，原保留raw/Bdefend，Unity误走普通伤害。当前完整失败在BDEFEND-FIELD-FAMILY-UNITY-001/after-field-fix。

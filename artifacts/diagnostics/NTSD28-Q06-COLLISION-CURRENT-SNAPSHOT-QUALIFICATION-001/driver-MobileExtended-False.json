@@ -1,9 +1,6 @@
 {
   "cases": 2,
-  "differences": [
-    "caughtAction 10 RNG counts legacy=3 native=0 CRT=0 expected CRT=2",
-    "caughtAction 998 RNG counts legacy=3 native=0 CRT=0 expected CRT=2"
-  ],
+  "differences": [],
   "plans": [
     {
       "caughtAction": 10,

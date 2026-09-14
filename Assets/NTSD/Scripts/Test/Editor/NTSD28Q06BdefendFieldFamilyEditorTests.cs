@@ -31,6 +31,7 @@ namespace NTSD.Test
         public void NativeFieldWritesAndRecoveryMatch(BattleRuntimeProfile profile, bool shadow)
         {
             var differences = new List<string>();
+            var coverageFailures = new List<object>();
             int cases = 0;
             foreach (var row in File.ReadLines(Source).Select(JObject.Parse))
             {
@@ -75,10 +76,18 @@ namespace NTSD.Test
                         world.PostInteractionTickAll(1);
                         var plan = world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
                         if (!plan.CurrentTickPlanValid || plan.ObservedWriterEffectCount != 1 || plan.LastWriterEffectDifferenceMask != 0)
+                        {
                             differences.Add(label + " Shadow plan/effect differs mask=" + plan.LastWriterEffectDifferenceMask);
+                            coverageFailures.Add(new
+                            {
+                                index = (int)row["index"], type = (int)row["type"], armor = (int)row["armorType"],
+                                attackerClr = attacker.GetType().FullName, targetClr = target.GetType().FullName,
+                                targetDatType = target.GetCurrentDataObjectTypeForSimulation(), plan
+                            });
+                        }
                     }
-                    else if (!world.DamageWriter.TryApplyCurrentDatTargetHit(world, attacker, target, attacker.Frame.D.itrs[0], default))
-                        differences.Add(label + " actual writer rejected");
+                    else if (!NTSD28Q06PrearmorFeedbackEditorTests.ConsumeRecordedCandidate(attacker))
+                        differences.Add(label + " formal candidate pipeline unavailable");
                     NTSD28Q06CollisionQualificationEditorTests.CompareRaw(world, row["after"], label + " after", differences);
                     if (target.Runtime.HitStateCount != 241) differences.Add(label + " legacy HitStateCount overwritten=" + target.Runtime.HitStateCount);
                     int after = target.Runtime.Bdefend;
@@ -94,7 +103,7 @@ namespace NTSD.Test
                 finally { NTSD28Q06State18SpawnEditorTests.Shutdown(world); }
             }
             Directory.CreateDirectory(Output);
-            File.WriteAllText(Output + profile + "-" + shadow + ".json", JsonConvert.SerializeObject(new { cases, differences }, Formatting.Indented));
+            File.WriteAllText(Output + profile + "-" + shadow + ".json", JsonConvert.SerializeObject(new { cases, differences, coverageFailures }, Formatting.Indented));
             Assert.That(cases, Is.EqualTo(256));
             Assert.That(differences, Is.Empty, string.Join("\n", differences.Take(15)));
         }

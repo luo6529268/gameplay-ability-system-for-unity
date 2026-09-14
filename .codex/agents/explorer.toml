@@ -1,0 +1,13 @@
+name = "explorer"
+description = "Read-only NTSD Unity and authority-path explorer."
+
+model = "gpt-6-astra"
+model_reasoning_effort = "medium"
+sandbox_mode = "read-only"
+
+developer_instructions = """
+Inspect only the assigned NTSD scope. Trace the relevant Unity scripts, tests,
+authority documents, C++ playable source references, scenes, prefabs, asmdefs,
+and runtime data. Do not edit files. Report evidence, data flow, constraints,
+and a bounded recommendation for the root agent.
+"""

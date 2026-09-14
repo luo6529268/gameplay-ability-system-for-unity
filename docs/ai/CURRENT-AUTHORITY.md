@@ -1,3 +1,123 @@
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / ALL843_FOCUSED_PASS。root已新增LF2Entity.NativeHitCandidateScope可空原Route/嵌套恢复，runner先Resolve再Begin；DamageWriter weapon/type5/type3水平后按明确BrokenFallback消费、bypass -1保持、type3 generic音效去除；HitPlan已同步原route与独立fallback预测。job46a5d9c9928c4c13b69d75976a1feb87 5/5 PASS：843四组before0/diff0+scope嵌套异常恢复。原回归jobf25fb55daf6941ca8c49a4cbe64d36b1 18项17PASS/1旧type3音频断言FAIL，原984/684early/Bdefend/prelude replay全PASS；独立oracle NTSD28-Q06-TYPE3-NATIVE-AUDIO-ORACLE-001 VERIFIED，单断言修正后job4b866e2569774961ad93f303a054d398 4/4 PASS。所有XML同parent artifact保留。下一必须项非零gain/resource-owner独立捕获/比较与源/Unity向量，现CanProjectNativeNoncharacterReduced明确gain非0拒绝，不能当完成；还需新selfcheck、Play两factory/关闭及本批local replay和必要type3专项音频回归。当前无job/build/agent运行；本批四生产文件+单新fixture及单oracle，未改Scene/资源/非战斗。Scene SHA BCD1047B…0E9FB6保持。总目标ACTIVE/Q07未部署，禁止computer-use。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / REDUCED_CORE_PASS_FALLBACK_RED。三生产文件已改：runner原dispatch传prelude.Route，新DamageWriter.TryApplyNativeNoncharacterReducedHit完整reduced；HitPlan保存原NativeRoute并独立预测（worker单文件完成root已读）。刷新编译无CS错误，job843b7b0c7dea469085d07194dda2a170终态四FAIL：843 before0，direct67差异(原14271)，Shadow94(原14346)；681实际reduced行四组全部0差异，剩余仅162fallback子集中的hp_activation/mp_activation/bypass_minus_one。原red和本轮reduced-core-pass-fallback-red均归档。下一步继续修复原命中route到unarmored fallback的明确broken pointer消费，不能HP==-1猜；type3回退音频及Shadow fallback guard未覆盖也需处理，精确必要新增路径先入Record。潜在方式扩展已有LF2Entity.NativeHitCandidateScope瞬时route并确保嵌套恢复/重置，但尚未声明或改该文件本批。新reduced production有非零gain owner处理，Shadow明确gain!=0不预测，需resource owner tuple与非零专项源/运行验证，不能永久跳过；843gain0仅本范围通过。无SelfCheck/Play/原984新回归，未整批关闭。当前无build/test/agent运行，禁止computer-use/非战斗/Scene/资源修改，Q07未部署、总目标ACTIVE。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / PRODUCTION_RED_CONFIRMED。新增单Editor fixture接source843。首次job268c98…因integer/precise归一化before274失败（fixture-position-red保留），仅恢复Runtime.XInt/YInt/ZInt修正。第二job256ee489459a428c9e21be219e390c31终态四FAIL：每组843 before0，direct14271差异、Shadow14346差异，production-red目录完整JSON/XML。source独立review可推进该合成矩阵RED，仍明确未激活resource transfer/status/weak/scale、非零reference/其它attacker类型是后续验证边界。下一步在本Record先加入准确SequenceRunner/DamageWriter/HitPlan路径再实施native reduced route传递与完整事务及独立预测，不再重复RED。原parent108小伤害不足以收口；843所有groups及原984保护都需回归。当前无测试job/build/Play运行，本批Unity生产未改。禁止computer-use/非战斗/Scene/资源修改，Q07未部署、总目标ACTIVE。
+
+> 当前 NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / TEST_FIRST_ONLY，root新增单Editor fixture接843，source子项仍保留实际独立验证边界。尚未改本批Unity生产。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / ACTION843_PASS_SOURCE_REVIEW。新增96 current4/7/70/75/action30/110/Y±5/Bdefend39/40/41行，总843；成功构建两run exit0/11275383bytes一致SHA c2e036569bb39f3692e34c8fce9061083acc18deec228c5cf3d04f413b1abdd0，459183检查PASS，action843归档。发现并纠正预期：state70/75不论朝向优先defense(armor null/threshold30)，state7同向才type1 armor(threshold40)；实际取current而非snapshot0state4。所有行新增完整CRT递推/sync标量事件/火花geometry与selected-route ID检查；162fallback追加broken-pointer HP0对比bypass初始-1保持、原HP/HPBound及不扣armorMP断言。full reduced raw/extra/rest及全部finalizer已验；fallback其它普通尾部仅source输出，不冒充独立全尾部证明。下一步收敛该源任务实际验证边界并独立审查，进入843 Unity fixture RED（source完整DAT/before/after可直接复建）；不要再无证据扩张源矩阵。保留资源/动作/route所有组，不缩到108小伤害测试。首次build参数输出误入helper错误及case771错误route预期已记录，成功重建数据为准。无build/test/agent运行，本批Unity生产未动，总目标ACTIVE/Q07未部署，禁止computer-use/非战斗修改。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / RELATION747_PASS_REMAINING_SOURCE_CHECKS。675的validator已强化全部reduced raw/extra/rest独立预测和全部行after→finalizer全状态计算；再加72 negative-parent/packed-delay行共747，构建/双跑exit0、9920711bytes一致SHA1cd3335b9f912a52a2a05c174a3bf192fa3a3f67c096e5e6f59b1701741c1931，379755检查PASS，relation747目录完整归档。有效parent2无reciprocal也复制rest之后hold，不取负；无效9不fallback；delay105/-205有符号计算已验。162 fallback仍只有选择/activation及finalizer检查，完整普通尾部不冒充验证。下一步补current7/70/75、action110阈值与snapshot分离、spark/随机完整独立递推、broken-fallback关键指针差异；然后Unity fixture RED及三生产文件接线。两Tools root独占，worker撤权停止；本批未改Unity生产，无build/test运行。源任务未关闭，总目标ACTIVE/Q07未部署，matched限定VERIFIED不重做，禁止computer-use/非战斗/Scene/资源修改。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / RESOURCE675_PASS_FULL_TUPLE_PENDING。root两Tools追加324 MP临界、72 armorHP临界、6 bypass_minus_one，共675；构建/两run exit0，8952470bytes一致SHAeb64b286317163c9435bcf1bd42d08d133bc976b52cf52a9c54af34533697bec，独立22239检查PASS。resource675目录含first/repeat/manifest/validation，273和24历史保持。162例确实fallback，validator只验它们decision/activation，不把全部普通尾部算通过；其余513 reduced行已验资源/HP/durability/status/horizontal/post等。新增params armorMp/armorHp/decrease/currentMp/runtimeArmorHp/bdefend，输出armorDecision/activationAvailable/activationMpCost/armorBroken，不仅selectedArmorType。下一步补negative parent hold/current-action阈值、full tuple/finalizer及fallback关键指针差异独立断言，后再Unity RED/三文件实现；本批Unity生产仍未改。无运行build/test/agent，原source worker撤权停止。matched已限定VERIFIED不重做；总目标ACTIVE/Q07未部署/禁止computer-use与非战斗修改。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / MOTION273_PASS_RESOURCE_PENDING。root两Tools已扩展273例（原24+motion216+effect_position24+post2000九例），构建与双跑exit0、3573700bytes一致SHA5e87945ff3ab9368b5225972a0b436333893cadb45aa3284f375ce07107c3c9b，独立9843检查PASS，motion273子目录含manifest。验证了地面±1/小数半速、Y/reference三侧、1002 0xF3及Z/-1.5、2000远离阻尼/相等不减速、22/23无反向例外。完整源任务仍未关闭：资源/armor临界/不足/破裂/bypass、negative parent hold、current/snapshot/action阈值、full tuple/finalizer断言仍待。下一步直接扩展ReducedCase/dat/emit与validator；armor_resolution.cpp105确认MPcost0强制1、currentMP<cost不足，HP<=effectiveInjury破裂（仅mp0）；记录路由不可只用selectedArmorType推断fallback。现无build/test运行，原worker已撤权停止，本批Unity生产未动。matched限定VERIFIED不重做，总目标ACTIVE/Q07未部署，禁止computer-use和非战斗修改。
+
+> 当前NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / BASE24_PASS_FULL_MATRIX_PENDING。原worker两次无产出已中断且撤销写权限，root接管并实际新增两Tools。基础24例构建exit0、双跑exit0/309580bytes一致SHA e5f597a7435e5fb03d705b3bc3519f3fd4adc7bd4f034ccfb0160607816774fe，独立792检查PASS，base24子目录完整归档含manifest。六type×active/defense×injury±7，dvx5；明确尚缺全部资源/armor临界/运动/关系扩展，不能标完整源任务完成。下一步直接扩展当前ReducedCase/reduced_dat/emit_reduced和validator，不重做matched，不改本批Unity生产。Build/NTSD28NoncharacterReduced无运行进程；两子代理已停止或完成。精确路由和consumer/horizontal审计在父NONCHARACTER-REDUCED-HIT-TRANSACTION Task。总目标ACTIVE，Q07未部署，禁止computer-use/非战斗修改。
+
+> 当前启动 NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001 IN_PROGRESS / SOURCE_ONLY；两Tools脚本worker独占，root核对Unity候选级route消费，尚不改本批Unity生产。matched批次已限定VERIFIED不重做。
+
+> 2026-09-14 15:15Z当前唯一游标：NTSD28-Q06-TYPE5-MATCHED-PAIR-EARLY-001 VERIFIED / DECLARED_NO_ARMOR_TYPE5_MATCHED_SCOPE；源NTSD28-Q06-TYPE5-MATCHED-PAIR-SOURCE-WITNESS-001 VERIFIED / SOURCE_MODEL_ONLY。138四组无差异、24+4相关回归、SelfCheck/Play552/关闭已通过；最后matched回放2/2 PASS，80场景160重放tick。两生产文件本轮未再次修改，只补原测试文件回放。下一唯一任务NONCHARACTER-REDUCED-HIT-TRANSACTION-001：先为完整reduced资源/armor/运动/随机补新source见证及准确Record，不能只把原108小伤害样本修绿。只读定位已写入该Task，三生产候选SequenceRunner/DamageWriter/HitPlan，命中时Route需保留，不用armorHP=-1猜。当前无运行job/build/Play。总目标ACTIVE/full incomplete，Q07未部署，schema/raw缺口/跨World epoch/stage.dat USER_HOLD及用户例外保持。禁止computer-use、非战斗与资源变化。
+
+> 2026-09-14 15:09Z当前游标：TYPE5-MATCHED-PAIR-EARLY生产两文件已修复；四138 before0/diff0，24/24相关测试及另旧type3四项4/4 PASS。SelfCheck15:07:54Z PASS；真实Play15:08:59Z 552 PASS（两factory/direct+Shadow、Renderer2→2、场景checksum保持），关闭15:09:11Z PASS（恢复4→4、World/slots/两pool0、两帧Stopped），Scene dirtyfalse/root14。所有证据同ID artifact。唯一剩余本批验收：专门matched local snapshot replay未补（普通type5/weapon replay已通过，不能替代）；补该项及source/主Task治理收口后再进入NONCHARACTER-REDUCED108。当前无运行测试或build/Play probe，下一步不用重做已过矩阵与Play。总目标ACTIVE，Q07未部署，禁止computer-use/非战斗修改，HUDBg30保留。
+
+> matched生产修复当前：138四组before0/diff0，job2f14606469fe40a6a8dab6c794c2ee2d 24/24通过；旧type3准确namespace补跑job33d31e5cef654979b380316477b99dc6 4/4通过。原Editor文件新增本批552真实Play probe，已请求刷新，尚未执行；本批SelfCheck及matched local replay仍待完成。生产两文件独立review未发现新增错误，Scene hash保持。无测试job运行；不要重复原RED或已通过矩阵。
+
+> 2026-09-14 matched批次更新：source138/78933 PASS，Unity有效RED四组before0/3432差异后，已按准确Record修改DamageWriter和HitPlan：无armor type5 matched入口、native current/latch/raw reset、独立Shadow投影。编译Console暂未见CS错误；job 2f14606469fe40a6a8dab6c794c2ee2d正在执行本批/普通type5/weapon。旧type3实际namespace为NTSD.Test.Editor，需补跑准确名称，不能把未选中的类算回归通过。SelfCheck/Play本批未跑，保持IN_PROGRESS。
+
+> 当前执行 `NTSD28-Q06-TYPE5-MATCHED-PAIR-EARLY-001` IN_PROGRESS / PRODUCTION_RED_CONFIRMED。source worker完成138/78933、两遍SHA f68655ba…2c8be，root独立validator PASS；source治理正式收口待整合。新增Unity测试已运行，修正fixture MaxPP→MaxMP后，job a8f32f45a53d45fab1c784f344d68fb6 四组各138/before0/3432差异，证据在同ID artifact production-red/；首次fixture失败也保留。尚未改本批Unity生产，下一步先精确声明DamageWriter/HitPlan路径，再实施matched早返与native latch/reset/Shadow，随后旧type3/普通type5/weapon回归及SelfCheck/Play。当前无运行中的测试或build。用户再次确认HUDBg30是其或其他任务修改，保持；禁止computer-use和非战斗变化。
+
+当前唯一恢复游标（2026-09-14 14:28Z）：
+
+- `NTSD28-Q06-TYPE5-UNARMORED-UNITY-001` VERIFIED / DECLARED_NO_ARMOR_ORDINARY_TYPE5_SCOPE。两生产文件已改：type5 native40/20/0分档/保留80/动作/机械/rest/post/音频，HitPlan独立type5预测；worker只读原型由root重写集成，reviewer只读复核。不要恢复旧50/30/10、清零80、legacy random/post或旧通用音频，不重做已验weapon。
+- 源`TYPE5-UNARMORED-SOURCE-WITNESS-001` VERIFIED / SOURCE_MODEL_ONLY：585/14048，两遍SHA c164b073b4ee789df121f18dcffe8253d0771c21c37703eca35b2e73d4acf30e，source build在Build/NTSD28Type5Witness（避免Editor退出清理Temp），独立validator已保存Tools目录并登记Record。
+- 原四组585 before0/直接各2277、Shadow各2862差异已清零；首次22/22 PASS含weapon14与Bdefend四256。后扩展50项46PASS/4FAIL：type5新增14个local replay/28ticks、原34和684早期等全部PASS；4FAIL仅原完整984 reduced108，每组846差异、before0、Shadow额外0。
+- `TYPE5-HIT-PLAN-COVERAGE-AUDIT-001` VERIFIED / DECLARED_NO_ARMOR_TYPE5_WRITER_COVERAGE。原16例实测plan valid=true/failure0/dispatch1/writer0（不是实际伤害未执行）；先修真实type5再独立投影，现在Bdefend四256全PASS、每candidate观察1。armor/special states/全部DAT-CLR组合未据此关闭。
+- 完整SelfCheck14:21:38Z PASS；真实Play14:24:37Z两factory×direct/Shadow×585=2340 PASS，Scene checksum保持/Renderer2→2；14:24:58Z关闭PASS：restore4→4，World/slots/两pool全0，两帧Stopped。Editor已退出Play、Scene dirtyfalse/root14/hash bcd1047b…保持，生产hash保持。
+- **下一唯一Task：`NTSD28-Q06-TYPE5-MATCHED-PAIR-EARLY-001`，READY_NOW。** reviewer已定位native6616非角色初始matched3005/3006早返，Unity仅type3；旧pair reset/latch getter上限857在latch/action900错误。先新源见证和完整RED，正确位置复用rest→target reset→attacker reset→holder hold release，再独立Shadow；不能只加类型gate。正常非match下prev13/snapshot12、非零reference/正向child-rest也补最小向量。精确合同及source位置在Task和artifact independent-review.md。
+- 然后`NONCHARACTER-REDUCED-HIT-TRANSACTION-001`处理108例（90active type1+18defense），破甲需进入命中时selected route，不能仅RuntimeArmorHp=-1猜测。父NONCHARACTER-ARMOR-FEEDBACK/BDEFEND/collision及Q06 umbrella未整体关闭；之后回完整984/driver/reader/表现，再Q07。
+- 2022 GUI Editor曾退出，原MCP job无终态未伪报；已确认别项目FPSTest2023，两个独立2022 batch分别exit2保留RED。用户重新打开本项目2022 GUI后，预检阻止第二实例，已转原Editor MCP。现在无运行中build/test/Play/request；两个Astra子代理均只读完成。
+- 总目标ACTIVE / FULL_ALIGNMENT_INCOMPLETE。Q07正式DAT/角色图片未部署，Scene仍旧内容/合成fixture；未验物理按键/Logan图片一致性。schema15/23/26/2/2、raw47/3、跨World allocation epoch缺口、stage.dat USER_HOLD/用户例外保持。用户HUDBg30已确认其或其他任务修改并保留，禁止computer-use、非战斗/Unity-GAS/Scene/资源/Server变化；未提交推送。
+
+以下历史检查点由以上当前游标优先：
+
+> 当前实现入口 `NTSD28-Q06-TYPE5-UNARMORED-UNITY-001` IN_PROGRESS / TEST_FIRST_ONLY。source585/14048通过，源two-run SHA c164b073…cf30e；单新增测试复用完整tuple，生产未改。type5旧16例明确plan valid=true、failure0、writer观察0，实际dispatch1，不能将mask0当覆盖通过。
+
+> 当前必要依赖 `NTSD28-Q06-TYPE5-UNARMORED-SOURCE-WITNESS-001` IN_PROGRESS / SOURCE_ONLY。静态确认type5实际旧反应阈值/80清零与源不同，先585向量，不仅补Shadow。原2022 Editor已退出，旧job无最终证据；已核对只有别项目FPSTest的2023 Editor，当前独立2022 batch定向测试在运行，不操作别项目。
+
+> 当前执行 `NTSD28-Q06-TYPE5-HIT-PLAN-COVERAGE-AUDIT-001` IN_PROGRESS / DIAGNOSTIC_ONLY：单Bdefend测试补完整plan/CLR/当前DAT诊断，生产本批尚未改。上一武器包已验收，不重做。
+
+当前唯一恢复游标（2026-09-14 10:39Z）：
+
+- `NTSD28-Q06-UNARMORED-WEAPON-REACTION-001` VERIFIED / DECLARED_WEAPON_TRANSACTION_SCOPE。三生产路径（DamageWriter、BruteForce kind0 heavy预处理、HitPlan）与测试已闭合声明事务；不要重做旧随机team/frame/self-rest尾部或恢复heavy减半。原source2100/43202，两遍SHA28cad088…55a。
+- 最终48/48 PASS：source2100×2profile×direct/Shadow=8400全部0差异；原34、整数X两例、8case本地回放/16ticks、六oracle入口通过。每候选prelude/writer各观察1次。state2000读int X；state1002用native同步0xEE/16，state3000 post只执行一次；保持counter/latch/Fall80/team、精确0.55及type2 low-fall跳过Y/action。
+- 独立`NTSD28-Q06-WEAPON-REACTION-SELF-CHECK-ORACLE-001` VERIFIED / TEST_ORACLE_ONLY：七个旧SelfCheck方法按当前源纠正，旧三次FAIL保留。完整SelfCheck10:33:50Z PASS。`NTSD28-Q06-WEAPON-REACTION-SOURCE-WITNESS-001` VERIFIED / SOURCE_MODEL_ONLY。
+- 真实Play10:36:58Z两factory×direct/Shadow×2100=8400 PASS，Scene checksum不变/Renderer2→2；10:37:31Z关闭PASS，原位restore4→4、World/slots/两pool全0、两帧Stopped。Editor idle非Play，Console error0，Scene dirtyfalse/root14/hash bcd1047b…保持。生产/正式EXE hash保持，未提交。
+- **下一唯一Task：`NTSD28-Q06-TYPE5-HIT-PLAN-COVERAGE-AUDIT-001`**。最新BDEFEND两profile direct256均PASS，Shadow每profile只剩16无armor type5观察guard；需输出valid/count/failure再落实对应owner，不删断言。当前DAT/CLR不一致的weapon旧Shadow guard亦为相关待核线索，未证明全部shell已覆盖。
+- 接着`NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001`：最新完整984四组各846差异/108例（90type1 active+18defense），before0、Shadow额外0；124无护甲weapon已清。原34、684早期四组与本地回放全PASS。父NONCHARACTER-ARMOR-FEEDBACK/BDEFEND/collision仍未关闭；reduced后回完整984/父矩阵，再reader/表现/Q07。
+- 总目标ACTIVE / FULL_ALIGNMENT_INCOMPLETE。Q07正式DAT/角色图片未部署；真实Scene仍Unity旧内容与合成fixture，未做物理按键/Logan图片一致性验收。schema15/23/26/2/2、raw47/3、跨World allocation epoch恢复缺口、stage.dat USER_HOLD和既有例外保持。
+- 用户确认HUDBg x30由其或其他任务修改，保留且不再询问；禁止computer-use、非战斗/Unity-GAS框架/Scene/资源/Server改动。本批准确记录/原始证据在同ID artifacts REPORT。所有build/test/Play/request均终态，无待轮询job。
+
+以下历史检查点由以上当前游标优先：
+
+> 当前执行保持UNARMORED-WEAPON-REACTION-001：8400 source对照/本地回放通过，原34回归通过；父完整984剩108 reduced、Bdefend只剩type5各16。活跃WEAPON-REACTION-SELF-CHECK-ORACLE-001正按源修订旧HitConfirm2/随机/team/self-rest/audio断言，不能回退新生产。最新额外state2000整数坐标2例RED已修两行，正定向复测；完整SelfCheck和Play尚未过，不标完成。
+
+> 当前武器批次：`NTSD28-Q06-UNARMORED-WEAPON-REACTION-001` IN_PROGRESS / DIRECT_2100_PASS_SHADOW_PENDING。三生产路径已改、两profile各2100直接对照0差异；当前正编译并补Shadow独立预测。源见证`NTSD28-Q06-WEAPON-REACTION-SOURCE-WITNESS-001` VERIFIED / SOURCE_MODEL_ONLY（2100/43202）。非战斗/HUDBg30保留，Q07未部署、完整对齐尚未完成。旧下文TEST_FIRST_ONLY/生产未改描述仅为历史检查点。
+
+> 当前执行 `NTSD28-Q06-WEAPON-REACTION-SOURCE-WITNESS-001` IN_PROGRESS / SOURCE_ONLY。补武器完整反应边界，不重做已过前置；Unity生产本轮尚未改。
+
+当前唯一恢复游标（2026-09-14 09:31Z）：
+
+- `NTSD28-Q06-NONCHARACTER-ARMOR-FEEDBACK-001` IN_PROGRESS / PRELUDE_FEEDBACK_RUNTIME_PASS_DAMAGE_DEPENDENCIES_OPEN。四生产文件已写：新BattleNativeOrdinaryHitPrelude、Resolver专用native入口、Runner真实前置顺序、HitPlan独立前置token/反馈预测。已不再是TEST_ONLY，禁止重复实现。详见同ID artifact REPORT.md。
+- source984四组最新before0差异，after每组1518条/232case（原4641/712），Shadow额外错误0/每候选前置观察1次。source684前置/反馈/拒绝契约四组全PASS（210 feedback+294 rejected+180 unsupported），feedback另断言writer观察1。原完整984失败保留，不把684当全包完成。
+- 旧34回归全PASS；完整SelfCheck09:17:43Z PASS；真实Play两factory×direct/Shadow×684=2736 PASS，before/after0差异、主Scene checksum保持、Renderer2→2；有序关闭PASS（原位恢复4→4、World/slots/两pool全0、两帧Stopped）。本地回放16场景/32replayed ticks通过，实际随机状态/links/rest/spark/完整checksum一致、Shadow有效。内部SynchronizedGeneration在restore故意失效旧cursor，测试已另验证旧cursor不能commit，非canonical allocation epoch问题。
+- **下一唯一执行Task：`NTSD28-Q06-UNARMORED-WEAPON-REACTION-001`。** 处理完整frame/team/hitReaction/rest/legacy随机尾部；BDEFEND256剩64武器例×3 raw=192，新984对应124个无护甲/绕过护甲武器例。原已有源只是部分state/height，按live调用补必要边界，准确新Record后实施；不能只改frame3→186，不能重做已过前置/反馈。
+- 然后`TYPE5-HIT-PLAN-COVERAGE-AUDIT-001`剩无armor16 guard（首type0的16已清）；再新Task`NONCHARACTER-REDUCED-HIT-TRANSACTION-001`的108例（90type1 active+18defense）。之后回完整984/BDEFEND256/父collision。完整984剩232=124weapon+108reduced。
+- BDEFEND测试direct已纠正到正式candidate入口，独立`NTSD28-Q06-BDEFEND-FORMAL-CANDIDATE-ENTRY-ORACLE-001` IN_PROGRESS / ENTRY_FIXED_PARENT_DAMAGE_PENDING；原raw/HitStateCount241/C25断言保持。当前每profile direct192/Shadow208，四组FAIL待上述依赖，不把测试入口修订当生产伤害全通过。
+- 前置关键规则保持：unarmored先reciprocal2/-2 release与special-rest，再type0反馈，再普通rest/firstbody；同步0xEC/6写child raw action，target Vy精确-1.0000000000000258、child Vy不改，getter矩阵[0][2]=45/[1][2]=30，槽历史保留。type1 bypass/active、defense rest早返后的fallback不可合并。新版Shadow在新token中捕获全Native随机与保留字段，旧ZeroAttackerHp consume位置保持，legacy heavy flag不二次执行。Native代次仅用于游标失效，不修改persistent schema。
+- 所有build/test/Play均已终态，Editor已退出Play；MCP当前端口6403，每次仍读取状态文件发现，不硬编码。HEAD 61b3b6cf，本轮未提交。生产hash在SelfCheck/Play后保持，仅测试/文档再补回放。总目标ACTIVE / FULL_ALIGNMENT_INCOMPLETE，各父记录未关闭。
+- Scene hash bcd1047b…、用户HUDBg x30、Unity/GAS/非战斗/Server边界保持，禁止computer-use。Q07正式DAT/角色图片未部署；schema15/23/26/2/2、raw47/3、跨World allocation epoch缺口、stage.dat USER_HOLD及其余例外不变。
+
+以下历史检查点由以上当前游标优先：
+
+当前唯一恢复游标（2026-09-14 08:43Z）：
+
+- `NTSD28-Q06-PREARMOR-FEEDBACK-SOURCE-WITNESS-001` VERIFIED / SOURCE_MODEL_ONLY。984向量、5108检查、两遍逐字节一致SHA12323954821eceea6cfc7aa3155ae66102c4389f4fdb47813dd8febc374c0a4a；正式EXE/75源身份保持。完整source调用/字段/限定范围在同ID artifact REPORT。
+- **下一唯一Task仍为`NTSD28-Q06-NONCHARACTER-ARMOR-FEEDBACK-001`，IN_PROGRESS / RED_CONFIRMED_BEFORE_INPUT_MATCHED。** 新984×两profile实际runner对照已跑，before受测raw47/3+links/rest/sparks0差异，after各4641条/712case。原FAIL见同ID artifact red/；当前Change Record只声明单新增测试脚本，尚未修改本批Unity生产。下一步按该REPORT落实单一ordinary hit前置owner、列准确生产code-path/Shadow阶段，再实施；不要继续重复source build或新建泛化审计。
+- 必须一起解决的已证顺序：原unarmored在armor/普通rest/first-body前执行reciprocal2/-2 release和special-link-rest；Unity目前CanConsumeRecordedCandidate先查live vrest，first-body又早于ConsumeEffects，不能只在DamageWriter最前面加return。源synchronized0xEC/6→child action；target/holder Vy=-1.0000000000000258而child Vy7.5保持；rest按getter实际矩阵[0][2]=45、[1][2]=30。父子slot历史保留，special gate可作用于dormant，不能用active-only getter替代。
+- 分支陷阱已补源样本：type1 ratio15<Bdefend17是bypass，会回unarmored prelude；Bdefend0的active/reduced另序。defended wrapper的reduced在rest提前返回时未保留defense_decision，普通unarmored入口可能继续fallback（state7+type0+rest5仍feedback）；type1顶层直接返回reduced，不可合成一个简单armor/defense bool。action_latch的Unity映射仍Runtime.WaitCounter，勿新造字段。
+- 984含720基本组合、48 current第一bdy1033/1100500000、180 type1 active、36 defense/rest向量。source210 feedback、198前置后rest拒绝、180前置后unsupported、96 reduced rest全状态不变；24反馈跳过current第一bdy。此为诊断冻结候选初值，未证明完整driver可达或默认spawn links；测试显式赋source默认links0。
+- 当前BDEFEND256也已重新测量：两profile direct各968/Shadow各1000条差异（4组FAIL），保留在source artifact unity-parent-red。新984测试入口已覆盖旧heavy release前置；不要把失败只当已排队weapon reaction而略过feedback/时序。尚未新测Shadow984/真实Play；当前生产上一批Spark的34/34、SelfCheck08:06:43Z、Play1440及关闭证据保持，Spark限定职责不重做。
+- 本轮只新增1个源诊断CPP与1个Unity Editor测试及文档；上一批生产未再修改。所有build/test均终态，无运行中job。总目标ACTIVE / FULL_ALIGNMENT_INCOMPLETE；父BDEFEND/collision/qualification仍未关闭。反馈之后继续weapon reaction/type5覆盖，再回父包，reader/display后Q07正式资源迁移。
+- 保留用户HUDBg x30、Scene hash bcd1047b…、Unity/GAS/非战斗/Server边界；禁止computer-use。Q07未部署、schema15/23/26/2/2、raw47/3、跨World allocation epoch恢复缺口、stage.dat USER_HOLD及其它用户例外不变。
+
+以下历史检查点由以上当前游标优先：
+
+> 当前执行 `NTSD28-Q06-PREARMOR-FEEDBACK-SOURCE-WITNESS-001` IN_PROGRESS / SOURCE_ONLY。反馈前的heavy release旧RNG/字段写入存在差异，先原完整前置取证，不直接早返；Unity生产本轮未改。
+
+当前唯一恢复游标（2026-09-14 08:14Z）：
+
+- `NTSD28-Q06-HIT-SPARK-UNITY-001` VERIFIED / DECLARED_HIT_SPARK_TRANSACTION_SCOPE。公共Append源guard/owner/capacity/编码/snapshot/cover/整数平均/target Z/Y-X CRT，candidate瞬时scope，角色route owner唯一emission、两个重复外层移除，Shadow独立CRT capture/compare已闭合。
+- 最终34/34 PASS：source438×2端点876、角色actual282×2=564（复制itr/原index2）、异常嵌套/非0 guard、原完整driver四组8向量及Shadow0差异、local replay8case/16replayed ticks；完整SelfCheck08:06:43Z PASS。真实Play两factory端点+actual共1440于08:11:26Z PASS，Scene checksum不变/Renderer2→2；08:11:53Z关闭PASS，原位恢复4→4、World/slots/两pool全0/连续两帧Stopped。
+- 旧C01 hook与SelfCheck观测分别由`NTSD28-Q06-SPARK-C01-TEST-HOOK-001`、`NTSD28-Q06-HIT-SPARK-SELF-CHECK-ORACLE-001` VERIFIED纠正；全部旧FAIL保留。唯一详细证据：`artifacts/diagnostics/NTSD28-Q06-HIT-SPARK-UNITY-001/REPORT.md`。主包8脚本+两个单测试子项，共10脚本；HEAD61b3b6cf，未提交。
+- **下一唯一Task：`NTSD28-Q06-NONCHARACTER-ARMOR-FEEDBACK-001 / READY_SOURCE_ORDER_AND_EXACT_RECORD`。** 公共spark已就绪，先闭合原selected armor/special-link-rest前置及各Unity活入口，准确新Record后再接反馈Append(...,armor,false,false)，不能无条件早返或只保留Bdefend。非角色首type0原96例曾误伤害；type1不能从type0推断。之后UNARMORED-WEAPON-REACTION和TYPE5-HIT-PLAN-COVERAGE，再回BDEFEND256/父collision/qualification。96/64/32是之前生产的测量，未按本轮重测，不当新鲜结果。
+- 父BDEFEND/collision/qualification、reader umbrella与总目标仍IN_PROGRESS / ACTIVE，FULL_ALIGNMENT_INCOMPLETE；旧四组完整driver的Spark RNG首差已经清除，不再当当前阻塞。reader/display其它职责后才Q07，正式DAT/角色图片**尚未部署**。Scene仍旧内容/合成fixture，未做物理按键或Logan图片一致性验收。
+- 正式EXE SHA B1E13AE1…D2819033、源438 trace b5df6113…ce6f8复核保持；Scene dirtyfalse/root14/SHA bcd1047b…保持，用户HUDBg x30确认归其或其他任务并保留。schema15/23/26/2/2、raw47/3、跨World allocation epoch恢复缺口、stage.dat USER_HOLD及既有例外保持。禁止computer-use、非战斗/Unity-GAS框架/Scene/资源/Server改动。
+
+以下历史检查点由以上当前游标优先：
+
+> 当前执行 `NTSD28-Q06-HIT-SPARK-UNITY-001` IN_PROGRESS / TEST_FIRST，准确七脚本；公共writer与candidate瞬时scope、route owner一起闭合，禁止computer-use。
+
+> 工作树补记：当前HEAD61b3b6cf（111），本轮未提交；新source CPP已被工作树外部提交包含且SHA与build一致，最后validator code diff0。不要据旧未提交清单回退或重做。
+
+> **当前唯一恢复游标（2026-09-14 07:37Z）：** HIT-SPARK-SOURCE-WITNESS-001 VERIFIED / SOURCE_MODEL_ONLY。原438/2994断言、两遍一致SHAb5df6113…；366追加+CRT2/72不追加+CRT0，Native0，原EXE/75源身份保持。完整owner/capacity/编码/index/armor/负数几何/CRT数组已证；本轮只新CPP/文档，未改Unity生产、未跑新Unity测试。Scene文件hash bcd1047b…保持。
+> **下一唯一Task：`NTSD28-Q06-HIT-SPARK-UNITY-001 / READY_EXACT_CONTEXT_AND_TEST_FIRST_RECORD`。** 先读source artifact REPORT，准确公共emitter/真实caller/瞬时原itr index与hit前selected armor上下文Record，再438 Unity RED/实现。重要纠正：LF2Character.Hit→Dat普通分支ApplyStandardCharacterDamage后RecordKind0Hit即return，普通命中不走底部旧SpawnSpark；不能只改它两行。旧CurrentItrIndex仅Character BeforeDispatch写，generic为空，不能当可靠通用index。route owner保留armor和unarmored/reduced/feedback flags，每次hit只发一次，移除重复外层调用，C01/C25记录生命周期保持。
+> 后继顺序仍Spark Unity→NONCHARACTER-ARMOR-FEEDBACK（96）→UNARMORED-WEAPON-REACTION（64）/TYPE5-HIT-PLAN-COVERAGE（32guard）→回BDEFEND256/完整driver。BDEFEND字段已写但父仍IN_PROGRESS；旧完整driver只有RNG差异，所有原失败保留。此前SelfCheck07:18:42Z是旧生产证据，本轮无新Play/自检；无运行中build/test/exec。总目标ACTIVE / FULL_ALIGNMENT_INCOMPLETE。
+> 用户HUDBg30保留，禁止computer-use、非战斗/Unity-GAS/Scene/资源/Server更改；raw47/3、schema15/23/26/2/2、epoch恢复缺口、Q07未部署、stage.dat USER_HOLD及用户例外保持。
+
+以下历史检查点由以上当前游标优先：
+
 > 当前执行 `NTSD28-Q06-HIT-SPARK-SOURCE-WITNESS-001` IN_PROGRESS / SOURCE_ONLY。普通命中实际走RecordKind0Hit而非底部旧SpawnSpark；原三入口/index/armor/geometry/capacity/CRT一起取证，生产未改。
 
 > **当前唯一恢复游标（2026-09-14 07:21Z）：** BDEFEND-FIELD-FAMILY-UNITY-001仍IN_PROGRESS / FIELD_FIX_WRITTEN_DEPENDENT_HIT_PATHS_OPEN。三生产文件已写Runtime.Bdefend的45/signed累加/阈值、armor delay读Bdefend、Shadow独立transient TargetBdefend（保留legacy观测），C25/compat/schema不改。新256×4仍FAIL，direct各968/Shadow各1000；角色全部和type3/5无armor raw/字段已匹配。当前完整driver四组bdefend0/45已清，仅Spark RNG legacy3/native0/CRT0对源CRT2失败。全部原FAIL保留，未标已对齐。
