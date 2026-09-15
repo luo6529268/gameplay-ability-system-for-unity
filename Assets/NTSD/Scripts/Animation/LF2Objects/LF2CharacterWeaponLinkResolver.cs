@@ -23,7 +23,13 @@ namespace NTSD.Animation.LF2Objects
         {
             int holderSlot = _character.Runtime?.SlotIndex ?? -1;
             int heldSlot = _character.Runtime?.TargetSlotIndex ?? -1;
-            if ((_character.Runtime?.LinkState ?? 0) <= 0 || holderSlot < 0 || heldSlot < 0)
+            // Alignment contract: NTSD28-Q06-HELD-QUERY-NONHOLDER-RELATION-PRESERVATION-001.
+            if ((_character.Runtime?.LinkState ?? 0) <= 0)
+            {
+                _character.HeldWeaponReferenceInternal = null;
+                return null;
+            }
+            if (holderSlot < 0 || heldSlot < 0)
             {
                 ClearStaleHeldReference();
                 return null;

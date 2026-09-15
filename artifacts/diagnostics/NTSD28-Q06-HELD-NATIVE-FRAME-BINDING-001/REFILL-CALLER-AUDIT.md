@@ -1,0 +1,14 @@
+# 补给调用链只读审计
+
+状态：SOURCE_WITNESS_PENDING，尚未修改Unity生产。
+
+1. 权威BattleWorld28::settle_held_refill_objects按HeldRefillSystemRules28/LockedSystemBattleTables2833的正式OID列表判断HP/MP补给；holder当前原生state17执行数值，未耗尽继续共享WPoint，耗尽continue越过WPoint。
+2. HP仅child.current_hp>0减1；余数5恢复bound+2/HP+4分别封顶，余数6恢复MP+5封顶500。HP<=0不执行HP耗尽分支。MP无正HP前置，减2/parentMP+3封顶500；child普通credit2F4>=0且childMP>150则降150。耗尽双方action0/counter0、link0、child父槽0/parent子槽0、childVy0及同步随机Vx，childweaponHp0。
+3. 源耗尽随机callsiteHP0x004181C9/MP0x004182C0，upperBound7。不能以旧BattleRandInt代替或合并为kind3抽样。
+4. Unity生产SimulationQueryAndLinkModule.HeldObjectProcessAll -> BattleHeldObjectWriter.RunStep12 -> LF2WeaponBase.Act -> LF2WeaponHeldStateResolver.ProcessDrinkConsumption。通用LF2OtherObject路径没有该补给调用；需以真实OID/数据type模型确认覆盖，不凭CLR名裁决。
+5. Unity ProcessDrinkConsumption读取ResolveRuntimeCharacterData(ObjectId).type_sub；正式CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(约978..980)在0时填entry.Id；旧LoadAll配置入口同样填characterId。现同源fixture直接BuildCharacterDataFromSource未填，必须在夹具模拟该正式loader默认，不能用缺type_sub的夹具误判生产不补给。
+6. Unity LF2WeaponReleaseFlowResolver.ReleaseHeldWeaponForConsume已清双方native关系为0，OnDrinkConsumed的LF2Weapon实现清FlightCounter。不要不读callee就重复实现。
+7. 耗尽仍有双方legacy held action0 setter和BattleRandInt(0,7)，属于精确待源向量比较项；尚未据此修改。
+8. Zz/PS.zz是Unity PhysicsDepthOffset；当前没有证据证明等价native render_shadow_offset_10c。此前报告的源不动位置与Unity清PS.zz仅是定位线索，不足以认定错误，禁止机械映射或改为保留。采用源真实位置/速度及descriptor作为对照。
+
+下一：新--refill源矩阵，保留原140/1150字节输出；独立模型+两次capture后扩同Editor fixture真实childOid/catalog/type_sub与2F4恢复，先before0后判断生产差异。

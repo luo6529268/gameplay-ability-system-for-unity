@@ -55,6 +55,10 @@ namespace NTSD.Simulation.Ecs
                 return true;
             }
 
+            LF2WeaponHeldStateResolver.ProcessNativeRefillConsumption(holder, held, ref result);
+            if (result.RefillExhausted)
+                return true;
+
             if (holderWPoint.WeaponAct >= 1000)
             {
                 result.TerminalDespawnRequested = true;
@@ -62,8 +66,8 @@ namespace NTSD.Simulation.Ecs
             }
 
             // Alignment contract: NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001.
-            held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);
-            if (held.FrameCache?.HasFrame(holderWPoint.WeaponAct) != true)
+            held.DirectWriteNativeRawFramePreserveWaitCounter(holderWPoint.WeaponAct);
+            if (held.FrameCache?.HasNativeFrame(holderWPoint.WeaponAct) != true)
             {
                 result.UnsupportedWeaponAction = true;
                 return true;
@@ -84,7 +88,7 @@ namespace NTSD.Simulation.Ecs
                     heldType == (int)LF2ObjectType.ThrowWeapon ||
                     heldType == (int)LF2ObjectType.Drink)
                 {
-                    held.DirectWriteHeldFramePreserveWaitCounter(40);
+                    held.DirectWriteNativeRawFramePreserveWaitCounter(40);
                     ThrowHeldObject(holder, held, holderWPoint);
                     result.Thrown = true;
                     if (holderWPoint.Kind != 3)
@@ -93,9 +97,8 @@ namespace NTSD.Simulation.Ecs
 
                 if (heldType == (int)LF2ObjectType.HeavyWeapon)
                 {
-                    held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.Kind == 3
-                        ? holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6)
-                        : holder.BattleRandInt(0, 6));
+                    held.DirectWriteNativeRawFramePreserveWaitCounter(
+                        holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6));
                     ThrowHeldObject(holder, held, holderWPoint);
                     result.Thrown = true;
                     if (holderWPoint.Kind != 3)
@@ -193,11 +196,13 @@ namespace NTSD.Simulation.Ecs
         {
             held.Runtime.Vx = holder.Runtime.Dir == "left" ? -wpoint.Dvx : wpoint.Dvx;
             held.Runtime.Vy = wpoint.Dvy;
-            held.Runtime.Vz = 0.0;
             if (holder.Runtime.KeyUp != 0 && holder.Runtime.KeyDown == 0)
                 held.Runtime.Vz = -wpoint.Dvz;
             else if (holder.Runtime.KeyUp == 0 && holder.Runtime.KeyDown != 0)
                 held.Runtime.Vz = wpoint.Dvz;
+            int heldType = held.GetCurrentDataObjectTypeForSimulation();
+            if (heldType == 1 || heldType == 4 || heldType == 6)
+                held.Runtime.ObjectAiExcludedGroupSourceSlot2F8 = holder.Runtime.SlotIndex;
             held.Runtime.Zz = 0f;
             ClearLinks(holder, held);
         }
@@ -214,7 +219,7 @@ namespace NTSD.Simulation.Ecs
 
             // Alignment contract: NTSD28-B6-WPOINT-KIND3-RELEASE-PRODUCTION-001.
             var random = holder.Match.NativeRandom;
-            held.DirectWriteHeldFramePreserveWaitCounter(random.SynchronizedNext(0x00418726, 6));
+            held.DirectWriteNativeRawFramePreserveWaitCounter(random.SynchronizedNext(0x00418726, 6));
             int randomX = random.SynchronizedNext(0x0041873A, 7) - 3;
             int randomY = -random.SynchronizedNext(0x00418756, 4);
             int randomZ = random.SynchronizedNext(0x00418772, 5) - 2;

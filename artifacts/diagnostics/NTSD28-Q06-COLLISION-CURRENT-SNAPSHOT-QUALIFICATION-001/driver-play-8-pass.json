@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "error": null,
+  "cases": 8,
+  "differences": [],
+  "driverOnly": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene context, two source driver cases across both profiles/frame modes; isolated logic worlds, scene checksum unchanged. No physical input or visual asset claim."
+}

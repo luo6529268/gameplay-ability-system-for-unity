@@ -1,0 +1,13 @@
+{
+  "rows": 140,
+  "bytes": 1467643,
+  "sha256": "8ddb447a80caa5edb8a2c55f1cb2ceda35b3fed3503f57d614fd5589655b9610",
+  "repeatEqual": true,
+  "independentChecks": 1344,
+  "failures": [],
+  "scope": "kind1 no-dvx cover0 all types native binding/full immediate raw; following tick captured but not independently model-validated",
+  "additionalRowChecks": 420,
+  "additionalFailures": 0,
+  "followingAlive": 126,
+  "followingLifetimeCheck": "source lifecycleSuccess true all rows; full following state requires Unity comparison"
+}

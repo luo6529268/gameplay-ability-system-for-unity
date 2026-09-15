@@ -10944,18 +10944,18 @@ namespace NTSD.Test
                         $"{label}: raw throw writes must preserve wait counters");
                     Expect(attacker.Runtime.FrameWaitCounter == 15 && victim.Runtime.FrameWaitCounter == 16,
                         $"{label}: raw throw frame writes must not use the immediate-frame FWC reset path");
-                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 6,
-                        $"{label}: throw clears only attacker attacking");
+                    Expect(attacker.AttackingCounter == 0 && victim.AttackingCounter == 0,
+                        $"{label}: native throw clears both frame counters");
                     float expectedVz = directionMode == 1 ? -3f : directionMode == 2 ? 3f : 6f;
                     Expect(Nearly(victim.Runtime.Vz, expectedVz),
                         $"{label}: victim Vz must change only for exclusive up/down input; expected={expectedVz}");
                 }
 
-                CheckCpointThrowTransformUsesSourceSnapshot(realCharacter);
+                CheckCpointNegativeThrowInjuryPreservesDefinition(realCharacter);
             }
         }
 
-        private static void CheckCpointThrowTransformUsesSourceSnapshot(bool realCharacter)
+        private static void CheckCpointNegativeThrowInjuryPreservesDefinition(bool realCharacter)
         {
             LF2CharacterData sourceData = BuildCpointThrowFrames(112, -132, -1);
             sourceData.frames.Add(Frame(130, 10, 1, 130, 35, 70, new CatchPoint { kind = 2 }));
@@ -10986,6 +10986,8 @@ namespace NTSD.Test
                 LF2Entity attacker = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Attacker", 1, sourceData);
                 LF2Entity victim = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Victim", 2, targetData);
                 LF2Entity ownedChild = CreateCpointMatrixEntity(realCharacter, "TransformThrow_Child", 1, sourceData);
+                LF2CharacterDataWrapper sourceWrapper = attacker.FrameCache.Wrapper;
+                LF2CharacterDataWrapper childWrapper = ownedChild.FrameCache.Wrapper;
                 world.Register(attacker);
                 world.Register(victim);
                 world.Register(ownedChild);
@@ -11010,20 +11012,20 @@ namespace NTSD.Test
 
                 attacker.RunCpointCheckStep10();
 
-                string label = realCharacter ? "character transform throw" : "shared-DAT transform throw";
-                Expect(attacker.ObjectId == 2,
-                    $"{label}: throwinjury=-1 must replace attacker ObjectId; actual={attacker.ObjectId}, frame={attacker.Frame.N}, resolverCalls={resolverCalls}");
-                Expect(attacker.FrameCache.Wrapper == targetWrapper,
-                    $"{label}: throwinjury=-1 must load target DAT wrapper; actual={attacker.FrameCache.Wrapper?.characterId}");
+                string label = realCharacter ? "character negative-injury throw" : "shared-DAT negative-injury throw";
+                Expect(attacker.ObjectId == 1 && resolverCalls == 0,
+                    $"{label}: throwinjury=-1 must preserve attacker ObjectId without a DAT lookup; actual={attacker.ObjectId}, resolverCalls={resolverCalls}");
+                Expect(attacker.FrameCache.Wrapper == sourceWrapper,
+                    $"{label}: throwinjury=-1 must preserve the source DAT wrapper");
                 Expect(attacker.Frame.N == 112 && attacker.Frame.Prev2 == 112 && attacker.Trans.WaitCounter == 11,
                     $"{label}: throw next must come from the source frame snapshot and raw-write without changing wait");
                 Expect(Nearly(victim.Runtime.X, 76f) && Nearly(victim.Runtime.Y, -36f),
-                    $"{label}: throw geometry must use source frame centers after attacker DAT transform");
+                    $"{label}: throw geometry must use the original snapshot frame centers");
                 Expect(Nearly(victim.Runtime.Vz, 6f),
                     $"{label}: transform throw with no exclusive depth input must preserve stale victim Vz");
-                Expect(ownedChild.ObjectId == 2 && ownedChild.FrameCache.Wrapper == targetWrapper &&
-                       ownedChild.Frame.D != null && ownedChild.Frame.D.centerx == 777,
-                    $"{label}: owned child must reload current Frame.D after DAT propagation");
+                Expect(ownedChild.ObjectId == 1 && ownedChild.FrameCache.Wrapper == childWrapper &&
+                       ReferenceEquals(ownedChild.Frame.D, childWrapper.characterData.frames.Find(frame => frame.frameId == 130)),
+                    $"{label}: negative throw injury must preserve the owned child's definition and current frame");
             }
             finally
             {
@@ -12246,7 +12248,7 @@ namespace NTSD.Test
             world.Register(sameSlotNewborn);
             Expect(holder.GetHeldWeapon() == null &&
                    holder.Runtime.LinkState == 0 &&
-                   holder.Runtime.TargetSlotIndex == -1 &&
+                   holder.Runtime.TargetSlotIndex == 0 &&
                    holder.Runtime.HeldWeaponStableId == -1,
                 "RISK-3: same-slot newborn without the reverse holder relation must not inherit a stale held cache");
 
@@ -12619,13 +12621,14 @@ namespace NTSD.Test
                     Expect(weapon.Frame.N == 40 &&
                            Nearly(weapon.Runtime.Vx, 8.0) && Nearly(weapon.Runtime.Vy, -3.0),
                         "BATTLE-AUDIT3-12: world-level real LF2Weapon damaged release must continue into dvx throw");
-                    Expect(weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
-                        "R5-HOLD-002: real type1 held throw must stamp the holder runtime slot as spawner");
+                    Expect(weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type1 held throw must stamp the holder runtime slot in the independent AI exclusion field");
                     Expect(weapon.PickerStableId == 71,
                         "R5-HOLD-003: real type1 held throw must preserve its preexisting picker slot");
                     Expect(holder.Runtime.LinkState == 0 && weapon.Runtime.LinkState == 0,
                         "BATTLE-AUDIT3-12: world-level damaged dvx continuation must clear both real weapon links");
                 },
+                initialSpawnerEntityIndex: 81,
                 initialPickerStableId: 71);
 
             RunWorldLevelRealWeaponStep12Case(
@@ -12635,11 +12638,12 @@ namespace NTSD.Test
                 (holder, weapon) =>
                 {
                     Expect(weapon.Frame.N == 40 &&
-                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
-                        "R5-HOLD-002: real type4 held throw must stamp the holder runtime slot as spawner");
+                           weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type4 held throw must stamp the holder runtime slot in the independent AI exclusion field");
                     Expect(weapon.PickerStableId == 72,
                         "R5-HOLD-003: real type4 held throw must preserve its preexisting picker slot");
                 },
+                initialSpawnerEntityIndex: 84,
                 initialPickerStableId: 72);
 
             RunWorldLevelRealWeaponStep12Case(
@@ -12649,11 +12653,12 @@ namespace NTSD.Test
                 (holder, weapon) =>
                 {
                     Expect(weapon.Frame.N == 40 &&
-                           weapon.SpawnerEntityIndex == holder.Runtime.SlotIndex,
-                        "R5-HOLD-002: real type6 held throw must stamp the holder runtime slot as spawner");
+                           weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 == holder.Runtime.SlotIndex,
+                        "R5-HOLD-002: real type6 held throw must stamp the holder runtime slot in the independent AI exclusion field");
                     Expect(weapon.PickerStableId == 73,
                         "R5-HOLD-003: real type6 held throw must preserve its preexisting picker slot");
                 },
+                initialSpawnerEntityIndex: 86,
                 initialPickerStableId: 73);
 
             RunWorldLevelRealWeaponStep12Case(
@@ -12699,7 +12704,8 @@ namespace NTSD.Test
             WeaponPoint holderWPoint,
             Action<FlowSelfCheckEntity, HeldActSelfCheckWeapon> verify,
             int initialSpawnerEntityIndex = -1,
-            int initialPickerStableId = -1)
+            int initialPickerStableId = -1,
+            int initialAiExclusionSourceSlot = 91)
         {
             LF2FrameData holderFrame = Frame(0, LF2States.Standing, 100, 0, 39, 79);
             holderFrame.wpoints = new List<WeaponPoint> { holderWPoint };
@@ -12736,6 +12742,7 @@ namespace NTSD.Test
             weapon.BindData(weaponData.name, 994, weaponType, weaponData);
             weapon.SpawnerEntityIndex = initialSpawnerEntityIndex;
             weapon.PickerStableId = initialPickerStableId;
+            weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 = initialAiExclusionSourceSlot;
             world.Register(holder);
             world.Register(weapon);
 
@@ -12749,12 +12756,19 @@ namespace NTSD.Test
 
             world.HeldObjectProcessAll(1);
 
+            Expect(weapon.SpawnerEntityIndex == initialSpawnerEntityIndex,
+                "R5-HOLD-002: held release must preserve the independent spawner field");
+            int expectedAiExclusionSourceSlot = holderWPoint.dvx != 0 &&
+                (weaponType == 1 || weaponType == 4 || weaponType == 6)
+                ? holderSlot : initialAiExclusionSourceSlot;
+            Expect(weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 == expectedAiExclusionSourceSlot,
+                "R5-HOLD-002: only type1/4/6 DVX release stamps the AI exclusion source slot");
             verify(holder, weapon);
         }
 
         private static void CheckReleaseTickRunsHeldStep12Twice()
         {
-            const int drinkOid = 992;
+            const int drinkOid = 122;
             LF2FrameData holderFrame = Frame(0, LF2States.Charging, 0, 1, 0, 0);
             holderFrame.wpoints = new List<WeaponPoint>
             {
@@ -13000,6 +13014,7 @@ namespace NTSD.Test
             bool consume = label == "Consume";
             int expectedConsumeVx = 0;
             ulong consumeRngCallsBefore = 0;
+            NTSD28NativeRandomScalarState consumeNativeBefore = default;
             if (consume)
             {
                 holder.AttackingCounter = 7;
@@ -13008,8 +13023,9 @@ namespace NTSD.Test
                 weapon.Runtime.Vz = 5.5;
                 weapon.Runtime.WeaponFlightCounter = 23;
                 consumeRngCallsBefore = world.Rng.CallCount;
-                var expectedRng = new DeterministicRng(world.Rng.State);
-                expectedConsumeVx = expectedRng.NextInt(0, 7) - 3;
+                consumeNativeBefore = world.NativeRandom.CaptureScalarState();
+                var expectedRng = world.NativeRandom.CaptureSynchronizedCursor();
+                expectedConsumeVx = expectedRng.Next(weaponOid == 122 ? 0x004181C9u : 0x004182C0u, 7) - 3;
             }
             beforeRelease?.Invoke(weapon);
 
@@ -13032,7 +13048,12 @@ namespace NTSD.Test
             if (consume)
             {
                 Expect(typeof(NTSD.Simulation.NTSDEntityRuntime).GetMember("HolderCopySlotIndex").Length == 0, "retired HolderCopy carrier must be absent");
-                Expect(world.Rng.CallCount == consumeRngCallsBefore + 1 &&
+                var consumeNativeAfter = world.NativeRandom.CaptureScalarState();
+                Expect(world.Rng.CallCount == consumeRngCallsBefore &&
+                       consumeNativeAfter.SynchronizedCalls == consumeNativeBefore.SynchronizedCalls + 1 &&
+                       consumeNativeAfter.LastSynchronizedCallSite == (weaponOid == 122 ? 0x004181C9u : 0x004182C0u) &&
+                       consumeNativeAfter.CrtState == consumeNativeBefore.CrtState &&
+                       consumeNativeAfter.CrtCalls == consumeNativeBefore.CrtCalls &&
                        weapon.Health.HP == 0 &&
                        Nearly(weapon.Runtime.Vx, expectedConsumeVx) &&
                        Nearly(weapon.Runtime.Vy, 0.0) &&
@@ -18272,8 +18293,7 @@ namespace NTSD.Test
                         attacker.FrameDelay == -3 && victim.FrameDelay == -3 &&
                         victim.Frame.N == 20 && victim.AttackingCounter == 0 &&
                        Nearly(victim.Runtime.Vx, 3.0) && Nearly(victim.Runtime.Vy, 4.0) && Nearly(victim.Runtime.Vz, 5.0) &&
-                       world.PendingSounds.Count == 2 && world.PendingSounds[0].Cue == "SFX_001" &&
-                       world.PendingSounds[1].Cue == "SFX_C30_HIT",
+                       world.PendingSounds.Count == 0,
                     "BATTLE-C30: type3 kind0 must complete object hurt/rest/sound without the legacy Unity effect tail");
             }
 
@@ -21562,14 +21582,27 @@ itr_end:
                 "DATA-01C: ImmediateFrame must reject legal missing EmptyFrame ids");
 
             character.SetCpointRawFramePreserveWait(450);
-            Expect(character.Frame.N == 0 && character.Frame.D == original,
-                "DATA-01C: cpoint raw frame writes must reject legal missing EmptyFrame ids");
+            Expect(character.Frame.N == 450 &&
+                   character.Frame.D == character.FrameCache.GetNativeFrameDataById(450) &&
+                   character.Frame.D.wait == 0,
+                "DATA-01C: cpoint raw writes bind native implicit frames");
 
+            character.ImmediateFrame(0);
             character.ImmediateFrame(LF2FrameCache.MaxFrameIdExclusive);
+            Expect(character.Frame.N == 0 && character.Frame.D == original,
+                "DATA-01C: legacy ImmediateFrame must retain its authored range gate");
             character.SetCpointRawFramePreserveWait(
                 LF2FrameCache.MaxFrameIdExclusive);
-            Expect(character.Frame.N == 0 && character.Frame.D == original,
-                "DATA-01C: direct frame writes must reject out-of-range ids");
+            Expect(character.Frame.N == 857 &&
+                   character.Frame.D == character.FrameCache.GetNativeFrameDataById(857),
+                "DATA-01C: cpoint raw writes use the native range independently of the legacy API");
+            foreach (int unavailableAction in new[] { -1, 999, 1000 })
+            {
+                character.SetCpointRawFramePreserveWait(unavailableAction);
+                Expect(character.Frame.N == unavailableAction && character.Frame.D == null,
+                    "DATA-01C: unavailable native cpoint destinations keep raw action and null descriptor");
+            }
+            character.ImmediateFrame(0);
 
             character.Frame.Prev2 = 450;
             character.Frame.Prev2D = character.FrameCache.GetFrameDataById(450);
@@ -29528,7 +29561,7 @@ itr_end:
                 "a fresh defend edge must interrupt stale ordinary step one and start DJA step one");
 
             LF2CharacterData failedJumpData = BuildComboWrapperCharacterData(
-                "SelfCheck_ComboLocalFailedDjaJump", 399);
+                "SelfCheck_ComboLocalFailedDjaJump", 1000);
             failedJumpData.frames.Find(frame => frame.frameId == 0).state = LF2States.Running;
             failedJumpData.frames.Add(Frame(85, LF2States.Attack, 100, 85, 39, 79));
             LF2Character failedJump = CreateCharacter(
@@ -29537,7 +29570,7 @@ itr_end:
             ((SelfCheckController)failedJump.Controller).InputBuffer.EnqueueForTick(1, FuncKeyMask.jump, true);
             failedJump.RunPostCooldownInputPhase(1);
             Expect(failedJump.Frame.N == 85,
-                $"BATTLE-AUDIT3-18 missing DJA target must skip 399 and continue through the running action tail to 85; " +
+                $"BATTLE-AUDIT3-18 missing DJA target must reject unavailable 1000 and continue through the running action tail to 85; " +
                 $"actual={failedJump.Frame.N}");
             ExpectComboLocalSeeds(failedJump, ordinaryValue: 0, djaValue: 0,
                 "a missing HitJa target must retain prior wrapper interrupts and clear triggered DJA");

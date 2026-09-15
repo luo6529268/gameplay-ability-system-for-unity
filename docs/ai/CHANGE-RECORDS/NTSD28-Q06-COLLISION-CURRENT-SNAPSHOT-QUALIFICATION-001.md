@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: ORDINARY_COLLISION_SNAPSHOT_QUALIFICATION
 code-path: Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHitCandidatePairSnapshotFactory.cs
@@ -42,3 +42,9 @@ RED job465a71b72a0a4b96a3a7c3e782ea5411四组全部FAIL：明确复现current100
 后继更新：HIT-SPARK-UNITY-001已限定VERIFIED，旧完整driver四组现PASS/Spark RNG差异清除。当前父记录不关闭，继续非角色反馈→武器反应/type5覆盖→回BDEFEND256；旧96/64/32未在本轮重测。源/测试/Play见spark artifact REPORT。
 
 后继生产进展：NONCHARACTER-ARMOR-FEEDBACK已写前置/反馈并通过684四组、Play2736、自检和本地回放；正式BDEFEND入口现direct192/Shadow208，余64weapon+16type5 guard。完整984余124weapon+108noncharacter reduced，父包保持IN_PROGRESS。下一weapon→type5→reduced后回访。
+
+依赖回访更正2026-09-15：weapon/type5/matched/reduced及gain已完成各自限定验收，原984/684/Bdefend/prelude replay已通过；qualification四个完整driver于job65d082698b534717b51999e3be656a5b 4/4 PASS（证据见reduced parent artifact qualification-driver-revisit-4-pass.xml）。旧232/108或Bdefend/Spark首差不再当前阻塞。父Record仍需逐项核对自身明确Play/关闭出口，不以本追加自动扩大VERIFIED；不得重做已过端点矩阵。
+
+父出口补验预声明：现有单Editor测试文件的PlayProbe新增run-driver请求，仅调用已过四组DriverCatchFrameChangePreservesQueuedAttack（两profile×两mode，各2case共8），原480端点run入口保持。Scene world暂停于稳定边界，验证Scene checksum/Renderer borrower守恒，再现有Q05有序关闭；无生产/Scene/资源修改。已有SelfCheck/端点Play证据不重复，缺的是原完整driver的真实Play运行上下文。
+
+VERIFIED / DECLARED_CURRENT_SNAPSHOT_QUALIFICATION。依赖weapon/type5/matched/reduced/gain已限定验收；原984/684/Bdefend/prelude replay通过，当前full driver四组EditMode4/4及真实Play driverOnly8例16:54:03Z PASS，Scene checksum不变/Renderer2→2；16:55:03Z关闭PASS，restore4→4、World/slots/两pool0、两帧Stopped。现有端点Play480/读帧Play168/前置Play2736及各自SelfCheck、当前完整SelfCheck16:36:40Z与reduced Play3948共同闭合声明出口，非全部reader或B5/B6/Q06完成。新增证据在qualification artifact driver-play-8-pass.json / driver-play-shutdown-pass.json；旧失败保留。

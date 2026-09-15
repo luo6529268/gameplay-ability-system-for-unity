@@ -1,0 +1,120 @@
+<test-suite type="TestSuite" id="9615" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7679" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="7.091190" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18189" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7671" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="7.028201" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18190" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7671" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="6.935306" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18198" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7133" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="6.837401" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11654" name="NTSD28Q06NativeInputMissingStateEditorTests" fullname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests" classname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="6.766645" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11657" name="SampledInputMatchesSourceOptionalState" fullname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests.SampledInputMatchesSourceOptionalState" classname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:56Z" duration="6.666415" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11655" name="SampledInputMatchesSourceOptionalState(Authority400)" fullname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests.SampledInputMatchesSourceOptionalState(Authority400)" methodname="SampledInputMatchesSourceOptionalState" classname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests" runstate="Runnable" seed="945105422" result="Failed" start-time="2026-09-14 17:55:49Z" end-time="2026-09-14 17:55:52Z" duration="2.965506" asserts="0"><properties /><failure><message><![CDATA[  case 4 after input.input.runAccumulator=-3 expected=-2
+case 4 after run accumulator=-3 expected=-2
+case 24 after input.input.runAccumulator=3 expected=2
+case 24 after run accumulator=3 expected=2
+case 30 after slot 0 frame.action=65 expected 99
+case 30 after slot 0 frame.frameCounter=0 expected 7
+case 30 after input.input.runAccumulator=0 expected=-2
+case 30 after random.synchronized.counter=1 expected=0
+case 30 after random.synchronized.index=1 expected=0
+case 30 after random.synchronized.lastCallSite=130 expected=0
+case 30 after random.synchronized.totalCalls=1 expected=0
+case 30 after descriptor availability differs
+case 30 after run accumulator=0 expected=-2
+case 30 RNG calls array length differs
+case 31 after slot 0 frame.action=65 expected 99
+case 31 after slot 0 frame.frameCounter=0 expected 7
+case 31 after input.input.runAccumulator=0 expected=-2
+case 31 after random.synchronized.counter=1 expected=0
+case 31 after random.synchronized.index=1 expected=0
+case 31 after random.synchronized.lastCallSite=130 expected=0
+  Expected: <empty>
+  But was:  < "case 4 after input.input.runAccumulator=-3 expected=-2", "case 4 after run accumulator=-3 expected=-2", "case 24 after input.input.runAccumulator=3 expected=2", "case 24 after run accumulator=3 expected=2", "case 30 after slot 0 frame.action=65 expected 99", "case 30 after slot 0 frame.frameCounter=0 expected 7", "case 30 after input.input.runAccumulator=0 expected=-2", "case 30 after random.synchronized.counter=1 expected=0", "case 30 after random.synchronized.index=1 expected=0", "case 30 after random.synchronized.lastCallSite=130 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests.SampledInputMatchesSourceOptionalState (NTSD.Simulation.BattleRuntimeProfile profile) [0x002a1] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputMissingStateEditorTests.cs:70
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=2</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=4, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=12, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=85, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 900 (current): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[Converter] 帧 0 (baseline): pic=0, state=0, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+]]></output></test-case><test-case id="11656" name="SampledInputMatchesSourceOptionalState(MobileExtended)" fullname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests.SampledInputMatchesSourceOptionalState(MobileExtended)" methodname="SampledInputMatchesSourceOptionalState" classname="NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests" runstate="Runnable" seed="438899222" result="Failed" start-time="2026-09-14 17:55:52Z" end-time="2026-09-14 17:55:56Z" duration="3.593645" asserts="0"><properties /><failure><message><![CDATA[  case 4 after input.input.runAccumulator=-3 expected=-2
+case 4 after run accumulator=-3 expected=-2
+case 24 after input.input.runAccumulator=3 expected=2
+case 24 after run accumulator=3 expected=2
+case 30 after slot 0 frame.action=65 expected 99
+case 30 after slot 0 frame.frameCounter=0 expected 7
+case 30 after input.input.runAccumulator=0 expected=-2
+case 30 after random.synchronized.counter=1 expected=0
+case 30 after random.synchronized.index=1 expected=0
+case 30 after random.synchronized.lastCallSite=130 expected=0
+case 30 after random.synchronized.totalCalls=1 expected=0
+case 30 after descriptor availability differs
+case 30 after run accumulator=0 expected=-2
+case 30 RNG calls array length differs
+case 31 after slot 0 frame.action=65 expected 99
+case 31 after slot 0 frame.frameCounter=0 expected 7
+case 31 after input.input.runAccumulator=0 expected=-2
+case 31 after random.synchronized.counter=1 expected=0
+case 31 after random.synchronized.index=1 expected=0
+case 31 after random.synchronized.lastCallSite=130 expected=0
+  Expected: <empty>
+  But was:  < "case 4 after input.input.runAccumulator=-3 expected=-2", "case 4 after run accumulator=-3 expected=-2", "case 24 after input.input.runAccumulator=3 expected=2", "case 24 after run accumulator=3 expected=2", "case 30 after slot 0 frame.action=65 expected 99", "case 30 after slot 0 frame.frameCounter=0 expected 7", "case 30 after input.input.runAccumulator=0 expected=-2", "case 30 after random.synchronized.counter=1 expected=0", "case 30 after random.synchronized.index=1 expected=0", "case 30 after random.synchronized.lastCallSite=130 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputMissingStateEditorTests.SampledInputMatchesSourceOptionalState (NTSD.Simulation.BattleRuntimeProfile profile) [0x002a1] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputMissingStateEditorTests.cs:70
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

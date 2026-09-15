@@ -1,0 +1,1124 @@
+[
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs",
+    "line": 6817,
+    "text": "LF2FrameData nextFrame = attacker.GetFrameDataById(activeFrame.next);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 87,
+    "text": "public LF2FrameData GetFrameDataById(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/Character/LF2FrameCache.cs",
+    "line": 93,
+    "text": "public bool HasFrame(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 535,
+    "text": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 923,
+    "text": "Frame.D = FrameCache?.GetFrameDataById(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 924,
+    "text": "Frame.Prev2D = FrameCache?.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1070,
+    "text": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1076,
+    "text": "if (Frame.N == 0 && !_preserveOpointActionZero && !FrameCache.HasFrame(0))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1079,
+    "text": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1084,
+    "text": "Frame.D = FrameCache.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs",
+    "line": 1089,
+    "text": "Frame.Prev2D = FrameCache.GetFrameDataById(Frame.Prev2);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterActionResolver.cs",
+    "line": 113,
+    "text": "if (_character.HitConfirmEa > 0 && _character.FrameCache.HasFrame(LF2StandardFrames.SuperPunch))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+    "line": 245,
+    "text": "_character.DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront5);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+    "line": 416,
+    "text": "_character.DirectWriteRawFramePreserveWaitCounter(bounceFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+    "line": 424,
+    "text": "_character.DirectWriteRawFramePreserveWaitCounter(landFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDamageStateResolver.cs",
+    "line": 441,
+    "text": "_character.DirectWriteRawFramePreserveWaitCounter(landFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 51,
+    "text": "LF2FrameData currentFrame = victim.GetFrameDataById(currentFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 52,
+    "text": "LF2FrameData futureFrame = victim.GetFrameDataById(currentFrameId + 6);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 397,
+    "text": "LF2FrameData futureFrame = _victim.GetFrameDataById((_victim.Frame?.N ?? 0) + 6);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 456,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(itr.dvx);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 568,
+    "text": "LF2FrameData frame10 = attacker.GetFrameDataById(10);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 690,
+    "text": "int prevState = _victim.GetFrameDataById(_victim.Frame?.Prev ?? 0)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs",
+    "line": 691,
+    "text": "int prev2State = _victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 135,
+    "text": "if (_character.FrameCache.HasFrame(targetFrame))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 162,
+    "text": "var futureFrame = _character.GetFrameDataById((_character.Frame?.N ?? 0) + 6);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 210,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(itr.dvx);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 382,
+    "text": "int prevState = _character.GetFrameDataById(_character.Frame?.Prev ?? 0)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterHitResolver.cs",
+    "line": 383,
+    "text": "int prev2State = _character.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterWeaponLinkResolver.cs",
+    "line": 211,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(40);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterWeaponLinkResolver.cs",
+    "line": 220,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 6));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterWeaponLinkResolver.cs",
+    "line": 255,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterWeaponLinkResolver.cs",
+    "line": 309,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 16));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterWeaponLinkResolver.cs",
+    "line": 331,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(_character.RandIntInternal(0, 6));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1189,
+    "text": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1190,
+    "text": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1219,
+    "text": "public virtual LF2FrameData GetFrameDataById(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 1220,
+    "text": "=> FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3024,
+    "text": "FrameCache?.HasFrame(LF2StandardFrames.SuperPunch) == true &&",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3096,
+    "text": "FrameCache?.HasFrame(LF2StandardFrames.HeavyWeaponThw) == true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3702,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3718,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 3790,
+    "text": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4259,
+    "text": "LF2FrameData prevFrame = GetFrameDataById(previousAction);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4419,
+    "text": "internal void DirectWriteRawFramePreserveWaitCounter(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4425,
+    "text": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4438,
+    "text": "internal void DirectWriteHeldFramePreserveWaitCounter(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4444,
+    "text": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4477,
+    "text": "DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4531,
+    "text": "Frame.D = FrameCache.GetFrameDataById(targetFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4555,
+    "text": "Frame.D = FrameCache.GetFrameDataById(Frame.N);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 4704,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(Frame.N);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5060,
+    "text": "LF2FrameData sourceNextFrame = FrameCache?.HasFrame(sourceNextFrameId) == true",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5061,
+    "text": "? FrameCache.GetFrameDataById(sourceNextFrameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5073,
+    "text": "FrameCache?.GetFrameDataById(Frame?.N ?? 0) ??",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5385,
+    "text": ": FrameCache?.GetFrameDataById(previousFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5635,
+    "text": "DirectWriteRawFramePreserveWaitCounter(landingAction);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5668,
+    "text": "DirectWriteRawFramePreserveWaitCounter(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5695,
+    "text": "DirectWriteRawFramePreserveWaitCounter(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5806,
+    "text": "DirectWriteRawFramePreserveWaitCounter(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5951,
+    "text": "SetFrameTickRawDirect(20);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5978,
+    "text": "SetFrameTickRawDirect(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5985,
+    "text": "SetFrameTickRawDirect(state == LF2States.WeaponThrowing ? 70 : 60);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 5997,
+    "text": "SetFrameTickRawDirect(101);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6024,
+    "text": "SetFrameTickRawDirect(landingFrame.hit_g);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6038,
+    "text": "SetFrameTickRawDirect(101);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6064,
+    "text": "SetFrameTickRawDirect(7);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6072,
+    "text": "SetFrameTickRawDirect(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6127,
+    "text": "DirectWriteRawFramePreserveWaitCounter(fallingLandingFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6141,
+    "text": "DirectWriteRawFramePreserveWaitCounter(bounceFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6167,
+    "text": "DirectWriteRawFramePreserveWaitCounter(LF2StandardFrames.FallingFront5);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6182,
+    "text": "DirectWriteRawFramePreserveWaitCounter(landingFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6291,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6723,
+    "text": "private void SetFrameTickRawDirect(int frameId)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6729,
+    "text": "Frame.D = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs",
+    "line": 6736,
+    "text": "SetFrameTickRawDirect(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 334,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 526,
+    "text": "if (FrameCache?.HasFrame(frameId) != true) return;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2LivingObject.cs",
+    "line": 528,
+    "text": "LF2FrameData targetFrame = FrameCache?.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 116,
+    "text": "if (action == 0 && !task.preserveActionZero && !owner.FrameCache.HasFrame(0))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 122,
+    "text": "owner.Frame.D = owner.FrameCache.GetFrameDataById(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.Lifecycle.partial.cs",
+    "line": 123,
+    "text": "owner.Frame.Prev2D = owner.FrameCache.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 17,
+    "text": "LF2FrameData targetFrame = owner.FrameCache.GetFrameDataById(targetFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 60,
+    "text": "if (frameId >= 0 && owner.FrameCache?.HasFrame(frameId) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2OtherObject.ReleaseFlow.partial.cs",
+    "line": 65,
+    "text": "owner.Frame.D = owner.FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 236,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 273,
+    "text": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 277,
+    "text": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 457,
+    "text": "var nextFrame = GetFrameDataById(activeFrame.next);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 815,
+    "text": "if (action == 0 && !FrameCache.HasFrame(0))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 817,
+    "text": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs",
+    "line": 819,
+    "text": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 498,
+    "text": "LF2FrameData targetFrame = FrameCache.GetFrameDataById(targetFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 836,
+    "text": "if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 838,
+    "text": "Frame.D = FrameCache.GetFrameDataById(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 842,
+    "text": "Frame.Prev2D = FrameCache.GetFrameDataById(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 916,
+    "text": "if (frameId >= 0 && FrameCache?.HasFrame(frameId) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponBase.cs",
+    "line": 920,
+    "text": "Frame.D = FrameCache.GetFrameDataById(frameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 64,
+    "text": "weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.WeaponAct);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 66,
+    "text": "if (weapon.FrameCache?.HasFrame(wpoint.WeaponAct) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 92,
+    "text": "weapon.DirectWriteHeldFramePreserveWaitCounter(40);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 98,
+    "text": "weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.Kind == 3",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 148,
+    "text": "weapon.DirectWriteHeldFramePreserveWaitCounter(weapon.BattleRandInt(0, 16));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 260,
+    "text": "weapon.DirectWriteHeldFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponHeldStateResolver.cs",
+    "line": 265,
+    "text": "holder.DirectWriteHeldFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Animation/LF2Objects/LF2WeaponInteractionResolver.cs",
+    "line": 108,
+    "text": "if (character.FrameCache.HasFrame(jumpFrame))",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiSensingModule.cs",
+    "line": 1676,
+    "text": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2158,
+    "text": "LF2FrameData currentFrame = target.GetFrameDataById(currentFrameId);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 2159,
+    "text": "LF2FrameData futureFrame = target.GetFrameDataById(currentFrameId + 6);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3230,
+    "text": "attacker.FrameCache.HasFrame(type3Frame) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3252,
+    "text": "target.GetFrameDataById(type3Frame) == null)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3298,
+    "text": "if (target.GetFrameDataById(targetFrame) == null ||",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3368,
+    "text": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3369,
+    "text": "int previous2State = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3384,
+    "text": "attacker.GetFrameDataById(40) == null ||",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3391,
+    "text": "int replacementState = attacker.GetFrameDataById(40).state;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3397,
+    "text": "attacker.GetFrameDataById(20) != null;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3444,
+    "text": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3445,
+    "text": "int previous2State = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3467,
+    "text": "LF2FrameData targetReplacementFrame = target.GetFrameDataById(replacementFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3468,
+    "text": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3487,
+    "text": "if (burningEffect && source.GetFrameDataById(203) == null)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3489,
+    "text": "if (freezeEffect && source.GetFrameDataById(200) == null)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3494,
+    "text": "source.GetFrameDataById(resolvedItr.effect - 6000) == null)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3778,
+    "text": "int previousState = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3780,
+    "text": "int previous2State = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3865,
+    "text": "int transformedState = attacker.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 3906,
+    "text": "int responseState = target.GetFrameDataById(targetFrame)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4120,
+    "text": "attacker.GetFrameDataById(40)?.state == LF2States.ObjectExpanding)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4183,
+    "text": "LF2FrameData sourceReplacementFrame = source.GetFrameDataById(replacementFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4439,
+    "text": "if (entity.GetFrameDataById(frameId) == null)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4638,
+    "text": "int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4639,
+    "text": "int previous2State = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4899,
+    "text": "attacker.GetFrameDataById(projection.TargetWaitCounter),",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 4900,
+    "text": "attacker.GetFrameDataById(projection.TargetPrevFrame));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5269,
+    "text": "int previous2State = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5570,
+    "text": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5583,
+    "text": "if (target.GetFrameDataById(projection.TargetFrame)?.state !=",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5680,
+    "text": "attackerFrame = attacker.GetFrameDataById(catchingFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs",
+    "line": 5681,
+    "text": "targetFrame = target.GetFrameDataById(caughtFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Stores/BattleFrameMotionStore.cs",
+    "line": 393,
+    "text": "return entity?.GetFrameDataById(currentFrame)?.hit_j ?? 0;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 71,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 82,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 95,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 96,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(181);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs",
+    "line": 278,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 77,
+    "text": "case BattleNativeImpactWriteKind.Action: victim.DirectWriteRawFramePreserveWaitCounter((int)op.Value); break;",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 151,
+    "text": "LF2FrameData selectedFrame = attacker.GetFrameDataById(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 186,
+    "text": "int previousState = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 214,
+    "text": "LF2FrameData latchedFrame = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 218,
+    "text": "LF2FrameData previousFrame = target.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 316,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(decision.AttackerAction);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 318,
+    "text": "target.DirectWriteRawFramePreserveWaitCounter(decision.TargetAction);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 333,
+    "text": "target.DirectWriteRawFramePreserveWaitCounter(decision.Action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 953,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 959,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(0);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1446,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(40);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1452,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(30);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1753,
+    "text": "int victimPrev2State = victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1975,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(226);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1985,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1996,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(220);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 1999,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2057,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(fallFrame);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2075,
+    "text": "LF2FrameData previousFrame = victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2080,
+    "text": "LF2FrameData previousFrame2 = victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2100,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2236,
+    "text": "target.DirectWriteHeldFramePreserveWaitCounter(action);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2248,
+    "text": "attacker.FrameCache.HasFrame(responseAction) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2259,
+    "text": "target.DirectWriteRawFramePreserveWaitCounter(responseAction);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2341,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2353,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2383,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(20);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2387,
+    "text": "victim.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2439,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2463,
+    "text": "int previousState = victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs",
+    "line": 2465,
+    "text": "int previous2State = victim.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleFirstBodyResponseWriter.cs",
+    "line": 150,
+    "text": "target.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleFirstBodyResponseWriter.cs",
+    "line": 157,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 28,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(resolvedHolderWPoint.WeaponAct);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 65,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.WeaponAct);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 66,
+    "text": "if (held.FrameCache?.HasFrame(holderWPoint.WeaponAct) != true)",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 87,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(40);",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 96,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(holderWPoint.Kind == 3",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 170,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(holder.BattleRandInt(0, 16));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleHeldObjectWriter.cs",
+    "line": 217,
+    "text": "held.DirectWriteHeldFramePreserveWaitCounter(random.SynchronizedNext(0x00418726, 6));",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleKind8ControlRelationWriter.cs",
+    "line": 47,
+    "text": "attacker.DirectWriteRawFramePreserveWaitCounter(",
+    "classification": "inventory_only_requires_call_path_review"
+  },
+  {
+    "path": "Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs",
+    "line": 888,
+    "text": "LF2FrameData previousFrame = entity.GetFrameDataById(",
+    "classification": "inventory_only_requires_call_path_review"
+  }
+]

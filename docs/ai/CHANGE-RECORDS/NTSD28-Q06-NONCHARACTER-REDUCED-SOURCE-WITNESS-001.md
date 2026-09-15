@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-NONCHARACTER-REDUCED-SOURCE-WITNESS-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: AUTHORITY_SOURCE_DIAGNOSTIC
 code-path: Tools/NTSD28AuthorityTrace/noncharacter_reduced_witness.cpp
 code-path: Tools/NTSD28AuthorityTrace/validate_noncharacter_reduced_witness.py
@@ -44,3 +44,7 @@ IN_PROGRESS / SOURCE_ONLY。准确只新增上述两Tools文件；输出Build/NT
 资源owner扩展预声明：原两Tools增144例types1..6×owner无/2/9×gain±7×余额0/6/7/420，原843保持，总987。冻结candidate后设owner与资源余额，实际gain写入DAT；before全三实体Owner/MP/MaxMP/消费计数保存。独立按两级owner规则与gain不足/上限/type6跳过预测，不从after推导。当前只单owner层，完整二层再以必要向量补。
 
 首owner987两run成功但validator case845失败：params遗漏gain/owner/balance（实际DAT与before包含，独立validator默认gain0导致预期不扣MP）。已归档owner987/incomplete-params，不改源规则；补齐显式params后重建再验证，不能把首输出当最终输入合同。
+
+源987 params补齐后独立PASS：987/545439，双run exit0，各13236640bytes，SHA42367528b7429d0dfb525a5c3208151f1bdd0937db7657b7b4a0b40066044bc9。owner987子目录manifest/validation完整；先前incomplete-params保留。Unity987待RED。
+
+VERIFIED / DECLARED_987_SOURCE_MODEL_WITNESS。最终owner987双跑各13236640bytes，SHA42367528b7429d0dfb525a5c3208151f1bdd0937db7657b7b4a0b40066044bc9，545439独立检查PASS，build manifest formal/closure身份保持；全部DAT/before/after可复建，独立review确认无循环自证。fallback不声称独立全普通尾部算术证明，保留其实际权威函数完整输出作为Unity对照；后续Unity987四组和Play3948已通过。固定seed/合成候选边界明确，非正式EXE物理输入/整场视听认证。

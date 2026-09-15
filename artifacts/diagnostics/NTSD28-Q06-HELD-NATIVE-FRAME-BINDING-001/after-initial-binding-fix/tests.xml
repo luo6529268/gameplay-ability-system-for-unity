@@ -1,0 +1,60 @@
+<test-suite type="TestSuite" id="9638" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7693" result="Failed" site="Child" start-time="2026-09-14 19:36:49Z" end-time="2026-09-14 19:36:55Z" duration="6.253463" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18235" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7685" result="Failed" site="Child" start-time="2026-09-14 19:36:49Z" end-time="2026-09-14 19:36:55Z" duration="6.189350" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18236" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7685" result="Failed" site="Child" start-time="2026-09-14 19:36:49Z" end-time="2026-09-14 19:36:55Z" duration="6.097397" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18244" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7147" result="Failed" site="Child" start-time="2026-09-14 19:36:49Z" end-time="2026-09-14 19:36:55Z" duration="6.000343" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11558" name="NTSD28Q06HeldNativeFrameBindingEditorTests" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-14 19:36:49Z" end-time="2026-09-14 19:36:55Z" duration="5.928691" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11561" name="HeldBindingAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldBindingAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-14 19:36:50Z" end-time="2026-09-14 19:36:55Z" duration="5.828681" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11559" name="HeldBindingAndFollowingTickMatchSource(Authority400,False)" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldBindingAndFollowingTickMatchSource(Authority400,False)" methodname="HeldBindingAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" seed="1969584768" result="Failed" start-time="2026-09-14 19:36:50Z" end-time="2026-09-14 19:36:52Z" duration="2.541879" asserts="0"><properties /><failure><message><![CDATA[  case 0 following entity count=1
+case 0 following missing slot=70
+case 0 following entities[0].link=0 expected=1
+case 0 following entities[0].child=0 expected=70
+case 0 following entities[1] object differs: 
+case 1 following slot 70 frame.actionLatch=0 expected 11
+case 1 following slot 70 frame.frameCounter=0 expected 7
+case 1 following entities[1].link=0 expected=-1
+case 1 following entities[1].child=-1 expected=0
+case 2 following slot 70 frame.actionLatch=0 expected 11
+case 2 following slot 70 frame.frameCounter=1 expected 7
+case 2 following entities[1].link=0 expected=-1
+case 2 following entities[1].child=-1 expected=0
+case 3 following slot 70 frame.actionLatch=20 expected 11
+case 3 following slot 70 frame.frameCounter=0 expected 7
+  Expected: <empty>
+  But was:  < "case 0 following entity count=1", "case 0 following missing slot=70", "case 0 following entities[0].link=0 expected=1", "case 0 following entities[0].child=0 expected=70", "case 0 following entities[1] object differs: ", "case 1 following slot 70 frame.actionLatch=0 expected 11", "case 1 following slot 70 frame.frameCounter=0 expected 7", "case 1 following entities[1].link=0 expected=-1", "case 1 following entities[1].child=-1 expected=0", "case 2 following slot 70 frame.actionLatch=0 expected 11"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldBindingAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean renderer) [0x003ac] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:78
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (destination): pic=0, state=3, wait=37, next=900, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11560" name="HeldBindingAndFollowingTickMatchSource(MobileExtended,False)" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldBindingAndFollowingTickMatchSource(MobileExtended,False)" methodname="HeldBindingAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" seed="1588314788" result="Failed" start-time="2026-09-14 19:36:52Z" end-time="2026-09-14 19:36:55Z" duration="3.181937" asserts="0"><properties /><failure><message><![CDATA[  case 0 following entity count=1
+case 0 following missing slot=70
+case 0 following entities[0].link=0 expected=1
+case 0 following entities[0].child=0 expected=70
+case 0 following entities[1] object differs: 
+case 1 following slot 70 frame.actionLatch=0 expected 11
+case 1 following slot 70 frame.frameCounter=0 expected 7
+case 1 following entities[1].link=0 expected=-1
+case 1 following entities[1].child=-1 expected=0
+case 2 following slot 70 frame.actionLatch=0 expected 11
+case 2 following slot 70 frame.frameCounter=1 expected 7
+case 2 following entities[1].link=0 expected=-1
+case 2 following entities[1].child=-1 expected=0
+case 3 following slot 70 frame.actionLatch=20 expected 11
+case 3 following slot 70 frame.frameCounter=0 expected 7
+  Expected: <empty>
+  But was:  < "case 0 following entity count=1", "case 0 following missing slot=70", "case 0 following entities[0].link=0 expected=1", "case 0 following entities[0].child=0 expected=70", "case 0 following entities[1] object differs: ", "case 1 following slot 70 frame.actionLatch=0 expected 11", "case 1 following slot 70 frame.frameCounter=0 expected 7", "case 1 following entities[1].link=0 expected=-1", "case 1 following entities[1].child=-1 expected=0", "case 2 following slot 70 frame.actionLatch=0 expected 11"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldBindingAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean renderer) [0x003ac] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:78
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

@@ -1,0 +1,10 @@
+{
+  "status": "PASS",
+  "error": null,
+  "throwCases": 1568,
+  "inputCases": 864,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene paused at stable boundary; source392 synthetic throws plus complete following tick in two profiles and both factories; source432 sampled input endpoints in two logic worlds. No physical-key or image-alignment claim. Separate Q05 shutdown required."
+}

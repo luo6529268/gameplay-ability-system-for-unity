@@ -43,6 +43,8 @@ namespace NTSD.Test.Editor
             catcher.CaughtSlotIndex = target.Runtime.SlotIndex;
             target.Runtime.PrevFrame2 = 5;
             target.AttackingCounter = 17;
+            target.Runtime.Bdefend = 7;
+            target.HitStateCount = 241;
             target.Runtime.OwnerSlotIndex = 29;
             target.SwitchDir("right");
             attacker.SwitchDir(sameFacing ? "right" : "left");
@@ -56,7 +58,8 @@ namespace NTSD.Test.Editor
                 Assert.That(target.AttackingCounter, Is.EqualTo(17));
                 Assert.That(target.Health.HP, Is.EqualTo(100));
                 Assert.That(target.FallCounter, Is.EqualTo(1));
-                Assert.That(target.HitStateCount, Is.EqualTo(45));
+                Assert.That(target.Runtime.Bdefend, Is.EqualTo(45));
+                Assert.That(target.HitStateCount, Is.EqualTo(241));
                 Assert.That(target.Runtime.OwnerSlotIndex, Is.EqualTo(29));
                 Assert.That(target.CatcherSlotIndex, Is.EqualTo(catcher.Runtime.SlotIndex));
                 Assert.That(catcher.CaughtSlotIndex, Is.EqualTo(target.Runtime.SlotIndex));

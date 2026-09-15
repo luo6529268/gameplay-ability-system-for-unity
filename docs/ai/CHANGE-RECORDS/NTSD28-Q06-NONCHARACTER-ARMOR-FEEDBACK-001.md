@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-NONCHARACTER-ARMOR-FEEDBACK-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: PREARMOR_FEEDBACK_UNITY_TRANSACTION
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PrearmorFeedbackEditorTests.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeOrdinaryHitPrelude.cs
@@ -50,3 +50,7 @@ focused684四组均PASS，Bdefend重接正式入口后direct192/Shadow208，剩6
 首个本地回放测试两组FAIL仅首先发现NativeRandom.SynchronizedGeneration 2→3；读取现有NTSD28NativeRandom.TryRestoreScalarState/ResetFromSeed/AdvanceSynchronizedGeneration确认它是故意失效旧只读cursor的内部代次，不是还原的战斗随机状态。保留FAIL，测试签名改为比较CRT state/count、table seed/hash、同步counter/index/calls/lastSite，并追加旧cursor在恢复后不可commit断言；不修改随机实现或已知canonical allocation epoch恢复问题。
 
 当前检查点IN_PROGRESS / PRELUDE_FEEDBACK_RUNTIME_PASS_DAMAGE_DEPENDENCIES_OPEN。前置684四组、Play2736/关闭、SelfCheck09:17:43Z、本地16场景/32replayed ticks均PASS；完整984仍四组各1518/232case，不能标全包VERIFIED。下一unarmored weapon→type5覆盖→noncharacter reduced；详细报告已重写，原RED报告保留。
+
+依赖回访更正2026-09-15：weapon/type5/matched/reduced及gain已完成各自限定验收，原984/684/Bdefend/prelude replay已通过；qualification四个完整driver于job65d082698b534717b51999e3be656a5b 4/4 PASS（证据见reduced parent artifact qualification-driver-revisit-4-pass.xml）。旧232/108或Bdefend/Spark首差不再当前阻塞。父Record仍需逐项核对自身明确Play/关闭出口，不以本追加自动扩大VERIFIED；不得重做已过端点矩阵。
+
+VERIFIED / DECLARED_PRELUDE_FEEDBACK_TRANSACTION。依赖weapon/type5/matched/reduced/gain已限定验收；原984/684/Bdefend/prelude replay通过，当前full driver四组EditMode4/4及真实Play driverOnly8例16:54:03Z PASS，Scene checksum不变/Renderer2→2；16:55:03Z关闭PASS，restore4→4、World/slots/两pool0、两帧Stopped。现有端点Play480/读帧Play168/前置Play2736及各自SelfCheck、当前完整SelfCheck16:36:40Z与reduced Play3948共同闭合声明出口，非全部reader或B5/B6/Q06完成。新增证据在qualification artifact driver-play-8-pass.json / driver-play-shutdown-pass.json；旧失败保留。

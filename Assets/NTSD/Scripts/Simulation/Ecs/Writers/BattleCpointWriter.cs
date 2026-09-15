@@ -227,7 +227,7 @@ namespace NTSD.Simulation.Ecs
         {
             attacker.ApplySignedCpointFrame(actionFrame);
             int victimAction = attacker.Frame?.D?.PrimaryCatchPoint.Vaction ?? 0;
-            victim.DirectWriteRawFramePreserveWaitCounter(victimAction);
+            victim.SetCpointRawFramePreserveWait(victimAction);
             victim.AttackingCounter = 0;
             attacker.AttackingCounter = 0;
         }
@@ -429,18 +429,6 @@ namespace NTSD.Simulation.Ecs
             BattleCatchPointValue cpoint,
             LF2FrameData throwFrameSnapshot)
         {
-            int sourceNextFrameId = throwFrameSnapshot?.next ?? 0;
-            LF2FrameData sourceNextFrame =
-                attacker.FrameCache?.HasFrame(sourceNextFrameId) == true
-                    ? attacker.FrameCache.GetFrameDataById(sourceNextFrameId)
-                    : null;
-
-            if (cpoint.ThrowInjury == -1 &&
-                attacker.HasStep10ThrowTransformVictimData(victim))
-            {
-                attacker.ApplyCpointThrowTransformToSelfAndOwnedObjects(victim);
-            }
-
             if (cpoint.ThrowInjury > 0)
             {
                 ApplyThrowInjuryDisplayLead(
@@ -454,7 +442,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             LF2FrameData throwFrame = throwFrameSnapshot ??
-                attacker.FrameCache?.GetFrameDataById(attacker.Frame?.N ?? 0) ??
+                attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? 0) ??
                 attacker.Frame?.D;
 
             int centerX = throwFrame?.centerx ?? 0;
@@ -470,8 +458,9 @@ namespace NTSD.Simulation.Ecs
             victim.Runtime.YInt = y;
 
             int nextFrame = throwFrame?.next ?? 0;
-            attacker.SetCpointRawFramePreserveWait(nextFrame, sourceNextFrame);
-            attacker.SetCpointRawPrevFrame2(nextFrame, sourceNextFrame);
+            // Alignment contract: NTSD28-Q06-CPOINT-THROW-NATIVE-RAW-BINDING-001.
+            attacker.SetCpointRawFramePreserveWait(nextFrame);
+            attacker.SetCpointRawPrevFrame2(nextFrame);
             attacker.AttackingCounter = 0;
 
             victim.Runtime.Vx = attacker.Runtime.Dir == "right"
@@ -489,6 +478,7 @@ namespace NTSD.Simulation.Ecs
 
             victim.SetCpointRawFramePreserveWait(cpoint.Vaction);
             victim.SetCpointRawPrevFrame2(cpoint.Vaction);
+            victim.AttackingCounter = 0;
         }
 
         private static void ApplyThrowInjuryDisplayLead(

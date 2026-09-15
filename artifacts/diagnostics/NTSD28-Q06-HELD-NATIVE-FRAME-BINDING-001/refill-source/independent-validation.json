@@ -1,0 +1,19 @@
+{
+  "rows": 242,
+  "checks": 229293,
+  "failures": [],
+  "totals": {
+    "linked": 242,
+    "updates": 188,
+    "unsupported": 0,
+    "terminal": 0,
+    "velocityReleases": 0,
+    "kind3Releases": 49,
+    "charging": 206,
+    "hpRefills": 82,
+    "mpRefills": 112,
+    "exhausted": 54
+  },
+  "sha256": "83af13d70ec22e0ff046cf5addaa2b06d8f0023123abda6a92366dfd842d5dc0",
+  "scope": "Independent complete before and immediate refill raw/links/descriptors/B2/2F4/consumption/RNG model. Following tick captured by source but not independently modeled here."
+}

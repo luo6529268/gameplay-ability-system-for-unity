@@ -18,7 +18,7 @@ namespace NTSD.Test.Editor
         private static IEnumerable<TestCaseData> MissingCases()
         {
             foreach (bool real in new[] { false, true })
-            foreach (int action in new[] { 777, -888 })
+            foreach (int action in new[] { 999, -888 })
             foreach (bool currentMissing in new[] { false, true })
             foreach (int type in new[] { 1, 2, 4, 6 })
             foreach (bool kind3 in new[] { false, true })
@@ -88,12 +88,26 @@ namespace NTSD.Test.Editor
                 scope.Child.Health.HP = exhausted ? decrement : 11;
                 ulong legacy = scope.World.Rng.CallCount;
                 ulong native = NativeCalls(scope.World);
+                var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+                var cursor = scope.World.NativeRandom.CaptureSynchronizedCursor();
+                uint site = oid == 122 ? 0x004181C9u : 0x004182C0u;
+                int expectedVx = cursor.Next(site, 7) - 3;
                 scope.World.HeldObjectProcessAll(7);
                 Assert.That(scope.Child.Health.HP, Is.EqualTo(exhausted ? 0 : 11 - decrement));
                 Assert.That(scope.Child.Frame.N, Is.EqualTo(exhausted ? 0 : -888));
                 Assert.That(scope.Child.Runtime.LinkState, Is.EqualTo(exhausted ? 0 : -1));
-                Assert.That(scope.World.Rng.CallCount - legacy, Is.EqualTo(exhausted ? 1UL : 0UL));
-                Assert.That(NativeCalls(scope.World), Is.EqualTo(native));
+                Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacy));
+                Assert.That(NativeCalls(scope.World), Is.EqualTo(native + (exhausted ? 1UL : 0UL)));
+                var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+                Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+                Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+                if (exhausted)
+                {
+                    Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(site));
+                    Assert.That(scope.Child.Runtime.Vx, Is.EqualTo(expectedVx));
+                }
+                else
+                    Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
                 Assert.That(scope.Events.Events.Count(e => e.Action == "held-unsupported-action"), Is.EqualTo(exhausted ? 0 : 1));
                 Assert.That(scope.World.FindEntityByRuntimeSlotForQuery(50), Is.SameAs(scope.Child));
             }
@@ -103,7 +117,7 @@ namespace NTSD.Test.Editor
         [TestCase(true)]
         public void Missing_ContinuesNextSlotAndDistinguishesC09C20(bool real)
         {
-            using (var scope = new Scope(real, 1, 777, 3, 70))
+            using (var scope = new Scope(real, 1, 999, 3, 70))
             {
                 LF2Character nextHolder = scope.AddHolder(1, 20, 1, 0, 0);
                 LF2Entity next = scope.AddChild(false, nextHolder, 51, 1);
@@ -116,7 +130,7 @@ namespace NTSD.Test.Editor
                 CollectionAssert.AreEqual(new[] { "held-refill:C09", "held-refill:C20" }, events.Select(e => e.Pass).ToArray());
                 Assert.That(events.All(e => e.Slot == 50 && e.CursorSlot == 50 && e.ActorSlot == 0 && e.Tick == 7), Is.True);
                 Assert.That(scope.Events.Events.Any(e => e.Action == "free"), Is.False);
-                Assert.That(scope.Child.Frame.N, Is.EqualTo(777));
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(999));
                 Assert.That(next.Runtime.LinkState, Is.EqualTo(-1));
             }
         }
@@ -127,6 +141,7 @@ namespace NTSD.Test.Editor
 
         private sealed class Generic : LF2Entity
         {
+            public Generic() { Trans = new FrameTransistor(this); }
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
             public override void Reset() { }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.LightWeapon;

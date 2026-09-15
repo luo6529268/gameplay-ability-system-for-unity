@@ -1,3 +1,5 @@
+VERIFIED / DECLARED_CURRENT_SNAPSHOT_QUALIFICATION。2026-09-15依赖与真实driver Play/关闭回访已通过，详情同ID Record；以下旧失败只保留历史，不再重做。
+
 > 当前IN_PROGRESS / QUALIFICATION_RUNTIME_PASS_FULL_DRIVER_DEPENDENCIES；3264端点已清零，但4完整driver失败等BDEFEND writer与Spark CRT两子项。下一UNARMORED-BDEFEND-WRITER-AUDIT-001，之后HIT-SPARK-TRANSACTION-AUDIT-001，证据见qualification artifact REPORT。
 
 # 碰撞 current 与 snapshot 准入差异

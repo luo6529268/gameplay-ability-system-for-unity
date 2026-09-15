@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "cases": 151,
+  "groups": {
+    "request": 16,
+    "encoded": 32,
+    "redirect_binding": 16,
+    "fallback_priority": 6,
+    "fallback": 18,
+    "rowing": 44,
+    "builtin": 19
+  },
+  "bytes": 627793,
+  "sha256": "b00f0e3fb7fcf6cbef85ac41616a931e6bc3eebd358bdfd9e71c313eeb7b1d9b",
+  "doubleRunEqual": true,
+  "structuralAndSelectedSemanticRowsChecked": 151,
+  "scope": "Actual source InputRouter28.step_sampled outputs. Selected request, redirect binding, fallback priority and fixed-seed builtin assertions only; not an independent full-field oracle."
+}

@@ -1,0 +1,72 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-CPOINT-THROW-NATIVE-RAW-BINDING-001
+status: VERIFIED
+change-kind: CPOINT_THROW_NATIVE_FRAME_BINDING
+code-path: Tools/NTSD28AuthorityTrace/cpoint_throw_raw_binding_witness.cpp
+code-path: Tools/NTSD28AuthorityTrace/validate_cpoint_throw_raw_binding_witness.py
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CpointThrowRawBindingEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleCpointWriter.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+code-path: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+authority: Current formal B1E13AE1 EXE and playable BattleWorld28::advance_catch_relations; frozen catcher snapshot supplies center/next/cpoint, raw action and snapshot writes do not require destination existence.
+evidence: Pre-change live caller audit confirms old HasFrame gate and GetFrameDataById binding in ApplyThrow and SetCpointRawFramePreserveWait/SetCpointRawPrevFrame2. Native witness and Unity tests pending.
+-->
+
+# CPoint 投掷原生帧绑定
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST。归属 BATCH-03/Q06；准确 Task 同 ID。先编译未修改权威源的独立诊断 runner，再建立 Unity RED；生产改动尚未开始。
+
+源入口：当前 source/ntsd28_core/src/simulation/battle_world.cpp 的 advance_catch_relations，约5751冻结catcher snapshot，5930读取输入新动作，5975～6005仍用原frame center/next及旧cpoint投掷，原始写入双方action/snapshot/counter。编译使用已有Build-AuthoritySourceCapture.ps1检验正式EXE和playable源码闭包；诊断runner不冒充正式EXE验收。
+
+当前 Unity：BattleCpointWriter.ApplyThrow预取旧定义next使用旧HasFrame/GetFrameDataById；LF2Entity两个SetCpointRaw*对高帧/缺帧处理不一致。候选改动仅此三个符号及必要的同事务victim counter reset；保护RunKind2Validation的212调用。旧protected ApplyCpointThrowStep10无正式caller时不修改。旧全局getter、FrameCache API、所有非战斗和资源保持。
+
+测试矩阵：普通声明0、隐式99、声明900、声明999、缺失999、1000、负值，双方交叉与朝向/输入选择；记录before、立即after、描述符、counter/latch、wait/next、关系/位置/速度/environment，以及后继完整driver。throwinjury=-1是否转换需按当前source核对，不能以旧Unity当权威；下文复核已确认当前source没有该分支。未覆盖项保持待验。
+
+副作用与边界：raw写入不自动等于后续tick可存活；null描述符不得沿用旧Frame.D或Prev2D。不得更改pass顺序、生命周期规则、持久schema、GAS、Mono组织、Scene、Prefab、资源或Server。没有新增runtime owner/queue/worker；十一阶段关闭原样保留。
+
+验收：源见证双跑与独立预期检查，Unity RED→修复→focused与kind2/旧throw回归，0编译错误、SelfCheck、真实Play场景checksum/borrower守恒、有序关闭、必要同world回放。限定合成数据证据不代表Q07内容已迁移或Q06全部完成。
+
+回滚：仅撤销本ID实际差量并保留既有工作；按仓库规则先获明确回滚批准。用户HUDBg30及外部提交不得覆盖。禁止computer-use，禁止提交推送或删除旧资源。
+
+源码复核纠正：当前playable并没有throwinjury==-1定义转换，旧Task的保护前提作废。源见证增加-1/0以及独立owned entity定义不变；Unity生产ApplyThrow移除该无依据入口属于本事务，保留未被正式调用的旧helper。另确认victim counter漏清零。新runner已写，首次编译因InputButtons28只读indexer赋值失败（原日志保留），改调用set；尚未有源运行结果。
+
+源见证已构建双跑exit0，各3555512 bytes、SHA aa306fb50d5f3f10318d2ab1bcab6bdfad73baf3b016798f0406b09971d05208，392行；新增独立validator已运行110742检查0差异，包含全立即after派生及-1/0配对等价。后继tick已捕获但Unity未消费，不能称全事务出口通过。新增单Editor测试由worker写入中，生产仍未改。
+SelfCheck预声明：同事务CheckCpointThrowRawAndTransformMatrix旧断言要求victim counter保持6、CheckCpointThrowTransformUsesSourceSnapshot要求-1替换自身/子对象DAT，均与当前source冲突；在独立392 Unity RED后修改这些准确符号的oracle，保留几何/原snapshot/等待缓存/无depth时Vz等其它断言。新增code-path已登记，不以放宽断言替代生产修复。
+
+源见证完善：序列化catch timeout纳入独立after保持检查；后继driver使用BattleConfig正式默认hp/mp/drop gate，避免把Options构造默认值当正式mode。原aa306双跑/110742证据保留source-initial-default-options，新的source输出待重建。立即投掷fixture不变。
+
+最终source392（含timeout/正式默认mode后继）双跑exit0/3594544 bytes，SHA c809a36431d9c5b8a81c1cfd3590612fd2c708ddfa9cda41a1eae3481f03a367；独立112506检查0差异，manifest075ource保持。单Editor fixture已写并root静态review：两profile/3entity生产factory、原始初值、47bound raw+extra/descriptor/Trans/definition/RNG，实际slot循环；第三entity另设KillCount0覆盖旧错误传播。未使用after初始化；完整后继tick、Play/replay仍待。已请求Unity刷新，尚无编译结论。
+
+Unity RED job7939fe89bc7440ae985bad4a13c9a5e0两项FAIL：每profile392 before0/after5676；production-red保留JSON/XML。现已修改两生产文件：ApplyThrow移除无源码依据的-1变身live分支、按原snapshot next native raw绑定并清victim counter；两raw setters撤旧存在门并统一Native descriptor，null只解绑描述符保留Trans缓存/latch。旧helper未改、kind2不写Prev2、不引入Transition。SelfCheck准确旧oracle已按source修订双方counter0与self/owned定义保持，几何/等待/方向/深度断言保留。编译/focused待重新运行。
+
+首轮修复后job4cf4c995960b4b7a8a3cce3f36b46d83终态30项26PASS/4FAIL。392两profile raw及extra已无差异，仅select后victim原生隐式131缓存wait仍1而非0；确定同文件ApplyAction仍DirectWriteRawFramePreserveWaitCounter旧EmptyFrame(wait1)。按source selected_frame直接raw写vaction链，将其准确符号纳入本ID并改用已经修正的SetCpointRawFramePreserveWait，保持counter0/不写snapshot。另两FAIL是旧Type3Tail_DoesNotReadPreviousCpointAsAction期待HitStateCount45（实际0），该反射helper路径不调用本批setter，须另项核对字段职责，保留失败，不为此回退已对齐生产。独立只读review目前未发现已改三处确定错误。
+
+ApplyAction native绑定后joba4f37d29d54146a09d6ee67f9c7c7736 2/2 PASS：两profile392 before0/after0，immediate-2-pass.xml保留。下一同单测试脚本增加后继完整RunReleaseTick两profile，消费源nextTick全部raw及alive/action/snapshot/counter/latch/descriptor；不以仅immediate通过替代生命周期验收。正式默认mode绑定与原input state需如实恢复，若新首差则保留并调查。
+
+完整driver首轮job77b90029625240d7a813667411da2f93：15项13PASS/2FAIL，独立type3 oracle全13通过；两profile392 before/immediate0，following各656差异，原输出following-red。首差select case2动作0/65：fixture仅初始化legacy KeyJump/CdAttack，未同步NativeInputProxy.Current[4]/EdgeWindow[0]，下一tick正式输入链会投影零canonical state覆盖legacy。依据源runner当前attack/edge5准确补这两个canonical字段，不修改生产输入。其它catchSource尾差待同输入复测后单独分析。
+
+原生输入字段补齐后jobe384413703f84a3188de23de663baf8b仍2immediate PASS/2following FAIL（656保持）；该初值修正没有消除首差，不能说已定位全部原因。进一步读实际构造：SimulationAiSensingModule.ExecutionProfile默认LegacyCanonical，纯new World未经过Host默认DataOrientedCanonical配置，UsesNTSD28NativeInputPipeline为false。完整driver fixture现在显式使用正式DataOrientedCanonical；之前输出单独保留following-canonical-input-only-red。不是修改生产输入逻辑。
+
+job5527674d6b7b4347863abbdd397803b2因fixture配置时机拒绝：AI profile必须在注册entity前设置。现将完整driver的DataOrientedCanonical配置移至MakeWorld注册前，不更改正式API生命周期限制。尚未得出同配置fulltick差异。
+
+job1ffa811419a74792bbe8735dc99638b7正确预注册native profile仍2FAIL，首差0/65保持，前一配置推断不足以解释该结果。原输出following-native-profile-red。接下来只在现有测试用已有诊断hook记录producer/route后action/input以及Flow/Profile，不修改生产或降低期望，直接定位首次分歧。
+
+诊断joba118e0ef5a5f408eb8d57c7049218838保留656：case2 beforeDriver KeyJump1/edge5，producer已变KeyJump0/CdAttack0，route投影零。不是C25猜测。实际BattleLogicEntityFactory初始化living.AiControlled=releaseOpointSpawn，fixture未覆写而source SpawnRequest及options.controls没有启用AI。准确补e.AiControlled=false匹配源；原canonical input和profile修正保留。需复测后再判断是否真正production首差，禁止把这次夹具补项写成生产输入修复。
+
+当前完整driver真实首差：fixture关闭AI后jobe756a0880dca465088333c6e9cb19000两immediate PASS、两following FAIL；before和立即0，各196差异仅28个next99 implicit/select行，余364行raw/extra/lifetime通过。source input_routing.cpp 907/987取state缺失-1，Unity native ground/airdash直接frame.state0。建立独立Task NATIVE-INPUT-MISSING-STATE-ROUTING-001，尚未新建其Change/改该生产。父包依赖未关闭，不宣称全tick通过。新完整SelfCheck已请求，结果待。
+
+完整SelfCheck17:40:42Z FAIL，DATA-01C CheckAuthoredFrameGates仍断言Cpoint raw拒绝450/857，与当前source原生raw合同冲突。修改前补准确符号：只分离该方法中legacy ImmediateFrame的拒绝检查与Cpoint raw的原生450/857接受、无效号raw绑定null检查，旧全局getter/其它collision检查不改；保留旧失败结果。
+
+最新完整SelfCheck17:43:37Z PASS，结果归档self-check-174337-pass.result；DATA01C旧失败保留。最新脚本编译CS0，未进行Play/回放/关闭，父仍IN_PROGRESS / FULL_TICK_DEPENDENCY。当前下一唯一Task NATIVE-INPUT-MISSING-STATE-ROUTING-001；未改它的生产代码，不重做已过source/立即端点。
+
+最终只读复核ApplyAction与DATA01C oracle新增差量，未发现确定错误；不扩大父出口。最终manage_scene get_active：NTSD_Battle isDirty=false/rootCount14，Scene文件SHA BCD1047B…0E9FB6保持，Scene/Config/Sprite git状态无新修改。Validator PASS、git diff --check PASS；未提交推送，禁止computer-use持续遵守。当前无build/test/agent运行，SelfCheck终态PASS，下一只处理已登记input missing-state任务。
+
+依赖输入optional-state修复后，job5cec09d0c7c540d0be3c74c154ba7509父四项（两profile立即+fulltick）全部PASS，原196首差清除。准备修改同Editor测试文件验收接口：抽取可传renderer flag的完整driver矩阵，真实Play两profile×两factory共1568例，并调用子输入432×两profile；Scene world暂停稳定边界、checksum和borrower守恒。新增同world snapshot replay代表对角56行/每profile（next/vaction及声明标记相同），capture before throw，再实际投掷+两个完整tick，restore后重复、raw/extra/input/RNG签名及旧cursor失效。无生产/场景修改，旧public立即/driver测试入口保持；Play之后必须现有Q05关闭检查。
+
+验收worker交付并root已读单文件：RunFollowingFullTickMatrix(profile,renderer)、两factory MakeWorld/失败清理、56对角场景tick0 before-throw snapshot replay（raw/extra/B2/RNG，旧cursor失效）、Play1568+864计数与Scene checksum/borrower保护。入口未绕snapshot guard，未运行Unity；写权归还。准备统一编译与真实replay测试，之后fresh SelfCheck/Play/关闭。
+
+Replay jobae055f0e5d094991bd053f908d9d4af8两FAIL：tick0 snapshot guard实际通过，随后ReplaySignature误把0传给只接受正数completedTick的诊断RawCapture。堆栈明确NTSD28UnityEntityRawCapture.CaptureTickObject38，不是snapshot限制。只改测试签名：显式记录真实tick，复用合法capture label1的entities投影，不将该label包装为已完成tick；实际world/snapshot仍0且不绕guard。原XML保留。
+
+Replay jobe7a8b916182146af9c02d2f7741c4c2d两项PASS：每profile56，总112个before-throw tick0快照场景；实际投掷+两个完整tick恢复重做，共224重放tick；恢复前状态/立即后/两tick raw、extra、B2输入和native RNG签名一致，旧cursor失效。诊断签名正数label修正不改变实际tick0捕获。XML与replay JSON已归档。现在请求fresh SelfCheck，之后Play1568+864与有序关闭。
+
+VERIFIED / DECLARED_CPOINT_RAW_BINDING_AND_FOLLOWING_TICK。fresh SelfCheck18:13:58Z PASS；Play18:15:16Z投掷完整tick1568+输入864全部PASS，Renderer2→2、Scene checksum不变；shutdown18:16:07Z PASS，恢复4→4，World/slots/logic/render全0、两帧Stopped。父before-throw replay112场景224重放tick通过。最终Editor idle/notPlaying，Scene dirtyfalse/root14/SHA BCD1047B…0E9FB6。证据各ID artifact。没有正式资源迁移、物理键、整场视听或全部B2/B6/Q06声明。下一唯一Task NATIVE-INPUT-ACTION-COST-FRAME-READERS-001 READY_LIVE_SOURCE_MAPPING，尚未改其脚本。

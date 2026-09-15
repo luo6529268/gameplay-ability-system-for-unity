@@ -1575,12 +1575,26 @@ namespace NTSD.Simulation.Ecs
                 target.Runtime.InputMpConsumedTotal350 = unchecked(target.Runtime.InputMpConsumedTotal350 + damage.MpDamage);
                 ApplyNativeStandardHitCreditAndConsume(world, attacker, target, damage.HpDamage);
                 var resourceAttacker = ResolveNativeHitResourceAttacker(world, attacker.Runtime.SlotIndex);
-                if (resourceAttacker?.Runtime != null)
+                if (resourceAttacker?.Runtime != null && resourceAttacker.Runtime.ObjType == 0 &&
+                    attacker.Runtime.InputLocalResourceEnabled49D034)
                 {
-                    // Noncharacter targets skip injury-MP and drain; the resolved character owner can still gain/spend MP.
-                    ApplyNativeHitResourceTransaction(resourceAttacker.Runtime, target.Runtime, 0,
-                        attacker.Runtime.HitResourceSuppression15C, itr.drain, itr.gain,
-                        attacker.Runtime.InputLocalResourceEnabled49D034, 0, 0, resourceAttacker.Health.MaxMP);
+                    // Native current MP is PP; the legacy MP bank is a separate carrier.
+                    if (itr.gain < 0)
+                    {
+                        int cost = unchecked(-itr.gain);
+                        if (cost <= resourceAttacker.Runtime.PP)
+                        {
+                            resourceAttacker.Runtime.PP = unchecked(resourceAttacker.Runtime.PP + itr.gain);
+                            resourceAttacker.Runtime.InputMpConsumedTotal350 = unchecked(
+                                resourceAttacker.Runtime.InputMpConsumedTotal350 + cost);
+                        }
+                    }
+                    else
+                    {
+                        int candidate = unchecked(resourceAttacker.Runtime.PP + itr.gain);
+                        if (candidate <= resourceAttacker.Runtime.MPMax)
+                            resourceAttacker.Runtime.PP = candidate;
+                    }
                 }
             }
             if (type == 1 || type == 2 || type == 4 || type == 6)
@@ -1988,11 +2002,12 @@ namespace NTSD.Simulation.Ecs
                 }
             }
 
-            LF2HitResolveRuntimeData.RecordStandardHurtSounds(
-                attacker,
-                victim,
-                itr,
-                knockdown);
+            if (attacker.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.SpecialAttack)
+            {
+                string cue = LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?.weapon_broken_sound;
+                if (!string.IsNullOrEmpty(cue))
+                    attacker.QueueBattleSound(cue);
+            }
             ArmNativeUnarmoredHitMotion(
                 victim.Runtime,
                 attacker.Runtime,

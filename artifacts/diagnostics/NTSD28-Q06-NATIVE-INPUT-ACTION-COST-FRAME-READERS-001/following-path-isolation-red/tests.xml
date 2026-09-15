@@ -1,0 +1,199 @@
+<test-suite type="TestSuite" id="9627" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7687" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="7.328523" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18213" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7679" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="7.261420" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18214" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7679" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="7.169247" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18222" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7141" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="7.072068" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11669" name="NTSD28Q06NativeInputActionCostEditorTests" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="7.001392" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11674" name="FollowingTickPreservesNativeCostAndLifetime" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:10Z" duration="6.900413" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11670" name="FollowingTickPreservesNativeCostAndLifetime(Authority400,Legacy)" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime(Authority400,Legacy)" methodname="FollowingTickPreservesNativeCostAndLifetime" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" seed="1295679268" result="Failed" start-time="2026-09-14 18:53:03Z" end-time="2026-09-14 18:53:05Z" duration="1.774217" asserts="0"><properties /><failure><message><![CDATA[  case 89 following slot 0 position.x=0 expected -9
+case 89 following slot 0 position.preciseX=0 expected -9
+case 91 following slot 0 position.x=0 expected -9
+case 91 following slot 0 position.preciseX=0 expected -9
+case 93 following slot 0 position.x=0 expected -9
+case 93 following slot 0 position.preciseX=0 expected -9
+case 95 following slot 0 position.x=0 expected -9
+case 95 following slot 0 position.preciseX=0 expected -9
+case 97 following slot 0 position.x=0 expected -2
+case 97 following slot 0 position.preciseX=0 expected -2
+case 99 following slot 0 position.x=0 expected -9
+case 99 following slot 0 position.preciseX=0 expected -9
+case 101 following slot 0 position.x=0 expected -9
+case 101 following slot 0 position.preciseX=0 expected -9
+case 103 following slot 0 position.x=0 expected -9
+case 103 following slot 0 position.preciseX=0 expected -9
+case 105 following slot 0 position.x=0 expected -9
+case 105 following slot 0 position.preciseX=0 expected -9
+case 107 following slot 0 position.x=0 expected -9
+case 107 following slot 0 position.preciseX=0 expected -9
+  Expected: <empty>
+  But was:  < "case 89 following slot 0 position.x=0 expected -9", "case 89 following slot 0 position.preciseX=0 expected -9", "case 91 following slot 0 position.x=0 expected -9", "case 91 following slot 0 position.preciseX=0 expected -9", "case 93 following slot 0 position.x=0 expected -9", "case 93 following slot 0 position.preciseX=0 expected -9", "case 95 following slot 0 position.x=0 expected -9", "case 95 following slot 0 position.preciseX=0 expected -9", "case 97 following slot 0 position.x=0 expected -2", "case 97 following slot 0 position.preciseX=0 expected -2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode physicsMode) [0x00397] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputActionCostEditorTests.cs:84
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 0 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 0 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=1000999, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=2000999, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=1013900, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=2020900, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=1000999, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=2000999, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=12, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>
+<color=cyan>[Converter] 帧 900 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (cost): pic=0, state=12, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=0, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=0, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=0, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 700 (current): pic=0, state=0, wait=37, next=700, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=NativeInputActionCost, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11671" name="FollowingTickPreservesNativeCostAndLifetime(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime(Authority400,DataOriented)" methodname="FollowingTickPreservesNativeCostAndLifetime" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" seed="1092871698" result="Failed" start-time="2026-09-14 18:53:05Z" end-time="2026-09-14 18:53:06Z" duration="1.335034" asserts="0"><properties /><failure><message><![CDATA[  case 0 following slot 0 frame.action=700 expected 231
+case 0 following slot 0 frame.actionLatch=700 expected 231
+case 0 following slot 0 frame.previousAction=700 expected 231
+case 0 following slot 0 frame.tickActionSnapshot=700 expected 231
+case 0 following slot 0 frame.frameCounter=1 expected 0
+case 0 following slot 0 frame.frameState=12 expected 0
+case 0 following slot 0 motion.y=2 expected 0
+case 2 following slot 0 frame.action=99 expected 230
+case 2 following slot 0 frame.actionLatch=99 expected 230
+case 2 following slot 0 frame.previousAction=99 expected 230
+case 2 following slot 0 frame.tickActionSnapshot=99 expected 230
+case 2 following slot 0 frame.frameCounter=1 expected 0
+case 2 following slot 0 frame.frameState=12 expected 0
+case 2 following slot 0 motion.y=2 expected 0
+case 4 following slot 0 frame.action=99 expected 230
+case 4 following slot 0 frame.actionLatch=99 expected 230
+case 4 following slot 0 frame.previousAction=99 expected 230
+case 4 following slot 0 frame.tickActionSnapshot=99 expected 230
+case 4 following slot 0 frame.frameCounter=1 expected 0
+case 4 following slot 0 frame.frameState=12 expected 0
+  Expected: <empty>
+  But was:  < "case 0 following slot 0 frame.action=700 expected 231", "case 0 following slot 0 frame.actionLatch=700 expected 231", "case 0 following slot 0 frame.previousAction=700 expected 231", "case 0 following slot 0 frame.tickActionSnapshot=700 expected 231", "case 0 following slot 0 frame.frameCounter=1 expected 0", "case 0 following slot 0 frame.frameState=12 expected 0", "case 0 following slot 0 motion.y=2 expected 0", "case 2 following slot 0 frame.action=99 expected 230", "case 2 following slot 0 frame.actionLatch=99 expected 230", "case 2 following slot 0 frame.previousAction=99 expected 230"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode physicsMode) [0x00397] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputActionCostEditorTests.cs:84
+]]></stack-trace></failure></test-case><test-case id="11672" name="FollowingTickPreservesNativeCostAndLifetime(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime(MobileExtended,Legacy)" methodname="FollowingTickPreservesNativeCostAndLifetime" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" seed="729100816" result="Failed" start-time="2026-09-14 18:53:06Z" end-time="2026-09-14 18:53:08Z" duration="1.796051" asserts="0"><properties /><failure><message><![CDATA[  case 89 following slot 0 position.x=0 expected -9
+case 89 following slot 0 position.preciseX=0 expected -9
+case 91 following slot 0 position.x=0 expected -9
+case 91 following slot 0 position.preciseX=0 expected -9
+case 93 following slot 0 position.x=0 expected -9
+case 93 following slot 0 position.preciseX=0 expected -9
+case 95 following slot 0 position.x=0 expected -9
+case 95 following slot 0 position.preciseX=0 expected -9
+case 97 following slot 0 position.x=0 expected -2
+case 97 following slot 0 position.preciseX=0 expected -2
+case 99 following slot 0 position.x=0 expected -9
+case 99 following slot 0 position.preciseX=0 expected -9
+case 101 following slot 0 position.x=0 expected -9
+case 101 following slot 0 position.preciseX=0 expected -9
+case 103 following slot 0 position.x=0 expected -9
+case 103 following slot 0 position.preciseX=0 expected -9
+case 105 following slot 0 position.x=0 expected -9
+case 105 following slot 0 position.preciseX=0 expected -9
+case 107 following slot 0 position.x=0 expected -9
+case 107 following slot 0 position.preciseX=0 expected -9
+  Expected: <empty>
+  But was:  < "case 89 following slot 0 position.x=0 expected -9", "case 89 following slot 0 position.preciseX=0 expected -9", "case 91 following slot 0 position.x=0 expected -9", "case 91 following slot 0 position.preciseX=0 expected -9", "case 93 following slot 0 position.x=0 expected -9", "case 93 following slot 0 position.preciseX=0 expected -9", "case 95 following slot 0 position.x=0 expected -9", "case 95 following slot 0 position.preciseX=0 expected -9", "case 97 following slot 0 position.x=0 expected -2", "case 97 following slot 0 position.preciseX=0 expected -2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode physicsMode) [0x00397] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputActionCostEditorTests.cs:84
+]]></stack-trace></failure></test-case><test-case id="11673" name="FollowingTickPreservesNativeCostAndLifetime(MobileExtended,DataOriented)" fullname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime(MobileExtended,DataOriented)" methodname="FollowingTickPreservesNativeCostAndLifetime" classname="NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests" runstate="Runnable" seed="1725567456" result="Failed" start-time="2026-09-14 18:53:08Z" end-time="2026-09-14 18:53:10Z" duration="1.889562" asserts="0"><properties /><failure><message><![CDATA[  case 0 following slot 0 frame.action=700 expected 231
+case 0 following slot 0 frame.actionLatch=700 expected 231
+case 0 following slot 0 frame.previousAction=700 expected 231
+case 0 following slot 0 frame.tickActionSnapshot=700 expected 231
+case 0 following slot 0 frame.frameCounter=1 expected 0
+case 0 following slot 0 frame.frameState=12 expected 0
+case 0 following slot 0 motion.y=2 expected 0
+case 2 following slot 0 frame.action=99 expected 230
+case 2 following slot 0 frame.actionLatch=99 expected 230
+case 2 following slot 0 frame.previousAction=99 expected 230
+case 2 following slot 0 frame.tickActionSnapshot=99 expected 230
+case 2 following slot 0 frame.frameCounter=1 expected 0
+case 2 following slot 0 frame.frameState=12 expected 0
+case 2 following slot 0 motion.y=2 expected 0
+case 4 following slot 0 frame.action=99 expected 230
+case 4 following slot 0 frame.actionLatch=99 expected 230
+case 4 following slot 0 frame.previousAction=99 expected 230
+case 4 following slot 0 frame.tickActionSnapshot=99 expected 230
+case 4 following slot 0 frame.frameCounter=1 expected 0
+case 4 following slot 0 frame.frameState=12 expected 0
+  Expected: <empty>
+  But was:  < "case 0 following slot 0 frame.action=700 expected 231", "case 0 following slot 0 frame.actionLatch=700 expected 231", "case 0 following slot 0 frame.previousAction=700 expected 231", "case 0 following slot 0 frame.tickActionSnapshot=700 expected 231", "case 0 following slot 0 frame.frameCounter=1 expected 0", "case 0 following slot 0 frame.frameState=12 expected 0", "case 0 following slot 0 motion.y=2 expected 0", "case 2 following slot 0 frame.action=99 expected 230", "case 2 following slot 0 frame.actionLatch=99 expected 230", "case 2 following slot 0 frame.previousAction=99 expected 230"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06NativeInputActionCostEditorTests.FollowingTickPreservesNativeCostAndLifetime (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode physicsMode) [0x00397] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06NativeInputActionCostEditorTests.cs:84
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

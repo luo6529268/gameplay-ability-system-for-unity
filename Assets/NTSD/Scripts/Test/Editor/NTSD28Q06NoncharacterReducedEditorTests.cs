@@ -82,6 +82,80 @@ namespace NTSD.Test
             finally { NTSD28Q06State18SpawnEditorTests.Shutdown(world); }
         }
 
+        [TestCase(BattleRuntimeProfile.Authority400)]
+        [TestCase(BattleRuntimeProfile.MobileExtended)]
+        public void ReducedStateSurvivesLocalSnapshotReplay(BattleRuntimeProfile profile)
+        {
+            var sourceRows = File.ReadLines(SourceRoot + "first.jsonl").Select(JObject.Parse).ToArray();
+            var rows = sourceRows.Where(row => (string)row["group"] != "resource_owner")
+                .GroupBy(row => (string)row["group"]).Select(group => group.First()).ToList();
+            rows.AddRange(sourceRows.Where(row => (string)row["group"] == "resource_owner" &&
+                (int)row["params"]["balance"] == 7 &&
+                new[] { 1, 5, 6 }.Contains((int)row["params"]["type"])));
+            Assert.That(rows.Count, Is.EqualTo(27));
+            foreach (var row in rows)
+            {
+                var world = MakeWorld(row, profile, out var entities);
+                try
+                {
+                    var before = new List<string>();
+                    var differences = new List<string>();
+                    RunCase(world, entities, row, false, before, differences);
+                    Assert.That(before, Is.Empty);
+                    Assert.That(differences, Is.Empty);
+                    world.ConfigureBattleHitExecutionPlanForDiagnostics(BattleHitExecutionPlanMode.ShadowCompare);
+                    var driver = new NTSDBattleTickSystem(world);
+                    driver.RunReleaseTick(1, false, new FrameInputSet(1, Array.Empty<SimulationPlayerInput>()));
+                    var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
+                    var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
+                    var staleCursor = world.NativeRandom.CaptureSynchronizedCursor();
+                    Assert.That(world.TryCaptureBattleStateSnapshot(identity, 1, snapshot), Is.True);
+                    var signatures = new List<string>();
+                    for (int tick = 2; tick <= 3; tick++)
+                    {
+                        driver.RunReleaseTick(tick, false, new FrameInputSet(tick, Array.Empty<SimulationPlayerInput>()));
+                        signatures.Add(ReplaySignature(world, entities, tick));
+                    }
+                    Assert.That(world.TryRestoreBattleStateSnapshot(identity, snapshot, out var failure), Is.True, failure.ToString());
+                    Assert.That(world.NativeRandom.CanCommitSynchronizedCursor(staleCursor), Is.False);
+                    for (int tick = 2; tick <= 3; tick++)
+                    {
+                        driver.RunReleaseTick(tick, false, new FrameInputSet(tick, Array.Empty<SimulationPlayerInput>()));
+                        Assert.That(ReplaySignature(world, entities, tick), Is.EqualTo(signatures[tick - 2]));
+                        Assert.That(world.BattleHitExecutionPlanDiagnosticsForDiagnostics.CurrentTickPlanValid, Is.True);
+                    }
+                }
+                finally
+                {
+                    NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                }
+            }
+        }
+
+        private static string ReplaySignature(SimulationWorld world, LF2Entity[] entities, int tick)
+        {
+            var rest = new int[3, 3];
+            for (int target = 0; target < 3; target++)
+                for (int attacker = 0; attacker < 3; attacker++) rest[target, attacker] = world.GetRawRestVrest(target, attacker);
+            var random = world.NativeRandom.CaptureScalarState();
+            return JsonConvert.SerializeObject(new
+            {
+                checksum = world.CaptureLockstepChecksumSnapshot(tick, new FrameInputSet(tick, Array.Empty<SimulationPlayerInput>())).OverallChecksum,
+                rest,
+                random = new
+                {
+                    random.CrtState, random.CrtCalls, random.TableSeed, random.SynchronizedCounter, random.SynchronizedIndex,
+                    random.SynchronizedCalls, random.LastSynchronizedCallSite, random.SynchronizedTableHash
+                },
+                entities = entities.Select(entity => new
+                {
+                    entity.HitCount, entity.KnockbackVx, entity.KnockbackVy, entity.KnockbackVz,
+                    entity.Runtime.LinkState, entity.Runtime.HolderStableId, entity.Runtime.TargetSlotIndex,
+                    records = Enumerable.Range(0, entity.HitRecordCount).Select(i => new[] { entity.GetHitRecordAge(i), entity.GetHitRecordX(i), entity.GetHitRecordZ(i) }).ToArray()
+                }).ToArray()
+            });
+        }
+
         internal static SimulationWorld MakeWorld(JObject row, BattleRuntimeProfile profile, out LF2Entity[] entities, bool renderer = false)
         {
             var raw = row["before"]["raw"];
@@ -280,6 +354,70 @@ namespace NTSD.Test
                 callSite = call.CallSite, upperBound = call.UpperBound, result = call.Result,
                 counterAfter = call.CounterAfter, indexAfter = call.IndexAfter, totalCalls = call.TotalCalls
             });
+        }
+    }
+    [InitializeOnLoad]
+    internal static class NTSD28Q06NoncharacterReducedPlayProbe
+    {
+        private const string Request = "Temp/NTSD28_Q06_NoncharacterReducedPlay.request";
+
+        static NTSD28Q06NoncharacterReducedPlayProbe() { EditorApplication.update += Poll; }
+
+        private static void Poll()
+        {
+            if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
+                !File.Exists(Request) || File.ReadAllText(Request).Trim() != "run") return;
+            var driver = SimulationTickDriver.Instance;
+            var sceneWorld = driver?.World;
+            if (sceneWorld == null || driver.CurrentTickIndex < 5 || !sceneWorld.IsBattleSnapshotBoundaryReady) return;
+            if (!driver.IsPaused) { driver.SetPaused(true); return; }
+            File.WriteAllText(Request, "running");
+            int borrowers = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance;
+            var input = new FrameInputSet(driver.CurrentTickIndex, Array.Empty<SimulationPlayerInput>());
+            string checksum = sceneWorld.CaptureLockstepChecksumSnapshot(driver.CurrentTickIndex, input).OverallChecksum;
+            string status = "FAIL", error = null;
+            int cases = 0;
+            var differences = new List<string>();
+            var beforeDifferences = new List<string>();
+            try
+            {
+                var selected = File.ReadLines((NTSD28Q06NoncharacterReducedEditorTests.SourceRoot + "first.jsonl")).Select(JObject.Parse)
+                    .ToArray();
+                Assert.That(selected.Length, Is.EqualTo(987));
+                foreach (bool renderer in new[] { false, true })
+                foreach (bool shadow in new[] { false, true })
+                foreach (var row in selected)
+                {
+                    var world = NTSD28Q06NoncharacterReducedEditorTests.MakeWorld(row, BattleRuntimeProfile.Authority400, out var entities, renderer);
+                    try
+                    {
+                        NTSD28Q06NoncharacterReducedEditorTests.RunCase(world, entities, row, shadow, beforeDifferences, differences);
+                        cases++;
+                    }
+                    finally
+                    {
+                        for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                            world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
+                        NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                        Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+                        Assert.That(LF2ObjectPool.Instance.ActiveObjectCountForAcceptance, Is.EqualTo(borrowers));
+                    }
+                }
+                Assert.That(differences, Is.Empty, string.Join("\n", differences.Take(10)));
+                Assert.That(cases, Is.EqualTo(3948));
+                Assert.That(beforeDifferences, Is.Empty, string.Join("\n", beforeDifferences.Take(10)));
+                Assert.That(sceneWorld.CaptureLockstepChecksumSnapshot(driver.CurrentTickIndex, input).OverallChecksum, Is.EqualTo(checksum));
+                status = "PASS";
+            }
+            catch (Exception exception) { error = exception.ToString(); }
+            File.WriteAllText("Temp/NTSD28_Q06_NoncharacterReducedPlay.result.json", JsonConvert.SerializeObject(new
+            {
+                status, error, cases, differences, beforeDifferences, rendererBorrowersBefore = borrowers,
+                rendererBorrowersAfter = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance,
+                sceneChecksumUnchanged = sceneWorld.CaptureLockstepChecksumSnapshot(driver.CurrentTickIndex, input).OverallChecksum == checksum,
+                scope = "Real Scene, source987 synthetic noncharacter reduced/fallback transactions through both factories and direct/Shadow. This does not validate physical keys or visual asset alignment."
+            }, Formatting.Indented));
+            File.WriteAllText(Request, "done");
         }
     }
 }

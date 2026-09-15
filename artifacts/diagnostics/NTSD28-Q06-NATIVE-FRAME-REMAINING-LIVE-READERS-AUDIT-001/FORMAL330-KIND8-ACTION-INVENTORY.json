@@ -1,0 +1,352 @@
+{
+  "counts": {
+    "declared": 7029,
+    "implicit": 30,
+    "sentinel999": 4
+  },
+  "examples": [
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 50,
+      "line": 27,
+      "dvx": 51,
+      "dvy": -1,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 58,
+      "line": 46,
+      "dvx": 59,
+      "dvy": -1,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 65,
+      "line": 58,
+      "dvx": 49,
+      "dvy": 0,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 66,
+      "line": 62,
+      "dvx": 49,
+      "dvy": 0,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 76,
+      "line": 81,
+      "dvx": 49,
+      "dvy": 0,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 77,
+      "line": 85,
+      "dvx": 49,
+      "dvy": 0,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 77,
+      "line": 86,
+      "dvx": 76,
+      "dvy": 0,
+      "class": "declared"
+    },
+    {
+      "oid": 714,
+      "path": "a/blac/blac.dat",
+      "frame": 80,
+      "line": 93,
+      "dvx": 79,
+      "dvy": -1,
+      "class": "declared"
+    },
+    {
+      "oid": 619,
+      "path": "c/gur/a/cag.dat",
+      "frame": 268,
+      "line": 254,
+      "dvx": 69,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 619,
+      "path": "c/gur/a/cag.dat",
+      "frame": 270,
+      "line": 262,
+      "dvx": 69,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 41,
+      "path": "c/hin/hin.dat",
+      "frame": 40,
+      "line": 317,
+      "dvx": 444,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 41,
+      "path": "c/hin/hin.dat",
+      "frame": 740,
+      "line": 3414,
+      "dvx": 444,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 21,
+      "line": 175,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 22,
+      "line": 183,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 23,
+      "line": 191,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 24,
+      "line": 199,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 26,
+      "line": 207,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 27,
+      "line": 223,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 28,
+      "line": 231,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 29,
+      "line": 239,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 31,
+      "line": 247,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 32,
+      "line": 255,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 33,
+      "line": 271,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 36,
+      "line": 287,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 37,
+      "line": 295,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 38,
+      "line": 303,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 39,
+      "line": 311,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 41,
+      "line": 319,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 42,
+      "line": 327,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 43,
+      "line": 335,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 44,
+      "line": 343,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 48,
+      "line": 351,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 49,
+      "line": 359,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 701,
+      "path": "c/jira/pre.dat",
+      "frame": 55,
+      "line": 367,
+      "dvx": 710,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 315,
+      "path": "c/kar/a/sas.dat",
+      "frame": 62,
+      "line": 282,
+      "dvx": 606,
+      "dvy": 0,
+      "class": "implicit"
+    },
+    {
+      "oid": 315,
+      "path": "c/kar/a/sas.dat",
+      "frame": 63,
+      "line": 295,
+      "dvx": 606,
+      "dvy": 0,
+      "class": "implicit"
+    },
+    {
+      "oid": 888,
+      "path": "c/oro/a/atk.dat",
+      "frame": 521,
+      "line": 488,
+      "dvx": 329,
+      "dvy": -1,
+      "class": "implicit"
+    },
+    {
+      "oid": 888,
+      "path": "c/oro/a/atk.dat",
+      "frame": 527,
+      "line": 522,
+      "dvx": 329,
+      "dvy": -1,
+      "class": "implicit"
+    }
+  ],
+  "scope": "Formal330 frame/ITR static content; eligibility not inferred."
+}

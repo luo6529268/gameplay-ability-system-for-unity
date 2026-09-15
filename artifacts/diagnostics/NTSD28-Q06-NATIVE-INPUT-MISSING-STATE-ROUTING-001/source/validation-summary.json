@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "scope": "source diagnostic only; strict optional state, missing-state accumulator, edges and RNG accounting; not full independent route oracle",
+  "cases": 432,
+  "checks": 3552,
+  "sha256": "7178ec5e534bc710575838e2a610d477c23b46228c30b9cc5dbdc22965d20898",
+  "actions": {
+    "99": 60,
+    "900": 60,
+    "999": 60,
+    "1000": 6,
+    "-1": 6,
+    "110": 60,
+    "215": 60,
+    "182": 60,
+    "188": 60
+  },
+  "validationCorrection": "Initial blanket accumulator assertion failed at case32 (declared state0 attack resets accumulator); final decay assertion restricted to missing/invalid state as source contract."
+}

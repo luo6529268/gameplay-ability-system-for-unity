@@ -61,9 +61,9 @@ namespace NTSD.Animation.LF2Objects
                 return result;
             }
 
-            weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.WeaponAct);
+            weapon.DirectWriteNativeRawFramePreserveWaitCounter(wpoint.WeaponAct);
             // Alignment contract: NTSD28-B6-WPOINT-MISSING-ACTION-CONTINUE-PRODUCTION-001.
-            if (weapon.FrameCache?.HasFrame(wpoint.WeaponAct) != true)
+            if (weapon.FrameCache?.HasNativeFrame(wpoint.WeaponAct) != true)
             {
                 result.UnsupportedWeaponAction = true;
                 return result;
@@ -89,16 +89,15 @@ namespace NTSD.Animation.LF2Objects
 
                 if (isHeavyThrow)
                 {
-                    weapon.DirectWriteHeldFramePreserveWaitCounter(40);
-                    ThrowHeldWeapon(holder, wpoint, stampSpawnerSlot: true);
+                    weapon.DirectWriteNativeRawFramePreserveWaitCounter(40);
+                    ThrowHeldWeapon(holder, wpoint, stampAiExclusionSourceSlot: true);
                     result.Thrown = true;
                 }
                 else if (isLightThrow)
                 {
-                    weapon.DirectWriteHeldFramePreserveWaitCounter(wpoint.Kind == 3
-                        ? holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6)
-                        : weapon.BattleRandInt(0, 6));
-                    ThrowHeldWeapon(holder, wpoint, stampSpawnerSlot: false);
+                    weapon.DirectWriteNativeRawFramePreserveWaitCounter(
+                        holder.Match.NativeRandom.SynchronizedNext(0x0041865E, 6));
+                    ThrowHeldWeapon(holder, wpoint, stampAiExclusionSourceSlot: false);
                     result.Thrown = true;
                 }
                 else
@@ -114,23 +113,20 @@ namespace NTSD.Animation.LF2Objects
         private void ThrowHeldWeapon(
             LF2Entity holder,
             BattleWeaponPointValue wpoint,
-            bool stampSpawnerSlot)
+            bool stampAiExclusionSourceSlot)
         {
             weapon.Runtime.Vx = weapon.Dirh() * wpoint.Dvx;
             weapon.Runtime.Vy = wpoint.Dvy;
 
-            if (wpoint.Dvz != 0)
-            {
-                bool keyUp = holder.Runtime.KeyUp != 0;
-                bool keyDown = holder.Runtime.KeyDown != 0;
-                if (keyUp && !keyDown)
-                    weapon.Runtime.Vz = -wpoint.Dvz;
-                else if (!keyUp && keyDown)
-                    weapon.Runtime.Vz = wpoint.Dvz;
-            }
+            bool keyUp = holder.Runtime.KeyUp != 0;
+            bool keyDown = holder.Runtime.KeyDown != 0;
+            if (keyUp && !keyDown)
+                weapon.Runtime.Vz = -wpoint.Dvz;
+            else if (!keyUp && keyDown)
+                weapon.Runtime.Vz = wpoint.Dvz;
 
-            if (stampSpawnerSlot)
-                weapon.SpawnerEntityIndex = holder.Runtime?.SlotIndex ?? -1;
+            if (stampAiExclusionSourceSlot)
+                weapon.Runtime.ObjectAiExcludedGroupSourceSlot2F8 = holder.Runtime.SlotIndex;
             weapon.PS.zz = 0;
             weapon.ReleaseHeldWeaponRuntimeInternal(holder);
             // Alignment contract: NTSD28-B6-WPOINT-DVX-WEAPON-HP-PRESERVATION-PRODUCTION-001.
@@ -205,70 +201,80 @@ namespace NTSD.Animation.LF2Objects
             LF2Entity holder,
             ref WeaponActResult result)
         {
-            if (holder?.Health == null)
+            ProcessNativeRefillConsumption(holder, weapon, ref result);
+        }
+
+        internal static void ProcessNativeRefillConsumption(
+            LF2Entity holder,
+            LF2Entity held,
+            ref WeaponActResult result)
+        {
+            if (holder?.Frame?.D?.state != 17 || held?.Runtime == null)
                 return;
+            bool hpRefill = held.ObjectId == 122;
+            bool mpRefill = held.ObjectId == 123;
+            if (!hpRefill && !mpRefill)
+                return;
+            var world = holder.Match;
+            if (world == null || held.Match != world)
+                throw new System.InvalidOperationException("Native held refill requires a shared registered world.");
 
-            LF2CharacterData charData =
-                weapon.ResolveRuntimeCharacterData(weapon.ObjectId);
-            int typeSub = charData?.type_sub ?? 0;
-
-            if (typeSub == 0x7A)
+            var parent = holder.Runtime;
+            var child = held.Runtime;
+            if (hpRefill)
             {
-                if (weapon.Health.HP <= 0)
+                if (child.HP <= 0)
                     return;
-
-                weapon.Health.HP--;
-                if (weapon.Health.HP % 5 == 0)
+                child.HP--;
+                if (child.HP % 5 == 0)
                 {
-                    holder.Health.HPBound += 2;
-                    holder.Health.HP += 4;
-                    if (holder.Health.HPBound > holder.Health.HP3)
-                        holder.Health.HPBound = holder.Health.HP3;
-                    if (holder.Health.HP > holder.Health.HPBound)
-                        holder.Health.HP = holder.Health.HPBound;
+                    parent.HPBound = System.Math.Min(parent.HPBound + 2, parent.HP3);
+                    parent.HP = System.Math.Min(parent.HP + 4, parent.HPBound);
                 }
-
-                if (weapon.Health.HP % 6 == 0)
-                {
-                    holder.Health.PP += 5;
-                    if (holder.Health.PP > NTSDGlobal.Gameplay.DrinkPPCap)
-                        holder.Health.PP = NTSDGlobal.Gameplay.DrinkPPCap;
-                }
-            }
-            else if (typeSub == 0x7B)
-            {
-                weapon.Health.HP -= 2;
-                holder.Health.PP += 3;
-                if (holder.Health.PP > NTSDGlobal.Gameplay.DrinkPPCap)
-                    holder.Health.PP = NTSDGlobal.Gameplay.DrinkPPCap;
-
-                if (weapon.Runtime.OrdinaryCreditGate2F4 >= 0 &&
-                    weapon.Health.PP > NTSDGlobal.Gameplay.PpRecoverLowLimit)
-                {
-                    weapon.Health.PP = NTSDGlobal.Gameplay.PpRecoverLowLimit;
-                }
+                if (child.HP % 6 == 0)
+                    parent.PP = System.Math.Min(parent.PP + 5, 500);
             }
             else
             {
-                return;
+                child.HP -= 2;
+                parent.PP = System.Math.Min(parent.PP + 3, 500);
+                if (child.OrdinaryCreditGate2F4 >= 0 && child.PP > 150)
+                    child.PP = 150;
             }
-
-            if (weapon.Health.HP > 0)
+            if (child.HP > 0)
                 return;
 
-            // Alignment contract: NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001.
-            weapon.DirectWriteHeldFramePreserveWaitCounter(0);
-            weapon.AttackingCounter = 0;
-            weapon.Runtime.Vx = weapon.BattleRandInt(0, 7) - 3;
-            weapon.Runtime.Vy = 0.0;
-            weapon.PS.zz = 0;
-            holder.DirectWriteHeldFramePreserveWaitCounter(0);
+            // Alignment contract: NTSD28-Q06-HELD-NATIVE-FRAME-BINDING-001.
+            if (held is LF2WeaponBase heldWeapon)
+            {
+                heldWeapon.ReleaseHeldWeaponForConsumeInternal(holder);
+                heldWeapon.PS.zz = 0;
+            }
+            else
+            {
+                parent.LinkState = 0;
+                parent.TargetSlotIndex = 0;
+                child.LinkState = 0;
+                child.HolderStableId = 0;
+                if (parent.HeldWeaponStableId == child.SlotIndex)
+                {
+                    parent.HeldWeaponStableId = -1;
+                    parent.ThrowFrameGuard = -1;
+                }
+                if (holder is LF2Character character)
+                    character.HeldWeaponReferenceInternal = null;
+            }
+            held.DirectWriteNativeRawFramePreserveWaitCounter(0);
+            held.AttackingCounter = 0;
+            child.Vy = 0;
+            child.Vx = world.NativeRandom.SynchronizedNext(hpRefill ? 0x004181C9u : 0x004182C0u, 7) - 3;
+            holder.DirectWriteNativeRawFramePreserveWaitCounter(0);
             holder.AttackingCounter = 0;
-            weapon.OnDrinkConsumedInternal();
-            weapon.ReleaseHeldWeaponForConsumeInternal(holder);
+            child.WeaponFlightCounter = 0;
+            if (held is LF2WeaponBase consumedWeapon)
+                consumedWeapon.OnDrinkConsumedInternal();
             result.ForceDrop = true;
             result.RefillExhausted = true;
         }
     }
-
 }

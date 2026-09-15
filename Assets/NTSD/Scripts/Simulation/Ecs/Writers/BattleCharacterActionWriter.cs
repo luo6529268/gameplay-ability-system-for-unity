@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NativeLinkedActionField = NTSD.Simulation.BattleNativeLinkedWeaponActionField;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.DatParser;
 
 namespace NTSD.Simulation.Ecs
 {
@@ -191,16 +192,14 @@ namespace NTSD.Simulation.Ecs
                 : requestedAction;
             if (targetAction == 999)
                 targetAction = 0;
-            if (character.FrameCache?.HasFrame(targetAction) != true)
+            LF2FrameData sourceFrame = character.FrameCache?.GetNativeFrameDataById(targetAction);
+            if (sourceFrame == null)
             {
                 return Result(
                     requestedAction,
                     targetAction,
                     failure: NTSD28NativeActionFailure.SourceFrameMissing);
             }
-            LF2FrameData sourceFrame =
-                character.FrameCache.GetFrameDataById(targetAction);
-
             int encodedState = sourceFrame.state;
             if (encodedState >= 1000000 && encodedState <= 1999999)
             {
@@ -581,7 +580,7 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            int state = frame.state;
+            int state = ReadNativeInputFrameState(frame);
             bool action110 = character.Frame.N == 110;
             bool specialGroundState = state == 19 || state == 301;
             if (!action110 && !specialGroundState &&
@@ -686,14 +685,16 @@ namespace NTSD.Simulation.Ecs
             }
 
             int action = character.Frame.N;
-            int state = frame.state;
+            int state = ReadNativeInputFrameState(frame);
+            // Alignment contract: NTSD28-Q06-NATIVE-INPUT-MISSING-STATE-ROUTING-001.
+            // Ground owns its handled states; this fallback consumes the remaining frame prelude once.
+            DecayNativeRunAccumulator(runtime);
             bool owned = action == 215 || action == 182 || action == 188 ||
                          state == 4 || state == 5 ||
                          state == 85 || state == 86;
             if (!owned)
                 return false;
 
-            DecayNativeRunAccumulator(runtime);
             bool left = input.Current[KeyLeft] != 0;
             bool right = input.Current[KeyRight] != 0;
             bool up = input.Current[KeyDepthUp] != 0;
@@ -712,7 +713,7 @@ namespace NTSD.Simulation.Ecs
                 frame = character.Frame?.D;
                 if (frame == null)
                     return true;
-                state = frame.state;
+                state = ReadNativeInputFrameState(frame);
             }
 
             action = character.Frame.N;
@@ -830,7 +831,7 @@ namespace NTSD.Simulation.Ecs
 
             int costAction = currentAction == 182 ? 100 : 108;
             LF2FrameData costFrame = character.FrameCache?
-                .GetFrameDataById(costAction);
+                .GetNativeFrameDataById(costAction);
             if (costFrame == null)
                 return;
 
@@ -848,7 +849,7 @@ namespace NTSD.Simulation.Ecs
                           (facingLeft && priorX > 0.0))
                 ? 100
                 : 108;
-            if (character.FrameCache?.HasFrame(action) != true)
+            if (character.FrameCache?.HasNativeFrame(action) != true)
                 return;
 
             AssignNativeDirectAction(character, action, true);
@@ -1486,6 +1487,18 @@ namespace NTSD.Simulation.Ecs
             return fallbackBase + phase;
         }
 
+        private static int ReadNativeInputFrameState(LF2FrameData frame)
+        {
+            if (!frame.UsesLoganFrameNumbers)
+                return frame.state;
+
+            return frame.rawProperties != null &&
+                   frame.rawProperties.TryGetValue("state", out string value) &&
+                   LoganNumericDecoder.TryParseInt32(value, out int state)
+                ? state
+                : -1;
+        }
+
         private static void DecayNativeRunAccumulator(
             NTSDEntityRuntime runtime)
         {
@@ -1567,7 +1580,7 @@ namespace NTSD.Simulation.Ecs
             LF2Entity character,
             int action)
         {
-            int rawCost = character.FrameCache?.GetFrameDataById(action)?.mp ?? 0;
+            int rawCost = character.FrameCache?.GetNativeFrameDataById(action)?.mp ?? 0;
             return AdjustNativeMpCost(character, rawCost);
         }
 

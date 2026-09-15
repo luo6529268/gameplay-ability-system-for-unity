@@ -20,7 +20,7 @@ namespace NTSD.Test.Editor
         [TestCase(true, 857)]
         [TestCase(false, 900)]
         [TestCase(true, 900)]
-        public void Held_InvalidActionSurvivesFullTick(bool real, int action)
+        public void Held_RawActionSurvivesFullTick(bool real, int action)
         {
             using (var scope = new Scope(real, action))
             {
@@ -41,7 +41,7 @@ namespace NTSD.Test.Editor
         [TestCase(true, -888, true)]
         [TestCase(false, 857, false)]
         [TestCase(true, 857, false)]
-        public void OrdinaryOrReleased_InvalidActionStillFrees(bool real, int action, bool released)
+        public void OrdinaryOrReleased_UsesNativeActionLifetime(bool real, int action, bool released)
         {
             using (var scope = new Scope(real, action))
             {
@@ -58,11 +58,31 @@ namespace NTSD.Test.Editor
                     scope.Holder.Runtime.TargetSlotIndex = -1;
                     scope.Child.Runtime.LinkState = 0;
                 }
+                scope.Child.FrameDelay = 0;
                 scope.Child.DirectWriteHeldFramePreserveWaitCounter(action);
                 var before = scope.World.StructuralWriterDiagnosticsForDiagnostics;
                 new NTSDBattleTickSystem(scope.World).RunReleaseTick(41, buildPresentation: false);
-                Assert.That(scope.World.TryResolveRuntimeHandleForDiagnostics(scope.Handle, out _), Is.False);
-                Assert.That(scope.World.StructuralWriterDiagnosticsForDiagnostics.FreeCount - before.FreeCount, Is.EqualTo(1));
+                bool terminal = action < 0 || action >= 999;
+                Assert.That(scope.World.TryResolveRuntimeHandleForDiagnostics(scope.Handle, out _), Is.EqualTo(!terminal));
+                Assert.That(scope.World.StructuralWriterDiagnosticsForDiagnostics.FreeCount - before.FreeCount, Is.EqualTo(terminal ? 1 : 0));
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void OrdinaryNegativeActionWaitsWhileFrameDelayBlocksC25(bool real)
+        {
+            using (var scope = new Scope(real, -888))
+            {
+                scope.Holder.Runtime.LinkState = 0;
+                scope.Holder.Runtime.TargetSlotIndex = -1;
+                scope.Child.Runtime.LinkState = 0;
+                scope.Child.FrameDelay = 100;
+                scope.Child.DirectWriteHeldFramePreserveWaitCounter(-888);
+                new NTSDBattleTickSystem(scope.World).RunReleaseTick(41, buildPresentation: false);
+                Assert.That(scope.World.TryResolveRuntimeHandleForDiagnostics(scope.Handle, out _), Is.True);
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(-888));
+                Assert.That(scope.Child.Runtime.NativeLifecycleResolutionPending, Is.False);
             }
         }
 
@@ -88,22 +108,26 @@ namespace NTSD.Test.Editor
 
         [TestCase(1100)]
         [TestCase(1200)]
-        public void FrameGroups11And12_KeepExistingStateWriteEvenWhenHeld(int action)
+        public void UnmarkedHighActionDoesNotTriggerLegacyFrameGroupExit(int action)
         {
             using (var scope = new Scope(true, action))
             {
                 scope.Child.DirectWriteHeldFramePreserveWaitCounter(action);
                 var module = new BattleLateEntityLifecycleModule(scope.World);
                 var method = typeof(BattleLateEntityLifecycleModule).GetMethod("HandleFrameTickExit", BindingFlags.NonPublic | BindingFlags.Instance);
-                Assert.That(method.Invoke(module, new object[] { scope.Child, null }), Is.EqualTo(true));
-                Assert.That(scope.Child.Frame.N, Is.Zero);
-                Assert.That(scope.Child.HitStun, Is.EqualTo(1100 - action));
+                scope.Child.HitStun = 17;
+                Assert.That(scope.Child.Runtime.NativeLifecycleResolutionPending, Is.False);
+                Assert.That(method.Invoke(module, new object[] { scope.Child, null }), Is.EqualTo(false));
+                Assert.That(scope.Child.Frame.N, Is.EqualTo(action));
+                Assert.That(scope.Child.HitStun, Is.EqualTo(17));
                 Assert.That(scope.World.TryResolveRuntimeHandleForDiagnostics(scope.Handle, out _), Is.True);
             }
         }
 
         private sealed class Generic : LF2Entity
         {
+            public Generic() { Trans = new FrameTransistor(this); }
+            public override void SimFrameTick(int tickIndex) { RunNativeC25FrameBodyForWorldPass(); }
             public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
             public override void Reset() { }
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.LightWeapon;

@@ -476,7 +476,8 @@ namespace NTSD.Test
             scope.Character.Runtime.AnimSub = 17;
             Assert.That(scope.Writer.RouteNativeAirDashRedirectBuiltins(
                 scope.Character), Is.False);
-            Assert.That(scope.Character.Runtime.AnimSub, Is.EqualTo(17));
+            Assert.That(scope.Character.Runtime.AnimSub, Is.EqualTo(16),
+                "An unhandled state still consumes the native common input prelude.");
 
             SetFrame(scope.Character, 503);
             scope.Input.Clear();

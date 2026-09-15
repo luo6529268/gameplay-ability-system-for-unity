@@ -1,3 +1,5 @@
+VERIFIED / DECLARED_PRELUDE_FEEDBACK_TRANSACTION。2026-09-15依赖与真实driver Play/关闭回访已通过，详情同ID Record；以下旧失败只保留历史，不再重做。
+
 > IN_PROGRESS / PRELUDE_FEEDBACK_RUNTIME_PASS_DAMAGE_DEPENDENCIES_OPEN。四生产路径已实现，684契约/direct-Shadow/两factory Play2736/SelfCheck/本地回放已过；完整984仍232 damage案例未过。下一执行weapon→type5覆盖→noncharacter reduced后回来，不重复此批已过职责。详细状态见同ID artifact REPORT，以下TEST_ONLY/RED状态均为历史。
 
 > IN_PROGRESS / RED_CONFIRMED_BEFORE_INPUT_MATCHED。source984/5108已VERIFIED；Unity两profile各984 before0、after4641/712case。下一唯一动作是按照同ID artifact REPORT落实正式ordinary hit入口顺序与准确生产code-path，然后实施。当前Record只授权到新增测试脚本，不要误以为生产已写。

@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "error": null,
+  "errors": [],
+  "passedCases": 968,
+  "matrixCases": 242,
+  "release": false,
+  "refill": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "sceneChecksumUnchanged": true,
+  "scope": "Real Scene paused and preserved; named source matrix immediate held and following full tick in both profiles/factories. Synthetic content, no physical-key/image claim; separate shutdown required."
+}

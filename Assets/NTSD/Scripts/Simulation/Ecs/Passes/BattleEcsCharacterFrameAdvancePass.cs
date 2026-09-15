@@ -104,16 +104,15 @@ namespace NTSD.Simulation.Ecs
                 frame.PrimaryCatchPoint.Kind == 2)
                 return true;
 
-            ExecuteCharacterDynamics(character, frame);
-            character.PromoteState12AirborneFrameIfNeeded(tickIndex);
-            character.PromoteBurningAirborneFrame205IfNeeded();
+            ExecuteCharacterDynamics(character, frame, tickIndex);
             character.ResetWeaponCountOutsideState12FrameAdvanceTail();
             return true;
         }
 
         private void ExecuteCharacterDynamics(
             LF2Character character,
-            LF2FrameData frame)
+            LF2FrameData frame,
+            int tickIndex)
         {
             NTSDEntityRuntime runtime = character.Runtime;
             var context = new CharacterMechanicsContext(
@@ -127,12 +126,30 @@ namespace NTSD.Simulation.Ecs
                 world.CharacterMechanicsForServices.StepBattleLogic(context);
 
             world.BoundaryWriter.SyncConsumedFlags(runtime);
-            if (character.ShouldResolveCharacterLanding(stepResult))
+            // Alignment contract: NTSD28-Q06-CANONICAL-CHARACTER-PHYSICS-TAIL-001.
+            character.ApplyCurrentDatType0State1218EnvironmentDamage(
+                character.Frame?.D,
+                stepResult);
+            bool state1218ContactResolved =
+                character.ApplyCurrentDatType0State1218ContactAction(
+                    character.Frame?.D,
+                    stepResult);
+            if (!state1218ContactResolved &&
+                character.ShouldResolveCharacterLanding(stepResult))
             {
-                character.HandleLandingEventForFrameAdvance(
-                    stepResult.VerticalVelocityBeforeLanding);
+                if (!character.ApplyCurrentDatType0OrdinaryLanding(
+                        character.Frame?.D,
+                        stepResult))
+                {
+                    character.HandleLandingEventForFrameAdvance(
+                        stepResult.VerticalVelocityBeforeLanding);
+                }
             }
 
+            character.ApplyCurrentDatType0AirborneAction(
+                character.Frame?.D,
+                stepResult,
+                tickIndex);
             runtime.SyncIntegerPosition();
         }
 

@@ -267,7 +267,10 @@ namespace NTSD.Test
         private static void Poll()
         {
             if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
-                !File.Exists(Request) || File.ReadAllText(Request).Trim() != "run") return;
+                !File.Exists(Request)) return;
+            string command = File.ReadAllText(Request).Trim();
+            if (command != "run" && command != "run-driver") return;
+            bool driverOnly = command == "run-driver";
             var driver = SimulationTickDriver.Instance;
             var sceneWorld = driver?.World;
             if (sceneWorld == null || driver.CurrentTickIndex < 5 || !sceneWorld.IsBattleSnapshotBoundaryReady) return;
@@ -281,42 +284,57 @@ namespace NTSD.Test
             var differences = new List<string>();
             try
             {
-                var selected = File.ReadLines(NTSD28Q06CollisionQualificationEditorTests.Source).Select(JObject.Parse)
-                    .Where(row => (string)row["kind"] == "qualification" &&
-                        (((int)row["pa"] == 0 && (int)row["pt"] == 0) || ((int)row["a"] == 0 && (int)row["t"] == 0))).ToArray();
-                Assert.That(selected.Length, Is.EqualTo(120));
-                foreach (bool renderer in new[] { false, true })
-                foreach (bool roleAware in new[] { false, true })
-                foreach (var row in selected)
+                if (driverOnly)
                 {
-                    var world = NTSD28Q06CollisionQualificationEditorTests.MakeWorld(row, BattleRuntimeProfile.Authority400,
-                        roleAware, out var attacker, out var target, renderer);
-                    try
+                    var tests = new NTSD28Q06CollisionQualificationEditorTests();
+                    foreach (var profile in new[] { BattleRuntimeProfile.Authority400, BattleRuntimeProfile.MobileExtended })
+                    foreach (bool optimized in new[] { false, true })
                     {
-                        NTSD28Q06CollisionQualificationEditorTests.RunCase(world, attacker, target, row, differences);
-                        cases++;
-                    }
-                    finally
-                    {
-                        for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
-                            world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
-                        NTSD28Q06State18SpawnEditorTests.Shutdown(world);
-                        Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+                        tests.DriverCatchFrameChangePreservesQueuedAttack(profile, optimized);
+                        cases += 2;
                         Assert.That(LF2ObjectPool.Instance.ActiveObjectCountForAcceptance, Is.EqualTo(borrowers));
                     }
                 }
-                Assert.That(differences, Is.Empty, string.Join("\n", differences.Take(10)));
-                Assert.That(cases, Is.EqualTo(480));
+                else
+                {
+                    var selected = File.ReadLines(NTSD28Q06CollisionQualificationEditorTests.Source).Select(JObject.Parse)
+                        .Where(row => (string)row["kind"] == "qualification" &&
+                            (((int)row["pa"] == 0 && (int)row["pt"] == 0) || ((int)row["a"] == 0 && (int)row["t"] == 0))).ToArray();
+                    Assert.That(selected.Length, Is.EqualTo(120));
+                    foreach (bool renderer in new[] { false, true })
+                    foreach (bool roleAware in new[] { false, true })
+                    foreach (var row in selected)
+                    {
+                        var world = NTSD28Q06CollisionQualificationEditorTests.MakeWorld(row, BattleRuntimeProfile.Authority400,
+                            roleAware, out var attacker, out var target, renderer);
+                        try
+                        {
+                            NTSD28Q06CollisionQualificationEditorTests.RunCase(world, attacker, target, row, differences);
+                            cases++;
+                        }
+                        finally
+                        {
+                            for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                                world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
+                            NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                            Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+                            Assert.That(LF2ObjectPool.Instance.ActiveObjectCountForAcceptance, Is.EqualTo(borrowers));
+                        }
+                    }
+                    Assert.That(differences, Is.Empty, string.Join("\n", differences.Take(10)));
+
+                }
+                Assert.That(cases, Is.EqualTo(driverOnly ? 8 : 480));
                 Assert.That(sceneWorld.CaptureLockstepChecksumSnapshot(driver.CurrentTickIndex, input).OverallChecksum, Is.EqualTo(checksum));
                 status = "PASS";
             }
             catch (Exception exception) { error = exception.ToString(); }
             File.WriteAllText("Temp/NTSD28_Q06_CollisionQualificationPlay.result.json", JsonConvert.SerializeObject(new
             {
-                status, error, cases, differences, rendererBorrowersBefore = borrowers,
+                status, error, cases, differences, driverOnly, rendererBorrowersBefore = borrowers,
                 rendererBorrowersAfter = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance,
                 sceneChecksumUnchanged = sceneWorld.CaptureLockstepChecksumSnapshot(driver.CurrentTickIndex, input).OverallChecksum == checksum,
-                scope = "Real Scene, synthetic qualification/frozen classification endpoints, both factories/query modes; full-driver bdefend and spark RNG differences remain open."
+                scope = driverOnly ? "Real Scene context, two source driver cases across both profiles/frame modes; isolated logic worlds, scene checksum unchanged. No physical input or visual asset claim." : "Real Scene, synthetic qualification/frozen classification endpoints, both factories/query modes."
             }, Formatting.Indented));
             File.WriteAllText(Request, "done");
         }

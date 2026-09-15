@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-COLLISION-FRAME-UNITY-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: NATIVE_COLLISION_FRAME_READERS
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CollisionFrameLookupEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
@@ -45,3 +45,7 @@ IN_PROGRESS / READER_RUNTIME_PASS_QUALIFICATION_PENDING。expanded四组336仍�
 新SelfCheck06:27:14Z PASS；原70回归69PASS/1旧期望，独立修订后4矩阵PASS；Play480/Renderer2→2/Scene checksum保持；Shutdown06:38:10Z恢复4→4、World/slots/两pool0、两帧Stopped。最终CS0/Editor idle/Scene dirtyfalse/root14/hash bcd1047b…；接口6402由状态文件发现。完整证据见COLLISION-CURRENT-SNAPSHOT-QUALIFICATION-001/REPORT.md。资源/非战斗/框架未改，父不标VERIFIED。
 
 后继更新：HIT-SPARK-UNITY-001已限定VERIFIED，旧完整driver四组现PASS/Spark RNG差异清除。当前父记录不关闭，继续非角色反馈→武器反应/type5覆盖→回BDEFEND256；旧96/64/32未在本轮重测。源/测试/Play见spark artifact REPORT。
+
+依赖回访更正2026-09-15：weapon/type5/matched/reduced及gain已完成各自限定验收，原984/684/Bdefend/prelude replay已通过；qualification四个完整driver于job65d082698b534717b51999e3be656a5b 4/4 PASS（证据见reduced parent artifact qualification-driver-revisit-4-pass.xml）。旧232/108或Bdefend/Spark首差不再当前阻塞。父Record仍需逐项核对自身明确Play/关闭出口，不以本追加自动扩大VERIFIED；不得重做已过端点矩阵。
+
+VERIFIED / DECLARED_COLLISION_FRAME_READERS。依赖weapon/type5/matched/reduced/gain已限定验收；原984/684/Bdefend/prelude replay通过，当前full driver四组EditMode4/4及真实Play driverOnly8例16:54:03Z PASS，Scene checksum不变/Renderer2→2；16:55:03Z关闭PASS，restore4→4、World/slots/两pool0、两帧Stopped。现有端点Play480/读帧Play168/前置Play2736及各自SelfCheck、当前完整SelfCheck16:36:40Z与reduced Play3948共同闭合声明出口，非全部reader或B5/B6/Q06完成。新增证据在qualification artifact driver-play-8-pass.json / driver-play-shutdown-pass.json；旧失败保留。

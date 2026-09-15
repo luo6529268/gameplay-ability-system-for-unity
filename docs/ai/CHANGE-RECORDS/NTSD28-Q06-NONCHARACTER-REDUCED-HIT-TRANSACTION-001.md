@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: NATIVE_NONCHARACTER_REDUCED_TRANSACTION
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NoncharacterReducedEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/BattleHitCandidateSequenceRunner.cs
@@ -38,3 +38,15 @@ root已写Entity scope/runner/三处broken helper及type3 generic声移除。既
 > 当前NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / ALL843_FOCUSED_PASS。root已新增LF2Entity.NativeHitCandidateScope可空原Route/嵌套恢复，runner先Resolve再Begin；DamageWriter weapon/type5/type3水平后按明确BrokenFallback消费、bypass -1保持、type3 generic音效去除；HitPlan已同步原route与独立fallback预测。job46a5d9c9928c4c13b69d75976a1feb87 5/5 PASS：843四组before0/diff0+scope嵌套异常恢复。原回归jobf25fb55daf6941ca8c49a4cbe64d36b1 18项17PASS/1旧type3音频断言FAIL，原984/684early/Bdefend/prelude replay全PASS；独立oracle NTSD28-Q06-TYPE3-NATIVE-AUDIO-ORACLE-001 VERIFIED，单断言修正后job4b866e2569774961ad93f303a054d398 4/4 PASS。所有XML同parent artifact保留。下一必须项非零gain/resource-owner独立捕获/比较与源/Unity向量，现CanProjectNativeNoncharacterReduced明确gain非0拒绝，不能当完成；还需新selfcheck、Play两factory/关闭及本批local replay和必要type3专项音频回归。当前无job/build/agent运行；本批四生产文件+单新fixture及单oracle，未改Scene/资源/非战斗。Scene SHA BCD1047B…0E9FB6保持。总目标ACTIVE/Q07未部署，禁止computer-use。
 
 非零gain测试预声明：原新fixture切换到source owner987子目录，准确恢复before.identity.ownerSlot→Runtime.OwnerSlotIndex，其余MP/MaxMP已逐实体还原；原843通过JSON归档all843-pass。先等待源987独立PASS再跑Unity RED，不修改生产或Shadow直到取得覆盖证据。
+
+owner987有效RED：job01aa008f3f5e418bbc84019b830eb2a8终态5项1scopePASS/4FAIL，所有987 before0，direct140差异/Shadow284。raw capture当前native MP明确绑定Runtime.PP，Health.PP亦如此；新生产误用了旧ApplyNativeHitResourceTransaction（Runtime.MP，仅旧test引用），不能修改fixture为旧MP。预声明修正本次DamageWriter新分支gain直接使用resourceAttacker.Runtime.PP及MPMax，保留旧helper与Runtime.MP不动，避免改框架/旧职责。HitPlan新增独立resource owner tuple读取PP、InputMpConsumedTotal350、MPMax、runtime ObjType、physical local flag、slot/handle，实际capture冻结owner slot；仅候选诊断不改World schema。资源差异可并入现有bit53，需保留字段诊断。独立resolver最多两级owner，无效不fallback。移除gain非0观察拒绝，type6也观察不变；验证当前987和已有resource-owner两级解析focused，再进行后续runtime验收。
+
+HitPlan worker完成resource tuple并交root已读：CaptureWriterEffectSnapshotWithCreditOverride可选冻结owner槽；ObserveLegacyWriterEffect按预测前槽查当前handle；独立两级resolver、PP/MPMax/消费/ObjType/localMode比较进bit53；移除gain gate。WriterEffectSnapshot不存在AttackerPp字段，未凭猜测造重复字段；owner=target同步已有TargetPp与消费，owner=attacker由专用tuple观察。root生产仅新gain块改用Runtime.PP，旧MP/helper保持。已刷新编译，job6c1197e1854b4f2c8d420f73393a5d3a正在跑987+owner解析+旧纯资源回归；尚无终态。
+
+987资源专项19/19 PASS后SelfCheck C30揭示剩余type3 target自带hit声错误。预声明同两生产路径修正：DamageWriter.ApplySpecialObjectHurtTail仅attacker3非空broken资源，HitPlan.ProjectStandardHurtCustomSounds不再非角色target hit声，type3标准/D1/activeD1 kind0预测与容量检查去除原generic/target声，character及kind9分支不批量改。源6765/6986直接确认，SelfCheck oracle独立ID重新打开精确追加测试文件。
+
+> 当前阶段仍BATCH-03/Q06。NONCHARACTER-REDUCED-HIT-TRANSACTION-001 IN_PROGRESS / ALL987_AND_SELF_CHECK_PASS。source owner987双跑SHA42367528…44bc9/545439PASS；Unity先before0 direct140/Shadow284，确认旧helper读Runtime.MP错误，root新gain块改Runtime.PP/MPMax，旧MP/helper保持；HitPlan独立resource-owner tuple(PP/消费/类型/上限/localflag/冻结slot+handle)及最多2级独立resolver已写，gain非0观察限制已移除。job6c1197e1854b4f2c8d420f73393a5d3a 19/19 PASS含987四组0差异/owner解析/旧纯函数/scope。后C30 SelfCheck暴露type3 target hit声，parent生产和标准/D1预测修正，音频oracle重新开/关留痕；job a568ca84a4a948e5942c57e0e2244a85 27/27 PASS含987及type3专项，完整SelfCheck16:36:40Z PASS。XML/失败/最新PASS全部parent artifact。下一直接本批真实Play987×两factory×directShadow=3948、关闭及本批local replay；尚未新增对应probe，不要重跑已过矩阵或重做source。若需两级resource-owner实际Shadow/非零localMode边缘可补必要focused，当前987只有0/1hop/invalid、旧resolver两级7项已过，不声称整个owner所有输入穷尽。当前无job/build/agent运行，工作树HEAD观察为f9f7b133（本任务未提交），既有外部提交不回退。Q07资源未部署、schema/raw缺口/跨World epoch/例外保持，总目标ACTIVE，禁止computer-use/非战斗/Scene/资源修改。
+
+本批运行时验收预声明：仅原NTSD28Q06NoncharacterReducedEditorTests.cs新增request Play probe，987×两factory×direct/Shadow=3948，暂停真实Scene world后独立fixture执行，finally free+Shutdown并验证Scene checksum/Renderer borrower守恒；沿已有probe模式，不新增runtime owner。新增ReducedStateSurvivesLocalSnapshotReplay两profile，每组27代表（9个非resource group首例+type1/5/6×owner3×gain2余额7），after命中/完整tick1稳定capture→tick2/3→同Worldrestore→重放，checksum+3×3rest+随机标量+三实体pending/关系/hit记录验证；不冒充跨World恢复。
+
+最终限定验收：VERIFIED / DECLARED_NONCHARACTER_REDUCED_AND_FALLBACK_SCOPE。987四组before0/diff0，资源联合19/19、type3联合27/27、完整SelfCheck16:36:40Z PASS；本批local replay54场景/108重放tick（job7fa21a8a1a9546ef96d214ed84048cdb 2/2 PASS）；真实Play16:45:17Z 3948/3948 PASS，两factory/direct-Shadow/Scene checksum保持/Renderer2→2；关闭16:45:31Z PASS，restore4→4、World/slots/两pool0、两帧Stopped。独立最终review四生产路径未发现确定新错误。当前四个qualification完整driver回访job65d082698b534717b51999e3be656a5b 4/4 PASS；原失败保留。不据此关闭全部Q06、跨World恢复或正式内容/视听；资源0/1hop/gain边界及两级resolver focused为实际范围，未穷尽所有owner组合。

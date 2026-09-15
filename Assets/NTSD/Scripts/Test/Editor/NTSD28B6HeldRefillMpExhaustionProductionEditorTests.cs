@@ -22,13 +22,25 @@ namespace NTSD.Test.Editor
             scope.Holder.Health.PP = 100;
             scope.Weapon.Runtime.Vz = 6.5;
 
-            int expectedVx = PredictSingleExhaustionVx(scope.World);
+            int expectedVx = PredictSingleExhaustionVx(scope.World, scope.Weapon.ObjectId);
             ulong callsBefore = scope.World.Rng.CallCount;
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.True);
-            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore + 1));
+            Assert.That(result.RefillExhausted, Is.True);
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore));
             Assert.That(scope.Weapon.Health.HP, Is.Zero);
             Assert.That(scope.Holder.Health.HPBound, Is.EqualTo(202));
             Assert.That(scope.Holder.Health.HP, Is.EqualTo(104));
@@ -45,13 +57,25 @@ namespace NTSD.Test.Editor
             scope.Weapon.Runtime.OrdinaryCreditGate2F4 = -1;
             scope.Weapon.Runtime.Vz = -4.25;
 
-            int expectedVx = PredictSingleExhaustionVx(scope.World);
+            int expectedVx = PredictSingleExhaustionVx(scope.World, scope.Weapon.ObjectId);
             ulong callsBefore = scope.World.Rng.CallCount;
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.True);
-            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore + 1));
+            Assert.That(result.RefillExhausted, Is.True);
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore));
             Assert.That(scope.Weapon.Health.HP, Is.Zero);
             Assert.That(scope.Holder.Health.PP, Is.EqualTo(203));
             Assert.That(scope.Weapon.Health.PP, Is.EqualTo(400));
@@ -69,11 +93,23 @@ namespace NTSD.Test.Editor
             scope.Weapon.Health.PP = 123;
             scope.Weapon.Runtime.OrdinaryCreditGate2F4 = -1;
             scope.Weapon.Runtime.Vz = 9.0;
-            int expectedVx = PredictSingleExhaustionVx(scope.World);
+            int expectedVx = PredictSingleExhaustionVx(scope.World, scope.Weapon.ObjectId);
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.True);
+            Assert.That(result.RefillExhausted, Is.True);
             Assert.That(scope.Weapon.Health.HP, Is.EqualTo(expectedHp));
             Assert.That(scope.Holder.Health.PP, Is.EqualTo(73));
             Assert.That(scope.Weapon.Health.PP, Is.EqualTo(123));
@@ -90,9 +126,21 @@ namespace NTSD.Test.Editor
             scope.Weapon.KillCount = -1;
             ulong callsBefore = scope.World.Rng.CallCount;
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.False);
+            Assert.That(result.RefillExhausted, Is.False);
             Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore));
             Assert.That(scope.Weapon.Health.HP, Is.EqualTo(8));
             Assert.That(scope.Holder.Health.PP, Is.EqualTo(203));
@@ -111,9 +159,21 @@ namespace NTSD.Test.Editor
             scope.Weapon.KillCount = 0;
             ulong callsBefore = scope.World.Rng.CallCount;
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.False);
+            Assert.That(result.RefillExhausted, Is.False);
             Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore));
             Assert.That(scope.Weapon.Health.HP, Is.EqualTo(8));
             Assert.That(scope.Holder.Health.PP, Is.EqualTo(203));
@@ -130,9 +190,21 @@ namespace NTSD.Test.Editor
             scope.Weapon.Runtime.Vz = 3.75;
             ulong callsBefore = scope.World.Rng.CallCount;
 
+            var nativeBefore = scope.World.NativeRandom.CaptureScalarState();
+            ulong legacyBefore = scope.World.Rng.CallCount;
             WeaponActResult result = scope.Run();
+            var nativeAfter = scope.World.NativeRandom.CaptureScalarState();
+            Assert.That(scope.World.Rng.CallCount, Is.EqualTo(legacyBefore));
+            Assert.That(nativeAfter.CrtState, Is.EqualTo(nativeBefore.CrtState));
+            Assert.That(nativeAfter.CrtCalls, Is.EqualTo(nativeBefore.CrtCalls));
+            Assert.That(nativeAfter.SynchronizedCalls, Is.EqualTo(nativeBefore.SynchronizedCalls + (result.RefillExhausted ? 1UL : 0UL)));
+            if (result.RefillExhausted)
+                Assert.That(nativeAfter.LastSynchronizedCallSite, Is.EqualTo(scope.Weapon.ObjectId == 122 ? 0x004181C9u : 0x004182C0u));
+            else
+                Assert.That(nativeAfter, Is.EqualTo(nativeBefore));
 
             Assert.That(result.ForceDrop, Is.False);
+            Assert.That(result.RefillExhausted, Is.False);
             Assert.That(scope.World.Rng.CallCount, Is.EqualTo(callsBefore));
             Assert.That(scope.Weapon.Health.HP, Is.EqualTo(18));
             Assert.That(scope.Holder.Health.PP, Is.EqualTo(500));
@@ -163,10 +235,10 @@ namespace NTSD.Test.Editor
             Assert.That(scope.Weapon.Runtime.WeaponFlightCounter, Is.Zero);
         }
 
-        private static int PredictSingleExhaustionVx(SimulationWorld world)
+        private static int PredictSingleExhaustionVx(SimulationWorld world, int oid)
         {
-            var expected = new DeterministicRng(world.Rng.State);
-            return expected.NextInt(0, 7) - 3;
+            var expected = world.NativeRandom.CaptureSynchronizedCursor();
+            return expected.Next(oid == 122 ? 0x004181C9u : 0x004182C0u, 7) - 3;
         }
 
         private static RefillScope CreateScope(int objectId, int weaponHp)

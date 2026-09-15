@@ -1,0 +1,13 @@
+{
+  "rows": 151,
+  "bytes": 877133,
+  "sha256": "3278f3bec1314c42ae5f5eb70dc4f7ca866ccda4ffb0f768a294eef63c875056",
+  "repeatEqual": true,
+  "endpointUnchanged": true,
+  "stageBounds": {
+    "width": 800,
+    "zNear": -10000,
+    "zFar": 10000
+  },
+  "followingIndependentValidation": "pending Unity comparison"
+}

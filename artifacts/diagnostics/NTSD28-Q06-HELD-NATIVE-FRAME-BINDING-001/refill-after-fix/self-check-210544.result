@@ -1,0 +1,7 @@
+FAIL
+System.InvalidOperationException: NTSD28-B6-HELD-REFILL-MP-EXHAUSTION-PRODUCTION-001: consume exhaustion must draw one synchronized X kick, zero Y, preserve Z, reset both actions/counters, and clear weapon HP
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33429 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAudit7WeaponReleaseCase (System.String label, System.Int32 tick, System.Int32 weaponState, System.Int32 holderState, System.Int32 weaponOid, System.Int32 weaponType, NTSD.Animation.WeaponPoint wpoint, System.Action`1[T] beforeRelease, System.Action`4[T1,T2,T3,T4] release) [0x003e2] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:13049 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckAudit7WeaponReleaseContracts () [0x00099] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:12856 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

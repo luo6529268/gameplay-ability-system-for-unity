@@ -1636,7 +1636,8 @@ namespace NTSD.Simulation.Ecs
                 attacker,
                 target,
                 pendingExpectedWriterEffectSnapshot.HeldTargetHandle.Slot,
-                pendingExpectedWriterEffectSnapshot.StandardCreditHandle.Slot);
+                pendingExpectedWriterEffectSnapshot.StandardCreditHandle.Slot,
+                pendingExpectedWriterEffectSnapshot.NativeResourceOwnerSlot);
             ulong differenceMask = DifferenceMask(
                 in pendingExpectedWriterEffectSnapshot,
                 in actual);
@@ -2439,7 +2440,8 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity target,
             int heldTargetSlotOverride,
-            int standardCreditSlotOverride = int.MinValue)
+            int standardCreditSlotOverride = int.MinValue,
+            int resourceOwnerSlotOverride = int.MinValue)
         {
             int attackerSlot = attacker?.Runtime?.SlotIndex ?? -1;
             int targetSlot = target?.Runtime?.SlotIndex ?? -1;
@@ -2473,6 +2475,10 @@ namespace NTSD.Simulation.Ecs
                     ? attacker
                     : target;
             }
+            LF2Entity resourceOwner = resourceOwnerSlotOverride == int.MinValue
+                ? ResolveIndependentNativeResourceOwner(world, attacker)
+                : (resourceOwnerSlotOverride >= 0
+                    ? world.FindEntityByRuntimeSlotForQuery(resourceOwnerSlotOverride) : null);
             int hitRecordCount = hitRecordOwner?.HitRecordCount ?? int.MinValue;
             int lastHitRecordIndex = hitRecordCount > 0 ? hitRecordCount - 1 : -1;
             int pendingSoundCount = world.PendingSounds?.Count ?? 0;
@@ -2514,6 +2520,13 @@ namespace NTSD.Simulation.Ecs
                 StandardCreditHandle = ResolveCurrentHandle(
                     standardCredit?.Runtime?.SlotIndex ?? -1,
                     standardCredit),
+                NativeResourceOwnerSlot = resourceOwner?.Runtime?.SlotIndex ?? -1,
+                NativeResourceOwnerHandle = ResolveCurrentHandle(resourceOwner?.Runtime?.SlotIndex ?? -1, resourceOwner),
+                NativeResourceOwnerType = resourceOwner?.Runtime?.ObjType ?? int.MinValue,
+                NativeResourceOwnerPp = resourceOwner?.Runtime?.PP ?? int.MinValue,
+                NativeResourceOwnerMpConsumed = resourceOwner?.Runtime?.InputMpConsumedTotal350 ?? int.MinValue,
+                NativeResourceOwnerMpMax = resourceOwner?.Runtime?.MPMax ?? int.MinValue,
+                NativeResourceLocalMode = attacker?.Runtime?.InputLocalResourceEnabled49D034 ?? false,
                 StandardCreditInputScore =
                     standardCredit?.Runtime?.InputScoreTotal348 ?? int.MinValue,
                 StandardCreditKnockoutCount =
@@ -3248,14 +3261,12 @@ namespace NTSD.Simulation.Ecs
                 return false;
             }
 
-            int requiredSounds = 1;
+            int requiredSounds = 0;
             if (attackerType == (int)LF2ObjectType.SpecialAttack &&
                 !string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
             {
                 requiredSounds++;
             }
-            if (!string.IsNullOrWhiteSpace(targetData.weapon_hit_sound))
-                requiredSounds++;
             return target.Match?.BattleBuffersForServices
                 .CanQueueSoundsWithoutRejection(requiredSounds) == true;
         }
@@ -3387,10 +3398,8 @@ namespace NTSD.Simulation.Ecs
             if (!plainIdentity && !expandingStateSync)
                 return false;
 
-            int requiredSounds = 1;
+            int requiredSounds = 0;
             if (!string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
-                requiredSounds++;
-            if (!string.IsNullOrWhiteSpace(targetData.weapon_hit_sound))
                 requiredSounds++;
             return target.Match?.BattleBuffersForServices
                 .CanQueueSoundsWithoutRejection(requiredSounds) == true;
@@ -3490,14 +3499,12 @@ namespace NTSD.Simulation.Ecs
             if (ResolveActiveType3Holder(attacker) == null)
                 return false;
 
-            int requiredSounds = 1;
+            int requiredSounds = 0;
             if (attackerType == (int)LF2ObjectType.SpecialAttack &&
                 !string.IsNullOrWhiteSpace(attackerData.weapon_broken_sound))
             {
                 requiredSounds++;
             }
-            if (!string.IsNullOrWhiteSpace(targetData.weapon_hit_sound))
-                requiredSounds++;
             if (resolvedItr.effect == 23 ||
                 (characterDat &&
                  (((resolvedItr.effect == 3 || resolvedItr.effect == 30) &&
@@ -4070,11 +4077,6 @@ namespace NTSD.Simulation.Ecs
             projection.TargetFall += resolvedItr.fall != 0
                 ? resolvedItr.fall
                 : NTSDGlobal.Default.Fall.Value;
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker.Runtime.XInt,
-                ref projection);
             ProjectStandardHurtCustomSounds(
                 targetWorld,
                 attacker,
@@ -4191,11 +4193,6 @@ namespace NTSD.Simulation.Ecs
             projection.TargetFall += resolvedItr.fall != 0
                 ? resolvedItr.fall
                 : NTSDGlobal.Default.Fall.Value;
-            ProjectQueuedSound(
-                targetWorld,
-                ResolveDamageEffectCue(resolvedItr.effect),
-                attacker.Runtime.XInt,
-                ref projection);
             ProjectStandardHurtCustomSounds(
                 targetWorld,
                 attacker,
@@ -5001,6 +4998,45 @@ namespace NTSD.Simulation.Ecs
             projection.TargetRuntimeArmorHp = 0;
         }
 
+        private static LF2Entity ResolveIndependentNativeResourceOwner(SimulationWorld world, LF2Entity attacker)
+        {
+            if (world == null || attacker?.Runtime == null)
+                return null;
+            LF2Entity owner = attacker;
+            for (int depth = 0; depth < 2; depth++)
+            {
+                int slot = owner.Runtime.OwnerSlotIndex;
+                if (slot < 0 || slot == owner.Runtime.SlotIndex)
+                    break;
+                owner = world.FindEntityByRuntimeSlotForQuery(slot);
+                if (owner?.Runtime == null)
+                    return null;
+            }
+            return owner;
+        }
+
+        private static void ProjectNativeNoncharacterResourceGain(int gain, ref WriterEffectSnapshot projection)
+        {
+            if (!projection.NativeResourceLocalMode || !projection.NativeResourceOwnerHandle.IsValid ||
+                projection.NativeResourceOwnerType != 0)
+                return;
+            if (gain < 0)
+            {
+                int cost = unchecked(-gain);
+                if (cost <= projection.NativeResourceOwnerPp)
+                {
+                    projection.NativeResourceOwnerPp = unchecked(projection.NativeResourceOwnerPp + gain);
+                    projection.NativeResourceOwnerMpConsumed = unchecked(projection.NativeResourceOwnerMpConsumed + cost);
+                }
+            }
+            else
+            {
+                int candidate = unchecked(projection.NativeResourceOwnerPp + gain);
+                if (candidate <= projection.NativeResourceOwnerMpMax)
+                    projection.NativeResourceOwnerPp = candidate;
+            }
+        }
+
         private static bool IsNativeNoncharacterReducedRoute(
             LF2Entity target, BattleOrdinaryCharacterDamageRoute route)
         {
@@ -5011,8 +5047,7 @@ namespace NTSD.Simulation.Ecs
         private static bool CanProjectNativeNoncharacterReduced(
             LF2Entity attacker, LF2Entity target, InteractionArea itr)
         {
-            // Nonzero gain needs an independently captured resource-owner tuple.
-            return itr != null && itr.kind == 0 && itr.gain == 0 &&
+            return itr != null && itr.kind == 0 &&
                 attacker?.Runtime != null && target?.Health != null &&
                 attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame?.N ?? -1) != null;
         }
@@ -5028,6 +5063,7 @@ namespace NTSD.Simulation.Ecs
                 ? route.Armor : null;
             var damage = default(BattleReducedHitDamageResult);
             int type = target.GetCurrentDataObjectTypeForSimulation();
+            projection.NativeResourceObserved = true;
             if (type != 6)
             {
                 damage = BattleReducedHitDamageResolver.Resolve(itr.injury, armor != null,
@@ -5041,6 +5077,19 @@ namespace NTSD.Simulation.Ecs
                 projection.TargetInputHpConsumedTotal = unchecked(projection.TargetInputHpConsumedTotal + damage.HpDamage);
                 projection.TargetInputMpConsumedTotal = unchecked(projection.TargetInputMpConsumedTotal + damage.MpDamage);
                 ProjectNativeStandardHitCreditAndConsume(target, damage.HpDamage, ref projection);
+                if (projection.NativeResourceOwnerHandle.IsValid &&
+                    projection.NativeResourceOwnerHandle == projection.TargetHandle)
+                {
+                    projection.NativeResourceOwnerPp = projection.TargetPp;
+                    projection.NativeResourceOwnerMpConsumed = projection.TargetInputMpConsumedTotal;
+                }
+                ProjectNativeNoncharacterResourceGain(itr.gain, ref projection);
+                if (projection.NativeResourceOwnerHandle.IsValid &&
+                    projection.NativeResourceOwnerHandle == projection.TargetHandle)
+                {
+                    projection.TargetPp = projection.NativeResourceOwnerPp;
+                    projection.TargetInputMpConsumedTotal = projection.NativeResourceOwnerMpConsumed;
+                }
             }
             if (type == 1 || type == 2 || type == 4 || type == 6)
             {
@@ -5450,18 +5499,6 @@ namespace NTSD.Simulation.Ecs
                     ref projection);
             }
 
-            LF2CharacterData targetData =
-                LF2HitResolveRuntimeData.ResolveCharacterData(target);
-            if (target.GetCurrentDataObjectTypeForSimulation() >
-                    (int)LF2ObjectType.Character &&
-                !string.IsNullOrWhiteSpace(targetData?.weapon_hit_sound))
-            {
-                ProjectQueuedSound(
-                    targetWorld,
-                    targetData.weapon_hit_sound,
-                    target.Runtime.XInt,
-                    ref projection);
-            }
         }
 
         private static int ProjectBattleRandInt(
@@ -6277,6 +6314,15 @@ namespace NTSD.Simulation.Ecs
             {
                 mask |= 1UL << 53;
             }
+            if (expected.NativeResourceObserved &&
+                (expected.NativeResourceOwnerSlot != actual.NativeResourceOwnerSlot ||
+                 expected.NativeResourceOwnerHandle != actual.NativeResourceOwnerHandle ||
+                 expected.NativeResourceOwnerType != actual.NativeResourceOwnerType ||
+                 expected.NativeResourceOwnerPp != actual.NativeResourceOwnerPp ||
+                 expected.NativeResourceOwnerMpConsumed != actual.NativeResourceOwnerMpConsumed ||
+                 expected.NativeResourceOwnerMpMax != actual.NativeResourceOwnerMpMax ||
+                 expected.NativeResourceLocalMode != actual.NativeResourceLocalMode))
+                mask |= 1UL << 53;
             if (expected.TargetComboCountVic != actual.TargetComboCountVic) mask |= 1UL << 54;
             if (expected.TargetAttackingCounter != actual.TargetAttackingCounter) mask |= 1UL << 55;
             if (expected.HolderKillStat != actual.HolderKillStat) mask |= 1UL << 56;
@@ -6531,6 +6577,14 @@ namespace NTSD.Simulation.Ecs
             internal int AttackerItrArest;
             internal int AttackerHp;
             internal int AttackerKind4SourceCount;
+            internal bool NativeResourceObserved;
+            internal int NativeResourceOwnerSlot;
+            internal RuntimeEntityHandle NativeResourceOwnerHandle;
+            internal int NativeResourceOwnerType;
+            internal int NativeResourceOwnerPp;
+            internal int NativeResourceOwnerMpConsumed;
+            internal int NativeResourceOwnerMpMax;
+            internal bool NativeResourceLocalMode;
             internal RuntimeEntityHandle StandardCreditHandle;
             internal int StandardCreditInputScore;
             internal int StandardCreditKnockoutCount;

@@ -1,0 +1,62 @@
+<test-suite type="TestSuite" id="9663" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7710" result="Failed" site="Child" start-time="2026-09-14 20:54:45Z" end-time="2026-09-14 20:54:56Z" duration="10.293950" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18285" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7702" result="Failed" site="Child" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:56Z" duration="10.227459" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="113976" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18286" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7702" result="Failed" site="Child" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:56Z" duration="10.136947" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18294" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7164" result="Failed" site="Child" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:56Z" duration="10.039559" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11583" name="NTSD28Q06HeldNativeFrameBindingEditorTests" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:56Z" duration="9.968555" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11595" name="HeldRefillAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldRefillAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:56Z" duration="9.868286" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11593" name="HeldRefillAndFollowingTickMatchSource(Authority400)" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldRefillAndFollowingTickMatchSource(Authority400)" methodname="HeldRefillAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" seed="1910952613" result="Failed" start-time="2026-09-14 20:54:46Z" end-time="2026-09-14 20:54:50Z" duration="4.362483" asserts="0"><properties /><failure><message><![CDATA[  case 12 held slot 70 motion.x=1 expected -3
+case 12 held RNG.synchronized.counter=0 expected=1
+case 12 held RNG.synchronized.index=0 expected=1
+case 12 held RNG.synchronized.lastCallSite=0 expected=4293065
+case 12 held RNG.synchronized.totalCalls=0 expected=1
+case 12 held calls.synchronized array length differs
+case 12 held legacy RNG changed
+case 13 held slot 70 motion.x=1 expected -3
+case 13 held RNG.synchronized.counter=0 expected=1
+case 13 held RNG.synchronized.index=0 expected=1
+case 13 held RNG.synchronized.lastCallSite=0 expected=4293065
+case 13 held RNG.synchronized.totalCalls=0 expected=1
+case 13 held calls.synchronized array length differs
+case 13 held legacy RNG changed
+case 14 held slot 0 frame.action=10 expected 0
+  Expected: <empty>
+  But was:  < "case 12 held slot 70 motion.x=1 expected -3", "case 12 held RNG.synchronized.counter=0 expected=1", "case 12 held RNG.synchronized.index=0 expected=1", "case 12 held RNG.synchronized.lastCallSite=0 expected=4293065", "case 12 held RNG.synchronized.totalCalls=0 expected=1", "case 12 held calls.synchronized array length differs", "case 12 held legacy RNG changed", "case 13 held slot 70 motion.x=1 expected -3", "case 13 held RNG.synchronized.counter=0 expected=1", "case 13 held RNG.synchronized.index=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean renderer, System.String sourceFolder, System.Int32 expectedCases, System.String prefix, System.Boolean genericShell) [0x003e3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:106
+at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldRefillAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:52
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=19, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (exhausted): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=HeldNativeChild, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11594" name="HeldRefillAndFollowingTickMatchSource(MobileExtended)" fullname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldRefillAndFollowingTickMatchSource(MobileExtended)" methodname="HeldRefillAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests" runstate="Runnable" seed="1489422615" result="Failed" start-time="2026-09-14 20:54:50Z" end-time="2026-09-14 20:54:56Z" duration="5.400797" asserts="0"><properties /><failure><message><![CDATA[  case 12 held slot 70 motion.x=1 expected -3
+case 12 held RNG.synchronized.counter=0 expected=1
+case 12 held RNG.synchronized.index=0 expected=1
+case 12 held RNG.synchronized.lastCallSite=0 expected=4293065
+case 12 held RNG.synchronized.totalCalls=0 expected=1
+case 12 held calls.synchronized array length differs
+case 12 held legacy RNG changed
+case 13 held slot 70 motion.x=1 expected -3
+case 13 held RNG.synchronized.counter=0 expected=1
+case 13 held RNG.synchronized.index=0 expected=1
+case 13 held RNG.synchronized.lastCallSite=0 expected=4293065
+case 13 held RNG.synchronized.totalCalls=0 expected=1
+case 13 held calls.synchronized array length differs
+case 13 held legacy RNG changed
+case 14 held slot 0 frame.action=10 expected 0
+  Expected: <empty>
+  But was:  < "case 12 held slot 70 motion.x=1 expected -3", "case 12 held RNG.synchronized.counter=0 expected=1", "case 12 held RNG.synchronized.index=0 expected=1", "case 12 held RNG.synchronized.lastCallSite=0 expected=4293065", "case 12 held RNG.synchronized.totalCalls=0 expected=1", "case 12 held calls.synchronized array length differs", "case 12 held legacy RNG changed", "case 13 held slot 70 motion.x=1 expected -3", "case 13 held RNG.synchronized.counter=0 expected=1", "case 13 held RNG.synchronized.index=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, System.Boolean renderer, System.String sourceFolder, System.Int32 expectedCases, System.String prefix, System.Boolean genericShell) [0x003e3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:106
+at NTSD.Test.NTSD28Q06HeldNativeFrameBindingEditorTests.HeldRefillAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06HeldNativeFrameBindingEditorTests.cs:52
+]]></stack-trace></failure><output><![CDATA[<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:7231 (active clients: 1)
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

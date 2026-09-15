@@ -1,0 +1,15 @@
+{
+  "rows": 1150,
+  "bytes": 13208826,
+  "sha256": "8a6c0cc2f8b20d7deeb360e70350fffce4f69a63f21ebfd58702793f605f44c3",
+  "repeatEqual": true,
+  "original140ByteIdentical": true,
+  "counts": {
+    "linked": 1150,
+    "updates": 1150,
+    "unsupported": 0,
+    "terminal": 0,
+    "velocityReleases": 536,
+    "kind3Releases": 679
+  }
+}

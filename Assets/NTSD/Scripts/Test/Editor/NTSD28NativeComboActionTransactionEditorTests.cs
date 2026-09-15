@@ -111,12 +111,15 @@ namespace NTSD.Test
                 int.MinValue);
             NTSD28NativeActionAttempt missing = scope.Writer.ApplyNativeInputAction(
                 scope.Character,
-                21);
+                1000);
 
             Assert.That(min.Failure,
                 Is.EqualTo(NTSD28NativeActionFailure.UnrepresentableMagnitude));
             Assert.That(missing.Failure,
                 Is.EqualTo(NTSD28NativeActionFailure.SourceFrameMissing));
+            NTSD28NativeActionAttempt implicitFrame = scope.Writer.ApplyNativeInputAction(scope.Character, 21);
+            Assert.That(implicitFrame.Applied, Is.True);
+            Assert.That(scope.Character.Frame.D, Is.SameAs(scope.Character.FrameCache.GetNativeFrameDataById(21)));
 
             runtime.InputLastAction144 = 123;
             runtime.AttackingCounter = 9;
@@ -179,7 +182,7 @@ namespace NTSD.Test
             Assert.That(result.MpCost, Is.EqualTo(25));
             Assert.That(character.Health.PP, Is.EqualTo(75));
             Assert.That(character.Frame.N, Is.EqualTo(777));
-            Assert.That(character.Frame.D, Is.Null);
+            Assert.That(character.Frame.D, Is.SameAs(character.FrameCache.GetNativeFrameDataById(777)));
             Assert.That(character.Runtime.InputLastAction144, Is.EqualTo(777));
         }
 
@@ -296,7 +299,7 @@ namespace NTSD.Test
             Assert.That(gate.UsedFallback, Is.True);
             Assert.That(gate.ResolvedAction, Is.EqualTo(71));
             Assert.That(first.Character.Frame.N, Is.EqualTo(71));
-            Assert.That(first.Character.Frame.D, Is.Null);
+            Assert.That(first.Character.Frame.D, Is.SameAs(first.Character.FrameCache.GetNativeFrameDataById(71)));
             Assert.That(first.Character.Runtime.Dir, Is.EqualTo("left"));
             Assert.That(first.Character.Runtime.InputLastAction144, Is.EqualTo(333));
             Assert.That(first.Character.Runtime.InputMpConsumedTotal350, Is.Zero);

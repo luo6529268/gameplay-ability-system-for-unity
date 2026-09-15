@@ -1,0 +1,7 @@
+{
+  "cases": 392,
+  "checks": 110742,
+  "differences": [],
+  "sha256": "aa306fb50d5f3f10318d2ab1bcab6bdfad73baf3b016798f0406b09971d05208",
+  "scope": "Independent full immediate after-state derivation from before for 392 synthetic cases; no depth keys, injury -1/0. Third entity has owner slot 0. Descriptor wait/next are not Unity mutable overrides. Next full tick captured but not independently verified here. Formal EXE observation and Unity acceptance are separate."
+}

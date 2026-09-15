@@ -1,0 +1,9 @@
+FAIL
+System.InvalidOperationException: R5-HOLD-002: real type1 held throw must stamp the holder runtime slot as spawner
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33417 
+  at NTSD.Test.BattleRuntimeSelfCheck+<>c.<CheckWorldLevelRealWeaponStep12Contracts>b__136_0 (NTSD.Test.BattleRuntimeSelfCheck+FlowSelfCheckEntity holder, NTSD.Test.BattleRuntimeSelfCheck+HeldActSelfCheckWeapon weapon) [0x00052] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:12624 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunWorldLevelRealWeaponStep12Case (System.String label, System.Int32 weaponType, NTSD.Animation.WeaponPoint holderWPoint, System.Action`2[T1,T2] verify, System.Int32 initialSpawnerEntityIndex, System.Int32 initialPickerStableId) [0x001f5] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:12754 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckWorldLevelRealWeaponStep12Contracts () [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:12615 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckGenericHeldStep12ContinuationContracts () [0x000d2] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:12610 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

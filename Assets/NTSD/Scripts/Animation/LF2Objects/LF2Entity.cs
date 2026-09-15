@@ -3732,9 +3732,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             WriteCurrentFrameId(frameId);
-            LF2FrameData targetFrame = FrameCache?.HasFrame(frameId) == true
-                ? FrameCache.GetFrameDataById(frameId)
-                : null;
+            LF2FrameData targetFrame = FrameCache?.GetNativeFrameDataById(frameId);
             Frame.D = targetFrame;
             if (targetFrame == null)
             {
@@ -5263,15 +5261,13 @@ namespace NTSD.Animation.LF2Objects
 
         internal void SetCpointRawFramePreserveWait(int frameId, LF2FrameData sourceFrame)
         {
-            if (Frame == null || FrameCache == null)
+            if (Frame == null)
                 return;
             bool sourceFrameMatches = sourceFrame != null && sourceFrame.frameId == frameId;
-            if (frameId >= 0 && !FrameCache.HasFrame(frameId) && !sourceFrameMatches)
-                return;
 
             LF2FrameData targetFrame = sourceFrameMatches
                 ? sourceFrame
-                : FrameCache.GetFrameDataById(frameId);
+                : FrameCache?.GetNativeFrameDataById(frameId);
             WriteCurrentFrameId(frameId);
             Frame.D = targetFrame;
             if (targetFrame != null)
@@ -5290,7 +5286,7 @@ namespace NTSD.Animation.LF2Objects
             Frame.Prev2 = frameId;
             Frame.Prev2D = sourceFrame != null && sourceFrame.frameId == frameId
                 ? sourceFrame
-                : FrameCache?.GetFrameDataById(frameId);
+                : FrameCache?.GetNativeFrameDataById(frameId);
             Runtime.PrevFrame2 = frameId;
         }
 
