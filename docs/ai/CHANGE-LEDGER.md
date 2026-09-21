@@ -2,7 +2,7 @@
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
-| NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001 | PLANNED | 新增项目本地正式内容候选身份定向Editor测试 | [Record](CHANGE-RECORDS/NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001.md) | 先从真实生产candidate路径验证330对象/1010图像及正式root同身份；尚未运行。 |
+| NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001 | CODE_WRITTEN | 新增项目本地正式内容候选身份定向Editor测试 | [Record](CHANGE-RECORDS/NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001.md) | 已写真实生产candidate比较；Unity导入中，focused test/compile尚未验。 |
 | NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001 | VERIFIED | 正式对象DAT/图片精确字节暂存；无脚本/生产配置改动 | [Record](CHANGE-RECORDS/NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001.md) | 1343/1343源与目标SHA，46,594,829字节，0缺/额外；candidate/发布待下一包。 |
 | NTSD28-Q06-OPOINT-ZERO-FRAME-SLOT-VISIBILITY-001 | VERIFIED | L-02–L-04 source/Unity witness and held-zero OPoint gate | [Record](CHANGE-RECORDS/NTSD28-Q06-OPOINT-ZERO-FRAME-SLOT-VISIBILITY-001.md) | source4/Unity4, component1, SelfCheck, Play3 and ordered close PASS; see ACCEPTANCE.md. |
 | `NTSD28-Q06-CPOINT-SETTLEMENT-REMAINDER-FRAME-BINDING-001` | `VERIFIED` | CPoint结算剩余帧绑定 | [Record](CHANGE-RECORDS/NTSD28-Q06-CPOINT-SETTLEMENT-REMAINDER-FRAME-BINDING-001.md) | 单源码见证先行。 |
