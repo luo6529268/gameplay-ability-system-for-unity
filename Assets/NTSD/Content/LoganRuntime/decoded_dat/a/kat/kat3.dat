@@ -1,0 +1,54 @@
+<bmp_begin>
+file(0-23): a\kat\kat2.png w: 81 h: 82 row: 4 col: 6
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 0 state: 3000 wait: 1 next: 1 dvx: 23 centerx: 51 centery: 41
+opoint: kind: 1 x: 51 y: 41 action: 50 oid: 818 facing: 0 opoint_end:
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+<frame> 1 flying
+pic: 1 state: 3000 wait: 1 next: 2 dvx: 23 centerx: 53 centery: 41
+opoint: kind: 1 x: 51 y: 41 action: 50 oid: 818 facing: 0 opoint_end:
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+<frame> 2 flying
+pic: 2 state: 3000 wait: 1 next: 999 dvx: 23 centerx: 51 centery: 41
+opoint: kind: 1 x: 51 y: 41 action: 50 oid: 818 facing: 0 opoint_end:
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 10 hiting
+pic: 8 state: 15 wait: 0 next: 31 centerx: 40 centery: 43
+<frame_end>
+<frame> 20 hit
+pic: 8 state: 15 wait: 1 next: 31 centerx: 44 centery: 43
+<frame_end>
+<frame> 30 rebounding
+pic: 8 state: 15 wait: 1 next: 31 centerx: 43 centery: 43
+<frame_end>
+<frame> 31 rebounding
+pic: 9 state: 15 wait: 1 next: 32 centerx: 40 centery: 42
+opoint: kind: 1 x: 41 y: 52 action: 150 oid: 121 facing: 0 opoint_end:
+<frame_end>
+<frame> 32 rebounding
+pic: 10 state: 15 wait: 1 next: 33 centerx: 46 centery: 39
+<frame_end>
+<frame> 33 rebounding
+pic: 11 state: 15 wait: 1 next: 1000 centerx: 52 centery: 41
+<frame_end>
+
+<frame> 50 flying
+pic: 999 state: 3005 wait: 0 next: 51 dvy: 550 centerx: 51 centery: 41
+<frame_end>
+<frame> 51 flying
+pic: 999 state: 3005 wait: 3 next: 1000 dvy: 550 centerx: 51 centery: 41
+opoint: kind: 1 x: 65 y: 55 action: 150 oid: 210 facing: 0 opoint_end:
+itr: kind: 0 x: 9 y: 99500 w: 99 h: 99 zwidth: 20 dvx: 30 dvy: 1 fall: 999 arest: 70 injury: 1 itr_end:
+<frame_end>

@@ -1,0 +1,11 @@
+# CPoint following tick first difference
+
+Unity job c4d578527ce3420ea8669f59dbc224d2 executed two profile tests; both failed. Each370 source rows has0 initial differences after expanding comparison to raw47, native descriptors, catch/link fields, exact B2 input and native RNG. Each profile records1194 post differences:886 input differences,308 raw/descriptor/other differences. Existing immediate stage also compared in this run; first observed differences are following tick. Full report/XML archived following-c4d57852. No further production edit.
+
+Case0 first difference: previousMask0 expected16; edge attack5 expected4; keyHistory[4]5 expected-1. Case247 includes downstream catcher action100 expected203 and victim position/action differences. This is not a passing following-tick result.
+
+Current-path investigation: native simulation_tick_driver.cpp503 calls InputRouter28::sample_pending for non-AI entities, updating previous every pass and current only according to native phase. Unity SimulationWorld.PostCooldownHumanInputAll at2735 refreshes active-human roster bindings, then skips entities lacking IsBoundActiveHumanRosterInputEntity or shared controller. The synthetic fixture uses actual logic factory but has no controller/active human roster. LF2Entity character producer without AI does not itself roll input history; FreezeProducerState copies existing aliases and ProcessNativeSampledState consumes them. This explains a candidate boundary mismatch but does not yet establish whether a missing fixture binding or an unsupported production population is responsible.
+
+Do not patch broad input ownership or overwrite expected previous/edge values. Next read-only trace existing roster/controller test setup and formal host control semantics; establish an equivalent real input producer for a representative, or declare an independent exact production gap with source reachability. A test hook that manually forces expected input cannot certify the production path. Original CPoint immediate370x2 and adjacent throw PASS remain valid within their stated scope; whole package stays FOCUSED_TEST_PASS, not VERIFIED.
+
+This turn changed only the declared test file. Ledger passed; no repeated all-role/SelfCheck/Play run. Full replay and stable package acceptance remain pending; Q06 incomplete/Q07 not migrated.

@@ -1,0 +1,20 @@
+{
+  "index": 3,
+  "count": 1,
+  "audioCount": 0,
+  "legacyCalls": 1,
+  "afterRandom": {
+    "crt": {
+      "state": 1975929314,
+      "totalCalls": 3000
+    },
+    "synchronized": {
+      "counter": 0,
+      "index": 0,
+      "lastCallSite": 0,
+      "tableHash64": "54BFC3E7F3017958",
+      "totalCalls": 0
+    }
+  },
+  "expectedCount": 1
+}

@@ -1,0 +1,58 @@
+<bmp_begin>
+file(0-11): a\spi\spi.png w: 135 h: 160 row: 4 col: 3
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 70 spiral
+pic: 0 state: 3005 wait: 0 next: 71 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 71 spiral
+pic: 1 state: 3005 wait: 0 next: 72 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 72 spiral
+pic: 2 state: 3005 wait: 0 next: 73 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 73 spiral
+pic: 3 state: 3005 wait: 0 next: 74 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 74 spiral
+pic: 4 state: 3005 wait: 0 next: 75 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 75 spiral
+pic: 5 state: 3005 wait: 0 next: 76 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 76 spiral
+pic: 6 state: 3005 wait: 0 next: 77 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 77 spiral
+pic: 4 state: 3005 wait: 0 next: 78 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 78 spiral
+pic: 5 state: 3005 wait: 0 next: 79 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 79 spiral
+pic: 6 state: 3005 wait: 0 next: 80 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 80 spiral
+pic: 4 state: 3005 wait: 0 next: 81 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 81 spiral
+pic: 5 state: 3005 wait: 0 next: 82 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 82 spiral
+pic: 6 state: 3005 wait: 0 next: 83 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 83 spiral
+pic: 7 state: 3005 wait: 0 next: 84 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 84 spiral
+pic: 8 state: 3005 wait: 0 next: 85 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 85 spiral
+pic: 9 state: 3005 wait: 0 next: 86 dvy: 550 centerx: 55 centery: 160
+<frame_end>
+<frame> 86 spiral
+pic: 10 state: 3005 wait: 0 next: 1000 dvy: 550 centerx: 55 centery: 160
+<frame_end>

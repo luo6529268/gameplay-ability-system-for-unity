@@ -1,0 +1,114 @@
+<bmp_begin>
+file(0-39): a\ama\ama.png w: 100 h: 145 row: 10 col: 4
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+shadow: 1
+<bmp_end>
+
+<frame> 0 delete
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 54 centery: 79
+<frame_end>
+<frame> 10 delete
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 54 centery: 79
+<frame_end>
+<frame> 20 delete
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 54 centery: 79
+<frame_end>
+<frame> 30 delete
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 54 centery: 79
+<frame_end>
+
+<frame> 77 amaterasu
+pic: 999 state: 400 wait: 3 next: 74 centerx: 55 centery: 145
+<frame_end>
+<frame> 74 amaterasu
+pic: 999 state: 18 wait: 0 next: 80 dvx: 80 centerx: 55 centery: 145
+<frame_end>
+
+<frame> 75 amaterasu
+pic: 999 state: 400 wait: 3 next: 76 centerx: 55 centery: 145
+<frame_end>
+<frame> 76 amaterasu
+pic: 999 state: 18 wait: 0 next: 80 dvx: 120 centerx: 55 centery: 145
+<frame_end>
+
+<frame> 78 amaterasu
+pic: 999 state: 400 wait: 3 next: 79 centerx: 55 centery: 145
+<frame_end>
+<frame> 79 amaterasu
+pic: 999 state: 18 wait: 0 next: 80 dvx: 160 centerx: 55 centery: 145
+<frame_end>
+
+<frame> 80 amastart
+pic: 10 state: 3005 wait: 1 next: 81 dvx: 550 centerx: 55 centery: 145 sound: data\067.wav
+<frame_end>
+<frame> 81 amastart
+pic: 11 state: 3003 wait: 1 next: 82 centerx: 55 centery: 145
+<frame_end>
+<frame> 82 amastart
+pic: 12 state: 18 wait: 1 next: 83 centerx: 55 centery: 145 mp: 30
+<frame_end>
+<frame> 83 amastart
+pic: 13 state: 18 wait: 1 next: 84 centerx: 55 centery: 145 mp: 40
+<frame_end>
+<frame> 84 amastart
+pic: 14 state: 18 wait: 1 next: 85 centerx: 55 centery: 145 mp: 30
+<frame_end>
+<frame> 85 amastart
+pic: 15 state: 18 wait: 1 next: 86 centerx: 55 centery: 145 mp: 40
+<frame_end>
+
+<frame> 86 amaloop
+pic: 0 state: 18 wait: 2 next: 87 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 25 fall: 10 arest: 15 itr_end:
+<frame_end>
+<frame> 87 amaloop
+pic: 1 state: 18 wait: 2 next: 88 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 19 fall: 10 arest: 15 itr_end:
+<frame_end>
+<frame> 88 amaloop
+pic: 2 state: 18 wait: 2 next: 89 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 20 fall: 10 arest: 15 itr_end:
+<frame_end>
+<frame> 89 amaloop
+pic: 3 state: 18 wait: 2 next: 90 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 10 fall: 10 arest: 15 itr_end:
+<frame_end>
+<frame> 90 amaloop
+pic: 4 state: 18 wait: 2 next: 91 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 15 fall: 10 arest: 15 itr_end:
+<frame_end>
+<frame> 91 amaloop
+pic: 5 state: 18 wait: 2 next: 86 centerx: 55 centery: 145 hit_a: 3 hit_d: 92 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 15 fall: 10 arest: 15 itr_end:
+<frame_end>
+
+<frame> 92 amaend
+pic: 16 state: 18 wait: 1 next: 93 centerx: 55 centery: 145 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 10 fall: 70 arest: 15 itr_end:
+<frame_end>
+<frame> 93 amaend
+pic: 17 state: 18 wait: 1 next: 94 centerx: 55 centery: 145 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 5 fall: 70 arest: 15 itr_end:
+<frame_end>
+<frame> 94 amaend
+pic: 18 state: 18 wait: 1 next: 95 centerx: 55 centery: 145 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 10 fall: 70 arest: 50 itr_end:
+<frame_end>
+<frame> 95 amaend
+pic: 19 state: 18 wait: 1 next: 96 centerx: 55 centery: 145 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 5 fall: 70 arest: 50 itr_end:
+<frame_end>
+<frame> 96 amaend
+pic: 20 state: 18 wait: 1 next: 97 centerx: 55 centery: 145 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 10 fall: 70 arest: 50 itr_end:
+<frame_end>
+<frame> 97 amaend
+pic: 21 state: 18 wait: 1 next: 98 centerx: 55 centery: 145 mp: 30
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 5 fall: 70 arest: 50 itr_end:
+<frame_end>
+<frame> 98 amaend
+pic: 22 state: 18 wait: 1 next: 1000 centerx: 55 centery: 145 mp: 40
+itr: kind: 0 x: 10 y: 50 w: 90 h: 100 effect: 5 bdefend: 100 injury: 10 fall: 70 arest: 50 itr_end:
+<frame_end>

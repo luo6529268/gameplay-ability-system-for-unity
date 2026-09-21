@@ -1,0 +1,72 @@
+{
+  "rider": {
+    "position": [
+      102,
+      -35,
+      247,
+      102.5,
+      -35.0,
+      247.5
+    ],
+    "reference": -35,
+    "platformSlot": 20,
+    "shadow": -35,
+    "previousY": -35
+  },
+  "platform": {
+    "position": [
+      100,
+      -35,
+      250,
+      100.0,
+      -35.0,
+      250.0
+    ],
+    "reference": 0,
+    "platformSlot": 0,
+    "shadow": 0,
+    "previousY": -20
+  },
+  "expected": {
+    "tick": 2,
+    "lifecycleSuccess": true,
+    "rider": {
+      "position": [
+        102,
+        -35,
+        247,
+        102.5,
+        -35,
+        247.5
+      ],
+      "previousY": -35,
+      "previousXYZ": [
+        102,
+        -35,
+        248
+      ],
+      "reference": -35,
+      "platformSlot": 20,
+      "shadow": -35
+    },
+    "platform": {
+      "position": [
+        100,
+        -35,
+        250,
+        100,
+        -35,
+        250
+      ],
+      "previousY": -20,
+      "previousXYZ": [
+        100,
+        -20,
+        250
+      ],
+      "reference": 0,
+      "platformSlot": 0,
+      "shadow": 0
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "case": "unscanned_high_slot",
+  "beforeDifferences": [],
+  "ticks": [
+    {
+      "tick": 0,
+      "expectedSpawned": 1,
+      "actualChildCount": 1,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 50,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 0
+          },
+          {
+            "slot": 51,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    }
+  ]
+}

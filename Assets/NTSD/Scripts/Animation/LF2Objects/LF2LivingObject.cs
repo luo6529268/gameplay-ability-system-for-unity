@@ -562,6 +562,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal override void DestroyEntityLikeExeCoreForStructuralWriter()
         {
+            // Alignment contract: NTSD28-Q06-DESTROY-POOL-OWNER-001.
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             DestroyEvent();
             Destroy();
             // 释放渲染器时会触发 ResetState -> Reset -> Unregister。
@@ -574,7 +576,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 UnregisterFromWorld();
             }
-            ResolveLogicReferencePool()?.Release(this);
+            referencePool?.Release(this);
         }
 
         #endregion

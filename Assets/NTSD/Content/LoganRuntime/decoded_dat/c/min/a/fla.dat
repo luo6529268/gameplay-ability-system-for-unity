@@ -1,0 +1,140 @@
+<bmp_begin>
+file(0-39): c\min\a\kun.png w: 48 h: 48 row: 10 col: 4
+weapon_hp: 200
+weapon_drop_hurt: 5
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 1 centerx: 24 centery: 24
+<frame_end>
+
+<frame> 1 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 1 centerx: 24 centery: 23
+<frame_end>
+
+<frame> 2 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 3 centerx: 24 centery: 25
+<frame_end>
+
+<frame> 3 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 4 centerx: 23 centery: 25
+<frame_end>
+
+<frame> 4 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 5 centerx: 24 centery: 26
+<frame_end>
+
+<frame> 5 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 6 centerx: 24 centery: 26
+<frame_end>
+
+<frame> 6 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 7 centerx: 24 centery: 25
+<frame_end>
+
+<frame> 7 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 8 centerx: 22 centery: 23
+<frame_end>
+
+<frame> 8 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 9 centerx: 26 centery: 15
+<frame_end>
+
+<frame> 9 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 10 centerx: 27 centery: 15
+<frame_end>
+
+<frame> 10 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 11 centerx: 25 centery: 25
+<frame_end>
+
+<frame> 11 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 12 centerx: 24 centery: 24
+<frame_end>
+
+<frame> 12 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 13 centerx: 25 centery: 24
+<frame_end>
+
+<frame> 13 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 14 centerx: 25 centery: 25
+<frame_end>
+
+<frame> 14 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 15 centerx: 24 centery: 24
+<frame_end>
+
+<frame> 15 in_the_sky
+pic: 39 state: 1000 wait: 0 next: 999 centerx: 24 centery: 23
+<frame_end>
+
+
+<frame> 40 throwing
+pic: 37 state: 1002 wait: 0 next: 41 centerx: 24 centery: 37
+<frame_end>
+<frame> 41 throwing
+pic: 37 state: 1002 wait: 0 next: 40 centerx: 24 centery: 34
+<frame_end>
+
+<frame> 45 throwing
+pic: 36 state: 1002 wait: 10 next: 46 centerx: 24 centery: 34
+<frame_end>
+<frame> 46 throwing
+pic: 36 state: 1002 wait: 0 next: 55 centerx: 24 centery: 34
+opoint: kind: 1 x: 24 y: 0 action: 41 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 55 throwing
+pic: 999 state: 1002 wait: 0 next: 1000 centerx: 24 centery: 34
+opoint: kind: 1 x: 24 y: 0 action: 40 dvx: 8 dvy: 13 oid: 448 facing: 50 opoint_end:
+opoint: kind: 1 x: 24 y: 5 action: 40 dvx: 8 dvy: 13 oid: 448 facing: 51 opoint_end:
+<frame_end>
+
+<frame> 60 on_ground
+pic: 39 state: 1003 wait: 1 next: 61 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 61 on_ground
+pic: 39 state: 1003 wait: 1 next: 62 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 62 on_ground
+pic: 39 state: 1003 wait: 1 next: 63 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 63 on_ground
+pic: 39 state: 1003 wait: 1 next: 64 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 64 on_ground
+pic: 39 state: 3005 wait: 1 dvx: 550 next: -100 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 70 just_on_ground
+pic: 39 state: 1003 wait: 1 next: 71 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 71 just_on_on_ground
+pic: 39 state: 1003 wait: 1 dvx: 550 next: 72 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 72 just_on_on_ground
+pic: 39 state: 1003 wait: 1 dvx: 550 next: -100 centerx: 24 centery: 29
+<frame_end>
+
+<frame> 100 just_on_on_ground
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 55 action: 5 oid: 815 facing: 1 opoint_end:
+<frame_end>
+<frame> 105 ground
+pic: 38 state: 3000 wait: 1 next: 106 dvx: 550 dvy: 550 dvz: 550 centerx: 24 centery: 24
+<frame_end>
+<frame> 106 ground
+pic: 38 state: 8815 wait: 1000 next: 5 dvx: 550 dvy: 550 dvz: 550 centerx: 24 centery: 24
+<frame_end>
+
+<frame> 399 dummy
+pic: 4 state: 0 wait: 0 next: 0 centerx: 24 centery: 30
+<frame_end>

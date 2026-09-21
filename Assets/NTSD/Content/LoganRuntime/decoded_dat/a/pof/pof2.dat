@@ -1,0 +1,76 @@
+<bmp_begin>
+file(0-7): a\pof\pof2.png w: 81 h: 82 row: 4 col: 2
+file(8-11): a\pof\pof3.png w: 219 h: 99 row: 4 col: 1
+file(12-16): a\pof\pof4.png w: 90 h: 90 row: 5 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 4 fly
+pic: 12 state: 3005 wait: 1 next: 5 centerx: 40 centery: 79
+<frame_end>
+<frame> 5 fly
+pic: 13 state: 3005 wait: 1 next: 6 centerx: 40 centery: 79
+<frame_end>
+<frame> 6 fly
+pic: 14 state: 3005 wait: 1 next: 7 centerx: 40 centery: 79
+<frame_end>
+<frame> 7 fly
+pic: 15 state: 3005 wait: 1 next: 8 centerx: 40 centery: 79
+<frame_end>
+<frame> 8 fly
+pic: 16 state: 3005 wait: 1 next: 1000 centerx: 40 centery: 79
+<frame_end>
+
+<frame> 41 puff
+pic: 0 state: 15 wait: 1 next: 42 centerx: 40 centery: 25 sound: data\061.wav
+<frame_end>
+<frame> 42 puff
+pic: 1 state: 15 wait: 1 next: 43 centerx: 40 centery: 25
+<frame_end>
+<frame> 43 puff
+pic: 2 state: 15 wait: 1 next: 44 centerx: 40 centery: 25
+<frame_end>
+<frame> 44 puff
+pic: 3 state: 15 wait: 1 next: 1000 centerx: 40 centery: 25
+<frame_end>
+
+<frame> 55 just_smoke
+pic: 8 state: 3005 wait: 3 next: 56 centerx: 113 centery: 18 sound: data\061.wav
+<frame_end>
+<frame> 56 just_smoke
+pic: 9 state: 3005 wait: 3 next: 57 centerx: 113 centery: 18
+<frame_end>
+<frame> 57 just_smoke
+pic: 10 state: 3005 wait: 3 next: 58 centerx: 113 centery: 18
+<frame_end>
+<frame> 58 just_smoke
+pic: 11 state: 3005 wait: 3 next: 1000 centerx: 113 centery: 18
+<frame_end>
+
+<frame> 73 spark2
+pic: 4 state: 3005 wait: 1 next: 74 centerx: 42 centery: 51 sound: data\017.wav
+<frame_end>
+<frame> 74 spark2
+pic: 5 state: 3005 wait: 1 next: 75 centerx: 42 centery: 51
+<frame_end>
+<frame> 75 spark2
+pic: 6 state: 3005 wait: 1 next: 76 centerx: 42 centery: 51
+<frame_end>
+<frame> 76 spark2
+pic: 7 state: 3005 wait: 1 next: 1000 centerx: 42 centery: 51
+<frame_end>
+
+<frame> 100 big_smoke
+pic: 8 state: 3005 wait: 1 next: 101 dvx: 550 dvy: 550 dvz: 550 centerx: 113 centery: 99 sound: data\061.wav 
+<frame_end>
+<frame> 101 big_smoke
+pic: 9 state: 3005 wait: 1 next: 102 dvx: 550 dvy: 550 dvz: 550 centerx: 113 centery: 99
+<frame_end>
+<frame> 102 big_smoke
+pic: 10 state: 3005 wait: 1 next: 103 dvx: 550 dvy: 550 dvz: 550 centerx: 113 centery: 99
+<frame_end>
+<frame> 103 big_smoke
+pic: 11 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 113 centery: 99
+<frame_end>

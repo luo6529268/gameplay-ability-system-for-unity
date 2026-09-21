@@ -1,0 +1,43 @@
+{
+  "status": "PASS",
+  "rows": [
+    {
+      "index": 0,
+      "vx": 3,
+      "beforeFacing": 1,
+      "events": 1,
+      "afterFacing": 1,
+      "action": 0,
+      "counter": 1
+    },
+    {
+      "index": 1,
+      "vx": 0,
+      "beforeFacing": 0,
+      "events": 1,
+      "afterFacing": 0,
+      "action": 0,
+      "counter": 1
+    },
+    {
+      "index": 2,
+      "vx": -3,
+      "beforeFacing": 0,
+      "events": 1,
+      "afterFacing": 0,
+      "action": 0,
+      "counter": 1
+    },
+    {
+      "index": 3,
+      "vx": 3,
+      "beforeFacing": 1,
+      "events": 1,
+      "afterFacing": 0,
+      "action": 1,
+      "counter": 0
+    }
+  ],
+  "sha256": "f4846ca2c06f20712a59e6a48699ad972df5efbf15ccffd9271e9e5f7a2f5bb4",
+  "scope": "Actual source step_frame_slot; expected held-facing and negative-next control, not EXE capture"
+}

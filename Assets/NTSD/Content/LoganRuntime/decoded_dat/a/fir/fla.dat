@@ -1,0 +1,19 @@
+<bmp_begin>
+file(0-3): a\fir\fla.png w: 180 h: 140 row: 2 col: 2
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 65 flare
+pic: 0 state: 3005 wait: 1 next: 66 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 140
+<frame_end>
+<frame> 66 flare
+pic: 1 state: 3005 wait: 1 next: 67 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 140
+<frame_end>
+<frame> 67 flare
+pic: 2 state: 3005 wait: 1 next: 68 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 140
+<frame_end>
+<frame> 68 flare
+pic: 3 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 140
+<frame_end>

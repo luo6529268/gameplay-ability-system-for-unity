@@ -1,0 +1,2443 @@
+<bmp_begin>
+name: Suigetsu
+head: sprite\face\suigetsu_f.png
+small: sprite\small\sui_s.png
+smallb: sprite\smallb\sui_s.png
+file(0-119): c\sui\sui1.png w: 79 h: 79 row: 10 col: 12
+file(120-149): c\sui\sui2.png w: 159 h: 159 row: 5 col: 6
+file(150-174): c\sui\sui3.png w: 567 h: 567 row: 5 col: 5
+walking_frame_rate 3
+walking_speed 4.000000
+walking_speedz 2.000000
+running_frame_rate 3
+running_speed 18.000000
+running_speedz 3.300000
+heavy_walking_speed 4.000000
+heavy_walking_speedz 2.000000
+heavy_running_speed 18.000000
+heavy_running_speedz 3.300000
+jump_height -16.299999
+jump_distance 8.000000
+jump_distancez 3.000000
+dash_height -13.000000
+dash_distance 15.000000
+dash_distancez 3.750000
+rowing_height -2.000000
+rowing_distance 30.000000
+walking_frame: 6
+5 6 7 8 515 516
+walking_frame_end:
+running_frame: 10
+9 10 11 519 520 521 522 523 524 525
+running_frame_end:
+heavy_walking_frame: 6
+12 13 14 15 526 527
+heavy_walking_frame_end:
+heavy_running_frame: 8
+16 17 18 528 529 530 531 532
+heavy_running_frame_end:
+hidden: 0 random: 0 bound: 2
+<bmp_end>
+<stats> max_mp: 500 <stats_end>
+<menu_face>
+layer: pic: c\0\M.png transparency: 1 x: -12 y: 177 dx: 606 dy: 1616 w: 100 h: 100 cc: 16 c1: 0 c2: 3 layer_end
+layer: pic: c\0\M.png transparency: 1 x: -12 y: 177 dx: 707 dy: 1616 w: 100 h: 100 cc: 16 c1: 4 c2: 7 layer_end
+layer: pic: c\0\M.png transparency: 1 x: -12 y: 177 dx: 808 dy: 1616 w: 100 h: 100 cc: 16 c1: 8 c2: 11 layer_end
+layer: pic: c\0\M.png transparency: 1 x: -12 y: 177 dx: 909 dy: 1616 w: 100 h: 100 cc: 16 c1: 12 c2: 16 layer_end
+<menu_face_end>
+
+<frame> 0 standing
+pic: 0 state: 0 wait: 3 next: 1 dvx: 550 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 35 y: 42 weaponact: 29 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 8 respond: 2 x: 0 y: 9004800 w: 115 h: 55 zwidth: 50 dvx: 600 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 1 standing
+pic: 1 state: 0 wait: 3 next: 2 dvx: 550 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 35 y: 42 weaponact: 29 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 2 standing
+pic: 2 state: 0 wait: 3 next: 3 dvx: 550 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 36 y: 42 weaponact: 29 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 3 standing
+pic: 3 state: 0 wait: 3 next: 999 dvx: 550 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 37 y: 42 weaponact: 29 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 5 walking
+pic: 4 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 45 y: 50 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 6 walking
+pic: 5 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 42 y: 49 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 7 walking
+pic: 6 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 35 y: 51 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 8 walking
+pic: 7 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 35 y: 51 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 515 walking
+pic: 8 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 38 y: 50 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 516 walking
+pic: 9 state: 1 wait: 3 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 38 y: 52 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 9 running
+pic: 10 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\003.wav
+wpoint: kind: 1 x: 32 y: 44 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 10 running
+pic: 11 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: 47 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 11 running
+pic: 12 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\004.wav
+wpoint: kind: 1 x: 27 y: 45 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 519 running
+pic: 13 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\003.wav
+wpoint: kind: 1 x: 26 y: 43 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 520 running
+pic: 14 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 27 y: 45 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 521 running
+pic: 15 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\004.wav
+wpoint: kind: 1 x: 35 y: 48 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 522 running
+pic: 16 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\003.wav
+wpoint: kind: 1 x: 26 y: 43 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 523 running
+pic: 17 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 27 y: 45 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 524 running
+pic: 18 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\004.wav
+wpoint: kind: 1 x: 35 y: 48 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 525 running
+pic: 19 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 27 y: 45 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 12 heavy_obj_walk
+pic: 64 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 42 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 13 heavy_obj_walk
+pic: 65 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 14 heavy_obj_walk
+pic: 66 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 15 heavy_obj_walk
+pic: 67 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 44 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 526 heavy_obj_walk
+pic: 68 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 527 heavy_obj_walk
+pic: 69 state: 1 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 44 y: 23 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 16 heavy_obj_run
+pic: 80 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\003.wav
+wpoint: kind: 1 x: 43 y: 26 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 17 heavy_obj_run
+pic: 81 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 27 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 18 heavy_obj_run
+pic: 82 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\004.wav
+wpoint: kind: 1 x: 44 y: 26 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 19 heavy_stop_run
+pic: 83 state: 15 wait: 7 next: 999 dvx: 2 centerx: 39 centery: 79 sound: data\009.wav
+wpoint: kind: 1 x: 32 y: 31 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 528 heavy_obj_run
+pic: 83 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 27 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 529 heavy_obj_run
+pic: 84 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\003.wav
+wpoint: kind: 1 x: 43 y: 26 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 530 heavy_obj_run
+pic: 85 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 27 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 531 heavy_obj_run
+pic: 86 state: 2 wait: 3 next: 0 centerx: 39 centery: 79 sound: data\004.wav
+wpoint: kind: 1 x: 44 y: 26 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 532 heavy_obj_run
+pic: 87 state: 2 wait: 4 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 27 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 20 normal_weapon_atck
+pic: 45 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 30 y: 42 weaponact: 20 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 25 normal_weapon_atck
+pic: 45 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 30 y: 42 weaponact: 20 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 30 jump_weapon_atck
+pic: 93 state: 15 wait: 6 next: 53 centerx: 41 centery: 68
+wpoint: kind: 1 x: 25 y: 35 weaponact: 22 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 35 run_weapon_atck
+pic: 45 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 30 y: 42 weaponact: 20 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 40 dash_weapon_atck
+pic: 93 state: 15 wait: 6 next: 53 centerx: 41 centery: 68
+wpoint: kind: 1 x: 25 y: 35 weaponact: 22 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 45 light_weapon_thw
+pic: 45 state: 15 wait: 3 next: 46 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 30 y: 42 weaponact: 20 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 46 light_weapon_thw
+pic: 40 state: 15 wait: 1 next: 47 centerx: 39 centery: 79 sound: data\007.wav
+opoint: kind: 1 x: 39 y: 39 action: 701 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 60 y: 42 weaponact: 31 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 47 light_weapon_thw
+pic: 40 state: 15 wait: 1 next: 999 centerx: 39 centery: 79
+wpoint: kind: 1 x: 100 y: 50 weaponact: 35 attacking: 0 cover: 1 dvx: 55 dvy: -4 dvz: 3 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 50 heavy_weapon_thw
+pic: 74 state: 15 wait: 1 next: 51 centerx: 39 centery: 79
+wpoint: kind: 1 x: 16 y: 57 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 51 heavy_weapon_thw
+pic: 75 state: 15 wait: 10 next: 999 centerx: 39 centery: 79 sound: data\007.wav
+wpoint: kind: 1 x: 93 y: 57 weaponact: 10 attacking: 0 cover: 0 dvx: 60 dvy: -5 dvz: 2 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 52 sky_lgt_wp_thw
+pic: 93 state: 15 wait: 6 next: 53 centerx: 41 centery: 68
+wpoint: kind: 1 x: 25 y: 35 weaponact: 22 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 53 sky_lgt_wp_thw
+pic: 94 state: 15 wait: 1 next: 54 dvy: -2 centerx: 39 centery: 79 sound: data\008.wav
+wpoint: kind: 1 x: 67 y: 56 weaponact: 34 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 33 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 33 h: 62 bdy_end:
+<frame_end>
+<frame> 54 sky_lgt_wp_thw
+pic: 95 state: 15 wait: 9 next: 999 centerx: 39 centery: 79
+wpoint: kind: 1 x: 67 y: 56 weaponact: 23 attacking: 0 cover: 0 dvx: 23 dvy: 8 dvz: 3 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 33 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 33 h: 62 bdy_end:
+<frame_end>
+
+<frame> 59 punch
+pic: 123 state: 3 wait: 0 next: 63 centerx: 90 centery: 147
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 60 punch
+pic: 120 state: 3 wait: 2 next: 61 dvx: 1 centerx: 90 centery: 147 hit_ad: 165 hit_aj: 145
+itr: kind: 2 x: 73 y: 124 w: 37 h: 23 vrest: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 61 punch
+pic: 121 state: 3 wait: 0 next: 62 centerx: 90 centery: 147 sound: data\007.wav
+opoint: kind: 1 x: 39 y: 39 action: 700 oid: 421 facing: 0 opoint_end:
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 843 w: 32 h: 11 bdy_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 62 punch
+pic: 122 state: 3 wait: 0 next: 59 centerx: 90 centery: 147
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 843 w: 32 h: 11 bdy_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 63 punch
+pic: 124 state: 3 wait: 2 next: 999 centerx: 90 centery: 147 hit_a: 64
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 64 punch
+pic: 125 state: 3 wait: 1 next: 66 dvx: 1 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 65 punch
+pic: 120 state: 3 wait: 2 next: 61 dvx: 1 centerx: 90 centery: 147 hit_ad: 165 hit_aj: 145
+itr: kind: 2 x: 73 y: 124 w: 37 h: 23 vrest: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 66 punch
+pic: 126 state: 3 wait: 0 next: 67 centerx: 90 centery: 147
+opoint: kind: 1 x: 39 y: 39 action: 701 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 67 punch
+pic: 127 state: 3 wait: 0 next: 68 centerx: 90 centery: 147 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 843 w: 32 h: 11 bdy_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 68 punch
+pic: 128 state: 3 wait: 0 next: 69 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 69 punch
+pic: 129 state: 3 wait: 3 next: 999 centerx: 90 centery: 147 hit_a: 70
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 70 super_punch
+pic: 131 state: 3 wait: 2 next: 71 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 71 super_punch
+pic: 132 state: 3 wait: 1 next: 72 centerx: 90 centery: 147
+opoint: kind: 1 x: 39 y: 39 action: 702 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 72 super_punch
+pic: 133 state: 3 wait: 0 next: 73 centerx: 90 centery: 147 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 86 y: 28 w: 71 h: 123 dvx: 15 dvy: -18 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 73 super_punch
+pic: 134 state: 3 wait: 0 next: 74 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 86 y: 28 w: 71 h: 123 dvx: 15 dvy: -18 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 74 super_punch
+pic: 135 state: 3 wait: 1 next: 75 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 75 super_punch
+pic: 136 state: 3 wait: 5 next: 999 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 80 jump_attack
+pic: 146 state: 3 wait: 1 next: 81 centerx: 68 centery: 129
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 81 jump_attack
+pic: 147 state: 3 wait: 1 next: 82 centerx: 68 centery: 129 sound: data\007.wav
+itr: kind: 0 x: 77 y: 15 w: 64 h: 123 dvx: 2 arest: 15 bdefend: 16 injury: 35 effect: 1 itr_end:
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 82 jump_attack
+pic: 148 state: 3 wait: 3 next: 999 centerx: 68 centery: 129
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 85 run_attack
+pic: 92 state: 3 wait: 1 next: 86 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 86 run_attack
+pic: 93 state: 3 wait: 1 next: 87 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 87 run_attack
+pic: 94 state: 3 wait: 1 next: 88 centerx: 39 centery: 79 dvx: 9 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 51 y: 47 action: 40 dvx: 9 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 88 run_attack
+pic: 95 state: 3 wait: 5 next: 999 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 39 action: 703 oid: 421 facing: 0 opoint_end:
+itr: kind: 0 x: 12 y: 27 w: 59 h: 49 dvx: 35 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 itr_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 90 dash_attack
+pic: 146 state: 15 wait: 1 next: 91 centerx: 68 centery: 129
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 91 dash_attack
+pic: 146 state: 15 wait: 1 next: 92 centerx: 68 centery: 129
+opoint: kind: 1 x: 39 y: 39 action: 703 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 92 dash_attack
+pic: 147 state: 15 wait: 1 next: 93 centerx: 68 centery: 129 dvy: 1 sound: data\007.wav
+itr: kind: 0 x: 77 y: 15 w: 64 h: 123 dvx: 12 fall: 70 arest: 20 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 93 dash_attack
+pic: 148 state: 15 wait: 20 next: 999 centerx: 68 centery: 129
+bdy: kind: 0 x: 47 y: 69 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 95 dash_defend
+pic: 146 state: 3 wait: 1 next: 81 centerx: 90 centery: 147
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 100 rowing
+pic: 54 state: 6 wait: 2 next: 101 dvz: 3 centerx: 39 centery: 79 sound: data\017.wav
+wpoint: kind: 1 x: 43 y: 66 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2044000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 101 rowing
+pic: 54 state: 6 wait: 6 next: 0 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: 54 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2044000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 102 rowing
+pic: 56 state: 6 wait: 1 next: 103 dvz: 3 centerx: 39 centery: 79 sound: data\017.wav
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 103 rowing
+pic: 57 state: 6 wait: 1 next: 104 dvz: 3 centerx: 39 centery: 79 hit_d: 104 mp: -25
+opoint: kind: 1 x: 39 y: 39 action: 704 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 104 rowing
+pic: 999 state: 6 wait: 2 next: 105 dvx: 25 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 105 rowing
+pic: 999 state: 6 wait: 2 next: 106 dvx: 25 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 106 rowing
+pic: 57 state: 6 wait: 2 next: 107 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 107 rowing
+pic: 56 state: 6 wait: 1 next: 999 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 108 rowing
+pic: 55 state: 6 wait: 3 next: 109 dvz: 3 centerx: 45 centery: 62 sound: data\017.wav
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2044000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 109 rowing
+pic: 55 state: 6 wait: 6 next: 0 dvz: 3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2044000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 110 defend
+pic: 22 state: 7 wait: 12 next: 610 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 55 y: 35 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 20 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 111 defend
+pic: 22 state: 7 wait: 0 next: 114 centerx: 39 centery: 79 hit_a: 664 hit_d: 235 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 55 y: 35 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 16 y: 19 w: 42 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 112 broken_defend
+pic: 31 state: 8 wait: 0 next: 113 dvx: -2 centerx: 39 centery: 79
+wpoint: kind: 1 x: 7 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 5 y: 17 w: 64 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 113 broken_defend
+pic: 31 state: 8 wait: 0 next: 114 dvx: -2 centerx: 39 centery: 79
+wpoint: kind: 1 x: 4 y: -999 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 5 y: 17 w: 64 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 114 broken_defend
+pic: 31 state: 8 wait: 2 next: 999 dvx: -2 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: -999 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 5 y: 17 w: 64 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 115 picking_light
+pic: 60 state: 15 wait: 5 next: 999 centerx: 39 centery: 79 hit_ad: 165 hit_aj: 145 sound: data\009.wav
+wpoint: kind: 1 x: 38 y: 76 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 24 y: 43 w: 33 h: 37 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 116 picking_heavy
+pic: 60 state: 15 wait: 5 next: 117 centerx: 39 centery: 79 sound: data\009.wav
+wpoint: kind: 1 x: 42 y: 79 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 24 y: 43 w: 33 h: 37 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 117 picking_heavy
+pic: 61 state: 15 wait: 5 next: 999 centerx: 39 centery: 79
+wpoint: kind: 1 x: 42 y: 66 weaponact: 10 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 24 y: 43 w: 33 h: 37 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 124 charge
+pic: 53 state: 3 wait: 9 next: 620 centerx: 39 centery: 79 hit_j: 650 hit_d: 999
+wpoint: kind: 1 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 8940000 w: 99 h: 99 dvx: 619 itr_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2042000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 125 charge
+pic: 53 state: 17 wait: 3 next: 126 centerx: 39 centery: 79
+opoint: kind: 2 x: 42 y: 51 action: 20 oid: 123 facing: 0 opoint_end:
+wpoint: kind: 1 x: 79 y: 2 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+<frame_end>
+<frame> 126 charge
+pic: 51 state: 17 wait: 3 next: 127 centerx: 39 centery: 79 hit_a: 128 hit_d: 128 hit_j: 128
+opoint: kind: 1 x: 51 y: 32 action: 4 oid: 204 opoint_end:
+wpoint: kind: 1 x: 39 y: 12 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+<frame_end>
+<frame> 127 charge
+pic: 51 state: 17 wait: 3 next: 126 centerx: 39 centery: 79 hit_a: 128 hit_d: 128 hit_j: 128
+wpoint: kind: 1 x: 39 y: 30 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 128 charge
+pic: 53 state: 15 wait: 0 next: 999 centerx: 39 centery: 79
+wpoint: kind: 3 x: 39 y: 79 weaponact: 399 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 130 picked_caught
+pic: 31 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 41 y: 39 fronthurtact: 132 backhurtact: 131 cpoint_end:
+wpoint: kind: 1 x: 31 y: 56 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 131 picked_caught
+pic: 31 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 41 y: 39 fronthurtact: 132 backhurtact: 132 cpoint_end:
+wpoint: kind: 1 x: 26 y: 54 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 132 picked_caught
+pic: 30 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 41 y: 39 fronthurtact: 131 backhurtact: 131 cpoint_end:
+wpoint: kind: 1 x: 39 y: 51 weaponact: 30 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 133 picked_caught
+pic: 30 state: 10 wait: 2 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 33 y: 36 cpoint_end:
+wpoint: kind: 1 x: 35 y: 46 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 134 picked_caught
+pic: 31 state: 10 wait: 2 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 37 y: 28 cpoint_end:
+wpoint: kind: 1 x: 41 y: 36 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 135 picked_caught
+pic: 32 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 31 y: 22 cpoint_end:
+wpoint: kind: 1 x: 40 y: 39 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 136 picked_caught
+pic: 33 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 27 y: 46 cpoint_end:
+wpoint: kind: 1 x: 24 y: 32 weaponact: 33 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 137 picked_caught
+pic: 34 state: 10 wait: 3 next: 0 centerx: 39 centery: 71
+cpoint: kind: 2 x: 33 y: 68 cpoint_end:
+wpoint: kind: 1 x: 33 y: 75 weaponact: 32 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 138 picked_caught
+pic: 33 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 34 y: 54 cpoint_end:
+wpoint: kind: 1 x: 38 y: 64 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 139 picked_caught
+pic: 30 state: 10 wait: 2 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 40 y: 36 cpoint_end:
+wpoint: kind: 1 x: 22 y: 47 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 140 picked_caught
+pic: 31 state: 10 wait: 2 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 36 y: 38 cpoint_end:
+wpoint: kind: 1 x: 23 y: 43 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 141 picked_caught
+pic: 32 state: 10 wait: 2 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 44 y: 40 cpoint_end:
+wpoint: kind: 1 x: 30 y: 43 weaponact: 23 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 142 picked_caught
+pic: 33 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 46 y: 51 cpoint_end:
+wpoint: kind: 1 x: 32 y: 50 weaponact: 26 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 143 picked_caught
+pic: 34 state: 10 wait: 3 next: 0 centerx: 39 centery: 74
+cpoint: kind: 2 x: 45 y: 66 cpoint_end:
+wpoint: kind: 1 x: 30 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+<frame> 144 picked_caught
+pic: 33 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 42 y: 55 cpoint_end:
+wpoint: kind: 1 x: 39 y: 67 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 5000 w: 79 h: 500 bdy_end:
+<frame_end>
+
+<frame> 145 AJ
+pic: 90 state: 15 wait: 0 next: 146 centerx: 39 centery: 79 mp: 150 sound: data\017.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 10 y: 5000 w: 200 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+itr: kind: 8 respond: 2 x: 0 y: 9004700 w: 115 h: 55 zwidth: 50 dvx: 600 itr_end:
+itr: kind: 8 respond: 2 dvy: -1 x: 0 y: 9000000 w: 115 h: 4600 zwidth: 50 dvx: 605 itr_end:
+bdy: kind: 0 x: 0 y: 9004700 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 146 AJ
+pic: 90 state: 15 wait: 1 next: 147 dvx: 45 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 3 x: 40 y: 16 w: 25 h: 65 catchingact: 149 149 caughtact: 130 130 itr_end:
+itr: kind: 0 x: 10 y: 5000 w: 200 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+itr: kind: 8 respond: 2 x: 0 y: 9004700 w: 115 h: 55 zwidth: 50 dvx: 600 itr_end:
+itr: kind: 8 respond: 2 dvy: -1 x: 0 y: 9000000 w: 115 h: 4600 zwidth: 50 dvx: 605 itr_end:
+bdy: kind: 0 x: 0 y: 9004700 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 147 AJ
+pic: 90 state: 15 wait: 1 next: 148 dvx: 45 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 3 x: 40 y: 16 w: 25 h: 65 catchingact: 149 149 caughtact: 130 130 itr_end:
+itr: kind: 0 x: 10 y: 5000 w: 200 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+itr: kind: 8 respond: 2 x: 0 y: 9004700 w: 115 h: 55 zwidth: 50 dvx: 600 itr_end:
+itr: kind: 8 respond: 2 dvy: -1 x: 0 y: 9000000 w: 115 h: 4600 zwidth: 50 dvx: 605 itr_end:
+bdy: kind: 0 x: 0 y: 9004700 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 148 AJ
+pic: 90 state: 15 wait: 0 next: 999 dvx: -1 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 3 x: 40 y: 16 w: 25 h: 65 catchingact: 149 149 caughtact: 130 130 itr_end:
+itr: kind: 0 x: 10 y: 5000 w: 200 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+itr: kind: 8 respond: 2 x: 0 y: 9004700 w: 115 h: 55 zwidth: 50 dvx: 600 itr_end:
+itr: kind: 8 respond: 2 dvy: -1 x: 0 y: 9000000 w: 115 h: 4600 zwidth: 50 dvx: 605 itr_end:
+bdy: kind: 0 x: 0 y: 9004700 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 149 AJC
+pic: 90 state: 9 wait: 1 next: 150 centerx: 39 centery: 79 sound: c\sui\w\j2.wav
+cpoint: kind: 1 x: 100 y: 33 vaction: 131 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 19 y: 15 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 150 AJC
+pic: 91 state: 9 wait: 1 next: 151 centerx: 39 centery: 79 hit_a: 152 hit_d: 157 mp: -8
+opoint: kind: 1 x: 110 y: 85 action: 80 oid: 421 facing: 0 opoint_end:
+cpoint: kind: 1 x: 100 y: 23 injury: 5 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: -7 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 19 y: 15 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 151 AJC
+pic: 91 state: 9 wait: 1 next: 151 centerx: 39 centery: 79 hit_a: 152 hit_d: 157 mp: -8
+opoint: kind: 1 x: 110 y: 85 action: 81 oid: 421 facing: 0 opoint_end:
+cpoint: kind: 1 x: 100 y: 23 injury: 5 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: -7 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 19 y: 15 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 152 AJCA
+pic: 120 state: 9 wait: 0 next: 153 centerx: 90 centery: 147
+cpoint: kind: 1 x: 151 y: 91 injury: 0 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 74 y: 83 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 74 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 153 AJCA
+pic: 120 state: 9 wait: 1 next: 154 centerx: 90 centery: 147
+opoint: kind: 1 x: 161 y: 153 action: 82 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 39 action: 702 oid: 421 facing: 0 opoint_end:
+cpoint: kind: 1 x: 151 y: 91 injury: 0 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 74 y: 83 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 74 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 154 AJCA
+pic: 121 state: 9 wait: 1 next: 155 centerx: 90 centery: 147
+opoint: kind: 1 x: 561 y: 147 action: 455 oid: 921 facing: 1 opoint_end:
+cpoint: kind: 1 x: 151 y: 91 injury: 0 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 74 y: 83 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 74 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 155 AJCA
+pic: 122 state: 3 wait: 1 next: 156 centerx: 90 centery: 147
+itr: kind: 0 x: 57 y: 63 w: 112 h: 94 dvx: 35 dvy: -7 fall: 100 vrest: 40 bdefend: 90 injury: 30 effect: 1 itr_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 74 y: 83 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 74 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 156 AJCA
+pic: 124 state: 15 wait: 9 next: 999 centerx: 90 centery: 147
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 74 y: 83 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 74 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 157 AJCD
+pic: 91 state: 9 wait: 0 next: 158 centerx: 39 centery: 79
+cpoint: kind: 1 x: 100 y: 23 injury: 5 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 19 y: 15 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 158 AJCD
+pic: 91 state: 9 wait: 9 next: 999 centerx: 39 centery: 79
+opoint: kind: 1 x: 110 y: 85 action: 110 oid: 421 facing: 0 opoint_end:
+cpoint: kind: 1 x: 100 y: 23 injury: 5 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 19 y: 15 w: 28 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 160 xAD
+pic: 137 state: 3 wait: 1 next: 161 dvx: 20 centerx: 59 centery: 142 dvy: -7
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 8 respond: 2 dvy: -1 x: 38 y: 8000 w: 19 h: 99 dvx: 177 itr_end:
+bdy: kind: 0 x: 38 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 38 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 161 xAD
+pic: 141 state: 3 wait: 1 next: 162 dvx: 20 centerx: 59 centery: 142
+opoint: kind: 1 x: 39 y: 39 action: 705 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 38 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 38 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 162 xAD
+pic: 139 state: 3 wait: 1 next: 163 dvx: 20 centerx: 72 centery: 142
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 59 y: 26 w: 87 h: 169 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 49 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 49 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 163 xAD
+pic: 136 state: 3 wait: 3 next: 999 dvx: 20 centerx: 106 centery: 148
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 83 y: 84 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 83 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 165 AD
+pic: 53 state: 15 wait: 1 next: 166 centerx: 39 centery: 79 mp: 150
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 8 bdefend: 3 dvy: -1 x: -9999 y: 6165000 w: 99999 h: 999 zwidth: 999 dvx: 171 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 166 AD
+pic: 53 state: 15 wait: 1 next: 167 centerx: 39 centery: 79 sound: data\007.wav
+opoint: kind: 1 x: 39 y: 39 action: 704 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 167 AD
+pic: 52 state: 15 wait: 1 next: 168 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 168 AD
+pic: 52 state: 15 wait: 1 next: 169 centerx: 39 centery: 79 sound: data\007.wav
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 169 AD
+pic: 51 state: 15 wait: 4 next: 170 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 170 AD
+pic: 51 state: 15 wait: 5 next: 999 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 350 action: 150 oid: 616 facing: 2 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 171 xAD
+pic: 129 state: 15 wait: 1 next: 172 centerx: 92 centery: 146
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 172 xAD
+pic: 131 state: 15 wait: 8 next: 173 centerx: 92 centery: 146 sound: data\063.wav
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 173 xAD
+pic: 131 state: 15 wait: 1 next: 174 centerx: 92 centery: 146
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 174 xAD
+pic: 56 state: 15 wait: 1 next: 175 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 175 xAD
+pic: 57 state: 15 wait: 1 next: 176 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 176 xAD
+pic: 999 state: 400 wait: 1 next: 160 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 177 xAD
+pic: 137 state: 3 wait: 1 next: 178 dvx: -20 centerx: 59 centery: 142 dvy: -6
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 38 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 38 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 178 xAD
+pic: 141 state: 3 wait: 1 next: 179 dvx: 550 centerx: 59 centery: 142
+opoint: kind: 1 x: 39 y: 39 action: 705 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 38 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 38 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 179 xAD
+pic: 139 state: 3 wait: 1 next: 163 dvx: 550 centerx: 72 centery: 142
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 59 y: 26 w: 87 h: 169 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 49 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 49 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 180 falling
+pic: 30 state: 12 wait: 3 next: 0 centerx: 39 centery: 79 sound: c\sui\w\p5.wav
+wpoint: kind: 1 x: 35 y: 47 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 21 y: 14 w: 29 h: 44 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 25 y: 25 w: 21 h: 20 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 181 falling
+pic: 31 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 43 y: 36 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 15 y: 11 w: 42 h: 26 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+itr: kind: 4 x: 35 y: 30 w: 27 h: 29 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 20 w: 24 h: 23 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 182 falling
+pic: 32 state: 12 wait: 6 next: 0 dvx: -3 centerx: 39 centery: 79
+wpoint: kind: 1 x: 38 y: 37 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 13 y: 18 w: 46 h: 26 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 27 y: 22 w: 20 h: 18 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 183 falling
+pic: 33 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: 33 weaponact: 33 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 32 y: 18 w: 33 h: 27 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+itr: kind: 4 x: 10 y: 38 w: 38 h: 21 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 30 w: 27 h: 21 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 184 falling
+pic: 34 state: 12 wait: 3 next: 0 centerx: 39 centery: 72
+wpoint: kind: 1 x: 36 y: 74 weaponact: 32 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 185 falling
+pic: 33 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 37 y: 64 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 186 falling
+pic: 30 state: 12 wait: 3 next: 0 centerx: 39 centery: 79 sound: c\sui\w\p6.wav
+wpoint: kind: 1 x: 21 y: 45 weaponact: 34 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 22 y: 12 w: 36 h: 50 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 31 y: 24 w: 25 h: 23 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 187 falling
+pic: 31 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 23 y: 42 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 33 y: 6 w: 26 h: 46 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+itr: kind: 4 x: 26 y: 43 w: 21 h: 29 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 28 y: 27 w: 24 h: 26 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 188 falling
+pic: 48 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 31 y: 42 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 14 y: 29 w: 58 h: 23 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 30 y: 31 w: 24 h: 21 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 189 falling
+pic: 49 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 31 y: 51 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 4 x: 24 y: 27 w: 26 h: 28 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+itr: kind: 4 x: 37 y: 45 w: 31 h: 28 dvx: 2 fall: 70 vrest: 20 bdefend: 10 injury: 30 itr_end:
+bdy: kind: 0 x: 30 y: 39 w: 23 h: 21 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 190 falling
+pic: 49 state: 12 wait: 3 next: 0 centerx: 39 centery: 75
+wpoint: kind: 1 x: 31 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 191 falling
+pic: 49 state: 12 wait: 3 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 38 y: 67 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 200 mpdrain
+pic: 30 state: 15 wait: 0 next: 201 centerx: 39 centery: 79
+wpoint: kind: 1 x: 18 y: 45 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+<frame> 201 mpdrain
+pic: 30 state: 15 wait: 0 next: 999 centerx: 39 centery: 79 mp: -45
+wpoint: kind: 1 x: 18 y: 44 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+
+<frame> 203 fire
+pic: 36 state: 18 wait: 0 next: 204 centerx: 39 centery: 79
+wpoint: kind: 1 x: 42 y: 46 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 22 y: 35 w: 26 h: 19 effect: 20 dvx: -6 dvy: -6 fall: 999 vrest: 10 bdefend: 16 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 35 w: 26 h: 19 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+<frame> 204 fire
+pic: 37 state: 18 wait: 0 next: 203 centerx: 39 centery: 79
+wpoint: kind: 1 x: 42 y: 46 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 22 y: 35 w: 26 h: 19 effect: 20 dvx: -6 dvy: -6 fall: 999 vrest: 10 bdefend: 16 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 35 w: 26 h: 19 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 205 fire
+pic: 36 state: 18 wait: 0 next: 206 centerx: 39 centery: 79
+wpoint: kind: 1 x: 30 y: 33 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 22 y: 35 w: 26 h: 19 effect: 20 dvx: -6 dvy: -6 fall: 999 vrest: 10 bdefend: 16 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 35 w: 26 h: 19 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+<frame> 206 fire
+pic: 37 state: 18 wait: 0 next: 205 centerx: 39 centery: 79
+wpoint: kind: 1 x: 30 y: 33 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 22 y: 35 w: 26 h: 19 effect: 20 dvx: -6 dvy: -6 fall: 999 vrest: 10 bdefend: 16 injury: 30 itr_end:
+bdy: kind: 0 x: 22 y: 35 w: 26 h: 19 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8930000 w: 43 h: 999 bdy_end:
+<frame_end>
+
+<frame> 207 tired
+pic: 61 state: 15 wait: 2 next: 0 centerx: 39 centery: 79
+wpoint: kind: 1 x: 42 y: 64 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 210 jump
+pic: 60 state: 4 wait: 3 next: 211 centerx: 39 centery: 79 hit_jd: 630
+wpoint: kind: 1 x: 51 y: 49 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 211 jump
+pic: 61 state: 4 wait: 1 next: 212 centerx: 39 centery: 79 sound: data\017.wav
+wpoint: kind: 1 x: 43 y: 75 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 212 jump
+pic: 28 state: 4 wait: 1 next: 0 centerx: 39 centery: 79 hit_Da: 309
+wpoint: kind: 1 x: 55 y: 40 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 213 dash
+pic: 29 state: 5 wait: 8 next: 216 centerx: 39 centery: 79 hit_Da: 309
+wpoint: kind: 1 x: 55 y: 40 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 214 dash
+pic: 35 state: 5 wait: 8 next: 217 centerx: 39 centery: 79 hit_Da: 309
+wpoint: kind: 1 x: 38 y: 34 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 215 crouch
+pic: 60 state: 15 wait: 2 next: 999 centerx: 39 centery: 79 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325 sound: data\012.wav
+wpoint: kind: 1 x: 51 y: 49 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 216 dash
+pic: 28 state: 5 wait: 2 next: 0 centerx: 39 centery: 79 hit_Da: 309
+wpoint: kind: 1 x: 60 y: 34 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 217 dash
+pic: 28 state: 5 wait: 2 next: 0 centerx: 39 centery: 79 hit_Da: 309
+wpoint: kind: 1 x: 60 y: 35 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 218 stop_running
+pic: 26 state: 15 wait: 5 next: 999 dvx: 1 centerx: 39 centery: 75 sound: data\009.wav
+wpoint: kind: 1 x: 40 y: 48 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 219 crouch2
+pic: 61 state: 15 wait: 2 next: 999 centerx: 39 centery: 79 hit_j: 640 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325 sound: data\012.wav
+wpoint: kind: 1 x: 43 y: 76 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 220 injured
+pic: 30 state: 11 wait: 1 next: 221 centerx: 47 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 57 y: 48 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 23 w: 23 h: 54 bdy_end:
+bdy: kind: 0 x: 29 y: 41 w: 20 h: 37 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 221 injured
+pic: 30 state: 11 wait: 1 next: 999 centerx: 44 centery: 79 hit_d: 235 sound: c\sui\w\p1.wav
+wpoint: kind: 3 x: 60 y: 48 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 46 y: 23 w: 21 h: 56 bdy_end:
+bdy: kind: 0 x: 30 y: 40 w: 17 h: 41 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 222 injured
+pic: 31 state: 11 wait: 1 next: 223 centerx: 39 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 27 y: 58 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 11 y: 24 w: 39 h: 31 bdy_end:
+bdy: kind: 0 x: 25 y: 53 w: 40 h: 27 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 223 injured
+pic: 31 state: 11 wait: 1 next: 999 centerx: 39 centery: 79 hit_d: 235 sound: c\sui\w\p2.wav
+wpoint: kind: 3 x: 24 y: 58 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 12 y: 23 w: 40 h: 37 bdy_end:
+bdy: kind: 0 x: 27 y: 56 w: 36 h: 24 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 224 injured
+pic: 30 state: 11 wait: 1 next: 221 centerx: 48 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 32 y: 53 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 32 y: 18 w: 28 h: 60 bdy_end:
+bdy: kind: 0 x: 52 y: 38 w: 20 h: 19 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 225 injured
+pic: 30 state: 11 wait: 1 next: 999 centerx: 39 centery: 79 hit_d: 235 sound: c\sui\w\p3.wav
+wpoint: kind: 3 x: 24 y: 53 weaponact: 20 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 24 y: 18 w: 35 h: 63 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 226 injured
+pic: 31 state: 16 wait: 1 next: 223 centerx: 39 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 58 y: 49 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 27 y: 22 w: 42 h: 58 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 227 injured
+pic: 31 state: 16 wait: 1 next: 228 centerx: 39 centery: 79 hit_d: 235 sound: c\sui\w\p4.wav
+wpoint: kind: 3 x: 60 y: 51 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 28 y: 24 w: 39 h: 57 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 228 injured
+pic: 31 state: 16 wait: 1 next: 229 centerx: 39 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 61 y: 48 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 28 y: 23 w: 37 h: 58 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 229 injured
+pic: 31 state: 16 wait: 1 next: 999 centerx: 39 centery: 79 hit_d: 235
+wpoint: kind: 3 x: 61 y: 51 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 29 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 230 lying
+pic: 34 state: 14 wait: 30 next: 219 centerx: 39 centery: 72 hit_Uj: 239
+wpoint: kind: 1 x: 35 y: 74 weaponact: 32 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 3000 w: 79 h: 99 bdy_end:
+<frame_end>
+<frame> 231 lying
+pic: 49 state: 14 wait: 30 next: 219 centerx: 39 centery: 72 hit_Uj: 239
+wpoint: kind: 1 x: 32 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 3500 w: 79 h: 99 bdy_end:
+<frame_end>
+<frame> 232 lying
+pic: 46 state: 15 wait: 0 next: 233 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 72
+wpoint: kind: 1 x: 32 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+<frame> 233 lying
+pic: 47 state: 14 wait: 30 next: 219 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 72
+wpoint: kind: 1 x: 32 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+
+<frame> 235 replacement
+pic: 30 state: 86 wait: 1 next: 236 dvy: -2 centerx: 39 centery: 79 mp: 50
+wpoint: kind: 3 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+
+<frame_end>
+<frame> 236 replacement
+pic: 30 state: 86 wait: 2 next: 237 dvy: 550 centerx: 39 centery: 79 sound: c\sui\w\r.wav
+opoint: kind: 1 x: 36 y: 21 action: 150 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 3 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+
+<frame_end>
+<frame> 237 replacement
+pic: 999 state: 3005 wait: 5 next: 238 dvx: 30 dvy: -4 dvz: 5 centerx: 39 centery: 79
+<frame_end>
+<frame> 238 replacement
+pic: 30 state: 15 wait: 0 next: 999 dvx: -1 dvy: 12 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 35 y: 70 action: 60 oid: 204 facing: 0 opoint_end:
+wpoint: kind: 3 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+<frame> 239 GUj
+pic: 34 state: 14 wait: 0 next: 340 centerx: 39 centery: 72 mp: 250
+wpoint: kind: 1 x: 35 y: 74 weaponact: 32 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 0 y: 3000 w: 79 h: 500 bdy_end:
+<frame_end>
+
+<frame> 250 Fa
+pic: 44 state: 15 wait: 1 next: 251 centerx: 39 centery: 79 mp: 100 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 251 Fa
+pic: 42 state: 15 wait: 3 next: 252 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 252 Fa
+pic: 43 state: 15 wait: 3 next: 253 centerx: 39 centery: 79 sound: data\046.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 55 y: 35 action: 65 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 253 Fa
+pic: 45 state: 15 wait: 1 next: 254 centerx: 39 centery: 79 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 254 Fa
+pic: 40 state: 15 wait: 3 next: 255 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 255 Fa
+pic: 41 state: 15 wait: 9 next: 999 centerx: 39 centery: 79 sound: data\046.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 55 y: 35 action: 65 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 256 Fjj
+pic: 51 state: 15 wait: 0 next: 257 centerx: 39 centery: 79 mp: 50
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 257 Fjj
+pic: 999 state: 15 wait: 0 next: 258 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 270 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 258 Fjj
+pic: 999 state: 15 wait: 2 next: -259 centerx: 39 centery: 79 dvx: 70
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 259 Fjj
+pic: 999 state: 15 wait: 1 next: 260 centerx: 39 centery: 79 dvx: 550
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 285 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 260 Fjj
+pic: 137 state: 15 wait: 1 next: 261 centerx: 60 centery: 149
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 40 y: 76 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 261 Fjj
+pic: 141 state: 15 wait: 1 next: 262 centerx: 60 centery: 149 dvy: -7
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 40 y: 76 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 262 Fjj
+pic: 139 state: 15 wait: 1 next: 263 centerx: 75 centery: 149
+opoint: kind: 1 x: 39 y: 39 action: 702 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 68 y: 25 w: 71 h: 123 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 40 effect: 1 itr_end:
+bdy: kind: 0 x: 52 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 263 Fjj
+pic: 136 state: 15 wait: 3 next: 999 centerx: 108 centery: 155
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 87 y: 80 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 268 Fj
+pic: 51 state: 15 wait: 0 next: 266 centerx: 39 centery: 79 hold_j: 275
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 264 Fj
+pic: 51 state: 15 wait: 1 next: 268 centerx: 39 centery: 79 sound: c\sui\w\j4.wav
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 265 Fj
+pic: 51 state: 15 wait: 3 next: 264 centerx: 39 centery: 79 mp: 125
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 266 Fj
+pic: 51 state: 15 wait: 1 next: 267 centerx: 39 centery: 79 sound: data\007.wav
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 267 Fj
+pic: 51 state: 15 wait: 7 next: 999 centerx: 39 centery: 79 hit_j: 256
+opoint: kind: 1 x: 85 y: 85 action: 65 oid: 816 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 274 FHj
+pic: 50 state: 15 wait: 1 next: 276 centerx: 39 centery: 79
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 275 FHj
+pic: 51 state: 3 wait: 1 next: 274 centerx: 39 centery: 79 mp: 50 sound: data\007.wav
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 276 FHj
+pic: 53 state: 15 wait: 1 next: 278 centerx: 39 centery: 79
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 277 FHj
+pic: 51 state: 15 wait: 9 next: 999 centerx: 39 centery: 79
+opoint: kind: 1 x: 140 y: 20 action: 41 dvx: 1 oid: 816 facing: 0 opoint_end:
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 278 FHj
+pic: 52 state: 15 wait: 1 next: 279 centerx: 39 centery: 79
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 279 FHj
+pic: 51 state: 15 wait: 3 next: 277 centerx: 39 centery: 79
+wpoint: kind: 1 x: 46 y: -999 weaponact: 30 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 280 Ua
+pic: 77 state: 3 wait: 2 next: 281 centerx: 38 centery: 79 mp: 200 sound: c\sui\w\j5.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 281 Ua
+pic: 78 state: 3 wait: 1 next: 282 dvx: 550 centerx: 39 centery: 79 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 282 Ua
+pic: 79 state: 3 wait: 5 next: 283 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 283 Ua
+pic: 79 state: 3 wait: 9 next: 284 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 68 y: 27 action: 240 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 284 Ua
+pic: 99 state: 3 wait: 29 next: 999 centerx: 31 centery: 79 sound: c\sui\w\j6.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 60 y: 27 action: 245 oid: 421 facing: 0 opoint_end:
+itr: kind: 8 bdefend: 3 x: -9999 y: 741000 w: 99999 h: 99 zwidth: 999 dvx: 285 itr_end:
+bdy: kind: 0 x: 11 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 11 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 285 xUa
+pic: 999 state: 3 wait: 3 next: -286 dvx: 19 centerx: 90 centery: 147
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 286 xUa
+pic: 120 state: 3 wait: 2 next: 287 dvx: 550 centerx: 90 centery: 147
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 287 xUa
+pic: 126 state: 3 wait: 0 next: 288 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 165 y: 88 action: 135 oid: 421 facing: 0 opoint_end:
+itr: kind: 0 x: 62 y: 70 w: 96 h: 78 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 80 effect: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 288 xUa
+pic: 127 state: 3 wait: 0 next: 289 centerx: 90 centery: 147 sound: data\007.wav
+opoint: kind: 1 x: 39 y: 39 action: 705 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 289 xUa
+pic: 128 state: 3 wait: 0 next: 290 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 290 xUa
+pic: 129 state: 3 wait: 3 next: 999 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 291 Uj
+pic: 51 state: 3 wait: 3 next: 296 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 292 Uj
+pic: 169 state: 3 wait: 3 next: 293 centerx: 413 centery: 360
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 293 Uj
+pic: 170 state: 3 wait: 3 next: 294 centerx: 302 centery: 306
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 294 Uj
+pic: 999 state: 3 wait: 9 next: 323 centerx: 278 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+
+<frame> 295 Uj
+pic: 51 state: 1150291 wait: 3 next: 345 centerx: 39 centery: 79 mp: 250 hit_a: 365
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 296 Uj
+pic: 51 state: 86 wait: 8 next: 297 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 450 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 39 action: 707 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 26 w: 37 h: 53 bdy_end:
+
+<frame_end>
+<frame> 297 Uj
+pic: 999 state: 86 wait: 19 next: 298 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 452 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 298 Uj
+pic: 159 state: 3 wait: 1 next: 299 dvx: 19 dvy: -3 dvz: 6 centerx: 278 centery: 334 sound: data\089.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 299 Uj
+pic: 160 state: 3 wait: 1 next: 300 dvx: 19 dvy: -3 dvz: 6 centerx: 348 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 222 y: 112 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 300 Uj
+pic: 161 state: 3 wait: 1 next: 301 dvx: 19 dvy: -3 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 253 y: 98 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 301 Uj
+pic: 162 state: 3 wait: 1 next: 302 dvx: 19 dvy: -3 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 261 y: 109 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 302 Uj
+pic: 163 state: 3 wait: 1 next: 303 dvx: 19 dvy: 550 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 273 y: 113 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 303 Uj
+pic: 164 state: 3 wait: 1 next: 304 dvx: 19 dvy: 550 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 237 y: 105 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 304 Uj
+pic: 165 state: 3 wait: 1 next: 305 dvx: 19 dvy: 1 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 266 y: 95 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 305 Uj
+pic: 166 state: 3 wait: 1 next: 305 dvx: 19 dvy: 3 dvz: 6 centerx: 378 centery: 334 hit_g: 306
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 251 y: 132 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 306 Uj
+pic: 167 state: 3 wait: 0 next: 307 dvx: 550 dvy: 550 dvz: 550 centerx: 398 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 307 Uj
+pic: 167 state: 3 wait: 2 next: 308 dvx: 550 dvy: 550 dvz: 550 centerx: 398 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 398 y: 334 action: 480 oid: 421 facing: 0 opoint_end:
+<frame_end>
+<frame> 308 Uj
+pic: 168 state: 3 wait: 3 next: 292 centerx: 397 centery: 358
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+
+<frame> 309 aeDa
+pic: 138 state: 15 wait: 1 next: 311 dvy: 7 centerx: 71 centery: 128 dvx: 9 dvy: -7 mp: 100 hit_g: 310
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 310 Da
+pic: 138 state: 3 wait: 1 next: 311 centerx: 71 centery: 128 dvx: 9 dvy: -7 mp: 100
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 311 Da
+pic: 146 state: 3 wait: 1 next: 312 centerx: 71 centery: 128
+opoint: kind: 1 x: 39 y: 39 action: 703 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 312 Da
+pic: 147 state: 3 wait: 9 next: 313 centerx: 71 centery: 128 dvy: 7 hit_g: 313 sound: data\007.wav
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 46 y: 15 w: 98 h: 115 fall: 70 bdefend: 50 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 313 Da
+pic: 145 state: 3 wait: 1 next: 314 centerx: 71 centery: 128
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 314 Da
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128 hit_a: 315
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 123 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 315 Daa
+pic: 148 state: 3 wait: 1 next: 316 centerx: 71 centery: 128 mp: 50
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 316 Daa
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128 hit_a: 317
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 203 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 317 Daaa
+pic: 148 state: 3 wait: 1 next: 318 centerx: 71 centery: 128 mp: 50
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 318 Daaa
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128 hit_a: 319
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 283 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 319 Daaaa
+pic: 148 state: 3 wait: 1 next: 320 centerx: 71 centery: 128 mp: 50
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 320 Daaaa
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128 hit_a: 321
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 363 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 321 Daaaaa
+pic: 148 state: 3 wait: 1 next: 322 centerx: 71 centery: 128 mp: 50
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 322 Daaaaa
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128 hit_a: 341
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 443 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 323 Uj
+pic: 999 state: 15 wait: 16 next: 324 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 78 action: 430 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 324 Uj
+pic: 51 state: 15 wait: 4 next: 999 centerx: 39 centery: 79
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 325 Dj
+pic: 51 state: 15 wait: 0 next: 326 centerx: 39 centery: 79 mp: 200
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 11 y: 17 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 11 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 326 Dj
+pic: 999 state: 86 wait: 20 next: 327 dvx: 550 dvz: 550 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 39 y: 39 action: 706 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 300 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 11 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 327 Dj
+pic: 999 state: 86 wait: 60 next: 328 centerx: 39 centery: 79 dvx: 9 dvz: 3 hit_a: 328 hit_j: 334 hit_d: 328
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 0 y: 3000 w: 79 h: 99 bdy_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 328 Dj
+pic: 999 state: 15 wait: 0 next: 329 centerx: 39 centery: 79
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 329 Dj
+pic: 999 state: 15 wait: 1 next: 330 centerx: 39 centery: 79 dvx: 550 dvz: 550
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 285 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 330 Dj
+pic: 137 state: 15 wait: 1 next: 331 centerx: 60 centery: 149
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 40 y: 76 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 331 Dj
+pic: 141 state: 15 wait: 1 next: 332 centerx: 60 centery: 149 dvy: -7
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 40 y: 76 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 332 Dj
+pic: 139 state: 15 wait: 1 next: 333 centerx: 75 centery: 149
+opoint: kind: 1 x: 39 y: 39 action: 705 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 0 x: 68 y: 25 w: 77 h: 123 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+bdy: kind: 0 x: 52 y: 78 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 333 Dj
+pic: 136 state: 15 wait: 3 next: 999 centerx: 108 centery: 155
+wpoint: kind: 1 x: 53 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 87 y: 80 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 40 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 334 Djj
+pic: 999 state: 86 wait: 3 next: 328 centerx: 39 centery: 79 dvx: 50 dvz: 3 hit_a: 328 hit_d: 328 mp: 50
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 0 y: 3000 w: 79 h: 99 bdy_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 335 GUj
+pic: 999 state: 86 wait: 60 next: 336 centerx: 39 centery: 79 dvx: 9 dvz: 3 hit_a: 328 hit_j: 336 hit_d: 328
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 0 y: 3000 w: 79 h: 99 bdy_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 336 GUjj
+pic: 999 state: 86 wait: 3 next: 328 centerx: 39 centery: 79 dvx: 50 dvz: 3 hit_a: 328 hit_d: 328
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 0 y: 3000 w: 79 h: 99 bdy_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 340 GUj
+pic: 999 state: 86 wait: 10 next: 335 dvx: 550 dvz: 550 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 39 y: 39 action: 706 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 350 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 11 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+
+<frame> 341 Daaaaaa
+pic: 148 state: 3 wait: 1 next: 342 centerx: 71 centery: 128 mp: 50
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 342 Daaaaaa
+pic: 148 state: 3 wait: 9 next: 999 centerx: 71 centery: 128
+wpoint: kind: 1 x: 39 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 523 y: 128 action: 120 oid: 421 facing: 0 opoint_end:
+bdy: kind: 0 x: 47 y: 68 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 47 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 345 Uj2
+pic: 51 state: 86 wait: 8 next: 346 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 39 action: 707 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 450 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 26 w: 37 h: 53 bdy_end:
+
+<frame_end>
+<frame> 346 Uj2
+pic: 999 state: 86 wait: 19 next: 347 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 452 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+
+<frame_end>
+<frame> 347 Uj2
+pic: 159 state: 3 wait: 1 next: 348 dvx: 19 dvy: -3 dvz: 6 centerx: 278 centery: 334 sound: data\089.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 348 Uj2
+pic: 160 state: 3 wait: 1 next: 349 dvx: 19 dvy: -3 dvz: 6 centerx: 348 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 222 y: 112 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 349 Uj2
+pic: 161 state: 3 wait: 1 next: 350 dvx: 19 dvy: -3 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 253 y: 98 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 350 Uj2
+pic: 162 state: 3 wait: 1 next: 351 dvx: 19 dvy: -3 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 261 y: 109 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 351 Uj2
+pic: 163 state: 3 wait: 1 next: 352 dvx: 19 dvy: 550 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 273 y: 113 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 352 Uj2
+pic: 164 state: 3 wait: 1 next: 353 dvx: 19 dvy: 550 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 237 y: 105 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 353 Uj2
+pic: 165 state: 3 wait: 1 next: 354 dvx: 19 dvy: 1 dvz: 6 centerx: 378 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 266 y: 95 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 354 Uj2
+pic: 166 state: 3 wait: 1 next: 354 dvx: 19 dvy: 3 dvz: 6 centerx: 378 centery: 334 hit_g: 355
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 251 y: 132 w: 288 h: 215 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 355 Uj2
+pic: 167 state: 3 wait: 0 next: 356 dvx: 550 dvy: 550 dvz: 550 centerx: 398 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 356 Uj2
+pic: 167 state: 3 wait: 2 next: 357 dvx: 550 dvy: 550 dvz: 550 centerx: 398 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 398 y: 334 action: 480 oid: 421 facing: 0 opoint_end:
+<frame_end>
+<frame> 357 Uj2
+pic: 168 state: 86 wait: 3 next: 358 centerx: 397 centery: 358
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+
+<frame_end>
+<frame> 358 Uj2
+pic: 169 state: 86 wait: 3 next: 359 centerx: 413 centery: 360
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+
+<frame_end>
+<frame> 359 Uj2
+pic: 170 state: 86 wait: 3 next: 360 centerx: 302 centery: 306
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+
+<frame_end>
+<frame> 360 Uj2
+pic: 999 state: 3 wait: 1 next: 361 dvx: 200 centerx: 278 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 361 Uj2
+pic: 999 state: 86 wait: 3 next: 298 dvx: 550 dvy: 550 dvz: 550 centerx: 398 centery: 334
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 398 y: 334 action: 480 oid: 421 facing: 0 opoint_end:
+
+<frame_end>
+
+<frame> 365 Uja
+pic: 51 state: 3 wait: 1 next: 366 centerx: 39 centery: 79 mp: 100
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 366 Uja
+pic: 999 state: 3 wait: 9 next: 367 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 270 oid: 421 facing: 0 opoint_end:
+opoint: kind: 1 x: 39 y: 39 action: 707 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 367 Uja
+pic: 999 state: 400 wait: 1 next: 368 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 368 Uja
+pic: 999 state: 3 wait: 1 next: 369 dvx: 50 centerx: 39 centery: 79
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 369 Uja
+pic: 999 state: 3 wait: 15 next: 370 dvx: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 79 action: 480 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 50 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 370 Uja
+pic: 150 state: 3 wait: 1 next: 371 centerx: 226 centery: 487 sound: data\089.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 83 y: 428 w: 288 h: 63 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 371 Uja
+pic: 151 state: 3 wait: 1 next: 372 centerx: 226 centery: 487
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 83 y: 306 w: 288 h: 185 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 372 Uja
+pic: 152 state: 3 wait: 1 next: 373 centerx: 226 centery: 487
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 83 y: 250 w: 288 h: 241 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 373 Uja
+pic: 153 state: 3 wait: 1 next: 374 centerx: 226 dvy: -9 centery: 487
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 83 y: 157 w: 272 h: 334 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 374 Uja
+pic: 154 state: 3 wait: 1 next: 375 centerx: 226 centery: 447
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 81 y: 105 w: 275 h: 339 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 375 Uja
+pic: 155 state: 3 wait: 1 next: 376 centerx: 226 centery: 427
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 85 y: 49 w: 275 h: 367 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 376 Uja
+pic: 156 state: 3 wait: 1 next: 376 centerx: 226 dvy: 1 centery: 327 hit_g: 377
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 107 y: 3 w: 250 h: 319 zwidth: 30 dvx: 15 dvy: -8 fall: 100 vrest: 50 bdefend: 80 injury: 50 itr_end:
+<frame_end>
+<frame> 377 Uja
+pic: 157 state: 3 wait: 0 next: 378 centerx: 279 centery: 489
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 378 Uja
+pic: 157 state: 3 wait: 1 next: 379 centerx: 279 centery: 489
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+opoint: kind: 1 x: 279 y: 489 action: 480 oid: 421 facing: 0 opoint_end:
+<frame_end>
+<frame> 379 Uja
+pic: 158 state: 3 wait: 2 next: 380 centerx: 285 centery: 519
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+<frame> 380 Uja
+pic: 999 state: 3 wait: 19 next: 323 centerx: 226 centery: 487
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+<frame_end>
+
+<frame> 397 lying
+pic: 58 state: 15 wait: 0 next: 398 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 72
+wpoint: kind: 1 x: 32 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+<frame> 398 lying
+pic: 59 state: 14 wait: 30 next: 219 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 72
+wpoint: kind: 1 x: 32 y: 74 weaponact: 24 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+
+<frame> 399 dummy
+pic: 30 state: 15 wait: 3 next: 1000 dvx: 550 dvy: 550 centerx: 39 centery: 79 sound: c\sui\w\d.wav
+wpoint: kind: 3 x: 58 y: 35 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+
+<frame> 455 AJCAClone
+pic: 142 state: 15 wait: 1 next: 456 dvx: 550 dvy: 550 dvz: 550 centerx: 57 centery: 136
+<frame_end>
+<frame> 456 AJCAClone
+pic: 143 state: 15 wait: 1 next: 457 dvx: 550 dvy: 550 dvz: 550 centerx: 57 centery: 136
+<frame_end>
+<frame> 457 AJCAClone
+pic: 144 state: 15 wait: 1 next: 458 dvx: 550 dvy: 550 dvz: 550 centerx: 57 centery: 136
+<frame_end>
+<frame> 458 AJCAClone
+pic: 124 state: 15 wait: 1 next: 459 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+opoint: kind: 1 x: 111 y: 147 action: 90 oid: 421 facing: 0 opoint_end:
+<frame_end>
+<frame> 459 AJCAClone
+pic: 125 state: 15 wait: 1 next: 460 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+<frame_end>
+<frame> 460 AJCAClone
+pic: 126 state: 15 wait: 1 next: 461 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+opoint: kind: 1 x: 39 y: 39 action: 701 oid: 421 facing: 0 opoint_end:
+<frame_end>
+<frame> 461 AJCAClone
+pic: 127 state: 15 wait: 1 next: 462 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+<frame_end>
+<frame> 462 AJCAClone
+pic: 128 state: 15 wait: 1 next: 463 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+<frame_end>
+<frame> 463 AJCAClone
+pic: 129 state: 15 wait: 2 next: 464 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+<frame_end>
+<frame> 464 AJCAClone
+pic: 130 state: 15 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 90 centery: 147
+<frame_end>
+
+<frame> 600 grabclash
+pic: 999 state: 15 wait: 0 next: 601 dvx: 550 dvy: 550 dvz: 550 centerx: 35 centery: 79 
+wpoint: kind: 1 x: 69 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 0 y: 9004800 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 601 grabclash
+pic: 90 state: 15 wait: 0 next: 602 dvx: -35 dvy: 550 dvz: 550 centerx: 35 centery: 79 
+wpoint: kind: 1 x: 69 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 0 y: 9004800 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 602 grabclash
+pic: 90 state: 15 wait: 21 next: 603 dvx: 1 dvy: 550 dvz: 550 centerx: 35 centery: 79
+wpoint: kind: 1 x: 69 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 43 y: 79 action: 100 oid: 900 facing: 0 opoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 0 y: 9004800 w: 100 h: 55 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 603 grabclash
+pic: 90 state: 15 wait: 19 next: 999 dvx: 550 dvy: 550 dvz: 550 centerx: 35 centery: 79
+wpoint: kind: 1 x: 69 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 28 y: 15 w: 27 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 605 evilclash
+pic: 31 state: 15 wait: 9 next: 999 dvx: -1 dvy: 550 centerx: 39 centery: 79
+wpoint: kind: 1 x: 7 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: -50 y: 17 w: 164 h: 65 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 610 defend
+pic: 22 state: 7 wait: 0 next: 999 centerx: 39 centery: 79 hold_d: 110 hit_ja: 124 hit_Fa: 250 hit_Fj: 265 hit_Ua: 280 hit_Uj: 295 hit_Da: 310 hit_Dj: 325
+wpoint: kind: 1 x: 55 y: 35 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 20 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 615 injured2
+pic: 31 state: 16 wait: 2 next: 616 centerx: 39 centery: 79 hit_g: 615
+wpoint: kind: 3 x: 58 y: 49 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 27 y: 22 w: 42 h: 58 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 616 injured2
+pic: 31 state: 16 wait: 2 next: 617 centerx: 39 centery: 79 hit_g: 616
+wpoint: kind: 3 x: 60 y: 51 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 28 y: 24 w: 39 h: 57 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 617 injured2
+pic: 31 state: 16 wait: 2 next: 618 centerx: 39 centery: 79 hit_g: 617
+wpoint: kind: 3 x: 61 y: 48 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 28 y: 23 w: 37 h: 58 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 618 injured2
+pic: 31 state: 16 wait: 2 next: 999 centerx: 39 centery: 79 hit_g: 618
+wpoint: kind: 3 x: 61 y: 51 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 6 x: 6 y: 12 w: 85 h: 68 vrest: 1 itr_end:
+bdy: kind: 0 x: 29 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 619 charge
+pic: 53 state: 3 wait: 0 next: 125 centerx: 39 centery: 79
+wpoint: kind: 1 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 620 charge
+pic: 53 state: 3 wait: 1 next: 619 centerx: 39 centery: 79 hit_a: 621
+opoint: kind: 1 x: 39 y: 39 action: 704 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 621 charge
+pic: 53 state: 3 wait: 0 next: 125 centerx: 39 centery: 79 mp: -25 sound: data\052.wav
+wpoint: kind: 1 x: 52 y: 24 weaponact: 31 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 26 w: 37 h: 53 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2043000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 630 crouch3
+pic: 61 state: 15 wait: 2 next: 211 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 8 dvy: -1 x: 39 y: -399 w: 9999 h: 499 zwidth: 999 dvx: 636 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 631 jump
+pic: 28 state: 15 wait: 1 next: 632 dvy: -9 dvz: 6 centerx: 39 centery: 79 sound: data\017.wav
+wpoint: kind: 1 x: 40 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 39 y: 79 action: 50 oid: 204 facing: 0 opoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2047000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 632 jump
+pic: 28 state: 15 wait: 6 next: 633 dvz: 6 centerx: 39 centery: 79
+wpoint: kind: 1 x: 40 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 633 jump
+pic: 28 state: 15 wait: 1 next: 633 dvy: 3 dvz: 6 centerx: 39 centery: 79 hit_g: 215
+wpoint: kind: 1 x: 40 y: -999 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 636 crouch3
+pic: 61 state: 15 wait: 0 next: 637 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 637 crouch3
+pic: 61 state: 15 wait: 2 next: 631 centerx: 39 centery: 79 mp: -25
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 638 crouch4
+pic: 61 state: 15 wait: 0 next: 639 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 639 crouch4
+pic: 61 state: 15 wait: 5 next: 641 dvx: -1 centerx: 39 centery: 79 mp: -25
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 640 crouch4
+pic: 61 state: 15 wait: 2 next: 999 centerx: 39 centery: 79
+wpoint: kind: 1 x: 26 y: -999 weaponact: 21 attacking: 0 cover: 0 wpoint_end:
+itr: kind: 8 dvy: -1 x: 39 y: -399 w: 9999 h: 499 zwidth: 999 dvx: 638 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 641 running2
+pic: 15 state: 15 wait: 3 next: 642 dvx: 40 dvz: 3 centerx: 39 centery: 79 hit_a: 85 hit_j: 646 hit_d: 102 sound: data\043.wav
+wpoint: kind: 1 x: 32 y: -999 weaponact: 26 attacking: 0 cover: 0 wpoint_end:
+opoint: kind: 1 x: 39 y: 88 action: 55 dvx: 4 oid: 204 facing: 30 opoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2046000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 642 running2
+pic: 17 state: 15 wait: 4 next: 643 dvx: 40 dvz: 3 centerx: 39 centery: 79 hit_a: 85 hit_j: 646 hit_d: 102
+wpoint: kind: 1 x: 33 y: -999 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 643 running2
+pic: 19 state: 15 wait: 3 next: 9 dvx: 40 dvz: 3 centerx: 39 centery: 79 hit_a: 85 hit_j: 646 hit_d: 102 sound: data\004.wav
+wpoint: kind: 1 x: 26 y: -999 weaponact: 25 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 25 y: 19 w: 38 h: 60 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 646 dash2
+pic: 29 state: 15 wait: 0 next: 213 dvx: 20 dvy: -20 dvz: 5 centerx: 39 centery: 79 sound: data\017.wav
+wpoint: kind: 1 x: 52 y: -999 weaponact: 23 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 650 taunt
+pic: 51 state: 15 wait: 1 next: 651 centerx: 37 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 651 taunt
+pic: 101 state: 15 wait: 1 next: 652 centerx: 38 centery: 79 sound: c\sui\w\t.wav
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 652 taunt
+pic: 102 state: 15 wait: 1 next: 653 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 653 taunt
+pic: 103 state: 15 wait: 1 next: 654 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 654 taunt
+pic: 104 state: 15 wait: 1 next: 655 centerx: 39 centery: 79 hit_a: 662 hit_j: 662 hit_d: 662
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 655 taunt
+pic: 105 state: 15 wait: 1 next: 656 centerx: 35 centery: 79 hit_a: 661 hit_j: 661 hit_d: 661
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 656 taunt
+pic: 106 state: 15 wait: 9 next: 657 centerx: 37 centery: 74 hit_a: 660 hit_j: 660 hit_d: 660
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 657 taunt
+pic: 107 state: 15 wait: 9 next: 658 centerx: 39 centery: 73 hit_a: 660 hit_j: 660 hit_d: 660
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 658 taunt
+pic: 108 state: 15 wait: 9 next: 659 centerx: 33 centery: 73 hit_a: 660 hit_j: 660 hit_d: 660
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 659 taunt
+pic: 107 state: 15 wait: 9 next: 656 centerx: 39 centery: 73 hit_a: 660 hit_j: 660 hit_d: 660
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 660 taunt
+pic: 105 state: 15 wait: 1 next: 661 centerx: 35 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 661 taunt
+pic: 104 state: 15 wait: 1 next: 662 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 662 taunt
+pic: 103 state: 15 wait: 1 next: 663 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 663 taunt
+pic: 102 state: 15 wait: 1 next: 670 centerx: 39 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 664 punch
+pic: 125 state: 7 wait: 1 next: 666 dvx: 1 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 666 punch
+pic: 126 state: 7 wait: 0 next: 667 centerx: 90 centery: 147
+opoint: kind: 1 x: 39 y: 39 action: 701 oid: 421 facing: 0 opoint_end:
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 667 punch
+pic: 127 state: 7 wait: 0 next: 668 centerx: 90 centery: 147 sound: data\007.wav
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+itr: kind: 0 x: 60 y: 83 w: 98 h: 64 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+bdy: kind: 0 x: 70 y: 843 w: 32 h: 11 bdy_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 2045098 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 668 punch
+pic: 128 state: 7 wait: 0 next: 669 centerx: 90 centery: 147
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 669 punch
+pic: 129 state: 7 wait: 3 next: 999 centerx: 90 centery: 147 hit_a: 70
+wpoint: kind: 1 x: 33 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 70 y: 85 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 70 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 670 taunt
+pic: 101 state: 15 wait: 1 next: 671 centerx: 38 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 671 taunt
+pic: 51 state: 15 wait: 1 next: 999 centerx: 37 centery: 79
+wpoint: kind: 1 x: 32 y: -999 weaponact: 21 attacking: 0 cover: 1 wpoint_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 700 chibaku
+pic: 31 state: 10 wait: 3 next: 0 centerx: 39 centery: 79
+cpoint: kind: 2 x: 41 y: 39 cpoint_end:
+wpoint: kind: 1 x: -40 y: -4 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+<frame> 701 tensei
+pic: 32 state: 15 wait: 1 next: 701 centerx: 39 centery: 79 hit_g: 1
+wpoint: kind: 1 x: -40 y: -4 weaponact: 22 attacking: 0 cover: 0 wpoint_end:
+bdy: kind: 0 x: 19 y: 22 w: 47 h: 59 bdy_end:
+<frame_end>

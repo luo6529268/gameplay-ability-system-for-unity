@@ -1,0 +1,138 @@
+<bmp_begin>
+file(0-1): a\wat\wat2.png w: 118 h: 110 row: 2 col: 1
+file(2-9): a\wat\wat3.png w: 81 h: 82 row: 4 col: 2
+file(10-10): a\wat\mists.png w: 3000 h: 1100 row: 1 col: 1
+file(11-11): a\wat\mists2.png w: 3000 h: 1100 row: 1 col: 1
+file(12-12): a\wat\mists3.png w: 3000 h: 1100 row: 1 col: 1
+file(13-13): a\wat\mists4.png w: 3000 h: 1100 row: 1 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 water_wave
+pic: 8 state: 15 wait: 0 next: 31 dvx: 550 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 10 water_wave
+pic: 8 state: 15 wait: 0 next: 31 dvx: 550 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 20 water_wave
+pic: 8 state: 15 wait: 0 next: 31 dvx: 550 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 30 water_wave
+pic: 8 state: 15 wait: 0 next: 31 dvx: 550 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 31 water_wave
+pic: 9 state: 15 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 40 prison
+pic: 0 state: 3005 wait: 1 next: 41 centerx: 60 centery: 110
+<frame_end>
+<frame> 41 prison
+pic: 1 state: 3006 wait: 1 next: 1000 centerx: 60 centery: 110
+<frame_end>
+
+<frame> 83 KISaj
+pic: 999 state: 3005 wait: 2 next: 1000 centerx: 28 centery: 79
+itr: kind: 3 x: 54 y: -23 w: 99 h: 99 catchingact: 84 84 caughtact: 130 130 itr_end:
+<frame_end>
+<frame> 84 KISaj
+pic: 999 state: 9 wait: 1 next: 84 centerx: 28 centery: 79 hit_a: 7
+opoint: kind: 1 x: 110 y: 85 action: 40 oid: 616 facing: 0 opoint_end:
+cpoint: kind: 1 x: 100 y: 23 injury: 0 vaction: 132 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 cpoint_end:
+<frame_end>
+
+<frame> 90 water_wave
+pic: 6 state: 3005 wait: 2 next: 91 dvx: -10 centerx: 41 centery: 82
+itr: kind: 0 x: 25 y: 50 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 20 bdefend: 100 injury: 15 itr_end:
+itr: kind: 0 x: 25 y: 8000 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 2 bdefend: 100 injury: 1 itr_end:
+<frame_end>
+<frame> 91 water_wave
+pic: 7 state: 3000 wait: 2 next: 92 centerx: 41 centery: 82
+itr: kind: 0 x: 25 y: 50 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 20 bdefend: 100 injury: 15 itr_end:
+itr: kind: 0 x: 25 y: 8000 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 2 bdefend: 100 injury: 1 itr_end:
+<frame_end>
+<frame> 92 water_wave
+pic: 8 state: 3000 wait: 2 next: 93 centerx: 41 centery: 82
+itr: kind: 0 x: 25 y: 50 w: 30 h: 30 zwidth: 8 fall: 70 vrest: 20 bdefend: 100 injury: 15 itr_end:
+itr: kind: 0 x: 25 y: 8000 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 2 bdefend: 100 injury: 1 itr_end:
+<frame_end>
+<frame> 93 water_wave
+pic: 9 state: 3000 wait: 2 next: 1000 centerx: 41 centery: 82
+itr: kind: 0 x: 25 y: 50 w: 30 h: 30 zwidth: 8 dvx: -0 fall: 70 vrest: 20 bdefend: 100 injury: 15 itr_end:
+itr: kind: 0 x: 25 y: 8000 w: 30 h: 30 zwidth: 8 fall: 30 vrest: 2 bdefend: 100 injury: 1 itr_end:
+<frame_end>
+
+<frame> 94 water_wave
+pic: 999 state: 3005 wait: 1 next: 95 dvx: 22 centerx: 81 centery: 82 sound: data\wave.wav
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 71 opoint_end:
+<frame_end>
+<frame> 95 water_wave
+pic: 999 state: 3005 wait: 1 next: 96 dvx: 21 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 61 opoint_end:
+<frame_end>
+<frame> 96 water_wave
+pic: 999 state: 3005 wait: 1 next: 97 dvx: 20 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 51 opoint_end:
+<frame_end>
+<frame> 97 water_wave
+pic: 999 state: 3005 wait: 1 next: 98 dvx: 18 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 41 opoint_end:
+<frame_end>
+<frame> 98 water_wave
+pic: 999 state: 3005 wait: 1 next: 99 dvx: 16 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 31 opoint_end:
+<frame_end>
+<frame> 99 water_wave
+pic: 999 state: 3005 wait: 1 next: 105 dvx: 12 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 21 opoint_end:
+<frame_end>
+<frame> 105 water_wave
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 8 centerx: 81 centery: 82
+opoint: kind: 1 x: 40 y: 82 action: 90 oid: 616 facing: 1 opoint_end:
+<frame_end>
+<frame> 100 water_wave
+pic: 999 state: 3005 wait: 1 next: 94 centerx: 81 centery: 82
+<frame_end>
+<frame> 101 water_wave
+pic: 6 state: 3005 wait: 1 next: 102 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 102 water_wave
+pic: 7 state: 3005 wait: 1 next: 103 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 103 water_wave
+pic: 8 state: 3005 wait: 1 next: 104 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+<frame> 104 water_wave
+pic: 9 state: 3005 wait: 1 next: 1000 dvy: 550 centerx: 41 centery: 82
+<frame_end>
+
+<frame> 150 mist
+ pic: 13 state: 3005 wait: 2 next: 151 centerx: 1500 centery: 1100 hit_j: 100
+itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 155000 w: 100 h: 999 dvx: 154 itr_end:
+bdy: kind: 0 x: 0 y: 6165000 w: 100 h: 999 bdy_end:
+<frame_end>
+<frame> 151 mist
+ pic: 12 state: 3005 wait: 2 next: 152 centerx: 1500 centery: 1100 hit_j: 100
+itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 155000 w: 100 h: 999 dvx: 154 itr_end:
+bdy: kind: 0 x: 0 y: 6165000 w: 100 h: 999 bdy_end:
+<frame_end>
+<frame> 152 mist
+ pic: 11 state: 3005 wait: 2 next: 153 centerx: 1500 centery: 1100 hit_j: 100
+itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 155000 w: 100 h: 999 dvx: 154 itr_end:
+bdy: kind: 0 x: 0 y: 6165000 w: 100 h: 999 bdy_end:
+<frame_end>
+<frame> 153 mist
+ pic: 10 state: 3005 wait: 200 next: 154 centerx: 1500 centery: 1100 hit_j: 100
+itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 155000 w: 100 h: 999 dvx: 154 itr_end:
+bdy: kind: 0 x: 0 y: 6165000 w: 100 h: 999 bdy_end:
+<frame_end>
+<frame> 154 mist
+ pic: 11 state: 3005 wait: 2 next: 155 centerx: 1500 centery: 1100
+<frame_end>
+<frame> 155 mist
+ pic: 12 state: 3005 wait: 2 next: 156 centerx: 1500 centery: 1100
+<frame_end>
+<frame> 156 mist
+ pic: 13 state: 3005 wait: 2 next: 1000 centerx: 1500 centery: 1100
+<frame_end>

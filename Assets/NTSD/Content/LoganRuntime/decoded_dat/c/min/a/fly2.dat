@@ -1,0 +1,32 @@
+<bmp_begin>
+file(0-0): data\pixel.png w: 1 h: 1 row: 1 col: 1
+weapon_hit_sound: data\027.wav
+weapon_drop_sound: data\027.wav
+weapon_broken_sound: data\027.wav
+shadow: 1
+<bmp_end>
+
+<frame> 0 fly
+pic: 999 state: 3000 wait: 0 next: 11 dvx: 550 dvy: 550 dvz: 550 centerx: 43 centery: 24
+<frame_end>
+<frame> 5 ground
+pic: 999 state: 3000 wait: 3 next: 6 dvx: 550 dvy: 550 dvz: 550 centerx: 24 centery: 24
+bdy: kind: 0 x: 7 y: 2900 w: 35 h: 199 bdy_end:
+<frame_end>
+<frame> 6 ground
+pic: 999 state: 3000 wait: 0 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 24 centery: 24
+itr: kind: 8 bdefend: 3 dvy: -1 x: 22 y: 272000 w: 20 h: 40 dvx: 5 itr_end:
+<frame_end>
+<frame> 10 illusion
+pic: 999 state: 3000 wait: 0 next: 11 dvx: 550 dvy: 550 dvz: 550 centerx: 43 centery: 24
+<frame_end>
+<frame> 11 illusion
+pic: 999 state: 3000 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 43 centery: 24
+bdy: kind: 0 x: 22 y: 273000 w: 20 h: 40 bdy_end:
+<frame_end>
+<frame> 20 illusion
+pic: 999 state: 3000 wait: 0 next: 11 dvx: 550 dvy: 550 dvz: 550 centerx: 43 centery: 24
+<frame_end>
+<frame> 30 illusion
+pic: 999 state: 3000 wait: 0 next: 11 dvx: 550 dvy: 550 dvz: 550 centerx: 43 centery: 24
+<frame_end>

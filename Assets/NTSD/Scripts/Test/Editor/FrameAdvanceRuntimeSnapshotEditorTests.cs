@@ -337,9 +337,14 @@ namespace NTSD.Test
         {
             var world = new SimulationWorld();
             LF2Character character = CreateRecoveryCharacter(world);
+            // Partial late updates consume the World phase, not the supplied tick index.
+            world.Runtime.NativeWorldClock.ResourcePhase12 = 1;
+            world.Runtime.NativeWorldClock.ResourcePhase3 = 1;
 
             world.LateEntityUpdateAll(1);
 
+            Assert.That(world.NativeResourcePhase12, Is.EqualTo(1));
+            Assert.That(world.NativeResourcePhase3, Is.EqualTo(1));
             Assert.That(character.Health.HP, Is.EqualTo(400));
             Assert.That(character.Health.HPBound, Is.EqualTo(500));
             Assert.That(character.Health.PP, Is.EqualTo(100));
@@ -424,7 +429,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void CharacterFrameTick_DataOrientedState2000FacesFinalHorizontalVelocity()
+        public void CharacterFrameTick_DataOrientedState2000PreservesFacingUnlessNegativeNext()
         {
             var world = new SimulationWorld();
             LF2Character positive = CreateFrameTickCharacter(
@@ -433,26 +438,40 @@ namespace NTSD.Test
                 world, objectId: 7202, wait: 100, next: 0);
             LF2Character negative = CreateFrameTickCharacter(
                 world, objectId: 7203, wait: 100, next: 0);
+            LF2Character flip = CreateFrameTickCharacter(
+                world, objectId: 7204, wait: 0, next: -1);
 
             positive.Frame.D.state = LF2States.HeavyWeaponInSky;
             zero.Frame.D.state = LF2States.HeavyWeaponInSky;
             negative.Frame.D.state = LF2States.HeavyWeaponInSky;
+            flip.Frame.D.state = LF2States.HeavyWeaponInSky;
             positive.Runtime.Vx = 3.0;
             zero.Runtime.Vx = 0.0;
             negative.Runtime.Vx = -3.0;
+            flip.Runtime.Vx = 3.0;
             positive.SwitchDir("left");
             zero.SwitchDir("right");
             negative.SwitchDir("right");
+            flip.SwitchDir("left");
 
             world.LateEntityUpdateAll(1);
 
-            Assert.That(positive.Runtime.Dir, Is.EqualTo("right"));
-            Assert.That(zero.Runtime.Dir, Is.EqualTo("left"));
-            Assert.That(negative.Runtime.Dir, Is.EqualTo("left"));
+            // Source step_frame_slot preserves held facing; negative next owns the flip.
+            Assert.That(positive.Runtime.Dir, Is.EqualTo("left"));
+            Assert.That(zero.Runtime.Dir, Is.EqualTo("right"));
+            Assert.That(negative.Runtime.Dir, Is.EqualTo("right"));
+            Assert.That(flip.Runtime.Dir, Is.EqualTo("right"));
+            foreach (LF2Character held in new[] { positive, zero, negative })
+            {
+                Assert.That(held.Frame.N, Is.Zero);
+                Assert.That(held.AttackingCounter, Is.EqualTo(1));
+            }
+            Assert.That(flip.Frame.N, Is.EqualTo(1));
+            Assert.That(flip.AttackingCounter, Is.Zero);
             Assert.That(
                 world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics
                     .ExactCharacterCount,
-                Is.EqualTo(3));
+                Is.EqualTo(4));
             Assert.That(
                 world.BattleEcsCharacterFrameTickPassDiagnosticsForDiagnostics
                     .CompatibilityFallbackCount,

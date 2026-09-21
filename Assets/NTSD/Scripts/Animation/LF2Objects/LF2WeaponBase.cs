@@ -350,17 +350,15 @@ namespace NTSD.Animation.LF2Objects
 
             if (lightLike)
             {
-                if (ObjectId == 201 || ObjectId == 202)
-                    return;
                 if (state != LF2States.WeaponInSky)
-                    SetFrameDirect(0);
-                ApplyWhirlwindVelocity(attacker, 3.0);
+                    DirectWriteNativeRawFramePreserveWaitCounter(0);
+                ApplyWhirlwindVelocity(attacker);
             }
             else if (heavyLike)
             {
                 if (state != LF2States.HeavyWeaponInSky)
-                    SetFrameDirect(0);
-                ApplyWhirlwindVelocity(attacker, 2.3);
+                    DirectWriteNativeRawFramePreserveWaitCounter(0);
+                ApplyWhirlwindVelocity(attacker);
             }
         }
 
@@ -875,7 +873,7 @@ namespace NTSD.Animation.LF2Objects
             OnHealthInitialized(charData);
         }
 
-        private void ApplyWhirlwindVelocity(LF2Entity attacker, double vyDelta)
+        private void ApplyWhirlwindVelocity(LF2Entity attacker)
         {
             KnockbackVx = Runtime.Vx +
                 (Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
@@ -885,18 +883,6 @@ namespace NTSD.Animation.LF2Objects
                 (Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
             Runtime.Vz = KnockbackVz;
 
-            if (GetRuntimeYInt() >= -2)
-            {
-                Runtime.Y = -2f;
-                Runtime.YInt = -2;
-                Runtime.Vy = -6f;
-            }
-
-            if (Runtime.Vy > -6f)
-            {
-                Runtime.Vy -= vyDelta;
-                KnockbackVy = Runtime.Vy;
-            }
         }
 
         protected static bool ShouldAbortAfterSuccessfulReleaseHit(InteractionArea itr, LF2Entity target)

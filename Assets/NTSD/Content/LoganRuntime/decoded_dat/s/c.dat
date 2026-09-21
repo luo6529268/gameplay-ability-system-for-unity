@@ -1,0 +1,43 @@
+<bmp_begin>
+file(0-0): s\c.png w: 79 h: 79 row: 1 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+<frame> 0 delete
+pic: 999 state: 3005 wait: 1 next: 60 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>
+<frame> 10 delete
+pic: 999 state: 3005 wait: 1 next: 60 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>
+<frame> 20 delete
+pic: 999 state: 3005 wait: 1 next: 60 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>
+<frame> 30 delete
+pic: 999 state: 3005 wait: 1 next: 60 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>
+<frame> 60 delete
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>
+<frame> 80 rock
+pic: 0 state: 3005 wait: 10 next: 80 centerx: 40 centery: 78
+itr: kind: 8 x: 36 y: 65 w: 15 h: 5 dvx: 81 injury: 0 itr_end:
+<frame_end>
+<frame> 81 rock
+pic: 999 state: 0 wait: 0 next: 82 centerx: 38 centery: 78
+<frame_end>
+<frame> 82 rock
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 38 centery: 500 sound: data\020.wav
+opoint: kind: 1 x: 39 y: 81 action: 6 oid: 150 facing: 0 opoint_end:
+<frame_end>
+<frame> 109 cleanup
+pic: 999 state: 3005 wait: 9 next: 1000 dvx: 550 dvy: 550 centerx: 42 centery: 87
+bdy: kind: 0 x: -9999 y: 3000000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 110 cleanup
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 42 centery: 87
+opoint: kind: 1 x: 42 y: 87 action: 109 oid: 300 facing: 0 opoint_end:
+<frame_end>
+<frame> 111 cleanup
+pic: 999 state: 3005 wait: 1 next: 110 dvx: 550 dvy: 550 centerx: 42 centery: 87
+<frame_end>

@@ -1,0 +1,70 @@
+<bmp_begin>
+file(0-1): c\dei\a\cla0.png w: 81 h: 82 row: 1 col: 2
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 start
+pic: 0 state: 3000 wait: 1 next: 1 centerx: 41 centery: 43 hit_Fa: 7
+bdy: kind: 0 x: 22 y: 101000 w: 120 h: 100 bdy_end:
+bdy: kind: 0 x: 22 y: 36 w: 38 h: 18 bdy_end:
+<frame_end>
+<frame> 1 flying
+pic: 1 state: 3000 wait: 1 next: 2 centerx: 44 centery: 42 hit_Fa: 7
+bdy: kind: 0 x: 22 y: 101000 w: 120 h: 100 bdy_end:
+bdy: kind: 0 x: 22 y: 36 w: 38 h: 18 bdy_end:
+<frame_end>
+<frame> 2 flying
+pic: 0 state: 3000 wait: 1 next: 3 centerx: 41 centery: 43 hit_Fa: 7
+bdy: kind: 0 x: 22 y: 101000 w: 120 h: 100 bdy_end:
+bdy: kind: 0 x: 22 y: 36 w: 38 h: 18 bdy_end:
+<frame_end>
+<frame> 3 flying
+pic: 1 state: 3000 wait: 1 next: 999 centerx: 41 centery: 43 hit_Fa: 7
+bdy: kind: 0 x: 22 y: 101000 w: 120 h: 100 bdy_end:
+bdy: kind: 0 x: 22 y: 36 w: 38 h: 18 bdy_end:
+<frame_end>
+
+<frame> 10 hiting
+pic: 999 state: 3000 wait: 0 next: 11 centerx: 42 centery: 45
+<frame_end>
+
+<frame> 11 hiting
+pic: 999 state: 3000 wait: 0 next: 1000 centerx: 42 centery: 45
+opoint: kind: 1 x: 39 y: 81 action: 144 oid: 211 facing: 0 opoint_end:
+<frame_end>
+
+<frame> 20 hit
+pic: 999 state: 3000 wait: 0 next: 11 centerx: 42 centery: 45
+<frame_end>
+<frame> 30 rebounding
+pic: 0 state: 3000 wait: 0 next: 11 centerx: 42 centery: 45
+<frame_end>
+<frame> 40 tail
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 19 centery: 25
+<frame_end>
+<frame> 50 start
+pic: 999 state: 3005 wait: 1 next: 51 centerx: 17 centery: 25
+<frame_end>
+<frame> 51 start
+pic: 999 state: 3005 wait: 1 next: 52 centerx: 17 centery: 25
+opoint: kind: 1 x: 41 y: 25 action: 41 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 52 start
+pic: 999 state: 3005 wait: 1 next: 53 centerx: 17 centery: 25
+<frame_end>
+<frame> 53 start
+pic: 999 state: 3005 wait: 1 next: 54 centerx: 17 centery: 25
+<frame_end>
+<frame> 54 start
+pic: 0 state: 3000 wait: 3 next: 999 centerx: 17 centery: 25 hit_Fa: 3
+<frame_end>
+
+<frame> 60 hiting_ground
+pic: 999 state: 3001 wait: 0 next: 61 centerx: 42 centery: 51
+<frame_end>
+<frame> 61 hiting_ground
+pic: 999 state: 3001 wait: 0 next: 1000 centerx: 45 centery: 50
+opoint: kind: 1 x: 39 y: 81 action: 144 oid: 211 facing: 0 opoint_end:
+<frame_end>

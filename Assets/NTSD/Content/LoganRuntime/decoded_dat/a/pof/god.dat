@@ -1,0 +1,188 @@
+<bmp_begin>
+file(0-7): a\pof\god.png w: 221 h: 232 row: 4 col: 2
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+shadow: 1
+<bmp_end>
+
+<frame> 0 hit
+ pic: 999 state: 3005 wait: 0 next: 286 dvx: 550 dvy: 550 centerx: 54 centery: 79
+<frame_end>
+<frame> 10 hit
+ pic: 999 state: 3005 wait: 0 next: 286 dvx: 550 dvy: 550 centerx: 54 centery: 79
+<frame_end>
+<frame> 20 hit
+ pic: 999 state: 3005 wait: 0 next: 286 dvx: 550 dvy: 550 centerx: 54 centery: 79
+<frame_end>
+<frame> 30 hit
+ pic: 999 state: 3005 wait: 0 next: 286 dvx: 550 dvy: 550 centerx: 54 centery: 79
+<frame_end>
+
+<frame> 165 god
+ pic: 0 state: 3005 wait: 4 next: 166 centerx: 110 centery: 231
+<frame_end>
+<frame> 166 god
+ pic: 1 state: 3005 wait: 4 next: 167 centerx: 110 centery: 231
+<frame_end>
+<frame> 167 god
+ pic: 2 state: 3005 wait: 4 next: 168 centerx: 110 centery: 231
+<frame_end>
+<frame> 168 god
+ pic: 3 state: 3005 wait: 4 next: 169 centerx: 110 centery: 231
+<frame_end>
+<frame> 169 god
+ pic: 0 state: 3005 wait: 4 next: 170 centerx: 110 centery: 231
+<frame_end>
+<frame> 170 god
+ pic: 1 state: 3005 wait: 4 next: 171 centerx: 110 centery: 231
+<frame_end>
+<frame> 171 god
+ pic: 2 state: 3005 wait: 4 next: 172 centerx: 110 centery: 231
+<frame_end>
+<frame> 172 god
+ pic: 3 state: 3005 wait: 4 next: 211 centerx: 110 centery: 231
+<frame_end>
+<frame> 178 god
+ pic: 0 state: 3005 wait: 4 next: 179 centerx: 110 centery: 231
+<frame_end>
+<frame> 179 god
+ pic: 1 state: 3005 wait: 4 next: 180 centerx: 110 centery: 231
+<frame_end>
+<frame> 180 god
+ pic: 2 state: 3005 wait: 4 next: 181 centerx: 110 centery: 231
+<frame_end>
+<frame> 181 god
+ pic: 3 state: 3005 wait: 4 next: 182 centerx: 110 centery: 231
+<frame_end>
+<frame> 182 god
+ pic: 0 state: 3005 wait: 4 next: 183 centerx: 110 centery: 231
+<frame_end>
+<frame> 183 god
+ pic: 1 state: 3005 wait: 4 next: 184 centerx: 110 centery: 231
+<frame_end>
+<frame> 184 god
+ pic: 2 state: 3005 wait: 4 next: 185 centerx: 110 centery: 231
+<frame_end>
+<frame> 185 god
+ pic: 3 state: 3005 wait: 4 next: 186 centerx: 110 centery: 231
+<frame_end>
+<frame> 186 god
+ pic: 0 state: 3005 wait: 4 next: 187 centerx: 110 centery: 231
+<frame_end>
+<frame> 187 god
+ pic: 1 state: 3005 wait: 4 next: 188 centerx: 110 centery: 231
+<frame_end>
+<frame> 188 god
+ pic: 2 state: 3005 wait: 4 next: 189 centerx: 110 centery: 231
+<frame_end>
+<frame> 189 god
+ pic: 3 state: 3005 wait: 4 next: 193 centerx: 110 centery: 231
+<frame_end>
+<frame> 193 god
+ pic: 0 state: 3005 wait: 4 next: 194 centerx: 110 centery: 231
+<frame_end>
+<frame> 194 god
+ pic: 1 state: 3005 wait: 4 next: 195 centerx: 110 centery: 231
+<frame_end>
+<frame> 195 god
+ pic: 2 state: 3005 wait: 4 next: 196 centerx: 110 centery: 231
+<frame_end>
+<frame> 196 god
+ pic: 3 state: 3005 wait: 4 next: 197 centerx: 110 centery: 231
+<frame_end>
+<frame> 197 god
+ pic: 0 state: 3005 wait: 4 next: 198 centerx: 110 centery: 231
+<frame_end>
+<frame> 198 god
+ pic: 1 state: 3005 wait: 4 next: 199 centerx: 110 centery: 231
+<frame_end>
+<frame> 199 god
+ pic: 2 state: 3005 wait: 4 next: 400 centerx: 110 centery: 231
+<frame_end>
+<frame> 207 god
+ pic: 2 state: 3005 wait: 4 next: 208 centerx: 110 centery: 231
+<frame_end>
+<frame> 208 god
+ pic: 3 state: 3005 wait: 4 next: 175 centerx: 110 centery: 231
+<frame_end>
+<frame> 175 god
+ pic: 4 state: 3005 wait: 2 next: 176 centerx: 110 centery: 231
+<frame_end>
+<frame> 176 god
+ pic: 5 state: 3005 wait: 4 next: 177 centerx: 110 centery: 231
+<frame_end>
+<frame> 177 god
+ pic: 6 state: 3005 wait: 4 next: 211 centerx: 110 centery: 231
+<frame_end>
+<frame> 211 god
+ pic: 7 state: 3005 wait: 4 next: 190 centerx: 110 centery: 231
+<frame_end>
+<frame> 190 god
+ pic: 5 state: 3005 wait: 4 next: 191 centerx: 110 centery: 231
+<frame_end>
+<frame> 191 god
+ pic: 6 state: 3005 wait: 4 next: 192 centerx: 110 centery: 231
+<frame_end>
+<frame> 192 god
+ pic: 7 state: 3005 wait: 4 next: 1000 centerx: 110 centery: 231
+<frame_end>
+<frame> 286 ball2
+ pic: 999 state: 3005 wait: 463 next: 287 centerx: 105 centery: 42
+<frame_end>
+<frame> 287 ball
+ pic: 999 state: 400 wait: 1 next: 289 centerx: 105 centery: 42
+opoint: kind: 1 x: 20 y: 20 action: 111 oid: 714 facing: 0 opoint_end:
+<frame_end>
+<frame> 289 ball2
+ pic: 999 state: 3005 wait: 5 next: 290 dvx: 550 dvy: 550 centerx: 105 centery: 42
+opoint: kind: 1 x: 20 y: 20 action: 191 oid: 717 facing: 0 opoint_end:
+<frame_end>
+<frame> 290 ball2
+ pic: 999 state: 3000 wait: 8 next: 300 dvx: 550 dvy: 550 centerx: 105 centery: 79
+ itr: kind: 0 x: 0 y: 8000 w: 599 h: 999 zwidth: 999 vrest: 15 bdefend: 100 fall: 0 injury: 1 drain: 100 itr_end: 
+<frame_end>
+<frame> 300 ball2
+ pic: 999 state: 3000 wait: 59 next: 301 dvx: 550 dvy: 550 centerx: 105 centery: 79
+ itr: kind: 0 x: -9999 y: 8000 w: 99999 h: 999 zwidth: 999 vrest: 15 bdefend: 100 fall: 0 injury: 1 drain: 100 itr_end: 
+<frame_end>
+<frame> 301 ball3
+ pic: 999 state: 3005 wait: 9 next: 1000 dvx: 550 dvy: 550 centerx: 39 centery: 79 sound: data\m_ok.wav
+ bdy: kind: 0 x: -9999 y: 7171717 w: 99999 zwidth: 999 h: 350 bdy_end:
+<frame_end>
+
+<frame> 343 minato
+ pic: 999 state: 18 wait: 0 next: 343 dvx: 550 dvy: 550 centerx: 39 centery: 79
+ itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 7171717 w: 9 h: 9 dvx: 344 itr_end:
+ itr: kind: 0 x: -9999 y: 278000 w: 99999 zwidth: 999 h: 350 vrest: 1 bdefend: 100 injury: 1 effect: 5 itr_end:
+<frame_end>
+<frame> 344 del
+ pic: 999 state: 18 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 345 hiruzen
+ pic: 999 state: 18 wait: 0 next: 345 dvx: 550 dvy: 550 centerx: 39 centery: 79
+ itr: kind: 8 bdefend: 3 dvy: -1 x: 0 y: 7171717 w: 9 h: 9 dvx: 344 itr_end:
+ itr: kind: 0 x: -9999 y: 638000 w: 99999 zwidth: 999 h: 350 vrest: 1 bdefend: 100 injury: 1 effect: 5 itr_end:
+<frame_end>
+
+<frame> 400 god
+ pic: 3 state: 3005 wait: 4 next: 401 centerx: 110 centery: 231
+<frame_end>
+<frame> 401 god
+ pic: 0 state: 3005 wait: 4 next: 402 centerx: 110 centery: 231
+<frame_end>
+<frame> 402 god
+ pic: 1 state: 3005 wait: 4 next: 403 centerx: 110 centery: 231
+<frame_end>
+<frame> 403 god
+ pic: 2 state: 3005 wait: 4 next: 404 centerx: 110 centery: 231
+<frame_end>
+<frame> 404 god
+ pic: 3 state: 3005 wait: 4 next: 405 centerx: 110 centery: 231
+<frame_end>
+<frame> 405 god
+ pic: 0 state: 3005 wait: 4 next: 406 centerx: 110 centery: 231
+<frame_end>
+<frame> 406 god
+ pic: 1 state: 3005 wait: 4 next: 207 centerx: 110 centery: 231
+<frame_end>

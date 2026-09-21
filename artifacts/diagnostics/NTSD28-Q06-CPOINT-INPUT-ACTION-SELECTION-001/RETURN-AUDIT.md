@@ -1,0 +1,11 @@
+# CPoint selection resumed after platform fulltick
+
+Current read-only evidence: BattleCpointWriter.RunActionSelection still implements A/T/J only, applying each matching action immediately; ApplyAction obtains victim action from attacker.Frame.D. Current source contract requires ordered final selection including D/Uz/Dz/F/B and matching zero cancellation, then selected native descriptor victim binding. Current caller remains LF2Entity.RunCharacterCpointStep10 -> RunKind1 -> RunActionSelection. Existing BattleCatchPointValue already carries the fields; no new schema is indicated by this audit.
+
+Rechecked source/first.jsonl and repeat.jsonl: byte-identical, 370 parsed rows, SHA256 9ED8699D6AF26C12F1C6E6C3776955A0AABC58C90E41048C7999EFCBBE63ADDE. Build manifest formal B1E13AE1/source07CD47A0 matches current declared authority. Existing selection-only-validation.json records2590 checks/zero failures limited to catcher selection/action/facing/counter/latch/snapshot. No new native run and no new Unity test this audit. Victim and following-tick parity are not established by these checks.
+
+Prior source-note statements that source had not been built are historical and superseded by the verified capture above. Formal selector zero-domain remains a content inventory finding, not permission to omit the explicit general battle rule from this goal. Implementation still needs exact test/production symbols and a source-matching initial fixture before any production edit.
+
+Platform fulltick/replay3 and OPoint materializer are not to be redone. Platform parent original shadow exit remains open and is explicitly assigned to Q09 with its preserved exact consumer audit and Q07/Q08 dependencies; parent is not promoted to VERIFIED. Q06 cannot be delivered while its other required consumers, including this selection chain and unresolved state13/action200 tail audit, remain open.
+
+Next: declare the exact Unity fixture, map canonical current/previous/edge input arrays from the existing native proxy, compare before/actual catch pass/next tick against the pinned source. Preserve selected-frame semantics and cached initial CPoint for later throw/dircontrol. Existing throw/kind2 responsibilities must not be broadened without a measured first difference.

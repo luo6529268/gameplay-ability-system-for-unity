@@ -1,0 +1,177 @@
+{
+  "schema": "ntsd28-raw-entity-comparison-self-test-v2",
+  "passed": false,
+  "cases": [
+    {
+      "name": "equal-raw",
+      "expectedStatus": "equal-raw",
+      "actualStatus": "equal-raw",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "missing-bindings",
+      "expectedStatus": "different",
+      "actualStatus": "equal-raw",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": null,
+      "passed": false
+    },
+    {
+      "name": "candidate-null-rejected",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-null-nonmissing-field:frame.previousAction",
+      "passed": true
+    },
+    {
+      "name": "non-contiguous-tick-rejected",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-non-contiguous-completed-tick",
+      "passed": true
+    },
+    {
+      "name": "value-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedUniqueDifferences": 1,
+      "actualUniqueDifferences": 1,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-old-raw-version",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "schema-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-content",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-header-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-forged-semantic",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-semanticSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-different-valid-content",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-different-valid-fusion-input",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-different-valid-fusion-semantic",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-fusion-input",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-v2-content",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-decodeContract-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-forged-composite",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-rawDefinitionSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-legacy-content-not-logan",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-wrong-joint-schema",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "content-schema-entityRuntime-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-runtime-provenance",
+      "expectedStatus": "invalid-capture",
+      "actualStatus": "invalid-capture",
+      "expectedUniqueDifferences": 0,
+      "actualUniqueDifferences": 0,
+      "reason": "unity-header-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-nondefault-2f8-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedUniqueDifferences": 1,
+      "actualUniqueDifferences": 1,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-earliest-tick-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedUniqueDifferences": 2,
+      "actualUniqueDifferences": 2,
+      "reason": null,
+      "passed": true
+    }
+  ]
+}

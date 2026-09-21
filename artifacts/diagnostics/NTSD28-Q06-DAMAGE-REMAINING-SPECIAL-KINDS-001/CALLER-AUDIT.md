@@ -1,0 +1,13 @@
+# Current caller classification
+
+> Correction after measured return: kind9/kind15 now source17/direct/following/candidate/Play verified; ApplySpecialWeaponThrowingTail state1002 now uses synchronized call-site 0xEE and native raw action binding, including selected-but-undeclared action3, source4/Unity4 and actual Renderer/ordered close. See ACCEPTANCE-FINAL4.md. The original read-only candidate classification below is retained as history. Guarded type3 victim raw220/222/224/226 branches and no-caller weapon helpers remain non-blocking by the same caller proof; new formal DAT content can trigger Q07/R09 recheck.
+
+Read-only 2026-09-21. Historical RAW-BINDING-CALLER-MATRIX statuses are corrected by current gates, not mechanically carried forward.
+
+- BattleDamageWriter792 TryApplyCurrentDatTargetHit routes type1/2/4/6 shell victims to LF2Weapon.Hit; generic DAT victims to ApplyGenericWeaponTypedHit892 -> kind15923. LF2Weapon.Hit377 also calls WhirlwindForce342. Both branches retain OID201/202 immunity and vertical impulse; playable kind155581..5615 only writes action0 when state differs and horizontal/depth motion. Difference candidate needs same-input measurement, not binder-only fix.
+- Type3 routes to LF2SpecialAttack.Hit522 or generic ApplyGenericObjectTypedHit889 -> ApplySpecialAttackDamage1428 kind9. Writer uses raw40/30 and CopyRelation (only group), versus source state3005 narrow40 or hit_j attacker/target/default30 with owner/control transfer, counter0 and motion reset. Source witness required; native kind0 locked transform already verified is a different branch and must not be reopened.
+- ApplySpecialObjectHurtTail1943 has one production caller1505. That dispatcher selects separate type5 tail1503, otherwise formal typed callers supply type3. Its victim raw226/222/224/220 and knockdown fallFrame are inside type!=3 guards: not reachable for these production type3 calls. Public/internal direct unit-test calls with other types do not establish formal gameplay reachability. Do not replace these calls simply because grep finds them.
+- ApplySpecialWeaponThrowingTail2089 remains reachable from type3 tail when attacker state is WeaponThrowing; exact source tail/preceding attacker-frame write still requires classification. Not closed.
+- ApplyKind0WeaponVictimTail2328, ApplyFlyingWeaponKnockbackX2390, ApplyWeaponAttackerState1002Response2429 have only declarations in project C# search; no production callers found. Leave untouched; not current live binding blockers.
+
+Candidate runner BattleHitCandidateSequenceRunner invokes native impact only for10/11/17/18;9/15 still dispatch via consumer. Initial content/eligibility must be preserved in witness. This is static classification, not measured Unity failure or completed Q06.

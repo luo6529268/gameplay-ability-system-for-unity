@@ -34,7 +34,7 @@ namespace NTSD.Simulation.Tests
         }
 
         [NUnit.Framework.Test]
-        public void CaptureTickJson_ProjectsBoundValuesAndKeepsMissingNull()
+        public void CaptureTickJson_ProjectsAllBoundValuesWithoutLegacyAliases()
         {
             var world = new SimulationWorld();
             var entity = new LF2OtherObject();
@@ -79,6 +79,9 @@ namespace NTSD.Simulation.Tests
             runtime.WeaponFlightCounter = 37;
             runtime.SpecialHitLatch0EB = true;
             runtime.Unk328 = -3;
+            runtime.EnvironmentState320 = -17;
+            runtime.EnvironmentSourceSlot160 = 23;
+            runtime.PlatformSourceSlotF4 = 31;
             runtime.PendingFlushDestroy = true;
 
             string first = NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1);
@@ -86,9 +89,9 @@ namespace NTSD.Simulation.Tests
 
             Assert.That(second, Is.EqualTo(first));
             Assert.That(first, Does.Contain("\"fieldCount\":50"));
-            Assert.That(first, Does.Contain("\"verifiedCount\":47"));
+            Assert.That(first, Does.Contain("\"verifiedCount\":50"));
             Assert.That(first, Does.Contain("\"candidateCount\":0"));
-            Assert.That(first, Does.Contain("\"missingCount\":3"));
+            Assert.That(first, Does.Contain("\"missingCount\":0"));
             Assert.That(first, Does.Contain("\"allocationEpoch\":1"));
             Assert.That(first, Does.Contain("\"objectId\":99"));
             Assert.That(first, Does.Contain("\"battleGroup\":13"));
@@ -124,7 +127,9 @@ namespace NTSD.Simulation.Tests
             Assert.That(first, Does.Contain("\"specialHitLatch0eb\":true"));
             Assert.That(first, Does.Contain("\"runtimeArmorHp\":0"));
             Assert.That(first, Does.Contain("\"armorRecoveryTimer\":-1"));
-            Assert.That(first, Does.Contain("\"environmentState\":null"));
+            Assert.That(first, Does.Contain("\"environmentState\":-17"));
+            Assert.That(first, Does.Contain("\"environmentSourceSlot\":23"));
+            Assert.That(first, Does.Contain("\"platformSourceSlot\":31"));
             Assert.That(first, Does.Not.Contain("\"environmentState\":-3"));
             Assert.That(first, Does.Contain("\"resolutionPending\":false"));
             Assert.That(first, Does.Not.Contain("\"resolutionPending\":true"));
@@ -161,7 +166,7 @@ namespace NTSD.Simulation.Tests
                 Has.Length.EqualTo(0));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
-                Has.Length.EqualTo(3));
+                Has.Length.EqualTo(0));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
                 Does.Not.Contain("combat.collisionYReference"));
@@ -215,7 +220,7 @@ namespace NTSD.Simulation.Tests
                 Does.Not.Contain("combat.environmentState"));
             Assert.That(
                 NTSD28UnityEntityRawCapture.MissingBindings,
-                Does.Contain("combat.environmentState"));
+                Does.Not.Contain("combat.environmentState"));
             Assert.That(
                 NTSD28UnityEntityRawCapture.CandidateBindings,
                 Does.Not.Contain("lifecycle.resolutionPending"));

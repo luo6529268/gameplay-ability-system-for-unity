@@ -581,8 +581,8 @@ internal static class TraceContractSelfTest
                    field.BindingStatus is EntityFieldContract.VerifiedBinding or
                        EntityFieldContract.CandidateBinding or
                        EntityFieldContract.MissingBinding) &&
-               EntityFieldContract.Fields.Any(field =>
-                   field.BindingStatus == EntityFieldContract.MissingBinding);
+               EntityFieldContract.Fields.All(field =>
+                   field.BindingStatus == EntityFieldContract.VerifiedBinding);
     }
 
     private static string BuildTrace(

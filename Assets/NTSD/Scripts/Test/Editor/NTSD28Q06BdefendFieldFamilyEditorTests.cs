@@ -30,14 +30,25 @@ namespace NTSD.Test
         [TestCase(BattleRuntimeProfile.MobileExtended, true)]
         public void NativeFieldWritesAndRecoveryMatch(BattleRuntimeProfile profile, bool shadow)
         {
+            Verify(profile, shadow, null);
+        }
+
+        internal static void VerifyRendererForPlay(int index)
+        {
+            Verify(BattleRuntimeProfile.Authority400, true, index);
+        }
+
+        private static void Verify(BattleRuntimeProfile profile, bool shadow, int? rendererIndex)
+        {
             var differences = new List<string>();
             var coverageFailures = new List<object>();
             int cases = 0;
             foreach (var row in File.ReadLines(Source).Select(JObject.Parse))
             {
+                if (rendererIndex.HasValue && (int)row["index"] != rendererIndex.Value) continue;
                 var definitions = new[] { Definition(row, true), Definition(row, false) };
                 var world = new SimulationWorld(profile, profile == BattleRuntimeProfile.Authority400 ? 400 : 1000);
-                world.SetLogicOnlyEntityMaterialization(true);
+                world.SetLogicOnlyEntityMaterialization(!rendererIndex.HasValue);
                 world.PrepareRuntimeDataCatalogForBattle(new[]
                 {
                     new ObjectDefinition(77, 0, "bdefend-a.dat"),
@@ -53,8 +64,11 @@ namespace NTSD.Test
                             targetWorld = world, requiredRuntimeSlot = slot, dir = "right", nativeWeaponPieceSpawn = true,
                             relationTeam = slot + 1, preserveActionZero = true, opoint = new ObjectPoint { oid = 77 + slot, action = 0 }
                         };
-                        pair[slot] = world.LogicEntityFactory.Create(task, out _);
+                        pair[slot] = rendererIndex.HasValue
+                            ? LF2ObjectPointFactory.Instance.MaterializeObjectForStructuralWriter(task)
+                            : world.LogicEntityFactory.Create(task, out _);
                         Assert.That(pair[slot], Is.Not.Null);
+                        if (rendererIndex.HasValue) Assert.That(pair[slot].Renderer, Is.Not.Null);
                         pair[slot].Team = slot + 1;
                         pair[slot].Runtime.SetPosition(100 + slot * 10, 0, 200);
                         pair[slot].Runtime.SyncIntegerPosition();
@@ -100,11 +114,19 @@ namespace NTSD.Test
                     if (target.Runtime.Bdefend != (int)row["afterFreeTimer"]) differences.Add(label + " free timer=" + target.Runtime.Bdefend);
                     cases++;
                 }
-                finally { NTSD28Q06State18SpawnEditorTests.Shutdown(world); }
+                finally
+                {
+                    if (rendererIndex.HasValue)
+                    {
+                        for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                            world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
+                    }
+                    NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                }
             }
             Directory.CreateDirectory(Output);
-            File.WriteAllText(Output + profile + "-" + shadow + ".json", JsonConvert.SerializeObject(new { cases, differences, coverageFailures }, Formatting.Indented));
-            Assert.That(cases, Is.EqualTo(256));
+            File.WriteAllText(Output + (rendererIndex.HasValue ? "renderer-" + rendererIndex.Value : profile + "-" + shadow) + ".json", JsonConvert.SerializeObject(new { cases, differences, coverageFailures }, Formatting.Indented));
+            Assert.That(cases, Is.EqualTo(rendererIndex.HasValue ? 1 : 256));
             Assert.That(differences, Is.Empty, string.Join("\n", differences.Take(15)));
         }
 

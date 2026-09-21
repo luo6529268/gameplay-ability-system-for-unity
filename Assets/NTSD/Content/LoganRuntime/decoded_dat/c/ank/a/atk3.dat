@@ -1,0 +1,88 @@
+<bmp_begin>
+file(0-2): c\ank\a\par.png w: 110 h: 170 row: 3 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 999 state: 3000 wait: 1 next: 1000 dvz: 550 centerx: 19 centery: 24
+<frame_end>
+
+<frame> 10 flying
+pic: 999 state: 3000 wait: 1 next: 1000 dvz: 550 centerx: 19 centery: 24
+<frame_end>
+
+<frame> 20 flying
+pic: 999 state: 3000 wait: 1 next: 1000 dvz: 550 centerx: 19 centery: 24
+<frame_end>
+
+<frame> 30 flying
+pic: 999 state: 3000 wait: 1 next: 1000 dvz: 550 centerx: 19 centery: 24
+<frame_end>
+
+<frame> 108 snake
+pic: 2 state: 15 wait: 0 next: 109 centerx: -54 centery: 170 sound: data\019.wav
+<frame_end>
+
+<frame> 109 snake
+pic: 1 state: 15 wait: 5 next: 110 centerx: -54 centery: 170
+<frame_end>
+
+<frame> 110 snake
+pic: 2 state: 15 wait: 0 next: 111 centerx: -54 centery: 170
+<frame_end>
+
+<frame> 111 snake
+pic: 0 state: 15 wait: 0 next: 1000 centerx: -54 centery: 170
+<frame_end>
+
+<frame> 112 snake
+pic: 0 state: 15 wait: 2 next: 108 dvx: 550 centerx: -54 centery: 170
+<frame_end>
+
+<frame> 309 snake
+pic: 999 state: 3005 wait: 4 next: 310 dvx: 45 centerx: 54 centery: 79 
+itr: kind: 0 x: 40 y: 5000 w: 100 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+<frame_end>
+
+<frame> 310 snake
+pic: 999 state: 15 wait: 1 next: 310 dvx: 45 centerx: 54 centery: 79 
+itr: kind: 3 x: 60 y: 50 w: 50 h: 65 catchingact: 311 311 caughtact: 130 130 itr_end:
+itr: kind: 0 x: 40 y: 5000 w: 100 h: 800 fall: 70 dvy: 100 injury: 1 itr_end:
+<frame_end>
+
+<frame> 311 snake
+pic: 0 state: 9 wait: 0 next: 312 centerx: 54 centery: 170 
+cpoint: kind: 1 x: 55 y: 125 injury: 0 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 312 snake
+pic: 0 state: 9 wait: 2 next: 313 centerx: 54 centery: 170 
+cpoint: kind: 1 x: 55 y: 125 injury: 25 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 313 snake
+pic: 2 state: 9 wait: 0 next: 314 centerx: 54 centery: 170 sound: data\019.wav 
+cpoint: kind: 1 x: 55 y: 20 injury: 25 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 314 snake
+pic: 1 state: 9 wait: 15 next: 315 centerx: 54 centery: 170 
+cpoint: kind: 1 x: 55 y: 20 injury: 25 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 315 snake
+pic: 2 state: 9 wait: 0 next: 316 centerx: 54 centery: 170 
+cpoint: kind: 1 x: 55 y: 20 injury: 0 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 316 snake
+pic: 0 state: 9 wait: 0 next: 317 centerx: 54 centery: 170 sound: data\020.wav 
+cpoint: kind: 1 x: 55 y: 125 injury: 25 vaction: 131 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+
+<frame> 317 snake
+pic: 999 state: 9 wait: 0 next: 1000 centerx: 54 centery: 170 
+cpoint: kind: 1 x: 96 y: 100 injury: 0 vaction: 232 throwvz: -842150451 hurtable: 0 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>

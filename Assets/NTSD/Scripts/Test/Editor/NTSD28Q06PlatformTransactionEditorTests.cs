@@ -20,6 +20,110 @@ namespace NTSD.Test
         private const string Source = "artifacts/diagnostics/NTSD28-Q06-PLATFORM-TRANSACTION-SOURCE-WITNESS-001/source-final/first.jsonl";
         private const string Output = "artifacts/diagnostics/NTSD28-Q06-PLATFORM-TRANSACTION-001/";
 
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        public void CompleteTicksAndReplayMatchSource(int index)
+        {
+            string path = Output + "source-fulltick-final/first.jsonl";
+            using (var stream = File.OpenRead(path))
+            using (var sha = SHA256.Create())
+                Assert.That(BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", ""),
+                    Is.EqualTo("3079EE34B013170CDDFAA0738CBC5E070A56826C9BF80921057963207442139F"));
+            var lines = new List<string>();
+            foreach (string line in File.ReadAllLines(path))
+                if (!string.IsNullOrWhiteSpace(line)) lines.Add(line);
+            var row = JObject.Parse(lines[index]);
+            var world = new SimulationWorld();
+            try
+            {
+                world.SetLogicOnlyEntityMaterialization(true);
+                world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+                var source = Definition(31980, (string)row["sourceDat"]);
+                var target = Definition(31981, (string)row["targetDat"]);
+                world.PrepareRuntimeDataCatalogForBattle(new[]
+                {
+                    new ObjectDefinition(31980, 3, "platform.dat"),
+                    new ObjectDefinition(31981, 0, "rider.dat")
+                }, id => id == 31980 ? source : id == 31981 ? target : null);
+                var platform = Spawn(31980, 20);
+                var rider = Spawn(31981, 21);
+                InitializeFullTickEntity(platform, row["platformBefore"]);
+                InitializeFullTickEntity(rider, row["before"]);
+                platform.SwitchDir((bool)row["params"]["left"] ? "left" : "right");
+                AssertFullTickEntity(platform, row["platformBefore"], "initial platform");
+                AssertFullTickEntity(rider, row["before"], "initial rider");
+                world.NativeRandom.ResetFromSeed(42);
+                world.Runtime.Stage.StageWidthPx = 800;
+                world.Runtime.Stage.BaseStageWidthPx = 800;
+                world.Runtime.Stage.ZMin = 180;
+                world.Runtime.Stage.ZMax = 350;
+                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
+                var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
+                Assert.That(world.TryCaptureBattleStateSnapshot(identity, 0, snapshot), Is.True);
+                var checksums = new ulong[2];
+                for (int pass = 0; pass < 2; pass++)
+                {
+                    if (pass == 1)
+                        Assert.That(world.TryRestoreBattleStateSnapshot(identity, snapshot, out var failure), Is.True, failure.ToString());
+                    for (int tick = 1; tick <= 2; tick++)
+                    {
+                        var input = new FrameInputSet(tick, Array.Empty<SimulationPlayerInput>());
+                        new NTSDBattleTickSystem(world).RunReleaseTick(tick, false, input);
+                        rider = world.FindEntityByRuntimeSlotForQuery(21);
+                        platform = world.FindEntityByRuntimeSlotForQuery(20);
+                        File.WriteAllText(Output + "fulltick-" + index + "-" + pass + "-" + tick + ".json", new JObject
+                        {
+                            ["rider"] = Capture(rider), ["platform"] = Capture(platform),
+                            ["expected"] = row["ticks"][tick - 1].DeepClone()
+                        }.ToString());
+                        AssertFullTickEntity(rider, row["ticks"][tick - 1]["rider"], "rider tick " + tick);
+                        AssertFullTickEntity(platform, row["ticks"][tick - 1]["platform"], "platform tick " + tick);
+                        ulong checksum = world.CaptureRuntimeChecksum64(tick, input);
+                        if (pass == 0) checksums[tick - 1] = checksum;
+                        else Assert.That(checksum, Is.EqualTo(checksums[tick - 1]), "replay tick " + tick);
+                    }
+                }
+
+                LF2Entity Spawn(int oid, int slot)
+                {
+                    var entity = world.LogicEntityFactory.Create(new OPointCreateTask
+                    {
+                        targetWorld = world, requiredRuntimeSlot = slot, dir = "right",
+                        preserveActionZero = true, relationTeam = 1,
+                        opoint = new ObjectPoint { oid = oid, action = 0 }
+                    }, out var failure);
+                    Assert.That(entity, Is.Not.Null, failure.ToString());
+                    entity.AiControlled = false;
+                    return entity;
+                }
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var failure), Is.True, failure);
+            }
+        }
+
+        private static void InitializeFullTickEntity(LF2Entity entity, JToken state)
+        {
+            var r = entity.Runtime;
+            r.XInt = (int)state["position"][0]; r.YInt = (int)state["position"][1]; r.ZInt = (int)state["position"][2];
+            r.X = (double)state["position"][3]; r.Y = (double)state["position"][4]; r.Z = (double)state["position"][5];
+            r.CollisionYReference = (int)state["reference"];
+            r.PlatformSourceSlotF4 = (int)state["platformSlot"];
+            r.RenderShadowOffset10C = (int)state["shadow"];
+            r.NativePreviousY104 = (int)state["previousY"];
+        }
+
+        private static void AssertFullTickEntity(LF2Entity entity, JToken expected, string phase)
+        {
+            var actual = Capture(entity);
+            AssertPosition(actual["position"], expected["position"], phase);
+            foreach (string key in new[] { "reference", "platformSlot", "shadow", "previousY" })
+                Assert.That((int)actual[key], Is.EqualTo((int)expected[key]), phase + "/" + key);
+        }
+
         private static IEnumerable<TestCaseData> CandidateCases()
         {
             for (int index = 0; index < 21; index++)
@@ -41,7 +145,21 @@ namespace NTSD.Test
         public void LinkedMotionMatchesSource(int index)
             => VerifyTransaction(index, false, true);
 
-        private static void VerifyTransaction(int index, bool bruteForce, bool motion)
+        [TestCase(false, "none")]
+        [TestCase(true, "none")]
+        [TestCase(false, "hold")]
+        [TestCase(true, "hold")]
+        [TestCase(false, "link")]
+        [TestCase(true, "link")]
+        [TestCase(false, "pending")]
+        [TestCase(true, "pending")]
+        public void PhysicsHistoryMatchesSource(bool worldEntry, string skip)
+            => VerifyTransaction(20, false, true, true, worldEntry, skip);
+
+        internal static void VerifyRendererForPlay(int index)
+            => VerifyTransaction(index, false, true, index == 20, false, "none", true);
+
+        private static void VerifyTransaction(int index, bool bruteForce, bool motion, bool physics = false, bool worldEntry = false, string skip = "none", bool renderer = false)
         {
             using (var input = File.OpenRead(Source))
             using (var sha = SHA256.Create())
@@ -52,7 +170,7 @@ namespace NTSD.Test
             var world = new SimulationWorld();
             try
             {
-                world.SetLogicOnlyEntityMaterialization(true);
+                world.SetLogicOnlyEntityMaterialization(!renderer);
                 var source = Definition(31980, (string)row["sourceDat"]);
                 var target = Definition(31981, (string)row["targetDat"]);
                 world.PrepareRuntimeDataCatalogForBattle(new[]
@@ -130,14 +248,46 @@ namespace NTSD.Test
                         Assert.That((int)moved[key], Is.EqualTo((int)row["afterMotion"][key]), key);
                 }
 
+                if (physics)
+                {
+                    if (skip == "hold") rider.Runtime.FrameDelay = 2;
+                    if (skip == "link") rider.Runtime.LinkState = -1;
+                    if (skip == "pending") rider.Runtime.NativeLifecycleResolutionPending = true;
+                    if (worldEntry)
+                    {
+                        world.ConfigureBattleEcsCharacterFrameAdvancePassForDiagnostics(
+                            NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode.DataOriented);
+                        world.NativePhysicsAndDeadCharacterResourceNormalizeAll(1);
+                        if (skip != "pending")
+                            Assert.That(world.BattleEcsCharacterFrameAdvancePassDiagnosticsForDiagnostics.ExactCharacterCount,
+                                Is.GreaterThan(0), "Actual ECS character entry");
+                    }
+                    else
+                        rider.ExecuteNativePhysicsForWorldPass(1);
+                    JToken expectedPhysics = row[skip == "none" ? "afterPhysics" : "afterMotion"];
+                    JObject integrated = Capture(rider);
+                    File.WriteAllText(Output + "physics-" + index + "-" + worldEntry + "-" + skip + ".json", JsonConvert.SerializeObject(new
+                    {
+                        index, worldEntry, skip, afterPhysics = integrated, expected = expectedPhysics,
+                        scope = "Actual rider physics entry; X/Z history and fulltick not certified"
+                    }, Formatting.Indented));
+                    AssertPosition(integrated["position"], expectedPhysics["position"], "After physics");
+                    foreach (string key in new[] { "reference", "platformSlot", "shadow", "previousY" })
+                        Assert.That((int)integrated[key], Is.EqualTo((int)expectedPhysics[key]), key);
+                }
+
                 LF2Entity Spawn(int oid, int slot)
                 {
-                    var entity = world.LogicEntityFactory.Create(new OPointCreateTask
+                    var task = new OPointCreateTask
                     {
                         targetWorld = world, requiredRuntimeSlot = slot, dir = "right",
                         preserveActionZero = true, relationTeam = 1,
                         opoint = new ObjectPoint { oid = oid, action = 0 }
-                    }, out var failure);
+                    };
+                    BattleLogicEntityCreationFailure failure = BattleLogicEntityCreationFailure.None;
+                    var entity = renderer ? LF2ObjectPointFactory.Instance.MaterializeObjectForStructuralWriter(task)
+                        : world.LogicEntityFactory.Create(task, out failure);
+                    if (renderer) Assert.That(entity?.Renderer, Is.Not.Null);
                     Assert.That(entity, Is.Not.Null, failure.ToString());
                     entity.AiControlled = false;
                     return entity;
@@ -145,6 +295,9 @@ namespace NTSD.Test
             }
             finally
             {
+                if (renderer)
+                    for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                        world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
                 world.BeginBattleShutdown();
                 Assert.That(world.TryShutdownAndClearLogicState(out _, out var shutdownFailure), Is.True, shutdownFailure);
             }

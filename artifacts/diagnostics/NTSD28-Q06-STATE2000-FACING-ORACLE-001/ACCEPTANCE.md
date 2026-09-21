@@ -1,0 +1,9 @@
+# State2000 facing oracle acceptance
+
+VERIFIED for diagnostic/test-only correction. Actual current-source BattleWorld28::step_frame_slot exercised state2000 held wait100/next0 with Vx+3/0/-3 and initial facing left/right/right. All preserve facing; action0/counter1. Control wait0/next-1 flips left to right, action1/counter0. Four rows twice byte-identical SHA F4846CA2C06F20712A59E6A48699AD972DF5EFBF15CCFFD9271E9E5F7A2F5BB4; expected table asserted; source/validation.json. Build formal B1E13AE17 and closure07CD47 match current identity. This is current playable-source API evidence, not EXE recording or full battle.
+
+Only Unity script change for this ID is one method in FrameAdvanceRuntimeSnapshotEditorTests: renamed CharacterFrameTick_DataOrientedState2000PreservesFacingUnlessNegativeNext; three held direction expectations corrected using source; added fourth negative-next control plus frame/counter assertions and exact count4/fallback0. No production behavior changed. Current frame-cache audit confirms both native/legacy lookup reference the same declared frame, so mutation targets correct data. Prior e8431e2c old expectation failure preserved.
+
+Fresh compile/reload CS0. Job492179a3384a42e798dd4b8a038f6df7 actual2/2PASS (four-case corrected test plus unchanged transition/counter adjacent test), XML independently inspected. No full suite/Play needed for this test-only correction. ChangeLedger631/11PASS, Logs/Q06-State2000-Facing-Ledger.log. Scene SHA unchanged BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6.
+
+The two prior late failures now have separate bounded resolutions: recovery fixture in RECOVERY-NOOP-FIXTURE-001, facing oracle here. Do not rewrite historical23-run21pass/2fail result as23pass. Q06 platform mixed interaction, stable package SelfCheck/Renderer/Destroy closure remain pending; Q09 shadow consumer return explicit. Q06 incomplete/Q07 not migrated.

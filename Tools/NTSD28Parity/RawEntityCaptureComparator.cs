@@ -514,9 +514,15 @@ internal static class RawEntityCaptureComparator
         AddSelfTest(
             report,
             "missing-bindings",
-            "different",
+            MissingPaths.Length == 0 ? "equal-raw" : "different",
             MissingPaths.Length,
             CompareTextForTest(authority, missingUnity));
+
+        foreach (string field in new[] { "platformSourceSlot", "environmentState", "environmentSourceSlot" })
+        {
+            AddSelfTest(report, field + "-null-rejected", "invalid-capture", 0,
+                CompareTextForTest(authority, MutateUnityField(equalUnity, "combat", field, null)));
+        }
 
         string invalidNull = MutateUnityField(
             equalUnity,

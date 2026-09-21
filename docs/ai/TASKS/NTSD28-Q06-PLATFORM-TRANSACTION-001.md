@@ -30,3 +30,14 @@ Candidate阶段追加准确路径及不变量见Record：
 - `Assets/NTSD/Scripts/DatParser/Runtime/Utils/Lf2DatConverter.cs`
 
 Linked-motion准确路径追加：`Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs`，仅已在Record声明的入口及private helper。
+
+Physics previousY生产准确追加：`Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs` 的3个成功积分尾部；共享virtual/ECS入口，既有skip保持。详Record。
+
+Platform shadow consumer read-only audit: artifacts/diagnostics/NTSD28-Q06-PLATFORM-TRANSACTION-001/SHADOW-CONSUMER-AUDIT.md. Snapshot/capture/two copy paths lack offset; central stableGroundPosition also drives foot marker and cannot be globally shifted. Shadow-only position must preserve Z sorting and approved UI. Q09 display return retains content dependencies; Q06 logic/fulltick gates remain independent. No shadow implementation claimed.
+
+Renderer extension exact existing fixture NTSD28Q06PlatformTransactionEditorTests.cs plus FRAME-MOTION-TAIL-owned new Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PlatformMotionPlayProbe.cs. Actual factory/Renderer and same source expected values; no display parity claim.
+
+Fulltick exact scope extension: Tools/NTSD28AuthorityTrace/platform_transaction_witness.cpp opt-in --fulltick; default source21 retained, three representatives two actual ticks from initial state, platform+rider states. Source first, no Unity production change.
+Pre-change integrated test declaration: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06PlatformTransactionEditorTests.cs only; add CompleteTicksAndReplayMatchSource(int), InitializeFullTickEntity and AssertFullTickEntity helpers. Pin source-fulltick-final SHA3079EE34; initialize both entities from source before/platformBefore, canonical AI profile before entity registration, seed42, bounds800/180/350. Two actual RunReleaseTick calls, compare position6/reference/link/shadow/previousY each tick, restore bootstrap snapshot and repeat with per-tick runtime checksum. No manual candidate/motion prefix, no production edits or previousX/Z claim. Existing tests unchanged. Failure must preserve source expectation and first-difference evidence. Existing World shutdown in finally; no new owner. Acceptance: compile and only these three representatives; reuse stable SelfCheck/Play.
+
+Final scope reconciliation: Q06 candidate→linked motion→physics/fulltick/replay and lifecycle/Renderer closure have now met the declared logic gate; evidence SCOPED-ACCEPTANCE.md. The original line requiring visible shadow execution is attributed to Q09 presentation under alignment §0.14 and SHADOW-CONSUMER-AUDIT.md, with exact consumer paths and prerequisites retained. This is an explicit downstream return, not a claim that shadow rendering already matches Logan. Two adjacent late failures have independently VERIFIED test-only corrections. Formal content-triggered R09 stays with Q07. Parent Change Record is VERIFIED for Q06 logic/lifecycle scope.

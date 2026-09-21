@@ -1,0 +1,56 @@
+{
+  "beforeDifferences": [],
+  "ticks": [
+    {
+      "tick": 0,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 20,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 1
+          },
+          {
+            "slot": 50,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    },
+    {
+      "tick": 1,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 20,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 0
+          },
+          {
+            "slot": 50,
+            "oid": 780,
+            "action": 0,
+            "counter": 2,
+            "hold": 0
+          },
+          {
+            "slot": 51,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    }
+  ]
+}

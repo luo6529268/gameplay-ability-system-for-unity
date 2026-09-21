@@ -1,0 +1,73 @@
+<bmp_begin>
+file(0-6): a\hea\hea.png w: 81 h: 82 row: 7 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 40 stars
+pic: 0 state: 3002 wait: 1 next: 41 dvx: 550 dvy: 550 centerx: 40 centery: 25 sound: data\049.wav
+<frame_end>
+<frame> 41 stars
+pic: 1 state: 3002 wait: 1 next: 42 centerx: 40 centery: 25
+<frame_end>
+<frame> 42 stars
+pic: 2 state: 3002 wait: 1 next: 43 centerx: 40 centery: 25
+<frame_end>
+<frame> 43 stars
+pic: 3 state: 3002 wait: 1 next: 44 centerx: 40 centery: 25
+<frame_end>
+<frame> 44 stars
+pic: 4 state: 3002 wait: 1 next: 45 centerx: 40 centery: 25
+<frame_end>
+<frame> 45 stars
+pic: 5 state: 3002 wait: 1 next: 46 centerx: 40 centery: 25
+<frame_end>
+<frame> 46 stars
+pic: 6 state: 3002 wait: 1 next: 1000 centerx: 40 centery: 25
+<frame_end>
+
+<frame> 48 stars
+pic: 999 state: 3002 wait: 1 next: 40 dvy: -80 centerx: 40 centery: 25
+<frame_end>
+
+<frame> 70 healball
+pic: 0 state: 3002 wait: 1 next: 71 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 40 injury: 100 itr_end:
+<frame_end>
+<frame> 71 healball
+pic: 1 state: 3002 wait: 1 next: 72 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 40 injury: 100 itr_end:
+<frame_end>
+<frame> 72 healball
+pic: 2 state: 3002 wait: 1 next: 73 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 40 injury: 100 itr_end:
+<frame_end>
+<frame> 73 healball
+pic: 3 state: 3002 wait: 1 next: 74 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 40 injury: 100 itr_end:
+<frame_end>
+<frame> 74 healball
+pic: 5 state: 3002 wait: 1 next: 1000 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 40 injury: 100 itr_end:
+<frame_end>
+<frame> 75 healball
+pic: 0 state: 3002 wait: 1 next: 76 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 48 injury: 100 itr_end:
+<frame_end>
+<frame> 76 healball
+pic: 1 state: 3002 wait: 1 next: 77 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 48 injury: 100 itr_end:
+<frame_end>
+<frame> 77 healball
+pic: 2 state: 3002 wait: 1 next: 78 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 48 injury: 100 itr_end:
+<frame_end>
+<frame> 78 healball
+pic: 3 state: 3002 wait: 1 next: 79 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 48 injury: 100 itr_end:
+<frame_end>
+<frame> 79 healball
+pic: 5 state: 3002 wait: 1 next: 1000 centerx: 40 centery: 26 hit_a: 9 hit_d: 55
+itr: kind: 8 x: 25 y: 13 w: 100 h: 34 dvx: 48 injury: 100 itr_end:
+<frame_end>

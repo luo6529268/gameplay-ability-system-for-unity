@@ -1,0 +1,58 @@
+<bmp_begin>
+file(0-27): c\sasu\a\chi.png w: 81 h: 82 row: 4 col: 7
+weapon_hit_sound: data\003.wav
+weapon_drop_sound: data\003.wav
+weapon_broken_sound: data\003.wav
+<bmp_end>
+<frame> 0 fly
+pic: 999 state: 15 wait: 0 next: 1000 dvy: 550 centerx: 40 centery: 41
+<frame_end>
+<frame> 10 hit
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 46 centery: 41
+<frame_end>
+<frame> 20 hit
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 46 centery: 41
+<frame_end>
+<frame> 30 reb
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 46 centery: 41
+<frame_end>
+<frame> 40 reb
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 46 centery: 41
+<frame_end>
+<frame> 41 genjend
+pic: 999 state: 3005 wait: 1 next: 1000 dvy: 550 centerx: 111 centery: 114 
+bdy: kind: 0 x: -9999 y: 980000 w: 99999 h: 999 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 50 genj
+pic: 999 state: 3005 wait: 55 next: 1000 dvx: 50 centerx: 250 centery: 250 
+itr: kind: 8 respond: 2 x: 200 y: 0 w: 180 h: 300 dvx: 51 itr_end:
+itr: kind: 0 x: 100 y: 68000 w: 300 h: 500 injury: 9 itr_end:
+itr: kind: 0 x: 100 y: 69000 w: 300 h: 500 injury: 9 itr_end:
+bdy: kind: 0 x: 100 y: 6030000 w: 300 h: 500 bdy_end:
+<frame_end>
+<frame> 51 genj
+pic: 999 state: 3005 wait: 1 next: 52 dvx: 550 centerx: 2000 centery: 400 hit_j: 48
+<frame_end>
+<frame> 52 genj
+pic: 999 state: 3005 wait: 1 next: 53 dvx: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 41 
+opoint: kind: 1 x: 39 y: 600 action: 58 oid: 714 facing: 2 opoint_end: 
+itr: kind: 0 x: 147 y: 8141 w: 206 h: 208 drain: 500 dvy: -5 fall: 20 vrest: 3 bdefend: 100 injury: 2 itr_end:
+<frame_end>
+<frame> 53 genj
+pic: 999 state: 3005 wait: 0 next: 54 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 41 
+opoint: kind: 1 x: 250 y: 260 action: 32 oid: 440 facing: 0 opoint_end: 
+itr: kind: 0 x: 147 y: 8141 w: 206 h: 208 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 54 genj
+pic: 999 state: 3005 wait: 0 next: 55 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 41 
+opoint: kind: 1 x: 250 y: 260 action: 36 oid: 440 facing: 0 opoint_end: 
+itr: kind: 0 x: 147 y: 8141 w: 206 h: 208 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 55 genj
+pic: 999 state: 3005 wait: 2 next: 56 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 41 
+itr: kind: 0 x: 147 y: 8141 w: 206 h: 208 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 56 genj
+pic: 999 state: 3005 wait: 1 next: 41 dvx: 550 dvz: 550 centerx: 250 centery: 250 
+itr: kind: 8 dvy: -1 x: -9999 y: 980000 w: 99999 h: 999 zwidth: 999 dvx: 55 itr_end:
+<frame_end>

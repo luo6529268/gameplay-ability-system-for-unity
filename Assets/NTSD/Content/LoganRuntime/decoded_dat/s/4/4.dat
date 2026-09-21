@@ -1,0 +1,292 @@
+<bmp_begin>
+file(0-13): s\4\d4.png w: 310 h: 125 row: 2 col: 7
+file(14-38): s\4\4.png w: 79 h: 79 row: 5 col: 5
+file(39-39): s\4\circle.png w: 125 h: 115 row: 1 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+<frame> 0 h
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 1 a
+pic: 14 state: 15 wait: 0 next: 25 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 160 y: 70 action: 400 oid: 56 facing: 11 opoint_end:
+<frame_end>
+<frame> 2 a
+pic: 14 state: 15 wait: 1 next: 3 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 250 y: 70 action: 400 oid: 25 facing: 11 opoint_end:
+<frame_end>
+<frame> 3 a
+pic: 14 state: 15 wait: 60 next: 4 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 38 y: 70 action: 348 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 4 a
+pic: 15 state: 15 wait: 5 next: 5 dvx: 550 dvy: 550 centerx: 32 centery: 70
+<frame_end>
+<frame> 5 a
+pic: 16 state: 15 wait: 5 next: 6 dvx: 550 dvy: 550 centerx: 37 centery: 69
+<frame_end>
+<frame> 6 a
+pic: 17 state: 15 wait: 50 next: 7 dvx: 550 dvy: 550 centerx: 40 centery: 70 sound: data\016.wav
+<frame_end>
+<frame> 7 a
+pic: 999 state: 15 wait: 3 next: 8 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 8 a
+pic: 17 state: 15 wait: 3 next: 9 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 9 a
+pic: 999 state: 15 wait: 3 next: 21 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 10 h
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 11 a
+pic: 14 state: 15 wait: 1 next: 1 dvx: 550 dvy: 550 centerx: 38 centery: 70
+<frame_end>
+<frame> 12 a
+pic: 999 state: 15 wait: 3 next: 13 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 13 a
+pic: 17 state: 15 wait: 3 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 14 a
+pic: 999 state: 3005 wait: 1 next: 15 dvx: 550 dvy: 550 centerx: 38 centery: 70
+<frame_end>
+<frame> 15 a
+pic: 999 state: 3005 wait: 1 next: 16 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 250 y: 70 action: 341 oid: 499 facing: 11 opoint_end:
+<frame_end>
+<frame> 16 a
+pic: 999 state: 3005 wait: 1 next: 19 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 38 y: 70 action: 355 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 17 a
+pic: 999 state: 3005 wait: 99 next: 18 dvx: 550 dvy: 550 centerx: 38 centery: 70
+<frame_end>
+<frame> 18 a
+pic: 999 state: 3005 wait: 1 next: 18 dvx: 550 dvy: 550 centerx: 38 centery: 70
+itr: kind: 3 x: -100 y: 54 w: 200 h: 25 zwidth: 999 catchingact: 20 20 caughtact: 399 399 itr_end:
+<frame_end>
+<frame> 19 a
+pic: 999 state: 400 wait: 1 next: 19 dvx: 550 dvy: 550 centerx: 38 centery: 70
+itr: kind: 8 bdefend: 3 dvy: -1 x: -9999 y: 3000000 w: 99999 h: 500 zwidth: 999 dvx: 20 itr_end:
+bdy: kind: 1 x: -9999 y: 560000 w: 99999 h: 99 bdy_end:
+<frame_end>
+<frame> 20 h
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 21 a
+pic: 17 state: 15 wait: 3 next: 12 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 25 a
+pic: 14 state: 15 wait: 0 next: 2 dvx: 550 dvy: 550 centerx: 38 centery: 70
+opoint: kind: 1 x: 160 y: -10 action: 400 oid: 304 facing: 0 opoint_end:
+<frame_end>
+<frame> 30 h
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 101 n
+pic: 20 state: 31 wait: 1 next: 102 dvx: 550 dvy: 550 centerx: 38 centery: 77
+<frame_end>
+<frame> 102 n
+pic: 20 state: 31 wait: 1 next: 103 dvx: 550 dvy: 550 centerx: 38 centery: 77
+opoint: kind: 1 x: 250 y: 77 action: 400 oid: 9 facing: 11 opoint_end:
+<frame_end>
+<frame> 103 n
+pic: 20 state: 31 wait: 100 next: 104 dvx: 550 dvy: 550 centerx: 38 centery: 77
+opoint: kind: 1 x: 38 y: 77 action: 366 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 104 n
+pic: 36 state: 15 wait: 5 next: 105 dvx: 550 dvy: 550 centerx: 32 centery: 70
+<frame_end>
+<frame> 105 n
+pic: 37 state: 15 wait: 5 next: 106 dvx: 550 dvy: 550 centerx: 37 centery: 69
+<frame_end>
+<frame> 106 n
+pic: 38 state: 15 wait: 50 next: 107 dvx: 550 dvy: 550 centerx: 40 centery: 70 sound: data\016.wav
+<frame_end>
+<frame> 107 n
+pic: 38 state: 15 wait: 1 next: 107 dvx: 550 dvy: 550 centerx: 40 centery: 70
+<frame_end>
+<frame> 180 0
+pic: 0 state: 3005 wait: 125 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 181 1
+pic: 1 state: 3005 wait: 125 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 192 12
+pic: 12 state: 3005 wait: 90 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 193 3
+pic: 3 state: 3005 wait: 70 next: 194 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 194 4
+pic: 4 state: 3005 wait: 125 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 195 5
+pic: 5 state: 3005 wait: 70 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 196 6
+pic: 6 state: 3005 wait: 65 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 207 7
+pic: 7 state: 3005 wait: 85 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 208 8
+pic: 8 state: 3005 wait: 90 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 209 9
+pic: 9 state: 3005 wait: 90 next: 210 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 210 10
+pic: 10 state: 3005 wait: 90 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 211 11
+pic: 11 state: 3005 wait: 90 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 213 13
+pic: 13 state: 3005 wait: 90 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 222 2
+pic: 2 state: 3005 wait: 65 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 205 hit_j: 1
+<frame_end>
+<frame> 300 reward
+pic: 999 state: 3005 wait: 1 next: 301 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 301 reward
+pic: 999 state: 3005 wait: 1 next: 301 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+itr: kind: 8 dvy: -1 x: -9999 y: 3040000 w: 99999 h: 99 dvx: 302 itr_end:
+<frame_end>
+<frame> 302 reward
+pic: 999 state: 3005 wait: 19 next: 303 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 303 reward
+pic: 999 state: 15 wait: 1 next: 303 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+itr: kind: 8 dvy: -1 x: -9999 y: 3040000 w: 99999 h: 99 dvx: 304 itr_end:
+<frame_end>
+<frame> 304 reward
+pic: 999 state: 3005 wait: 19 next: 305 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 305 reward
+pic: 999 state: 15 wait: 1 next: 305 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+itr: kind: 8 dvy: -1 x: -9999 y: 3040000 w: 99999 h: 99 dvx: 306 itr_end:
+<frame_end>
+<frame> 306 reward
+pic: 999 state: 3005 wait: 19 next: 307 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 307 reward
+pic: 999 state: 15 wait: 1 next: 307 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+itr: kind: 8 dvy: -1 x: -9999 y: 3040000 w: 99999 h: 99 dvx: 308 itr_end:
+<frame_end>
+<frame> 308 reward
+pic: 18 state: 31 wait: 150 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 348 0
+pic: 999 state: 3005 wait: 0 next: 349 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 349 0
+pic: 999 state: 3005 wait: 1 next: 350 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 180 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 350 1
+pic: 999 state: 3005 wait: 1 next: 350 dvx: 550 dvy: 550 centerx: 85 centery: 145
+itr: kind: 8 bdefend: 3 dvy: -1 x: -40 y: 560000 w: 162 h: 500 zwidth: 30 dvx: 351 itr_end:
+<frame_end>
+<frame> 351 1
+pic: 999 state: 3005 wait: 1 next: 352 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 352 1
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 181 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 353 2
+pic: 999 state: 3005 wait: 1 next: 354 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 354 2
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 430 y: 0 action: 222 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 355 3
+pic: 999 state: 3005 wait: 0 next: 356 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 356 3
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 193 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 357 5
+pic: 999 state: 3005 wait: 200 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+itr: kind: 8 dvy: -1 x: -9999 y: 560000 w: 99999 h: 500 zwidth: 999 dvx: 358 itr_end:
+<frame_end>
+<frame> 358 5
+pic: 999 state: 3005 wait: 9 next: 359 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 359 5
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 195 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 360 6
+pic: 999 state: 3005 wait: 9 next: 361 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 361 6
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 196 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 362 7
+pic: 999 state: 3005 wait: 9 next: 363 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 363 7
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 207 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 364 8
+pic: 999 state: 3005 wait: 9 next: 365 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 365 8
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 208 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 366 9
+pic: 999 state: 3005 wait: 9 next: 367 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 367 9
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 209 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 368 11
+pic: 999 state: 3005 wait: 9 next: 369 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 369 11
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 211 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 370 12
+pic: 999 state: 3005 wait: 9 next: 371 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 371 12
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 192 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 372 13
+pic: 999 state: 3005 wait: 9 next: 373 dvx: 550 dvy: 550 centerx: 85 centery: 145
+<frame_end>
+<frame> 373 13
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 85 centery: 145
+opoint: kind: 1 x: 85 y: 0 action: 213 oid: 304 facing: 10 opoint_end:
+<frame_end>
+<frame> 398 s4
+pic: 39 state: 18 wait: 1 next: 399 dvx: 550 dvy: 550 dvz: 550 centerx: 60 centery: 18
+opoint: kind: 1 x: 60 y: 79 action: 401 oid: 333 facing: 0 opoint_end:
+<frame_end>
+<frame> 399 s4
+pic: 39 state: 18 wait: 1 next: 399 dvx: 550 dvy: 550 dvz: 550 centerx: 60 centery: 18
+opoint: kind: 1 x: 60 y: 79 action: 218 oid: 333 facing: 0 opoint_end:
+itr: kind: 0 x: -2 y: 561000 w: 125 h: 200 effect: 8 caughtact: 208 sound: 1 zwidth: 25 dvy: -1 fall: -1 arest: 40 bdefend: 100 injury: -55 itr_end:
+bdy: kind: 0 x: 1 y: 3000 w: 121 h: 50 zwidth: 30 bdy_end:
+bdy: kind: 0 x: -9999 y: 565000 w: 99999 h: 900 zwidth: 900 bdy_end:
+bdy: kind: 0 x: -200 y: 3042000 w: 500 h: 900 bdy_end:
+<frame_end>
+<frame> 400 s4
+pic: 39 state: 18 wait: 1 next: 398 dvx: 550 dvy: 550 dvz: 550 centerx: 60 centery: 18
+<frame_end>

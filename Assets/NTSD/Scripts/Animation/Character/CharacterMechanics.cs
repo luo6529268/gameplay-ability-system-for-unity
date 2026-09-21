@@ -398,6 +398,8 @@ namespace NTSD.Animation
 
 
 
+            // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.
+            runtime.NativePreviousY104 = runtime.YInt;
             return new BattleMechanicsStepResult(
                 boundaryMode,
                 landed,
@@ -447,6 +449,7 @@ namespace NTSD.Animation
             if (runtime.Y < -0.0001)
                 runtime.Vy += gravityToAdd;
 
+            runtime.NativePreviousY104 = runtime.YInt;
             return crossedGround;
         }
 
@@ -485,6 +488,7 @@ namespace NTSD.Animation
             if (airborne)
                 runtime.Vy += gravityToAdd;
 
+            runtime.NativePreviousY104 = runtime.YInt;
             return new BattleNonCharacterMechanicsStepResult(
                 previousPreciseY,
                 contactY,

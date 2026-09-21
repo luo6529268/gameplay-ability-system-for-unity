@@ -1,0 +1,50 @@
+<test-suite type="TestSuite" id="10214" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8138" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.598769" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="19387" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="8130" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.525870" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19388" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8130" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.434051" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19396" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7569" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.342615" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12165" name="NTSD28Q06DamageSpecialKindsEditorTests" fullname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests" classname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.274680" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12168" name="ImpactAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="1.172956" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12166" name="ImpactAndFollowingTickMatchSource(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.ImpactAndFollowingTickMatchSource(Authority400,DataOriented)" methodname="ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests" runstate="Runnable" seed="1797950243" result="Failed" start-time="2026-09-21 14:13:27Z" end-time="2026-09-21 14:13:28Z" duration="0.767879" asserts="0"><properties /><failure><message><![CDATA[  case 0 impact slot 70 identity.ownerSlot=-1 expected 1
+case 0 impact entities[3].wait=1 expected=0
+case 1 impact slot 70 identity.ownerSlot=-1 expected 1
+case 2 impact entities[3].wait=1 expected=0
+case 4 impact slot 70 identity.ownerSlot=-1 expected 1
+case 4 impact slot 70 frame.action=30 expected 857
+case 4 impact slot 70 frame.frameState=0 expected 3
+case 4 impact entities[3].state=0 expected=3
+case 4 impact entities[3].wait=1 expected=37
+case 5 impact slot 70 identity.ownerSlot=-1 expected 1
+case 5 impact slot 70 frame.action=30 expected 998
+case 5 impact slot 70 frame.frameState=0 expected 3
+  Expected: <empty>
+  But was:  < "case 0 impact slot 70 identity.ownerSlot=-1 expected 1", "case 0 impact entities[3].wait=1 expected=0", "case 1 impact slot 70 identity.ownerSlot=-1 expected 1", "case 2 impact entities[3].wait=1 expected=0", "case 4 impact slot 70 identity.ownerSlot=-1 expected 1", "case 4 impact slot 70 frame.action=30 expected 857", "case 4 impact slot 70 frame.frameState=0 expected 3", "case 4 impact entities[3].state=0 expected=3", "case 4 impact entities[3].wait=1 expected=37", "case 5 impact slot 70 identity.ownerSlot=-1 expected 1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06DamageSpecialKindsEditorTests.cs:90
+at NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.ImpactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06DamageSpecialKindsEditorTests.cs:33
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactOwner, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="12167" name="ImpactAndFollowingTickMatchSource(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.ImpactAndFollowingTickMatchSource(MobileExtended,Legacy)" methodname="ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests" runstate="Runnable" seed="133997231" result="Failed" start-time="2026-09-21 14:13:28Z" end-time="2026-09-21 14:13:28Z" duration="0.301486" asserts="0"><properties /><failure><message><![CDATA[  case 0 impact slot 70 identity.ownerSlot=-1 expected 1
+case 0 impact entities[3].wait=1 expected=0
+case 2 impact entities[3].wait=1 expected=0
+case 4 impact slot 70 identity.ownerSlot=-1 expected 1
+case 4 impact slot 70 frame.action=30 expected 857
+case 4 impact slot 70 frame.frameState=0 expected 3
+case 4 impact entities[3].state=0 expected=3
+case 4 impact entities[3].wait=1 expected=37
+case 7 impact slot 70 frame.frameCounter=0 expected 8
+case 7 impact slot 70 motion.y=-4.5 expected -1.5
+case 7 impact entities[3].pendingY=-4.5 expected=17
+case 10 impact slot 70 position.preciseY=-2 expected -2.375
+  Expected: <empty>
+  But was:  < "case 0 impact slot 70 identity.ownerSlot=-1 expected 1", "case 0 impact entities[3].wait=1 expected=0", "case 2 impact entities[3].wait=1 expected=0", "case 4 impact slot 70 identity.ownerSlot=-1 expected 1", "case 4 impact slot 70 frame.action=30 expected 857", "case 4 impact slot 70 frame.frameState=0 expected 3", "case 4 impact entities[3].state=0 expected=3", "case 4 impact entities[3].wait=1 expected=37", "case 7 impact slot 70 frame.frameCounter=0 expected 8", "case 7 impact slot 70 motion.y=-4.5 expected -1.5"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003e9] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06DamageSpecialKindsEditorTests.cs:90
+at NTSD.Test.NTSD28Q06DamageSpecialKindsEditorTests.ImpactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06DamageSpecialKindsEditorTests.cs:33
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

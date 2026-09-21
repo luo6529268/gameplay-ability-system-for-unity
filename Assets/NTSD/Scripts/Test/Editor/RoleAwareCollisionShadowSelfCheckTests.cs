@@ -1518,7 +1518,7 @@ namespace NTSD.Test
                     type3,
                     out SpatialAabbXZ type3Bounds),
                 Is.True);
-            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(85, 200, 145, 201)));
+            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(85, 206, 145, 207)));
 
             right.Runtime.SetPosition(120, 0, 210);
             left.Runtime.SetPosition(150, 0, 210);
@@ -1570,7 +1570,7 @@ namespace NTSD.Test
                     type3,
                     out type3Bounds),
                 Is.True);
-            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(110, 210, 170, 211)));
+            Assert.That(type3Bounds, Is.EqualTo(new SpatialAabbXZ(110, 220, 170, 221)));
         }
 
         [Test]

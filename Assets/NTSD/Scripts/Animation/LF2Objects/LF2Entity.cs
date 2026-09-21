@@ -1271,6 +1271,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void DestroyEntityLikeExeCoreForStructuralWriter()
         {
+            // Alignment contract: NTSD28-Q06-DESTROY-POOL-OWNER-001.
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             DestroyEvent();
             Destroy();
             if (Renderer != null)
@@ -1282,7 +1284,7 @@ namespace NTSD.Animation.LF2Objects
             {
                 UnregisterFromWorld();
             }
-            ResolveLogicReferencePool()?.Release(this);
+            referencePool?.Release(this);
         }
 
         // FrameTransistor 真正执行换帧时，会先走到这里。
@@ -2536,13 +2538,6 @@ namespace NTSD.Animation.LF2Objects
             if (entity == null)
                 return 0;
 
-            if (entity.GetCurrentDataObjectType() == (int)LF2ObjectType.SpecialAttack &&
-                entity.Runtime != null &&
-                System.Math.Abs(entity.Runtime.Type3VisualZOffset) > 0.0001)
-            {
-                return (int)(entity.Runtime.Z - entity.Runtime.Type3VisualZOffset);
-            }
-
             return entity.Runtime?.ZInt ?? 0;
         }
 
@@ -2583,9 +2578,7 @@ namespace NTSD.Animation.LF2Objects
             int currentDataType = GetCurrentDataObjectTypeForSimulation();
             if (currentDataType == (int)LF2ObjectType.SpecialAttack)
             {
-                double logicZ = Runtime.Z - Runtime.Type3VisualZOffset;
-                logicZ = System.Math.Clamp(logicZ, zMin - 1.0, zMax + 1.0);
-                Runtime.Z = logicZ + Runtime.Type3VisualZOffset;
+                Runtime.Z = System.Math.Clamp(Runtime.Z, zMin - 1.0, zMax + 1.0);
             }
             else if (currentDataType == (int)LF2ObjectType.Character)
             {
@@ -4215,7 +4208,8 @@ namespace NTSD.Animation.LF2Objects
         internal virtual void RunLateTailBeforePrevFrame()
         {
             RunLateCharacterDatInputTrigger();
-            SpawnLateTransitionEffects();
+            // Alignment contract: NTSD28-Q06-STATE13-EXIT-TAIL-RETIREMENT-001.
+            // Current playable has no state13/action200 exit particle producer.
         }
 
         internal void RunLateTailAfterNativePreviousActionCommit(
@@ -4737,13 +4731,6 @@ namespace NTSD.Animation.LF2Objects
 
         internal float GetDisplayZForCurrentDataType(int currentDataObjectType)
         {
-            if (currentDataObjectType == (int)LF2ObjectType.SpecialAttack &&
-                Runtime != null &&
-                System.Math.Abs(Runtime.Type3VisualZOffset) > 0.0001)
-            {
-                return (float)(Runtime.Z - Runtime.Type3VisualZOffset);
-            }
-
             return GetRenderZInt();
         }
 
@@ -4822,15 +4809,6 @@ namespace NTSD.Animation.LF2Objects
 
         public virtual int GetCollisionZInt(LF2FrameData frame)
         {
-            if (GetCurrentDataObjectType() == (int)LF2ObjectType.SpecialAttack && Runtime != null)
-            {
-                if (System.Math.Abs(Runtime.Type3VisualZOffset) > 0.0001)
-                    return ReleaseInt(Runtime.Z - Runtime.Type3VisualZOffset);
-
-                if (frame != null && frame.hit_j > 0)
-                    return ReleaseInt(Runtime.Z - (frame.hit_j - 50));
-            }
-
             return GetRenderZInt();
         }
 
@@ -6816,6 +6794,37 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Vy = vy;
             Runtime.Vz = vz;
             ApplyLinkedPlatformMotion(frame);
+            ApplyNativeFrameMotionTail(frame);
+        }
+
+        // Alignment contract: NTSD28-Q06-FRAME-MOTION-TAIL-001.
+        private void ApplyNativeFrameMotionTail(LF2FrameData frame)
+        {
+            double scale = Runtime.DelayTimer134 > 0 ? 0.25 : 1.0;
+            if (Runtime.DelayTimer134 > 0)
+            {
+                Runtime.Vx *= scale;
+                Runtime.Vy *= scale;
+                Runtime.Vz *= scale;
+            }
+            if (frame.dx != 0.0)
+            {
+                Runtime.Vx = 0.0;
+                Runtime.X = Runtime.XInt + (Runtime.IsFacingLeft ? -frame.dx : frame.dx) * scale;
+                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+            }
+            if (frame.dy != 0.0)
+            {
+                Runtime.Vy = 0.0;
+                Runtime.Y = Runtime.YInt + frame.dy * scale;
+                Runtime.YInt = RoundPlatformCoordinate(Runtime.Y);
+            }
+            if (frame.dz != 0.0)
+            {
+                Runtime.Vz = 0.0;
+                Runtime.Z = Runtime.ZInt + frame.dz * scale;
+                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+            }
         }
 
         // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.

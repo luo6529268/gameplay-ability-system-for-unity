@@ -1,0 +1,71 @@
+<bmp_begin>
+file(0-11): custom\1genma\a\katon.png w: 81 h: 82 row: 4 col: 4
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 0 state: 3000 wait: 1 next: 1 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 1 flying
+pic: 1 state: 3000 wait: 1 next: 2 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 2 flying
+pic: 2 state: 3000 wait: 1 next: 3 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 3 flying
+pic: 12 state: 3000 wait: 1 next: 4 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 4 flying
+pic: 13 state: 3000 wait: 1 next: 5 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 5 flying
+pic: 14 state: 3000 wait: 1 next: 999 dvx: 23 centerx: 51 centery: 41
+itr: kind: 0 x: 22 y: 27 w: 55 h: 27 effect: 2 dvx: 10 dvy: -15 fall: 999 vrest: 10 bdefend: 16 injury: 25 itr_end:
+bdy: kind: 0 x: 22 y: 27 w: 55 h: 27 bdy_end:
+<frame_end>
+
+<frame> 10 hiting
+pic: 8 state: 3001 wait: 0 next: 21 centerx: 40 centery: 43
+<frame_end>
+
+<frame> 20 hit
+pic: 8 state: 3002 wait: 1 next: 21 centerx: 44 centery: 43
+<frame_end>
+
+<frame> 21 hit
+pic: 9 state: 3002 wait: 1 next: 32 centerx: 41 centery: 43
+<frame_end>
+
+<frame> 30 rebounding
+pic: 8 state: 3003 wait: 1 next: 31 centerx: 43 centery: 43
+<frame_end>
+
+<frame> 31 rebounding
+pic: 9 state: 3003 wait: 1 next: 32 centerx: 40 centery: 42
+opoint: kind: 1 x: 41 y: 42 action: 0 oid: 904 facing: 1 opoint_end:
+<frame_end>
+
+<frame> 32 rebounding
+pic: 10 state: 3003 wait: 1 next: 33 centerx: 46 centery: 39
+<frame_end>
+
+<frame> 33 rebounding
+pic: 11 state: 3003 wait: 1 next: 1000 centerx: 52 centery: 41
+<frame_end>

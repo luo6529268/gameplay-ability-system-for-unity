@@ -1,0 +1,39 @@
+<fusion_begin>
+        fusion: 1
+	id1: 7
+ 	id2: 8
+ 	id3: 51
+	hp: 177
+ 	mp: 500
+ 	respond: 1
+ 	decrease: 4500
+ 	wait: 900
+ 	state: 2
+ 	action: 290
+	frame: 112
+                chp: 0
+                hit_ja: 0
+                cover: 0
+                fronthurtact: 9
+                backhurtact: 260
+        fusion_end:
+
+        fusion: 2
+	id1: 10
+ 	id2: 11
+ 	id3: 52
+	hp: 375
+ 	mp: 500
+ 	respond: 0
+ 	decrease: 200
+ 	wait: 100 
+ 	state: 2
+ 	action: 310
+	frame: 112
+                chp: 1
+                hit_ja: 1
+                cover: 1
+                fronthurtact: 9
+                backhurtact: 260
+        fusion_end:
+<fusion_end>

@@ -7,7 +7,7 @@ namespace NTSD.Simulation
     {
         public const string Schema = "ntsd28-unity-entity-raw-capture-v2";
         public const int FieldCount = 50;
-        public const int VerifiedBindingCount = 47;
+        public const int VerifiedBindingCount = 50;
 
         public static readonly string[] CandidateBindings =
         {
@@ -15,9 +15,6 @@ namespace NTSD.Simulation
 
         public static readonly string[] MissingBindings =
         {
-            "combat.platformSourceSlot",
-            "combat.environmentState",
-            "combat.environmentSourceSlot",
         };
 
         public static string CaptureTickJson(
@@ -93,12 +90,12 @@ namespace NTSD.Simulation
                     ("attackerRest", runtime.AttackExempt),
                     ("bdefendAccumulator", runtime.Bdefend),
                     ("collisionYReference", runtime.CollisionYReference),
-                    ("environmentSourceSlot", null),
+                    ("environmentSourceSlot", runtime.EnvironmentSourceSlot160),
                     ("objectAiExcludedGroupSourceSlot", runtime.ObjectAiExcludedGroupSourceSlot2F8),
-                    ("environmentState", null),
+                    ("environmentState", runtime.EnvironmentState320),
                     ("hitReactionTimer", runtime.Fall),
                     ("motionHoldTimer", runtime.FrameDelay),
-                    ("platformSourceSlot", null),
+                    ("platformSourceSlot", runtime.PlatformSourceSlotF4),
                     ("renderPhase", runtime.HitStop),
                     ("runtimeArmorHp", runtime.RuntimeArmorHp118),
                     ("runtimeStateCode", runtime.NativeRuntimeStateCode),

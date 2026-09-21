@@ -1,0 +1,48 @@
+<bmp_begin>
+file(0-3): data\etc.png w: 79 h: 79 row: 4 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 come_here
+pic: 0 state: 9997 wait: 1 next: 1 centerx: 68 centery: 150
+bdy: kind: 0 x: 21 y: 9981000 w: 999 h: 999 zwidth: 999 bdy_end:
+<frame_end>
+
+<frame> 1 come_here
+pic: 0 state: 9997 wait: 60 next: 1000 centerx: 68 centery: 150
+itr: kind: 8 bdefend: 5 respond: 3 x: 21 y: 9981000 w: 999 h: 999 dvx: 399 itr_end:
+<frame_end>
+
+<frame> 2 stay
+pic: 1 state: 9997 wait: 1 next: 3 centerx: 68 centery: 150
+bdy: kind: 0 x: 21 y: 9981000 w: 999 h: 999 zwidth: 999 bdy_end:
+<frame_end>
+
+<frame> 3 stay
+pic: 1 state: 9997 wait: 60 next: 1000 centerx: 68 centery: 150
+itr: kind: 8 bdefend: 5 respond: 3 x: 21 y: 9981000 w: 999 h: 999 dvx: 399 itr_end:
+<frame_end>
+
+<frame> 4 move
+pic: 2 state: 9997 wait: 1 next: 5 centerx: 68 centery: 150
+bdy: kind: 0 x: 21 y: 9981000 w: 999 h: 999 zwidth: 999 bdy_end:
+<frame_end>
+
+<frame> 5 move
+pic: 2 state: 9997 wait: 60 next: 1000 centerx: 68 centery: 150
+itr: kind: 8 bdefend: 5 respond: 3 x: 21 y: 9981000 w: 999 h: 999 dvx: 399 itr_end:
+<frame_end>
+
+<frame> 6 join
+pic: 3 state: 9997 wait: 1 next: 7 centerx: 68 centery: 150
+<frame_end>
+
+<frame> 7 join
+pic: 3 state: 9997 wait: 60 next: 1000 centerx: 68 centery: 150
+<frame_end>
+
+<frame> 399 delete
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 68 centery: 150
+<frame_end>

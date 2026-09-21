@@ -1,0 +1,136 @@
+<bmp_begin>
+file(0-9): c\dan\a\mark.png w: 79 h: 79 row: 10 col: 1
+weapon_hit_sound: data\0.wav
+weapon_drop_sound: data\0.wav
+weapon_broken_sound: data\0.wav
+<bmp_end>
+
+<frame> 0 no_mark
+pic: 999 next: 1000 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+<frame_end>
+
+<frame> 10 mark
+pic: 999 next: 11 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+<frame_end>
+<frame> 11 mark
+pic: 999 next: 1000 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+opoint: kind: 1 x: 39 y: 60 action: 12 oid: 408 facing: 0 opoint_end:
+<frame_end>
+<frame> 12 mark
+pic: 999 next: 1000 state: 15 wait: 5 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+itr: kind: 8 respond: 2 dvy: -1 x: 9 y: 8000 w: 99 h: 199 fall: 70 dvx: 13 itr_end:
+<frame_end>
+<frame> 13 mark
+pic: 999 next: 14 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+<frame_end>
+<frame> 14 mark
+pic: 999 next: 1000 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+opoint: kind: 1 x: 39 y: 60 action: 100 oid: 408 facing: 0 opoint_end:
+<frame_end>
+
+<frame> 20 no_mark
+pic: 999 next: 1000 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+<frame_end>
+<frame> 30 no_mark
+pic: 999 next: 1000 state: 15 wait: 0 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 60
+<frame_end>
+
+<frame> 61 punch1
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 39 centery: 79 dvz: 550
+itr: kind: 0 x: 49 y: 33 w: 23 h: 33 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+<frame_end>
+<frame> 62 punch2
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 70 centery: 79 dvz: 550
+itr: kind: 0 x: 67 y: 26 w: 59 h: 52 zwidth: 10 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+<frame_end>
+<frame> 66 punch3
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 39 centery: 79 dvz: 550
+itr: kind: 0 x: 56 y: 37 w: 23 h: 35 zwidth: 10 dvx: 5 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+<frame_end>
+<frame> 67 punch4
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 70 centery: 79 dvz: 550
+itr: kind: 0 x: 73 y: 0 w: 60 h: 80 zwidth: 10 dvx: -3 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+<frame_end>
+<frame> 667 punch5
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 39 centery: 79 dvz: 550
+itr: kind: 0 x: 50 y: 37 w: 33 h: 28 dvx: 2 bdefend: 16 injury: 20 effect: 8 caughtact: 615 sound: 1 itr_end:
+<frame_end>
+<frame> 72 super_punch2
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 70 centery: 79 dvz: 550
+itr: kind: 0 x: 61 y: 19 w: 71 h: 58 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+<frame_end>
+<frame> 82 dash_attack
+pic: 999 state: 3000 wait: 1 next: 1000 dvx: 1 dvy: 1 centerx: 38 centery: 73 dvz: 550
+itr: kind: 0 x: 27 y: 27 w: 40 h: 43 dvx: 12 fall: 70 arest: 20 bdefend: 60 injury: 35 effect: 1 itr_end:
+<frame_end>
+<frame> 502 super_punch
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 39 centery: 79 dvz: 550
+itr: kind: 0 x: 43 y: 29 w: 22 h: 35 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 effect: 1 itr_end:
+<frame_end>
+<frame> 510 super_punch2
+pic: 999 state: 3000 wait: 1 next: 1000 centerx: 39 centery: 79 dvz: 550
+itr: kind: 0 x: 47 y: 42 w: 30 h: 31 dvx: 15 dvy: -8 fall: 100 arest: 15 bdefend: 60 injury: 50 itr_end:
+<frame_end>
+
+<frame> 99 marked
+pic: 999 state: 3005 wait: 1 next: 1000 centerx: 39 centery: 79
+<frame_end>
+<frame> 100 marked
+pic: 9 state: 3005 wait: 1 next: 101 centerx: 39 centery: 79
+itr: kind: 8 bdefend: 3 dvy: -1 x: -9999 y: 728000 w: 99999 h: 199 zwidth: 999 dvx: 99 itr_end:
+<frame_end>
+<frame> 101 marked
+pic: 8 state: 3005 wait: 480 next: 102 centerx: 39 centery: 79
+itr: kind: 8 respond: 4 dvy: 2 x: -9999 y: 8000 w: 99999 h: 199 fall: 70 zwidth: 999 dvx: 101 itr_end:
+itr: kind: 8 respond: 4 dvy: 2 x: -9999 y: 3000 w: 99999 h: 199 zwidth: 999 dvx: 101 itr_end:
+itr: kind: 8 respond: 4 dvy: 2 x: -9999 y: 3500 w: 99999 h: 199 zwidth: 999 dvx: 101 itr_end:
+itr: kind: 8 dvy: -1 x: 9 y: 727000 w: 99 h: 199 dvx: 102 itr_end:
+bdy: kind: 0 x: 9 y: 728000 w: 99 h: 199 bdy_end:
+<frame_end>
+<frame> 102 marked
+pic: 9 state: 3005 wait: 1 next: 103 centerx: 39 centery: 79
+bdy: kind: 0 x: 9 y: 728000 w: 99 h: 199 bdy_end:
+<frame_end>
+<frame> 103 marked
+pic: 999 state: 3005 wait: 200 next: 104 centerx: 39 centery: 79
+bdy: kind: 0 x: 9 y: 728000 w: 99 h: 199 bdy_end:
+bdy: kind: 0 x: 9 y: 729000 w: 99 h: 199 bdy_end:
+<frame_end>
+<frame> 104 marked
+pic: 999 state: 3005 wait: 1 next: 1000 centerx: 39 centery: 79 sound: c\dan\w\e2.wav 
+bdy: kind: 0 x: 9 y: 728000 w: 99 h: 199 bdy_end:
+bdy: kind: 0 x: 9 y: 729000 w: 99 h: 199 bdy_end:
+<frame_end>
+
+<frame> 300 AJJ
+pic: 999 state: 3005 wait: 1 next: 1000 centerx: 70 centery: 79
+itr: kind: 8 respond: 2 x: -9999 y: 0 w: 99999 h: 99 zwidth: 999 dvx: 301 itr_end:
+<frame_end>
+<frame> 301 AJJ
+pic: 999 state: 3005 wait: 1 next: 1000 centerx: 70 centery: 79
+itr: kind: 3 x: 51 y: 62 w: 38 h: 19 catchingact: 349 349 caughtact: 130 130 itr_end:
+<frame_end>
+<frame> 349 AJJC
+pic: 999 state: 9 wait: 1 next: 350 centerx: 39 centery: 79
+cpoint: kind: 1 x: 39 y: 39 vaction: 131 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+<frame> 350 AJJC
+pic: 999 state: 9 wait: 3 next: 351 centerx: 39 centery: 79
+cpoint: kind: 1 x: 39 y: 39 vaction: 130 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+<frame> 351 AJJC
+pic: 4 state: 9 wait: 3 next: 352 centerx: 39 centery: 79
+cpoint: kind: 1 x: 39 y: 39 vaction: 130 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+<frame> 352 AJJC
+pic: 5 state: 9 wait: 3 next: 353 centerx: 39 centery: 79 
+cpoint: kind: 1 x: 39 y: 39 vaction: 130 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+<frame> 353 AJJC
+pic: 6 state: 9 wait: 3 next: 354 centerx: 39 centery: 79
+cpoint: kind: 1 x: 39 y: 39 vaction: 130 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>
+<frame> 354 AJJC
+pic: 7 state: 9 wait: 99 next: 1000 centerx: 39 centery: 79
+cpoint: kind: 1 x: 39 y: 39 vaction: 130 throwvz: -842150451 hurtable: 1 throwinjury: -842150451 decrease: 3 cpoint_end:
+<frame_end>

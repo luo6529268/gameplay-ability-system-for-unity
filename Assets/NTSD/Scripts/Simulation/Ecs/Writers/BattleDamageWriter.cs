@@ -946,25 +946,21 @@ namespace NTSD.Simulation.Ecs
             bool heavyLike = victimType == (int)LF2ObjectType.HeavyWeapon;
             if (lightLike)
             {
-                int victimOid = LF2Entity.ResolveCurrentDataObjectId(victim);
-                if (victimOid == 201 || victimOid == 202)
-                    return;
                 if (victim.GetState() != LF2States.WeaponInSky)
-                    victim.DirectWriteRawFramePreserveWaitCounter(0);
-                ApplyGenericWeaponWhirlwindVelocity(victim, attacker, 3.0);
+                    victim.DirectWriteNativeRawFramePreserveWaitCounter(0);
+                ApplyGenericWeaponWhirlwindVelocity(victim, attacker);
             }
             else if (heavyLike)
             {
                 if (victim.GetState() != LF2States.HeavyWeaponInSky)
-                    victim.DirectWriteRawFramePreserveWaitCounter(0);
-                ApplyGenericWeaponWhirlwindVelocity(victim, attacker, 2.3);
+                    victim.DirectWriteNativeRawFramePreserveWaitCounter(0);
+                ApplyGenericWeaponWhirlwindVelocity(victim, attacker);
             }
         }
 
         private static void ApplyGenericWeaponWhirlwindVelocity(
             LF2Entity victim,
-            LF2Entity attacker,
-            double verticalStep)
+            LF2Entity attacker)
         {
             victim.KnockbackVx = victim.Runtime.Vx +
                 (victim.Runtime.XInt > attacker.Runtime.XInt ? -1.0 : 1.0);
@@ -973,18 +969,6 @@ namespace NTSD.Simulation.Ecs
                 (victim.Runtime.ZInt > attacker.Runtime.ZInt ? -0.5 : 0.5);
             victim.Runtime.Vz = victim.KnockbackVz;
 
-            if (victim.GetRuntimeYInt() >= -2)
-            {
-                victim.Runtime.Y = -2.0;
-                victim.Runtime.YInt = -2;
-                victim.Runtime.Vy = -6.0;
-            }
-
-            if (victim.Runtime.Vy > -6.0)
-            {
-                victim.Runtime.Vy -= verticalStep;
-                victim.KnockbackVy = victim.Runtime.Vy;
-            }
         }
 
         private static void ApplyNativeStandardHitRest(
@@ -1440,13 +1424,19 @@ namespace NTSD.Simulation.Ecs
                 if (victim.GetState() == LF2States.ObjectFlying)
                 {
                     victim.Runtime.SpecialHitLatch0EB = true;
-                    victim.DirectWriteRawFramePreserveWaitCounter(40);
+                    victim.DirectWriteNativeRawFramePreserveWaitCounter(40);
                 }
                 else
                 {
                     CopyRelation(attacker, victim);
+                    victim.Runtime.OwnerSlotIndex = attacker.Runtime.OwnerSlotIndex;
                     victim.Runtime.SpecialHitLatch0EB = true;
-                    victim.DirectWriteRawFramePreserveWaitCounter(30);
+                    int action = attacker.FrameCache?.GetNativeFrameDataById(attacker.Frame.N)?.hit_j ?? 0;
+                    if (action == 0)
+                        action = victim.FrameCache?.GetNativeFrameDataById(victim.Frame.N)?.hit_j ?? 0;
+                    if (action == 0)
+                        action = 30;
+                    victim.DirectWriteNativeRawFramePreserveWaitCounter(action);
                     ResetType3HitMotion(victim);
                     victim.Runtime.AnimCounter = attacker.Runtime.SlotIndex;
                 }
@@ -2064,7 +2054,7 @@ namespace NTSD.Simulation.Ecs
                 victim.FallCounter = 0;
 
             LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
-            ApplySpecialWeaponThrowingTail(attacker, victim, victimType);
+            ApplySpecialWeaponThrowingTail(world, attacker, victim, victimType);
         }
 
         private static bool ShouldForceObjectFall80(LF2Entity victim)
@@ -2087,6 +2077,7 @@ namespace NTSD.Simulation.Ecs
         }
 
         private static void ApplySpecialWeaponThrowingTail(
+            SimulationWorld world,
             LF2Entity attacker,
             LF2Entity victim,
             int victimType)
@@ -2094,8 +2085,8 @@ namespace NTSD.Simulation.Ecs
             if (!FrameStateIs(attacker, LF2States.WeaponThrowing))
                 return;
 
-            attacker.DirectWriteRawFramePreserveWaitCounter(
-                attacker.BattleRandInt(0, 16));
+            attacker.DirectWriteNativeRawFramePreserveWaitCounter(
+                world.NativeRandom.SynchronizedNext(0xEEu, 16));
             attacker.Runtime.Vx = victim.KnockbackVx * -0.5;
             attacker.Runtime.Vy = -4.0;
             if (attacker.GetCurrentDataObjectTypeForSimulation() ==

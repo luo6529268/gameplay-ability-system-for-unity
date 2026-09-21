@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "passedCases": 3,
+  "errors": [],
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Actual pooled Renderer destruction for three logic shell types in independent Worlds; scene checksum and global renderer borrowers preserved."
+}

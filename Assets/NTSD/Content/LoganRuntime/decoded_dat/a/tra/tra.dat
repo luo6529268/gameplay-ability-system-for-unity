@@ -1,0 +1,22 @@
+<bmp_begin>
+file(65-80): a\tra\tra.png w: 125 h: 115 row: 5 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 210 circle
+pic: 0 state: 3005 wait: 1 next: 211 dvx: 550 dvy: 550 dvz: 550 centerx: 115 centery: 18
+<frame_end>
+<frame> 211 circle
+pic: 1 state: 3005 wait: 1 next: 215 dvx: 550 dvy: 550 dvz: 550 centerx: 115 centery: 18
+<frame_end>
+<frame> 213 circle
+pic: 3 state: 3005 wait: 1 next: 214 dvx: 550 dvy: 550 dvz: 550 centerx: 115 centery: 18
+<frame_end>
+<frame> 214 circle
+pic: 4 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 115 centery: 18
+<frame_end>
+<frame> 215 circle
+pic: 2 state: 3005 wait: 1 next: 213 dvx: 550 dvy: 550 dvz: 550 centerx: 115 centery: 18
+<frame_end>

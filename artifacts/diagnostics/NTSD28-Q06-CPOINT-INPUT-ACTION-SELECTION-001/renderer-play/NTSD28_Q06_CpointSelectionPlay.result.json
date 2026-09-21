@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "passedCases": 2,
+  "errors": [],
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Actual pooled Renderer CPoint selection and following tick through bound input; logic values, not physical key or visual parity."
+}

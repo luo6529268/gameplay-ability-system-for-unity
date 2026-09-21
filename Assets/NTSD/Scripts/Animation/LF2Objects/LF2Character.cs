@@ -1028,6 +1028,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal override void DestroyEntityLikeExeCoreForStructuralWriter()
         {
+            // Alignment contract: NTSD28-Q06-DESTROY-POOL-OWNER-001.
+            BattleLogicReferencePool referencePool = ResolveLogicReferencePool();
             DestroyEvent();
 
             if (Renderer != null)
@@ -1045,7 +1047,7 @@ namespace NTSD.Animation.LF2Objects
                 Destroy();
             }
 
-            ResolveLogicReferencePool()?.Release(this);
+            referencePool?.Release(this);
         }
 
         public override void DirectWriteFramePreserveWaitCounter(int frameId)

@@ -1,0 +1,415 @@
+<bmp_begin>
+file(0-39): c\jiro\a\gol.png w: 372 h: 346 row: 10 col: 4
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+shadow: 1
+<bmp_end>
+<frame> 0 golemend
+pic: 14 state: 3005 wait: 2 next: 163 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 10 golemhit
+pic: 14 state: 3005 wait: 4 next: 211 dvx: 550 dvy: 550 centerx: 187 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 666000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 20 golemhit
+pic: 14 state: 3005 wait: 4 next: 211 dvx: 550 dvy: 550 centerx: 187 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 666000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 30 golemhit
+pic: 14 state: 3005 wait: 4 next: 211 dvx: 550 dvy: 550 centerx: 187 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 666000 w: 43 h: 62 bdy_end:
+<frame_end>
+<frame> 99 golemstart
+pic: 0 state: 3005 wait: 1 next: 101 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+opoint: kind: 1 x: 187 y: 341 action: 100 oid: 708 facing: 0 opoint_end:
+<frame_end>
+<frame> 100 golemstart
+pic: 0 state: 3005 wait: 0 next: 99 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 101 golemstart
+pic: 1 state: 3005 wait: 2 next: 102 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341 sound: data\019.wav
+<frame_end>
+<frame> 102 golemstart
+pic: 2 state: 3005 wait: 2 next: 103 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 103 golemstart
+pic: 3 state: 3005 wait: 2 next: 104 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 104 golemstart
+pic: 4 state: 3005 wait: 2 next: 105 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 105 golemstart
+pic: 5 state: 3005 wait: 2 next: 106 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 106 golemstart
+pic: 6 state: 3005 wait: 2 next: 107 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 107 golemstart
+pic: 7 state: 3005 wait: 2 next: 108 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 108 golemstart
+pic: 8 state: 3005 wait: 2 next: 109 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 109 golemstart
+pic: 9 state: 3005 wait: 2 next: 110 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 110 golemstart
+pic: 10 state: 3005 wait: 2 next: 111 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 111 golemstart
+pic: 11 state: 3005 wait: 2 next: 112 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 112 golemstart
+pic: 12 state: 3005 wait: 2 next: 113 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 113 golemstart
+pic: 13 state: 3005 wait: 2 next: 210 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 150 golemend
+pic: 0 state: 3005 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 151 golemend
+pic: 1 state: 3005 wait: 2 next: 150 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 152 golemend
+pic: 2 state: 3005 wait: 2 next: 151 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 153 golemend
+pic: 3 state: 3005 wait: 2 next: 152 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 154 golemend
+pic: 4 state: 3005 wait: 2 next: 153 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 155 golemend
+pic: 5 state: 3005 wait: 2 next: 154 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 156 golemend
+pic: 6 state: 3005 wait: 2 next: 155 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 157 golemend
+pic: 7 state: 3005 wait: 2 next: 156 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 158 golemend
+pic: 8 state: 3005 wait: 2 next: 157 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 159 golemend
+pic: 9 state: 3005 wait: 2 next: 158 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341 sound: data\019.wav
+<frame_end>
+<frame> 160 golemend
+pic: 10 state: 3005 wait: 2 next: 159 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+<frame_end>
+<frame> 161 golemend
+pic: 11 state: 3005 wait: 2 next: 160 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 162 golemend
+pic: 12 state: 3005 wait: 2 next: 161 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 163 golemend
+pic: 13 state: 3005 wait: 2 next: 162 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+opoint: kind: 1 x: 187 y: 341 action: 163 oid: 708 facing: 0 opoint_end:
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 210 golemstand1
+pic: 14 state: 3005 wait: 4 next: 211 dvx: 550 dvy: 550 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 210 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 666000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 250 y: 7092000 w: 170 h: 700 bdy_end:
+<frame_end>
+<frame> 211 golemstand2
+pic: 14 state: 3005 wait: 4 next: 214 dvx: 550 dvy: 550 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 210 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 665000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 250 y: 7092000 w: 170 h: 700 bdy_end:
+<frame_end>
+<frame> 213 golemstand4
+pic: 14 state: 3005 wait: 4 next: 210 dvx: 550 dvy: 550 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 210 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 663000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 250 y: 7092000 w: 170 h: 700 bdy_end:
+<frame_end>
+<frame> 214 golemstand3
+pic: 14 state: 3005 wait: 4 next: 213 dvx: 550 dvy: 550 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 210 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 376000 w: 9999 h: 500 zwidth: 999 dvx: 244 itr_end:
+itr: kind: 8 dvy: -1 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: 130 y: 664000 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 250 y: 7092000 w: 170 h: 700 bdy_end:
+<frame_end>
+<frame> 220 golemend
+pic: 14 state: 3005 wait: 2 next: 163 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 221 golemend
+pic: 14 state: 3005 wait: 2 next: 222 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 222 golemend
+pic: 13 state: 3005 wait: 2 next: 223 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+opoint: kind: 1 x: 187 y: 341 action: 163 oid: 708 facing: 0 opoint_end:
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 223 golemend
+pic: 12 state: 3005 wait: 2 next: 161 dvx: 550 dvy: 550 dvz: 550 centerx: 187 centery: 341
+opoint: kind: 1 x: 187 y: 341 action: 250 oid: 708 facing: 0 opoint_end:
+bdy: kind: 0 x: -9999 y: 379000 w: 99999 h: 500 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 230 golemattack
+pic: 29 state: 3005 wait: 3 next: 231 centerx: 187 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 231 golemattack
+pic: 30 state: 3005 wait: 3 next: 232 centerx: 187 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 232 golemattack
+pic: 31 state: 3005 wait: 3 next: 233 centerx: 109 centery: 341 sound: data\069.wav
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 0 x: 165 y: 130 w: 208 h: 230 dvx: 25 dvy: -5 zwidth: 35 vrest: 70 bdefend: 100 fall: 100 injury: 150 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 233 golemattack
+pic: 32 state: 3005 wait: 3 next: 234 centerx: 109 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 0 x: 234 y: 182 w: 139 h: 150 dvx: 25 dvy: -5 zwidth: 35 vrest: 70 bdefend: 100 fall: 100 injury: 150 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 234 golemattack
+pic: 33 state: 3005 wait: 4 next: 214 centerx: 187 centery: 341 hit_a: 10 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 239 golemstop
+pic: 21 state: 3005 wait: 2 next: 210 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 240 golemwalk1
+pic: 20 state: 3005 wait: 4 next: 241 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 241 golemwalk2
+pic: 21 state: 3005 wait: 4 next: 242 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 241 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 242 golemwalk3
+pic: 22 state: 3005 wait: 4 next: 243 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 243 golemwalk4
+pic: 23 state: 3005 wait: 4 next: 246 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 241 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 244 golemwalk
+pic: 20 state: 3005 wait: 2 next: 240 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 245 golemturn
+pic: 21 state: 3005 wait: 2 next: -210 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 246 golemwalk5
+pic: 24 state: 3005 wait: 4 next: 247 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 247 golemwalk6
+pic: 25 state: 3005 wait: 4 next: 248 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+opoint: kind: 1 x: 187 y: 341 action: 241 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 248 golemwalk7
+pic: 26 state: 3005 wait: 4 next: 240 centerx: 187 centery: 341 hit_a: 1 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 8 x: -999 y: 378000 w: 9999 h: 500 zwidth: 999 dvx: 230 itr_end:
+itr: kind: 8 x: -999 y: 667000 w: 9999 h: 500 zwidth: 999 dvx: 239 itr_end:
+itr: kind: 8 x: -999 y: 668000 w: 9999 h: 500 zwidth: 999 dvx: 245 itr_end:
+itr: kind: 8 x: -999 y: 375000 w: 9999 h: 500 zwidth: 999 dvx: 240 itr_end:
+itr: kind: 8 x: -999 y: 374000 w: 9999 h: 500 zwidth: 999 dvx: 241 itr_end:
+itr: kind: 8 x: -999 y: 373000 w: 9999 h: 500 zwidth: 999 dvx: 242 itr_end:
+itr: kind: 8 x: -999 y: 372000 w: 9999 h: 500 zwidth: 999 dvx: 243 itr_end:
+itr: kind: 8 x: -999 y: 371000 w: 9999 h: 500 zwidth: 999 dvx: 246 itr_end:
+itr: kind: 8 x: -999 y: 370000 w: 9999 h: 500 zwidth: 999 dvx: 247 itr_end:
+itr: kind: 8 x: -999 y: 669000 w: 9999 h: 500 zwidth: 999 dvx: 248 itr_end:
+itr: kind: 8 x: -999 y: 377000 w: 9999 h: 500 zwidth: 999 dvx: 250 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 250 golemstomp
+pic: 34 state: 3005 wait: 3 next: 251 centerx: 137 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 251 golemstomp
+pic: 35 state: 3005 wait: 3 next: 252 centerx: 137 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 252 golemstomp
+pic: 36 state: 3005 wait: 3 next: 253 centerx: 137 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 253 golemstomp
+pic: 37 state: 3005 wait: 3 next: 254 centerx: 149 centery: 341
+opoint: kind: 1 x: 260 y: 341 action: 50 oid: 708 facing: 0 opoint_end:
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 254 golemstomp
+pic: 38 state: 3005 wait: 3 next: 255 centerx: 140 centery: 341
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>
+<frame> 255 golemstomp
+pic: 39 state: 3005 wait: 3 next: 214 centerx: 145 centery: 341 hit_a: 10 hit_d: 220
+itr: kind: 8 dvy: -1 x: -999 y: 379000 w: 9999 h: 500 zwidth: 999 dvx: 221 itr_end:
+itr: kind: 14 x: 165 y: 130 w: 70 h: 230 zwidth: 25 vrest: 1 itr_end:
+itr: kind: 14 x: 147 y: 8000 w: 108 h: 500 zwidth: 30 vrest: 1 itr_end:
+<frame_end>

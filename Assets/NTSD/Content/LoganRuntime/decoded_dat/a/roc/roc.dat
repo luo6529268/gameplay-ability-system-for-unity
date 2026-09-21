@@ -1,0 +1,39 @@
+<bmp_begin>
+file(0-8): a\roc\roc.png w: 209 h: 128 row: 3 col: 3
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 40 centery: 42 hit_Fa: 12
+<frame_end>
+<frame> 90 rocks
+pic: 0 state: 15 wait: 2 next: 91 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 91 rocks
+pic: 1 state: 15 wait: 2 next: 92 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 92 rocks
+pic: 2 state: 15 wait: 2 next: 1000 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 95 rocks2
+pic: 3 state: 15 wait: 1 next: 96 dvy: 550 centerx: 107 centery: 120 sound: data\021.wav
+<frame_end>
+<frame> 96 rocks2
+pic: 4 state: 15 wait: 1 next: 97 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 97 rocks2
+pic: 5 state: 15 wait: 1 next: 98 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 98 rocks2
+pic: 6 state: 15 wait: 1 next: 1000 dvy: 550 centerx: 107 centery: 120
+<frame_end>
+<frame> 165 rocks_hakke
+pic: 999 state: 3005 wait: 0 next: 166 dvx: 60 centerx: 107 centery: 120
+opoint: kind: 1 x: 100 y: 120 action: 90 dvx: 5 oid: 229 facing: 0 opoint_end:
+<frame_end>
+<frame> 166 rocks_hakke
+pic: 0 state: 3005 wait: 0 next: 165 dvx: 60 centerx: 107 centery: 120
+opoint: kind: 1 x: 100 y: 120 action: 90 dvx: 5 oid: 229 facing: 0 opoint_end:
+<frame_end>

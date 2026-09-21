@@ -1,0 +1,15 @@
+{
+  "status": "PASS",
+  "rows": 3,
+  "expectedCandidates": [
+    0,
+    1,
+    0
+  ],
+  "expectedY": [
+    -20,
+    -20,
+    -10
+  ],
+  "sha256": "62d0258d7de8061625d0be85f764bcf58ca878062f1f94e5c70c25f627deb77e"
+}

@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-NATIVE-LIFECYCLE-STATE-CARRIER-001
-status: FOCUSED_TEST_PASS
+status: VERIFIED
 change-kind: NATIVE_LIFECYCLE_CARRIERS
 code-path: Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Core/BattleEcsWorld.cs
@@ -77,3 +77,5 @@ NTSD28-Q06-NATIVE-WEAPON-PIECE-TRANSACTION-001 / READY_SOURCE_WITNESS_AND_EXACT_
 当前schema处于frame campaign未完成窗口，不发布最终baseline。剩余3MISSING/其它frame reader/definition与fusion完整准入、display其余出生/post、Q07资源及Q10播放仍由总表继续跟踪。总目标ACTIVE。
 
 后续更正：WEAPON-PIECE-TRANSACTION已有两阶段producer、49联合及真实Late四向量/关闭通过；旧“producer未实现”不再是当前阻塞。完整SelfCheck已越过武器，现GT08旧encoded/HitStun fixture待独立核验；carrier仍保持原限定FOCUSED/SCOPED Play状态，完整总目标未关闭。
+
+2026-09-21 final reconciliation VERIFIED / declared carrier+consumer scope. Existing386 XML/actual lifecycle Play/full-driver Play224 and zero-close inspected; successor weapon fragments and stableSelfCheck close original blockers. See EXIT-RECONCILIATION.md and pinned evidence JSON. No rerun/production changes; populated cross-World epoch, raw3 and Q07-Q12 boundaries remain explicit.

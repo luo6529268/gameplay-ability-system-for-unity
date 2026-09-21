@@ -1,0 +1,133 @@
+<bmp_begin>
+file(0-5): w\1.png w: 58 h: 58 row: 6 col: 1
+weapon_hp: 800
+weapon_drop_hurt: 200
+weapon_hit_sound: data\010.wav
+weapon_drop_sound: data\010.wav
+weapon_broken_sound: data\021.wav
+<bmp_end>
+
+<weapon_piece>
+team: 1
+piece: 1
+ act: 109 framea: 0
+
+ oid: 999 amount: 1
+piece_end:
+piece: 2
+ act: 0 framea: 4
+ dvx: 12 dvy: -20 dvz: 4
+ amount: 2
+piece_end:
+piece: 2
+ act: 4 framea: 4
+ dvx: 4 dvy: -8 dvz: 4
+piece_end:
+piece: 3
+ act: 4 framea: 4
+ dvx: 8 dvy: -10 dvz: 4
+ amount: 4
+piece_end:
+<weapon_piece_end>
+
+<frame> 0 in_the_sky
+pic: 0 state: 2000 wait: 3 next: 1 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 1 in_the_sky
+pic: 1 state: 2000 wait: 2 next: 2 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 2 in_the_sky
+pic: 2 state: 2000 wait: 3 next: 3 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 3 in_the_sky
+pic: 3 state: 2000 wait: 2 next: 4 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 4 in_the_sky
+pic: 4 state: 2000 wait: 3 next: 5 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 5 in_the_sky
+pic: 5 state: 2000 wait: 2 next: 999 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 6 in_the_sky2
+pic: 0 state: 2000 wait: 3 next: 6 dvy: 50 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+bdy: kind: 0 x: 6 y: 9 w: 44 h: 46 bdy_end:
+<frame_end>
+
+<frame> 10 on_hand
+pic: 5 state: 2001 wait: 0 next: 0 centerx: 29 centery: 56 
+wpoint: kind: 2 x: 29 y: 56 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+<frame_end>
+
+<frame> 20 on_ground
+pic: 5 state: 2004 wait: 60 next: 64 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+
+<frame> 21 just_on_ground
+pic: 3 state: 2000 wait: 1 next: 999 centerx: 29 centery: 56 
+itr: kind: 0 x: 6 y: 9 w: 44 h: 46 dvx: 5 dvy: -7 fall: 80 vrest: 17 bdefend: 100 injury: 60 itr_end:
+<frame_end>
+<frame> 64 on_ground
+pic: 5 state: 1004 wait: 10 next: 65 centerx: 29 centery: 56
+itr: kind: 8 bdefend: 3 dvy: -1 x: 9 y: 8910000 w: 9 h: 99 dvx: 164 itr_end:
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+<frame> 65 on_ground
+pic: 999 state: 1004 wait: 10 next: 66 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+<frame> 66 on_ground
+pic: 5 state: 1004 wait: 10 next: 67 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+<frame> 67 on_ground
+pic: 999 state: 1004 wait: 10 next: 68 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+<frame> 68 on_ground
+pic: 5 state: 1004 wait: 10 next: 1000 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+<frame> 70 up
+pic: 999 state: 15 wait: 2 next: 6 dvy: -50 centerx: 29 centery: 56 
+<frame_end>
+<frame> 164 stay_ground
+pic: 5 state: 1004 wait: 10 next: 164 centerx: 29 centery: 56 
+itr: kind: 14 x: 21 y: 37 w: 16 h: 18 vrest: 1 zwidth: 10 itr_end:
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 zwidth: 11 bdy_end:
+<frame_end>
+
+<frame> 399 dummy
+pic: 5 state: 0 wait: 2 next: 999 centerx: 29 centery: 56 
+bdy: kind: 0 x: 11 y: 15 w: 36 h: 40 bdy_end:
+<frame_end>
+
+<frame> 410 on_hand
+pic: 5 state: 2001 wait: 0 next: 0 centerx: 29 centery: 56 
+wpoint: kind: 2 x: 29 y: 56 weaponact: 35 attacking: 0 cover: 0 wpoint_end:
+<frame_end>

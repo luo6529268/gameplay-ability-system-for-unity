@@ -1,0 +1,5 @@
+{
+  "cases": 6,
+  "replayedTicks": 12,
+  "scope": "Same-world impact physics transaction plus two complete ticks; not cross-world or renderer validation."
+}

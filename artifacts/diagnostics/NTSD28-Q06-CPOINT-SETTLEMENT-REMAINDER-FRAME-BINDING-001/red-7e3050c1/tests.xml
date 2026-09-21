@@ -1,0 +1,187 @@
+<test-suite type="TestSuite" id="10203" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8131" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="1.209382" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="19365" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="8123" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="1.129595" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19366" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8123" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="1.042762" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19374" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7562" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="0.949277" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12136" name="NTSD28Q06CpointSettlementRemainderEditorTests" fullname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests" classname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="0.882111" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12139" name="RemainingPassMatchesSource" fullname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests.RemainingPassMatchesSource" classname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="0.781901" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12137" name="RemainingPassMatchesSource(Authority400)" fullname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests.RemainingPassMatchesSource(Authority400)" methodname="RemainingPassMatchesSource" classname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests" runstate="Runnable" seed="628731019" result="Failed" start-time="2026-09-21 13:51:42Z" end-time="2026-09-21 13:51:43Z" duration="0.456352" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 descriptor wait/next=1/0
+case 2 after slot 1 descriptor wait/next=1/0
+case 4 after slot 1 available
+case 5 after slot 1 frame.frameState=0 expected 10
+case 5 after slot 1 position.x=350 expected 325
+case 5 after slot 1 position.y=0 expected 4
+case 5 after slot 1 position.z=250 expected 249
+case 5 after slot 1 position.preciseX=350 expected 325
+case 5 after slot 1 position.preciseY=0 expected 4
+case 5 after slot 1 position.preciseZ=250 expected 249
+case 5 after slot 1 available
+case 6 after slot 1 available
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 descriptor wait/next=1/0", "case 2 after slot 1 descriptor wait/next=1/0", "case 4 after slot 1 available", "case 5 after slot 1 frame.frameState=0 expected 10", "case 5 after slot 1 position.x=350 expected 325", "case 5 after slot 1 position.y=0 expected 4", "case 5 after slot 1 position.z=250 expected 249", "case 5 after slot 1 position.preciseX=350 expected 325", "case 5 after slot 1 position.preciseY=0 expected 4", "case 5 after slot 1 position.preciseZ=250 expected 249"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests.RemainingPassMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x003c4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CpointSettlementRemainderEditorTests.cs:75
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="12138" name="RemainingPassMatchesSource(MobileExtended)" fullname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests.RemainingPassMatchesSource(MobileExtended)" methodname="RemainingPassMatchesSource" classname="NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests" runstate="Runnable" seed="1015176577" result="Failed" start-time="2026-09-21 13:51:43Z" end-time="2026-09-21 13:51:43Z" duration="0.219594" asserts="0"><properties /><failure><message><![CDATA[  case 0 after slot 1 descriptor wait/next=1/0
+case 2 after slot 1 descriptor wait/next=1/0
+case 4 after slot 1 available
+case 5 after slot 1 frame.frameState=0 expected 10
+case 5 after slot 1 position.x=350 expected 325
+case 5 after slot 1 position.y=0 expected 4
+case 5 after slot 1 position.z=250 expected 249
+case 5 after slot 1 position.preciseX=350 expected 325
+case 5 after slot 1 position.preciseY=0 expected 4
+case 5 after slot 1 position.preciseZ=250 expected 249
+case 5 after slot 1 available
+case 6 after slot 1 available
+  Expected: <empty>
+  But was:  < "case 0 after slot 1 descriptor wait/next=1/0", "case 2 after slot 1 descriptor wait/next=1/0", "case 4 after slot 1 available", "case 5 after slot 1 frame.frameState=0 expected 10", "case 5 after slot 1 position.x=350 expected 325", "case 5 after slot 1 position.y=0 expected 4", "case 5 after slot 1 position.z=250 expected 249", "case 5 after slot 1 position.preciseX=350 expected 325", "case 5 after slot 1 position.preciseY=0 expected 4", "case 5 after slot 1 position.preciseZ=250 expected 249"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06CpointSettlementRemainderEditorTests.RemainingPassMatchesSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x003c4] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06CpointSettlementRemainderEditorTests.cs:75
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=10, wait=31, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 100 (initial): pic=0, state=9, wait=43, next=100, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=0, wait=23, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=RemainderA, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=RemainderB, 找到 0 个精灵文件定义</color>
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

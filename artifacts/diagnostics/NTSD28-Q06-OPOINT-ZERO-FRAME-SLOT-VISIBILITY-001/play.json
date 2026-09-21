@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "passedCases": 3,
+  "errors": [],
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Real Play prior OPoint boundary cases100/102 plus formal-source held zero-frame child birth over two full ticks with pooled Renderer; isolated World, scene checksum and borrower guard."
+}

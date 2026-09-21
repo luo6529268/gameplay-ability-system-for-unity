@@ -1,0 +1,158 @@
+<bmp_begin>
+file(0-9): s\S\S.png w: 79 h: 79 row: 10 col: 1
+file(10-15): s\S\dS.png w: 310 h: 125 row: 2 col: 3
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+<frame> 0 del
+pic: 999 state: 3005 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 105
+<frame_end>
+<frame> 10 del
+pic: 999 state: 3005 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 105
+<frame_end>
+<frame> 20 del
+pic: 999 state: 3005 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 105
+<frame_end>
+<frame> 30 del
+pic: 999 state: 3005 wait: 0 next: 1000 dvx: 550 dvy: 550 centerx: 38 centery: 105
+<frame_end>
+<frame> 118 stage6
+pic: 999 state: 400 wait: 1 next: 119 dvy: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 119 stage6
+pic: 999 state: 400 wait: 1 next: 1000 dvx: 550 dvy: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 150 y: 0 action: 158 oid: 235 facing: 10 opoint_end:
+<frame_end>
+<frame> 146 defeat
+pic: 999 state: 3005 wait: 1 next: -147 dvy: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 147 defeat
+pic: 999 state: 3005 wait: 1 next: 1000 dvy: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 150 y: 0 action: 159 oid: 235 facing: 10 opoint_end:
+<frame_end>
+<frame> 157 tobi
+pic: 10 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 158 itachi3
+pic: 13 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 159 itachi3
+pic: 14 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 160 tobi
+pic: 15 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 166 itachi1
+pic: 11 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 167 itachi2
+pic: 12 state: 3005 wait: 150 next: 1000 dvx: 550 dvy: 550 centerx: 160 centery: 125
+<frame_end>
+<frame> 354 itachi
+pic: 4 state: 15 wait: 0 next: 355 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79 sound: data\017.wav
+<frame_end>
+<frame> 355 itachi
+pic: 4 state: 15 wait: 0 next: 356 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 39 y: 200 action: 66 oid: 714 facing: 0 opoint_end:
+<frame_end>
+<frame> 356 itachi
+pic: 0 state: 15 wait: 50 next: 357 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: -98 y: 200 action: 319 oid: 220 facing: 0 opoint_end:
+<frame_end>
+<frame> 357 itachi
+pic: 1 state: 15 wait: 9 next: 358 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 150 y: 0 action: 166 oid: 235 facing: 10 opoint_end:
+<frame_end>
+<frame> 358 itachi
+pic: 2 state: 15 wait: 9 next: 359 dvx: 550 dvy: 550 dvz: 550 centerx: 40 centery: 79
+<frame_end>
+<frame> 359 itachi
+pic: 3 state: 15 wait: 9 next: 360 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 360 itachi
+pic: 0 state: 15 wait: 9 next: 361 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 361 itachi
+pic: 1 state: 15 wait: 9 next: 362 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 362 itachi
+pic: 2 state: 15 wait: 9 next: 363 dvx: 550 dvy: 550 dvz: 550 centerx: 40 centery: 79
+<frame_end>
+<frame> 363 itachi
+pic: 3 state: 15 wait: 9 next: 364 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 364 itachi
+pic: 0 state: 15 wait: 9 next: 365 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 365 itachi
+pic: 1 state: 15 wait: 9 next: 366 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 366 itachi
+pic: 2 state: 15 wait: 9 next: 367 dvx: 550 dvy: 550 dvz: 550 centerx: 40 centery: 79
+<frame_end>
+<frame> 367 itachi
+pic: 3 state: 15 wait: 9 next: 368 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 368 itachi
+pic: 4 state: 15 wait: 3 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 40 centery: 79 sound: data\017.wav
+<frame_end>
+<frame> 374 itachi
+pic: 4 state: 15 wait: 1 next: 376 dvx: 550 dvy: 550 dvz: 550 centerx: 40 centery: 79 sound: data\017.wav
+<frame_end>
+<frame> 376 itachi
+pic: 5 state: 15 wait: 9 next: 377 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 377 itachi
+pic: 6 state: 15 wait: 9 next: 378 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 150 y: 0 action: 167 oid: 235 facing: 10 opoint_end:
+<frame_end>
+<frame> 378 itachi
+pic: 7 state: 15 wait: 9 next: 379 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 379 itachi
+pic: 8 state: 15 wait: 9 next: 380 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 380 itachi
+pic: 5 state: 15 wait: 9 next: 381 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 381 itachi
+pic: 6 state: 15 wait: 9 next: 382 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 382 itachi
+pic: 7 state: 15 wait: 9 next: 383 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 383 itachi
+pic: 8 state: 15 wait: 9 next: 384 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 384 itachi
+pic: 5 state: 15 wait: 9 next: 385 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 385 itachi
+pic: 6 state: 15 wait: 9 next: 386 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 386 itachi
+pic: 7 state: 15 wait: 9 next: 387 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 387 itachi
+pic: 8 state: 15 wait: 9 next: 368 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+opoint: kind: 1 x: 43 y: 81 action: 198 oid: 220 opoint_end:
+<frame_end>
+<frame> 388 tobi
+pic: 4 state: 15 wait: 1 next: 389 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79 sound: data\017.wav
+<frame_end>
+<frame> 389 tobi
+pic: 9 state: 15 wait: 180 next: 390 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 73
+opoint: kind: 1 x: 150 y: 0 action: 160 oid: 235 facing: 10 opoint_end:
+<frame_end>
+<frame> 390 tobi
+pic: 9 state: 15 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 73 sound: data\017.wav
+opoint: kind: 1 x: 38 y: 25 action: 300 oid: 212 facing: 0 opoint_end:
+<frame_end>
+<frame> 391 tobi
+pic: 999 state: 3005 wait: 1 next: 392 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 79
+<frame_end>
+<frame> 392 tobi
+pic: 999 state: 3005 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 73
+opoint: kind: 1 x: 150 y: 0 action: 157 oid: 235 facing: 10 opoint_end:
+<frame_end>

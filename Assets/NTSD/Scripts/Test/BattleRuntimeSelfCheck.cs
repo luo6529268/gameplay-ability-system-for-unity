@@ -183,7 +183,7 @@ namespace NTSD.Test
                 CheckAudit7ResultsActiveGate();
                 CheckBattleResultsSlotAndRelationContracts();
                 CheckResultsReserveTerminalIntegrationContracts();
-                CheckTransitionEffectDoublePrecision();
+                CheckState13ExitPreservesPreciseState();
                 CheckPhysicsMovementAndVerticalBoundaryContracts();
                 CheckSharedCharacterLandingNumericAndDamageBoundaries();
                 CheckLandingRawFrameIntermediateState();
@@ -20446,8 +20446,9 @@ itr_end:
 
             QueuedBoundaryTransitionSelfCheckEntity directTransition = CreateQueuedBoundaryTransitionEntity();
             directTransition.RunLateTailBeforePrevFrame();
-            Expect(GetQueuedObjectPointTaskCount(factory) == 15,
-                "leaving state 13 through the real late tail must queue the fifteen C# authority transition effects");
+            // Alignment contract: NTSD28-Q06-STATE13-EXIT-TAIL-RETIREMENT-001.
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "current playable state13 exit must not publish legacy transition effects");
 
             factory.FlushTasks();
             directTransition.MirrorLatePrevFrame();
@@ -20463,9 +20464,9 @@ itr_end:
             transitionWorld.LateEntityUpdateAll(3);
 
             Expect(transition.Frame.Prev == transition.Frame.N,
-                "the full late pass must mirror prev_frame after the real transition-effect production phase");
+                "the full late pass must mirror prev_frame after the state13 exit tail");
             Expect(GetQueuedObjectPointTaskCount(factory) == 0,
-                "the transition-effect late boundary must consume the real factory queue before the pass continues");
+                "the state13 exit late boundary must leave the real factory queue empty");
 
             transitionWorld.FlushQueuedObjectPointTasks();
             Expect(GetQueuedObjectPointTaskCount(factory) == 0,
@@ -23609,8 +23610,10 @@ itr_end:
             world.Register(currentCharacter);
             currentCharacter.FrameDelay = 1;
             LF2ObjectPointFactory.Instance.ProcessOpointSpawn(currentCharacter);
-            Expect(FindOidEntity(world, ordinaryOid) == null,
-                "OP-01: nonzero FrameDelay must suppress opoint for current Character DAT");
+            LF2Entity currentCharacterChild = FindOidEntity(world, ordinaryOid);
+            Expect(currentCharacterChild != null,
+                "OP-01: zero-counter Character DAT opoint must emit despite nonzero FrameDelay");
+            currentCharacterChild.FreeEntityLikeExe();
 
             LF2CharacterData currentSpecialOpoint = BuildFrameLifecycleOpointSpawnerData(
                 "SelfCheck_OP01_CurrentSpecial", LF2ObjectType.SpecialAttack, ordinaryOid, kind: 1);
@@ -25391,8 +25394,8 @@ itr_end:
                     reverseType3.ApplyPreFrameZBounds(100f, 200f);
                     Expect(realCharacter.Runtime.Z == 200.0 && realCharacter.Runtime.ZInt == 200 &&
                            sharedCharacter.Runtime.Z == 100.0 && sharedCharacter.Runtime.ZInt == 100 &&
-                           reverseType3.Runtime.Z == 129.0 && reverseType3.Runtime.ZInt == 129,
-                        "GT-05: preframe Z must use current DAT character/non-character/type3 logic-Z bounds for every CLR shell");
+                            reverseType3.Runtime.Z == 120.0 && reverseType3.Runtime.ZInt == 120,
+                        "GT-05: preframe Z must clamp current DAT character/non-character precise Z for every CLR shell");
 
                     var recoveryWorld = new SimulationWorld(runtimeCharacterConfigs);
                     recoveryWorld.Register(realCharacter);
@@ -26647,7 +26650,7 @@ itr_end:
             slot.StableId = entity.Runtime.StableId;
         }
 
-        private static void CheckTransitionEffectDoublePrecision()
+        private static void CheckState13ExitPreservesPreciseState()
         {
             var wrappers = new Dictionary<int, LF2CharacterDataWrapper>
             {
@@ -26672,11 +26675,7 @@ itr_end:
             const double sourceZ = 42.24681357913579;
             const double sourceVx = 0.135791357913579;
             world.Rng.Seed(seed);
-            DeterministicRng expectedRng = new DeterministicRng(seed);
-            double expectedY = sourceY - expectedRng.NextInt(0, 29);
-            double expectedX = sourceX + expectedRng.NextInt(0, 39) - 19.0;
-            double expectedVy = -(expectedRng.NextInt(0, 20) / 2.0) - 8.0;
-            double expectedVx = sourceVx * 0.5 + expectedRng.NextInt(0, 11) - 5.0;
+            ulong rngCallsBefore = world.Rng.CallCount;
 
             QueuedBoundaryTransitionSelfCheckEntity source = CreateQueuedBoundaryTransitionEntity();
             source.Runtime.SetPosition(sourceX, sourceY, sourceZ);
@@ -26684,18 +26683,18 @@ itr_end:
             source.Runtime.SyncIntegerPosition();
             world.Register(source);
             source.RunLateTailBeforePrevFrame();
-            Expect(GetQueuedObjectPointTaskCount(factory) == 15,
-                "GT-12 transition precision fixture must queue the complete branch1 effect group");
+            // Alignment contract: NTSD28-Q06-STATE13-EXIT-TAIL-RETIREMENT-001.
+            Expect(GetQueuedObjectPointTaskCount(factory) == 0,
+                "current playable state13 exit must not queue the retired effect group");
 
             factory.FlushTasks();
-            LF2Entity spawned = FindOidEntity(world, 999);
-            Expect(spawned != null, "GT-12 transition precision fixture must create a real oid999 entity");
-            Expect(spawned.Runtime.X == expectedX && spawned.Runtime.Y == expectedY && spawned.Runtime.Z == sourceZ &&
-                   spawned.Runtime.Vx == expectedVx && spawned.Runtime.Vy == expectedVy,
-                $"GT-12: transition effect must preserve double position/velocity through the opoint task; " +
-                $"actual=({spawned.Runtime.X:R},{spawned.Runtime.Y:R},{spawned.Runtime.Z:R}," +
-                $"{spawned.Runtime.Vx:R},{spawned.Runtime.Vy:R}), " +
-                $"expected=({expectedX:R},{expectedY:R},{sourceZ:R},{expectedVx:R},{expectedVy:R})");
+            Expect(FindOidEntity(world, 999) == null && world.ObjectCount == 1,
+                "state13 exit and safety flush must not create legacy particles");
+            Expect(world.Rng.CallCount == rngCallsBefore,
+                "state13 exit tail must not consume legacy particle RNG");
+            Expect(source.Runtime.X == sourceX && source.Runtime.Y == sourceY && source.Runtime.Z == sourceZ &&
+                   source.Runtime.Vx == sourceVx && source.Runtime.Vy == 0.0 && source.Runtime.Vz == 0.0,
+                "state13 exit tail must preserve the source precise position and velocity");
         }
 
         private static void FillInputState(NTSDEntityRuntime runtime)

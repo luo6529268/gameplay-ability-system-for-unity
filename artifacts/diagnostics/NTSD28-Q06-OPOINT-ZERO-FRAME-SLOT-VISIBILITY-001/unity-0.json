@@ -1,0 +1,99 @@
+{
+  "case": "repeat_zero_frame",
+  "beforeDifferences": [],
+  "ticks": [
+    {
+      "tick": 0,
+      "expectedSpawned": 1,
+      "actualChildCount": 1,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 20,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 0
+          },
+          {
+            "slot": 50,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    },
+    {
+      "tick": 1,
+      "expectedSpawned": 1,
+      "actualChildCount": 2,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 20,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 0
+          },
+          {
+            "slot": 50,
+            "oid": 780,
+            "action": 0,
+            "counter": 2,
+            "hold": 0
+          },
+          {
+            "slot": 51,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    },
+    {
+      "tick": 2,
+      "expectedSpawned": 1,
+      "actualChildCount": 3,
+      "differences": [],
+      "actual": {
+        "entities": [
+          {
+            "slot": 20,
+            "oid": 779,
+            "action": 0,
+            "counter": 0,
+            "hold": 0
+          },
+          {
+            "slot": 50,
+            "oid": 780,
+            "action": 0,
+            "counter": 3,
+            "hold": 0
+          },
+          {
+            "slot": 51,
+            "oid": 780,
+            "action": 0,
+            "counter": 2,
+            "hold": 0
+          },
+          {
+            "slot": 52,
+            "oid": 780,
+            "action": 0,
+            "counter": 1,
+            "hold": 0
+          }
+        ]
+      }
+    }
+  ]
+}

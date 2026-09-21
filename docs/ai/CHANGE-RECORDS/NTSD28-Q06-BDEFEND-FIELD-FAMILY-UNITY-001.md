@@ -1,11 +1,12 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-BDEFEND-FIELD-FAMILY-UNITY-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: NATIVE_BDEFEND_FIELD_FAMILY
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleOrdinaryCharacterDamageRouteResolver.cs
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06BdefendFieldFamilyEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06BdefendPlayProbe.cs
 authority: Current native +0x0B8 field overwrite45, reduced signed add, armor match input and C25h recovery; original256 source witness and full-driver0/45 first difference.
 evidence: Current actual damage/armor reader/Shadow still use legacy HitStateCount rather than Runtime.Bdefend; C25h already correctly decrements Bdefend.
 -->
@@ -34,3 +35,9 @@ RED e237d2773ed24bf89f43cfd848ae9b4e四组失败，raw before无首差，原Bdef
 后继更新：HIT-SPARK-UNITY-001已限定VERIFIED，旧完整driver四组现PASS/Spark RNG差异清除。当前父记录不关闭，继续非角色反馈→武器反应/type5覆盖→回BDEFEND256；旧96/64/32未在本轮重测。源/测试/Play见spark artifact REPORT。
 
 后继生产进展：NONCHARACTER-ARMOR-FEEDBACK已写前置/反馈并通过684四组、Play2736、自检和本地回放；正式BDEFEND入口现direct192/Shadow208，余64weapon+16type5 guard。完整984余124weapon+108noncharacter reduced，父包保持IN_PROGRESS。下一weapon→type5→reduced后回访。
+
+2026-09-21 parent reconciliation: FOCUSED_TEST_PASS. Exact existing XML re-read; four256 Bdefend cases passed in two downstream batches. Historical failures retained, not current blockers. See artifacts/diagnostics/NTSD28-Q06-BDEFEND-FIELD-FAMILY-UNITY-001/PARENT-EXIT-AUDIT.md and pinned XML evidence JSON. Original actual Renderer field-isolation exit remains pending; logic-only256 cannot substitute for it.
+
+2026-09-21 pre-change Renderer exit amendment: exact existing NTSD28Q06BdefendFieldFamilyEditorTests.cs extracts shared Verify(profile,shadow,nullable index) preserving original256 test, optional one-row actual Renderer factory, assert Renderer exists, same raw/legacy241/held-free assertions, finally Free fixture active entities then existing ordered World shutdown. New Assets/NTSD/Scripts/Test/Editor/NTSD28Q06BdefendPlayProbe.cs reuses State13 probe structure and executes source indices0,32,48,96,160,224,225,228 with actual Shadow: character/weapon/type3/type5 overwrite45, feedback preserve, negative/positive signed add and armor HP protection. Eight representatives needed for distinct typed factory/writer paths; no profile/matrix rerun. Probe preserves Scene checksum/global pool count and delegates close to existing Q05 probe. No new runtime owner, production, Scene/assets changes. Compile then this Play only; reuse stable SelfCheck and prior logic matrix. Rollback only these test deltas with authorization, preserve user work.
+
+Final 2026-09-21 VERIFIED / declared field-family: actual Renderer8 PASS13:27:15Z, source raw/Shadow/legacy241/held-free, Scene checksum/borrowers retained; fresh Q05close13:27:16Z all0/Stopped2frames. Historical four256 and stableSelfCheck reused, no production changes. Initial adapter CS1061 corrected to existing FreeEntityLikeExe, final CS0. See artifact ACCEPTANCE.md; Q06 remains incomplete.

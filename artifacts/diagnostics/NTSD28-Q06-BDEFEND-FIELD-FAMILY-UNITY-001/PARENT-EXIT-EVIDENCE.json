@@ -1,0 +1,71 @@
+[
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-TYPE5-UNARMORED-UNITY-001/first-pass/tests-22-pass.xml",
+    "sha256": "c5955124eb291ebb6e8a138ce1b9ca9b47a2abc30970a92292544fce8463eba1",
+    "suiteResult": "Passed",
+    "selectedTests": [
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)",
+        "result": "Passed"
+      }
+    ]
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001/regression-18-one-old-audio-fail.xml",
+    "sha256": "b608a8c53a7a859f17ab1b4b00263e9b9e08c52f928e8875710680bc971f6900",
+    "suiteResult": "Failed",
+    "selectedTests": [
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(Authority400,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06BdefendFieldFamilyEditorTests.NativeFieldWritesAndRecoveryMatch(MobileExtended,True)",
+        "result": "Passed"
+      }
+    ]
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NONCHARACTER-REDUCED-HIT-TRANSACTION-001/qualification-driver-revisit-4-pass.xml",
+    "sha256": "629ffd682b48ca06743220a72a69f890dadd26c6af9c773bdd1b1dcf5a7ad338",
+    "suiteResult": "Passed",
+    "selectedTests": [
+      {
+        "name": "NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(Authority400,True)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,False)",
+        "result": "Passed"
+      },
+      {
+        "name": "NTSD.Test.NTSD28Q06CollisionQualificationEditorTests.DriverCatchFrameChangePreservesQueuedAttack(MobileExtended,True)",
+        "result": "Passed"
+      }
+    ]
+  }
+]

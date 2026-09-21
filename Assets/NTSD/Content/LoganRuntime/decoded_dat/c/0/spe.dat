@@ -1,0 +1,95 @@
+<bmp_begin>
+name: Spectator
+head: c\0\spe.png
+small: c\0\spe_s.png
+smallb: sprite\smallb\spe_s.png
+file(0-0): data\pixel.png w: 1 h: 1 row: 1 col: 1
+walking_frame_rate 3
+walking_speed 4.000000
+walking_speedz 2.000000
+running_frame_rate 3
+running_speed 15.000000
+running_speedz 3.300000
+heavy_walking_speed 4.000000
+heavy_walking_speedz 2.000000
+heavy_running_speed 15.000000
+heavy_running_speedz 3.300000
+jump_height -16.299999
+jump_distance 8.000000
+jump_distancez 3.000000
+dash_height -13.000000
+dash_distance 15.000000
+dash_distancez 3.750000
+rowing_height -2.000000
+rowing_distance 20.000000
+hidden: 1 random: 4
+<bmp_end>
+<stats> max_mp: 500 <stats_end>
+
+<frame> 0 standing
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 5 walking
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 6 walking
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 7 walking
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 8 walking
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 9 running
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 10 running
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 11 running
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 60 punch
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 65 punch
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 70 super_punch
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 210 jump
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 211 jump
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 212 jump
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 213 dash
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 214 dash
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 215 crouch
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 216 dash
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 217 dash
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 218 stop_running
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+<frame> 219 crouch2
+pic: 999 state: 15 wait: 0 next: 300 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 300 del
+pic: 999 state: 15 wait: 0 next: 1000 centerx: 39 centery: 79
+<frame_end>

@@ -1,0 +1,40 @@
+<bmp_begin>
+file(0-0): data\pixel.png w: 1 h: 1 row: 1 col: 1
+weapon_hit_sound: data\0.wav
+weapon_drop_sound: data\0.wav
+weapon_broken_sound: data\0.wav
+shadow: 1
+<bmp_end>
+<frame> 0 hit
+ pic: 999 state: 18 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 0 x: 22 y: 202000 w: 30 h: 65 injury: 9 itr_end:
+<frame_end>
+<frame> 10 hit
+ pic: 999 state: 18 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 0 x: 22 y: 202000 w: 30 h: 65 injury: 9 itr_end:
+<frame_end>
+<frame> 20 hit
+ pic: 999 state: 18 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 0 x: 22 y: 202000 w: 30 h: 65 injury: 9 itr_end:
+<frame_end>
+<frame> 30 hit
+ pic: 999 state: 18 wait: 2 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 0 x: 22 y: 202000 w: 30 h: 65 injury: 9 itr_end:
+<frame_end>
+<frame> 31 hit
+ pic: 999 state: 18 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+<frame_end>
+<frame> 40 edo
+ pic: 999 state: 18 wait: 99 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 8 dvy: -1 x: -9999 y: 698000 w: 99999 h: 99 zwidth: 999 dvx: 30 itr_end:
+itr: kind: 8 bdefend: 3 dvy: -1 x: 22 y: 204000 w: 30 h: 99 dvx: 31 itr_end:
+bdy: kind: 0 x: 16 y: 2 w: 44 h: 99 zwidth: 30 bdy_end:
+bdy: kind: 0 x: 22 y: 202000 w: 30 h: 65 bdy_end:
+<frame_end>
+<frame> 140 edo
+ pic: 999 state: 18 wait: 99 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 39 centery: 83
+itr: kind: 8 dvy: -1 x: -9999 y: 648000 w: 99999 h: 99 zwidth: 999 dvx: 31 itr_end:
+itr: kind: 8 bdefend: 3 dvy: -1 x: 22 y: 204000 w: 30 h: 99 dvx: 31 itr_end:
+bdy: kind: 0 x: 16 y: 2 w: 44 h: 99 zwidth: 30 bdy_end:
+bdy: kind: 0 x: 22 y: 202000 w: 30 h: 65 bdy_end:
+<frame_end>

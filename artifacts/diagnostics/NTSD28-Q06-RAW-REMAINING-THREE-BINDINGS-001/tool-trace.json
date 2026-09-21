@@ -1,0 +1,789 @@
+{
+  "schema": "ntsd28-logan-trace-self-test-v3",
+  "passed": true,
+  "cases": [
+    {
+      "name": "Q05-current-trace-version",
+      "expectedStatus": "v3",
+      "actualStatus": "v3",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-independent-2f8-binding",
+      "expectedStatus": "bound",
+      "actualStatus": "bound",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-semantic-header-required",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-trace-version-rejected",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "schema-mismatch: expected ntsd28-logan-battle-trace-v3, got ntsd28-logan-battle-trace-v2",
+      "passed": true
+    },
+    {
+      "name": "contract-descriptor",
+      "expectedStatus": "descriptor-valid",
+      "actualStatus": "descriptor-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "entity-binding-inventory",
+      "expectedStatus": "binding-inventory-valid",
+      "actualStatus": "binding-inventory-valid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-valid",
+      "expectedStatus": "valid-source-model-capture",
+      "actualStatus": "valid-source-model-capture",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-truncated",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "missing-required-tick:2",
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-extra-tick",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "extra-tick-after-declared-range",
+      "passed": true
+    },
+    {
+      "name": "authority-source-capture-formal-sha-drift",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "formalExeSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "valid-trace",
+      "expectedStatus": "valid-structure",
+      "actualStatus": "valid-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "equal-with-different-slot-capacity",
+      "expectedStatus": "equal-structure",
+      "actualStatus": "equal-structure",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "input-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "input",
+      "actualDomain": "input",
+      "reason": "domain-hash-mismatch",
+      "passed": true
+    },
+    {
+      "name": "rng-call-site-first-difference",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "rng",
+      "actualDomain": "rng",
+      "reason": "domain-hash-mismatch",
+      "passed": true
+    },
+    {
+      "name": "skipped-completed-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: non-contiguous-completed-tick: expected 2, got 3",
+      "passed": true
+    },
+    {
+      "name": "forged-domain-hash",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: forged-domain-hash:world",
+      "passed": true
+    },
+    {
+      "name": "entity-slot-outside-producer-capacity",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "authority",
+      "actualDomain": "authority",
+      "reason": "invalid-authority-tick: entity-slot-outside-producer-capacity",
+      "passed": true
+    },
+    {
+      "name": "entity-required-field-missing",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: entity-frame-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "entity-extra-field-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: entity-combat-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "entity-field-type-rejected",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: preciseX-must-be-float64",
+      "passed": true
+    },
+    {
+      "name": "content-identity-mismatch",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "content-identity-mismatch",
+      "passed": true
+    },
+    {
+      "name": "approved-exception-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: approved-exceptions-mismatch",
+      "passed": true
+    },
+    {
+      "name": "excluded-feature-drift",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "header",
+      "actualDomain": "header",
+      "reason": "invalid-unity: excluded-features-mismatch",
+      "passed": true
+    },
+    {
+      "name": "extra-authority-tick",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "stream",
+      "actualDomain": "stream",
+      "reason": "extra-authority-tick-after-declared-range",
+      "passed": true
+    },
+    {
+      "name": "malformed-unity-json",
+      "expectedStatus": "different",
+      "actualStatus": "different",
+      "expectedDomain": "unity",
+      "actualDomain": "unity",
+      "reason": "invalid-unity-tick: \u0027n\u0027 is an invalid start of a property name. Expected a \u0027\u0022\u0027. LineNumber: 0 | BytePositionInLine: 1.",
+      "passed": true
+    },
+    {
+      "name": "Q05-raw-without-rehash",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-rawDefinitionSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-invalid-raw",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-raw-definition-sha256",
+      "passed": true
+    },
+    {
+      "name": "Q05-false-semantic",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-semanticSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-wrong-projection",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-catalogFingerprint64-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-wrong-decode",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-decodeContract-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-policy",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-policy-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-wrong-scope",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-scope-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-unknown-profile",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-extra-content-field",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-wrong-schema-type",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-extra-schema",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-policy",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-scope",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-profile",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-profile",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-rawDefinitionSha256",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-decodeContract",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-semanticSha256",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-catalogFingerprint64",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-schemas",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-objectDefinitionSha256",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-fusionInputSha256",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-missing-fusionSemanticSha256",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-entityRuntime",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-entityRuntime-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-aggregate",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-aggregate-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-checksum",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-checksum-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-characterShell",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-characterShell-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-old-entityBaseShell",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-entityBaseShell-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-fusion-carrier-schema-entityRuntime",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-entityRuntime-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-fusion-carrier-schema-aggregate",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-aggregate-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-fusion-carrier-schema-checksum",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-checksum-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-platform-carrier-schema-entityRuntime",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-entityRuntime-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-platform-carrier-schema-aggregate",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-aggregate-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-retired-platform-carrier-schema-checksum",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-schema-checksum-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q05-frozen-semantic-vector",
+      "expectedStatus": "match",
+      "actualStatus": "match",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-formal-independent-vector",
+      "expectedStatus": "match",
+      "actualStatus": "match",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fixed-byte-independent-vector",
+      "expectedStatus": "match",
+      "actualStatus": "match",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-old-v2-tag",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-decodeContract-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-old-v2-property-set",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-property-set-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-objectDefinitionSha256-tampered",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-rawDefinitionSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-objectDefinitionSha256-invalid",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-raw-definition-sha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-objectDefinitionSha256-null",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-objectDefinitionSha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionInputSha256-tampered",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-rawDefinitionSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionInputSha256-invalid",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-raw-definition-sha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionInputSha256-null",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-fusionInputSha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionSemanticSha256-tampered",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "content-rawDefinitionSha256-mismatch",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionSemanticSha256-invalid",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-raw-definition-sha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-composite-fusionSemanticSha256-null",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "invalid-content-fusionSemanticSha256",
+      "passed": true
+    },
+    {
+      "name": "Q06-one-component-logan-factory-rejected",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-0-null",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-0-",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-0-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-0-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-1-null",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-1-",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-1-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-1-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-2-null",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-2-",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-2-GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-invalid-factory-component-2-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expectedStatus": "rejected",
+      "actualStatus": "rejected",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q06-legacy-profile-unchanged",
+      "expectedStatus": "match",
+      "actualStatus": "match",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": null,
+      "passed": true
+    },
+    {
+      "name": "Q05-source-missing-2f8-rejected",
+      "expectedStatus": "invalid",
+      "actualStatus": "invalid",
+      "expectedDomain": null,
+      "actualDomain": null,
+      "reason": "entity-combat-property-set-mismatch",
+      "passed": true
+    }
+  ]
+}

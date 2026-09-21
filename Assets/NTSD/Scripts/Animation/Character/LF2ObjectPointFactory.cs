@@ -245,9 +245,6 @@ namespace NTSD.Animation
 
             if (spawner.AttackingCounter != 0)
                 return;
-            if (spawner.FrameDelay != 0 &&
-                spawner.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
-                return;
 
             if (hasList)
             {

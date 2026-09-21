@@ -68,7 +68,7 @@ namespace NTSD.Simulation.Ecs
                 attacker.CaughtSlotIndex);
             if (victim?.Frame == null)
             {
-                attacker.DirectWriteRawFramePreserveWaitCounter(0);
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(0);
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace NTSD.Simulation.Ecs
                     out BattleCatchPointValue victimCpoint) ||
                 victimCpoint.Kind != 2)
             {
-                attacker.DirectWriteRawFramePreserveWaitCounter(0);
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(0);
                 return;
             }
 
@@ -92,8 +92,8 @@ namespace NTSD.Simulation.Ecs
                 attacker.Runtime.CaughtDuration += cpoint.Decrease;
                 if (attacker.Runtime.CaughtDuration < 0)
                 {
-                    attacker.DirectWriteRawFramePreserveWaitCounter(0);
-                    victim.DirectWriteRawFramePreserveWaitCounter(181);
+                    attacker.DirectWriteNativeRawFramePreserveWaitCounter(0);
+                    victim.DirectWriteNativeRawFramePreserveWaitCounter(181);
                     attacker.AttackingCounter = 1;
                     victim.AttackingCounter = 1;
                     victim.KnockbackVx = attacker.Runtime.XInt > victim.Runtime.XInt
@@ -191,33 +191,40 @@ namespace NTSD.Simulation.Ecs
             LF2Entity victim,
             BattleCatchPointValue cpoint)
         {
-            bool attackReady = attacker.Runtime.KeyJump != 0 &&
-                attacker.Runtime.CdAttack > 0;
-            bool jumpReady = attacker.Runtime.KeyDefend != 0 &&
-                attacker.Runtime.CdJump > 0;
-
-            if (attackReady && cpoint.Aaction != 0)
+            // Alignment contract: NTSD28-Q06-CPOINT-INPUT-ACTION-SELECTION-001.
+            var runtime = attacker.Runtime;
+            bool attackReady = runtime.KeyJump != 0 && runtime.CdAttack > 0;
+            bool horizontal = runtime.KeyLeft != 0 || runtime.KeyRight != 0;
+            bool direction = horizontal || runtime.KeyUp != 0 || runtime.KeyDown != 0;
+            int requested = 0;
+            if (attackReady && (!horizontal || cpoint.Taction == 0))
+                requested = cpoint.Aaction;
+            if (attackReady && direction && cpoint.Taction != 0)
+                requested = cpoint.Taction;
+            if (runtime.KeyAttack != 0 && runtime.CdDefend > 0)
+                requested = cpoint.Daction;
+            if (runtime.PrevUp != 0 && runtime.CdUp > 0)
+                requested = cpoint.Uzaction;
+            if (runtime.PrevDown != 0 && runtime.CdDown > 0)
+                requested = cpoint.Dzaction;
+            if (runtime.Dir == "left")
             {
-                bool directionAllowed =
-                    (attacker.Runtime.KeyLeft == 0 &&
-                     attacker.Runtime.KeyRight == 0) ||
-                     cpoint.Taction == 0;
-                if (directionAllowed)
-                    ApplyAction(attacker, victim, cpoint.Aaction);
+                if (runtime.PrevRight != 0 && runtime.CdRight > 0)
+                    requested = cpoint.Faction;
+                if (runtime.PrevLeft != 0 && runtime.CdLeft > 0)
+                    requested = cpoint.Baction;
             }
-
-            if (attackReady && cpoint.Taction != 0)
+            else
             {
-                bool hasDirection = attacker.Runtime.KeyLeft != 0 ||
-                    attacker.Runtime.KeyRight != 0 ||
-                    attacker.Runtime.KeyUp != 0 ||
-                    attacker.Runtime.KeyDown != 0;
-                if (hasDirection)
-                    ApplyAction(attacker, victim, cpoint.Taction);
+                if (runtime.PrevLeft != 0 && runtime.CdLeft > 0)
+                    requested = cpoint.Faction;
+                if (runtime.PrevRight != 0 && runtime.CdRight > 0)
+                    requested = cpoint.Baction;
             }
-
-            if (jumpReady && cpoint.Jaction != 0)
-                ApplyAction(attacker, victim, cpoint.Jaction);
+            if (runtime.KeyDefend != 0 && runtime.CdJump > 0)
+                requested = cpoint.Jaction;
+            if (requested != 0)
+                ApplyAction(attacker, victim, requested);
         }
 
         private void ApplyAction(
@@ -225,7 +232,12 @@ namespace NTSD.Simulation.Ecs
             LF2Entity victim,
             int actionFrame)
         {
-            attacker.ApplySignedCpointFrame(actionFrame);
+            if (actionFrame < 0)
+            {
+                attacker.SwitchDir(attacker.Runtime.Dir == "left" ? "right" : "left");
+                actionFrame = -actionFrame;
+            }
+            attacker.SetCpointRawFramePreserveWait(actionFrame);
             int victimAction = attacker.Frame?.D?.PrimaryCatchPoint.Vaction ?? 0;
             victim.SetCpointRawFramePreserveWait(victimAction);
             victim.AttackingCounter = 0;
@@ -275,7 +287,7 @@ namespace NTSD.Simulation.Ecs
                     victim.Runtime.Dir == "left" ? "right" : "left");
                 action = -action;
             }
-            victim.DirectWriteRawFramePreserveWaitCounter(action);
+            victim.DirectWriteNativeRawFramePreserveWaitCounter(action);
         }
 
         private void ApplyHeldInjury(

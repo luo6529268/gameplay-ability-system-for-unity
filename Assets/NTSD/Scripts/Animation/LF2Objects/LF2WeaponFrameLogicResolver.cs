@@ -161,18 +161,10 @@ namespace NTSD.Animation.LF2Objects
             _weapon.Runtime.SyncIntegerPosition();
         }
 
-        // 某些 type=3 对象的渲染 z 和逻辑 z 不完全一样，这里取逻辑判定坐标。
         private static int GetFrameLogicZInt(LF2Entity entity)
         {
             if (entity == null)
                 return 0;
-
-            if (entity.GetCurrentDataObjectType() == (int)LF2ObjectType.SpecialAttack &&
-                entity.Runtime != null &&
-                System.Math.Abs(entity.Runtime.Type3VisualZOffset) > 0.0001)
-            {
-                return (int)(entity.Runtime.Z - entity.Runtime.Type3VisualZOffset);
-            }
 
             return entity.GetRenderZInt();
         }

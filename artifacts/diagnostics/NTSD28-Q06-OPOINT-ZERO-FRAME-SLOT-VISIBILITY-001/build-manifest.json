@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "D547A8D74729C092C896DE75F9200C1704877CB1A4F787A27E676D3A198AC01A",
+  "captureBinarySha256": "3E8B2A8CD0BBE115C4BA749C503F702098A9004D93E23F0269E243907C009F1B",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28AuthorityTrace\\opoint-zero-frame-slot-visibility\\opoint_zero_frame_slot_visibility_witness.exe",
+  "authorityWriteAllowed": false
+}

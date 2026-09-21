@@ -1,0 +1,39 @@
+{
+  "index": 20,
+  "worldEntry": true,
+  "skip": "none",
+  "afterPhysics": {
+    "position": [
+      102,
+      -18,
+      247,
+      102.5,
+      -18.5,
+      247.5
+    ],
+    "reference": -18,
+    "platformSlot": 20,
+    "shadow": -20,
+    "previousY": -18
+  },
+  "expected": {
+    "position": [
+      102,
+      -18,
+      247,
+      102.5,
+      -18.5,
+      247.5
+    ],
+    "previousY": -18,
+    "previousXYZ": [
+      102,
+      -18,
+      248
+    ],
+    "reference": -18,
+    "platformSlot": 20,
+    "shadow": -20
+  },
+  "scope": "Actual rider physics entry; X/Z history and fulltick not certified"
+}

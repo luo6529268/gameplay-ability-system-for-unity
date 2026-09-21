@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "AE74A10CE3F60DB68CC3529385F1C1F89B7865A9DEBE8AF6D40247A9FCED9921",
+  "captureBinarySha256": "365B4E3F961A8AAC4E81D3D86608BEF51EE2F6F9A64E48B5F1B4AB26F366AD01",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q06-FRAME-MOTION-TAIL-001\\source-following\\frame_motion_tail_witness.exe",
+  "authorityWriteAllowed": false
+}

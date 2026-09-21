@@ -1,0 +1,94 @@
+[
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NATIVE-LIFECYCLE-STATE-CARRIER-001/related-386-pass.xml",
+    "sha256": "53708eda57bec405e967009e990f8c7fb6021d11d2a60e00d25c0c62389f0c8d",
+    "result": {
+      "result": "Passed",
+      "total": "386",
+      "passed": "386",
+      "failed": "0"
+    }
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NATIVE-LIFECYCLE-STATE-CARRIER-001/play-lifecycle-pass.json",
+    "sha256": "21c10408154d8f7a89ba1f32f7970d08c91355e8fe700b808864507ffc801357",
+    "result": {
+      "status": "PASS",
+      "error": null,
+      "scope": "Current-content real Scene paused carrier restore plus actual C25 late entry encoded lifecycle; no complete input/physics tick or fragment parity claim.",
+      "tick": 5,
+      "objectsBefore": 4,
+      "objectsAfter": 4,
+      "stateCode": -1,
+      "frameAction": 0,
+      "modifiedChecksumRestored": true,
+      "originalChecksumRestored": true
+    }
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NATIVE-FRAME-FULL-DRIVER-UNITY-001/Play-224-pass.json",
+    "sha256": "48c53ef93c3b66079202b701958ae063edc950bf85da66b67fa7f327998ad18a",
+    "result": {
+      "status": "PASS",
+      "error": null,
+      "cases": 224,
+      "ticks": 672,
+      "differences": [],
+      "rendererBorrowersBefore": 2,
+      "rendererBorrowersAfter": 2,
+      "sceneChecksumUnchanged": true,
+      "scope": "Real Scene, isolated synthetic high-action/cost worlds; both actual factories and backends, complete three ticks; no image or physical-input certification."
+    }
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-NATIVE-FRAME-FULL-DRIVER-UNITY-001/Shutdown-pass.json",
+    "sha256": "667dc3a96cd35abc1b98fe7dc342f89932763c41374093df71c6d6df559b28ac",
+    "result": {
+      "status": "PASS",
+      "error": null,
+      "configuration": {
+        "lifecycle": "Running",
+        "worldProfile": "Authority400",
+        "snapshotProfile": "Authority400",
+        "worldCapacity": 400,
+        "snapshotCapacity": 400,
+        "worldBroadphase": "BruteForce",
+        "snapshotBroadphase": "BruteForce",
+        "snapshotObjects": 4,
+        "snapshotClaimed": 2,
+        "slotClaimed": 2,
+        "capacities": [
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400,
+          400
+        ],
+        "pendingUnregister": 0,
+        "pendingDestroy": 0,
+        "snapshotUnregister": 0,
+        "snapshotDestroy": 0,
+        "soundCapacity": 6400,
+        "snapshotSoundCount": 0
+      },
+      "scope": "Current Unity legacy content, real Scene in-place snapshot restore and existing ordered shutdown; no physical input or Logan image parity claim.",
+      "tick": 5,
+      "objectsBefore": 4,
+      "objectsAfterRestore": 4,
+      "worldObjectsAfterShutdown": 0,
+      "slotsAfterShutdown": 0,
+      "logicBorrowersAfterShutdown": 0,
+      "renderBorrowersAfterShutdown": 0,
+      "restoreAndRendererRetention": true,
+      "remainedStoppedAfterTwoFrames": true
+    }
+  },
+  {
+    "path": "artifacts/diagnostics/NTSD28-Q06-STATE13-EXIT-TAIL-RETIREMENT-001/stable-selfcheck.result",
+    "sha256": "2f9acb02faa121bb2a3621951f57b4c690655337edee2e5ac350be2b3be88ea8",
+    "result": "PASS"
+  }
+]

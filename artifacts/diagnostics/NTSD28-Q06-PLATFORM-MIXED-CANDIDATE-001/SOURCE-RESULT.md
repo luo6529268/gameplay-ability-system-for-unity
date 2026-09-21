@@ -1,0 +1,11 @@
+# Platform mixed candidate source result
+
+SOURCE3_PASS, package IN_PROGRESS; Unity fixture/validation not yet implemented.
+
+Actual BattleWorld28::rebuild_geometric_hit_candidates with platform slot20, rider21, attacker19 or22. Platform snaps rider integerY-10 to-20 while preciseY stays-10. Attack before platform pair produces0 candidates; attack after platform pair produces1; after-slot with attacking0 platform(no snap) produces0. All cases still set reference-20/platformSlot20. Thus ordinary geometry after earlier pair must consume mutated integerY, not frozen pre-platform or preciseY. Initial source fixture accidentally put attacker inside platform and all counts0; retained initial-source and original logs. Corrected attackerX120 outside strict platform90..110 and local itrX-24 preserves world96..104. Expected0/1/0 remained unchanged, not fitted to output.
+
+Build source-final exit0 with current formal B1E13AE17/closure07CD47; see build-manifest. Double outputs identical SHA62D0258D7DE8061625D0BE85F764BCF58CA878062F1F94E5C70C25F627DEB77E. Inline independent expected checks passed, source-final/validation.json. This is source API diagnostic, not formal EXE recording, actual hit-consumption or fulltick evidence.
+
+Unity read-only: CollectCollisionCandidatesWithPlatforms uses ordinaryA/B,platformA/B,ordinaryB/A,platformB/A. Ordinary RecordOverlappingBodyCandidates -> LocalRectWorldRect reads Runtime.XInt/YInt live; role-aware cached route bypassed for platform ticks. This is static support only, not runtime pass. Next declare exact Unity fixture path; parse these DATs through Logan loader, actual World/factory and slot placement (attackerX120!), CaptureCollisionFrameSnapshotsAll then CollectCollisionCandidatesAll; compare candidate count plus target integer/preciseY/reference/platform slot and ensure attacker remainsY0. Default/ForceBruteForce share platform route, do not claim independent optimizations. No production changes justified until actual differential fails.
+
+Q06 still needs mixed Unity test, stable package SelfCheck/Renderer/Destroy closure. Previous two late failures resolved in separate records. Shadow presentation return stays Q09 with shared foot-marker anchor protected. Q06 incomplete/Q07 migration not started. No computer-use/nonbattle/Scene/resource edits.

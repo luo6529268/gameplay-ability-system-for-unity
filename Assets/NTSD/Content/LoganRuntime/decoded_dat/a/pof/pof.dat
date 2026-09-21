@@ -1,0 +1,19 @@
+<bmp_begin>
+file(0-5): a\pof\pof.png w: 255 h: 150 row: 3 col: 2
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 125 smoke_big
+pic: 0 state: 15 wait: 1 next: 126 dvx: 550 dvy: 550 dvz: 550 centerx: 127 centery: 160 sound: data\061.wav
+<frame_end>
+<frame> 126 smoke_big
+pic: 1 state: 15 wait: 1 next: 127 dvx: 550 dvy: 550 dvz: 550 centerx: 127 centery: 160
+<frame_end>
+<frame> 127 smoke_big
+pic: 2 state: 15 wait: 1 next: 128 dvx: 550 dvy: 550 dvz: 550 centerx: 127 centery: 160
+<frame_end>
+<frame> 128 smoke_big
+pic: 3 state: 15 wait: 1 next: 1000 dvx: 550 dvy: 550 dvz: 550 centerx: 127 centery: 160
+<frame_end>

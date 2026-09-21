@@ -1,0 +1,60 @@
+<bmp_begin>
+file(0-13): a\fla\fla.png w: 414 h: 193 row: 2 col: 7
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 0 state: 3005 wait: 0 next: 1 centerx: 207 centery: 193 hit_a: 50 hit_d: 15 sound: data\017.wav
+<frame_end>
+<frame> 1 flying
+pic: 1 state: 3005 wait: 0 next: 2 centerx: 207 centery: 193 hit_a: 50 hit_d: 15 sound: data\014.wav
+<frame_end>
+<frame> 2 flying
+pic: 2 state: 3005 wait: 0 next: 3 centerx: 207 centery: 193 hit_a: 50 hit_d: 15 sound: data\017.wav
+<frame_end>
+<frame> 3 flying
+pic: 3 state: 3005 wait: 0 next: 4 centerx: 207 centery: 193
+opoint: kind: 1 x: 105 y: 85 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 4 flying
+pic: 4 state: 3005 wait: 0 next: 5 centerx: 207 centery: 193
+opoint: kind: 1 x: 195 y: 135 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 5 flying
+pic: 5 state: 3005 wait: 0 next: 6 centerx: 207 centery: 193
+opoint: kind: 1 x: 235 y: 105 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 6 flying
+pic: 6 state: 3005 wait: 0 next: 7 centerx: 207 centery: 193
+opoint: kind: 1 x: 135 y: 145 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 7 flying
+pic: 7 state: 3005 wait: 0 next: 8 centerx: 207 centery: 193
+opoint: kind: 1 x: 175 y: 105 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 8 flying
+pic: 8 state: 3005 wait: 0 next: 9 centerx: 207 centery: 193 sound: data\014.wav
+<frame_end>
+<frame> 9 flying
+pic: 9 state: 3005 wait: 0 next: 10 centerx: 207 centery: 193
+opoint: kind: 1 x: 285 y: 145 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 10 flying
+pic: 10 state: 3005 wait: 0 next: 11 centerx: 207 centery: 193 sound: data\014.wav
+<frame_end>
+<frame> 11 flying
+pic: 11 state: 3005 wait: 0 next: 12 centerx: 207 centery: 193
+opoint: kind: 1 x: 105 y: 75 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 12 flying
+pic: 12 state: 3005 wait: 0 next: 13 centerx: 207 centery: 193 sound: data\014.wav
+<frame_end>
+<frame> 13 flying
+pic: 13 state: 3005 wait: 0 next: 999 centerx: 207 centery: 193
+opoint: kind: 1 x: 195 y: 145 action: 73 oid: 706 facing: 0 opoint_end:
+<frame_end>
+<frame> 15 flying
+pic: 6 state: 3005 wait: 0 next: 1000 centerx: 207 centery: 193 sound: data\006.wav
+<frame_end>

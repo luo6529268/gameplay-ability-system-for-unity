@@ -1,0 +1,156 @@
+<bmp_begin>
+file(0-7): c\ita\a\cro.png w: 224 h: 224 row: 4 col: 2
+file(8-12): c\ita\a\cro2.png w: 500 h: 500 row: 1 col: 5
+file(13-13): c\ita\a\cro3.png w: 3000 h: 800 row: 1 col: 1
+file(14-17): c\ita\a\cro4.png w: 345 h: 145 row: 2 col: 2
+weapon_hit_sound: data\003.wav
+weapon_drop_sound: data\003.wav
+weapon_broken_sound: data\003.wav
+shadow: 1
+<bmp_end>
+
+<frame> 10 hiting
+pic: 999 state: 15 wait: 1 next: 1000 centerx: 44 centery: 39
+<frame_end>
+
+<frame> 20 hit
+pic: 999 state: 15 wait: 1 next: 1000 centerx: 44 centery: 39
+<frame_end>
+
+<frame> 30 rebounding
+pic: 999 state: 15 wait: 1 next: 1000 centerx: 44 centery: 39
+<frame_end>
+
+<frame> 53 limitcheck
+pic: 999 state: 400 wait: 15 next: 1000 dvx: 550 dvy: 550 centerx: 40 centery: 71
+bdy: kind: 0 x: 36 y: 94000 w: 99 h: 999 bdy_end:
+<frame_end>
+<frame> 100 itachi_slash
+pic: 14 state: 3005 wait: 1 next: 101 dvx: 30 dvy: 550 dvz: 550 centerx: 50 centery: 145
+<frame_end>
+<frame> 101 itachi_slash
+pic: 15 state: 3005 wait: 1 next: 102 dvx: 30 dvy: 550 dvz: 550 centerx: 50 centery: 145
+itr: kind: 0 x: 0 y: 0 w: 350 h: 100 effect: 1 dvx: 15 dvy: -12 fall: 100 vrest: 25 bdefend: 100 injury: 70 itr_end:
+itr: kind: 0 x: 0 y: 3000 w: 350 h: 100 effect: 8 caughtact: 232 vrest: 30 injury: 50 sound: 10 itr_end:
+itr: kind: 0 x: 0 y: 3500 w: 350 h: 100 effect: 8 caughtact: 397 vrest: 30 injury: 50 sound: 10 itr_end:
+<frame_end>
+<frame> 102 itachi_slash
+pic: 16 state: 3005 wait: 1 next: 103 dvx: 30 dvy: 550 dvz: 550 centerx: 50 centery: 145
+itr: kind: 0 x: 0 y: 0 w: 350 h: 100 effect: 1 dvx: 15 dvy: -12 fall: 100 vrest: 25 bdefend: 100 injury: 70 itr_end:
+itr: kind: 0 x: 0 y: 3000 w: 350 h: 100 effect: 8 caughtact: 232 vrest: 30 injury: 50 sound: 10 itr_end:
+itr: kind: 0 x: 0 y: 3500 w: 350 h: 100 effect: 8 caughtact: 397 vrest: 30 injury: 50 sound: 10 itr_end:
+<frame_end>
+<frame> 103 itachi_slash
+pic: 17 state: 3005 wait: 1 next: 1000 dvx: 30 dvy: 550 dvz: 550 centerx: 50 centery: 145
+<frame_end>
+<frame> 110 genjutsu
+pic: 999 state: 3005 wait: 55 next: 1000 dvx: 50 centerx: 250 centery: 250
+itr: kind: 8 respond: 2 x: 100 y: 0 w: 300 h: 500 dvx: 111 itr_end:
+itr: kind: 0 x: 100 y: 68000 w: 300 h: 500 injury: 9 itr_end:
+itr: kind: 0 x: 100 y: 69000 w: 300 h: 500 injury: 9 itr_end:
+bdy: kind: 0 x: 100 y: 6030000 w: 300 h: 500 bdy_end:
+<frame_end>
+<frame> 111 genjutsu
+pic: 13 state: 15 centerz: 20000 wait: 1 next: 112 dvx: 550 centerx: 1500 centery: 400 hit_j: 48
+<frame_end>
+<frame> 112 genjutsu
+pic: 12 state: 15 centerz: 20000 wait: 1 next: 113 dvx: 550 centerx: 250 centery: 250
+opoint: kind: 1 x: 39 y: 600 action: 50 oid: 714 facing: 2 opoint_end:
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 drain: 500 dvy: -5 fall: 20 vrest: 3 bdefend: 100 injury: 2 sound: 6 itr_end:
+<frame_end>
+<frame> 113 genjutsu
+pic: 12 state: 15 centerz: 20000 wait: 2 next: 129 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 15 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 114 genjutsu
+pic: 12 state: 15 centerz: 20000 wait: 1 next: 136 dvx: 550 dvz: 550 centerx: 250 centery: 250
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 115 genjutsu
+pic: 13 state: 15 centerz: 20000 wait: 1 next: 1000 centerx: 1500 centery: 400
+bdy: kind: 0 x: -9999 y: 98000 w: 99999 h: 999 zwidth: 999 bdy_end:
+<frame_end>
+<frame> 116 spark
+pic: 0 state: 3005 wait: 0 next: 117 centerx: 112 centery: 112
+<frame_end>
+<frame> 117 spark
+pic: 1 state: 3005 wait: 0 next: 118 centerx: 112 centery: 112
+<frame_end>
+<frame> 118 spark
+pic: 2 state: 3005 wait: 0 next: 119 centerx: 112 centery: 112
+<frame_end>
+<frame> 119 spark
+pic: 3 state: 3005 wait: 0 next: 120 centerx: 112 centery: 112
+<frame_end>
+<frame> 120 spark
+pic: 4 state: 3005 wait: 0 next: 121 centerx: 112 centery: 112
+<frame_end>
+<frame> 121 spark
+pic: 5 state: 3005 wait: 0 next: 122 centerx: 112 centery: 112
+<frame_end>
+<frame> 122 spark
+pic: 6 state: 3005 wait: 0 next: 123 centerx: 112 centery: 112
+<frame_end>
+<frame> 123 spark
+pic: 7 state: 3005 wait: 0 next: 1000 centerx: 112 centery: 112
+<frame_end>
+<frame> 129 genjutsu
+pic: 8 state: 15 centerz: 20000 wait: 1 next: 130 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 130 genjutsu
+pic: 11 state: 15 centerz: 20000 wait: 1 next: 131 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 131 genjutsu
+pic: 10 state: 15 centerz: 20000 wait: 1 next: 138 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 132 genjutsu
+pic: 9 state: 15 centerz: 20000 wait: 2 next: 133 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 15 hit_d: 114
+sound: data\016.wav
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 133 genjutsu
+pic: 10 state: 15 centerz: 20000 wait: 1 next: 134 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+sound: data\016.wav
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 134 genjutsu
+pic: 11 state: 15 centerz: 20000 wait: 1 next: 135 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 135 genjutsu
+pic: 8 state: 15 centerz: 20000 wait: 1 next: 137 dvx: 550 dvz: 550 centerx: 250 centery: 250 hit_a: 8 hit_d: 114
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 399 effect: 5 fall: 70 vrest: 1 bdefend: 1 injury: 2 itr_end:
+<frame_end>
+<frame> 136 genjutsu
+pic: 12 state: 15 centerz: 20000 wait: 5 next: 115 centerx: 250 centery: 250 sound: data\028.wav
+itr: kind: 0 x: 100 y: 8050 w: 300 h: 400 effect: 1 dvx: 20 dvy: -5 fall: 5000 vrest: 15 bdefend: 100 injury: 2 itr_end:
+<frame_end>
+<frame> 137 genjutsu
+pic: 8 state: 15 centerz: 20000 wait: 1 next: 114 dvx: 550 dvz: 550 centerx: 250 centery: 250
+itr: kind: 8 dvy: -1 x: -9999 y: 98000 w: 99999 h: 999 zwidth: 999 dvx: 113 itr_end:
+<frame_end>
+<frame> 138 genjutsu
+pic: 10 state: 15 centerz: 20000 wait: 1 next: 114 dvx: 550 dvz: 550 centerx: 250 centery: 250
+itr: kind: 8 dvy: -1 x: -9999 y: 98000 w: 99999 h: 999 zwidth: 999 dvx: 132 itr_end:
+<frame_end>
+<frame> 700 a2
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\a2.wav
+<frame_end>
+<frame> 701 a3
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\a3.wav
+<frame_end>
+<frame> 702 a4
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\a4.wav
+<frame_end>
+<frame> 703 j1
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\j1.wav
+<frame_end>
+<frame> 704 j4
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\j4.wav
+<frame_end>
+<frame> 705 p3
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\ita\w\p3.wav
+<frame_end>

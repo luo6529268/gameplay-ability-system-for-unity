@@ -1,0 +1,33 @@
+<bmp_begin>
+file(0-4): a\zzz\zzz.png w: 79 h: 79 row: 5 col: 1
+weapon_hit_sound: data\001.wav
+weapon_drop_sound: data\001.wav
+weapon_broken_sound: data\001.wav
+<bmp_end>
+
+<frame> 0 flying
+pic: 999 state: 3000 wait: 2 next: 1000 centerx: 39 centery: 71
+bdy: kind: 0 x: -25 y: 18 w: 120 h: 100 bdy_end:
+<frame_end>
+<frame> 1 zZz
+pic: 2 state: 3005 wait: 10 next: 2 dvx: -1 dvy: -1 centerx: 2 centery: 80
+<frame_end>
+
+<frame> 2 zZz
+pic: 3 state: 3005 wait: 10 next: 3 dvx: 1 centerx: 4 centery: 85
+<frame_end>
+
+<frame> 3 zZz
+pic: 4 state: 3005 wait: 10 next: 1000 dvx: -1 centerx: 6 centery: 90
+<frame_end>
+<frame> 10 hiting
+pic: 0 state: 3001 wait: 2 next: 1000 dvx: 27 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 20 hit
+pic: 1 state: 3001 wait: 2 next: 1000 dvx: 27 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 30 rebounding
+pic: 999 state: 3001 wait: 2 next: 1000 dvx: 27 centerx: 39 centery: 79
+<frame_end>

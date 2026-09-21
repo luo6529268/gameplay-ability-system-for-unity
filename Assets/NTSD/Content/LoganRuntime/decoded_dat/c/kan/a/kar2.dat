@@ -1,0 +1,253 @@
+<bmp_begin>
+file(0-69): c\kan\a\kar.png w: 79 h: 79 row: 10 col: 7
+weapon_hp: 1999
+weapon_hit_sound: data\007.wav
+weapon_broken_sound: data\007.wav
+weapon_drop_sound: data\007.wav
+<bmp_end>
+
+<frame> 0 stand
+pic: 0 state: 3005 wait: 0 next: 60 centerx: 55 centery: 100
+bdy: kind: 0 x: 11 y: 15 w: 40 h: 40 bdy_end:
+<frame_end>
+
+<frame> 1 stand
+pic: 1 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 2 stand
+pic: 2 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 3 stand
+pic: 3 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 4 walk
+pic: 4 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 5 walk
+pic: 5 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 6 walk
+pic: 6 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 7 walk
+pic: 7 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 8 attack1
+pic: 12 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 9 attack1
+pic: 13 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 10 attack1
+pic: 14 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 11 attack1
+pic: 15 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+itr: kind: 0 x: 40 y: 35 w: 55 h: 27 effect: 1 dvx: 2 fall: 15 arest: 10 bdefend: 15 injury: 25 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 5 y: -555 w: 5 h: 40 bdy_end:
+<frame_end>
+
+<frame> 12 attack1
+pic: 16 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 13 attack2
+pic: 17 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 14 attack2
+pic: 18 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+itr: kind: 0 x: 40 y: 32 w: 55 h: 27 effect: 1 dvx: 2 fall: 15 arest: 10 bdefend: 15 injury: 25 itr_end:
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 15 attack2
+pic: 19 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 16 spin
+pic: 42 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79 mp: -2
+itr: kind: 0 x: 72 y: 5 w: 12 h: 73 effect: 1 dvx: 2 fall: 15 vrest: 7 bdefend: 16 injury: 25 itr_end:
+<frame_end>
+
+<frame> 17 spin
+pic: 43 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79 mp: -2
+itr: kind: 0 x: 47 y: 12 w: 12 h: 60 effect: 1 dvx: 12 fall: 15 vrest: 7 bdefend: 16 injury: 25 itr_end:
+<frame_end>
+
+<frame> 18 spin
+pic: 44 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79 mp: -2
+itr: kind: 0 x: -1 y: 9 w: 60 h: 71 effect: 1 dvx: 18 fall: 15 vrest: 7 bdefend: 16 injury: 25 itr_end:
+itr: kind: 0 x: 3 y: 11 w: 50 h: 65 effect: 1 dvx: -4 fall: 15 vrest: 7 bdefend: 16 injury: 35 itr_end:
+<frame_end>
+
+<frame> 19 spin
+pic: 45 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79 mp: -2
+itr: kind: 0 x: 49 y: 9 w: 14 h: 64 effect: 1 dvx: 18 fall: 15 vrest: 7 bdefend: 16 injury: 25 itr_end:
+<frame_end>
+
+<frame> 20 spin_start
+pic: 41 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 5 y: -555 w: 5 h: 40 bdy_end:
+<frame_end>
+
+<frame> 21 spin_finish
+pic: 46 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 22 spin_finish
+pic: 47 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 23 dash_back
+pic: 48 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+itr: kind: 0 x: 10 y: 9 w: 35 h: 64 dvx: -5 dvy: -3 fall: 100 vrest: 7 bdefend: 100 injury: 25 itr_end:
+<frame_end>
+
+<frame> 24 dash_back
+pic: 9 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 25 kunai
+pic: 27 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 5 y: -555 w: 5 h: 40 bdy_end:
+bdy: kind: 0 x: 0 y: 950000 w: 99 h: 99 bdy_end:
+<frame_end>
+
+<frame> 26 kunai
+pic: 28 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 27 kunai
+pic: 29 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 28 kunai
+pic: 30 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 29 kunai
+pic: 31 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 30 kunai
+pic: 32 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 30 h: 62 bdy_end:
+<frame_end>
+
+<frame> 31 kunai
+pic: 33 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 35 jump_attack
+pic: 22 state: 3005 wait: 1 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 7 y: 19 w: 37 h: 45 bdy_end:
+<frame_end>
+
+<frame> 36 jump_attack
+pic: 24 state: 3005 wait: 1 next: 60 centerx: 39 centery: 79 sound: data\007.wav
+itr: kind: 0 x: 27 y: 45 w: 53 h: 23 effect: 1 dvx: 12 fall: 70 vrest: 70 bdefend: 60 injury: 50 itr_end:
+bdy: kind: 0 x: 7 y: 19 w: 37 h: 45 bdy_end:
+<frame_end>
+
+<frame> 37 jump_attack
+pic: 25 state: 3005 wait: 1 next: 60 centerx: 39 centery: 79 sound: data\007.wav
+itr: kind: 0 x: 27 y: 45 w: 53 h: 23 effect: 1 dvx: 12 fall: 70 vrest: 70 bdefend: 60 injury: 50 itr_end:
+bdy: kind: 0 x: 7 y: 19 w: 37 h: 45 bdy_end:
+<frame_end>
+
+<frame> 38 jump_attack
+pic: 26 state: 3005 wait: 1 next: 60 centerx: 39 centery: 79 sound: data\007.wav
+itr: kind: 0 x: 27 y: 45 w: 53 h: 23 effect: 1 dvx: 12 fall: 70 vrest: 70 bdefend: 60 injury: 50 itr_end:
+bdy: kind: 0 x: 7 y: 19 w: 37 h: 45 bdy_end:
+<frame_end>
+
+<frame> 40 poison
+pic: 27 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+bdy: kind: 0 x: 5 y: -555 w: 5 h: 40 bdy_end:
+bdy: kind: 0 x: 0 y: 950000 w: 99 h: 99 bdy_end:
+<frame_end>
+
+<frame> 41 poison
+pic: 35 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 42 poison
+pic: 36 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 43 poison
+pic: 37 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 44 poison
+pic: 38 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 45 poison
+pic: 39 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 30 h: 62 bdy_end:
+<frame_end>
+
+<frame> 46 poison
+pic: 40 state: 3005 wait: 0 next: 60 centerx: 39 centery: 79
+bdy: kind: 0 x: 21 y: 18 w: 43 h: 62 bdy_end:
+<frame_end>
+
+<frame> 60 on_ground
+pic: 8 state: 3005 wait: 3 next: 61 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 61 on_ground
+pic: 9 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: data\061.wav
+opoint: kind: 1 x: 39 y: 65 action: 60 oid: 204 facing: 0 opoint_end:
+<frame_end>
+
+<frame> 70 just_on_ground
+pic: 10 state: 3005 wait: 3 next: 71 centerx: 39 centery: 79
+<frame_end>
+
+<frame> 71 just_on_ground
+pic: 11 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: data\061.wav
+opoint: kind: 1 x: 70 y: 65 action: 60 oid: 204 facing: 0 opoint_end:
+<frame_end>
+<frame> 300 dummy
+pic: 999 state: 3005 wait: 0 next: 60 centerx: 30 centery: 44
+<frame_end>
+<frame> 399 dummy
+pic: 4 state: 0 wait: 0 next: 60 centerx: 30 centery: 44
+bdy: kind: 0 x: 1 y: 19 w: 46 h: 15 bdy_end:
+<frame_end>

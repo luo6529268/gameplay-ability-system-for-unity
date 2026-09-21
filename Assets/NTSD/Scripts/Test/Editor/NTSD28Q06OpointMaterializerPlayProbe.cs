@@ -52,14 +52,23 @@ namespace NTSD.Test
                     errors.Add("case=" + index + ": " + error);
                 }
             }
+            try
+            {
+                NTSD28Q06OpointZeroFrameSlotVisibilityEditorTests.VerifyRendererHoldForPlay();
+                passed++;
+            }
+            catch (Exception error)
+            {
+                errors.Add("held-zero-frame: " + error);
+            }
             bool unchanged = scene.CaptureRuntimeChecksum64(driver.CurrentTickIndex, input) == checksum;
             int after = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance;
             File.WriteAllText(Result, JsonConvert.SerializeObject(new
             {
-                status = errors.Count == 0 && passed == 2 && unchanged && borrowers == after ? "PASS" : "FAIL",
+                status = errors.Count == 0 && passed == 3 && unchanged && borrowers == after ? "PASS" : "FAIL",
                 passedCases = passed, errors, sceneChecksumUnchanged = unchanged,
                 rendererBorrowersBefore = borrowers, rendererBorrowersAfter = after,
-                scope = "Real Play first invalid OID/kind records skip to valid later OPoint with pooled Renderer. Synthetic source cases0/2; prior positive-first Renderer evidence retained."
+                scope = "Real Play prior OPoint boundary cases100/102 plus formal-source held zero-frame child birth over two full ticks with pooled Renderer; isolated World, scene checksum and borrower guard."
             }, Formatting.Indented));
             File.WriteAllText(Request, "done");
             File.WriteAllText("Temp/NTSD28_Q05_ReplayPlay.request", "run");

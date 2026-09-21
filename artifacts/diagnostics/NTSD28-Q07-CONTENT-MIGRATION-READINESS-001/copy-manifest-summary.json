@@ -1,0 +1,22 @@
+{
+  "status": "READ_ONLY_MANIFEST_NOT_COPIED",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "sourceRoot": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+  "targetRoot": "Assets/NTSD/Content/LoganRuntime",
+  "totalFiles": 1343,
+  "totalBytes": 46594829,
+  "counts": {
+    "catalog_or_runtime_contract": 3,
+    "indexed_object_dat": 330,
+    "indexed_object_image": 1010
+  },
+  "manifestSha256": "E09BEC00503D577ECB401275C7E066CBF2DC8A13CBEBC87109B7E73184301792",
+  "destinationExisting": 0,
+  "oldDeletionAuthorized": false,
+  "excluded": [
+    "decoded_dat/data/stage.dat",
+    "background and menu DAT not in indexed object set",
+    "VFS images not referenced by indexed object DAT",
+    "WAV and WMA"
+  ]
+}

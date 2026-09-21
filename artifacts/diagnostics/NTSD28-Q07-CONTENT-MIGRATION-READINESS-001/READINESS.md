@@ -1,0 +1,31 @@
+# BATCH-04 / Q07 content migration readiness (2026-09-21)
+
+Status: initial `READ_ONLY_INVENTORY`, followed by `STAGED_HASH_VERIFIED` on 2026-09-22; this is **not** a production content switch or runtime acceptance certificate. Q06's scoped exit and Q02's loading infrastructure satisfy Q07's entry dependencies. The master goal remains active.
+
+## Current source and candidate set
+
+- Formal release EXE SHA-256: `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`.
+- Runtime source: `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime`.
+- Fresh `catalog.csv` SHA-256: `0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE`; formal `decoded_dat/data/data.txt`: `3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0`; existing Unity `Assets/NTSD/Config/data.txt`: `DB7A5F7A02B45E8461701D5033F30DA7128A07ED1B07134B5E5822884121B913`. These match the Q01 frozen inventory.
+- `copy-manifest.csv` specifies 1,343 individually source-hash-checked files / 46,594,829 bytes: 330 indexed object DAT, 1,010 distinct images referenced by those objects, plus catalog, data index and fusion input. Manifest SHA-256: `E09BEC00503D577ECB401275C7E066CBF2DC8A13CBEBC87109B7E73184301792`. None of the proposed destinations existed at inventory time.
+- Project-local staged root: `Assets/NTSD/Content/LoganRuntime`, retaining `catalog.csv`, `decoded_dat/...`, and `vfs/...` relative layout required by `BattleContentSource.ForLoganRuntime`. Its import/build packaging behavior remains to be accepted. The current `GameConfig.asset` still has the default empty battle-content root; production therefore still selects the old Unity content.
+
+The Q01 counts are source/catalog inventory, not a current parser failure count: Q05 subsequently closed the six formal DAT admission defects. The candidate must still be captured and actually loaded from the final project-local root before any Q07 content is marked available.
+
+## Boundary and first migration sequence
+
+1. Freeze a Task/Change with exact file and configuration ownership, source and target hashes, runtime acceptance and rollback. Do not edit scripts or the configured root before that record exists. Keep the current battle Scene, HUDBg user change, UI and nonbattle resource references untouched.
+2. Stage only declared files at a project-local portable root; verify every copied destination hash and reject unexpected extras or overwrites. Keep all old `Assets/NTSD/Config` and `Assets/NTSD/Sprite` files intact during staging.
+3. Capture `LoganVisualContentCandidate` against that staged root, then test actual content preparation/publication, cache invalidation, App/menu callers and re-entry with the current Editor. Check all 330 indexed object definitions and all referenced sheets, and verify normalized values and content fingerprint against the formal root. A copied file count or parser-only pass is insufficient.
+4. Switch the battle-content root only after staged candidate and caller checks pass; then run targeted representative battle runtime and visual loading checks, content-triggered R02/R06–R12/R15/R17/R18 returns, and ordered exit/re-entry. Any newly discovered dependency expands the explicit manifest before migration, not a silent fallback to old data.
+5. Decide old-file disposition from an exact static and dynamic reference graph and existing deletion authorization. Current Q01 disposition authorizes **zero** old-file deletions. The battle Scene still references `Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp` via GUID `6d174fff55a50784d9bbf85531fb7d86` in an inactive editor preview; deleting it without rebinding would break that reference.
+
+`decoded_dat/data/stage.dat` and its minibars are excluded because default stage DAT deployment remains on user hold. Background/menu DAT and images, unclassified ancillary images, and WAV/WMA are excluded from this object-first candidate set. These exclusions are Q07/Q09/Q10 classification work, not evidence that those resources can be discarded. The formal catalog contains non-object rows, but `LoganObjectCatalog.Read` only enumerates `registry_section == object`; other consumers of `data.txt` and packaging/build paths still require focused review before enabling production.
+
+## Staging result (2026-09-22)
+
+`NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001` copied the exact manifest to the previously absent project-local root. Pre-copy recheck found 1,343 unique targets, 46,594,829 source bytes and zero source hash/size or destination-existence issues. Post-copy destination SHA-256 matched the manifest for every file. Independent enumeration found expected=actual=1,343, missing=extra=0, no generated `.meta` yet, and no staged default `stage.dat`. `git status --short` for old Config/Sprite found only the new staged subtree; `GameConfig.asset` still has no serialized `BattleContentRuntimeRoot` and remains at its empty default. The actual Scene path is `Assets/NTSD/Scene/NTSD_Battle.unity` (singular `Scene`); its fresh SHA-256 is `BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6`, unchanged from the protected baseline. An initial query used the nonexistent `Assets/NTSD/Scenes/` path and provided no Scene evidence; the later hash is the evidence. `git diff --check` exited 0 (line-ending warnings only).
+
+This validates staging bytes, not Unity candidate construction, import, build packaging, production publication or battle behavior. No old resource was deleted or rebound; no script, GameConfig asset, Scene or nonbattle file was modified. Unity tests were not run for this byte-staging package.
+
+Post-staging Editor access check: `unity status --format json --non-interactive` returned `STATUS_NO_INSTANCES` because this project does not expose the Unity Pipeline package. The existing project's Unity-MCP socket at port 6403 did answer its handshake. A read-only `execute_code` status query failed before evaluating code because its CodeDom invocation exceeded Windows command length; the explicit Roslyn path reported that Roslyn is unavailable. Neither response is a candidate result. Use a governed focused Editor test through the existing `run_tests`/test-job path for staged-root capture rather than asserting that this dynamic-code probe passed or starting a second Editor.

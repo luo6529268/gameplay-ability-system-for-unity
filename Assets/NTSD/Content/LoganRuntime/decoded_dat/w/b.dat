@@ -1,0 +1,18 @@
+<bmp_begin>
+file(0-5): w\b.png w: 9 h: 9 row: 6 col: 1
+weapon_hit_sound: data\027.wav
+weapon_drop_sound: data\034.wav
+weapon_broken_sound: data\027.wav
+<bmp_end>
+<frame> 0 blood
+pic: 0 state: 3005 wait: 1 next: 999 dvy: 1 centerx: 5 centery: 10
+<frame_end>
+<frame> 60 blood_ground
+pic: 3 state: 3005 wait: 30 next: 61 centerx: 5 centery: 10
+<frame_end>
+<frame> 61 blood_ground
+pic: 4 state: 3005 wait: 30 next: 62 centerx: 5 centery: 10
+<frame_end>
+<frame> 62 blood_ground
+pic: 5 state: 3005 wait: 30 next: 1000 centerx: 5 centery: 10
+<frame_end>

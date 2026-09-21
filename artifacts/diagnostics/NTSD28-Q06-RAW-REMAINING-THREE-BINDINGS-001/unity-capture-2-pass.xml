@@ -1,0 +1,94 @@
+<test-suite type="TestSuite" id="28597" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8129" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.472137" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="37755" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="8121" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.398849" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="37756" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8121" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.296379" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="37760" name="EditorTools" fullname="NTSD.EditorTools" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.244570" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="37761" name="Tests" fullname="NTSD.EditorTools.Tests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.143894" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="28749" name="NTSD28UnityRawCaptureEditorTests" fullname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests" classname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests" runstate="Runnable" testcasecount="12" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:17Z" duration="6.044720" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="28753" name="CommonScenarioProducesDeterministicCanonicalRawCapture" fullname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests.CommonScenarioProducesDeterministicCanonicalRawCapture" methodname="CommonScenarioProducesDeterministicCanonicalRawCapture" classname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests" runstate="Runnable" seed="1563013612" result="Passed" start-time="2026-09-21 13:38:11Z" end-time="2026-09-21 13:38:15Z" duration="4.069994" asserts="0"><properties /><output><![CDATA[<color=green>✅ GameDataManager 加载成功: 对象=137, 背景=0</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=37, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 150 (kyubii): pic=130, state=9, wait=0, next=371, bodies=1, itrs=0, wpoints=2, opoint=有, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (rasengan): pic=102, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 300 (rasenganshuriken): pic=79, state=15, wait=2, next=301, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=14</color>
+<color=cyan>[Converter] 帧 350 (catching3): pic=117, state=15, wait=2, next=351, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Naruto, 找到 2 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_0.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp, 范围=[140-209], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[210-289], w=79, h=79, row=10, col=8</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=39, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (charge): pic=29, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 300 (konoha_sempu): pic=122, state=3, wait=1, next=301, bodies=1, itrs=1, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 350 (gate2): pic=151, state=3, wait=1, next=351, bodies=0, itrs=1, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 150 (counter): pic=285, state=3, wait=2, next=151, bodies=0, itrs=2, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Rock_Lee, 找到 4 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\gaara_2.bmp, 范围=[140-209], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[210-289], 尺寸=79x79, 行列=10x8</color>
+<color=green>✅ GameDataManager 加载成功: 对象=137, 背景=0</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=37, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 150 (kyubii): pic=130, state=9, wait=0, next=371, bodies=1, itrs=0, wpoints=2, opoint=有, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (rasengan): pic=102, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 300 (rasenganshuriken): pic=79, state=15, wait=2, next=301, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=14</color>
+<color=cyan>[Converter] 帧 350 (catching3): pic=117, state=15, wait=2, next=351, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Naruto, 找到 2 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_0.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp, 范围=[140-209], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[210-289], w=79, h=79, row=10, col=8</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=39, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (charge): pic=29, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 300 (konoha_sempu): pic=122, state=3, wait=1, next=301, bodies=1, itrs=1, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 350 (gate2): pic=151, state=3, wait=1, next=351, bodies=0, itrs=1, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 150 (counter): pic=285, state=3, wait=2, next=151, bodies=0, itrs=2, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Rock_Lee, 找到 4 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\gaara_2.bmp, 范围=[140-209], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[210-289], 尺寸=79x79, 行列=10x8</color>
+]]></output></test-case><test-case id="28751" name="CommonScenarioWritesThreeCompletedTicksWithTwoRealEntities" fullname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests.CommonScenarioWritesThreeCompletedTicksWithTwoRealEntities" methodname="CommonScenarioWritesThreeCompletedTicksWithTwoRealEntities" classname="NTSD.EditorTools.Tests.NTSD28UnityRawCaptureEditorTests" runstate="Runnable" seed="592967430" result="Passed" start-time="2026-09-21 13:38:15Z" end-time="2026-09-21 13:38:17Z" duration="1.874774" asserts="0"><properties /><output><![CDATA[<color=green>✅ GameDataManager 加载成功: 对象=137, 背景=0</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=37, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 150 (kyubii): pic=130, state=9, wait=0, next=371, bodies=1, itrs=0, wpoints=2, opoint=有, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (rasengan): pic=102, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 300 (rasenganshuriken): pic=79, state=15, wait=2, next=301, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=14</color>
+<color=cyan>[Converter] 帧 350 (catching3): pic=117, state=15, wait=2, next=351, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Naruto, 找到 2 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_0.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/MingRen/naruto_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\MingRen\naruto_2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp, 范围=[0-69], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[70-139], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp, 范围=[140-209], w=79, h=79, row=10, col=7</color>
+<color=cyan>[Parser] 解析 BMP 文件定义: Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp, 范围=[210-289], w=79, h=79, row=10, col=8</color>
+<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=3, next=1, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=18</color>
+<color=cyan>[Converter] 帧 50 (heavy_weapon_thw): pic=39, state=15, wait=6, next=51, bodies=1, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 100 (rowing): pic=65, state=6, wait=2, next=101, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 200 (mpdrain): pic=30, state=15, wait=0, next=201, bodies=0, itrs=0, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 250 (charge): pic=29, state=3, wait=1, next=251, bodies=2, itrs=0, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 300 (konoha_sempu): pic=122, state=3, wait=1, next=301, bodies=1, itrs=1, wpoints=1, opoint=无, 属性数=12</color>
+<color=cyan>[Converter] 帧 350 (gate2): pic=151, state=3, wait=1, next=351, bodies=0, itrs=1, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[Converter] 帧 150 (counter): pic=285, state=3, wait=2, next=151, bodies=0, itrs=2, wpoints=1, opoint=无, 属性数=11</color>
+<color=cyan>[BMP 解析] 角色=Rock_Lee, 找到 4 个精灵文件定义</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee.bmp, 范围=[0-69], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[70-139], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/gaara_2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\gaara_2.bmp, 范围=[140-209], 尺寸=79x79, 行列=10x7</color>
+<color=cyan>[BMP 文件] Assets/NTSD/Sprite/Character/rock_lee/rock_lee2.bmp -> I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Sprite\Character\rock_lee\rock_lee2.bmp, 范围=[210-289], 尺寸=79x79, 行列=10x8</color>
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

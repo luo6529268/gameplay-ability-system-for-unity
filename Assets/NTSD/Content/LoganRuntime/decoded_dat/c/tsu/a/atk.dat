@@ -1,0 +1,20 @@
+<bmp_begin>
+file(0-0): data\pixel.png w: 1 h: 1 row: 1 col: 1
+weapon_hit_sound: data\020.wav
+weapon_drop_sound: data\020.wav
+weapon_broken_sound: data\020.wav
+<bmp_end>
+
+<frame> 50 shatter
+pic: 999 state: 15 wait: 6 next: 50 dvx: 20 dvy: 550 centerx: 40 centery: 26 sound: data\021.wav
+opoint: kind: 1 x: 115 y: 25 action: 45 oid: 208 facing: 0 opoint_end:
+<frame_end>
+<frame> 700 a1
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\tsu\w\a1.wav
+<frame_end>
+<frame> 701 a2
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\tsu\w\a2.wav
+<frame_end>
+<frame> 702 j3
+pic: 999 state: 3005 wait: 0 next: 1000 centerx: 39 centery: 79 sound: c\tsu\w\j3.wav
+<frame_end>
