@@ -1,0 +1,102 @@
+{
+  "scope": "Indexed330 hash-verified raw frame-header token audit; duplicate frame documents separately listed. No dynamic hit/caller reachability claim. OID221 implicit-selected frames0..5 have no ITR.",
+  "counts": {
+    "declared_low": 893,
+    "implicit_low": 6
+  },
+  "examples": [
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 0,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    },
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 1,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    },
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 2,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    },
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 3,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    },
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 4,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    },
+    {
+      "oid": "221",
+      "type": "3",
+      "path": "c\\dei\\a\\cla3.dat",
+      "frame": 5,
+      "state": 3000,
+      "cover": 0,
+      "selected": 10,
+      "category": "implicit_low"
+    }
+  ],
+  "duplicateFrameDocuments": [],
+  "implicitSelectedEntryHasItr": [
+    {
+      "frame": 0,
+      "hasItr": false,
+      "hasBdy": false
+    },
+    {
+      "frame": 1,
+      "hasItr": false,
+      "hasBdy": false
+    },
+    {
+      "frame": 2,
+      "hasItr": false,
+      "hasBdy": false
+    },
+    {
+      "frame": 3,
+      "hasItr": false,
+      "hasBdy": false
+    },
+    {
+      "frame": 4,
+      "hasItr": false,
+      "hasBdy": false
+    },
+    {
+      "frame": 5,
+      "hasItr": false,
+      "hasBdy": false
+    }
+  ]
+}

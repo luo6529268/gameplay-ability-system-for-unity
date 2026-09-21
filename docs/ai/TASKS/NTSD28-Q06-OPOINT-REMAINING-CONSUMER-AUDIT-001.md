@@ -1,3 +1,5 @@
+> 2026-09-21 READ_ONLY_RETURN：父NATIVE-FRAME-TRANSACTION-INTEGRATION已限定VERIFIED，WAIT_PARENT_FRAME_JOIN解除。post/display亦已验；现恢复R06/R12完整materializer审计。见artifacts/diagnostics/NTSD28-Q06-REMAINING-DEPENDENCY-RETURN-20260921/AUDIT.md；先准确source witness Record，再新增脚本，未实施生产。下文WAIT仅历史。
+
 # 普通OPoint剩余消费者回访
 
 WAIT_PARENT_FRAME_JOIN，属于原NATIVE-FRAME-RUNTIME-READER-MIGRATION生成组，不抢当前C25L关闭出口。深度/lives具体首差已由独立Task处理；不能据此标普通OPoint全部对齐。

@@ -1,0 +1,7 @@
+# Pair-pass reference first difference
+
+2026-09-21 independently reviewed by cpoint_acceptance (read-only). Ordinary landing native binder single caller is correct and preserves motion, selection, counter/latch/snapshots. Four post-fix matrices each186: before0, immediate0, following78. All remaining differences are collisionYReference -10 vs source0. Raw previousXYZ remain source-only; no Unity mapping claimed.
+
+Authority BattleWorld28 collision candidate collection battle_world.cpp4026-4028 unconditionally resets collision_y_reference, platform_source_slot_f4, render_shadow_offset_10c for every active slot before visiting unordered pairs, including one entity/no ITR. Actual Unity NTSDBattleTickSystem invokes CollectCollisionCandidatesAll; runtime CollisionYReference assignment search found lifecycle reset but no corresponding per-pass clear. Physics must still consume the old negative reference before this later candidate pass. Do not clear at fixture setup or before physics.
+
+Next independent Task/Change must establish exact pass entry, all-active-slot/no-pair coverage and op30 refill ordering. Do not mechanically map the other two native fields to Unity Zz/shadow fields. No additional production edits authorized by this note alone; use existing total-goal authorization plus exact pre-change record. Landing parent remains IN_PROGRESS until complete following/replay/SelfCheck/Play evidence. Original RED and post-fix partial RED are retained.

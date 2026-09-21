@@ -311,6 +311,8 @@ namespace NTSD.Simulation
                 try
                 {
                     diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
+                    // Host projection precedes core input on both main and worker tick paths.
+                    world.ProjectFusionFeatureGateToActiveEntities();
                     if (world.Runtime?.Flow != null)
                         world.Runtime.Flow.HumanInputPolledExternally = false;
                     world.PendingSounds.Clear();

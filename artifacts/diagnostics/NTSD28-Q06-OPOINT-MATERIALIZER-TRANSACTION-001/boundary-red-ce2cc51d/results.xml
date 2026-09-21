@@ -1,0 +1,181 @@
+<test-suite type="TestSuite" id="10063" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8013" result="Failed" site="Child" start-time="2026-09-21 10:36:05Z" end-time="2026-09-21 10:36:06Z" duration="0.900888" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="19085" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="8005" result="Failed" site="Child" start-time="2026-09-21 10:36:05Z" end-time="2026-09-21 10:36:06Z" duration="0.834392" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19086" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="8005" result="Failed" site="Child" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.720233" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19094" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7444" result="Failed" site="Child" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.645444" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12428" name="NTSD28Q06OpointMaterializerEditorTests" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="60" result="Failed" site="Child" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.573796" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12488" name="BoundaryImmediateMatchesSource" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.473370" total="12" passed="4" failed="8" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12476" name="OpointBoundary_0_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_0_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1027455384" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.147595" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12477" name="OpointBoundary_0_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_0_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2078943171" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.015650" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12478" name="OpointBoundary_1_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_1_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="543945678" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.015963" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12479" name="OpointBoundary_1_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_1_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="251637544" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.015181" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12480" name="OpointBoundary_2_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_2_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="893642842" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.020254" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12481" name="OpointBoundary_2_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_2_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="521790616" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.016149" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12482" name="OpointBoundary_3_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_3_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2043138720" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.015735" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12483" name="OpointBoundary_3_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_3_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="289653295" result="Failed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.019327" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=1 expected=2
+after missing slot 50
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=1 expected=2", "after missing slot 50" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.VerifyImmediate (System.Int32 index, System.Boolean component, System.String sourcePath, System.String expectedHash, System.String outputPrefix) [0x00223] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:92
+at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.BoundaryImmediateMatchesSource (System.Int32 index, System.Boolean component) [0x00000] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:48
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12484" name="OpointBoundary_4_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_4_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="120577892" result="Passed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.038599" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12485" name="OpointBoundary_4_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_4_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1569528320" result="Passed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.020597" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12486" name="OpointBoundary_5_False" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_5_False" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1353453080" result="Passed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.021416" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12487" name="OpointBoundary_5_True" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointBoundary_5_True" methodname="BoundaryImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1158695222" result="Passed" start-time="2026-09-21 10:36:06Z" end-time="2026-09-21 10:36:06Z" duration="0.019382" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

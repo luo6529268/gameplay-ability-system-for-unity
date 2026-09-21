@@ -1,0 +1,7 @@
+{
+  "cases": 13,
+  "checks": 214,
+  "failures": [],
+  "sha256": "fb3f06bf92ee1fac2ae9354d33548b393cd32ede6fed0333baa6152b5dbf0e31",
+  "scope": "Selected-frame action/descriptor/counter/history and motion XYZ transition, fixed fixture HP and reported armor activation/status/lifecycle flags. No independent full hit side-effect, RNG or following model."
+}

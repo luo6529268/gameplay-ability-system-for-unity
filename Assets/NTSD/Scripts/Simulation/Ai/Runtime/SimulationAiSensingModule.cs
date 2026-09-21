@@ -1645,6 +1645,7 @@ namespace NTSD.Simulation
             rows.Generation[slot] = generation;
             rows.Identity[slot] = runtime.StableId;
             rows.ObjectId[slot] = objectId;
+            rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
             rows.DataObjectType[slot] = dataObjectType;
             rows.X[slot] = runtime.XInt;
             rows.Y[slot] = runtime.YInt;

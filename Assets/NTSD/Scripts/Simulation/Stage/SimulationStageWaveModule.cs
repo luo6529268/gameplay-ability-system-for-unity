@@ -1,6 +1,7 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation.Ecs;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -659,6 +660,7 @@ namespace NTSD.Simulation
             entity.Health.HP = hp;
             entity.Health.HPBound = hp;
             entity.Health.HP3 = hp;
+            BattleNativeDisplayWriter.InitializeBirth(entity.Runtime, hp);
             entity.Health.PP = 500;
             entity.Health.MaxPP = 500;
             entity.Health.PPBound = 500;
@@ -686,6 +688,7 @@ namespace NTSD.Simulation
             entity.Health.HP = hp;
             entity.Health.HPBound = hp;
             entity.Health.HP3 = hp;
+            BattleNativeDisplayWriter.InitializeBirth(entity.Runtime, hp);
         }
 
         private bool IsStageRuntimeAllocationSealed()
@@ -741,6 +744,7 @@ namespace NTSD.Simulation
             entity.Health.HP = hp;
             entity.Health.HPBound = hp;
             entity.Health.HP3 = hp;
+            BattleNativeDisplayWriter.InitializeBirth(entity.Runtime, hp);
             return entity;
         }
 

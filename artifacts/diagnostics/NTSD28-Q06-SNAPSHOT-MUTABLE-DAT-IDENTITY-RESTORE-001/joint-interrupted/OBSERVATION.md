@@ -1,0 +1,7 @@
+# Incomplete joint-run observation
+
+Job84364ef670d3421baa4ca9cc3df6c5af last observed running with completed36. Four failures observed: MutableDatRestore type3 success, late-slot StableId rejection, expected999 rejection, and parent locked-kind local replay, all due to EntityPayloadMismatch from incorrect raw-type equality gate. No final result/count available. Later old Editor62860 absent, MCP6403 refused connections, Temp/Goal18_LastTestResults.xml missing. Do not invent a final XML or count; original earlier payload-red and after-binding-fix XML remain archived.
+
+Raw ownership correction: RuntimeSlotTable Page allocates independent raw runtimes; BattleWorldEntityRuntimeSnapshot validates non-reference-equality; Q05-UNCLAIMED-RAW-RUNTIME-RESTORE-001 explicitly preserves raw independently. Updated helper checks entity types only, named HasConsistentEntityDataType. Test raw case now seeds raw type6 before capture with entity type3 and requires exact independent restoration. This is correction of an invalid test premise, not relaxing formal entity identity rules.
+
+Corrected code not yet compiled/tested. Current Unity status shows no controllable instance; three Unity Open Project processes29364/33236/33824, actual Temp/UnityLockfile read-exclusive probe failed sharing violation HResult-2147024864. Do not start a second Editor or delete lock. Resume existing-project bridge when it becomes available; then focused8 plus original replay and related raw/native snapshot checks. No fullSelfCheck/Play rerun until production stable.

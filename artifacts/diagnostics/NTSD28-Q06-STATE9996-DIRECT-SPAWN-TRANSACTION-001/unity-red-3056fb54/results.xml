@@ -1,0 +1,221 @@
+<test-suite type="TestSuite" id="9979" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7938" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="1.321563" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18917" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7930" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="1.246608" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18918" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7930" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="1.146664" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18926" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7369" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="0.991276" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12496" name="NTSD28Q06State9996DirectSpawnEditorTests" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="0.985030" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12509" name="NativeDirectSpawnImmediateMatchesSource" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" testcasecount="12" result="Failed" site="Child" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="0.885033" total="12" passed="3" failed="9" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12497" name="NativeDirectSpawnImmediateMatchesSource(0)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(0)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="111185455" result="Failed" start-time="2026-09-21 08:44:36Z" end-time="2026-09-21 08:44:37Z" duration="0.149062" asserts="0"><properties /><failure><message><![CDATA[  immediate.slot50.raw.frame.actionLatch=0 expected=2
+immediate.slot50.raw.frame.previousAction=0 expected=2
+immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot50.raw.vitals.currentHp=10 expected=500
+immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot50.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot50.raw.vitals.currentMp=10 expected=500
+immediate.slot50.pending[0]=0.1 expected=0
+immediate.slot50.pending[1]=0.1 expected=0
+immediate.slot50.pending[2]=0.1 expected=0
+immediate.slot50.display[4]=100 expected=500
+immediate.slot50.display[6]=100 expected=500
+immediate.slot51.raw.vitals.currentHp=10 expected=500
+immediate.slot51.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot51.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot51.raw.vitals.currentMp=10 expected=500
+immediate.slot51.pending[0]=0.1 expected=0
+immediate.slot51.pending[1]=0.1 expected=0
+immediate.slot51.pending[2]=0.1 expected=0
+immediate.slot51.display[4]=100 expected=500
+immediate.slot51.display[6]=100 expected=500
+immediate.slot52.raw.frame.actionLatch=0 expected=2
+immediate.slot52.raw.frame.previousAction=0 expected=2
+immediate.slot52.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot52.raw.vitals.currentHp=10 expected=500
+immediate.slot52.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot52.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot52.raw.vitals.currentMp=10 expected=500
+immediate.slot52.pending[0]=0.1 expected=0
+immediate.slot52.pending[1]=0.1 expected=0
+immediate.slot52.pending[2]=0.1 expected=0
+immediate.slot52.display[4]=100 expected=500
+immediate.slot52.display[6]=100 expected=500
+immediate.slot53.raw.frame.actionLatch=0 expected=2
+immediate.slot53.raw.frame.previousAction=0 expected=2
+immediate.slot53.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot53.raw.vitals.currentHp=10 expected=500
+immediate.slot53.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot53.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot53.raw.vitals.currentMp=10 expected=500
+  Expected: <empty>
+  But was:  < "immediate.slot50.raw.frame.actionLatch=0 expected=2", "immediate.slot50.raw.frame.previousAction=0 expected=2", "immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2", "immediate.slot50.raw.vitals.currentHp=10 expected=500", "immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500", "immediate.slot50.raw.vitals.baseMaxHp=10 expected=500", "immediate.slot50.raw.vitals.currentMp=10 expected=500", "immediate.slot50.pending[0]=0.1 expected=0", "immediate.slot50.pending[1]=0.1 expected=0", "immediate.slot50.pending[2]=0.1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=CloneSource, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (clone): pic=0, state=0, wait=41, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=DirectCloneTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (clone): pic=0, state=0, wait=41, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=DirectCloneTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (filler): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Filler, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="12498" name="NativeDirectSpawnImmediateMatchesSource(1)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(1)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="459655742" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.012761" asserts="0"><properties /><failure><message><![CDATA[  immediate.nonFillerCount=1 expected=6
+immediate.activeCount=1 expected=6
+immediate missing slot 50
+immediate missing slot 51
+immediate missing slot 52
+immediate missing slot 53
+immediate missing slot 54
+  Expected: <empty>
+  But was:  < "immediate.nonFillerCount=1 expected=6", "immediate.activeCount=1 expected=6", "immediate missing slot 50", "immediate missing slot 51", "immediate missing slot 52", "immediate missing slot 53", "immediate missing slot 54" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=DirectCloneTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=DirectCloneTarget, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="12499" name="NativeDirectSpawnImmediateMatchesSource(2)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(2)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1434176641" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.019669" asserts="0"><properties /><failure><message><![CDATA[  immediate.slot50.raw.frame.actionLatch=0 expected=2
+immediate.slot50.raw.frame.previousAction=0 expected=2
+immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot50.raw.vitals.currentHp=10 expected=500
+immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot50.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot50.raw.vitals.currentMp=10 expected=500
+immediate.slot50.raw.combat.runtimeArmorHp=0 expected=23
+immediate.slot50.raw.combat.armorRecoveryTimer=-1 expected=17
+immediate.slot50.pending[0]=0.1 expected=0
+immediate.slot50.pending[1]=0.1 expected=0
+immediate.slot50.pending[2]=0.1 expected=0
+immediate.slot50.display[4]=100 expected=500
+immediate.slot50.display[6]=100 expected=500
+immediate.slot51.raw.vitals.currentHp=10 expected=500
+immediate.slot51.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot51.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot51.raw.vitals.currentMp=10 expected=500
+immediate.slot51.raw.combat.runtimeArmorHp=0 expected=23
+immediate.slot51.raw.combat.armorRecoveryTimer=-1 expected=17
+immediate.slot51.pending[0]=0.1 expected=0
+immediate.slot51.pending[1]=0.1 expected=0
+immediate.slot51.pending[2]=0.1 expected=0
+immediate.slot51.display[4]=100 expected=500
+immediate.slot51.display[6]=100 expected=500
+immediate.slot52.raw.frame.actionLatch=0 expected=2
+immediate.slot52.raw.frame.previousAction=0 expected=2
+immediate.slot52.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot52.raw.vitals.currentHp=10 expected=500
+immediate.slot52.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot52.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot52.raw.vitals.currentMp=10 expected=500
+immediate.slot52.raw.combat.runtimeArmorHp=0 expected=23
+immediate.slot52.raw.combat.armorRecoveryTimer=-1 expected=17
+immediate.slot52.pending[0]=0.1 expected=0
+immediate.slot52.pending[1]=0.1 expected=0
+immediate.slot52.pending[2]=0.1 expected=0
+immediate.slot52.display[4]=100 expected=500
+immediate.slot52.display[6]=100 expected=500
+immediate.slot53.raw.frame.actionLatch=0 expected=2
+  Expected: <empty>
+  But was:  < "immediate.slot50.raw.frame.actionLatch=0 expected=2", "immediate.slot50.raw.frame.previousAction=0 expected=2", "immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2", "immediate.slot50.raw.vitals.currentHp=10 expected=500", "immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500", "immediate.slot50.raw.vitals.baseMaxHp=10 expected=500", "immediate.slot50.raw.vitals.currentMp=10 expected=500", "immediate.slot50.raw.combat.runtimeArmorHp=0 expected=23", "immediate.slot50.raw.combat.armorRecoveryTimer=-1 expected=17", "immediate.slot50.pending[0]=0.1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12500" name="NativeDirectSpawnImmediateMatchesSource(3)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(3)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1308646896" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.009937" asserts="0"><properties /><failure><message><![CDATA[  immediate.nonFillerCount=1 expected=6
+immediate.activeCount=1 expected=6
+immediate missing slot 50
+immediate missing slot 51
+immediate missing slot 52
+immediate missing slot 53
+immediate missing slot 54
+  Expected: <empty>
+  But was:  < "immediate.nonFillerCount=1 expected=6", "immediate.activeCount=1 expected=6", "immediate missing slot 50", "immediate missing slot 51", "immediate missing slot 52", "immediate missing slot 53", "immediate missing slot 54" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12501" name="NativeDirectSpawnImmediateMatchesSource(4)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(4)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1416560746" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.009236" asserts="0"><properties /><failure><message><![CDATA[  immediate.slot50.raw.frame.actionLatch=0 expected=3
+immediate.slot50.raw.frame.previousAction=0 expected=3
+immediate.slot50.raw.frame.tickActionSnapshot=0 expected=3
+immediate.slot50.raw.vitals.currentHp=10 expected=500
+immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot50.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot50.raw.vitals.currentMp=10 expected=500
+immediate.slot50.pending[0]=0.1 expected=0
+immediate.slot50.pending[1]=0.1 expected=0
+immediate.slot50.pending[2]=0.1 expected=0
+immediate.slot50.display[4]=100 expected=500
+immediate.slot50.display[6]=100 expected=500
+  Expected: <empty>
+  But was:  < "immediate.slot50.raw.frame.actionLatch=0 expected=3", "immediate.slot50.raw.frame.previousAction=0 expected=3", "immediate.slot50.raw.frame.tickActionSnapshot=0 expected=3", "immediate.slot50.raw.vitals.currentHp=10 expected=500", "immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500", "immediate.slot50.raw.vitals.baseMaxHp=10 expected=500", "immediate.slot50.raw.vitals.currentMp=10 expected=500", "immediate.slot50.pending[0]=0.1 expected=0", "immediate.slot50.pending[1]=0.1 expected=0", "immediate.slot50.pending[2]=0.1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12502" name="NativeDirectSpawnImmediateMatchesSource(5)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(5)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="667362665" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.013522" asserts="0"><properties /><failure><message><![CDATA[  immediate.slot50.raw.frame.actionLatch=0 expected=2
+immediate.slot50.raw.frame.previousAction=0 expected=2
+immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot50.raw.vitals.currentHp=10 expected=500
+immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot50.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot50.raw.vitals.currentMp=10 expected=500
+immediate.slot50.pending[0]=0.1 expected=0
+immediate.slot50.pending[1]=0.1 expected=0
+immediate.slot50.pending[2]=0.1 expected=0
+immediate.slot50.display[4]=100 expected=500
+immediate.slot50.display[6]=100 expected=500
+immediate.slot51.raw.vitals.currentHp=10 expected=500
+immediate.slot51.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot51.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot51.raw.vitals.currentMp=10 expected=500
+immediate.slot51.pending[0]=0.1 expected=0
+immediate.slot51.pending[1]=0.1 expected=0
+immediate.slot51.pending[2]=0.1 expected=0
+immediate.slot51.display[4]=100 expected=500
+immediate.slot51.display[6]=100 expected=500
+immediate.slot52.raw.frame.actionLatch=0 expected=2
+immediate.slot52.raw.frame.previousAction=0 expected=2
+immediate.slot52.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot52.raw.vitals.currentHp=10 expected=500
+immediate.slot52.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot52.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot52.raw.vitals.currentMp=10 expected=500
+immediate.slot52.pending[0]=0.1 expected=0
+immediate.slot52.pending[1]=0.1 expected=0
+immediate.slot52.pending[2]=0.1 expected=0
+immediate.slot52.display[4]=100 expected=500
+immediate.slot52.display[6]=100 expected=500
+immediate.slot53.raw.frame.actionLatch=0 expected=2
+immediate.slot53.raw.frame.previousAction=0 expected=2
+immediate.slot53.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot53.raw.vitals.currentHp=10 expected=500
+immediate.slot53.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot53.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot53.raw.vitals.currentMp=10 expected=500
+  Expected: <empty>
+  But was:  < "immediate.slot50.raw.frame.actionLatch=0 expected=2", "immediate.slot50.raw.frame.previousAction=0 expected=2", "immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2", "immediate.slot50.raw.vitals.currentHp=10 expected=500", "immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500", "immediate.slot50.raw.vitals.baseMaxHp=10 expected=500", "immediate.slot50.raw.vitals.currentMp=10 expected=500", "immediate.slot50.pending[0]=0.1 expected=0", "immediate.slot50.pending[1]=0.1 expected=0", "immediate.slot50.pending[2]=0.1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12503" name="NativeDirectSpawnImmediateMatchesSource(6)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(6)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="2137264934" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.272308" asserts="0"><properties /><failure><message><![CDATA[  immediate.slot50.raw.frame.actionLatch=0 expected=2
+immediate.slot50.raw.frame.previousAction=0 expected=2
+immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2
+immediate.slot50.raw.vitals.currentHp=10 expected=500
+immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot50.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot50.raw.vitals.currentMp=10 expected=500
+immediate.slot50.pending[0]=0.1 expected=0
+immediate.slot50.pending[1]=0.1 expected=0
+immediate.slot50.pending[2]=0.1 expected=0
+immediate.slot50.display[4]=100 expected=500
+immediate.slot50.display[6]=100 expected=500
+immediate.slot51.raw.vitals.currentHp=10 expected=500
+immediate.slot51.raw.vitals.effectiveMaxHp=10 expected=500
+immediate.slot51.raw.vitals.baseMaxHp=10 expected=500
+immediate.slot51.raw.vitals.currentMp=10 expected=500
+immediate.slot51.pending[0]=0.1 expected=0
+immediate.slot51.pending[1]=0.1 expected=0
+immediate.slot51.pending[2]=0.1 expected=0
+immediate.slot51.display[4]=100 expected=500
+immediate.slot51.display[6]=100 expected=500
+immediate.random.synchronized.counter=14 expected=34
+immediate.random.synchronized.index=14 expected=34
+immediate.random.synchronized.totalCalls=14 expected=34
+calls.synchronized array length differs
+  Expected: <empty>
+  But was:  < "immediate.slot50.raw.frame.actionLatch=0 expected=2", "immediate.slot50.raw.frame.previousAction=0 expected=2", "immediate.slot50.raw.frame.tickActionSnapshot=0 expected=2", "immediate.slot50.raw.vitals.currentHp=10 expected=500", "immediate.slot50.raw.vitals.effectiveMaxHp=10 expected=500", "immediate.slot50.raw.vitals.baseMaxHp=10 expected=500", "immediate.slot50.raw.vitals.currentMp=10 expected=500", "immediate.slot50.pending[0]=0.1 expected=0", "immediate.slot50.pending[1]=0.1 expected=0", "immediate.slot50.pending[2]=0.1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12504" name="NativeDirectSpawnImmediateMatchesSource(7)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(7)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1322031134" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.257508" asserts="0"><properties /><failure><message><![CDATA[  immediate.random.synchronized.counter=0 expected=34
+immediate.random.synchronized.index=0 expected=34
+immediate.random.synchronized.lastCallSite=0 expected=4323691
+immediate.random.synchronized.totalCalls=0 expected=34
+calls.synchronized array length differs
+  Expected: <empty>
+  But was:  < "immediate.random.synchronized.counter=0 expected=34", "immediate.random.synchronized.index=0 expected=34", "immediate.random.synchronized.lastCallSite=0 expected=4323691", "immediate.random.synchronized.totalCalls=0 expected=34", "calls.synchronized array length differs" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12505" name="NativeDirectSpawnImmediateMatchesSource(8)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(8)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1226637570" result="Passed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.008417" asserts="0"><properties /></test-case><test-case id="12506" name="NativeDirectSpawnImmediateMatchesSource(9)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(9)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1520404295" result="Failed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.010666" asserts="0"><properties /><failure><message><![CDATA[  immediate.nonFillerCount=6 expected=1
+immediate.activeCount=6 expected=1
+immediate.random.synchronized.counter=34 expected=0
+immediate.random.synchronized.index=34 expected=0
+immediate.random.synchronized.lastCallSite=4323691 expected=0
+immediate.random.synchronized.totalCalls=34 expected=0
+calls.synchronized array length differs
+  Expected: <empty>
+  But was:  < "immediate.nonFillerCount=6 expected=1", "immediate.activeCount=6 expected=1", "immediate.random.synchronized.counter=34 expected=0", "immediate.random.synchronized.index=34 expected=0", "immediate.random.synchronized.lastCallSite=4323691 expected=0", "immediate.random.synchronized.totalCalls=34 expected=0", "calls.synchronized array length differs" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource (System.Int32 index) [0x001e8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State9996DirectSpawnEditorTests.cs:71
+]]></stack-trace></failure></test-case><test-case id="12507" name="NativeDirectSpawnImmediateMatchesSource(10)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(10)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="1929880379" result="Passed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.007025" asserts="0"><properties /></test-case><test-case id="12508" name="NativeDirectSpawnImmediateMatchesSource(11)" fullname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests.NativeDirectSpawnImmediateMatchesSource(11)" methodname="NativeDirectSpawnImmediateMatchesSource" classname="NTSD.Test.NTSD28Q06State9996DirectSpawnEditorTests" runstate="Runnable" seed="244683347" result="Passed" start-time="2026-09-21 08:44:37Z" end-time="2026-09-21 08:44:37Z" duration="0.007932" asserts="0"><properties /><output><![CDATA[<color=cyan>[BMP 解析] 角色=CloneSource, 找到 0 个精灵文件定义</color>
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

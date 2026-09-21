@@ -1,0 +1,19 @@
+{
+  "scope": "Hash-verified formal indexed bound identities; static current definitions only",
+  "entries": [
+    {
+      "oid": "8",
+      "type": "0",
+      "path": "c\\chi\\chi.dat",
+      "declared40": true,
+      "frame40": "dash_weapon_atck\r\npic: 62 state: 15 wait: 1 next: 53 centerx: 39 centery: 79\r\nwpoint: kind: 1 x: -40 y: -4 weaponact: 429 attacking: 0 cover: 1 wpoint_end:\r\nitr: kind: 8 bdefend: 3 dvy: -1 x: 29 y: 85000 w: 25 h: 99 dvx: 540 itr_end:\r\nbdy: kind: 0 x: 22 y: 10 w: 40 h: 52 bdy_end:\r\nbdy: kind: 0 x: 21 y: 8000 w: 43 h: 62 bdy_end:"
+    },
+    {
+      "oid": "213",
+      "type": "3",
+      "path": "c\\saso\\a\\pup.dat",
+      "declared40": false,
+      "frame40": null
+    }
+  ]
+}

@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="51" result="Failed(Child)" total="51" passed="49" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 23:20:38Z" end-time="2026-09-20 23:20:45Z" duration="7.1804102">
+  <test-suite type="TestSuite" id="9673" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7716" result="Failed" site="Child" start-time="2026-09-20 23:20:38Z" end-time="2026-09-20 23:20:45Z" duration="7.180410" total="51" passed="49" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="18305" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7708" result="Failed" site="Child" start-time="2026-09-20 23:20:38Z" end-time="2026-09-20 23:20:45Z" duration="6.927458" total="51" passed="49" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="63476" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="18306" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7708" result="Failed" site="Child" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:45Z" duration="6.760698" total="51" passed="49" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="18314" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7170" result="Failed" site="Child" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:45Z" duration="6.574955" total="51" passed="49" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="18315" name="Editor" fullname="NTSD.Test.Editor" runstate="Runnable" testcasecount="5165" result="Failed" site="Child" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:40Z" duration="0.604161" total="49" passed="47" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestFixture" id="12820" name="NTSD28B5Kind8AtomicProductionIntegrationEditorTests" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" testcasecount="14" result="Failed" site="Child" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:40Z" duration="0.213997" total="14" passed="12" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="ParameterizedMethod" id="12832" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" testcasecount="6" result="Passed" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:40Z" duration="0.086888" total="6" passed="6" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12826" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(-1,10.5d,20.5d,30.5d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(-1,10.5d,20.5d,30.5d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="322188410" result="Passed" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:39Z" duration="0.048607" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12827" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(0,100.25d,20.5d,301.25d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(0,100.25d,20.5d,301.25d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="759109878" result="Passed" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:39Z" duration="0.006096" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12828" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(1,10.5d,200.25d,301.25d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(1,10.5d,200.25d,301.25d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="922061207" result="Passed" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:39Z" duration="0.005615" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12829" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(2,100.25d,200.25d,301.25d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(2,100.25d,200.25d,301.25d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="244954163" result="Passed" start-time="2026-09-20 23:20:39Z" end-time="2026-09-20 23:20:40Z" duration="0.005315" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12830" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(3,100.25d,20.5d,301.25d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(3,100.25d,20.5d,301.25d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="708405905" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005628" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12831" name="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(-2,100.25d,20.5d,301.25d)" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors(-2,100.25d,20.5d,301.25d)" methodname="Actual_DvySelectsPreciseAxesAndNeverWritesIntegerMirrors" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="500561317" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005132" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-case id="12824" name="Actual_RejectedSelectorHasNoMutation" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_RejectedSelectorHasNoMutation" methodname="Actual_RejectedSelectorHasNoMutation" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="1523462112" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005545" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="12825" name="Actual_ZeroHealCaughtactAndDvx999UseIndependentGates" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Actual_ZeroHealCaughtactAndDvx999UseIndependentGates" methodname="Actual_ZeroHealCaughtactAndDvx999UseIndependentGates" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="671382258" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005967" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="12821" name="Candidate_NonCharacterExactSelectorIsAccepted" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Candidate_NonCharacterExactSelectorIsAccepted" methodname="Candidate_NonCharacterExactSelectorIsAccepted" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="775392255" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.007872" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="12823" name="Candidate_Respond4UsesBattleGameModeContext" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Candidate_Respond4UsesBattleGameModeContext" methodname="Candidate_Respond4UsesBattleGameModeContext" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="241107744" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.009220" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="12822" name="Candidate_SelectorAndRelationRejectionsAreApplied" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.Candidate_SelectorAndRelationRejectionsAreApplied" methodname="Candidate_SelectorAndRelationRejectionsAreApplied" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="2137193386" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.011193" asserts="0">
+                <properties />
+              </test-case>
+              <test-case id="12833" name="HitPlan_ProjectsConditionalTransactionWithoutIntegerWrites" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.HitPlan_ProjectsConditionalTransactionWithoutIntegerWrites" methodname="HitPlan_ProjectsConditionalTransactionWithoutIntegerWrites" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="1272819949" result="Failed" label="Error" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.034975" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number.]]></message>
+                  <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.ConvertValues (System.Reflection.Binder binder, System.Object[] args, System.Reflection.ParameterInfo[] pinfo, System.Globalization.CultureInfo culture, System.Reflection.BindingFlags invokeAttr) [0x00016] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00040] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.TryProject (NTSD.Simulation.SimulationWorld world, NTSD.Animation.LF2Objects.LF2Entity attacker, NTSD.Animation.LF2Objects.LF2Entity target, NTSD.Animation.InteractionArea interaction, System.Object& projection) [0x000bd] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs:283 
+  at NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.HitPlan_ProjectsConditionalTransactionWithoutIntegerWrites () [0x0005d] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs:180 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1071a2cb0cb3433aae80a793c277a048>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="12834" name="HitPlan_RejectedSelectorReturnsFalseWithoutProjectionMutation" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.HitPlan_RejectedSelectorReturnsFalseWithoutProjectionMutation" methodname="HitPlan_RejectedSelectorReturnsFalseWithoutProjectionMutation" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="233276107" result="Failed" label="Error" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.037685" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number.]]></message>
+                  <stack-trace><![CDATA[  at System.Reflection.RuntimeMethodInfo.ConvertValues (System.Reflection.Binder binder, System.Object[] args, System.Reflection.ParameterInfo[] pinfo, System.Globalization.CultureInfo culture, System.Reflection.BindingFlags invokeAttr) [0x00016] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x00040] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.Reflection.MethodBase.Invoke (System.Object obj, System.Object[] parameters) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.TryProject (NTSD.Simulation.SimulationWorld world, NTSD.Animation.LF2Objects.LF2Entity attacker, NTSD.Animation.LF2Objects.LF2Entity target, NTSD.Animation.InteractionArea interaction, System.Object& projection) [0x000bd] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs:283 
+  at NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.HitPlan_RejectedSelectorReturnsFalseWithoutProjectionMutation () [0x0002b] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs:207 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1071a2cb0cb3433aae80a793c277a048>:0 ]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="12835" name="SharedRunnerSourceRoutesKind8ThroughSingleWriter" fullname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests.SharedRunnerSourceRoutesKind8ThroughSingleWriter" methodname="SharedRunnerSourceRoutesKind8ThroughSingleWriter" classname="NTSD.Test.Editor.NTSD28B5Kind8AtomicProductionIntegrationEditorTests" runstate="Runnable" seed="1777652122" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.001522" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+            <test-suite type="TestFixture" id="12836" name="NTSD28B5Kind8EligibilityPureCoreEditorTests" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="35" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.049808" total="35" passed="35" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="12845" name="ExactSelector_RejectsDifferentType" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector_RejectsDifferentType" methodname="ExactSelector_RejectsDifferentType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1806627446" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.001351" asserts="0">
+                <properties />
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="12844" name="ExactSelector0Through6_AcceptsMatchingType" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.007205" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12837" name="ExactSelector0Through6_AcceptsMatchingType(0)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(0)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="145268026" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000371" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12838" name="ExactSelector0Through6_AcceptsMatchingType(1)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(1)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1861562717" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000125" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12839" name="ExactSelector0Through6_AcceptsMatchingType(2)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(2)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="906375799" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000089" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12840" name="ExactSelector0Through6_AcceptsMatchingType(3)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(3)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1263514253" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000083" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12841" name="ExactSelector0Through6_AcceptsMatchingType(4)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(4)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="228204926" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000079" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12842" name="ExactSelector0Through6_AcceptsMatchingType(5)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(5)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="936673029" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000080" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12843" name="ExactSelector0Through6_AcceptsMatchingType(6)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.ExactSelector0Through6_AcceptsMatchingType(6)" methodname="ExactSelector0Through6_AcceptsMatchingType" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1506450088" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000084" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="12875" name="InvalidRelationSelector_Rejects" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidRelationSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.004313" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12873" name="InvalidRelationSelector_Rejects(-1)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidRelationSelector_Rejects(-1)" methodname="InvalidRelationSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1389884529" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000207" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12874" name="InvalidRelationSelector_Rejects(5)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidRelationSelector_Rejects(5)" methodname="InvalidRelationSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="945110927" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000092" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="12860" name="InvalidTypeSelector_Rejects" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidTypeSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005084" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12858" name="InvalidTypeSelector_Rejects(-1)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidTypeSelector_Rejects(-1)" methodname="InvalidTypeSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1784399834" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000317" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12859" name="InvalidTypeSelector_Rejects(9)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.InvalidTypeSelector_Rejects(9)" methodname="InvalidTypeSelector_Rejects" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1840900009" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000123" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="12872" name="RelationSelector_UsesNativeGroupOwnerModeOrder" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.009219" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12861" name="RelationSelector_UsesNativeGroupOwnerModeOrder(0,1,2,-1,-1,0,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(0,1,2,-1,-1,0,True)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="112887274" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000399" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12862" name="RelationSelector_UsesNativeGroupOwnerModeOrder(1,5,5,-1,-1,0,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(1,5,5,-1,-1,0,True)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1377283472" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000135" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12863" name="RelationSelector_UsesNativeGroupOwnerModeOrder(1,5,6,-1,-1,0,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(1,5,6,-1,-1,0,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="994782472" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000089" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12864" name="RelationSelector_UsesNativeGroupOwnerModeOrder(2,5,6,-1,-1,0,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(2,5,6,-1,-1,0,True)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="863690257" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000087" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12865" name="RelationSelector_UsesNativeGroupOwnerModeOrder(2,5,5,-1,-1,0,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(2,5,5,-1,-1,0,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="319463329" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000081" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12866" name="RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,7,12,12,0,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,7,12,12,0,True)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="962653001" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000076" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12867" name="RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,7,12,13,0,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,7,12,13,0,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="498835126" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000076" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12868" name="RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,8,12,12,0,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(3,7,8,12,12,0,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1629133678" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000082" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12869" name="RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,6,6,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,6,6,True)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="941879220" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000076" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12870" name="RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,6,2,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,6,2,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1282578977" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000075" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12871" name="RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,7,6,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.RelationSelector_UsesNativeGroupOwnerModeOrder(4,9,9,6,7,6,False)" methodname="RelationSelector_UsesNativeGroupOwnerModeOrder" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1324602005" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000078" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-case id="12876" name="SameZeroGroup_IsStillSameGroup" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.SameZeroGroup_IsStillSameGroup" methodname="SameZeroGroup_IsStillSameGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="464152372" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000180" asserts="0">
+                <properties />
+              </test-case>
+              <test-suite type="ParameterizedMethod" id="12853" name="Selector7_AcceptsOnlyNativeWeaponGroup" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="7" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.007551" total="7" passed="7" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12846" name="Selector7_AcceptsOnlyNativeWeaponGroup(1,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(1,True)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="709731958" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000399" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12847" name="Selector7_AcceptsOnlyNativeWeaponGroup(2,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(2,True)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1391896758" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000132" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12848" name="Selector7_AcceptsOnlyNativeWeaponGroup(4,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(4,True)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1061612753" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000097" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12849" name="Selector7_AcceptsOnlyNativeWeaponGroup(6,True)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(6,True)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="2202" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000087" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12850" name="Selector7_AcceptsOnlyNativeWeaponGroup(0,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(0,False)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1421352650" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000086" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12851" name="Selector7_AcceptsOnlyNativeWeaponGroup(3,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(3,False)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="318576614" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000082" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12852" name="Selector7_AcceptsOnlyNativeWeaponGroup(5,False)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector7_AcceptsOnlyNativeWeaponGroup(5,False)" methodname="Selector7_AcceptsOnlyNativeWeaponGroup" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="251908794" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000075" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-suite type="ParameterizedMethod" id="12857" name="Selector8_IsUnrestricted" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector8_IsUnrestricted" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.005248" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="12854" name="Selector8_IsUnrestricted(0)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector8_IsUnrestricted(0)" methodname="Selector8_IsUnrestricted" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1986697503" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000246" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12855" name="Selector8_IsUnrestricted(3)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector8_IsUnrestricted(3)" methodname="Selector8_IsUnrestricted" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1215523608" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000113" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="12856" name="Selector8_IsUnrestricted(6)" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.Selector8_IsUnrestricted(6)" methodname="Selector8_IsUnrestricted" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="79562107" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000081" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+              <test-case id="12877" name="WarmResolve_AllocatesNoManagedMemory" fullname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests.WarmResolve_AllocatesNoManagedMemory" methodname="WarmResolve_AllocatesNoManagedMemory" classname="NTSD.Test.Editor.NTSD28B5Kind8EligibilityPureCoreEditorTests" runstate="Runnable" seed="1094120141" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:40Z" duration="0.000770" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+          <test-suite type="TestFixture" id="11649" name="NTSD28Q06Kind8NativeRawBindingEditorTests" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:45Z" duration="5.608749" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="ParameterizedMethod" id="11652" name="Kind8AndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:45Z" duration="5.605242" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-case id="11650" name="Kind8AndFollowingTickMatchSource(Authority400)" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource(Authority400)" methodname="Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" seed="451477601" result="Passed" start-time="2026-09-20 23:20:40Z" end-time="2026-09-20 23:20:42Z" duration="2.576258" asserts="0">
+                <properties />
+                <output><![CDATA[<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+]]></output>
+              </test-case>
+              <test-case id="11651" name="Kind8AndFollowingTickMatchSource(MobileExtended)" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource(MobileExtended)" methodname="Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" seed="1820548029" result="Passed" start-time="2026-09-20 23:20:42Z" end-time="2026-09-20 23:20:45Z" duration="3.024731" asserts="0">
+                <properties />
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

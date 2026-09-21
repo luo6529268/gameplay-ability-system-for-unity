@@ -1,6 +1,10 @@
-> 当前IN_PROGRESS / CODE_WRITTEN：递推与slot适配四脚本已写，RED9/10；完整出生依赖NTSD28-Q06-OPOINT-SPAWN-VITALS-TRANSACTION-001必须继续。
+> 2026-09-21 VERIFIED / NATIVE_DISPLAY_PROGRESSION. OPoint、普通/Stage、state9996出生依赖全部闭合；新joint13/13含980通过，当前SelfCheck/相关Play/关闭通过。下一POST-DISPLAY-RESOURCE；下文WAIT及出生未完是历史，不能重新开已闭合职责。
+
+> 2026-09-21当前回访：父任务仍IN_PROGRESS，递推/slot已验；OPoint出生资源已VERIFIED，不再重复实施。现在依次完成ORDINARY-STAGE-DISPLAY-BIRTH-001普通/Stage出生初值，以及state9996 direct clone完整资源语义（source500/500，Unity目前写10且混入OPoint百分比）。后者尚待独立源见证/Task，不允许直接把display同步到错误HP10。两者完成后回父任务联合关闭，再推进post-display；详DISPLAY-BIRTH-RETURN-AUDIT-001。下文早期checkpoint保留历史。
 
 # Q06完整显示值推进owner
+
+2026-09-21补充：ORDINARY-STAGE-DISPLAY-BIRTH-001现已限定VERIFIED（joint21/SelfCheck/真实Play2/关闭通过），普通与Stage出生子条件满足。下一唯一出生依赖是state9996 direct-spawn资源事务；formal源HP/MP500与Unity OPoint后10差异需完整见证。未关闭本父任务，不重做递推、OPoint、weapon piece、融合或普通出生。
 
 READY_FOR_EXACT_PRECHANGE_RECORD。前置DISPLAY-POST-DISPLAY-RESOURCE-AUDIT已完成，其REPORT及SOURCE-WITNESS原函数980 display/2379 post是当前依据，不重复源码大审计，不直接重跑已验HP/MP。
 

@@ -280,10 +280,10 @@ namespace NTSD.Test.Editor
                 Assert.That(
                     child.Runtime.Dir,
                     Is.EqualTo(expectedFacing == 0 ? "right" : "left"));
-                Assert.That(child.Health.HP, Is.EqualTo(10));
-                Assert.That(child.Health.HPBound, Is.EqualTo(10));
-                Assert.That(child.Health.HP3, Is.EqualTo(10));
-                Assert.That(child.Health.PP, Is.EqualTo(10));
+                Assert.That(child.Health.HP, Is.EqualTo(500));
+                Assert.That(child.Health.HPBound, Is.EqualTo(500));
+                Assert.That(child.Health.HP3, Is.EqualTo(500));
+                Assert.That(child.Health.PP, Is.EqualTo(500));
                 Assert.That(child.SpawnerEntityIndex, Is.EqualTo(-1));
                 Assert.That(child.OwnerId, Is.EqualTo(-1));
                 Assert.That(child.OwnerEntityIndex, Is.EqualTo(-1));
@@ -300,7 +300,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void C25b_MissingDefinitionsAndCapacity_ConsumeNoSynchronizedRandom()
+        public void C25b_MissingDefinitionsSkipRandom_FullCapacityConsumesAllTuples()
         {
             SimulationWorld missingWorld = CreateCloneWorld(
                 include217: false,
@@ -335,7 +335,7 @@ namespace NTSD.Test.Editor
                 fullWorld.NativeRandom.CaptureScalarState();
             Assert.That(
                 fullAfter.SynchronizedCalls,
-                Is.EqualTo(fullBefore.SynchronizedCalls));
+                Is.EqualTo(fullBefore.SynchronizedCalls + 34ul));
             Assert.That(fullWorld.ObjectCount, Is.EqualTo(1));
         }
 

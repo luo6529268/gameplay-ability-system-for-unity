@@ -66,6 +66,7 @@ namespace NTSD.DatParser
 
                 switch (loganContent ? prop.Key : CanonicalLegacyFrameKey(prop.Key))
                 {
+                    case "attacking": frameData.NativePlatformAttacking = integer; break;
                     case "pic": frameData.pic = integer; break;
                     case "state": frameData.state = integer; break;
                     case "cover": frameData.cover = integer; break;
@@ -416,7 +417,10 @@ namespace NTSD.DatParser
                     case "h": itr.h = ParseInt(prop.Value); break;
                     case "zwidth": itr.zwidth = ParseInt(prop.Value); break;
                     case "dvx": itr.dvx = ParseInt(prop.Value); break;
-                    case "dvy": itr.dvy = ParseInt(prop.Value); break;
+                    case "dvy":
+                        itr.dvy = ParseInt(prop.Value);
+                        itr.PlatformDvy = LoganNumericDecoder.ParseFiniteFloat32OrZero(prop.Value);
+                        break;
                     case "dvz": itr.dvz = ParseInt(prop.Value); break;
                     case "injury": itr.injury = ParseInt(prop.Value); break;
                     case "fall": itr.fall = ParseInt(prop.Value); break;

@@ -1,5 +1,6 @@
 #include "ntsd28_playable/game_session.h"
 #include "ntsd28_playable/scenario28.h"
+#include "ntsd28/fusion_catalog.h"
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -187,8 +188,78 @@ Bytes28 capture_content_raw(const std::filesystem::path& root) {
     return content_sha256(bytes);
 }
 
-std::string capture_content_json(const Bytes28& raw) {
-    const std::string tag = "NTSD28_LOGAN_DAT_SEMANTICS_V2";
+// Alignment contract: NTSD28-Q06-FUSION-COMPOSITE-CONTENT-IDENTITY-001.
+struct FusionContentInput28 {
+    std::filesystem::path selected_path;
+    Bytes28 input_hash;
+    Bytes28 semantic_hash;
+};
+void content_int32(Bytes28& bytes, int value) {
+    const auto bits = static_cast<std::uint32_t>(value);
+    for (unsigned int shift = 0; shift < 32U; shift += 8U)
+        bytes.push_back(static_cast<unsigned char>(bits >> shift));
+}
+FusionContentInput28 capture_fusion_input(const std::filesystem::path& decoded_root,
+                                        const std::filesystem::path& extracted_root) {
+    FusionContentInput28 result;
+    std::vector<std::filesystem::path> candidates;
+    if (!decoded_root.empty()) candidates.push_back(decoded_root / "data" / "fusion.dat");
+    for (const auto& suffix : {std::filesystem::path("data"), std::filesystem::path("dat/data"),
+                              std::filesystem::path("assets/data"), std::filesystem::path("NTSD2.8/data")})
+        candidates.push_back(extracted_root / suffix / "fusion.dat");
+    for (const auto& candidate : candidates) {
+        std::error_code error;
+        if (std::filesystem::is_regular_file(candidate, error)) { result.selected_path = candidate; break; }
+    }
+    Bytes28 file_bytes;
+    ntsd28::FusionCatalog28 catalog;
+    if (result.selected_path.empty()) catalog = ntsd28::FusionCatalog28::locked_runtime_table_2833();
+    else {
+        file_bytes = content_read_bytes(result.selected_path);
+        catalog = ntsd28::FusionCatalog28::parse_text(std::string(file_bytes.begin(), file_bytes.end()));
+    }
+    if (!catalog.ok()) throw std::runtime_error("selected fusion content failed strict parsing");
+    Bytes28 semantic;
+    content_string(semantic, "NTSD28-FUSION-SEMANTIC-v1");
+    content_int32(semantic, static_cast<int>(catalog.records().size()));
+    for (const auto& r : catalog.records())
+        for (int value : {r.id1,r.id2,r.id3,r.hp,r.mp,r.respond,r.decrease,r.wait,r.state,
+                          r.action,r.frame,r.chp,r.hit_ja,r.cover,r.front_hurt_action,r.back_hurt_action})
+            content_int32(semantic, value);
+    result.semantic_hash = content_sha256(semantic);
+    Bytes28 input;
+    content_string(input, "NTSD28-FUSION-INPUT-v1");
+    content_string(input, result.selected_path.empty() ? "LOCKED_TABLE" : "FILE");
+    content_string(input, content_hex(result.selected_path.empty() ? result.semantic_hash : content_sha256(file_bytes)));
+    result.input_hash = content_sha256(input);
+    return result;
+}
+struct BattleContentInput28 {
+    Bytes28 object_hash;
+    FusionContentInput28 fusion;
+    Bytes28 composite_hash;
+};
+BattleContentInput28 capture_battle_content(const std::filesystem::path& resource_root,
+                                          const std::filesystem::path& complete_vfs_root) {
+    BattleContentInput28 result;
+    result.object_hash = capture_content_raw(resource_root);
+    result.fusion = capture_fusion_input(complete_vfs_root / "decoded_dat", resource_root);
+    const std::string tag = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
+    Bytes28 bytes(tag.begin(), tag.end()); bytes.push_back(0);
+    for (const auto* digest : {&result.object_hash, &result.fusion.input_hash, &result.fusion.semantic_hash})
+        bytes.insert(bytes.end(), digest->begin(), digest->end());
+    result.composite_hash = content_sha256(bytes);
+    return result;
+}
+bool same_battle_content(const BattleContentInput28& left, const BattleContentInput28& right) {
+    return left.object_hash == right.object_hash && left.fusion.input_hash == right.fusion.input_hash &&
+           left.fusion.semantic_hash == right.fusion.semantic_hash &&
+           left.fusion.selected_path == right.fusion.selected_path;
+}
+
+std::string capture_content_json(const BattleContentInput28& content) {
+    const auto& raw = content.composite_hash;
+    const std::string tag = "NTSD28_LOGAN_DAT_SEMANTICS_V3";
     Bytes28 input(tag.begin(), tag.end());
     input.push_back(0);
     input.insert(input.end(), raw.begin(), raw.end());
@@ -199,11 +270,14 @@ std::string capture_content_json(const Bytes28& raw) {
     if (projection == 0) projection = 1;
     std::ostringstream hex_projection;
     hex_projection << std::uppercase << std::hex << std::setw(16) << std::setfill('0') << projection;
-    return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"catalog-object-definitions\","
-        "\"profile\":\"logan-runtime\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
+    return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"catalog-object-fusion-definitions\","
+        "\"profile\":\"logan-runtime\",\"objectDefinitionSha256\":\"" + content_hex(content.object_hash) +
+        "\",\"fusionInputSha256\":\"" + content_hex(content.fusion.input_hash) +
+        "\",\"fusionSemanticSha256\":\"" + content_hex(content.fusion.semantic_hash) +
+        "\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
         "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
         "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
-        "\",\"schemas\":{\"entityRuntime\":15,\"aggregate\":23,\"checksum\":26,"
+        "\",\"schemas\":{\"entityRuntime\":17,\"aggregate\":25,\"checksum\":28,"
         "\"characterShell\":2,\"entityBaseShell\":2}}";
 }
 
@@ -921,7 +995,7 @@ int run(int count, wchar_t** arguments) {
         return 3;
     }
 
-    const auto content_raw = capture_content_raw(options.resource_root);
+    const auto content_raw = capture_battle_content(options.resource_root, options.complete_vfs_root);
     ntsd28_playable::GameSession28 session(
         options.resource_root, options.complete_vfs_root);
     std::string error;
@@ -940,7 +1014,7 @@ int run(int count, wchar_t** arguments) {
         std::cerr << "unable to open capture output\n";
         return 5;
     }
-    if (capture_content_raw(options.resource_root) != content_raw)
+    if (!same_battle_content(capture_battle_content(options.resource_root, options.complete_vfs_root), content_raw))
         throw std::runtime_error("content inputs changed during session initialization");
     write_header(output, options, loaded.scenario, capture_content_json(content_raw));
 
@@ -1028,7 +1102,7 @@ int run(int count, wchar_t** arguments) {
             previous_random = current_world->random().state();
         }
     }
-    if (capture_content_raw(options.resource_root) != content_raw) {
+    if (!same_battle_content(capture_battle_content(options.resource_root, options.complete_vfs_root), content_raw)) {
         output << "INVALID_CONTENT_INPUTS_CHANGED\n";
         throw std::runtime_error("content inputs changed during simulation");
     }

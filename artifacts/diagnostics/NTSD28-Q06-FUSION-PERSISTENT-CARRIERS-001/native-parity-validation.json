@@ -1,0 +1,18 @@
+{
+  "schema": "ntsd28-authority-source-capture-validation-v2",
+  "contentIdentityKey": "logan-runtime|3A7FF5A15521B9766FC35BBF04B8FA9D3F4BDEA5C5D0045A578BA8B523C37CC4|FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147",
+  "source": "native-formal.jsonl",
+  "status": "valid-source-model-capture",
+  "valid": true,
+  "certificateEligible": false,
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scenarioId": "neutral-common-two-entity",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "26288F2B2CAFF5874EC9E26E4201E30C1CEE456F78EC9D148133A47E9DE3E819",
+  "captureBinarySha256": "8F7FB285E850578FB615866C66D49E3D90316CE07EF17F50BA3243CD20825E87",
+  "scenarioDataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "expectedTicks": 3,
+  "validatedTicks": 3,
+  "entitySnapshots": 6,
+  "reason": null
+}

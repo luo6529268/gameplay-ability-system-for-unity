@@ -1187,13 +1187,17 @@ namespace NTSD.Simulation
             IReadOnlyList<ObjectDefinition> definitions = dataManager?.GetAllObjects();
             if (animatorManager != null && definitions != null && definitions.Count > 0)
             {
+                LoganObjectCatalog loganCatalog = animatorManager.PublishedLoganCatalog;
+                if (!ReferenceEquals(loganCatalog?.ContentIdentity, dataManager.PublishedLoganContentIdentity))
+                    throw new InvalidOperationException("Battle object and fusion publications do not share one content identity.");
                 _world.UnsealRuntimeDataCatalog();
                 _world.PrepareRuntimeDataCatalogForBattle(
                     definitions,
                     animatorManager.GetCharacterConfig,
                     animatorManager.CommonVisualCatalog?.IsSparkValid == true
                         ? BattleHitRecordLifecycleCatalog.Available
-                        : BattleHitRecordLifecycleCatalog.Unavailable);
+                        : BattleHitRecordLifecycleCatalog.Unavailable,
+                    loganCatalog);
             }
 
             animatorManager?.GetMaximumBattleCollisionRectCounts(

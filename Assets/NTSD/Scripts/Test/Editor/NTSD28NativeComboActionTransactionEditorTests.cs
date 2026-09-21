@@ -502,11 +502,28 @@ namespace NTSD.Test
             current.hit_ja = 360;
             using CharacterScope alias = CreateScopeWithObjectId(777, current, Frame(360));
             alias.Character.FrameCache.Wrapper.characterData.use_ai = 6;
+            alias.Character.Runtime.NativeAiProfileObjectId = 6;
             alias.Character.Runtime.InputLinkedDefinitionId324 = 99;
             alias.Character.Runtime.InputSpecialGate194 = 1;
             alias.Character.Runtime.NativeInputProxy.ComboState[8] = 1;
             Assert.That(alias.Writer.RouteNativeComboAction(alias.Character).Consumed,
                 Is.False);
+        }
+
+        [TestCase(6, 0, false)]
+        [TestCase(0, 6, true)]
+        public void HitJaUsesPersistedAliasRatherThanReplacementDat(int persistentAlias, int currentDatAlias, bool applied)
+        {
+            LF2FrameData current = Frame(0);
+            current.hit_ja = 300;
+            using CharacterScope scope = CreateScopeWithObjectId(777, current, Frame(300));
+            scope.Character.Health.HP = 200;
+            scope.Character.Runtime.NativeAiProfileObjectId = persistentAlias;
+            scope.Character.FrameCache.Wrapper.characterData.use_ai = currentDatAlias;
+            scope.Character.Runtime.FeatureGate4A8428 = false;
+            scope.Character.Runtime.NativeInputProxy.ComboState[8] = 1;
+            Assert.That(scope.Writer.RouteNativeComboAction(scope.Character).Applied, Is.EqualTo(applied));
+            Assert.That(scope.Character.Frame.N, Is.EqualTo(applied ? 300 : 0));
         }
 
         [Test]

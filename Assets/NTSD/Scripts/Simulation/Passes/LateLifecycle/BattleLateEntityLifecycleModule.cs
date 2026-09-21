@@ -79,6 +79,7 @@ namespace NTSD.Simulation
                     if (obj == null)
                     {
                         AdvanceNativeDisplay(runtimeSlot);
+                        AdvanceNativePostDisplayResources(runtimeSlot);
                         continue;
                     }
 
@@ -110,6 +111,7 @@ namespace NTSD.Simulation
                             detailDiagnostics?.EndPhase(
                                 BattleTickDetailPhase.LateEntityStateSpecial);
                             AdvanceNativeDisplay(runtimeSlot);
+                            AdvanceNativePostDisplayResources(runtimeSlot);
                             continue;
                         }
 
@@ -143,6 +145,7 @@ namespace NTSD.Simulation
                             detailDiagnostics?.EndPhase(
                                 BattleTickDetailPhase.LateEntityRecovery);
                             AdvanceNativeDisplay(runtimeSlot);
+                            AdvanceNativePostDisplayResources(runtimeSlot);
                             continue;
                         }
                     }
@@ -150,6 +153,7 @@ namespace NTSD.Simulation
                         BattleTickDetailPhase.LateEntityRecovery);
 
                     AdvanceNativeDisplay(runtimeSlot);
+                    AdvanceNativePostDisplayResources(runtimeSlot);
 
                     detailDiagnostics?.BeginPhase(
                         BattleTickDetailPhase.LateEntityFrameTick);
@@ -372,6 +376,20 @@ namespace NTSD.Simulation
                 world.FindEntityByRuntimeSlotForNativeDisplay(runtimeSlot)?.Runtime);
         }
 
+        private void AdvanceNativePostDisplayResources(int runtimeSlot)
+        {
+            // Each native subpass re-reads the slot; local pending destruction is not native lifecycle pending.
+            var stage = world.Runtime.Stage;
+            BattleNativePostDisplayResourceWriter.Advance(
+                world.FindEntityByRuntimeSlotForNativeDisplay(runtimeSlot),
+                world.Runtime.NativeHitResourceRules?.ActiveModeHitGroupGate18 ??
+                    NTSD28HitResourceRulesRuntimeState.DefaultActiveModeHitGroupGate18,
+                stage != null,
+                stage?.StageWidthPx ?? 0,
+                stage?.ZMin ?? 0,
+                stage?.ZMax ?? 0);
+        }
+
         private static void RefreshNativeComputerState(
             LF2Entity entity,
             int runtimeSlot)
@@ -385,7 +403,7 @@ namespace NTSD.Simulation
                 return;
             }
 
-            int state = entity.Frame?.D?.state ?? 0;
+            int state = entity.FrameCache?.GetNativeFrameDataById(entity.Runtime.Frame)?.state ?? 0;
             if (state >= 7000 && state <= 7999)
                 entity.Runtime.NativeComputerState1B8 = state - 7000;
         }
@@ -632,7 +650,11 @@ namespace NTSD.Simulation
             LF2Entity spawner,
             bool useNativeSynchronizedRandom)
         {
-            if (spawner?.Frame?.D?.state != 9996 ||
+            LF2FrameData sourceFrame = useNativeSynchronizedRandom
+                ? spawner?.FrameCache?.GetNativeFrameDataById(spawner.Runtime.Frame)
+                : spawner?.Frame?.D;
+            if (sourceFrame?.state != 9996 ||
+                (useNativeSynchronizedRandom && spawner.Runtime.NativeLifecycleResolutionPending) ||
                 spawner.GetCurrentDataObjectTypeForSimulation() !=
                     (int)LF2ObjectType.Character ||
                 spawner.AttackingCounter != 1)
@@ -649,11 +671,14 @@ namespace NTSD.Simulation
             int spawnerSlot = spawner.Runtime?.SlotIndex ?? -1;
             for (int spawnIndex = 0; spawnIndex < 5; spawnIndex++)
             {
-                int freeSlot = world.FindFirstFreeRuntimeSlotForModule(
-                    world.DynamicRuntimeSlotStartForServices,
-                    world.RuntimeSlotCapacity);
-                if (freeSlot < 0)
-                    break;
+                int freeSlot = -1;
+                if (!useNativeSynchronizedRandom)
+                {
+                    freeSlot = world.FindFirstFreeRuntimeSlotForModule(
+                        world.DynamicRuntimeSlotStartForServices, world.RuntimeSlotCapacity);
+                    if (freeSlot < 0)
+                        break;
+                }
 
                 int spawnOid = spawnIndex == 4 ? 218 : 217;
                 if (!CanMaterializeState9996Oid(
@@ -723,13 +748,29 @@ namespace NTSD.Simulation
                     useNativeSynchronizedRandom,
                     0x0041F96Bu,
                     2);
-                if (!HasAuthoredFrame(targetWrapper, spawnFrame))
+                bool admitted = useNativeSynchronizedRandom
+                    ? BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(targetWrapper, spawnFrame)
+                    : HasAuthoredFrame(targetWrapper, spawnFrame);
+                if (!admitted)
                     continue;
+
+                // Native attempts consume the complete tuple before capacity rejection.
+                if (useNativeSynchronizedRandom)
+                {
+                    freeSlot = world.FindFirstFreeRuntimeSlotForModule(
+                        world.DynamicRuntimeSlotStartForServices, world.RuntimeSlotCapacity);
+                    if (freeSlot < 0)
+                        continue;
+                }
 
                 OPointCreateTask task =
                     referencePool.Fetch<OPointCreateTask>();
                 if (task == null)
+                {
+                    if (useNativeSynchronizedRandom)
+                        continue;
                     break;
+                }
 
                 task.opoint = new ObjectPoint
                 {
@@ -742,6 +783,7 @@ namespace NTSD.Simulation
                 task.targetWorld = world;
                 task.team = 0;
                 task.relationTeam = 0;
+                task.nativeState9996CloneSpawn = useNativeSynchronizedRandom;
                 task.dir = "right";
                 task.requiredRuntimeSlot = freeSlot;
                 task.preserveActionZero = true;
@@ -773,6 +815,8 @@ namespace NTSD.Simulation
                 if (spawned == null ||
                     spawned.Runtime?.SlotIndex != freeSlot)
                 {
+                    if (useNativeSynchronizedRandom)
+                        continue;
                     break;
                 }
 
@@ -788,13 +832,6 @@ namespace NTSD.Simulation
                 spawned.OwnerEntityIndex = -1;
                 spawned.KillCount = -1;
                 spawned.AttackExempt = 6;
-                if (useNativeSynchronizedRandom && spawned.Health != null)
-                {
-                    spawned.Health.HP = 10;
-                    spawned.Health.HPBound = 10;
-                    spawned.Health.HP3 = 10;
-                    spawned.Health.PP = 10;
-                }
                 world.ResetCooldownsForRuntimeSlot(freeSlot, spawned);
                 spawned.RefreshRuntimeSnapshot();
             }

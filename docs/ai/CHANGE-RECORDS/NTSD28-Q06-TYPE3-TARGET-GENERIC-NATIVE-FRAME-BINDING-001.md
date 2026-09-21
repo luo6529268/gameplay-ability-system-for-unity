@@ -1,0 +1,46 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-TYPE3-TARGET-GENERIC-NATIVE-FRAME-BINDING-001
+status: VERIFIED
+change-kind: TYPE3_TARGET_NATIVE_RESPONSE_FRAME_BINDING
+code-path: Tools/NTSD28AuthorityTrace/type3_target_generic_native_frame_binding_witness.cpp
+code-path: Tools/NTSD28AuthorityTrace/validate_type3_target_generic_native_frame_binding_witness.py
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+authority: Formal playable battle_world.cpp generic type3 continuation and following matched pair reset.
+evidence: Current source and Unity caller audit; source11 not built yet.
+-->
+
+# NTSD28-Q06-TYPE3-TARGET-GENERIC-NATIVE-FRAME-BINDING-001
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST。
+
+当前authority正式EXE B1E13A…19033/对应playable闭包07CD47…778F，battle_world.cpp resolve_confirmed_unarmored_hit type3 generic分支及reset_native_matched_projectile_pair后继。Unity ApplyNativeType3TargetGenericContinuation唯一旧DirectWriteHeldFramePreserveWaitCounter是准确实际绑定缺口；保留B5已VERIFIED owner/control/speciallatch/clear pending但保留count/仅0fallback/FjUj选择。locked kind transform独立不混改。
+
+第一写域仅Tools/NTSD28AuthorityTrace/type3_target_generic_native_frame_binding_witness.cpp。11代表，slot0/70、OID77/78，attacker默认type0/current20state0带kind0effect0injury5fall1ITR，targettype3/current10state0带BDY/hitFj与hitUj。完整真实geometric candidate/public ordinary unarmored hit/全following，不调用私有helper，不手填after。
+
+主8 FJ类别：selected69implicit、900implicit、900declaredstate0、999declaredstate0、999missing、1000、-1、0→implicit30。另3：type3attacker/current20state0/无link的Uj0→implicit20；post-pair真实代表(attacker type3/current20state3005,target current10state0,Uj900declaredstate3005，attacker latch13声明hitUj70,target latch11声明hitUj71，70/71支持帧state0wait100self)；低位declared77state0控制。普通目的声明wait41next自身。所有before snapshot与history区分，目标pending13/17/19与贡献计数非零可观测，速度1.25/0/-0.5；pair目的900是中间值，捕获actual generic返回动作与最终after，不预设after900。
+
+前state3005skip证据复用上一TYPE3-ATTACKER-POSTHIT源case12，不重复该scope。负link activeparent等旧归属职责保留不扩乘积；本次目的帧绑定输入与copy行为独立。source可达性若被前置拒绝须保留失败并检查构造，禁止绕过。
+
+当前projection独立边界：CanProjectStandardType3DamageWriterEffect generic旧GetFrame目的gate，高位声明也拒绝；ProjectStandardType3DamageWriterEffect responseState旧reader随gate被遮蔽。只改gate会漏高位3005/3006pair，若后续扩投影须两访问一起声明/验证，不能在本单binder task默默宣称已闭。HasFrame40为lockedkind分支，不在本范围。source之后才声明Unityfixture与最小生产位置；先RED，相关旧11与parent边界复用，闭包出口一次SelfCheck/代表replayPlay，不跑全角色乘积。
+
+正式indexed150个type3对象静态非3005帧响应：Fj5865declaredlow/128implicitlow、Uj5809declaredlow/184implicitlow；312缺声明响应中66对应frame有BDY。报告FORMAL330-TYPE3-TARGET-RESPONSES.json；无dynamic玩家可达证明，不能据有BDY断言实战Bug。
+
+保持Unity/GAS/非战斗/Scene/资源/schema与例外，source-onlypreviousXYZ/raw3限制。回滚仅本ID新source与后续声明精确代码，不覆盖其他工作，不做Git回退。Q06未完/Q07未迁移。
+
+source11已写，root审查真实pair条件/当前frame与latch分离；build session34073。预声明独立focused validator：从params与before计算generic selected、pair最终70/71、native descriptor、counter与history保持、directowner/team/control/speciallatch、pendingXYZ清零及贡献count非零保留；不独立模拟整个hit/RNG/following。Unity下一fixture须显式restore/capture本地extra pendingCount=entity.HitCount，不能沿用旧模板默认0造成假差异；不改全局raw schema。
+
+source11构建双跑SHA c4d7afdcea4c897a388c36a882ad5e9b47111357ef39fdf4619799b547d5ebee一致/独立419PASS；全部applied/lifecycletrue，paircase9 generic900→final attacker70target71真实触发，targetcount全部2。准确Unity扩域新单fixture：catalog attacker依params type0/3、target3，factory20/10，source before恢复，local pendingCount观测/恢复=HitCount，完整ApplySpecialAttackDamage后/完整following；主11Authority/DataOriented+smoke5{0,2,4,8,9}Mobile/Legacy。只新增fixture不改production，独立observer逐字段source对照，source-onlypreviousXYZ保持不假造。
+
+Unity RED job9ff0c7ac11e04895a69388cf70ac66e3主11 before0/即时22/后继22，smoke5 before0/即时17/后继21；implicit默认wait/highdescriptor以及case9漏后置pair均复现，贡献count/owner初态匹配。production-red保留。准确生产只改ApplyNativeType3TargetGenericContinuation唯一target.DirectWriteHeldFramePreserveWaitCounter(action)为DirectWriteNativeRawFramePreserveWaitCounter(action)。不改任何其他held caller、字段写入、后置pairreset实现、locked transform或投影gate；pairreset已有native且此前只因generic新descriptor丢失而未触发。
+
+单binder已修，job7aeaa81dae8c4f21bf2f94d7e047eabb 13/13PASS（旧11+新2，1.369秒），主11+smoke5 before/即时/following全0，pair最终70/71及pendingCount保持一致。预声明最终测试扩域同fixture：captured case0低implicit+case9高位postpair两代表，按attackerType选Character/Object真实consumer，Shadow/DataOriented对照源targetaction及bothpending/count/HP；只case0要求writerobservation非零，高位case9既有generic gate不覆盖须明记。随后同World5代表replay/Play10和关闭。生产不改，投影gate/readers仍独立范围。
+
+新增captured入口脚本已写；刷新compile尚未完成时提交job917c3855993346559bb23ff6a430e893实际XML total0，无testcase。工具succeeded不算验证PASS，空运行已存captured-pre-reload-empty；现Editor已完成reload/idle，重新运行准确新方法，不重跑旧矩阵。
+
+有效captured job279b944e3d16493a81ea526c22f415d5实际XML2testcase/2PASS，低implicit及高位postpair两mode actual源字段一致；高位pair不称独立writerprojectionPASS。提交一次完整SelfCheck；最后同fixture预声明5代表Authority replay与Type3TargetPlayProbe两profile/factory各5=10，保持Scenechecksum/borrower及Q05关闭，不再改production。
+
+完整SelfCheck2026-09-21T03:11:12Z PASS归档。仅测试扩展5代表sameWorld replay与Type3TargetPlayProbe10已按预声明写入，当前待刷新/执行；生产没有新增改动，不重复完整SelfCheck/旧矩阵。
+
+
+2026-09-21 限定VERIFIED：单generic native binder；source11/419、Unity11+5零差异、联合13/13、实际captured2/2（highpair projection未覆盖）、SelfCheck03:11:12Z、representative replay5/10tick、Play10及Q05关闭03:14:12Z全部PASS；Scene/hash/checksum/borrower保持与零残留。准确scope/空test运行历史/限制见artifacts/diagnostics/NTSD28-Q06-TYPE3-TARGET-GENERIC-NATIVE-FRAME-BINDING-001/ACCEPTANCE.md。上文旧运行中/未写由本条覆盖。Q06整体未完/Q07未迁移。

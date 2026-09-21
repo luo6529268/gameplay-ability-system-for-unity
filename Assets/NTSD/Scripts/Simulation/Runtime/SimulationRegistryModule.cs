@@ -175,6 +175,21 @@ namespace NTSD.Simulation
             return RuntimeSlots.GetRawRuntime(runtimeSlot);
         }
 
+        internal void ProjectFusionFeatureGateToActiveEntities(bool enabled)
+        {
+            for (int slot = 0; slot < RuntimeSlots.LogicalCapacity; slot++)
+            {
+                LF2Entity entity = RuntimeSlots.GetCurrentOccupant(slot);
+                if (entity?.Runtime == null || entity.Runtime.OidMergeDormant)
+                    continue;
+
+                entity.Runtime.FeatureGate4A8428 = enabled;
+                NTSDEntityRuntime raw = RuntimeSlots.GetRawRuntime(slot);
+                if (raw != null && !ReferenceEquals(raw, entity.Runtime))
+                    raw.FeatureGate4A8428 = enabled;
+            }
+        }
+
         internal void ProjectNativeHitResourceGateToActiveEntities(bool enabled)
         {
             for (int runtimeSlot = 0;

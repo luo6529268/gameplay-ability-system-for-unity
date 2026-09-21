@@ -147,17 +147,17 @@ namespace NTSD.Simulation.Ecs
                 target.RelationTeam = response.TargetGroup;
             if (response.WriteTargetAction)
             {
-                target.DirectWriteRawFramePreserveWaitCounter(
+                target.DirectWriteNativeRawFramePreserveWaitCounter(
                     response.TargetAction);
                 if (response.ResetTargetFrameCounter)
-                    target.Runtime.FrameWaitCounter = 0;
+                    target.AttackingCounter = 0;
             }
             if (response.WriteAttackerAction)
             {
-                attacker.DirectWriteRawFramePreserveWaitCounter(
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(
                     response.AttackerAction);
                 if (response.ResetAttackerFrameCounter)
-                    attacker.Runtime.FrameWaitCounter = 0;
+                    attacker.AttackingCounter = 0;
             }
             if (response.ApplyHold)
             {

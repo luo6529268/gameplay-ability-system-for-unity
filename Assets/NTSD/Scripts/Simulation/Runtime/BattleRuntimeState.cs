@@ -513,6 +513,8 @@ namespace NTSD.Simulation
     {
         private const int BattleStatSlotCount = 3;
 
+        public bool FusionFirstFeatureGate4A8428;
+        public bool FusionSecondFeatureGate4A842C;
         public BattleMatchRuntimeState Match = new BattleMatchRuntimeState();
         public BattleStageRuntimeState Stage = new BattleStageRuntimeState();
         [NonSerialized]
@@ -552,6 +554,8 @@ namespace NTSD.Simulation
 
         public void Reset()
         {
+            FusionFirstFeatureGate4A8428 = false;
+            FusionSecondFeatureGate4A842C = false;
             Match?.Reset();
             Stage?.Reset();
             StageProgression?.Reset();

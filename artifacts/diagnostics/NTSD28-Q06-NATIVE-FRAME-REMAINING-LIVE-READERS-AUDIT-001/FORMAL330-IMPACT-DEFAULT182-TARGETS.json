@@ -1,0 +1,18 @@
+{
+  "scope": "Potential type0 targets only; candidate eligibility and runtime reachability not asserted",
+  "declared": 157,
+  "implicit": 1,
+  "implicitTargets": [
+    {
+      "oid": 899,
+      "path": "c/0/spe.dat"
+    }
+  ],
+  "implicitTargetStaticGeometry": {
+    "oid": 899,
+    "frames": 22,
+    "bdyBlocks": 0,
+    "itrBlocks": 0,
+    "scope": "All parsed frames only; no default geometric body target producer shown. Identity/frame-definition transformations remain unaudited."
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "scope": "complete current content header equality; not full battle equality",
+  "allHeaderPropertiesEqual": true,
+  "independentVectorChecks": {
+    "objectDefinitionSha256": true,
+    "fusionInputSha256": true,
+    "fusionSemanticSha256": true,
+    "rawDefinitionSha256": true,
+    "decodeContract": true,
+    "semanticSha256": true,
+    "catalogFingerprint64": true
+  },
+  "unityJob": "906f2e19a88c4e1d82bbe615868b17e6",
+  "unityTests": 33
+}

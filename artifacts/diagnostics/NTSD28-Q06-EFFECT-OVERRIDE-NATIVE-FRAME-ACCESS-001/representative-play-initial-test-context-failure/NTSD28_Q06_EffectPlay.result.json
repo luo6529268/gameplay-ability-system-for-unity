@@ -1,0 +1,12 @@
+{
+  "status": "FAIL",
+  "errors": [
+    "Authority400/DataOriented/True: System.NullReferenceException: Object reference not set to an instance of an object\r\n  at NUnit.Framework.TestContext.WriteLine (System.String value) [0x00006] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.NTSD28Q06StandardHitFall80PreservationEditorTests.RunCapturedHitPlan (NTSD.Simulation.Ecs.BattleHitExecutionPlanMode mode, System.String sourceFile, System.Boolean renderer) [0x000c5] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06StandardHitFall80PreservationEditorTests.cs:126 \r\n  at NTSD.Test.NTSD28Q06EffectPlayProbe.Poll () [0x00132] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06EffectOverrideNativeFrameAccessEditorTests.cs:429 ",
+    "MobileExtended/Legacy/False: System.NullReferenceException: Object reference not set to an instance of an object\r\n  at NUnit.Framework.TestContext.WriteLine (System.String value) [0x00006] in <10b6135e63434fdba4fc6c109928ab3b>:0 \r\n  at NTSD.Test.NTSD28Q06StandardHitFall80PreservationEditorTests.RunCapturedHitPlan (NTSD.Simulation.Ecs.BattleHitExecutionPlanMode mode, System.String sourceFile, System.Boolean renderer) [0x000c5] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06StandardHitFall80PreservationEditorTests.cs:126 \r\n  at NTSD.Test.NTSD28Q06EffectPlayProbe.Poll () [0x00132] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q06EffectOverrideNativeFrameAccessEditorTests.cs:429 "
+  ],
+  "passedCases": 12,
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Real Scene preserved; Effect6 representatives on Authority/DataOriented/renderer and Mobile/Legacy/logic; standard3 and vertical2 captured candidate cases on Shadow/renderer and DataOriented/logic. Physical-key and image parity not claimed; separate Q05 shutdown result required."
+}

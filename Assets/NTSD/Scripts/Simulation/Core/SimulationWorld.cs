@@ -694,12 +694,14 @@ namespace NTSD.Simulation
         internal void PrepareRuntimeDataCatalogForBattle(
             IReadOnlyList<ObjectDefinition> definitions,
             Func<int, LF2CharacterDataWrapper> configResolver,
-            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog = default)
+            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog = default,
+            LoganObjectCatalog loganCatalog = null)
         {
             runtimeDataCatalog.Prepare(
                 definitions,
                 configResolver,
-                hitRecordLifecycleCatalog);
+                hitRecordLifecycleCatalog,
+                loganCatalog);
             runtimeDataCatalog.Seal();
         }
 
@@ -2342,6 +2344,18 @@ namespace NTSD.Simulation
         internal void InvalidateAiUnifiedRowMembershipForModule() => battleAiUnifiedRowPublisher.InvalidateAfterRowMembershipChange();
 
         internal NTSDEntityRuntime GetRawRuntimeSlotState(int runtimeSlot) => registryModule.GetRawRuntimeSlotState(runtimeSlot);
+
+        internal void ConfigureFusionFeatureGates(bool first, bool second)
+        {
+            Runtime.FusionFirstFeatureGate4A8428 = first;
+            Runtime.FusionSecondFeatureGate4A842C = second;
+            ProjectFusionFeatureGateToActiveEntities();
+        }
+
+        internal void ProjectFusionFeatureGateToActiveEntities()
+        {
+            registryModule.ProjectFusionFeatureGateToActiveEntities(Runtime.FusionFirstFeatureGate4A8428);
+        }
 
         internal void ProjectNativeHitResourceGateToActiveEntities(bool enabled)
         {

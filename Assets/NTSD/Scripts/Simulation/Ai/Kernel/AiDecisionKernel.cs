@@ -994,7 +994,8 @@ namespace NTSD.Simulation
                 return;
 
             int oid = rows.ObjectId[self];
-            bool specialFamily = IsNativeProfileFamily(oid);
+            int alias = rows.NativeAiProfileObjectId[self];
+            bool specialFamily = IsNativeProfileFamily(IsNativeProfileFamily(alias) ? alias : oid);
             int predictedDx =
                 rows.X[target] + 2 * (int)rows.Vx[target] - rows.X[self];
             int absPredictedDx = Abs(predictedDx);
@@ -1027,13 +1028,13 @@ namespace NTSD.Simulation
                 else
                     input.KeyLeft = 1;
 
-                if (oid == 34 && RandAt(ref rng, 0x3Au, 2) == 0)
+                if (MatchesNativeAiProfile(rows, self, 34) && RandAt(ref rng, 0x3Au, 2) == 0)
                     input.KeyDefend = 1;
                 else
                     input.KeyJump = 1;
             }
 
-            if (oid == 1 &&
+            if (MatchesNativeAiProfile(rows, self, 1) &&
                 absPredictedDx > 100 &&
                 absPredictedDx < 300 &&
                 dz < 5 &&
@@ -1075,36 +1076,41 @@ namespace NTSD.Simulation
                     "NTSD 2.8 special-profile evaluation requires a synchronized RNG cursor.");
             }
 
+            if (!IsIncluded(rows, self) ||
+                rows.DataObjectType[self] != 0 || rows.Hp[self] <= 0)
+            {
+                return false;
+            }
             if (RandAt(ref rng, 0x3Cu, aiRand5 + 1) > 0)
                 return false;
-            if (!IsIncluded(rows, self) ||
-                !IsIncluded(rows, target) ||
-                rows.ObjectId[self] != 33 ||
-                rows.Hp[target] <= 0)
+            if (MatchesNativeAiProfile(rows, self, 33) &&
+                IsIncluded(rows, target) && rows.Hp[target] > 0)
             {
-                return false;
+                int rng6C = RandAt(ref rng, 0x6Cu, 5);
+                int targetState = rows.State[target];
+                bool gate = rng6C == 0 || targetState == 16 || targetState == 8;
+                int predictedDx = Abs(
+                    rows.X[target] + (int)rows.Vx[self] - rows.X[self]);
+                int dz = Abs(rows.Z[target] - rows.Z[self]);
+                bool facesTarget =
+                    (rows.Facing[self] == 0 && rows.X[self] < rows.X[target]) ||
+                    (rows.Facing[self] == 1 && rows.X[self] > rows.X[target]);
+                if (gate && predictedDx < 60 && dz < 7 && rows.Pp[self] > 150 && facesTarget)
+                {
+                    input.ComboDua = 3;
+                    return true;
+                }
             }
 
-            int rng6C = RandAt(ref rng, 0x6Cu, 5);
-            int targetState = rows.State[target];
-            bool gate = rng6C == 0 || targetState == 16 || targetState == 8;
-            int predictedDx = Abs(
-                rows.X[target] + (int)rows.Vx[self] - rows.X[self]);
-            int dz = Abs(rows.Z[target] - rows.Z[self]);
-            bool facesTarget =
-                (rows.Facing[self] == 0 && rows.X[self] < rows.X[target]) ||
-                (rows.Facing[self] == 1 && rows.X[self] > rows.X[target]);
-            if (!gate ||
-                predictedDx >= 60 ||
-                dz >= 7 ||
-                rows.Pp[self] <= 150 ||
-                !facesTarget)
-            {
-                return false;
-            }
+            // Alignment contract: NTSD28-Q06-NATIVE-AI-PERSISTED-ALIAS-001.
+            // Unsupported aliases stop this decision after the RNG gate; sampling still follows.
+            return rows.NativeAiProfileObjectId[self] != 0;
+        }
 
-            input.ComboDua = 3;
-            return true;
+        private static bool MatchesNativeAiProfile(AiSensingSnapshot rows, int self, int value)
+        {
+            int alias = rows.NativeAiProfileObjectId[self];
+            return alias >= 0 && (alias == value || rows.ObjectId[self] == value);
         }
 
         public static void ApplyInputEdges(ref AiDecisionInputState input)

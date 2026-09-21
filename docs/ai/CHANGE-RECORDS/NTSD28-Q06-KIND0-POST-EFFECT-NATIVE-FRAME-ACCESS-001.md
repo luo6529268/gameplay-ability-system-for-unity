@@ -1,0 +1,44 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-KIND0-POST-EFFECT-NATIVE-FRAME-ACCESS-001
+status: VERIFIED
+change-kind: NATIVE_KIND0_POST_EFFECT_FRAME_ACCESS
+code-path: Tools/NTSD28AuthorityTrace/kind0_post_effect_native_frame_access_witness.cpp
+code-path: Tools/NTSD28AuthorityTrace/validate_kind0_post_effect_native_frame_access_witness.py
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind0PostEffectNativeFrameAccessEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+authority: Formal playable battle_world.cpp apply_native_kind0_post_effect_action and ordinary unarmored standard hit caller.
+evidence: Prior read-only post-effect access audit; source witnesses required before production changes.
+-->
+
+# NTSD28-Q06-KIND0-POST-EFFECT-NATIVE-FRAME-ACCESS-001
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST。
+
+正式authority: B1E13A…19033 EXE与playable闭包07CD47…778F，battle_world.cpp apply_native_kind0_post_effect_action及resolve_confirmed_unarmored_hit完整调用。Unity ResolveNativeKind0PostEffectAction previous旧getter与ApplyNativeKind0PostEffectAction旧raw binder；HitPlan共用resolver。
+
+保留已VERIFIED B5 KIND0-DIRECT-POST-EFFECT职责：effect表/previous不是current或snapshot/counter0/最终pendingX朝向/override后执行/kind0type0范围。只补高位previous和implicit200/203 descriptor访问，不改数值规则、框架、Scene、资源、schema或非战斗。
+
+第一准确写域 Tools/NTSD28AuthorityTrace/kind0_post_effect_native_frame_access_witness.cpp。复用existing effect runner相同capture格式、真实geometric candidate及resolve_ordinary_unarmored_standard_hit和following driver，6代表：previous900state13/effect3抑制；900state18/effect20抑制；900state0/effect3允许；低previous12+implicit200/effect3；低previous12+implicit203/effect20；显式203/effect20控制。声明reaction180/186/220支持避免混入无关binder。完整before/after/following、descriptor/history/counter/pending/RNG/calls，defaultseed42；不直接调用匿名helper，不手填after，不改权威源码。
+
+source构建/双跑/独立focused模型后再准确声明Unity单fixture与最小生产两访问点，先观察RED。相关旧16回归复用且必要时一并运行，不全B5/角色乘积。闭包出口一次SelfCheck与必要代表Play/replay；如其他事务首差另拆，不修改expected掩盖。
+
+回滚仅本ID新脚本及后续明确两访问点，不覆盖已有工作；不执行Git回退。Q06未完/Q07未迁移。正式内容动态可达性尚未证明，不把诊断差异称玩家Bug。
+
+源CPP6例已写，root已核对输入/真实入口，build session53547执行中。新独立focused Python validator预声明：只验证6例effect/previous-state选择、descriptor、frame-counter/latch/previous/snapshot及固定injury5 HP；完整hit其它副作用/RNG/following不由此独立模型证明。正式330 indexed rawtoken逐DAT SHA校验：kind0 effect20=579/2=320/21=43/3=2，type0高位state13/18为0；缺200为OID65/44/899，缺203为899。仅静态域，不证明动态命中可达；报告FORMAL330-KIND0-POST-EFFECT-DOMAIN.json。
+
+初次source build成功但run在case1候选断言退出91，partial已保留source/initial-candidate-failure。正式candidate_passes_native_direct_effect_filter与consumer在effect20 prevstate18/19前置拒绝，因此原case1后置抑制预期不可达。准确纠正：6例中case1为真实earlygate控制，记录candidateCount0/directEffectRejections1/hitAttemptedfalse，不调用不存在candidate index，不伪造result；after真实world不执行hit，following照常。其余5例保持完整hit；validator针对拒绝case检查before/after一致并不冒充后置18抑制覆盖。未来若要该后置分支需找到真实多事务previous改变序列，不在本包手改快照。
+
+预声明Unity单fixture（源最终6行验证后运行）：复用前effect fixture capture/restore/catalog factory，主Authority400/DataOriented全6，Mobile/Legacy smoke3。case1必须从正式query生成0candidate并跳过writer，其他5例完整标准伤害；before/即时/following分别对照source。明确只诊断原始source覆盖字段，previousXYZ source-only不假造。新Play/replay稍后精确声明；当前不改生产。
+
+source case1 earlygate已修，第二build session24689中；validator已对拒绝case检查hitAttempted/candidateCount/directEffectRejections及before=after。新Unity单fixture主6+smoke3已写且刷新编译中，尚未运行；case1真实query拒绝检查、其余原完整writer+following，生产保持未改。
+
+source6双跑SHAc01031a3eca684e4833146d4bb511c4110d18c5d7439cb64b6e943ff3c2bcae4、独立124检查PASS。Unity RED job164176a131e24bdabe33e98eb0a305fd：主6 before0/即时10/后继12，smoke3 before0/即时8/后继10；case1前置拒绝正确。production-red已归档。准确生产扩域：只ResolveNativeKind0PostEffectAction previous读取改FrameCache?.GetNativeFrameDataById，ApplyNativeKind0PostEffectAction单raw binder改DirectWriteNativeRawFramePreserveWaitCounter，保留counter/facing/order/gate。case0另有Fall20 vs80/pending差异，已定位ApplyStandardFall约2460/2462仍旧reader，属独立共享reaction职责，不能混入本包；先验证两访问点后单独Task/Change处理依赖，不删案例。
+
+两production访问已写，复测job440cbbd2bef64c5e9f7f49ce15b76b7e共17：旧15PASS/新两矩阵FAIL（不是旧16，本次实际为15）；before0，主6即时5/后继7、smoke3同5/7，全剩case0普通反应。其余case1拒绝及2..5binder全部零差异。证据after-post-effect-access。独立依赖STANDARD-REACTION-HISTORY-NATIVE-READERS-001已PLANNED，下一source快照12/control两例（复用existing previous13），不再重复父source6；parent仍IN_PROGRESS，不提前运行完整SelfCheck/Play。
+
+生产仅previous两reader已修（snapshot回退未动），联合job07f95e07fec3418a95ea3adcd75498fa 25/25PASS/1.663秒；父6+smoke3、snapshot2 before/即时/following全0，captured2两mode及旧15/既有fall5通过。当前一次SelfCheck运行，尚待代表replay/Play。预声明同Kind0 fixture测试扩域：Authority同World4代表（父0/1/4+snapshot0）snapshot restore后完整hit或early拒绝+两tick，另新Kind0PostEffectPlayProbe复用已有请求/Scene checksum/borrower保护模板，在一次真实Play进行父3+snapshot2两profile两factory合计10例，然后请求现Q05有序关闭。只测试代码，不改生产/Scene/资源；日志避免Play调用TestContext。
+
+完整SelfCheck 2026-09-21T02:24:27.349008Z PASS已存joint-pass。仅测试扩展已写：Kind0AndHistoryRepresentativesSurviveLocalSnapshotReplay4代表8重放tick与Kind0PostEffectPlayProbe合并10例/既有Q05关闭请求，生产不再变更；当前刷新编译，replay/Play尚未执行。不重复完整SelfCheck/已过矩阵。
+
+
+2026-09-21 限定VERIFIED：联合25/25/SelfCheck02:24:27Z/representative replay4场景8tick/真实Play10及关闭02:27:23Z全部PASS；Scenechecksum/borrower保持、零残留、dirtyfalse/root14/hash不变。准确生产范围及限制见artifacts/diagnostics/NTSD28-Q06-KIND0-POST-EFFECT-NATIVE-FRAME-ACCESS-001/ACCEPTANCE.md。上文PLANNED/未写/四reader计划是历史检查点；最终reaction只两previous reader，snapshotfallback未改。Q06整体未完/Q07未迁移。

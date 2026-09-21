@@ -833,6 +833,7 @@ namespace NTSD.Animation.LF2Objects
             int action = task.opoint.action;
             LF2CharacterDataWrapper wrapper = ResolveRuntimeCharacterConfig(ObjectId);
             FrameCache.Load(wrapper);
+            InitializeNativeDefinitionIdentityForSpawn();
             if (action == 0 && !task.preserveActionZero && !FrameCache.HasFrame(0))
                 action = 999;
             Frame.D = FrameCache.GetFrameDataById(action);

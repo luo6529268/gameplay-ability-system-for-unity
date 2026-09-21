@@ -30,6 +30,7 @@ namespace NTSD.Animation
         public string PublishedVisualContentKey { get; private set; }
         private LoganVisualContentCandidate publishedLoganCandidate;
         public LoganContentIdentity PublishedLoganContentIdentity => publishedLoganCandidate?.ContentIdentity;
+        internal LoganObjectCatalog PublishedLoganCatalog => publishedLoganCandidate?.Catalog;
         private int configuredContentGeneration;
         private bool configuredPrewarmRunning;
         private string configuredPrewarmRoot;

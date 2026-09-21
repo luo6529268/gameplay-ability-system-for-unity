@@ -166,6 +166,13 @@ namespace NTSD.Simulation
                     continue;
 
                 LF2Entity entity = view.Entity;
+                BattleRuntimeSlotSnapshot savedIdentity = snapshot.RuntimeSlots.GetSlot(runtimeSlot);
+                if (savedIdentity.CurrentDataObjectId != LF2Entity.ResolveCurrentDataObjectId(entity))
+                {
+                    // Alignment contract: NTSD28-Q06-SNAPSHOT-MUTABLE-DAT-IDENTITY-RESTORE-001.
+                    // All slots were validated before mutation; bind the saved DAT before resolving frames.
+                    entity.FrameCache.Load(RuntimeDataCatalog.GetCharacterConfig(savedIdentity.CurrentDataObjectId));
+                }
                 BattleEntityBaseShellSnapshot baseState =
                     snapshot.EntityBaseShell.GetState(runtimeSlot);
                 if (!TryResolveSnapshotHandle(
@@ -369,12 +376,18 @@ namespace NTSD.Simulation
                         expected.EntityKind !=
                             BattleWorldRuntimeSlotSnapshotBuffer.ResolveEntityKind(entity) ||
                         expected.StableId != entity.Runtime.StableId ||
-                        expected.CurrentDataObjectId !=
-                            LF2Entity.ResolveCurrentDataObjectId(entity) ||
                         expected.CurrentDataObjectType !=
-                            entity.GetCurrentDataObjectTypeForSimulation())
+                            entity.GetCurrentDataObjectTypeForSimulation() ||
+                        (expected.CurrentDataObjectId != LF2Entity.ResolveCurrentDataObjectId(entity) &&
+                            !CanRestoreLocalDataDefinition(expected, entity)))
                     {
                         failure = BattleStateSnapshotRestoreFailure.EntityIdentityMismatch;
+                        return false;
+                    }
+                    if (expected.CurrentDataObjectId != LF2Entity.ResolveCurrentDataObjectId(entity) &&
+                        !snapshot.EntityRuntime.HasConsistentEntityDataType(runtimeSlot, expected.CurrentDataObjectType))
+                    {
+                        failure = BattleStateSnapshotRestoreFailure.EntityPayloadMismatch;
                         return false;
                     }
                 }
@@ -766,6 +779,8 @@ namespace NTSD.Simulation
                 new NTSD28StandardHitRestRuntimeState();
             Runtime.NativeStandardHitRest.RestoreForSnapshot(
                 core.StandardHitRest.TimingReduction4A9FF4);
+            Runtime.FusionFirstFeatureGate4A8428 = core.FusionFirstFeatureGate4A8428;
+            Runtime.FusionSecondFeatureGate4A842C = core.FusionSecondFeatureGate4A842C;
             world.SetOneTuInputForBattle(core.OneTuInput);
 
             Rng.RestoreState(core.RngState, core.RngCallCount);
@@ -821,6 +836,16 @@ namespace NTSD.Simulation
                        state.CurrentDataObjectId) != null;
         }
 
+        private bool CanRestoreLocalDataDefinition(
+            in BattleRuntimeSlotSnapshot state,
+            LF2Entity entity)
+        {
+            LF2CharacterDataWrapper config = RuntimeDataCatalog.GetCharacterConfig(state.CurrentDataObjectId);
+            return entity.FrameCache != null &&
+                   CanMaterializeSnapshotShell(state) &&
+                   config != null && config.characterId == state.CurrentDataObjectId;
+        }
+
         private bool HasSnapshotFrameData(
             in BattleRuntimeSlotSnapshot state,
             LF2Entity localEntity,
@@ -828,7 +853,8 @@ namespace NTSD.Simulation
         {
             if (frameId < 0)
                 return true;
-            if (localEntity != null)
+            if (localEntity != null &&
+                state.CurrentDataObjectId == LF2Entity.ResolveCurrentDataObjectId(localEntity))
                 return localEntity.FrameCache?.GetNativeFrameDataById(frameId) != null;
 
             LF2CharacterData data = RuntimeDataCatalog.GetCharacterData(

@@ -1589,7 +1589,7 @@ namespace NTSD.Simulation.Ecs
             NTSD28NativeComboRouteDecision decision)
         {
             NTSDEntityRuntime runtime = character.Runtime;
-            int useAi = character.FrameCache?.Wrapper?.characterData?.use_ai ?? 0;
+            int useAi = runtime.NativeAiProfileObjectId;
             bool specialFamily = character.ObjectId == 6 || useAi == 6;
             if (specialFamily &&
                 decision.RequestedAction == 300 &&

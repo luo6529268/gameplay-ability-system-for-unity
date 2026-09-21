@@ -1,0 +1,7 @@
+FAIL
+System.InvalidOperationException: BATTLE-AUDIT7-I2: FractionalCharacter native birth must initialize current/queued lives and queued HP to 1/0/0
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33494 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAudit7LateOpointPrecisionCase (System.String label, System.Int32 oid, NTSD.Animation.LF2Objects.LF2ObjectType expectedType, System.Double parentX, System.Double parentY, System.Double parentZ, System.String direction, System.Int32 tick) [0x001e1] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:20818 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckAudit7LateOpointPrecisionContracts () [0x0016b] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:20741 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

@@ -163,15 +163,8 @@ namespace NTSD.Simulation
             if (!hasList && !hasSingle)
                 return;
 
-            BattleObjectPointValue firstOpoint = hasList
-                ? frame.opoints[0]
-                : frame.opoint.Value;
-            if (firstOpoint.Kind <= 0 ||
-                firstOpoint.Oid <= 0 ||
-                spawner.AttackingCounter != 0)
-            {
+            if (spawner.AttackingCounter != 0)
                 return;
-            }
             if (spawner.FrameDelay != 0 &&
                 spawner.GetCurrentDataObjectTypeForSimulation() ==
                     (int)LF2ObjectType.Character)
@@ -184,15 +177,15 @@ namespace NTSD.Simulation
                 for (int index = 0; index < frame.opoints.Count; index++)
                 {
                     ClearSpawnedBuffer();
-                    ProcessOneLateOpoint(spawner, frame, frame.opoints[index]);
-                    ApplyMultiSpawnExemptAndVrest();
+                    bool continueFrame = ProcessOneLateOpoint(spawner, frame, frame.opoints[index]);
+                    if (!continueFrame)
+                        break;
                 }
             }
             else
             {
                 ClearSpawnedBuffer();
                 ProcessOneLateOpoint(spawner, frame, frame.opoint.Value);
-                ApplyMultiSpawnExemptAndVrest();
             }
 
             ClearSpawnedBuffer();
@@ -244,13 +237,19 @@ namespace NTSD.Simulation
             }
         }
 
-        private void ProcessOneLateOpoint(
+        private bool ProcessOneLateOpoint(
             LF2Entity spawner,
             LF2FrameData frame,
             BattleObjectPointValue opoint)
         {
-            if (opoint.Kind <= 0 || opoint.Oid <= 0)
-                return;
+            // Alignment contract: NTSD28-Q06-OPOINT-MATERIALIZER-TRANSACTION-001.
+            if ((opoint.Kind != 1 && opoint.Kind != 2) || opoint.Oid <= 0)
+                return true;
+            if (world.RuntimeDataCatalog.GetObjectDefinition(opoint.Oid) == null)
+                return false;
+            if (!BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(
+                world.RuntimeDataCatalog.GetCharacterConfig(opoint.Oid), opoint.Action))
+                return true;
 
             int spawnCount = 1;
             int facingMode = opoint.Facing;
@@ -265,12 +264,12 @@ namespace NTSD.Simulation
                 int requiredRuntimeSlot =
                     world.FindFirstFreeFrameLogicRuntimeSlot();
                 if (requiredRuntimeSlot < 0)
-                    continue;
+                    return false;
 
                 OPointCreateTask task =
                     world.LogicReferencePool?.Fetch<OPointCreateTask>();
                 if (task == null)
-                    break;
+                    return false;
 
                 ObjectPoint spawnOpoint =
                     BattleObjectPointValueAdapter.ToLegacyTask(opoint);
@@ -294,34 +293,17 @@ namespace NTSD.Simulation
                     BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
                 world.LogicReferencePool.Recycle(task);
                 if (spawned == null)
-                    continue;
+                    return false;
 
                 if (opoint.Kind != 2)
                     spawned.Runtime.HolderStableId = 0;
 
-                if (spawnCount > 1)
-                {
-                    float spread =
-                        spawnIndex * 10f / (spawnCount - 1) - 5f;
-                    spawned.PS.vz += spread;
-                    float absoluteSpread = Math.Abs(spread);
-                    if (spawned.PS.vx > 0f)
-                        spawned.PS.vx -= absoluteSpread;
-                    else if (spawned.PS.vx < 0f)
-                        spawned.PS.vx += absoluteSpread;
-                    else
-                        spawned.PS.vx += spread;
-                }
-
-                if (spawner.GetCurrentDataObjectTypeForSimulation() == 3 &&
-                    frame.state == 3003)
-                {
-                    ApplyState3003LinkedVrest(spawner, spawned);
-                }
+                BattleNativeOpointBirthWriter.ApplySpread(spawned, spawnIndex, spawnCount);
 
                 spawned.AttackExempt = 0;
                 AddSpawned(spawned);
             }
+            return true;
         }
 
         private LF2Entity ProcessCreateObject(

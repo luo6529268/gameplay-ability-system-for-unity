@@ -1,0 +1,15 @@
+# Birth and input stage result
+
+IN_PROGRESS / BIRTH_INPUT_FOCUSED_PASS_GLOBAL_PROJECTION_PENDING. Same persistent carrier package,21 exact declared script paths after9-path amendment. Full fusion behavior not closed.
+
+Implemented helper LF2Entity.InitializeNativeDefinitionIdentityForSpawn: only alias/drop from native BMP with default0; manual-wrapper alias fallback when metadata absent. Character ModuleBind separate optional initializeNativeDefinitionIdentity, snapshot caller passesfalse independently of armorflag. Weapon/special/other birth frame initialization calls helper. Common FrameCache observer and same-shell DAT reload unchanged. Input RouteNativeHitJa uses persisted alias, preserving ObjectId6 alternative and all prior action gates.
+
+Evidence:
+- Actual four class birth paths0/1/3/5 initially RED4 alias-1 vs31, joba0821e34c77f407da281f32278693696; birth-red-results.xml.
+- Final joint18/18 job13e9bdc8a1264cc385db1123cfc43b6d,7.0622695s: newbirth7 (four class paths/poolreuse/rebind preservation, ModuleBindbirth vs explicitrestorefalse2, missing-native/manualwrapper1); persistedalias-vs-currentDAT input2; oldspecialfamily1; mutableDATrestore/atomicity8. birth-focused-results.xml.
+- Additional directly affected snapshot shell/freed entity replay2/2 job1a0df8ce8660436a8454dde9e7b2441a,0.5140155s; birth-snapshot-shell-results.xml. Existing whole snapshots/restores checked; no claim this exhausts all runtime profiles/epoch cases.
+- Independent finalbirth diff review found no material issue. Reviewer confirmed noncharacter snapshot Init values are subsequently replaced by canonical copy, same-shell restore does not invokehelper, and independent character flag preserves snapshot binding semantics.
+- Current Unity compiled after production/test changes and successfully ran tests. Scope includes shared code used by renderer births; four representative test cases use actual logic factory. Stage/roster reuse ModuleBind by source/caller proof, not newly measured fullstage scene or physical input proof.
+- Earlier storage14/14, generic entity/raw snapshot and schema traces, Parity84/19, native header evidence reused; these underlying storage/schema files unchanged in birthstage. No repeated fullSelfCheck/Play sweep. No Scene/resource/nonbattle/Server writes, no computer-use/commit/push.
+
+Next: sameTask explicit World globalfeature configuration and correct first-global→entity projection (init/acceptedtoggle/Host preclassification/poststory predriver). Must declare exact additional code paths before edits. Unity raw scenario currently lacks source same-named fields; add config projection without menu or per-getter fallback. Read shared actual Host/worker tick entry before deciding placement so Manual/Local/worker paths agree; do not just overwrite arbitrary entity fixtures. Then complete record-driven fusion transaction/source4 and targeted runtime acceptance. Display190 assignment still pending fusion implementation; NativeAI alias consumer audit still open. Q06 incomplete/Q07 unmigrated/goalACTIVE.

@@ -18,3 +18,5 @@ PLANNED / SOURCE_WITNESS_FIRST.
 源场景使用throwvx0隔离选择事务，保留其他flags/selector组合；不重做已验CpointThrow392、kind2validation212或已关闭字段退休。捕获same initial relation并保留失败/invalid行，不用Unity定义源规则。当前Unity生产不改；具体测试/生产符号在源证据后另准确追加Record。
 
 验收：源build+双跑+独立检查、Unity两profile完整初态匹配和立即/后继tick、局部replay及真实Play/关闭/新SelfCheck；只达到各层才推进状态。风险：选择顺序、旧输入映射、0取消语义、selected descriptor/vaction与cached initial CPoint后续消费。保持Unity/GAS/33ms/有序关闭和非战斗/资源/Scene边界。回滚仅人工撤销同ID准确diff，保留用户和其它Task修改及失败证据，不自动删除。
+
+恢复确认：源诊断370双跑一致SHA9ed8699d6af26c12f1c6e6c3776955a0aabc58c90e41048c7999efcbbe63adde；根独立selector/catcher action-facing-counter-latch-snapshot2590检查0失败，仅部分oracle，非全事务/Unity验证。formal330 primarykind1=1709且八selector非零值0（原始405字段另查同为0）。本项保持IN_PROGRESS / SOURCE_CAPTURE_ONLY，生产优先级让位kind8；不标整个selector对齐，也不从静态零域取消总目标要求。

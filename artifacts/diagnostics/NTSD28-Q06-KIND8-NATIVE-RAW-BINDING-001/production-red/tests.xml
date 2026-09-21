@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-20 23:18:19Z" end-time="2026-09-20 23:18:26Z" duration="6.4065544">
+  <test-suite type="TestSuite" id="9673" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7716" result="Failed" site="Child" start-time="2026-09-20 23:18:19Z" end-time="2026-09-20 23:18:26Z" duration="6.406554" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="18305" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7708" result="Failed" site="Child" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:26Z" duration="6.223907" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="51800" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="18306" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7708" result="Failed" site="Child" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:26Z" duration="6.061357" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="18314" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7170" result="Failed" site="Child" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:26Z" duration="5.896701" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11649" name="NTSD28Q06Kind8NativeRawBindingEditorTests" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:26Z" duration="5.672673" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="ParameterizedMethod" id="11652" name="Kind8AndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:26Z" duration="5.667587" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="11650" name="Kind8AndFollowingTickMatchSource(Authority400)" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource(Authority400)" methodname="Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" seed="1503882905" result="Failed" start-time="2026-09-20 23:18:20Z" end-time="2026-09-20 23:18:23Z" duration="2.538814" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 kind8 entities[0].wait=1 expected=0
+case 1 kind8 entities[0].wait=1 expected=0
+case 2 kind8 entities[0].wait=1 expected=0
+case 3 kind8 entities[0].wait=1 expected=0
+case 4 kind8 entities[0].wait=1 expected=0
+case 5 kind8 entities[0].wait=1 expected=0
+case 12 kind8 entities[0].wait=1 expected=0
+case 13 kind8 entities[0].wait=1 expected=0
+case 14 kind8 entities[0].wait=1 expected=0
+case 15 kind8 entities[0].wait=1 expected=0
+case 16 kind8 entities[0].wait=1 expected=0
+case 17 kind8 entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 kind8 entities[0].wait=1 expected=0", "case 1 kind8 entities[0].wait=1 expected=0", "case 2 kind8 entities[0].wait=1 expected=0", "case 3 kind8 entities[0].wait=1 expected=0", "case 4 kind8 entities[0].wait=1 expected=0", "case 5 kind8 entities[0].wait=1 expected=0", "case 12 kind8 entities[0].wait=1 expected=0", "case 13 kind8 entities[0].wait=1 expected=0", "case 14 kind8 entities[0].wait=1 expected=0", "case 15 kind8 entities[0].wait=1 expected=0"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x00318] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Kind8NativeRawBindingEditorTests.cs:75
+]]></stack-trace>
+                </failure>
+                <output><![CDATA[<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (target): pic=0, state=3, wait=37, next=10, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=Kind8Attacker, 找到 0 个精灵文件定义</color>
+]]></output>
+              </test-case>
+              <test-case id="11651" name="Kind8AndFollowingTickMatchSource(MobileExtended)" fullname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource(MobileExtended)" methodname="Kind8AndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests" runstate="Runnable" seed="712813375" result="Failed" start-time="2026-09-20 23:18:23Z" end-time="2026-09-20 23:18:26Z" duration="3.115553" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  case 0 kind8 entities[0].wait=1 expected=0
+case 1 kind8 entities[0].wait=1 expected=0
+case 2 kind8 entities[0].wait=1 expected=0
+case 3 kind8 entities[0].wait=1 expected=0
+case 4 kind8 entities[0].wait=1 expected=0
+case 5 kind8 entities[0].wait=1 expected=0
+case 12 kind8 entities[0].wait=1 expected=0
+case 13 kind8 entities[0].wait=1 expected=0
+case 14 kind8 entities[0].wait=1 expected=0
+case 15 kind8 entities[0].wait=1 expected=0
+case 16 kind8 entities[0].wait=1 expected=0
+case 17 kind8 entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 kind8 entities[0].wait=1 expected=0", "case 1 kind8 entities[0].wait=1 expected=0", "case 2 kind8 entities[0].wait=1 expected=0", "case 3 kind8 entities[0].wait=1 expected=0", "case 4 kind8 entities[0].wait=1 expected=0", "case 5 kind8 entities[0].wait=1 expected=0", "case 12 kind8 entities[0].wait=1 expected=0", "case 13 kind8 entities[0].wait=1 expected=0", "case 14 kind8 entities[0].wait=1 expected=0", "case 15 kind8 entities[0].wait=1 expected=0"... >
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Kind8NativeRawBindingEditorTests.Kind8AndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile) [0x00318] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Kind8NativeRawBindingEditorTests.cs:75
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

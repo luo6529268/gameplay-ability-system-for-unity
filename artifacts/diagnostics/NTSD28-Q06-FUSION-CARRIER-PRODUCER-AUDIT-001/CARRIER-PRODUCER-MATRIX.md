@@ -1,0 +1,36 @@
+# Fusion carrier and producer audit
+
+READ_ONLY_AUDIT_COMPLETE / IMPLEMENTATION_PENDING. Formal authority unchanged (B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033; playable closure07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F). Prepared World catalog predecessor VERIFIED; no runtime carrier scripts changed in this audit.
+
+## Entity values: exact writers and preservation
+
+| Native field | Evidence | Unity decision |
+|---|---|---|
+| ai_profile_object_id | battle_world.h:240 defaults -1; battle_world.cpp:1262 spawn writes bmp.use_ai default0; fusion publish_definition:2663 writes replacement value; input_routing.cpp:482 and native_ai.cpp:69,78,1618 consume persisted alias | Add independent NativeAiProfileObjectId. Constructor/pool reset -1, explicit native birth sets DAT value default0. Fusion writes from selected replacement definition. Ordinary FrameCache.Load / locked kind / snapshot DAT rebinding must not overwrite it. |
+| definition_drop_mode | battle_world.h:244 default0; battle_world.cpp:1263 birth and2665 fusion assign bmp.drop default0 | Add independent NativeDefinitionDropMode, reset0/copy/checksum. Do not derive it lazily from current wrapper. No currently identified general consumer authorizes inventing drop behavior. |
+| fusion_display_timer_190 | battle_world.h:262 default0; battle_world.cpp:2790 merge writes record.decrease; all current core occurrence search found no decrement/defuse clearing | Add FusionDisplayTimer190, reset0, persistent copy/hash. Do not alias ticking Unk338 or clear on split. |
+| revive_visual_runtime_318 | prior B4/respawn mapping to RenderPicOffset remains confirmed | Reuse Runtime.RenderPicOffset; no duplicate field. |
+
+Current LF2Entity.PublishIdentityMetadataForSimulation (around239) runs on every FrameCache identity change; it updates runtime type and identity writer. It is NOT a valid general birth initializer for persisted alias/drop. TryApplyRuntimeIdentity/TryReloadCurrentFrameDataForRuntimeIdentity (4513 onward) and snapshot reload need preservation except explicit fusion publish.
+
+Birth paths needing exact explicit calls: LF2Character.ModuleBind1066 (existing initializeNativeArmorRuntime flag is armor-specific and must not silently change semantics); LF2WeaponBase.InitializeFrame835; LF2SpecialAttack.InitializeFrame813; LF2OtherObject.Lifecycle.InitializeFrame113. Character callers include BattleLogicEntityFactory97/222 and SimulationStageWaveModule777; Renderer LF2ObjectRenderer173 invokes logic.Init. Read these callers before finalizing birth activation. BattleSpawnVitalsWriter is NOT sufficient: only OPoint post-init callers LF2ObjectPointFactory803 and BattleLogicEntityFactory280 use it; roster/stage/general spawn coverage cannot be inferred.
+
+Current input special-family reader BattleCharacterActionWriter.RouteNativeHitJa1592 reads live wrapper.use_ai. After persisted alias birth integration it must consume the runtime alias. NTSD28NativeComboActionTransactionEditorTests504 currently mutates wrapper.use_ai after binding; update the fixture to represent source-valid birth or explicit persisted setup, not redefine source to satisfy old fixture. Unity canonical AI rows currently expose ObjectId, no established alias carrier found by targeted search; retain an explicit subsequent AI-consumer revisit instead of claiming native AI alignment from adding the field.
+
+## Global feature ownership: newly resolved relationship
+
+BattleConfig defaults false/false: game_session.h410–411. initialize1165 accepts config. scenario28.cpp858–861 reads explicit same-named booleans. game_session.cpp1025 feature sequence toggles each bool (not permanent unlock); submit_native_feature_key2463–2490 applies independently of selection and projects globals to active entities. Formal main.cpp1987 routes key input. game_session_lfr.cpp569–570 restores validated0/1 values. Failed initialization rolls back previous_config around2405.
+
+Fusion rules: game_session.cpp4187–4190 passes both global values to native fusion. Entity input projection: project_process_globals_to_entities2525/2540–2541 copies FIRST global into entity.feature_gate_4a8428. It runs after initialization2272, accepted toggle2490 and other Host paths; within step it runs before survivor classification2721 and again after story phase spawn3242 before tick_driver_.step. Therefore domains are separate ownership but explicitly related by projection. Do not substitute game mode or infer global state from one entity. Do not move projection into arbitrary getter or rewrite global from snapshot entity state.
+
+Unity has per-entity FeatureGate4A8428 reset/copy/hash but no matching global pair. Add pair to existing BattleRuntimeState with false defaults/reset; include in World core snapshot/restore/checksum. Explicit scenario fields/bootstrap bridge must configure pair so true cases are reachable. Feature key admission and process persistence across frontend/selection remain separate Host work; no menu rewrite authorized. Exact native projection order relative to Unity's established Host/input pass needs its own implementation evidence before activation, rather than indiscriminately overwriting existing fixture gates every tick.
+
+## One coordinated snapshot version change
+
+Current versions observed: entityRuntime15, aggregate23, checksum26, worldCore11, character/base shells2/2. Proposed new carrier package increments to16/24/27/core12 together; shells unchanged. This is payload evolution, not decoder-content byte change: V3 O/F/S/C/M values stay unchanged, header.schemas changes. Source capture fixed header, Parity exact schemas and current Q05 trace tests must move together. Historical captures remain untouched; old schema rejection tested. Raw47/3 binding count remains unchanged unless independently implemented; do not promote missing platform/environment fields.
+
+NTSDEntityRuntime.TryCopyCanonicalStateTo and Reset own entity/raw persistence; BattleWorldEntityRuntimeSnapshot storage delegates canonical copy for both domains. BattleWorldCoreScalarSnapshot builds World values, BattleStateSnapshotRestore around755 restores them, BattleLockstepChecksumModule hashes both World and entity. Aggregate schema must advance with the nested layouts. New tests must show nondefault/negative alias values survive entity/raw copy, snapshot restore, hash sensitivity, pool reset, plus global pair preservation without conflating entity projection. Reuse prior parser/freeze/identity/prepared tests; joint relevant schema/producer checks once stable.
+
+## Next actionable work
+
+Create exact joint carrier Task/Change before edits. First fields + canonical copy/reset + core snapshot/restore/checksum/schema and negative version checks. Then explicit birth writers + input alias consumer; preserve locked transform and snapshot restoration. Before calling carrier package fully integrated, cover roster/stage, OPoint character, weapon/special/other representative entry classes. In parallel planning, retain global projection/Host key obligations; no implicit game mode fallback. Complete native fusion transaction then uses prepared records, fields and global pair; source4 comparison and atomic split refusal remain required. This audit does not close any fusion runtime or Q06 exit.

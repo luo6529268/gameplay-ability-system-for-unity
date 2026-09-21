@@ -1,0 +1,112 @@
+<test-suite type="TestSuite" id="9705" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7739" result="Failed" site="Child" start-time="2026-09-21 00:30:16Z" end-time="2026-09-21 00:30:49Z" duration="32.336060" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18369" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7731" result="Failed" site="Child" start-time="2026-09-21 00:30:16Z" end-time="2026-09-21 00:30:49Z" duration="32.247206" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="62860" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18370" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7731" result="Failed" site="Child" start-time="2026-09-21 00:30:16Z" end-time="2026-09-21 00:30:49Z" duration="32.156090" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18378" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7193" result="Failed" site="Child" start-time="2026-09-21 00:30:17Z" end-time="2026-09-21 00:30:49Z" duration="32.051784" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11942" name="NTSD28Q06State1218ContactNativeFrameEditorTests" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-09-21 00:30:17Z" end-time="2026-09-21 00:30:49Z" duration="31.988063" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11947" name="State1218ContactAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-21 00:30:17Z" end-time="2026-09-21 00:30:49Z" duration="31.880404" total="4" passed="0" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11943" name="State1218ContactAndFollowingTickMatchSource(Authority400,Legacy)" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource(Authority400,Legacy)" methodname="State1218ContactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" seed="1607471274" result="Failed" start-time="2026-09-21 00:30:17Z" end-time="2026-09-21 00:30:24Z" duration="7.120458" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 1 physics entities[0].wait=1 expected=0
+case 2 physics entities[0].wait=1 expected=0
+case 6 physics entities[0].wait=1 expected=0
+case 7 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 9 physics entities[0].wait=1 expected=0
+case 10 physics entities[0].wait=1 expected=0
+case 11 physics entities[0].wait=1 expected=0
+case 12 physics entities[0].wait=1 expected=0
+case 13 physics entities[0].wait=1 expected=0
+case 14 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 1 physics entities[0].wait=1 expected=0", "case 2 physics entities[0].wait=1 expected=0", "case 6 physics entities[0].wait=1 expected=0", "case 7 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 9 physics entities[0].wait=1 expected=0", "case 10 physics entities[0].wait=1 expected=0", "case 11 physics entities[0].wait=1 expected=0", "case 12 physics entities[0].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x00390] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:88
+at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:34
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 300 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218ContactNative, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11944" name="State1218ContactAndFollowingTickMatchSource(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource(Authority400,DataOriented)" methodname="State1218ContactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" seed="863762745" result="Failed" start-time="2026-09-21 00:30:24Z" end-time="2026-09-21 00:30:31Z" duration="6.875694" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 1 physics entities[0].wait=1 expected=0
+case 2 physics entities[0].wait=1 expected=0
+case 6 physics entities[0].wait=1 expected=0
+case 7 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 9 physics entities[0].wait=1 expected=0
+case 10 physics entities[0].wait=1 expected=0
+case 11 physics entities[0].wait=1 expected=0
+case 12 physics entities[0].wait=1 expected=0
+case 13 physics entities[0].wait=1 expected=0
+case 14 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 1 physics entities[0].wait=1 expected=0", "case 2 physics entities[0].wait=1 expected=0", "case 6 physics entities[0].wait=1 expected=0", "case 7 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 9 physics entities[0].wait=1 expected=0", "case 10 physics entities[0].wait=1 expected=0", "case 11 physics entities[0].wait=1 expected=0", "case 12 physics entities[0].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x00390] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:88
+at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:34
+]]></stack-trace></failure></test-case><test-case id="11945" name="State1218ContactAndFollowingTickMatchSource(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource(MobileExtended,Legacy)" methodname="State1218ContactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" seed="1263695477" result="Failed" start-time="2026-09-21 00:30:31Z" end-time="2026-09-21 00:30:40Z" duration="9.215505" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 1 physics entities[0].wait=1 expected=0
+case 2 physics entities[0].wait=1 expected=0
+case 6 physics entities[0].wait=1 expected=0
+case 7 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 9 physics entities[0].wait=1 expected=0
+case 10 physics entities[0].wait=1 expected=0
+case 11 physics entities[0].wait=1 expected=0
+case 12 physics entities[0].wait=1 expected=0
+case 13 physics entities[0].wait=1 expected=0
+case 14 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 1 physics entities[0].wait=1 expected=0", "case 2 physics entities[0].wait=1 expected=0", "case 6 physics entities[0].wait=1 expected=0", "case 7 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 9 physics entities[0].wait=1 expected=0", "case 10 physics entities[0].wait=1 expected=0", "case 11 physics entities[0].wait=1 expected=0", "case 12 physics entities[0].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x00390] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:88
+at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:34
+]]></stack-trace></failure></test-case><test-case id="11946" name="State1218ContactAndFollowingTickMatchSource(MobileExtended,DataOriented)" fullname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource(MobileExtended,DataOriented)" methodname="State1218ContactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests" runstate="Runnable" seed="182006562" result="Failed" start-time="2026-09-21 00:30:40Z" end-time="2026-09-21 00:30:49Z" duration="8.557565" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 1 physics entities[0].wait=1 expected=0
+case 2 physics entities[0].wait=1 expected=0
+case 6 physics entities[0].wait=1 expected=0
+case 7 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 9 physics entities[0].wait=1 expected=0
+case 10 physics entities[0].wait=1 expected=0
+case 11 physics entities[0].wait=1 expected=0
+case 12 physics entities[0].wait=1 expected=0
+case 13 physics entities[0].wait=1 expected=0
+case 14 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 1 physics entities[0].wait=1 expected=0", "case 2 physics entities[0].wait=1 expected=0", "case 6 physics entities[0].wait=1 expected=0", "case 7 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 9 physics entities[0].wait=1 expected=0", "case 10 physics entities[0].wait=1 expected=0", "case 11 physics entities[0].wait=1 expected=0", "case 12 physics entities[0].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x00390] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:88
+at NTSD.Test.NTSD28Q06State1218ContactNativeFrameEditorTests.State1218ContactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218ContactNativeFrameEditorTests.cs:34
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

@@ -1,3 +1,23 @@
+> 2026-09-21重要纠正：identity5152非仅旧getter问题，正式FusionCatalog两record而Unityhardcoded7/8，完整merge/defuse/preflight/partner保留/definition发布存在差异。source4+1737见NTSD28-Q06-FUSION-CATALOG-TRANSACTION-WITNESS-001；下一carrier/catalog合同，保持已闭C12/C25h调度，生产未改。
+
+> 2026-09-21：firstBDY两binder及encoded native counter独立包已限定VERIFIED，见各ACCEPTANCE。lockedkind及mutable snapshot也已限定VERIFIED。下一只读identity5152完整事务及source/frame域，未新改生产；projection旧门和late/display未关闭。
+
+> 2026-09-21：Type3 target generic单binder限定VERIFIED，source11/postpair/count及代表验收见ACCEPTANCE。下一actual lockedkind implicit40准入，详LOCKED-KIND-NEXT-ACCESS-AUDIT；generic高位projection仍旧gate，不能称已覆盖。
+
+> 2026-09-21：Type3 attacker shared selected reader/binder限定VERIFIED，见TYPE3-ATTACKER-POSTHIT-NATIVE-FRAME-ACCESS-001/ACCEPTANCE。target3005非匹配pairwriter projection依旧明确不支持，actual已验不冒充projection。下一只读target generic continuation单held binder（不是held ownership旧事务），其它identity/late/display/platform/raw3保持。
+
+> 2026-09-21：Kind0 post-effect native access与standard previous13实际/预测reader均限定VERIFIED，见两ACCEPTANCE。snapshotfallback保护控制保持；effect20prev18是前置拒绝非后置覆盖。下一Type3 attacker shared selected access，已native helper不重做。
+
+> 2026-09-21：normal effect两reader/两binder以及独立Fall80保持/pendingY projection已按三个ACCEPTANCE限定VERIFIED。下一只读审计已完成，见POST-EFFECT-REMAINING-ACCESS-AUDIT.md：先Kind0 post-effect previous reader/200203 binder，再type3共享selected访问；已native的noncharacter unarmored/reduced helper不重做。新source witness/实现尚未建立。
+
+> 2026-09-21：TryApplyNativeImpact Action caller已限定VERIFIED，source20与代表验收出口见同ID ACCEPTANCE；下文旧pending由此覆盖。下一effect override两caller只读审计，不重做B6。
+
+> 2026-09-21：state12/18 contact两caller与airborne单caller已独立VERIFIED（source480/55、代表验收），旧pending分类历史由这两个ACCEPTANCE覆盖。下一native impact Action操作只读审计，不全量重测已闭包。
+
+> 2026-09-21更新：ordinary landing native binding及candidate collision reference reset已按各Record限定VERIFIED。下文旧pending分类仅历史，以新ACCEPTANCE.md为准。下一state12/18 contact/airborne三caller审计；平台op30/previousXYZ不可因reset关闭。
+
+> kind8单caller已限定VERIFIED，下一ordinary landing原生descriptor，详见ORDINARY-LANDING-NATIVE-FRAME-BINDING-001。CPoint selectors全零的静态证据让其生产优先级后移，源370保留，不取消总目标。
+
 > 最新排序：held三作用域已限定VERIFIED；state10同图0已补。下一CPOINT-INPUT-ACTION-SELECTION-001：RunKind1→RunActionSelection实际只A/T/J且多次写，源advance_catch_relations八路最终选择；这是数据consumer缺口与selected-frame绑定的完整事务，不只改一个getter。后续canonical kind8单caller（dvx999为不写哨兵）按RAW-BINDING-CALLER-MATRIX排队；dynamic identity须回访held静态零域边界。
 
 > 当前修订：held初次140/释放1150/补给242已限定验证，见父held报告；下表旧HasFrame857描述是实施前检查点，不能继续当当前代码事实。SyncHeldPose只有定义无直接caller，damaged12/10静态域核对中。当前C++ held无state12/18 unsupported分支，历史表述已纠正。下一按RAW-BINDING-CALLER-MATRIX与identity等实际caller继续。

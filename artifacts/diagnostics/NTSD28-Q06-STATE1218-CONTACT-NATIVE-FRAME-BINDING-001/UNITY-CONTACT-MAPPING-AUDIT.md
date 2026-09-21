@@ -1,0 +1,9 @@
+# State12/18 contact mapping and priority
+
+Actual Unity exact LF2Character / canonical BattleEcsCharacterFrameAdvancePass / shared type0 physics all call LF2Entity.ApplyCurrentDatType0State1218ContactAction after environment damage. Two old raw bindings at soft and hard action exits. Airborne uses separate third caller and is not part of this source-only package. Existing B4 mechanics and pending-motion responsibilities remain closed.
+
+Source BattleWorld28::step_physics selects soft230/231 and clears counter; hard sets Vy-3.5, clamps Vx+-7 then optionally consumes pending status (gain exactly1), selecting picked for action>=186 except state18; otherwise picking. Without gain1 it selects185/191. Source counter unchanged on hard. Fields StatusDx1C0/StatusDy1C4/StatusDz1C8/StatusGain1CC/StatusHitFacing1D0/StatusPickedAction1D4/StatusPickingAction1D8 are explicit Unity carriers; new fixture must restore and compare all seven, since ordinary landing fixture does not currently do so. Initial state reflection/source raw alone does not cover them.
+
+Formal330 static audit: hardFallback2512 and soft1853 target references all declared, no unknown. All19461 ITR blocks contain no nonzero pickedact/pickingact (missing treated0, first frame and first field retained). Source arm_native_unarmored_hit_motion defaults0 to191/185. This does not prove dynamic identity-retaining paths cannot introduce missing descriptors. It does mean no current-content positive binding discrepancy demonstrated. Source480 remains synthetic witness pending validation; do not prioritize Unity mutation just because a lexical old getter exists. Re-evaluate after source and identity-domain audit; platform and other live remaining transactions remain active backlog.
+
+Current previousXYZ extras stay source-only; raw3 missing fields stay explicit. Environment fixed0 isolates binding and does not re-certify environment damage/KO. No production, Scene or resource changes in this Task yet.

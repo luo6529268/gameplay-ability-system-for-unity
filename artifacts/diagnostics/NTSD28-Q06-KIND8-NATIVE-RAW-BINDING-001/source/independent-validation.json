@@ -1,0 +1,8 @@
+{
+  "rows": 134,
+  "checks": 62045,
+  "failures": [],
+  "applied": 132,
+  "sha256": "c0543119fde7016ef29c084d9c40ba98f0633551343de8ac1bc16546f7b26009",
+  "scope": "Independent immediate transition over complete captured before; selected initial prerequisites checked. Not a complete initial-state generator or following-tick/Unity validation."
+}

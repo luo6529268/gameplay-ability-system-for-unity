@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "30C35E1E2FF9AA4F42CC0DDDA84341720F3DE29F8017C4C3338D57D5BF4C2570",
+  "captureBinarySha256": "0750DC1BE6727EC3F5D0050C8FDC84BD460F995CF2F212162F17A625D838150A",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Build\\NTSD28EffectFrame\\effect_override_native_frame_access_witness.exe",
+  "authorityWriteAllowed": false
+}

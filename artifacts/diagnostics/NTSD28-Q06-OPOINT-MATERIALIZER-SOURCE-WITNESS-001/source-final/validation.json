@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "cases": 23,
+  "checks": 360,
+  "sha256": "12ACA9132D088999F1771B3A7170DFF56141708FD464581810D780B57F250FD7",
+  "failures": [],
+  "scope": "Bounded source formulas and recorded RNG deltas; not Unity comparison or independent RNG algorithm certification."
+}

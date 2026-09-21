@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "runtimeAndCaseScalars": 390,
+  "excluded": [
+    "sourceDat",
+    "targetDat"
+  ],
+  "note": "Initial all-property equality failed because dvy source text0 became0.000000 when adding fractional parameter; exact DAT text identity not claimed. All original runtime results unchanged."
+}

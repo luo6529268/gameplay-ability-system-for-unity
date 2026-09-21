@@ -1,0 +1,543 @@
+<test-suite type="TestSuite" id="28141" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7999" result="Passed" start-time="2026-09-21 10:15:24Z" end-time="2026-09-21 10:15:27Z" duration="2.870757" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="Assembly" id="37147" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7991" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:27Z" duration="2.811077" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><test-suite type="TestSuite" id="37148" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7991" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:27Z" duration="2.714044" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestSuite" id="37156" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7430" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:27Z" duration="2.617104" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="TestFixture" id="30506" name="NTSD28Q06OpointMaterializerEditorTests" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:27Z" duration="2.548373" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-suite type="ParameterizedMethod" id="30553" name="ImmediateMatchesOriginalMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:27Z" duration="2.448313" total="46" passed="46" failed="0" inconclusive="0" skipped="0" asserts="0"><properties /><test-case id="30507" name="OpointSource_0_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_0_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="174988522" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.026281" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30508" name="OpointSource_0_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_0_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="535608041" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.030656" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30509" name="OpointSource_1_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_1_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1990811017" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.025902" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30510" name="OpointSource_1_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_1_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="967933138" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.025302" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30511" name="OpointSource_2_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_2_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="729509297" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.027533" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30512" name="OpointSource_2_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_2_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1499368892" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.025592" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30513" name="OpointSource_3_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_3_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1532029538" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.027210" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30514" name="OpointSource_3_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_3_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1444533298" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.030735" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30515" name="OpointSource_4_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_4_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2087228515" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.040377" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30516" name="OpointSource_4_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_4_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2013635706" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.082004" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30517" name="OpointSource_5_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_5_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1458266381" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.026886" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30518" name="OpointSource_5_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_5_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1612860511" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.027439" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30519" name="OpointSource_6_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_6_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1936865716" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.026212" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30520" name="OpointSource_6_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_6_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1535763983" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.030822" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30521" name="OpointSource_7_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_7_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="466816057" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.028717" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30522" name="OpointSource_7_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_7_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1993585302" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:25Z" duration="0.026611" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30523" name="OpointSource_8_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_8_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1786805642" result="Passed" start-time="2026-09-21 10:15:25Z" end-time="2026-09-21 10:15:26Z" duration="0.025012" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30524" name="OpointSource_8_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_8_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="324292542" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025918" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30525" name="OpointSource_9_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_9_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="649867825" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.029983" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30526" name="OpointSource_9_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_9_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1729310312" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024521" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30527" name="OpointSource_10_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_10_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="343518192" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025967" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30528" name="OpointSource_10_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_10_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="724425894" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.027085" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30529" name="OpointSource_11_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_11_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1547898472" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.028098" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30530" name="OpointSource_11_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_11_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1269302357" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.028304" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30531" name="OpointSource_12_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_12_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1650928648" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025572" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30532" name="OpointSource_12_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_12_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1870322842" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.027386" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30533" name="OpointSource_13_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_13_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1468759806" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025025" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30534" name="OpointSource_13_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_13_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1646502744" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024161" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30535" name="OpointSource_14_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_14_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="530319274" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.023683" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=17, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30536" name="OpointSource_14_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_14_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1563173573" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024322" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=17, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30537" name="OpointSource_15_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_15_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1165156127" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024706" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30538" name="OpointSource_15_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_15_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2052650794" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025235" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30539" name="OpointSource_16_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_16_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="542248029" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.023015" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30540" name="OpointSource_16_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_16_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1063604239" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024065" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30541" name="OpointSource_17_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_17_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1556256710" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.024840" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30542" name="OpointSource_17_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_17_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="755374693" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.025254" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30543" name="OpointSource_18_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2119570769" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.029225" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30544" name="OpointSource_18_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1348001789" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.026119" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30545" name="OpointSource_19_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1216208329" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.023053" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30546" name="OpointSource_19_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1592727907" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.022962" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30547" name="OpointSource_20_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1395154878" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:26Z" duration="0.350042" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30548" name="OpointSource_20_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="268485828" result="Passed" start-time="2026-09-21 10:15:26Z" end-time="2026-09-21 10:15:27Z" duration="0.270827" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30549" name="OpointSource_21_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_21_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="359683237" result="Passed" start-time="2026-09-21 10:15:27Z" end-time="2026-09-21 10:15:27Z" duration="0.272776" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30550" name="OpointSource_21_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_21_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="436674542" result="Passed" start-time="2026-09-21 10:15:27Z" end-time="2026-09-21 10:15:27Z" duration="0.271393" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30551" name="OpointSource_22_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1784158263" result="Passed" start-time="2026-09-21 10:15:27Z" end-time="2026-09-21 10:15:27Z" duration="0.022820" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="30552" name="OpointSource_22_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2101903730" result="Passed" start-time="2026-09-21 10:15:27Z" end-time="2026-09-21 10:15:27Z" duration="0.023950" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

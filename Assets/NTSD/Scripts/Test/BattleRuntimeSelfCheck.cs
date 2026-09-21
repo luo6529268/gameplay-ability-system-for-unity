@@ -14224,8 +14224,8 @@ namespace NTSD.Test
             StandardCharacterHitSnapshot lethal = RunStandardCharacterHitCase(true, injury31, startingHp: 30);
             Expect(lethal.KillStat == 0 && lethal.KillWorldStat == 1 && lethal.ComboAttacker == 0 &&
                    lethal.ComboVictim == 31 && lethal.DamageStat == 31 && lethal.Hp == -1 &&
-                   lethal.Fall == 0 && lethal.AttackingCounter == 37,
-                "C-11/C-12: lethal standard hit must preserve retired holder stats, update victim/world accounting, preserve attacking, and clear fall80 after knockdown tail");
+                   lethal.Fall == 80 && lethal.AttackingCounter == 37,
+                "C-11/C-12: lethal standard hit must preserve retired holder stats, update victim/world accounting, preserve attacking, and retain native fall80 after knockdown tail");
 
             StandardCharacterHitSnapshot heavy = RunStandardCharacterHitCase(true, injury31, heavyAttacker: true);
             Expect(heavy.Hp == 69 && heavy.HpBound == 90 && heavy.ComboVictim == 31,
@@ -14260,8 +14260,8 @@ namespace NTSD.Test
                 victimVy: 1.0);
             Expect(airborneActual.Equals(airborneShared) &&
                    airborneActual.Frame == LF2StandardFrames.FallingBack &&
-                   airborneActual.Fall == 0 && airborneActual.AttackingCounter == 37,
-                "C-12: YInt<0 with Vy>=0 must force knockdown and preserve attacking on actual/shared paths");
+                   airborneActual.Fall == 80 && airborneActual.AttackingCounter == 37,
+                "C-12: YInt<0 with Vy>=0 must force knockdown and preserve fall80/attacking on actual/shared paths");
 
             InteractionArea knockdownReaction = MakeInteractionItr(kind: 0, vrest: 0, injury: 1, dvx: 0);
             knockdownReaction.fall = 61;
@@ -20815,8 +20815,11 @@ itr_end:
                        Nearly(spawned.Runtime.Y, expectedY) && spawned.Runtime.YInt == expectedY &&
                        Nearly(spawned.Runtime.Z, expectedZ) && spawned.Runtime.ZInt == (int)expectedZ,
                     $"BATTLE-AUDIT7-I2: {label} late opoint must derive integer XYZ from the spawner snapshot before the native Z+1 offset");
-                Expect(spawned.Runtime.HP2Orig == 1 && spawned.Runtime.HPOrig == 0 && spawned.Runtime.RespawnCount == 0,
-                    $"BATTLE-AUDIT7-I2: {label} native birth must initialize current/queued lives and queued HP to 1/0/0");
+                // Alignment contract: NTSD28-Q06-OPOINT-MATERIALIZER-TRANSACTION-001.
+                int expectedLives = ((int)expectedType == 0 || (int)expectedType == 5) &&
+                    producer.Runtime.OrdinaryCreditGate2F4 != 2 ? 0 : 1;
+                Expect(spawned.Runtime.HP2Orig == expectedLives && spawned.Runtime.HPOrig == 0 && spawned.Runtime.RespawnCount == 0,
+                    $"BATTLE-AUDIT7-I2: {label} native birth must apply zero-valued OPoint continuation to eligible type0/5 children");
                 double expectedVx = direction == "right" ? opDvx : -opDvx;
                 Expect(Nearly(spawned.Runtime.Vx, expectedVx) &&
                        Nearly(spawned.Runtime.Vy, opDvy) && Nearly(spawned.Runtime.Vz, 0.0),
@@ -21016,6 +21019,7 @@ itr_end:
             world.Register(linked);
             world.Register(spawner);
             spawner.Runtime.AnimCounter = linked.Runtime.SlotIndex;
+            linked.ItrRest.SetVrest(spawner.Runtime.SlotIndex, 7);
 
             LF2ObjectPointFactory.Instance.ProcessOpointSpawn(spawner);
 
@@ -21033,17 +21037,20 @@ itr_end:
             {
                 LF2Entity newborn = newborns[i];
                 int newbornSlot = newborn.Runtime.SlotIndex;
-                Expect(linked.ItrRest.GetVrest(newbornSlot) == 10 &&
-                       newborn.ItrRest.GetVrest(linked.Runtime.SlotIndex) == 10,
-                    "state3003 must write bilateral vrest between AnimCounter linked slot and newborn slot");
+                Expect(linked.ItrRest.GetVrest(newbornSlot) == 0 &&
+                       newborn.ItrRest.GetVrest(linked.Runtime.SlotIndex) == 0 && newborn.AttackExempt == 0,
+                    "native state3003 OPoint birth must not synthesize linked bilateral vrest or attacker rest");
                 Expect(!spawner.ItrRest.HasVrest(newbornSlot) &&
                        !newborn.ItrRest.HasVrest(spawner.StableId),
                     "state3003 must not substitute the spawner or StableId for the linked runtime slot");
             }
 
-            Expect(newborns[0].ItrRest.GetVrest(newborns[1].Runtime.SlotIndex) == 40 &&
-                   newborns[1].ItrRest.GetVrest(newborns[0].Runtime.SlotIndex) == 40,
-                "multi-opoint mutual vrest must use newborn runtime slots");
+            // Alignment contract: NTSD28-Q06-OPOINT-MATERIALIZER-TRANSACTION-001.
+            Expect(linked.ItrRest.GetVrest(spawner.Runtime.SlotIndex) == 7,
+                "native OPoint birth must preserve existing pair rest");
+            Expect(newborns[0].ItrRest.GetVrest(newborns[1].Runtime.SlotIndex) == 0 &&
+                   newborns[1].ItrRest.GetVrest(newborns[0].Runtime.SlotIndex) == 0,
+                "native multi-opoint birth must leave mutual vrest zero");
         }
 
         private static void CheckNonCharacterKind2RuntimeSlotLink()
@@ -26018,10 +26025,10 @@ itr_end:
                    cloneWorld.Rng.CallCount == legacyCallsBefore,
                 "GT-11/C25b production must consume the exact 34-call native synchronized stream without advancing legacy RNG");
             Expect(firstClone != null &&
-                   firstClone.Health.HP == 10 &&
-                   firstClone.Health.HPBound == 10 &&
-                   firstClone.Health.HP3 == 10 &&
-                   firstClone.Health.PP == 10 &&
+                   firstClone.Health.HP == 500 &&
+                   firstClone.Health.HPBound == 500 &&
+                   firstClone.Health.HP3 == 500 &&
+                   firstClone.Health.PP == 500 &&
                    firstClone.SpawnerEntityIndex == -1 &&
                    firstClone.OwnerEntityIndex == -1 &&
                    firstClone.AttackExempt == 6 &&
@@ -28201,8 +28208,10 @@ itr_end:
                     "oid 7/8 merge must write integer midpoint X/Z");
                 Expect(Nearly(self.Runtime.Vy, 7f) && Nearly(partner.Runtime.Vy, 0f),
                     "oid 7/8 merge must preserve self Vy and zero partner Vy");
-                Expect(self.Trans.WaitCounter == 37,
-                    "oid 7/8 merge identity switch must preserve the self wait counter");
+                Expect(self.Trans.WaitCounter == 290 && self.AttackingCounter == 0 &&
+                       self.Frame.Prev2 == 290 && self.Frame.Prev2D == self.Frame.D &&
+                       self.Runtime.NativeSoundActionLatch == -1,
+                    "native merge must bind action latch/snapshot to 290, zero frame counter and clear sound latch");
                 Expect(partner.ItrRest.Arest == 6 && partner.ItrRest.GetVrest(0) == 8 &&
                        partner.ItrRest.GetVrest(19) == 11,
                     "oid 7/8 merge must not clear the dormant partner's external arest/vrest state");
@@ -28210,7 +28219,7 @@ itr_end:
                        self.Runtime.Unk32C == 11 &&
                        self.Runtime.Unk330 == 7 &&
                        self.Runtime.Unk334 == 8 &&
-                       self.Runtime.Unk338 == 4500,
+                       self.Runtime.Unk338 == 4500 && self.Runtime.FusionDisplayTimer190 == 4500,
                     "oid 7/8 merge must write merge bookkeeping fields");
                 Expect(partner.Runtime.OidMergeDormant,
                     "merged partner must become dormant instead of being unregistered");
@@ -28295,7 +28304,7 @@ itr_end:
                 AssertOid5152MergeRejected(wrappers, "partner-state14", 7, 0, 11,
                     (world, self, partner) =>
                     {
-                        partner.Frame.D = Frame(10, 14, 1, 10, 39, 79);
+                        partner.ImmediateFrame(14);
                     });
                 AssertOid5152MergeRejected(wrappers, "dx-boundary", 7, 0, 11,
                     (world, self, partner) =>
@@ -28321,6 +28330,20 @@ itr_end:
                         self.Runtime.SyncIntegerPosition();
                         partner.Runtime.SyncIntegerPosition();
                     });
+
+                AssertOid5152MergeRejected(wrappers, "mode1-is-not-feature-bypass", 7, 0, 11,
+                    (world, self, partner) =>
+                    {
+                        world.Runtime.Match.BattleGameModeId = 1;
+                        self.Health.HP = partner.Health.HP = 177;
+                    });
+                SimulationWorld featureWorld = CreateOid5152MergeCandidate(
+                    wrappers, 7, 0, 11, out LF2Character featureSelf, out LF2Character featurePartner);
+                featureSelf.Health.HP = featurePartner.Health.HP = 177;
+                featureWorld.Runtime.FusionFirstFeatureGate4A8428 = true;
+                featureWorld.Oid5152FusionScanAll(1);
+                Expect(featureSelf.ObjectId == 51 && featurePartner.Runtime.OidMergeDormant,
+                    "respond1 must bypass strict HP threshold only with the explicit global first feature flag");
 
                 SimulationWorld orderedWorld = CreateOid5152MergeCandidate(
                     wrappers, 7, 0, 1, out LF2Character orderedSelf, out LF2Character orderedPartner);
@@ -28379,12 +28402,12 @@ itr_end:
                 partnerRenderer.ForceRefreshPresentation();
                 Expect(self.ObjectId == 51 && self.Runtime.Unk330 == 8 && self.Runtime.Unk334 == 7,
                     "oid 8 must mirror oid 7 as an equally valid active merge owner");
-                Expect(self.Trans.WaitCounter == 29,
-                    "oid 8 merge identity switch must preserve self wait counter");
+                Expect(self.Trans.WaitCounter == 290 && self.AttackingCounter == 0 && self.Frame.Prev2 == 290,
+                    "mirrored native merge must publish action latch/snapshot and reset frame counter");
                 Expect(selfSpriteRenderer.enabled && selfSpriteRenderer.sprite == sprites51.Sprite,
                     "merged oid 51 renderer must rebind the oid 51 sprite catalog");
                 Expect(!partnerSpriteRenderer.enabled,
-                    "inactive merged partner presentation must be hidden like C# authority active=false");
+                    "native suspended partner must be hidden by the Unity dormant presentation adapter");
 
                 partner.FrameDelay = -7;
                 partner.KnockbackVx = 8.5;
@@ -28412,20 +28435,26 @@ itr_end:
                 Expect(self.ObjectId == 8 && partner.ObjectId == 7 &&
                        self.Frame.N == 112 && partner.Frame.N == 112,
                     "oid 51 split must work from an out-of-range frame number even when Frame.D is null");
-                Expect(self.Trans.WaitCounter == 31 && partner.Trans.WaitCounter == 0,
-                    "mirrored split must preserve self wait and Reset partner wait");
+                Expect(self.Trans.WaitCounter == 112 && partner.Trans.WaitCounter == 112 &&
+                       self.AttackingCounter == 0 && partner.AttackingCounter == 0 &&
+                       self.Frame.Prev2 == 112 && partner.Frame.Prev2 == 112,
+                    "mirrored split must bind both action latches/snapshots to 112 and reset frame counters");
                 Expect(Nearly(self.Runtime.X, 77.75) && self.Runtime.XInt == 77 &&
                        Nearly(self.Runtime.Z, 9.25) && self.Runtime.ZInt == 9 &&
                        Nearly(partner.Runtime.X, 77.75) && partner.Runtime.XInt == 77 &&
-                       Nearly(partner.Runtime.Z, 9.25) && partner.Runtime.ZInt == 9,
-                    "mirrored split must preserve fractional X/Z while copying their integer snapshots");
-                Expect(partner.RelationTeam == 0 && partner.Team == 0,
-                    "split partner must inherit exact Unk364=0 without falling back to self Team");
-                Expect(partner.FrameDelay == 0 &&
-                       Nearly(partner.KnockbackVx, 0.1) && Nearly(partner.KnockbackVy, 0.1) &&
-                       Nearly(partner.KnockbackVz, 0.1) && partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
-                       partner.Frame.Prev2D == null && HasFormalOid5152PartnerEffectDefaults(partner),
-                    "mirrored split partner must use formal Entity::reset defaults before M-1 contract writes");
+                       Nearly(partner.Runtime.Z, 9.25) && partner.Runtime.ZInt == 9 &&
+                       Nearly(self.Runtime.Y, -5.5) && self.Runtime.YInt == -5 &&
+                       Nearly(partner.Runtime.Y, -5.5) && partner.Runtime.YInt == -5 &&
+                       partner.Runtime.CollisionYReference == self.Runtime.CollisionYReference,
+                    "mirrored split must preserve precise XYZ and copy their integer snapshots plus collision Y reference");
+                Expect(partner.RelationTeam == 0 && partner.Team == 7,
+                    "split partner must inherit exact group zero while retaining its unrelated Team adapter value");
+                Expect(partner.FrameDelay == -7 &&
+                       Nearly(partner.KnockbackVx, 8.5) && Nearly(partner.KnockbackVy, -4.5) &&
+                       Nearly(partner.KnockbackVz, 2.5) && partner.Frame.PN == 71 && partner.Frame.Prev == 72 &&
+                       partner.Frame.Prev2 == 112 && partner.Frame.Prev2D == partner.Frame.D &&
+                       HasPreservedOid5152PartnerEffectState(partner, 12),
+                    "native split must preserve partner pending impulses, unrelated history and effect state; only action snapshot is replaced");
                 Expect(selfSpriteRenderer.enabled && selfSpriteRenderer.sprite == sprites8.Sprite &&
                        partnerSpriteRenderer.enabled && partnerSpriteRenderer.sprite == sprites7.Sprite,
                     "split renderers must restore visibility and rebind the original oid 8/7 sprite catalogs");
@@ -28492,6 +28521,11 @@ itr_end:
             Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
 
             SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+                int preservedPartnerTeam = partner.Team;
+                int preservedPartnerOwner = partner.OwnerId;
+                int preservedPartnerGate328 = partner.Runtime.Unk328;
+                partner.Runtime.Vz = 3.75;
+                self.Runtime.CollisionYReference = -17;
                 partner.FrameDelay = -6;
                 partner.KnockbackVx = 6.5;
                 partner.KnockbackVy = -3.5;
@@ -28524,34 +28558,41 @@ itr_end:
                        partner.Health.HP == 100 && partner.Health.HPBound == 99,
                     "oid 51 split must floor-divide odd HP and HPBound for both sides");
                 Expect(self.Health.HP3 == 200 && partner.Health.HP3 == 500,
-                    "oid 51 split must preserve self HP3 and keep partner Reset default HP3");
+                    "oid 51 split must preserve each participant base HP3");
                 Expect(self.Health.PP == 0 && partner.Health.PP == 0,
                     "oid 51 split must zero PP for both sides");
                 Expect(self.Runtime.Unk328 == -1 && self.Runtime.Unk338 == 900,
                     "oid 51 split must clear merge flag and write 900 cooldown on self");
                 Expect(!partner.Runtime.OidMergeDormant && world.ObjectCount == 2,
                     "split success must reactivate dormant partner and restore ObjectCount");
-                Expect(partner.Team == 0 && partner.OwnerId == -1 && partner.Runtime.Unk328 == -1,
-                    "split success partner must come from Reset defaults before contract overwrites");
-                Expect(Nearly(self.Runtime.Vy, 9f) && Nearly(partner.Runtime.Vy, 0f) && Nearly(partner.Runtime.Vz, 0f),
-                    "split success must preserve self Vy/Vz and keep partner Reset default vertical velocity");
+                Expect(partner.Team == preservedPartnerTeam && partner.OwnerId == preservedPartnerOwner &&
+                       partner.Runtime.Unk328 == preservedPartnerGate328,
+                    "native split must retain partner team adapter, owner and unrelated fusion gate");
+                Expect(Nearly(self.Runtime.Vy, 9f) && Nearly(self.Runtime.Vz, 4f) &&
+                       Nearly(partner.Runtime.Vy, 0f) && Nearly(partner.Runtime.Vz, 3.75),
+                    "native split must preserve self Vy/Vz and partner Vz while zeroing partner Vy");
                 Expect(Nearly(self.Runtime.X, 90.75) && self.Runtime.XInt == 90 &&
                        Nearly(self.Runtime.Z, 6.5) && self.Runtime.ZInt == 6 &&
                        Nearly(partner.Runtime.X, 90.75) && partner.Runtime.XInt == 90 &&
                        Nearly(partner.Runtime.Z, 6.5) && partner.Runtime.ZInt == 6 &&
-                       Nearly(self.Runtime.Y, 0.0) && self.Runtime.YInt == 0 &&
-                       Nearly(partner.Runtime.Y, 0.0) && partner.Runtime.YInt == 0,
-                    "oid 51 split must copy float and integer X/Z independently and zero only Y");
-                Expect(self.Trans.WaitCounter == 41 && partner.Trans.WaitCounter == 0,
-                    "oid 51 split must preserve self wait counter while revived partner starts from Reset wait 0");
-                Expect(partner.FrameDelay == 0 &&
-                       Nearly(partner.KnockbackVx, 0.1) && Nearly(partner.KnockbackVy, 0.1) &&
-                       Nearly(partner.KnockbackVz, 0.1) && partner.Frame.PN == 0 && partner.Frame.Prev == 0 && partner.Frame.Prev2 == 0 &&
-                       partner.Frame.Prev2D == null && HasFormalOid5152PartnerEffectDefaults(partner),
-                    "split partner must use formal Entity::reset defaults before M-1 contract writes");
+                       Nearly(self.Runtime.Y, -3.25) && self.Runtime.YInt == -3 &&
+                       Nearly(partner.Runtime.Y, -3.25) && partner.Runtime.YInt == -3 &&
+                       partner.Runtime.CollisionYReference == -17,
+                    "native split must copy precise XYZ, integer XYZ and collision Y reference without zeroing Y");
+                Expect(self.Trans.WaitCounter == 112 && partner.Trans.WaitCounter == 112 &&
+                       self.AttackingCounter == 0 && partner.AttackingCounter == 0 &&
+                       self.Frame.Prev2 == 112 && self.Frame.Prev2D == self.Frame.D &&
+                       self.Runtime.NativeSoundActionLatch == -1 && partner.Runtime.NativeSoundActionLatch == -1,
+                    "native split must publish both configured action latches/snapshots, zero counters and clear sound latches");
+                Expect(partner.FrameDelay == -6 &&
+                       Nearly(partner.KnockbackVx, 6.5) && Nearly(partner.KnockbackVy, -3.5) &&
+                       Nearly(partner.KnockbackVz, 1.5) && partner.Frame.PN == 81 && partner.Frame.Prev == 82 &&
+                       partner.Frame.Prev2 == 112 && partner.Frame.Prev2D == partner.Frame.D &&
+                       HasPreservedOid5152PartnerEffectState(partner, 13),
+                    "native split must preserve partner pending impulses, unrelated history and effects without Reset");
                 Expect(partner.ItrRest.Arest == 6 && partner.ItrRest.GetVrest(0) == 8 &&
                        partner.ItrRest.GetVrest(19) == 11,
-                    "oid 51 split Reset must preserve external partner arest and all vrest keys");
+                    "native split must preserve external partner arest and all vrest keys");
             Expect(self.Runtime.Dir != partner.Runtime.Dir,
                 "split success must face revived partner opposite to self");
         }
@@ -28570,40 +28611,63 @@ itr_end:
             partner.Effect.BlinkCounter = 8;
         }
 
-        private static bool HasFormalOid5152PartnerEffectDefaults(LF2Character partner)
+        private static bool HasPreservedOid5152PartnerEffectState(LF2Character partner, int deadBlinkCount)
         {
             LF2EffectState effect = partner.Effect;
-            return partner.DeadBlinkCountInternal == -1 &&
-                   effect != null && effect.Num == -99 && Nearly(effect.Dvx, 0.0) &&
-                   Nearly(effect.Dvy, 0.0) && !effect.Stuck &&
-                   !effect.Blink && !effect.Super && effect.TimeIn == 0 && effect.TimeOut == 0 &&
-                   effect.BlinkCounter == 0;
+            return partner.DeadBlinkCountInternal == deadBlinkCount &&
+                   effect != null && effect.Num == 7 && Nearly(effect.Dvx, 2.0) &&
+                   Nearly(effect.Dvy, -3.0) && effect.Stuck &&
+                   effect.Blink && effect.Super && effect.TimeIn == -5 && effect.TimeOut == 6 &&
+                   effect.BlinkCounter == 8;
         }
 
         private static void CheckOid5152SplitFailurePartialRecovery()
         {
-            Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
-
-            SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
+            // Historical method name retained for the focused runner; native failure is atomic.
+            foreach (bool missingDefinition in new[] { false, true })
+            {
+                Dictionary<int, LF2CharacterDataWrapper> wrappers = BuildOid5152Wrappers();
+                SimulationWorld world = CreateOid5152MergedWorld(wrappers, out LF2Character self, out LF2Character partner);
                 self.Health.PP = 123;
                 self.Health.HP = 180;
                 self.Health.HPBound = 180;
-                self.Runtime.Unk32C = 399;
                 self.Runtime.Unk338 = 0;
+                if (missingDefinition)
+                {
+                    wrappers.Remove(8);
+                    // Seal this test catalog so a missing override cannot fall back to global content.
+                    world.PrepareRuntimeDataCatalogForBattle(
+                        new[] { new ObjectDefinition(7, 0, "fusion-selfcheck-7.dat"), new ObjectDefinition(51, 0, "fusion-selfcheck-51.dat") },
+                        id => wrappers.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+                }
+                else self.Runtime.Unk32C = 399;
+                LF2FrameData retainedFrame = self.Frame.D;
+                int actionLatch = self.Trans.WaitCounter;
+                int previousAction = self.Frame.Prev;
+                int snapshotAction = self.Frame.Prev2;
+                int partnerStableId = partner.StableId;
+                int partnerSlot = partner.Runtime.SlotIndex;
+                var checksumInput = new FrameInputSet(3, Array.Empty<SimulationPlayerInput>());
+                ulong before = world.CaptureRuntimeChecksum64(3, checksumInput);
 
-                world.Oid5152RuntimeMaintenanceAll(3);
+                world.Oid5152FusionScanAll(3);
 
-                Expect(self.ObjectId == 7,
-                    "split partial recovery must still restore self identity first");
-                Expect(self.Runtime.Unk328 == -1 && self.Runtime.Unk338 == 900,
-                    "split partial recovery must persist self cooldown writes");
+                Expect(world.CaptureRuntimeChecksum64(3, checksumInput) == before,
+                    "failed fusion split must leave the runtime checksum unchanged");
+
+                Expect(self.ObjectId == 51 && self.Runtime.Unk328 == 1 && self.Runtime.Unk338 == 0,
+                    "native split preflight failure must retain fused identity, flag and timer without partial recovery");
                 Expect(self.CurrentFrameId == 290 && self.Health.PP == 123 &&
                        self.Health.HP == 180 && self.Health.HPBound == 180,
-                    "split partial recovery must not apply frame112, PP0 or HP halving");
-                Expect(self.Frame.D != null && !self.FrameCache.HasFrame(290) && self.Frame.D.wait == 1,
-                    "split partial recovery must leave self frame data reloaded against original DAT EmptyFrame when frame 290 is absent");
-            Expect(partner.Runtime.OidMergeDormant && world.ObjectCount == 1,
-                "split partial recovery must not revive dormant partner or increment ObjectCount");
+                    "failed split must not apply frame112, PP0 or HP halving");
+                Expect(ReferenceEquals(self.Frame.D, retainedFrame) && self.Trans.WaitCounter == actionLatch &&
+                       self.Frame.Prev == previousAction && self.Frame.Prev2 == snapshotAction,
+                    "failed split must retain fused DAT frame reference, latch and history");
+                Expect(partner.Runtime.OidMergeDormant && world.ObjectCount == 1 && partner.ObjectId == 8 &&
+                       partner.StableId == partnerStableId && partner.Runtime.SlotIndex == partnerSlot &&
+                       world.FindEntityByRuntimeSlotIncludingDormant(partnerSlot) == partner,
+                    "failed split must retain dormant partner identity, original instance and slot");
+            }
         }
 
         private static void CheckOid5152DjaReleaseTriggersSameTickSplit()
@@ -32583,6 +32647,7 @@ itr_end:
                 {
                     Frame(0, 0, 1, 0, 39, 79),
                     Frame(10, 2, 1, 10, 39, 79),
+                    Frame(14, 14, 1, 14, 39, 79),
                     Frame(112, 0, 1, 112, 39, 79),
                 },
             };

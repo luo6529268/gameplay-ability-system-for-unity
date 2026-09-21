@@ -2249,7 +2249,7 @@ namespace NTSD.Simulation.Ecs
                 AttackerFrame = attacker?.Frame?.N ?? int.MinValue,
                 AttackerRuntimeFrame = attacker?.Runtime?.Frame ?? int.MinValue,
                 AttackerFrameCounter =
-                    attacker?.Runtime?.FrameWaitCounter ?? int.MinValue,
+                    attacker?.Runtime?.AttackingCounter ?? int.MinValue,
                 AttackerGroup = attacker?.Runtime?.RelationTeam ?? int.MinValue,
                 AttackerFrameDelay = attacker?.Runtime?.FrameDelay ?? int.MinValue,
                 AttackerInputScore =
@@ -2257,7 +2257,7 @@ namespace NTSD.Simulation.Ecs
                 TargetFrame = target?.Frame?.N ?? int.MinValue,
                 TargetRuntimeFrame = target?.Runtime?.Frame ?? int.MinValue,
                 TargetFrameCounter =
-                    target?.Runtime?.FrameWaitCounter ?? int.MinValue,
+                    target?.Runtime?.AttackingCounter ?? int.MinValue,
                 TargetGroup = target?.Runtime?.RelationTeam ?? int.MinValue,
                 TargetFrameDelay = target?.Runtime?.FrameDelay ?? int.MinValue,
                 TargetHp = target?.Health?.HP ?? int.MinValue,
@@ -4635,7 +4635,7 @@ namespace NTSD.Simulation.Ecs
             int fallIncrement = resolvedItr.fall != 0
                 ? resolvedItr.fall
                 : NTSDGlobal.Default.Fall.Value;
-            int previousState = target.GetFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;
+            int previousState = target.FrameCache?.GetNativeFrameDataById(target.Frame?.Prev ?? 0)?.state ?? 0;
             int previous2State = target.GetFrameDataById(
                     target.Runtime.PrevFrame2)?.state ??
                 target.Frame?.Prev2D?.state ?? 0;
@@ -4799,7 +4799,8 @@ namespace NTSD.Simulation.Ecs
             {
                 projection.TargetKnockbackVy +=
                     resolvedItr.dvy != 0 ? resolvedItr.dvy : -7.0;
-                if ((int)(projection.TargetKnockbackVy + projection.TargetYInt) > 0)
+                if (resolvedItr.dvy != 0 &&
+                    (int)(projection.TargetKnockbackVy + projection.TargetYInt) > 0)
                     projection.TargetKnockbackVy = 12.0;
 
                 int targetFrame = projection.TargetFacing == 0
@@ -4830,8 +4831,6 @@ namespace NTSD.Simulation.Ecs
                 ref projection);
 
             ProjectActiveHolderFrameDelay(ref projection);
-            if (projection.TargetFall == 80)
-                projection.TargetFall = 0;
 
             if (attacker.GetState() == LF2States.WeaponThrowing)
             {

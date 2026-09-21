@@ -10,7 +10,12 @@ namespace NTSD.Animation
     /// <summary>Immutable raw input and decoder identity, computed before publication or simulation.</summary>
     public sealed class LoganContentIdentity
     {
-        public const string CurrentDecodeContractTag = "NTSD28_LOGAN_DAT_SEMANTICS_V2";
+        public const string CurrentDecodeContractTag = "NTSD28_LOGAN_DAT_SEMANTICS_V3";
+        private const string BattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
+
+        public string ObjectDefinitionFingerprint { get; }
+        public string FusionInputFingerprint { get; }
+        public string FusionSemanticFingerprint { get; }
 
         public string RawDefinitionFingerprint { get; }
         public string DecodeContractTag { get; }
@@ -19,23 +24,12 @@ namespace NTSD.Animation
 
         private LoganContentIdentity(string rawFingerprint, string contractTag)
         {
-            if (rawFingerprint == null || rawFingerprint.Length != 64)
-                throw new ArgumentException("A 32-byte hexadecimal definition fingerprint is required.", nameof(rawFingerprint));
+            byte[] raw = DecodeFingerprint(rawFingerprint);
             if (string.IsNullOrEmpty(contractTag))
                 throw new ArgumentException("A nonempty ASCII decoder contract is required.", nameof(contractTag));
             foreach (char character in contractTag)
                 if (character == '\0' || character > 127)
                     throw new ArgumentException("Decoder contract must be ASCII without NUL.", nameof(contractTag));
-
-            byte[] raw = new byte[32];
-            for (int i = 0; i < raw.Length; i++)
-            {
-                int high = HexDigit(rawFingerprint[i * 2]);
-                int low = HexDigit(rawFingerprint[i * 2 + 1]);
-                if (high < 0 || low < 0)
-                    throw new ArgumentException("Definition fingerprint contains a non-hexadecimal character.", nameof(rawFingerprint));
-                raw[i] = (byte)((high << 4) | low);
-            }
 
             RawDefinitionFingerprint = Hex(raw);
             DecodeContractTag = contractTag;
@@ -53,7 +47,47 @@ namespace NTSD.Animation
 
         public static LoganContentIdentity FromDefinitionFingerprint(string rawFingerprint)
         {
-            return new LoganContentIdentity(rawFingerprint, CurrentDecodeContractTag);
+            return new LoganContentIdentity(rawFingerprint, "NTSD28_LOGAN_DAT_SEMANTICS_V2");
+        }
+
+        private LoganContentIdentity(string composite, string objects, string fusionInput, string fusionSemantic)
+            : this(composite, CurrentDecodeContractTag)
+        {
+            ObjectDefinitionFingerprint = objects;
+            FusionInputFingerprint = fusionInput;
+            FusionSemanticFingerprint = fusionSemantic;
+        }
+
+        public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic)
+        {
+            byte[] objectBytes = DecodeFingerprint(objects);
+            byte[] inputBytes = DecodeFingerprint(fusionInput);
+            byte[] semanticBytes = DecodeFingerprint(fusionSemantic);
+            byte[] tag = Encoding.ASCII.GetBytes(BattleInputTag);
+            byte[] preimage = new byte[tag.Length + 1 + 96];
+            Buffer.BlockCopy(tag, 0, preimage, 0, tag.Length);
+            Buffer.BlockCopy(objectBytes, 0, preimage, tag.Length + 1, 32);
+            Buffer.BlockCopy(inputBytes, 0, preimage, tag.Length + 33, 32);
+            Buffer.BlockCopy(semanticBytes, 0, preimage, tag.Length + 65, 32);
+            using (var sha = SHA256.Create())
+                return new LoganContentIdentity(Hex(sha.ComputeHash(preimage)),
+                    Hex(objectBytes), Hex(inputBytes), Hex(semanticBytes));
+        }
+
+        private static byte[] DecodeFingerprint(string value)
+        {
+            if (value == null || value.Length != 64)
+                throw new ArgumentException("A 32-byte hexadecimal component fingerprint is required.", nameof(value));
+            var bytes = new byte[32];
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                int high = HexDigit(value[i * 2]);
+                int low = HexDigit(value[i * 2 + 1]);
+                if (high < 0 || low < 0)
+                    throw new ArgumentException("Component fingerprint contains a non-hexadecimal character.", nameof(value));
+                bytes[i] = (byte)((high << 4) | low);
+            }
+            return bytes;
         }
 
         internal static LoganContentIdentity ForDecodeContract(string rawFingerprint, string contractTag)
@@ -72,8 +106,9 @@ namespace NTSD.Animation
         public LockstepSessionIdentity CreateLocalValidationSessionIdentity(
             ulong sessionId, uint seed, ulong stageFingerprint, IReadOnlyList<int> playerSlots)
         {
-            if (DecodeContractTag != CurrentDecodeContractTag)
-                throw new InvalidOperationException("Local validation requires the current decoder contract.");
+            if (DecodeContractTag != CurrentDecodeContractTag || ObjectDefinitionFingerprint == null ||
+                FusionInputFingerprint == null || FusionSemanticFingerprint == null)
+                throw new InvalidOperationException("Local validation requires the current decoder contract and all battle content components.");
             return new LockstepSessionIdentity(LockstepSessionIdentity.CurrentSchemaVersion,
                 sessionId, seed, CatalogFingerprint, stageFingerprint, playerSlots);
         }

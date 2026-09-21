@@ -1,13 +1,13 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-NATIVE-DISPLAY-PROGRESSION-001
-status: FOCUSED_TEST_PASS
+status: VERIFIED
 change-kind: NATIVE_DISPLAY_PROGRESSION
 code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleNativeDisplayWriter.cs
 code-path: Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
 code-path: Assets/NTSD/Scripts/Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeDisplayEditorTests.cs
 authority: Formal Logan BattleWorld28::advance_native_display_values_slot, spawn_at and SimulationTickDriver28 C25; source witness980 and post2379.
-evidence: DISPLAY-POST-DISPLAY audit source vectors and current birth/late slot caller read; Unity RED pending
+evidence: Existing display13/980 + prior scopedPlay, closed OPoint/ordinaryStage/clone birth dependencies; fresh joint13/13 job29fbea6b, currentSelfCheck and clonePlay/closure PASS. See final return appendix.
 -->
 
 # C25d完整显示推进
@@ -37,3 +37,7 @@ World只新增当前slot显示查询适配：读取当前occupant，排除已注
 SCOPED_PLAY_PASS：真实旧内容Scene两个tick显示13/26/499/498→10/32/500/500，source真值保持，checksum恢复4→4；Q05有序关闭四类计数全0、两帧Stopped。CS0/dirtyfalse/root14/用户Scene SHA保持。完整报告同ID artifacts/REPORT.md。当前仅递推与slot适配阶段通过，Record保持FOCUSED_TEST_PASS，出生初始值与OPoint vitals前置未完成，不得VERIFIED。下一唯一Task OPOINT-SPAWN-VITALS-TRANSACTION，再返回本父Task联验。
 
 账本最终PASS：514 records/17 governed code diff；日志在父DISPLAY-PROGRESSION artifact/ledger-final.txt。历史Record不在当前diff的警告保留，不是本次失败。
+
+## Final dependency return — 2026-09-21
+
+VERIFIED / NATIVE_DISPLAY_PROGRESSION. Previous recursive/slot/source980 and two-tick scene checks remain valid; do not reimplement them. Required OPoint vitals, ordinary/Stage birth and state9996 directbirth now individually VERIFIED, shared piece birth representatives revalidated. Fresh parent13/13 job29fbea6b3f4e4098b5fa1fecc49331d9 (includes980 source vectors) PASS0.3197383s after final production changes. Latest completeSelfCheck09:06:05.218Z plus cloneRenderer2/scenechecksum/poolretention09:07:01.330Z and Q05closure09:07:01.905Z PASS. Raw47/3 and persistent schemas unchanged; ordinaryHUD/nonbattle/resources unchanged. Evidence archived in state9996 ACCEPTANCE.md and display-parent-joint-29fbea6b.xml. Existing displayScene two-tick checks reused; currentPlay is clonebirth, not mislabeled a rerun of oldDisplayPlay. Scope is display advancement/slot eligibility/birth initialization; post-display resource transaction is a separate still-unimplemented responsibility. Q06 incomplete; no formal image parity claim.

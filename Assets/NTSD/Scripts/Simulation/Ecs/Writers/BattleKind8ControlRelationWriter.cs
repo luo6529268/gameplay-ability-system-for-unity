@@ -44,7 +44,7 @@ namespace NTSD.Simulation.Ecs
 
             if (interaction.dvx != 999)
             {
-                attacker.DirectWriteRawFramePreserveWaitCounter(
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(
                     interaction.dvx);
             }
 

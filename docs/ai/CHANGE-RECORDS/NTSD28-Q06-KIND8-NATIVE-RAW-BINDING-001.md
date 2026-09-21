@@ -1,8 +1,11 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q06-KIND8-NATIVE-RAW-BINDING-001
-status: IN_PROGRESS
+status: VERIFIED
 change-kind: KIND8_NATIVE_RAW_BINDING_SOURCE_WITNESS_FIRST
 code-path: Tools/NTSD28AuthorityTrace/kind8_native_raw_binding_witness.cpp
+code-path: Tools/NTSD28AuthorityTrace/validate_kind8_native_raw_binding_witness.py
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind8NativeRawBindingEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleKind8ControlRelationWriter.cs
 authority: Formal B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 playable BattleWorld28::resolve_special_relation_hit kind8.
 evidence: RAW-BINDING-CALLER-MATRIX actual canonical caller; formal330 inventory30 implicit action references, no runtime parity claim yet.
 -->
@@ -14,3 +17,23 @@ IN_PROGRESS / SOURCE_WITNESS_FIRST。当前正式BattleWorld28::resolve_special_
 当前仅允许新增Tools/NTSD28AuthorityTrace/kind8_native_raw_binding_witness.cpp。以实际resolve_special_relation_hit合法candidate、固定非复杂eligibility，覆盖源实际隐式69/444及0/高857/900/998/999哨兵/负/1000等声明与隐式，dvy-1/0/1/2及越界归0，HP/MP副作用与不改counter/latch/snapshot/整数镜像。先source双跑及独立检查，完整before/立即/following/RNG/DAT/params。无效或生命周期行不可跳过；source结论不能代替Unity验收。
 
 后续测试/production符号必须先准确扩Record；禁止全局改旧getter或重做已闭kind8eligibility/atomic资源规则。生产首选仅单caller替换，前提完整源见证与UnityRED支持。保留Unity/GAS、33ms、有序关闭、非战斗/Scene/resources/Server边界。验收compile、focused、完整SelfCheck、同Worldreplay/真实Play/关闭。回滚仅同ID精确diff并保留失败/其它修改。
+
+2026-09-21恢复核对：当前HEAD641d3054，kind8 runner尚不存在，前委派未产出脚本；root接手原声明新CPP。默认120个动作/descriptor/dvy组合，加12个资源副作用/哨兵向量和2个关系拒绝控制，共134。候选经真实geometric rebuild建立，拒绝控制仅在建立后改变targetgroup，以实际resolver验证无写入；完整前后及following记录。保持既有CPoint370源产物，暂无Unity生产修改。
+
+首build/134行capture exit0。核对shared raw投影未覆盖encoded_heal_timer_e0，新增kind8实体额外healTimer投影以完整验证injury副作用；初次capture保留source/initial.jsonl，不用无该字段输出宣称完整事务。下一重建双跑及独立模型。
+
+独立验证器预声明：新validate_kind8_native_raw_binding_witness.py。验证134索引/双跑/seed及已声明前置状态，基于before完整深拷贝只应用source kind8规定的mutations，对全after字典严格比较，尤其精确坐标与整数镜像、999不写、healTimer/MP、descriptor和counter/latch保持、零随机调用。该模型独立验证transition与关键初值，不声称完整before生成模型或following独立重建。
+
+源134最终双跑SHA c0543119fde7016ef29c084d9c40ba98f0633551343de8ac1bc16546f7b26009，62045独立transition检查0失败，132applied/2拒绝。准确测试扩展：新单Editor fixture借用已验held的world建模/全raw+extra/B2/RNG比较形状，恢复healTimer及完整初态，调用canonical Kind8 writer，再完整下一tick。type0普通factory两profile，初步logic-only；不修改held fixture或生产，先134 RED，原失败保留。当前目标Unity项目未打开（现有Editor属于其它项目），可在确认无同项目实例后以指定2022.3.62f3批模式运行新测试，不占用其它项目Library。
+
+当前验证进度：native134双跑及独立模型62045 PASS；新Editor测试fixture Unity脚本编译完成(Tundra build success)，当前批模式PID51800仍存活、正在domain初始化，尚无Logs/kind8-134-editmode.xml。不能据此称测试通过。Validate-ChangeLedger实际594records/3governedfiles PASS。下次查询同PID/日志/XML，禁止重复启动同项目实例。无Unity生产修改。
+
+Unity134两profile实测before0/immediate144/following54，首轮XML终态2FAIL，已归档production-red。生产精确预声明：仅BattleKind8ControlRelationWriter.TryApply内dvx!=999分支的一次DirectWriteRawFramePreserveWaitCounter替换为已有DirectWriteNativeRawFramePreserveWaitCounter。资格/资源/顺序/位置/999门保持，绝不改共享旧setter。无新owner/lifecycle/schema。先相同134复验全0，再相关kind8既有回归及replay/SelfCheck/Play/关闭。
+
+后继准确测试扩展：同NTSD28Q06Kind8NativeRawBindingEditorTests.cs新增source134两profile同World快照恢复重放，快照前kind8未执行，重放kind8+两完整tick，比较完整capture并确认旧同步cursor失效。范围只此fixture，不改生产或global replay；跨World与renderer/真实Play仍后继。
+
+本轮进度：生产仅kind8单caller改native binder，134两profile before/立即/following0。旧联合51为49PASS2反射fixtureFAIL，独立KIND8-PROJECTION-TEST-ENTRY-001修默认参数后最终53/53PASS，包含268场景536重放tick。完整SelfCheck独立batch PID122096已退出，日志27263行成功marker位于RunAllChecksStatic与WriteResult(PASS)之后；Temp结果退出后缺失，完整证据边界记录full-selfcheck-completion-proof.json，不伪称结果文件归档。父IN_PROGRESS / FOCUSED_REPLAY_SELF_CHECK_PASS_PLAY_PENDING；下一同Editor fixture准备真实Play536两factory及Scenechecksum/borrowers保护，之后现有Q05关闭验收。尚未写Play入口，无运行Unity进程/测试/build，禁止重跑已过source/53项目以替代Play。
+
+真实Play准确扩展：仅同NTSD28Q06Kind8NativeRawBindingEditorTests.cs把已验矩阵抽成RunMatrix(profile,renderer)，原EditMode入口仍false；新增Editor-only Kind8PlayProbe，536=134×两profile×两factory，保护scene checksum与pool borrower数，各world finally既有shutdown。新增显式StartPlayAcceptance供本任务新Editor -executeMethod调用：仅在非Play/非dirty场景打开现有NTSD_Battle，不保存或改资产，写request并进入Play。矩阵结束后提交已有Q05_ReplayPlay关闭请求，原probe负责restore/关闭/退Play；本probe不创建新的runtime manager、改生命周期阶段或接入产品流程。结果保留Temp及既有artifact，不声称物理按键/正式图像验收。
+
+VERIFIED / DECLARED_CANONICAL_KIND8_RAW_BINDING_SCOPE：独立只读review通过。源134/62045，Unity134两profilebefore/立即/following0，53回归与268场景536重放tick、完整SelfCheck成功日志、真实Play536四矩阵全0、关闭2026-09-20T23:33:57Z全部PASS。play-pass包含四JSON及play-536-pass/shutdown-233357-pass。Scene checksum/borrowers2→2、restore4→4/worldslots两pool0/两帧Stopped；Editor62860当前idle/notPlaying，scene dirtyfalse/root14/SHA BCD1047B…0E9FB6保持。Console读取仅两MCP client-disconnect日志，未据此声称Console绝对无记录。Ledger595/5及diffcheck通过。范围仍合成source矩阵与sameWorld replay，不是30个正式技能逐一按键/图像或全Q06验收。

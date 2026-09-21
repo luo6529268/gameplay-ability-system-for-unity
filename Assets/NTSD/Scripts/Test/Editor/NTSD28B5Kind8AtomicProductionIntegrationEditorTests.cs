@@ -8,6 +8,7 @@ using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
+using NTSD.Simulation.Ecs;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -279,6 +280,8 @@ namespace NTSD.Test.Editor
                 interaction,
                 BattleHitCandidateDisposition.Kind8,
                 projection,
+                false,
+                default(BattleOrdinaryCharacterDamageRoute),
             };
             bool result = (bool)project.Invoke(null, args);
             projection = args[4];

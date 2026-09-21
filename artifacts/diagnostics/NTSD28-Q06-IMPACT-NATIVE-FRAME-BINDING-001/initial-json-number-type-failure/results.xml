@@ -1,0 +1,53 @@
+<test-suite type="TestSuite" id="9714" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7743" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.404747" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18387" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7735" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.340080" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="62860" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18388" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7735" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.302959" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18396" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7197" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.268381" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11685" name="NTSD28Q06ImpactNativeFrameBindingEditorTests" fullname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests" classname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.261529" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11688" name="ImpactAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="1.255844" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11686" name="ImpactAndFollowingTickMatchSource(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.ImpactAndFollowingTickMatchSource(Authority400,DataOriented)" methodname="ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests" runstate="Runnable" seed="945315481" result="Failed" start-time="2026-09-21 01:02:09Z" end-time="2026-09-21 01:02:10Z" duration="0.745858" asserts="0"><properties /><failure><message><![CDATA[  case 0 before entities[0].pendingX=0 expected=0
+case 0 before entities[0].pendingY=0 expected=0
+case 0 before entities[0].pendingZ=0 expected=0
+case 0 before entities[1].pendingX=0 expected=0
+case 0 before entities[1].pendingY=0 expected=0
+case 0 before entities[1].pendingZ=0 expected=0
+case 0 before entities[2].pendingX=0 expected=0
+case 0 before entities[2].pendingY=0 expected=0
+case 0 before entities[2].pendingZ=0 expected=0
+case 0 before entities[3].pendingX=13 expected=13
+case 0 before entities[3].pendingY=17 expected=17
+case 0 before entities[3].pendingZ=19 expected=19
+  Expected: <empty>
+  But was:  < "case 0 before entities[0].pendingX=0 expected=0", "case 0 before entities[0].pendingY=0 expected=0", "case 0 before entities[0].pendingZ=0 expected=0", "case 0 before entities[1].pendingX=0 expected=0", "case 0 before entities[1].pendingY=0 expected=0", "case 0 before entities[1].pendingZ=0 expected=0", "case 0 before entities[2].pendingX=0 expected=0", "case 0 before entities[2].pendingY=0 expected=0", "case 0 before entities[2].pendingZ=0 expected=0", "case 0 before entities[3].pendingX=13 expected=13"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003c8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06ImpactNativeFrameBindingEditorTests.cs:88
+at NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.ImpactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06ImpactNativeFrameBindingEditorTests.cs:32
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactOwner, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (destination): pic=0, state=3, wait=37, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactTarget, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=ImpactAttacker, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11687" name="ImpactAndFollowingTickMatchSource(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.ImpactAndFollowingTickMatchSource(MobileExtended,Legacy)" methodname="ImpactAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests" runstate="Runnable" seed="1465660735" result="Failed" start-time="2026-09-21 01:02:10Z" end-time="2026-09-21 01:02:10Z" duration="0.497744" asserts="0"><properties /><failure><message><![CDATA[  case 0 before entities[0].pendingX=0 expected=0
+case 0 before entities[0].pendingY=0 expected=0
+case 0 before entities[0].pendingZ=0 expected=0
+case 0 before entities[1].pendingX=0 expected=0
+case 0 before entities[1].pendingY=0 expected=0
+case 0 before entities[1].pendingZ=0 expected=0
+case 0 before entities[2].pendingX=0 expected=0
+case 0 before entities[2].pendingY=0 expected=0
+case 0 before entities[2].pendingZ=0 expected=0
+case 0 before entities[3].pendingX=13 expected=13
+case 0 before entities[3].pendingY=17 expected=17
+case 0 before entities[3].pendingZ=19 expected=19
+  Expected: <empty>
+  But was:  < "case 0 before entities[0].pendingX=0 expected=0", "case 0 before entities[0].pendingY=0 expected=0", "case 0 before entities[0].pendingZ=0 expected=0", "case 0 before entities[1].pendingX=0 expected=0", "case 0 before entities[1].pendingY=0 expected=0", "case 0 before entities[1].pendingZ=0 expected=0", "case 0 before entities[2].pendingX=0 expected=0", "case 0 before entities[2].pendingY=0 expected=0", "case 0 before entities[2].pendingZ=0 expected=0", "case 0 before entities[3].pendingX=13 expected=13"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003c8] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06ImpactNativeFrameBindingEditorTests.cs:88
+at NTSD.Test.NTSD28Q06ImpactNativeFrameBindingEditorTests.ImpactAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06ImpactNativeFrameBindingEditorTests.cs:32
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

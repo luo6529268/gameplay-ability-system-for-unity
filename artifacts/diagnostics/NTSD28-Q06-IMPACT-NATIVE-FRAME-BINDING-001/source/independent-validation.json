@@ -1,0 +1,7 @@
+{
+  "cases": 20,
+  "checks": 18285,
+  "failures": [],
+  "sha256": "4041ba46914f43292e97058fb9c8687f67482cf384dbcb3590e1d0a0946d6edd",
+  "scope": "Independent impact transition from captured before and params, all four after entities and unchanged RNG. Spawn initial generation and following tick not modelled."
+}

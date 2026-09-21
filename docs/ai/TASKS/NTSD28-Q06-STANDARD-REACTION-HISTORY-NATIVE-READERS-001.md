@@ -1,0 +1,15 @@
+> 2026-09-21 VERIFIED / DECLARED_SCOPE_ONLY。联合25/25、SelfCheck、代表replay4/8ticks、Play10/Q05关闭PASS。最终范围与证据见artifacts/diagnostics/NTSD28-Q06-STANDARD-REACTION-HISTORY-NATIVE-READERS-001/ACCEPTANCE.md；下文保留原计划，四reader意向已收敛两previous reader。
+
+# NTSD28-Q06-STANDARD-REACTION-HISTORY-NATIVE-READERS-001
+
+PLANNED / SOURCE_WITNESS_EXTENSION_REQUIRED。
+
+来源：KIND0-POST-EFFECT-NATIVE-FRAME-ACCESS源6 case0 previous900显式state13当前正式source真实hit输出fall80/action186/pendingX5/pendingY10；Unity完成post-effect两访问修复后仍fall20/action220/pendingX0/pendingY17。首差已存父包after-post-effect-access（job440cbbd2bef64c5e9f7f49ce15b76b7e）。before0、其他5例无差异；不能改expected/删除case0。
+
+当前正式battle_world.cpp resolve_unarmored_reaction读取previous_action_078 state13或tick_action_snapshot state12强制80，随后实际水平/纵向反应消费该值。Unity BattleDamageWriter.ApplyStandardFall约2460/2462仍旧GetFrameDataById；HitPlan.ProjectStandardCharacterDamageWriterEffect约4638/4639同样旧读。先精确核对这4访问及源字段，别把type3 identity或其他candidate reader一起批改。
+
+第一实现步骤：扩既有Tools/NTSD28AuthorityTrace/kind0_post_effect_native_frame_access_witness.cpp可选--reaction，仅新增2个history代表：effect0/current10/previous12/snapshot900显式state12与state0控制。snapshot必须在snapshot_actions之后设置，candidate构建前固定；它代表已有历史字段，不修改候选后state或伪after。真实几何/wholehit/following，声明180186220支持帧。默认6行输出bytes必须保持SHAc01031a3eca684e4833146d4bb511c4110d18c5d7439cb64b6e943ff3c2bcae4。先源码构建/双跑/field证据，再声明Unity source2 direct+captured Shadow/DataOriented准确入口；复用现有previous13 sourcecase0，不扩大角色/配置乘积。
+
+当前只计划source扩展，尚未修改本任务脚本。source验证后才扩生产4reader准确scope；保留现有fallback/null处理需核对其native语义，不能仅机械替换。counter/HP/damage/knockback公式/序列和其它type3/catch职责不变，default200203绑定归父包。
+
+验收：source2控制+已有previous13源/Unity首差，captured projection独立观察，父包6+smoke3/旧15定向回归在修复稳定后联合一次；一次SelfCheck+代表Play/需要的snapshot回放收尾。无Scene/资源/非战斗/framework/schema改动。回滚仅此ID未来声明的source模式与4reader/测试扩展，不回退其他工作。Q06保持未完成，父包等待该依赖出口；Q07正式资源未迁移。

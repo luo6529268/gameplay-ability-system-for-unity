@@ -60,8 +60,8 @@ namespace NTSD.Simulation
             }
 
             BattleLogicReferencePool referencePool = world.LogicReferencePool;
-            if (task.nativeWeaponPieceSpawn &&
-                !BattleNativeWeaponPieceWriter.IsInitialActionAdmitted(characterConfig, task.opoint.action))
+            if ((task.nativeWeaponPieceSpawn || task.nativeState9996CloneSpawn || task.IsLateOpointSpawn) &&
+                !BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(characterConfig, task.opoint.action))
             {
                 failure = BattleLogicEntityCreationFailure.InvalidTask;
                 return null;
@@ -109,6 +109,10 @@ namespace NTSD.Simulation
 
             if (task.nativeWeaponPieceSpawn)
                 BattleNativeWeaponPieceWriter.InitializeBirth(entity, task);
+            else if (task.nativeState9996CloneSpawn)
+                BattleNativeDirectSpawnWriter.InitializeBirth(entity, task);
+            else if (task.IsLateOpointSpawn && task.parent != null)
+                BattleNativeOpointBirthWriter.InitializeBirth(entity, task);
             else PostInitLiving(
                 entity,
                 task.parent,
@@ -223,7 +227,8 @@ namespace NTSD.Simulation
                     characterConfig,
                     state.CurrentDataObjectId,
                     world,
-                    initializeNativeArmorRuntime: false);
+                    initializeNativeArmorRuntime: false,
+                    initializeNativeDefinitionIdentity: false);
                 character.Initialize(
                     NTSDGlobal.Default.Health.HpFull,
                     NTSDGlobal.Default.Health.MpFull);
@@ -349,7 +354,7 @@ namespace NTSD.Simulation
             OPointCreateTask task)
         {
             if (living?.PS == null || task?.parent == null ||
-                !task.releaseOpointSpawn || task.useDirectVelocity)
+                !task.releaseOpointSpawn || task.useDirectVelocity || task.IsLateOpointSpawn)
             {
                 return;
             }

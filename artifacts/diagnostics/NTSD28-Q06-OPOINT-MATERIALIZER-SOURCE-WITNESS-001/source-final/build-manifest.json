@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "07650DAB7D6DAAB317304128B1B7A1AD00AB896B1EFC40750BC21D1BAFD23A27",
+  "captureBinarySha256": "B142B74C0442C46A240876642E3B58310210FB3D9E17B89F67AB1B17A22F1562",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q06-OPOINT-MATERIALIZER-SOURCE-WITNESS-001\\source-final\\opoint_materializer_witness.exe",
+  "authorityWriteAllowed": false
+}

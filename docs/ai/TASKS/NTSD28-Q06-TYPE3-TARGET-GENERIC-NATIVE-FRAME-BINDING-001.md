@@ -1,0 +1,19 @@
+> 2026-09-21 VERIFIED / DECLARED_GENERIC_TARGET_BINDER_SCOPE。source11/419、对照/回归、SelfCheck、代表replay5/10tick、Play10/Q05关闭通过；高位投影与lockedkind独立未关闭。准确证据见artifacts/diagnostics/NTSD28-Q06-TYPE3-TARGET-GENERIC-NATIVE-FRAME-BINDING-001/ACCEPTANCE.md。下文保留原计划。
+
+# NTSD28-Q06-TYPE3-TARGET-GENERIC-NATIVE-FRAME-BINDING-001
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST。
+
+当前authority正式EXE B1E13A…19033/对应playable闭包07CD47…778F，battle_world.cpp resolve_confirmed_unarmored_hit type3 generic分支及reset_native_matched_projectile_pair后继。Unity ApplyNativeType3TargetGenericContinuation唯一旧DirectWriteHeldFramePreserveWaitCounter是准确实际绑定缺口；保留B5已VERIFIED owner/control/speciallatch/clear pending但保留count/仅0fallback/FjUj选择。locked kind transform独立不混改。
+
+第一写域仅Tools/NTSD28AuthorityTrace/type3_target_generic_native_frame_binding_witness.cpp。11代表，slot0/70、OID77/78，attacker默认type0/current20state0带kind0effect0injury5fall1ITR，targettype3/current10state0带BDY/hitFj与hitUj。完整真实geometric candidate/public ordinary unarmored hit/全following，不调用私有helper，不手填after。
+
+主8 FJ类别：selected69implicit、900implicit、900declaredstate0、999declaredstate0、999missing、1000、-1、0→implicit30。另3：type3attacker/current20state0/无link的Uj0→implicit20；post-pair真实代表(attacker type3/current20state3005,target current10state0,Uj900declaredstate3005，attacker latch13声明hitUj70,target latch11声明hitUj71，70/71支持帧state0wait100self)；低位declared77state0控制。普通目的声明wait41next自身。所有before snapshot与history区分，目标pending13/17/19与贡献计数非零可观测，速度1.25/0/-0.5；pair目的900是中间值，捕获actual generic返回动作与最终after，不预设after900。
+
+前state3005skip证据复用上一TYPE3-ATTACKER-POSTHIT源case12，不重复该scope。负link activeparent等旧归属职责保留不扩乘积；本次目的帧绑定输入与copy行为独立。source可达性若被前置拒绝须保留失败并检查构造，禁止绕过。
+
+当前projection独立边界：CanProjectStandardType3DamageWriterEffect generic旧GetFrame目的gate，高位声明也拒绝；ProjectStandardType3DamageWriterEffect responseState旧reader随gate被遮蔽。只改gate会漏高位3005/3006pair，若后续扩投影须两访问一起声明/验证，不能在本单binder task默默宣称已闭。HasFrame40为lockedkind分支，不在本范围。source之后才声明Unityfixture与最小生产位置；先RED，相关旧11与parent边界复用，闭包出口一次SelfCheck/代表replayPlay，不跑全角色乘积。
+
+正式indexed150个type3对象静态非3005帧响应：Fj5865declaredlow/128implicitlow、Uj5809declaredlow/184implicitlow；312缺声明响应中66对应frame有BDY。报告FORMAL330-TYPE3-TARGET-RESPONSES.json；无dynamic玩家可达证明，不能据有BDY断言实战Bug。
+
+保持Unity/GAS/非战斗/Scene/资源/schema与例外，source-onlypreviousXYZ/raw3限制。回滚仅本ID新source与后续声明精确代码，不覆盖其他工作，不做Git回退。Q06未完/Q07未迁移。

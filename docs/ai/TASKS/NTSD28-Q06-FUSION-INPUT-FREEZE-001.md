@@ -1,0 +1,15 @@
+# NTSD28-Q06-FUSION-INPUT-FREEZE-001
+
+IN_PROGRESS / LOAD_TIME_FUSION_INPUT_IDENTITY.
+
+Source: GameSession optional_global_dat selects first regular file from decodedRoot/data/fusion.dat then extractedRoot/data,dat/data,assets/data,NTSD2.8/data. Existing but malformed/empty file aborts,only nofile invokes FusionCatalog28.locked_runtime_table_2833. Explicit extractedRoot is distinct from unifiedRuntimeRoot; do not silently guess it from ImageRoot. Current formal fusion filehash/source4 evidence inherited. Current LoganObjectCatalog.DefinitionFingerprint hashes catalog+objectDAT only; fusion input identity must be separately frozen before future composite content integration.
+
+Exact two new scripts:
+Assets/NTSD/Scripts/Animation/LoganFusionCatalogInput.cs: immutable Catalog,SelectedPath,UsesLockedFallback,InputFingerprint,SemanticFingerprint; static Capture(decodedDatRoot,extractedRoot),internal overload same+Func<string,byte[]> regularFileReader(nullmeansabsent),AssertInputsCurrent with same capturedroots/reader. Explicit extractedRoot required, decoded optional. File bytes UTF8decode preservingBOM; firstselected invalid throwsInvalidDataException,not skip tolowerpath. Readonly preparedcatalog from existing strictparser. Copy expectedlocked2records from actualsource fallback,not infer fromUnityoldvalues. No filesystemwrites,tickIO,singletons,newmanager.
+Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FusionInputFreezeEditorTests.cs: formalactualfile read; delegate-backed path precedence,empty/malformed selected rejection,missing-onlyfallback,mutation/stale-source/higherpriority appearance rejection; semanticrecordfingerprint invariantundercomments and sensitive torecordvalues; fallbacksameformalrecords semantically equivalent; no tempasset changes.
+
+Identity contract: semantic hash deterministic BinaryWriter UTF8contracttag+ordered16intfields per record,count; ignore SourceLine/comments. Input hash distinguishes FILE rawbyteSHA from LOCKED_TABLE fallback marker+semantic hash,not absolute machinepath. SelectedPath separately retained and compared onfreshness,includinghigherpriorityappearance. Both are specificfusion identities,NOT replacements for existingglobalLoganContentIdentity/catalog fingerprint. Later composite identity/sourceexport/hostprepare task must explicitly fold them before productionconsumer activation; this task cannot claim completecontentidentityintegration.
+
+Lifecycle immutableloadtimevalue owned by caller, no activequeue/pool/worker/cleanup; eventualexistingWorldpreparedcatalogowner unchanged. Strictfailedcapture never publishes a candidate. No Host/World/schema/runtimefields/Scene/resources/nonbattlechanges. Narrowcompile+focusedtests+review only; no fullbattleSelfCheck/Play for unusedloadtimehelper. Rollback only exact task-owned diffs,retain unrelateduserwork,no destructiveGit. Q06/goalactive,Q07notmigrated.
+
+Final VERIFIED / FUSION_INPUT_FREEZE_ONLY. Exact2files,job5d8aa21ce3dd47b89fac788cfd9155f6 14/14PASS,CS0,independent reviewPASS. Evidence artifacts/diagnostics/NTSD28-Q06-FUSION-INPUT-FREEZE-001/ACCEPTANCE.md. NoHost/World/globalidentityintegration;noSelfCheck/Play claim.

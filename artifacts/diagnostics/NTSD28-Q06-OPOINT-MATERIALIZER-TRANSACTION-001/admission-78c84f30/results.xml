@@ -1,0 +1,123 @@
+<test-suite type="TestSuite" id="10047" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7999" result="Failed" site="Child" start-time="2026-09-21 10:10:24Z" end-time="2026-09-21 10:10:25Z" duration="1.412155" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="19053" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7991" result="Failed" site="Child" start-time="2026-09-21 10:10:24Z" end-time="2026-09-21 10:10:25Z" duration="1.345178" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19054" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7991" result="Failed" site="Child" start-time="2026-09-21 10:10:24Z" end-time="2026-09-21 10:10:25Z" duration="1.252161" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19062" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7430" result="Failed" site="Child" start-time="2026-09-21 10:10:24Z" end-time="2026-09-21 10:10:25Z" duration="1.154473" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12412" name="NTSD28Q06OpointMaterializerEditorTests" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Failed" site="Child" start-time="2026-09-21 10:10:24Z" end-time="2026-09-21 10:10:25Z" duration="1.085531" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12459" name="ImmediateMatchesOriginalMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Failed" site="Child" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.985691" total="8" passed="4" failed="4" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12449" name="OpointSource_18_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="627636896" result="Failed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.213280" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.vitals.reviveLives=1 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=0
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.vitals.reviveLives=1 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=0", "after.slot50.links[2]=-1 expected=0" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12450" name="OpointSource_18_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="551932091" result="Failed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.026418" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.vitals.reviveLives=1 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=0
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.vitals.reviveLives=1 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=0", "after.slot50.links[2]=-1 expected=0" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12451" name="OpointSource_19_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="921948760" result="Passed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.025042" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12452" name="OpointSource_19_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2004886821" result="Passed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.022369" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12453" name="OpointSource_20_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="99067727" result="Passed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.268230" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12454" name="OpointSource_20_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1671423750" result="Passed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.270671" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12457" name="OpointSource_22_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1125138120" result="Failed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.025575" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.vitals.reviveLives=1 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=0
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.vitals.reviveLives=1 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=0", "after.slot50.links[2]=-1 expected=0" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12458" name="OpointSource_22_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1187576637" result="Failed" start-time="2026-09-21 10:10:25Z" end-time="2026-09-21 10:10:25Z" duration="0.024713" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.vitals.reviveLives=1 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=0
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.vitals.reviveLives=1 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=0", "after.slot50.links[2]=-1 expected=0" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

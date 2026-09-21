@@ -1,0 +1,18 @@
+{
+  "cases": 16,
+  "checks": 365,
+  "failures": [
+    {
+      "path": "case5.entity1.wait",
+      "expected": 37,
+      "actual": 41
+    },
+    {
+      "path": "case7.entity1.wait",
+      "expected": 37,
+      "actual": 41
+    }
+  ],
+  "sha256": "52093e69d3e286ddd5e496ab862efb7e35ec385b63b41472fa5b0dda51696f0d",
+  "scope": "Fixed effect8 fixture gate/override/descriptor and frame-history invariants. Fixed injury5 HP only; full damage side effects, RNG and following not independently modelled."
+}

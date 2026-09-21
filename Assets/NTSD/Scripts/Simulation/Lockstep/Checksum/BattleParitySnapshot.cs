@@ -1009,6 +1009,9 @@ namespace NTSD.Simulation
             object transform = DictionaryOf(
                 ("facing", (object)(isDefault || runtime.Dir == "right" ? 0 : 1)),
                 ("collisionYReference", isDefault ? 0 : runtime.CollisionYReference),
+                ("platformSourceSlotF4", isDefault ? 0 : runtime.PlatformSourceSlotF4),
+                ("renderShadowOffset10C", isDefault ? 0 : runtime.RenderShadowOffset10C),
+                ("nativePreviousY104", isDefault ? 0 : runtime.NativePreviousY104),
                 ("renderOffsetX", isDefault ? 0 : (int)runtime.RenderOffsetX),
                 ("type3VisualZOffset", isDefault ? 0.0 : runtime.Type3VisualZOffset),
                 ("x", isDefault ? 0.0 : runtime.X),

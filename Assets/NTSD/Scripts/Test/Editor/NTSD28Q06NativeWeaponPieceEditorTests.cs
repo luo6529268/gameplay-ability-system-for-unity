@@ -93,7 +93,9 @@ namespace NTSD.Test
                 "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime",
                 NTSD.EditorTools.NTSD28UnityRawCaptureEditor.DefaultScenario, profile, 3, (driver, inputs, identity) =>
             {
-                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("3900ECBC509557DB"));
+                Assert.That(driver.World.RuntimeDataCatalog.LoganContentIdentity.ObjectDefinitionFingerprint,
+                    Is.EqualTo("4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C"));
+                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("0FEFD4B968D618FD"));
                 var catalog = driver.World.RuntimeDataCatalog;
                 foreach (string line in File.ReadLines(Witness + "formal.jsonl"))
                 {

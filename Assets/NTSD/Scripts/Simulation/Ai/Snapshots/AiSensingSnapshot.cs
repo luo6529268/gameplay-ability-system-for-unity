@@ -34,6 +34,7 @@ namespace NTSD.Simulation
             Generation = new uint[capacity];
             Identity = new int[capacity];
             ObjectId = new int[capacity];
+            NativeAiProfileObjectId = new int[capacity];
             DataObjectType = new int[capacity];
             X = new int[capacity];
             Y = new int[capacity];
@@ -80,6 +81,7 @@ namespace NTSD.Simulation
         public readonly uint[] Generation;
         public readonly int[] Identity;
         public readonly int[] ObjectId;
+        public readonly int[] NativeAiProfileObjectId;
         public readonly int[] DataObjectType;
         public readonly int[] X;
         public readonly int[] Y;
@@ -144,6 +146,7 @@ namespace NTSD.Simulation
             Array.Copy(Generation, grown.Generation, count);
             Array.Copy(Identity, grown.Identity, count);
             Array.Copy(ObjectId, grown.ObjectId, count);
+            Array.Copy(NativeAiProfileObjectId, grown.NativeAiProfileObjectId, count);
             Array.Copy(DataObjectType, grown.DataObjectType, count);
             Array.Copy(X, grown.X, count);
             Array.Copy(Y, grown.Y, count);

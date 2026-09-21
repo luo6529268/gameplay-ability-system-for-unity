@@ -1,0 +1,15 @@
+# Post-display pre-change audit
+
+2026-09-21. Production not yet modified. Existing post.tsv2379 SHA4C8CC6013FF44CB2613C5AC2F42B5BF056522B4C564829B9D539BD2B49D8B644 freshly verified. Native build manifest closure07CD47/formalEXEB1E13 match current authority. No redundant rebuild/source matrix run required.
+
+Current formal battle_world.cpp2389-2550: slotexists/non-lifecyclePending/type0/nativecurrentdescriptor guard; cache original descriptor. frame_0mp positive +HPpositive/effectiveMaxnonpositive +actionprotected-range exclusions -> actiononly. Resolve previous078 using currentdefinition:62HP1/63HP+max0/64MP0/65HP+maxbase/66MP500/405intstagecenter syncpreciseXYZ and zeromotion;4000..4999lives,3640..3645battleGroup. Restore onlycreditgate-1/cachedcurrentstate!=63/(timerpositive or mode2/3),setsHP/maxbase and clears selfdamage+KO. Thenupper HP/max and DATmaxMP only. No lowerclamps; no restore of score/othercounters. No field resets merely to simplify frame_0mp.
+
+Unity mappings verified: Health.HP/HPBound/HP3/PP; Frame.Prev previous078; WriteCurrentFrameId writes rawframeonly; NativeMetadata.Bmp.frame_0mp/Stats.max_mp; Runtime.HP2Orig lives; entity.RelationTeam battleGroup; Runtime.FullRestoreTimer1B0,OrdinaryCreditGate2F4,InputHpConsumedTotal34C,KnockoutCount358. Existing reset/copy/checksum fields; no schema upgrade. Runtime.SetPosition doesn't sync ints by itself, so405 needs SyncIntegerPosition; SetVelocity zeros Vxyz only,not pending hit impulse.
+
+StageBounds28.valid battle_world.h859 is width>0 && z_near<=z_far. GameSession2148 sets nativeWorldhitgroup18 from config.selected_mode_hit_group_gate_18;4165 sets postresourcefullrestore18 from sameconfig. Therefore existing Runtime.NativeHitResourceRules.ActiveModeHitGroupGate18 is correct consumer carrier, not a newglobal/defaultconstant. Its B5carrier Record explicitly leaves fullrestoreconsumer unconnected. Complete Host selectedmode content remains Q08; defaultvalue0.
+
+LateModule has display in threeearly-return paths and normalpath. Normalcurrently display thencomputer/frame. QueryAndLink.FindCurrent uses IsActiveForCurrentPass, excludingPendingFlushDestroy/dormant/pendingUnregister; source postguard excludes NativeLifecycleResolutionPending, not arbitrarylocalflags. Existing display-slotquery excludesdormant/unregister but retainsPendingFlushDestroy. Need preserve each branch's tailcontinue while letting independent postguard see actual remaining slot. Never globally relax IsActiveForCurrentPass to accomplish this. Independent qualification review pending.
+
+Test-first new exact fixture prepared separately; missingwriter reflection failure must be reported as ownerabsence, not2379executedmismatches. Add actualnormalcaller/frame observation and mode2/3 fromWorldcarrier;405nonzeromotion requires labelledsource-code-derived test in addition to2379 existingnative vectors whosemotionstarts0. No resource/scene/nonbattle writes.
+
+Independent followup confirms sameconfig modecarrier reuse and all4 post-display exits/requery as above. No need for new persistent fields or World accessor. New test preparation in progress; production remains unchanged.

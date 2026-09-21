@@ -75,7 +75,7 @@ namespace NTSD.Test
                 var lines = File.ReadAllLines(output);
                 var header = JObject.Parse(lines[0]);
                 var catalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(root));
-                Assert.That((string)header["content"]["rawDefinitionSha256"], Is.EqualTo(catalog.DefinitionFingerprint));
+                Assert.That((string)header["content"]["rawDefinitionSha256"], Is.EqualTo(catalog.BattleDefinitionFingerprint));
                 Assert.That((string)header["content"]["semanticSha256"], Is.EqualTo(catalog.ContentIdentity.SemanticFingerprint));
                 Assert.That((string)header["content"]["profile"], Is.EqualTo("logan-runtime"));
                 Assert.That((string)header["schema"], Is.EqualTo("ntsd28-unity-raw-capture-v2"));
@@ -133,19 +133,19 @@ namespace NTSD.Test
             var type = typeof(NTSD.EditorTools.NTSD28UnityRawCaptureEditor).Assembly
                 .GetType("NTSD.EditorTools.NTSD28TraceContentIdentity");
             Assert.That(type, Is.Not.Null);
-            var method = type.GetMethod("FromLoganRaw", BindingFlags.Static | BindingFlags.NonPublic);
+            var method = type.GetMethod("FromLoganCatalog", BindingFlags.Static | BindingFlags.NonPublic);
             Assert.That(method, Is.Not.Null);
             var content = (IDictionary)method.Invoke(null, new object[]
             {
-                "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C"
+                LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime"))
             });
-            Assert.That(content["semanticSha256"], Is.EqualTo("DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407"));
-            Assert.That(content["catalogFingerprint64"], Is.EqualTo("3900ECBC509557DB"));
+            Assert.That(content["semanticSha256"], Is.EqualTo("FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147"));
+            Assert.That(content["catalogFingerprint64"], Is.EqualTo("0FEFD4B968D618FD"));
             Assert.That(content["profile"], Is.EqualTo("logan-runtime"));
             var schemas = (IDictionary)content["schemas"];
-            Assert.That(schemas["entityRuntime"], Is.EqualTo(15));
-            Assert.That(schemas["aggregate"], Is.EqualTo(23));
-            Assert.That(schemas["checksum"], Is.EqualTo(26));
+            Assert.That(schemas["entityRuntime"], Is.EqualTo(17));
+            Assert.That(schemas["aggregate"], Is.EqualTo(25));
+            Assert.That(schemas["checksum"], Is.EqualTo(28));
             Assert.That(schemas["characterShell"], Is.EqualTo(2));
             Assert.That(schemas["entityBaseShell"], Is.EqualTo(2));
         }

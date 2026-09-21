@@ -1,0 +1,1337 @@
+<test-suite type="TestSuite" id="10047" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7999" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="3.021019" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="19053" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7991" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="2.949438" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19054" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7991" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="2.862911" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="19062" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7430" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="2.764932" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12412" name="NTSD28Q06OpointMaterializerEditorTests" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="2.696688" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12459" name="ImmediateMatchesOriginalMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" testcasecount="46" result="Failed" site="Child" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:12Z" duration="2.594936" total="46" passed="2" failed="44" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12413" name="OpointSource_0_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_0_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1700321619" result="Failed" start-time="2026-09-21 10:02:09Z" end-time="2026-09-21 10:02:10Z" duration="0.156490" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12414" name="OpointSource_0_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_0_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1966149099" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027753" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12415" name="OpointSource_1_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_1_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1190840002" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025118" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=0 expected=7
+after.slot50.extra[0]=0 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=0 expected=7", "after.slot50.extra[0]=0 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12416" name="OpointSource_1_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_1_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1216906432" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027107" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=0 expected=7
+after.slot50.extra[0]=0 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=0 expected=7", "after.slot50.extra[0]=0 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12417" name="OpointSource_2_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_2_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1003347520" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027332" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.combat.renderPhase=0 expected=7
+after.slot50.extra[0]=0 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.extra[5]=1 expected=0
+after.slot51.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.combat.renderPhase=0 expected=7", "after.slot50.extra[0]=0 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.links[2]=-1 expected=0", "after.slot50.motion[2]=0 expected=3", "after.slot51.raw.vitals.reviveLives=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12418" name="OpointSource_2_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_2_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1856966688" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026677" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.combat.renderPhase=0 expected=7
+after.slot50.extra[0]=0 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.extra[5]=1 expected=0
+after.slot51.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.combat.renderPhase=0 expected=7", "after.slot50.extra[0]=0 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.links[2]=-1 expected=0", "after.slot50.motion[2]=0 expected=3", "after.slot51.raw.vitals.reviveLives=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12419" name="OpointSource_3_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_3_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1575789066" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025709" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.links[2]=-1 expected=0", "after.slot50.motion[2]=0 expected=3", "after.slot51.extra[1]=0 expected=2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12420" name="OpointSource_3_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_3_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="51793853" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026674" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.links[2]=-1 expected=0", "after.slot50.motion[2]=0 expected=3", "after.slot51.extra[1]=0 expected=2"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12421" name="OpointSource_4_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_4_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1788993041" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026101" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.extra[5]=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3", "after.slot50.extra[6]=0 expected=123", "after.slot50.extra[7]=0 expected=4"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12422" name="OpointSource_4_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_4_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1186703717" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025943" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+after.slot51.extra[2]=0 expected=1
+after.slot51.extra[5]=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3", "after.slot50.extra[6]=0 expected=123", "after.slot50.extra[7]=0 expected=4"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12423" name="OpointSource_5_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_5_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1864425700" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.028820" asserts="0"><properties /><failure><message><![CDATA[  after.slot20.links[0]=1 expected=101
+after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.identity.battleGroup=3 expected=4
+after.slot51.raw.vitals.reviveLives=1 expected=3
+  Expected: <empty>
+  But was:  < "after.slot20.links[0]=1 expected=101", "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12424" name="OpointSource_5_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_5_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="240983747" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.028531" asserts="0"><properties /><failure><message><![CDATA[  after.slot20.links[0]=1 expected=101
+after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.identity.battleGroup=3 expected=4
+after.slot51.raw.vitals.reviveLives=1 expected=3
+  Expected: <empty>
+  But was:  < "after.slot20.links[0]=1 expected=101", "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12425" name="OpointSource_6_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_6_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="703010815" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026306" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3", "after.slot50.extra[6]=0 expected=123"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12426" name="OpointSource_6_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_6_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="460243359" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025957" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+after.slot51.extra[1]=0 expected=2
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3", "after.slot50.extra[6]=0 expected=123"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12427" name="OpointSource_7_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_7_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1410910132" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026688" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12428" name="OpointSource_7_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_7_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2043186564" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027412" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12429" name="OpointSource_8_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_8_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="632363533" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026379" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12430" name="OpointSource_8_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_8_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="409712334" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025900" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12431" name="OpointSource_9_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_9_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1646038472" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.024941" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12432" name="OpointSource_9_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_9_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1737994100" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026786" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+after.slot51.raw.vitals.reviveLives=1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140", "after.slot50.extra[5]=1 expected=3"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12433" name="OpointSource_10_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_10_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="276056799" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.024935" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12434" name="OpointSource_10_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_10_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="532352785" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025220" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12435" name="OpointSource_11_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_11_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1363705996" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027704" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.identity.battleGroup=3 expected=4
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12436" name="OpointSource_11_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_11_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="117280668" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.028556" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot51.raw.identity.battleGroup=3 expected=4
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12437" name="OpointSource_12_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_12_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1285015289" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.027418" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=-5 expected=-2
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=-5 expected=-2", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12438" name="OpointSource_12_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_12_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="434379785" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.026861" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=-5 expected=-2
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.raw.combat.attackerRest=2 expected=0
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=-5 expected=-2", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.raw.combat.attackerRest=2 expected=0", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12439" name="OpointSource_13_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_13_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="57538003" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.024982" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12440" name="OpointSource_13_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_13_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="126322486" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025120" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12441" name="OpointSource_14_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_14_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="705896485" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.024701" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=17, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12442" name="OpointSource_14_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_14_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1061226010" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.025090" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=0 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=17, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12443" name="OpointSource_15_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_15_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="957142943" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.029968" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=2
+after.slot50.raw.frame.frameState=3000 expected=0
+after.slot50.raw.position.x=308 expected=310
+after.slot50.raw.position.preciseX=308 expected=310
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=2", "after.slot50.raw.frame.frameState=3000 expected=0", "after.slot50.raw.position.x=308 expected=310", "after.slot50.raw.position.preciseX=308 expected=310", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12444" name="OpointSource_15_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_15_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1133978771" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.056189" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=2
+after.slot50.raw.frame.frameState=3000 expected=0
+after.slot50.raw.position.x=308 expected=310
+after.slot50.raw.position.preciseX=308 expected=310
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=2", "after.slot50.raw.frame.frameState=3000 expected=0", "after.slot50.raw.position.x=308 expected=310", "after.slot50.raw.position.preciseX=308 expected=310", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12445" name="OpointSource_16_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_16_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1183322508" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.046797" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=900
+after.slot50.raw.frame.actionLatch=0 expected=900
+after.slot50.raw.frame.previousAction=0 expected=900
+after.slot50.raw.frame.tickActionSnapshot=0 expected=900
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=900", "after.slot50.raw.frame.actionLatch=0 expected=900", "after.slot50.raw.frame.previousAction=0 expected=900", "after.slot50.raw.frame.tickActionSnapshot=0 expected=900", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12446" name="OpointSource_16_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_16_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1876381159" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:10Z" duration="0.024638" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=900
+after.slot50.raw.frame.actionLatch=0 expected=900
+after.slot50.raw.frame.previousAction=0 expected=900
+after.slot50.raw.frame.tickActionSnapshot=0 expected=900
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=900", "after.slot50.raw.frame.actionLatch=0 expected=900", "after.slot50.raw.frame.previousAction=0 expected=900", "after.slot50.raw.frame.tickActionSnapshot=0 expected=900", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12447" name="OpointSource_17_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_17_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1635109643" result="Failed" start-time="2026-09-21 10:02:10Z" end-time="2026-09-21 10:02:11Z" duration="0.024934" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=999
+after.slot50.raw.frame.actionLatch=0 expected=999
+after.slot50.raw.frame.previousAction=0 expected=999
+after.slot50.raw.frame.tickActionSnapshot=0 expected=999
+after.slot50.raw.frame.frameState=0 expected=3000
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=999", "after.slot50.raw.frame.actionLatch=0 expected=999", "after.slot50.raw.frame.previousAction=0 expected=999", "after.slot50.raw.frame.tickActionSnapshot=0 expected=999", "after.slot50.raw.frame.frameState=0 expected=3000", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12448" name="OpointSource_17_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_17_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1890910539" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.025159" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.frame.action=0 expected=999
+after.slot50.raw.frame.actionLatch=0 expected=999
+after.slot50.raw.frame.previousAction=0 expected=999
+after.slot50.raw.frame.tickActionSnapshot=0 expected=999
+after.slot50.raw.frame.frameState=0 expected=3000
+after.slot50.raw.motion.z=0 expected=3
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.frame.action=0 expected=999", "after.slot50.raw.frame.actionLatch=0 expected=999", "after.slot50.raw.frame.previousAction=0 expected=999", "after.slot50.raw.frame.tickActionSnapshot=0 expected=999", "after.slot50.raw.frame.frameState=0 expected=3000", "after.slot50.raw.motion.z=0 expected=3", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12449" name="OpointSource_18_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1653595278" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.023854" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=3 expected=2
+after.slot50.raw.identity.objectId=777 expected=778
+after.slot50.raw.identity.objectType=0 expected=5
+after.slot50.raw.position.x=308 expected=297
+after.slot50.raw.position.y=-31 expected=-24
+after.slot50.raw.position.z=256 expected=251
+after.slot50.raw.position.preciseX=308 expected=297
+after.slot50.raw.position.preciseY=-31 expected=-24
+after.slot50.raw.position.preciseZ=256 expected=251
+after.slot50.raw.motion.x=8 expected=0
+after.slot50.raw.motion.y=-2 expected=0
+after.slot50.raw.vitals.currentHp=137 expected=500
+after.slot50.raw.vitals.effectiveMaxHp=137 expected=500
+after.slot50.raw.vitals.baseMaxHp=137 expected=500
+after.slot50.raw.vitals.currentMp=211 expected=500
+after.slot50.raw.vitals.baseMaxMp=211 expected=500
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=3 expected=2", "after.slot50.raw.identity.objectId=777 expected=778", "after.slot50.raw.identity.objectType=0 expected=5", "after.slot50.raw.position.x=308 expected=297", "after.slot50.raw.position.y=-31 expected=-24", "after.slot50.raw.position.z=256 expected=251", "after.slot50.raw.position.preciseX=308 expected=297", "after.slot50.raw.position.preciseY=-31 expected=-24", "after.slot50.raw.position.preciseZ=256 expected=251", "after.slot50.raw.motion.x=8 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12450" name="OpointSource_18_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_18_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1923742645" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.025521" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=3 expected=2
+after.slot50.raw.identity.objectId=777 expected=778
+after.slot50.raw.identity.objectType=0 expected=5
+after.slot50.raw.position.x=308 expected=297
+after.slot50.raw.position.y=-31 expected=-24
+after.slot50.raw.position.z=256 expected=251
+after.slot50.raw.position.preciseX=308 expected=297
+after.slot50.raw.position.preciseY=-31 expected=-24
+after.slot50.raw.position.preciseZ=256 expected=251
+after.slot50.raw.motion.x=8 expected=0
+after.slot50.raw.motion.y=-2 expected=0
+after.slot50.raw.vitals.currentHp=137 expected=500
+after.slot50.raw.vitals.effectiveMaxHp=137 expected=500
+after.slot50.raw.vitals.baseMaxHp=137 expected=500
+after.slot50.raw.vitals.currentMp=211 expected=500
+after.slot50.raw.vitals.baseMaxMp=211 expected=500
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=3 expected=2", "after.slot50.raw.identity.objectId=777 expected=778", "after.slot50.raw.identity.objectType=0 expected=5", "after.slot50.raw.position.x=308 expected=297", "after.slot50.raw.position.y=-31 expected=-24", "after.slot50.raw.position.z=256 expected=251", "after.slot50.raw.position.preciseX=308 expected=297", "after.slot50.raw.position.preciseY=-31 expected=-24", "after.slot50.raw.position.preciseZ=256 expected=251", "after.slot50.raw.motion.x=8 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12451" name="OpointSource_19_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="187414255" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.021850" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=2 expected=1
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=2 expected=1" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12452" name="OpointSource_19_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_19_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1137430311" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.023884" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=2 expected=1
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=2 expected=1" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12453" name="OpointSource_20_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1704911430" result="Passed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.286064" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12454" name="OpointSource_20_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_20_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="206875036" result="Passed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.273321" asserts="0"><properties /><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12455" name="OpointSource_21_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_21_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2020930453" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:11Z" duration="0.287746" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=-5 expected=-2
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=-5 expected=-2
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=-5 expected=-2", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12456" name="OpointSource_21_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_21_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="2135705438" result="Failed" start-time="2026-09-21 10:02:11Z" end-time="2026-09-21 10:02:12Z" duration="0.292221" asserts="0"><properties /><failure><message><![CDATA[  after.slot50.raw.identity.battleGroup=3 expected=4
+after.slot50.raw.motion.z=-5 expected=-2
+after.slot50.raw.vitals.reviveLives=1 expected=3
+after.slot50.raw.vitals.reviveNextLives=0 expected=4
+after.slot50.raw.vitals.reviveNextHp=0 expected=123
+after.slot50.raw.combat.renderPhase=11 expected=7
+after.slot50.extra[0]=11 expected=7
+after.slot50.extra[1]=0 expected=2
+after.slot50.extra[2]=0 expected=1
+after.slot50.extra[4]=0 expected=140
+after.slot50.extra[5]=1 expected=3
+after.slot50.extra[6]=0 expected=123
+after.slot50.extra[7]=0 expected=4
+after.slot50.extra[8]=0 expected=31998
+after.slot50.links[2]=-1 expected=0
+after.slot50.motion[2]=-5 expected=-2
+  Expected: <empty>
+  But was:  < "after.slot50.raw.identity.battleGroup=3 expected=4", "after.slot50.raw.motion.z=-5 expected=-2", "after.slot50.raw.vitals.reviveLives=1 expected=3", "after.slot50.raw.vitals.reviveNextLives=0 expected=4", "after.slot50.raw.vitals.reviveNextHp=0 expected=123", "after.slot50.raw.combat.renderPhase=11 expected=7", "after.slot50.extra[0]=11 expected=7", "after.slot50.extra[1]=0 expected=2", "after.slot50.extra[2]=0 expected=1", "after.slot50.extra[4]=0 expected=140"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12457" name="OpointSource_22_WorldLogicLate" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_WorldLogicLate" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1743855954" result="Failed" start-time="2026-09-21 10:02:12Z" end-time="2026-09-21 10:02:12Z" duration="0.058190" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=3 expected=2
+after.slot50.raw.identity.objectId=777 expected=778
+after.slot50.raw.identity.objectType=0 expected=5
+after.slot50.raw.frame.frameState=3000 expected=0
+after.slot50.raw.position.x=308 expected=297
+after.slot50.raw.position.y=-31 expected=-24
+after.slot50.raw.position.z=256 expected=251
+after.slot50.raw.position.preciseX=308 expected=297
+after.slot50.raw.position.preciseY=-31 expected=-24
+after.slot50.raw.position.preciseZ=256 expected=251
+after.slot50.raw.motion.x=8 expected=0
+after.slot50.raw.motion.y=-2 expected=0
+after.slot50.raw.vitals.currentHp=137 expected=500
+after.slot50.raw.vitals.effectiveMaxHp=137 expected=500
+after.slot50.raw.vitals.baseMaxHp=137 expected=500
+after.slot50.raw.vitals.currentMp=211 expected=500
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=3 expected=2", "after.slot50.raw.identity.objectId=777 expected=778", "after.slot50.raw.identity.objectType=0 expected=5", "after.slot50.raw.frame.frameState=3000 expected=0", "after.slot50.raw.position.x=308 expected=297", "after.slot50.raw.position.y=-31 expected=-24", "after.slot50.raw.position.z=256 expected=251", "after.slot50.raw.position.preciseX=308 expected=297", "after.slot50.raw.position.preciseY=-31 expected=-24", "after.slot50.raw.position.preciseZ=256 expected=251"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case><test-case id="12458" name="OpointSource_22_ComponentLateLogicMaterializer" fullname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.OpointSource_22_ComponentLateLogicMaterializer" methodname="ImmediateMatchesOriginalMaterializer" classname="NTSD.Test.NTSD28Q06OpointMaterializerEditorTests" runstate="Runnable" seed="1655802859" result="Failed" start-time="2026-09-21 10:02:12Z" end-time="2026-09-21 10:02:12Z" duration="0.054871" asserts="0"><properties /><failure><message><![CDATA[  after.nonFillerCount=3 expected=2
+after.slot50.raw.identity.objectId=777 expected=778
+after.slot50.raw.identity.objectType=0 expected=5
+after.slot50.raw.frame.frameState=3000 expected=0
+after.slot50.raw.position.x=308 expected=297
+after.slot50.raw.position.y=-31 expected=-24
+after.slot50.raw.position.z=256 expected=251
+after.slot50.raw.position.preciseX=308 expected=297
+after.slot50.raw.position.preciseY=-31 expected=-24
+after.slot50.raw.position.preciseZ=256 expected=251
+after.slot50.raw.motion.x=8 expected=0
+after.slot50.raw.motion.y=-2 expected=0
+after.slot50.raw.vitals.currentHp=137 expected=500
+after.slot50.raw.vitals.effectiveMaxHp=137 expected=500
+after.slot50.raw.vitals.baseMaxHp=137 expected=500
+after.slot50.raw.vitals.currentMp=211 expected=500
+  Expected: <empty>
+  But was:  < "after.nonFillerCount=3 expected=2", "after.slot50.raw.identity.objectId=777 expected=778", "after.slot50.raw.identity.objectType=0 expected=5", "after.slot50.raw.frame.frameState=3000 expected=0", "after.slot50.raw.position.x=308 expected=297", "after.slot50.raw.position.y=-31 expected=-24", "after.slot50.raw.position.z=256 expected=251", "after.slot50.raw.position.preciseX=308 expected=297", "after.slot50.raw.position.preciseY=-31 expected=-24", "after.slot50.raw.position.preciseZ=256 expected=251"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06OpointMaterializerEditorTests.ImmediateMatchesOriginalMaterializer (System.Int32 index, System.Boolean component) [0x0022a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06OpointMaterializerEditorTests.cs:77
+]]></stack-trace></failure><output><![CDATA[
+IgnoreFailingMessages:true
+<color=cyan>[Converter] 帧 0 (parent): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=有, 属性数=5</color>
+<color=cyan>[BMP 解析] 角色=MaterializerParent, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (child): pic=0, state=3000, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=MaterializerChild, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 0 (idle): pic=0, state=0, wait=100, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=Neutral, 找到 0 个精灵文件定义</color>
+
+IgnoreFailingMessages:false
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

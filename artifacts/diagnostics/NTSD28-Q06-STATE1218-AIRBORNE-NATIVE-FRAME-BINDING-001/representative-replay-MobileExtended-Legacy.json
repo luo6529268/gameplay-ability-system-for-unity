@@ -1,0 +1,5 @@
+{
+  "cases": 8,
+  "replayedTicks": 16,
+  "scope": "Same-world state12/18 airborne physics transaction plus two complete ticks; not cross-world or renderer validation."
+}

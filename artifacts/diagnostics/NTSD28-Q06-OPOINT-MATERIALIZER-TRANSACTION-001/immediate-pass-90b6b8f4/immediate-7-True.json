@@ -1,0 +1,672 @@
+{
+  "index": 7,
+  "name": "defend100_reset",
+  "component": true,
+  "scope": "Actual late caller, logic-only world; component route does not certify Renderer factory",
+  "beforeDifferences": [],
+  "differences": [],
+  "before": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 11,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 0,
+            "actionLatch": 0,
+            "facingLeft": false,
+            "frameCounter": 0,
+            "frameState": 0,
+            "previousAction": 0,
+            "tickActionSnapshot": 0
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 31980,
+            "objectType": 0,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 300,
+            "preciseY": -20,
+            "preciseZ": 250,
+            "x": 300,
+            "y": -20,
+            "z": 250
+          },
+          "slot": 20,
+          "vitals": {
+            "baseMaxHp": 500,
+            "baseMaxMp": 500,
+            "currentHp": 500,
+            "currentMp": 500,
+            "effectiveMaxHp": 500,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 31980,
+          "slot": 20
+        },
+        "extra": [
+          11,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          500,
+          500,
+          0
+        ],
+        "links": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          300,
+          -20,
+          250,
+          300.0,
+          -20.0,
+          250.0
+        ],
+        "motion": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "fillers": 0,
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "after": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 11,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 0,
+            "actionLatch": 0,
+            "facingLeft": false,
+            "frameCounter": 0,
+            "frameState": 0,
+            "previousAction": 0,
+            "tickActionSnapshot": 0
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 31980,
+            "objectType": 0,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 300,
+            "preciseY": -20,
+            "preciseZ": 250,
+            "x": 300,
+            "y": -20,
+            "z": 250
+          },
+          "slot": 20,
+          "vitals": {
+            "baseMaxHp": 500,
+            "baseMaxMp": 500,
+            "currentHp": 500,
+            "currentMp": 500,
+            "effectiveMaxHp": 500,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 31980,
+          "slot": 20
+        },
+        "extra": [
+          11,
+          2,
+          1,
+          -1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          500,
+          500,
+          0
+        ],
+        "links": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          300,
+          -20,
+          250,
+          300.0,
+          -20.0,
+          250.0
+        ],
+        "motion": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 7,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 17
+          },
+          "frame": {
+            "action": 0,
+            "actionLatch": 0,
+            "facingLeft": false,
+            "frameCounter": 0,
+            "frameState": 3000,
+            "previousAction": 0,
+            "tickActionSnapshot": 0
+          },
+          "identity": {
+            "battleGroup": 4,
+            "controlSlot": 0,
+            "objectId": 777,
+            "objectType": 0,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 8,
+            "y": -2,
+            "z": 3
+          },
+          "position": {
+            "preciseX": 308,
+            "preciseY": -31,
+            "preciseZ": 256,
+            "x": 308,
+            "y": -31,
+            "z": 256
+          },
+          "slot": 50,
+          "vitals": {
+            "baseMaxHp": 137,
+            "baseMaxMp": 211,
+            "currentHp": 137,
+            "currentMp": 211,
+            "effectiveMaxHp": 137,
+            "reviveLives": 3,
+            "reviveNextHp": 123,
+            "reviveNextLives": 4
+          }
+        },
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 777,
+          "slot": 50
+        },
+        "extra": [
+          7,
+          2,
+          1,
+          20,
+          0,
+          3,
+          123,
+          4,
+          31998,
+          0,
+          0,
+          0,
+          137,
+          137,
+          17
+        ],
+        "links": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          308,
+          -31,
+          256,
+          308.0,
+          -31.0,
+          256.0
+        ],
+        "motion": [
+          8.0,
+          -2.0,
+          3.0
+        ]
+      },
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 0,
+            "actionLatch": 0,
+            "facingLeft": false,
+            "frameCounter": 0,
+            "frameState": 0,
+            "previousAction": 0,
+            "tickActionSnapshot": 0
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 778,
+            "objectType": 5,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 297,
+            "preciseY": -24,
+            "preciseZ": 251,
+            "x": 297,
+            "y": -24,
+            "z": 251
+          },
+          "slot": 51,
+          "vitals": {
+            "baseMaxHp": 500,
+            "baseMaxMp": 500,
+            "currentHp": 500,
+            "currentMp": 500,
+            "effectiveMaxHp": 500,
+            "reviveLives": 0,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 778,
+          "slot": 51
+        },
+        "extra": [
+          0,
+          2,
+          1,
+          -1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          500,
+          500,
+          0
+        ],
+        "links": [
+          0,
+          0,
+          0
+        ],
+        "position": [
+          297,
+          -24,
+          251,
+          297.0,
+          -24.0,
+          251.0
+        ],
+        "motion": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "fillers": 0,
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "calls": {
+    "crt": [],
+    "synchronized": []
+  }
+}

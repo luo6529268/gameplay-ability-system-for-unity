@@ -1,0 +1,229 @@
+<test-suite type="TestSuite" id="9903" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7878" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.905624" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18765" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7870" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.838493" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="33236" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18766" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7870" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.748154" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18774" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7332" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.647449" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11923" name="NTSD28Q06FusionRecordTransactionEditorTests" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.580562" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11928" name="RecordMergeAndControlledDefuseMatchSource" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.480490" total="4" passed="1" failed="3" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11924" name="RecordMergeAndControlledDefuseMatchSource(0)" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource(0)" methodname="RecordMergeAndControlledDefuseMatchSource" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" seed="927665070" result="Failed" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.197917" asserts="0"><properties /><failure><message><![CDATA[  afterMerge.entities[0].raw.frame.actionLatch=13 expected=290
+afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=290
+afterMerge.entities[0].raw.frame.frameCounter=7 expected=0
+afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800
+afterMerge.entities[0].raw.combat.weaponHp=21 expected=23
+afterMerge.entities[0].fusionDisplayTimer=23 expected=4500
+afterMerge.entities[0].soundLatch=41 expected=-1
+afterMerge.entities[0].aiProfile=31 expected=33
+afterMerge.entities[0].dropMode=1 expected=3
+afterMerge.entities[0].incomingScale=0 expected=187
+afterMerge.entities[0].reviveVisual318=51 expected=0
+  Expected: <empty>
+  But was:  < "afterMerge.entities[0].raw.frame.actionLatch=13 expected=290", "afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=290", "afterMerge.entities[0].raw.frame.frameCounter=7 expected=0", "afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800", "afterMerge.entities[0].raw.combat.weaponHp=21 expected=23", "afterMerge.entities[0].fusionDisplayTimer=23 expected=4500", "afterMerge.entities[0].soundLatch=41 expected=-1", "afterMerge.entities[0].aiProfile=31 expected=33", "afterMerge.entities[0].dropMode=1 expected=3", "afterMerge.entities[0].incomingScale=0 expected=187"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource (System.Int32 index) [0x00335] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06FusionRecordTransactionEditorTests.cs:93
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=FusionWitness0, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness1, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness2, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11925" name="RecordMergeAndControlledDefuseMatchSource(1)" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource(1)" methodname="RecordMergeAndControlledDefuseMatchSource" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" seed="1429989627" result="Failed" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.084775" asserts="0"><properties /><failure><message><![CDATA[  afterMerge.entities[0].raw.identity.objectId=10 expected=52
+afterMerge.entities[0].raw.frame.action=20 expected=310
+afterMerge.entities[0].raw.frame.actionLatch=13 expected=310
+afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=310
+afterMerge.entities[0].raw.frame.frameCounter=7 expected=0
+afterMerge.entities[0].raw.frame.frameState=2 expected=0
+afterMerge.entities[0].raw.position.x=340 expected=320
+afterMerge.entities[0].raw.position.preciseX=340.25 expected=320
+afterMerge.entities[0].raw.position.preciseZ=250.5 expected=250
+afterMerge.entities[0].raw.motion.x=1.25 expected=0
+afterMerge.entities[0].raw.vitals.currentHp=200 expected=400
+afterMerge.entities[0].raw.vitals.effectiveMaxHp=250 expected=400
+afterMerge.entities[0].raw.vitals.currentMp=497 expected=500
+afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800
+afterMerge.entities[0].raw.combat.weaponHp=21 expected=23
+afterMerge.entities[0].state=2 expected=0
+afterMerge.entities[0].wait=41 expected=0
+afterMerge.entities[0].next=20 expected=0
+afterMerge.entities[0].snapshotState=2 expected=0
+afterMerge.entities[0].fusionTimer=17 expected=200
+afterMerge.entities[0].fusionDisplayTimer=23 expected=200
+afterMerge.entities[0].fusionPartnerSlot=-1 expected=1
+afterMerge.entities[0].fusionPrimaryId=-1 expected=10
+afterMerge.entities[0].fusionPartnerId=-1 expected=11
+afterMerge.entities[0].gate328=0 expected=1
+afterMerge.entities[0].gate194=0 expected=1
+afterMerge.entities[0].soundLatch=41 expected=-1
+afterMerge.entities[0].aiProfile=31 expected=33
+afterMerge.entities[0].dropMode=1 expected=3
+afterMerge.entities[0].incomingScale=0 expected=187
+afterMerge.entities[0].reviveVisual318=51 expected=0
+afterMerge.entities[0].input.objectId=10 expected=52
+afterMerge.entities[1]={
+  "raw": {
+    "active": true,
+    "allocationEpoch": 1,
+    "combat": {
+      "armorRecoveryTimer": -1,
+      "attackerRest": 0,
+      "bdefendAccumulator": 0,
+      "collisionYReference": 0,
+      "environmentSourceSlot": null,
+      "environmentState": null,
+      "hitReactionTimer": 0,
+      "motionHoldTimer": 0,
+      "objectAiExcludedGroupSourceSlot": -1,
+      "platformSourceSlot": null,
+      "renderPhase": 0,
+      "runtimeArmorHp": 0,
+      "runtimeStateCode": 0,
+      "specialHitLatch0eb": false,
+      "weaponHp": 22
+    },
+    "frame": {
+      "action": 10,
+      "actionLatch": 11,
+      "facingLeft": false,
+      "frameCounter": 8,
+      "frameState": 2,
+      "previousAction": 12,
+      "tickActionSnapshot": 10
+    },
+    "identity": {
+      "battleGroup": 3,
+      "controlSlot": 0,
+      "objectId": 11,
+      "objectType": 0,
+      "ownerSlot": -1,
+      "participantClass": 0
+    },
+    "lifecycle": {
+      "code": 0,
+      "resolutionPending": false
+    },
+    "motion": {
+      "x": 2.25,
+      "y": -3.5,
+      "z": 1.75
+    },
+    "position": {
+      "preciseX": 300.25,
+      "preciseY": 0,
+      "preciseZ": 250.5,
+      "x": 300,
+      "y": 0,
+      "z": 250
+    },
+    "slot": 1,
+    "vitals": {
+      "baseMaxHp": 400,
+      "baseMaxMp": 700,
+      "currentHp": 300,
+      "currentMp": 497,
+      "effectiveMaxHp": 275,
+      "reviveLives": 1,
+      "reviveNextHp": 0,
+      "reviveNextLives": 0
+    }
+  },
+  "available": true,
+  "state": 2,
+  "wait": 41,
+  "next": 10,
+  "snapshotAvailable": true,
+  "snapshotState": 2,
+  "environment": 0,
+  "environmentSource": -1,
+  "catchSource": -1,
+  "impactSource": -1,
+  "pendingCount": 1,
+  "pendingX": 14.0,
+  "pendingY": 18.0,
+  "pendingZ": 20.0,
+  "fusionTimer": 18,
+  "fusionDisplayTimer": 24,
+  "fusionPartnerSlot": -1,
+  "fusionPrimaryId": -1,
+  "fusionPartnerId": -1,
+  "gate328": 0,
+  "gate194": 0,
+  "soundLatch": 42,
+  "aiProfile": 32,
+  "dropMode": 2,
+  "incomingScale": 0,
+  "modeScale": 150,
+  "reviveVisual318": 52,
+  "hpConsumed": 62,
+  "mpConsumed": 72,
+  "score": 82,
+  "input": {
+    "allocationEpoch": 1,
+    "input": {
+      "boundState": 0,
+      "comboState": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "currentMask": 0,
+      "defendReentryCooldown": 0,
+      "edgeWindow": {
+        "attack": 0,
+        "defend": 0,
+        "down": 0,
+        "jump": 0,
+        "left": 0,
+        "right": 0,
+        "up": 0
+      },
+      "globalRecordState": 0,
+      "keyHistory": [
+        -1,
+        -1,
+        -1,
+        -1,
+        -1
+      ],
+      "lastAction": 0,
+      "previousMask": 0,
+      "proxyTail": 0,
+      "remapIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "remapState": 0,
+      "runAccumulator": 0
+    },
+    "objectId": 11,
+    "slot": 1
+  }
+} expected=
+  Expected: <empty>
+  But was:  < "afterMerge.entities[0].raw.identity.objectId=10 expected=52", "afterMerge.entities[0].raw.frame.action=20 expected=310", "afterMerge.entities[0].raw.frame.actionLatch=13 expected=310", "afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=310", "afterMerge.entities[0].raw.frame.frameCounter=7 expected=0", "afterMerge.entities[0].raw.frame.frameState=2 expected=0", "afterMerge.entities[0].raw.position.x=340 expected=320", "afterMerge.entities[0].raw.position.preciseX=340.25 expected=320", "afterMerge.entities[0].raw.position.preciseZ=250.5 expected=250", "afterMerge.entities[0].raw.motion.x=1.25 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource (System.Int32 index) [0x00335] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06FusionRecordTransactionEditorTests.cs:93
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=FusionWitness0, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness1, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness2, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11926" name="RecordMergeAndControlledDefuseMatchSource(2)" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource(2)" methodname="RecordMergeAndControlledDefuseMatchSource" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" seed="1077644353" result="Passed" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.046555" asserts="0"><properties /><output><![CDATA[<color=cyan>[BMP 解析] 角色=FusionWitness0, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness1, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness2, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11927" name="RecordMergeAndControlledDefuseMatchSource(3)" fullname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource(3)" methodname="RecordMergeAndControlledDefuseMatchSource" classname="NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests" runstate="Runnable" seed="728406556" result="Failed" start-time="2026-09-21 06:35:24Z" end-time="2026-09-21 06:35:24Z" duration="0.047090" asserts="0"><properties /><failure><message><![CDATA[  afterMerge.entities[0].raw.frame.actionLatch=13 expected=290
+afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=290
+afterMerge.entities[0].raw.frame.frameCounter=7 expected=0
+afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800
+afterMerge.entities[0].raw.combat.weaponHp=21 expected=23
+afterMerge.entities[0].fusionDisplayTimer=23 expected=4500
+afterMerge.entities[0].soundLatch=41 expected=-1
+afterMerge.entities[0].aiProfile=31 expected=33
+afterMerge.entities[0].dropMode=1 expected=3
+afterMerge.entities[0].incomingScale=0 expected=187
+afterMerge.entities[0].reviveVisual318=51 expected=0
+  Expected: <empty>
+  But was:  < "afterMerge.entities[0].raw.frame.actionLatch=13 expected=290", "afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=290", "afterMerge.entities[0].raw.frame.frameCounter=7 expected=0", "afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800", "afterMerge.entities[0].raw.combat.weaponHp=21 expected=23", "afterMerge.entities[0].fusionDisplayTimer=23 expected=4500", "afterMerge.entities[0].soundLatch=41 expected=-1", "afterMerge.entities[0].aiProfile=31 expected=33", "afterMerge.entities[0].dropMode=1 expected=3", "afterMerge.entities[0].incomingScale=0 expected=187"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06FusionRecordTransactionEditorTests.RecordMergeAndControlledDefuseMatchSource (System.Int32 index) [0x00335] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06FusionRecordTransactionEditorTests.cs:93
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=FusionWitness0, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness1, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness2, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness0, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=FusionWitness2, 找到 0 个精灵文件定义</color>
+]]></output></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

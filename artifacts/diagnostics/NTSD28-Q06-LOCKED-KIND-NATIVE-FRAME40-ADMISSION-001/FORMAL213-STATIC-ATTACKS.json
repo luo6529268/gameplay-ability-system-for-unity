@@ -1,0 +1,48 @@
+{
+  "scope": "Static authoritative indexed OID213 current DAT; not dynamic hit evidence",
+  "declared40": false,
+  "kind0Itr": [
+    {
+      "frame": 106,
+      "state": 3000,
+      "effect": 1,
+      "injury": 65
+    },
+    {
+      "frame": 111,
+      "state": 3000,
+      "effect": 1,
+      "injury": 65
+    },
+    {
+      "frame": 131,
+      "state": 3000,
+      "effect": 1,
+      "injury": 65
+    },
+    {
+      "frame": 132,
+      "state": 3000,
+      "effect": 1,
+      "injury": 65
+    },
+    {
+      "frame": 175,
+      "state": 3000,
+      "effect": 1,
+      "injury": 55
+    },
+    {
+      "frame": 176,
+      "state": 3000,
+      "effect": 1,
+      "injury": 55
+    },
+    {
+      "frame": 197,
+      "state": 15,
+      "effect": 0,
+      "injury": 145
+    }
+  ]
+}

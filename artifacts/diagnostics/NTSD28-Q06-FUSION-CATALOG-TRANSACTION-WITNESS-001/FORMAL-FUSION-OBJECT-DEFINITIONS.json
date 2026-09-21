@@ -1,0 +1,134 @@
+[
+  {
+    "id": 52,
+    "type": 0,
+    "path": "c\\nar\\kyu.dat",
+    "sha256": "f1313a21ec21cb3e29c5daec73d3cba7d18c7ee1891a680777e68a51d7aa88ec",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18
+    ],
+    "explicitlyDeclaredFrames": {
+      "310": false
+    },
+    "nativeDescriptorsAvailable": {
+      "310": true
+    },
+    "captureInputHashVerified": true
+  },
+  {
+    "id": 11,
+    "type": 0,
+    "path": "c\\sasu\\sasu.dat",
+    "sha256": "f0296329c30a30771bbcd292b72296be413b9cf68a460d54c782c02305ab9583",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18
+    ],
+    "explicitlyDeclaredFrames": {
+      "112": true
+    },
+    "nativeDescriptorsAvailable": {
+      "112": true
+    },
+    "captureInputHashVerified": true
+  },
+  {
+    "id": 7,
+    "type": 0,
+    "path": "c\\lee\\lee.dat",
+    "sha256": "775079f67116e0ea490dd57fc6fb226e1813c6d645807e4d49273639929c99be",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18,
+      650,
+      651,
+      652
+    ],
+    "explicitlyDeclaredFrames": {
+      "112": true
+    },
+    "nativeDescriptorsAvailable": {
+      "112": true
+    },
+    "captureInputHashVerified": true
+  },
+  {
+    "id": 8,
+    "type": 0,
+    "path": "c\\chi\\chi.dat",
+    "sha256": "70b5dcddb31cc783f13d86103f6b96a47ba62d04cef38369de193546a5d210b1",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18,
+      650,
+      651,
+      652
+    ],
+    "explicitlyDeclaredFrames": {
+      "112": true
+    },
+    "nativeDescriptorsAvailable": {
+      "112": true
+    },
+    "captureInputHashVerified": true
+  },
+  {
+    "id": 51,
+    "type": 0,
+    "path": "c\\saso\\saso.dat",
+    "sha256": "3a617fc575608a144ac5e44979ee642871c296f973d0c6503be40bd2bed26063",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18
+    ],
+    "explicitlyDeclaredFrames": {
+      "290": true
+    },
+    "nativeDescriptorsAvailable": {
+      "290": true
+    },
+    "captureInputHashVerified": true
+  },
+  {
+    "id": 10,
+    "type": 0,
+    "path": "c\\dei\\dei.dat",
+    "sha256": "8bb04cc5060f2d7e1be3bfbb659344de23a154f291f1bff77476b262b782f28a",
+    "state2Frames": [
+      9,
+      10,
+      11,
+      16,
+      17,
+      18
+    ],
+    "explicitlyDeclaredFrames": {
+      "112": true
+    },
+    "nativeDescriptorsAvailable": {
+      "112": true
+    },
+    "captureInputHashVerified": true
+  }
+]

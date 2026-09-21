@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "46E0ACFFB93C712707E80BABA2A08455C30C364CA0436D0575FFBF480FE9168F",
+  "captureBinarySha256": "FE463AD83FBDED7E027E7F8B98C630D5AA291327D019FAADEBF9D45A4A00829C",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Build\\NTSD28FusionCatalog\\fusion_catalog_transaction_witness.exe",
+  "authorityWriteAllowed": false
+}

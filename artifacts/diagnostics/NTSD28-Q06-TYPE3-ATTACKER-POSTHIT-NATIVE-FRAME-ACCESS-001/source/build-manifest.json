@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "0624408B414837E836531E3B30F508E4528F68113C7DEC08FF418B3DC7868AA3",
+  "captureBinarySha256": "6EB6859F069C4AB2A579692B5C06512016079DCC79352ACC485D6BD2538B5C98",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Build\\NTSD28Type3PostHit\\type3_attacker_posthit_native_frame_access_witness.exe",
+  "authorityWriteAllowed": false
+}

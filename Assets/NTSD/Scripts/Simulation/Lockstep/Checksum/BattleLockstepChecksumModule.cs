@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 26;
+        internal const int CurrentSchemaVersion = 28;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -360,6 +360,8 @@ namespace NTSD.Simulation
             builder.AddInt32(hitResourceRules?.NegativeEnvironmentDamage90 ??
                 NTSD28HitResourceRulesRuntimeState
                     .DefaultNegativeEnvironmentDamage90);
+            builder.AddBoolean(battle?.FusionFirstFeatureGate4A8428 ?? false);
+            builder.AddBoolean(battle?.FusionSecondFeatureGate4A842C ?? false);
             NTSD28NativeComboRuntimeState nativeCombo = battle?.NativeCombo;
             builder.AddBoolean(nativeCombo?.RecordPresent ??
                 NTSD28NativeComboRuntimeState.DefaultRecordPresent);
@@ -630,6 +632,9 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? 0 : runtime.Unk330);
             builder.AddInt32(isDefault ? 0 : runtime.Unk334);
             builder.AddInt32(isDefault ? 0 : runtime.Unk338);
+            builder.AddInt32(isDefault ? -1 : runtime.NativeAiProfileObjectId);
+            builder.AddInt32(isDefault ? 0 : runtime.NativeDefinitionDropMode);
+            builder.AddInt32(isDefault ? 0 : runtime.FusionDisplayTimer190);
             builder.AddInt32(runtime?.TransformTargetObjectId ?? -1);
             builder.AddInt32(isDefault ? -1 : runtime.Unk360);
             builder.AddInt32(isDefault ? -1000 : runtime.Unk3FC);
@@ -685,6 +690,9 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? -1 : runtime.InputLinkedDefinitionId324);
             builder.AddInt32(isDefault ? 0 : runtime.EnvironmentState320);
             builder.AddInt32(isDefault ? 0 : runtime.CollisionYReference);
+            builder.AddInt32(isDefault ? 0 : runtime.PlatformSourceSlotF4);
+            builder.AddInt32(isDefault ? 0 : runtime.RenderShadowOffset10C);
+            builder.AddInt32(isDefault ? 0 : runtime.NativePreviousY104);
         }
 
         private void AppendNativeResourceDisplayCarriers(

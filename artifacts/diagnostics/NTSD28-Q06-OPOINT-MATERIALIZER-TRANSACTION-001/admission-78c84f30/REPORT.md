@@ -1,0 +1,6 @@
+
+## Admission implementation checkpoint
+
+Both declared late callers now return record continuation, skip unsupported kinds, stop on missing definition/capacity/materialization failure, and reject absent native action using the existing admission query. No persistent fields or task flags added. Compile refreshed in existing Editor: idle after reload, error CS query returned zero. Focused job78c84f30edd24b11ab9bbcd96ac27196 ran only indices18/19/20/22 through both callers: 8 total, 4 PASS / 4 FAIL. Indices19/20 pass. Indices18/22 now have matching entity topology/identity; each still has five initialization differences (reviveLives, injury/suppression, extra lives, child link sentinel), so original full assertions correctly remain failed. No claim of complete alignment. Archive admission-78c84f30/results.xml and eight JSON reports. Root immediate JSON filenames are latest-per-case and selected files were overwritten by this run; original RED XML remains immutable, prior 46-report observations recorded in RED-EVIDENCE.
+
+Ledger validator PASS:625 records/121 governed code files. Only affected tests ran; no full SelfCheck or Play. Next finish common native ordinary birth initialization, random action/position, high action binding, kind2 links and double motion/spread, with pre-edit exact path declaration; directclone/piece/vitals remain protected.

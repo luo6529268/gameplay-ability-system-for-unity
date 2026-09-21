@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "cases": 3,
+  "checks": 113,
+  "sha256": "ca4698c686dda92c55f8aefcf1c9d88adb9c0783d6e5fb1b5ff725ebbe46efa6",
+  "scope": "Source-model actual materializer, exact immediate all-pairs rest preservation; following lifecycle succeeds but no Unity following comparison here."
+}

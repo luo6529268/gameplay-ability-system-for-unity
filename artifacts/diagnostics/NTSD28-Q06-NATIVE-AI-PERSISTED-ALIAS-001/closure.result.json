@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "error": null,
+  "configuration": {
+    "lifecycle": "Running",
+    "worldProfile": "Authority400",
+    "snapshotProfile": "Authority400",
+    "worldCapacity": 400,
+    "snapshotCapacity": 400,
+    "worldBroadphase": "BruteForce",
+    "snapshotBroadphase": "BruteForce",
+    "snapshotObjects": 4,
+    "snapshotClaimed": 2,
+    "slotClaimed": 2,
+    "capacities": [
+      400,
+      400,
+      400,
+      400,
+      400,
+      400,
+      400,
+      400
+    ],
+    "pendingUnregister": 0,
+    "pendingDestroy": 0,
+    "snapshotUnregister": 0,
+    "snapshotDestroy": 0,
+    "soundCapacity": 6400,
+    "snapshotSoundCount": 0
+  },
+  "scope": "Current Unity legacy content, real Scene in-place snapshot restore and existing ordered shutdown; no physical input or Logan image parity claim.",
+  "tick": 5,
+  "objectsBefore": 4,
+  "objectsAfterRestore": 4,
+  "worldObjectsAfterShutdown": 0,
+  "slotsAfterShutdown": 0,
+  "logicBorrowersAfterShutdown": 0,
+  "renderBorrowersAfterShutdown": 0,
+  "restoreAndRendererRetention": true,
+  "remainedStoppedAfterTwoFrames": true
+}

@@ -1,0 +1,11 @@
+# Stable acceptance gates and remaining closure audit
+
+IN_PROGRESS / ACCEPTANCE_GATES_PASS_CLOSURE_AUDIT_PENDING.
+
+New source linked-rest witness built against formalB1E13/closure07CD47. Three source-model cases(type3 parent3003 facing20/40 and state0 control),113 immediate matrix/count/preservation checksPASS, two runs SHAca4698c686dda92c55f8aefcf1c9d88adb9c0783d6e5fb1b5ff725ebbe46efa6. Existing rest7 preserved, no newborn attacker rest or linked/mutual vrest. Following lifecycle succeeded; no Unity following rest equivalence claimed. Current source body supports retired extra legacy rest writes. Only named CheckState3003RuntimeSlotVrest corrected to no new rest with preservation control; old failures archived.
+
+Full SelfCheck subsequent run PASS (stable-acceptance/selfcheck.txt). True Play pooled Renderer cases0/5/15 PASS at2026-09-21T10:31:32Z; scene checksum unchanged, borrowers2->2. Existing Q05 closure10:31:33Z PASS: objects4->4 restore, final world/slots/logic/render borrowers0, Stopped twoframes; Editor exited Play. Archive stable-acceptance/renderer-play.json,q05-close.json and three full renderer reports. Synthetic parent/catalog; no formal EXE visual or physical keyboard parity claim. Initial result-file reads predated completion and showed prior Q05 result09:39; only archived fresh10:31 evidence applies.
+
+Reuse immediate46PASS, following/fulltick+replay2PASS, resolver3PASS, two profiles329 native birthsPASS. No full role sweep. Production remains four exact paths; test amendments named before edits. Ledger625/125PASS. Independent agent reviewer unavailable(thread limit), root source review still responsible.
+
+Before marking complete, finish source boundary audit already noted in IMMEDIATE-PASS: current first-record Kind/Oid gate may suppress later valid records although source planner skips each individually; randomized action may fall outside native frame range and descriptor-null behavior needs evidence. Do not infer all-input equivalence from23vectors. Next read native materialize entry vs both Unity early guards and raw random action setter, add exact source/test witnesses only for confirmed missing branches before any further production edits. Whole Q06 incomplete/Q07 not migrated/objectiveACTIVE.

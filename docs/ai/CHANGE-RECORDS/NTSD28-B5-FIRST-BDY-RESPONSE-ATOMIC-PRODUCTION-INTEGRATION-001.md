@@ -89,3 +89,5 @@ probe现有暂停、baseline、owned-entity清理与Scene不保存合同。
 ## 回滚
 
 按Task Contract撤销本包七个生产/测试路径的增量；carrier和pure resolver不回退。
+
+2026-09-21精确纠正：原encoded counter writer/observer/tests共同使用FrameWaitCounter，未证明当前source frame.frame_counter(AttackingCounter)清零；新NTSD28-Q06-FIRST-BDY-NATIVE-COUNTER-CARRIER-001据source8真实RED修复。原动作判定/RNG/group/hold/manualstats/earlyabort证据保留，不将整个旧包作废。

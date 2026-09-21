@@ -59,6 +59,7 @@ namespace NTSD.Test
             attacker.FrameDelay = 9;
             target.FrameDelay = 8;
             target.Runtime.FrameWaitCounter = 123;
+            target.AttackingCounter = 57;
 
             BattleFirstBodyResponseAttemptResult result =
                 BattleFirstBodyResponseWriter.TryApply(
@@ -74,6 +75,7 @@ namespace NTSD.Test
             Assert.That(target.Frame.N, Is.EqualTo(33));
             Assert.That(target.Runtime.Frame, Is.EqualTo(33));
             Assert.That(target.Runtime.FrameWaitCounter, Is.EqualTo(123));
+            Assert.That(target.AttackingCounter, Is.EqualTo(57));
             Assert.That(target.RelationTeam, Is.EqualTo(47));
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
@@ -92,6 +94,8 @@ namespace NTSD.Test
                 injury: 37);
             attacker.Runtime.FrameWaitCounter = 88;
             target.Runtime.FrameWaitCounter = 77;
+            attacker.AttackingCounter = 61;
+            target.AttackingCounter = 62;
             attacker.Runtime.InputScoreTotal348 = 5;
             target.Runtime.InputHpConsumedTotal34C = 7;
             target.Health.HP = 20;
@@ -110,8 +114,10 @@ namespace NTSD.Test
             Assert.That(result.RollConsumed, Is.False);
             Assert.That(target.Frame.N, Is.EqualTo(123));
             Assert.That(attacker.Frame.N, Is.EqualTo(456));
-            Assert.That(target.Runtime.FrameWaitCounter, Is.Zero);
-            Assert.That(attacker.Runtime.FrameWaitCounter, Is.Zero);
+            Assert.That(target.AttackingCounter, Is.Zero);
+            Assert.That(attacker.AttackingCounter, Is.Zero);
+            Assert.That(target.Runtime.FrameWaitCounter, Is.EqualTo(77));
+            Assert.That(attacker.Runtime.FrameWaitCounter, Is.EqualTo(88));
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(target.Health.HP, Is.Zero);
@@ -169,6 +175,10 @@ namespace NTSD.Test
                 out TypedCharacter target,
                 out InteractionArea interaction);
             uint seed = FindSeed(world.NativeRandom, 1, expectedPass: true);
+            attacker.AttackingCounter = 61;
+            target.AttackingCounter = 62;
+            attacker.Runtime.FrameWaitCounter = 88;
+            target.Runtime.FrameWaitCounter = 77;
             world.NativeRandom.ResetFromSeed(seed);
             NTSD28NativeRandomScalarState before =
                 world.NativeRandom.CaptureScalarState();
@@ -191,8 +201,10 @@ namespace NTSD.Test
             Assert.That(after.LastSynchronizedCallSite, Is.EqualTo(1u));
             Assert.That(target.Frame.N, Is.EqualTo(123));
             Assert.That(attacker.Frame.N, Is.EqualTo(456));
-            Assert.That(target.Runtime.FrameWaitCounter, Is.Zero);
-            Assert.That(attacker.Runtime.FrameWaitCounter, Is.Zero);
+            Assert.That(target.AttackingCounter, Is.Zero);
+            Assert.That(attacker.AttackingCounter, Is.Zero);
+            Assert.That(target.Runtime.FrameWaitCounter, Is.EqualTo(77));
+            Assert.That(attacker.Runtime.FrameWaitCounter, Is.EqualTo(88));
         }
 
         [Test]

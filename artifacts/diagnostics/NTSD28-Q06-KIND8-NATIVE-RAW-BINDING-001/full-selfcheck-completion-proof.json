@@ -1,0 +1,12 @@
+{
+  "status": "PASS_FROM_COMPLETION_LOG",
+  "logPath": "Logs\\kind8-full-selfcheck-editor.log",
+  "logSha256": "8a4f5277e07adc3b165a65334649340884b622d4052cbfedf3531f9d6232aa49",
+  "completionMarker": "[BattleRuntimeSelfCheckEditor] 自检完成。",
+  "markerLines": [
+    27263
+  ],
+  "logModifiedUtcTimestamp": 1789946867.9625847,
+  "evidenceContract": "BattleRuntimeSelfCheckEditor.RunAndWriteResult logs this marker only after RunAllChecksStatic returns and WriteResult(PASS).",
+  "limitation": "Temp result absent after batch Editor exit; do not claim archived result file. No real Play proof."
+}

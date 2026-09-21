@@ -1465,6 +1465,7 @@ namespace NTSD.Simulation
             rows.Generation[slot] = generation;
             rows.Identity[slot] = identity.StableId;
             rows.ObjectId[slot] = objectId;
+            rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
             rows.DataObjectType[slot] = identity.DataObjectType;
             rows.X[slot] = frameMotion.X;
             rows.Y[slot] = frameMotion.Y;
@@ -1882,6 +1883,7 @@ namespace NTSD.Simulation
 
             return rows.Identity[slot] == identity.StableId &&
                    rows.ObjectId[slot] == identity.ObjectId &&
+                   rows.NativeAiProfileObjectId[slot] == runtime.NativeAiProfileObjectId &&
                    rows.DataObjectType[slot] == identity.DataObjectType &&
                    rows.InputHistoryGate[slot] == inputProjection.InputHistoryGate &&
                    rows.X[slot] == frameMotion.X &&
@@ -2540,6 +2542,7 @@ namespace NTSD.Simulation
                 rows.Generation[slot] = view.Generation;
                 rows.Identity[slot] = runtime.StableId;
                 rows.ObjectId[slot] = entity.ObjectId;
+                rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
                 rows.DataObjectType[slot] =
                     entity.GetCurrentDataObjectTypeForSimulation();
                 rows.X[slot] = runtime.XInt;
@@ -3565,6 +3568,7 @@ namespace NTSD.Simulation
                     !MatchUnifiedSnapshotValue(production.Identity[slot], unified.Identity[slot], consumer, AiUnifiedSnapshotMismatchKind.Identity, AiUnifiedSnapshotField.None, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.InputHistoryGate[slot] ? 1 : 0, unified.InputHistoryGate[slot] ? 1 : 0, consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.InputHistoryGate, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.ObjectId[slot], unified.ObjectId[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.ObjectId, slot, ref mismatch) ||
+                    !MatchUnifiedSnapshotValue(production.NativeAiProfileObjectId[slot], unified.NativeAiProfileObjectId[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.NativeAiProfileObjectId, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.DataObjectType[slot], unified.DataObjectType[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.DataObjectType, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.X[slot], unified.X[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.X, slot, ref mismatch) ||
                     !MatchUnifiedSnapshotValue(production.Y[slot], unified.Y[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Y, slot, ref mismatch) ||
@@ -3705,6 +3709,7 @@ namespace NTSD.Simulation
                    MatchUnifiedSnapshotValue(production.Identity[slot], unified.Identity[slot], consumer, AiUnifiedSnapshotMismatchKind.Identity, AiUnifiedSnapshotField.None, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.InputHistoryGate[slot] ? 1 : 0, unified.InputHistoryGate[slot] ? 1 : 0, consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.InputHistoryGate, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.ObjectId[slot], unified.ObjectId[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.ObjectId, slot, ref mismatch) &&
+                   MatchUnifiedSnapshotValue(production.NativeAiProfileObjectId[slot], unified.NativeAiProfileObjectId[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.NativeAiProfileObjectId, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.DataObjectType[slot], unified.DataObjectType[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.DataObjectType, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.X[slot], unified.X[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.X, slot, ref mismatch) &&
                    MatchUnifiedSnapshotValue(production.Y[slot], unified.Y[slot], consumer, AiUnifiedSnapshotMismatchKind.Field, AiUnifiedSnapshotField.Y, slot, ref mismatch) &&

@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "content": {
+    "policy": "logan-dat-character-images",
+    "scope": "catalog-object-fusion-definitions",
+    "profile": "logan-runtime",
+    "objectDefinitionSha256": "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+    "fusionInputSha256": "28E1809EDE9C18E49629E6CBEC20CBD11FCB6E0175DF9DEE6ED90CE542886D5F",
+    "fusionSemanticSha256": "81CA495386950C3F8D5F00B43A62934410D4F6F738CD7B720610241E88F8D369",
+    "rawDefinitionSha256": "3A7FF5A15521B9766FC35BBF04B8FA9D3F4BDEA5C5D0045A578BA8B523C37CC4",
+    "decodeContract": "NTSD28_LOGAN_DAT_SEMANTICS_V3",
+    "semanticSha256": "FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147",
+    "catalogFingerprint64": "0FEFD4B968D618FD",
+    "schemas": {
+      "entityRuntime": 16,
+      "aggregate": 24,
+      "checksum": 27,
+      "characterShell": 2,
+      "entityBaseShell": 2
+    }
+  }
+}

@@ -1,3 +1,6 @@
+using System.Buffers.Binary;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -317,10 +320,26 @@ internal static class TraceContractSelfTest
             ["wrong-schema-type"] = content => content["schemas"] = "13/21/24/2/2",
             ["extra-schema"] = content => content["schemas"]!["extra"] = 1,
         };
-        foreach (string property in new[] { "policy", "scope", "profile", "rawDefinitionSha256", "decodeContract", "semanticSha256", "catalogFingerprint64", "schemas" })
+        foreach (string property in new[] { "policy", "scope", "profile", "rawDefinitionSha256", "decodeContract", "semanticSha256", "catalogFingerprint64", "schemas", "objectDefinitionSha256", "fusionInputSha256", "fusionSemanticSha256" })
             mutations["missing-" + property] = content => content.Remove(property);
         foreach (string schema in new[] { "entityRuntime", "aggregate", "checksum", "characterShell", "entityBaseShell" })
             mutations["old-" + schema] = content => content["schemas"]![schema] = 0;
+        foreach (var retiredSchema in new Dictionary<string, int>
+        {
+            ["entityRuntime"] = 15, ["aggregate"] = 23, ["checksum"] = 26,
+        })
+        {
+            mutations["retired-fusion-carrier-schema-" + retiredSchema.Key] =
+                content => content["schemas"]![retiredSchema.Key] = retiredSchema.Value;
+        }
+        foreach (var retiredSchema in new Dictionary<string, int>
+        {
+            ["entityRuntime"] = 16, ["aggregate"] = 24, ["checksum"] = 27,
+        })
+        {
+            mutations["retired-platform-carrier-schema-" + retiredSchema.Key] =
+                content => content["schemas"]![retiredSchema.Key] = retiredSchema.Value;
+        }
         foreach (var mutation in mutations)
         {
             RunCase(report, "Q05-" + mutation.Key, "invalid", null, () =>
@@ -335,9 +354,94 @@ internal static class TraceContractSelfTest
         }
         RunCase(report, "Q05-frozen-semantic-vector", "match", null, () =>
         {
-            var content = TraceContentIdentity.Create("logan-runtime", "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C");
-            bool matches = content["semanticSha256"]!.GetValue<string>() == "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407" &&
-                content["catalogFingerprint64"]!.GetValue<string>() == "3900ECBC509557DB";
+            // Historical V2 vector remains evidence of the retired object-only math.
+            byte[] input = Encoding.ASCII.GetBytes("NTSD28_LOGAN_DAT_SEMANTICS_V2\0")
+                .Concat(Convert.FromHexString("4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C")).ToArray();
+            byte[] semantic = SHA256.HashData(input);
+            bool matches = Convert.ToHexString(semantic) == "DB579550BCEC0039383BB421B0F62FB9C741FA2BFD30212059F329B8CADA4407" &&
+                BinaryPrimitives.ReadUInt64LittleEndian(semantic).ToString("X16") == "3900ECBC509557DB";
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        RunCase(report, "Q06-composite-formal-independent-vector", "match", null, () =>
+        {
+            var content = TraceContentIdentity.CreateLogan(
+                "4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C",
+                "28E1809EDE9C18E49629E6CBEC20CBD11FCB6E0175DF9DEE6ED90CE542886D5F",
+                "81CA495386950C3F8D5F00B43A62934410D4F6F738CD7B720610241E88F8D369");
+            TraceContentIdentity.Validate(content, true);
+            bool matches = content["rawDefinitionSha256"]!.GetValue<string>() == "3A7FF5A15521B9766FC35BBF04B8FA9D3F4BDEA5C5D0045A578BA8B523C37CC4" &&
+                content["semanticSha256"]!.GetValue<string>() == "FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147" &&
+                content["catalogFingerprint64"]!.GetValue<string>() == "0FEFD4B968D618FD";
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        RunCase(report, "Q06-composite-fixed-byte-independent-vector", "match", null, () =>
+        {
+            var content = TraceContentIdentity.CreateLogan(
+                "000102030405060708090A0B0C0D0E0F101112131415161718191A1B1C1D1E1F",
+                "202122232425262728292A2B2C2D2E2F303132333435363738393A3B3C3D3E3F",
+                "404142434445464748494A4B4C4D4E4F505152535455565758595A5B5C5D5E5F");
+            TraceContentIdentity.Validate(content, true);
+            bool matches = content["rawDefinitionSha256"]!.GetValue<string>() == "C32F2109ABE09F390E5D13936B32E174AD704D64B1B56A9516D573BCF3BE55EF" &&
+                content["semanticSha256"]!.GetValue<string>() == "68EE16B9C9BCAB61B44C040C057C7686E642662F25DA2B0999FD7359729D0111" &&
+                content["catalogFingerprint64"]!.GetValue<string>() == "61ABBCC9B916EE68";
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        var compositeMutations = new Dictionary<string, Action<JsonObject>>
+        {
+            ["old-v2-tag"] = content => content["decodeContract"] = "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+            ["old-v2-property-set"] = content =>
+            {
+                content.Remove("objectDefinitionSha256"); content.Remove("fusionInputSha256"); content.Remove("fusionSemanticSha256");
+                content["decodeContract"] = "NTSD28_LOGAN_DAT_SEMANTICS_V2";
+                content["scope"] = "catalog-object-definitions";
+            },
+        };
+        foreach (string component in new[] { "objectDefinitionSha256", "fusionInputSha256", "fusionSemanticSha256" })
+        {
+            compositeMutations[component + "-tampered"] = content => content[component] = new string('E', 64);
+            compositeMutations[component + "-invalid"] = content => content[component] = "not-a-sha";
+            compositeMutations[component + "-null"] = content => content[component] = null;
+        }
+        foreach (var mutation in compositeMutations)
+        {
+            RunCase(report, "Q06-composite-" + mutation.Key, "invalid", null, () =>
+            {
+                string[] lines = SplitLines(authority);
+                JsonObject header = JsonNode.Parse(lines[0])!.AsObject();
+                mutation.Value(header["content"]!.AsObject());
+                lines[0] = Serialize(header);
+                var validation = TraceComparator.ValidateTextForTest(JoinLines(lines));
+                return (validation.Status, validation.Reason, (string?)null);
+            });
+        }
+        RunCase(report, "Q06-one-component-logan-factory-rejected", "rejected", null, () =>
+        {
+            try { TraceContentIdentity.Create("logan-runtime", new string('A', 64)); }
+            catch (InvalidDataException) { return ("rejected", (string?)null, (string?)null); }
+            return ("accepted", (string?)null, (string?)null);
+        });
+        foreach (int componentIndex in new[] { 0, 1, 2 })
+        {
+            foreach (string? invalid in new string?[] { null, "", new string('G', 64), new string('A', 63) })
+            {
+                RunCase(report, "Q06-invalid-factory-component-" + componentIndex + "-" + (invalid ?? "null"), "rejected", null, () =>
+                {
+                    string[] components = { new string('A', 64), new string('C', 64), new string('D', 64) };
+                    components[componentIndex] = invalid!;
+                    try { TraceContentIdentity.CreateLogan(components[0], components[1], components[2]); }
+                    catch (InvalidDataException) { return ("rejected", (string?)null, (string?)null); }
+                    return ("accepted", (string?)null, (string?)null);
+                });
+            }
+        }
+        RunCase(report, "Q06-legacy-profile-unchanged", "match", null, () =>
+        {
+            var content = TraceContentIdentity.Create("unity-legacy", new string('A', 64));
+            TraceContentIdentity.Validate(content);
+            byte[] semantic = SHA256.HashData(Encoding.ASCII.GetBytes("NTSD28_UNITY_LEGACY_DAT_SEMANTICS_V1\0")
+                .Concat(Convert.FromHexString(new string('A', 64))).ToArray());
+            bool matches = content.Count == 8 && content["scope"]!.GetValue<string>() == "unity-legacy-dat-files" &&
+                content["semanticSha256"]!.GetValue<string>() == Convert.ToHexString(semantic);
             return (matches ? "match" : "mismatch", (string?)null, (string?)null);
         });
         RunCase(report, "Q05-source-missing-2f8-rejected", "invalid", null, () =>
@@ -531,7 +635,7 @@ internal static class TraceContractSelfTest
                     TraceContract.FastLogicIntervalMilliseconds,
             },
             ["slotCapacity"] = slotCapacity,
-            ["content"] = TraceContentIdentity.Create("logan-runtime", contentManifest),
+            ["content"] = TraceContentIdentity.CreateLogan(contentManifest, new string('C', 64), new string('D', 64)),
             ["approvedExceptions"] = ToJsonArray(
                 TraceContract.ApprovedExceptions),
             ["excludedFeatures"] = ToJsonArray(
@@ -673,7 +777,7 @@ internal static class TraceContractSelfTest
         {
             ["kind"] = "header",
             ["schema"] = AuthorityCaptureValidator.CaptureSchema,
-            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
+            ["content"] = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64), new string('D', 64)),
             ["certificateEligible"] = false,
             ["evidenceClass"] = AuthorityCaptureValidator.EvidenceClass,
             ["formalExeSha256"] = TraceContract.AuthorityExecutableSha256,

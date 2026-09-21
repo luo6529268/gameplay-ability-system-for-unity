@@ -1,0 +1,47 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-TYPE3-ATTACKER-POSTHIT-NATIVE-FRAME-ACCESS-001
+status: VERIFIED
+change-kind: TYPE3_ATTACKER_NATIVE_SELECTED_FRAME_ACCESS
+code-path: Tools/NTSD28AuthorityTrace/type3_attacker_posthit_native_frame_access_witness.cpp
+code-path: Tools/NTSD28AuthorityTrace/validate_type3_attacker_posthit_native_frame_access_witness.py
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Type3AttackerPostHitNativeFrameAccessEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+authority: Formal playable battle_world.cpp apply_native_type3_post_hit_action and three live callers.
+evidence: Read-only current caller and selected-frame audit; source13 witnesses pending.
+-->
+
+# NTSD28-Q06-TYPE3-ATTACKER-POSTHIT-NATIVE-FRAME-ACCESS-001
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST。
+
+Authority正式EXE B1E13A…19033与playable闭包07CD47…778F；battle_world.cpp apply_native_type3_post_hit_action以及真实standard unarmored/type1 armor/reduced消费者。Unity共享ResolveNativeType3AttackerPostHitAction selected getter、ApplyNativeType3AttackerPostHitAction binder仍旧接口。实际caller为type0标准、type0 ApplyAlternateDamage reduced、type3 ApplySpecialObjectHurtTail。已native的weapon/type5/noncharacter reduced helper不重做。既有B5 cover/state gate、只有0回退10、selected dvx写Z、counter/X清零及其它顺序保持。
+
+第一写域仅 Tools/NTSD28AuthorityTrace/type3_attacker_posthit_native_frame_access_witness.cpp。复用现source capture格式slot0/70/OID77/78，attacker type3 initialaction20/state3000，targettype0 current10/state0。非零速度X1.25/Z-0.5、counter7/latch13/previous14/snapshot20保持可观测；target支持180186220，pending沿用effect fixture，HP400/MP497，kind0/effect0/injury5/fall1。
+
+主11代表：selected69implicit、900declared dvx7、900implicit、999declared dvx-9、999missing、1000、-1、hit_Fj0→implicit10、state3007cover2 selected900declared、state3007cover1不应用、77declared dvx550低位控制。selected声明state0/wait41/next自身，目标0fallback10须不与initial20冲突。
+另两route代表：type0未耗尽匹配type1 armor真正reduced；type3 target10state3005避免matched3005pair前置/后置覆盖；均attacker3000→declared900state0dvx7。armor精确字段参照现type1 witness/源码，必须输出actual route/status证明reduced，不能凭标签认定。若构造前置被拒绝须报告修正，不绕过资格。
+
+每例真实geometric candidate1，public resolve_ordinary_unarmored_standard_hit或resolve_ordinary_type1_armor_standard_hit；不存在resolve_ordinary_reduced_hit API，不调用confirmed helper绕过。完整before/after/following driver，两对象raw/descriptor/history/pending/B2/RNG及实际result/lifecycle。不要手写after，不修改权威源码/资源。
+
+source构建/双跑/聚焦独立验证后，才准确声明Unityfixture及生产最小访问点，先RED。原旧B5规则按相关小回归复用，不扩全角色/target矩阵。若其它事务差异另拆，不过滤来变绿。闭包出口一次SelfCheck/代表replay/Play/Q05关闭。框架/Scene/非战斗/资源/schema保护，source-onlypreviousXYZ/raw3限制保持，Q06未完/Q07未迁移。
+
+回滚范围：本ID新source/后续准确声明的Unity访问及测试，不覆盖其他工作，不做Git回退。正式330 hash-verified静态selected域893declaredlow/6implicitlow（OID221 frames0..5无ITR），无dynamic玩家可达证明；报告remaining/FORMAL330-TYPE3-ATTACKER-SELECTED-FRAMES.json。
+
+source13已写并root核对输入/caller，build session77694执行中。预声明聚焦独立validator：按state/cover/hitFj/声明与native域计算即时attacker action、descriptor、counter、motionX/Z及历史保持，固定type1减伤HP与实际activation/status分开检查；不独立模拟整个hit的target其它副作用/RNG/following。当前没有Unity/production修改。
+
+source13 build/double-run一致SHAfb3f06bf92ee1fac2ae9354d33548b393cd32ede6fed0333baa6152b5dbf0e31、独立214PASS。case11实际armorDecision applies/type1/activationavailable/mpCost0/notbroken/HP398，case12type3target applied；13status均applied。独立脚本初版键dvx应为selectedDvx的KeyError已纠正，不是source差异。准确Unity扩域：新单fixture复用source raw/descriptor/history/B2/RNG capture，catalog实际attackerType3/targetType0或3，factory初态20/10；type0完整ApplyStandardCharacterDamage（含真实route resolver→reduced），type3完整ApplySpecialAttackDamage。主13Authority/DataOriented +Mobile/Legacy smoke6{0,1,4,9,11,12}，before/即时/following分别比较，不混改production。
+
+Unity source13+smoke6 RED job81b7c9b8410f483487a8fa3e83b6dabc：主before0/即时24/后继14，smoke before0/即时13/后继9；仅selected descriptor/wait/native Z及following传播，3消费者均复现。production-red已保留。精确生产范围：ResolveNativeType3AttackerPostHitAction唯一selectedFrame读取改attacker.FrameCache?.GetNativeFrameDataById(action)；ApplyNativeType3AttackerPostHitAction唯一binder改DirectWriteNativeRawFramePreserveWaitCounter。保留current Frame.D/state/cover/仅0fallback/counter0/X0/selecteddvx→Z顺序；HitPlan共用resolver无需修改独立逻辑；不动已nativehelper或targetgeneric后续。
+
+两production访问已修，联合jobb094fbe79e4c4119bef9bb35f520a882 13/13PASS（旧11+新2），主13+smoke6 before/即时/following全0，已归档after-access-fix。下一测试精确扩域：同fixture添加case1/11/12真实captured candidate->PostInteractionTickAll在Shadow/DataOriented的source attackerframe/descriptor/counter/VxVz及targetHP对照；Shadow观察count用于明确实际投影覆盖，不把无观察当projection已验证。随后6代表Authority sameWorld replay、Play12按两个profile/factory，复用原probe/关闭合同。同步修正输出scope文案覆盖unarmored/reduced/type3三路径，生产不再改。
+
+新增captured入口首跑job8748fd327d0f4484a39fa4436d7c0ffe失败2：CharacterPassCapture1/ObjectPassCapture0/PlannedAttacker0，type3未在角色PostInteraction pass消费（frame仍20）。原XML保存captured-entry-failure，非production访问修复失败。实际driver ResolveObjectInteractions使用ObjectInteractionTickAll；准确修正测试helper改用该object pass，不修改生产。
+
+Object pass复测job87cea9bdb16e481397debcf0444dac02：DataOriented三routes source字段PASS；Shadow前两type0有writer observation1且source匹配，case12(type3targetstate3005) observedwriter0。已查CanProjectStandardType3DamageWriterEffect明确targetState==LF2States.ObjectFlying返回false，为既有投影支持域限制；actual object dispatch/candidate/consume均1，不是本两访问点新增退化。原失败XML保留object-captured-initial。修正测试覆盖声明：type0两个Shadow仍强制writer observation>0；type3 case12保留所有actual source字段/Failure/Mismatch断言并记录diagnostics，但不声称独立writer projection覆盖，也不为本包扩大projection支持域。此未覆盖域回链remaining审计，不取消实际source一致性验收。
+
+object captured job05135a7f372b49448ce0b420be5421e8 2/2PASS，三routes actualsource字段一致，type0两route writerprojection观察PASS；target3005明确未观察。完整SelfCheck请求即将提交，scope文案已修正。最后同fixture新增6代表Authority同World replay和Type3PostHitPlayProbe两profile/factory各6合计12，遵循已有checksum/borrower保护和Q05关闭；不扩角色乘积，不再改生产。
+
+完整SelfCheck 2026-09-21T02:49:00Z PASS已存after-access-fix。已按预声明写入6代表Authority replay与Type3PostHitPlayProbe12入口，仅测试代码；当前刷新编译，尚未运行replay/Play。生产不再修改，后续不重跑完整SelfCheck。
+
+
+2026-09-21 限定VERIFIED：production两访问点，source13/214、Unity13+6零差异、旧11+新2=13/13、Object captured2/2（target3005不称projection通过）、SelfCheck02:49:00Z、representative replay6/12tick、真实Play12与关闭02:51:18Z全部PASS。Scene/hash/checksum/borrowers保持及零残留，准确限制和失败历史见artifacts/diagnostics/NTSD28-Q06-TYPE3-ATTACKER-POSTHIT-NATIVE-FRAME-ACCESS-001/ACCEPTANCE.md。前未写/运行中描述保留历史由本条覆盖。Q06未完/Q07未迁移。

@@ -10,7 +10,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleWorldEntityRuntimeSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 15;
+        public const int CurrentSchemaVersion = 17;
 
         private readonly bool[] entityRuntimePresent;
         private readonly bool[] rawRuntimePresent;
@@ -82,6 +82,16 @@ namespace NTSD.Simulation
         {
             ValidateSlot(runtimeSlot);
             return rawRuntimePresent[runtimeSlot];
+        }
+
+        internal bool HasConsistentEntityDataType(int runtimeSlot, int expectedDataType)
+        {
+            ValidateSlot(runtimeSlot);
+            int expectedObjectType = expectedDataType == 0 ? 0 : 1;
+            NTSDEntityRuntime entity = entityRuntimes[runtimeSlot];
+            // Raw slot storage is independent; DAT rebinding only publishes entity metadata.
+            return entityRuntimePresent[runtimeSlot] && entity != null &&
+                   entity.EntityType == expectedDataType && entity.ObjType == expectedObjectType;
         }
 
         public bool TryCopyEntityRuntime(

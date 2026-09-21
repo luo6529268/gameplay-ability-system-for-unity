@@ -17,6 +17,7 @@ namespace NTSD.Animation
 
         [Header("基本参数")]
         public int pic = 0;
+        public int NativePlatformAttacking;
         public int state = 0;
         public int cover = 0;
         public int wait = 1;
@@ -354,6 +355,7 @@ namespace NTSD.Animation
         public int h = 0;
         public int zwidth = 15;
         public int z = 0;
+        public float PlatformDvy;
         public bool hasGeometry = true;
 
         // 击退速度字段；DAT 缺失时默认 0。
@@ -451,6 +453,7 @@ namespace NTSD.Animation
             dbdefend = source.dbdefend;
             kill = source.kill;
             bdefend = source.bdefend;
+            PlatformDvy = source.PlatformDvy;
             rawProperties = source.rawProperties;
             catchingact = source.catchingact;
             caughtact = source.caughtact;

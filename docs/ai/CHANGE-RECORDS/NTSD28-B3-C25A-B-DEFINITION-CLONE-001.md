@@ -1,5 +1,7 @@
 # NTSD28-B3-C25A-B-DEFINITION-CLONE-001 — C25a-b definition and clones
 
+2026-09-21 current-authority follow-up: this historical record used closure39DDDA15. Current closure07CD47 materialize_special_state_clones uses requestHP/MP500, native implicit frame access and consumes random tuples before spawn_transient capacity refusal. Therefore HP10/pre-RNG capacity/explicit-frame assumptions below are not current closure acceptance. New NTSD28-Q06-STATE9996-DIRECT-SPAWN-TRANSACTION-001 obtains complete fresh evidence; successful five-clone topology/callsite order and original dated facts remain preserved, no automatic reimplementation of unrelated C25a responsibilities.
+
 <!-- CHANGE-RECORD
 id: NTSD28-B3-C25A-B-DEFINITION-CLONE-001
 status: VERIFIED

@@ -1,0 +1,7 @@
+FAIL
+System.InvalidOperationException: state3003 must write bilateral vrest between AnimCounter linked slot and newborn slot
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33497 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckState3003RuntimeSlotVrest () [0x000fd] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:21039 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckInteractionRuntimeSlotContracts () [0x000d3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:20879 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x00508] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:268 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

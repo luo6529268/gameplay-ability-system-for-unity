@@ -243,14 +243,8 @@ namespace NTSD.Animation
             bool hasSingle = frame.opoint.HasValue;
             if (!hasList && !hasSingle) return;
 
-            BattleObjectPointValue firstOp =
-                hasList ? frame.opoints[0] : frame.opoint.Value;
-            if (firstOp.Kind <= 0 ||
-                firstOp.Oid <= 0 ||
-                spawner.AttackingCounter != 0)
-            {
+            if (spawner.AttackingCounter != 0)
                 return;
-            }
             if (spawner.FrameDelay != 0 &&
                 spawner.GetCurrentDataObjectTypeForSimulation() == (int)LF2ObjectType.Character)
                 return;
@@ -260,15 +254,15 @@ namespace NTSD.Animation
                 for (int i = 0; i < frame.opoints.Count; i++)
                 {
                     _spawnedBuffer.Clear();
-                    ProcessOneLateOpoint(spawner, frame, frame.opoints[i]);
-                    ApplyMultiSpawnExemptAndVrest(_spawnedBuffer);
+                    bool continueFrame = ProcessOneLateOpoint(spawner, frame, frame.opoints[i]);
+                    if (!continueFrame)
+                        break;
                 }
             }
             else
             {
                 _spawnedBuffer.Clear();
                 ProcessOneLateOpoint(spawner, frame, frame.opoint.Value);
-                ApplyMultiSpawnExemptAndVrest(_spawnedBuffer);
             }
 
             _spawnedBuffer.Clear();
@@ -279,12 +273,19 @@ namespace NTSD.Animation
             ProcessOpointSpawn(spawner);
         }
 
-        private void ProcessOneLateOpoint(
+        private bool ProcessOneLateOpoint(
             LF2Entity spawner,
             LF2FrameData frame,
             BattleObjectPointValue op)
         {
-            if (op.Kind <= 0 || op.Oid <= 0) return;
+            // Alignment contract: NTSD28-Q06-OPOINT-MATERIALIZER-TRANSACTION-001.
+            if ((op.Kind != 1 && op.Kind != 2) || op.Oid <= 0)
+                return true;
+            if (ResolveObjectDefinition(spawner.Match, op.Oid) == null)
+                return false;
+            if (!BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(
+                ResolveCharacterConfig(spawner.Match, op.Oid), op.Action))
+                return true;
 
             int spawnCount = 1;
             int facingMode = op.Facing;
@@ -298,7 +299,7 @@ namespace NTSD.Animation
             {
                 int requiredRuntimeSlot = spawner.Match?.FindFirstFreeFrameLogicRuntimeSlot() ?? -1;
                 if (requiredRuntimeSlot < 0)
-                    continue;
+                    return false;
 
                 ObjectPoint spawnOp =
                     BattleObjectPointValueAdapter.ToLegacyTask(op);
@@ -308,7 +309,7 @@ namespace NTSD.Animation
                     ResolveReferencePool(spawner.Match);
                 OPointCreateTask task = referencePool?.Fetch<OPointCreateTask>();
                 if (task == null)
-                    break;
+                    return false;
                 task.opoint = spawnOp;
                 task.parent = spawner;
                 task.targetWorld = spawner.Match;
@@ -327,30 +328,17 @@ namespace NTSD.Animation
                     task,
                     BattleStructuralPlaybackBoundary.CurrentEntityImmediate);
                 referencePool?.Recycle(task);
-                if (spawned == null) continue;
+                if (spawned == null) return false;
 
                 if (op.Kind != 2)
                     spawned.Runtime.HolderStableId = 0;
 
-                if (spawnCount > 1)
-                {
-                    float spread = i * 10f / (spawnCount - 1) - 5f;
-                    spawned.PS.vz += spread;
-                    float absSpread = Mathf.Abs(spread);
-                    if (spawned.PS.vx > 0f)
-                        spawned.PS.vx -= absSpread;
-                    else if (spawned.PS.vx < 0f)
-                        spawned.PS.vx += absSpread;
-                    else
-                        spawned.PS.vx += spread;
-                }
-
-                if (spawner.GetCurrentDataObjectTypeForSimulation() == 3 && frame.state == 3003)
-                    ApplyState3003LinkedVrest(spawner, spawned);
+                BattleNativeOpointBirthWriter.ApplySpread(spawned, i, spawnCount);
 
                 spawned.AttackExempt = 0;
                 _spawnedBuffer.Add(spawned);
             }
+            return true;
         }
 
         private static void ConfigureLateOpointPosition(
@@ -473,8 +461,8 @@ namespace NTSD.Animation
             if (combatData?.characterData == null)
                 return null;
 
-            if (task.nativeWeaponPieceSpawn &&
-                !BattleNativeWeaponPieceWriter.IsInitialActionAdmitted(combatData, task.opoint.action))
+            if ((task.nativeWeaponPieceSpawn || task.nativeState9996CloneSpawn || task.IsLateOpointSpawn) &&
+                !BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(combatData, task.opoint.action))
                 return null;
 
             int objType = def.type;
@@ -544,6 +532,10 @@ namespace NTSD.Animation
                 // 7. 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
                 if (task.nativeWeaponPieceSpawn)
                     BattleNativeWeaponPieceWriter.InitializeBirth(living, task);
+                else if (task.nativeState9996CloneSpawn)
+                    BattleNativeDirectSpawnWriter.InitializeBirth(living, task);
+                else if (task.IsLateOpointSpawn && task.parent != null)
+                    BattleNativeOpointBirthWriter.InitializeBirth(living, task);
                 else PostInitLiving(
                     living,
                     task.parent,
@@ -922,7 +914,7 @@ namespace NTSD.Animation
         private static void ApplyReleaseOpointDirectionalVz(LF2Entity living, OPointCreateTask task)
         {
             if (living?.PS == null || task?.parent == null || !task.releaseOpointSpawn) return;
-            if (task.useDirectVelocity) return;
+            if (task.useDirectVelocity || task.IsLateOpointSpawn) return;
 
             LF2FrameData frame = living.Frame?.D;
             if (frame == null) return;

@@ -1,0 +1,25 @@
+# NTSD28-Q06-NATIVE-AI-PERSISTED-ALIAS-001
+
+CURRENT: VERIFIED / NATIVE_AI_PERSISTED_ALIAS_CONSUMPTION. Acceptance: artifacts/diagnostics/NTSD28-Q06-NATIVE-AI-PERSISTED-ALIAS-001/ACCEPTANCE.md. Original staged plan below retained. All declared implementation and focused integration exits satisfied within canonical native consumer scope; no claim of Q06/total completion or exhaustive historical/forced-fallback coverage.
+
+IN_PROGRESS / SOURCE_WITNESS_FIRST. Parent Q06 / BATCH-03. Follow-up of NATIVE-AI-ALIAS-CONSUMER-AUDIT-001.
+
+Objective: consume persisted NativeAiProfileObjectId in actual Unity AI derived rows and current native decision branches, matching current playable classifier/matcher/special-profile early-return and synchronized RNG/sampling semantics. Preserve Unity/GAS, actual-ID sensing, legacy non-synchronized paths, all closed fusion responsibilities, Scene/resources and nonbattle behavior.
+
+Authority: formal source/ntsd28_core/src/simulation/native_ai.cpp native_profile_classifier/native_use_ai_match, step_profiled_combat, step_special_profile, step_ordinary_combat, step_main; simulation_tick_driver.cpp AI producer then sample_pending. native_ai.cpp participates in playable build.ps1:63. Source-backed diagnostics are not formal EXE recordings.
+
+Initial exact script scope: Tools/NTSD28AuthorityTrace/native_ai_persisted_alias_witness.cpp and Tools/NTSD28AuthorityTrace/validate_native_ai_persisted_alias_witness.py only. Public API witness for classifier, match34, match1 versus actual1 chase, special33, RNG gate order, unsupported stop. Record inputs, actual result fields, input state, synchronized call sites/cursor. Compare representative alias -1/0/recognized/unrecognized positive, not every character. Include step_main/real tick representative to prove stop does not skip sampling or later tick. No edits to authority source, no private access tricks. Build via existing wrapper to workspace Build, double-run and inspect expected branches independently. Test data synthetic and explicitly labelled.
+
+After source evidence, declare exact Unity fixture paths, obtain failing tests on current production, then declare five audited runtime paths and any required existing-test fixture clarification before editing. Do not add an unused helper or mechanical global ObjectId replacement. Preserve current schemas/raw47/3; derived caches do not define persistent state. Add no lifecycle owner, worker, pool or shutdown phase.
+
+Initial independent carrier test amendment: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeAiPersistedAliasEditorTests.cs is declared now for RED of three row producers/Grow/alias-only recapture, based on already established persistent carrier contract. Source-dependent behavioral fixtures still wait for witness output. This reduces serialized waiting without changing authority requirements.
+
+After four actual carrier RED failures, exact production row paths declared: Simulation/Ai/Snapshots/AiSensingSnapshot.cs; Simulation/Ai/Runtime/SimulationAiSensingModule.cs; SimulationAiDecisionModule.cs; SimulationAiDecisionTypes.cs (all under Assets/NTSD/Scripts). Symbols: array constructor/declaration/CopyTo; TryCaptureRow; TryCaptureUnifiedAuthorityRow/CaptureShadowSnapshot/ValidateUnifiedExecutionRowAfterCharacterInput/TryCompareAiUnifiedSnapshotRows/TryCompareUnifiedSnapshotRow; append enum NativeAiProfileObjectId=62. This stage does not change kernel behavior or claim full alias completion.
+
+After source18/408 and Unity15-case RED8, declare Assets/NTSD/Scripts/Simulation/Ai/Kernel/AiDecisionKernel.cs. Exact behavior: ProcessNativeProfiledCombat classifier/match34/match1, TryApplyNativeSpecialProfile applicability/match33/unsupported early stop and private matcher. Actual-ID1 chase and all unrelated consumers unchanged. Acceptance is source15 joint plus relevant existing special-profile tests, followed by actual producer/sampler/restore representative; source helpers alone do not close full integration.
+
+After joint27 PASS, declare new Assets/NTSD/Scripts/Test/Editor/NTSD28Q06NativeAiAliasTickEditorTests.cs for actual two-tick source16/17 sampler parity, snapshot restore/recapture and stale validation representative. Remain IN_PROGRESS until integration evidence reviewed; do not repeat unaffected fusion tests.
+
+Acceptance: source representative branch outputs and repeatability; Unity compile and focused source/Unity parity, actual row producer/copy/stale/compare coverage, full AI decision/sampling representative and alias-only restore recapture. Stable related batch gets relevant joint regression; no unrelated full-role/scenes. A fullSelfCheck/Play is not repeated per fixture edit. Record what is and is not proved, then scoped review and validator. Keep Q06/goal active until all exit requirements are separately fulfilled.
+
+Rollback: review and reverse only this Change's hunks with user work preserved, never destructive Git or deletion of unknown files. Any rollback requiring deletion/restoration remains subject to user authorization.

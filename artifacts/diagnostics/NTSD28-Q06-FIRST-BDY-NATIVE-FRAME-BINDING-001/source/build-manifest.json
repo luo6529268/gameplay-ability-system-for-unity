@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "85CC5AD9569CE17ED814CCCE85AD3BDBF5CB2F765BFA9C64B82ADD7BC5700A24",
+  "captureBinarySha256": "D726598475BD5AAF295B10CC70DDCB5DB492714E765124B417A99ED4D240EEBC",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Build\\NTSD28FirstBdyNative\\first_bdy_native_frame_binding_witness.exe",
+  "authorityWriteAllowed": false
+}

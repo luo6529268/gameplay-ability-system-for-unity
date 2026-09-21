@@ -1,0 +1,15 @@
+# Ordinary landing native frame binding entry
+
+IN_PROGRESS / READ_ONLY。Unity生产未改。
+
+已验证旧物理规则与接线保持：B4 TYPE0-ORDINARY-LANDING与Q06 CANONICAL-CHARACTER-PHYSICS-TAIL不重做。此项只补ApplyCurrentDatType0OrdinaryLanding最后raw action setter的native descriptor契约。
+
+正式可测入口world.NativePhysicsAndDeadCharacterResourceNormalizeAll(tick)，既有CanonicalCharacterPhysicsTailEditorTests使用同入口验证Legacy/DataOriented。source对应单slot World.step_physics(slot,{})；双方physics观察upcoming resource phase，但不在此入口提交时钟推进。可用单entity避免额外damage/credit事务，collision_y_reference原始负值需同源恢复。
+
+source PhysicsIntegrator28定义contact为newPreciseY>=effectiveFloor，strict crossing检查oldPreciseY<effectiveFloor；恰好接触算落地，原来已接触不算再次crossing。negative collision reference替代floor；非负保留flat0。当前source frame_state100优先94，212或state6优先215，其它hit_g非0或219；保留原始signed动作，不按输入999语义归零。
+
+Unity三个真实consumer共用ApplyCurrentDatType0OrdinaryLanding：exact LF2Character的普通physics路径、canonical BattleEcsCharacterFrameAdvancePass以及LF2Entity shared character DAT路径。即时比较不能只用完整tick终点，因为后续C25可能修正此前错误descriptor。
+
+初步验收应同时比较Legacy/DataOriented，并保留初态、即时、following分离报告。state12/18、环境伤害、非角色物理和角色模型架构不在本次修改范围。current source含义与已有actual entry已确认，具体source矩阵仍在制作。
+
+Source extra previousXYZ mapping audit：NTSDEntityRuntime没有同名直接carrier；Unity AiSensingModule.PreviousX只是局部row-refresh旧值，不是native PhysicsIntegrator Position28.previous_x，不能拿来冒充。当前source previous_y在battle_world.cpp4208..4210用于platform op30；这属于已有platform/source-field对齐后继，不能静默删掉差异或用fixture旁路伪造。源186保留三个extra且由独立模型核验，Unity本普通landing descriptor对照暂明确标为source-only extras（非raw50内字段），不得用本包结果宣称平台历史坐标一致。生产主scope不因此扩到字段/schema。

@@ -1,0 +1,8 @@
+{
+  "status": "PASS",
+  "cases": 18,
+  "checks": 408,
+  "sha256": "e3ccefda7a02ad530a5868b2c5375518d6434b8d118f1653090373992f36c07d",
+  "failures": [],
+  "scope": "Independent alias branches, call-site presence/order constraints, full RNG result/cursor algorithm and focused sampler assertions; not full AI or full world-state model."
+}

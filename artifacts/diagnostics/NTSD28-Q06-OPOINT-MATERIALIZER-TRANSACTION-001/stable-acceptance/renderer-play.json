@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "passedCases": 3,
+  "errors": [],
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Real Play ordinary OPoint pooled-renderer births: ordinary, held multi, random XYZ/action vs source. Synthetic parent; no formal EXE image parity claim."
+}

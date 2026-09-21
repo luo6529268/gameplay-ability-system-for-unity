@@ -1,0 +1,50 @@
+<test-suite type="TestSuite" id="9709" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7741" result="Failed" site="Child" start-time="2026-09-21 00:42:32Z" end-time="2026-09-21 00:42:34Z" duration="1.557778" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18377" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7733" result="Failed" site="Child" start-time="2026-09-21 00:42:32Z" end-time="2026-09-21 00:42:34Z" duration="1.481869" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="62860" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18378" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7733" result="Failed" site="Child" start-time="2026-09-21 00:42:32Z" end-time="2026-09-21 00:42:34Z" duration="1.342042" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18386" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7195" result="Failed" site="Child" start-time="2026-09-21 00:42:32Z" end-time="2026-09-21 00:42:34Z" duration="1.302243" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="11946" name="NTSD28Q06State1218AirborneNativeFrameEditorTests" fullname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests" classname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 00:42:32Z" end-time="2026-09-21 00:42:34Z" duration="1.233272" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="11949" name="State1218AirborneAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.State1218AirborneAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 00:42:33Z" end-time="2026-09-21 00:42:34Z" duration="1.133107" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="11947" name="State1218AirborneAndFollowingTickMatchSource(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.State1218AirborneAndFollowingTickMatchSource(Authority400,DataOriented)" methodname="State1218AirborneAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests" runstate="Runnable" seed="1957816738" result="Failed" start-time="2026-09-21 00:42:33Z" end-time="2026-09-21 00:42:33Z" duration="0.823002" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 1 physics entities[0].wait=1 expected=0
+case 2 physics entities[0].wait=1 expected=0
+case 3 physics entities[0].wait=1 expected=0
+case 4 physics entities[0].wait=1 expected=0
+case 5 physics entities[0].wait=1 expected=0
+case 6 physics entities[0].wait=1 expected=0
+case 7 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 9 physics entities[0].wait=1 expected=0
+case 13 physics entities[0].wait=1 expected=0
+case 14 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 1 physics entities[0].wait=1 expected=0", "case 2 physics entities[0].wait=1 expected=0", "case 3 physics entities[0].wait=1 expected=0", "case 4 physics entities[0].wait=1 expected=0", "case 5 physics entities[0].wait=1 expected=0", "case 6 physics entities[0].wait=1 expected=0", "case 7 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 9 physics entities[0].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003fb] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218AirborneNativeFrameEditorTests.cs:90
+at NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.State1218AirborneAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218AirborneNativeFrameEditorTests.cs:32
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=State1218AirborneNative, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="11948" name="State1218AirborneAndFollowingTickMatchSource(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.State1218AirborneAndFollowingTickMatchSource(MobileExtended,Legacy)" methodname="State1218AirborneAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests" runstate="Runnable" seed="1323994150" result="Failed" start-time="2026-09-21 00:42:33Z" end-time="2026-09-21 00:42:34Z" duration="0.206403" asserts="0"><properties /><failure><message><![CDATA[  case 0 physics entities[0].wait=1 expected=0
+case 4 physics entities[0].wait=1 expected=0
+case 8 physics entities[0].wait=1 expected=0
+case 15 physics entities[0].wait=1 expected=0
+case 32 physics entities[0].wait=1 expected=0
+case 36 physics entities[0].wait=1 expected=0
+case 44 physics entities[0].wait=1 expected=0
+  Expected: <empty>
+  But was:  < "case 0 physics entities[0].wait=1 expected=0", "case 4 physics entities[0].wait=1 expected=0", "case 8 physics entities[0].wait=1 expected=0", "case 15 physics entities[0].wait=1 expected=0", "case 32 physics entities[0].wait=1 expected=0", "case 36 physics entities[0].wait=1 expected=0", "case 44 physics entities[0].wait=1 expected=0" >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003fb] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218AirborneNativeFrameEditorTests.cs:90
+at NTSD.Test.NTSD28Q06State1218AirborneNativeFrameEditorTests.State1218AirborneAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06State1218AirborneNativeFrameEditorTests.cs:32
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

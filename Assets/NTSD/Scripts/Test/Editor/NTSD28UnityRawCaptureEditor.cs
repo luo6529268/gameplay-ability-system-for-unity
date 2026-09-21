@@ -122,7 +122,8 @@ namespace NTSD.EditorTools
                 ConfigureWorldAndRoster(observedWorld, dataScope.Configs, scenario, true);
                 observedWorld.PrepareRuntimeDataCatalogForBattle(dataScope.Catalog.Entries
                     .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
-                    id => dataScope.Configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null);
+                    id => dataScope.Configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null,
+                    loganCatalog: dataScope.Catalog);
                 driver.ApplySettings(new LockstepSimulationSettings
                 {
                     driveMode = SimulationDriveMode.Manual,
@@ -322,6 +323,11 @@ namespace NTSD.EditorTools
             SimulationTickDriver driver = driverScope.Driver;
             SimulationWorld world = driver.World;
             ConfigureWorldAndRoster(world, dataScope.Configs, scenario, dataScope.IsLogan);
+            if (dataScope.IsLogan)
+                world.PrepareRuntimeDataCatalogForBattle(dataScope.Catalog.Entries
+                    .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
+                    id => dataScope.Configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null,
+                    loganCatalog: dataScope.Catalog);
             var directRngCalls = new NativeRandomDirectCallRecorder();
             world.NativeRandom.SetDiagnosticCallObserver(directRngCalls);
             world.SetAcceptedAiRandomTraceObserverForDiagnostics(
@@ -682,6 +688,8 @@ namespace NTSD.EditorTools
                 rosterSlot.StableId = character.Runtime.StableId;
                 runtime.Roster.ActiveSlotCount++;
             }
+            world.ConfigureFusionFeatureGates(scenario.fusionFirstFeatureGate4A8428,
+                scenario.fusionSecondFeatureGate4A842C);
         }
 
         private static LF2Character CreateCharacter(
@@ -1400,7 +1408,7 @@ namespace NTSD.EditorTools
                 {
                     loganCatalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(loganRuntimeRoot));
                     Configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(loganCatalog);
-                    Content = NTSD28TraceContentIdentity.FromLoganRaw(loganCatalog.DefinitionFingerprint);
+                    Content = NTSD28TraceContentIdentity.FromLoganCatalog(loganCatalog);
                 }
                 else
                 {
@@ -1499,9 +1507,10 @@ namespace NTSD.EditorTools
 
             internal void AssertInputsCurrent()
             {
+                loganCatalog?.FusionInput.AssertInputsCurrent();
                 Dictionary<string, object> current = loganCatalog == null
                     ? NTSD28TraceContentIdentity.CaptureLegacy(ProjectPath(ProductionConfigRoot), ProjectPath(ProductionDataIndex))
-                    : NTSD28TraceContentIdentity.FromLoganRaw(LoganObjectCatalog.Read(loganCatalog.Source).DefinitionFingerprint);
+                    : NTSD28TraceContentIdentity.FromLoganCatalog(LoganObjectCatalog.Read(loganCatalog.Source));
                 if (!Equals(current["semanticSha256"], Content["semanticSha256"]))
                     throw new InvalidDataException("Capture content inputs changed during loading or simulation.");
             }
@@ -1674,6 +1683,8 @@ namespace NTSD.EditorTools
             public int battleMode;
             public int stageId;
             public int difficultyLevel4A0C30;
+            public bool fusionFirstFeatureGate4A8428;
+            public bool fusionSecondFeatureGate4A842C;
             public UnityRawCombatant[] combatants;
             public UnityRawInput[] inputs;
         }

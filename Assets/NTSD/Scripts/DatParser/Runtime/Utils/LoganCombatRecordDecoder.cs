@@ -131,7 +131,10 @@ namespace NTSD.DatParser
                     case "w": break;
                     case "h": break;
                     case "dvx": area.dvx = LoganNumericDecoder.ParseInt32OrZero(property.Value); break;
-                    case "dvy": area.dvy = LoganNumericDecoder.ParseInt32OrZero(property.Value); break;
+                    case "dvy":
+                        area.dvy = LoganNumericDecoder.ParseInt32OrZero(property.Value);
+                        area.PlatformDvy = LoganNumericDecoder.ParseFiniteFloat32OrZero(property.Value);
+                        break;
                     case "fall": area.fall = LoganNumericDecoder.ParseInt32OrZero(property.Value); break;
                     case "arest": area.arest = LoganNumericDecoder.ParseInt32OrZero(property.Value); break;
                     case "vrest": area.vrest = LoganNumericDecoder.ParseInt32OrZero(property.Value); break;

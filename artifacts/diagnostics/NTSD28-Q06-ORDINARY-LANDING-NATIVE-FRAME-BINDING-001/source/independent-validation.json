@@ -1,0 +1,12 @@
+{
+  "rows": 186,
+  "checks": 97845,
+  "failures": [],
+  "totals": {
+    "landings": 162,
+    "airborne": 8,
+    "contactWithoutLanding": 16
+  },
+  "sha256": "ed75a284cc6a23423d4aee09241bf6bdafa8e516ca732fbab81131a85a773f2e",
+  "scope": "Independent full before and immediate ordinary type0 physics model from params and fixed initial state, including previousXYZ/descriptor/B2/RNG/all step fields. Following tick is captured but not independently modeled; Unity previousXYZ mapping not asserted."
+}

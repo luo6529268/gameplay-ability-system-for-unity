@@ -1,0 +1,7 @@
+{
+  "cases": 480,
+  "checks": 228481,
+  "failures": [],
+  "sha256": "d898b84df517ebc3b5c21b1113c1a390baaedadffa961f35d8e385608dffc6c1",
+  "scope": "Independent initial entity and complete immediate entity transition; RNG unchanged from captured seed state. Step flags and following tick not independently modelled."
+}

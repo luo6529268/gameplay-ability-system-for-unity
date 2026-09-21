@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "cases": 10,
+  "checks": 120,
+  "sha256": "74fd90c9c9feb4b5e7de92858e97e9b8f7d506d3d276e51ee62d5c5700ac1168",
+  "scope": "Actual candidate API then actual frame-motion API. Not whole-tick ordering or Unity parity."
+}

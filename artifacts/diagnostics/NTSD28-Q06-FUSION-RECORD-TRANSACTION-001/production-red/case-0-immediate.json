@@ -1,0 +1,1060 @@
+{
+  "index": 0,
+  "beforeDifferences": [],
+  "mergeDifferences": [
+    "afterMerge.entities[0].raw.frame.actionLatch=13 expected=290",
+    "afterMerge.entities[0].raw.frame.tickActionSnapshot=20 expected=290",
+    "afterMerge.entities[0].raw.frame.frameCounter=7 expected=0",
+    "afterMerge.entities[0].raw.vitals.baseMaxMp=600 expected=800",
+    "afterMerge.entities[0].raw.combat.weaponHp=21 expected=23",
+    "afterMerge.entities[0].fusionDisplayTimer=23 expected=4500",
+    "afterMerge.entities[0].soundLatch=41 expected=-1",
+    "afterMerge.entities[0].aiProfile=31 expected=33",
+    "afterMerge.entities[0].dropMode=1 expected=3",
+    "afterMerge.entities[0].incomingScale=0 expected=187",
+    "afterMerge.entities[0].reviveVisual318=51 expected=0"
+  ],
+  "splitBeforeDifferences": [
+    "beforeDefuse.entities[0].raw.frame.actionLatch=13 expected=290",
+    "beforeDefuse.entities[0].raw.frame.tickActionSnapshot=20 expected=290",
+    "beforeDefuse.entities[0].raw.frame.frameCounter=7 expected=0",
+    "beforeDefuse.entities[0].raw.vitals.baseMaxMp=600 expected=800",
+    "beforeDefuse.entities[0].raw.combat.weaponHp=21 expected=23",
+    "beforeDefuse.entities[0].fusionDisplayTimer=23 expected=4500",
+    "beforeDefuse.entities[0].soundLatch=41 expected=-1",
+    "beforeDefuse.entities[0].aiProfile=31 expected=33",
+    "beforeDefuse.entities[0].dropMode=1 expected=3",
+    "beforeDefuse.entities[0].incomingScale=0 expected=187",
+    "beforeDefuse.entities[0].reviveVisual318=51 expected=0"
+  ],
+  "splitDifferences": [
+    "afterDefuse.entities[0].raw.frame.actionLatch=13 expected=112",
+    "afterDefuse.entities[0].raw.frame.tickActionSnapshot=20 expected=112",
+    "afterDefuse.entities[0].raw.frame.frameCounter=7 expected=0",
+    "afterDefuse.entities[0].snapshotState=2 expected=0",
+    "afterDefuse.entities[0].fusionDisplayTimer=23 expected=4500",
+    "afterDefuse.entities[0].soundLatch=41 expected=-1",
+    "afterDefuse.entities[0].incomingScale=0 expected=137",
+    "afterDefuse.entities[0].reviveVisual318=51 expected=0",
+    "afterDefuse.entities[1].raw.frame.actionLatch=0 expected=112",
+    "afterDefuse.entities[1].raw.frame.previousAction=0 expected=12",
+    "afterDefuse.entities[1].raw.frame.tickActionSnapshot=0 expected=112",
+    "afterDefuse.entities[1].raw.motion.z=0 expected=1.75",
+    "afterDefuse.entities[1].raw.vitals.baseMaxHp=500 expected=400",
+    "afterDefuse.entities[1].raw.vitals.baseMaxMp=500 expected=700",
+    "afterDefuse.entities[1].raw.vitals.reviveLives=0 expected=1",
+    "afterDefuse.entities[1].raw.combat.weaponHp=0 expected=22",
+    "afterDefuse.entities[1].pendingCount=0 expected=1",
+    "afterDefuse.entities[1].pendingX=0.1 expected=14",
+    "afterDefuse.entities[1].pendingY=0.1 expected=18",
+    "afterDefuse.entities[1].pendingZ=0.1 expected=20",
+    "afterDefuse.entities[1].fusionDisplayTimer=0 expected=24",
+    "afterDefuse.entities[1].fusionPrimaryId=0 expected=-1",
+    "afterDefuse.entities[1].fusionPartnerId=0 expected=-1",
+    "afterDefuse.entities[1].gate328=-1 expected=0",
+    "afterDefuse.entities[1].aiProfile=-1 expected=32",
+    "afterDefuse.entities[1].dropMode=0 expected=2",
+    "afterDefuse.entities[1].incomingScale=0 expected=195",
+    "afterDefuse.entities[1].modeScale=100 expected=150",
+    "afterDefuse.entities[1].reviveVisual318=0 expected=52",
+    "afterDefuse.entities[1].hpConsumed=0 expected=62",
+    "afterDefuse.entities[1].mpConsumed=0 expected=72",
+    "afterDefuse.entities[1].score=0 expected=82",
+    "afterDefuse.entities[1].input.input.keyHistory[0]=0 expected=-1",
+    "afterDefuse.entities[1].input.input.keyHistory[1]=0 expected=-1",
+    "afterDefuse.entities[1].input.input.keyHistory[2]=0 expected=-1",
+    "afterDefuse.entities[1].input.input.keyHistory[3]=0 expected=-1",
+    "afterDefuse.entities[1].input.input.keyHistory[4]=0 expected=-1"
+  ],
+  "before": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 21
+          },
+          "frame": {
+            "action": 20,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 7,
+            "frameState": 2,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 7,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 1.25,
+            "y": -2.5,
+            "z": 0.75
+          },
+          "position": {
+            "preciseX": 340.25,
+            "preciseY": 0,
+            "preciseZ": 250.5,
+            "x": 340,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 400,
+            "baseMaxMp": 600,
+            "currentHp": 100,
+            "currentMp": 497,
+            "effectiveMaxHp": 250,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 2,
+        "wait": 41,
+        "next": 20,
+        "snapshotAvailable": true,
+        "snapshotState": 2,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 1,
+        "pendingX": 13.0,
+        "pendingY": 17.0,
+        "pendingZ": 19.0,
+        "fusionTimer": 0,
+        "fusionDisplayTimer": 23,
+        "fusionPartnerSlot": -1,
+        "fusionPrimaryId": -1,
+        "fusionPartnerId": -1,
+        "gate328": 0,
+        "gate194": 0,
+        "soundLatch": 41,
+        "aiProfile": 31,
+        "dropMode": 1,
+        "incomingScale": 0,
+        "modeScale": 125,
+        "reviveVisual318": 51,
+        "hpConsumed": 61,
+        "mpConsumed": 71,
+        "score": 81,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 7,
+          "slot": 0
+        }
+      },
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 22
+          },
+          "frame": {
+            "action": 10,
+            "actionLatch": 11,
+            "facingLeft": false,
+            "frameCounter": 8,
+            "frameState": 2,
+            "previousAction": 12,
+            "tickActionSnapshot": 10
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 8,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 2.25,
+            "y": -3.5,
+            "z": 1.75
+          },
+          "position": {
+            "preciseX": 300.25,
+            "preciseY": 0,
+            "preciseZ": 250.5,
+            "x": 300,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 1,
+          "vitals": {
+            "baseMaxHp": 400,
+            "baseMaxMp": 700,
+            "currentHp": 120,
+            "currentMp": 497,
+            "effectiveMaxHp": 275,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 2,
+        "wait": 41,
+        "next": 10,
+        "snapshotAvailable": true,
+        "snapshotState": 2,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 1,
+        "pendingX": 14.0,
+        "pendingY": 18.0,
+        "pendingZ": 20.0,
+        "fusionTimer": 0,
+        "fusionDisplayTimer": 24,
+        "fusionPartnerSlot": -1,
+        "fusionPrimaryId": -1,
+        "fusionPartnerId": -1,
+        "gate328": 0,
+        "gate194": 0,
+        "soundLatch": 42,
+        "aiProfile": 32,
+        "dropMode": 2,
+        "incomingScale": 0,
+        "modeScale": 150,
+        "reviveVisual318": 52,
+        "hpConsumed": 62,
+        "mpConsumed": 72,
+        "score": 82,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 8,
+          "slot": 1
+        }
+      }
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "merged": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 21
+          },
+          "frame": {
+            "action": 290,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 7,
+            "frameState": 0,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 51,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": -2.5,
+            "z": 0.75
+          },
+          "position": {
+            "preciseX": 320,
+            "preciseY": 0,
+            "preciseZ": 250,
+            "x": 320,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 400,
+            "baseMaxMp": 600,
+            "currentHp": 220,
+            "currentMp": 500,
+            "effectiveMaxHp": 400,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 0,
+        "wait": 41,
+        "next": 290,
+        "snapshotAvailable": true,
+        "snapshotState": 0,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 1,
+        "pendingX": 13.0,
+        "pendingY": 17.0,
+        "pendingZ": 19.0,
+        "fusionTimer": 4500,
+        "fusionDisplayTimer": 23,
+        "fusionPartnerSlot": 1,
+        "fusionPrimaryId": 7,
+        "fusionPartnerId": 8,
+        "gate328": 1,
+        "gate194": 0,
+        "soundLatch": 41,
+        "aiProfile": 31,
+        "dropMode": 1,
+        "incomingScale": 0,
+        "modeScale": 125,
+        "reviveVisual318": 51,
+        "hpConsumed": 61,
+        "mpConsumed": 71,
+        "score": 81,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 51,
+          "slot": 0
+        }
+      },
+      null
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "beforeDefuse": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 21
+          },
+          "frame": {
+            "action": 290,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 7,
+            "frameState": 0,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 51,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": -2.5,
+            "z": 0.75
+          },
+          "position": {
+            "preciseX": 320,
+            "preciseY": 0,
+            "preciseZ": 250,
+            "x": 320,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 400,
+            "baseMaxMp": 600,
+            "currentHp": 220,
+            "currentMp": 500,
+            "effectiveMaxHp": 400,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 0,
+        "wait": 41,
+        "next": 290,
+        "snapshotAvailable": true,
+        "snapshotState": 0,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 1,
+        "pendingX": 13.0,
+        "pendingY": 17.0,
+        "pendingZ": 19.0,
+        "fusionTimer": 0,
+        "fusionDisplayTimer": 23,
+        "fusionPartnerSlot": 1,
+        "fusionPrimaryId": 7,
+        "fusionPartnerId": 8,
+        "gate328": 1,
+        "gate194": 0,
+        "soundLatch": 41,
+        "aiProfile": 31,
+        "dropMode": 1,
+        "incomingScale": 0,
+        "modeScale": 125,
+        "reviveVisual318": 51,
+        "hpConsumed": 61,
+        "mpConsumed": 71,
+        "score": 81,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 51,
+          "slot": 0
+        }
+      },
+      null
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "afterDefuse": {
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 21
+          },
+          "frame": {
+            "action": 112,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 7,
+            "frameState": 0,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 7,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": -2.5,
+            "z": 0.75
+          },
+          "position": {
+            "preciseX": 320,
+            "preciseY": 0,
+            "preciseZ": 250,
+            "x": 320,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 400,
+            "baseMaxMp": 600,
+            "currentHp": 110,
+            "currentMp": 0,
+            "effectiveMaxHp": 200,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 0,
+        "wait": 41,
+        "next": 112,
+        "snapshotAvailable": true,
+        "snapshotState": 2,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 1,
+        "pendingX": 13.0,
+        "pendingY": 17.0,
+        "pendingZ": 19.0,
+        "fusionTimer": 900,
+        "fusionDisplayTimer": 23,
+        "fusionPartnerSlot": 1,
+        "fusionPrimaryId": 7,
+        "fusionPartnerId": 8,
+        "gate328": -1,
+        "gate194": 0,
+        "soundLatch": 41,
+        "aiProfile": 31,
+        "dropMode": 1,
+        "incomingScale": 0,
+        "modeScale": 125,
+        "reviveVisual318": 51,
+        "hpConsumed": 61,
+        "mpConsumed": 71,
+        "score": 81,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 7,
+          "slot": 0
+        }
+      },
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 112,
+            "actionLatch": 0,
+            "facingLeft": true,
+            "frameCounter": 0,
+            "frameState": 0,
+            "previousAction": 0,
+            "tickActionSnapshot": 0
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 8,
+            "objectType": 0,
+            "ownerSlot": -1,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 320,
+            "preciseY": 0,
+            "preciseZ": 250,
+            "x": 320,
+            "y": 0,
+            "z": 250
+          },
+          "slot": 1,
+          "vitals": {
+            "baseMaxHp": 500,
+            "baseMaxMp": 500,
+            "currentHp": 110,
+            "currentMp": 0,
+            "effectiveMaxHp": 200,
+            "reviveLives": 0,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 0,
+        "wait": 41,
+        "next": 112,
+        "snapshotAvailable": true,
+        "snapshotState": 0,
+        "environment": 0,
+        "environmentSource": -1,
+        "catchSource": -1,
+        "impactSource": -1,
+        "pendingCount": 0,
+        "pendingX": 0.1,
+        "pendingY": 0.1,
+        "pendingZ": 0.1,
+        "fusionTimer": 0,
+        "fusionDisplayTimer": 0,
+        "fusionPartnerSlot": -1,
+        "fusionPrimaryId": 0,
+        "fusionPartnerId": 0,
+        "gate328": -1,
+        "gate194": 0,
+        "soundLatch": -1,
+        "aiProfile": -1,
+        "dropMode": 0,
+        "incomingScale": 0,
+        "modeScale": 100,
+        "reviveVisual318": 0,
+        "hpConsumed": 0,
+        "mpConsumed": 0,
+        "score": 0,
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 8,
+          "slot": 1
+        }
+      }
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "rejectionBefore": "{\"entities\":[{\"raw\":{\"active\":true,\"allocationEpoch\":1,\"combat\":{\"armorRecoveryTimer\":-1,\"attackerRest\":0,\"bdefendAccumulator\":0,\"collisionYReference\":0,\"environmentSourceSlot\":null,\"environmentState\":null,\"hitReactionTimer\":0,\"motionHoldTimer\":0,\"objectAiExcludedGroupSourceSlot\":-1,\"platformSourceSlot\":null,\"renderPhase\":0,\"runtimeArmorHp\":0,\"runtimeStateCode\":0,\"specialHitLatch0eb\":false,\"weaponHp\":21},\"frame\":{\"action\":290,\"actionLatch\":13,\"facingLeft\":false,\"frameCounter\":7,\"frameState\":0,\"previousAction\":14,\"tickActionSnapshot\":20},\"identity\":{\"battleGroup\":3,\"controlSlot\":0,\"objectId\":51,\"objectType\":0,\"ownerSlot\":-1,\"participantClass\":0},\"lifecycle\":{\"code\":0,\"resolutionPending\":false},\"motion\":{\"x\":0,\"y\":-2.5,\"z\":0.75},\"position\":{\"preciseX\":320,\"preciseY\":0,\"preciseZ\":250,\"x\":320,\"y\":0,\"z\":250},\"slot\":0,\"vitals\":{\"baseMaxHp\":400,\"baseMaxMp\":600,\"currentHp\":220,\"currentMp\":500,\"effectiveMaxHp\":400,\"reviveLives\":1,\"reviveNextHp\":0,\"reviveNextLives\":0}},\"available\":true,\"state\":0,\"wait\":41,\"next\":290,\"snapshotAvailable\":true,\"snapshotState\":0,\"environment\":0,\"environmentSource\":-1,\"catchSource\":-1,\"impactSource\":-1,\"pendingCount\":1,\"pendingX\":13.0,\"pendingY\":17.0,\"pendingZ\":19.0,\"fusionTimer\":0,\"fusionDisplayTimer\":23,\"fusionPartnerSlot\":1,\"fusionPrimaryId\":7,\"fusionPartnerId\":8,\"gate328\":1,\"gate194\":0,\"soundLatch\":41,\"aiProfile\":31,\"dropMode\":1,\"incomingScale\":0,\"modeScale\":125,\"reviveVisual318\":51,\"hpConsumed\":61,\"mpConsumed\":71,\"score\":81,\"input\":{\"allocationEpoch\":1,\"input\":{\"boundState\":0,\"comboState\":[0,0,0,0,0,0,0,0,0,0],\"currentMask\":0,\"defendReentryCooldown\":0,\"edgeWindow\":{\"attack\":0,\"defend\":0,\"down\":0,\"jump\":0,\"left\":0,\"right\":0,\"up\":0},\"globalRecordState\":0,\"keyHistory\":[-1,-1,-1,-1,-1],\"lastAction\":0,\"previousMask\":0,\"proxyTail\":0,\"remapIndices\":[0,1,2,3,4,5,6],\"remapState\":0,\"runAccumulator\":0},\"objectId\":51,\"slot\":0}},{\"raw\":{\"active\":true,\"allocationEpoch\":1,\"combat\":{\"armorRecoveryTimer\":-1,\"attackerRest\":0,\"bdefendAccumulator\":0,\"collisionYReference\":0,\"environmentSourceSlot\":null,\"environmentState\":null,\"hitReactionTimer\":0,\"motionHoldTimer\":0,\"objectAiExcludedGroupSourceSlot\":-1,\"platformSourceSlot\":null,\"renderPhase\":0,\"runtimeArmorHp\":0,\"runtimeStateCode\":0,\"specialHitLatch0eb\":false,\"weaponHp\":22},\"frame\":{\"action\":10,\"actionLatch\":11,\"facingLeft\":false,\"frameCounter\":8,\"frameState\":2,\"previousAction\":12,\"tickActionSnapshot\":10},\"identity\":{\"battleGroup\":3,\"controlSlot\":0,\"objectId\":8,\"objectType\":0,\"ownerSlot\":-1,\"participantClass\":0},\"lifecycle\":{\"code\":0,\"resolutionPending\":false},\"motion\":{\"x\":2.25,\"y\":0,\"z\":1.75},\"position\":{\"preciseX\":300.25,\"preciseY\":0,\"preciseZ\":250.5,\"x\":300,\"y\":0,\"z\":250},\"slot\":1,\"vitals\":{\"baseMaxHp\":400,\"baseMaxMp\":700,\"currentHp\":120,\"currentMp\":497,\"effectiveMaxHp\":275,\"reviveLives\":1,\"reviveNextHp\":0,\"reviveNextLives\":0}},\"available\":true,\"state\":2,\"wait\":41,\"next\":10,\"snapshotAvailable\":true,\"snapshotState\":2,\"environment\":0,\"environmentSource\":-1,\"catchSource\":-1,\"impactSource\":-1,\"pendingCount\":1,\"pendingX\":14.0,\"pendingY\":18.0,\"pendingZ\":20.0,\"fusionTimer\":0,\"fusionDisplayTimer\":24,\"fusionPartnerSlot\":-1,\"fusionPrimaryId\":-1,\"fusionPartnerId\":-1,\"gate328\":0,\"gate194\":0,\"soundLatch\":42,\"aiProfile\":32,\"dropMode\":2,\"incomingScale\":0,\"modeScale\":150,\"reviveVisual318\":52,\"hpConsumed\":62,\"mpConsumed\":72,\"score\":82,\"input\":{\"allocationEpoch\":1,\"input\":{\"boundState\":0,\"comboState\":[0,0,0,0,0,0,0,0,0,0],\"currentMask\":0,\"defendReentryCooldown\":0,\"edgeWindow\":{\"attack\":0,\"defend\":0,\"down\":0,\"jump\":0,\"left\":0,\"right\":0,\"up\":0},\"globalRecordState\":0,\"keyHistory\":[-1,-1,-1,-1,-1],\"lastAction\":0,\"previousMask\":0,\"proxyTail\":0,\"remapIndices\":[0,1,2,3,4,5,6],\"remapState\":0,\"runAccumulator\":0},\"objectId\":8,\"slot\":1}}],\"random\":{\"crt\":{\"state\":1975929314,\"totalCalls\":3000},\"synchronized\":{\"counter\":0,\"index\":0,\"lastCallSite\":0,\"tableHash64\":\"54BFC3E7F3017958\",\"totalCalls\":0}}}",
+  "rejectionAfter": "{\"entities\":[{\"raw\":{\"active\":true,\"allocationEpoch\":1,\"combat\":{\"armorRecoveryTimer\":-1,\"attackerRest\":0,\"bdefendAccumulator\":0,\"collisionYReference\":0,\"environmentSourceSlot\":null,\"environmentState\":null,\"hitReactionTimer\":0,\"motionHoldTimer\":0,\"objectAiExcludedGroupSourceSlot\":-1,\"platformSourceSlot\":null,\"renderPhase\":0,\"runtimeArmorHp\":0,\"runtimeStateCode\":0,\"specialHitLatch0eb\":false,\"weaponHp\":21},\"frame\":{\"action\":112,\"actionLatch\":13,\"facingLeft\":false,\"frameCounter\":7,\"frameState\":0,\"previousAction\":14,\"tickActionSnapshot\":20},\"identity\":{\"battleGroup\":3,\"controlSlot\":0,\"objectId\":7,\"objectType\":0,\"ownerSlot\":-1,\"participantClass\":0},\"lifecycle\":{\"code\":0,\"resolutionPending\":false},\"motion\":{\"x\":0,\"y\":-2.5,\"z\":0.75},\"position\":{\"preciseX\":320,\"preciseY\":0,\"preciseZ\":250,\"x\":320,\"y\":0,\"z\":250},\"slot\":0,\"vitals\":{\"baseMaxHp\":400,\"baseMaxMp\":600,\"currentHp\":110,\"currentMp\":0,\"effectiveMaxHp\":200,\"reviveLives\":1,\"reviveNextHp\":0,\"reviveNextLives\":0}},\"available\":true,\"state\":0,\"wait\":41,\"next\":112,\"snapshotAvailable\":true,\"snapshotState\":2,\"environment\":0,\"environmentSource\":-1,\"catchSource\":-1,\"impactSource\":-1,\"pendingCount\":1,\"pendingX\":13.0,\"pendingY\":17.0,\"pendingZ\":19.0,\"fusionTimer\":900,\"fusionDisplayTimer\":23,\"fusionPartnerSlot\":1,\"fusionPrimaryId\":7,\"fusionPartnerId\":8,\"gate328\":-1,\"gate194\":0,\"soundLatch\":41,\"aiProfile\":31,\"dropMode\":1,\"incomingScale\":0,\"modeScale\":125,\"reviveVisual318\":51,\"hpConsumed\":61,\"mpConsumed\":71,\"score\":81,\"input\":{\"allocationEpoch\":1,\"input\":{\"boundState\":0,\"comboState\":[0,0,0,0,0,0,0,0,0,0],\"currentMask\":0,\"defendReentryCooldown\":0,\"edgeWindow\":{\"attack\":0,\"defend\":0,\"down\":0,\"jump\":0,\"left\":0,\"right\":0,\"up\":0},\"globalRecordState\":0,\"keyHistory\":[-1,-1,-1,-1,-1],\"lastAction\":0,\"previousMask\":0,\"proxyTail\":0,\"remapIndices\":[0,1,2,3,4,5,6],\"remapState\":0,\"runAccumulator\":0},\"objectId\":7,\"slot\":0}},{\"raw\":{\"active\":true,\"allocationEpoch\":1,\"combat\":{\"armorRecoveryTimer\":-1,\"attackerRest\":0,\"bdefendAccumulator\":0,\"collisionYReference\":0,\"environmentSourceSlot\":null,\"environmentState\":null,\"hitReactionTimer\":0,\"motionHoldTimer\":0,\"objectAiExcludedGroupSourceSlot\":-1,\"platformSourceSlot\":null,\"renderPhase\":0,\"runtimeArmorHp\":0,\"runtimeStateCode\":0,\"specialHitLatch0eb\":false,\"weaponHp\":0},\"frame\":{\"action\":112,\"actionLatch\":0,\"facingLeft\":true,\"frameCounter\":0,\"frameState\":0,\"previousAction\":0,\"tickActionSnapshot\":0},\"identity\":{\"battleGroup\":3,\"controlSlot\":0,\"objectId\":8,\"objectType\":0,\"ownerSlot\":-1,\"participantClass\":0},\"lifecycle\":{\"code\":0,\"resolutionPending\":false},\"motion\":{\"x\":0,\"y\":0,\"z\":0},\"position\":{\"preciseX\":320,\"preciseY\":0,\"preciseZ\":250,\"x\":320,\"y\":0,\"z\":250},\"slot\":1,\"vitals\":{\"baseMaxHp\":500,\"baseMaxMp\":500,\"currentHp\":110,\"currentMp\":0,\"effectiveMaxHp\":200,\"reviveLives\":0,\"reviveNextHp\":0,\"reviveNextLives\":0}},\"available\":true,\"state\":0,\"wait\":41,\"next\":112,\"snapshotAvailable\":true,\"snapshotState\":0,\"environment\":0,\"environmentSource\":-1,\"catchSource\":-1,\"impactSource\":-1,\"pendingCount\":0,\"pendingX\":0.1,\"pendingY\":0.1,\"pendingZ\":0.1,\"fusionTimer\":0,\"fusionDisplayTimer\":0,\"fusionPartnerSlot\":-1,\"fusionPrimaryId\":0,\"fusionPartnerId\":0,\"gate328\":-1,\"gate194\":0,\"soundLatch\":-1,\"aiProfile\":-1,\"dropMode\":0,\"incomingScale\":0,\"modeScale\":100,\"reviveVisual318\":0,\"hpConsumed\":0,\"mpConsumed\":0,\"score\":0,\"input\":{\"allocationEpoch\":1,\"input\":{\"boundState\":0,\"comboState\":[0,0,0,0,0,0,0,0,0,0],\"currentMask\":0,\"defendReentryCooldown\":0,\"edgeWindow\":{\"attack\":0,\"defend\":0,\"down\":0,\"jump\":0,\"left\":0,\"right\":0,\"up\":0},\"globalRecordState\":0,\"keyHistory\":[0,0,0,0,0],\"lastAction\":0,\"previousMask\":0,\"proxyTail\":0,\"remapIndices\":[0,1,2,3,4,5,6],\"remapState\":0,\"runAccumulator\":0},\"objectId\":8,\"slot\":1}}],\"random\":{\"crt\":{\"state\":1975929314,\"totalCalls\":3000},\"synchronized\":{\"counter\":0,\"index\":0,\"lastCallSite\":0,\"tableHash64\":\"54BFC3E7F3017958\",\"totalCalls\":0}}}",
+  "unsupportedExtras": [
+    "previousX",
+    "previousY",
+    "previousZ",
+    "opointLatch"
+  ],
+  "rawMissingBindings": [
+    "combat.platformSourceSlot",
+    "combat.environmentState",
+    "combat.environmentSourceSlot"
+  ],
+  "followingStatus": "NOT_RUN_SOURCE_FOLLOWING_RETAINED_FOR_LATER_INTEGRATION",
+  "scope": "Synthetic matching object catalog plus exact formal fusion bytes; current source4 immediate public states. Native suspended slot represented by retained dormant Unity shell. No claim native slot reuse or hidden native suspended bytes."
+}

@@ -1,0 +1,106 @@
+{
+  "counts": {
+    "declared": 2343,
+    "implicit": 7
+  },
+  "examples": [
+    {
+      "oid": 44,
+      "path": "c/ank/acl.dat",
+      "frame": 615,
+      "state": 16,
+      "hit_g": 615,
+      "targetKind": "declared"
+    },
+    {
+      "oid": 44,
+      "path": "c/ank/acl.dat",
+      "frame": 616,
+      "state": 16,
+      "hit_g": 616,
+      "targetKind": "declared"
+    },
+    {
+      "oid": 44,
+      "path": "c/ank/acl.dat",
+      "frame": 617,
+      "state": 16,
+      "hit_g": 617,
+      "targetKind": "declared"
+    },
+    {
+      "oid": 44,
+      "path": "c/ank/acl.dat",
+      "frame": 618,
+      "state": 16,
+      "hit_g": 618,
+      "targetKind": "declared"
+    },
+    {
+      "oid": 44,
+      "path": "c/ank/acl.dat",
+      "frame": 678,
+      "state": 3007,
+      "hit_g": 679,
+      "targetKind": "declared"
+    },
+    {
+      "oid": 870,
+      "path": "c/ank/ssnk.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 802,
+      "path": "c/dei/zom2.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 413,
+      "path": "c/hay/clo2.dat",
+      "frame": 420,
+      "state": 3005,
+      "hit_g": 422,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 721,
+      "path": "c/kaka/pak.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 508,
+      "path": "c/nar/4tk.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 88,
+      "path": "c/oro/1.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    },
+    {
+      "oid": 89,
+      "path": "c/oro/2.dat",
+      "frame": 701,
+      "state": 15,
+      "hit_g": 1,
+      "targetKind": "implicit"
+    }
+  ],
+  "unparsed": [],
+  "scope": "Formal330 type0, first frame/field. Static hit_g targets excluding state12/18/5/6 and action212; not proof of floor-contact reachability."
+}

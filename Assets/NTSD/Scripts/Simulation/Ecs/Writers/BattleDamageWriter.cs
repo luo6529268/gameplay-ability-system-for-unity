@@ -74,7 +74,7 @@ namespace NTSD.Simulation.Ecs
                     case BattleNativeImpactWriteKind.Environment: target.EnvironmentState320 = (int)op.Value; break;
                     case BattleNativeImpactWriteKind.CatchSource: target.CatchSourceSlot90 = (int)op.Value; break;
                     case BattleNativeImpactWriteKind.ImpactSource: target.ImpactSourceSlot164 = (int)op.Value; break;
-                    case BattleNativeImpactWriteKind.Action: victim.DirectWriteRawFramePreserveWaitCounter((int)op.Value); break;
+                    case BattleNativeImpactWriteKind.Action: victim.DirectWriteNativeRawFramePreserveWaitCounter((int)op.Value); break;
                     case BattleNativeImpactWriteKind.Vx: target.Vx = op.Value; break;
                     case BattleNativeImpactWriteKind.Vz: target.Vz = op.Value; break;
                     case BattleNativeImpactWriteKind.PendingX: target.KnockbackVx = op.Value; break;
@@ -148,7 +148,7 @@ namespace NTSD.Simulation.Ecs
             }
 
             int action = currentFrame.hit_Fj != 0 ? currentFrame.hit_Fj : 10;
-            LF2FrameData selectedFrame = attacker.GetFrameDataById(action);
+            LF2FrameData selectedFrame = attacker.FrameCache?.GetNativeFrameDataById(action);
             return new NativeType3AttackerPostHitActionDecision(
                 action,
                 selectedFrame != null,
@@ -163,7 +163,7 @@ namespace NTSD.Simulation.Ecs
             if (!decision.Applies)
                 return;
 
-            attacker.DirectWriteFramePreserveWaitCounter(decision.Action);
+            attacker.DirectWriteNativeRawFramePreserveWaitCounter(decision.Action);
             attacker.AttackingCounter = 0;
             attacker.Runtime.Vx = 0.0;
             if (decision.HasSelectedFrame)
@@ -183,7 +183,7 @@ namespace NTSD.Simulation.Ecs
                 return default;
             }
 
-            int previousState = target.GetFrameDataById(
+            int previousState = target.FrameCache?.GetNativeFrameDataById(
                 target.Frame?.Prev ?? 0)?.state ?? 0;
             if ((interaction.effect == 3 || interaction.effect == 30) &&
                 previousState != 13)
@@ -211,11 +211,11 @@ namespace NTSD.Simulation.Ecs
             if (attacker?.Runtime == null || target?.Runtime == null || interaction == null)
                 return default;
 
-            LF2FrameData latchedFrame = target.GetFrameDataById(
+            LF2FrameData latchedFrame = target.FrameCache?.GetNativeFrameDataById(
                 target.Trans?.WaitCounter ?? target.Runtime.WaitCounter);
             int targetProperty = LF2HitResolveRuntimeData
                 .ResolveCharacterData(target)?.property ?? 0;
-            LF2FrameData previousFrame = target.GetFrameDataById(
+            LF2FrameData previousFrame = target.FrameCache?.GetNativeFrameDataById(
                 target.Frame?.Prev ?? 0);
             return ResolveNativeEffectActionOverrideForProjectedTarget(
                 attacker,
@@ -313,9 +313,9 @@ namespace NTSD.Simulation.Ecs
                     interaction,
                     target.Health?.HP ?? 0);
             if (decision.AttackerAction > 0)
-                attacker.DirectWriteRawFramePreserveWaitCounter(decision.AttackerAction);
+                attacker.DirectWriteNativeRawFramePreserveWaitCounter(decision.AttackerAction);
             if (decision.TargetAction > 0)
-                target.DirectWriteRawFramePreserveWaitCounter(decision.TargetAction);
+                target.DirectWriteNativeRawFramePreserveWaitCounter(decision.TargetAction);
         }
 
         private static void ApplyNativeKind0PostEffectAction(
@@ -330,7 +330,7 @@ namespace NTSD.Simulation.Ecs
             if (decision.Action <= 0)
                 return;
 
-            target.DirectWriteRawFramePreserveWaitCounter(decision.Action);
+            target.DirectWriteNativeRawFramePreserveWaitCounter(decision.Action);
             target.AttackingCounter = 0;
             if (decision.Facing >= 0)
                 target.SwitchDir(decision.Facing == 0 ? "right" : "left");
@@ -1207,9 +1207,6 @@ namespace NTSD.Simulation.Ecs
 
             victim.Runtime.Bdefend = 45;
             ApplyNativeStandardHitRest(world, attacker, victim, itr);
-
-            if (victimHitCounters.Fall == 80)
-                victimHitCounters.SetFall(0);
 
             LF2HitResolveRuntimeData.ApplyActiveHolderFrameDelay(attacker);
             ApplyStandardState1002Tail(attacker, victim);
@@ -2233,7 +2230,7 @@ namespace NTSD.Simulation.Ecs
             if (action == 0)
                 action = ordinaryFjPath ? 30 : 20;
 
-            target.DirectWriteHeldFramePreserveWaitCounter(action);
+            target.DirectWriteNativeRawFramePreserveWaitCounter(action);
             target.AttackingCounter = 0;
             return true;
         }
@@ -2245,7 +2242,7 @@ namespace NTSD.Simulation.Ecs
             const int responseAction = 40;
             if (!IsNativeLockedKindTransformCandidate(attacker, target) ||
                 attacker.FrameCache?.Wrapper == null ||
-                attacker.FrameCache.HasFrame(responseAction) != true)
+                attacker.FrameCache.HasNativeFrame(responseAction) != true)
             {
                 return false;
             }
@@ -2256,7 +2253,7 @@ namespace NTSD.Simulation.Ecs
             target.Runtime.OwnerSlotIndex = attacker.Runtime.OwnerSlotIndex;
             target.ObjectId = sourceObjectId;
             target.FrameCache.Load(sourceWrapper);
-            target.DirectWriteRawFramePreserveWaitCounter(responseAction);
+            target.DirectWriteNativeRawFramePreserveWaitCounter(responseAction);
             target.Trans?.SyncDirectFrameData(
                 target.Frame.D.wait,
                 target.Frame.D.next,
@@ -2460,7 +2457,7 @@ namespace NTSD.Simulation.Ecs
             int fallIncrement = itr.fall != 0
                 ? itr.fall
                 : NTSDGlobal.Default.Fall.Value;
-            int previousState = victim.GetFrameDataById(
+            int previousState = victim.FrameCache?.GetNativeFrameDataById(
                 victim.Frame?.Prev ?? 0)?.state ?? 0;
             int previous2State = victim.GetFrameDataById(
                     victim.Runtime.PrevFrame2)?.state

@@ -1,0 +1,23 @@
+# Preliminary Unity carrier and bootstrap entry audit
+
+Read-only, not an implementation authorization or complete carrier classification.
+
+Existing runtime fields: Unk328/32C/330/334/338; InputSpecialGate194; CollisionYReference; IncomingDamageScale340/ModeDamageScalePercent; MPMax,WeaponFlightCounter; native action/latch/snapshot/counter and native opoint/sound latch infrastructure. Need exact source→Unity field proof for fusion_display_timer_190,revive_visual_runtime_318,AIprofile,drop and second featuregate. FeatureGate4A8428 exists as per-entity native input field; do not automatically substitute it for two global FusionSystemRules gates or GameMode1 without producer/consumer evidence. Current grep absence is a pending mapping,not proof to add duplicate carriers.
+
+Current prepared-data seam: SimulationTickDriver prepares World runtime catalog before seal via SimulationWorld.PrepareRuntimeDataCatalogForBattle→BattleRuntimeDataCatalog.Prepare/Seal. Current signature contains object definitions/config resolver/hit-record lifecycle catalog, no fusion record parameter. CharacterAnimtorManager has configured Logan publication and source-aware loader paths. Future fusion data hookup must use prepared immutable battle data and exact content identity; do not read files from inner tick or introduce singleton creation. Q07 asset migration and current legacy-content fallback behavior need explicit separate decisions/contracts; do not deploy resources in this diagnostic task.
+
+Whole transaction tests must prove invalid defuse partner/original definitions cause zero partial mutation, secondrecord cover/chp/gate/timers, preserved suspended partner state, and current frame commit/definition field publication. Prior 4503tick Play proved C12/C25h placement under old internal behavior; it does not validate new catalog semantics.
+
+Host gate producer verified:GameSession builds options.fusion_rules from BattleConfig28 fusion_first_feature_gate_4a8428 and fusion_second_feature_gate_4a842c (game_session.cpp4187..4190),both declared false by default(game_session.h410..411). These are explicit config feature flags, not derived here from selected game mode. Other producers/selection transitions need exact read before implementing battle-only bridge; no UI modification implied.
+
+## Confirmed carrier resolution and next dependencies
+
+- revive_visual_runtime_318 reuses Runtime.RenderPicOffset, confirmed both B4queued contract and BattleRespawnModule166/167 production. No duplicatefield.
+- fusion_display_timer_190 default0 and fusionwrite decrease; current source has no identified decrement/defuseclear, so it must persist independently of tickingUnk338. No equivalent existing Unitycarrier identified after source/consumer audit.
+- ai_profile_object_id/definition_drop_mode are explicit persisted sourcefields assigned spawn/fusion. Lockedkind transform changes definition without changing them; therefore currentwrapper.use_ai/drop is NOT a globallyequivalent carrier. Input routing/nativeAI read alias. Staticdrop can readpreparedNativeMetadata but persistentstate must obey eachwriter's actual source rules.
+- FusionSystemRules hastwo World/global featuregates,defaultfalse. Entity FeatureGate4A8428 is separateinputboundary; GameMode1 is not an equivalent source. ExistingWorldsnapshot/corestate has no establishedmatching globalpair.
+- Newpersisted entity/world fields require reset/canonicalcopy/snapshot/checksum/parity/schema contract and exactbirth/fusion/identity-preservation producers. Do not silently upgrade raw47/raw3 or rescope verified identity tasks; track their revisit explicitly.
+
+Parser prerequisite NTSD28-Q06-FUSION-CATALOG-PARSER-001 is now VERIFIED onlyimmutableParseText,24/24/CS0. Next create exactpreparedfusioncatalog/contentidentity Task (loadbeforeseal,actualformalpath/fallback semantics,avoid tickIO), and exactcarrier/schema Task before anyruntimefield changes. They can be staged while production remainsold until fullsource4 transactionintegration RED; don't deployresources or alter UI/config selection duringparserwork. End-to-end fusion/source4Unitycomparison remainspending,includingrecord2/atomicdefuse/preservedpartnerfields.
+
+Input freeze prerequisite nowVERIFIED14/14 underNTSD28-Q06-FUSION-INPUT-FREEZE-001. ExplicitrootCapture fullyreplicates5path lookup;hostbinding must supply trueextractedroot independently. Fusion-specificfingerprints arefrozen/documented;currentglobalLoganContentIdentity remainsunchanged. Next exactglobalidentity/source-export/tool matching andpreparedcatalogscope beforeactivation;no staleobject-onlyfingerprint reuse for fusion-enabledbattle.

@@ -1,0 +1,32 @@
+{
+  "scope": "Only three fixed fixture HP/fall outputs; not full hit or following model",
+  "checks": [
+    {
+      "index": 0,
+      "expected": 80,
+      "after": 80,
+      "following": 80,
+      "hp": -4,
+      "holdAfter": -3,
+      "holdFollowing": -2
+    },
+    {
+      "index": 1,
+      "expected": 80,
+      "after": 80,
+      "following": 80,
+      "hp": 395,
+      "holdAfter": -3,
+      "holdFollowing": -2
+    },
+    {
+      "index": 2,
+      "expected": 20,
+      "after": 20,
+      "following": 20,
+      "hp": 395,
+      "holdAfter": -3,
+      "holdFollowing": -2
+    }
+  ]
+}

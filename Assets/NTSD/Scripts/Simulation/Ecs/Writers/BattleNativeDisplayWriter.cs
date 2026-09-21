@@ -2,6 +2,22 @@ namespace NTSD.Simulation.Ecs
 {
     internal static class BattleNativeDisplayWriter
     {
+        internal static void InitializeBirth(NTSDEntityRuntime runtime, int hp)
+        {
+            if (runtime == null)
+                return;
+
+            // Alignment contract: NTSD28-Q06-ORDINARY-STAGE-DISPLAY-BIRTH-001.
+            runtime.DisplayScore1F0 = 0;
+            runtime.DisplayScoreStep1F4 = 0;
+            runtime.DisplayDamageTotal1F8 = 0;
+            runtime.DisplayDamageStep1FC = 0;
+            runtime.DisplayCurrentHp200 = hp;
+            runtime.DisplayCurrentHpStep204 = 0;
+            runtime.DisplayEffectiveMaxHp208 = hp;
+            runtime.DisplayEffectiveMaxHpStep20C = 0;
+        }
+
         internal static void Advance(NTSDEntityRuntime runtime)
         {
             if (runtime == null)

@@ -1,0 +1,38 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q06-STANDARD-REACTION-HISTORY-NATIVE-READERS-001
+status: VERIFIED
+change-kind: STANDARD_REACTION_NATIVE_HISTORY_READERS
+code-path: Tools/NTSD28AuthorityTrace/kind0_post_effect_native_frame_access_witness.cpp
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q06Kind0PostEffectNativeFrameAccessEditorTests.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleDamageWriter.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+authority: Formal playable battle_world.cpp resolve_unarmored_reaction previous13 and tick snapshot12 rules.
+evidence: Parent source6 case0 and after-access Unity RED; source snapshot12 control extension pending.
+-->
+
+# NTSD28-Q06-STANDARD-REACTION-HISTORY-NATIVE-READERS-001
+
+PLANNED / SOURCE_WITNESS_EXTENSION_REQUIRED。
+
+来源：KIND0-POST-EFFECT-NATIVE-FRAME-ACCESS源6 case0 previous900显式state13当前正式source真实hit输出fall80/action186/pendingX5/pendingY10；Unity完成post-effect两访问修复后仍fall20/action220/pendingX0/pendingY17。首差已存父包after-post-effect-access（job440cbbd2bef64c5e9f7f49ce15b76b7e）。before0、其他5例无差异；不能改expected/删除case0。
+
+当前正式battle_world.cpp resolve_unarmored_reaction读取previous_action_078 state13或tick_action_snapshot state12强制80，随后实际水平/纵向反应消费该值。Unity BattleDamageWriter.ApplyStandardFall约2460/2462仍旧GetFrameDataById；HitPlan.ProjectStandardCharacterDamageWriterEffect约4638/4639同样旧读。先精确核对这4访问及源字段，别把type3 identity或其他candidate reader一起批改。
+
+第一实现步骤：扩既有Tools/NTSD28AuthorityTrace/kind0_post_effect_native_frame_access_witness.cpp可选--reaction，仅新增2个history代表：effect0/current10/previous12/snapshot900显式state12与state0控制。snapshot必须在snapshot_actions之后设置，candidate构建前固定；它代表已有历史字段，不修改候选后state或伪after。真实几何/wholehit/following，声明180186220支持帧。默认6行输出bytes必须保持SHAc01031a3eca684e4833146d4bb511c4110d18c5d7439cb64b6e943ff3c2bcae4。先源码构建/双跑/field证据，再声明Unity source2 direct+captured Shadow/DataOriented准确入口；复用现有previous13 sourcecase0，不扩大角色/配置乘积。
+
+当前只计划source扩展，尚未修改本任务脚本。source验证后才扩生产4reader准确scope；保留现有fallback/null处理需核对其native语义，不能仅机械替换。counter/HP/damage/knockback公式/序列和其它type3/catch职责不变，default200203绑定归父包。
+
+验收：source2控制+已有previous13源/Unity首差，captured projection独立观察，父包6+smoke3/旧15定向回归在修复稳定后联合一次；一次SelfCheck+代表Play/需要的snapshot回放收尾。无Scene/资源/非战斗/framework/schema改动。回滚仅此ID未来声明的source模式与4reader/测试扩展，不回退其他工作。Q06保持未完成，父包等待该依赖出口；Q07正式资源未迁移。
+
+实施前范围纠正：snapshot旧getter>=857返回null后已有Prev2D native descriptor fallback，当前同步合同保证同snapshot，source2很可能原本就通过；作为保护控制，不预设RED，也不为凑4reader批改。previous900state13没有fallback且真实RED，计划生产只按实测确定必要访问点。source --reaction由cpoint_acceptance编写中。Unity测试精确扩展现Kind0 fixture：RunMatrix可选sourceFile/outputRoot，原6+smoke3语义不变；新增Authority2snapshot direct对照；新增parent case0/2两代表的真实captured candidate Shadow/DataOriented，与source HP/Fall/pendingXY及诊断Failure/Mismatch0对照。snapshot2不人工修改candidate后历史、不冒充已走完整Unityconsumer。
+
+--reaction source2已写（snapshot900带相同BDY，geometry读取snapshot而low-fall资格读current10/state0），root build session94849中；默认6静态输出保持待实测。Unity fixture已新增snapshot2 direct/following以及parent case0/2 captured Shadow/DataOriented入口，当前刷新编译；未改生产。
+
+source2双跑SHAcc5c49e209acc75ecc5b09a8169e988727b2c7cf2bdff0486644195f5ca8af76，固定reaction/HP/candidate/lifecycle10检查PASS；默认6字节与原SHA完全一致。新snapshot2 direct/following job42080235ce3f4be4b9aa043edb9fd557 PASS1/1，before/即时/following0，说明现有Prev2D回退已经覆盖该合法snapshot域；不修改snapshot reader。真实captured previous13原RED jobae06c90f1e3c44118673d3b7a1d9bc31两个mode都actualfall20expected80（actual与projection同错），原XML保留。精确生产范围收敛为2处：ApplyStandardFall previousState和ProjectStandardCharacterDamageWriterEffect previousState，改FrameCache?.GetNativeFrameDataById；其余snapshot回退/公式/branch/order不动。不据此关闭所有history域或其它type3预测。
+
+生产仅previous两reader已修（snapshot回退未动），联合job07f95e07fec3418a95ea3adcd75498fa 25/25PASS/1.663秒；父6+smoke3、snapshot2 before/即时/following全0，captured2两mode及旧15/既有fall5通过。当前一次SelfCheck运行，尚待代表replay/Play。预声明同Kind0 fixture测试扩域：Authority同World4代表（父0/1/4+snapshot0）snapshot restore后完整hit或early拒绝+两tick，另新Kind0PostEffectPlayProbe复用已有请求/Scene checksum/borrower保护模板，在一次真实Play进行父3+snapshot2两profile两factory合计10例，然后请求现Q05有序关闭。只测试代码，不改生产/Scene/资源；日志避免Play调用TestContext。
+
+完整SelfCheck 2026-09-21T02:24:27.349008Z PASS已存joint-pass。仅测试扩展已写：Kind0AndHistoryRepresentativesSurviveLocalSnapshotReplay4代表8重放tick与Kind0PostEffectPlayProbe合并10例/既有Q05关闭请求，生产不再变更；当前刷新编译，replay/Play尚未执行。不重复完整SelfCheck/已过矩阵。
+
+
+2026-09-21 限定VERIFIED：联合25/25/SelfCheck02:24:27Z/representative replay4场景8tick/真实Play10及关闭02:27:23Z全部PASS；Scenechecksum/borrower保持、零残留、dirtyfalse/root14/hash不变。准确生产范围及限制见artifacts/diagnostics/NTSD28-Q06-STANDARD-REACTION-HISTORY-NATIVE-READERS-001/ACCEPTANCE.md。上文PLANNED/未写/四reader计划是历史检查点；最终reaction只两previous reader，snapshotfallback未改。Q06整体未完/Q07未迁移。

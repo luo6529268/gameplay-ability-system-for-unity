@@ -185,6 +185,10 @@ namespace NTSD.Simulation
         public int InputLinkedDefinitionId324 = -1;
         public int EnvironmentState320;
         public int CollisionYReference;
+        // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.
+        public int PlatformSourceSlotF4;
+        public int RenderShadowOffset10C;
+        public int NativePreviousY104;
         public int StatusDx1C0;
         public int StatusDy1C4;
         public int StatusDz1C8;
@@ -374,6 +378,9 @@ namespace NTSD.Simulation
         public int Unk330;
         public int Unk334;
         public int Unk338;
+        public int NativeAiProfileObjectId = -1;
+        public int NativeDefinitionDropMode;
+        public int FusionDisplayTimer190;
         public int Unk344;
         public int Unk360 = -1;
         public int Unk3FC = -1000;
@@ -887,6 +894,9 @@ namespace NTSD.Simulation
             destination.InputLinkedDefinitionId324 = InputLinkedDefinitionId324;
             destination.EnvironmentState320 = EnvironmentState320;
             destination.CollisionYReference = CollisionYReference;
+            destination.PlatformSourceSlotF4 = PlatformSourceSlotF4;
+            destination.RenderShadowOffset10C = RenderShadowOffset10C;
+            destination.NativePreviousY104 = NativePreviousY104;
             destination.StatusDx1C0 = StatusDx1C0;
             destination.StatusDy1C4 = StatusDy1C4;
             destination.StatusDz1C8 = StatusDz1C8;
@@ -1001,6 +1011,9 @@ namespace NTSD.Simulation
             destination.Unk330 = Unk330;
             destination.Unk334 = Unk334;
             destination.Unk338 = Unk338;
+            destination.NativeAiProfileObjectId = NativeAiProfileObjectId;
+            destination.NativeDefinitionDropMode = NativeDefinitionDropMode;
+            destination.FusionDisplayTimer190 = FusionDisplayTimer190;
             destination.Unk344 = Unk344;
             destination.Unk360 = Unk360;
             destination.Unk3FC = Unk3FC;
@@ -1107,6 +1120,9 @@ namespace NTSD.Simulation
             ResetNativeActionCarriers();
             EnvironmentState320 = 0;
             CollisionYReference = 0;
+            PlatformSourceSlotF4 = 0;
+            RenderShadowOffset10C = 0;
+            NativePreviousY104 = 0;
             ResetNativeResourceDisplayCarriers();
             ResetNativeReactionStatusCarriers();
             HolderStableId = -1;
@@ -1178,6 +1194,9 @@ namespace NTSD.Simulation
             Unk330 = 0;
             Unk334 = 0;
             Unk338 = 0;
+            NativeAiProfileObjectId = -1;
+            NativeDefinitionDropMode = 0;
+            FusionDisplayTimer190 = 0;
             Unk344 = 0;
             Unk360 = -1;
             Unk3FC = -1000;

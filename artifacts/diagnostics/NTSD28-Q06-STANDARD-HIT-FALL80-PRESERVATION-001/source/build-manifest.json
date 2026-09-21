@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "32B507C9133AA9B4E5EC41F24AEAAF66D0A3766D6E636A6AC31BC1734CC0A222",
+  "captureBinarySha256": "1B0FB5FE5F86386DEF999A8932EB83DB272BAC4F717C684F4F4542A57E31324D",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Build\\NTSD28StandardFall80\\standard_hit_fall80_preservation_witness.exe",
+  "authorityWriteAllowed": false
+}

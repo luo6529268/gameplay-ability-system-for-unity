@@ -1,0 +1,11 @@
+# NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001
+
+IN_PROGRESS / TEST_FIRST。总目标Q06授权；父普通落地186四组following78，全部CollisionYReference=-10 expected0，旧RED存父after-binding-fix。当前正式playable BattleWorld28 candidate pass在battle_world.cpp4026无条件清每个active slot的collision_y_reference；发生于physics之后、任何unordered pair及op30回填之前。源另外platform_source_slot_f4/render_shadow_offset_10c同步清零，当前Unity无已确认等价carrier，留明确平台联合合同，不机械映射Zz。
+
+准确范围：Assets/NTSD/Scripts/Animation/Character/BruteForceSceneQuery.cs，仅CollectCollisionCandidates入口，在任何fast path/role roster过滤前遍历现有ActiveEntitiesByRuntimeSlotForModule，清CollisionYReference。Assets/NTSD/Scripts/Test/Editor/NTSD28Q06CandidateCollisionReferenceResetEditorTests.cs新增focused测试。源码186既有见证复用，不编辑source或修改其expected。
+
+前置/不变量：核查active traversal及直接query/world两个入口，无pair、无ITR、缺descriptor也必须清零；physics不得提前清，candidate以外查询不改变值；不写对象身份、动作、速度、碰撞几何、RNG、schema、关系、停止顺序。已有runtime字段不新增manager/queue/lifecycle模块。类型0与非角色均覆盖，正负零、重复收集、slot孔洞验证；平台op30完整producer仍未实现不得宣称已对齐。
+
+验收：先focused RED，然后source186×四矩阵before/即时/完整tick及focused复测，compile/SelfCheck/回放/Play与关闭、独立review。任何回填caller未确认则先只读，不用测试清零伪造。回滚仅同ID精确diff、遵守用户批准规则并保留其他工作与失败证据。Q06未完成/Q07未迁移。
+
+最终VERIFIED_SCOPED：同ID Record与普通落地ACCEPTANCE.md为出口证据；不关闭Q06/平台域。

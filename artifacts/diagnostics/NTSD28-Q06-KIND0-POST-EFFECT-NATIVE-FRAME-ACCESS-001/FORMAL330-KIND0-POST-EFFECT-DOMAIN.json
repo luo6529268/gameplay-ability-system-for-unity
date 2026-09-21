@@ -1,0 +1,961 @@
+{
+  "scope": "Hash-verified indexed catalog raw token inventory only; not parser/runtime or dynamic reachability proof",
+  "objects": 330,
+  "effects": {
+    "20": 579,
+    "2": 320,
+    "21": 43,
+    "3": 2
+  },
+  "highState13or18": [],
+  "type0Targets": [
+    {
+      "oid": "901",
+      "path": "custom\\1genma\\genma.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "903",
+      "path": "custom\\1genma\\genmaclone.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "50",
+      "path": "m\\ton\\ton.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "39",
+      "path": "m\\san\\san.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "32",
+      "path": "m\\nin\\hun.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "31",
+      "path": "m\\nin\\nin2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "30",
+      "path": "m\\nin\\nin.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "500",
+      "path": "m\\hug\\hug.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "501",
+      "path": "m\\hug\\hug2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "502",
+      "path": "m\\hug\\hug3.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "86",
+      "path": "m\\teu\\teu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "2",
+      "path": "c\\nar\\nar.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "33",
+      "path": "c\\nar\\ncl.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "99",
+      "path": "c\\nar\\sna.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "96",
+      "path": "c\\nar\\snc.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "52",
+      "path": "c\\nar\\kyu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "508",
+      "path": "c\\nar\\4tk.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "1",
+      "path": "c\\saku\\saku.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "704",
+      "path": "c\\saku\\saku2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "705",
+      "path": "c\\saku\\saku3.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "11",
+      "path": "c\\sasu\\sasu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "38",
+      "path": "c\\sasu\\cs2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "98",
+      "path": "c\\sasu\\mss.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "87",
+      "path": "c\\sasu\\sus.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "4",
+      "path": "c\\sai\\sai.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "3",
+      "path": "c\\kaka\\kaka.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "721",
+      "path": "c\\kaka\\pak.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "13",
+      "path": "c\\yam\\yam.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "48",
+      "path": "c\\yam\\ycl.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "65",
+      "path": "c\\ank\\ank.dat",
+      "declared200": false,
+      "declared203": true
+    },
+    {
+      "oid": "44",
+      "path": "c\\ank\\acl.dat",
+      "declared200": false,
+      "declared203": true
+    },
+    {
+      "oid": "870",
+      "path": "c\\ank\\ssnk.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "73",
+      "path": "c\\hay\\hay.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "410",
+      "path": "c\\hay\\hayS.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "412",
+      "path": "c\\hay\\clo1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "413",
+      "path": "c\\hay\\clo2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "72",
+      "path": "c\\dan\\dan.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "604",
+      "path": "c\\dan\\danr.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "70",
+      "path": "c\\shis\\shis.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "18",
+      "path": "c\\nej\\nej.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "41",
+      "path": "c\\hin\\hin.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "7",
+      "path": "c\\lee\\lee.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "506",
+      "path": "c\\guy\\guy.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "94",
+      "path": "c\\guy\\gsi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "97",
+      "path": "c\\guy\\gei.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "19",
+      "path": "c\\ten\\ten.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "713",
+      "path": "c\\ten\\pole.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "723",
+      "path": "c\\ten\\swords.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "724",
+      "path": "c\\ten\\blade.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "729",
+      "path": "c\\ten\\bash.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "22",
+      "path": "c\\shik\\shik.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "430",
+      "path": "c\\asu\\asu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "5",
+      "path": "c\\shino\\shino.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "12",
+      "path": "c\\kib\\kib.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "8",
+      "path": "c\\chi\\chi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "850",
+      "path": "c\\chi\\pup1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "851",
+      "path": "c\\chi\\pup2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "852",
+      "path": "c\\chi\\pup3.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "853",
+      "path": "c\\chi\\pup4.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "854",
+      "path": "c\\chi\\pup5.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "855",
+      "path": "c\\chi\\pup6.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "856",
+      "path": "c\\chi\\pup7.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "857",
+      "path": "c\\chi\\pup8.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "858",
+      "path": "c\\chi\\pup9.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "859",
+      "path": "c\\chi\\pup10.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "14",
+      "path": "c\\kan\\kan.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "95",
+      "path": "c\\kan\\kan2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "15",
+      "path": "c\\tem\\tem.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "16",
+      "path": "c\\gaa\\gaa.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "78",
+      "path": "c\\rai\\rai.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "436",
+      "path": "c\\rai\\raiT.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "75",
+      "path": "c\\bee\\bee.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "726",
+      "path": "c\\han\\han.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "727",
+      "path": "c\\han\\smo.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "510",
+      "path": "c\\yag\\yag.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "29",
+      "path": "c\\hak\\hak.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "84",
+      "path": "c\\gur\\gur.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "85",
+      "path": "c\\gur\\fakefan.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "60",
+      "path": "c\\zab\\zab.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "49",
+      "path": "c\\zab\\clo.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "456",
+      "path": "c\\zab\\dem.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "74",
+      "path": "c\\sui\\sui.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "77",
+      "path": "c\\kar\\kar.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "71",
+      "path": "c\\jug\\jugo.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "400",
+      "path": "c\\jug\\jugoCS2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "76",
+      "path": "c\\miz\\miz.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "428",
+      "path": "c\\miz\\cs2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "66",
+      "path": "c\\jiro\\jiro1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "37",
+      "path": "c\\jiro\\jiro.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "711",
+      "path": "c\\jiro\\gol.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "712",
+      "path": "c\\jiro\\gol2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "67",
+      "path": "c\\kid\\kid1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "34",
+      "path": "c\\kid\\kid.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "61",
+      "path": "c\\sako\\sako1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "81",
+      "path": "c\\sako\\suk1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "83",
+      "path": "c\\sako\\uko1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "35",
+      "path": "c\\sako\\sako.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "80",
+      "path": "c\\sako\\suk.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "82",
+      "path": "c\\sako\\uko.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "62",
+      "path": "c\\tay\\tay1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "36",
+      "path": "c\\tay\\tay.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "28",
+      "path": "c\\kim\\kim1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "507",
+      "path": "c\\kim\\kim.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "23",
+      "path": "c\\kab\\kab.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "860",
+      "path": "c\\kab\\tsurugi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "861",
+      "path": "c\\kab\\yoroi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "20",
+      "path": "c\\oro\\oro.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "88",
+      "path": "c\\oro\\1.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "89",
+      "path": "c\\oro\\2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "21",
+      "path": "c\\jira\\jira.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "701",
+      "path": "c\\jira\\pre.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "702",
+      "path": "c\\jira\\sag.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "513",
+      "path": "c\\tsu\\tsu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "27",
+      "path": "c\\min\\min.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "449",
+      "path": "c\\min\\sag.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "427",
+      "path": "c\\min\\kcm.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "63",
+      "path": "c\\hir\\hir.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "504",
+      "path": "c\\hir\\hcl.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "64",
+      "path": "c\\tobir\\tobir.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "415",
+      "path": "c\\tobir\\tclo.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "69",
+      "path": "c\\has\\has.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "93",
+      "path": "c\\has\\sag.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "47",
+      "path": "c\\has\\hcl.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "25",
+      "path": "c\\kaku\\kakun.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "498",
+      "path": "c\\kaku\\kakunck.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "57",
+      "path": "c\\kaku\\kakunre.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "871",
+      "path": "c\\kaku\\maskfir.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "872",
+      "path": "c\\kaku\\maskthu.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "873",
+      "path": "c\\kaku\\maskwat.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "874",
+      "path": "c\\kaku\\maskair.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "24",
+      "path": "c\\hid\\hid.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "56",
+      "path": "c\\hid\\rea.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "6",
+      "path": "c\\saso\\Hsa.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "51",
+      "path": "c\\saso\\saso.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "90",
+      "path": "c\\saso\\ncs.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "55",
+      "path": "c\\saso\\pup.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "10",
+      "path": "c\\dei\\dei.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "58",
+      "path": "c\\dei\\bir.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "45",
+      "path": "c\\dei\\ncd.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "46",
+      "path": "c\\dei\\ncb.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "800",
+      "path": "c\\dei\\zom.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "802",
+      "path": "c\\dei\\zom2.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "17",
+      "path": "c\\kis\\kis.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "505",
+      "path": "c\\kis\\kcl.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "91",
+      "path": "c\\kis\\sam.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "42",
+      "path": "c\\kis\\nck.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "9",
+      "path": "c\\ita\\ita.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "68",
+      "path": "c\\kon\\kon.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "54",
+      "path": "c\\kon\\ang.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "26",
+      "path": "c\\pai\\pai.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "509",
+      "path": "c\\pai\\paid.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "0",
+      "path": "c\\tobi\\tobi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "53",
+      "path": "c\\tobi\\ttobi.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "899",
+      "path": "c\\0\\spe.dat",
+      "declared200": false,
+      "declared203": false
+    },
+    {
+      "oid": "92",
+      "path": "s\\0\\iru.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "43",
+      "path": "s\\0\\iruc.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "59",
+      "path": "s\\1\\ncs.dat",
+      "declared200": true,
+      "declared203": true
+    },
+    {
+      "oid": "40",
+      "path": "s\\2\\ncs2.dat",
+      "declared200": true,
+      "declared203": true
+    }
+  ]
+}

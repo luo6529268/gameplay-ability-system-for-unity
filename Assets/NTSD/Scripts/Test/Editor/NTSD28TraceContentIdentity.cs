@@ -13,9 +13,10 @@ namespace NTSD.EditorTools
     {
         internal const string LegacyTag = "NTSD28_UNITY_LEGACY_DAT_SEMANTICS_V1";
 
-        internal static Dictionary<string, object> FromLoganRaw(string raw)
+        internal static Dictionary<string, object> FromLoganCatalog(LoganObjectCatalog catalog)
         {
-            return Build("logan-runtime", LoganContentIdentity.FromDefinitionFingerprint(raw));
+            if (catalog == null) throw new ArgumentNullException(nameof(catalog));
+            return Build("logan-runtime", catalog.ContentIdentity);
         }
 
         internal static Dictionary<string, object> CaptureLegacy(string configRoot, string indexPath)
@@ -41,10 +42,10 @@ namespace NTSD.EditorTools
 
         private static Dictionary<string, object> Build(string profile, LoganContentIdentity identity)
         {
-            return new Dictionary<string, object>
+            var result = new Dictionary<string, object>
             {
                 ["policy"] = "logan-dat-character-images",
-                ["scope"] = profile == "logan-runtime" ? "catalog-object-definitions" : "unity-legacy-dat-files",
+                ["scope"] = profile == "logan-runtime" ? "catalog-object-fusion-definitions" : "unity-legacy-dat-files",
                 ["profile"] = profile,
                 ["rawDefinitionSha256"] = identity.RawDefinitionFingerprint,
                 ["decodeContract"] = identity.DecodeContractTag,
@@ -59,6 +60,17 @@ namespace NTSD.EditorTools
                     ["entityBaseShell"] = BattleWorldEntityBaseShellSnapshotBuffer.CurrentSchemaVersion,
                 },
             };
+            if (profile == "logan-runtime")
+            {
+                if (identity.DecodeContractTag != LoganContentIdentity.CurrentDecodeContractTag ||
+                    identity.ObjectDefinitionFingerprint == null || identity.FusionInputFingerprint == null ||
+                    identity.FusionSemanticFingerprint == null)
+                    throw new InvalidOperationException("Current Logan trace requires complete battle content identity.");
+                result["objectDefinitionSha256"] = identity.ObjectDefinitionFingerprint;
+                result["fusionInputSha256"] = identity.FusionInputFingerprint;
+                result["fusionSemanticSha256"] = identity.FusionSemanticFingerprint;
+            }
+            return result;
         }
 
         private static string Hash(byte[] bytes)

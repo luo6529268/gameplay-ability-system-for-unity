@@ -1,0 +1,15 @@
+# Native ordinary OPoint birth: immediate comparison checkpoint
+
+Status: IN_PROGRESS / IMMEDIATE_46_PASS. Not VERIFIED and not Q06 completion.
+
+Production scope: BattleNativeOpointBirthWriter (new stateless shared writer), BattleLogicEntityFactory.Create and directional helper, BattleLogicObjectPointRuntime late caller, LF2ObjectPointFactory late caller/materialization/directional helper. Exact paths were declared before edits. Uses existing LateOpoint semantic and parent; no task flags, persistent carriers, schemas, queues or shutdown owners added.
+
+Shared initialization preserves BattleSpawnVitalsWriter and direct clone/piece branch precedence. Native action descriptor/history birth, kind1 synchronized random X/Y/Z/action, exact parent injury/suppression, type0 credit/render, effect/continuation/defend, team override, kind2 raw links/weaponHP and depth-before-double-spread are now wired into both factories. Removed legacy multi attack-exempt/vrest and state3003 extra-vrest invocations only from ordinary late materialization; private helpers retained. Source full materialize_supported_spawns and tick-driver emit caller have no equivalent extra writes.
+
+Fresh compile/domain reload idle and error CS query0. First affected representatives job986269403c154a77b83b0486c0c550d4: 6/6 PASS (0/5/11/15/16/17 WorldLogicLate), archived birth-representatives-98626940. Stable immediate package combined job90b6b8f4c1b340b9a4719ef0975cf6df: 46/46 PASS, duration2.8707573 seconds, archived immediate-pass-90b6b8f4/results.xml and 46 JSON reports. Re-read all 46: beforeDifferences and differences empty, including full RNG calls comparison. Prior RED and admission partial failures retained in their XML/subdirectories; root immediate filenames are latest outputs.
+
+Limitations: synthetic catalog, source-derived witness rather than formal EXE recording; component caller still dispatches to logic-only factory, so does not prove true Renderer branch. Following full tick, combined snapshot/replay, true pooled Renderer, relevant shared regression and stable package one SelfCheck/ordered Play closure remain pending. Independent reviewer spawn failed due to agent thread limit; no independent review claimed. Root inspected source and dispatch. Possible unrepresented inputs/invalid random target action and existing initial caller guards need review before package close, without weakening formal source rules or assertions.
+
+Scene SHA BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6 unchanged, isDirty=false/rootCount14. No Scene/resources/nonbattle edits. Ledger625 records/122 governed code files PASS. No full SelfCheck or Play run this step. Q06 incomplete, Q07 content migration not started; active objective unchanged.
+
+Next: extend existing exact fixture with source0/15 following and snapshot/replay, using actual full driver without resetting counters or compensating inputs; inspect true Renderer test seam and declare any additional script before editing. Archive each result before reruns. Do not repeat unaffected full role/scenario suites.

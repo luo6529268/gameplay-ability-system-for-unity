@@ -576,6 +576,119 @@ namespace NTSD.Test
             Assert.That(scope.Driver.CurrentTickIndex, Is.EqualTo(2));
         }
 
+        [TestCase(0, 0)]
+        [TestCase(3, 0)]
+        [TestCase(3, 1)]
+        [TestCase(3, 2)]
+        [TestCase(3, 3)]
+        [TestCase(3, 4)]
+        [TestCase(3, 5)]
+        [TestCase(3, 6)]
+        public void MutableDatRestorePreservesLocalShellAndPreflightAtomicity(int dataType, int corruption)
+        {
+            var originalData = new LF2CharacterData();
+            originalData.frames.Add(new LF2FrameData { frameId = 0, wait = 9, next = 0, state = 0 });
+            originalData.frames.Add(new LF2FrameData { frameId = 999, wait = 4, next = 0, state = 12 });
+            var changedData = new LF2CharacterData();
+            changedData.frames.Add(new LF2FrameData { frameId = 0, wait = 2, next = 0, state = 3 });
+            var original = new LF2CharacterDataWrapper(200, originalData);
+            var changed = new LF2CharacterDataWrapper(213, changedData);
+            var world = new SimulationWorld(BattleRuntimeProfile.Authority400, 400);
+            try
+            {
+                world.PrepareRuntimeDataCatalogForBattle(new[]
+                {
+                    new ObjectDefinition(200, dataType, "restore-original.dat"),
+                    new ObjectDefinition(213, dataType, "restore-changed.dat"),
+                }, id => id == 200 ? original : changed);
+                world.SetLogicOnlyEntityMaterialization(true);
+                LF2Entity Spawn(int slot)
+                {
+                    var entity = world.LogicEntityFactory.Create(new OPointCreateTask
+                    {
+                        targetWorld = world, requiredRuntimeSlot = slot, dir = "right",
+                        preserveActionZero = true,
+                        opoint = new ObjectPoint { oid = 200, kind = 1, action = 0 },
+                    }, out var failure);
+                    Assert.That(entity, Is.Not.Null, failure.ToString());
+                    return entity;
+                }
+
+                var first = Spawn(3);
+                var later = Spawn(70);
+                NTSD28Q06NativeFrameSnapshotEditorTests.Bind(first, 0, 999);
+                NTSDEntityRuntime independentRaw = world.GetRawRuntimeSlotState(3);
+                if (corruption == 3)
+                {
+                    independentRaw.EntityType = 6;
+                    independentRaw.ObjType = 1;
+                }
+                var identity = StrictDelayedInputBufferEditorTests.CreateIdentity();
+                var input = new FrameInputSet(0, Array.Empty<SimulationPlayerInput>());
+                var snapshot = world.CreateBattleStateSnapshotBufferForBootstrap();
+                Assert.That(world.TryCaptureBattleStateSnapshot(identity, 0, snapshot), Is.True);
+                string expected = world.CaptureLockstepChecksumSnapshot(0, input).OverallChecksum;
+                int stableId = first.Runtime.StableId;
+                first.ObjectId = 213;
+                first.FrameCache.Load(changed);
+                NTSD28Q06NativeFrameSnapshotEditorTests.Bind(first, 0, 0);
+                first.Runtime.X = 901;
+                if (corruption == 1)
+                    later.Runtime.StableId++;
+                if (corruption == 2)
+                {
+                    var payloads = (NTSDEntityRuntime[])typeof(BattleWorldEntityRuntimeSnapshotBuffer)
+                        .GetField("entityRuntimes", BindingFlags.Instance | BindingFlags.NonPublic)
+                        .GetValue(snapshot.EntityRuntime);
+                    payloads[3].EntityType = 0;
+                    payloads[3].ObjType = 0;
+                }
+                if (corruption == 4)
+                    original.characterId = 9999;
+                if (corruption == 5)
+                    originalData.frames.RemoveAt(1);
+                if (corruption == 6)
+                    original.characterData = null;
+                string before = world.CaptureLockstepChecksumSnapshot(0, input).OverallChecksum;
+
+                bool restored = world.TryRestoreBattleStateSnapshot(identity, snapshot, out var restoreFailure);
+                if (corruption != 0 && corruption != 3)
+                {
+                    Assert.That(restored, Is.False);
+                    if (corruption == 1 || corruption == 4 || corruption == 6)
+                        Assert.That(restoreFailure, Is.EqualTo(BattleStateSnapshotRestoreFailure.EntityIdentityMismatch));
+                    else if (corruption == 5)
+                        Assert.That(restoreFailure, Is.EqualTo(BattleStateSnapshotRestoreFailure.CollisionFrameDataUnavailable));
+                    else
+                        Assert.That(restoreFailure, Is.EqualTo(BattleStateSnapshotRestoreFailure.EntityPayloadMismatch));
+                    Assert.That(first.FrameCache.Wrapper, Is.SameAs(changed));
+                    Assert.That(first.ObjectId, Is.EqualTo(213));
+                    Assert.That(world.CaptureLockstepChecksumSnapshot(0, input).OverallChecksum, Is.EqualTo(before));
+                }
+                else
+                {
+                    Assert.That(restored, Is.True, restoreFailure.ToString());
+                    Assert.That(world.FindEntityByRuntimeSlotForQuery(3), Is.SameAs(first));
+                    Assert.That(first.Runtime.StableId, Is.EqualTo(stableId));
+                    Assert.That(first.FrameCache.Wrapper, Is.SameAs(original));
+                    Assert.That(first.ObjectId, Is.EqualTo(200));
+                    Assert.That(first.Frame.D, Is.SameAs(originalData.frames[0]));
+                    Assert.That(first.Frame.Prev2D, Is.SameAs(originalData.frames[1]));
+                    if (corruption == 3)
+                    {
+                        Assert.That(independentRaw.EntityType, Is.EqualTo(6));
+                        Assert.That(independentRaw.ObjType, Is.EqualTo(1));
+                    }
+                    Assert.That(world.CaptureLockstepChecksumSnapshot(0, input).OverallChecksum, Is.EqualTo(expected));
+                }
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
         private static FrameInputSet CanonicalNeutralFrame(int tick)
         {
             return new FrameInputSet(tick, new[]

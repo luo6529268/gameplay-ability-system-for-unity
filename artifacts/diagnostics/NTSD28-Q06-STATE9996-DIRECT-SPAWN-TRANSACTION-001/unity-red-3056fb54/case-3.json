@@ -1,0 +1,662 @@
+{
+  "index": 3,
+  "name": "implicit_type3",
+  "beforeDifferences": [],
+  "immediateDifferences": [
+    "immediate.nonFillerCount=1 expected=6",
+    "immediate.activeCount=1 expected=6",
+    "immediate missing slot 50",
+    "immediate missing slot 51",
+    "immediate missing slot 52",
+    "immediate missing slot 53",
+    "immediate missing slot 54"
+  ],
+  "before": {
+    "activeCount": 1,
+    "fillerCount": 0,
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 20,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 1,
+            "frameState": 9996,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 31980,
+            "objectType": 0,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 300,
+            "preciseY": -20,
+            "preciseZ": 250,
+            "x": 300,
+            "y": -20,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 137,
+            "baseMaxMp": 211,
+            "currentHp": 137,
+            "currentMp": 211,
+            "effectiveMaxHp": 137,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 9996,
+        "wait": 100,
+        "next": 20,
+        "aiProfile": 0,
+        "dropMode": 0,
+        "incomingScale": 0,
+        "modeScale": 100,
+        "pendingCount": 0,
+        "pending": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "display": [
+          0,
+          0,
+          0,
+          0,
+          137,
+          0,
+          137,
+          0
+        ],
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 31980,
+          "slot": 0
+        }
+      }
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 0,
+        "index": 0,
+        "lastCallSite": 0,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 0
+      }
+    }
+  },
+  "after": {
+    "activeCount": 1,
+    "fillerCount": 0,
+    "entities": [
+      {
+        "raw": {
+          "active": true,
+          "allocationEpoch": 1,
+          "combat": {
+            "armorRecoveryTimer": -1,
+            "attackerRest": 0,
+            "bdefendAccumulator": 0,
+            "collisionYReference": 0,
+            "environmentSourceSlot": null,
+            "environmentState": null,
+            "hitReactionTimer": 0,
+            "motionHoldTimer": 0,
+            "objectAiExcludedGroupSourceSlot": -1,
+            "platformSourceSlot": null,
+            "renderPhase": 0,
+            "runtimeArmorHp": 0,
+            "runtimeStateCode": 0,
+            "specialHitLatch0eb": false,
+            "weaponHp": 0
+          },
+          "frame": {
+            "action": 20,
+            "actionLatch": 13,
+            "facingLeft": false,
+            "frameCounter": 1,
+            "frameState": 9996,
+            "previousAction": 14,
+            "tickActionSnapshot": 20
+          },
+          "identity": {
+            "battleGroup": 3,
+            "controlSlot": 0,
+            "objectId": 31980,
+            "objectType": 0,
+            "ownerSlot": 9,
+            "participantClass": 0
+          },
+          "lifecycle": {
+            "code": 0,
+            "resolutionPending": false
+          },
+          "motion": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "position": {
+            "preciseX": 300,
+            "preciseY": -20,
+            "preciseZ": 250,
+            "x": 300,
+            "y": -20,
+            "z": 250
+          },
+          "slot": 0,
+          "vitals": {
+            "baseMaxHp": 137,
+            "baseMaxMp": 211,
+            "currentHp": 137,
+            "currentMp": 211,
+            "effectiveMaxHp": 137,
+            "reviveLives": 1,
+            "reviveNextHp": 0,
+            "reviveNextLives": 0
+          }
+        },
+        "available": true,
+        "state": 9996,
+        "wait": 100,
+        "next": 20,
+        "aiProfile": 0,
+        "dropMode": 0,
+        "incomingScale": 0,
+        "modeScale": 100,
+        "pendingCount": 0,
+        "pending": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "display": [
+          0,
+          0,
+          0,
+          0,
+          137,
+          0,
+          137,
+          0
+        ],
+        "input": {
+          "allocationEpoch": 1,
+          "input": {
+            "boundState": 0,
+            "comboState": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "currentMask": 0,
+            "defendReentryCooldown": 0,
+            "edgeWindow": {
+              "attack": 0,
+              "defend": 0,
+              "down": 0,
+              "jump": 0,
+              "left": 0,
+              "right": 0,
+              "up": 0
+            },
+            "globalRecordState": 0,
+            "keyHistory": [
+              -1,
+              -1,
+              -1,
+              -1,
+              -1
+            ],
+            "lastAction": 0,
+            "previousMask": 0,
+            "proxyTail": 0,
+            "remapIndices": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "remapState": 0,
+            "runAccumulator": 0
+          },
+          "objectId": 31980,
+          "slot": 0
+        }
+      }
+    ],
+    "random": {
+      "crt": {
+        "state": 1975929314,
+        "totalCalls": 3000
+      },
+      "synchronized": {
+        "counter": 34,
+        "index": 34,
+        "lastCallSite": 4323691,
+        "tableHash64": "54BFC3E7F3017958",
+        "totalCalls": 34
+      }
+    }
+  },
+  "calls": {
+    "crt": [],
+    "synchronized": [
+      {
+        "callSite": 4323218,
+        "upperBound": 7,
+        "result": 0,
+        "counterAfter": 1,
+        "indexAfter": 1,
+        "totalCalls": 1
+      },
+      {
+        "callSite": 4323254,
+        "upperBound": 7,
+        "result": 1,
+        "counterAfter": 2,
+        "indexAfter": 2,
+        "totalCalls": 2
+      },
+      {
+        "callSite": 4323352,
+        "upperBound": 15,
+        "result": 0,
+        "counterAfter": 3,
+        "indexAfter": 3,
+        "totalCalls": 3
+      },
+      {
+        "callSite": 4323497,
+        "upperBound": 2,
+        "result": 1,
+        "counterAfter": 4,
+        "indexAfter": 4,
+        "totalCalls": 4
+      },
+      {
+        "callSite": 4323549,
+        "upperBound": 3,
+        "result": 0,
+        "counterAfter": 5,
+        "indexAfter": 5,
+        "totalCalls": 5
+      },
+      {
+        "callSite": 4323669,
+        "upperBound": 4,
+        "result": 2,
+        "counterAfter": 6,
+        "indexAfter": 6,
+        "totalCalls": 6
+      },
+      {
+        "callSite": 4323691,
+        "upperBound": 2,
+        "result": 1,
+        "counterAfter": 7,
+        "indexAfter": 7,
+        "totalCalls": 7
+      },
+      {
+        "callSite": 4323218,
+        "upperBound": 7,
+        "result": 4,
+        "counterAfter": 8,
+        "indexAfter": 8,
+        "totalCalls": 8
+      },
+      {
+        "callSite": 4323254,
+        "upperBound": 7,
+        "result": 4,
+        "counterAfter": 9,
+        "indexAfter": 9,
+        "totalCalls": 9
+      },
+      {
+        "callSite": 4323352,
+        "upperBound": 15,
+        "result": 5,
+        "counterAfter": 10,
+        "indexAfter": 10,
+        "totalCalls": 10
+      },
+      {
+        "callSite": 4323455,
+        "upperBound": 2,
+        "result": 1,
+        "counterAfter": 11,
+        "indexAfter": 11,
+        "totalCalls": 11
+      },
+      {
+        "callSite": 4323549,
+        "upperBound": 3,
+        "result": 2,
+        "counterAfter": 12,
+        "indexAfter": 12,
+        "totalCalls": 12
+      },
+      {
+        "callSite": 4323669,
+        "upperBound": 4,
+        "result": 0,
+        "counterAfter": 13,
+        "indexAfter": 13,
+        "totalCalls": 13
+      },
+      {
+        "callSite": 4323691,
+        "upperBound": 2,
+        "result": 0,
+        "counterAfter": 14,
+        "indexAfter": 14,
+        "totalCalls": 14
+      },
+      {
+        "callSite": 4323218,
+        "upperBound": 7,
+        "result": 1,
+        "counterAfter": 15,
+        "indexAfter": 15,
+        "totalCalls": 15
+      },
+      {
+        "callSite": 4323254,
+        "upperBound": 7,
+        "result": 5,
+        "counterAfter": 16,
+        "indexAfter": 16,
+        "totalCalls": 16
+      },
+      {
+        "callSite": 4323352,
+        "upperBound": 15,
+        "result": 5,
+        "counterAfter": 17,
+        "indexAfter": 17,
+        "totalCalls": 17
+      },
+      {
+        "callSite": 4323497,
+        "upperBound": 2,
+        "result": 0,
+        "counterAfter": 18,
+        "indexAfter": 18,
+        "totalCalls": 18
+      },
+      {
+        "callSite": 4323592,
+        "upperBound": 3,
+        "result": 1,
+        "counterAfter": 19,
+        "indexAfter": 19,
+        "totalCalls": 19
+      },
+      {
+        "callSite": 4323669,
+        "upperBound": 4,
+        "result": 2,
+        "counterAfter": 20,
+        "indexAfter": 20,
+        "totalCalls": 20
+      },
+      {
+        "callSite": 4323691,
+        "upperBound": 2,
+        "result": 0,
+        "counterAfter": 21,
+        "indexAfter": 21,
+        "totalCalls": 21
+      },
+      {
+        "callSite": 4323218,
+        "upperBound": 7,
+        "result": 3,
+        "counterAfter": 22,
+        "indexAfter": 22,
+        "totalCalls": 22
+      },
+      {
+        "callSite": 4323254,
+        "upperBound": 7,
+        "result": 5,
+        "counterAfter": 23,
+        "indexAfter": 23,
+        "totalCalls": 23
+      },
+      {
+        "callSite": 4323352,
+        "upperBound": 15,
+        "result": 5,
+        "counterAfter": 24,
+        "indexAfter": 24,
+        "totalCalls": 24
+      },
+      {
+        "callSite": 4323455,
+        "upperBound": 2,
+        "result": 1,
+        "counterAfter": 25,
+        "indexAfter": 25,
+        "totalCalls": 25
+      },
+      {
+        "callSite": 4323592,
+        "upperBound": 3,
+        "result": 0,
+        "counterAfter": 26,
+        "indexAfter": 26,
+        "totalCalls": 26
+      },
+      {
+        "callSite": 4323669,
+        "upperBound": 4,
+        "result": 2,
+        "counterAfter": 27,
+        "indexAfter": 27,
+        "totalCalls": 27
+      },
+      {
+        "callSite": 4323691,
+        "upperBound": 2,
+        "result": 1,
+        "counterAfter": 28,
+        "indexAfter": 28,
+        "totalCalls": 28
+      },
+      {
+        "callSite": 4323218,
+        "upperBound": 7,
+        "result": 0,
+        "counterAfter": 29,
+        "indexAfter": 29,
+        "totalCalls": 29
+      },
+      {
+        "callSite": 4323254,
+        "upperBound": 7,
+        "result": 4,
+        "counterAfter": 30,
+        "indexAfter": 30,
+        "totalCalls": 30
+      },
+      {
+        "callSite": 4323352,
+        "upperBound": 15,
+        "result": 14,
+        "counterAfter": 31,
+        "indexAfter": 31,
+        "totalCalls": 31
+      },
+      {
+        "callSite": 4323630,
+        "upperBound": 7,
+        "result": 1,
+        "counterAfter": 32,
+        "indexAfter": 32,
+        "totalCalls": 32
+      },
+      {
+        "callSite": 4323669,
+        "upperBound": 4,
+        "result": 3,
+        "counterAfter": 33,
+        "indexAfter": 33,
+        "totalCalls": 33
+      },
+      {
+        "callSite": 4323691,
+        "upperBound": 2,
+        "result": 0,
+        "counterAfter": 34,
+        "indexAfter": 34,
+        "totalCalls": 34
+      }
+    ]
+  },
+  "sourceResult": {
+    "success": true,
+    "applicable": true,
+    "spawned": 5,
+    "unresolved": 0,
+    "events": [
+      {
+        "cloneIndex": 0,
+        "oid": 217,
+        "slot": 50,
+        "message": "spawned by recovered FUN_0041C3D0 five-clone branch"
+      },
+      {
+        "cloneIndex": 1,
+        "oid": 217,
+        "slot": 51,
+        "message": "spawned by recovered FUN_0041C3D0 five-clone branch"
+      },
+      {
+        "cloneIndex": 2,
+        "oid": 217,
+        "slot": 52,
+        "message": "spawned by recovered FUN_0041C3D0 five-clone branch"
+      },
+      {
+        "cloneIndex": 3,
+        "oid": 217,
+        "slot": 53,
+        "message": "spawned by recovered FUN_0041C3D0 five-clone branch"
+      },
+      {
+        "cloneIndex": 4,
+        "oid": 218,
+        "slot": 54,
+        "message": "spawned by recovered FUN_0041C3D0 five-clone branch"
+      }
+    ]
+  },
+  "sourceCapacity": 1000,
+  "unityCapacity": 400,
+  "capacityNormalized": false,
+  "requestedDynamicFreeSlots": 950,
+  "scope": "Synthetic immediate private native boundary only; pending case probes boundary, not outer caller reachability. Encoded 8M is unresolved no-op control. Capacity fillers excluded from tuple parity; noncapacity counts exact. No following, renderer or EXE claim."
+}

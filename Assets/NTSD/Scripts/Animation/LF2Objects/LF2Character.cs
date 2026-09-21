@@ -1059,11 +1059,14 @@ namespace NTSD.Animation.LF2Objects
             LF2CharacterDataWrapper frameDataWrapper,
             int characterId,
             SimulationWorld targetWorld = null,
-            bool initializeNativeArmorRuntime = true)
+            bool initializeNativeArmorRuntime = true,
+            bool initializeNativeDefinitionIdentity = true)
         {
             FrameCache.Load(frameDataWrapper);
             if (initializeNativeArmorRuntime)
                 InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+            if (initializeNativeDefinitionIdentity)
+                InitializeNativeDefinitionIdentityForSpawn();
 
             if (!_initializedFromOpoint)
             {
@@ -1111,6 +1114,7 @@ namespace NTSD.Animation.LF2Objects
             Health.MaxPP = maxMp;
             Health.PPBound = maxMp;
             Health.MaxMP = maxMp;
+            BattleNativeDisplayWriter.InitializeBirth(Runtime, maxHp);
             ResetLocalInputState();
             HitCounters.Reset();
             ItrRest.Reset();

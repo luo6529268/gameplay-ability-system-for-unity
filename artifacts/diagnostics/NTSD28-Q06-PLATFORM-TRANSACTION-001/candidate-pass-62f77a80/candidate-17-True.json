@@ -1,0 +1,52 @@
+{
+  "index": 17,
+  "bruteForce": true,
+  "before": {
+    "position": [
+      100,
+      -10,
+      250,
+      100.0,
+      -10.0,
+      250.0
+    ],
+    "reference": -999,
+    "platformSlot": 99,
+    "shadow": -999,
+    "previousY": -10
+  },
+  "after": {
+    "position": [
+      100,
+      -20,
+      250,
+      100.0,
+      -10.0,
+      250.0
+    ],
+    "reference": -20,
+    "platformSlot": 20,
+    "shadow": -20,
+    "previousY": -10
+  },
+  "expected": {
+    "position": [
+      100,
+      -20,
+      250,
+      100,
+      -10,
+      250
+    ],
+    "previousY": -10,
+    "previousXYZ": [
+      0,
+      -10,
+      0
+    ],
+    "reference": -20,
+    "platformSlot": 20,
+    "shadow": -20
+  },
+  "scope": "Actual candidate state; source previousXYZ X/Z and following motion/fulltick not certified"
+}

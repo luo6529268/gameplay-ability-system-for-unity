@@ -1,0 +1,51 @@
+{
+  "index": 15,
+  "afterCandidate": {
+    "position": [
+      100,
+      -18,
+      250,
+      100.0,
+      -10.0,
+      250.0
+    ],
+    "reference": -18,
+    "platformSlot": 20,
+    "shadow": -18,
+    "previousY": -10
+  },
+  "afterMotion": {
+    "position": [
+      100,
+      -18,
+      250,
+      100.0,
+      -10.0,
+      250.0
+    ],
+    "reference": -18,
+    "platformSlot": 20,
+    "shadow": -18,
+    "previousY": -10
+  },
+  "expected": {
+    "position": [
+      102,
+      -16,
+      248,
+      102.5,
+      -16.5,
+      247.5
+    ],
+    "previousY": -10,
+    "previousXYZ": [
+      0,
+      -10,
+      0
+    ],
+    "reference": -16,
+    "platformSlot": 20,
+    "shadow": -18
+  },
+  "scope": "Actual rider motion entry; no fulltick or native diagnostic success parity"
+}

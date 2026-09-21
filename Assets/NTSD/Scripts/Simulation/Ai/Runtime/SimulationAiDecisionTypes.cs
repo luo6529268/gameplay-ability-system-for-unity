@@ -120,6 +120,7 @@ namespace NTSD.Simulation
         WitnessOldHp = 59,
         WitnessNewHp = 60,
         HitJ = 61,
+        NativeAiProfileObjectId = 62,
     }
 
     public enum AiUnifiedSnapshotProductMutationKind
@@ -198,4 +199,3 @@ namespace NTSD.Simulation
     }
 
 }
-

@@ -1508,6 +1508,14 @@ namespace NTSD.Animation
         /// </summary>
         public void CollectCollisionCandidates()
         {
+            // Alignment contract: NTSD28-Q06-CANDIDATE-COLLISION-REFERENCE-RESET-001.
+            foreach (LF2Entity entity in _world.ActiveEntitiesByRuntimeSlotForModule)
+            {
+                entity.Runtime.CollisionYReference = 0;
+                entity.Runtime.PlatformSourceSlotF4 = 0;
+                entity.Runtime.RenderShadowOffset10C = 0;
+            }
+
             _candidateStoreShadow.AbortBuild();
             InvalidateCollisionCandidateRanges();
             CollisionRoleZeroItrFastPathParticipantCountForDiagnostics = 0;
@@ -1611,9 +1619,12 @@ namespace NTSD.Animation
                 return;
             }
 
+            bool platformPass = HasCurrentPlatformInteractions();
+            if (platformPass)
+                _world.GetAllEntities(_tmpAllObjects);
             BeginCollisionCandidateStoreShadowBuild();
 
-            if (ShadowBroadphaseDiagnosticsEnabled)
+            if (ShadowBroadphaseDiagnosticsEnabled && !platformPass)
             {
                 try
                 {
@@ -1625,7 +1636,12 @@ namespace NTSD.Animation
                 }
             }
 
-            if (collectorMode != CollisionFormalCollectorMode.ForceBruteForce)
+            if (platformPass)
+            {
+                AbortRoleAwareShadow();
+                CollectCollisionCandidatesWithPlatforms(currentTick);
+            }
+            else if (collectorMode != CollisionFormalCollectorMode.ForceBruteForce)
             {
                 uint rngStateBeforeFormal = _world.Rng.State;
                 ulong rngCallsBeforeFormal = _world.Rng.CallCount;
@@ -2090,6 +2106,110 @@ namespace NTSD.Animation
                 entity.Runtime.HitCandidateNearestDistance = CandidateDistanceUnset;
                 entity.Runtime.HitCandidateKind1Distance = CandidateDistanceUnset;
                 entity.Runtime.HitCandidateExtraDistance = CandidateDistanceUnset;
+            }
+        }
+
+        // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.
+        private bool HasCurrentPlatformInteractions()
+        {
+            foreach (LF2Entity entity in _tmpAllObjects)
+            {
+                var itrs = GetAuthoredCurrentFrame(entity)?.itrs;
+                if (itrs == null)
+                    continue;
+                foreach (InteractionArea itr in itrs)
+                    if (itr != null && itr.kind >= 30 && itr.kind < 100)
+                        return true;
+            }
+            return false;
+        }
+
+        private void CollectCollisionCandidatesWithPlatforms(int currentTick)
+        {
+            for (int i = 0; i < _tmpAllObjects.Count; i++)
+            {
+                LF2Entity first = _tmpAllObjects[i];
+                for (int j = i + 1; j < _tmpAllObjects.Count; j++)
+                {
+                    LF2Entity second = _tmpAllObjects[j];
+                    bool ordinaryPair = first.PS != null && second.PS != null &&
+                        !IsPendingFlushDestroy(first) && !IsPendingFlushDestroy(second) &&
+                        !IsCollisionCandidateSuppressed(first, currentTick) &&
+                        !IsCollisionCandidateSuppressed(second, currentTick);
+                    if (ordinaryPair)
+                        CollectCandidatesForPair(first, second);
+                    CollectPlatformDirection(first, second);
+                    if (ordinaryPair)
+                        CollectCandidatesForPair(second, first);
+                    CollectPlatformDirection(second, first);
+                }
+            }
+        }
+
+        private static void CollectPlatformDirection(LF2Entity source, LF2Entity target)
+        {
+            LF2FrameData current = GetAuthoredCurrentFrame(source);
+            LF2FrameData snapshot = GetAuthoredPrev2Frame(source);
+            if (current?.itrs == null || snapshot == null)
+                return;
+            var from = source.Runtime;
+            var to = target.Runtime;
+            int targetType = GetCurrentDataObjectType(target);
+            foreach (InteractionArea itr in current.itrs)
+            {
+                if (itr == null || itr.kind < 30 || itr.kind >= 100)
+                    continue;
+                int operation = itr.kind;
+                if (operation >= 60)
+                {
+                    if (targetType != 1 && targetType != 2 && targetType != 4 && targetType != 5 && targetType != 6)
+                        continue;
+                    operation -= 30;
+                }
+                else if (targetType != 0 && targetType != 3)
+                    continue;
+                if (operation > 39)
+                {
+                    operation -= 10;
+                    if (operation <= 39)
+                    {
+                        if (from.RelationTeam != to.RelationTeam)
+                            continue;
+                    }
+                    else
+                    {
+                        operation -= 10;
+                        if (operation > 39 || from.RelationTeam == to.RelationTeam)
+                            continue;
+                    }
+                }
+                int left = snapshot.centerx - itr.x;
+                left = from.IsFacingLeft ? left - itr.w : -left;
+                left += from.XInt;
+                if (left >= to.XInt || left + itr.w <= to.XInt)
+                    continue;
+                int width = itr.zwidth == 0 ? 15 : itr.zwidth;
+                if (Math.Abs((long)from.ZInt + itr.z - to.ZInt) >= width)
+                    continue;
+                // Source leaves editable-DAT operations31..35 unimplemented; do not invent their tails.
+                if (operation != 30)
+                    continue;
+                double rounded = Math.Round((double)itr.PlatformDvy, MidpointRounding.ToEven);
+                int offset = double.IsNaN(rounded) || rounded < int.MinValue || rounded > int.MaxValue
+                    ? int.MinValue : (int)rounded;
+                int previousReference = unchecked(from.NativePreviousY104 + offset);
+                int currentReference = unchecked(from.YInt + offset);
+                if (previousReference < to.NativePreviousY104 && currentReference < to.YInt)
+                    continue;
+                if (currentReference < to.CollisionYReference)
+                {
+                    to.CollisionYReference = currentReference;
+                    to.PlatformSourceSlotF4 = from.SlotIndex;
+                    to.RenderShadowOffset10C = currentReference;
+                }
+                if (currentReference < to.YInt && snapshot.NativePlatformAttacking == 1 &&
+                    (snapshot.state == 3000 || snapshot.state == 3006 || snapshot.state == 3003))
+                    to.YInt = currentReference;
             }
         }
 

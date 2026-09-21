@@ -80,6 +80,15 @@ namespace NTSD.Animation
         /// <summary>Load-time freshness gate. Do not call from a simulation tick.</summary>
         public void AssertInputsCurrent()
         {
+            try
+            {
+                Catalog.FusionInput.AssertInputsCurrent();
+            }
+            catch (InvalidOperationException error)
+            {
+                // Preserve the existing publication cache's stale-input invalidation contract.
+                throw new InvalidDataException("Logan fusion input selection changed after candidate capture.", error);
+            }
             LoganObjectCatalog current = LoganObjectCatalog.Read(Catalog.Source);
             if (current.DefinitionFingerprint != Catalog.DefinitionFingerprint ||
                 current.ContentIdentity.SemanticFingerprint != ContentIdentity.SemanticFingerprint)

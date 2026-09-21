@@ -1,0 +1,6 @@
+{
+  "rows": 370,
+  "checks": 2590,
+  "failures": [],
+  "scope": "Independent selector/last-zero cancellation/catcher action-facing-counter-latch-snapshot only. Not a full transaction, victim, following-tick or Unity validation."
+}

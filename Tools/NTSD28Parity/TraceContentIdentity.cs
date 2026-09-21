@@ -8,20 +8,43 @@ namespace NTSD28Parity;
 internal static class TraceContentIdentity
 {
     internal const string Policy = "logan-dat-character-images";
-    internal const string LoganTag = "NTSD28_LOGAN_DAT_SEMANTICS_V2";
+    internal const string LoganTag = "NTSD28_LOGAN_DAT_SEMANTICS_V3";
     internal const string LegacyTag = "NTSD28_UNITY_LEGACY_DAT_SEMANTICS_V1";
     private static readonly string[] Properties =
     [
         "policy", "scope", "profile", "rawDefinitionSha256", "decodeContract",
         "semanticSha256", "catalogFingerprint64", "schemas",
     ];
+    private static readonly string[] LoganProperties = Properties.Concat(new[]
+    {
+        "objectDefinitionSha256", "fusionInputSha256", "fusionSemanticSha256",
+    }).ToArray();
     private static readonly IReadOnlyDictionary<string, int> Schemas = new Dictionary<string, int>
     {
-        ["entityRuntime"] = 15, ["aggregate"] = 23, ["checksum"] = 26,
+        ["entityRuntime"] = 17, ["aggregate"] = 25, ["checksum"] = 28,
         ["characterShell"] = 2, ["entityBaseShell"] = 2,
     };
 
     internal static JsonObject Create(string profile, string rawDefinition)
+    {
+        if (profile != "unity-legacy")
+            throw new InvalidDataException("logan-content-requires-three-components");
+        return Build(profile, rawDefinition);
+    }
+
+    internal static JsonObject CreateLogan(string objectDefinition, string fusionInput, string fusionSemantic)
+    {
+        byte[] prefix = Encoding.ASCII.GetBytes("NTSD28_LOGAN_BATTLE_INPUTS_V1\0");
+        byte[] inputs = prefix.Concat(DecodeSha(objectDefinition)).Concat(DecodeSha(fusionInput))
+            .Concat(DecodeSha(fusionSemantic)).ToArray();
+        JsonObject content = Build("logan-runtime", Convert.ToHexString(SHA256.HashData(inputs)));
+        content["objectDefinitionSha256"] = objectDefinition.ToUpperInvariant();
+        content["fusionInputSha256"] = fusionInput.ToUpperInvariant();
+        content["fusionSemanticSha256"] = fusionSemantic.ToUpperInvariant();
+        return content;
+    }
+
+    private static JsonObject Build(string profile, string rawDefinition)
     {
         (string scope, string tag) = Profile(profile);
         byte[] raw = DecodeSha(rawDefinition);
@@ -45,17 +68,21 @@ internal static class TraceContentIdentity
 
     internal static string Validate(JsonObject content, bool requireLogan = false)
     {
-        if (!TraceContract.HasExactProperties(content, Properties))
-            throw new InvalidDataException("content-property-set-mismatch");
         string profile = Text(content, "profile");
+        if (!TraceContract.HasExactProperties(content, profile == "logan-runtime" ? LoganProperties : Properties))
+            throw new InvalidDataException("content-property-set-mismatch");
         if (requireLogan && profile != "logan-runtime")
             throw new InvalidDataException("authority-content-profile-mismatch");
         string raw = Text(content, "rawDefinitionSha256");
-        JsonObject expected = Create(profile, raw);
+        DecodeSha(raw);
+        JsonObject expected = profile == "logan-runtime"
+            ? CreateLogan(Text(content, "objectDefinitionSha256"), Text(content, "fusionInputSha256"),
+                Text(content, "fusionSemanticSha256"))
+            : Create(profile, raw);
         foreach (string key in new[] { "policy", "scope", "decodeContract" })
             if (!string.Equals(Text(content, key), Text(expected, key), StringComparison.Ordinal))
                 throw new InvalidDataException("content-" + key + "-mismatch");
-        foreach (string key in new[] { "semanticSha256", "catalogFingerprint64" })
+        foreach (string key in new[] { "rawDefinitionSha256", "semanticSha256", "catalogFingerprint64" })
             if (!string.Equals(Text(content, key), Text(expected, key), StringComparison.OrdinalIgnoreCase))
                 throw new InvalidDataException("content-" + key + "-mismatch");
         if (content["schemas"] is not JsonObject schemas ||
@@ -71,7 +98,7 @@ internal static class TraceContentIdentity
     {
         return profile switch
         {
-            "logan-runtime" => ("catalog-object-definitions", LoganTag),
+            "logan-runtime" => ("catalog-object-fusion-definitions", LoganTag),
             "unity-legacy" => ("unity-legacy-dat-files", LegacyTag),
             _ => throw new InvalidDataException("unknown-content-profile"),
         };
@@ -79,7 +106,7 @@ internal static class TraceContentIdentity
 
     private static byte[] DecodeSha(string value)
     {
-        if (value.Length != 64 || !value.All(Uri.IsHexDigit))
+        if (value == null || value.Length != 64 || !value.All(Uri.IsHexDigit))
             throw new InvalidDataException("invalid-content-raw-definition-sha256");
         return Convert.FromHexString(value);
     }

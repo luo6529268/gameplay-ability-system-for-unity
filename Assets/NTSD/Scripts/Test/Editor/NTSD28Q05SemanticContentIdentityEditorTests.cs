@@ -86,10 +86,10 @@ namespace NTSD.Test.Editor
         [Test]
         public void CurrentIdentityNormalizesHexAndSeparatesDecoderCacheKeys()
         {
-            object current = Call("FromDefinitionFingerprint", Raw.ToLowerInvariant());
+            object current = Call("FromBattleComponents", Raw.ToLowerInvariant(), Raw, Raw);
             object older = Call("ForDecodeContract", Raw, "NTSD28_LOGAN_DAT_SEMANTICS_V1");
-            Assert.That(Property(current, "DecodeContractTag"), Is.EqualTo(Tag));
-            Assert.That(Property(current, "RawDefinitionFingerprint"), Is.EqualTo(Raw));
+            Assert.That(Property(current, "DecodeContractTag"), Is.EqualTo(LoganContentIdentity.CurrentDecodeContractTag));
+            Assert.That(Property(current, "ObjectDefinitionFingerprint"), Is.EqualTo(Raw));
             MethodInfo key = IdentityType.GetMethod("CreateSourceCacheKey");
             Assert.That(key, Is.Not.Null);
             Assert.That(key.Invoke(current, new object[] { "root" }), Is.Not.EqualTo(key.Invoke(older, new object[] { "root" })));
@@ -115,7 +115,7 @@ namespace NTSD.Test.Editor
             var candidate = LoganVisualContentCandidate.Capture(BattleContentSource.ForLoganRuntime(root));
             object identity = Property(candidate, "ContentIdentity");
             Assert.That(Property(candidate.Catalog, "ContentIdentity"), Is.SameAs(identity));
-            Assert.That(Property(identity, "RawDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
+            Assert.That(Property(identity, "ObjectDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
             Assert.That(candidate.SourceCacheKey, Does.Contain((string)Property(identity, "SemanticFingerprint")));
             Assert.That(candidate.SourceCacheKey, Does.Contain(candidate.VisualFingerprint));
             Assert.That(candidate.Catalog.SourceCacheKey, Does.Contain((string)Property(identity, "SemanticFingerprint")));
@@ -132,8 +132,8 @@ namespace NTSD.Test.Editor
         [Test]
         public void LocalSessionUsesSemanticProjectionAndRejectsOtherContent()
         {
-            object current = Call("FromDefinitionFingerprint", Raw);
-            object changed = Call("FromDefinitionFingerprint", new string('F', 64));
+            object current = Call("FromBattleComponents", Raw, Raw, Raw);
+            object changed = Call("FromBattleComponents", new string('F', 64), Raw, Raw);
             MethodInfo create = IdentityType.GetMethod("CreateLocalValidationSessionIdentity");
             Assert.That(create, Is.Not.Null);
             object[] args = { 100UL, 424242U, 200UL, new[] { 0 } };
@@ -164,8 +164,8 @@ namespace NTSD.Test.Editor
             var candidate = LoganVisualContentCandidate.Capture(source);
             object identity = Property(candidate, "ContentIdentity");
             Assert.That(candidate.Catalog.Entries.Count, Is.EqualTo(330));
-            Assert.That(Property(identity, "RawDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
-            Assert.That(Property(identity, "DecodeContractTag"), Is.EqualTo(Tag));
+            Assert.That(Property(identity, "ObjectDefinitionFingerprint"), Is.EqualTo(candidate.Catalog.DefinitionFingerprint));
+            Assert.That(Property(identity, "DecodeContractTag"), Is.EqualTo(LoganContentIdentity.CurrentDecodeContractTag));
             Assert.That(candidate.Catalog.DefinitionFingerprint, Is.EqualTo(LoganObjectCatalog.Read(source).DefinitionFingerprint));
             candidate.AssertInputsCurrent();
             string report = UnityEngine.JsonUtility.ToJson(new IdentityReceipt

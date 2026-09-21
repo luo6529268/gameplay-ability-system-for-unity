@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NTSD.Animation;
+using NTSD.DatParser;
 
 namespace NTSD.Simulation
 {
@@ -53,6 +54,8 @@ namespace NTSD.Simulation
         private int generation;
 
         public bool IsReady { get; private set; }
+        public LoganFusionCatalog FusionCatalog { get; private set; }
+        public LoganContentIdentity LoganContentIdentity { get; private set; }
         public bool IsSealedForBattle => sealedForBattle;
         public int Generation => generation;
         public int ObjectDefinitionCount => objectDefinitions.Count;
@@ -68,7 +71,8 @@ namespace NTSD.Simulation
         public void Prepare(
             IReadOnlyList<ObjectDefinition> definitions,
             Func<int, LF2CharacterDataWrapper> configResolver,
-            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog = default)
+            BattleHitRecordLifecycleCatalog hitRecordLifecycleCatalog = default,
+            LoganObjectCatalog loganCatalog = null)
         {
             if (sealedForBattle)
             {
@@ -79,6 +83,34 @@ namespace NTSD.Simulation
                 throw new ArgumentNullException(nameof(definitions));
             if (configResolver == null)
                 throw new ArgumentNullException(nameof(configResolver));
+
+            LF2CharacterDataWrapper[] preparedLoganConfigs = null;
+            if (loganCatalog != null)
+            {
+                var identity = loganCatalog.ContentIdentity;
+                if (identity.DecodeContractTag != Animation.LoganContentIdentity.CurrentDecodeContractTag ||
+                    identity.ObjectDefinitionFingerprint != loganCatalog.DefinitionFingerprint ||
+                    identity.FusionInputFingerprint != loganCatalog.FusionInput.InputFingerprint ||
+                    identity.FusionSemanticFingerprint != loganCatalog.FusionInput.SemanticFingerprint)
+                    throw new ArgumentException("Prepared fusion data requires its complete current content identity.", nameof(loganCatalog));
+                if (definitions.Count != loganCatalog.Entries.Count)
+                    throw new ArgumentException("Prepared objects do not match the captured Logan catalog.", nameof(definitions));
+                for (int index = 0; index < definitions.Count; index++)
+                {
+                    var definition = definitions[index];
+                    var entry = loganCatalog.Entries[index];
+                    if (definition == null || definition.id != entry.Id || definition.type != entry.Type)
+                        throw new ArgumentException("Prepared object order or type does not match the captured Logan catalog.", nameof(definitions));
+                }
+                preparedLoganConfigs = new LF2CharacterDataWrapper[definitions.Count];
+                for (int index = 0; index < definitions.Count; index++)
+                {
+                    var config = configResolver(definitions[index].id);
+                    if (config != null && config.characterId != definitions[index].id)
+                        throw new ArgumentException("Prepared character config has a different object identity.", nameof(configResolver));
+                    preparedLoganConfigs[index] = config;
+                }
+            }
 
             objectDefinitions.Clear();
             characterConfigs.Clear();
@@ -94,13 +126,16 @@ namespace NTSD.Simulation
                     continue;
 
                 objectDefinitions[definition.id] = definition;
-                LF2CharacterDataWrapper config = configResolver(definition.id);
+                LF2CharacterDataWrapper config = preparedLoganConfigs != null
+                    ? preparedLoganConfigs[index] : configResolver(definition.id);
                 if (config?.characterData != null)
                     characterConfigs[definition.id] = config;
             }
 
             generation = generation == int.MaxValue ? 1 : generation + 1;
             HitRecordLifecycleCatalog = hitRecordLifecycleCatalog;
+            FusionCatalog = loganCatalog?.FusionInput.Catalog;
+            LoganContentIdentity = loganCatalog?.ContentIdentity;
             IsReady = objectDefinitions.Count > 0;
         }
 

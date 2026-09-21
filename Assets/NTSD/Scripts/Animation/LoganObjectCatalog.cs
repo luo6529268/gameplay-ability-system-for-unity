@@ -42,6 +42,8 @@ namespace NTSD.Animation
         public string CatalogSha256 { get; }
         /// <summary>Only catalog and object DAT inputs; image/audio identity belongs to complete publication.</summary>
         public string DefinitionFingerprint { get; }
+        public LoganFusionCatalogInput FusionInput { get; }
+        public string BattleDefinitionFingerprint => ContentIdentity.RawDefinitionFingerprint;
         public LoganContentIdentity ContentIdentity { get; }
         public string SourceCacheKey { get; }
 
@@ -66,7 +68,10 @@ namespace NTSD.Animation
                 }
                 DefinitionFingerprint = Hash(bytes.ToArray());
             }
-            ContentIdentity = LoganContentIdentity.FromDefinitionFingerprint(DefinitionFingerprint);
+            // Canonical portable layout: both native roots are RuntimeRoot; DatRoot is its decoded_dat.
+            FusionInput = LoganFusionCatalogInput.Capture(source.DatRoot, source.RuntimeRoot);
+            ContentIdentity = LoganContentIdentity.FromBattleComponents(DefinitionFingerprint,
+                FusionInput.InputFingerprint, FusionInput.SemanticFingerprint);
             SourceCacheKey = ContentIdentity.CreateSourceCacheKey(source.RuntimeRoot);
         }
 

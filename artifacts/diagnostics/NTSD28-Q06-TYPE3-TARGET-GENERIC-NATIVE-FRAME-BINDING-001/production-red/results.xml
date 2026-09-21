@@ -1,0 +1,47 @@
+<test-suite type="TestSuite" id="9755" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7766" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="1.115473" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="Assembly" id="18469" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="7758" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="1.042594" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties><property name="_PID" value="62860" /><property name="_APPDOMAIN" value="Unity Child Domain" /><property name="platform" value="EditMode" /></properties><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18470" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="7758" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="0.949334" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestSuite" id="18478" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="7220" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="0.849583" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="TestFixture" id="12132" name="NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" fullname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" classname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="0.786068" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-suite type="ParameterizedMethod" id="12135" name="Type3TargetAndFollowingTickMatchSource" fullname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.Type3TargetAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="0.684391" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0"><properties /><failure><message><![CDATA[One or more child tests had errors]]></message></failure><test-case id="12133" name="Type3TargetAndFollowingTickMatchSource(Authority400,DataOriented)" fullname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.Type3TargetAndFollowingTickMatchSource(Authority400,DataOriented)" methodname="Type3TargetAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" runstate="Runnable" seed="1297002949" result="Failed" start-time="2026-09-21 03:04:13Z" end-time="2026-09-21 03:04:14Z" duration="0.384271" asserts="0"><properties /><failure><message><![CDATA[  case 0 effect entities[1].wait=1 expected=0
+case 1 effect entities[1].available=False expected=True
+case 2 effect entities[1].available=False expected=True
+case 2 effect entities[1].wait=0 expected=41
+case 2 effect entities[1].next=0 expected=900
+case 3 effect entities[1].available=False expected=True
+case 3 effect entities[1].wait=0 expected=41
+case 3 effect entities[1].next=0 expected=999
+case 7 effect entities[1].wait=1 expected=0
+case 8 effect entities[1].wait=1 expected=0
+case 9 effect slot 0 frame.action=20 expected 70
+case 9 effect slot 0 frame.frameCounter=7 expected 0
+  Expected: <empty>
+  But was:  < "case 0 effect entities[1].wait=1 expected=0", "case 1 effect entities[1].available=False expected=True", "case 2 effect entities[1].available=False expected=True", "case 2 effect entities[1].wait=0 expected=41", "case 2 effect entities[1].next=0 expected=900", "case 3 effect entities[1].available=False expected=True", "case 3 effect entities[1].wait=0 expected=41", "case 3 effect entities[1].next=0 expected=999", "case 7 effect entities[1].wait=1 expected=0", "case 8 effect entities[1].wait=1 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003cc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs:90
+at NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.Type3TargetAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs:33
+]]></stack-trace></failure><output><![CDATA[<color=cyan>[BMP 解析] 角色=GenericType3Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (selected): pic=0, state=0, wait=41, next=900, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Attacker, 找到 0 个精灵文件定义</color>
+<color=cyan>[Converter] 帧 900 (selected): pic=0, state=3005, wait=41, next=900, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=3</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+<color=cyan>[BMP 解析] 角色=GenericType3Target, 找到 0 个精灵文件定义</color>
+]]></output></test-case><test-case id="12134" name="Type3TargetAndFollowingTickMatchSource(MobileExtended,Legacy)" fullname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.Type3TargetAndFollowingTickMatchSource(MobileExtended,Legacy)" methodname="Type3TargetAndFollowingTickMatchSource" classname="NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests" runstate="Runnable" seed="1106297091" result="Failed" start-time="2026-09-21 03:04:14Z" end-time="2026-09-21 03:04:14Z" duration="0.196754" asserts="0"><properties /><failure><message><![CDATA[  case 0 effect entities[1].wait=1 expected=0
+case 2 effect entities[1].available=False expected=True
+case 2 effect entities[1].wait=0 expected=41
+case 2 effect entities[1].next=0 expected=900
+case 8 effect entities[1].wait=1 expected=0
+case 9 effect slot 0 frame.action=20 expected 70
+case 9 effect slot 0 frame.frameCounter=7 expected 0
+case 9 effect slot 0 frame.frameState=3005 expected 0
+case 9 effect slot 70 frame.action=900 expected 71
+case 9 effect entities[0].state=3005 expected=0
+case 9 effect entities[0].next=20 expected=70
+case 9 effect entities[0].pendingX=13 expected=0
+  Expected: <empty>
+  But was:  < "case 0 effect entities[1].wait=1 expected=0", "case 2 effect entities[1].available=False expected=True", "case 2 effect entities[1].wait=0 expected=41", "case 2 effect entities[1].next=0 expected=900", "case 8 effect entities[1].wait=1 expected=0", "case 9 effect slot 0 frame.action=20 expected 70", "case 9 effect slot 0 frame.frameCounter=7 expected 0", "case 9 effect slot 0 frame.frameState=3005 expected 0", "case 9 effect slot 70 frame.action=900 expected 71", "case 9 effect entities[0].state=3005 expected=0"... >
+]]></message><stack-trace><![CDATA[at NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.RunMatrix (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode, System.Boolean renderer) [0x003cc] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs:90
+at NTSD.Test.NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.Type3TargetAndFollowingTickMatchSource (NTSD.Simulation.BattleRuntimeProfile profile, NTSD.Simulation.Ecs.BattleEcsCharacterFrameAdvancePassMode mode) [0x00001] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q06Type3TargetGenericNativeFrameBindingEditorTests.cs:33
+]]></stack-trace></failure></test-case></test-suite></test-suite></test-suite></test-suite></test-suite></test-suite>

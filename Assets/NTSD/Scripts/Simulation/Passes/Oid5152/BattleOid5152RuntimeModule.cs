@@ -1,322 +1,217 @@
+using System;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
-using UnityEngine;
+using NTSD.DatParser;
 
 namespace NTSD.Simulation
 {
-    /// <summary>
-    /// Owns the release-compatible OID 7/8 to 51 merge and split lifecycle.
-    /// World retains only the stable scheduling façade.
-    /// </summary>
+    /// <summary>Record-driven fusion transactions; World retains the existing pass schedule.</summary>
     internal sealed class BattleOid5152RuntimeModule
     {
+        private static readonly LoganFusionCatalog LegacyFusionCatalog = LoganFusionCatalogInput.CreateLockedFallback();
         private readonly SimulationWorld world;
+
+        static BattleOid5152RuntimeModule()
+        {
+        }
 
         internal BattleOid5152RuntimeModule(SimulationWorld world)
         {
             this.world = world;
         }
 
-        internal void RunMaintenance(int tickIndex)
-        {
-            RunFusionScan(tickIndex, advanceTimerBeforeFusion: true);
-        }
-
-        internal void RunFusionScan(int tickIndex)
-        {
-            RunFusionScan(tickIndex, advanceTimerBeforeFusion: false);
-        }
+        internal void RunMaintenance(int tickIndex) => RunFusionScan(tickIndex, true);
+        internal void RunFusionScan(int tickIndex) => RunFusionScan(tickIndex, false);
 
         internal void AdvanceReactionTimer(LF2Entity entity)
         {
             if (entity?.Runtime == null || entity.Runtime.Unk338 <= 0)
                 return;
-
             entity.Runtime.Unk338--;
             world.RefreshRuntimeSnapshotForModule(entity);
         }
 
-        private void RunFusionScan(
-            int tickIndex,
-            bool advanceTimerBeforeFusion)
+        private void RunFusionScan(int tickIndex, bool advanceTimerBeforeFusion)
         {
+            LoganFusionCatalog catalog = world.RuntimeDataCatalog.FusionCatalog ?? LegacyFusionCatalog;
+            if (!catalog.IsValid) return;
             world.BeginDeferredEntityMutationPass();
             try
             {
-                for (int runtimeSlot = 0; runtimeSlot < 20; runtimeSlot++)
+                if (advanceTimerBeforeFusion)
+                    for (int slot = 0; slot < 20; slot++)
+                    {
+                        var entity = ActiveEntity(slot);
+                        if (entity != null) AdvanceReactionTimer(entity);
+                    }
+                // Alignment contract: NTSD28-Q06-FUSION-RECORD-TRANSACTION-001.
+                for (int recordIndex = 0; recordIndex < catalog.Records.Count; recordIndex++)
                 {
-                    LF2Entity entity =
-                        world.FindEntityByRuntimeSlotIncludingDormant(runtimeSlot);
-                    if (entity == null ||
-                        !world.IsActiveForCurrentPassInternal(entity))
+                    LoganFusionRecord record = catalog.Records[recordIndex];
+                    bool bypass = record.Respond == 1 ? world.Runtime.FusionFirstFeatureGate4A8428 :
+                        record.Respond == 2 ? world.Runtime.FusionSecondFeatureGate4A842C :
+                        record.Respond == 3 && world.Runtime.FusionFirstFeatureGate4A8428 && world.Runtime.FusionSecondFeatureGate4A842C;
+                    for (int slot = 0; slot < 20; slot++)
                     {
-                        continue;
-                    }
-
-                    if (advanceTimerBeforeFusion)
-                        AdvanceReactionTimer(entity);
-
-                    if (entity.ObjectId == 51)
-                    {
-                        TrySplitOid51BackToPair(entity);
-                    }
-                    else if (entity.ObjectId == 7 || entity.ObjectId == 8)
-                    {
-                        TryMergeOid7Or8Into51(entity);
+                        LF2Entity primary = ActiveEntity(slot);
+                        if (primary?.Health == null || primary.Runtime.NativeLifecycleResolutionPending ||
+                            primary.GetCurrentDataObjectTypeForSimulation() != 0)
+                            continue;
+                        if (slot < 10 && TryMerge(primary, slot, record, bypass)) continue;
+                        TrySplit(primary, record);
                     }
                 }
             }
-            finally
-            {
-                world.EndDeferredEntityMutationPass();
-            }
+            finally { world.EndDeferredEntityMutationPass(); }
         }
 
-        private bool TryMergeOid7Or8Into51(LF2Entity self)
+        private LF2Entity ActiveEntity(int slot)
         {
-            if (self?.Runtime == null || self.Health == null)
+            LF2Entity entity = world.GetCurrentRuntimeSlotOccupantForInteractionModule(slot);
+            return entity?.Runtime == null || entity.Runtime.OidMergeDormant ? null : entity;
+        }
+
+        private static int FrameState(LF2Entity entity) => entity.FrameCache.GetNativeFrameDataById(entity.Frame.N)?.state ?? 0;
+
+        private bool TryResolve(int id, int action, out LF2CharacterDataWrapper wrapper)
+        {
+            wrapper = world.RuntimeDataCatalog.IsReady
+                ? world.RuntimeDataCatalog.GetCharacterConfig(id) : world.RuntimeCharacterConfigs.Resolve(id);
+            if (wrapper?.characterData == null || wrapper.characterId != id || (uint)action >= LF2FrameCache.NativeMaxFrameIdExclusive)
                 return false;
-
-            int selfSlot = self.Runtime.SlotIndex;
-            LF2FrameData selfFrame = self.Frame?.D;
-            if (selfSlot < 0 ||
-                selfSlot >= 10 ||
-                selfFrame == null ||
-                selfFrame.state != 2)
-            {
+            if (world.RuntimeDataCatalog.IsReady && world.RuntimeDataCatalog.GetObjectDefinition(id) == null)
                 return false;
-            }
-            if (self.Health.HP <= 0 || self.Runtime.Unk338 != 0)
-                return false;
-            if (!PassesHpGate(self))
-                return false;
-
-            LF2CharacterDataWrapper oid51Wrapper =
-                world.RuntimeCharacterConfigs.Resolve(51);
-            if (oid51Wrapper == null)
-                return false;
-
-            int selfX = self.GetRuntimeXInt();
-            int selfZ = self.GetRenderZInt();
-            int selfRelationTeam = ResolveRelationTeam(self);
-            int partnerOid = 15 - self.ObjectId;
-
-            for (int partnerSlot = 0; partnerSlot < 20; partnerSlot++)
-            {
-                if (partnerSlot == selfSlot)
-                    continue;
-
-                LF2Entity partner =
-                    world.FindEntityByRuntimeSlotForQuery(partnerSlot);
-                if (partner?.Runtime == null || partner.Health == null)
-                    continue;
-                if (partner.ObjectId != partnerOid ||
-                    partner.Health.HP <= 0 ||
-                    partner.Runtime.Unk338 != 0)
-                {
-                    continue;
-                }
-                if (!PassesHpGate(partner))
-                    continue;
-                if (ResolveRelationTeam(partner) != selfRelationTeam)
-                    continue;
-
-                LF2FrameData partnerFrame = partner.Frame?.D;
-                int partnerFrameId = partner.Frame?.N ?? -1;
-                if (partnerFrame == null ||
-                    partnerFrameId < 0 ||
-                    partnerFrameId >= LF2FrameCache.MaxFrameIdExclusive)
-                {
-                    continue;
-                }
-                if (partnerFrame.state == 14)
-                    continue;
-                if (partnerFrame.state != 2 &&
-                    (partner.GetRuntimeYInt() != 0 || partnerSlot <= 9))
-                {
-                    continue;
-                }
-
-                int partnerX = partner.GetRuntimeXInt();
-                int partnerZ = partner.GetRenderZInt();
-                if (Mathf.Abs(selfX - partnerX) >= 50 ||
-                    Mathf.Abs(selfZ - partnerZ) >= 8)
-                {
-                    continue;
-                }
-                if (partnerSlot <= 9 && selfX <= partnerX)
-                    continue;
-
-                int mergedHpBound = self.Health.HPBound + partner.Health.HPBound;
-                if (mergedHpBound > self.Health.HP3)
-                    mergedHpBound = self.Health.HP3;
-
-                int mergedHp = self.Health.HP + partner.Health.HP;
-                if (mergedHp > mergedHpBound)
-                    mergedHp = mergedHpBound;
-
-                int midpointX = (selfX + partnerX) / 2;
-                int midpointZ = (selfZ + partnerZ) / 2;
-                int originalSelfOid = self.ObjectId;
-
-                self.Runtime.Unk328 = 1;
-                self.Runtime.Unk32C = partnerSlot;
-                self.Runtime.Unk330 = originalSelfOid;
-                self.Runtime.Unk334 = partner.ObjectId;
-                self.Runtime.Unk338 = 4500;
-                self.Health.HPBound = mergedHpBound;
-                self.Health.HP = mergedHp;
-                self.Runtime.Vx = 0f;
-                self.Runtime.X = midpointX;
-                self.Runtime.Z = midpointZ;
-                self.Runtime.XInt = midpointX;
-                self.Runtime.ZInt = midpointZ;
-
-                partner.Runtime.Vy = 0f;
-                // Alignment contract: R8-AIROWGEN-001. Dormancy changes the
-                // unified snapshot Included set without releasing this handle.
-                world.InvalidateAiUnifiedRowMembershipForModule();
-                partner.Runtime.OidMergeDormant = true;
-
-                self.TryApplyRuntimeIdentity(51, 290, false, out _);
-                self.Health.PP = 500;
-                self.RefreshRuntimeSnapshot();
-                partner.RefreshRuntimeSnapshot();
-                return true;
-            }
-
+            if (action < 999) return true;
+            var frames = wrapper.characterData.frames;
+            if (frames != null)
+                foreach (LF2FrameData frame in frames)
+                    if (frame != null && frame.frameId == action) return true;
             return false;
         }
 
-        private bool TrySplitOid51BackToPair(LF2Entity self)
+        private bool TryMerge(LF2Entity primary, int primarySlot, LoganFusionRecord record, bool bypass)
         {
-            if (self?.Runtime == null || self.Health == null)
+            if ((primary.ObjectId != record.Id1 && primary.ObjectId != record.Id2) || primary.Health.HP <= 0 ||
+                FrameState(primary) != record.State || (record.Cover != 1 && primary.Runtime.Unk338 != 0) ||
+                !(primary.Health.HP < record.Hp || bypass))
                 return false;
-            if (self.ObjectId != 51 ||
-                self.Runtime.Unk328 != 1 ||
-                self.Runtime.Unk338 > 0)
+            int partnerId = unchecked(record.Id1 + record.Id2 - primary.ObjectId);
+            for (int slot = 0; slot < 20; slot++)
             {
-                return false;
-            }
+                LF2Entity partner = ActiveEntity(slot);
+                if (slot == primarySlot || partner?.Health == null || partner.Runtime.NativeLifecycleResolutionPending ||
+                    partner.GetCurrentDataObjectTypeForSimulation() != 0 || partner.ObjectId != partnerId ||
+                    partner.Health.HP <= 0 || partner.RelationTeam != primary.RelationTeam ||
+                    (record.Cover != 1 && partner.Runtime.Unk338 != 0) || !(partner.Health.HP < record.Hp || bypass))
+                    continue;
+                int state = FrameState(partner);
+                if (!(state == record.State || (state != 14 && slot > 9 && partner.GetRuntimeYInt() == partner.Runtime.CollisionYReference)))
+                    continue;
+                int x = primary.GetRuntimeXInt(), px = partner.GetRuntimeXInt();
+                int z = primary.GetRenderZInt(), pz = partner.GetRenderZInt();
+                if (Math.Abs((long)x - px) >= 50 || Math.Abs((long)z - pz) >= 8 || (slot <= 9 && x <= px))
+                    continue;
+                if (!TryResolve(record.Id3, record.Action, out var fused)) continue;
 
-            int currentFrameId = self.Frame?.N ?? -1;
-            if (currentFrameId >= 9 && currentFrameId <= 260)
-                return false;
-
-            int originalOid = self.Runtime.Unk330;
-            if (world.RuntimeCharacterConfigs.Resolve(originalOid) == null)
-                return false;
-
-            int aggregateHp = self.Health.HP;
-            int aggregateHpBound = self.Health.HPBound;
-            int partnerSlot = self.Runtime.Unk32C;
-            int partnerOid = self.Runtime.Unk334;
-            double splitX = self.Runtime.X;
-            double splitZ = self.Runtime.Z;
-            int splitXInt = self.GetRuntimeXInt();
-            int splitZInt = self.GetRenderZInt();
-            double preservedVy = self.Runtime.Vy;
-            double preservedVz = self.Runtime.Vz;
-            string preservedDir = self.Runtime.Dir;
-
-            self.TryApplyRuntimeIdentity(originalOid, currentFrameId, false, out _);
-            self.Runtime.Unk328 = -1;
-            self.Runtime.Unk338 = 900;
-            self.RefreshRuntimeSnapshot();
-
-            if (partnerSlot < 0)
+                int bound = Math.Min(unchecked(primary.Health.HPBound + partner.Health.HPBound), primary.Health.HP3);
+                primary.Health.HP = Math.Min(unchecked(primary.Health.HP + partner.Health.HP), bound);
+                primary.Health.HPBound = bound;
+                primary.Runtime.Unk328 = 1;
+                if (record.HitJa == 1) primary.Runtime.InputSpecialGate194 = 1;
+                primary.Runtime.RenderPicOffset = 0;
+                primary.Runtime.Vx = 0;
+                partner.Runtime.Vy = 0;
+                int midpointX = unchecked(x + px) / 2, midpointZ = unchecked(z + pz) / 2;
+                primary.Runtime.X = primary.Runtime.XInt = midpointX;
+                primary.Runtime.Z = primary.Runtime.ZInt = midpointZ;
+                primary.Runtime.Unk32C = slot;
+                primary.Runtime.Unk338 = record.Decrease;
+                primary.Runtime.FusionDisplayTimer190 = record.Decrease;
+                primary.Runtime.Unk330 = primary.ObjectId;
+                primary.Runtime.Unk334 = partner.ObjectId;
+                PublishDefinition(primary, fused);
+                SetAction(primary, record.Action);
+                primary.Health.PP = record.Mp;
+                world.InvalidateAiUnifiedRowMembershipForModule();
+                partner.Runtime.OidMergeDormant = true;
+                primary.RefreshRuntimeSnapshot();
+                partner.RefreshRuntimeSnapshot();
                 return true;
-
-            LF2Entity partner =
-                world.FindEntityByRuntimeSlotIncludingDormant(partnerSlot);
-            if (partner == null ||
-                world.RuntimeCharacterConfigs.Resolve(partnerOid) == null)
-            {
-                return true;
             }
+            return false;
+        }
 
-            int halfHp = aggregateHp / 2;
-            int halfHpBound = aggregateHpBound / 2;
-            int partnerStableId = partner.Runtime.StableId;
-            int partnerRuntimeSlot = partner.Runtime.SlotIndex;
+        private void TrySplit(LF2Entity primary, LoganFusionRecord record)
+        {
+            int action = primary.Frame.N;
+            if (primary.ObjectId != record.Id3 || primary.Runtime.Unk328 != 1 || primary.Runtime.Unk338 > 0 ||
+                (action >= record.FrontHurtAction && action <= record.BackHurtAction)) return;
+            int slot = primary.Runtime.Unk32C;
+            if (slot < 0 || slot >= world.RuntimeSlotCapacity) return;
+            LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(slot);
+            if (partner?.Runtime == null || partner.Health == null || !partner.Runtime.OidMergeDormant ||
+                !TryResolve(primary.Runtime.Unk330, record.Frame, out var original) ||
+                !TryResolve(primary.Runtime.Unk334, record.Frame, out var other)) return;
 
-            // Alignment contract: R8-AIROWGEN-001. The dormant partner is not
-            // present in the active unified row set. End that publication before
-            // reset writes through the still-bound original-generation stores.
+            // A suspended native slot stays reserved; restore its saved entity without pool Reset.
             world.InvalidateAiUnifiedRowMembershipForModule();
-
-            self.TryApplyRuntimeIdentity(originalOid, 112, false, out _);
-            self.Health.HP = halfHp;
-            self.Health.HPBound = halfHpBound;
-            self.Health.PP = 0;
-            self.Runtime.Y = 0f;
-            self.Runtime.YInt = 0;
-            self.Runtime.Vx = 0f;
-            self.Runtime.Vy = preservedVy;
-            self.Runtime.Vz = preservedVz;
-            self.Runtime.Dir = preservedDir;
-            self.RefreshRuntimeSnapshot();
-
-            LF2ItrRestTracker partnerRest = partner.ItrRest;
-            partnerRest?.BeginPreserveStateAcrossOwnerReset();
-            try
-            {
-                partner.Reset();
-            }
-            finally
-            {
-                partnerRest?.EndPreserveStateAcrossOwnerReset();
-            }
-
-            // LF2Character.Reset has pool-specific defaults that differ from
-            // formal Entity::reset.
-            partner.FrameDelay = 0;
-            partner.KnockbackVx = 0.1;
-            partner.KnockbackVy = 0.1;
-            partner.KnockbackVz = 0.1;
-            partner.Effect?.Reset();
-            if (partner is LF2Character partnerCharacter)
-                partnerCharacter.DeadBlinkCountInternal = -1;
-            if (partner.Frame != null)
-            {
-                partner.Frame.PN = 0;
-                partner.Frame.Prev = 0;
-                partner.Frame.Prev2 = 0;
-                partner.Frame.Prev2D = null;
-            }
-            partner.RestoreStableIdAfterLifecycleReset(partnerStableId);
-            partner.SetRuntimeSlotIndex(partnerRuntimeSlot);
             partner.Runtime.OidMergeDormant = false;
-            partner.TryApplyRuntimeIdentity(partnerOid, 112, true, out _);
-            partner.Health.HP = halfHp;
-            partner.Health.HPBound = halfHpBound;
-            partner.Health.PP = 0;
-            partner.RelationTeam = self.RelationTeam;
-            partner.Runtime.X = splitX;
-            partner.Runtime.Y = 0f;
-            partner.Runtime.Z = splitZ;
-            partner.Runtime.XInt = splitXInt;
-            partner.Runtime.YInt = 0;
-            partner.Runtime.ZInt = splitZInt;
-            partner.Runtime.Vx = 0f;
-            partner.Runtime.Vy = 0f;
-            partner.Runtime.Vz = 0f;
-            partner.SwitchDir(preservedDir == "right" ? "left" : "right");
+            PublishDefinition(primary, original);
+            PublishDefinition(partner, other);
+            primary.Runtime.Unk328 = -1;
+            primary.Runtime.InputSpecialGate194 = 0;
+            primary.Runtime.Unk338 = record.Wait;
+            int hp = record.Chp == 1 ? primary.Health.HP : primary.Health.HP / 2;
+            int bound = record.Chp == 1 ? primary.Health.HPBound : primary.Health.HPBound / 2;
+            primary.Health.HP = partner.Health.HP = hp;
+            primary.Health.HPBound = partner.Health.HPBound = bound;
+            partner.Runtime.X = primary.Runtime.X;
+            partner.Runtime.Y = primary.Runtime.Y;
+            partner.Runtime.Z = primary.Runtime.Z;
+            partner.Runtime.XInt = primary.Runtime.XInt;
+            partner.Runtime.YInt = primary.Runtime.YInt;
+            partner.Runtime.ZInt = primary.Runtime.ZInt;
+            partner.Runtime.CollisionYReference = primary.Runtime.CollisionYReference;
+            primary.Runtime.Vx = partner.Runtime.Vx = partner.Runtime.Vy = 0;
+            partner.SwitchDir(primary.Runtime.Dir == "right" ? "left" : "right");
+            SetAction(primary, record.Frame);
+            SetAction(partner, record.Frame);
+            primary.Health.PP = partner.Health.PP = 0;
+            partner.RelationTeam = primary.RelationTeam;
+            primary.RefreshRuntimeSnapshot();
             partner.RefreshRuntimeSnapshot();
-            return true;
         }
 
-        private bool PassesHpGate(LF2Entity entity)
+        private static void PublishDefinition(LF2Entity entity, LF2CharacterDataWrapper wrapper)
         {
-            if (entity?.Health == null || entity.Health.HP <= 0)
-                return false;
-
-            return world.BattleGameModeId == 1 || entity.Health.HP < 177;
+            entity.ObjectId = wrapper.characterId;
+            entity.FrameCache.Load(wrapper);
+            if (entity.GetCurrentDataObjectTypeForSimulation() == 0)
+                entity.EnsureSharedCharacterDatControllerForSimulation();
+            entity.InitializeNativeDefinitionIdentityForSpawn();
+            var data = wrapper.characterData;
+            var stats = data.NativeMetadata?.Stats;
+            entity.Health.MaxMP = stats?.Int32OrDefault("max_mp", entity.Health.MaxMP) ?? entity.Health.MaxMP;
+            entity.Runtime.WeaponFlightCounter = data.NativeMetadata?.Bmp.Int32OrDefault("weapon_hp", 0) ?? data.weapon_hp;
+            int scale = stats?.Int32OrDefault("defend", 0) ?? 0;
+            if (scale <= 0) scale = 0;
+            if (entity.Runtime.ModeDamageScalePercent != 100)
+                scale = scale == 0 ? entity.Runtime.ModeDamageScalePercent :
+                    unchecked((int)((long)entity.Runtime.ModeDamageScalePercent * scale / 100));
+            entity.Runtime.IncomingDamageScale340 = scale;
         }
 
-        private static int ResolveRelationTeam(LF2Entity entity)
+        private static void SetAction(LF2Entity entity, int action)
         {
-            return entity?.RelationTeam ?? 0;
+            entity.WriteCurrentFrameId(action);
+            LF2FrameData frame = entity.FrameCache.GetNativeFrameDataById(action);
+            entity.Frame.D = frame;
+            entity.Trans.SyncDirectFrameData(frame.wait, frame.next, action);
+            entity.AttackingCounter = 0;
+            entity.Frame.Prev2 = action;
+            entity.Frame.Prev2D = frame;
+            entity.Runtime.PrevFrame2 = action;
+            entity.Runtime.NativeSoundActionLatch = -1;
         }
     }
 }

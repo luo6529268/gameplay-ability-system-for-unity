@@ -1,0 +1,46 @@
+{
+  "index": 1,
+  "bruteForce": true,
+  "before": {
+    "position": [
+      90,
+      -10,
+      250,
+      90.0,
+      -10.0,
+      250.0
+    ],
+    "reference": -999
+  },
+  "after": {
+    "position": [
+      90,
+      -10,
+      250,
+      90.0,
+      -10.0,
+      250.0
+    ],
+    "reference": 0
+  },
+  "expected": {
+    "position": [
+      90,
+      -10,
+      250,
+      90,
+      -10,
+      250
+    ],
+    "previousY": -10,
+    "previousXYZ": [
+      0,
+      -10,
+      0
+    ],
+    "reference": 0,
+    "platformSlot": 0,
+    "shadow": 0
+  },
+  "scope": "Position/reference only; platform/history/shadow carriers and fulltick not certified"
+}

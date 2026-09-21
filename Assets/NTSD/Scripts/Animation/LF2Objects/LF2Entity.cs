@@ -4585,6 +4585,14 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
+        internal void InitializeNativeDefinitionIdentityForSpawn()
+        {
+            var data = FrameCache?.Wrapper?.characterData;
+            var bmp = data?.NativeMetadata?.Bmp;
+            Runtime.NativeAiProfileObjectId = bmp?.Int32OrDefault("use_ai", 0) ?? data?.use_ai ?? 0;
+            Runtime.NativeDefinitionDropMode = bmp?.Int32OrDefault("drop", 0) ?? 0;
+        }
+
         internal void InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn()
         {
             if (Runtime == null)
@@ -5632,7 +5640,7 @@ namespace NTSD.Animation.LF2Objects
             else
                 landingAction = LF2StandardFrames.Crouch2;
 
-            DirectWriteRawFramePreserveWaitCounter(landingAction);
+            DirectWriteNativeRawFramePreserveWaitCounter(landingAction);
             AttackingCounter = 0;
             return true;
         }
@@ -5665,7 +5673,7 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Vy = 0.0;
                 Runtime.Vx /= 3.0;
                 action = currentAction >= 186 ? 231 : 230;
-                DirectWriteRawFramePreserveWaitCounter(action);
+                DirectWriteNativeRawFramePreserveWaitCounter(action);
                 AttackingCounter = 0;
                 return true;
             }
@@ -5692,7 +5700,7 @@ namespace NTSD.Animation.LF2Objects
                     : 191;
             }
 
-            DirectWriteRawFramePreserveWaitCounter(action);
+            DirectWriteNativeRawFramePreserveWaitCounter(action);
             return true;
         }
 
@@ -5803,7 +5811,7 @@ namespace NTSD.Animation.LF2Objects
             if (action < 0)
                 return false;
 
-            DirectWriteRawFramePreserveWaitCounter(action);
+            DirectWriteNativeRawFramePreserveWaitCounter(action);
             return true;
         }
 
@@ -6807,6 +6815,53 @@ namespace NTSD.Animation.LF2Objects
             Runtime.Vx = vx;
             Runtime.Vy = vy;
             Runtime.Vz = vz;
+            ApplyLinkedPlatformMotion(frame);
+        }
+
+        // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.
+        private void ApplyLinkedPlatformMotion(LF2FrameData currentFrame)
+        {
+            if (Runtime.PlatformSourceSlotF4 == 0 || Runtime.YInt != Runtime.CollisionYReference)
+                return;
+            if (GetCurrentDataObjectTypeForSimulation() == 3 &&
+                currentFrame.state != 3000 && currentFrame.state != 3006 && currentFrame.state != 3003)
+                return;
+
+            int slot = Runtime.PlatformSourceSlotF4;
+            LF2Entity platform = slot > 0 ? registeredWorld?.FindEntityByRuntimeSlotForQuery(slot) : null;
+            LF2FrameData linkedFrame = platform?.FrameCache?.GetNativeFrameDataById(platform.Frame.N);
+            if (linkedFrame == null)
+                return;
+
+            double x = linkedFrame.UsesLoganFrameNumbers ? linkedFrame.nativeDvx : linkedFrame.dvx;
+            double z = linkedFrame.UsesLoganFrameNumbers ? linkedFrame.nativeDvz : linkedFrame.dvz;
+            double y = linkedFrame.UsesLoganFrameNumbers ? linkedFrame.nativeDvy : linkedFrame.dvy;
+            if (x != 0.0)
+            {
+                double displacement = x > 500.0 ? x - 550.0 : x;
+                if (x <= 500.0 && platform.Runtime.IsFacingLeft)
+                    displacement = -displacement;
+                Runtime.X = Runtime.XInt + displacement;
+                Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+            }
+            if (z != 0.0)
+            {
+                Runtime.Z = Runtime.ZInt + (z > 500.0 ? z - 550.0 : z);
+                Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+            }
+            if (y != 0.0)
+            {
+                Runtime.Y = Runtime.YInt + (y > 500.0 ? y - 550.0 : y);
+                Runtime.YInt = RoundPlatformCoordinate(Runtime.Y);
+                Runtime.CollisionYReference = Runtime.YInt;
+            }
+        }
+
+        private static int RoundPlatformCoordinate(double value)
+        {
+            double rounded = System.Math.Round(value, System.MidpointRounding.ToEven);
+            return double.IsNaN(rounded) || rounded < int.MinValue || rounded > int.MaxValue
+                ? int.MinValue : (int)rounded;
         }
 
         private static void ApplyFrameAxisVelocity(int value, ref double velocity, int direction) // P0-f: double sim velocity

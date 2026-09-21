@@ -118,44 +118,12 @@ namespace NTSD.Simulation.Ecs
 
         internal static bool IsInitialActionAdmitted(LF2CharacterDataWrapper wrapper, int action)
         {
-            // Alignment contract: NTSD28-Q06-WEAPON-PIECE-SPAWN-ADMISSION-EDGE-001.
-            return wrapper?.characterData != null && action >= 0 &&
-                action < LF2FrameCache.NativeMaxFrameIdExclusive &&
-                (action != 999 || wrapper.characterData.frames.Exists(frame => frame.frameId == action));
+            return BattleNativeDirectSpawnWriter.IsInitialActionAdmitted(wrapper, action);
         }
 
         internal static void InitializeBirth(LF2Entity entity, OPointCreateTask task)
         {
-            var data = entity.FrameCache.Wrapper.characterData;
-            var runtime = entity.Runtime;
-            entity.RelationTeam = task.relationTeam;
-            entity.Health.HP = 500;
-            entity.Health.HPBound = 500;
-            entity.Health.HP3 = 500;
-            entity.Health.PP = 500;
-            entity.Health.MaxMP = data.NativeMetadata?.Stats.Int32OrDefault("max_mp", 500) ?? 500;
-            runtime.HP2Orig = 1;
-            runtime.HPOrig = 0;
-            runtime.RespawnCount = 0;
-            runtime.DisplayCurrentHp200 = 500;
-            runtime.DisplayEffectiveMaxHp208 = 500;
-            runtime.DisplayScore1F0 = 0;
-            runtime.DisplayDamageTotal1F8 = 0;
-            runtime.DisplayScoreStep1F4 = 0;
-            runtime.DisplayDamageStep1FC = 0;
-            runtime.DisplayCurrentHpStep204 = 0;
-            runtime.DisplayEffectiveMaxHpStep20C = 0;
-            runtime.WeaponFlightCounter = data.NativeMetadata?.Bmp.Int32OrDefault("weapon_hp", 0) ?? data.weapon_hp;
-            entity.WriteCurrentFrameId(task.opoint.action);
-            entity.Frame.D = entity.FrameCache.GetNativeFrameDataById(task.opoint.action);
-            entity.Trans.SyncDirectFrameData(entity.Frame.D.wait, entity.Frame.D.next, task.opoint.action);
-            entity.Frame.Prev = task.opoint.action;
-            entity.AttackingCounter = 0;
-            entity.SyncCollisionSnapshotToCurrentFrame();
-            runtime.NativeSoundActionLatch = -1;
-            runtime.NativeLifecycleResolutionPending = false;
-            runtime.NativeLifecycleCode = 0;
-            runtime.NativeRuntimeStateCode = 0;
+            BattleNativeDirectSpawnWriter.InitializeBirth(entity, task);
         }
 
         private static int BuiltinAction(NTSD28NativeRandom random, int oid, int ordinal, ref int vy)

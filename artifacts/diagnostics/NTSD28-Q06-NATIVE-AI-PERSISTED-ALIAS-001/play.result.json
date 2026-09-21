@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "passedCases": 2,
+  "errors": [],
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Real Play source16/17 two ticks each with pooled renderers; synthetic data, no physical-key or pixel parity claim."
+}

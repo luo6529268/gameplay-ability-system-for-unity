@@ -555,7 +555,12 @@ internal static class RawEntityCaptureComparator
             ["old-raw-version"] = header => header["schema"] = "ntsd28-unity-raw-capture-v1",
             ["missing-content"] = header => header.Remove("content"),
             ["forged-semantic"] = header => header["content"]!["semanticSha256"] = new string('0', 64),
-            ["different-valid-content"] = header => header["content"] = TraceContentIdentity.Create("logan-runtime", new string('B', 64)),
+            ["different-valid-content"] = header => header["content"] = TraceContentIdentity.CreateLogan(new string('B', 64), new string('C', 64), new string('D', 64)),
+            ["different-valid-fusion-input"] = header => header["content"] = TraceContentIdentity.CreateLogan(new string('A', 64), new string('E', 64), new string('D', 64)),
+            ["different-valid-fusion-semantic"] = header => header["content"] = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64), new string('E', 64)),
+            ["missing-fusion-input"] = header => header["content"]!.AsObject().Remove("fusionInputSha256"),
+            ["retired-v2-content"] = header => header["content"]!["decodeContract"] = "NTSD28_LOGAN_DAT_SEMANTICS_V2",
+            ["forged-composite"] = header => header["content"]!["rawDefinitionSha256"] = new string('A', 64),
             ["legacy-content-not-logan"] = header => header["content"] = TraceContentIdentity.Create("unity-legacy", new string('A', 64)),
             ["wrong-joint-schema"] = header => header["content"]!["schemas"]!["entityRuntime"] = 12,
             ["missing-runtime-provenance"] = header => header.Remove("runtimeAssemblySha256"),
@@ -625,7 +630,7 @@ internal static class RawEntityCaptureComparator
         {
             ["kind"] = "header",
             ["schema"] = AuthorityCaptureValidator.CaptureSchema,
-            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
+            ["content"] = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64), new string('D', 64)),
             ["certificateEligible"] = false,
             ["evidenceClass"] = AuthorityCaptureValidator.EvidenceClass,
             ["formalExeSha256"] = TraceContract.AuthorityExecutableSha256,
@@ -670,7 +675,7 @@ internal static class RawEntityCaptureComparator
             ["slotCapacity"] = 400,
             ["unityAssemblySha256"] = new string('1', 64),
             ["runtimeAssemblySha256"] = new string('2', 64),
-            ["content"] = TraceContentIdentity.Create("logan-runtime", new string('A', 64)),
+            ["content"] = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64), new string('D', 64)),
         };
         JsonObject tick = new()
         {
