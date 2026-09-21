@@ -1,0 +1,27 @@
+{
+    "runId": "q07-serialized-menu-1",
+    "mode": "menu",
+    "status": "PASS",
+    "message": "Actual formal-staged content caller, World preparation and ordered unload passed.",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime|FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147|1A81ED6000C49CAF9F29CBB786B69DA8BC914DC416383B09CD5E2D479912B8A4",
+    "shutdownStage": "RuntimeMapCleared",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "",
+    "failureLifecycle": "",
+    "sourceIds": [
+        0,
+        50,
+        52
+    ],
+    "worldObjects": 4,
+    "trackedResources": 29400,
+    "resourceSurvivors": 0,
+    "menuPreviousOwnerSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 1,
+    "menuReady": true,
+    "samePublishedKeys": true,
+    "stayedStoppedAfterTwoFrames": true,
+    "serializedRootSelected": true,
+    "rootFromAsset": "Assets/NTSD/Content/LoganRuntime"
+}

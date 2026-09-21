@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:25:04Z" end-time="2026-09-21 22:25:05Z" duration="0.358213">
+  <test-suite type="TestSuite" id="8144" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6058" result="Passed" start-time="2026-09-21 22:25:04Z" end-time="2026-09-21 22:25:05Z" duration="0.358213" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15247" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6050" result="Passed" start-time="2026-09-21 22:25:04Z" end-time="2026-09-21 22:25:05Z" duration="0.296523" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="8772" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15248" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6050" result="Passed" start-time="2026-09-21 22:25:04Z" end-time="2026-09-21 22:25:05Z" duration="0.243952" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15256" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5488" result="Passed" start-time="2026-09-21 22:25:04Z" end-time="2026-09-21 22:25:05Z" duration="0.160075" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="8987" name="BattleResultsOutcomeHostWriterSeamEditorTests" fullname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests" classname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-21 22:25:05Z" end-time="2026-09-21 22:25:05Z" duration="0.046449" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="BattleResultsOutcomeHostWriterSeam" />
+            </properties>
+            <test-case id="8989" name="ExistingActiveResultsGateRemainsUnchanged" fullname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests.ExistingActiveResultsGateRemainsUnchanged" methodname="ExistingActiveResultsGateRemainsUnchanged" classname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests" runstate="Runnable" seed="1671805269" result="Passed" start-time="2026-09-21 22:25:05Z" end-time="2026-09-21 22:25:05Z" duration="0.023945" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="8988" name="TerminalObservationHasDedicatedSingleWriterSource" fullname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests.TerminalObservationHasDedicatedSingleWriterSource" methodname="TerminalObservationHasDedicatedSingleWriterSource" classname="NTSD.Test.BattleResultsOutcomeHostWriterSeamEditorTests" runstate="Runnable" seed="1217436379" result="Passed" start-time="2026-09-21 22:25:05Z" end-time="2026-09-21 22:25:05Z" duration="0.008651" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

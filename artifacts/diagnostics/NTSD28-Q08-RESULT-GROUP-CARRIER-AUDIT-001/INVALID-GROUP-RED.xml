@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:37:27Z" end-time="2026-09-21 22:37:28Z" duration="0.5663075">
+  <test-suite type="TestSuite" id="8148" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6061" result="Failed" site="Child" start-time="2026-09-21 22:37:27Z" end-time="2026-09-21 22:37:28Z" duration="0.566308" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15255" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6053" result="Failed" site="Child" start-time="2026-09-21 22:37:27Z" end-time="2026-09-21 22:37:28Z" duration="0.437927" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="67256" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15256" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6053" result="Failed" site="Child" start-time="2026-09-21 22:37:27Z" end-time="2026-09-21 22:37:28Z" duration="0.324258" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15264" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5491" result="Failed" site="Child" start-time="2026-09-21 22:37:27Z" end-time="2026-09-21 22:37:28Z" duration="0.214875" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11028" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-21 22:37:28Z" end-time="2026-09-21 22:37:28Z" duration="0.116307" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="ParameterizedMethod" id="11032" name="InvalidGroupDoesNotPreventSoleEligibleWinner" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-21 22:37:28Z" end-time="2026-09-21 22:37:28Z" duration="0.110248" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="11029" name="InvalidGroupDoesNotPreventSoleEligibleWinner(0)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(0)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="453092757" result="Failed" start-time="2026-09-21 22:37:28Z" end-time="2026-09-21 22:37:28Z" duration="0.043783" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:26
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11030" name="InvalidGroupDoesNotPreventSoleEligibleWinner(5)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(5)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="2067819633" result="Failed" start-time="2026-09-21 22:37:28Z" end-time="2026-09-21 22:37:28Z" duration="0.020917" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:26
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11031" name="InvalidGroupDoesNotPreventSoleEligibleWinner(40)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(40)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1252115932" result="Failed" start-time="2026-09-21 22:37:28Z" end-time="2026-09-21 22:37:28Z" duration="0.033077" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:26
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,3 +1,53 @@
+> Q08 mode-4 reserve 专项：正式playable完整GameSession mode-4一存活组timer1/350转202双跑一致；所检BattleConfig无Unity committed-result-reserve同条件入口，不能据源码负搜索删现有RESULT-RESERVE-09补reserve逻辑。详MODE4-RESERVE-CALLER-AUDIT；同条件正式EXE可见结果待证。Q08未闭。
+
+> Q08 `NTSD28-Q08-RESULT-GROUP-CARRIER-AUDIT-001 / NATIVE_GROUP_TIMING_COMBAT_LETHAL_PASS / UNITY_GROUP_RED_4_TIMING_DIRECT_RED_2_FULLTICK_RED_1`：正式playable隔离源码`GameSession28::step()`组六例+计时锁定/80/101/144→350+真实Attack致死tick12计时0/tick13计时1，双跑同输出；隔离Unity组别4例、直接producer计时锁定/过早结果页2例及`RunReleaseTick`恢复组别timer不增1例目标RED（类3PASS/7FAIL）。TeamIds[2]/HadBoth绑定结果UI、schema1快照与checksum；独立原生组合同见CARRIER-CONTRACT，下一Unity同条件自然命中/准确Change。未动生产，Q08未闭、Q06出口保持，禁computer-use。
+
+> Q08 `NTSD28-Q08-REVIVE-LIVES-LIVING-GROUP-001 / FOCUSED_TEST_PASS_ISOLATED`：正式HP0/剩余生命分支已用现有HP2Orig接入；同SHA隔离Unity三例RED 1/3→PASS 3/3，相邻结果seam 2/2+3/3。原Editor/完整SelfCheck/真实战斗及Q08其它结果语义待验；详ACCEPTANCE。Q06出口保持，禁computer-use。
+
+> Q08 `NTSD28-Q08-RESULT-FLOW-SOURCE-MATCHED-001 / REVIVE2_DIRECT_AND_UNITY_FULLTICK_RED_REPRODUCED`：隔离Unity EditMode直接writer与RunReleaseTick第2 tick各1例RED，组1/2、HP0/HP2Orig2实测BattleEndPhase1，正式source对应timer0；均编译并在目标断言失败，证据见CALLER-AUDIT/REPORT与XML。正式端同初态完整driver、其它分支及精确生产Change仍待；Q06出口保持，禁computer-use。
+
+> 当前Q07 `NTSD28-Q07-SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001 / ISOLATED_VISIBLE_PREVIEW_PASS`：同SHA隔离Unity副本正式PNG 1/1、预览类11/11及现有图形验证JSON/PNG PASS；画面已查看、Scene hash保持。原Editor重载及其现场可见预览待，Q07整批未闭；详PROGRESS。Q06限定出口保持，禁computer-use。
+
+> Q07 Sasuke旧图磁盘owner回访：退场CSV为修改前快照；当前磁盘Scene旧GUID引用0、精确脚本文字仅保留旧BMP网格测试1处，旧空根DAT动态路径仍可达；Editor未Reload，删授权仍0。详SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001/OLD-ASSET-OWNER-REFRESH.md。
+
+> 当前Q07 `NTSD28-Q07-SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001 / CODE_WRITTEN / UNITY_MODAL_RELOAD_PENDING`：正式sasu.png importer因RED1024先由独立子Task仅调nPOTScale并1/1PASS；预览PNG alpha、Editor示例/验证、Battle Scene禁用预览GUID及y881已精确写入，Scene仅两字段diff、HUDBg x30/旧BMP/Menu保持。现有Editor外部Scene修改弹窗阻断后续编译/预览图验收，已请用户手动Reload，禁computer-use/第二Editor；详PROGRESS。Q07未闭。
+
+> Q08结果设置stage计数当前权威面修正：正式EXE SHA匹配，但其host只有战斗Scene loop/GUI/smoke及转换边界冻结的LFR回放，已检live path没有mode-4结果设置stage动作。不能继续把“直接取同条件EXE见证”当可执行下一步，更不能把赛前24背景ID写入结果计数；Unity零计数仍仅静态候选。详Q08 RESULT-STAGE-COUNT-AUTHORITY-AUDIT-001/SHIPPED-HOST-SURFACE-ADDENDUM.md；Q08其他项继续，禁computer-use。
+
+> 当前Q07未索引旧`effect/weapon4.dat`静态调用链已审：它不是data.txt OID120的`chars/weapon4.dat`；默认正式/旧索引/手动刷新/正式catalog/Editor补丁未见已知reader，GUID无序列化owner。仅`STATIC_NO_KNOWN_READER`，不证明全局不可达，仍`deleteAuthorized=false`、未删。详UNINDEXED-EFFECT-WEAPON4-REACHABILITY-001/REPORT.md；Q07未闭，禁computer-use。
+
+> 当前Q07 `NTSD28-Q07-WINDOWS-PLAYER-NATURAL-SKILL-001 / VERIFIED_PLAYER_NARUTO_REPRESENTATIVE_ONLY`：Windows Mono Development build-3 0错，独立Player物理L/D/J于tick4/6→frame285 tick8→OID33隐藏tick13/正式ncl.png pic1 tick14，进程exit0/PASS；关闭Stopped/borrowers0、双Scene SHA保持。前build-1编译/前run-2探针方向码错误保留，生产未改。详本包ACCEPTANCE；Q07整批仍IN_PROGRESS，Q06本地出口保持，禁computer-use。
+
+> 当前Q07 `NTSD28-Q07-LEGACY-DAT-IMAGE-RETIREMENT-GATE-AUDIT-001 / VERIFIED_STATIC_RETIREMENT_GATE_ONLY`：旧DAT138中137由旧data.txt直接索引、1个effect/weapon4.dat仍待动态归属；旧索引图片383有保留的legacy/Editor读取，1张sasuke_0.bmp仍是Battle Scene预览序列化引用；174其他图片归HUD/Menu/地图/阴影等独立owner。521行退场门槛表逐项`deleteAuthorized=false`，正式默认战斗仍用LoganRuntime，未删/重绑任何文件。详本包REPORT/CSV；Q07 IN_PROGRESS、Q06本地出口保持，禁computer-use。
+
+> 当前Q08 `NTSD28-Q08-F4-PLAYER-CLOSE-OWNER-001 / VERIFIED_PLAYER_F4_CLOSE_SCOPE`：正式F4的Player关闭效果已接入战斗宿主；两次真实Windows Player物理F4均tick3→3、Stopped/对象池0，第二次进程退出码0；Editor物理键PASS、F4拒绝路由8/8、Scene保持。录像save-pending保护因Unity无对应owner仍待，Q08结果计数和总目标未闭；详本包ACCEPTANCE。下条只读缺口是实施前历史，已由本包局部取代；禁computer-use。
+
+> Q08 `NTSD28-Q08-F4-CLOSE-OWNER-AUDIT-001 / CONFIRMED_PRODUCTION_EFFECT_GAP`：正式playable的F4经录像待保存保护关闭整应用；Unity已有物理键handoff但仅测试诊断消费，生产无关闭owner。先精确Task/Change再接战斗host/Player关闭与有序shutdown验收；不得改为返回菜单。Q07 Scene closure首Scene选择已异步询问，其他可独立工作继续，禁computer-use。
+
+> `NTSD28-Q07-SASUKE-NEEDLE-PHYSICAL-001 / VERIFIED_SOURCE_FORMULA_AND_SCOPED_PLAY_ONLY`：正式Sasuke OID11自然L/D/J两次真实Play通过，tick15帧264四个OID440，四子位置/速度逐项符合正式源码公式、chi.png pic0绑定观察通过；Editor退出、Scene hash/dirty保持、Console error0、Ledger653/15PASS。原EXE同条件tick、命中/完整生命周期/屏幕表现及Q07出口仍待；详ACCEPTANCE，禁computer-use。
+
+> 当前Q07旧图owner清单已复核：52个现存旧路径序列化引用=禁用Editor预览角色图1、Battle HUD/UI 26、Menu UI 14、GameConfig UI 8、地图2、通用阴影1。唯一旧角色图sasuke_0.bmp仍被Battle Scene预览及Editor测试引用，正式sasu.png仅为待验证重绑候选；清单见Q07 OLD-ASSET-REFERENCE-REFRESH-001/SERIALIZED-OWNER-CLASSIFICATION.md。没有重绑或删除，Scene/非战斗保持；Q07仍IN_PROGRESS，Q08 mode-4结果计数仍待权威同条件见证，禁computer-use。
+
+> 当前Q08 `NTSD28-Q08-RESULT-STAGE-COUNT-AUTHORITY-AUDIT-001` 已闭只读边界：正式playable的24有效背景ID进入赛前post-roster菜单；mode-4战果设置stage action在所检playable live path未给出同条件规则。Unity正式根`RuntimeStageCount`静态为0但尚非已证首差，禁止直接写24。下一需正式EXE mode-4同stage/按键与Unity同条件见证；Q08其他有权威证据的子项可先行。详同ID REPORT；Q07仍IN_PROGRESS、Q06本地出口保持，禁computer-use。
+
+> 当前Q07 `NTSD28-Q07-LEGACY-DATA-LAZY-LOAD-001` 限定VERIFIED：GameDataManager初始化不再隐式读取旧data.txt；空根显式加载保留，聚焦EditMode两次1/1、正式完整发布1/1、序列化根menu Play q07-lazy-menu-1 PASS。最终无行为的空覆盖删除后重新编译/聚焦通过，完整发布/Play为此前等效路径。Q08背景计数、Menu Scene空Build Settings、旧资源删除权限仍未闭合；详本包ACCEPTANCE，禁computer-use。
+
+> 当前Q07 `NTSD28-Q07-NARUTO-CLONE-SPRITE-BINDING-001`限定VERIFIED：真实物理L/D/J的OID33 tick11 frame241/pic999无entry→tick12 frame242/pic1/key(33,1)/正式ncl.png 79×79/中央binding有效，fresh Play PASS；首轮探针FAIL保留。只闭逻辑到图片目录绑定，像素/排序/阴影/整技能待；Menu Scene闭包首差独立保留，Q07 IN_PROGRESS、Q06 DELIVERED_SCOPED。详本包ACCEPTANCE。
+
+> 活跃依赖`NTSD28-Q07-MENU-SCENE-CALLBACK-PLAY-001`保持BLOCKED：真实Menu回调到Fight后因Build Settings空Scene表无法加法加载Battle，生产Scene闭包确定后重跑。该包的两次Play及负例preflight证据保留；不以Naruto图片目录PASS覆盖此缺口。
+
+> 当前Q07 Windows Player编译/打包子包限定VERIFIED：初28个Player编译错误已修，聚焦AI 11/11PASS；q07-package-build-4 Succeeded/errors0，正式1343文件/46594829字节逐hash及SPARK一致。实际Player内源选择/发布/战斗/关闭待办，GameConfig空根、Scene保持，四个Odin生成文件保留。
+
+
+
+> 当前Q07 `NTSD28-Q07-STAGED-FORMAL-CALLER-PLAY-001` 限定VERIFIED：真实App/Menu Play正式暂存内容指纹与三owner一致，World4、旧/新owner零残留、borrowers0、两帧Stopped；GameConfig空根、Scene/旧资源不动。下一Player打包/根映射和实际Player验证，再决定生产切换。
+
+> 当前Q07 `STAGED-FULL-PUBLICATION-001` FOCUSED_TEST_PASS：正式暂存330对象完整Unity发布、906有效图片、三owner同key/所有声明UI图及显式生产清理零残留，job1711ab45 1/1PASS；EditMode夹具OnDestroy事件未触发的三次RED保留，真实Play退出仍待。Player原始资源打包/根映射缺口另见BUILD-PORTABILITY-AUDIT；GameConfig空根、Scene未变、Q07未交付。
+
+> Q07下一子包`NTSD28-Q07-STAGED-FULL-PUBLICATION-001` PLANNED：正式项目本地330对象/906有效图片的完整Unity发布及资源回收定向Editor测试；Task/Change已建，未改生产/Scene/GameConfig。构建携带路径仍未证，生产切换不得提前。
+
+> 当前Q07 `STAGED-CANDIDATE-IDENTITY-001` FOCUSED_TEST_PASS：Unity真实候选正式/暂存两根330对象/906有效图像及全部内容/视觉指纹一致，EditMode job f0b2e9a7 1/1PASS；初次raw1010误作effective906的RED已记录。1343资源字节导入后仍逐hash一致，Scene SHA保持，Ledger640PASS；生产root未切，Q07发布/加载/Play未验。详READINESS.md/Task/Record。
+
 > Q07下一精确子包`NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001` PLANNED：仅新增一个Editor测试，从项目本地root和正式root构建生产候选，比较330对象/1010图像及内容身份；Task/Change已建，GameConfig/Scene/旧资源保持。
 
 > 当前BATCH-04/Q07 `NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001`仅资源暂存VERIFIED：330对象DAT、1010引用PNG及catalog/index/fusion三文件共1343/46,594,829字节逐hash一致；GameConfig未切换，Unity候选/真实加载/Play待验，Q07未交付。见Q07 READINESS.md/Task/Record。Q06本地出口保持，旧资源/Scene/非战斗未动，禁computer-use。
@@ -3297,3 +3347,14 @@ NTSD28-Q06-NATIVE-INPUT-MISSING-STATE-ROUTING-001 IN_PROGRESS / SOURCE_WITNESS_F
 
 NTSD28-Q06-NATIVE-INPUT-ACTION-COST-FRAME-READERS-001 IN_PROGRESS / SOURCE_WITNESS_FIRST。准确Record已建立，生产未改；三BCAW符号及单Source/Editor测试。
 > 当前BATCH-04/Q07 `NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001`仅资源暂存VERIFIED：正式对象DAT330、对象引用PNG1010和catalog/index/fusion三文件共1343/46,594,829逐hash一致；GameConfig未切换，Unity candidate/实际加载/Play待验，Q07未交付。见Q07 READINESS.md/Task/Record。Q06本地出口保持，Q08～Q12/R及例外不变；旧资源/Scene/非战斗未动，禁computer-use。
+> 当前Q07 `NTSD28-Q07-WINDOWS-PLAYER-RUNTIME-001`限定VERIFIED_PLAYER_CONTENT_BOOTSTRAP_ONLY：真实Windows Mono构建0错、正式侧载1343、独立Player exit0/PASS，正式源与三owner/World4/关闭零残留通过；13条旧音频目录缺失留Q10。GameConfig生产空根、Q07切换及自然技能/表现仍待，Q06 DELIVERED_SCOPED保持。见WINDOWS-PLAYER-RUNTIME-ACCEPTANCE.md。
+> 当前Q07 `NTSD28-Q07-PRODUCTION-CONTENT-ROOT-SWITCH-001` IN_PROGRESS：修改前Task/Change已建，准确GameConfig单字段+既有Development Player测试脚本序列化根模式；目标默认正式DAT/角色图片，不改Scene、旧资源或非战斗。
+> 当前Q07 `NTSD28-Q07-SERIALIZED-MENU-CALLER-001` IN_PROGRESS：共享正式GameConfig的菜单预热caller聚焦验证；准确Task/Change已建，仅既有Editor Play探针单脚本，生产/Scene/旧资源不改。
+> 当前Q07 `NTSD28-Q07-NARUTO-FORWARD-ATTACK-PHYSICAL-001` IN_PROGRESS：正式Naruto防前攻自然输入到OID33定向Play，修改前精确Task/Change已建，仅既有Editor物理键探针测试脚本；不改生产/Scene/资源，旧引用审计与Q06出口保持。
+> 当前Q07旧资源动态审计：正式根下`GameDataManager`初始化仍读取旧`data.txt`，旧背景0条、正式data.txt背景24条；正式对象发布保留旧背景表，Battle准备的`RuntimeStageCount`静态路径为0，Q08结果阶段条件可能受影响。仅静态调用链/文件证据，正式playable与Unity同条件运行时待验；见`artifacts/diagnostics/NTSD28-Q07-OLD-ASSET-REFERENCE-REFRESH-001/DYNAMIC-REACHABILITY.md`。旧data.txt/DAT/图片删除授权0，Q06本地出口不变，Q07/总目标ACTIVE。
+> 当前Q07 `NTSD28-Q07-NARUTO-CLONE-CENTRAL-PIXEL-WITNESS-001` 限定VERIFIED：前两次探针FAIL保留，fresh q07-clone-pixel-3与同轮物理键q07-naruto-clone-5真实Play PASS；tick12 OID33 pic1中央命令、生产相机全图2583/投影区1087非清屏像素。Editor退出、Battle Scene dirtyfalse/root14、双Scene SHA保持，Ledger651/13 PASS。仅单例中央命令到相机像素，EXE像素/排序/阴影/整技能和Q07出口仍待；详同ID ACCEPTANCE.md，禁computer-use。
+> 当前Q07 `NTSD28-Q07-LEGACY-DATA-LAZY-LOAD-001` 限定VERIFIED：移除GameDataManager初始化旧`data.txt`隐式读取，空根显式加载保留；聚焦EditMode两次1/1、正式完整发布1/1、序列化根menu Play q07-lazy-menu-1 PASS（World4/三owner/关闭零残留）。最终空覆盖删除后重新编译/聚焦通过，完整发布/Play为该无行为改动前的等效路径；详ACCEPTANCE。Q08正式背景/结果计数待权威见证，旧资源删授权0，Q06本地出口保持。
+> 当前Q08 `NTSD28-Q08-F4-PLAYER-CLOSE-OWNER-001 / IN_PROGRESS`：正式F4整应用关闭效果的精确Task/Change已建立，限定SimulationTickDriver、AppManager及定向Player探针/构建入口；脚本实施与Player验证待。Editor不得被F4退出，录像save-pending保护因Unity尚无对应owner不冒称已闭。Q07首Scene决定、Q08结果计数独立待办，Q06本地出口保持。
+> 当前Q07 `NTSD28-Q07-SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001 / FOCUSED_TEST_PASS_ISOLATED`：同SHA隔离Unity副本的正式PNG EditMode 1/1及预览类11/11 PASS，含旧BMP网格；XML已归档。原Editor外部Scene重载弹窗及可见预览报告/图片仍待，不能宣称预览或Q07整体完成。详同包PROGRESS；Q06限定出口保持，禁computer-use。
+> Q08 `NTSD28-Q08-STORY-SELECTOR-RED-001 / FOCUSED_TEST_PASS`纠正：真实菜单未配置stage campaign，Unity MatchConfig没有正式story mission/child成对字段；此前4/1把StageProgressionValid当正式选关的测试预期不成立，原XML保留且已撤回缺陷解释。校正后隔离Unity 5/5PASS，Scene哈希不变；正式story selector仍未接，直接战斗的group/timing首差可继续。详STORY-SELECTOR-CALLER-CORRECTION。Q08未闭。
+> Q08 `NTSD28-Q08-NATIVE-RESULT-CARRIER-001 / PLANNED`：正式组/预战斗计时独立载体的准确Task/Change已在脚本前建立，含Results状态、tick producer、roster/aggregate快照、restore预检、checksum/parity和聚焦测试。直接战斗group/timing RED已存；旧UI/mode4 reserve与>=144继续输入为父任务独立依赖，正式story selector不可由mode1/stage有效推断。生产尚未改，Q08未闭。

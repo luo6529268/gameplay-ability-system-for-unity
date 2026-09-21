@@ -1,0 +1,15 @@
+{
+    "status": "PASS",
+    "message": "OID33 pic1 central command and projected non-clear camera pixels observed.",
+    "evidenceScope": "OID33 central command and projected camera region, not EXE pixel parity",
+    "visibleTick": 12,
+    "planSimulationTick": 12,
+    "commandStableId": 103,
+    "commandRuntimeSlot": 51,
+    "commandVisualDataId": 33,
+    "commandEffectivePic": 1,
+    "fullNonClearPixels": 2583,
+    "cloneBoundsNonClearPixels": 1087,
+    "cloneBoundsAreaPixels": 3192,
+    "imagePath": "artifacts/diagnostics/NTSD28-Q07-NARUTO-CLONE-CENTRAL-PIXEL-WITNESS-001/q07-clone-pixel-3.png"
+}

@@ -35,7 +35,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleWorldRosterResultsSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 2;
         public const int RosterSlotCount = 8;
         public const int ResultSideCount = 2;
         public const int ResultColumnCount = 11;
@@ -93,7 +93,20 @@ namespace NTSD.Simulation
         public int ResultsPendingWinner { get; private set; }
         public int ResultsTeamCount { get; private set; }
         public int ResultsPendingHostAction { get; private set; }
+        public ulong NativeLivingGroupMask { get; private set; }
+        public int NativeResultTimer { get; private set; }
+        public int NativeResultOutputTimer { get; private set; }
+        public int NativeResultPhase { get; private set; }
+        public int NativeTransitionState { get; private set; }
         public bool ReserveOwnerValid { get; private set; }
+
+        public bool HasCanonicalNativeResultFlow =>
+            BattleResultsRuntimeState.IsCanonicalNativeResultFlow(
+                NativeLivingGroupMask,
+                NativeResultTimer,
+                NativeResultOutputTimer,
+                NativeResultPhase,
+                NativeTransitionState);
 
         public BattleRosterSlotSnapshot GetRosterSlot(int index)
         {
@@ -212,7 +225,8 @@ namespace NTSD.Simulation
             LockstepSessionIdentity identity,
             int tick)
         {
-            if (!HasCanonicalFixedBuffers(runtime))
+            if (!HasCanonicalFixedBuffers(runtime) ||
+                !runtime.Results.HasCanonicalNativeResultFlow())
             {
                 return false;
             }
@@ -265,6 +279,11 @@ namespace NTSD.Simulation
             ResultsPendingWinner = results.PendingWinner;
             ResultsTeamCount = results.TeamCount;
             ResultsPendingHostAction = results.PendingHostAction;
+            NativeLivingGroupMask = results.NativeLivingGroupMask;
+            NativeResultTimer = results.NativeResultTimer;
+            NativeResultOutputTimer = results.NativeResultOutputTimer;
+            NativeResultPhase = results.NativeResultPhase;
+            NativeTransitionState = results.NativeTransitionState;
             ReserveOwnerValid = runtime.ReserveOwnerValid;
             return true;
         }
@@ -272,6 +291,7 @@ namespace NTSD.Simulation
         internal bool TryRestoreTo(BattleRuntimeState runtime)
         {
             if (SchemaVersion != CurrentSchemaVersion ||
+                !HasCanonicalNativeResultFlow ||
                 !HasCanonicalFixedBuffers(runtime))
             {
                 return false;
@@ -310,6 +330,11 @@ namespace NTSD.Simulation
             results.PendingWinner = ResultsPendingWinner;
             results.TeamCount = ResultsTeamCount;
             results.PendingHostAction = ResultsPendingHostAction;
+            results.NativeLivingGroupMask = NativeLivingGroupMask;
+            results.NativeResultTimer = NativeResultTimer;
+            results.NativeResultOutputTimer = NativeResultOutputTimer;
+            results.NativeResultPhase = NativeResultPhase;
+            results.NativeTransitionState = NativeTransitionState;
 
             CopyArray(resultTeamIds, results.TeamIds);
             CopyArray(resultMultiplier, results.ResultMultiplier);

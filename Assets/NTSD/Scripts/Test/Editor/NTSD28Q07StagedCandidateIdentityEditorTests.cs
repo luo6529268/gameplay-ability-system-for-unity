@@ -27,7 +27,8 @@ namespace NTSD.Test.Editor
 
             Assert.That(formal.Catalog.Entries.Count, Is.EqualTo(330));
             Assert.That(staged.Catalog.Entries.Count, Is.EqualTo(330));
-            Assert.That(formal.Images.Count, Is.EqualTo(1010));
+            // Q01 indexed 1,010 raw PNG references; the current parsed candidate selects 906.
+            Assert.That(formal.Images.Count, Is.EqualTo(906));
             Assert.That(staged.Images.Count, Is.EqualTo(formal.Images.Count));
             Assert.That(staged.Catalog.DefinitionFingerprint, Is.EqualTo(formal.Catalog.DefinitionFingerprint));
             Assert.That(staged.Catalog.FusionInput.InputFingerprint, Is.EqualTo(formal.Catalog.FusionInput.InputFingerprint));

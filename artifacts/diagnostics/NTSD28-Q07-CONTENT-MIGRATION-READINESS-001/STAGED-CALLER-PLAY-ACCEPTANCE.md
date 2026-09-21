@@ -1,0 +1,11 @@
+# Q07 staged formal content — real Play caller acceptance (2026-09-22)
+
+Scope: `NTSD28-Q07-STAGED-FORMAL-CALLER-PLAY-001`. The temporary GameConfig clone selected `Assets/NTSD/Content/LoganRuntime`; the serialized production GameConfig retained its empty content root. Actual Unity Editor Play used the existing battle scene, production content loader, App initialization, menu prewarm/rebuild, World, ordered shutdown and scene unload. This is an Editor Play result, not a Player build or natural-skill parity claim.
+
+The first `q07-formal-app-1.json` was RED at the old probe's 1,800-render-frame prewarm deadline, before the full source finished loading. The Q07-only wait was changed to a bounded 240-second real-time deadline; Q02 retains its former wait. The transient request-file sharing violation was confined to the Editor poll and is now retried on the next update.
+
+`q07-formal-app-2.json` PASS: formal semantic fingerprint `FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147`, representative formal IDs 0/50/52, coherent manager/data/UI publication keys, Running World with 4 objects, 29,400 tracked publication resources, ordered shutdown `RuntimeMapCleared`, zero pool borrowers, zero tracked survivors after owner unload and Stopped after two frames.
+
+Fresh second Play `q07-formal-menu-2.json` PASS: actual menu prewarm completed, previous owner destroyed with **zero** tracked survivors, candidate cache hit 1 on owner rebuild, App battle reached 4 World objects with the same formal fingerprint and three-owner key agreement, new owner unloaded with zero tracked survivors, zero pool borrowers and Stopped after two frames. The intermediate `q07-formal-menu-1.json` passed the new owner path but did not count previous-owner resources; the second run closes that test coverage gap.
+
+Fresh script compilation completed with no `error CS` or `Compilation failed` in the recent Editor log; `git diff --check` on the two test scripts passed. Protected `NTSD_Battle.unity` SHA-256 stayed `BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6`. Neither Scene nor GameConfig asset is in this task's Git diff. Q07 still needs Player-carried raw content/root mapping, production configuration, formal-content natural battle/visual returns, reference retirement inventory and final exit. The old Config/Sprite assets remain untouched.

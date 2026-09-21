@@ -18,6 +18,40 @@ namespace NTSD.Animation.Rendering.Editor
             "Assets/NTSD/Config/GameConfig/GameConfig.asset";
 
         [Test]
+        [Category("NTSD28_Q07")]
+        public void FormalSasukePng_ImportedSizeAndFirstCellMatchRawData()
+        {
+            const string path =
+                "Assets/NTSD/Content/LoganRuntime/vfs/c/sasu/sasu.png";
+            Texture2D imported = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+            Assert.That(imported, Is.Not.Null);
+            Assert.That(imported.width, Is.EqualTo(799));
+            Assert.That(imported.height, Is.EqualTo(960));
+
+            BMPLoader.BmpData raw = BMPLoader.LoadBmpData(path);
+            Assert.That(raw, Is.Not.Null);
+            Assert.That(raw.IsPng, Is.True);
+            Assert.That(raw.Width, Is.EqualTo(799));
+            Assert.That(raw.Height, Is.EqualTo(960));
+            Assert.That(BattleCentralEditorPreview.ResolveTopLeftSourceRectForEditor(
+                imported, 79, 79), Is.EqualTo(new RectInt(0, 881, 79, 79)));
+
+            int visible = 0;
+            int transparent = 0;
+            for (int y = 881; y < 960; y++)
+            {
+                for (int x = 0; x < 79; x++)
+                {
+                    float alpha = raw.Pixels[y * raw.Width + x].a;
+                    if (alpha > 0.5f) visible++;
+                    else transparent++;
+                }
+            }
+            Assert.That(visible, Is.GreaterThan(1000));
+            Assert.That(transparent, Is.GreaterThan(1000));
+        }
+
+        [Test]
         public void HealthBatch_UsesThreeQuadsAndClampedWidths()
         {
             var backend = new BattleHealthBarBatchBackend();
@@ -597,7 +631,7 @@ namespace NTSD.Animation.Rendering.Editor
         private const string MenuPath =
             "NTSD/Battle Rendering/Validate Edit Mode Central Preview";
         private const string SourceTexturePath =
-            "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
+            "Assets/NTSD/Content/LoganRuntime/vfs/c/sasu/sasu.png";
         private const string GameConfigPath =
             "Assets/NTSD/Config/GameConfig/GameConfig.asset";
         private const string CommonShadowPrefabPath =

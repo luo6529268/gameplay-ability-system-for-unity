@@ -1,0 +1,15 @@
+# Q08 direct battle versus configured stage — focused Unity RED
+
+Correction (2026-09-22): `STORY-SELECTOR-CALLER-CORRECTION.md` retracts this test's authority interpretation. A configured Unity stage campaign does not prove the formal paired story mission/child selection. The 4PASS/1FAIL XML is retained as historical test output, not a valid story-selector production defect. The corrected oracle compiled and passed 5/5.
+
+Status: `ISOLATED_EDITMODE_4_PASS_1_TARGET_RED / PRODUCTION_UNCHANGED` (2026-09-22).
+
+The original Q08 Editor test class was extended by `NTSD28-Q08-STORY-SELECTOR-RED-001` with two complete-`RunReleaseTick` cases. The isolated validation copy changes only the class/category name so it can coexist with prior diagnostic fixtures; copied source SHA-256 `FCF492D9F468661C3C0C228C47F92CF61FBB1F8E1C56B186B6289277BE7E8F66`, original source SHA-256 `EA576808228EBA42C5F0035A0AA8EF9D1A34BE7B0CEF02F1BF772CEEF5B35E00`.
+
+Unity 2022.3.62f3 EditMode in the independent `ntsd-q07-isolated-validation-20260922` Library compiled and ran the five-method class. [XML](UNITY-STORY-SELECTOR-RED.xml) reports 5 total, 4 passed, 1 failed. The direct-battle mode-1 control passed: no selected stage (`StageProgressionValid=false`), two groups on tick 1, second group HP0/one life before tick 2, current `BattleEndPhase=1`. The selected-stage case configured a parsed stage 12 with one phase, asserted `StageProgressionValid=true`, started wave zero, established two groups on tick 1, then made the second group ineligible before tick 2. It failed exactly at the ordinary-VS guard assertion: expected phase 0, observed phase 1. The three pre-existing revive-life tests passed. [Unity log](UNITY-STORY-SELECTOR-RED.log) contains no `error CS...` or compilation-failed marker.
+
+This is a first difference for **Unity's configured-stage fixture**, not proof that `StageProgressionValid` is identical to the playable host's paired `story_mission_id`/`story_child_stage_id` selection. The formal host skips `BattleFlow28` for the paired story selector (`game_session.cpp` around lines 2722–2745). The next production contract must either establish exact Unity selector equivalence through the real bootstrap or introduce an explicit deterministic session flag with reset/snapshot/checksum ownership. It must leave default direct mode-1 battles in ordinary result flow. Existing two-side result UI and mode-4 reserve remain separate owners.
+
+Original Battle Scene SHA-256 after this test: `9E7B8A91ADD396D8A3674915BB5AC9A03B8D1A2EC817BA3B12F135D03EBA0AC0`, matching its pre-test value. No original Unity Editor, Scene, resource, formal source, GAS or nonbattle script was modified by the test run. No natural story-child Play or formal-EXE visible parity is claimed.
+
+Project `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity` exited 0 (`PASSED`, 658 Records / 24 governed code files in the current diff). Scoped `git diff --check` exited 0. This validates change accounting, not the intentionally RED battle behavior.

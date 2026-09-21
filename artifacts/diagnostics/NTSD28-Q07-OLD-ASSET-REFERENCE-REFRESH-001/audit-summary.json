@@ -1,0 +1,43 @@
+{
+  "inputRows": 695,
+  "classes": {
+    "OLD_DAT": 138,
+    "OLD_INDEXED_IMAGE": 383,
+    "OTHER_IMAGE_OWNER_REVIEW": 174
+  },
+  "filesScannedForStaticReferences": 2751,
+  "missing": [
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_01.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_02.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_03.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_04.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_05.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_06.png",
+    "Assets/NTSD/Sprite/UIPanels/FootEnemy.png",
+    "Assets/NTSD/Sprite/UIPanels/FootFirend.png",
+    "Assets/NTSD/Sprite/UIPanels/FootSelf.png"
+  ],
+  "hashChangedFromQ01": [],
+  "guidChangedFromQ01": [
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_01.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_02.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_03.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_04.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_05.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_06.png",
+    "Assets/NTSD/Sprite/UIPanels/FootEnemy.png",
+    "Assets/NTSD/Sprite/UIPanels/FootFirend.png",
+    "Assets/NTSD/Sprite/UIPanels/FootSelf.png"
+  ],
+  "withSerializedReferences": 58,
+  "withExactScriptLiteralReferences": 6,
+  "deleteAuthorizedCount": 0,
+  "dispositions": {
+    "PRESENT_SAME_GUID": 686,
+    "RELOCATED_SAME_GUID": 6,
+    "MISSING_NO_CURRENT_GUID_OWNER": 3
+  },
+  "withCurrentOldPathSerializedReferences": 52,
+  "relocatedSameHashCount": 6,
+  "guidCollisionCount": 0
+}

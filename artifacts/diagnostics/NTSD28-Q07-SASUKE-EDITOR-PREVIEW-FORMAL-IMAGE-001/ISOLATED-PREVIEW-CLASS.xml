@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="11" result="Passed" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.4498394">
+  <test-suite type="TestSuite" id="8140" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6055" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.449839" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15239" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6047" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.402070" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="78028" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15240" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6047" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.371114" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15250" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.237421" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="15251" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.231257" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="15252" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.225112" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="14813" name="BattleCentralEditorPreviewEditorTests" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.210315" total="11" passed="11" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="14820" name="CommonShadowAsset_ProvidesTheProductionDescriptorBinding" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.CommonShadowAsset_ProvidesTheProductionDescriptorBinding" methodname="CommonShadowAsset_ProvidesTheProductionDescriptorBinding" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="2021941748" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.015550" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14819" name="FootMarkerAnimationAssets_AreOrderedPointFilteredSpritesWithExpectedDimensions" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.FootMarkerAnimationAssets_AreOrderedPointFilteredSpritesWithExpectedDimensions" methodname="FootMarkerAnimationAssets_AreOrderedPointFilteredSpritesWithExpectedDimensions" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="1653541911" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.015987" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14814" name="FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" methodname="FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="603456941" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.014078" asserts="0">
+                  <properties>
+                    <property name="Category" value="NTSD28_Q07" />
+                  </properties>
+                </test-case>
+                <test-case id="14816" name="HealthBatch_OneThousandBarsRemainOneMeshAndOneSubMesh" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.HealthBatch_OneThousandBarsRemainOneMeshAndOneSubMesh" methodname="HealthBatch_OneThousandBarsRemainOneMeshAndOneSubMesh" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="1113091954" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.003895" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14815" name="HealthBatch_UsesThreeQuadsAndClampedWidths" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.HealthBatch_UsesThreeQuadsAndClampedWidths" methodname="HealthBatch_UsesThreeQuadsAndClampedWidths" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="693259318" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.000848" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14823" name="PreviewCameraGate_IsEditModeOnlyAndWorldCameraScoped" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.PreviewCameraGate_IsEditModeOnlyAndWorldCameraScoped" methodname="PreviewCameraGate_IsEditModeOnlyAndWorldCameraScoped" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="281259228" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.055355" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14818" name="PreviewController_BuildsCharacterAndHealthFromSameSpriteTop" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.PreviewController_BuildsCharacterAndHealthFromSameSpriteTop" methodname="PreviewController_BuildsCharacterAndHealthFromSameSpriteTop" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="1670070133" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.025367" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14821" name="PreviewController_BuildsCommonShadowFootMarkerActorAndHealthLayers" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.PreviewController_BuildsCommonShadowFootMarkerActorAndHealthLayers" methodname="PreviewController_BuildsCommonShadowFootMarkerActorAndHealthLayers" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="2060829100" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:18Z" duration="0.016551" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14824" name="PreviewController_UsesSceneViewAuthoringEditor" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.PreviewController_UsesSceneViewAuthoringEditor" methodname="PreviewController_UsesSceneViewAuthoringEditor" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="1620041534" result="Passed" start-time="2026-09-21 22:08:18Z" end-time="2026-09-21 22:08:19Z" duration="0.022936" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14822" name="PreviewGroundVisuals_OneThousandActorsRemainTwoCentralDraws" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.PreviewGroundVisuals_OneThousandActorsRemainTwoCentralDraws" methodname="PreviewGroundVisuals_OneThousandActorsRemainTwoCentralDraws" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="108110871" result="Passed" start-time="2026-09-21 22:08:19Z" end-time="2026-09-21 22:08:19Z" duration="0.023110" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14817" name="TopLeftSourceRect_SkipsOnePixelGridSeparator" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.TopLeftSourceRect_SkipsOnePixelGridSeparator" methodname="TopLeftSourceRect_SkipsOnePixelGridSeparator" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="2128884414" result="Passed" start-time="2026-09-21 22:08:19Z" end-time="2026-09-21 22:08:19Z" duration="0.000550" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

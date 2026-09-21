@@ -465,6 +465,16 @@ namespace NTSD.Simulation
         private sealed class AiDecisionShadowSelfCheckException : Exception
         {
         }
+#else
+        [System.Diagnostics.Conditional("UNITY_INCLUDE_TESTS")]
+        private void ThrowShadowExceptionForSelfCheck(AiDecisionShadowExceptionStage stage)
+        {
+        }
+
+        [System.Diagnostics.Conditional("UNITY_INCLUDE_TESTS")]
+        private void ThrowUnifiedSnapshotExceptionForSelfCheck(AiUnifiedSnapshotExceptionStage stage)
+        {
+        }
 #endif
 
         internal void EvaluateIndexedShadow(

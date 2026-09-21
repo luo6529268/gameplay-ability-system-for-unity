@@ -1,0 +1,24 @@
+{
+    "runId": "q07-formal-app-1",
+    "mode": "app",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: The direct bootstrap must prepare native resources without creating actors for App/menu checks.\r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:265 \r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor+Request request) [0x002be] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:106 ",
+    "sourceKey": "",
+    "shutdownStage": "",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "Assets/NTSD/Content/LoganRuntime",
+    "failureLifecycle": "Preparing",
+    "sourceIds": [
+        0,
+        50,
+        52
+    ],
+    "worldObjects": 0,
+    "trackedResources": 0,
+    "resourceSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 0,
+    "menuReady": false,
+    "samePublishedKeys": false,
+    "stayedStoppedAfterTwoFrames": false
+}

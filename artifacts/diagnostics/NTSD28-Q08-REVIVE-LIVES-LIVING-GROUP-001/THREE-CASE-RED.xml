@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Failed(Child)" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.5457523">
+  <test-suite type="TestSuite" id="8144" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6058" result="Failed" site="Child" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.545752" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15247" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6050" result="Failed" site="Child" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.419822" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="71628" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15248" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6050" result="Failed" site="Child" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.310938" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15256" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5488" result="Failed" site="Child" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.205843" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11024" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.120851" total="3" passed="1" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11026" name="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" methodname="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="665848362" result="Failed" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.103063" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native pre-combat BattleFlow28 keeps the revive2 group alive.
+  Expected: 0
+  But was:  1
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail () [0x0007d] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:49
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11025" name="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" methodname="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="479375167" result="Passed" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.002666" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11027" name="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" methodname="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1559316564" result="Failed" start-time="2026-09-21 22:22:51Z" end-time="2026-09-21 22:22:51Z" duration="0.001361" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Formal battle_flow_tests: HP0 with revive_lives_30c=2 remains living, timer=0.
+  Expected: 0
+  But was:  1
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive () [0x0008d] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:70
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

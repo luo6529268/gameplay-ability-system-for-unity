@@ -107,6 +107,12 @@ namespace NTSD.Test.Editor
                     true,
                     new NTSD28NativeFunctionKeyModifiers(true),
                     NTSD28NativeFunctionKeyRouteContext.Allowed);
+            NTSD28NativeFunctionKeyRouteResult repeatedF4 =
+                NTSD28NativeFunctionKeyRouter.Route(
+                    NTSD28NativeFunctionKey.F4,
+                    true,
+                    NTSD28NativeFunctionKeyModifiers.None,
+                    NTSD28NativeFunctionKeyRouteContext.Allowed);
 
             Assert.That(
                 repeatedF1.Disposition,
@@ -123,6 +129,12 @@ namespace NTSD.Test.Editor
             Assert.That(
                 repeatedControlF9.MaintenanceCommand,
                 Is.EqualTo(NTSD28NativeFunctionKeyMaintenanceCommand.None));
+            Assert.That(
+                repeatedF4.Disposition,
+                Is.EqualTo(NTSD28NativeFunctionKeyDisposition.RejectedAutoRepeat));
+            Assert.That(
+                repeatedF4.HostCommand,
+                Is.EqualTo(NTSD28NativeFunctionKeyHostCommand.None));
         }
 
         [Test]
@@ -208,6 +220,12 @@ namespace NTSD.Test.Editor
                     false,
                     NTSD28NativeFunctionKeyModifiers.None,
                     new NTSD28NativeFunctionKeyRouteContext(false, false, true, false));
+            NTSD28NativeFunctionKeyRouteResult outsideBattleF4 =
+                NTSD28NativeFunctionKeyRouter.Route(
+                    NTSD28NativeFunctionKey.F4,
+                    false,
+                    NTSD28NativeFunctionKeyModifiers.None,
+                    new NTSD28NativeFunctionKeyRouteContext(false, false, true, false));
             NTSD28NativeFunctionKeyRouteResult wrongMainState =
                 NTSD28NativeFunctionKeyRouter.Route(
                     NTSD28NativeFunctionKey.F8,
@@ -242,6 +260,12 @@ namespace NTSD.Test.Editor
             Assert.That(
                 outsideBattle.RejectReason,
                 Is.EqualTo(NTSD28NativeFunctionKeyRejectReason.NotInBattle));
+            Assert.That(
+                outsideBattleF4.RejectReason,
+                Is.EqualTo(NTSD28NativeFunctionKeyRejectReason.NotInBattle));
+            Assert.That(
+                outsideBattleF4.HostCommand,
+                Is.EqualTo(NTSD28NativeFunctionKeyHostCommand.None));
             Assert.That(
                 wrongMainState.RejectReason,
                 Is.EqualTo(NTSD28NativeFunctionKeyRejectReason.MainStateDisallows));

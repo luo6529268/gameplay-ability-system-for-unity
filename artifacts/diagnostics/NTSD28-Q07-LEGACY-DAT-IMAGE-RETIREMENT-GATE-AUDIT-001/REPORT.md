@@ -1,0 +1,21 @@
+# Q07 old DAT and indexed-image retirement gate (2026-09-22)
+
+Decision: `VERIFIED_STATIC_RETIREMENT_GATE_ONLY / DELETE_AUTHORIZATION_ZERO`. This read-only audit extends the existing Q07 695-path serialized reference graph with direct old-index membership and current loader ownership. The 521-row [retirement-gate.csv](retirement-gate.csv) has SHA-256 `E916637D5E8BBF3DCC078E2EF57E9B19243134CC701642D40DC5333F824D624A`. It is a disposition worksheet, not a deletion list.
+
+The current serialized `GameConfig.asset` selects `Assets/NTSD/Content/LoganRuntime`. `LoadingPrewarmController.PrewarmOnceCoreAsync` uses `PrewarmConfiguredLoganContentAsync` for a nonempty root; `BattleTestBootstrap.LoadCharacterDataAsync` has the same formal-root branch. Existing Q07 Player/Menu certificates prove formal candidate publication in those tested paths. `GameDataManager` no longer reads the old index implicitly at singleton creation. These facts support **default formal object publication**, not global old-file unreachability.
+
+The explicit empty-root branch still calls `CharacterAnimtorManager.ParseCharacterFrameConfigs`, which reads old `Assets/NTSD/Config/data.txt`, resolves its DAT entries and then `LoadCharacterSpritesAsync` reads their old bitmap paths. The manager's manual Inspector `RefreshAllData` button still calls those legacy methods without a configured-root guard. `CharacterFramePreviewWindow` explicitly opens the old index. Existing self-check, trace/editor fixtures and named tests also read old files. Deleting old content now would break retained behavior or authoring evidence even though default formal battle startup succeeds.
+
+Current source-graph reconciliation:
+
+| Category | Paths | Direct old `data.txt` entries | Other observed ownership | Disposition |
+|---|---:|---:|---|---|
+| Old DAT | 138 | 137 | 4 have exact test/editor script literals; one unindexed path remains unproved | Keep pending legacy/authoring/test migration and exact approval |
+| Old indexed images | 383 | Indirect through old DAT definitions | 2 have exact editor/test literals; one of them is serialized on the inactive Battle Scene preview | Keep pending legacy/preview/test rebind and exact approval |
+| Other images in prior graph | 174 | Outside this indexed retirement worksheet | 51 current-old-path serialized references cover HUD, Menu UI, maps and common shadow | Preserve/classify under their own owners; not bulk-delete candidates |
+
+The one old DAT absent from the direct index is `Assets/NTSD/Config/effect/weapon4.dat`. A narrow literal search of `Assets/NTSD/Config` and self-written scripts found no reference to this exact path; the index does contain a *different* `Assets/NTSD/Config/chars/weapon4.dat` at OID 120. This is an **unresolved potential orphan**, not proof of no dynamic reader or permission to remove it. Every CSV row has `deleteAuthorized=false`.
+
+The only serialized old indexed image is `Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp` in inactive `NTSD_Battle.unity` `BattleCentralEditorPreview`; its Editor preview and two editor tests also have exact literals. Formal `sasu.png` is already present in LoganRuntime, but a Scene/sourceRect/importer/test rebind needs its own scope and visual evidence. One other old indexed image, `naruto_0.bmp`, is an exact grid-separator Editor test literal. The 4 exact DAT literals are `Character/naruto.dat`, `chars/weapon3.dat`, `chars/weapon9.dat`, and `FrameConfig/weapon8.dat`; the remaining 134 lack literal/serialized references in the prior graph but are not thereby safe to delete.
+
+Next gate: preserve the current formal default and old files; separately migrate or intentionally retain empty-root loading, manual Editor refresh/preview and named tests. Reconcile the unindexed DAT with all dynamic loaders. Then refresh every target hash/GUID/owner and prepare a concrete file-by-file deletion request under the repository's explicit delete-approval rule. Do not sweep `Config`, `Sprite`, HUD/Menu/map/common-shadow assets or `.meta` files by directory name. This audit did not run Unity because it changed no runtime/asset code; it reuses the already accepted formal publication and Play evidence without promoting it to full Q07 behavior or visual parity. No source, Scene, GameConfig, importer, old asset or nonbattle behavior was changed; Q07 remains IN_PROGRESS.

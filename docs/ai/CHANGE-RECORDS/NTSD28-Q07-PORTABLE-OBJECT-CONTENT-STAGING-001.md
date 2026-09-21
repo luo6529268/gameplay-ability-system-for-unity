@@ -1,3 +1,12 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001
+status: VERIFIED
+change-kind: GOVERNANCE_ONLY
+code-path: NONE
+authority: D-023 formal NTSD 2.8-Logan runtime resources; Q01 indexed object and image manifest
+evidence: READINESS.md; 1343 source and target SHA-256 matches, 0 missing or extra files, protected Scene unchanged
+-->
+
 # NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001
 
 Status: `VERIFIED` for exact resource-byte staging only (2026-09-22; no script change). Production publication and Q07 content availability remain pending.
@@ -5,6 +14,8 @@ Status: `VERIFIED` for exact resource-byte staging only (2026-09-22; no script c
 Authority/need: D-023 formal DAT and character-related image content, Q01 manifest, Q02 portable source contract, Q06 scoped exit. Existing Unity `Assets/NTSD/Config` and `Assets/NTSD/Sprite` remain the production content because GameConfig battle-content root is empty.
 
 Declared paths: only the 1,343 `targetRelative` files listed in `artifacts/diagnostics/NTSD28-Q07-CONTENT-MIGRATION-READINESS-001/copy-manifest.csv`, under `Assets/NTSD/Content/LoganRuntime`, plus Unity-generated `.meta` for that new subtree if import occurs. No C# symbol or existing asset is changed in this package. New root is a portable candidate, not an approved build-packaging contract.
+
+The validator's `GOVERNANCE_ONLY`/`code-path: NONE` metadata denotes no governed **script** path; the actual resource changes are explicitly enumerated by the copy manifest. It does not mean this record was documentation-only.
 
 Expected side effects: new Unity asset import work and new tracked/untracked files; no active battle content change, no GUID rebinding, no Scene dirty, no old-file deletion. Preserve all user work and current exceptions.
 

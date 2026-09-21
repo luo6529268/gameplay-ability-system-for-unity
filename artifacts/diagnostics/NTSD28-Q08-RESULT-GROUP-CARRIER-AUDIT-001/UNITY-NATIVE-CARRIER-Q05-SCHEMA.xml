@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="6" result="Failed(Child)" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="4.2952352">
+  <test-suite type="TestSuite" id="8162" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6074" result="Failed" site="Child" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="4.295235" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15283" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6066" result="Failed" site="Child" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="4.151688" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="66264" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15284" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6066" result="Failed" site="Child" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="4.028572" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15292" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5504" result="Failed" site="Child" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="3.843049" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="10033" name="NTSD28Q05TraceIdentityEditorTests" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" testcasecount="6" result="Failed" site="Child" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:05Z" duration="3.715253" total="6" passed="2" failed="4" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="10034" name="ConstructorFailureAfterTemporaryPublicationRestoresManagers" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.ConstructorFailureAfterTemporaryPublicationRestoresManagers" methodname="ConstructorFailureAfterTemporaryPublicationRestoresManagers" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="1685012511" result="Passed" start-time="2026-09-21 23:39:01Z" end-time="2026-09-21 23:39:02Z" duration="0.352208" asserts="0">
+              <properties />
+              <output><![CDATA[<color=green>✅ GameDataManager 加载成功: 对象=137, 背景=0</color>
+]]></output>
+            </test-case>
+            <test-case id="10035" name="FormalLoganCaptureUsesActualInputsAndRestoresExistingManagerReferences" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.FormalLoganCaptureUsesActualInputsAndRestoresExistingManagerReferences" methodname="FormalLoganCaptureUsesActualInputsAndRestoresExistingManagerReferences" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="654434704" result="Failed" label="Error" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:02Z" duration="0.002730" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[System.IO.DirectoryNotFoundException : Could not find a part of the path "I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Tools\NTSD28AuthorityTrace\Scenarios\neutral-common-two-entity.json".]]></message>
+                <stack-trace><![CDATA[  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.Boolean anonymous, System.IO.FileOptions options) [0x00164] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.FileStream..ctor (System.String path, System.IO.FileMode mode, System.IO.FileAccess access, System.IO.FileShare share, System.Int32 bufferSize, System.IO.FileOptions options) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at (wrapper remoting-invoke-with-check) System.IO.FileStream..ctor(string,System.IO.FileMode,System.IO.FileAccess,System.IO.FileShare,int,System.IO.FileOptions)
+  at System.IO.StreamReader..ctor (System.String path, System.Text.Encoding encoding, System.Boolean detectEncodingFromByteOrderMarks, System.Int32 bufferSize) [0x00055] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.StreamReader..ctor (System.String path, System.Text.Encoding encoding, System.Boolean detectEncodingFromByteOrderMarks) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at (wrapper remoting-invoke-with-check) System.IO.StreamReader..ctor(string,System.Text.Encoding,bool)
+  at System.IO.File.InternalReadAllText (System.String path, System.Text.Encoding encoding) [0x00000] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at System.IO.File.ReadAllText (System.String path, System.Text.Encoding encoding) [0x00034] in <1071a2cb0cb3433aae80a793c277a048>:0 
+  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.RunScenario (System.String scenarioPath, System.String outputPath, System.String domainOutputPath, System.String inputRngOutputPath, System.String loganRuntimeRoot) [0x0006a] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28UnityRawCaptureEditor.cs:283 
+  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.RunLoganScenarioForTests (System.String runtimeRoot, System.String scenarioPath, System.String outputPath) [0x00001] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28UnityRawCaptureEditor.cs:83 
+  at NTSD.Test.NTSD28Q05TraceIdentityEditorTests.FormalLoganCaptureUsesActualInputsAndRestoresExistingManagerReferences () [0x000ee] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q05TraceIdentityEditorTests.cs:73 
+  at (wrapper managed-to-native) System.Reflection.RuntimeMethodInfo.InternalInvoke(System.Reflection.RuntimeMethodInfo,object,object[],System.Exception&)
+  at System.Reflection.RuntimeMethodInfo.Invoke (System.Object obj, System.Reflection.BindingFlags invokeAttr, System.Reflection.Binder binder, System.Object[] parameters, System.Globalization.CultureInfo culture) [0x0006a] in <1071a2cb0cb3433aae80a793c277a048>:0 ]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="10039" name="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:02Z" duration="0.070208" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="10036" name="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(-1)" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(-1)" methodname="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="1963650722" result="Failed" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:02Z" duration="0.060198" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Expected: 47
+  But was:  50
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields (System.Int32 value) [0x000d0] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q05TraceIdentityEditorTests.cs:119
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="10037" name="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(0)" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(0)" methodname="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="871309744" result="Failed" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:02Z" duration="0.002319" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Expected: 47
+  But was:  50
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields (System.Int32 value) [0x000d0] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q05TraceIdentityEditorTests.cs:119
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="10038" name="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(37)" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields(37)" methodname="RawCaptureUsesIndependent2F8AndKeepsSixMissingFields" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="1912841047" result="Failed" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:02Z" duration="0.001765" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Expected: 47
+  But was:  50
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q05TraceIdentityEditorTests.RawCaptureUsesIndependent2F8AndKeepsSixMissingFields (System.Int32 value) [0x000d0] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q05TraceIdentityEditorTests.cs:119
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-case id="10040" name="TraceIdentityUsesFrozenSemanticBytesAndCurrentJointSchemas" fullname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests.TraceIdentityUsesFrozenSemanticBytesAndCurrentJointSchemas" methodname="TraceIdentityUsesFrozenSemanticBytesAndCurrentJointSchemas" classname="NTSD.Test.NTSD28Q05TraceIdentityEditorTests" runstate="Runnable" seed="1591070308" result="Passed" start-time="2026-09-21 23:39:02Z" end-time="2026-09-21 23:39:05Z" duration="3.273702" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

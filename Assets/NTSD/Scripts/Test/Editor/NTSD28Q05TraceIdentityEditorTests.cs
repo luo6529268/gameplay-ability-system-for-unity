@@ -144,8 +144,8 @@ namespace NTSD.Test
             Assert.That(content["profile"], Is.EqualTo("logan-runtime"));
             var schemas = (IDictionary)content["schemas"];
             Assert.That(schemas["entityRuntime"], Is.EqualTo(17));
-            Assert.That(schemas["aggregate"], Is.EqualTo(25));
-            Assert.That(schemas["checksum"], Is.EqualTo(28));
+            Assert.That(schemas["aggregate"], Is.EqualTo(26));
+            Assert.That(schemas["checksum"], Is.EqualTo(29));
             Assert.That(schemas["characterShell"], Is.EqualTo(2));
             Assert.That(schemas["entityBaseShell"], Is.EqualTo(2));
         }

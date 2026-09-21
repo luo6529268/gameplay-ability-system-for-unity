@@ -1,0 +1,10 @@
+{
+    "status": "PASS",
+    "message": "Physical F4 closed the Player after ordered battle shutdown.",
+    "f4Queued": true,
+    "tickBeforeF4": 3,
+    "tickAtQuit": 3,
+    "lifecycleAtQuit": "Stopped",
+    "activePoolBorrowersAtQuit": 0,
+    "poolQuiescedAtQuit": true
+}

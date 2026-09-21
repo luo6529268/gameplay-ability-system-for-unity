@@ -8,7 +8,7 @@ namespace NTSD.Animation.Rendering.Editor
     public sealed class BattleCentralEditorPreviewEditor : UnityEditor.Editor
     {
         private const string SampleSourcePath =
-            "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp";
+            "Assets/NTSD/Content/LoganRuntime/vfs/c/sasu/sasu.png";
         private const string CommonShadowPrefabPath =
             "Assets/NTSD/Prefabs/Common/Shadow.prefab";
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.2982254">
+  <test-suite type="TestSuite" id="8140" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6055" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.298225" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15239" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6047" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.249911" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="71476" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15240" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6047" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.219481" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15250" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.072329" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="15251" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.065951" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="15252" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.059815" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="14813" name="BattleCentralEditorPreviewEditorTests" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.043745" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="14814" name="FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" fullname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" methodname="FormalSasukePng_ImportedSizeAndFirstCellMatchRawData" classname="NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests" runstate="Runnable" seed="1936920195" result="Passed" start-time="2026-09-21 22:04:00Z" end-time="2026-09-21 22:04:00Z" duration="0.027474" asserts="0">
+                  <properties>
+                    <property name="Category" value="NTSD28_Q07" />
+                  </properties>
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

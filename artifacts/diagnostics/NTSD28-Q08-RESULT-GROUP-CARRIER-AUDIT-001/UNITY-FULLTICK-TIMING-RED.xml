@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="10" result="Failed(Child)" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.7268054">
+  <test-suite type="TestSuite" id="8152" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6065" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.726805" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15263" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6057" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.567445" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="69760" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15264" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6057" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.390216" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15272" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5495" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.256622" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11032" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.140894" total="10" passed="3" failed="7" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11043" name="FullTickKeepsStartedTimerWhenOtherGroupReturns" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickKeepsStartedTimerWhenOtherGroupReturns" methodname="FullTickKeepsStartedTimerWhenOtherGroupReturns" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1388530554" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.105057" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native started timer remains monotonic after the other group returns.
+  Expected: 2
+  But was:  1
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickKeepsStartedTimerWhenOtherGroupReturns () [0x000b8] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:156
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11039" name="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" methodname="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1473644282" result="Passed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.005651" asserts="0">
+              <properties />
+            </test-case>
+            <test-suite type="ParameterizedMethod" id="11037" name="InvalidGroupDoesNotPreventSoleEligibleWinner" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="3" result="Failed" site="Child" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.008720" total="3" passed="0" failed="3" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-case id="11034" name="InvalidGroupDoesNotPreventSoleEligibleWinner(0)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(0)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1457254160" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001343" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:42
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11035" name="InvalidGroupDoesNotPreventSoleEligibleWinner(5)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(5)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="2062507213" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001101" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:42
+]]></stack-trace>
+                </failure>
+              </test-case>
+              <test-case id="11036" name="InvalidGroupDoesNotPreventSoleEligibleWinner(40)" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner(40)" methodname="InvalidGroupDoesNotPreventSoleEligibleWinner" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="722402265" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001091" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[  Native BattleFlow28 starts timer with only group 1 eligible.
+  Expected: 1
+  But was:  0
+]]></message>
+                  <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.InvalidGroupDoesNotPreventSoleEligibleWinner (System.Int32 invalidGroup) [0x00031] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:42
+]]></stack-trace>
+                </failure>
+              </test-case>
+            </test-suite>
+            <test-case id="11041" name="NativeStartedTimerContinuesWhenOtherGroupReturns" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeStartedTimerContinuesWhenOtherGroupReturns" methodname="NativeStartedTimerContinuesWhenOtherGroupReturns" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="608109206" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001450" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native BattleFlow28 keeps a started timer and latched winner after revival.
+  Expected: 2
+  But was:  1
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeStartedTimerContinuesWhenOtherGroupReturns () [0x00086] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:120
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11042" name="ResultPageDoesNotActivateBeforeNativeRecordAt101" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ResultPageDoesNotActivateBeforeNativeRecordAt101" methodname="ResultPageDoesNotActivateBeforeNativeRecordAt101" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="56621643" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001888" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native result record is created at 101; early result-page activation changes observable timing.
+  Expected: False
+  But was:  True
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ResultPageDoesNotActivateBeforeNativeRecordAt101 () [0x00061] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:136
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11033" name="ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" methodname="ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1991685863" result="Failed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001380" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native BattleFlow28 retains every distinct eligible group.
+  Expected: 3
+  But was:  2
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer () [0x0003a] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:25
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11038" name="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" methodname="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1204523198" result="Passed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001422" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11040" name="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" methodname="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1792423497" result="Passed" start-time="2026-09-21 23:00:14Z" end-time="2026-09-21 23:00:14Z" duration="0.001090" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,17 @@
+{
+    "status": "PASS",
+    "error": "",
+    "lifecycle": "Running",
+    "keyboardDeviceId": 1,
+    "startTick": 988,
+    "endTick": 993,
+    "f6Passed": true,
+    "f7Passed": true,
+    "f8F9Passed": true,
+    "f3LockPassed": true,
+    "f10NoActionPassed": true,
+    "f11F12HeldPassed": true,
+    "f11F12ReleasePassed": true,
+    "f4HandoffPassed": true,
+    "controlF10Passed": true
+}

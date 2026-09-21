@@ -1,0 +1,9 @@
+# NTSD28-Q07-MENU-SCENE-INTERACTION-AUDIT-001
+
+Status: `VERIFIED_STATIC_CALL_CHAIN_ONLY / RUNTIME_PENDING`. Parent BATCH-04/Q07. Read-only audit to distinguish the accepted menu-prewarm caller from actual `NTSD_Menu.unity` interaction. No script, Scene, asset or nonbattle edit.
+
+Authority and boundary: the current formal GameConfig root selects NTSD 2.8-Logan DAT/character images. Q07 requires proof that the existing Menu scene and its actual interaction path reach a battle using that content. The UI flow itself remains Unity-native and outside the battle-rule rewrite scope; Q08 owns unsupported game-mode behavior. Preserve the existing Scene and all user work.
+
+Evidence: `artifacts/diagnostics/NTSD28-Q07-MENU-SCENE-INTERACTION-AUDIT-001/AUDIT.md` records the current scene GUID binding, caller chain and the missing runtime proof. Prior `NTSD28-Q07-SERIALIZED-MENU-CALLER-001` validates prewarm from the serialized asset root but invokes the battle initializer on the active probe Scene, so it does not close this task's actual Menu interaction question.
+
+Runtime exit for a future exact test-only package: open the existing Menu scene via an Editor or Player automation path without computer-use; activate the actual GameStart button/callback; observe Loading prewarm and VS selection; use the existing role/CMC/settings interaction to build MatchConfig; confirm additive `NTSD_Battle` load and `BattleRunning` with the formal fingerprint and the selected actor; then exit through ordered shutdown, verify zero resource/borrower remnants, and compare both Scene hashes. A test package must record its exact script paths and Change Record before editing. Do not inject `InitializeBattleAsync` directly as a substitute for this chain. No broad all-character suite is needed for this Q07 caller check.

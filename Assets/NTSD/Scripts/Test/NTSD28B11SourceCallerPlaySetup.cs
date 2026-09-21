@@ -13,6 +13,7 @@ namespace NTSD.Test
         [Serializable] private sealed class Request
         {
             public bool requested;
+            public bool formalStaged;
             public string runId, mode, root, configAssetPath;
         }
 
@@ -24,7 +25,10 @@ namespace NTSD.Test
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Install()
         {
-            string path = Path.Combine(Directory.GetParent(Application.dataPath).FullName, "Temp/NTSD28_B11_SourceCaller.request.json");
+            string root = Directory.GetParent(Application.dataPath).FullName;
+            string path = Path.Combine(root, "Temp/NTSD28_Q07_StagedCaller.request.json");
+            if (!File.Exists(path) || !JsonUtility.FromJson<Request>(File.ReadAllText(path)).requested)
+                path = Path.Combine(root, "Temp/NTSD28_B11_SourceCaller.request.json");
             if (!File.Exists(path)) return;
             Request request = JsonUtility.FromJson<Request>(File.ReadAllText(path));
             if (request == null || !request.requested) return;

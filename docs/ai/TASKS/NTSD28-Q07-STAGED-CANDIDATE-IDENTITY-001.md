@@ -1,6 +1,6 @@
 # NTSD28-Q07-STAGED-CANDIDATE-IDENTITY-001
 
-Status: `IN_PROGRESS`. Parent BATCH-04/Q07; prerequisite `NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001` verified for exact bytes.
+Status: `FOCUSED_TEST_PASS` (2026-09-22). Parent BATCH-04/Q07; prerequisite `NTSD28-Q07-PORTABLE-OBJECT-CONTENT-STAGING-001` verified for exact bytes.
 
 Authority: formal NTSD 2.8-Logan release runtime at `J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime`; source identity and D-023 in CURRENT-AUTHORITY. Q02 `BattleContentSource`, `LoganObjectCatalog`, `LoganVisualContentCandidate` are the production candidate paths. This task checks the **staged project-local copy** against that formal root and does not activate production content.
 
@@ -9,3 +9,5 @@ Declared script path: only new `Assets/NTSD/Scripts/Test/Editor/NTSD28Q07StagedC
 Validation: run only this new EditMode test in the existing Editor, inspect actual test-job result and compile status. If RED, inspect first failing production contract or manifest path and fix only through a separately declared scope; do not weaken the test or switch GameConfig. No broad Q06 test matrix is needed for this test-only addition. Scene hash and GameConfig root must remain unchanged.
 
 Rollback: leave existing content and code untouched; any test removal follows exact file deletion approval. This package can be superseded by corrected test code under this Change ID if the correction is confined to the declared test path and documented.
+
+Result: initial exact test job `503f7636325f4cf88bb7498202cfc211` RED on raw-reference versus effective-candidate count (1010 versus formal 906); corrected test oracle within the declared file. Fresh job `f0b2e9a7af184839922ca82c8f4f1e12` 1/1 PASS, both roots 330 objects/906 effective images and equal object/fusion/content/visual fingerprints, distinct source keys and valid freshness. ChangeLedger 640 records/new governed script covered PASS. Post-import 1343 non-meta file hashes still match and Scene checksum remains unchanged. See Q07 READINESS.md. No publication or production switch is claimed.

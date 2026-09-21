@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Passed" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:26:33Z" end-time="2026-09-21 23:26:34Z" duration="0.7472639">
+  <test-suite type="TestSuite" id="8158" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6070" result="Passed" start-time="2026-09-21 23:26:33Z" end-time="2026-09-21 23:26:34Z" duration="0.747264" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15275" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6062" result="Passed" start-time="2026-09-21 23:26:33Z" end-time="2026-09-21 23:26:34Z" duration="0.591203" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="64044" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15276" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6062" result="Passed" start-time="2026-09-21 23:26:33Z" end-time="2026-09-21 23:26:34Z" duration="0.453937" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15284" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5500" result="Passed" start-time="2026-09-21 23:26:33Z" end-time="2026-09-21 23:26:34Z" duration="0.285746" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="11050" name="NTSD28Q08StorySelectorGateEditorTests" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" testcasecount="5" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.126932" total="5" passed="5" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08StorySelectorGate" />
+            </properties>
+            <test-case id="11052" name="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" methodname="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="443516806" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.098517" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11055" name="ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" methodname="ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="348725586" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.007935" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11054" name="ModeOneDirectBattleStillStartsTerminalGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ModeOneDirectBattleStillStartsTerminalGuard" methodname="ModeOneDirectBattleStillStartsTerminalGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="1226274936" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.003945" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11051" name="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" methodname="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="684895746" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.001397" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11053" name="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" methodname="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="340964080" result="Passed" start-time="2026-09-21 23:26:34Z" end-time="2026-09-21 23:26:34Z" duration="0.001244" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -1,0 +1,19 @@
+# Q07 Naruto clone formal sprite catalog binding
+
+Decision: `VERIFIED_LOGIC_TO_FORMAL_SPRITE_CATALOG_ONLY`. This is one real Unity Battle Play path driven by physical L/D/J, with formal content; it does not establish final rendered pixels or all-character visual parity.
+
+Formal authority: OID33 is `Naruto(Clone)` in the current formal catalog, backed by `decoded_dat/c/nar/ncl.dat` SHA-256 `1E79078AF213896E82AC18A9E0A1D9A7026D3CC5C44386D231B67798D7FA68E3`, matching the staged copy. Frames240/241 use `pic:999`; frame242 uses `pic:1`. The DAT maps pic1 to `c\nar\ncl.png` at 79×79. Formal and staged VFS `ncl.png` both have SHA-256 `F8673833CCC0FC18695EBD956911704C8981B65179E3EEE343AA31F9597135B0`. Production GameConfig and the live published content key selected the formal root/fingerprint.
+
+First Play `q07-naruto-clone-1.json` is preserved as FAIL. Its test-specific result directory had not been created, causing repeated report-write exceptions until that directory was created; the same running attempt then wrote its raw trace and exited. The result's strict frame240-only condition failed even though the source also authorizes frame241 as hidden. In that trace the first observed clone tick was frame241/pic999, immediately followed by frame242/pic1 with the correct entry. The test-only probe was corrected to accept either authored hidden frame240/241, create its result directory and stop observation in `finally` if writing fails. No production code changed.
+
+Fresh Play `q07-naruto-clone-2.json` is PASS. Physical L/D/J steps were seen at ticks2/4/6; peak OID33 count was 1. At tick11 the clone was frame241/pic999 and `TryResolveCurrentSpriteEntry=false`; at tick12 it was frame242/pic1 with key `(VisualDataId=33, EffectivePic=1)`, source path under `Assets/NTSD/Content/LoganRuntime/vfs/c/nar/ncl.png`, 79×79 pixel rect and `CentralBinding.IsValid=true`. `cloneHiddenPicObserved=true`, `cloneVisiblePicObserved=true`, `formalRootVerified=true`. The successful report resides in the same folder.
+
+The existing Editor imported/compiled the probe without new `error CS` in the current log tail, ran the target Play and returned idle/outside Play on `NTSD_Battle.unity`; request JSON is `requested:false` and neither run result was overwritten. Protected Battle Scene SHA-256 remains `BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6`; Menu Scene SHA-256 remains `6CF124A17F692325CED5774C3C10C3324AA047439BC6C3EB08856188A78AB4B1`.
+
+`Tools/Validate-ChangeLedger.ps1` passed with 650 records and 12 governed code files in the current diff; `git diff --check` exited 0. No unrelated character suite was rerun.
+
+This proves the logical clone's hidden-to-visible sprite catalog lookup and formal source-image identity in this one sequence. It does not prove the final on-screen draw, transparency/compositing, sort order, shadow, camera, hit/lifetime or original EXE pixel match. Q09/Q12 and R17/R18 retain those exits. No computer-use, nonbattle production, Scene, ProjectSettings or resource edit occurred.
+
+## Follow-up source-image pixel and crop check (2026-09-22)
+
+Read-only inspection of the current staged `vfs/c/nar/ncl.png` confirmed SHA-256 `F8673833CCC0FC18695EBD956911704C8981B65179E3EEE343AA31F9597135B0`, RGBA size 799×1120. Its first-cell top and left samples are transparent, while the separator at `(79,0)` and `(0,79)` is opaque orange `(201,47,0,255)`; `(40,40)` is opaque art. The DAT declares `w:79 h:79 row:10 col:14`, and the Unity `BuildIndexedSpriteRects` source steps by `(w+1,h+1)` but crops to `w×h`, excluding those separator coordinates. The Logan-PNG branch of `PrepareBattleSheetPixels` returns a straight-RGBA copy without the legacy BMP color-key and separator processing. These checks support the sprite source/crop and alpha-data contract for this sheet; they do **not** demonstrate what the camera finally draws, how overlapping sprites composite, or EXE pixel identity.

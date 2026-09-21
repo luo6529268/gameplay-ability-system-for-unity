@@ -1,0 +1,9 @@
+# Q07 serialized-root menu prewarm caller — scoped acceptance (2026-09-22)
+
+Status: `VERIFIED_SERIALIZED_MENU_CALLER_ONLY`. The same persistent GameConfig asset referenced by the Menu and Battle scenes is now configured with formal root `Assets/NTSD/Content/LoganRuntime`. This focused Play run exercised the existing `LoadingPrewarmController.PrewarmOnceAsync` caller through the isolated B11/Q07 menu probe; it did not open and interact with the actual Menu Scene UI.
+
+Unique request `q07-serialized-menu-1` used `mode=menu`, `formalStaged=true`, `useSerializedRoot=true`. Before Play, the probe pinned `Assets/NTSD/Config/GameConfig/GameConfig.asset`, required its serialized root to be the formal path and copied exactly that value into the isolated Play clone. The terminal JSON reports `PASS`, `serializedRootSelected=true` and `rootFromAsset=Assets/NTSD/Content/LoganRuntime`. The default request branch and earlier explicit-root tests remain unchanged.
+
+The actual menu prewarm caller reported `menuReady=true`, candidate cache hits 1, formal semantic fingerprint in its source key, equal manager/data/UI keys, 4 World objects and 29,400 tracked publication resources. Previous owner survivors 0, current owner survivors after unload 0, pool borrowers 0, and two-frame Stopped true; ordered shutdown reached `RuntimeMapCleared`. Editor returned to idle/not playing. GameConfig SHA-256 stayed `C4DB45C7426045D09FB481B2FC1D3FF27089CAF902A7AFE0CA413DE1795DF4B2`; battle Scene stayed `BCD1047BF912C6A4A8BC9F3A76EAF3FA954211AD064E0402B1C01BF3BA0E9FB6`. Menu Scene had no Git diff.
+
+This protects the named prewarm caller against the production-root switch. Real Menu Scene interaction, natural skills, visible battle presentation, old reference disposition and audio are separate Q07/Q09/Q10 returns. No nonbattle production code or UI was modified.

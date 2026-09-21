@@ -1,0 +1,16 @@
+# Q08 result timer and early result-page first differences — 2026-09-22
+
+Status: `NATIVE_FULL_DRIVER_TIMING_PASS / ISOLATED_UNITY_DIRECT_WRITER_RED_2 / UNITY_FULL_TICK_RED_1`. This narrows Q08 G-05/G-06; Q08 aggregate, original Editor runtime and formal-EXE visible parity remain unverified.
+
+The matching playable source was compiled in the separate `ntsd-q08-native-validation-20260922` tree. Its `GameSession28::step()` fixture double-ran with identical [output](NATIVE-FULL-DRIVER-6.txt): timer starts at 1 with only group 1 eligible, keeps its latched winner while group 2 becomes eligible and increments to 2, emits the end signal at 80 and result record at 101, and accepts Attack at 144 to transition through 350. The same executable also reuses the formal natural-attack setup from `game_session_tests.cpp` with both combatants in valid groups: Attack causes HP20 target's lethal hit on tick 12; the source result timer stays 0 during that tick and becomes 1 on tick 13. The formal EXE SHA-256 remains `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`.
+
+The first two timing tests were added **only** to the separate Unity validation project's Q08 test class. Unity 2022.3.62f3 EditMode compiled and executed the class in its isolated Library: [direct XML](UNITY-TIMING-RED.xml) `total=9, passed=3, failed=6`. The four earlier group-rule RED cases account for four failures; the new two failures reached their intended assertions:
+
+| Case | Native full-driver expectation | Current Unity direct-writer observation |
+|---|---|---|
+| Start terminal timer, then restore group 2 | Timer 1 -> 2; original winner remains latched | `BattleEndPhase` remains 1 (`Expected: 2; But was: 1`) |
+| Continue terminal result to tick 80 | Result record/page not yet created; source creates record at 101 | `Results.IsActive` already true (`Expected: False; But was: True`) |
+
+One more test uses the complete `NTSDBattleTickSystem.RunReleaseTick` entrance: two living groups on tick 1, group 2 terminal on tick 2, restored on tick 3. It reaches `BattleEndPhase=1` on tick 2, then fails at the intended tick-3 assertion: expected 2, actual 1. [Full-tick XML](UNITY-FULLTICK-TIMING-RED.xml) reports `total=10, passed=3, failed=7`; the six earlier RED failures remain, with this one new full-tick RED. The [final archived isolated fixture](ISOLATED-TIMING-FIXTURE.cs.txt) SHA-256 is `735D745F44FBC82A2BC9D7A1D406E8332C4C2DF1A9C8B0013A00CA370899CDCB`; the original project test source remained SHA-256 `51A86717A21A558E7FF4A69B2056677BDB19CBD725DCB8DA33D457C569D64134`.
+
+The direct tests prove the current producer's latching and activation differences. The complete-tick test separately proves the monotonic-timer gap through Unity's actual battle tick entrance. The native combat-caused lethal hit's next-tick classification is now witnessed, but the corresponding Unity natural-hit complete-tick first difference, original Editor Scene state and formal-EXE visible result remain pending. Preserve the existing after-world result-page input seam, then apply the independent native carrier and pre-combat classifier contract in [CARRIER-CONTRACT.md](CARRIER-CONTRACT.md) with an exact prechange Task/Change Record. No production, Scene, resource, formal source, nonbattle, or computer-use change was made in this focused RED probe.

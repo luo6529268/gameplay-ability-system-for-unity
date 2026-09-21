@@ -317,6 +317,7 @@ namespace NTSD.Simulation
                         world.Runtime.Flow.HumanInputPolledExternally = false;
                     world.PendingSounds.Clear();
                     world.AdvanceBattleFlowTick(tickIndex);
+                    world.AdvanceNativeBattleResultsBeforeCombat();
                     diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
                     diagnostics?.BeginPhase(BattleTickPhase.NativeSparkAdvance);
                     AdvanceNativeSparks();

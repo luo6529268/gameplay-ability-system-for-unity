@@ -51,6 +51,8 @@ namespace NTSD.Simulation
         public const int HostActionNone = 0;
         public const int HostActionRematch = 1;
         public const int HostActionBootstrapDirect = 2;
+        public const ulong NativeValidLivingGroupMask =
+            ((1UL << 40) - 2UL) & ~(1UL << 5);
 
         private static readonly int[] InitialRow1 =
         {
@@ -109,6 +111,11 @@ namespace NTSD.Simulation
         public int TeamCount;
         public int[] TeamIds = { -1, -1 };
         public int PendingHostAction;
+        public ulong NativeLivingGroupMask;
+        public int NativeResultTimer;
+        public int NativeResultOutputTimer;
+        public int NativeResultPhase;
+        public int NativeTransitionState;
 
         public bool IsActive => Phase >= 200;
 
@@ -125,6 +132,7 @@ namespace NTSD.Simulation
             PendingHostAction = HostActionNone;
             ResetResultTableState();
             ResetLiveGuard();
+            ResetNativeResultFlow();
         }
 
         public void PrepareForBattleRematch()
@@ -140,6 +148,39 @@ namespace NTSD.Simulation
             Winner = -1;
             PendingHostAction = HostActionNone;
             ResetLiveGuard();
+            ResetNativeResultFlow();
+        }
+
+        public void ResetNativeResultFlow()
+        {
+            NativeLivingGroupMask = 0UL;
+            NativeResultTimer = 0;
+            NativeResultOutputTimer = 0;
+            NativeResultPhase = 0;
+            NativeTransitionState = 0;
+        }
+
+        public bool HasCanonicalNativeResultFlow() => IsCanonicalNativeResultFlow(
+            NativeLivingGroupMask,
+            NativeResultTimer,
+            NativeResultOutputTimer,
+            NativeResultPhase,
+            NativeTransitionState);
+
+        public static bool IsCanonicalNativeResultFlow(
+            ulong livingGroupMask,
+            int timer,
+            int outputTimer,
+            int phase,
+            int transitionState)
+        {
+            return (livingGroupMask & ~NativeValidLivingGroupMask) == 0UL &&
+                   timer >= 0 && timer < 350 &&
+                   outputTimer >= 0 && outputTimer <= 350 &&
+                   phase >= 0 && phase <= 3 &&
+                   (transitionState == 0 || transitionState == 1 ||
+                    transitionState == 2 || transitionState == 28 ||
+                    transitionState == 128 || transitionState == 202);
         }
 
         public void ResetLiveGuard()

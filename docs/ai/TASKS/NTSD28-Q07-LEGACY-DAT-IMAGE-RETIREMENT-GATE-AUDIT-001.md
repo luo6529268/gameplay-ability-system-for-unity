@@ -1,0 +1,9 @@
+# NTSD28-Q07-LEGACY-DAT-IMAGE-RETIREMENT-GATE-AUDIT-001
+
+Status: VERIFIED_STATIC_RETIREMENT_GATE_ONLY / DELETE_AUTHORIZATION_ZERO. Parent: BATCH-04 / Q07 old-content disposition; D-023 formal DAT and character-related images. Evidence: `artifacts/diagnostics/NTSD28-Q07-LEGACY-DAT-IMAGE-RETIREMENT-GATE-AUDIT-001/REPORT.md` and its 521-row CSV.
+
+Scope: reconcile the existing 695-path Q07 reference graph with the current default Logan content root, explicit empty-root fallback, direct Battle bootstrap, Editor refresh/preview and tests. Check which old DATs are directly listed in old `data.txt`, classify all 138 old DATs and 383 old indexed images into retained owner/gate categories, and record the 174 other images as out of this retirement decision. Do not infer deletion safety from missing serialized GUID references.
+
+Exact reads: `Assets/NTSD/Config/data.txt`, `Assets/NTSD/Config/GameConfig/GameConfig.asset`, `Assets/NTSD/Scripts/UI/LoadingPrewarmController.cs`, `Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs`, `Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs`, `Assets/NTSD/Scripts/Animation/GameDataManager.cs`, Q07 reference graph and serialized-owner classification. Search narrowly for any newly identified literal or dynamic caller. The formal root identity/copy evidence is reused from Q07 readiness; this audit does not redo publication/Player tests.
+
+Output: a per-path 521-row CSV and a report that distinguishes default formal battle reachability, retained legacy/editor/test reachability, unknowns and the exact next rebind/deletion gates. Every row remains `deleteAuthorized=false`; no DAT, image, Scene, GameConfig, script, importer or `.meta` may be moved, overwritten or deleted. Read-only evidence does not reopen Q06 or alter nonbattle functionality.

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:38:05Z" end-time="2026-09-21 23:38:06Z" duration="0.4326554">
+  <test-suite type="TestSuite" id="8162" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6074" result="Passed" start-time="2026-09-21 23:38:05Z" end-time="2026-09-21 23:38:06Z" duration="0.432655" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15283" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6066" result="Passed" start-time="2026-09-21 23:38:05Z" end-time="2026-09-21 23:38:06Z" duration="0.356049" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="69544" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15284" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6066" result="Passed" start-time="2026-09-21 23:38:05Z" end-time="2026-09-21 23:38:06Z" duration="0.299553" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15292" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5504" result="Passed" start-time="2026-09-21 23:38:05Z" end-time="2026-09-21 23:38:06Z" duration="0.244528" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="9063" name="BattleStateSnapshotRestoreEditorTests" fullname="NTSD.Test.BattleStateSnapshotRestoreEditorTests" classname="NTSD.Test.BattleStateSnapshotRestoreEditorTests" runstate="Runnable" testcasecount="18" result="Passed" start-time="2026-09-21 23:38:06Z" end-time="2026-09-21 23:38:06Z" duration="0.094533" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="9064" name="NativeResultFlowRestoresChecksumAndRejectsInvalidMaskBeforeMutation" fullname="NTSD.Test.BattleStateSnapshotRestoreEditorTests.NativeResultFlowRestoresChecksumAndRejectsInvalidMaskBeforeMutation" methodname="NativeResultFlowRestoresChecksumAndRejectsInvalidMaskBeforeMutation" classname="NTSD.Test.BattleStateSnapshotRestoreEditorTests" runstate="Runnable" seed="1116079300" result="Passed" start-time="2026-09-21 23:38:06Z" end-time="2026-09-21 23:38:06Z" duration="0.078709" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

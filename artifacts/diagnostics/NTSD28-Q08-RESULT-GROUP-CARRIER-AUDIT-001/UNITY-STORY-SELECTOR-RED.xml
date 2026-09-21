@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="5" result="Failed(Child)" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.7274877">
+  <test-suite type="TestSuite" id="8158" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6070" result="Failed" site="Child" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.727488" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15275" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6062" result="Failed" site="Child" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.527079" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="10668" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15276" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6062" result="Failed" site="Child" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.389456" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15284" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5500" result="Failed" site="Child" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.255376" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11050" name="NTSD28Q08StorySelectorGateEditorTests" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" testcasecount="5" result="Failed" site="Child" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.137640" total="5" passed="4" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08StorySelectorGate" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11052" name="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" methodname="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="1453117705" result="Passed" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.103380" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11054" name="ModeOneDirectBattleStillStartsTerminalGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ModeOneDirectBattleStillStartsTerminalGuard" methodname="ModeOneDirectBattleStillStartsTerminalGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="1089951556" result="Passed" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.004272" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11055" name="ModeOneSelectedStageDoesNotStartOrdinaryVsGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ModeOneSelectedStageDoesNotStartOrdinaryVsGuard" methodname="ModeOneSelectedStageDoesNotStartOrdinaryVsGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="1385171641" result="Failed" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.012422" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  A selected stage must not be classified by the ordinary VS result producer.
+  Expected: 0
+  But was:  1
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ModeOneSelectedStageDoesNotStartOrdinaryVsGuard () [0x000b5] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08StorySelectorGateEditorTests.cs:114
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11051" name="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" methodname="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="867793227" result="Passed" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.001536" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11053" name="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" fullname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" methodname="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" classname="NTSD.Test.NTSD28Q08StorySelectorGateEditorTests" runstate="Runnable" seed="427841966" result="Passed" start-time="2026-09-21 23:22:20Z" end-time="2026-09-21 23:22:20Z" duration="0.001410" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

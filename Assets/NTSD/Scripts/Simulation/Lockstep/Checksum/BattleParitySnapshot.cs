@@ -1378,6 +1378,12 @@ namespace NTSD.Simulation
                 ("reserveMissingCount", ZeroMatrix(2, 11)),
                 ("reserveOidTable", new[] { 30, 31, 33, 34, 39, 32, 35, 36, 37, 122, 123 }),
                 ("reserveOwnerValid", battle.ReserveOwnerValid),
+                ("nativeResultFlow", DictionaryOf(
+                    ("livingGroupMask", (object)results.NativeLivingGroupMask),
+                    ("timer", results.NativeResultTimer),
+                    ("outputTimer", results.NativeResultOutputTimer),
+                    ("phase", results.NativeResultPhase),
+                    ("transitionState", results.NativeTransitionState))),
                 ("results", DictionaryOf(
                     ("battleEndPhase", (object)results.BattleEndPhase),
                     ("hadBoth", results.HadBoth),

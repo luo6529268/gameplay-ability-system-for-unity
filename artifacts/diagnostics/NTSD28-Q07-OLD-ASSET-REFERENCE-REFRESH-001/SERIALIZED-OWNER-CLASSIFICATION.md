@@ -1,0 +1,20 @@
+# Q07 old-image serialized owner classification — 2026-09-22
+
+Status: `VERIFIED_STATIC_OWNER_CLASSIFICATION / REBIND_NOT_STARTED / DELETE_AUTHORIZATION_ZERO`. This extends the 695-path reference refresh using its current [per-path graph](current-reference-graph.csv). The exact 52 current-old-path rows and their owner/action are in [serialized-owner-classification.csv](serialized-owner-classification.csv). No Scene, prefab, GameConfig, script, importer or image was edited; no resource was deleted.
+
+| Owner class | Old paths | Observed serialized owner | Disposition |
+|---|---:|---|---|
+| Inactive Editor preview character sheet | 1 | `NTSD_Battle.unity` | Separate authoring-preview rebind before considering retirement |
+| Battle HUD/UI | 26 | `NTSD_Battle.unity` | Preserve existing HUD and control graphics; not bulk character-sheet retirement |
+| Menu UI | 14 | `NTSD_Menu.unity` | Preserve nonbattle UI |
+| GameConfig Menu UI | 8 | `GameConfig.asset`, one also in `NTSD_Menu.unity` | Preserve countdown/join/random icons |
+| Map backgrounds | 2 | `SunagakureMap.asset`, `TrainingGroundMap.asset` and the latter also in Battle Scene | Preserve map owners; separate background-content review |
+| Common shadow | 1 | `Shadow.prefab` | Preserve; Q09 appearance review owns any change |
+
+The sole indexed old image with a serialized owner is `Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp` (GUID `6d174fff55a50784d9bbf85531fb7d86`, SHA-256 `3D5A6AD7C931AAAF3B180AB9B5FA744B6C4097142EA5A3FB6E868436E254109E`). `NTSD_Battle.unity:3017–3059` stores it on `BattleCentralEditorPreview`, a GameObject with `m_IsActive: 0`; the actor has `resolveFromCharacterManager: 0` and explicit `sourceSheet`, `sourceRectPixels (0,481,79,79)`. This is a serialized authoring fixture, not evidence that the active battle entity pipeline uses this old sheet. The preview type is `[ExecuteAlways]`, and `BattleCentralEditorPreviewEditor.cs`, its tests, and `BattleSpriteGridSeparatorEditorTests.cs` also name the old path. Inactivity today does not make deletion safe because enabling the preview or running its editor tests still depends on the old asset.
+
+The formal selectable Sasuke is catalog OID 11 at `catalog.csv:31`, with `decoded_dat/c/sasu/sasu.dat:6` mapping pic 0–119 to `c\sasu\sasu.png` (`w:79 h:79 row:10 col:12`). The staged formal `vfs/c/sasu/sasu.png` exists, SHA-256 `2AEB4FF667A9EE63E60EE0E866E4700C780974746D47E231CAEF1EAFCAD7C694`, and measures 799×960; the old BMP is 800×560. If the preview continues to display the upper-left cell, its current bottom-origin rect `y=481` on the 560-pixel old image would need a corresponding `y=881` on the 960-pixel formal image. That coordinate is a **candidate derived from dimensions and DAT**, not a verified Editor render or approval to edit the protected Scene. A rebind must check importer format, alpha, frame identity, layout/pivot and editor tests in its own Task/Change.
+
+The other 382 indexed old images lack serialized GUID owners in the scanned current asset set, but the retained empty-root legacy loader and old DAT path declarations can reach them dynamically. Their `deleteAuthorized` value remains false, as does every row here. This classification proves which of the 52 serialized paths belongs to which owner; it does not certify deletion of any of the 695 old files or revoke approved nonbattle/visual exceptions. The prior static scan's six moved Foot frames and three absent UI paths remain separately classified in [REPORT.md](REPORT.md).
+
+Next Q07 action: perform a dedicated, authorized preview-rebind Task only if the Editor fixture is to use formal Sasuke content; preserve the Scene until its exact diff and visual/test outcome are reviewable. Independently continue natural formal-content skills and runtime presentation evidence. Keep Menu, HUD, GameConfig, map and common-shadow assets out of blanket character-image removal.

@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "3fc9eefefb1142ba9dccfce8b23ef253",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1790025569276,
+    "finished_unix_ms": 1790025576472,
+    "last_update_unix_ms": 1790025576472,
+    "progress": {
+      "completed": 1,
+      "total": 8157,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790025575788,
+      "last_finished_test_full_name": "NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.FormalSasukePng_ImportedSizeAndFirstCellMatchRawData",
+      "last_finished_unix_ms": 1790025576037,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.8742609,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "FormalSasukePng_ImportedSizeAndFirstCellMatchRawData",
+          "fullName": "NTSD.Animation.Rendering.Editor.BattleCentralEditorPreviewEditorTests.FormalSasukePng_ImportedSizeAndFirstCellMatchRawData",
+          "state": "Passed",
+          "durationSeconds": 0.2460625,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+    "runId": "q07-menu-scene-callback-2",
+    "status": "FAIL",
+    "phase": "battle",
+    "message": "System.InvalidOperationException: Menu callback chain did not reach BattleRunning.\r\n  at NTSD.Test.Editor.NTSD28Q07MenuSceneCallbackPlayProbeEditor.Require (System.Boolean condition, System.String failure) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs:287 \r\n  at NTSD.Test.Editor.NTSD28Q07MenuSceneCallbackPlayProbeEditor.WaitUntil (System.Func`1[TResult] predicate, System.Single seconds, System.String failure) [0x000ab] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs:277 \r\n  at Cysharp.Threading.Tasks.UniTaskCompletionSourceCore`1[TResult].GetResult (System.Int16 token) [0x00067] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTaskCompletionSource.cs:244 \r\n  at Cysharp.Threading.Tasks.CompilerServices.AsyncUniTask`1[TStateMachine].GetResult (System.Int16 token) [0x00002] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\CompilerServices\\StateMachineRunner.cs:218 \r\n  at Cysharp.Threading.Tasks.UniTask+Awaiter.GetResult () [0x00015] in .\\Library\\PackageCache\\com.cysharp.unitask@5cc97c7f00\\Runtime\\UniTask.cs:312 \r\n  at NTSD.Test.Editor.NTSD28Q07MenuSceneCallbackPlayProbeEditor.Run (System.String runId, System.String output) [0x0084d] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs:214 ",
+    "sourceKey": "",
+    "shutdownStage": "",
+    "selectedCharacterId": 2,
+    "worldObjects": 0,
+    "finalPoolBorrowers": 0,
+    "pendingLoadingTextsAfterPrewarm": 749,
+    "prewarmed": true,
+    "modeSelected": true,
+    "roleConfirmed": true,
+    "battleSceneLoaded": false,
+    "battleRunning": false,
+    "samePublishedKeys": false,
+    "stayedStopped": false,
+    "returnedToMenu": false
+}

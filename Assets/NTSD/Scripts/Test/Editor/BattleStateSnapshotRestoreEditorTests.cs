@@ -14,6 +14,46 @@ namespace NTSD.Test
     public sealed class BattleStateSnapshotRestoreEditorTests
     {
         [Test]
+        public void NativeResultFlowRestoresChecksumAndRejectsInvalidMaskBeforeMutation()
+        {
+            using var scope = new DriverScope();
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var session = new BattleLockstepSession(scope.Driver, identity, 0, 8, 8);
+            BattleStateSnapshotBuffer snapshot =
+                session.CreateBattleStateSnapshotBufferForBootstrap();
+            SimulationWorld world = scope.Driver.World;
+            BattleResultsRuntimeState results = world.Runtime.Results;
+            results.NativeLivingGroupMask = 1UL << 1;
+            results.NativeResultTimer = 2;
+            results.NativeResultOutputTimer = 2;
+            results.NativeResultPhase = 0;
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            ulong expected = world.CaptureRuntimeChecksum64(0, null);
+
+            results.NativeLivingGroupMask = 1UL << 2;
+            results.NativeResultTimer = 3;
+            results.NativeResultOutputTimer = 3;
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.Not.EqualTo(expected));
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out BattleStateSnapshotRestoreFailure failure),
+                Is.True, failure.ToString());
+            Assert.That(results.NativeLivingGroupMask, Is.EqualTo(1UL << 1));
+            Assert.That(results.NativeResultTimer, Is.EqualTo(2));
+            Assert.That(results.NativeResultOutputTimer, Is.EqualTo(2));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.EqualTo(expected));
+
+            typeof(BattleWorldRosterResultsSnapshotBuffer)
+                .GetProperty(nameof(BattleWorldRosterResultsSnapshotBuffer.NativeLivingGroupMask))
+                .SetValue(snapshot.RosterResults, 1UL << 40);
+            Assert.That(snapshot.IsValid, Is.False);
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out failure), Is.False);
+            Assert.That(failure, Is.EqualTo(BattleStateSnapshotRestoreFailure.InvalidSnapshot));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.EqualTo(expected));
+        }
+
+        [Test]
         public void ExactInPlaceRestoreReinstatesCanonicalEntityAndWorldState()
         {
             using var scope = new DriverScope();

@@ -1,0 +1,20 @@
+{
+    "runId": "q07-menu-scene-preflight-1",
+    "status": "FAIL",
+    "phase": "edit-preflight",
+    "message": "System.InvalidOperationException: Additive Battle Scene is absent from enabled Editor Build Settings scenes.\r\n  at NTSD.Test.Editor.NTSD28Q07MenuSceneCallbackPlayProbeEditor.Require (System.Boolean condition, System.String failure) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs:290 \r\n  at NTSD.Test.Editor.NTSD28Q07MenuSceneCallbackPlayProbeEditor.Poll () [0x00197] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs:108 ",
+    "sourceKey": "",
+    "shutdownStage": "",
+    "selectedCharacterId": 0,
+    "worldObjects": 0,
+    "finalPoolBorrowers": 0,
+    "pendingLoadingTextsAfterPrewarm": 0,
+    "prewarmed": false,
+    "modeSelected": false,
+    "roleConfirmed": false,
+    "battleSceneLoaded": false,
+    "battleRunning": false,
+    "samePublishedKeys": false,
+    "stayedStopped": false,
+    "returnedToMenu": false
+}

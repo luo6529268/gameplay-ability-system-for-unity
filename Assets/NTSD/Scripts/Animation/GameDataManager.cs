@@ -87,12 +87,6 @@ namespace NTSD.Animation
         public long UnloadedBackgroundQueryCountForDiagnostics { get; private set; }
         public int BackgroundCount => cachedConfig?.backgrounds?.Count ?? 0;
 
-        protected override void InitializeSingleton()
-        {
-            base.InitializeSingleton();
-            LoadDataFile();
-        }
-
         /// <summary>
         /// 加载 data.txt 文件
         /// </summary>

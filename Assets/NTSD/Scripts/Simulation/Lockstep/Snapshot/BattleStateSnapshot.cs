@@ -11,7 +11,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleStateSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 25;
+        public const int CurrentSchemaVersion = 26;
 
         internal BattleStateSnapshotBuffer(
             BattleWorldRosterResultsSnapshotBuffer rosterResults,
@@ -54,6 +54,7 @@ namespace NTSD.Simulation
         public ulong IdentityFingerprint { get; private set; }
         public int CapturedTick { get; private set; }
         public bool IsValid => SchemaVersion == CurrentSchemaVersion &&
+            RosterResults.HasCanonicalNativeResultFlow &&
             HasMatchingPayloadHeaders(Core, ProtocolSchemaVersion, IdentityFingerprint, CapturedTick);
 
         public BattleWorldCoreScalarSnapshot Core { get; private set; }

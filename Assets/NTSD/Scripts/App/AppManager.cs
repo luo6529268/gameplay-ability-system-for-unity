@@ -99,6 +99,31 @@ namespace NTSD.App
             TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
         }
 
+        public bool TryCloseBattleApplicationFromNativeFunctionKey()
+        {
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            if (driver == null ||
+                driver.LifecycleState != BattleRuntimeLifecycleState.Running)
+            {
+                return false;
+            }
+
+            if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
+                    out BattleRuntimeShutdownReport report))
+            {
+                Debug.LogError(
+                    "[AppManager] F4 application close was refused because ordered " +
+                    $"shutdown stopped at {report.CompletedStage}: " +
+                    report.FailureReason);
+                return false;
+            }
+
+#if !UNITY_EDITOR
+            Application.Quit(0);
+#endif
+            return true;
+        }
+
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             if (scene.name == battleSceneName)

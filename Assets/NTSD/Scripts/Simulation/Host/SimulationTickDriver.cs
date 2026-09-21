@@ -360,6 +360,21 @@ namespace NTSD.Simulation
 
                 CaptureHostControlEdges();
                 CaptureBattleFunctionKeyEdges();
+#if !UNITY_EDITOR
+                if (_nativeFunctionKeyLeaveBattleRequested)
+                {
+                    // Alignment contract: NTSD28-Q08-F4-PLAYER-CLOSE-OWNER-001.
+                    // The native host closes before advancing another battle tick.
+                    AppManager app = AppManager.Instance;
+                    if (app != null &&
+                        app.TryCloseBattleApplicationFromNativeFunctionKey())
+                    {
+                        _nativeFunctionKeyLeaveBattleRequested = false;
+                    }
+                    RefreshInspectorState();
+                    return;
+                }
+#endif
                 ApplyPendingHostControlCommands();
 
                 if (paused || _world == null)

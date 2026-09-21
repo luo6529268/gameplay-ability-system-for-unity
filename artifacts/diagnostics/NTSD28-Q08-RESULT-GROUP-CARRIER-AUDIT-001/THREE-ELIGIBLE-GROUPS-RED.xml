@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 22:38:30Z" end-time="2026-09-21 22:38:31Z" duration="0.551479">
+  <test-suite type="TestSuite" id="8149" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6062" result="Failed" site="Child" start-time="2026-09-21 22:38:30Z" end-time="2026-09-21 22:38:31Z" duration="0.551479" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15257" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6054" result="Failed" site="Child" start-time="2026-09-21 22:38:30Z" end-time="2026-09-21 22:38:31Z" duration="0.412643" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="77640" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15258" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6054" result="Failed" site="Child" start-time="2026-09-21 22:38:30Z" end-time="2026-09-21 22:38:31Z" duration="0.297015" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15266" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5492" result="Failed" site="Child" start-time="2026-09-21 22:38:31Z" end-time="2026-09-21 22:38:31Z" duration="0.185745" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11029" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="7" result="Failed" site="Child" start-time="2026-09-21 22:38:31Z" end-time="2026-09-21 22:38:31Z" duration="0.051322" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11030" name="ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" methodname="ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="4834707" result="Failed" start-time="2026-09-21 22:38:31Z" end-time="2026-09-21 22:38:31Z" duration="0.037840" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Native BattleFlow28 retains every distinct eligible group.
+  Expected: 3
+  But was:  2
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ThreeEligibleGroupsRemainDistinctBeforeTerminalTimer () [0x0003a] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:25
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

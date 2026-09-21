@@ -514,8 +514,13 @@ namespace NTSD.Animation.Rendering
                 if (segment.Material == null || segment.Texture == null)
                     continue;
                 propertyBlock.Clear();
-                Texture animatedTexture = ResolveFootMarkerTexture(
-                    EditorApplication.timeSinceStartup);
+                double animationTime;
+#if UNITY_EDITOR
+                animationTime = EditorApplication.timeSinceStartup;
+#else
+                animationTime = Time.unscaledTimeAsDouble;
+#endif
+                Texture animatedTexture = ResolveFootMarkerTexture(animationTime);
                 propertyBlock.SetTexture(
                     MainTexId,
                     animatedTexture != null ? animatedTexture : segment.Texture);
@@ -1528,8 +1533,11 @@ namespace NTSD.Animation.Rendering
                     var sourcePixels = new Color32[bmpData.Pixels.Length];
                     for (int index = 0; index < sourcePixels.Length; index++)
                         sourcePixels[index] = bmpData.Pixels[index];
-                    Color32[] processedPixels =
-                        RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels);
+                    // Alignment contract: NTSD28-Q07-SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001.
+                    // Formal PNG keeps its authored alpha; legacy BMP keeps its black-key preview.
+                    Color32[] processedPixels = bmpData.IsPng
+                        ? sourcePixels
+                        : RuntimeSpriteProcessor.ProcessSheetPixelsFast(sourcePixels);
                     if (processedPixels == null ||
                         processedPixels.Length != bmpData.Width * bmpData.Height)
                     {

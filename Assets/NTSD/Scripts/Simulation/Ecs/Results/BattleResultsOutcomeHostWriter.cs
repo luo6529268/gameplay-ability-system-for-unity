@@ -15,6 +15,79 @@ namespace NTSD.Simulation.Ecs
             this.world = world;
         }
 
+        // Alignment contract: NTSD28-Q08-NATIVE-RESULT-CARRIER-001.
+        // The ordinary result classifier runs before any combat update in this tick.
+        internal void AdvanceNativeFlowBeforeCombat()
+        {
+            BattleResultsRuntimeState results = world.Runtime?.Results;
+            if (results == null)
+                return;
+
+            if (results.NativeResultPhase == 3)
+            {
+                if (results.NativeTransitionState == 2)
+                    results.NativeTransitionState = 1;
+                results.NativeResultOutputTimer = results.NativeResultTimer;
+                return;
+            }
+
+            ulong currentGroups = 0UL;
+            int slotCount = world.RuntimeSlotCapacityForDiagnostics <
+                            SimulationWorld.AuthorityRuntimeSlotCapacity
+                ? world.RuntimeSlotCapacityForDiagnostics
+                : SimulationWorld.AuthorityRuntimeSlotCapacity;
+            for (int runtimeSlot = 0; runtimeSlot < slotCount; runtimeSlot++)
+            {
+                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingDormant(
+                    runtimeSlot);
+                if (!world.IsActiveForCurrentPassInternal(entity) ||
+                    entity.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.Character ||
+                    entity.Health == null ||
+                    (entity.Health.HP <= 0 && entity.HP2Orig <= 1))
+                {
+                    continue;
+                }
+
+                int group = entity.RelationTeam;
+                if (group > 0 && group < 40 && group != 5)
+                    currentGroups |= 1UL << group;
+            }
+
+            if (results.NativeResultTimer == 0 &&
+                (currentGroups & (currentGroups - 1UL)) != 0UL)
+            {
+                results.NativeLivingGroupMask = currentGroups;
+                results.NativeResultOutputTimer = 0;
+                return;
+            }
+
+            if (results.NativeResultTimer == 0)
+                results.NativeLivingGroupMask = currentGroups;
+
+            int timer = ++results.NativeResultTimer;
+            results.NativeResultOutputTimer = timer;
+            results.NativeResultPhase = timer < 80
+                ? 0
+                : timer < 101
+                    ? 1
+                    : timer < 350
+                        ? 2
+                        : 3;
+            if (timer == 350)
+            {
+                int mode = world.BattleGameModeId;
+                results.NativeTransitionState = mode == 2
+                    ? 28
+                    : mode == 3
+                        ? 128
+                        : mode == 4
+                            ? 202
+                            : 2;
+                results.NativeResultTimer = 0;
+            }
+        }
+
         // Alignment contract: CLIENT-CPP-RESULTS-RESERVE-TERMINAL-INTEGRATION-001.
         // C++ retains two full-domain living-team buckets before reserve/guard handling.
         internal void UpdateSummaryActivation()
@@ -44,7 +117,7 @@ namespace NTSD.Simulation.Ecs
                     entity.GetCurrentDataObjectTypeForSimulation() !=
                     (int)LF2ObjectType.Character ||
                     entity.Health == null ||
-                    entity.Health.HP <= 0)
+                    (entity.Health.HP <= 0 && entity.HP2Orig <= 1))
                 {
                     continue;
                 }

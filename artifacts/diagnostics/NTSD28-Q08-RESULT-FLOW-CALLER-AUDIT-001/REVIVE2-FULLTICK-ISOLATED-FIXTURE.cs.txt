@@ -1,0 +1,113 @@
+#if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System.Collections.Generic;
+using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
+using NTSD.Simulation;
+using NUnit.Framework;
+
+namespace NTSD.Test
+{
+    [Category("NTSD28Q08BattleFlowRedProbe")]
+    public sealed class NTSD28Q08BattleFlowRedProbeEditorTests
+    {
+        [Test]
+        public void FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 1;
+            Register(world, 0, 1);
+            var second = Register(world, 1, 2);
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            tickSystem.RunReleaseTick(1, buildPresentation: false);
+            Assert.That(world.Runtime.Results.HadBoth, Is.True,
+                "Fixture must establish two living groups after the first full tick.");
+
+            second.Health.HP = 0;
+            second.HP2Orig = 2;
+            tickSystem.RunReleaseTick(2, buildPresentation: false);
+
+            Assert.That(world.Runtime.Results.BattleEndPhase, Is.Zero,
+                "Native pre-combat BattleFlow28 keeps the revive2 group alive.");
+        }
+
+        [Test]
+        public void ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 1;
+            var first = Register(world, 0, 1);
+            var second = Register(world, 1, 2);
+
+            world.UpdateBattleResultsFlow();
+            Assert.That(world.Runtime.Results.HadBoth, Is.True,
+                "Fixture must first establish two living groups.");
+            Assert.That(world.Runtime.Results.BattleEndPhase, Is.Zero);
+
+            second.Health.HP = 0;
+            second.HP2Orig = 2;
+            world.UpdateBattleResultsFlow();
+
+            Assert.That(world.Runtime.Results.BattleEndPhase, Is.Zero,
+                "Formal battle_flow_tests: HP0 with revive_lives_30c=2 remains living, timer=0.");
+        }
+
+        private static FlowEntity Register(SimulationWorld world, int slot, int group)
+        {
+            var entity = new FlowEntity();
+            entity.Name = "Q08Flow" + slot;
+            entity.ObjectId = 900 + slot;
+            entity.FrameCache.Load(new LF2CharacterDataWrapper(
+                entity.ObjectId,
+                new LF2CharacterData
+                {
+                    name = entity.Name,
+                    frames = new List<LF2FrameData>
+                    {
+                        new LF2FrameData
+                        {
+                            frameId = 0,
+                            state = 0,
+                            wait = 3,
+                            next = 0,
+                            centerx = 39,
+                            centery = 79,
+                        },
+                    },
+                }));
+            entity.Frame.D = entity.FrameCache.GetFrameDataById(0);
+            entity.Frame.PN = 0;
+            entity.Frame.N = 0;
+            entity.RelationTeam = group;
+            entity.SetRequiredRuntimeSlot(slot);
+            world.Register(entity);
+            entity.Health.HP = 500;
+            entity.Health.HPBound = 500;
+            entity.RefreshRuntimeSnapshot();
+            return entity;
+        }
+
+        private sealed class FlowEntity : LF2Entity
+        {
+            public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Character;
+
+            public FlowEntity()
+            {
+                Health = new LF2Health();
+                Health.BindRuntime(Runtime);
+                ItrRest = new LF2ItrRestTracker();
+                PS.BindRuntime(Runtime);
+                Trans = new FrameTransistor(this);
+            }
+
+            public override int GetCurrentDataObjectTypeForSimulation() =>
+                (int)LF2ObjectType.Character;
+
+            public override void Reset() { }
+
+            public override void Init(LF2TaskBase task, LF2ObjectRenderer renderer) { }
+        }
+    }
+}
+#endif

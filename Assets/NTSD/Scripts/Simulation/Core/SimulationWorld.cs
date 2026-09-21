@@ -1690,6 +1690,9 @@ namespace NTSD.Simulation
 
         internal void ResetUnityFixedWorldRenderOffsets() => stageRenderModule.ResetUnityFixedWorldRenderOffsets();
 
+        internal void AdvanceNativeBattleResultsBeforeCombat() =>
+            battleResultsOutcomeHostWriter.AdvanceNativeFlowBeforeCombat();
+
         public void UpdateBattleResultsFlow() => battleResultsOutcomeHostWriter.UpdateSummaryActivation();
 
         internal bool TrySpawnBattleResultsReserveBeforeResults(
@@ -4674,6 +4677,7 @@ namespace NTSD.Simulation
             return aiRuntime.Input.RunAiGroundNearestQueriesForSelfCheck(self, inputPhase, iterations);
         }
 
+#if UNITY_INCLUDE_TESTS
         internal void CaptureAiNearestFactsTargetForSelfCheck(
             LF2Entity self,
             int inputPhase,
@@ -4733,6 +4737,7 @@ namespace NTSD.Simulation
         {
             return aiRuntime.Input.AiNearestGenerationMismatchFallsBackForSelfCheck(self, candidate, inputPhase, out fastAborted);
         }
+#endif
 
         internal bool AiGroundFailClosedFallbackMatchesBruteForSelfCheck(
             LF2Entity self,

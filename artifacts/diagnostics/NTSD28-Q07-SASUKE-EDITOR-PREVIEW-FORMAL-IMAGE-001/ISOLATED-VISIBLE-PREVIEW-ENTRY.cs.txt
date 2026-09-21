@@ -1,0 +1,36 @@
+#if UNITY_EDITOR
+using System;
+using System.IO;
+using NTSD.Animation.Rendering.Editor;
+using UnityEditor.SceneManagement;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
+namespace NTSD.Test
+{
+    public static class NTSD28Q07IsolatedPreviewValidationEditor
+    {
+        public static void Run()
+        {
+            const string scenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
+            EditorSceneManager.OpenScene(scenePath, OpenSceneMode.Single);
+            BattleCentralEditorPreviewValidationEditor.Run();
+
+            string report = Path.GetFullPath(Path.Combine(
+                Application.dataPath,
+                "../Temp/BATTLE-CENTRAL-EDITOR-PREVIEW-001/editmode-preview.result.json"));
+            if (!File.Exists(report))
+                throw new InvalidOperationException("Preview report was not generated.");
+            string text = File.ReadAllText(report);
+            if (!text.Contains("\"status\": \"PASS\""))
+                throw new InvalidOperationException("Preview validation did not pass; inspect report.");
+
+            string root = Path.GetFullPath(Path.Combine(Application.dataPath, ".."));
+            File.Copy(report, Path.Combine(root, "Q07-Sasuke-Isolated-Preview-2.json"));
+            File.Copy(
+                Path.Combine(Path.GetDirectoryName(report), "editmode-preview.png"),
+                Path.Combine(root, "Q07-Sasuke-Isolated-Preview-2.png"));
+        }
+    }
+}
+#endif
