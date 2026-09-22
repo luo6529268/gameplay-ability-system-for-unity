@@ -786,7 +786,10 @@ namespace NTSD.Simulation.Ecs
 
             LF2Entity credit = ResolveNativeStandardHitCredit(world, attacker);
             if (credit?.Runtime != null)
+            {
                 credit.Runtime.KnockoutCount358++;
+                world?.RecordNativeStandardHitKnockout(attacker, victim, credit);
+            }
         }
 
         internal bool TryApplyCurrentDatTargetHit(

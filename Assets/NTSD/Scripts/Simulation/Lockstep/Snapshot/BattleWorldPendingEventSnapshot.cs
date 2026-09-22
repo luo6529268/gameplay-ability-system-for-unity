@@ -10,9 +10,10 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleWorldPendingEventSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 1;
+        public const int CurrentSchemaVersion = 2;
 
         private readonly PendingSoundEvent[] sounds;
+        private NativeKnockoutEvent[] knockouts;
 
         public BattleWorldPendingEventSnapshotBuffer(int soundCapacity)
         {
@@ -23,10 +24,12 @@ namespace NTSD.Simulation
 
             SoundCapacity = soundCapacity;
             sounds = new PendingSoundEvent[soundCapacity];
+            knockouts = new NativeKnockoutEvent[soundCapacity];
         }
 
         public int SoundCapacity { get; }
         public int SoundCount { get; private set; }
+        public int KnockoutCount { get; private set; }
         public int PendingUnregisterCount { get; private set; }
         public int PendingSlotReleasedDestroyCount { get; private set; }
         public int SchemaVersion { get; private set; }
@@ -42,6 +45,13 @@ namespace NTSD.Simulation
             }
 
             return sounds[index];
+        }
+
+        public NativeKnockoutEvent GetKnockout(int index)
+        {
+            if ((uint)index >= (uint)KnockoutCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return knockouts[index];
         }
 
         internal bool TryCapture(
@@ -67,6 +77,9 @@ namespace NTSD.Simulation
                 }
             }
 
+            int knockoutCount = source.NativeKnockoutEvents.Count;
+            if (knockouts.Length < knockoutCount)
+                Array.Resize(ref knockouts, knockoutCount);
             int soundCount = source.PendingSounds.Count;
             for (int index = 0; index < soundCount; index++)
             {
@@ -77,7 +90,13 @@ namespace NTSD.Simulation
                 sounds[index] = default;
             }
 
+            for (int index = 0; index < knockoutCount; index++)
+                knockouts[index] = source.NativeKnockoutEvents[index];
+            for (int index = knockoutCount; index < KnockoutCount; index++)
+                knockouts[index] = default;
+
             SoundCount = soundCount;
+            KnockoutCount = knockoutCount;
             PendingUnregisterCount = 0;
             PendingSlotReleasedDestroyCount = 0;
             SchemaVersion = CurrentSchemaVersion;
@@ -100,9 +119,14 @@ namespace NTSD.Simulation
                 return false;
             }
 
+            if (destination.NativeKnockoutEvents.Capacity < KnockoutCount)
+                destination.NativeKnockoutEvents.Capacity = KnockoutCount;
             destination.PendingSounds.Clear();
             for (int index = 0; index < SoundCount; index++)
                 destination.PendingSounds.Add(sounds[index]);
+            destination.NativeKnockoutEvents.Clear();
+            for (int index = 0; index < KnockoutCount; index++)
+                destination.NativeKnockoutEvents.Add(knockouts[index]);
             return true;
         }
     }

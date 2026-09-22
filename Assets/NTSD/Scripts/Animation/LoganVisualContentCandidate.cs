@@ -23,30 +23,112 @@ namespace NTSD.Animation
             }
         }
 
+        public sealed class NativeWordsInput
+        {
+            private const int FirstWordIndex = 16;
+            private const int WordCount = 6;
+
+            public string ResourceDatPath { get; }
+            public ReadOnlyCollection<ImageInput> Images { get; }
+            public string InputFingerprint { get; }
+
+            private NativeWordsInput(BattleContentSource source, string resourceDatPath,
+                byte[] resourceDatBytes, IReadOnlyList<string> virtualPaths)
+            {
+                ResourceDatPath = resourceDatPath;
+                var images = new List<ImageInput>(WordCount);
+                using (var bytes = new MemoryStream())
+                {
+                    using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
+                    {
+                        writer.Write("NTSD28_WORDS_INPUT_V1");
+                        writer.Write(HashBytes(resourceDatBytes));
+                        for (int index = 0; index < WordCount; index++)
+                        {
+                            string virtualPath = virtualPaths[FirstWordIndex + index].Replace('\\', '/');
+                            string path = source.ResolveImagePath(virtualPath, null);
+                            var image = new ImageInput(path);
+                            images.Add(image);
+                            writer.Write(virtualPath);
+                            writer.Write(image.Sha256);
+                        }
+                    }
+                    InputFingerprint = HashBytes(bytes.ToArray());
+                }
+                Images = images.AsReadOnly();
+            }
+
+            public static NativeWordsInput Capture(BattleContentSource source)
+            {
+                if (source == null || !source.IsLoganRuntime)
+                    throw new ArgumentException("A Logan runtime source is required.", nameof(source));
+
+                string resourceDatPath = Path.Combine(source.DatRoot, "data", "resource.dat");
+                if (!File.Exists(resourceDatPath))
+                    return null;
+
+                byte[] resourceDatBytes = File.ReadAllBytes(resourceDatPath);
+                IReadOnlyList<string> paths = FirstNativeResourceTable(Encoding.UTF8.GetString(resourceDatBytes));
+                if (paths.Count < FirstWordIndex + WordCount)
+                    throw new InvalidDataException("Native resource.dat has no complete WORDS0..WORDS5 index range.");
+                return new NativeWordsInput(source, resourceDatPath, resourceDatBytes, paths);
+            }
+
+            private static IReadOnlyList<string> FirstNativeResourceTable(string text)
+            {
+                string[] tokens = text.Split((char[])null, StringSplitOptions.RemoveEmptyEntries);
+                for (int index = 0; index < tokens.Length; index++)
+                {
+                    if (tokens[index] != "<bmp_begin>")
+                        continue;
+
+                    var paths = new List<string>();
+                    for (++index; index < tokens.Length; index++)
+                    {
+                        if (tokens[index] == "<bmp_end>")
+                            return paths;
+                        if (tokens[index] != "pic:")
+                            continue;
+                        if (++index >= tokens.Length || tokens[index].StartsWith("<", StringComparison.Ordinal))
+                            throw new InvalidDataException("Native resource.dat pic: has no path.");
+                        if (paths.Count < 48)
+                            paths.Add(tokens[index]);
+                    }
+                    throw new InvalidDataException("Native resource.dat has no <bmp_end>.");
+                }
+                throw new InvalidDataException("Native resource.dat has no <bmp_begin>.");
+            }
+        }
+
         private readonly Dictionary<string, string> imageHashes;
 
         public LoganObjectCatalog Catalog { get; }
+        public NativeWordsInput WordsInput { get; }
         public LoganContentIdentity ContentIdentity => Catalog.ContentIdentity;
         public ReadOnlyCollection<ImageInput> Images { get; }
         public string VisualFingerprint { get; }
         public string SourceCacheKey { get; }
 
-        private LoganVisualContentCandidate(LoganObjectCatalog catalog, List<ImageInput> images)
+        private LoganVisualContentCandidate(LoganObjectCatalog catalog, List<ImageInput> images,
+            NativeWordsInput wordsInput)
         {
             Catalog = catalog;
+            WordsInput = wordsInput;
             Images = images.AsReadOnly();
             imageHashes = images.ToDictionary(image => image.Path, image => image.Sha256, StringComparer.Ordinal);
             using (var bytes = new MemoryStream())
             {
                 using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
                 {
-                    writer.Write("LOGAN_VISUAL_INPUTS_V1");
+                    writer.Write(wordsInput == null ? "LOGAN_VISUAL_INPUTS_V1" : "LOGAN_VISUAL_INPUTS_V2");
                     writer.Write(catalog.DefinitionFingerprint);
                     foreach (ImageInput image in images)
                     {
                         writer.Write(Path.GetRelativePath(catalog.Source.ImageRoot, image.Path).Replace('\\', '/'));
                         writer.Write(image.Sha256);
                     }
+                    if (wordsInput != null)
+                        writer.Write(wordsInput.InputFingerprint);
                 }
                 using (var hash = SHA256.Create())
                     VisualFingerprint = Hex(hash.ComputeHash(bytes.ToArray()));
@@ -72,7 +154,8 @@ namespace NTSD.Animation
             var images = new List<ImageInput>(paths.Count);
             foreach (string path in paths)
                 images.Add(new ImageInput(path));
-            var candidate = new LoganVisualContentCandidate(catalog, images);
+            var candidate = new LoganVisualContentCandidate(catalog, images,
+                NativeWordsInput.Capture(source));
             candidate.AssertInputsCurrent();
             return candidate;
         }
@@ -80,6 +163,11 @@ namespace NTSD.Animation
         /// <summary>Load-time freshness gate. Do not call from a simulation tick.</summary>
         public void AssertInputsCurrent()
         {
+            Catalog.ModeComboInput?.AssertInputsCurrent();
+            NativeWordsInput currentWords = NativeWordsInput.Capture(Catalog.Source);
+            if (!string.Equals(currentWords?.InputFingerprint, WordsInput?.InputFingerprint,
+                    StringComparison.Ordinal))
+                throw new InvalidDataException("Logan WORDS resource inputs changed after candidate capture.");
             try
             {
                 Catalog.FusionInput.AssertInputsCurrent();
@@ -92,7 +180,7 @@ namespace NTSD.Animation
             LoganObjectCatalog current = LoganObjectCatalog.Read(Catalog.Source);
             if (current.DefinitionFingerprint != Catalog.DefinitionFingerprint ||
                 current.ContentIdentity.SemanticFingerprint != ContentIdentity.SemanticFingerprint)
-                throw new InvalidDataException("Logan catalog, DAT or decoder contract changed after candidate capture.");
+                throw new InvalidDataException("Logan catalog, DAT, mode or decoder contract changed after candidate capture.");
             foreach (ImageInput image in Images)
                 if (!string.Equals(HashFile(image.Path), image.Sha256, StringComparison.Ordinal))
                     throw new InvalidDataException("Logan image changed after candidate capture: " + image.Path);
@@ -118,6 +206,12 @@ namespace NTSD.Animation
             using (var stream = File.OpenRead(path))
             using (var hash = SHA256.Create())
                 return Hex(hash.ComputeHash(stream));
+        }
+
+        private static string HashBytes(byte[] bytes)
+        {
+            using (var hash = SHA256.Create())
+                return Hex(hash.ComputeHash(bytes));
         }
 
         private static string Hex(byte[] hash)

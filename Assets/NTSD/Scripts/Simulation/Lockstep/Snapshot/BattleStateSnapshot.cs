@@ -11,7 +11,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleStateSnapshotBuffer
     {
-        public const int CurrentSchemaVersion = 26;
+        public const int CurrentSchemaVersion = 27;
 
         internal BattleStateSnapshotBuffer(
             BattleWorldRosterResultsSnapshotBuffer rosterResults,

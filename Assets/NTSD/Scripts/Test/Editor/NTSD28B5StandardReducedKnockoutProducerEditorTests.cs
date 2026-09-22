@@ -53,6 +53,12 @@ namespace NTSD.Test.Editor
             Assert.That(source.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(attacker.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(attacker.Runtime.Kind4SourceCount92, Is.EqualTo(1));
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent redirected = world.NativeKnockoutEvents[0];
+            Assert.That(redirected.SourceSlot, Is.EqualTo(source.Runtime.SlotIndex));
+            Assert.That(redirected.CreditSlot, Is.EqualTo(credit.Runtime.SlotIndex));
+            Assert.That(redirected.FourOwnerSlot, Is.EqualTo(credit.Runtime.SlotIndex));
+            Assert.That(redirected.VictimSlot, Is.EqualTo(victim.Runtime.SlotIndex));
         }
 
         [Test]
@@ -125,6 +131,15 @@ namespace NTSD.Test.Editor
             Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(8));
             Assert.That(source.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(attacker.Runtime.KnockoutCount358, Is.Zero);
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.BattleTimeTick, Is.EqualTo(world.CurrentTickIndex));
+            Assert.That(knockout.SourceObjectType,
+                Is.EqualTo((int)LF2ObjectType.Character));
+            Assert.That(knockout.SourceSlot, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(credit.Runtime.SlotIndex));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(credit.Runtime.SlotIndex));
+            Assert.That(knockout.VictimSlot, Is.EqualTo(victim.Runtime.SlotIndex));
         }
 
         private static void AssertRejected(
@@ -161,6 +176,7 @@ namespace NTSD.Test.Editor
                     interaction),
                 Is.True);
             Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(17));
+            Assert.That(world.NativeKnockoutEvents, Is.Empty);
         }
 
         private static void CreateScope(

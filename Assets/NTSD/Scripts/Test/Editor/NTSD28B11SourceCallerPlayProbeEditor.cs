@@ -197,7 +197,7 @@ namespace NTSD.Test.Editor
                 }
                 if (request.formalStaged)
                     Require(manager.PublishedLoganContentIdentity?.SemanticFingerprint ==
-                        "FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147",
+                        "FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB",
                         "The production caller did not publish the formal staged content identity.");
                 report.candidateCacheHits = manager.ConfiguredCandidateCacheHitCount;
                 if (request.mode == "menu") Require(report.candidateCacheHits > 0, "Menu owner rehydration did not reuse the candidate input cache.");

@@ -1,6 +1,7 @@
 #include "ntsd28_playable/game_session.h"
 #include "ntsd28_playable/scenario28.h"
 #include "ntsd28/fusion_catalog.h"
+#include "ntsd28/native_combo_hud.h"
 
 #ifndef NOMINMAX
 #define NOMINMAX
@@ -234,19 +235,118 @@ FusionContentInput28 capture_fusion_input(const std::filesystem::path& decoded_r
     result.input_hash = content_sha256(input);
     return result;
 }
+// Alignment contract: NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001.
+struct ModeContentInput28 {
+    std::filesystem::path parent_path, child_path;
+    int parent_priority = -1, child_priority = -1;
+    std::string child_virtual_path;
+    Bytes28 input_hash, semantic_hash;
+    ntsd28::NativeComboHud28 combo;
+};
+
+std::filesystem::path select_mode_candidate(
+    const std::vector<std::filesystem::path>& candidates, int& priority) {
+    for (std::size_t i = 0; i < candidates.size(); ++i) {
+        std::error_code error;
+        if (std::filesystem::is_regular_file(candidates[i], error)) {
+            priority = static_cast<int>(i);
+            return candidates[i];
+        }
+        if (error && error != std::errc::no_such_file_or_directory &&
+            error != std::errc::not_a_directory)
+            throw std::runtime_error("mode candidate cannot be inspected");
+    }
+    return {};
+}
+
+ModeContentInput28 capture_mode_input(const std::filesystem::path& root,
+                                     const std::filesystem::path& vfs) {
+    ModeContentInput28 result;
+    std::vector<std::filesystem::path> parents;
+    if (!vfs.empty()) parents.push_back(vfs / "decoded_dat/data/mode.dat");
+    for (const auto& suffix : {"data", "dat/data", "assets/data", "NTSD2.8/data"})
+        parents.push_back(root / suffix / "mode.dat");
+    result.parent_path = select_mode_candidate(parents, result.parent_priority);
+    if (result.parent_path.empty()) return result;
+    const auto parent = content_read_bytes(result.parent_path);
+    std::istringstream tokens(std::string(parent.begin(), parent.end()));
+    bool in_record = false;
+    std::string token;
+    while (tokens >> token) {
+        if (token == "<mode_information>") { in_record = true; continue; }
+        if (token == "<mode_information_end>") { in_record = false; continue; }
+        if (!in_record) continue;
+        if (token == "file:") { tokens >> result.child_virtual_path; break; }
+        if (token.rfind("file:", 0) == 0 && token.size() > 5) {
+            result.child_virtual_path = token.substr(5); break;
+        }
+    }
+    if (result.child_virtual_path.empty())
+        throw std::runtime_error("mode parent has no selected child");
+    auto normalized = result.child_virtual_path;
+    std::replace(normalized.begin(), normalized.end(), '\\', '/');
+    const auto relative = std::filesystem::u8path(normalized).lexically_normal();
+    if (relative.empty() || relative.is_absolute())
+        throw std::runtime_error("invalid selected mode child path");
+    for (const auto& part : relative)
+        if (part == "..") throw std::runtime_error("selected mode child escapes root");
+    std::vector<std::filesystem::path> children;
+    if (!vfs.empty()) {
+        children.push_back(vfs / "decoded_dat" / relative);
+    }
+    children.push_back((vfs.empty() ? root / "assets/sprites" : vfs / "vfs") / relative);
+    for (const auto& suffix : {"", "dat", "assets", "NTSD2.8"})
+        children.push_back(root / suffix / relative);
+    result.child_path = select_mode_candidate(children, result.child_priority);
+    if (result.child_path.empty()) throw std::runtime_error("selected mode child is missing");
+    const auto child = content_read_bytes(result.child_path);
+    std::vector<std::string> diagnostics;
+    result.combo = ntsd28::NativeComboHud28::parse_text(
+        std::string(child.begin(), child.end()), diagnostics);
+    if (!result.combo.complete() || !diagnostics.empty())
+        throw std::runtime_error("selected mode combo failed strict parsing");
+    Bytes28 input;
+    content_string(input, "NTSD28-MODE-COMBO-INPUT-v1");
+    content_string(input, result.child_virtual_path);
+    content_string(input, content_hex(content_sha256(parent)));
+    content_string(input, content_hex(content_sha256(child)));
+    result.input_hash = content_sha256(input);
+    Bytes28 semantic;
+    content_string(semantic, "NTSD28-MODE-COMBO-SEMANTIC-v1");
+    for (int value : {*result.combo.bound, *result.combo.facing,
+                      *result.combo.respond, *result.combo.caughtact})
+        content_int32(semantic, value);
+    result.semantic_hash = content_sha256(semantic);
+    return result;
+}
+
+bool same_combo(const ntsd28::NativeComboHud28& a, const ntsd28::NativeComboHud28& b) {
+    return a.declared == b.declared && a.bound == b.bound && a.respond == b.respond &&
+        a.offset_x == b.offset_x && a.offset_y == b.offset_y && a.facing == b.facing &&
+        a.times == b.times && a.state == b.state && a.caughtact == b.caughtact &&
+        a.effect == b.effect && a.width == b.width && a.height == b.height &&
+        a.picture_virtual_path == b.picture_virtual_path && a.name == b.name;
+}
+
 struct BattleContentInput28 {
     Bytes28 object_hash;
     FusionContentInput28 fusion;
+    ModeContentInput28 mode;
     Bytes28 composite_hash;
 };
 BattleContentInput28 capture_battle_content(const std::filesystem::path& resource_root,
                                           const std::filesystem::path& complete_vfs_root) {
     BattleContentInput28 result;
     result.object_hash = capture_content_raw(resource_root);
-    result.fusion = capture_fusion_input(complete_vfs_root / "decoded_dat", resource_root);
-    const std::string tag = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
+    result.fusion = capture_fusion_input(complete_vfs_root.empty() ? std::filesystem::path{} :
+        complete_vfs_root / "decoded_dat", resource_root);
+    result.mode = capture_mode_input(resource_root, complete_vfs_root);
+    const std::string tag = result.mode.parent_path.empty()
+        ? "NTSD28_LOGAN_BATTLE_INPUTS_V1" : "NTSD28_LOGAN_BATTLE_INPUTS_V2";
     Bytes28 bytes(tag.begin(), tag.end()); bytes.push_back(0);
     for (const auto* digest : {&result.object_hash, &result.fusion.input_hash, &result.fusion.semantic_hash})
+        bytes.insert(bytes.end(), digest->begin(), digest->end());
+    for (const auto* digest : {&result.mode.input_hash, &result.mode.semantic_hash})
         bytes.insert(bytes.end(), digest->begin(), digest->end());
     result.composite_hash = content_sha256(bytes);
     return result;
@@ -254,7 +354,14 @@ BattleContentInput28 capture_battle_content(const std::filesystem::path& resourc
 bool same_battle_content(const BattleContentInput28& left, const BattleContentInput28& right) {
     return left.object_hash == right.object_hash && left.fusion.input_hash == right.fusion.input_hash &&
            left.fusion.semantic_hash == right.fusion.semantic_hash &&
-           left.fusion.selected_path == right.fusion.selected_path;
+           left.fusion.selected_path == right.fusion.selected_path &&
+           left.mode.parent_path == right.mode.parent_path &&
+           left.mode.child_path == right.mode.child_path &&
+           left.mode.parent_priority == right.mode.parent_priority &&
+           left.mode.child_priority == right.mode.child_priority &&
+           left.mode.child_virtual_path == right.mode.child_virtual_path &&
+           left.mode.input_hash == right.mode.input_hash &&
+           left.mode.semantic_hash == right.mode.semantic_hash;
 }
 
 std::string capture_content_json(const BattleContentInput28& content) {
@@ -270,14 +377,20 @@ std::string capture_content_json(const BattleContentInput28& content) {
     if (projection == 0) projection = 1;
     std::ostringstream hex_projection;
     hex_projection << std::uppercase << std::hex << std::setw(16) << std::setfill('0') << projection;
-    return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"catalog-object-fusion-definitions\","
+    const std::string mode_fields = content.mode.parent_path.empty() ? "" :
+        "\"battleInputContract\":\"NTSD28_LOGAN_BATTLE_INPUTS_V2\","
+        "\"modeInputSha256\":\"" + content_hex(content.mode.input_hash) +
+        "\",\"modeSemanticSha256\":\"" + content_hex(content.mode.semantic_hash) + "\",";
+    return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"" +
+        std::string(content.mode.parent_path.empty() ? "catalog-object-fusion-definitions" :
+            "catalog-object-fusion-mode-definitions") + "\"," + mode_fields +
         "\"profile\":\"logan-runtime\",\"objectDefinitionSha256\":\"" + content_hex(content.object_hash) +
         "\",\"fusionInputSha256\":\"" + content_hex(content.fusion.input_hash) +
         "\",\"fusionSemanticSha256\":\"" + content_hex(content.fusion.semantic_hash) +
         "\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
         "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
         "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
-        "\",\"schemas\":{\"entityRuntime\":17,\"aggregate\":25,\"checksum\":28,"
+        "\",\"schemas\":{\"entityRuntime\":17,\"aggregate\":26,\"checksum\":29,"
         "\"characterShell\":2,\"entityBaseShell\":2}}";
 }
 
@@ -973,6 +1086,22 @@ void write_tick(std::ostream& output,
     output << "]}\n";
 }
 
+struct CaptureBundleGuard28 {
+    std::vector<std::filesystem::path> paths;
+    bool committed = false;
+    ~CaptureBundleGuard28() noexcept {
+        if (committed) return;
+        for (const auto& path : paths) {
+            if (path.empty()) continue;
+            try {
+                // A failed bundle must never leave a standalone valid side stream.
+                std::ofstream failed(path, std::ios::binary | std::ios::app);
+                failed << "INVALID_CAPTURE_BUNDLE\n";
+            } catch (...) {}
+        }
+    }
+};
+
 int run(int count, wchar_t** arguments) {
     Options28 options;
     if (!parse_options(count, arguments, options)) {
@@ -987,6 +1116,7 @@ int run(int count, wchar_t** arguments) {
         return 2;
     }
 
+    CaptureBundleGuard28 bundle{{options.output, options.domain_output, options.b2_input_rng_output}};
     const auto loaded = ntsd28_playable::ScenarioLoader28::load(options.scenario);
     if (!loaded.success) {
         for (const auto& diagnostic : loaded.diagnostics) {
@@ -1003,6 +1133,10 @@ int run(int count, wchar_t** arguments) {
         std::cerr << "session: " << error << '\n';
         return 4;
     }
+    const auto& actual_combo = session.config().native_combo_hud;
+    if (content_raw.mode.parent_path.empty() ? actual_combo.has_value() :
+        (!actual_combo || !same_combo(content_raw.mode.combo, *actual_combo)))
+        throw std::runtime_error("initialized session combo differs from captured mode input");
     // Alignment contract: NTSD28-B2-DIRECT-RNG-PER-CALL-JOINT-TRACE-001.
     // Initialization table/BGM calls remain represented by scalar state; the
     // per-call window begins at the first completed battle tick.
@@ -1106,12 +1240,16 @@ int run(int count, wchar_t** arguments) {
         output << "INVALID_CONTENT_INPUTS_CHANGED\n";
         throw std::runtime_error("content inputs changed during simulation");
     }
+    output.flush();
+    if (domain_output.is_open()) domain_output.flush();
+    if (b2_input_rng_output.is_open()) b2_input_rng_output.flush();
     if (!output ||
         (domain_output.is_open() && !domain_output) ||
         (b2_input_rng_output.is_open() && !b2_input_rng_output)) {
         std::cerr << "capture write failed\n";
         return 6;
     }
+    bundle.committed = true;
     std::cout << "capture_schema=" << capture_schema << '\n'
               << "capture_ticks=" << loaded.scenario.ticks << '\n'
               << "domain_capture="

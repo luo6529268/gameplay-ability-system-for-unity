@@ -1,0 +1,196 @@
+menu_bgm1: bgm\main.wma
+menu_bgm2: bgm\main.wma
+
+name: Naruto_-_The_Setting_Dawn
+file: data\saves.txt
+
+link: https://discord.gg/gejWevY
+
+cover: data\load\
+bdefend: 0
+
+cheat1: KANCHOO
+cheat2: KEZEALTHESAVIOR
+
+spark_w: 99
+spark_h: 79
+
+fps_value: 33
+fps_value_f5: 3
+
+slow_motion: 0
+slow_power: 65
+
+adjust_cmc: 3
+adjust_1on1: 3
+adjust_2on2: 3
+adjust_battle: 3
+adjust_scoreboard: 3
+
+text_load: 1
+percent_load: 1
+load_type: 1
+
+facing: 2
+effect: 1
+kind: 1
+injury: 1
+
+arest: 1
+vrest: 1
+
+st_vol: 100
+tu_mode: 0
+
+<menu_back_1>
+type: 1    rect32: 0
+layer:  pic: sprite\menu\1.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\2.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\3.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\4.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\5.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\6.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\7.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\8.png   transparency: 1   layer_end
+<menu_back_end>
+
+<menu_back_2>
+type: 1  rect32: 0
+layer:  pic: sprite\menu\1.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\2.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\3.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\4.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\5.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\6.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\7.png   transparency: 1   layer_end
+layer:  pic: sprite\menu\8.png   transparency: 1   layer_end
+<menu_back_end>
+
+<menu_wait>
+   pic: sprite\loading\menu_wait.png
+<menu_wait_end>
+
+<loading>
+   w: 793
+   h: 230
+   row: 1
+   col: 10
+   x: 0
+   y: 300
+   loop: 10
+<loading_end>
+
+<armor_s>
+ state: 8 
+ state: 11
+ state: 12
+ state: 13
+ state: 14
+ state: 16
+ state: 18
+<armor_s_end>
+
+<defend>
+ id: 822
+<defend_end>
+
+<hp_refill>
+   id: 122
+<hp_end>
+
+<mp_refill>
+   id: 123
+<mp_end>
+
+<criminal_free>
+   id: 201
+   id: 202
+<criminal_free_end>
+
+<stage_com>
+  id: 30
+  id: 31
+  id: 32
+  id: 33
+  id: 34
+  id: 35
+  id: 36
+  id: 37
+  id: 39
+  id: 43
+<stage_com_end>
+
+<z_oid>
+   id: 223
+   id: 224
+<z_oid_end>
+
+<z_states>
+   state: 1002
+   state: 3000
+   state: 3006
+<z_states_end>
+
+<z_movement>
+  id: 211
+<z_movement_end>
+
+<freeze_column>
+  id: 212
+<freeze_column_end>
+
+<henry_arrow>
+  id: 201
+<henry_arrow_end>
+
+<john_biscuit>
+  id: 214
+<john_biscuit_end>
+
+<weapon_ww_sky>
+  id: 201
+  id: 202
+<weapon_ww_sky_end>
+
+<weapon_flute_sky>
+  id: 201
+  id: 202
+<weapon_flute_sky_end>
+
+<id_no_blink>
+  id: 30
+  id: 31
+  id: 32
+  id: 33
+  id: 34
+  id: 35
+  id: 36
+  id: 37
+  id: 39
+<id_no_blink_end>
+
+<weapon_throw>
+  id: 120
+  id: 124
+<weapon_throw_end>
+
+<weapon_run>
+  id: 122
+  id: 123
+<weapon_run_end>
+
+<id_locked>
+  id: 30
+  id: 31
+  id: 32
+  id: 33
+  id: 34
+  id: 35
+  id: 36
+  id: 37
+  id: 38
+  id: 39
+  id: 50
+  id: 51
+  id: 52
+<id_locked_end>

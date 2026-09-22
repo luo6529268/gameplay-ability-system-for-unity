@@ -1,0 +1,186 @@
+<frame>
+frame: sprite\frame\INKHUD\FRAME.png
+bars: sprite\frame\INKHUD\BARS.png
+
+border_w: 1315
+border_h: 60
+
+frame_x: 6
+frame_y: 10
+
+frame_w: 165
+frame_h: 30
+
+small_x: 18
+small_y: 9
+
+col_dhp: 30
+col_hp: 20
+col_bhp: 40
+col_dmp: 10
+col_mp: 0
+
+row: 8
+hidden: 1
+<frame_end>
+
+<hp_bar>
+  type: 1
+  x: 56
+  y: 22
+  w: 100
+  h: 5
+<hp_bar_end>
+
+<mp_bar>
+  type: 3
+  x: 55
+  y: 32
+  w: 14
+  h: 10
+  dx: 0
+  dy: 0
+  amount: 1
+  loop: 10
+<mp_bar_end>
+
+<stats_count>
+count:
+ x: 80  y: 43  type: 1  max: 999  pic: 2   loop: 9
+count_end:
+count:
+ x: 126  y: 43  type: 3  max: 999  pic: 1   loop: 9
+count_end:
+<stats_count_end>
+
+<team_flag>
+team_flag_x: 7
+team_flag_y: 28
+
+team0_flag: sprite\frame\INKHUD\team0.png
+team1_flag: sprite\frame\INKHUD\team1.png
+team2_flag: sprite\frame\INKHUD\team2.png
+team3_flag: sprite\frame\INKHUD\team3.png
+team4_flag: sprite\frame\INKHUD\team4.png
+team5_flag: sprite\frame\INKHUD\team0.png
+<team_flag_end>
+
+
+<effect> 
+layer:       #poison-timer
+  pic: sprite\frame\INKHUD\BARS.png
+  type: 6  transparency: 0   x: 56  y: 22  dx: 0  dy: 30  w: 100 h: 5   bound: 1 facing: 0 max: 999   cc: 16  c1: 0  c2: 7
+layer_end
+layer:        #poison-timer
+  pic: sprite\frame\INKHUD\BARS.png
+  type: 6  transparency: 0   x: 56  y: 22  dx: 0  dy: 30  w: 100 h: 5   bound: 1 facing: 0 max: 999   cc: 16  c1: 8  c2: 15
+layer_end
+
+layer:       #confuse
+  pic: sprite\frame\INKHUD\BARS.png
+  type: 10  transparency: 0   x: 56  y: 22  dx: 0  dy: 40  w: 100 h: 5   bound: 1 facing: 0 max: 999   cc: 16  c1: 0  c2: 7
+layer_end
+layer:        #confuse
+  pic: sprite\frame\INKHUD\BARS.png
+  type: 10  transparency: 0   x: 56  y: 22  dx: 0  dy: 40  w: 100 h: 5   bound: 1 facing: 0 max: 999   cc: 16  c1: 8  c2: 15
+layer_end
+<effect_end>
+
+
+<name>
+respond: 0
+name_x: 58
+name_y: 7
+<name_end>
+
+<radar>
+bound: 0
+pic: sprite\radar\base2.png
+pic_x: 0
+pic_y: 128
+
+start_x: 2
+start_y: 130
+
+height: 69
+width: 178
+		
+offset_x: 6
+offset_y: 6
+
+fall: 1
+action: 1
+rect: 16777215
+cover: 1
+transparency: 1
+respond: 3
+
+facing: 1
+shadow: 1
+
+h: 75
+w: 180
+
+type: 0
+type: 3
+type: 5
+type: 6
+
+state: 0
+state: 1
+state: 2
+state: 3
+state: 4
+state: 5
+state: 6
+state: 7
+state: 8
+state: 9
+state: 10
+state: 11
+state: 12
+state: 13
+state: 14
+state: 15
+state: 16
+state: 17
+state: 18
+state: 19
+
+state: 100
+state: 301
+state: 500
+state: 501
+state: 1700
+
+state: 1000
+state: 1001
+state: 1002
+state: 1003
+state: 1004
+
+state: 3000
+state: 3006
+state: 3007
+
+pic_team1: sprite\radar\team1.png
+pic_team2: sprite\radar\team2.png
+pic_team3: sprite\radar\team3.png
+pic_team4: sprite\radar\team4.png
+pic_team5: sprite\radar\team5.png
+
+pic_type0: sprite\radar\type0.png
+pic_type1: sprite\radar\type1.png
+pic_type2: sprite\radar\type2.png
+pic_type3: sprite\radar\type3.png
+pic_type4: sprite\radar\type0.png
+pic_type5: sprite\radar\type5.png
+pic_type6: sprite\radar\type6.png
+
+pic_hidden: sprite\radar\hidden.png
+pic_clone: sprite\radar\clone.png
+
+pic_dead: sprite\radar\dead.png
+pic_heal: sprite\radar\heal.png
+
+<radar_end>

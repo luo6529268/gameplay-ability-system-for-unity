@@ -21,7 +21,7 @@ namespace NTSD.Test
     {
         private const string FormalRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string FormalFingerprint =
-            "FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147";
+            "FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB";
         private const string CaptureName = "formal-source-camera-v2";
         private const int Width = 960;
 

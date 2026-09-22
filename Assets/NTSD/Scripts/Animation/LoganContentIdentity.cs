@@ -12,10 +12,14 @@ namespace NTSD.Animation
     {
         public const string CurrentDecodeContractTag = "NTSD28_LOGAN_DAT_SEMANTICS_V3";
         private const string BattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
+        private const string ModeBattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V2";
 
         public string ObjectDefinitionFingerprint { get; }
         public string FusionInputFingerprint { get; }
         public string FusionSemanticFingerprint { get; }
+        public string ModeInputFingerprint { get; }
+        public string ModeSemanticFingerprint { get; }
+        public string BattleInputContractTag { get; }
 
         public string RawDefinitionFingerprint { get; }
         public string DecodeContractTag { get; }
@@ -50,28 +54,49 @@ namespace NTSD.Animation
             return new LoganContentIdentity(rawFingerprint, "NTSD28_LOGAN_DAT_SEMANTICS_V2");
         }
 
-        private LoganContentIdentity(string composite, string objects, string fusionInput, string fusionSemantic)
+        private LoganContentIdentity(string composite, string objects, string fusionInput, string fusionSemantic,
+            string modeInput = null, string modeSemantic = null)
             : this(composite, CurrentDecodeContractTag)
         {
             ObjectDefinitionFingerprint = objects;
             FusionInputFingerprint = fusionInput;
             FusionSemanticFingerprint = fusionSemantic;
+            ModeInputFingerprint = modeInput;
+            ModeSemanticFingerprint = modeSemantic;
+            BattleInputContractTag = modeInput == null ? BattleInputTag : ModeBattleInputTag;
         }
 
         public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic)
         {
+            return FromBattleComponents(objects, fusionInput, fusionSemantic, null, null);
+        }
+
+        public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic,
+            string modeInput, string modeSemantic)
+        {
+            if ((modeInput == null) != (modeSemantic == null))
+                throw new ArgumentException("Mode input and semantic fingerprints must be supplied together.");
             byte[] objectBytes = DecodeFingerprint(objects);
             byte[] inputBytes = DecodeFingerprint(fusionInput);
             byte[] semanticBytes = DecodeFingerprint(fusionSemantic);
-            byte[] tag = Encoding.ASCII.GetBytes(BattleInputTag);
-            byte[] preimage = new byte[tag.Length + 1 + 96];
+            byte[] modeInputBytes = modeInput == null ? null : DecodeFingerprint(modeInput);
+            byte[] modeSemanticBytes = modeSemantic == null ? null : DecodeFingerprint(modeSemantic);
+            byte[] tag = Encoding.ASCII.GetBytes(modeInput == null ? BattleInputTag : ModeBattleInputTag);
+            byte[] preimage = new byte[tag.Length + 1 + (modeInput == null ? 96 : 160)];
             Buffer.BlockCopy(tag, 0, preimage, 0, tag.Length);
             Buffer.BlockCopy(objectBytes, 0, preimage, tag.Length + 1, 32);
             Buffer.BlockCopy(inputBytes, 0, preimage, tag.Length + 33, 32);
             Buffer.BlockCopy(semanticBytes, 0, preimage, tag.Length + 65, 32);
+            if (modeInputBytes != null)
+            {
+                Buffer.BlockCopy(modeInputBytes, 0, preimage, tag.Length + 97, 32);
+                Buffer.BlockCopy(modeSemanticBytes, 0, preimage, tag.Length + 129, 32);
+            }
             using (var sha = SHA256.Create())
                 return new LoganContentIdentity(Hex(sha.ComputeHash(preimage)),
-                    Hex(objectBytes), Hex(inputBytes), Hex(semanticBytes));
+                    Hex(objectBytes), Hex(inputBytes), Hex(semanticBytes),
+                    modeInputBytes == null ? null : Hex(modeInputBytes),
+                    modeSemanticBytes == null ? null : Hex(modeSemanticBytes));
         }
 
         private static byte[] DecodeFingerprint(string value)

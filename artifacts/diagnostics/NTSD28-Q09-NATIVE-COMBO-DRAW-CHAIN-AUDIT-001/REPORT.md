@@ -1,0 +1,24 @@
+# NTSD28-Q09-NATIVE-COMBO-DRAW-CHAIN-AUDIT-001
+
+Status: `STATIC_DRAW_CHAIN_GAP_CONFIRMED / UNITY_RUNTIME_PENDING` (2026-09-22). Read-only Q09 handoff; no script, Scene, resource, or importer change. This report does not close Q07, Q09, R15, or the overall alignment goal.
+
+## Formal release path
+
+- The formal `resources/runtime/decoded_dat/data/mode.dat` selects `data/mode/ntsd.dat`. The selected `<combo>` record and `vfs/sprite/combo_hits.png` are already staged in `Assets/NTSD/Content/LoganRuntime` with formal hashes. The record explicitly says `bound=1, facing=1, respond=50, caughtact=1`, `effect=20`, `offset_x=20`, `offset_y=21`, `w=h=15`, `name=%d_hit`. Q07's content entry records the exact two-DAT selection and four-field World tuple. The staged atlas decodes to 256x256 pixels.
+- `GameSession28` loads the full `NativeComboHud28` record and resolves its picture path (`source/ntsd28_playable/src/game_session.cpp:1332-1375`). It initializes the World combo tuple (`:4148-4158`) and passes the full HUD record, resolved image, and display latch into snapshot building (`:3331-3334`). Q07's current Unity implementation writes only the four World fields and `RecordPresent`; it does not claim to publish the full display record.
+- `project_native_combo_command` (`source/ntsd28_core/src/rendering/render_snapshot.cpp:650-753`) first requires the display latch, a complete record, `bound==1`, type-0 character, positive combo count, positive-effect slot ceiling, available picture, and `lastTick+respond > world.sequence`. It uses the current frame's `centerz` (default 0), replaces `_` with spaces and the first `%d` with the count, and sets `(left,top)=(x-offset_x,z-centerz+y-offset_y)`. The command stores Z order, original slot, text, count and resource. The locked atlas geometry is 15x15 source cells in a 16x16 grid with one-pixel gutters and eight-pixel destination advance. Invalid geometry or image suppresses the command.
+- The projection occurs inside the depth-sorted entity pass near the nameplate and before that entity's spark tail (`render_snapshot.cpp:1938-1947`, sorted command registration at `:2210-2217`). `D3D11Renderer28::draw_native_combo_text` samples this dedicated atlas and fails closed for an invalid cell (`source/ntsd28_playable/src/d3d11_renderer.cpp:776-824`). The renderer applies entity interpolation and camera offsets when drawing the combo command (`:1773-1790`). The image cannot be replaced by a generic font without changing this formal path.
+
+## Unity current boundary
+
+- Q06 already owns the ordinary/caughtact combo counter and last-tick production, post-C25 expiry, runtime fields, snapshot and checksum. Relevant fields are `NTSDEntityRuntime.NativeComboHitCount1E0` and `NativeComboHitLastTick1E4`; `BattleNativeComboOrdinaryProducer` writes them. This is existing battle logic and must not be recreated as a Q09 display counter.
+- `BattlePresentationShadowBuild.BattleRenderCommandType` currently has only `Shadow`, `Entity`, `OverlayGlyph`, and `HitRecord`. A scoped search of `Assets/NTSD/Scripts/Simulation/Presentation`, `Assets/NTSD/Scripts/Animation`, and `Assets/NTSD/Scripts/UI` found no reader of the two entity combo-display fields. That static result identifies the missing presentation connection; it does not prove what the original Editor currently draws, because its loaded assemblies predate the Q07/R15 edits.
+- The staged `combo_hits.png` is present and hashes to `1D398C0AE0AE01495B7FF5FEC78B7978690CFE53B98D10913E1BCEC92426AD48`. The sprite bytes are available, but there is no Q09 command/atlas consumer verified in Unity.
+
+## Exact next package and exit
+
+1. Finish Q07's original-Editor compile and focused formal-mode activation gate first. The currently loaded original-Editor assemblies are stale; a request-file test would run old code. Do not start another Editor or use computer-use.
+2. Before Q09 script edits, create a separate Task Contract and Change Record naming the full-record visual projection, publication freshness, command representation, sorting and render consumer. Keep the battle counter, expiry, input, hit and Q06 producer untouched; leave menu/KO/result records outside this package.
+3. Compare one same-seed, same-input positive combo event from the formal playable snapshot against Unity's count, last tick, suppression gates, command position, resource key, atlas cell and order. Then validate actual battle pixels in the original Unity project, including expiration and a second entity at equal Z. Preserve current approved camera/background/HUD exceptions. Compilation alone and a source-model diagnostic trace are insufficient to close this Q09 item.
+
+This audit is narrower than all Q09 presentation work: spark, shadow, nameplate, interpolation and other display branches retain their own exits.

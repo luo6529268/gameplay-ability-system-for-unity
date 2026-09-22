@@ -2,6 +2,14 @@
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
+| NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001 | CODE_WRITTEN | Q08正式致死逐次事件、尾部过期、快照/校验/恢复/清理 | [Record](CHANGE-RECORDS/NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001.md) | 原项目离线runtime+Editor当前源码编译0错且新测试类型入DLL；原Editor编译/NUnit/SelfCheck/Play/同seed与Q09 mode70数据驱动待，不能报验证。 |
+| NTSD28-Q09-WORDS-PUBLICATION-001 | COMPILE_PASS | Q09正式六WORDS图复用现有公共视觉目录/中央图集原子发布 | [Record](CHANGE-RECORDS/NTSD28-Q09-WORDS-PUBLICATION-001.md) | 原Editor最终源码编译/重载已证；定向请求已消费但尚无结果，不算NUnit通过；画面与关闭验收待。 |
+| NTSD28-Q09-WORDS-INPUT-IDENTITY-001 | COMPILE_PASS | Q09正式resource.dat索引16..21与六WORDS图视觉候选身份/新鲜度 | [Record](CHANGE-RECORDS/NTSD28-Q09-WORDS-INPUT-IDENTITY-001.md) | 原Editor 07:58Z程序集晚于源文件且完成重载；离线身份反例PASS，原Editor NUnit/Play仍待。 |
+| NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001 | FOCUSED_TEST_PASS | R15 native source-model正式mode双DAT V2捕获 | [Record](CHANGE-RECORDS/NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001.md) | final-build 0错；正式3路双跑逐字节同、3校验器PASS、变更反例全bundle拒绝；Unity/正式EXE同条件待。 |
+| NTSD28-R15-FORMAL-PROBE-V2-VECTOR-001 | CODE_WRITTEN | R15正式根战斗探针V2固定身份预期 | [Record](CHANGE-RECORDS/NTSD28-R15-FORMAL-PROBE-V2-VECTOR-001.md) | 九脚本十文字断言已精确更新；正式/暂存V2独立向量复核PASS，原Editor编译/运行待。 |
+| NTSD28-R15-VERSIONED-TRACE-HEADER-001 | CODE_WRITTEN | R15 V1/V2 trace头和精确schema身份校验 | [Record](CHANGE-RECORDS/NTSD28-R15-VERSIONED-TRACE-HEADER-001.md) | parity工具Release build 0错/自测157/157；原项目Unity编译、native V2捕获及同版本比较待。 |
+| NTSD28-Q07-MODE-COMBO-PUBLISHED-ACTIVATION-001 | COMPILE_PASS | Q07正式mode combo联合身份、发布新鲜度与新World首tick前激活 | [Record](CHANGE-RECORDS/NTSD28-Q07-MODE-COMBO-PUBLISHED-ACTIVATION-001.md) | 原Editor 07:58Z程序集晚于本包源码/测试且完成重载；focused NUnit/Play与R15 trace仍待。 |
+| NTSD28-Q07-MODE-COMBO-INPUT-PROJECTION-001 | CODE_WRITTEN | Q07正式mode combo双DAT不可变输入投影 | [Record](CHANGE-RECORDS/NTSD28-Q07-MODE-COMBO-INPUT-PROJECTION-001.md) | 新源+meta；Add-Type纯依赖编译、正式/暂存指纹一致、反例2/2；原项目Unity编译/Play待。 |
 | NTSD28-Q08-COMBAT-LETHAL-PRECOMBAT-TIMING-001 | CODE_WRITTEN | Q08完整tick碰撞致死与下一tick结果计时见证 | [Record](CHANGE-RECORDS/NTSD28-Q08-COMBAT-LETHAL-PRECOMBAT-TIMING-001.md) | 正式GameSession致死tick12计时0/次tick13计时1；Unity用例已写、待原Editor编译/定向运行。 |
 | NTSD28-Q08-ATLAS-BUDGET-SOURCE-BINDING-001 | RUNTIME_PENDING | Q08超预算Auto复用已发布源纹理中央绑定 | [Record](CHANGE-RECORDS/NTSD28-Q08-ATLAS-BUDGET-SOURCE-BINDING-001.md) | 隔离Unity聚焦4/4、正式内容Battle Scene第二轮1/1通过；代表像素/顺序及正式EXE表现未验。 |
 | NTSD28-Q08-FORMAL-SOURCE-PIXEL-WITNESS-001 | RUNTIME_PENDING | Q08正式资源源纹理真实Battle Scene像素见证 | [Record](CHANGE-RECORDS/NTSD28-Q08-FORMAL-SOURCE-PIXEL-WITNESS-001.md) | 隔离实时Editor NUnit1/1；原Editor相机PNG/JSON同hash，原NUnit回调未落盘，正式EXE像素未验。 |

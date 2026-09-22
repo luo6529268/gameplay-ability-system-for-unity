@@ -1,0 +1,7 @@
+# Original-project offline compile checkpoint
+
+Date: 2026-09-22. Status: `OFFLINE_COMPILE_PASS / ORIGINAL_EDITOR_RUNTIME_PENDING`.
+
+The original repository's `Assembly-CSharp-Editor.csproj` was compiled by `dotnet msbuild` with `-t:Build -clp:ErrorsOnly -nologo` and a Temp-only absolute `CustomAfterMicrosoftCommonTargets` path to [current-sources.targets](../../../Temp/diagnostics/NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001/current-sources.targets). The targets add the new Q08 focused Editor test to the generated project inputs. `-getItem:Compile` confirmed that test path; the resulting offline Editor DLL contains `NTSD28Q08NativeKnockoutEventStateEditorTests`, and the runtime DLL contains `NativeKnockoutEvent`. Final command exit code was 0 with no compiler errors. The output is under `Temp/diagnostics/NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001/Build`.
+
+An earlier build used a relative targets path and also exited 0, but evaluated inputs showed that it omitted the new test. It is superseded by the absolute-path build and cannot support the test compilation claim. Neither build started another Unity project, changed generated csproj files, refreshed the live Editor, ran NUnit or verified behavior. The original Editor PID 33236 still had older Library assemblies when checked; Q09 WORDS' earlier one-shot TestRunner request was consumed without a result, so no concurrent Q08 runner was queued.

@@ -54,7 +54,7 @@ namespace NTSD.Test.Editor
         private const string MenuScenePath = "Assets/NTSD/Scene/NTSD_Menu.unity";
         private const string BattleScenePath = "Assets/NTSD/Scene/NTSD_Battle.unity";
         private const string FormalFingerprint =
-            "FD18D668B9D4EF0FAD4EE3D8056F98754049B3F25FB6927EC562C3F60B008147";
+            "FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB";
         private static bool running;
         private static string Root => Directory.GetParent(Application.dataPath).FullName;
         private static string RequestPath => Path.Combine(Root, "Temp/NTSD28_Q07_MenuSceneCallback.request.json");

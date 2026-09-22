@@ -1,0 +1,46 @@
+[
+  {
+    "case": "parent-bytes",
+    "mutatedAfterHeader": true,
+    "exitCode": 91,
+    "stderr": "unhandled_std_exception=content inputs changed during simulation\r\n",
+    "tails": [
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE"
+    ]
+  },
+  {
+    "case": "child-bytes",
+    "mutatedAfterHeader": true,
+    "exitCode": 91,
+    "stderr": "unhandled_std_exception=content inputs changed during simulation\r\n",
+    "tails": [
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE"
+    ]
+  },
+  {
+    "case": "selected-path",
+    "mutatedAfterHeader": true,
+    "exitCode": 91,
+    "stderr": "unhandled_std_exception=content inputs changed during simulation\r\n",
+    "tails": [
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE"
+    ]
+  },
+  {
+    "case": "priority-emergence",
+    "mutatedAfterHeader": true,
+    "exitCode": 91,
+    "stderr": "unhandled_std_exception=content inputs changed during simulation\r\n",
+    "tails": [
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE",
+      "INVALID_CAPTURE_BUNDLE"
+    ]
+  }
+]

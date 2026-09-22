@@ -549,6 +549,10 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
             BattleResultsFlow(resultsActiveAtTickStart, frameInput);
             diagnostics?.EndPhase(BattleTickPhase.BattleResults);
+            // Alignment contract: NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001.
+            // The selected formal #killtext record uses times:70; Q09 owns the
+            // later parsed-content handoff for alternative mode definitions.
+            world.PruneNativeKnockoutTail(tickIndex, 70);
             diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
             RenderDispatch(tickIndex, buildPresentation, simulationWorker);
             diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);

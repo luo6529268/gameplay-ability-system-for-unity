@@ -1,0 +1,62 @@
+<bmp_begin>
+pic: sprite\UI\LF2_CURSOR.png
+pic: sprite\UI\MENU_CLIP.png
+pic: sprite\UI\MENU_CLIP2.png
+pic: sprite\UI\MENU_CLIP3.png
+pic: sprite\UI\MENU_CLIP4.png
+pic: sprite\UI\MENU_CLIP5.png
+pic: sprite\UI\MENU_CLIP6.png
+pic: sprite\UI\BG_RANDOM.png
+pic: sprite\UI\BG_FRAME.png
+pic: sprite\UI\SLOGAN.png
+pic: sprite\UI\ENDING.png
+pic: sprite\UI\CS2.png
+pic: sprite\UI\CS3.png
+pic: sprite\UI\CS4.png
+pic: sprite\UI\CS5.png
+pic: sprite\UI\CS6.png
+pic: sprite\UI\WORDS0.png
+pic: sprite\UI\WORDS1.png
+pic: sprite\UI\WORDS2.png
+pic: sprite\UI\WORDS3.png
+pic: sprite\UI\WORDS4.png
+pic: sprite\UI\WORDS5.png
+pic: sprite\UI\PAUSE.png
+pic: sprite\UI\DEMO.png
+pic: sprite\UI\SCORE_BOARD1.png
+pic: sprite\UI\SCORE_BOARD2.png
+pic: sprite\UI\SCORE_BOARD3.png
+pic: sprite\UI\SCORE_BOARD4.png
+pic: sprite\UI\WIN_ALIVE.png
+pic: sprite\UI\WIN_DEAD.png
+pic: sprite\UI\LOSE_DEAD.png
+pic: sprite\UI\LOSE_ALIVE.png
+pic: sprite\UI\CHARMENU.png
+pic: sprite\UI\CM1.png
+pic: sprite\UI\CM2.png
+pic: sprite\UI\CM3.png
+pic: sprite\UI\CM4.png
+pic: sprite\UI\CM5.png
+pic: sprite\UI\CMA.png
+pic: sprite\UI\CMA2.png
+pic: sprite\UI\CMC.png
+pic: sprite\UI\CMC2.png
+pic: sprite\UI\RFACE.png
+pic: sprite\UI\SPARK.png
+pic: sprite\UI\BATTLEMODE.png
+pic: sprite\UI\BATTLETROOPS.png
+pic: sprite\UI\information.png
+pic: sprite\Loading\loading.png
+<bmp_end>
+
+
+<frame>
+pic: sprite\UI\extra\recording_background.png
+pic: sprite\UI\extra\human.png
+pic: sprite\UI\extra\BG1o1.png
+pic: sprite\UI\extra\BG2o2.png
+pic: sprite\UI\extra\branch.png
+pic: sprite\UI\extra\branch2.png
+pic: sprite\UI\extra\player.png
+<frame_end>
+

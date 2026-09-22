@@ -1,0 +1,23 @@
+# NTSD28-Q09-NATIVE-SPARK-ATLAS-REACHABILITY-001
+
+Status: `STATIC_FIRST_DIFFERENCE_REFINED / Q09_IMPLEMENTATION_PENDING` (2026-09-22). Read-only source, current-project and formal-content audit. `native-spark-id-map.csv` enumerates all 100 native grid IDs from the formal dimensions; no Unity script, Scene, resource or importer was changed.
+
+## Formal playable chain and exact content
+
+- Formal `data/resource.dat` index 43 selects `sprite\UI\SPARK.png`; `data/system.dat` gives `spark_w=99`, `spark_h=79`. `GameSession28::initialize_resources` resolves both (`source/ntsd28_playable/src/game_session.cpp:1216-1253`) and passes them into render snapshot config. The staged PNG matches formal SHA-256 `15D8843E0CE87FF63F46DFF7170D30C23BAEA0F2799434B26717AADFD5EC881B` and decodes to 500x320 pixels.
+- `BattleWorld28` produces an event with host slot, logical spark ID and jittered world contact point (`source/ntsd28_core/src/simulation/battle_world.cpp:772-863`). Its 10-entry per-host lifecycle advances the ID and retains non-tail terminal entries (`:2066-2094`). Unity already has the corresponding hit-record fields and `AdvanceNativeSparkLifecycle`; this package must not revise the producer, RNG, host selection, count, or lifecycle to make pixels appear.
+- `render_snapshot.cpp:1635-1662` projects each native ID into a 10-column grid: `sourceX=(id%10)*100`, `sourceY=(id/10)*80`, cell 99x79, with every tenth ID (9,19,...,99) non-drawable. The D3D11 renderer further skips a source rectangle extending beyond the actual PNG, centers the cell on the contact point, subtracts the horizontal camera offset, and uses **black color key** (`source/ntsd28_playable/src/d3d11_renderer.cpp:1798-1832`). The formal PNG is 4-bit indexed and all 160,000 decoded pixels have alpha 255; 150,378 are pure black. Reusing PNG alpha as transparency would produce an opaque black rectangle.
+
+## Measured ID reachability and Unity difference
+
+Only **20 of 100** native IDs have a drawable 99x79 rectangle inside 500x320: `0-4`, `10-14`, `20-24`, `30-34`. The CSV (SHA-256 `572DADC43B8300356CFCFF5C52327BA25DC8A0AFF7A21F3796A635EA5E2EAF3B`) records each ID's source rectangle, native drawable gate, atlas-bounds gate, and current Unity mapping. This is a geometry calculation against the measured formal PNG, not a claim that each ID is naturally produced in a battle.
+
+Unity's `BattleHitRecordLifecycleCatalog.TryResolveAge` maps **28** age values into 20 legacy pictures (`Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeDataCatalog.cs:21-36`): for example, native IDs 20 and 21 both become legacy picture 10, while the formal source uses adjacent distinct 99x79 cells. `BattleCommonVisualCatalog.GetSparkPixelRect` reads 102x80 and 61x48 rectangles from the 256-high legacy BMP; `CharacterAnimtorManager.BuildSparkPublicationAsync` always loads old `SPARK.bmp` and creates 20 bindings. `SparkRenderer` and the central `HitRecord` command both consume that same legacy age-to-picture mapping. Thus merely copying `SPARK.png`, swapping a path, or changing 20 Sprite rectangles cannot reproduce the native ID/grid/resource gate.
+
+The formal PNG is present in the staged root, but neither `resource.dat` index 43 nor `system.dat` dimensions currently reach the Unity common-spark publication. The old BMP remains owned by current legacy rendering/tests and is **not** authorized for deletion by this audit.
+
+## Q09 package boundary and exit
+
+An exact implementation package needs a separate Task Contract and Change Record. It should publish the formal resource with its 99x79/100x80 source layout and black color-key pixels under the formal-content branch, preserve the existing Unity renderer/pool/central-command architecture, and consume raw native event IDs and contact coordinates without collapsing them through the old 20-picture age mapper. The 100-ID logical space is sparse over this 500x320 image; invalid and out-of-bounds IDs must produce no pixels, while their logic lifecycle remains unchanged. Legacy content can retain its existing 20-picture path during migration.
+
+Focused exit evidence should include IDs `0`, `4`, `5`, `9`, `10`, `20`, `21`, `24`, `25`, `30`, `34`, `35`, a non-tail terminal event, the source rect/resource key/order and black-key output, plus a same-seed formal-snapshot versus original-Unity battle pixel comparison. Check 30/60/120 presentation sampling, snapshot restore and ordered shutdown for any newly owned texture/sprite resources. This does not close Q09/R14/R17 until fresh original-Editor compilation, targeted Play, and formal observable comparison pass. Do not start a second Unity Editor or use computer-use.

@@ -503,6 +503,14 @@ namespace NTSD.Animation
             public Color32[] ProcessedPixels;
         }
 
+        private sealed class WordPublicationStaging
+        {
+            public Texture2D[] Textures;
+            public Sprite[][] Sprites;
+            public Color32[][] Pixels;
+            public string[] SourcePaths;
+        }
+
         [ShowInInspector, ReadOnly]
         [DictionaryDrawerSettings(
             KeyLabel = "角色ID",
@@ -1527,6 +1535,7 @@ namespace NTSD.Animation
             BattleAtlasPolicyDecision atlasPolicyDecision = null;
             BattleAtlasDiagnosticInputs atlasDiagnosticInputs = null;
             SparkPublicationStaging stagedSpark = null;
+            WordPublicationStaging stagedWords = null;
             BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
@@ -1543,6 +1552,14 @@ namespace NTSD.Animation
                         stagedCreatedSprites.Add(sparkSprite);
                 }
 
+                if (native?.Candidate.WordsInput != null)
+                    stagedWords = await BuildWordPublicationAsync(
+                        native.Candidate.WordsInput,
+                        invocation,
+                        stagedCreatedSprites,
+                        stagedTextures,
+                        stagedResources);
+
                 await UniTask.SwitchToMainThread();
                 if (!CanCompleteSpritePrewarmInvocation(invocation))
                 {
@@ -1554,16 +1571,25 @@ namespace NTSD.Animation
                     NTSD.App.GameConfig.Instance?.ShadowPrefab,
                     stagedSpark.Texture,
                     stagedSpark.Sprites);
+                if (stagedWords != null)
+                    commonVisualCatalog = commonVisualCatalog.WithWords(
+                        stagedWords.Textures,
+                        stagedWords.Sprites);
                 if (!commonVisualCatalog.IsRuntimeReady)
+                    throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
+                if (stagedWords != null && !commonVisualCatalog.IsWordsValid)
                     throw new InvalidOperationException(commonVisualCatalog.Diagnostic);
 
                 var commonSourcePaths =
                     new Dictionary<BattleVisualResourceKey, string>(
-                        1 + BattleCommonVisualCatalog.SparkFrameCount);
+                        1 + BattleCommonVisualCatalog.SparkFrameCount +
+                        (stagedWords == null ? 0 : BattleCommonVisualCatalog.WordSheetCount *
+                            BattleCommonVisualCatalog.WordGlyphsPerSheet));
                 var forcedCommonSource2DPaths = new List<string>();
                 if (!TryAppendCommonAtlasSources(
                         commonVisualCatalog,
                         stagedSpark,
+                        stagedWords,
                         stagedAtlasSources,
                         commonSourcePaths,
                         forcedCommonSource2DPaths,
@@ -1742,6 +1768,71 @@ namespace NTSD.Animation
             return pixels;
         }
 
+        private async UniTask<WordPublicationStaging> BuildWordPublicationAsync(
+            LoganVisualContentCandidate.NativeWordsInput input,
+            int invocation,
+            HashSet<Sprite> stagedSprites,
+            HashSet<Texture2D> stagedTextures,
+            HashSet<UnityEngine.Object> stagedResources)
+        {
+            var words = new WordPublicationStaging
+            {
+                Textures = new Texture2D[BattleCommonVisualCatalog.WordSheetCount],
+                Sprites = new Sprite[BattleCommonVisualCatalog.WordSheetCount][],
+                Pixels = new Color32[BattleCommonVisualCatalog.WordSheetCount][],
+                SourcePaths = new string[BattleCommonVisualCatalog.WordSheetCount]
+            };
+            for (int sheetIndex = 0; sheetIndex < words.Textures.Length; sheetIndex++)
+            {
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native WORDS publication was cancelled.");
+                LoganVisualContentCandidate.ImageInput image = input.Images[sheetIndex];
+                BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+                    BMPLoader.LoadVerifiedImageData(image.Path, image.Sha256));
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native WORDS publication was cancelled.");
+                if (decoded?.Pixels == null || !decoded.IsPng ||
+                    decoded.Width != BattleCommonVisualCatalog.WordTextureWidth ||
+                    decoded.Height != BattleCommonVisualCatalog.WordTextureHeight)
+                    throw new InvalidDataException("Native WORDS sheet has an invalid PNG geometry: " + image.Path);
+
+                Color32[] pixels = ConvertToColor32(decoded.Pixels);
+                await UniTask.SwitchToMainThread();
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native WORDS publication was cancelled.");
+
+                var texture = new Texture2D(decoded.Width, decoded.Height, TextureFormat.RGBA32, false);
+                stagedTextures.Add(texture);
+                stagedResources.Add(texture);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels32(pixels);
+                texture.Apply(false, true);
+                texture.name = "WORDS" + sheetIndex;
+
+                words.Textures[sheetIndex] = texture;
+                words.Pixels[sheetIndex] = pixels;
+                words.SourcePaths[sheetIndex] = image.Path;
+                words.Sprites[sheetIndex] = new Sprite[BattleCommonVisualCatalog.WordGlyphsPerSheet];
+                for (int charCode = 0; charCode < words.Sprites[sheetIndex].Length; charCode++)
+                {
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        throw new OperationCanceledException("Native WORDS publication was cancelled.");
+                    Sprite sprite = Sprite.Create(
+                        texture,
+                        BattleCommonVisualCatalog.GetWordGlyphPixelRect(charCode),
+                        BattleCommonVisualCatalog.GetWordGlyphPivotNormalized(),
+                        100f,
+                        0,
+                        SpriteMeshType.FullRect);
+                    stagedSprites.Add(sprite);
+                    sprite.name = $"WORDS{sheetIndex}_{charCode:D3}";
+                    words.Sprites[sheetIndex][charCode] = sprite;
+                }
+            }
+            return words;
+        }
+
         private static void DestroySparkPublicationStaging(Texture2D texture, Sprite[] sprites)
         {
             if (sprites != null)
@@ -1769,6 +1860,7 @@ namespace NTSD.Animation
         private static bool TryAppendCommonAtlasSources(
             BattleCommonVisualCatalog commonCatalog,
             SparkPublicationStaging spark,
+            WordPublicationStaging words,
             ICollection<BattleAtlasSourcePixels> sources,
             IDictionary<BattleVisualResourceKey, string> sourcePaths,
             ICollection<string> forcedSourceTexture2DPaths,
@@ -1797,6 +1889,34 @@ namespace NTSD.Animation
                 spark.ProcessedPixels));
             for (int pic = 0; pic < BattleCommonVisualCatalog.SparkFrameCount; pic++)
                 sourcePaths[BattleVisualResourceKey.CommonSpark(pic)] = spark.SourcePath;
+
+            if (words != null)
+            {
+                if (!commonCatalog.IsWordsValid ||
+                    words.Textures.Length != BattleCommonVisualCatalog.WordSheetCount)
+                {
+                    diagnostic = "Native WORDS publication is incomplete.";
+                    return false;
+                }
+                for (int sheetIndex = 0; sheetIndex < words.Textures.Length; sheetIndex++)
+                {
+                    Texture2D texture = words.Textures[sheetIndex];
+                    Color32[] pixels = words.Pixels[sheetIndex];
+                    string path = words.SourcePaths[sheetIndex];
+                    if (texture == null || pixels == null ||
+                        pixels.Length != texture.width * texture.height ||
+                        string.IsNullOrWhiteSpace(path))
+                    {
+                        diagnostic = "Native WORDS atlas source is incomplete.";
+                        return false;
+                    }
+                    sources.Add(new BattleAtlasSourcePixels(path, texture.width, texture.height, pixels));
+                    for (int charCode = 0;
+                         charCode < BattleCommonVisualCatalog.WordGlyphsPerSheet;
+                         charCode++)
+                        sourcePaths[BattleVisualResourceKey.CommonWordGlyph(sheetIndex, charCode)] = path;
+                }
+            }
 
             BattleCommonVisualBinding shadow = commonCatalog.Shadow;
             Texture2D shadowTexture = shadow?.Texture;

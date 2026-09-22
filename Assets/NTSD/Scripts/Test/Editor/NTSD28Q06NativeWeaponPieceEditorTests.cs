@@ -95,7 +95,7 @@ namespace NTSD.Test
             {
                 Assert.That(driver.World.RuntimeDataCatalog.LoganContentIdentity.ObjectDefinitionFingerprint,
                     Is.EqualTo("4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C"));
-                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("0FEFD4B968D618FD"));
+                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("9F40EB3FFF1812FF"));
                 var catalog = driver.World.RuntimeDataCatalog;
                 foreach (string line in File.ReadLines(Witness + "formal.jsonl"))
                 {

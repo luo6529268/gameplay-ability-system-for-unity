@@ -544,6 +544,49 @@ namespace NTSD.Simulation
         }
 
         public List<PendingSoundEvent> PendingSounds => battleBuffers.PendingSounds;
+        public IReadOnlyList<NativeKnockoutEvent> NativeKnockoutEvents =>
+            battleBuffers.NativeKnockoutEvents;
+
+        internal void RecordNativeStandardHitKnockout(
+            LF2Entity physicalAttacker,
+            LF2Entity victim,
+            LF2Entity credit)
+        {
+            if (physicalAttacker?.Runtime == null || victim?.Runtime == null ||
+                credit?.Runtime == null)
+                return;
+
+            int sourceSlot = physicalAttacker.Runtime.SlotIndex;
+            if ((physicalAttacker.Runtime.Kind4SourceCount92 & 0xFFFF) != 0)
+                sourceSlot = unchecked((ushort)physicalAttacker.Runtime.CatchSourceSlot90);
+            LF2Entity source = FindEntityByRuntimeSlotForQuery(sourceSlot);
+            if (source?.Runtime == null)
+                return;
+
+            LF2Entity fourOwner = source;
+            for (int depth = 0; depth < 4; depth++)
+            {
+                int ownerSlot = fourOwner.Runtime.OwnerSlotIndex;
+                if (ownerSlot < 0)
+                    break;
+                LF2Entity next = FindEntityByRuntimeSlotForQuery(ownerSlot);
+                if (next?.Runtime == null)
+                    break;
+                fourOwner = next;
+            }
+            battleBuffers.RecordNativeKnockout(new NativeKnockoutEvent(
+                CurrentTickIndex,
+                source.GetCurrentDataObjectTypeForSimulation(),
+                fourOwner.Runtime.SlotIndex,
+                victim.Runtime.SlotIndex,
+                sourceSlot,
+                credit.Runtime.SlotIndex));
+        }
+
+        internal int PruneNativeKnockoutTail(int currentTick, int lifetimeTicks)
+        {
+            return battleBuffers.PruneNativeKnockoutTail(currentTick, lifetimeTicks);
+        }
         public long QueuedSoundEventCountForDiagnostics { get; private set; }
         public BattleEcsCapacityProfile BattleEcsCapacityProfileForDiagnostics => battleEcsShadowModule.CapacityProfile;
         public BattleEcsShadowMode BattleEcsShadowModeForDiagnostics => battleEcsShadowModule.Mode;
@@ -2467,6 +2510,7 @@ namespace NTSD.Simulation
             Rng?.Seed(0x4E545344u);
             NativeRandom?.ResetFromSeed(0x4E545344u);
             PendingSounds.Clear();
+            battleBuffers.NativeKnockoutEvents.Clear();
             _cameraX = 0;
             _cameraVel = 0;
             _nextAutoStableId = 100;

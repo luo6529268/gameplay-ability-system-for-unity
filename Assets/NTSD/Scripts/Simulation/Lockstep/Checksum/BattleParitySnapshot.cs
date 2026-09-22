@@ -257,7 +257,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleExtendedChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v1";
+        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v2";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -339,7 +339,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleLockstepChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-lockstep-core-checksum-v1";
+        public const string SchemaId = "ntsd-lockstep-core-checksum-v2";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -710,7 +710,7 @@ namespace NTSD.Simulation
             object statsDomain = DictionaryOf(
                 ("damage", CloneArray(DamageStats)),
                 ("kill", CloneArray(KillStats)));
-            object eventsDomain = ProjectEventsDomain();
+            object eventsDomain = ProjectEventsDomain(includeKnockouts: true);
 
             var hashes = new BattleExtendedChecksumHashes
             {
@@ -780,7 +780,8 @@ namespace NTSD.Simulation
             object statsDomain = DictionaryOf(
                 ("damage", CloneArray(DamageStats)),
                 ("kill", CloneArray(KillStats)));
-            object eventsDomain = ProjectEventsDomain(structuralEvents);
+            object eventsDomain = ProjectEventsDomain(
+                structuralEvents, includeKnockouts: true);
 
             var hashes = new BattleLockstepChecksumHashes
             {
@@ -1498,7 +1499,8 @@ namespace NTSD.Simulation
         }
 
         private object ProjectEventsDomain(
-            IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null)
+            IReadOnlyList<BattleParityStructuralEvent> structuralEvents = null,
+            bool includeKnockouts = false)
         {
             var sounds = new object[PendingSounds?.Count ?? 0];
             for (int i = 0; i < sounds.Length; i++)
@@ -1508,6 +1510,34 @@ namespace NTSD.Simulation
                     ("cue", (object)NormalizeTraceAssetCue(sound.Cue)),
                     ("tick", sound.Tick),
                     ("worldX", sound.WorldX));
+            }
+            if (includeKnockouts)
+            {
+                IReadOnlyList<NativeKnockoutEvent> events = world.NativeKnockoutEvents;
+                var knockouts = new object[events.Count];
+                for (int i = 0; i < knockouts.Length; i++)
+                {
+                    NativeKnockoutEvent value = events[i];
+                    knockouts[i] = DictionaryOf(
+                        ("tick", (object)value.BattleTimeTick),
+                        ("sourceType", value.SourceObjectType),
+                        ("fourOwnerSlot", value.FourOwnerSlot),
+                        ("victimSlot", value.VictimSlot),
+                        ("sourceSlot", value.SourceSlot),
+                        ("creditSlot", value.CreditSlot));
+                }
+                if (structuralEvents == null)
+                    return DictionaryOf(
+                        ("pendingSounds", (object)sounds),
+                        ("knockoutEvents", knockouts));
+                var structuralWithKnockouts = new object[structuralEvents.Count];
+                for (int i = 0; i < structuralWithKnockouts.Length; i++)
+                    structuralWithKnockouts[i] =
+                        structuralEvents[i]?.ToCanonicalObject();
+                return DictionaryOf(
+                    ("pendingSounds", (object)sounds),
+                    ("knockoutEvents", knockouts),
+                    ("structural", structuralWithKnockouts));
             }
             if (structuralEvents == null)
                 return DictionaryOf(("pendingSounds", (object)sounds));

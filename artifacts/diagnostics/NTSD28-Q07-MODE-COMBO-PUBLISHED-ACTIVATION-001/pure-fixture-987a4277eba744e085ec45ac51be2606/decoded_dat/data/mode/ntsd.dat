@@ -1,0 +1,343 @@
+<name>
+name: _
+respond: 0    
+x: 1210 
+y: 715 
+hexf: 16777215 
+hexb:  00000000  
+<name_end>
+
+<misc>
+link: https://discord.gg/gejWevY
+
+text_y1: 110
+text_y2: 128
+
+background_small: 1
+allow_defense: 1
+battle_offset1: 140
+battle_offset2: 114
+
+music_x: 425
+music_y: 5
+
+frame_x: 531
+frame_y: 4
+
+small_x: 538
+small_y: 11
+respond: 5
+
+pic: sprite\UI\menu_clip2b.png
+bound: 1
+<misc_end>
+
+<battle>
+id: 30
+id: 31
+id: 33
+id: 34
+id: 39
+id: 32
+id: 35
+id: 36
+id: 37
+<battle_end>
+
+<bmp_begin> #killtext
+bound: 1
+respond: 5
+times: 70
+loop: 40
+name: 0
+transparency: 1
+
+mode: 0
+mode: 1
+mode: 4
+
+y: 132
+x: 575
+dx: 560
+dvx: 650
+
+arest: 1
+vrest: 1
+
+caughtact: 1
+catchingact: 1
+
+pickedact: 1
+pickingact: 0
+
+pic_type0: sprite\kill\c.png
+pic_type1: sprite\kill\sk2.png
+pic_type2: sprite\kill\sk2.png
+pic_type3: sprite\kill\sk1.png
+pic_type4: sprite\kill\sk2.png
+pic_type5: sprite\kill\sk2.png
+pic_type6: sprite\kill\sk2.png
+
+sound1: data\m_ok.wav
+sound2: data\m_join.wav
+<bmp_end>
+
+<combo>
+bound: 1
+name: %d_hit
+pic:  sprite\combo_hits.png
+h: 15
+w: 15
+offset_x: 20
+offset_y: 21
+times: 30
+respond: 50
+facing: 1
+state: 1
+caughtact: 1
+effect: 20
+<combo_end>
+
+<menu_control>
+pic: sprite\UI\CharMenu.png
+
+start_x: 0
+start_y: 0
+
+face_x: 22
+face_y: 60
+
+name: 0
+name_x: 103
+name_y: 263
+
+fighter_x: -1500
+fighter_y: -1500
+
+team_x: 90
+team_y: 291
+
+team0_flag: sprite\UI\TF0.png
+team1_flag: sprite\UI\TF1.png
+team2_flag: sprite\UI\TF2.png
+team3_flag: sprite\UI\TF3.png
+team4_flag: sprite\UI\TF4.png
+
+centerx: 164
+centery: 0
+
+hidden: 0
+transform: 1
+
+respond: 0
+row: 8
+
+bound: 1
+mode: 2
+mode: 3
+<menu_control_end>
+
+<menu_small>
+layer: 1          #base 
+   pic: sprite\UI\menu_small\base.png    respond: 0   transparency: 1   centerx: 3   centery: 3  
+layer_end
+
+layer: 2          #base_stage
+   pic: sprite\UI\menu_small\base2.png     respond: 0   transparency: 1   centerx: 3   centery: 3  
+   pic2: sprite\UI\menu_small\base2b.png  
+layer_end
+
+layer: 3        #fight
+   pic: sprite\UI\menu_small\m1.png    respond: 0   transparency: 1   centerx:  -66  centery: 11
+layer_end
+
+layer: 4        #reset all
+   pic: sprite\UI\menu_small\m2.png    respond: 0   transparency: 1   centerx:  -49  centery: 33
+layer_end
+
+layer: 5        #reset random
+   pic: sprite\UI\menu_small\m3.png    respond: 0   transparency: 1   centerx:  -44  centery: 58
+   pic2: sprite\UI\menu_small\m3b.png      dx: 136   dy: 72
+layer_end
+
+layer: 6        #background
+   pic: sprite\UI\menu_small\m4.png    respond: 0   transparency: 1   centerx:  36  centery: 92      dx: 143   dy: 100
+layer_end
+
+layer: 7        #stage
+   pic: sprite\UI\menu_small\m4b.png    respond: 0   transparency: 1   centerx:  36  centery: 92    dx:  89   dy:  100
+layer_end
+
+layer: 8        #difficulty
+   pic: sprite\UI\menu_small\m5.png    respond: 0   transparency: 1   centerx:  36  centery: 117    dx:  122   dy:  125
+layer_end
+
+layer: 9        #bgmode
+   pic: sprite\UI\menu_small\m6.png    respond: 0   transparency: 1  centerx:  35  centery: 140      dx: 109   dy: 149
+layer_end
+
+layer: 10        #tumode
+   pic: sprite\UI\menu_small\m7.png    respond: 0   transparency: 1   centerx:  -34  centery: 160    dx:  112   dy:  171
+layer_end
+
+layer: 11        #exit
+   pic: sprite\UI\menu_small\m8.png    respond: 0   transparency: 1   centerx:  -72  centery: 180
+layer_end
+<menu_small_end>
+
+
+<mode>
+layer: 1       #easy
+    name: _Genin   hex: 65280   
+layer_end
+
+layer: 2       #normal
+    name: _Chunin   hex:  52223  
+layer_end
+
+layer: 3       #diificult
+    name: _Jounin    hex: 72950500  
+layer_end
+
+layer: 4       #crazy
+    name: _Kage    hex: 16722582  
+layer_end
+
+layer: 5       #dummy
+     name: _Dummy   hex: 16777215   
+layer_end
+<mode_end>
+
+
+<grid_char>
+small: sprite\small\random.png
+pic_x: 760
+pic_y: 33
+
+start_x: 44
+start_y: 350
+
+rect: 16777215
+
+max: 24
+row: 17
+
+centerx: 74
+centery: 63
+
+h: 54
+w: 60
+
+name: 1	
+human_x: 4
+human_y: 1
+com_x: 28
+com_y: 36
+
+respond: 1
+<grid_end>
+
+
+<grid_bg>
+pic: sprite\UI\BGBOX.png
+small: sprite\UI\BG_RANDOM.png
+start_x: 27
+start_y: 10
+
+pic_x: 2
+pic_y: 2
+
+rect: 16777215
+w: 246
+h: 127
+
+centerx: 258
+centery: 150
+
+row: 5
+state: 2
+
+next: 0
+wait: 0
+
+action: 720
+effect: -720
+
+name: 2
+cover: 1
+name_x: 50
+name_y: 130
+
+facing: 1
+respond: 0
+<grid_end>
+
+
+<grid_bg_mode>
+pic: sprite\UI\BGBOX.png
+
+pic_x: 2
+pic_y: 2
+
+start_x: 27
+start_y: 10
+
+rect: 16777215
+w: 246
+h: 127
+
+state: 2
+row: 5
+
+centerx: 258
+centery: 150
+
+next: 0
+wait: 0
+
+action: 720
+effect: -720
+
+name: 2
+cover: 0
+name_x: 50
+name_y: 130
+
+facing: 1
+respond: 0
+<grid_end>
+
+
+<grid_stage>
+pic: sprite\UI\BGBOX.png
+
+pic_x: 2
+pic_y: 2
+
+start_x: 27
+start_y: 10
+
+rect: 16777215
+w: 246
+h: 127
+
+state: 2
+row: 5
+
+centerx: 258
+centery: 150
+
+next: 0
+wait: 0
+
+action: 720
+effect: -720
+
+name: 2
+cover: 0
+name_x: 50
+name_y: 130
+
+facing: 1
+respond: 0
+<grid_end>

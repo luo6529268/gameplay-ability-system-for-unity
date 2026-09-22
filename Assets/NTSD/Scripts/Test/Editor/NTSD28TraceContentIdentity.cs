@@ -42,10 +42,13 @@ namespace NTSD.EditorTools
 
         private static Dictionary<string, object> Build(string profile, LoganContentIdentity identity)
         {
+            bool hasMode = profile == "logan-runtime" && identity.ModeInputFingerprint != null;
             var result = new Dictionary<string, object>
             {
                 ["policy"] = "logan-dat-character-images",
-                ["scope"] = profile == "logan-runtime" ? "catalog-object-fusion-definitions" : "unity-legacy-dat-files",
+                ["scope"] = profile == "logan-runtime"
+                    ? (hasMode ? "catalog-object-fusion-mode-definitions" : "catalog-object-fusion-definitions")
+                    : "unity-legacy-dat-files",
                 ["profile"] = profile,
                 ["rawDefinitionSha256"] = identity.RawDefinitionFingerprint,
                 ["decodeContract"] = identity.DecodeContractTag,
@@ -64,11 +67,20 @@ namespace NTSD.EditorTools
             {
                 if (identity.DecodeContractTag != LoganContentIdentity.CurrentDecodeContractTag ||
                     identity.ObjectDefinitionFingerprint == null || identity.FusionInputFingerprint == null ||
-                    identity.FusionSemanticFingerprint == null)
+                    identity.FusionSemanticFingerprint == null ||
+                    (hasMode != (identity.ModeSemanticFingerprint != null)) ||
+                    identity.BattleInputContractTag != (hasMode
+                        ? "NTSD28_LOGAN_BATTLE_INPUTS_V2" : "NTSD28_LOGAN_BATTLE_INPUTS_V1"))
                     throw new InvalidOperationException("Current Logan trace requires complete battle content identity.");
                 result["objectDefinitionSha256"] = identity.ObjectDefinitionFingerprint;
                 result["fusionInputSha256"] = identity.FusionInputFingerprint;
                 result["fusionSemanticSha256"] = identity.FusionSemanticFingerprint;
+                if (hasMode)
+                {
+                    result["battleInputContract"] = identity.BattleInputContractTag;
+                    result["modeInputSha256"] = identity.ModeInputFingerprint;
+                    result["modeSemanticSha256"] = identity.ModeSemanticFingerprint;
+                }
             }
             return result;
         }

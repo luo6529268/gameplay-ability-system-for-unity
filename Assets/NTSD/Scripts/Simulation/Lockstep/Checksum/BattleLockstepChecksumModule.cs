@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 29;
+        internal const int CurrentSchemaVersion = 30;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -170,6 +170,7 @@ namespace NTSD.Simulation
             AppendRest(world.RuntimeRestStoreForServices, ref builder);
             AppendStats(world);
             AppendEvents(world.PendingSounds);
+            AppendKnockoutEvents(world.NativeKnockoutEvents);
             return builder.Complete();
         }
 
@@ -770,6 +771,22 @@ namespace NTSD.Simulation
                 builder.AddNormalizedSoundCue(sound.Cue);
                 builder.AddInt32(sound.Tick);
                 builder.AddInt32(sound.WorldX);
+            }
+        }
+
+        private void AppendKnockoutEvents(IReadOnlyList<NativeKnockoutEvent> events)
+        {
+            int count = events?.Count ?? 0;
+            builder.AddInt32(count);
+            for (int index = 0; index < count; index++)
+            {
+                NativeKnockoutEvent value = events[index];
+                builder.AddInt32(value.BattleTimeTick);
+                builder.AddInt32(value.SourceObjectType);
+                builder.AddInt32(value.FourOwnerSlot);
+                builder.AddInt32(value.VictimSlot);
+                builder.AddInt32(value.SourceSlot);
+                builder.AddInt32(value.CreditSlot);
             }
         }
     }

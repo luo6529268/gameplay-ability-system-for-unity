@@ -453,8 +453,111 @@ internal static class TraceContractSelfTest
             var validation = AuthorityCaptureValidator.ValidateTextForTest(JoinLines(lines));
             return (validation.Status, validation.Reason, (string?)null);
         });
+        RunVersionedContentCases(report, authority, unity);
         report.Passed = report.Cases.All(test => test.Passed);
         return report;
+    }
+
+    private static void RunVersionedContentCases(TraceSelfTestReport report, string authority, string unity)
+    {
+        JsonObject version2 = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64),
+            new string('D', 64), new string('E', 64), new string('F', 64));
+        RunCase(report, "R15-V2-independent-vector", "match", null, () =>
+        {
+            TraceContentIdentity.Validate(version2, true);
+            bool matches = version2.Count == 14 &&
+                version2["rawDefinitionSha256"]!.GetValue<string>() == "3657ADC3FA0E4FD6EFE4BCD06A54E3CFB22501B43A2821340F7603347EF088B0" &&
+                version2["semanticSha256"]!.GetValue<string>() == "0574C28613982E4E30C8F0339B578886D614B703FA5B006F455C19C0BBCD9FA0" &&
+                version2["catalogFingerprint64"]!.GetValue<string>() == "4E2E981386C27405" &&
+                version2["scope"]!.GetValue<string>() == "catalog-object-fusion-mode-definitions";
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        JsonObject currentV1 = TraceContentIdentity.CreateLogan(new string('A', 64), new string('C', 64), new string('D', 64));
+        currentV1["schemas"]!["aggregate"] = 26;
+        currentV1["schemas"]!["checksum"] = 29;
+        string currentV1Authority = ReplaceContent(authority, currentV1);
+        string v2Authority = ReplaceContent(authority, version2);
+        string v2Unity = ReplaceContent(unity, version2);
+        RunComparisonCase(report, "R15-current-V1-valid", TraceComparator.EqualStructureStatus, null,
+            currentV1Authority, ReplaceContent(unity, currentV1));
+        RunComparisonCase(report, "R15-old-current-schema-header-difference", "different", "header",
+            authority, ReplaceContent(unity, currentV1));
+        RunComparisonCase(report, "R15-V1-V2-header-difference", "different", "header", currentV1Authority, v2Unity);
+        RunComparisonCase(report, "R15-V2-V1-header-difference", "different", "header", v2Authority, ReplaceContent(unity, currentV1));
+        RunComparisonCase(report, "R15-V2-equal", TraceComparator.EqualStructureStatus, null, v2Authority, v2Unity);
+        RunComparisonCase(report, "R15-V2-tick-first-difference", "different", "input", v2Authority,
+            MutateTickDomain(v2Unity, 1, "input", input => input["phase"] = 1));
+
+        var mutations = new Dictionary<string, Action<JsonObject>>
+        {
+            ["unknown-contract"] = content => content["battleInputContract"] = "NTSD28_LOGAN_BATTLE_INPUTS_V3",
+            ["V1-contract"] = content => content["battleInputContract"] = TraceContentIdentity.BattleInputV1,
+            ["null-contract"] = content => content["battleInputContract"] = null,
+            ["V1-scope"] = content => content["scope"] = "catalog-object-fusion-definitions",
+            ["old-schema"] = content => { content["schemas"]!["aggregate"] = 25; content["schemas"]!["checksum"] = 28; },
+            ["old-aggregate"] = content => content["schemas"]!["aggregate"] = 25,
+            ["old-checksum"] = content => content["schemas"]!["checksum"] = 28,
+            ["extra-field"] = content => content["extra"] = 1,
+            ["extra-schema"] = content => content["schemas"]!["extra"] = 1,
+            ["wrong-decode"] = content => content["decodeContract"] = TraceContentIdentity.LegacyTag,
+            ["wrong-profile"] = content => content["profile"] = "unity-legacy",
+            ["wrong-projection"] = content => content["catalogFingerprint64"] = "0000000000000000",
+            ["wrong-semantic"] = content => content["semanticSha256"] = new string('0', 64),
+            ["V1-raw"] = content => content["rawDefinitionSha256"] = currentV1["rawDefinitionSha256"]!.DeepClone(),
+        };
+        foreach (string property in version2.Select(pair => pair.Key))
+            mutations["missing-" + property] = content => content.Remove(property);
+        foreach (string component in new[] { "objectDefinitionSha256", "fusionInputSha256", "fusionSemanticSha256", "modeInputSha256", "modeSemanticSha256" })
+        {
+            mutations["tampered-" + component] = content => content[component] = new string('0', 64);
+            mutations["null-" + component] = content => content[component] = null;
+            mutations["invalid-" + component] = content => content[component] = new string('G', 64);
+        }
+        foreach (string schema in new[] { "entityRuntime", "aggregate", "checksum", "characterShell", "entityBaseShell" })
+        {
+            mutations["wrong-schema-" + schema] = content => content["schemas"]![schema] = 0;
+            mutations["string-schema-" + schema] = content => content["schemas"]![schema] = "2";
+            mutations["missing-schema-" + schema] = content => content["schemas"]!.AsObject().Remove(schema);
+        }
+        foreach (var mutation in mutations)
+        {
+            RunCase(report, "R15-V2-" + mutation.Key, "invalid", null, () =>
+            {
+                JsonObject invalid = version2.DeepClone().AsObject();
+                mutation.Value(invalid);
+                TraceValidationReport validation = TraceComparator.ValidateTextForTest(ReplaceContent(authority, invalid));
+                return (validation.Status, validation.Reason, (string?)null);
+            });
+        }
+        foreach (string property in new[] { "modeInputSha256", "modeSemanticSha256", "battleInputContract" })
+        {
+            RunCase(report, "R15-V1-extra-" + property, "invalid", null, () =>
+            {
+                JsonObject invalid = currentV1.DeepClone().AsObject();
+                invalid[property] = version2[property]!.DeepClone();
+                TraceValidationReport validation = TraceComparator.ValidateTextForTest(ReplaceContent(authority, invalid));
+                return (validation.Status, validation.Reason, (string?)null);
+            });
+        }
+        foreach (string schema in new[] { "aggregate", "checksum" })
+        {
+            RunCase(report, "R15-V1-mixed-schema-" + schema, "invalid", null, () =>
+            {
+                JsonObject invalid = currentV1.DeepClone().AsObject();
+                invalid["schemas"]![schema] = schema == "aggregate" ? 25 : 28;
+                TraceValidationReport validation = TraceComparator.ValidateTextForTest(ReplaceContent(authority, invalid));
+                return (validation.Status, validation.Reason, (string?)null);
+            });
+        }
+    }
+
+    private static string ReplaceContent(string trace, JsonObject content)
+    {
+        string[] lines = SplitLines(trace);
+        JsonObject header = JsonNode.Parse(lines[0])!.AsObject();
+        header["content"] = content.DeepClone();
+        lines[0] = Serialize(header);
+        return JoinLines(lines);
     }
 
     private static void RunComparisonCase(

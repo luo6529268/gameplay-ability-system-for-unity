@@ -1,3 +1,17 @@
+> Q08 `NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001 / CODE_WRITTEN`：原项目标准致死处新增独立逐次事件但保持旧计数只加一次；native tail过期、预热+超额保留、pending快照/恢复、锁步校验、扩展/lockstep parity v2及reset已接，frozen Authority400 v3投影保持。原项目Temp-only绝对targets离线runtime+Editor编译0错，确认新增聚焦测试进入DLL；**原Editor编译/NUnit/SelfCheck/同seed/Play/退出重进未验**。正式选定mode的70tick仍是捕获常量，Q09须接数据驱动；R15版本化复核待。Q09 WORDS旧请求无结果，不并发跑Q08测试。详Record。
+
+> Q08 `NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001 / IN_PROGRESS`：脚本接线开始前Task/Change已建立并补NTSDBattleTickSystem准确路径；致死事件、单次统计、tail过期、快照/校验/恢复/清理为同一合同，尚无通过结论。赛前按runtime slots预热、超额仍保留事件并计量分配，不任意封顶；Q09图文/Q10声音后置。原Editor WORDS请求无结果，不并发重跑。
+
+> 当前Q08→Q09击倒提示链 `NTSD28-Q08-Q09-KNOCKOUT-FEED-CHAIN-AUDIT-001 / STATIC_PRODUCER_AND_CONSUMER_GAP_CONFIRMED`：正式除致死统计还有持久事件、Session尾部过期、30tick显示窗与mode图文；Unity所检脚本已有致死统计但未见事件载体、mode读者、击倒行命令。Q08先补事件/时序，Q09补图文，Q10补声音；均需Task/Change与原项目验证，Q08/Q09/R17开放。详本包REPORT。WORDS请求已消费无结果，禁并发重发。
+
+> 当前Q09击倒提示图标内容前置 `NTSD28-Q09-NATIVE-KNOCKOUT-FEED-ICONS-STAGING-001 / VERIFIED_EXACT_CONTENT_STAGING_ONLY`：正式mode `#killtext`选定三PNG已在原项目逐SHA暂存，四新GUID各唯一；现337 DAT/1031 PNG，缺224正式PNG。Unity reader/画面、EXE同条件像素未验；Q09/R17开放。WORDS原Editor请求已消费仍无结果，禁止并发重发。详本包Acceptance与WORDS Run-Pending。下方1028/缺227为本包前状态。
+
+> 当前Q09活动INKHUD内容前置 `NTSD28-Q09-ACTIVE-FRAME-HUD-CONTENT-STAGING-001 / VERIFIED_EXACT_CONTENT_STAGING_ONLY`：正式active frame双DAT与七PNG精确暂存，逐SHA、全Assets新meta GUID唯一；现337 DAT/1028 PNG，缺227正式PNG。仅证明正式内容可达，不证明Unity HUD reader/画面；Q09/R17开放。WORDS聚焦请求已被原Editor消费但结果未产生，禁止并发重发。详Q09两包Acceptance/Run-Pending。
+
+> 当前Q07 `NTSD28-Q07-MODE-COMBO-PUBLISHED-ACTIVATION-001 / COMPILE_PASS / RUNTIME_PENDING`：原Editor PID33236于07:58Z编译并重载晚于本包全部源码/测试的程序集；正式mode输入已进入catalog五组件V2身份、候选新鲜度及共用seal。公开seal/reset/tick0 restore聚焦NUnit尚未运行，旧V1 trace/探针待R15版本化，Q07未闭。Q09 WORDS最终定向测试现已编译，但结果仍未产生。只用原项目，禁computer-use和新Unity副本。
+
+> 当前Q07 `NTSD28-Q07-MODE-COMBO-INPUT-PROJECTION-001 / CODE_WRITTEN`：正式mode双DAT已逐SHA暂存，新纯输入投影的Add-Type编译/正式与暂存指纹/反例2/2通过；生产combo tuple仍未激活。后续独立联合identity+World激活包才改行为。Task/Change已更新，原项目Editor程序集仍早于新脚本、Unity编译/Play待，禁computer-use和第二Unity项目。
+
 > Q08 `NTSD28-Q08-COMBAT-LETHAL-PRECOMBAT-TIMING-001 / CODE_WRITTEN / COMPILE_PENDING`：准确单个EditMode用例已写，完整`RunReleaseTick`中kind0 itr伤害20HP目标，计划验致死tick native timer0、次tick timer1及锁定胜组；原Editor测试程序集仍早于新源码，不能报编译/测试通过。生产、Scene、正式资源与非战斗未改；Task/Record/Ledger齐备，禁computer-use。
 
 > Q08新聚焦见证`NTSD28-Q08-COMBAT-LETHAL-PRECOMBAT-TIMING-001 / PLANNED`：正式playable已有实际Attack致死tick12计时0、次tick13计时1双跑见证；Unity现有Q08用例仅跨tick直接设HP，缺完整tick内部碰撞致死。准确单测试脚本Task/Change已建，生产不改；等待用例写入及原Editor编译/聚焦验收。禁computer-use、非战斗/Scene/资源改动。
@@ -3396,3 +3410,18 @@ NTSD28-Q06-NATIVE-INPUT-ACTION-COST-FRAME-READERS-001 IN_PROGRESS / SOURCE_WITNE
 > `NTSD28-Q08-FORMAL-SOURCE-PIXEL-WITNESS-001 / PLANNED`：正式内容SourceTexture2D回退的结构绑定/顺序与结果流已验，真实相机像素仍待。单个战斗Play测试的Task/Change已建，尚未改脚本；只验证实际生产相机出图及政策/指纹，不冒称正式EXE逐像素一致。Q08/总目标未闭、Q06本地出口保持，禁computer-use。
 
 > Q08正式源纹理相机见证（2026-09-22）：`NTSD28-Q08-FORMAL-SOURCE-PIXEL-WITNESS-001 / RUNTIME_PENDING`在隔离非batch D3D11 Editor NUnit1/1PASS，正式指纹、Auto145页2.43GB超512MiB预算、SourceTexture2D、中央tick34/4命令及960×540图2015非白像素有证；原项目现有Editor无第二进程亦产生同hash PNG/JSON，原NUnit回调结果未落盘，不能报原Editor测试PASS。原项目同时Q07物理Naruto探针首键8次未入FrameInputSet而FAIL，与源纹理像素分开审。Scene磁盘SHA保持；正式EXE像素/全角色与技能未验，Q08/总目标未闭、Q06本地出口保持。详`artifacts/diagnostics/NTSD28-Q08-FORMAL-SOURCE-PIXEL-WITNESS-001/ACCEPTANCE-PENDING.md`，禁computer-use。
+
+> NTSD28-R15-VERSIONED-TRACE-HEADER-001 / IN_PROGRESS（2026-09-22）：修改前准确Task/Change及Ledger已建立，限定Unity trace emitter、parity validator/self-test、两项正式根Editor断言。目标是V1/V2严格头与17/25/28/2/2、17/26/29/2/2精确schema身份；native V2诊断捕获、原项目Unity编译/运行及同seed/input验收仍另待。Q07/R15未闭，禁computer-use/第二Unity项目。
+
+> NTSD28-R15-VERSIONED-TRACE-HEADER-001 / CODE_WRITTEN（2026-09-22）：Unity emitter严格分V1无mode及V2五组件，parity工具严格验证版本/哈希/旧17-25-28与当前17-26-29 schema并在header拒绝跨版本；Release build0错、自测157/157、Ledger682通过。正式根Q05/Q06两Editor断言已迁V2，review发现的fallback跨V1/V2弱断言已纠正；原项目Unity程序集仍旧，五脚本未在原Editor编译/运行。native source-model仍V1/25/28、正式新V2双端同seed/input比较未做，另有固定V1 Play探针需独立回访；Q07/R15未闭，禁computer-use/第二Unity项目。证据artifacts/diagnostics/NTSD28-R15-VERSIONED-TRACE-HEADER-001/parity-self-test.json及同ID Change Record。
+
+> NTSD28-R15-FORMAL-PROBE-V2-VECTOR-001 / IN_PROGRESS（2026-09-22）：修改前准确Task/Change和Ledger已建，限定九个战斗验证脚本十处正式根旧V1固定身份文字为当前V2独立向量；不改输入/行为/Scene/生产资源/非战斗。原Editor编译/探针待，Q07/R15未闭，禁computer-use/第二Unity项目。
+
+> NTSD28-R15-FORMAL-PROBE-V2-VECTOR-001 / CODE_WRITTEN（2026-09-22）：九个战斗测试/探针十处正式根固定V1值精确改为已复核V2 semantic FF1218FF...及projection 9F40EB3FFF1812FF；旧值源码搜索0，diff仅十行预期文字。纯源正式/暂存向量检查PASS，原Editor程序集/探针仍未编译运行。native V2 source-model下一包的只读准确边界见artifacts/diagnostics/NTSD28-R15-NATIVE-MODE-CAPTURE-CONTRACT-001/REPORT.md；正式源码不改、旧native V1捕获不重标。Q07/R15未闭，禁computer-use/第二Unity项目。
+
+> NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001 / IN_PROGRESS（2026-09-22）：修改前准确Task/Change及Ledger已建，唯一代码路径为Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp；正式playable源码/EXE只读，旧V1 JSONL不重标。目标新鲜source-model正式mode双DAT五组件V2、实际session.config完整核对、17/26/29当前trace兼容声明及bundle失败门槛；原项目Unity编译/同条件双端仍待。见同ID Task和R15 NATIVE-MODE-CAPTURE-CONTRACT报告。Q07/R15未闭，禁computer-use/第二Unity项目。
+
+> NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001 / FOCUSED_TEST_PASS_SOURCE_MODEL_ONLY（2026-09-22）：仅仓库诊断runner读取正式mode父/子DAT并核对实际GameSession完整combo配置；未改J:正式源码/Unity生产/Scene。final-build 0错，正式3tick主/domain/B2双跑各逐字节同；五组件V2原始/语义/投影与正式及暂存Unity纯投影一致，三个validator PASS。无mode V1保留；缺子/残缺/初始化及运行中路径、优先级、字节变化均失效并标三路bundle。证据artifacts/diagnostics/NTSD28-R15-NATIVE-MODE-V2-CAPTURE-001/及同ID Record。仍仅SOURCE_MODEL_DIAGNOSTIC_ONLY；原项目Unity新程序集/同seed双端tick首差/正式EXE可见表现未验，Q07/R15未闭，禁computer-use/第二Unity项目。
+> `NTSD28-Q09-WORDS-INPUT-IDENTITY-001 / PLANNED`：已建立精确Task/Change/Ledger，拟只在视觉候选中版本化正式resource.dat索引16..21及六图指纹/新鲜度，不改规则身份或菜单；脚本尚未修改。原Editor新程序集仍待。
+> `NTSD28-Q09-WORDS-INPUT-IDENTITY-001 / CODE_WRITTEN / OFFLINE_COMPILE_PASS / ORIGINAL_UNITY_PENDING`：按预先Task/Change仅改视觉候选与新聚焦测试/meta，正式resource.dat索引16..21及六图进入可选V2视觉身份/新鲜度；无resource保留V1。原项目离线runtime/Editor编译0错、compiled actual projection正式/暂存同指纹及四夹具反例PASS；原Editor NUnit/Play、实际WORDS发布/画面待。
+> `NTSD28-Q09-WORDS-PUBLICATION-001 / COMPILE_PASS / FOCUSED_RESULT_PENDING`：脚本前Task/Change/Ledger已建；仅改`CharacterAnimtorManager.cs`加新聚焦Editor测试/meta，正式6表经现有预热/目录/atlas/所有权原子发布。原项目Editor最终测试程序集08:11:44Z晚于源码且重载成功；一次性测试请求已消费但结果文件未产生，不能判PASS/FAIL。先查同一运行终态，避免并发重跑。alpha/画面、取消、关闭仍待；详本包`ORIGINAL-EDITOR-RUN-PENDING.md`。`I:\UnityPreject\test`不用于本目标；禁第二Editor/computer-use。

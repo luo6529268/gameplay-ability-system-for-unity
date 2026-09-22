@@ -1221,6 +1221,8 @@ namespace NTSD.Simulation
             battleRuntimeServicesPrepared = true;
         }
 
+        private SimulationWorld modeComboConfiguredWorld;
+
         public void BeginBattleAllocationSeal()
         {
             if (lifecycleState == BattleRuntimeLifecycleState.Stopping)
@@ -1264,6 +1266,7 @@ namespace NTSD.Simulation
                         ? BattleHitRecordLifecycleCatalog.Available
                         : BattleHitRecordLifecycleCatalog.Unavailable,
                     loganCatalog);
+                ApplyPublishedModeComboBeforeFirstTick(loganCatalog);
             }
 
             animatorManager?.GetMaximumBattleCollisionRectCounts(
@@ -1291,6 +1294,25 @@ namespace NTSD.Simulation
                 _world.RuntimeDataCatalog?.IsReady == true);
             StartDedicatedSimulationWorkerIfEligible();
             _managedMemoryBoundary.CompleteLoadingAndOpenBattleWindow();
+        }
+
+        private void ApplyPublishedModeComboBeforeFirstTick(LoganObjectCatalog catalog)
+        {
+            // Alignment contract: NTSD28-Q07-MODE-COMBO-PUBLISHED-ACTIVATION-001
+            if (_world == null || ReferenceEquals(modeComboConfiguredWorld, _world) ||
+                _world.CurrentTickIndex != 0)
+                return;
+            LoganModeComboInput input = catalog?.ModeComboInput;
+            if (input != null)
+            {
+                NTSD28NativeComboRuntimeState state = _world.Runtime.NativeCombo;
+                state.RecordPresent = true;
+                state.Bound = input.Bound;
+                state.Facing = input.Facing;
+                state.Respond = input.Respond;
+                state.CaughtAct = input.CaughtAct;
+            }
+            modeComboConfiguredWorld = _world;
         }
 
         private void StartDedicatedSimulationWorkerIfEligible()
@@ -1556,6 +1578,7 @@ namespace NTSD.Simulation
 
                 _world?.BindSnapshotHostBusyObserver(null);
                 _world = null;
+                modeComboConfiguredWorld = null;
                 _localFrameInputProvider.BindWorld(null);
                 _battleTickSystem = null;
                 ResetLastAppliedFrameInput(_tickIndex);
@@ -1663,6 +1686,7 @@ namespace NTSD.Simulation
                 return;
 
             _world.ResetRuntimeState();
+            modeComboConfiguredWorld = null;
             _world.BeginBattlePreparation();
             _battleObjectPointFactory = LF2ObjectPointFactory.TryGetInstance();
             _battleObjectPool = LF2ObjectPool.TryGetInstance();
@@ -2220,6 +2244,7 @@ namespace NTSD.Simulation
             }
 
             _tickIndex = snapshot.CapturedTick;
+            modeComboConfiguredWorld = _world;
             _sparkRenderFrame = snapshot.Core.Flow.SparkRenderFrame;
             _offlineLocalTickPolicy.Reset();
             _manualReplayTickPolicy.Reset();
