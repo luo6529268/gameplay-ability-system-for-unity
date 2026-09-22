@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 03:00:31Z" end-time="2026-09-22 03:00:34Z" duration="3.0136103">
+  <test-suite type="TestSuite" id="1000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6087" result="Passed" start-time="2026-09-22 03:00:31Z" end-time="2026-09-22 03:00:34Z" duration="3.013610" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="8137" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:00:33Z" end-time="2026-09-22 03:00:34Z" duration="1.137894" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="84640" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="8138" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:00:33Z" end-time="2026-09-22 03:00:34Z" duration="0.996462" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="8146" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5517" result="Passed" start-time="2026-09-22 03:00:34Z" end-time="2026-09-22 03:00:34Z" duration="0.858496" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="3905" name="NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" fullname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" classname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-22 03:00:34Z" end-time="2026-09-22 03:00:34Z" duration="0.712214" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="3906" name="SecondResultWithDirectOwnerRequiresLogicalSelectionState" fullname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests.SecondResultWithDirectOwnerRequiresLogicalSelectionState" methodname="SecondResultWithDirectOwnerRequiresLogicalSelectionState" classname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" runstate="Runnable" seed="732518377" result="Passed" start-time="2026-09-22 03:00:27Z" end-time="2026-09-22 03:00:34Z" duration="7.233302" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <output><![CDATA[[BattleTestBootstrap] AppManager exists, skipping test bootstrap.
+GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

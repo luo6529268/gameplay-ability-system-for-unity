@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.4952222">
+  <test-suite type="TestSuite" id="8178" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6087" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.495222" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15315" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.446671" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="77016" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15316" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.414703" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15326" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.280325" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="15327" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.273271" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="15328" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="416" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.266326" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="14933" name="BattleCommonAtlasBindingEditorTests" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" testcasecount="2" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.251715" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="14934" name="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" methodname="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="412207697" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.184841" asserts="0">
+                  <properties>
+                    <property name="Category" value="NTSD_W08Regression" />
+                  </properties>
+                </test-case>
+                <test-case id="14935" name="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" methodname="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="193209099" result="Passed" start-time="2026-09-22 03:19:47Z" end-time="2026-09-22 03:19:47Z" duration="0.053276" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

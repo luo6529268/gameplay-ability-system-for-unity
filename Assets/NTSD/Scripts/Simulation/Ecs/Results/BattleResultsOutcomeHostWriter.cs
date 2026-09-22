@@ -17,7 +17,7 @@ namespace NTSD.Simulation.Ecs
 
         // Alignment contract: NTSD28-Q08-NATIVE-RESULT-CARRIER-001.
         // The ordinary result classifier runs before any combat update in this tick.
-        internal void AdvanceNativeFlowBeforeCombat()
+        internal void AdvanceNativeFlowBeforeCombat(FrameInputSet frameInput)
         {
             BattleResultsRuntimeState results = world.Runtime?.Results;
             if (results == null)
@@ -66,6 +66,12 @@ namespace NTSD.Simulation.Ecs
                 results.NativeLivingGroupMask = currentGroups;
 
             int timer = ++results.NativeResultTimer;
+            // Alignment contract: NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001.
+            if (timer >= 144 && ContinueRequestedByParticipant(frameInput))
+            {
+                timer = 350;
+                results.NativeResultTimer = timer;
+            }
             results.NativeResultOutputTimer = timer;
             results.NativeResultPhase = timer < 80
                 ? 0
@@ -86,6 +92,35 @@ namespace NTSD.Simulation.Ecs
                             : 2;
                 results.NativeResultTimer = 0;
             }
+        }
+
+        private bool ContinueRequestedByParticipant(FrameInputSet frameInput)
+        {
+            if (frameInput?.Players == null)
+                return false;
+
+            BattleSlotRuntimeState[] rosterSlots = world.Runtime?.Roster?.Slots;
+            if (rosterSlots == null)
+                return false;
+
+            for (int index = 0; index < frameInput.Players.Count; index++)
+            {
+                SimulationPlayerInput input = frameInput.Players[index];
+                int slot = input.PlayerSlot;
+                if (slot < 0 || slot >= rosterSlots.Length ||
+                    rosterSlots[slot]?.Active != true)
+                {
+                    continue;
+                }
+
+                if ((input.Buttons &
+                     (SimulationInputButtons.Attack | SimulationInputButtons.Jump)) != 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         // Alignment contract: CLIENT-CPP-RESULTS-RESERVE-TERMINAL-INTEGRATION-001.

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Failed(Child)" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 03:36:40Z" end-time="2026-09-22 03:36:42Z" duration="1.5660631">
+  <test-suite type="TestSuite" id="8180" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6089" result="Failed" site="Child" start-time="2026-09-22 03:36:40Z" end-time="2026-09-22 03:36:42Z" duration="1.566063" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15319" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6081" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.517904" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="73640" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15320" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6081" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.485363" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15330" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="418" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.354356" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestSuite" id="15331" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="418" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.347167" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-suite type="TestSuite" id="15332" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="418" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.337897" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[One or more child tests had errors]]></message>
+              </failure>
+              <test-suite type="TestFixture" id="14935" name="BattleCommonAtlasBindingEditorTests" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="1.323108" total="4" passed="3" failed="1" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <failure>
+                  <message><![CDATA[One or more child tests had errors]]></message>
+                </failure>
+                <test-case id="14937" name="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" methodname="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="2018790482" result="Passed" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:41Z" duration="0.206740" asserts="0">
+                  <properties>
+                    <property name="Category" value="NTSD_W08Regression" />
+                  </properties>
+                </test-case>
+                <test-case id="14936" name="OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" methodname="OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="1481308808" result="Passed" start-time="2026-09-22 03:36:41Z" end-time="2026-09-22 03:36:42Z" duration="0.994514" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14939" name="UnifiedPublication_AutoOverBudgetRetainsEverySourceBinding" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.UnifiedPublication_AutoOverBudgetRetainsEverySourceBinding" methodname="UnifiedPublication_AutoOverBudgetRetainsEverySourceBinding" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="1400549302" result="Failed" start-time="2026-09-22 03:36:42Z" end-time="2026-09-22 03:36:42Z" duration="0.057420" asserts="0">
+                  <properties />
+                  <failure>
+                    <message><![CDATA[  Expected: <empty>
+  But was:  < <NTSD Battle Atlas Page 0 (UnityEngine.Texture2D)> >
+]]></message>
+                    <stack-trace><![CDATA[at NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.UnifiedPublication_AutoOverBudgetRetainsEverySourceBinding () [0x000d1] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Animation\Rendering\Editor\BattleCommonAtlasBindingEditorTests.cs:346
+]]></stack-trace>
+                  </failure>
+                </test-case>
+                <test-case id="14938" name="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" methodname="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="1910534098" result="Passed" start-time="2026-09-22 03:36:42Z" end-time="2026-09-22 03:36:42Z" duration="0.049109" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

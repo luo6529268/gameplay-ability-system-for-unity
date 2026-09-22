@@ -192,6 +192,155 @@ namespace NTSD.Test
             Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
         }
 
+        [Test]
+        public void NativeResultContinueUsesHeldAttackAt144NotEarlier()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 1;
+            Register(world, 0, 1);
+            world.Runtime.Roster.Slots[0].Active = true;
+            world.Runtime.Results.NativeResultTimer = 142;
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            tickSystem.RunReleaseTick(1, false, new FrameInputSet(1, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Attack),
+            }));
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(143));
+            Assert.That(world.Runtime.Results.NativeResultPhase, Is.EqualTo(2));
+
+            tickSystem.RunReleaseTick(2, false, new FrameInputSet(2, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Attack),
+            }));
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+            Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
+            Assert.That(world.Runtime.Results.NativeResultPhase, Is.EqualTo(3));
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly()
+        {
+            var activeWorld = new SimulationWorld();
+            Register(activeWorld, 0, 1);
+            activeWorld.Runtime.Roster.Slots[2].Active = true;
+            activeWorld.Runtime.Results.NativeResultTimer = 143;
+            new NTSDBattleTickSystem(activeWorld).RunReleaseTick(1, false,
+                new FrameInputSet(1, new[]
+                {
+                    new SimulationPlayerInput(2, SimulationInputButtons.Jump),
+                }));
+            Assert.That(activeWorld.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+
+            var inactiveWorld = new SimulationWorld();
+            Register(inactiveWorld, 0, 1);
+            inactiveWorld.Runtime.Results.NativeResultTimer = 143;
+            new NTSDBattleTickSystem(inactiveWorld).RunReleaseTick(1, false,
+                new FrameInputSet(1, new[]
+                {
+                    new SimulationPlayerInput(2, SimulationInputButtons.Attack),
+                }));
+            Assert.That(inactiveWorld.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(144));
+
+            var edgeWorld = new SimulationWorld();
+            Register(edgeWorld, 0, 1);
+            edgeWorld.Runtime.Roster.Slots[0].Active = true;
+            edgeWorld.Runtime.Results.NativeResultTimer = 143;
+            new NTSDBattleTickSystem(edgeWorld).RunReleaseTick(1, false,
+                new FrameInputSet(1, new[]
+                {
+                    new SimulationPlayerInput(
+                        0,
+                        SimulationInputButtons.None,
+                        SimulationInputButtons.Attack),
+                }));
+            Assert.That(edgeWorld.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(144));
+        }
+
+        [Test]
+        public void ModeFourTransitionStopsCombatWorldOn350AndFollowingTick()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 4;
+            Register(world, 0, 1);
+            var victim = Register(world, 1, 2);
+            victim.Health.HP = 0;
+            victim.HP2Orig = 1;
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            for (int tick = 1; tick <= 349; tick++)
+                tickSystem.RunReleaseTick(tick, buildPresentation: false);
+
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(349));
+            ulong frameSequenceBefore = world.Runtime.NativeWorldClock.FrameSequence;
+            tickSystem.RunReleaseTick(350, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(202));
+            Assert.That(world.Runtime.NativeWorldClock.FrameSequence,
+                Is.EqualTo(frameSequenceBefore),
+                "Formal GameSession skips the combat driver on the transition tick.");
+
+            tickSystem.RunReleaseTick(351, buildPresentation: false);
+            Assert.That(world.Runtime.NativeWorldClock.FrameSequence,
+                Is.EqualTo(frameSequenceBefore),
+                "The following upper-state tick must leave the combat world frozen.");
+        }
+
+        [Test]
+        public void OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 0;
+            Register(world, 0, 1);
+            var victim = Register(world, 1, 2);
+            victim.Health.HP = 0;
+            victim.HP2Orig = 1;
+            world.Runtime.Results.NativeResultTimer = 349;
+            var tickSystem = new NTSDBattleTickSystem(world);
+            ulong frameSequenceBefore = world.Runtime.NativeWorldClock.FrameSequence;
+
+            tickSystem.RunReleaseTick(350, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
+            Assert.That(world.Runtime.NativeWorldClock.FrameSequence,
+                Is.EqualTo(frameSequenceBefore));
+
+            tickSystem.RunReleaseTick(351, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(1));
+            Assert.That(world.Runtime.NativeWorldClock.FrameSequence,
+                Is.EqualTo(frameSequenceBefore));
+        }
+
+        [Test]
+        public void TransitionTickDoesNotRunOldResultsSettingsWriter()
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 4;
+            Register(world, 0, 1);
+            var victim = Register(world, 1, 2);
+            victim.Health.HP = 0;
+            victim.HP2Orig = 1;
+            world.Runtime.Results.NativeResultTimer = 349;
+            world.Runtime.Results.Phase = 202;
+            world.Runtime.Results.SettingsCursor = 0;
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            tickSystem.RunReleaseTick(350, false, new FrameInputSet(350, new[]
+            {
+                new SimulationPlayerInput(
+                    1,
+                    SimulationInputButtons.Attack,
+                    SimulationInputButtons.Attack),
+            }));
+
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(202));
+            Assert.That(world.Runtime.Results.PendingHostAction,
+                Is.EqualTo(BattleResultsRuntimeState.HostActionNone),
+                "The old Results settings writer must not edit the frozen battle after transition.");
+            Assert.That(world.Runtime.Results.Phase, Is.EqualTo(202));
+        }
+
         private static FlowEntity Register(SimulationWorld world, int slot, int group)
         {
             var entity = new FlowEntity();

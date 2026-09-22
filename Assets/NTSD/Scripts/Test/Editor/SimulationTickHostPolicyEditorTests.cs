@@ -239,6 +239,42 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks()
+        {
+            using var scope = new DriverScope();
+            SimulationTickDriver driver = scope.Driver;
+            int nextTick = driver.CurrentTickIndex + 1;
+            MethodInfo canAdvance = typeof(SimulationTickDriver).GetMethod(
+                "CanAdvanceTick",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(canAdvance, Is.Not.Null);
+            Assert.That(canAdvance.Invoke(driver, new object[] { nextTick }), Is.True,
+                "An active battle must still admit its next host tick.");
+
+            SimulationWorld world = driver.World;
+            FrameInputSet previousInput = world.CurrentAppliedFrameInputForResults;
+            world.Runtime.Results.NativeResultPhase = 3;
+            world.Runtime.Results.NativeTransitionState = 202;
+
+            Assert.That(canAdvance.Invoke(driver, new object[] { nextTick }), Is.False,
+                "Automatic ticks must stop after the native result transition.");
+            Assert.That(driver.StepOneTick(
+                new FrameInputSet(nextTick, Array.Empty<SimulationPlayerInput>()),
+                ignorePaused: true,
+                buildPresentation: false), Is.False,
+                "An explicit Manual/Lockstep frame must not enter the old battle World.");
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(nextTick - 1));
+            Assert.That(world.CurrentAppliedFrameInputForResults, Is.SameAs(previousInput));
+
+            driver.SetPaused(true);
+            driver.QueueHostControlCommandsForDiagnostics(
+                SimulationHostControlCommand.SingleStep);
+            Assert.That(driver.ProcessHostControlCommandsForDiagnostics(), Is.False,
+                "Paused F2 cannot bypass a completed battle result transition.");
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(nextTick - 1));
+        }
+
+        [Test]
         public void ManualAndNetworkPolicies_NeverConsumeWallClockAutomatically()
         {
             var settings = new LockstepSimulationSettings();

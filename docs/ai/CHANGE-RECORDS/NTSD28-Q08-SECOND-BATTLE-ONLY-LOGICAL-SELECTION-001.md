@@ -1,0 +1,18 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q08-SECOND-BATTLE-ONLY-LOGICAL-SELECTION-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs
+code-path: Assets/NTSD/Scripts/Test/BattleTestBootstrap.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests.cs
+authority: formal Logan second battle-only result transition2 to ordinary upper selection1 in same World
+evidence: source second-cycle witness; temporary-host RED then 1/1 PASS; adjacent ordinary 3/3 PASS; later scripted formal-content Scene 1/1 PASS after atlas budget fix; natural KO pending
+-->
+
+# NTSD28-Q08-SECOND-BATTLE-ONLY-LOGICAL-SELECTION-001
+
+Created before script edit. Task: `docs/ai/TASKS/NTSD28-Q08-SECOND-BATTLE-ONLY-LOGICAL-SELECTION-001.md`. Before: first direct rematch is scoped Play-accepted; next result command2 remains pending with no Menu Scene because the direct host only accepts the first cycle and AppManager's ordinary route requires Menu+Battle. Formal source second cycle enters selection state1 in the same World. Planned after: explicit direct-owner second-result logical transition2→1, same World/entity state, no second direct recreation, ordinary registered menu route unaffected. Invariants: no nonbattle UI/Scene or content modification, no tick or spawn after state1, no closure/World teardown in this boundary. Validation: temporary host RED→PASS and adjacent ordinary tests; real formal-content Scene pending due repeated loading OOM, so runtime status must remain limited. Rollback exact three paths only under repository rules.
+
+Actual change: `SimulationTickDriver.IBattleOnlyResultHost` and result dispatch now expose a separate second-result callback before ordinary AppManager fallback. `BattleTestBootstrap.TryHandleSecondBattleOnlyResult` accepts only the registered direct owner after its first successful rematch at phase3/timer>=350/transition2 and writes transition1 without replacing the World. The declared new Editor test supplies the no-image temporary-host proxy. `UNITY-SECOND-BATTLE-PROXY-RED.xml` was target RED 1/1 before the production change; `UNITY-SECOND-BATTLE-PROXY-AFTER.xml` passed 1/1 and `UNITY-SECOND-BATTLE-ORDINARY-ADJACENT.xml` passed 3/3 after it. Exact SHA values and limitations are in `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/SECOND-BATTLE-LOGICAL-SELECTION-ACCEPTANCE-PENDING.md`. Both original and isolated Battle Scene SHA-256 remained `9E7B8A91ADD396D8A3674915BB5AC9A03B8D1A2EC817BA3B12F135D03EBA0AC0`. The full SelfCheck passed after the preceding first-rematch change and was not repeated for this scalar branch. Two formal-content Scene attempts failed during image loading before bootstrap due to out-of-memory, producing no second-cycle verdict. Natural KO, upper-selection roster semantics and visible EXE parity are unverified. Status remains `RUNTIME_PENDING`; do not promote proxy acceptance to full Q08 closure.
+
+Later evidence correction (2026-09-22): `NTSD28-Q08-ATLAS-BUDGET-SOURCE-BINDING-001` routed the oversized Auto atlas plan to existing source textures. The same formal-content D3D11 Battle Scene test passed 1/1, process exit 0; `UNITY-SECOND-BATTLE-SOURCE-BUDGET.xml` SHA-256 `E70E58EAA8D64150B314F843E8320F97D3CAD5CB3F5317A9A552B692D7692B77`. The test scripts the first and second result boundaries, then checks a populated fresh World after first rematch, same World and frozen tick after second result, and transition1. The former OOM blocker is cleared for this case only. Natural KO, original-project Editor, real selection frontend, and formal EXE visible parity remain unverified, so status stays `RUNTIME_PENDING`.

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:28:27Z" end-time="2026-09-22 00:28:28Z" duration="0.417663">
+  <test-suite type="TestSuite" id="8163" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6076" result="Failed" site="Child" start-time="2026-09-22 00:28:27Z" end-time="2026-09-22 00:28:28Z" duration="0.417663" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15285" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6068" result="Failed" site="Child" start-time="2026-09-22 00:28:27Z" end-time="2026-09-22 00:28:28Z" duration="0.336051" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="80560" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15286" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6068" result="Failed" site="Child" start-time="2026-09-22 00:28:27Z" end-time="2026-09-22 00:28:28Z" duration="0.278806" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15294" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5506" result="Failed" site="Child" start-time="2026-09-22 00:28:27Z" end-time="2026-09-22 00:28:28Z" duration="0.224432" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="9009" name="BattleResultsSceneHostTickAlignmentEditorTests" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" testcasecount="4" result="Failed" site="Child" start-time="2026-09-22 00:28:28Z" end-time="2026-09-22 00:28:28Z" duration="0.073407" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="9010" name="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsPageVisibilityDoesNotSuppressCombatHumanInput" methodname="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="2070641460" result="Failed" start-time="2026-09-22 00:28:28Z" end-time="2026-09-22 00:28:28Z" duration="0.059004" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Unity result-page visibility must not suppress pre-transition combat input.
+  Expected: True
+  But was:  False
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsPageVisibilityDoesNotSuppressCombatHumanInput () [0x00074] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\BattleResultsSceneHostTickAlignmentEditorTests.cs:23
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

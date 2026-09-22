@@ -1,6 +1,8 @@
 # NTSD28-Q08-NATIVE-RESULT-CARRIER-001
 
-Status: `PLANNED / SOURCE_FIRST / PRECHANGE`. Parent: `NTSD28-Q08-RESULT-FLOW-SOURCE-MATCHED-001`, BATCH-04/Q08 G-05/G-06.
+Correction (2026-09-22): alignment §1.2/P-19/G-08 excludes native result-page and selection visuals. References below to a parent “101-tick UI consumption” mean only the **logical** result-record creation at101 and preventing Unity's own page from changing battle truth; they do not require Unity's visual page to appear at native timer101. This correction supersedes any contrary interpretation while preserving the already implemented carrier and pending host work.
+
+Status: `RUNTIME_PENDING / FOCUSED_AND_ISOLATED_SELFCHECK_PASS`. Parent: `NTSD28-Q08-RESULT-FLOW-SOURCE-MATCHED-001`, BATCH-04/Q08 G-05/G-06. Actual code/evidence and the explicit old UI/continue/real-Play limits are in `artifacts/diagnostics/NTSD28-Q08-NATIVE-RESULT-CARRIER-001/ACCEPTANCE-PENDING.md`.
 
 Authority: matching playable `GameSession28::step()` calls `BattleFlow28::step()` before combat for ordinary direct battles. `battle_flow.cpp` classifies object-type-0 slot occupants, group 1..39 excluding 5, HP positive or revive lives >1; it latches the first terminal outcome, advances a timer across revival, and emits 80/101/350 milestones. Existing full-driver source evidence and Unity group/timing RED are archived in `artifacts/diagnostics/NTSD28-Q08-RESULT-GROUP-CARRIER-AUDIT-001/`. The configured-stage proxy test was retracted by `STORY-SELECTOR-CALLER-CORRECTION.md`; current menu direct mode1 must remain eligible. Formal story selection is a separate missing host input.
 

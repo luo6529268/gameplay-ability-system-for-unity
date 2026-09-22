@@ -1,0 +1,11 @@
+# Q08 result-transition host tick admission
+
+Status: `FOCUSED_TEST_PASS / ISOLATED_SELFCHECK_PASS / ROUTING_PENDING` (2026-09-22). Task/Change: `NTSD28-Q08-TRANSITION-HOST-TICK-ADMISSION-001`.
+
+Formal `GameSession28::step()` does not feed another combat-driver/input tick to the old battle after its result transition. After the core transition stop, Unity `SimulationTickDriver` still had two open paths: automatic/paused admission through `CanAdvanceTick`, and explicit Manual/Lockstep `StepOneTick(FrameInputSet)` which bypasses that method. The [prechange RED](UNITY-HOST-ADMISSION-RED.xml) compiled and failed 0/1 at automatic admission after canonical result phase3/command202: expected false, actual true.
+
+The driver now checks a nonzero native transition in both paths before host tick index, spark count, `ApplyFrameInputSet`, checksum or publication. The explicit path retains its own frame-input readiness semantics and does not call `CanAdvanceTick`. The [postchange target](UNITY-HOST-ADMISSION-POST.xml) passed 1/1, reaching automatic, explicit and paused F2 assertions with unchanged tick/input; [adjacent host/Q08/Results classes](UNITY-HOST-ADMISSION-ADJACENT.xml) passed 25/25. The isolated [full SelfCheck](UNITY-HOST-ADMISSION-SELFCHECK.log) logged battle runtime PASS and editor completion. This did not change 33 ms cadence, F1/F2/F5, ordered shutdown, mode command values, Scene, content or nonbattle UI.
+
+This is an old-battle admission guard, not a result transition handler. AppManager currently has no production consumer for ordinary command2 or mode-specific 28/128/202; ordinary return to Unity character selection and the battle-only rematch branch still require an explicit governed host task. Real original Editor/Player battle, same-seed replay and full Q08 exit remain unverified. No computer-use was used.
+
+Governance: [Change Ledger run](HOST-ADMISSION-LEDGER.log) passed 666 records/eight governed code diff files, `git diff --check` exited 0, and the original Battle Scene SHA-256 remained `9E7B8A91ADD396D8A3674915BB5AC9A03B8D1A2EC817BA3B12F135D03EBA0AC0`.

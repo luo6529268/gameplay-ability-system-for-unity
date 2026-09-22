@@ -28,6 +28,44 @@ namespace NTSD.Animation.Rendering.Editor
                 BindingFlags.Static | BindingFlags.NonPublic);
 
         [Test]
+        public void OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages()
+        {
+            var plan = new BattleAtlasPlan(
+                BattleAtlasLayoutPlanner.PageSize,
+                BattleAtlasLayoutPlanner.ExtrusionPadding,
+                new List<BattleAtlasPlacement>
+                {
+                    new BattleAtlasPlacement("a.png", 0, new RectInt(0, 0, 4, 4), new RectInt(1, 1, 2, 2)),
+                    new BattleAtlasPlacement("b.png", 1, new RectInt(0, 0, 4, 4), new RectInt(1, 1, 2, 2)),
+                });
+            var sources = new Dictionary<string, BattleAtlasSourcePixels>(StringComparer.Ordinal)
+            {
+                ["a.png"] = new BattleAtlasSourcePixels("a.png", 2, 2, new[]
+                {
+                    new Color32(1, 2, 3, 255), new Color32(4, 5, 6, 255),
+                    new Color32(7, 8, 9, 255), new Color32(10, 11, 12, 255),
+                }),
+                ["b.png"] = new BattleAtlasSourcePixels("b.png", 2, 2, new[]
+                {
+                    new Color32(13, 14, 15, 255), new Color32(16, 17, 18, 255),
+                    new Color32(19, 20, 21, 255), new Color32(22, 23, 24, 255),
+                }),
+            };
+
+            Color32[][] wholePlan = BattleAtlasResourceBuilder.AssemblePages(plan, sources);
+            for (int page = 0; page < plan.PageCount; page++)
+            {
+                Color32[] singlePage = BattleAtlasResourceBuilder.AssemblePage(plan, sources, page);
+                Assert.That(singlePage.Length, Is.EqualTo(wholePlan[page].Length));
+                for (int pixel = 0; pixel < singlePage.Length; pixel++)
+                {
+                    if (!singlePage[pixel].Equals(wholePlan[page][pixel]))
+                        Assert.Fail($"Atlas pixel mismatch at page {page}, index {pixel}.");
+                }
+            }
+        }
+
+        [Test]
         [Category("NTSD_W08Regression")]
         public void ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity()
         {
@@ -272,6 +310,113 @@ namespace NTSD.Animation.Rendering.Editor
             Assert.That(spark.CentralBinding.Mode,
                 Is.EqualTo(BattleSpriteCentralBindingMode.AtlasTextureArray));
             Assert.That(arguments[11] as string, Does.Contain("oversizedSource2DRetainedCount=1"));
+        }
+
+        [Test]
+        public void UnifiedPublication_AutoOverBudgetRetainsEverySourceBinding()
+        {
+            using var fixture = new CommonFixture();
+            var capabilities = new BattleRenderingDeviceCapabilities(
+                "test", "test", "test", true, 4096, 256, true, false, 1);
+            object[] arguments =
+            {
+                BattleSpriteCatalog.Empty,
+                fixture.Catalog,
+                fixture.Sources,
+                fixture.SourcePaths,
+                Array.Empty<string>(),
+                capabilities,
+                null,
+                Array.Empty<string>(),
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+            };
+
+            Assert.That((bool)BuildUnifiedPublicationMethod.Invoke(null, arguments),
+                Is.True, arguments[11] as string);
+            var bound = arguments[9] as BattleCommonVisualCatalog;
+            var owned = arguments[10] as HashSet<UnityEngine.Object>;
+            var decision = arguments[12] as BattleAtlasPolicyDecision;
+            var inputs = arguments[13] as BattleAtlasDiagnosticInputs;
+            Assert.That(bound, Is.Not.Null);
+            Assert.That(owned, Is.Empty);
+            Assert.That(decision.RequestedMode, Is.EqualTo(BattleAtlasPolicyMode.Auto));
+            Assert.That(decision.EffectiveMode, Is.EqualTo(BattleAtlasPolicyMode.SourceTexture2D));
+            Assert.That(inputs.PlannedPageCount, Is.GreaterThan(0));
+            Assert.That(inputs.EstimatedAtlasBytes, Is.GreaterThan(capabilities.AtlasMemoryBudgetBytes));
+            Assert.That(inputs.CatalogResourceMode,
+                Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+            Assert.That(bound.Shadow.CentralBinding.Texture,
+                Is.SameAs(fixture.Catalog.Shadow.CentralBinding.Texture));
+            Assert.That(bound.Shadow, Is.SameAs(fixture.Catalog.Shadow));
+            Assert.That(bound.TryGetSpark(13, out BattleCommonVisualBinding spark), Is.True);
+            Assert.That(spark.CentralBinding.Mode,
+                Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+            Assert.That(fixture.Catalog.TryGetSpark(13, out BattleCommonVisualBinding sourceSpark), Is.True);
+            Assert.That(spark.CentralBinding.Texture,
+                Is.SameAs(sourceSpark.CentralBinding.Texture));
+            Assert.That(spark, Is.SameAs(sourceSpark));
+            Assert.That(bound.TryGetWordGlyph(5, 'L', out BattleCommonVisualBinding word), Is.True);
+            Assert.That(word.CentralBinding.Mode,
+                Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+            Assert.That(fixture.Catalog.TryGetWordGlyph(5, 'L', out BattleCommonVisualBinding sourceWord), Is.True);
+            Assert.That(word, Is.SameAs(sourceWord));
+            var resolver = new BattleCatalogCentralResourceResolver();
+            resolver.Configure(BattleSpriteCatalog.Empty, bound,
+                fixture.FallbackMaterial, fixture.ArrayMaterial);
+            var frame = new BattlePresentationFrame();
+            Assert.That(ResetFrameMethod, Is.Not.Null);
+            Assert.That(AddCommandMethod, Is.Not.Null);
+            ResetFrameMethod.Invoke(frame, new object[] { 1, bound });
+            AddCommandMethod.Invoke(frame,
+                new object[] { CreateCommand(BattleRenderCommandType.Shadow, bound.Shadow, -1, -1) });
+            AddCommandMethod.Invoke(frame,
+                new object[] { CreateCommand(BattleRenderCommandType.HitRecord, spark, -1, 13) });
+            AddCommandMethod.Invoke(frame,
+                new object[] { CreateCommand(BattleRenderCommandType.OverlayGlyph, word, 5, 'L') });
+            AddCommandMethod.Invoke(frame,
+                new object[] { CreateCommand(BattleRenderCommandType.Shadow, bound.Shadow, -1, -1) });
+            using (var backend = new BattleDynamicMeshBackend())
+            {
+                backend.Build(frame, resolver, BattleCentralDrawMode.OrderedChunks);
+                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(4));
+                Assert.That(backend.SegmentCount, Is.EqualTo(4));
+                Texture[] expectedTextures =
+                {
+                    bound.Shadow.CentralBinding.Texture,
+                    spark.CentralBinding.Texture,
+                    word.CentralBinding.Texture,
+                    bound.Shadow.CentralBinding.Texture,
+                };
+                for (int index = 0; index < expectedTextures.Length; index++)
+                {
+                    BattleCentralRenderSegment segment = backend.GetSegment(index);
+                    Assert.That(segment.FirstCommandIndex, Is.EqualTo(index));
+                    Assert.That(segment.Texture, Is.SameAs(expectedTextures[index]));
+                    Assert.That(segment.BindingMode,
+                        Is.EqualTo(BattleSpriteCentralBindingMode.SourceTexture2D));
+                }
+            }
+            Assert.That(arguments[11] as string, Does.Contain("exceeds budget"));
+
+            arguments[7] = new[]
+            {
+                BattleRenderingPolicyResolver.AtlasModeArgument,
+                nameof(BattleAtlasPolicyMode.OrderedPages),
+            };
+            Assert.That((bool)BuildUnifiedPublicationMethod.Invoke(null, arguments),
+                Is.True, arguments[11] as string);
+            fixture.Track(arguments[10] as IEnumerable<UnityEngine.Object>);
+            decision = arguments[12] as BattleAtlasPolicyDecision;
+            Assert.That(decision.EffectiveMode, Is.EqualTo(BattleAtlasPolicyMode.OrderedPages));
+            Assert.That(((HashSet<UnityEngine.Object>)arguments[10]).Count, Is.GreaterThan(0));
+            Assert.That(BattleRenderingPolicyResolver.TryParseAtlasMode(
+                nameof(BattleAtlasPolicyMode.SourceTexture2D), out BattleAtlasPolicyMode parsed), Is.True);
+            Assert.That(parsed, Is.EqualTo(BattleAtlasPolicyMode.SourceTexture2D));
         }
 
         private static void AssertDescriptorIdentity(

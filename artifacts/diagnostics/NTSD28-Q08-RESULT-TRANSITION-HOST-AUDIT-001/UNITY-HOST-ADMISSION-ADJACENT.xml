@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="25" result="Passed" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:59:32Z" end-time="2026-09-22 00:59:34Z" duration="2.0818993">
+  <test-suite type="TestSuite" id="8166" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 00:59:32Z" end-time="2026-09-22 00:59:34Z" duration="2.081899" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15291" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6071" result="Passed" start-time="2026-09-22 00:59:32Z" end-time="2026-09-22 00:59:34Z" duration="1.845313" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="79860" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15292" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6071" result="Passed" start-time="2026-09-22 00:59:32Z" end-time="2026-09-22 00:59:34Z" duration="1.698634" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15300" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5509" result="Passed" start-time="2026-09-22 00:59:32Z" end-time="2026-09-22 00:59:34Z" duration="1.535109" total="25" passed="25" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="9012" name="BattleResultsSceneHostTickAlignmentEditorTests" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.091658" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="9014" name="ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" methodname="ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="842300564" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.064155" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9016" name="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" methodname="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="43352227" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.003823" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9015" name="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" methodname="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="919800923" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.002481" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9013" name="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsPageVisibilityDoesNotSuppressCombatHumanInput" methodname="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="868693808" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.003869" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="11048" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:34Z" duration="0.983551" total="13" passed="13" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <test-case id="11050" name="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" methodname="FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="2037366406" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.048929" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11059" name="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" methodname="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="629145811" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.461225" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11053" name="ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" methodname="ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="215570346" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.007829" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11052" name="ModeOneDirectBattleStillStartsTerminalGuard" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeOneDirectBattleStillStartsTerminalGuard" methodname="ModeOneDirectBattleStillStartsTerminalGuard" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="579091815" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.003791" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11054" name="NativePrecombatResultLatchesFirstTerminalGroupsAcrossRevival" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultLatchesFirstTerminalGroupsAcrossRevival" methodname="NativePrecombatResultLatchesFirstTerminalGroupsAcrossRevival" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1294744436" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.005287" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11055" name="NativePrecombatResultRetainsThirdGroupAndExcludesInvalidGroups" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultRetainsThirdGroupAndExcludesInvalidGroups" methodname="NativePrecombatResultRetainsThirdGroupAndExcludesInvalidGroups" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="625756417" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.005435" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11058" name="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" methodname="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="977172705" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.005364" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11057" name="NativeResultContinueUsesHeldAttackAt144NotEarlier" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier" methodname="NativeResultContinueUsesHeldAttackAt144NotEarlier" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1907894029" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:33Z" duration="0.002463" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11056" name="NativeResultTimerEmitsSourceMilestonesAndClearsStored350" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultTimerEmitsSourceMilestonesAndClearsStored350" methodname="NativeResultTimerEmitsSourceMilestonesAndClearsStored350" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="2039453877" result="Passed" start-time="2026-09-22 00:59:33Z" end-time="2026-09-22 00:59:34Z" duration="0.429159" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11060" name="OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" methodname="OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="382675102" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.001299" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11061" name="TransitionTickDoesNotRunOldResultsSettingsWriter" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter" methodname="TransitionTickDoesNotRunOldResultsSettingsWriter" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="951253667" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.001195" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11049" name="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" methodname="ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="194353743" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.001074" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11051" name="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" methodname="ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1808739648" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.001354" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+          <test-suite type="TestFixture" id="11202" name="SimulationTickHostPolicyEditorTests" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.032375" total="8" passed="8" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="11208" name="DriverHostControl_RunningF2IsDroppedAndPausedF2AdvancesExactlyOnce" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.DriverHostControl_RunningF2IsDroppedAndPausedF2AdvancesExactlyOnce" methodname="DriverHostControl_RunningF2IsDroppedAndPausedF2AdvancesExactlyOnce" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="1684452167" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.022805" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11206" name="HostControl_AppliesF1ThenF2ThenF5WithPausedOnlySingleStep" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.HostControl_AppliesF1ThenF2ThenF5WithPausedOnlySingleStep" methodname="HostControl_AppliesF1ThenF2ThenF5WithPausedOnlySingleStep" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="1935825211" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000481" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11207" name="HostPhysicalEdgeLatch_EmitsOnlyFalseToTrueAndReleaseRearms" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.HostPhysicalEdgeLatch_EmitsOnlyFalseToTrueAndReleaseRearms" methodname="HostPhysicalEdgeLatch_EmitsOnlyFalseToTrueAndReleaseRearms" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="472610604" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000426" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11210" name="ManualAndNetworkPolicies_NeverConsumeWallClockAutomatically" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.ManualAndNetworkPolicies_NeverConsumeWallClockAutomatically" methodname="ManualAndNetworkPolicies_NeverConsumeWallClockAutomatically" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="1151248791" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000421" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11209" name="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" methodname="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="1230792185" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.001629" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11205" name="OfflineLocal_CadenceChangeClearsDebtAndSameModePreservesIt" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.OfflineLocal_CadenceChangeClearsDebtAndSameModePreservesIt" methodname="OfflineLocal_CadenceChangeClearsDebtAndSameModePreservesIt" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="771129744" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000335" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11204" name="OfflineLocal_CapsWallClockDebtAtTwoActiveIntervals" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.OfflineLocal_CapsWallClockDebtAtTwoActiveIntervals" methodname="OfflineLocal_CapsWallClockDebtAtTwoActiveIntervals" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="1240546702" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000213" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11203" name="OfflineLocal_UsesExactCadenceAndDrainsAtMostTwoIntervalsPerUpdate" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.OfflineLocal_UsesExactCadenceAndDrainsAtMostTwoIntervalsPerUpdate" methodname="OfflineLocal_UsesExactCadenceAndDrainsAtMostTwoIntervalsPerUpdate" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="287377030" result="Passed" start-time="2026-09-22 00:59:34Z" end-time="2026-09-22 00:59:34Z" duration="0.000429" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

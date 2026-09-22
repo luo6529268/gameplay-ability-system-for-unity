@@ -308,16 +308,29 @@ namespace NTSD.Simulation
                 diagnostics?.BeginTick(tickIndex);
                 detailDiagnostics?.BeginTick(tickIndex);
                 world.BeginDataObjectTypeTickCache(tickIndex);
+                bool refreshCombatShadow = false;
                 try
                 {
                     diagnostics?.BeginPhase(BattleTickPhase.BattleFlow);
+                    world.AdvanceNativeBattleResultsBeforeCombat(
+                        frameInput != null && frameInput.TickIndex == tickIndex
+                            ? frameInput
+                            : null);
+                    // Alignment contract: NTSD28-Q08-NATIVE-TRANSITION-COMBAT-FREEZE-001.
+                    // The formal host returns before the combat driver on the transition tick.
+                    if (world.Runtime?.Results?.NativeTransitionState != 0)
+                    {
+                        diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
+                        return BattleTickCompletion.FullReturn;
+                    }
+
+                    refreshCombatShadow = true;
                     // Host projection precedes core input on both main and worker tick paths.
                     world.ProjectFusionFeatureGateToActiveEntities();
                     if (world.Runtime?.Flow != null)
                         world.Runtime.Flow.HumanInputPolledExternally = false;
                     world.PendingSounds.Clear();
                     world.AdvanceBattleFlowTick(tickIndex);
-                    world.AdvanceNativeBattleResultsBeforeCombat();
                     diagnostics?.EndPhase(BattleTickPhase.BattleFlow);
                     diagnostics?.BeginPhase(BattleTickPhase.NativeSparkAdvance);
                     AdvanceNativeSparks();
@@ -328,15 +341,13 @@ namespace NTSD.Simulation
                         world.Runtime?.Results?.IsActive == true;
 
                     bool stepWaitGate = PrepareBattleStepGateForTick();
-                    if (!resultsActiveAtTickStart &&
-                        (!stepWaitGate || world.NeedClearInput))
+                    if (!stepWaitGate || world.NeedClearInput)
                     {
                         diagnostics?.BeginPhase(BattleTickPhase.HumanInput);
                         PollHumanInput(tickIndex);
                         diagnostics?.EndPhase(BattleTickPhase.HumanInput);
                     }
-                    if (!stepWaitGate &&
-                        (resultsActiveAtTickStart || !world.NeedClearInput))
+                    if (!stepWaitGate && !world.NeedClearInput)
                     {
                         diagnostics?.BeginPhase(BattleTickPhase.CharacterInput);
                         NativeProducerSampleAndInputRoute(tickIndex);
@@ -345,7 +356,7 @@ namespace NTSD.Simulation
                     if (!RunFrameAdvancePhase(
                             tickIndex,
                             diagnostics,
-                            allowBattleEntryInputClear: !resultsActiveAtTickStart))
+                            allowBattleEntryInputClear: true))
                     {
                         return BattleTickCompletion.NotCompleted;
                     }
@@ -368,7 +379,8 @@ namespace NTSD.Simulation
                     world.EndDataObjectTypeTickCache();
                     detailDiagnostics?.EndTick();
                     diagnostics?.EndTick();
-                    world.RefreshBattleEcsShadowAfterTick(tickIndex);
+                    if (refreshCombatShadow)
+                        world.RefreshBattleEcsShadowAfterTick(tickIndex);
                 }
             }
             finally

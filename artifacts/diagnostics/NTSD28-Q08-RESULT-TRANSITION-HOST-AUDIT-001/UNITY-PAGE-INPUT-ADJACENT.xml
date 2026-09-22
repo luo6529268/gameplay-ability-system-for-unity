@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Passed" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:31:31Z" end-time="2026-09-22 00:31:32Z" duration="1.0159286">
+  <test-suite type="TestSuite" id="8163" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6076" result="Passed" start-time="2026-09-22 00:31:31Z" end-time="2026-09-22 00:31:32Z" duration="1.015929" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15285" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6068" result="Passed" start-time="2026-09-22 00:31:31Z" end-time="2026-09-22 00:31:32Z" duration="0.836276" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="80148" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15286" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6068" result="Passed" start-time="2026-09-22 00:31:31Z" end-time="2026-09-22 00:31:32Z" duration="0.671927" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15294" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5506" result="Passed" start-time="2026-09-22 00:31:31Z" end-time="2026-09-22 00:31:32Z" duration="0.498409" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="11045" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="11" result="Passed" start-time="2026-09-22 00:31:32Z" end-time="2026-09-22 00:31:32Z" duration="0.132340" total="2" passed="2" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <test-case id="11055" name="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" methodname="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1007503419" result="Passed" start-time="2026-09-22 00:31:32Z" end-time="2026-09-22 00:31:32Z" duration="0.110468" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11054" name="NativeResultContinueUsesHeldAttackAt144NotEarlier" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier" methodname="NativeResultContinueUsesHeldAttackAt144NotEarlier" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="522150332" result="Passed" start-time="2026-09-22 00:31:32Z" end-time="2026-09-22 00:31:32Z" duration="0.004718" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

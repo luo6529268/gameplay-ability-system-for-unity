@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:46:25Z" end-time="2026-09-22 00:46:27Z" duration="1.6274271">
+  <test-suite type="TestSuite" id="8165" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6078" result="Passed" start-time="2026-09-22 00:46:25Z" end-time="2026-09-22 00:46:27Z" duration="1.627427" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15289" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6070" result="Passed" start-time="2026-09-22 00:46:25Z" end-time="2026-09-22 00:46:27Z" duration="1.442808" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="74660" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15290" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6070" result="Passed" start-time="2026-09-22 00:46:26Z" end-time="2026-09-22 00:46:27Z" duration="1.221253" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15298" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5508" result="Passed" start-time="2026-09-22 00:46:26Z" end-time="2026-09-22 00:46:27Z" duration="1.033226" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="11047" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="13" result="Passed" start-time="2026-09-22 00:46:26Z" end-time="2026-09-22 00:46:27Z" duration="0.601443" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <test-case id="11058" name="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" methodname="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1514278689" result="Passed" start-time="2026-09-22 00:46:26Z" end-time="2026-09-22 00:46:27Z" duration="0.573241" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11059" name="OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" methodname="OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="598260103" result="Passed" start-time="2026-09-22 00:46:27Z" end-time="2026-09-22 00:46:27Z" duration="0.004472" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="11060" name="TransitionTickDoesNotRunOldResultsSettingsWriter" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter" methodname="TransitionTickDoesNotRunOldResultsSettingsWriter" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="165394687" result="Passed" start-time="2026-09-22 00:46:27Z" end-time="2026-09-22 00:46:27Z" duration="0.003726" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -140,6 +140,10 @@ namespace NTSD.Animation
 
     public static class BattleAtlasResourceBuilder
     {
+        private static readonly bool TraceAllocations = Array.Exists(
+            Environment.GetCommandLineArgs(),
+            argument => string.Equals(argument, "-ntsdAtlasAllocationTrace", StringComparison.OrdinalIgnoreCase));
+
         public static bool TryBuild(
             BattleAtlasPlan plan,
             IEnumerable<BattleAtlasSourcePixels> sources,
@@ -186,23 +190,27 @@ namespace NTSD.Animation
                 }
             }
 
-            Color32[][] pages;
-            try
-            {
-                pages = AssemblePages(plan, indexed);
-            }
-            catch (Exception exception)
-            {
-                diagnostic = $"Atlas CPU assembly failed: {exception.Message}";
-                return false;
-            }
-
             BattleAtlasArrayDecision decision = policy.EvaluateArray(plan.PageCount);
+            if (TraceAllocations)
+                Debug.Log($"[Q08 AtlasTrace] planPages={plan.PageCount}, array={decision.UseTextureArray}, reason={decision.Reason}, managedBytes={GC.GetTotalMemory(false)}, phase=select");
+            Color32[][] pages = null;
             if (decision.UseTextureArray)
             {
+                try
+                {
+                    pages = AssemblePages(plan, indexed);
+                }
+                catch (Exception exception)
+                {
+                    diagnostic = $"Atlas CPU assembly failed: {exception.Message}";
+                    return false;
+                }
+
                 Texture2DArray array = null;
                 try
                 {
+                    if (TraceAllocations)
+                        Debug.Log("[Q08 AtlasTrace] array allocation begin");
                     array = new Texture2DArray(
                         BattleAtlasLayoutPlanner.PageSize,
                         BattleAtlasLayoutPlanner.PageSize,
@@ -218,6 +226,8 @@ namespace NTSD.Animation
                     for (int page = 0; page < pages.Length; page++)
                         array.SetPixels32(pages[page], page, 0);
                     array.Apply(false, true);
+                    if (TraceAllocations)
+                        Debug.Log("[Q08 AtlasTrace] array allocation complete");
                     resources = new BattleAtlasResources(
                         BattleSpriteCentralBindingMode.AtlasTextureArray,
                         array,
@@ -230,6 +240,8 @@ namespace NTSD.Animation
                 {
                     DestroyObject(array);
                     diagnostic = $"Texture2DArray allocation/upload failed ({exception.Message}); using ordered page fallback.";
+                    if (TraceAllocations)
+                        Debug.Log($"[Q08 AtlasTrace] array fallback: {exception.GetType().Name}: {exception.Message}");
                 }
             }
             else
@@ -241,8 +253,13 @@ namespace NTSD.Animation
             var owned = new List<UnityEngine.Object>(plan.PageCount);
             try
             {
-                for (int page = 0; page < pages.Length; page++)
+                for (int page = 0; page < plan.PageCount; page++)
                 {
+                    if (TraceAllocations)
+                        Debug.Log($"[Q08 AtlasTrace] ordered page begin={page}/{plan.PageCount}, managedBytes={GC.GetTotalMemory(false)}");
+                    Color32[] pagePixels = pages != null
+                        ? pages[page]
+                        : AssemblePage(plan, indexed, page);
                     var texture = new Texture2D(
                         BattleAtlasLayoutPlanner.PageSize,
                         BattleAtlasLayoutPlanner.PageSize,
@@ -256,9 +273,11 @@ namespace NTSD.Animation
                     };
                     owned.Add(texture);
                     beforeFallbackUpload?.Invoke(texture, page);
-                    texture.SetPixels32(pages[page]);
+                    texture.SetPixels32(pagePixels);
                     texture.Apply(false, true);
                     pageTextures.Add(texture);
+                    if (TraceAllocations)
+                        Debug.Log($"[Q08 AtlasTrace] ordered page complete={page}/{plan.PageCount}");
                 }
                 resources = new BattleAtlasResources(
                     BattleSpriteCentralBindingMode.AtlasPageTexture2D,
@@ -606,6 +625,30 @@ namespace NTSD.Animation
                     plan.Padding);
             }
             return pages;
+        }
+
+        internal static Color32[] AssemblePage(
+            BattleAtlasPlan plan,
+            IReadOnlyDictionary<string, BattleAtlasSourcePixels> indexedSources,
+            int pageIndex)
+        {
+            var page = new Color32[checked(plan.PageSize * plan.PageSize)];
+            for (int index = 0; index < plan.Placements.Count; index++)
+            {
+                BattleAtlasPlacement placement = plan.Placements[index];
+                if (placement.PageIndex != pageIndex)
+                    continue;
+                BattleAtlasSourcePixels source = indexedSources[placement.NormalizedPath];
+                CopyWithExtrusion(
+                    source.Pixels,
+                    source.Width,
+                    source.Height,
+                    page,
+                    plan.PageSize,
+                    placement.ContentRect,
+                    plan.Padding);
+            }
+            return page;
         }
 
         internal static bool TryValidateSourceSet(

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Passed" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:58:18Z" end-time="2026-09-22 00:58:19Z" duration="0.828682">
+  <test-suite type="TestSuite" id="8166" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 00:58:18Z" end-time="2026-09-22 00:58:19Z" duration="0.828682" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15291" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6071" result="Passed" start-time="2026-09-22 00:58:18Z" end-time="2026-09-22 00:58:19Z" duration="0.558641" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="80448" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15292" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6071" result="Passed" start-time="2026-09-22 00:58:18Z" end-time="2026-09-22 00:58:19Z" duration="0.386492" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15300" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5509" result="Passed" start-time="2026-09-22 00:58:19Z" end-time="2026-09-22 00:58:19Z" duration="0.210888" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="11202" name="SimulationTickHostPolicyEditorTests" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" testcasecount="8" result="Passed" start-time="2026-09-22 00:58:19Z" end-time="2026-09-22 00:58:19Z" duration="0.052801" total="1" passed="1" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="11209" name="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" methodname="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="2064117874" result="Passed" start-time="2026-09-22 00:58:19Z" end-time="2026-09-22 00:58:19Z" duration="0.038689" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

@@ -2316,8 +2316,33 @@ namespace NTSD.Animation
                 planResult.Plan.PageCount,
                 config,
                 commandLineArguments);
-            if (planResult.Plan.PageCount == 0)
+            long plannedAtlasBytes = BattleAtlasDiagnosticInputs.EstimateAtlasBytes(planResult.Plan.PageCount);
+            if (planResult.Plan.PageCount > 0 &&
+                policyDecision.RequestedMode == BattleAtlasPolicyMode.Auto &&
+                capabilities.AtlasMemoryBudgetBytes >= 0 &&
+                plannedAtlasBytes > capabilities.AtlasMemoryBudgetBytes)
             {
+                string budgetReason =
+                    $"Auto retained SourceTexture2D because atlas allocation {plannedAtlasBytes} bytes exceeds budget {capabilities.AtlasMemoryBudgetBytes}.";
+                policyDecision = new BattleAtlasPolicyDecision(
+                    BattleAtlasPolicyMode.Auto,
+                    BattleAtlasPolicyMode.SourceTexture2D,
+                    budgetReason,
+                    capabilities.ToAtlasCapabilityPolicy());
+            }
+            if (planResult.Plan.PageCount == 0 ||
+                policyDecision.EffectiveMode == BattleAtlasPolicyMode.SourceTexture2D)
+            {
+                if (planResult.Plan.PageCount > 0)
+                {
+                    var allSourcePaths = new HashSet<string>(
+                        sourceTexture2DExcludedPaths,
+                        StringComparer.Ordinal);
+                    foreach (BattleAtlasSourcePixels source in eligibleSources)
+                        allSourcePaths.Add(BattleAtlasLayoutPlanner.NormalizePath(source.Path));
+                    sourceTexture2DExcludedPaths = allSourcePaths.ToList();
+                    sourceTexture2DExcludedPaths.Sort(StringComparer.Ordinal);
+                }
                 if (!TryRetainExcludedSourceTexture2DCatalog(
                         boundCatalog,
                         sourceTexture2DExcludedPaths,
@@ -2327,12 +2352,14 @@ namespace NTSD.Animation
                     return false;
                 }
 
-                diagnostic = oversizedDiagnostic;
+                diagnostic = CombineAtlasDiagnostics(
+                    policyDecision.FallbackOrRefusalReason,
+                    oversizedDiagnostic);
                 diagnosticInputs = new BattleAtlasDiagnosticInputs(
                     capabilities,
                     policyDecision,
-                    0,
-                    0,
+                    planResult.Plan.PageCount,
+                    plannedAtlasBytes,
                     BattleSpriteCentralBindingMode.SourceTexture2D,
                     diagnostic);
                 return true;
@@ -2461,8 +2488,33 @@ namespace NTSD.Animation
                 planResult.Plan.PageCount,
                 config,
                 commandLineArguments);
-            if (planResult.Plan.PageCount == 0)
+            long plannedAtlasBytes = BattleAtlasDiagnosticInputs.EstimateAtlasBytes(planResult.Plan.PageCount);
+            if (planResult.Plan.PageCount > 0 &&
+                policyDecision.RequestedMode == BattleAtlasPolicyMode.Auto &&
+                capabilities.AtlasMemoryBudgetBytes >= 0 &&
+                plannedAtlasBytes > capabilities.AtlasMemoryBudgetBytes)
             {
+                string budgetReason =
+                    $"Auto retained SourceTexture2D because atlas allocation {plannedAtlasBytes} bytes exceeds budget {capabilities.AtlasMemoryBudgetBytes}.";
+                policyDecision = new BattleAtlasPolicyDecision(
+                    BattleAtlasPolicyMode.Auto,
+                    BattleAtlasPolicyMode.SourceTexture2D,
+                    budgetReason,
+                    capabilities.ToAtlasCapabilityPolicy());
+            }
+            if (planResult.Plan.PageCount == 0 ||
+                policyDecision.EffectiveMode == BattleAtlasPolicyMode.SourceTexture2D)
+            {
+                if (planResult.Plan.PageCount > 0)
+                {
+                    var allSourcePaths = new HashSet<string>(
+                        sourceTexture2DExcludedPaths,
+                        StringComparer.Ordinal);
+                    foreach (BattleAtlasSourcePixels source in eligibleSources)
+                        allSourcePaths.Add(BattleAtlasLayoutPlanner.NormalizePath(source.Path));
+                    sourceTexture2DExcludedPaths = allSourcePaths.ToList();
+                    sourceTexture2DExcludedPaths.Sort(StringComparer.Ordinal);
+                }
                 if (!TryRetainExcludedSourceTexture2DCatalog(
                         boundCatalog,
                         sourceTexture2DExcludedPaths,
@@ -2476,12 +2528,14 @@ namespace NTSD.Animation
                     return false;
                 }
 
-                diagnostic = oversizedDiagnostic;
+                diagnostic = CombineAtlasDiagnostics(
+                    policyDecision.FallbackOrRefusalReason,
+                    oversizedDiagnostic);
                 diagnosticInputs = new BattleAtlasDiagnosticInputs(
                     capabilities,
                     policyDecision,
-                    0,
-                    0,
+                    planResult.Plan.PageCount,
+                    plannedAtlasBytes,
                     BattleSpriteCentralBindingMode.SourceTexture2D,
                     diagnostic);
                 return true;

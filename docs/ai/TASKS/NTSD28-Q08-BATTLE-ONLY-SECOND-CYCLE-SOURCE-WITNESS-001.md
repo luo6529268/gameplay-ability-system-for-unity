@@ -1,0 +1,9 @@
+# NTSD28-Q08-BATTLE-ONLY-SECOND-CYCLE-SOURCE-WITNESS-001
+
+Status: `FOCUSED_TEST_PASS / SOURCE_MODEL_ONLY`. Parent BATCH-04/Q08. Focused build exit0; two source-model runs exited0 with identical SHA and confirmed one direct rematch then ordinary selection at the second result. See `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/SECOND-CYCLE-SOURCE-WITNESS.md`. Formal authority: root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, matching playable `GameSession28::step()` and `start_selected_battle()`.
+
+Exact diagnostic paths: new `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/native_battle_only_second_cycle_fixture.cpp`, and the isolated test copy `I:/GitHub/Unity_GAS/ntsd-q08-native-validation-20260922/source/ntsd28_playable/tests/game_session_tests.cpp`. J: authority remains read-only; no Unity production/test code, Scene, DAT/images, nonbattle UI or GAS edits. Preserve the old first-cycle fixture and outputs.
+
+Acceptance: source SHA parity, focused native `game_session_tests` build exit0, two fresh executable runs exit0 and byte-identical. The test must observe the original battle-only result350→first recreated battle; then force the same valid single-survivor outcome in that new World, observe its second result350 and following upper-state call, recording config flag, flow transition, frontend scene, world pointer and former victim HP. Do not assume perpetual rematch or silently alter formal source. Report a source-model conclusion separately from formal EXE-visible frontend behavior and Unity runtime.
+
+Rollback: only the new diagnostic fixture and its isolated test copy, subject to repository approval rules. This Task is complete only at the source-witness boundary; Unity battle-only host implementation remains separate.

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:56:29Z" end-time="2026-09-22 00:56:30Z" duration="0.8051727">
+  <test-suite type="TestSuite" id="8166" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Failed" site="Child" start-time="2026-09-22 00:56:29Z" end-time="2026-09-22 00:56:30Z" duration="0.805173" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15291" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6071" result="Failed" site="Child" start-time="2026-09-22 00:56:29Z" end-time="2026-09-22 00:56:30Z" duration="0.537833" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="79916" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15292" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6071" result="Failed" site="Child" start-time="2026-09-22 00:56:29Z" end-time="2026-09-22 00:56:30Z" duration="0.368546" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15300" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5509" result="Failed" site="Child" start-time="2026-09-22 00:56:29Z" end-time="2026-09-22 00:56:30Z" duration="0.203426" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11202" name="SimulationTickHostPolicyEditorTests" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2026-09-22 00:56:30Z" end-time="2026-09-22 00:56:30Z" duration="0.054800" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11209" name="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" fullname="NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" methodname="NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks" classname="NTSD.Test.SimulationTickHostPolicyEditorTests" runstate="Runnable" seed="2031626696" result="Failed" start-time="2026-09-22 00:56:30Z" end-time="2026-09-22 00:56:30Z" duration="0.037814" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Automatic ticks must stop after the native result transition.
+  Expected: False
+  But was:  True
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks () [0x000a3] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\SimulationTickHostPolicyEditorTests.cs:259
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

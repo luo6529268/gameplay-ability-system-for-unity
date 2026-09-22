@@ -13,6 +13,7 @@ namespace NTSD.Animation.Rendering
         Auto = 0,
         TextureArray = 1,
         OrderedPages = 2,
+        SourceTexture2D = 3,
     }
 
     public enum BattleDrawPolicyMode : byte
@@ -207,6 +208,11 @@ namespace NTSD.Animation.Rendering
                 mode = BattleAtlasPolicyMode.OrderedPages;
                 return true;
             }
+            if (string.Equals(value, nameof(BattleAtlasPolicyMode.SourceTexture2D), StringComparison.OrdinalIgnoreCase))
+            {
+                mode = BattleAtlasPolicyMode.SourceTexture2D;
+                return true;
+            }
 
             mode = BattleAtlasPolicyMode.Auto;
             return false;
@@ -249,6 +255,15 @@ namespace NTSD.Animation.Rendering
             BattleAtlasPolicyMode requestedMode = ResolveRequestedAtlasMode(explicitMode, configuredMode);
             BattleAtlasCapabilityPolicy capabilityPolicy = capabilities.ToAtlasCapabilityPolicy();
             BattleAtlasArrayDecision arrayDecision = capabilityPolicy.EvaluateArray(plannedPageCount);
+
+            if (requestedMode == BattleAtlasPolicyMode.SourceTexture2D)
+            {
+                return new BattleAtlasPolicyDecision(
+                    requestedMode,
+                    BattleAtlasPolicyMode.SourceTexture2D,
+                    "SourceTexture2D was explicitly requested; atlas allocation is disabled.",
+                    capabilityPolicy);
+            }
 
             if (requestedMode == BattleAtlasPolicyMode.OrderedPages)
             {

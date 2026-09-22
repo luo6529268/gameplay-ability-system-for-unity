@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Skipped:Ignored" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 04:14:56Z" end-time="2026-09-22 04:14:57Z" duration="0.7495059">
+  <test-suite type="TestSuite" id="8182" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6090" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:56Z" end-time="2026-09-22 04:14:57Z" duration="0.749506" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+    <properties />
+    <reason>
+      <message><![CDATA[One or more child tests were ignored]]></message>
+    </reason>
+    <test-suite type="Assembly" id="15323" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6082" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:56Z" end-time="2026-09-22 04:14:57Z" duration="0.505956" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+      <properties>
+        <property name="_PID" value="21844" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <reason>
+        <message><![CDATA[One or more child tests were ignored]]></message>
+      </reason>
+      <test-suite type="TestSuite" id="15324" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6082" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:56Z" end-time="2026-09-22 04:14:57Z" duration="0.339381" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+        <properties />
+        <reason>
+          <message><![CDATA[One or more child tests were ignored]]></message>
+        </reason>
+        <test-suite type="TestSuite" id="15332" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5518" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:57Z" end-time="2026-09-22 04:14:57Z" duration="0.175099" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+          <properties />
+          <reason>
+            <message><![CDATA[One or more child tests were ignored]]></message>
+          </reason>
+          <test-suite type="TestFixture" id="11083" name="NTSD28Q08FormalSourcePixelPlayModeTests" fullname="NTSD.Test.NTSD28Q08FormalSourcePixelPlayModeTests" classname="NTSD.Test.NTSD28Q08FormalSourcePixelPlayModeTests" runstate="Runnable" testcasecount="1" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:57Z" end-time="2026-09-22 04:14:57Z" duration="0.030668" total="1" passed="0" failed="0" inconclusive="0" skipped="1" asserts="0">
+            <properties />
+            <reason>
+              <message><![CDATA[One or more child tests were ignored]]></message>
+            </reason>
+            <test-case id="11084" name="FormalSourceBindingProducesProductionCameraPixels" fullname="NTSD.Test.NTSD28Q08FormalSourcePixelPlayModeTests.FormalSourceBindingProducesProductionCameraPixels" methodname="FormalSourceBindingProducesProductionCameraPixels" classname="NTSD.Test.NTSD28Q08FormalSourcePixelPlayModeTests" runstate="Explicit" seed="971565382" result="Skipped" label="Ignored" start-time="2026-09-22 04:14:57Z" end-time="2026-09-22 04:14:57Z" duration="0.015925" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+                <property name="_SKIPREASON" value="Requires a live Editor world-camera render loop; batchmode does not invoke the registered BattleRenderFeature." />
+                <property name="Timeout" value="180000" />
+              </properties>
+              <reason>
+                <message><![CDATA[Batchmode did not provide the renderer observation required by CentralOnly output.]]></message>
+              </reason>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

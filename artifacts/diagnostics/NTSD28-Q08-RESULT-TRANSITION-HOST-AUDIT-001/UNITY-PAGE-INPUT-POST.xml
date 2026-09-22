@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="4" result="Passed" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.389051">
+  <test-suite type="TestSuite" id="8163" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6076" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.389051" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15285" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6068" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.313966" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="79980" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15286" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6068" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.261135" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15294" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5506" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.209931" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="9009" name="BattleResultsSceneHostTickAlignmentEditorTests" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" testcasecount="4" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.087019" total="4" passed="4" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="9011" name="ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" methodname="ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="1180840773" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.058217" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9013" name="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" methodname="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="878543928" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.003807" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9012" name="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" methodname="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="1402918572" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.002471" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9010" name="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsPageVisibilityDoesNotSuppressCombatHumanInput" methodname="ResultsPageVisibilityDoesNotSuppressCombatHumanInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="478128697" result="Passed" start-time="2026-09-22 00:30:18Z" end-time="2026-09-22 00:30:18Z" duration="0.007012" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

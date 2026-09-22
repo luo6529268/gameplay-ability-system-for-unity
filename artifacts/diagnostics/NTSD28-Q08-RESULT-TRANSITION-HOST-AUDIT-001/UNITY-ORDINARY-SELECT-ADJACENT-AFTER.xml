@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 02:41:23Z" end-time="2026-09-22 02:41:26Z" duration="2.7563783">
+  <test-suite type="TestSuite" id="1000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6085" result="Passed" start-time="2026-09-22 02:41:23Z" end-time="2026-09-22 02:41:26Z" duration="2.756378" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="8134" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6077" result="Passed" start-time="2026-09-22 02:41:25Z" end-time="2026-09-22 02:41:26Z" duration="0.849004" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="73492" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="8135" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6077" result="Passed" start-time="2026-09-22 02:41:25Z" end-time="2026-09-22 02:41:26Z" duration="0.724740" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="8143" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5515" result="Passed" start-time="2026-09-22 02:41:25Z" end-time="2026-09-22 02:41:26Z" duration="0.603439" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="3901" name="NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-22 02:41:25Z" end-time="2026-09-22 02:41:26Z" duration="0.473813" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="3903" name="ModeFourCommandDoesNotUseOrdinarySelectionRoute" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.ModeFourCommandDoesNotUseOrdinarySelectionRoute" methodname="ModeFourCommandDoesNotUseOrdinarySelectionRoute" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="784913143" result="Passed" start-time="2026-09-22 02:41:03Z" end-time="2026-09-22 02:41:11Z" duration="8.038844" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+            </test-case>
+            <test-case id="3904" name="OrdinaryCommandWithoutMenuRemainsPending" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.OrdinaryCommandWithoutMenuRemainsPending" methodname="OrdinaryCommandWithoutMenuRemainsPending" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="136154859" result="Passed" start-time="2026-09-22 02:41:11Z" end-time="2026-09-22 02:41:18Z" duration="7.612259" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+            </test-case>
+            <test-case id="3902" name="OrdinaryTransitionReturnsToExistingCharacterSelection" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.OrdinaryTransitionReturnsToExistingCharacterSelection" methodname="OrdinaryTransitionReturnsToExistingCharacterSelection" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="901882670" result="Passed" start-time="2026-09-22 02:41:18Z" end-time="2026-09-22 02:41:26Z" duration="7.398902" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

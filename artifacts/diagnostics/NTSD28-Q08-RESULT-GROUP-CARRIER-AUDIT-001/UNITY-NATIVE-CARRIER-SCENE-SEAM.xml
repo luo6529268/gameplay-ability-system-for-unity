@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.4506047">
+  <test-suite type="TestSuite" id="8162" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6074" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.450605" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15283" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6066" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.324139" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76848" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15284" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6066" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.265076" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15292" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5504" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.214954" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="9008" name="BattleResultsSceneHostTickAlignmentEditorTests" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.089861" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="9009" name="ResultsActiveTickRunsFullWorldTailWithoutEntityHumanPoll" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsActiveTickRunsFullWorldTailWithoutEntityHumanPoll" methodname="ResultsActiveTickRunsFullWorldTailWithoutEntityHumanPoll" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="1050502683" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.066451" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9011" name="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" methodname="ResultsHostDoesNotRetriggerFromHeldOnlyOrNonP1P2PressedInput" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="43074970" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.004067" asserts="0">
+              <properties />
+            </test-case>
+            <test-case id="9010" name="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" fullname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests.ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" methodname="ResultsHostUsesExplicitP1P2PressedEdgesAfterWorldTick" classname="NTSD.Test.BattleResultsSceneHostTickAlignmentEditorTests" runstate="Runnable" seed="10602197" result="Passed" start-time="2026-09-21 23:41:37Z" end-time="2026-09-21 23:41:37Z" duration="0.002303" asserts="0">
+              <properties />
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

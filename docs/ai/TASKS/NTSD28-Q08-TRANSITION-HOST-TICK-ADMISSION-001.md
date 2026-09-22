@@ -1,0 +1,9 @@
+# NTSD28-Q08-TRANSITION-HOST-TICK-ADMISSION-001
+
+Status: `FOCUSED_TEST_PASS / ISOLATED_SELFCHECK_PASS / ROUTING_PENDING`. Parent BATCH-04/Q08. Authority: formal `GameSession28::step()` on result transition skips `SimulationTickDriver28::step` and, on later upper-state calls, does not apply another old-battle combat input frame. The core transition stop is `NTSD28-Q08-NATIVE-TRANSITION-COMBAT-FREEZE-001`; its acceptance identified `SimulationTickDriver` host tick and `ApplyFrameInputSet` as the remaining old-world admission gap, now guarded here.
+
+Exact script scope: `Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs` and `Assets/NTSD/Scripts/Test/Editor/SimulationTickHostPolicyEditorTests.cs`. Add a focused driver test that sets a canonical native result transition on its World, attempts the next explicit frame and host-controlled paused single step, and checks rejection with unchanged host tick/applied frame; retain normal pre-transition step. Then reject automatic and explicit old-world tick admission before input application and checksum/presentation on nonzero native transition. Keep LocalFreeRun, Manual and Lockstep admission consistent; do not change cadence, pause/F1/F2/F5 rules, ordered shutdown, AppManager/menu, DAT, Scene, GAS or nonbattle UI. Do not consume or rewrite 2/28/128/202 commands; routing is a subsequent task.
+
+Acceptance: isolated Unity target RED, postchange focused host tests plus Q08 transition tests, one stable SelfCheck, Change Ledger/diff/Scene hash. Natural original Editor/Player transition, selection/rematch/mode-specific routing, replay and Q08 exit remain pending. Rollback only these exact code/test hunks under repository approval rules.
+
+Observed: isolated Unity target RED0/1→PASS1/1, adjacent host/Q08/Results25/25 and fresh full SelfCheck PASS. Evidence and remaining routing limits: `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/HOST-TICK-ADMISSION-ACCEPTANCE.md`.

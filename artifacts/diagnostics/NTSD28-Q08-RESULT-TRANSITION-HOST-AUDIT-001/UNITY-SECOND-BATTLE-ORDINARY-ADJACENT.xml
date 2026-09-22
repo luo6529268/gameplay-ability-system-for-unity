@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 03:02:03Z" end-time="2026-09-22 03:02:05Z" duration="2.5820089">
+  <test-suite type="TestSuite" id="1000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6087" result="Passed" start-time="2026-09-22 03:02:03Z" end-time="2026-09-22 03:02:05Z" duration="2.582009" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="8137" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:02:04Z" end-time="2026-09-22 03:02:05Z" duration="0.775565" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="86660" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="8138" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Passed" start-time="2026-09-22 03:02:05Z" end-time="2026-09-22 03:02:05Z" duration="0.659434" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="8146" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5517" result="Passed" start-time="2026-09-22 03:02:05Z" end-time="2026-09-22 03:02:05Z" duration="0.545813" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestFixture" id="3901" name="NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-22 03:02:05Z" end-time="2026-09-22 03:02:05Z" duration="0.426512" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-case id="3903" name="ModeFourCommandDoesNotUseOrdinarySelectionRoute" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.ModeFourCommandDoesNotUseOrdinarySelectionRoute" methodname="ModeFourCommandDoesNotUseOrdinarySelectionRoute" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="1911771365" result="Passed" start-time="2026-09-22 03:01:45Z" end-time="2026-09-22 03:01:52Z" duration="6.993998" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <output><![CDATA[GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+            <test-case id="3904" name="OrdinaryCommandWithoutMenuRemainsPending" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.OrdinaryCommandWithoutMenuRemainsPending" methodname="OrdinaryCommandWithoutMenuRemainsPending" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="564062058" result="Passed" start-time="2026-09-22 03:01:52Z" end-time="2026-09-22 03:01:58Z" duration="6.758186" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <output><![CDATA[GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+            <test-case id="3902" name="OrdinaryTransitionReturnsToExistingCharacterSelection" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.OrdinaryTransitionReturnsToExistingCharacterSelection" methodname="OrdinaryTransitionReturnsToExistingCharacterSelection" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="1267567882" result="Passed" start-time="2026-09-22 03:01:58Z" end-time="2026-09-22 03:02:05Z" duration="6.776522" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <output><![CDATA[GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

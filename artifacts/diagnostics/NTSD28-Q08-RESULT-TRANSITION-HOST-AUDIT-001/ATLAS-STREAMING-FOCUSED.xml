@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="3" result="Passed" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.5238583">
+  <test-suite type="TestSuite" id="8179" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6088" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.523858" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <test-suite type="Assembly" id="15317" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6080" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.468540" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="39976" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <test-suite type="TestSuite" id="15318" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6080" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.430191" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <test-suite type="TestSuite" id="15328" name="Animation" fullname="NTSD.Animation" runstate="Runnable" testcasecount="417" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.279733" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <test-suite type="TestSuite" id="15329" name="Rendering" fullname="NTSD.Animation.Rendering" runstate="Runnable" testcasecount="417" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.271477" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <test-suite type="TestSuite" id="15330" name="Editor" fullname="NTSD.Animation.Rendering.Editor" runstate="Runnable" testcasecount="417" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.263504" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+              <properties />
+              <test-suite type="TestFixture" id="14934" name="BattleCommonAtlasBindingEditorTests" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" testcasecount="3" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="1.248241" total="3" passed="3" failed="0" inconclusive="0" skipped="0" asserts="0">
+                <properties />
+                <test-case id="14936" name="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" methodname="ArrayPublication_BindsShadowSparkAndWordsWithoutChangingDescriptorIdentity" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="1644202362" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:33Z" duration="0.206180" asserts="0">
+                  <properties>
+                    <property name="Category" value="NTSD_W08Regression" />
+                  </properties>
+                </test-case>
+                <test-case id="14935" name="OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" methodname="OrderedPageAssembly_MatchesWholePlanPixelsForMultiplePages" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="220047783" result="Passed" start-time="2026-09-22 03:24:33Z" end-time="2026-09-22 03:24:34Z" duration="0.973909" asserts="0">
+                  <properties />
+                </test-case>
+                <test-case id="14937" name="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" fullname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests.UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" methodname="UnifiedPublication_OversizedShadowRetainsOnlyItsSourceTexture2D" classname="NTSD.Animation.Rendering.Editor.BattleCommonAtlasBindingEditorTests" runstate="Runnable" seed="1443679516" result="Passed" start-time="2026-09-22 03:24:34Z" end-time="2026-09-22 03:24:34Z" duration="0.053430" asserts="0">
+                  <properties />
+                </test-case>
+              </test-suite>
+            </test-suite>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

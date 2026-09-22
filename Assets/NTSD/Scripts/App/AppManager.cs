@@ -369,6 +369,26 @@ namespace NTSD.App
 
         public AsyncOperation UnloadBattle()
         {
+            return UnloadBattleInternal(false);
+        }
+
+        public bool TryReturnToCharacterSelectionFromBattleResult()
+        {
+            if (state != AppFlowState.BattleRunning &&
+                state != AppFlowState.BattlePaused)
+                return false;
+
+            Scene menuScene = SceneManager.GetSceneByName(menuSceneName);
+            Scene battleScene = SceneManager.GetSceneByName(battleSceneName);
+            if (!menuScene.IsValid() || !menuScene.isLoaded ||
+                !battleScene.IsValid() || !battleScene.isLoaded)
+                return false;
+
+            return UnloadBattleInternal(true) != null;
+        }
+
+        private AsyncOperation UnloadBattleInternal(bool returnToCharacterSelection)
+        {
             state = AppFlowState.BattleStopping;
             var scene = SceneManager.GetSceneByName(battleSceneName);
             if (!TryShutdownBattleRuntimeBeforeSceneDestroy(
@@ -383,7 +403,8 @@ namespace NTSD.App
 
             NTSD.TimeWheel.TimeWheel.DestroySharedInstance();
 
-            state = AppFlowState.MenuMain;
+            if (!returnToCharacterSelection)
+                state = AppFlowState.MenuMain;
             var op = SceneManager.UnloadSceneAsync(battleSceneName);
 
             if (menuUi == null)
@@ -396,7 +417,18 @@ namespace NTSD.App
                 op.completed += _ =>
                 {
                     menuUi?.EnableMenuUiCamera(true);
-                    menuUi?.ShowMainMenu();
+                    if (returnToCharacterSelection)
+                    {
+                        CharacterSelectionController selection =
+                            FindObjectOfType<CharacterSelectionController>(true);
+                        selection?.ResetAll();
+                        menuUi?.ShowSelectCharacter();
+                        state = AppFlowState.MenuSelectCharacter;
+                    }
+                    else
+                    {
+                        menuUi?.ShowMainMenu();
+                    }
                     EnsureSingleEventSystem();
                 };
             }

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 02:56:49Z" end-time="2026-09-22 02:56:52Z" duration="2.9116333">
+  <test-suite type="TestSuite" id="1000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6087" result="Failed" site="Child" start-time="2026-09-22 02:56:49Z" end-time="2026-09-22 02:56:52Z" duration="2.911633" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="8137" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6079" result="Failed" site="Child" start-time="2026-09-22 02:56:51Z" end-time="2026-09-22 02:56:52Z" duration="0.987230" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="86836" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="8138" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6079" result="Failed" site="Child" start-time="2026-09-22 02:56:51Z" end-time="2026-09-22 02:56:52Z" duration="0.846483" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="8146" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5517" result="Failed" site="Child" start-time="2026-09-22 02:56:51Z" end-time="2026-09-22 02:56:52Z" duration="0.701644" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="3905" name="NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" fullname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" classname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" runstate="Runnable" testcasecount="2" result="Failed" site="Child" start-time="2026-09-22 02:56:52Z" end-time="2026-09-22 02:56:52Z" duration="0.550170" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="3906" name="SecondResultWithDirectOwnerRequiresLogicalSelectionState" fullname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests.SecondResultWithDirectOwnerRequiresLogicalSelectionState" methodname="SecondResultWithDirectOwnerRequiresLogicalSelectionState" classname="NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests" runstate="Runnable" seed="1103349292" result="Failed" start-time="2026-09-22 02:56:45Z" end-time="2026-09-22 02:56:52Z" duration="7.246998" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <failure>
+                <message><![CDATA[  A second result needs ordinary upper-selection state even without a Menu Scene.
+  Expected: 1
+  But was:  2
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests+<SecondResultWithDirectOwnerRequiresLogicalSelectionState>d__0.MoveNext () [0x0027e] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08SecondBattleOnlyResultSelectionRedPlayModeTests.cs:55
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:46
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[[BattleTestBootstrap] AppManager exists, skipping test bootstrap.
+GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

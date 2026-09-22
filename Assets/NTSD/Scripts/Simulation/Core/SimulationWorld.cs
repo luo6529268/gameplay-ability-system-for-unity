@@ -1690,8 +1690,8 @@ namespace NTSD.Simulation
 
         internal void ResetUnityFixedWorldRenderOffsets() => stageRenderModule.ResetUnityFixedWorldRenderOffsets();
 
-        internal void AdvanceNativeBattleResultsBeforeCombat() =>
-            battleResultsOutcomeHostWriter.AdvanceNativeFlowBeforeCombat();
+        internal void AdvanceNativeBattleResultsBeforeCombat(FrameInputSet frameInput) =>
+            battleResultsOutcomeHostWriter.AdvanceNativeFlowBeforeCombat(frameInput);
 
         public void UpdateBattleResultsFlow() => battleResultsOutcomeHostWriter.UpdateSummaryActivation();
 

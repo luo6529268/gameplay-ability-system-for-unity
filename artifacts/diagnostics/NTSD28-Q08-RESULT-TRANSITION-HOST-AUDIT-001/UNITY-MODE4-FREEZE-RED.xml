@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 00:11:31Z" end-time="2026-09-22 00:11:33Z" duration="1.309441">
+  <test-suite type="TestSuite" id="8162" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6075" result="Failed" site="Child" start-time="2026-09-22 00:11:31Z" end-time="2026-09-22 00:11:33Z" duration="1.309441" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15283" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6067" result="Failed" site="Child" start-time="2026-09-22 00:11:31Z" end-time="2026-09-22 00:11:33Z" duration="1.118878" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="78944" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15284" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6067" result="Failed" site="Child" start-time="2026-09-22 00:11:32Z" end-time="2026-09-22 00:11:32Z" duration="0.892358" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15292" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5505" result="Failed" site="Child" start-time="2026-09-22 00:11:32Z" end-time="2026-09-22 00:11:32Z" duration="0.728659" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11043" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="11" result="Failed" site="Child" start-time="2026-09-22 00:11:32Z" end-time="2026-09-22 00:11:32Z" duration="0.574794" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11054" name="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" methodname="ModeFourTransitionStopsCombatWorldOn350AndFollowingTick" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="446336027" result="Failed" start-time="2026-09-22 00:11:32Z" end-time="2026-09-22 00:11:32Z" duration="0.560330" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Formal GameSession skips the combat driver on the transition tick.
+  Expected: 349
+  But was:  350
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick () [0x000fa] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:280
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

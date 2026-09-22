@@ -26374,7 +26374,7 @@ itr_end:
             world.SetStageSpawnWaveApplied(4);
             world.SetStageSpawnWaveDeferredEntryApplied(4);
             world.Runtime.Results.ActivateSummary(0, 2, 1, 2);
-            world.SetNeedClearInput(true);
+            world.SetNeedClearInput(false);
 
             var resultHostFrame = new FrameInputSet(12, new[]
             {
@@ -26390,9 +26390,9 @@ itr_end:
 
             Expect(world.CurrentTickIndex == 12 && world.InputPhase == 1 &&
                    world.FrameMod12 == 0 && world.FrameToggle == 1 &&
-                   !world.Runtime.Flow.HumanInputPolledExternally &&
-                   world.NeedClearInput,
-                "BATTLE-AUDIT7-F6: results-active tick must update the release header without polling battle-entity human input");
+                   world.Runtime.Flow.HumanInputPolledExternally &&
+                   !world.NeedClearInput,
+                "BATTLE-AUDIT7-F6: result-page visibility must not suppress pre-transition battle-entity human input");
             Expect(human.AttackExempt == 0 &&
                    human.ItrRest.Arest == 0 &&
                    human.ItrRest.GetVrest(3) == 19,

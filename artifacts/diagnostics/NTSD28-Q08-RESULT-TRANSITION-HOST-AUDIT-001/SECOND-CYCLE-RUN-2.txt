@@ -1,0 +1,15 @@
+case=0 groups=1, winner=1 timer=1
+case=1 groups=1, winner=1 timer=1
+case=2 groups=1, winner=1 timer=1
+case=3 groups=1,2,3, winner=-1 timer=0
+case=4 groups= winner=-1 timer=1
+case=5 groups=1,2, winner=-1 timer=0
+timing=start1,latch2,signal80,record101,continue144to350
+lethal=tick12,sameTimer0,nextTimer1
+mode4=winner1,timer350,transition202
+mode4-freeze=349->350->next,entities+dual-rng-stable,lastTick=null,projectionHash=124f31aafa3937a3
+ordinary=350:result+transition2+noCombat;next:selection+transition1+sameWorld
+battle-only=350:result+transition2+noCombat;next:recreatedBattle+victimHp500
+second-cycle=loopFlag0,timer350,transition2,scene3
+second-cycle-next=loopFlag0,transition1,scene0,selected1,sameWorld1,victimHp0
+PASS 6/6 groups plus timing, combat-lethal and mode4 full-driver

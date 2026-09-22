@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="2" result="Failed(Child)" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-21 23:53:41Z" end-time="2026-09-21 23:53:42Z" duration="1.1719142">
+  <test-suite type="TestSuite" id="8161" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6074" result="Failed" site="Child" start-time="2026-09-21 23:53:41Z" end-time="2026-09-21 23:53:42Z" duration="1.171914" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="15281" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6066" result="Failed" site="Child" start-time="2026-09-21 23:53:41Z" end-time="2026-09-21 23:53:42Z" duration="0.993205" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76268" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="15282" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6066" result="Failed" site="Child" start-time="2026-09-21 23:53:41Z" end-time="2026-09-21 23:53:42Z" duration="0.831214" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="15290" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5504" result="Failed" site="Child" start-time="2026-09-21 23:53:42Z" end-time="2026-09-21 23:53:42Z" duration="0.494903" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="11042" name="NTSD28Q08BattleFlowRedProbeEditorTests" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" testcasecount="10" result="Failed" site="Child" start-time="2026-09-21 23:53:42Z" end-time="2026-09-21 23:53:42Z" duration="0.153698" total="2" passed="0" failed="2" inconclusive="0" skipped="0" asserts="0">
+            <properties>
+              <property name="Category" value="NTSD28Q08BattleFlowRedProbe" />
+            </properties>
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="11052" name="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" methodname="NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="1430301427" result="Failed" start-time="2026-09-21 23:53:42Z" end-time="2026-09-21 23:53:42Z" duration="0.129033" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Expected: 350
+  But was:  144
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly () [0x00068] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:234
+]]></stack-trace>
+              </failure>
+            </test-case>
+            <test-case id="11051" name="NativeResultContinueUsesHeldAttackAt144NotEarlier" fullname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier" methodname="NativeResultContinueUsesHeldAttackAt144NotEarlier" classname="NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests" runstate="Runnable" seed="910471112" result="Failed" start-time="2026-09-21 23:53:42Z" end-time="2026-09-21 23:53:42Z" duration="0.004940" asserts="0">
+              <properties />
+              <failure>
+                <message><![CDATA[  Expected: 350
+  But was:  144
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier () [0x000e7] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08BattleFlowRedProbeEditorTests.cs:216
+]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

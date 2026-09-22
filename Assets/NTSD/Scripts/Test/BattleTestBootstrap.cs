@@ -23,7 +23,7 @@ namespace NTSD.Test
     /// 2. 在 Inspector 中配置 overrideCharacterIds（可选）
     /// 3. 直接 Play NTSD_Battle 场景即可
     /// </summary>
-    public class BattleTestBootstrap : MonoBehaviour
+    public class BattleTestBootstrap : MonoBehaviour, IBattleOnlyResultHost
     {
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
         public static bool SuppressEntityCreationForProductionStress { get; set; }
@@ -54,6 +54,9 @@ namespace NTSD.Test
         [SerializeField] private bool logForceStateToggle = true;
 
         private LF2Character firstPlayerLf2;
+        private bool ownsDirectBattle;
+        private bool firstDirectRematchCompleted;
+        private bool directRematchInProgress;
 
         private async void Start()
         {
@@ -72,6 +75,7 @@ namespace NTSD.Test
             }
 
             Debug.Log("[BattleTestBootstrap] No AppManager detected, running test bootstrap...");
+            ownsDirectBattle = true;
 
             // 创建 AppManager（含 NTSDSoundPlayer, SparkRenderer, EventSystem）
             EnsureAppManager();
@@ -210,6 +214,7 @@ namespace NTSD.Test
                 }
 
                 Debug.Log("[BattleTestBootstrap] === Test bootstrap complete ===");
+                simulationDriver.RegisterBattleOnlyResultHost(this);
             }
             catch (System.Exception error)
             {
@@ -356,6 +361,99 @@ namespace NTSD.Test
             }
         }
 
+        public bool TryHandleFirstBattleOnlyResult(SimulationTickDriver driver)
+        {
+            if (!ownsDirectBattle || firstDirectRematchCompleted ||
+                directRematchInProgress || driver == null ||
+                driver.LifecycleState != BattleRuntimeLifecycleState.Running ||
+                driver.World?.Runtime?.Results?.NativeTransitionState != 2)
+                return false;
+
+            AppManager app = AppManager.Instance;
+            Scene battleScene = gameObject.scene;
+            if (app == null || !battleScene.IsValid() || !battleScene.isLoaded)
+                return false;
+
+            directRematchInProgress = true;
+            SimulationWorld oldWorld = driver.World;
+            NTSD28NativeRandomState previousRandom =
+                oldWorld.NativeRandom.CaptureState();
+            uint previousLocalRng = oldWorld.Rng.State;
+            int previousInputPhase = oldWorld.InputPhase;
+
+            try
+            {
+                if (!app.TryShutdownBattleRuntimeBeforeSceneDestroy(out _))
+                    return false;
+
+                TimeWheel.TimeWheel.DestroySharedInstance();
+                driver.RecreateWorld();
+                if (!driver.EnsureRuntimeProfileFromSources())
+                    throw new System.InvalidOperationException(
+                        "Direct rematch runtime profile reconciliation failed.");
+
+                TimeWheel.TimeWheel.CreateSharedInstance();
+                SceneManager.SetActiveScene(battleScene);
+                BattleBootstrap bootstrap = FindObjectOfType<BattleBootstrap>(true);
+                if (bootstrap != null)
+                {
+                    if (!bootstrap.TryPrepareMapConfiguration(out string mapFailure))
+                        throw new System.InvalidOperationException(mapFailure);
+                    if (bootstrap.IsMapConfigurationPrepared)
+                        driver.World.RefreshStageRuntimeSnapshotFromScene();
+                }
+
+                driver.PrepareBattleRuntimeServices();
+                firstPlayerLf2 = null;
+                SetupTestCharacters(BoundaryWallManager.Instance, battleScene);
+                SimulationWorld nextWorld = driver.World;
+                if (nextWorld == null || nextWorld.ObjectCount == 0 ||
+                    nextWorld.Runtime?.Roster?.ActiveSlotCount == 0)
+                    throw new System.InvalidOperationException(
+                        "Direct rematch did not recreate its roster.");
+
+                nextWorld.Rng.Seed(previousLocalRng);
+                nextWorld.NativeRandom.Restore(previousRandom);
+                nextWorld.Runtime.Flow.InputPhase = previousInputPhase;
+                nextWorld.NativeRandom.SynchronizedNext(
+                    NTSD28NativeRandom.DirectBattleRandomBgmCallSite, 1);
+
+                driver.BeginBattleAllocationSeal();
+                bootstrap?.EnablePresentation();
+                driver.SetPaused(false);
+                firstDirectRematchCompleted = true;
+                return true;
+            }
+            catch (System.Exception error)
+            {
+                Debug.LogError("[BattleTestBootstrap] Direct rematch failed: " + error);
+                app.TryShutdownBattleRuntimeBeforeSceneDestroy(out _);
+                return false;
+            }
+            finally
+            {
+                directRematchInProgress = false;
+            }
+        }
+
+        public bool TryHandleSecondBattleOnlyResult(SimulationTickDriver driver)
+        {
+            if (!ownsDirectBattle || !firstDirectRematchCompleted ||
+                directRematchInProgress || driver == null ||
+                driver.LifecycleState != BattleRuntimeLifecycleState.Running)
+                return false;
+
+            BattleResultsRuntimeState results = driver.World?.Runtime?.Results;
+            if (results == null || results.NativeResultPhase != 3 ||
+                results.NativeResultOutputTimer < 350 ||
+                results.NativeTransitionState != 2)
+                return false;
+
+            // Alignment contract: NTSD28-Q08-SECOND-BATTLE-ONLY-LOGICAL-SELECTION-001.
+            results.NativeTransitionState = 1;
+            return true;
+        }
+
         private void ApplyForcedMovementState()
         {
             if (!forceWalkingMode && !forceRunningMode) return;
@@ -418,6 +516,7 @@ namespace NTSD.Test
 
         private void OnDestroy()
         {
+            SimulationTickDriver.Instance?.UnregisterBattleOnlyResultHost(this);
             if (App.AppManager.Instance != null) return;
             TimeWheel.TimeWheel.DestroySharedInstance();
             Debug.Log("[BattleTestBootstrap] TimeWheel destroyed (test cleanup).");

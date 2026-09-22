@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<test-run id="2" testcasecount="1" result="Failed(Child)" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0" engine-version="3.5.0.0" clr-version="4.0.30319.42000" start-time="2026-09-22 01:17:09Z" end-time="2026-09-22 01:17:12Z" duration="3.058611">
+  <test-suite type="TestSuite" id="1000" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6080" result="Failed" site="Child" start-time="2026-09-22 01:17:09Z" end-time="2026-09-22 01:17:12Z" duration="3.058611" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+    <properties />
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="Assembly" id="8127" name="Assembly-CSharp-Editor.dll" fullname="I:/GitHub/Unity_GAS/ntsd-q07-isolated-validation-20260922/Library/ScriptAssemblies/Assembly-CSharp-Editor.dll" runstate="Runnable" testcasecount="6072" result="Failed" site="Child" start-time="2026-09-22 01:17:11Z" end-time="2026-09-22 01:17:12Z" duration="1.185865" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+      <properties>
+        <property name="_PID" value="76892" />
+        <property name="_APPDOMAIN" value="Unity Child Domain" />
+        <property name="platform" value="EditMode" />
+      </properties>
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="8128" name="NTSD" fullname="NTSD" runstate="Runnable" testcasecount="6072" result="Failed" site="Child" start-time="2026-09-22 01:17:11Z" end-time="2026-09-22 01:17:12Z" duration="1.042675" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+        <properties />
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestSuite" id="8136" name="Test" fullname="NTSD.Test" runstate="Runnable" testcasecount="5510" result="Failed" site="Child" start-time="2026-09-22 01:17:11Z" end-time="2026-09-22 01:17:12Z" duration="0.897929" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+          <properties />
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="TestFixture" id="3896" name="NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2026-09-22 01:17:11Z" end-time="2026-09-22 01:17:12Z" duration="0.752668" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="0">
+            <properties />
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="3897" name="OrdinaryTransitionReturnsToExistingCharacterSelection" fullname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.OrdinaryTransitionReturnsToExistingCharacterSelection" methodname="OrdinaryTransitionReturnsToExistingCharacterSelection" classname="NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests" runstate="Runnable" seed="630516532" result="Failed" start-time="2026-09-22 01:17:04Z" end-time="2026-09-22 01:17:12Z" duration="7.657457" asserts="0">
+              <properties>
+                <property name="_JOINTYPE" value="UnityCombinatorial" />
+              </properties>
+              <failure>
+                <message><![CDATA[  The ordinary native result command must reach the existing Unity selection host.
+  Expected: MenuSelectCharacter
+  But was:  BattleRunning
+]]></message>
+                <stack-trace><![CDATA[at NTSD.Test.NTSD28Q08OrdinaryResultSelectionHostPlayModeTests+<OrdinaryTransitionReturnsToExistingCharacterSelection>d__5.MoveNext () [0x002ef] in I:\GitHub\Unity_GAS\ntsd-q07-isolated-validation-20260922\Assets\NTSD\Scripts\Test\Editor\NTSD28Q08OrdinaryResultSelectionHostPlayModeTests.cs:64
+at UnityEngine.TestTools.TestEnumerator+<Execute>d__7.MoveNext () [0x0004e] in .\Library\PackageCache\com.unity.test-framework@1.1.33\UnityEngine.TestRunner\NUnitExtensions\Attributes\TestEnumerator.cs:46
+]]></stack-trace>
+              </failure>
+              <output><![CDATA[GfxDevice renderer is null. Unity cannot update the Ambient Probe and Reflection Probes that the SkyManager generates. Run the Editor without the -nographics argument or generate lighting for your scene.
+]]></output>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

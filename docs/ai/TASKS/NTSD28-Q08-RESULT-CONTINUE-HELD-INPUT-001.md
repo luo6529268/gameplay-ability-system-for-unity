@@ -1,0 +1,13 @@
+# NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001
+
+Correction (2026-09-22): P-19/G-08 exclude the full native result-page/selection visuals. Any “101 UI consumer” pending language below refers to the logical result-record event and isolating old Unity UI input from battle truth; it does not require a visual page at native timer101.
+
+Status: `RUNTIME_PENDING / FOCUSED_AND_ISOLATED_SELFCHECK_PASS`. Parent BATCH-04/Q08 G-05/G-06. Authority and caller audit: `artifacts/diagnostics/NTSD28-Q08-RESULT-CONTINUE-INPUT-AUDIT-001/REPORT.md`. Actual diff/evidence/limits: `artifacts/diagnostics/NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001/ACCEPTANCE-PENDING.md`.
+
+Formal `GameSession28::step()` reads held Attack/Jump from configured effective-combatant slots before `BattleFlow28::step`; after increment to >=144 it completes at 350 in that tick. Unity's native carrier currently advances naturally to 350, while old Results UI reads P1/P2 pressed edges after combat. Unity direct MatchConfig active player indices populate roster slots and bind runtime entities; frame `SimulationPlayerInput.PlayerSlot` is that roster index, not the runtime physical slot.
+
+Scope: pass the current-tick `FrameInputSet` through `NTSDBattleTickSystem.RunTick` and `SimulationWorld.AdvanceNativeBattleResultsBeforeCombat` to `BattleResultsOutcomeHostWriter.AdvanceNativeFlowBeforeCombat`. Only active configured roster slots may request completion; use `Buttons` held bits Attack/Jump, not `PressedButtons`, health/group, input controller, or old UI. Require frame tick identity. No match/no input stays neutral. Preserve old result UI and mode4 reserve separately. The phase3 transition combat-skip, 101 UI consumer, formal paired story selector and natural battle acceptance remain parent follow-ups, not silent changes here.
+
+Exact script paths: `Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs`, `Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs`, `Assets/NTSD/Scripts/Simulation/Ecs/Results/BattleResultsOutcomeHostWriter.cs`, `Assets/NTSD/Scripts/Test/Editor/NTSD28Q08BattleFlowRedProbeEditorTests.cs`. No Scene, content, nonbattle, GAS, generated or third-party edit.
+
+Acceptance: source-matched 143/no-skip and 144/Attack-or-Jump shortcut, active third roster slot accepted, inactive/unconfigured slot rejected, pressed-only without held rejected, no-input natural timer, mode transition and stored timer0. Focused RED before production then PASS; compile and adjacent result seam; real Play/close-reenter remains Q08 parent. Preserve other dirty files. Rollback only exact owned hunks under repository approval rules; no reset/clean.

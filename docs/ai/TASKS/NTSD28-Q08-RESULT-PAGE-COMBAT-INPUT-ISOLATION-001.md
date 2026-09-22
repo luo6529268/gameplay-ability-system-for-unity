@@ -1,0 +1,11 @@
+# NTSD28-Q08-RESULT-PAGE-COMBAT-INPUT-ISOLATION-001
+
+Status: `FOCUSED_TEST_PASS / RUNTIME_PENDING`. Parent BATCH-04/Q08. Authority: formal `GameSession28::step()` continues the combat driver with participant input before result transition 350; P-19/G-08 exclude native result and selection visuals, not combat input. Evidence: `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/P19-EXCEPTION-LOGIC-COUPLING.md`.
+
+Scope: `Assets/NTSD/Scripts/Simulation/Core/NTSDBattleTickSystem.cs`, `Assets/NTSD/Scripts/Test/Editor/BattleResultsSceneHostTickAlignmentEditorTests.cs`, and the `CheckAudit7ResultsActiveGate` fixture/assertions in `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs`. Retain the existing Unity Results page and its P1/P2 UI input. While the combat driver still runs, `Results.IsActive` must not suppress human input, change CharacterInput admission, or prevent the battle-entry input clear. Correct the historical test and SelfCheck oracles; add an active-page versus inactive-page focused comparison. Do not implement transition freeze or host routing in this task; the separate mode4 350 RED remains the parent dependency. No Scene, content, nonbattle, GAS or framework edits.
+
+Acceptance: record the focused prechange RED, compile and run the focused postchange tests plus the adjacent Results UI input tests; inspect the exact diff and run Change Ledger validation. Real battle and full Q08 exit remain pending. Rollback only this task's test and core input-gate hunks under repository approval rules, preserving all other work.
+
+Observed: prechange isolated Unity target RED 0/1 at active-page human polling, postchange result-scene class 4/4 and adjacent held-continue 2/2 PASS. Change Ledger passed 664 records/five governed code diff files. Exact evidence and remaining gates: `artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/PAGE-COMBAT-INPUT-ACCEPTANCE.md`.
+
+SelfCheck return: the first isolated full run failed at the historical `BATTLE-AUDIT7-F6` null-human-poll oracle. Only that fixture/assertion was corrected; the fresh second full run logs SelfCheck PASS and completion. Final Ledger PASS 664 records/six governed code diff files, `git diff --check` exit 0, Scene SHA unchanged. Real battle and Q08 transition/freeze remain pending.

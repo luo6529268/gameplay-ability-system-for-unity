@@ -14,6 +14,12 @@ using UnityEngine.InputSystem;
 
 namespace NTSD.Simulation
 {
+    public interface IBattleOnlyResultHost
+    {
+        bool TryHandleFirstBattleOnlyResult(SimulationTickDriver driver);
+        bool TryHandleSecondBattleOnlyResult(SimulationTickDriver driver);
+    }
+
     public enum SimulationDriveMode
     {
         LocalFreeRun,
@@ -358,6 +364,12 @@ namespace NTSD.Simulation
                     return;
                 }
 
+                if (TryDispatchOrdinaryResultTransition())
+                {
+                    RefreshInspectorState();
+                    return;
+                }
+
                 CaptureHostControlEdges();
                 CaptureBattleFunctionKeyEdges();
 #if !UNITY_EDITOR
@@ -419,12 +431,46 @@ namespace NTSD.Simulation
                     catchUpTicks++;
                 }
 
+                TryDispatchOrdinaryResultTransition();
                 RefreshInspectorState();
             }
             finally
             {
                 _managedMemoryBoundary.ObserveAfterDriverUpdate(_tickIndex);
             }
+        }
+
+        private bool TryDispatchOrdinaryResultTransition()
+        {
+            if (_world?.Runtime?.Results?.NativeTransitionState != 2)
+                return false;
+
+            if (_battleOnlyResultHost?.TryHandleFirstBattleOnlyResult(this) == true)
+                return true;
+            if (_battleOnlyResultHost?.TryHandleSecondBattleOnlyResult(this) == true)
+                return true;
+
+            AppManager app = AppManager.Instance;
+            return app != null &&
+                   app.TryReturnToCharacterSelectionFromBattleResult();
+        }
+
+        private IBattleOnlyResultHost _battleOnlyResultHost;
+
+        public void RegisterBattleOnlyResultHost(IBattleOnlyResultHost host)
+        {
+            if (host == null)
+                throw new ArgumentNullException(nameof(host));
+            if (_battleOnlyResultHost != null &&
+                !ReferenceEquals(_battleOnlyResultHost, host))
+                throw new InvalidOperationException("A battle-only result host is already registered.");
+            _battleOnlyResultHost = host;
+        }
+
+        public void UnregisterBattleOnlyResultHost(IBattleOnlyResultHost host)
+        {
+            if (ReferenceEquals(_battleOnlyResultHost, host))
+                _battleOnlyResultHost = null;
         }
 
         private void FixedUpdate()
@@ -486,6 +532,9 @@ namespace NTSD.Simulation
         {
             if (lifecycleState == BattleRuntimeLifecycleState.Stopping ||
                 lifecycleState == BattleRuntimeLifecycleState.Stopped)
+                return false;
+            // Alignment contract: NTSD28-Q08-TRANSITION-HOST-TICK-ADMISSION-001.
+            if (_world?.Runtime?.Results?.NativeTransitionState != 0)
                 return false;
 
             TryCompleteDedicatedSimulationWorkerPresentationConsumption();
@@ -564,7 +613,9 @@ namespace NTSD.Simulation
             snapshotWorld?.EnterSnapshotTickBoundary();
             try
             {
-                if (_world == null || frameInput == null || frameInput.TickIndex != _tickIndex + 1)
+                if (_world == null || frameInput == null ||
+                    frameInput.TickIndex != _tickIndex + 1 ||
+                    _world.Runtime?.Results?.NativeTransitionState != 0)
                     return false;
 
                 int tickIndex = frameInput.TickIndex;

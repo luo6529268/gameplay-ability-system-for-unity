@@ -9,7 +9,23 @@ namespace NTSD.Test
     public sealed class BattleResultsSceneHostTickAlignmentEditorTests
     {
         [Test]
-        public void ResultsActiveTickRunsFullWorldTailWithoutEntityHumanPoll()
+        public void ResultsPageVisibilityDoesNotSuppressCombatHumanInput()
+        {
+            var inactiveWorld = new SimulationWorld();
+            var activeWorld = new SimulationWorld();
+            activeWorld.Runtime.Results.Phase = 200;
+
+            new NTSDBattleTickSystem(inactiveWorld).RunReleaseTick(1, false);
+            new NTSDBattleTickSystem(activeWorld).RunReleaseTick(1, false);
+
+            Assert.That(inactiveWorld.Runtime.Flow.HumanInputPolledExternally, Is.True);
+            Assert.That(activeWorld.Runtime.Results.IsActive, Is.True);
+            Assert.That(activeWorld.Runtime.Flow.HumanInputPolledExternally, Is.True,
+                "Unity result-page visibility must not suppress pre-transition combat input.");
+        }
+
+        [Test]
+        public void ResultsActiveTickConsumesBattleEntryClearThenRunsWorldTail()
         {
             var world = new SimulationWorld();
             world.Runtime.Results.Phase = 200;
@@ -20,18 +36,23 @@ namespace NTSD.Test
                 1,
                 buildPresentation: false);
 
+            Assert.That(world.Runtime.Flow.HumanInputPolledExternally, Is.True);
+            Assert.That(world.NeedClearInput, Is.False,
+                "The battle-entry clear request belongs to combat, regardless of result-page visibility.");
+            Assert.That(world.InitStatsRequest, Is.EqualTo(1),
+                "The battle-entry clear gate returns before the world tail on this tick.");
+
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                2,
+                buildPresentation: false);
             Assert.That(
                 world.InitStatsRequest,
                 Is.Zero,
-                "C++ SceneState::RESULTS still completes the world post-frame tail.");
+                "The next pre-transition combat tick completes the world post-frame tail.");
             Assert.That(
                 world.Runtime.Flow.HumanInputPolledExternally,
-                Is.False,
-                "C++ Results passes a null post-cooldown battle-entity input callback.");
-            Assert.That(
-                world.NeedClearInput,
                 Is.True,
-                "A null Results entity-input callback must not consume the battle-entry clear request.");
+                "Result-page visibility does not suppress participant input.");
         }
 
         [Test]
@@ -68,7 +89,7 @@ namespace NTSD.Test
 
             Assert.That(world.Runtime.Results.Phase, Is.EqualTo(202));
             Assert.That(world.Runtime.Results.SettingsCursor, Is.EqualTo(2));
-            Assert.That(world.Runtime.Flow.HumanInputPolledExternally, Is.False);
+            Assert.That(world.Runtime.Flow.HumanInputPolledExternally, Is.True);
         }
 
         [Test]
