@@ -250,7 +250,9 @@ namespace NTSD.Test.Editor
                     break;
 
                 case ProbePhase.RightQueued:
-                    if (HasButton(playerInput.PressedButtons, MoveButton) &&
+                    if (HasButton(
+                            holdThroughLanding ? playerInput.Buttons : playerInput.PressedButtons,
+                            MoveButton) &&
                         HasButton(playerInput.Buttons, MoveButton) &&
                         (heldMoveLeft ? character.Runtime.KeyLeft : character.Runtime.KeyRight) == 1 &&
                         (heldMoveLeft ? character.Runtime.CdLeft : character.Runtime.CdRight) > 0)
@@ -260,7 +262,9 @@ namespace NTSD.Test.Editor
                         retryReleaseQueued = false;
                         phase = ProbePhase.RightHeld;
                     }
-                    else if (!PulseRightState(tick))
+                    else if ((!holdThroughLanding ||
+                              !HasButton(playerInput.Buttons, MoveButton)) &&
+                             !PulseRightState(tick))
                     {
                         Finish(
                             false,
@@ -284,7 +288,9 @@ namespace NTSD.Test.Editor
                 case ProbePhase.JumpQueued:
                     // Physical K is the Unity JumpAction, but the preserved NTSD crossed
                     // canonical contract carries it in the Defend bit before KeyDefend/CdJump.
-                    if (HasButton(playerInput.PressedButtons, SimulationInputButtons.Defend) &&
+                    if (HasButton(
+                            holdThroughLanding ? playerInput.Buttons : playerInput.PressedButtons,
+                            SimulationInputButtons.Defend) &&
                         HasButton(playerInput.Buttons, MoveButton) &&
                         character.Runtime.KeyDefend == 1 && character.Runtime.CdJump > 0)
                     {
@@ -295,7 +301,9 @@ namespace NTSD.Test.Editor
                         retryReleaseQueued = false;
                         phase = ProbePhase.WaitingForAirborne;
                     }
-                    else if (!PulseJumpState(tick))
+                    else if ((!holdThroughLanding ||
+                              !HasButton(playerInput.Buttons, SimulationInputButtons.Defend)) &&
+                             !PulseJumpState(tick))
                     {
                         Finish(
                             false,

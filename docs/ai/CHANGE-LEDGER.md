@@ -2,8 +2,11 @@
 
 | Change ID | 状态 | 范围 | 记录 | 证据 |
 |---|---|---|---|---|
+| NTSD28-USER-OPOINT-BIRTH-RATIO-001 | PLANNED | D-024 late OPoint 子实体相对出生偏移按视口比例换算，父实体绝对位置和DAT原值不重复缩放 | [Record](CHANGE-RECORDS/NTSD28-USER-OPOINT-BIRTH-RATIO-001.md) | 等原Editor既有全量测试终态后实施与定向验收；Y及其他spawn类别另包。 |
 | NTSD28-USER-CORE-MOTION-OUTPUT-RATIO-001 | FOCUSED_TEST_PASS | D-024全实体核心X/Z积分出口首批：保留原始逻辑速度、在最终位移处一次性按画面比例换算，DAT不变 | [Record](CHANGE-RECORDS/NTSD28-USER-CORE-MOTION-OUTPUT-RATIO-001.md) | 原Editor聚焦4/4、11/11、13/13、4/4、5/5，加合成core tick 1/1及物化type-1武器物理通道1/1通过；完整Driver tick/真实Play、Y与其他直写位移待。 |
-| NTSD28-USER-FIXED-VIEW-RUN-RATIO-001 | IN_PROGRESS | 用户批准固定相机完整背景下通用奔跑/冲刺实际位移按2048/1333增大；DAT数据禁止修改 | [Record](CHANGE-RECORDS/NTSD28-USER-FIXED-VIEW-RUN-RATIO-001.md) | 原Editor比例2/2、Native Action215先红后绿11/11、地面普通/重载跑13/13；首次自然落地Play仅7像素且转walking，最终脚本重测合成按键未进FrameInputSet，待正式live自然序列与技能时机验收。 |
+| NTSD28-USER-RASENGAN-WINDOW-PARITY-001 | FOCUSED_TEST_PASS | 鸣人241起始完整32-tick真实Unity Driver技能输入窗口诊断；只新增Editor测试，不改DAT或战斗生产 | [Record](CHANGE-RECORDS/NTSD28-USER-RASENGAN-WINDOW-PARITY-001.md) | 原Editor定向3/3、三组各32tick：鸣人action/counter/MP与源码模型全同；错过变招后的OID434速度差另记，物理Play/正式EXE可见待。 |
+| NTSD28-USER-RASENGAN-PHYSICAL-PLAY-001 | FOCUSED_TEST_PASS | 鸣人螺旋丸253画面时点→物理J→FrameInputSet→动作301的原项目Play诊断 | [Record](CHANGE-RECORDS/NTSD28-USER-RASENGAN-PHYSICAL-PLAY-001.md) | 原Editor Play首次/第二次253按J均下一tick转301；Scene SHA不变、生产/DAT未改。用户体感症状与正式EXE可见时机仍待。 |
+| NTSD28-USER-FIXED-VIEW-RUN-RATIO-001 | IN_PROGRESS | 用户批准固定相机完整背景下通用奔跑/冲刺实际位移按2048/1333增大；DAT数据禁止修改 | [Record](CHANGE-RECORDS/NTSD28-USER-FIXED-VIEW-RUN-RATIO-001.md) | 持续D+K原Editor真实Play一次按键/落地PASS；同动作后3tick精确位移Unity11.7789447/2048=源模型7.6666667/1333。此为鸣人16:9局部出口，正式EXE可见/全实体D-024待。 |
 | NTSD28-USER-CAMERA-VIEWPORT-SCALE-001 | ROLLED_BACK | 曾误解用户为修改战斗相机取景；用户明确保留相机尺寸后撤销 | [Record](CHANGE-RECORDS/NTSD28-USER-CAMERA-VIEWPORT-SCALE-001.md) | 原Editor临时相机测试21/21，真实Scene未测；两脚本inverse patch后Git diff为空，Battle Scene SHA不变。 |
 | NTSD28-Q07-HITFA7-TARGET-FULLTICK-WITNESS-001 | FOCUSED_TEST_PASS | Q07非角色hit_Fa7有目标完整tick诊断见证 | [Record](CHANGE-RECORDS/NTSD28-Q07-HITFA7-TARGET-FULLTICK-WITNESS-001.md) | 原Editor精确数值RED 0/1→后继生产修复后GREEN 1/1，初态及完整tick1/2对源模型一致；tick3 OPoint诊断pool前置、正式EXE可见与Player待。 |
 | NTSD28-Q07-NONCHARACTER-DVY-SINGLE-APPLICATION-001 | FOCUSED_TEST_PASS | Q07非角色帧速度在原生frame-motion后单次应用 | [Record](CHANGE-RECORDS/NTSD28-Q07-NONCHARACTER-DVY-SINGLE-APPLICATION-001.md) | 原Editor数值RED 0/1→目标GREEN 1/1、相邻5/5；R15原kind/type3三tick主150字段0差、B2相等、B0共享域相等但RNG拓扑不同；Scene SHA保持，EXE可见/Player/tick3 OPoint待，Q07/R15开放。 |

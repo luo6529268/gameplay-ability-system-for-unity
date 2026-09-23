@@ -1,0 +1,18 @@
+{
+  "schema": "ntsd28-authority-source-capture-validation-v2",
+  "contentIdentityKey": "logan-runtime|NTSD28_LOGAN_BATTLE_INPUTS_V3|E88C4CBAC231E6C6FF47A41EFC86D46B46F74B63A8E0F3ABD30ED37C5C05C36A|B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45|entityRuntime=17|aggregate=28|checksum=31|characterShell=2|entityBaseShell=2",
+  "source": "landing-d4-dk-held-x800.source.raw.jsonl",
+  "status": "valid-source-model-capture",
+  "valid": true,
+  "certificateEligible": false,
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scenarioId": "landing-d4-dk-held-x800.scenario",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "1A8C4819B654214879E7E29CE7059E2E97535F725DE1055EB551F54C805F6EB7",
+  "captureBinarySha256": "6C5D1652E8E597C1C927CBDED701C16C2FF19ECA32BFBAAEE09A4570EF7B2654",
+  "scenarioDataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "expectedTicks": 40,
+  "validatedTicks": 40,
+  "entitySnapshots": 80,
+  "reason": null
+}
