@@ -46,7 +46,7 @@ Application protocol continues to own:
 
 ## 6. Candidate evaluation
 
-Candidates may include UDP plus a project-owned application protocol, KCP, ENet, LiteNetLib or another maintained option. Evaluate:
+Candidates may include UDP plus a project-owned application protocol, KCP, ENet, LiteNetLib or another maintained option. `NativeSockets` is recorded below as a UDP socket primitive candidate, not as a complete game transport. Evaluate:
 
 - Android/Windows support and maintenance;
 - reliable/unreliable ordered channels;
@@ -58,6 +58,13 @@ Candidates may include UDP plus a project-owned application protocol, KCP, ENet,
 - exact equivalence with in-memory fixtures.
 
 No candidate is currently selected.
+
+### NativeSockets candidate note (2026-09-23; evaluation only)
+
+- Source: [Molth/NativeSockets README](https://github.com/Molth/NativeSockets). The project describes a managed C# UDP library with Windows/Android support and low-allocation send/receive and vectored I/O APIs. These are upstream claims, not NTSD measurements or a Unity/IL2CPP compatibility result. `NativeSockets2` is a separate native-library/P/Invoke variant and must not be treated as the same deployment choice.
+- Possible fit: place a proven socket implementation behind `NTSD.Server.Transport`/`IFrameTransport` when S6 formally opens. It may help with byte delivery and allocation pressure; it does not supply room authority, ordered authority history, ACK/gap/retransmission policy, duplicate-input disposition, reconnect/recovery, application identity or checksum semantics.
+- Before selection, compare the managed library against the platform's `System.Net.Sockets.Socket` implementation under the same packet script. Verify the package target frameworks/API surface against the Server runtime and Unity build pipeline; run Windows Server, Windows Client and Android Client builds and real-device send/receive tests (including the selected Unity scripting backend). Measure allocation, CPU, latency distribution, packet rate and bandwidth at the planned 20-human room load. Exercise MTU boundaries, loss/reorder/duplicates, shutdown and the security review in Section 8. Record any dependency, licensing or maintenance risks.
+- Acceptance for a candidate remains Section 10's in-memory authority-history/checksum equivalence. This note does not select a library, authorize a Socket implementation or advance S6; implementation remains behind the S5 `VERIFIED` entry gate and the existing endpoint authorization.
 
 ## 7. Boundaries and forbidden shortcuts
 
@@ -105,3 +112,4 @@ Hand off versioned endpoint configuration, supported runtime matrix, packet/chan
 ## 13. Revision history
 
 - 2026-08-29: dossier created; transport remains deferred and unselected.
+- 2026-09-23: recorded NativeSockets as a future UDP primitive candidate with comparison and cross-platform verification gates; transport remains deferred and unselected.

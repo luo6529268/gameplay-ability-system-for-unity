@@ -2,5 +2,6 @@
   "cases": 140,
   "replayedTicks": 280,
   "snapshotTick": 0,
-  "scope": "Same-world snapshot before native held pass, then two complete ticks; all140 rows. No cross-world or deployed-content claim."
+  "sourceFolder": "source",
+  "scope": "Same-world snapshot before native held pass, then two complete ticks; every row of the named source matrix. No cross-world or deployed-content claim."
 }

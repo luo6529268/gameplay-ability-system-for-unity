@@ -1,0 +1,13 @@
+# NTSD28-Q07-HITFA7-TICK3-OPOINT-WITNESS-001
+
+Status: `FOCUSED_TEST_PASS` for the declared Editor diagnostic; Q07/R15 and formal EXE/Player parity remain open. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001`, BATCH-04/Q07 and the target-present `hit_Fa=7` complete-tick witness. This is diagnostic only; it does not authorize production, Scene, resource or nonbattle edits.
+
+Authority: formal EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, paired playable `GameSession28::step` and `SimulationTickDriver28::step`. The frozen Stage23 OID99 target/OID875 type3 action55 scenario, seed682973786 and three no-input ticks are already captured at `artifacts/diagnostics/NTSD28-Q07-HITFA7-TARGET-FULLTICK-WITNESS-001/source-stage23-witness.jsonl`. Source tick3 reaches action61 and three entities. Unity initial/ticks1–2 now match source after `NTSD28-Q07-NONCHARACTER-DVY-SINGLE-APPLICATION-001`.
+
+Pre-change Unity evidence: prior original Editor attempts at tick3 threw `NullReferenceException` from `LF2ObjectPool.Get` during late OPoint materialization. `NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests` sets `world.SetLogicOnlyEntityMaterialization(true)` before callback, and `LF2ObjectPointFactory.MaterializeObjectForStructuralWriter` should route a task whose `targetWorld` or parent `Match` is that World to `LogicEntityFactory`. Therefore “diagnostic pool lacks Renderer” is only a provisional interpretation; actual task ownership and caller need fresh evidence.
+
+Declared code path: existing `Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NonCharacterHitFa7EditorTests.cs` only, adding one independent real-driver tick3 diagnostic test and Temp output. It may assert source action/Y/previousY/count at tick3 only after recording the actual result. The existing 1–2 tick test and its source witness remain unchanged. Task/Change/Ledger/STATE/handoff/alignment and `artifacts/diagnostics/NTSD28-Q07-HITFA7-TICK3-OPOINT-WITNESS-001/` are evidence paths. If a production defect or a fixture dependency is found, create a separately scoped follow-up Task/Change before modifying other scripts.
+
+Acceptance: original Editor compiles 0 error; run only the new exact test via `testNames`, preserve output and full exception if RED, identify the first failing production call and whether task World ownership is missing, wrong, or present. Check existing Q07 1–2 tick test after any test correction. Do not turn off OPoint or alter scenario ticks to force PASS. Record Scene SHA unchanged and distinguish source-model versus formal EXE behavior.
+
+Rollback: retain user and other-task changes; review only the declared test diff. No destructive Git or file cleanup without explicit authorization.

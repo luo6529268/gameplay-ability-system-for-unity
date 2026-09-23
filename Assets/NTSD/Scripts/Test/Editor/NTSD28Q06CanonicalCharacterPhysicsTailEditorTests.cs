@@ -67,11 +67,97 @@ namespace NTSD.Test
             }
         }
 
-        private static string Run(Case c, BattleRuntimeProfile profile, BattleEcsCharacterFrameAdvancePassMode mode)
+        [Test]
+        public void ConfiguredWorldPhysicsPass_ScalesPositionButKeepsRawFrictionInBothOwners()
+        {
+            var c = new Case
+            {
+                Name = "configured-ground-motion",
+                Action = 300,
+                State = 4,
+                Y = 0,
+                Vx = 18,
+                Vz = 3.3,
+                Vy = 0,
+                ExpectedAction = 300,
+                ExpectedVx = 17,
+                ExpectedCounter = 9,
+            };
+
+            string legacy = Run(c, BattleRuntimeProfile.Authority400,
+                BattleEcsCharacterFrameAdvancePassMode.Legacy, configuredMotion: true);
+            string canonical = Run(c, BattleRuntimeProfile.Authority400,
+                BattleEcsCharacterFrameAdvancePassMode.DataOriented, configuredMotion: true);
+            Assert.That(canonical, Is.EqualTo(legacy));
+        }
+
+        [Test]
+        public void ConfiguredWorldCoreTick_PreservesPositionRatioAndRawMotion()
+        {
+            var c = new Case
+            {
+                Name = "configured-core-tick",
+                Action = 300,
+                State = 4,
+                Y = 0,
+                Vx = 18,
+                Vz = 3.3,
+                Vy = 0,
+                ExpectedAction = 300,
+                ExpectedVx = 17,
+                ExpectedCounter = 10,
+            };
+
+            Run(c, BattleRuntimeProfile.Authority400,
+                BattleEcsCharacterFrameAdvancePassMode.DataOriented,
+                configuredMotion: true, fullCoreTick: true);
+        }
+
+        [Test]
+        public void ConfiguredType1WeaponPhysicsPass_UsesWorldRatioWithoutChangingVelocity()
+        {
+            var world = new SimulationWorld();
+            try
+            {
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+                world.SetLogicOnlyEntityMaterialization(true);
+                var definition = Definition(79, 0, 0, 0);
+                world.PrepareRuntimeDataCatalogForBattle(
+                    new[] { new ObjectDefinition(79, 1, "motion-weapon.dat") },
+                    id => id == 79 ? definition : null);
+                LF2Entity weapon = world.LogicEntityFactory.Create(new OPointCreateTask
+                {
+                    targetWorld = world,
+                    requiredRuntimeSlot = 0,
+                    dir = "right",
+                    nativeWeaponPieceSpawn = true,
+                    preserveActionZero = true,
+                    opoint = new ObjectPoint { oid = 79, action = 0 }
+                }, out _);
+                Assert.That(weapon, Is.TypeOf<LF2Weapon>());
+                weapon.Runtime.SetPosition(300, -20, 250);
+                weapon.Runtime.SetVelocity(12, 0, 3);
+                weapon.Runtime.SyncIntegerPosition();
+
+                world.NativePhysicsAndDeadCharacterResourceNormalizeAll(1);
+
+                Assert.That(weapon.Runtime.X, Is.EqualTo(300.0 + 12.0 * 2048.0 / 1333.0).Within(1e-10));
+                Assert.That(weapon.Runtime.Z, Is.EqualTo(250.0 + 3.0 * 1152.0 / 730.0).Within(1e-10));
+                Assert.That(weapon.Runtime.Vx, Is.EqualTo(12.0).Within(1e-10));
+                Assert.That(weapon.Runtime.Vz, Is.EqualTo(3.0).Within(1e-10));
+            }
+            finally { NTSD28Q06State18SpawnEditorTests.Shutdown(world); }
+        }
+
+        private static string Run(Case c, BattleRuntimeProfile profile,
+            BattleEcsCharacterFrameAdvancePassMode mode, bool configuredMotion = false,
+            bool fullCoreTick = false)
         {
             var world = new SimulationWorld(profile, profile == BattleRuntimeProfile.Authority400 ? 400 : 1000);
             try
             {
+                if (configuredMotion)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
                 world.SetLogicOnlyEntityMaterialization(true);
                 world.ConfigureBattleEcsCharacterFrameAdvancePassForDiagnostics(mode);
                 var definitions = new Dictionary<int, LF2CharacterDataWrapper>
@@ -88,7 +174,8 @@ namespace NTSD.Test
                 LF2Entity credit = Create(world, 78, 1, 0);
                 var r = victim.Runtime;
                 r.CollisionYReference = c.Floor;
-                r.SetPosition(300, c.Y, 100);
+                double initialZ = fullCoreTick ? 250.0 : 100.0;
+                r.SetPosition(300, c.Y, initialZ);
                 r.SetVelocity(c.Vx, c.Vy, c.Vz);
                 r.SyncIntegerPosition();
                 r.HP = c.Hp;
@@ -111,7 +198,15 @@ namespace NTSD.Test
                 credit.Runtime.SetPosition(500, 0, 100);
                 credit.Runtime.SyncIntegerPosition();
                 world.Runtime.NativeWorldClock.ResourcePhase12 = c.Phase;
-                world.NativePhysicsAndDeadCharacterResourceNormalizeAll(1);
+                if (fullCoreTick)
+                    new NTSDBattleTickSystem(world).RunReleaseTick(1, buildPresentation: false);
+                else
+                    world.NativePhysicsAndDeadCharacterResourceNormalizeAll(1);
+                if (configuredMotion)
+                {
+                    Assert.That(r.X, Is.EqualTo(300.0 + c.Vx * 2048.0 / 1333.0).Within(1e-10));
+                    Assert.That(r.Z, Is.EqualTo(initialZ + c.Vz * 1152.0 / 730.0).Within(1e-10));
+                }
                 var diagnostics = world.BattleEcsCharacterFrameAdvancePassDiagnosticsForDiagnostics;
                 Assert.That(diagnostics.Mode, Is.EqualTo(mode));
                 if (mode == BattleEcsCharacterFrameAdvancePassMode.DataOriented)
@@ -142,7 +237,10 @@ namespace NTSD.Test
                     Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(10), c.Name);
                     Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(c.Hp <= 10 ? 1 : 0), c.Name);
                 }
-                Assert.That(world.NativeResourcePhase12, Is.EqualTo(c.Phase), c.Name + " physics does not advance resource phase");
+                if (!fullCoreTick)
+                    Assert.That(world.NativeResourcePhase12, Is.EqualTo(c.Phase), c.Name + " physics does not advance resource phase");
+                else
+                    Assert.That(world.NativeResourcePhase12, Is.EqualTo((c.Phase + 1) % 12), c.Name + " core tick advances resource phase");
                 return JsonConvert.SerializeObject(new
                 {
                     raw = NTSD28UnityEntityRawCapture.CaptureTickJson(world, 1),

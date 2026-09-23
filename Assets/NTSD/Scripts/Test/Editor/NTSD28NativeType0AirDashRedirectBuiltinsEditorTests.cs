@@ -305,6 +305,32 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void Action215_ConfiguredFixedViewScalesBothDirectionsWithoutChangingAuthoredData()
+        {
+            LF2CharacterData data = AirData();
+            using CharacterScope scope = CreateScope(data);
+            scope.World.ConfigureFixedViewRunDistance(2048, 1152);
+            double expectedSpeed = data.dash_distance;
+
+            SetFrame(scope.Character, 215);
+            scope.Character.SwitchDir("right");
+            scope.Input.Current[KeyRight] = 1;
+            scope.Input.Current[KeyJump] = 1;
+            scope.Input.EdgeWindow[EdgeJump] = 5;
+            scope.Writer.RouteNativeAirDashRedirectBuiltins(scope.Character);
+            Assert.That(scope.Character.Runtime.Vx, Is.EqualTo(expectedSpeed).Within(1e-10));
+
+            SetFrame(scope.Character, 215);
+            scope.Input.Clear();
+            scope.Input.Current[KeyLeft] = 1;
+            scope.Input.Current[KeyJump] = 1;
+            scope.Input.EdgeWindow[EdgeJump] = 5;
+            scope.Writer.RouteNativeAirDashRedirectBuiltins(scope.Character);
+            Assert.That(scope.Character.Runtime.Vx, Is.EqualTo(-expectedSpeed).Within(1e-10));
+            Assert.That(data.dash_distance, Is.EqualTo(15f));
+        }
+
+        [Test]
         public void Action215_DefendAndStaleWindowsKeepDirectAndDepthSemantics()
         {
             using CharacterScope scope = CreateScope(AirData());

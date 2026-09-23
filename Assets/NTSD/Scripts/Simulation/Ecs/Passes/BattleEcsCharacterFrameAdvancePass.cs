@@ -120,7 +120,9 @@ namespace NTSD.Simulation.Ecs
                 frame,
                 0f,
                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity);
+                NTSDGlobal.Gameplay.Gravity,
+                world.FixedViewRunDistanceScale,
+                world.FixedViewRunVerticalDistanceScale);
 
             BattleMechanicsStepResult stepResult =
                 world.CharacterMechanicsForServices.StepBattleLogic(context);

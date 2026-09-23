@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "1A8C4819B654214879E7E29CE7059E2E97535F725DE1055EB551F54C805F6EB7",
+  "captureBinarySha256": "4E3F628A5234638B0D4F7EBAEA07C9DA5917C765626118A7ABEF40C9DA0C5054",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\diagnostics\\NTSD28-Q07-NONCHARACTER-DVY-SINGLE-APPLICATION-001\\source-build\\ntsd28_authority_source_capture.exe",
+  "authorityWriteAllowed": false
+}

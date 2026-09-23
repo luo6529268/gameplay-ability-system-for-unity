@@ -2436,6 +2436,9 @@ namespace NTSD.Simulation
                 settings.Profile,
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
+            nextWorld.ConfigureFixedViewRunDistance(
+                GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? 1333,
+                GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? 730);
             nextWorld.BindLogicReferencePool(LF2ReferencePool.Instance.SimulationCore);
             nextWorld.ConfigureAiExecutionProfile(aiExecutionProfile);
             nextWorld.SetBattlePresentationBackend(presentationMode);
@@ -2508,6 +2511,12 @@ namespace NTSD.Simulation
             BattlePresentationBackendResolver.ValidateAvailable(presentationMode);
             if (WorldMatchesRuntimeSettings(_world, settings, aiExecutionProfile))
             {
+                if (_world.ObjectCount == 0)
+                {
+                    _world.ConfigureFixedViewRunDistance(
+                        GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? 1333,
+                        GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? 730);
+                }
                 _presentationBackendMode = presentationMode;
                 _aiExecutionProfile = aiExecutionProfile;
                 effectiveAiExecutionProfile = aiExecutionProfile.ToString();

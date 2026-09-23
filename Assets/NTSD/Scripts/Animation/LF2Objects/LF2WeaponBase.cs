@@ -943,7 +943,9 @@ namespace NTSD.Animation.LF2Objects
                         BattleNonCharacterMechanicsStepResult step =
                             CharacterMechanics.StepNonCharacterBattleLogic(
                                 Runtime,
-                                _gravityToAdd);
+                                _gravityToAdd,
+                                RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
+                                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                         _lastLandingVyBeforeClamp =
                             step.VerticalVelocityBeforeMove;
                         RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
@@ -978,7 +980,9 @@ namespace NTSD.Animation.LF2Objects
                         bool landed = CharacterMechanics.WeaponDynamics(
                             Runtime,
                             _gravityToAdd,
-                            out _lastLandingVyBeforeClamp);
+                            out _lastLandingVyBeforeClamp,
+                            RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
+                            RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                         RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
 
                         if (Runtime.Y < -0.0001)

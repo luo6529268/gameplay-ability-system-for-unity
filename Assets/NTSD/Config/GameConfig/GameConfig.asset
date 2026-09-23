@@ -43,6 +43,8 @@ MonoBehaviour:
   PoolCheckIntervalSeconds: 10
   PoolInitialSpritePoolSize: 16
   BattleStageWidthPx: 800
+  BattleFixedViewRunReferenceWidthPx: 2048
+  BattleFixedViewRunReferenceHeightPx: 1152
   BattleStageZMinPx: 180
   BattleStageZMaxPx: 350
   BattlePerspectiveNear: 0

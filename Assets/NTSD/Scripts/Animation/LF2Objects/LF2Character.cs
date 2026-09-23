@@ -159,7 +159,9 @@ namespace NTSD.Animation.LF2Objects
                 Frame.D,
                 spriteWidthPx,
                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity
+                NTSDGlobal.Gameplay.Gravity,
+                RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
+                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0
             );
 
             BattleMechanicsStepResult stepResult =

@@ -201,6 +201,34 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void ConfiguredFixedViewScalesNormalAndHeavyRunningWithoutChangingAuthoredData()
+        {
+            LF2CharacterData data = StandardGroundData();
+            using CharacterScope scope = CreateScope(data, LinkedData());
+            scope.World.ConfigureFixedViewRunDistance(2048, 1152);
+
+            SetFrame(scope.Character, 9);
+            scope.Character.SwitchDir("right");
+            scope.Input.Current[KeyRight] = 1;
+            scope.Input.Current[KeyUp] = 1;
+            scope.Writer.RouteNativeGroundBuiltins(scope.Character);
+            Assert.That(scope.Character.Runtime.Vx, Is.EqualTo(18.0 / 1.2).Within(1e-10));
+            Assert.That(scope.Character.Runtime.Vz, Is.EqualTo(-3.3).Within(1e-6));
+
+            SetFrame(scope.Character, 16);
+            scope.Input.Clear();
+            scope.Character.Runtime.LinkState = 2;
+            scope.Character.Runtime.TargetSlotIndex = 1;
+            scope.Input.Current[KeyLeft] = 1;
+            scope.Input.Current[KeyDown] = 1;
+            scope.Writer.RouteNativeGroundBuiltins(scope.Character);
+            Assert.That(scope.Character.Runtime.Vx, Is.EqualTo(-12.0 / 1.2).Within(1e-10));
+            Assert.That(scope.Character.Runtime.Vz, Is.EqualTo(4.5).Within(1e-6));
+            Assert.That(data.running_speed, Is.EqualTo(18f));
+            Assert.That(data.heavy_running_speed, Is.EqualTo(12f));
+        }
+
+        [Test]
         public void NativeDirectGroundActions_BypassLockCostAndMirrorWithExactRestarts()
         {
             using CharacterScope scope = CreateScope(StandardGroundData());

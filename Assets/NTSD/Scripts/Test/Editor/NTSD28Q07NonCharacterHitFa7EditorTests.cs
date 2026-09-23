@@ -190,9 +190,132 @@ namespace NTSD.Test.Editor
                 })
                 {
                     Assert.That(unity[field].Value<double>(),
-                        Is.EqualTo(sourceRows[tick][field].Value<double>()),
+                        Is.EqualTo(sourceRows[tick][field].Value<double>())
+                            .Within(1e-9),
                         $"tick {tick}, field {field}");
                 }
+            }
+        }
+
+        [Test]
+        public void RealOid875PreassignedTargetTick3MaterializesOpoint()
+        {
+            string output = ProjectPath(
+                "Temp/NTSD28UnityTrace/FocusedTests/q07-hitfa7-tick3.unity.jsonl");
+            string sourcePath = ProjectPath(
+                FullTickWitnessRoot + "/source-stage23-witness.jsonl");
+            var sourceRows = File.ReadAllLines(sourcePath)
+                .Select(JObject.Parse).ToArray();
+            Assert.That(sourceRows.Length, Is.EqualTo(4));
+
+            var unityRows = new List<string>();
+            Directory.CreateDirectory(Path.GetDirectoryName(output));
+            try
+            {
+                NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                    ProjectPath(RuntimeRoot),
+                    ProjectPath(FullTickWitnessRoot + "/scenario.json"),
+                    BattleRuntimeProfile.Authority400,
+                    3,
+                    (driver, inputs, identity) =>
+                    {
+                        SimulationWorld world = driver.World;
+                        var target = world.FindEntityByRuntimeSlotForQuery(0);
+                        var subject = world.FindEntityByRuntimeSlotForQuery(1);
+                        Assert.That(target?.ObjectId, Is.EqualTo(99));
+                        Assert.That(subject?.ObjectId, Is.EqualTo(875));
+                        Assert.That(subject?.Frame.N, Is.EqualTo(55));
+                        LF2ObjectPool pool = LF2ObjectPool.Instance;
+                        if (!pool.IsRuntimeStateValidForAcceptance)
+                        {
+                            typeof(LF2ObjectPool).GetMethod(
+                                "Awake",
+                                System.Reflection.BindingFlags.Instance |
+                                System.Reflection.BindingFlags.NonPublic)
+                                ?.Invoke(pool, null);
+                        }
+                        Assert.That(pool.IsRuntimeStateValidForAcceptance,
+                            Is.True);
+                        driver.BeginBattleAllocationSeal();
+                        world.SetLogicOnlyEntityMaterialization(true);
+                        Assert.That(world.UsesLogicOnlyEntityMaterialization, Is.True);
+                        subject.ObjectAiTargetSlot3F8 = 0;
+                        subject.Runtime.SetVelocity(0.0, 3.8, 0.0);
+                        unityRows.Add(CaptureFullTickRow(world, subject, target, 0));
+
+                        for (int tick = 1; tick <= 3; tick++)
+                        {
+                            File.WriteAllText(output + ".preconditions.json",
+                                new JObject
+                                {
+                                    ["nextTick"] = tick,
+                                    ["worldLogicOnly"] =
+                                        world.UsesLogicOnlyEntityMaterialization,
+                                    ["subjectRegisteredToWorld"] =
+                                        ReferenceEquals(subject.Match, world),
+                                    ["subjectAtSlot1"] = ReferenceEquals(
+                                        world.FindEntityByRuntimeSlotForQuery(1),
+                                        subject),
+                                    ["subjectObjectId"] = subject.ObjectId,
+                                    ["entityCount"] = world.ObjectCount,
+                                }.ToString(Newtonsoft.Json.Formatting.Indented));
+                            Assert.That(driver.StepOneTick(
+                                inputs[tick - 1], ignorePaused: true,
+                                buildPresentation: false), Is.True);
+                            target = world.FindEntityByRuntimeSlotForQuery(0);
+                            subject = world.FindEntityByRuntimeSlotForQuery(1);
+                            Assert.That(subject, Is.Not.Null);
+                            unityRows.Add(CaptureFullTickRow(
+                                world, subject, target, tick));
+                        }
+                        BattleRuntimeShutdownReport shutdown =
+                            driver.ShutdownBattleRuntime();
+                        File.WriteAllText(output + ".shutdown.json",
+                            new JObject
+                            {
+                                ["status"] = shutdown.Status.ToString(),
+                                ["completedStage"] =
+                                    shutdown.CompletedStage.ToString(),
+                                ["failureReason"] = shutdown.FailureReason,
+                                ["remainingWorldObjects"] =
+                                    shutdown.RemainingWorldObjects,
+                                ["remainingRuntimeSlots"] =
+                                    shutdown.RemainingRuntimeSlots,
+                                ["remainingPoolBorrowers"] =
+                                    shutdown.RemainingPoolBorrowers,
+                            }.ToString(Newtonsoft.Json.Formatting.Indented));
+                    });
+            }
+            catch (Exception exception)
+            {
+                File.WriteAllLines(output, unityRows);
+                File.WriteAllText(output + ".failure.txt", exception.ToString());
+                throw;
+            }
+
+            File.WriteAllLines(output, unityRows);
+            Assert.That(unityRows.Count, Is.EqualTo(sourceRows.Length));
+            JObject unityTick3 = JObject.Parse(unityRows[3]);
+            JObject sourceTick3 = sourceRows[3];
+            foreach (string field in new[]
+            {
+                "completedTick", "targetOid", "subjectOid", "targetSlot",
+                "action", "integerY", "previousY", "entityCount"
+            })
+            {
+                Assert.That(unityTick3[field].Value<int>(),
+                    Is.EqualTo(sourceTick3[field].Value<int>()),
+                    $"tick 3, field {field}");
+            }
+            foreach (string field in new[]
+            {
+                "motionX", "motionY", "motionZ", "preciseY"
+            })
+            {
+                Assert.That(unityTick3[field].Value<double>(),
+                    Is.EqualTo(sourceTick3[field].Value<double>())
+                        .Within(1e-9),
+                    $"tick 3, field {field}");
             }
         }
 

@@ -25,6 +25,8 @@ namespace NTSD.Test.Editor
             "NTSD/Battle Diagnostics/R8/Run Physical Movement Jump Landing Play Probe";
         private const string ResultPath =
             "Temp/NTSD_R8_PHYSICAL_MOVEMENT_PLAY.result.json";
+        private const string HeldRunResultPath =
+            "Temp/NTSD28_USER_FIXED_VIEW_HELD_LANDING_RUN.result.json";
         private const int NeutralTimeoutTicks = 180;
         private const int ProbeTimeoutTicks = 300;
         private const int RightHoldTicksBeforeJump = 3;
@@ -66,11 +68,30 @@ namespace NTSD.Test.Editor
         private static int keyboardDeviceId;
         private static bool retryReleaseQueued;
         private static bool running;
+        private static bool holdThroughLanding;
+        private static bool heldMoveLeft;
+        private static int landingRunStartXInt;
+        private static Key MoveKey => heldMoveLeft ? Key.A : Key.D;
+        private static SimulationInputButtons MoveButton => heldMoveLeft
+            ? SimulationInputButtons.Left
+            : SimulationInputButtons.Right;
 
         [MenuItem(MenuPath)]
         public static void RunFromMenu()
         {
+            RunProbe(keepDirectionAndJumpHeld: false);
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/R8/Run Held D+K Landing Run Ratio Probe")]
+        public static void RunHeldLandingFromMenu()
+        {
+            RunProbe(keepDirectionAndJumpHeld: true);
+        }
+
+        private static void RunProbe(bool keepDirectionAndJumpHeld)
+        {
             StopObservation();
+            holdThroughLanding = keepDirectionAndJumpHeld;
             if (!EditorApplication.isPlaying)
             {
                 WriteFailure("Play Mode is not active.");
@@ -112,8 +133,10 @@ namespace NTSD.Test.Editor
             airborneTick = -1;
             releaseTick = -1;
             landingTick = -1;
+            landingRunStartXInt = 0;
             baselineObjectCount = driver.World.ObjectCount;
             baselineXInt = character.Runtime.XInt;
+            heldMoveLeft = holdThroughLanding && baselineXInt > 1024;
             jumpStartXInt = baselineXInt;
             firstAirXInt = baselineXInt;
             lastInputPulseTick = startTick;
@@ -141,7 +164,7 @@ namespace NTSD.Test.Editor
             {
                 neutralTick = startTick;
                 baselineXInt = character.Runtime.XInt;
-                QueueKeyboardState(Key.D);
+                QueueKeyboardState(MoveKey);
                 rightPressAttempts = 1;
                 phase = ProbePhase.RightQueued;
             }
@@ -214,7 +237,7 @@ namespace NTSD.Test.Editor
                     {
                         neutralTick = tick;
                         baselineXInt = xInt;
-                        QueueKeyboardState(Key.D);
+                        QueueKeyboardState(MoveKey);
                         rightPressAttempts = 1;
                         lastInputPulseTick = tick;
                         retryReleaseQueued = false;
@@ -227,9 +250,10 @@ namespace NTSD.Test.Editor
                     break;
 
                 case ProbePhase.RightQueued:
-                    if (HasButton(playerInput.PressedButtons, SimulationInputButtons.Right) &&
-                        HasButton(playerInput.Buttons, SimulationInputButtons.Right) &&
-                        character.Runtime.KeyRight == 1 && character.Runtime.CdRight > 0)
+                    if (HasButton(playerInput.PressedButtons, MoveButton) &&
+                        HasButton(playerInput.Buttons, MoveButton) &&
+                        (heldMoveLeft ? character.Runtime.KeyLeft : character.Runtime.KeyRight) == 1 &&
+                        (heldMoveLeft ? character.Runtime.CdLeft : character.Runtime.CdRight) > 0)
                     {
                         rightInputSeen = true;
                         rightEdgeTick = tick;
@@ -249,7 +273,7 @@ namespace NTSD.Test.Editor
                     if (tick >= rightEdgeTick + RightHoldTicksBeforeJump)
                     {
                         jumpStartXInt = xInt;
-                        QueueKeyboardState(Key.D, Key.K);
+                        QueueKeyboardState(MoveKey, Key.K);
                         jumpPressAttempts = 1;
                         lastInputPulseTick = tick;
                         retryReleaseQueued = false;
@@ -261,12 +285,13 @@ namespace NTSD.Test.Editor
                     // Physical K is the Unity JumpAction, but the preserved NTSD crossed
                     // canonical contract carries it in the Defend bit before KeyDefend/CdJump.
                     if (HasButton(playerInput.PressedButtons, SimulationInputButtons.Defend) &&
-                        HasButton(playerInput.Buttons, SimulationInputButtons.Right) &&
+                        HasButton(playerInput.Buttons, MoveButton) &&
                         character.Runtime.KeyDefend == 1 && character.Runtime.CdJump > 0)
                     {
                         jumpInputSeen = true;
                         jumpEdgeTick = tick;
-                        QueueKeyboardState(Key.D);
+                        if (!holdThroughLanding)
+                            QueueKeyboardState(MoveKey);
                         retryReleaseQueued = false;
                         phase = ProbePhase.WaitingForAirborne;
                     }
@@ -295,13 +320,35 @@ namespace NTSD.Test.Editor
                     break;
 
                 case ProbePhase.Airborne:
-                    if (xInt > firstAirXInt)
+                    if ((heldMoveLeft ? firstAirXInt - xInt : xInt - firstAirXInt) > 0)
                         horizontalAirMotionSeen = true;
-                    if (tick >= airborneTick + AirTicksBeforeRelease)
+                    if (holdThroughLanding && yInt == 0 && Math.Abs(character.Runtime.Y) < 0.0001)
+                    {
+                        landedSeen = true;
+                        landingTick = tick;
+                        landingRunStartXInt = xInt;
+                        phase = ProbePhase.LandingRunHeld;
+                    }
+                    else if (!holdThroughLanding && tick >= airborneTick + AirTicksBeforeRelease)
                     {
                         releaseTick = tick;
                         QueueKeyboardState();
                         phase = ProbePhase.WaitingForLanding;
+                    }
+                    break;
+
+                case ProbePhase.LandingRunHeld:
+                    if (tick >= landingTick + 3)
+                    {
+                        int travel = heldMoveLeft
+                            ? landingRunStartXInt - xInt
+                            : xInt - landingRunStartXInt;
+                        bool passed = rightInputSeen && jumpInputSeen && airborneSeen &&
+                                      landedSeen && travel > 0 &&
+                                      HasButton(playerInput.Buttons, MoveButton);
+                        Finish(passed,
+                            $"Physical {MoveKey}+K held through landing; three-tick X travel={travel}, " +
+                            $"run scale={driver.World.FixedViewRunDistanceScale:R}.");
                     }
                     break;
 
@@ -361,7 +408,7 @@ namespace NTSD.Test.Editor
             }
             else
             {
-                QueueKeyboardState(Key.D);
+                QueueKeyboardState(MoveKey);
                 rightPressAttempts++;
                 retryReleaseQueued = false;
             }
@@ -379,12 +426,12 @@ namespace NTSD.Test.Editor
             {
                 if (jumpPressAttempts >= MaximumPressAttemptsPerPhase)
                     return false;
-                QueueKeyboardState(Key.D);
+                QueueKeyboardState(MoveKey);
                 retryReleaseQueued = true;
             }
             else
             {
-                QueueKeyboardState(Key.D, Key.K);
+                QueueKeyboardState(MoveKey, Key.K);
                 jumpPressAttempts++;
                 retryReleaseQueued = false;
             }
@@ -411,7 +458,11 @@ namespace NTSD.Test.Editor
         private static void QueueKeyboardState(params Key[] pressedKeys)
         {
             if (keyboard != null)
+            {
                 InputSystem.QueueStateEvent(keyboard, new KeyboardState(pressedKeys));
+                if (holdThroughLanding)
+                    InputSystem.Update();
+            }
         }
 
         private static void Finish(bool passed, string message)
@@ -446,6 +497,13 @@ namespace NTSD.Test.Editor
                 airborneTick = airborneTick,
                 releaseTick = releaseTick,
                 landingTick = landingTick,
+                landingRunStartXInt = landingRunStartXInt,
+                landingRunThreeTickDistance = landingTick >= 0 && holdThroughLanding
+                    ? (heldMoveLeft ? landingRunStartXInt - (character?.Runtime?.XInt ?? landingRunStartXInt)
+                        : (character?.Runtime?.XInt ?? landingRunStartXInt) - landingRunStartXInt)
+                    : 0,
+                fixedViewRunDistanceScale = driver?.World?.FixedViewRunDistanceScale ?? 1.0,
+                heldMoveKey = MoveKey.ToString(),
                 expectedJumpDistance = characterData?.jump_distance ?? 0f,
                 expectedJumpHeight = characterData?.jump_height ?? 0f,
                 baselineXInt = baselineXInt,
@@ -473,7 +531,8 @@ namespace NTSD.Test.Editor
         private static void WriteResult(ProbeResult result)
         {
             string path = Path.GetFullPath(
-                Path.Combine(Application.dataPath, "..", ResultPath));
+                Path.Combine(Application.dataPath, "..",
+                    holdThroughLanding ? HeldRunResultPath : ResultPath));
             File.WriteAllText(path, JsonUtility.ToJson(result, true));
         }
 
@@ -502,6 +561,10 @@ namespace NTSD.Test.Editor
             public int airborneTick;
             public int releaseTick;
             public int landingTick;
+            public int landingRunStartXInt;
+            public int landingRunThreeTickDistance;
+            public double fixedViewRunDistanceScale;
+            public string heldMoveKey;
             public float expectedJumpDistance;
             public float expectedJumpHeight;
             public int baselineXInt;
@@ -570,6 +633,7 @@ namespace NTSD.Test.Editor
             WaitingForAirborne,
             Airborne,
             WaitingForLanding,
+            LandingRunHeld,
         }
     }
 }

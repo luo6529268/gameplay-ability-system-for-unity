@@ -68,6 +68,22 @@ namespace NTSD.Simulation
     /// </summary>
     public class SimulationWorld
     {
+        private const int FormalRunViewWidthPx = 1333;
+        private const int FormalRunViewHeightPx = 730;
+        public double FixedViewRunDistanceScale { get; private set; } = 1.0;
+        public double FixedViewRunVerticalDistanceScale { get; private set; } = 1.0;
+
+        internal void ConfigureFixedViewRunDistance(int referenceWidthPx, int referenceHeightPx = FormalRunViewHeightPx)
+        {
+            // Alignment contract: NTSD28-USER-FIXED-VIEW-RUN-RATIO-001.
+            FixedViewRunDistanceScale = referenceWidthPx > FormalRunViewWidthPx
+                ? referenceWidthPx / (double)FormalRunViewWidthPx
+                : 1.0;
+            FixedViewRunVerticalDistanceScale = referenceHeightPx > FormalRunViewHeightPx
+                ? referenceHeightPx / (double)FormalRunViewHeightPx
+                : 1.0;
+        }
+
         private readonly SimulationEntityTraversal entityTraversal;
         private readonly SimulationQueryAndLinkModule queryAndLinkModule;
         private readonly SimulationBattleBufferModule battleBuffers;
@@ -3258,29 +3274,39 @@ namespace NTSD.Simulation
 
         public void NativePhysicsAndDeadCharacterResourceNormalizeAll(int tickIndex)
         {
-            using (BeginDeferredMutationEntityPass())
+            bool previousSuppression = suppressLegacyFrameMotionForSerialPass;
+            // Alignment contract: NTSD28-Q07-NONCHARACTER-DVY-SINGLE-APPLICATION-001.
+            suppressLegacyFrameMotionForSerialPass = true;
+            try
             {
-                foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+                using (BeginDeferredMutationEntityPass())
                 {
-                    // Alignment contract: NTSD28-Q06-NATIVE-PENDING-PRE-C25-MOTION-GUARD-001.
-                    if (!entity.Runtime.NativeLifecycleResolutionPending &&
-                        !entity.HasUnavailableNativePhysicsFrameForWorldPass() &&
-                        battleEcsCharacterFrameAdvancePass.TryExecute(
-                            entity,
-                            tickIndex))
+                    foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
                     {
-                        entity.MarkNativePhysicsCompletedForWorldPass(tickIndex);
-                    }
-                    else
-                    {
-                        entity.ExecuteNativePhysicsForWorldPass(tickIndex);
-                    }
-                    if (!IsActiveForCurrentPass(entity))
-                        continue;
+                        // Alignment contract: NTSD28-Q06-NATIVE-PENDING-PRE-C25-MOTION-GUARD-001.
+                        if (!entity.Runtime.NativeLifecycleResolutionPending &&
+                            !entity.HasUnavailableNativePhysicsFrameForWorldPass() &&
+                            battleEcsCharacterFrameAdvancePass.TryExecute(
+                                entity,
+                                tickIndex))
+                        {
+                            entity.MarkNativePhysicsCompletedForWorldPass(tickIndex);
+                        }
+                        else
+                        {
+                            entity.ExecuteNativePhysicsForWorldPass(tickIndex);
+                        }
+                        if (!IsActiveForCurrentPass(entity))
+                            continue;
 
-                    entity.NormalizeNativeDeadCharacterResourcesForWorldPass();
-                    RefreshRuntimeSnapshot(entity);
+                        entity.NormalizeNativeDeadCharacterResourcesForWorldPass();
+                        RefreshRuntimeSnapshot(entity);
+                    }
                 }
+            }
+            finally
+            {
+                suppressLegacyFrameMotionForSerialPass = previousSuppression;
             }
         }
 

@@ -215,6 +215,7 @@ namespace NTSD.Animation.LF2Objects
         private RuntimeCharacterConfigResolver selfCheckCharacterConfigResolver;
 
         public SimulationWorld Match => registeredWorld ?? SimulationTickDriver.Instance?.World;
+
         internal SimulationWorld RegisteredWorldForSimulation => registeredWorld;
 
         internal BattleLogicReferencePool ResolveLogicReferencePool()
@@ -5587,7 +5588,9 @@ namespace NTSD.Animation.LF2Objects
                 Frame?.D,
                 GetSpriteWidthPxForCollision(),
                 NTSDGlobal.Gameplay.MinSpeed,
-                NTSDGlobal.Gameplay.Gravity);
+                NTSDGlobal.Gameplay.Gravity,
+                RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
+                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
 
             BattleMechanicsStepResult stepResult =
                 ResolveCharacterMechanics().StepBattleLogic(context);
@@ -5871,7 +5874,8 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             int objectIdAlias = FrameCache?.Wrapper?.characterData?.type_sub ?? 0;
-            Runtime.X += BattleNativeIdentityXExtraKernel.ResolveExtra(
+            Runtime.X += (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0) *
+                BattleNativeIdentityXExtraKernel.ResolveExtra(
                 dataType,
                 ObjectId,
                 objectIdAlias,
@@ -5880,7 +5884,8 @@ namespace NTSD.Animation.LF2Objects
             if (dataType == (int)LF2ObjectType.SpecialAttack && frame.hit_j > 0)
             {
                 double visualZ = frame.hit_j - 50;
-                Runtime.Z += visualZ;
+                Runtime.Z += visualZ *
+                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                 Runtime.Type3VisualZOffset += visualZ;
             }
 
@@ -5896,7 +5901,9 @@ namespace NTSD.Animation.LF2Objects
             BattleNonCharacterMechanicsStepResult step =
                 CharacterMechanics.StepNonCharacterBattleLogic(
                     Runtime,
-                    gravity);
+                    gravity,
+                    RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
+                    RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
             if (dataType == (int)LF2ObjectType.LightWeapon)
             {

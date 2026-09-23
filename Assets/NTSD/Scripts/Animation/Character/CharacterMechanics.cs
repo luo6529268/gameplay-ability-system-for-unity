@@ -122,19 +122,25 @@ namespace NTSD.Animation
         public readonly float spriteWidthPx;
         public readonly float minSpeed;
         public readonly double gravity; // P0-f-2a: double sim gravity
+        public readonly double motionScaleX;
+        public readonly double motionScaleZ;
 
         public CharacterMechanicsContext(
             NTSDEntityRuntime runtime,
             LF2FrameData frameData,
             float spriteWidthPx,
             float minSpeed,
-            double gravity)
+            double gravity,
+            double motionScaleX = 1.0,
+            double motionScaleZ = 1.0)
         {
             Runtime = runtime;
             this.frameData = frameData;
             this.spriteWidthPx = spriteWidthPx;
             this.minSpeed = minSpeed;
             this.gravity = gravity;
+            this.motionScaleX = motionScaleX;
+            this.motionScaleZ = motionScaleZ;
         }
     }
 
@@ -358,8 +364,9 @@ namespace NTSD.Animation
             bool blockedX = (runtime.Vx > 0f && runtime.XBoundPositive) || (runtime.Vx < 0f && runtime.XBoundNegative);
             bool blockedZ = (runtime.Vz > 0f && runtime.ZBoundPositive) || (runtime.Vz < 0f && runtime.ZBoundNegative);
 
-            if (!blockedX) runtime.X += runtime.Vx;
-            if (!blockedZ) runtime.Z += runtime.Vz;
+            // Alignment contract: NTSD28-USER-CORE-MOTION-OUTPUT-RATIO-001.
+            if (!blockedX) runtime.X += runtime.Vx * ctx.motionScaleX;
+            if (!blockedZ) runtime.Z += runtime.Vz * ctx.motionScaleZ;
 
             if (blockedX && blockedZ) boundaryMode = BoundaryResolveMode.Stop;
             else if (blockedX) boundaryMode = BoundaryResolveMode.ZOnly;
@@ -416,20 +423,21 @@ namespace NTSD.Animation
         /// 只有 y 位移后仍处于空中时才追加重力。
         /// </summary>
         // 武器的基础动力学与角色不同，所以单独走这个入口。
-        public static bool WeaponDynamics(NTSDEntityRuntime runtime, double gravityToAdd, out double oldVy) // P0-f-2a: double gravity; P0-f-2b B1: out double oldVy (no float truncation)
+        public static bool WeaponDynamics(NTSDEntityRuntime runtime, double gravityToAdd, out double oldVy,
+            double motionScaleX = 1.0, double motionScaleZ = 1.0) // P0-f-2a: double gravity; P0-f-2b B1: out double oldVy (no float truncation)
         {
             oldVy = 0.0;
             if (runtime == null) return false;
 
             if (runtime.Vx > 0 && !runtime.XBoundPositive)
-                runtime.X += runtime.Vx;
+                runtime.X += runtime.Vx * motionScaleX;
             else if (runtime.Vx < 0 && !runtime.XBoundNegative)
-                runtime.X += runtime.Vx;
+                runtime.X += runtime.Vx * motionScaleX;
 
             if (runtime.Vz > 0 && !runtime.ZBoundPositive)
-                runtime.Z += runtime.Vz;
+                runtime.Z += runtime.Vz * motionScaleZ;
             else if (runtime.Vz < 0 && !runtime.ZBoundNegative)
-                runtime.Z += runtime.Vz;
+                runtime.Z += runtime.Vz * motionScaleZ;
 
             runtime.ClearBounds();
 
@@ -456,20 +464,22 @@ namespace NTSD.Animation
         internal static BattleNonCharacterMechanicsStepResult
             StepNonCharacterBattleLogic(
                 NTSDEntityRuntime runtime,
-                double gravityToAdd)
+                double gravityToAdd,
+                double motionScaleX = 1.0,
+                double motionScaleZ = 1.0)
         {
             if (runtime == null)
                 return default;
 
             if (runtime.Vx > 0 && !runtime.XBoundPositive)
-                runtime.X += runtime.Vx;
+                runtime.X += runtime.Vx * motionScaleX;
             else if (runtime.Vx < 0 && !runtime.XBoundNegative)
-                runtime.X += runtime.Vx;
+                runtime.X += runtime.Vx * motionScaleX;
 
             if (runtime.Vz > 0 && !runtime.ZBoundPositive)
-                runtime.Z += runtime.Vz;
+                runtime.Z += runtime.Vz * motionScaleZ;
             else if (runtime.Vz < 0 && !runtime.ZBoundNegative)
-                runtime.Z += runtime.Vz;
+                runtime.Z += runtime.Vz * motionScaleZ;
 
             runtime.ClearBounds();
 

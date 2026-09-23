@@ -13,12 +13,12 @@
             "attackerRest": 0,
             "bdefendAccumulator": 0,
             "collisionYReference": 0,
-            "environmentSourceSlot": null,
-            "environmentState": null,
+            "environmentSourceSlot": -1,
+            "environmentState": 0,
             "hitReactionTimer": 0,
             "motionHoldTimer": 0,
             "objectAiExcludedGroupSourceSlot": -1,
-            "platformSourceSlot": null,
+            "platformSourceSlot": 0,
             "renderPhase": 0,
             "runtimeArmorHp": 0,
             "runtimeStateCode": 0,
@@ -164,12 +164,12 @@
             "attackerRest": 0,
             "bdefendAccumulator": 0,
             "collisionYReference": 0,
-            "environmentSourceSlot": null,
-            "environmentState": null,
+            "environmentSourceSlot": -1,
+            "environmentState": 0,
             "hitReactionTimer": 0,
             "motionHoldTimer": 0,
             "objectAiExcludedGroupSourceSlot": -1,
-            "platformSourceSlot": null,
+            "platformSourceSlot": 0,
             "renderPhase": 0,
             "runtimeArmorHp": 0,
             "runtimeStateCode": 0,
@@ -327,9 +327,5 @@
     "previousZ",
     "opointLatch"
   ],
-  "rawMissingBindings": [
-    "combat.platformSourceSlot",
-    "combat.environmentState",
-    "combat.environmentSourceSlot"
-  ]
+  "rawMissingBindings": []
 }

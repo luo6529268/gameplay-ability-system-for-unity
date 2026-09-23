@@ -1,0 +1,3 @@
+System.InvalidOperationException: Replay validation shutdown retained objects=3, slots=3, borrowers=1
+  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests (System.String runtimeRoot, System.String scenarioPath, NTSD.Simulation.BattleRuntimeProfile profile, System.Int32 totalTicks, System.Action`3[T1,T2,T3] verify) [0x00318] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28UnityRawCaptureEditor.cs:140 
+  at NTSD.Test.Editor.NTSD28Q07NonCharacterHitFa7EditorTests.RealOid875PreassignedTargetTick3MaterializesOpoint () [0x00070] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28Q07NonCharacterHitFa7EditorTests.cs:215 
