@@ -16,6 +16,7 @@ namespace NTSD.Test.Editor
         {
             public bool requested;
             public string runId;
+            public bool menuFirst;
         }
 
         [Serializable]
@@ -28,6 +29,7 @@ namespace NTSD.Test.Editor
             public string outputPath;
             public int totalErrors;
             public long totalSize;
+            public string scenes;
         }
 
         private static bool running;
@@ -77,17 +79,32 @@ namespace NTSD.Test.Editor
                 if (string.IsNullOrEmpty(request.runId) ||
                     !request.runId.All(value => char.IsLetterOrDigit(value) || value == '-'))
                     throw new InvalidOperationException("Q07 build runId must be alphanumeric or hyphenated.");
-                resultPath = Path.Combine(Root,
-                    "artifacts/diagnostics/NTSD28-Q07-CONTENT-MIGRATION-READINESS-001",
-                    request.runId + "-build.json");
+                string artifactDirectory = request.menuFirst
+                    ? "artifacts/diagnostics/NTSD28-Q07-MENU-FIRST-WINDOWS-PLAYER-001"
+                    : "artifacts/diagnostics/NTSD28-Q07-CONTENT-MIGRATION-READINESS-001";
+                resultPath = Path.Combine(Root, artifactDirectory, request.runId + "-build.json");
+                Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
                 if (File.Exists(resultPath))
                     throw new IOException("Q07 build report already exists: " + resultPath);
-                string outputDirectory = Path.Combine(Root, "Temp", "Q07-Windows-Player", request.runId);
+                string outputDirectory = Path.Combine(Root, "Temp",
+                    request.menuFirst ? "Q07-MenuFirst-Windows-Player" : "Q07-Windows-Player",
+                    request.runId);
                 if (Directory.Exists(outputDirectory))
                     throw new IOException("Q07 build output already exists: " + outputDirectory);
                 Directory.CreateDirectory(outputDirectory);
-                result.outputPath = Path.Combine(outputDirectory, "NTSD-Q07-Windows-Mono.exe");
+                result.outputPath = Path.Combine(outputDirectory, request.menuFirst
+                    ? "NTSD-Q07-MenuFirst.exe" : "NTSD-Q07-Windows-Mono.exe");
                 File.WriteAllText(resultPath, JsonUtility.ToJson(result, true));
+
+                string[] buildScenes = request.menuFirst
+                    ? EditorBuildSettings.scenes.Where(scene => scene.enabled)
+                        .Select(scene => scene.path).ToArray()
+                    : new[] { "Assets/NTSD/Scene/NTSD_Battle.unity" };
+                if (request.menuFirst && (buildScenes.Length != 2 ||
+                    buildScenes[0] != "Assets/NTSD/Scene/NTSD_Menu.unity" ||
+                    buildScenes[1] != "Assets/NTSD/Scene/NTSD_Battle.unity"))
+                    throw new InvalidOperationException("Q07 Menu-first Player requires the confirmed Menu/Battle Build Settings order.");
+                result.scenes = string.Join(";", buildScenes);
 
                 previousBackend = PlayerSettings.GetScriptingBackend(BuildTargetGroup.Standalone);
                 backendCaptured = true;
@@ -99,7 +116,7 @@ namespace NTSD.Test.Editor
                 PlayerSettings.SetScriptingBackend(BuildTargetGroup.Standalone, ScriptingImplementation.Mono2x);
                 BuildReport buildReport = BuildPipeline.BuildPlayer(new BuildPlayerOptions
                 {
-                    scenes = new[] { "Assets/NTSD/Scene/NTSD_Battle.unity" },
+                    scenes = buildScenes,
                     locationPathName = result.outputPath,
                     target = BuildTarget.StandaloneWindows64,
                     options = BuildOptions.Development,

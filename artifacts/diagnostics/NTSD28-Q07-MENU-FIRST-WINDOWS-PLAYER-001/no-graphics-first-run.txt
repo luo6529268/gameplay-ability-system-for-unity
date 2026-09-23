@@ -1,0 +1,3 @@
+Flags: -batchmode -nographics -ntsd-q07-menu-first-probe
+Outcome: prewarm failed, own diagnostic Player was stopped before the 480-second probe timeout; no PASS report or exit-code claim.
+Log: [LoadingPrewarmController] Start failed with exception: GameConfig.ShadowPrefab BattleCommonShadowDescriptor Material does not declare premultiplied sprite alpha semantics.

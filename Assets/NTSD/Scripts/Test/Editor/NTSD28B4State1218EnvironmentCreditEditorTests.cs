@@ -128,6 +128,13 @@ namespace NTSD.Test.Editor
             Assert.That(victim.Health.HPBound, Is.EqualTo(-6));
             Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(1));
             Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(10));
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.VictimSlot, Is.EqualTo(0));
+            Assert.That(knockout.SourceSlot, Is.EqualTo(0));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(1));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(0));
+            Assert.That(knockout.SourceObjectType, Is.EqualTo(0));
         }
 
         [Test]
@@ -150,6 +157,7 @@ namespace NTSD.Test.Editor
             Assert.That(victim.Health.HPBound, Is.EqualTo(-10));
             Assert.That(credit.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(10));
+            Assert.That(world.NativeKnockoutEvents, Is.Empty);
         }
 
         [Test]

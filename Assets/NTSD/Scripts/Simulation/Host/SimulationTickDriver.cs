@@ -1222,6 +1222,7 @@ namespace NTSD.Simulation
         }
 
         private SimulationWorld modeComboConfiguredWorld;
+        private bool nativeKnockoutAudioDisplayEnabled = true;
 
         public void BeginBattleAllocationSeal()
         {
@@ -1267,6 +1268,7 @@ namespace NTSD.Simulation
                         : BattleHitRecordLifecycleCatalog.Unavailable,
                     loganCatalog);
                 ApplyPublishedModeComboBeforeFirstTick(loganCatalog);
+                ApplyPublishedKnockoutFeedBeforeFirstTick(loganCatalog);
             }
 
             animatorManager?.GetMaximumBattleCollisionRectCounts(
@@ -1313,6 +1315,24 @@ namespace NTSD.Simulation
                 state.CaughtAct = input.CaughtAct;
             }
             modeComboConfiguredWorld = _world;
+        }
+
+        private void ApplyPublishedKnockoutFeedBeforeFirstTick(LoganObjectCatalog catalog)
+        {
+            // Alignment contract: NTSD28-Q08-Q09-KILLTEXT-RUNTIME-LIFETIME-001.
+            if (_world == null || _world.CurrentTickIndex != 0)
+                return;
+            LoganModeKnockoutFeedInput feed = catalog?.ModeComboInput?.KnockoutFeed;
+            _world.Runtime.NativeKnockoutFeed ??=
+                new NTSD28NativeKnockoutFeedRuntimeState();
+            _world.Runtime.NativeKnockoutFeed.RestoreForSnapshot(
+                feed != null,
+                feed?.LifetimeTicks ?? 0);
+            _battleTickSystem?.ConfigureNativeKnockoutAudio(
+                feed?.StageTeam1DeathSoundPath,
+                feed?.StageTeam5DeathSoundPath,
+                nativeKnockoutAudioDisplayEnabled);
+            _world.BattlePresentation.ConfigureKnockoutFeedContent(catalog);
         }
 
         private void StartDedicatedSimulationWorkerIfEligible()
@@ -1532,6 +1552,7 @@ namespace NTSD.Simulation
                 _publishedSoundEvents.Clear();
                 CharacterAnimtorManager.TryGetInstance()?.ReleaseCancelledNativeContentStaging();
                 BattleCentralRenderSystem.ResetRuntime();
+                _world?.BattlePresentation.ClearKnockoutFeedSession();
                 _world?.BattlePresentation.Reset();
                 CompleteShutdownStage(BattleRuntimeShutdownStage.PresentationCleared);
 
@@ -1674,6 +1695,8 @@ namespace NTSD.Simulation
                 throw new InvalidOperationException(
                     "A battle match cannot be prepared while runtime shutdown is in progress.");
 
+            nativeKnockoutAudioDisplayEnabled =
+                config?.nativeKnockoutFeedRuntimeDisplayEnabled ?? true;
             EnterPreparingState();
             _battleFunctionKeyInputLatch.Clear();
             ClearNativeFunctionKeyRoutingState();
@@ -1714,6 +1737,7 @@ namespace NTSD.Simulation
                 (uint)(config?.seed ?? 0));
             _world.SetOneTuInputForBattle(config?.oneTuInput ?? false);
             _world.Runtime?.Roster?.ApplyMatchConfig(config);
+            _world.BattlePresentation.ConfigureKnockoutFeedNames(config);
             _world.Runtime?.ApplyBootstrapFromMatchConfig(config);
             _world.SetNeedClearInput(true);
             _world.RefreshStageRuntimeSnapshotFromScene();

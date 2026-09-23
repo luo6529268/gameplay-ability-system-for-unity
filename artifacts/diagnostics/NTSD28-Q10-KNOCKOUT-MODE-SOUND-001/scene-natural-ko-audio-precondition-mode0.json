@@ -1,0 +1,22 @@
+{
+    "status": "FAIL",
+    "error": "System.InvalidOperationException: The live Battle Scene is not in formal mode-1 KO feed state.\r\n  at NTSD.Test.NTSD28Q10ModeSoundScenePlayProbe.PollNatural (System.String request) [0x00279] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q10KnockoutModeSoundEditorTests.cs:428 ",
+    "scope": "Real Battle Scene full lethal tick with two temporary test combatants; no physical player input.",
+    "scenePath": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "tick": 0,
+    "preparedClips": 0,
+    "playsBefore": 0,
+    "playsAfter": 0,
+    "rejectedBefore": 0,
+    "rejectedAfter": 0,
+    "catalogSealed": true,
+    "sceneDirtyAtEntry": false,
+    "battleMode": 0,
+    "attackerSlot": 0,
+    "victimSlot": 0,
+    "victimHpAfterTick": 0,
+    "knockoutCountBefore": 0,
+    "knockoutCountAfter": 0,
+    "targetKnockoutRecorded": false,
+    "targetCueQueued": false
+}

@@ -1,13 +1,13 @@
 # H-02 Android Build 与 Scene 闭包方案
 
 > 优先级：高  
-> 状态：`OPEN / SOLUTION_DOCUMENTED / IMPLEMENTATION_NOT_STARTED`  
-> 最后更新：2026-09-06  
+> 状态：`OPEN / FIRST_SCENE_CONFIRMED / UNITY_SCENE_LIST_AND_EDITOR_CALLBACK_PASS / ANDROID_BUILD_PENDING`
+> 最后更新：2026-09-23
 > 主登记表：[Android 移动端就绪度与 1000 AI 风险清单](../android-mobile-readiness-priority-risk-register.md)
 
 ## 问题与边界
 
-`EditorBuildSettings.asset` 当前没有正式 Scene 清单，仓库也没有可复核的 APK/AAB。问题不在 SDK/NDK 缺失，而在可重复的入口 Scene、Additive 依赖、URP、输入和内容闭包尚未形成版本化构建合同。
+用户已确认正式首 Scene 为 `NTSD_Menu`，`NTSD_Battle` 排第二。原项目的 `EditorBuildSettings.asset` 已按此顺序登记两条启用 Scene；原 Editor 的 Menu 回调进入 Additive Battle、退出返回 Menu 定向验证已通过。仓库仍没有本方案要求的可复核 Android APK/AAB 与设备冷启动验收。可重复的 Android Build Profile、URP、输入和内容闭包仍待后续任务完成。
 
 ## 解决方案
 
@@ -18,7 +18,7 @@
 
 ## 实施步骤
 
-1. 由用户确认正式首 Scene 与菜单/加载边界；不得从当前 Editor 状态猜测。
+1. 由用户确认正式首 Scene 与菜单/加载边界；不得从当前 Editor 状态猜测。**已完成：Menu 第一、Battle 第二。**
 2. 添加只读 Preflight，先报告缺失项，再建立构建 Profile。
 3. 建立 Android Development Build，随后增加 Release/AAB 配置；签名由 L-02 独立处理。
 4. 建立 Post-build Inspector，检查 Scene、native library、Manifest 和资源包。
@@ -42,6 +42,7 @@
 
 ## 证据与留痕
 
-- 当前证据：`ProjectSettings/EditorBuildSettings.asset` 为 `m_Scenes: []`。
+- 改前证据：`ProjectSettings/EditorBuildSettings.asset` 为 `m_Scenes: []`。
+- 2026-09-23：用户确认 Menu 第一、Battle 第二。`NTSD28-Q07-PRODUCTION-SCENE-LIST-001` 仅修改原项目 `ProjectSettings/EditorBuildSettings.asset::m_Scenes`；原 Editor 的 `q07-menu-scene-closure-2.json` 记录 Menu 回调进入 Additive Battle、BattleRunning、有序退出返回 Menu 通过，两个 Scene 文件 SHA-256 未变。此证据不覆盖 Player 冷启动或 Android 构建/设备验收。
 - 实施时保存：Build Profile、完整命令、BuildReport、产物 SHA-256、包内 Scene/ABI/资源清单和安装日志。
-- 2026-09-06：方案文档建立；实现未开始。
+- 2026-09-06：方案文档建立；当时实现未开始。

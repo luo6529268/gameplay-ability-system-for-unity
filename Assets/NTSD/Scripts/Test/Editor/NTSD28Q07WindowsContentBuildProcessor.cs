@@ -15,9 +15,9 @@ namespace NTSD.Test.Editor
     {
         private const string ContentRelativeRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string ManifestRelativePath =
-            "artifacts/diagnostics/NTSD28-Q07-CONTENT-MIGRATION-READINESS-001/copy-manifest.csv";
-        private const int ExpectedFileCount = 1343;
-        private const long ExpectedBytes = 46594829;
+            "artifacts/diagnostics/NTSD28-Q07-WINDOWS-PLAYER-MANIFEST-V2-001/copy-manifest-v2.csv";
+        private const int ExpectedFileCount = 1371;
+        private const long ExpectedBytes = 46883057;
 
         public int callbackOrder => 1000;
 

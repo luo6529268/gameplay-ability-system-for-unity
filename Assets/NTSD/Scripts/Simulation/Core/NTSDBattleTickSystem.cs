@@ -247,10 +247,23 @@ namespace NTSD.Simulation
     public sealed class NTSDBattleTickSystem
     {
         private readonly SimulationWorld world;
+        private string nativeKnockoutTeam1SoundPath;
+        private string nativeKnockoutTeam5SoundPath;
+        private bool nativeKnockoutAudioDisplayEnabled = true;
 
         public NTSDBattleTickSystem(SimulationWorld world)
         {
             this.world = world;
+        }
+
+        internal void ConfigureNativeKnockoutAudio(
+            string team1SoundPath,
+            string team5SoundPath,
+            bool runtimeDisplayEnabled)
+        {
+            nativeKnockoutTeam1SoundPath = team1SoundPath;
+            nativeKnockoutTeam5SoundPath = team5SoundPath;
+            nativeKnockoutAudioDisplayEnabled = runtimeDisplayEnabled;
         }
 
         public void RunReleaseTick(int tickIndex)
@@ -300,6 +313,8 @@ namespace NTSD.Simulation
             {
                 if (world == null)
                     return BattleTickCompletion.NotCompleted;
+
+                int knockoutCountBeforeTick = world.NativeKnockoutEvents.Count;
 
                 BattleTickPhaseDiagnostics diagnostics =
                     world.ActiveBattleTickPhaseDiagnosticsForDiagnostics;
@@ -368,9 +383,10 @@ namespace NTSD.Simulation
                         stepWaitGate,
                         diagnostics,
                         resultsActiveAtTickStart,
-                        frameInput != null && frameInput.TickIndex == tickIndex
-                            ? frameInput
-                            : null)
+                         frameInput != null && frameInput.TickIndex == tickIndex
+                             ? frameInput
+                             : null,
+                         knockoutCountBeforeTick)
                         ? BattleTickCompletion.FullReturn
                         : BattleTickCompletion.NotCompleted;
                 }
@@ -501,7 +517,8 @@ namespace NTSD.Simulation
             bool stepWaitGate,
             BattleTickPhaseDiagnostics diagnostics,
             bool resultsActiveAtTickStart,
-            FrameInputSet frameInput)
+            FrameInputSet frameInput,
+            int knockoutCountBeforeTick)
         {
             if (stepWaitGate)
             {
@@ -549,14 +566,47 @@ namespace NTSD.Simulation
             diagnostics?.BeginPhase(BattleTickPhase.BattleResults);
             BattleResultsFlow(resultsActiveAtTickStart, frameInput);
             diagnostics?.EndPhase(BattleTickPhase.BattleResults);
-            // Alignment contract: NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001.
-            // The selected formal #killtext record uses times:70; Q09 owns the
-            // later parsed-content handoff for alternative mode definitions.
-            world.PruneNativeKnockoutTail(tickIndex, 70);
+            // Alignment contract: NTSD28-Q10-KNOCKOUT-MODE-SOUND-001.
+            QueueNativeKnockoutAudioBeforeTailPrune(knockoutCountBeforeTick);
+            // Alignment contract: NTSD28-Q08-Q09-KILLTEXT-RUNTIME-LIFETIME-001.
+            NTSD28NativeKnockoutFeedRuntimeState feed =
+                world.Runtime?.NativeKnockoutFeed;
+            if (feed?.RecordPresent == true)
+                world.PruneNativeKnockoutTail(tickIndex, feed.LifetimeTicks);
             diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
             RenderDispatch(tickIndex, buildPresentation, simulationWorker);
             diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
             return true;
+        }
+
+        private void QueueNativeKnockoutAudioBeforeTailPrune(int countBeforeTick)
+        {
+            if (world.BattleGameModeId != 1 ||
+                !nativeKnockoutAudioDisplayEnabled ||
+                world.Runtime?.NativeKnockoutFeed?.RecordPresent != true)
+                return;
+
+            var events = world.NativeKnockoutEvents;
+            for (int index = countBeforeTick; index < events.Count; index++)
+            {
+                int victimSlot = events[index].VictimSlot;
+                if (!world.TryGetRuntimeSlotReadOnlyView(
+                        victimSlot,
+                        out RuntimeSlotTable.ReadOnlySlotView view) || !view.Claimed)
+                    continue;
+
+                NTSDEntityRuntime victim = view.Entity?.Runtime ?? view.RawRuntime;
+                if (victim == null)
+                    continue;
+
+                string soundPath = victim.RelationTeam == 1
+                    ? nativeKnockoutTeam1SoundPath
+                    : victim.RelationTeam == 5
+                        ? nativeKnockoutTeam5SoundPath
+                        : null;
+                if (!string.IsNullOrEmpty(soundPath))
+                    world.QueueSound(soundPath, victim.XInt);
+            }
         }
 
         private void AdvanceNativeSparks()

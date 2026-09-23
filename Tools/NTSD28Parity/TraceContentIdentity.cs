@@ -12,6 +12,8 @@ internal static class TraceContentIdentity
     internal const string LegacyTag = "NTSD28_UNITY_LEGACY_DAT_SEMANTICS_V1";
     internal const string BattleInputV1 = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
     internal const string BattleInputV2 = "NTSD28_LOGAN_BATTLE_INPUTS_V2";
+    internal const string BattleInputV3 = "NTSD28_LOGAN_BATTLE_INPUTS_V3";
+    internal const string BattleInputV3KindOnly = "NTSD28_LOGAN_BATTLE_INPUTS_V3_KIND_ONLY";
     private static readonly string[] Properties =
     [
         "policy", "scope", "profile", "rawDefinitionSha256", "decodeContract",
@@ -24,6 +26,14 @@ internal static class TraceContentIdentity
     private static readonly string[] LoganV2Properties = LoganProperties.Concat(new[]
     {
         "battleInputContract", "modeInputSha256", "modeSemanticSha256",
+    }).ToArray();
+    private static readonly string[] LoganV3Properties = LoganV2Properties.Concat(new[]
+    {
+        "kindInputSha256", "kindSemanticSha256",
+    }).ToArray();
+    private static readonly string[] LoganKindOnlyProperties = LoganProperties.Concat(new[]
+    {
+        "battleInputContract", "kindInputSha256", "kindSemanticSha256",
     }).ToArray();
     private static readonly IReadOnlyDictionary<string, int> Schemas = new Dictionary<string, int>
     {
@@ -69,6 +79,39 @@ internal static class TraceContentIdentity
         return content;
     }
 
+    internal static JsonObject CreateLoganWithKind(string objectDefinition, string fusionInput,
+        string fusionSemantic, string? modeInput, string? modeSemantic,
+        string kindInput, string kindSemantic)
+    {
+        if ((modeInput == null) != (modeSemantic == null))
+            throw new InvalidDataException("incomplete-mode-content-components");
+        bool hasMode = modeInput != null;
+        string tag = hasMode ? BattleInputV3 : BattleInputV3KindOnly;
+        IEnumerable<byte> bytes = Encoding.ASCII.GetBytes(tag + "\0")
+            .Concat(DecodeSha(objectDefinition)).Concat(DecodeSha(fusionInput))
+            .Concat(DecodeSha(fusionSemantic));
+        if (hasMode)
+            bytes = bytes.Concat(DecodeSha(modeInput!)).Concat(DecodeSha(modeSemantic!));
+        bytes = bytes.Concat(DecodeSha(kindInput)).Concat(DecodeSha(kindSemantic));
+        JsonObject content = Build("logan-runtime", Convert.ToHexString(SHA256.HashData(bytes.ToArray())));
+        content["scope"] = hasMode ? "catalog-object-fusion-mode-kind-definitions" :
+            "catalog-object-fusion-kind-definitions";
+        content["battleInputContract"] = tag;
+        content["objectDefinitionSha256"] = objectDefinition.ToUpperInvariant();
+        content["fusionInputSha256"] = fusionInput.ToUpperInvariant();
+        content["fusionSemanticSha256"] = fusionSemantic.ToUpperInvariant();
+        if (hasMode)
+        {
+            content["modeInputSha256"] = modeInput!.ToUpperInvariant();
+            content["modeSemanticSha256"] = modeSemantic!.ToUpperInvariant();
+        }
+        content["kindInputSha256"] = kindInput.ToUpperInvariant();
+        content["kindSemanticSha256"] = kindSemantic.ToUpperInvariant();
+        content["schemas"]!["aggregate"] = 28;
+        content["schemas"]!["checksum"] = 31;
+        return content;
+    }
+
     private static JsonObject Build(string profile, string rawDefinition)
     {
         (string scope, string tag) = Profile(profile);
@@ -94,18 +137,30 @@ internal static class TraceContentIdentity
     internal static string Validate(JsonObject content, bool requireLogan = false)
     {
         string profile = Text(content, "profile");
-        bool version2 = profile == "logan-runtime" && content.ContainsKey("battleInputContract");
-        if (version2 && Text(content, "battleInputContract") != BattleInputV2)
+        string contract = profile == "logan-runtime" && content.ContainsKey("battleInputContract")
+            ? Text(content, "battleInputContract") : BattleInputV1;
+        bool version2 = contract == BattleInputV2;
+        bool version3 = contract == BattleInputV3;
+        bool kindOnly = contract == BattleInputV3KindOnly;
+        if (profile == "logan-runtime" && contract != BattleInputV1 &&
+            !version2 && !version3 && !kindOnly)
             throw new InvalidDataException("unknown-content-battle-input-contract");
         if (!TraceContract.HasExactProperties(content,
-            profile == "logan-runtime" ? (version2 ? LoganV2Properties : LoganProperties) : Properties))
+            profile == "logan-runtime" ? (version3 ? LoganV3Properties :
+                kindOnly ? LoganKindOnlyProperties : version2 ? LoganV2Properties : LoganProperties) : Properties))
             throw new InvalidDataException("content-property-set-mismatch");
         if (requireLogan && profile != "logan-runtime")
             throw new InvalidDataException("authority-content-profile-mismatch");
         string raw = Text(content, "rawDefinitionSha256");
         DecodeSha(raw);
         JsonObject expected = profile == "logan-runtime"
-            ? version2
+            ? version3 || kindOnly
+                ? CreateLoganWithKind(Text(content, "objectDefinitionSha256"),
+                    Text(content, "fusionInputSha256"), Text(content, "fusionSemanticSha256"),
+                    version3 ? Text(content, "modeInputSha256") : null,
+                    version3 ? Text(content, "modeSemanticSha256") : null,
+                    Text(content, "kindInputSha256"), Text(content, "kindSemanticSha256"))
+                : version2
                 ? CreateLogan(Text(content, "objectDefinitionSha256"), Text(content, "fusionInputSha256"),
                     Text(content, "fusionSemanticSha256"), Text(content, "modeInputSha256"), Text(content, "modeSemanticSha256"))
                 : CreateLogan(Text(content, "objectDefinitionSha256"), Text(content, "fusionInputSha256"),
@@ -130,10 +185,12 @@ internal static class TraceContentIdentity
         bool historical = Schemas.All(pair => actualSchemas[pair.Key] == pair.Value);
         bool current = Schemas.All(pair => actualSchemas[pair.Key] ==
             (pair.Key == "aggregate" ? 26 : pair.Key == "checksum" ? 29 : pair.Value));
-        if (!current && (version2 || !historical))
+        bool kindCurrent = Schemas.All(pair => actualSchemas[pair.Key] ==
+            (pair.Key == "aggregate" ? 28 : pair.Key == "checksum" ? 31 : pair.Value));
+        if ((version3 || kindOnly) ? !kindCurrent : !current && (version2 || !historical))
             throw new InvalidDataException("content-schema-tuple-mismatch");
-        string contract = profile == "logan-runtime" ? (version2 ? BattleInputV2 : BattleInputV1) : LegacyTag;
-        return profile + "|" + contract + "|" + Text(expected, "rawDefinitionSha256") + "|" +
+        string identityContract = profile == "logan-runtime" ? contract : LegacyTag;
+        return profile + "|" + identityContract + "|" + Text(expected, "rawDefinitionSha256") + "|" +
             Text(expected, "semanticSha256") + "|" + string.Join("|", Schemas.Keys.Select(key => key + "=" + actualSchemas[key]));
     }
 

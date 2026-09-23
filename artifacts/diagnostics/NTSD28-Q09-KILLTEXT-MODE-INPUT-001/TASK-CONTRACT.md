@@ -1,0 +1,13 @@
+# NTSD28-Q09-KILLTEXT-MODE-INPUT-001
+
+Latest status (2026-09-22): `CODE_WRITTEN / OFFLINE_COMPILE_PASS / COMPILED_PARSER_PROBE_PASS / ORIGINAL_EDITOR_RUNTIME_PENDING`. The PLANNED line below is the preserved pre-edit contract; see Change Record and `ACCEPTANCE-PENDING.md` for current evidence.
+
+Status `PLANNED` before script changes, 2026-09-22. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001`, BATCH-05/Q09; source audit `NTSD28-Q08-Q09-KILLTEXT-LIFETIME-HANDOFF-AUDIT-001`.
+
+Authority: formal EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` and playable `GameSession28::initialize_resources` first mode child, `load_native_knockout_feed_config28` in `render_snapshot.cpp` lines 895-988, selected formal `data/mode/ntsd.dat`. The selected child DAT is already captured and byte-hashed by `LoganModeComboInput`; its raw two-DAT fingerprint participates in V2 content identity. A semantic view of that same captured child must use those exact bytes, not a later independent read.
+
+Current Unity has a mode combo parser but no `#killtext` structured input. Implement a nullable immutable knockout-feed record on `LoganModeComboInput`, parsed from its captured selected child bytes through the existing `Lf2DatTokenizer`. Capture the native fields `bound/respond/times/loop/transparency/arest/vrest/y/x/dx/dvx/caughtact/catchingact/pickedact/pickingact`, `pic_type0..6`, repeated `mode`/`id`, and `sound1`/`sound2`; omitted scalars default to native zero, booleans are exactly value 1. Absence of `<bmp_begin>` is distinct from a present `bound:0` record. Preserve virtual resource paths for Q09/Q10; image byte identity/publication and runtime activation are later bounded packages. The current formal selected record is the initial acceptance vector.
+
+Owned script paths before edit: `Assets/NTSD/Scripts/Animation/LoganModeComboInput.cs` and new `Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KilltextModeInputEditorTests.cs` plus its `.meta`. No other script or Scene/Prefab/resource/old-content/nonbattle path is authorized by this Task without a Record amendment.
+
+Risks: accepting a malformed or changed child without the existing double-DAT freshness check would publish a false config; parsing `mode`/`id` as a single scalar would change filters; defaulting an absent record to 70 would change Session expiry. The new parser must not change the existing combo tuple, V2 content identity, publication/rollback, tick, renderer or shutdown ownership. Focused tests check the formal vector, absent record, `bound:0`, repeated values and malformed record; offline compile is distinct from original Editor NUnit/Play. Rollback only this Record's exact diffs after reviewing the dirty tree. No second Unity project or computer-use.

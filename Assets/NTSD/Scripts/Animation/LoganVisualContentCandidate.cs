@@ -100,27 +100,78 @@ namespace NTSD.Animation
             }
         }
 
+        public sealed class NativeKillIconInput
+        {
+            private const int TypeCount = 7;
+
+            public ReadOnlyCollection<ImageInput> Images { get; }
+            public string InputFingerprint { get; }
+
+            private NativeKillIconInput(BattleContentSource source,
+                LoganModeKnockoutFeedInput feed)
+            {
+                var images = new List<ImageInput>(TypeCount);
+                using (var bytes = new MemoryStream())
+                {
+                    using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
+                    {
+                        writer.Write("NTSD28_KILL_ICON_INPUT_V1");
+                        for (int type = 0; type < TypeCount; type++)
+                        {
+                            string virtualPath = feed.TypeResourcePath(type)?.Replace('\\', '/')
+                                ?? string.Empty;
+                            string path = virtualPath.Length == 0
+                                ? string.Empty
+                                : source.ResolveImagePath(virtualPath, null);
+                            ImageInput image = path.Length > 0 && File.Exists(path)
+                                ? new ImageInput(path)
+                                : null;
+                            images.Add(image);
+                            writer.Write(type);
+                            writer.Write(virtualPath);
+                            writer.Write(image != null);
+                            if (image != null)
+                                writer.Write(image.Sha256);
+                        }
+                    }
+                    InputFingerprint = HashBytes(bytes.ToArray());
+                }
+                Images = images.AsReadOnly();
+            }
+
+            public static NativeKillIconInput Capture(BattleContentSource source,
+                LoganModeKnockoutFeedInput feed)
+            {
+                if (source == null || !source.IsLoganRuntime)
+                    throw new ArgumentException("A Logan runtime source is required.", nameof(source));
+                return feed == null ? null : new NativeKillIconInput(source, feed);
+            }
+        }
+
         private readonly Dictionary<string, string> imageHashes;
 
         public LoganObjectCatalog Catalog { get; }
         public NativeWordsInput WordsInput { get; }
+        public NativeKillIconInput KillIconInput { get; }
         public LoganContentIdentity ContentIdentity => Catalog.ContentIdentity;
         public ReadOnlyCollection<ImageInput> Images { get; }
         public string VisualFingerprint { get; }
         public string SourceCacheKey { get; }
 
         private LoganVisualContentCandidate(LoganObjectCatalog catalog, List<ImageInput> images,
-            NativeWordsInput wordsInput)
+            NativeWordsInput wordsInput, NativeKillIconInput killIconInput)
         {
             Catalog = catalog;
             WordsInput = wordsInput;
+            KillIconInput = killIconInput;
             Images = images.AsReadOnly();
             imageHashes = images.ToDictionary(image => image.Path, image => image.Sha256, StringComparer.Ordinal);
             using (var bytes = new MemoryStream())
             {
                 using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
                 {
-                    writer.Write(wordsInput == null ? "LOGAN_VISUAL_INPUTS_V1" : "LOGAN_VISUAL_INPUTS_V2");
+                    writer.Write(killIconInput != null ? "LOGAN_VISUAL_INPUTS_V3" :
+                        wordsInput == null ? "LOGAN_VISUAL_INPUTS_V1" : "LOGAN_VISUAL_INPUTS_V2");
                     writer.Write(catalog.DefinitionFingerprint);
                     foreach (ImageInput image in images)
                     {
@@ -129,6 +180,11 @@ namespace NTSD.Animation
                     }
                     if (wordsInput != null)
                         writer.Write(wordsInput.InputFingerprint);
+                    if (killIconInput != null)
+                    {
+                        writer.Write(wordsInput != null);
+                        writer.Write(killIconInput.InputFingerprint);
+                    }
                 }
                 using (var hash = SHA256.Create())
                     VisualFingerprint = Hex(hash.ComputeHash(bytes.ToArray()));
@@ -155,7 +211,8 @@ namespace NTSD.Animation
             foreach (string path in paths)
                 images.Add(new ImageInput(path));
             var candidate = new LoganVisualContentCandidate(catalog, images,
-                NativeWordsInput.Capture(source));
+                NativeWordsInput.Capture(source),
+                NativeKillIconInput.Capture(source, catalog.ModeComboInput?.KnockoutFeed));
             candidate.AssertInputsCurrent();
             return candidate;
         }
@@ -168,6 +225,20 @@ namespace NTSD.Animation
             if (!string.Equals(currentWords?.InputFingerprint, WordsInput?.InputFingerprint,
                     StringComparison.Ordinal))
                 throw new InvalidDataException("Logan WORDS resource inputs changed after candidate capture.");
+            NativeKillIconInput currentKillIcons = NativeKillIconInput.Capture(
+                Catalog.Source, Catalog.ModeComboInput?.KnockoutFeed);
+            if (!string.Equals(currentKillIcons?.InputFingerprint,
+                    KillIconInput?.InputFingerprint, StringComparison.Ordinal))
+                throw new InvalidDataException(
+                    "Logan knockout-feed icon inputs changed after candidate capture.");
+            try
+            {
+                Catalog.KindInput.AssertInputsCurrent();
+            }
+            catch (InvalidOperationException error)
+            {
+                throw new InvalidDataException("Logan kind input selection changed after candidate capture.", error);
+            }
             try
             {
                 Catalog.FusionInput.AssertInputsCurrent();

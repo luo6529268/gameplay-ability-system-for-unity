@@ -21,7 +21,7 @@ namespace NTSD.Test.Editor
             "artifacts/diagnostics/NTSD28-Q07-NARUTO-CLONE-CENTRAL-PIXEL-WITNESS-001";
         private const string FormalRoot = "Assets/NTSD/Content/LoganRuntime";
         private const string FormalFingerprint =
-            "FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB";
+            "B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45";
         private const int CaptureWidth = 960;
         private const int TimeoutTicks = 75;
         private static readonly Color32 ClearColor = new Color32(255, 255, 255, 255);

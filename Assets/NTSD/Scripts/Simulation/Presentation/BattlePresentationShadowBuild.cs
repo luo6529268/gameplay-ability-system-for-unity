@@ -892,6 +892,8 @@ namespace NTSD.Simulation.Presentation
         private BattlePresentationEntitySnapshot[] entities = new BattlePresentationEntitySnapshot[16];
         private int[] presentationOrderIndices = new int[16];
         private BattlePresentationHitRecordSnapshot[] hitRecords = new BattlePresentationHitRecordSnapshot[16];
+        private BattleKnockoutFeedRowSnapshot[] knockoutFeedRows =
+            new BattleKnockoutFeedRowSnapshot[8];
         private BattleRenderCommand[] commands = new BattleRenderCommand[64];
         private readonly char[,] slotLabelChars = new char[10, 12];
         private readonly int[] slotLabelState = new int[10];
@@ -902,6 +904,9 @@ namespace NTSD.Simulation.Presentation
         public int TickIndex { get; internal set; }
         public int EntityCount { get; internal set; }
         public int HitRecordCount { get; internal set; }
+        public int KnockoutFeedRowCount { get; internal set; }
+        public int KnockoutFeedNativeRecordCount { get; internal set; }
+        public int KnockoutFeedMissingActorCount { get; internal set; }
         public int CommandCount { get; internal set; }
         public bool PresentationOrderMaterialized { get; internal set; }
         public bool CommandsMaterialized { get; internal set; }
@@ -913,11 +918,19 @@ namespace NTSD.Simulation.Presentation
         public string CommonShadowDiagnostic { get; internal set; } = string.Empty;
         public int EntityCapacity => entities.Length;
         public int HitRecordCapacity => hitRecords.Length;
+        public int KnockoutFeedRowCapacity => knockoutFeedRows.Length;
         public int CommandCapacity => commands.Length;
         internal char[,] SlotLabelChars => slotLabelChars;
         internal int[] SlotLabelState => slotLabelState;
         public BattleSpriteCatalog BoundCatalogForAcceptance => boundCatalog;
         internal BattleSpriteCatalog BoundCatalog => boundCatalog;
+
+        public BattleKnockoutFeedRowSnapshot GetKnockoutFeedRow(int index)
+        {
+            if ((uint)index >= (uint)KnockoutFeedRowCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return knockoutFeedRows[index];
+        }
 
         public BattlePresentationEntitySnapshot GetEntity(int index)
         {
@@ -989,6 +1002,7 @@ namespace NTSD.Simulation.Presentation
                     ReleasePublicationBinding();
                     EnsureEntityCapacity(source.EntityCount);
                     EnsureHitRecordCapacity(source.HitRecordCount);
+                    EnsureCapacity(ref knockoutFeedRows, source.KnockoutFeedRowCount);
                     EnsureCommandCapacity(source.CommandCount);
                     Array.Copy(source.entities, entities, source.EntityCount);
                     if (source.usesIndexedPresentationOrder)
@@ -999,6 +1013,8 @@ namespace NTSD.Simulation.Presentation
                             source.EntityCount);
                     }
                     Array.Copy(source.hitRecords, hitRecords, source.HitRecordCount);
+                    Array.Copy(source.knockoutFeedRows, knockoutFeedRows,
+                        source.KnockoutFeedRowCount);
                     Array.Copy(source.commands, commands, source.CommandCount);
                     Array.Copy(source.slotLabelChars, slotLabelChars, source.slotLabelChars.Length);
                     Array.Copy(source.slotLabelState, slotLabelState, source.slotLabelState.Length);
@@ -1006,6 +1022,11 @@ namespace NTSD.Simulation.Presentation
                     TickIndex = source.TickIndex;
                     EntityCount = source.EntityCount;
                     HitRecordCount = source.HitRecordCount;
+                    KnockoutFeedRowCount = source.KnockoutFeedRowCount;
+                    KnockoutFeedNativeRecordCount =
+                        source.KnockoutFeedNativeRecordCount;
+                    KnockoutFeedMissingActorCount =
+                        source.KnockoutFeedMissingActorCount;
                     CommandCount = source.CommandCount;
                     PresentationOrderMaterialized = source.PresentationOrderMaterialized;
                     usesIndexedPresentationOrder = source.usesIndexedPresentationOrder;
@@ -1035,6 +1056,9 @@ namespace NTSD.Simulation.Presentation
             TickIndex = tickIndex;
             EntityCount = 0;
             HitRecordCount = 0;
+            KnockoutFeedRowCount = 0;
+            KnockoutFeedNativeRecordCount = 0;
+            KnockoutFeedMissingActorCount = 0;
             CommandCount = 0;
             PresentationOrderMaterialized = false;
             usesIndexedPresentationOrder = false;
@@ -1169,6 +1193,12 @@ namespace NTSD.Simulation.Presentation
         {
             EnsureHitRecordCapacity(HitRecordCount + 1);
             hitRecords[HitRecordCount++] = hitRecord;
+        }
+
+        internal void AddKnockoutFeedRow(in BattleKnockoutFeedRowSnapshot row)
+        {
+            EnsureCapacity(ref knockoutFeedRows, KnockoutFeedRowCount + 1);
+            knockoutFeedRows[KnockoutFeedRowCount++] = row;
         }
 
         internal void AddCommand(in BattleRenderCommand command)
@@ -1362,6 +1392,8 @@ namespace NTSD.Simulation.Presentation
             new BattleSpriteMaterialClassifier();
         private readonly BattlePresentationFrame frameA = new BattlePresentationFrame();
         private readonly BattlePresentationFrame frameB = new BattlePresentationFrame();
+        private readonly BattleKnockoutFeedRowProjection knockoutFeedRowProjection =
+            new BattleKnockoutFeedRowProjection();
         private readonly BattleHitRecordPresentationCycle hitRecordCycleA =
             new BattleHitRecordPresentationCycle();
         private readonly BattleHitRecordPresentationCycle hitRecordCycleB =
@@ -1840,6 +1872,27 @@ namespace NTSD.Simulation.Presentation
             Diagnostics.FirstActualProbe = default;
         }
 
+        internal void ConfigureKnockoutFeedNames(NTSD.App.MatchConfig config)
+        {
+            knockoutFeedRowProjection.SetNames(config);
+        }
+
+        internal void ConfigureKnockoutFeedContent(LoganObjectCatalog catalog)
+        {
+            knockoutFeedRowProjection.SetFeed(catalog);
+        }
+
+        internal void ConfigureKnockoutFeedContent(
+            LoganModeKnockoutFeedInput feed, BattleContentSource source)
+        {
+            knockoutFeedRowProjection.SetFeed(feed, source);
+        }
+
+        internal void ClearKnockoutFeedSession()
+        {
+            knockoutFeedRowProjection.SetNames(null);
+        }
+
         public void CompleteLegacyFrame()
         {
             if (!awaitingLegacyCompletion)
@@ -2155,6 +2208,7 @@ namespace NTSD.Simulation.Presentation
                 {
                     spriteCaptureCache.Clear();
                     frame.Reset(tickIndex, commonVisualCatalog);
+                    knockoutFeedRowProjection.Project(world, tickIndex, frame);
                     Array.Copy(
                         world.Runtime.SlotLabels.BattleSlotLabels,
                         frame.SlotLabelChars,

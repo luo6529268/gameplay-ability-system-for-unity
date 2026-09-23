@@ -24,6 +24,43 @@ internal static class B0DomainRawContractSelfTest
         string unity = BuildCapture(B0DomainRawContract.UnityProducer);
         RunValidationCase(report, "authority-valid", "valid-b0-domain-raw", authority);
         RunValidationCase(report, "unity-valid", "valid-b0-domain-raw", unity);
+        RunValidationCase(report, "unity-ai-diagnostic-valid", "valid-b0-domain-raw",
+            MutateTick(unity, 1, tick => tick["aiAcceptedTrace"] = new JsonObject
+            {
+                ["committed"] = 0,
+                ["eligible"] = 0,
+                ["fallback"] = 0,
+                ["firstFallbackReason"] = "None",
+                ["oracleMismatch"] = 0,
+            }));
+        RunValidationCase(report, "authority-ai-diagnostic-rejected", "invalid",
+            MutateTick(authority, 1, tick => tick["aiAcceptedTrace"] = new JsonObject
+            {
+                ["committed"] = 0,
+                ["eligible"] = 0,
+                ["fallback"] = 0,
+                ["firstFallbackReason"] = "None",
+                ["oracleMismatch"] = 0,
+            }));
+        RunValidationCase(report, "unity-ai-diagnostic-malformed-rejected", "invalid",
+            MutateTick(unity, 1, tick => tick["aiAcceptedTrace"] = new JsonObject
+            {
+                ["committed"] = -1,
+                ["eligible"] = 0,
+                ["fallback"] = 0,
+                ["firstFallbackReason"] = "None",
+                ["oracleMismatch"] = 0,
+            }));
+        RunValidationCase(report, "unity-ai-diagnostic-extra-field-rejected", "invalid",
+            MutateTick(unity, 1, tick => tick["aiAcceptedTrace"] = new JsonObject
+            {
+                ["committed"] = 0,
+                ["eligible"] = 0,
+                ["fallback"] = 0,
+                ["firstFallbackReason"] = "None",
+                ["oracleMismatch"] = 0,
+                ["unexpected"] = 1,
+            }));
         RunValidationCase(
             report,
             "truncated",
@@ -95,6 +132,71 @@ internal static class B0DomainRawContractSelfTest
             "invalid",
             MutateTick(authority, 1, tick =>
                 tick["rng"]!["authorityCrt"]!["totalCalls"] = null));
+
+        const string v2Schema = "ntsd28-logan-b0-domain-raw-v2";
+        RunCase(report, "v2-descriptor", "descriptor-valid", () =>
+        {
+            JsonObject descriptor = JsonSerializer.SerializeToNode(
+                B0DomainRawContract.CreateDescriptor(v2Schema), CompactOptions)!.AsObject();
+            return descriptor["schema"]!.GetValue<string>() == B0DomainRawContract.DescriptorSchemaV2 &&
+                   descriptor["rawSchema"]!.GetValue<string>() == v2Schema &&
+                   !descriptor["certificateEligible"]!.GetValue<bool>() &&
+                   descriptor["lifecycleDelta"]!["provenance"]!.GetValue<string>() == "snapshot-derived" &&
+                   TraceContract.SequenceEqual(descriptor["lifecycleDelta"]!["eventKinds"]!.AsArray(),
+                       new[] { "birth", "death", "reuse", "object-id-change" })
+                ? "descriptor-valid" : "descriptor-invalid";
+        });
+        string v2 = MutateHeader(authority, header => header["schema"] = v2Schema);
+        RunValidationCase(report, "v2-existing-lifecycle-valid", "valid-b0-domain-raw", v2);
+        string changedId = MutateTick(v2, 2, tick =>
+        {
+            tick["slots"]!["occupants"]![0]!["allocationEpoch"] = 1;
+            tick["lifecycleDelta"]!["events"]![0] =
+                Event("object-id-change", 0, 1, 1, 2, 9);
+        });
+        RunValidationCase(report, "v2-object-id-change-valid", "valid-b0-domain-raw", changedId);
+        RunValidationCase(report, "v1-object-id-change-still-rejected", "invalid",
+            MutateHeader(changedId, header => header["schema"] = B0DomainRawContract.Schema));
+        RunValidationCase(report, "v2-object-id-change-missing", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]!.AsArray().RemoveAt(0)));
+        RunValidationCase(report, "v2-object-id-change-wrong-kind", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]![0]!["kind"] = "reuse"));
+        RunValidationCase(report, "v2-object-id-change-wrong-epoch", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]![0]!["currentAllocationEpoch"] = 2));
+        RunValidationCase(report, "v2-object-id-change-wrong-id", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]![0]!["previousObjectId"] = 77));
+        RunValidationCase(report, "v2-object-id-change-extra-field", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]![0]!["unexpected"] = 1));
+        RunValidationCase(report, "v2-object-id-change-extra-event", "invalid",
+            MutateTick(changedId, 2, tick => tick["lifecycleDelta"]!["events"]!.AsArray().Add(
+                Event("object-id-change", 0, 1, 1, 2, 9))));
+        RunValidationCase(report, "v2-lifecycle-order-rejected", "invalid",
+            MutateTick(changedId, 2, tick =>
+            {
+                JsonArray events = tick["lifecycleDelta"]!["events"]!.AsArray();
+                tick["lifecycleDelta"]!["events"] = new JsonArray(events[1]!.DeepClone(), events[0]!.DeepClone());
+            }));
+        RunValidationCase(report, "v2-unchanged-id-false-event-rejected", "invalid",
+            MutateTick(changedId, 2, tick => tick["slots"]!["occupants"]![0]!["objectId"] = 2));
+        RunValidationCase(report, "v2-reuse-mislabeled-as-id-change-rejected", "invalid",
+            MutateTick(changedId, 2, tick => tick["slots"]!["occupants"]![0]!["allocationEpoch"] = 2));
+        foreach (string producerCapture in new[] { authority, unity })
+        {
+            bool isUnity = producerCapture == unity;
+            string diagnosticV2 = MutateTick(
+                MutateHeader(producerCapture, header => header["schema"] = v2Schema), 1,
+                tick => tick["aiAcceptedTrace"] = new JsonObject
+                {
+                    ["committed"] = 0, ["eligible"] = 0, ["fallback"] = 0,
+                    ["firstFallbackReason"] = "None", ["oracleMismatch"] = 0,
+                });
+            RunValidationCase(report, isUnity ? "v2-unity-ai-diagnostic-valid" : "v2-authority-ai-diagnostic-rejected",
+                isUnity ? "valid-b0-domain-raw" : "invalid", diagnosticV2);
+        }
+        RunValidationCase(report, "v2-zero-epoch-rejected", "invalid",
+            MutateTick(changedId, 2, tick => tick["slots"]!["occupants"]![0]!["allocationEpoch"] = 0));
+        RunValidationCase(report, "v2-decreased-epoch-rejected", "invalid",
+            MutateHeader(changedId, header => header["initialOccupants"]![0]!["allocationEpoch"] = 2));
 
         report.Passed = report.Cases.All(test => test.Passed);
         return report;

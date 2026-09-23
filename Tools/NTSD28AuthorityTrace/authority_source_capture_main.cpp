@@ -1,6 +1,7 @@
 #include "ntsd28_playable/game_session.h"
 #include "ntsd28_playable/scenario28.h"
 #include "ntsd28/fusion_catalog.h"
+#include "ntsd28/kind_catalog.h"
 #include "ntsd28/native_combo_hud.h"
 
 #ifndef NOMINMAX
@@ -328,10 +329,57 @@ bool same_combo(const ntsd28::NativeComboHud28& a, const ntsd28::NativeComboHud2
         a.picture_virtual_path == b.picture_virtual_path && a.name == b.name;
 }
 
+// Alignment contract: NTSD28-R15-NATIVE-KIND-V3-CAPTURE-001.
+struct KindContentInput28 {
+    std::filesystem::path selected_path;
+    int selected_priority = -1;
+    Bytes28 input_hash, semantic_hash;
+};
+
+KindContentInput28 capture_kind_input(const std::filesystem::path& decoded_root,
+                                      const std::filesystem::path& extracted_root) {
+    KindContentInput28 result;
+    std::vector<std::filesystem::path> candidates;
+    if (!decoded_root.empty()) candidates.push_back(decoded_root / "data" / "kind.dat");
+    for (const auto& suffix : {std::filesystem::path("data"), std::filesystem::path("dat/data"),
+                              std::filesystem::path("assets/data"), std::filesystem::path("NTSD2.8/data")})
+        candidates.push_back(extracted_root / suffix / "kind.dat");
+    result.selected_path = select_mode_candidate(candidates, result.selected_priority);
+    Bytes28 file_bytes;
+    ntsd28::KindCatalog28 catalog;
+    if (result.selected_path.empty()) catalog = ntsd28::KindCatalog28::locked_runtime_table_2833();
+    else {
+        file_bytes = content_read_bytes(result.selected_path);
+        catalog = ntsd28::KindCatalog28::parse_text(
+            std::string(file_bytes.begin(), file_bytes.end()));
+    }
+    if (!catalog.ok()) throw std::runtime_error("selected kind content failed strict parsing");
+    Bytes28 semantic;
+    content_string(semantic, "NTSD28-KIND-SEMANTIC-v1");
+    content_int32(semantic, static_cast<int>(catalog.records().size()));
+    for (const auto& record : catalog.records()) {
+        content_int32(semantic, record.effect);
+        content_int32(semantic, record.frame);
+        content_int32(semantic, static_cast<int>(record.bound_ids.size()));
+        for (int id : record.bound_ids) content_int32(semantic, id);
+        content_int32(semantic, static_cast<int>(record.respond_ids.size()));
+        for (int id : record.respond_ids) content_int32(semantic, id);
+    }
+    result.semantic_hash = content_sha256(semantic);
+    Bytes28 input;
+    content_string(input, "NTSD28-KIND-INPUT-v1");
+    content_string(input, result.selected_path.empty() ? "LOCKED_TABLE" : "FILE");
+    content_string(input, content_hex(result.selected_path.empty()
+        ? result.semantic_hash : content_sha256(file_bytes)));
+    result.input_hash = content_sha256(input);
+    return result;
+}
+
 struct BattleContentInput28 {
     Bytes28 object_hash;
     FusionContentInput28 fusion;
     ModeContentInput28 mode;
+    KindContentInput28 kind;
     Bytes28 composite_hash;
 };
 BattleContentInput28 capture_battle_content(const std::filesystem::path& resource_root,
@@ -341,12 +389,17 @@ BattleContentInput28 capture_battle_content(const std::filesystem::path& resourc
     result.fusion = capture_fusion_input(complete_vfs_root.empty() ? std::filesystem::path{} :
         complete_vfs_root / "decoded_dat", resource_root);
     result.mode = capture_mode_input(resource_root, complete_vfs_root);
+    result.kind = capture_kind_input(complete_vfs_root.empty() ? std::filesystem::path{} :
+        complete_vfs_root / "decoded_dat", resource_root);
     const std::string tag = result.mode.parent_path.empty()
-        ? "NTSD28_LOGAN_BATTLE_INPUTS_V1" : "NTSD28_LOGAN_BATTLE_INPUTS_V2";
+        ? "NTSD28_LOGAN_BATTLE_INPUTS_V3_KIND_ONLY" : "NTSD28_LOGAN_BATTLE_INPUTS_V3";
     Bytes28 bytes(tag.begin(), tag.end()); bytes.push_back(0);
     for (const auto* digest : {&result.object_hash, &result.fusion.input_hash, &result.fusion.semantic_hash})
         bytes.insert(bytes.end(), digest->begin(), digest->end());
-    for (const auto* digest : {&result.mode.input_hash, &result.mode.semantic_hash})
+    if (!result.mode.parent_path.empty())
+        for (const auto* digest : {&result.mode.input_hash, &result.mode.semantic_hash})
+            bytes.insert(bytes.end(), digest->begin(), digest->end());
+    for (const auto* digest : {&result.kind.input_hash, &result.kind.semantic_hash})
         bytes.insert(bytes.end(), digest->begin(), digest->end());
     result.composite_hash = content_sha256(bytes);
     return result;
@@ -361,7 +414,11 @@ bool same_battle_content(const BattleContentInput28& left, const BattleContentIn
            left.mode.child_priority == right.mode.child_priority &&
            left.mode.child_virtual_path == right.mode.child_virtual_path &&
            left.mode.input_hash == right.mode.input_hash &&
-           left.mode.semantic_hash == right.mode.semantic_hash;
+           left.mode.semantic_hash == right.mode.semantic_hash &&
+           left.kind.selected_path == right.kind.selected_path &&
+           left.kind.selected_priority == right.kind.selected_priority &&
+           left.kind.input_hash == right.kind.input_hash &&
+           left.kind.semantic_hash == right.kind.semantic_hash;
 }
 
 std::string capture_content_json(const BattleContentInput28& content) {
@@ -378,19 +435,22 @@ std::string capture_content_json(const BattleContentInput28& content) {
     std::ostringstream hex_projection;
     hex_projection << std::uppercase << std::hex << std::setw(16) << std::setfill('0') << projection;
     const std::string mode_fields = content.mode.parent_path.empty() ? "" :
-        "\"battleInputContract\":\"NTSD28_LOGAN_BATTLE_INPUTS_V2\","
         "\"modeInputSha256\":\"" + content_hex(content.mode.input_hash) +
         "\",\"modeSemanticSha256\":\"" + content_hex(content.mode.semantic_hash) + "\",";
     return "{\"policy\":\"logan-dat-character-images\",\"scope\":\"" +
-        std::string(content.mode.parent_path.empty() ? "catalog-object-fusion-definitions" :
-            "catalog-object-fusion-mode-definitions") + "\"," + mode_fields +
+        std::string(content.mode.parent_path.empty() ? "catalog-object-fusion-kind-definitions" :
+            "catalog-object-fusion-mode-kind-definitions") + "\",\"battleInputContract\":\"" +
+        (content.mode.parent_path.empty() ? "NTSD28_LOGAN_BATTLE_INPUTS_V3_KIND_ONLY" :
+            "NTSD28_LOGAN_BATTLE_INPUTS_V3") + "\"," + mode_fields +
         "\"profile\":\"logan-runtime\",\"objectDefinitionSha256\":\"" + content_hex(content.object_hash) +
         "\",\"fusionInputSha256\":\"" + content_hex(content.fusion.input_hash) +
         "\",\"fusionSemanticSha256\":\"" + content_hex(content.fusion.semantic_hash) +
+        "\",\"kindInputSha256\":\"" + content_hex(content.kind.input_hash) +
+        "\",\"kindSemanticSha256\":\"" + content_hex(content.kind.semantic_hash) +
         "\",\"rawDefinitionSha256\":\"" + content_hex(raw) +
         "\",\"decodeContract\":\"" + tag + "\",\"semanticSha256\":\"" + content_hex(semantic) +
         "\",\"catalogFingerprint64\":\"" + hex_projection.str() +
-        "\",\"schemas\":{\"entityRuntime\":17,\"aggregate\":26,\"checksum\":29,"
+        "\",\"schemas\":{\"entityRuntime\":17,\"aggregate\":28,\"checksum\":31,"
         "\"characterShell\":2,\"entityBaseShell\":2}}";
 }
 
@@ -398,6 +458,8 @@ struct Options28 {
     std::filesystem::path scenario;
     std::filesystem::path output;
     std::filesystem::path domain_output;
+    bool domain_v2 = false;
+    bool domain_version_specified = false;
     std::filesystem::path b2_input_rng_output;
     std::filesystem::path resource_root;
     std::filesystem::path complete_vfs_root;
@@ -455,6 +517,11 @@ bool parse_options(int count, wchar_t** arguments, Options28& output) {
         if (option == L"--scenario") output.scenario = value;
         else if (option == L"--output") output.output = value;
         else if (option == L"--domain-output") output.domain_output = value;
+        else if (option == L"--domain-version") {
+            if (output.domain_version_specified || (value != L"1" && value != L"2")) return false;
+            output.domain_version_specified = true;
+            output.domain_v2 = value == L"2";
+        }
         else if (option == L"--b2-input-rng-output") {
             output.b2_input_rng_output = value;
         }
@@ -471,6 +538,7 @@ bool parse_options(int count, wchar_t** arguments, Options28& output) {
             return false;
         }
     }
+    if (output.domain_version_specified && output.domain_output.empty()) return false;
     std::array<std::filesystem::path, 3> outputs{{
         output.output,
         output.domain_output,
@@ -614,7 +682,8 @@ void write_domain_event(std::ostream& output,
 
 void write_domain_events(std::ostream& output,
                          const DomainOccupants28& previous,
-                         const DomainOccupants28& current) {
+                         const DomainOccupants28& current,
+                         bool domain_v2) {
     std::map<std::size_t, bool> slots;
     for (const auto& [slot, occupant] : previous) {
         static_cast<void>(occupant);
@@ -660,8 +729,18 @@ void write_domain_events(std::ostream& output,
         const auto& new_value = new_iterator->second;
         if (old_value.allocation_epoch == new_value.allocation_epoch) {
             if (old_value.object_id != new_value.object_id) {
-                throw std::runtime_error(
-                    "domain occupant changed without allocation epoch");
+                if (!domain_v2) {
+                    throw std::runtime_error(
+                        "domain occupant changed without allocation epoch");
+                }
+                write_domain_event(output,
+                                   first,
+                                   "object-id-change",
+                                   slot,
+                                   old_value.allocation_epoch,
+                                   new_value.allocation_epoch,
+                                   old_value.object_id,
+                                   new_value.object_id);
             }
             continue;
         }
@@ -794,7 +873,8 @@ void write_domain_header(
     const ntsd28::NativeRandomState28& initial_random,
     const DomainOccupants28& initial_occupants) {
     output << "{\"kind\":\"header\""
-           << ",\"schema\":\"ntsd28-logan-b0-domain-raw-v1\""
+           << ",\"schema\":\"ntsd28-logan-b0-domain-raw-v"
+           << (options.domain_v2 ? "2" : "1") << "\""
            << ",\"producer\":\"authority-source-model\""
            << ",\"evidenceClass\":\"SOURCE_MODEL_DIAGNOSTIC_ONLY\""
            << ",\"certificateEligible\":false"
@@ -831,7 +911,8 @@ void write_domain_tick(
                      ntsd28_playable::maximum_native_combatants28>& buttons,
     const ntsd28::NativeRandomState28& previous_random,
     const DomainOccupants28& previous_occupants,
-    const DomainOccupants28& current_occupants) {
+    const DomainOccupants28& current_occupants,
+    bool domain_v2) {
     const auto* world = session.world();
     if (world == nullptr) {
         throw std::runtime_error("domain capture world is missing");
@@ -878,7 +959,7 @@ void write_domain_tick(
     write_domain_occupants(output, current_occupants);
     output << "},\"lifecycleDelta\":{"
            << "\"provenance\":\"snapshot-derived\",\"events\":";
-    write_domain_events(output, previous_occupants, current_occupants);
+    write_domain_events(output, previous_occupants, current_occupants, domain_v2);
     output << "}}\n";
 }
 
@@ -1106,7 +1187,7 @@ int run(int count, wchar_t** arguments) {
     Options28 options;
     if (!parse_options(count, arguments, options)) {
         std::cerr << "usage: authority_source_capture --scenario <json> "
-                     "--output <jsonl> [--domain-output <jsonl>] "
+                     "--output <jsonl> [--domain-output <jsonl>] [--domain-version <1|2>] "
                      "[--b2-input-rng-output <jsonl>] "
                      "--resource-root <folder> "
                      "--complete-vfs-root <folder> "
@@ -1222,7 +1303,8 @@ int run(int count, wchar_t** arguments) {
                               buttons,
                               previous_random,
                               previous_occupants,
-                              current_occupants);
+                              current_occupants,
+                              options.domain_v2);
             previous_occupants = std::move(current_occupants);
         }
         if (b2_input_rng_output) {

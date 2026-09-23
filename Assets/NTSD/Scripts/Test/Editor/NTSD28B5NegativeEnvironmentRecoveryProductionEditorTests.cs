@@ -147,6 +147,36 @@ namespace NTSD.Test.Editor
             Assert.That(replacement.Runtime.KnockoutCount358, Is.EqualTo(13));
             Assert.That(released.Runtime.InputScoreTotal348, Is.EqualTo(101));
             Assert.That(released.Runtime.KnockoutCount358, Is.EqualTo(103));
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.VictimSlot, Is.EqualTo(0));
+            Assert.That(knockout.SourceSlot, Is.EqualTo(2));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(2));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void LethalMissingImpactSourceStillRecordsCreditedEvent()
+        {
+            SimulationWorld world = World(
+                BattleEcsCharacterRecoveryPassMode.DataOriented);
+            LF2Character victim = Character(world, 0, 9988);
+            LF2Character credit = Character(world, 1, 9989);
+            ArrangeVictim(victim, hp: 5, hpBound: 5);
+            victim.Runtime.CatchSourceSlot90 = 1;
+            victim.Runtime.ImpactSourceSlot164 = -1;
+            world.Runtime.NativeHitResourceRules.NegativeEnvironmentDamage90 = 9;
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(1));
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.SourceSlot, Is.EqualTo(1000));
+            Assert.That(knockout.SourceObjectType, Is.EqualTo(-1));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(1000));
+            Assert.That(knockout.VictimSlot, Is.EqualTo(0));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(1));
         }
 
         [Test]
@@ -171,6 +201,7 @@ namespace NTSD.Test.Editor
             Assert.That(victim.Runtime.InputHpConsumedTotal34C, Is.EqualTo(14));
             Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(3));
             Assert.That(credit.Runtime.KnockoutCount358, Is.EqualTo(5));
+            Assert.That(world.NativeKnockoutEvents, Is.Empty);
         }
 
         [TestCase(BattleEcsCharacterRecoveryPassMode.DataOriented)]

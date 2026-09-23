@@ -13,12 +13,16 @@ namespace NTSD.Animation
         public const string CurrentDecodeContractTag = "NTSD28_LOGAN_DAT_SEMANTICS_V3";
         private const string BattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V1";
         private const string ModeBattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V2";
+        private const string KindOnlyBattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V3_KIND_ONLY";
+        private const string KindModeBattleInputTag = "NTSD28_LOGAN_BATTLE_INPUTS_V3";
 
         public string ObjectDefinitionFingerprint { get; }
         public string FusionInputFingerprint { get; }
         public string FusionSemanticFingerprint { get; }
         public string ModeInputFingerprint { get; }
         public string ModeSemanticFingerprint { get; }
+        public string KindInputFingerprint { get; }
+        public string KindSemanticFingerprint { get; }
         public string BattleInputContractTag { get; }
 
         public string RawDefinitionFingerprint { get; }
@@ -55,7 +59,8 @@ namespace NTSD.Animation
         }
 
         private LoganContentIdentity(string composite, string objects, string fusionInput, string fusionSemantic,
-            string modeInput = null, string modeSemantic = null)
+            string modeInput = null, string modeSemantic = null,
+            string kindInput = null, string kindSemantic = null)
             : this(composite, CurrentDecodeContractTag)
         {
             ObjectDefinitionFingerprint = objects;
@@ -63,7 +68,11 @@ namespace NTSD.Animation
             FusionSemanticFingerprint = fusionSemantic;
             ModeInputFingerprint = modeInput;
             ModeSemanticFingerprint = modeSemantic;
-            BattleInputContractTag = modeInput == null ? BattleInputTag : ModeBattleInputTag;
+            KindInputFingerprint = kindInput;
+            KindSemanticFingerprint = kindSemantic;
+            BattleInputContractTag = kindInput != null
+                ? (modeInput == null ? KindOnlyBattleInputTag : KindModeBattleInputTag)
+                : (modeInput == null ? BattleInputTag : ModeBattleInputTag);
         }
 
         public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic)
@@ -74,15 +83,30 @@ namespace NTSD.Animation
         public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic,
             string modeInput, string modeSemantic)
         {
+            return FromBattleComponents(objects, fusionInput, fusionSemantic,
+                modeInput, modeSemantic, null, null);
+        }
+
+        public static LoganContentIdentity FromBattleComponents(string objects, string fusionInput, string fusionSemantic,
+            string modeInput, string modeSemantic, string kindInput, string kindSemantic)
+        {
             if ((modeInput == null) != (modeSemantic == null))
                 throw new ArgumentException("Mode input and semantic fingerprints must be supplied together.");
+            if ((kindInput == null) != (kindSemantic == null))
+                throw new ArgumentException("Kind input and semantic fingerprints must be supplied together.");
             byte[] objectBytes = DecodeFingerprint(objects);
             byte[] inputBytes = DecodeFingerprint(fusionInput);
             byte[] semanticBytes = DecodeFingerprint(fusionSemantic);
             byte[] modeInputBytes = modeInput == null ? null : DecodeFingerprint(modeInput);
             byte[] modeSemanticBytes = modeSemantic == null ? null : DecodeFingerprint(modeSemantic);
-            byte[] tag = Encoding.ASCII.GetBytes(modeInput == null ? BattleInputTag : ModeBattleInputTag);
-            byte[] preimage = new byte[tag.Length + 1 + (modeInput == null ? 96 : 160)];
+            byte[] kindInputBytes = kindInput == null ? null : DecodeFingerprint(kindInput);
+            byte[] kindSemanticBytes = kindSemantic == null ? null : DecodeFingerprint(kindSemantic);
+            string inputTag = kindInputBytes != null
+                ? (modeInputBytes == null ? KindOnlyBattleInputTag : KindModeBattleInputTag)
+                : (modeInputBytes == null ? BattleInputTag : ModeBattleInputTag);
+            byte[] tag = Encoding.ASCII.GetBytes(inputTag);
+            byte[] preimage = new byte[tag.Length + 1 + 96 +
+                (modeInputBytes == null ? 0 : 64) + (kindInputBytes == null ? 0 : 64)];
             Buffer.BlockCopy(tag, 0, preimage, 0, tag.Length);
             Buffer.BlockCopy(objectBytes, 0, preimage, tag.Length + 1, 32);
             Buffer.BlockCopy(inputBytes, 0, preimage, tag.Length + 33, 32);
@@ -92,11 +116,19 @@ namespace NTSD.Animation
                 Buffer.BlockCopy(modeInputBytes, 0, preimage, tag.Length + 97, 32);
                 Buffer.BlockCopy(modeSemanticBytes, 0, preimage, tag.Length + 129, 32);
             }
+            if (kindInputBytes != null)
+            {
+                int kindOffset = tag.Length + 97 + (modeInputBytes == null ? 0 : 64);
+                Buffer.BlockCopy(kindInputBytes, 0, preimage, kindOffset, 32);
+                Buffer.BlockCopy(kindSemanticBytes, 0, preimage, kindOffset + 32, 32);
+            }
             using (var sha = SHA256.Create())
                 return new LoganContentIdentity(Hex(sha.ComputeHash(preimage)),
                     Hex(objectBytes), Hex(inputBytes), Hex(semanticBytes),
                     modeInputBytes == null ? null : Hex(modeInputBytes),
-                    modeSemanticBytes == null ? null : Hex(modeSemanticBytes));
+                    modeSemanticBytes == null ? null : Hex(modeSemanticBytes),
+                    kindInputBytes == null ? null : Hex(kindInputBytes),
+                    kindSemanticBytes == null ? null : Hex(kindSemanticBytes));
         }
 
         private static byte[] DecodeFingerprint(string value)

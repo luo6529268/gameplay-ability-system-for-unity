@@ -1,0 +1,258 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "803b671356754cc0b1c7ff170719e493",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790131141855,
+      "finished_unix_ms": 1790131146335,
+      "last_update_unix_ms": 1790131146335,
+      "progress": {
+        "completed": 24,
+        "total": 8241,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790131145925,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.StagedFormalFileMatchesNativeFallbackSemantics",
+        "last_finished_unix_ms": 1790131145928,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 24,
+          "passed": 24,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.7378659,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CaptureFreezesValuesAndRejectsChangedBytesOrHigherPriorityPath",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.CaptureFreezesValuesAndRejectsChangedBytesOrHigherPriorityPath",
+            "state": "Passed",
+            "durationSeconds": 0.0169172,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "EmptyTextIsNativeValidButMalformedCountsAndBomFail",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.EmptyTextIsNativeValidButMalformedCountsAndBomFail",
+            "state": "Passed",
+            "durationSeconds": 0.0010918,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InputFingerprintTracksCommentsButSemanticFingerprintDoesNot",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InputFingerprintTracksCommentsButSemanticFingerprintDoesNot",
+            "state": "Passed",
+            "durationSeconds": 0.0020206,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"+7\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"+7\")",
+            "state": "Passed",
+            "durationSeconds": 0.0007966,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"1.0\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"1.0\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001603,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"1x\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"1x\")",
+            "state": "Passed",
+            "durationSeconds": 0.0001078,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"2147483648\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"2147483648\")",
+            "state": "Passed",
+            "durationSeconds": 9.14e-05,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"-2147483649\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"-2147483649\")",
+            "state": "Passed",
+            "durationSeconds": 8.68e-05,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidNumericFieldCannotBeSilentlyCoerced(\"\")",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidNumericFieldCannotBeSilentlyCoerced(\"\")",
+            "state": "Passed",
+            "durationSeconds": 9.67e-05,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "InvalidSelectedFileDoesNotFallThroughToLowerPriority",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.InvalidSelectedFileDoesNotFallThroughToLowerPriority",
+            "state": "Passed",
+            "durationSeconds": 0.0016018,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "MissingFileFallbackDetectsLaterAppearance",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.MissingFileFallbackDetectsLaterAppearance",
+            "state": "Passed",
+            "durationSeconds": 0.0012101,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeGrammarKeepsLastWriteDefaultsFirstEffectAndWarnings",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeGrammarKeepsLastWriteDefaultsFirstEffectAndWarnings",
+            "state": "Passed",
+            "durationSeconds": 0.0009767,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeRecordLimitKeepsFirstHundredAndReportsError",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeRecordLimitKeepsFirstHundredAndReportsError",
+            "state": "Passed",
+            "durationSeconds": 0.0015104,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeStrictSignedIntegerBoundariesAreAccepted(\"-2147483648\",int.MinValue)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeStrictSignedIntegerBoundariesAreAccepted(\"-2147483648\",int.MinValue)",
+            "state": "Passed",
+            "durationSeconds": 0.0004459,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeStrictSignedIntegerBoundariesAreAccepted(\"2147483647\",int.MaxValue)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeStrictSignedIntegerBoundariesAreAccepted(\"2147483647\",int.MaxValue)",
+            "state": "Passed",
+            "durationSeconds": 0.0001363,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeStrictSignedIntegerBoundariesAreAccepted(\"-0\",0)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeStrictSignedIntegerBoundariesAreAccepted(\"-0\",0)",
+            "state": "Passed",
+            "durationSeconds": 9.89e-05,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeStrictSignedIntegerBoundariesAreAccepted(\"0007\",7)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.NativeStrictSignedIntegerBoundariesAreAccepted(\"0007\",7)",
+            "state": "Passed",
+            "durationSeconds": 0.0001108,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PresentEmptyFileStaysSelectedInsteadOfUsingFallback",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.PresentEmptyFileStaysSelectedInsteadOfUsingFallback",
+            "state": "Passed",
+            "durationSeconds": 0.0011284,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SelectsFirstRegularFileInNativeOrder(0)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.SelectsFirstRegularFileInNativeOrder(0)",
+            "state": "Passed",
+            "durationSeconds": 0.0019523,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SelectsFirstRegularFileInNativeOrder(1)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.SelectsFirstRegularFileInNativeOrder(1)",
+            "state": "Passed",
+            "durationSeconds": 0.0008448,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SelectsFirstRegularFileInNativeOrder(2)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.SelectsFirstRegularFileInNativeOrder(2)",
+            "state": "Passed",
+            "durationSeconds": 0.0004956,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SelectsFirstRegularFileInNativeOrder(3)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.SelectsFirstRegularFileInNativeOrder(3)",
+            "state": "Passed",
+            "durationSeconds": 0.0004388,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "SelectsFirstRegularFileInNativeOrder(4)",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.SelectsFirstRegularFileInNativeOrder(4)",
+            "state": "Passed",
+            "durationSeconds": 0.0003768,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "StagedFormalFileMatchesNativeFallbackSemantics",
+            "fullName": "NTSD.Test.NTSD28Q07KindCatalogInputEditorTests.StagedFormalFileMatchesNativeFallbackSemantics",
+            "state": "Passed",
+            "durationSeconds": 0.0030511,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

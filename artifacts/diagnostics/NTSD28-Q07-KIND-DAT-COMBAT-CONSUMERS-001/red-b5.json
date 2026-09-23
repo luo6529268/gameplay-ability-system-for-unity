@@ -1,0 +1,43 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "784fac29d1bf4c75aa6def869f99b541",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790133223298,
+      "finished_unix_ms": 1790133230037,
+      "last_update_unix_ms": 1790133230037,
+      "progress": {
+        "completed": 9,
+        "total": 8246,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790133229477,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5Type3KindCatalogTransformEditorTests.Transform_PrecedesMatchingStatePairReset",
+        "last_finished_unix_ms": 1790133229481,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5Type3KindCatalogTransformEditorTests.CandidateGate_UsesEffectRespondDirectionAndKind9Exception",
+            "message": "  Native kind-table gate needs target type and selected catalog.\r\n  Expected: 5\r\n  But was:  3\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5Type3KindCatalogTransformEditorTests.SelectedRecordChangesCandidateAndTransformFrame",
+            "message": "  Expected: 5\r\n  But was:  3\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5Type3KindCatalogTransformEditorTests.SelectedRecordOrderZeroFrameAndEmptyTableAreRespected",
+            "message": "  Expected: True\r\n  But was:  False\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

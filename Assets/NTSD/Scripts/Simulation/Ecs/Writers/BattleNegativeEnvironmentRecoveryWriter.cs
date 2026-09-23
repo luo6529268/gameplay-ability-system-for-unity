@@ -49,6 +49,12 @@ namespace NTSD.Simulation.Ecs
             {
                 credit.KnockoutCount358 = unchecked(
                     credit.KnockoutCount358 + 1);
+                world.RecordNativeKnockout(
+                    runtime.SlotIndex,
+                    runtime.ImpactSourceSlot164 >= 0
+                        ? runtime.ImpactSourceSlot164
+                        : 1000,
+                    credit.SlotIndex);
             }
 
             runtime.HP = unchecked(runtime.HP - actualDamage);

@@ -7,6 +7,8 @@ namespace NTSD28Parity;
 internal static class B0DomainRawContract
 {
     internal const string Schema = "ntsd28-logan-b0-domain-raw-v1";
+    internal const string SchemaV2 = "ntsd28-logan-b0-domain-raw-v2";
+    internal const string DescriptorSchemaV2 = "ntsd28-logan-b0-domain-raw-contract-v2";
     internal const string DescriptorSchema = "ntsd28-logan-b0-domain-raw-contract-v1";
     internal const string ValidationSchema = "ntsd28-logan-b0-domain-raw-validation-v1";
     internal const string AuthorityProducer = "authority-source-model";
@@ -35,6 +37,15 @@ internal static class B0DomainRawContract
     private static readonly string[] TickProperties =
     [
         "kind", "completedTick", "input", "rng", "slots", "lifecycleDelta",
+    ];
+    private static readonly string[] UnityTickPropertiesWithAiAcceptedTrace =
+    [
+        ..TickProperties, "aiAcceptedTrace",
+    ];
+    private static readonly string[] AiAcceptedTraceProperties =
+    [
+        "committed", "eligible", "fallback", "firstFallbackReason",
+        "oracleMismatch",
     ];
 
     private static readonly string[] InputProperties =
@@ -82,12 +93,14 @@ internal static class B0DomainRawContract
         "previousObjectId", "currentObjectId",
     ];
 
-    internal static object CreateDescriptor()
+    internal static object CreateDescriptor(string rawSchema = Schema)
     {
+        if (rawSchema is not Schema and not SchemaV2)
+            throw new InvalidDataException("unsupported-raw-schema");
         return new SortedDictionary<string, object?>(StringComparer.Ordinal)
         {
-            ["schema"] = DescriptorSchema,
-            ["rawSchema"] = Schema,
+            ["schema"] = rawSchema == SchemaV2 ? DescriptorSchemaV2 : DescriptorSchema,
+            ["rawSchema"] = rawSchema,
             ["completedTickBoundary"] =
                 "state after one simulation step; host/render frames excluded",
             ["input"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
@@ -117,7 +130,9 @@ internal static class B0DomainRawContract
             ["lifecycleDelta"] = new SortedDictionary<string, object?>(StringComparer.Ordinal)
             {
                 ["provenance"] = SnapshotDerived,
-                ["eventKinds"] = new[] { "birth", "death", "reuse" },
+                ["eventKinds"] = rawSchema == SchemaV2
+                    ? new[] { "birth", "death", "reuse", "object-id-change" }
+                    : new[] { "birth", "death", "reuse" },
                 ["initialSnapshotRequired"] = true,
             },
             ["certificateEligible"] = false,
@@ -201,7 +216,9 @@ internal static class B0DomainRawContract
     {
         RequireExactProperties(header, HeaderProperties, "header-properties");
         RequireString(header, "kind", "header");
-        RequireString(header, "schema", Schema);
+        string rawSchema = RequireString(header, "schema");
+        if (rawSchema != SchemaV2)
+            RequireString(header, "schema", Schema);
         string producer = RequireString(header, "producer");
         if (producer is not AuthorityProducer and not UnityProducer)
         {
@@ -273,6 +290,7 @@ internal static class B0DomainRawContract
             slotCapacity);
         RequireString(header, "lifecycleDeltaProvenance", SnapshotDerived);
         return new HeaderContext(
+            rawSchema,
             producer,
             firstCompletedTick,
             expectedTickCount,
@@ -290,12 +308,19 @@ internal static class B0DomainRawContract
         SortedDictionary<int, Occupant> previousOccupants,
         Dictionary<string, ulong?> previousTotals)
     {
-        RequireExactProperties(tick, TickProperties, "tick-properties");
+        bool hasAiAcceptedTrace = tick.ContainsKey("aiAcceptedTrace");
+        RequireExactProperties(tick,
+            hasAiAcceptedTrace && context.Producer == UnityProducer
+                ? UnityTickPropertiesWithAiAcceptedTrace
+                : TickProperties,
+            "tick-properties");
         RequireString(tick, "kind", "tick");
         if (RequireNonNegativeInt64(tick, "completedTick") != expectedTick)
         {
             throw new InvalidDataException("completed-tick-sequence-mismatch");
         }
+        if (hasAiAcceptedTrace)
+            ValidateUnityAiAcceptedTrace(RequireObject(tick, "aiAcceptedTrace"));
 
         ValidateInput(RequireObject(tick, "input"), context.SlotCapacity);
         Dictionary<string, ulong?> totals = ValidateRng(
@@ -315,8 +340,21 @@ internal static class B0DomainRawContract
         ValidateLifecycleDelta(
             RequireObject(tick, "lifecycleDelta"),
             previousOccupants,
-            occupants);
+            occupants,
+            context.RawSchema == SchemaV2);
         return (occupants, totals);
+    }
+
+    private static void ValidateUnityAiAcceptedTrace(JsonObject trace)
+    {
+        RequireExactProperties(trace, AiAcceptedTraceProperties,
+            "ai-accepted-trace-properties");
+        RequireNonNegativeInt64(trace, "committed");
+        RequireNonNegativeInt64(trace, "eligible");
+        RequireNonNegativeInt64(trace, "fallback");
+        RequireNonNegativeInt64(trace, "oracleMismatch");
+        if (string.IsNullOrWhiteSpace(RequireString(trace, "firstFallbackReason")))
+            throw new InvalidDataException("ai-accepted-trace-reason-empty");
     }
 
     private static void ValidateInput(JsonObject input, int slotCapacity)
@@ -462,7 +500,8 @@ internal static class B0DomainRawContract
     private static void ValidateLifecycleDelta(
         JsonObject lifecycleDelta,
         SortedDictionary<int, Occupant> previous,
-        SortedDictionary<int, Occupant> current)
+        SortedDictionary<int, Occupant> current,
+        bool allowObjectIdChange)
     {
         RequireExactProperties(
             lifecycleDelta,
@@ -470,7 +509,7 @@ internal static class B0DomainRawContract
             "lifecycle-delta-properties");
         RequireString(lifecycleDelta, "provenance", SnapshotDerived);
         JsonArray events = RequireArray(lifecycleDelta, "events");
-        List<LifecycleEvent> expected = DeriveEvents(previous, current);
+        List<LifecycleEvent> expected = DeriveEvents(previous, current, allowObjectIdChange);
         if (events.Count != expected.Count)
         {
             throw new InvalidDataException("lifecycle-event-count-mismatch");
@@ -505,7 +544,8 @@ internal static class B0DomainRawContract
 
     private static List<LifecycleEvent> DeriveEvents(
         SortedDictionary<int, Occupant> previous,
-        SortedDictionary<int, Occupant> current)
+        SortedDictionary<int, Occupant> current,
+        bool allowObjectIdChange)
     {
         var slots = new SortedSet<int>(previous.Keys);
         slots.UnionWith(current.Keys);
@@ -532,8 +572,14 @@ internal static class B0DomainRawContract
             {
                 if (oldValue.ObjectId != newValue.ObjectId)
                 {
-                    throw new InvalidDataException(
-                        "occupant-changed-without-allocation-epoch");
+                    if (!allowObjectIdChange)
+                    {
+                        throw new InvalidDataException(
+                            "occupant-changed-without-allocation-epoch");
+                    }
+                    result.Add(new LifecycleEvent(
+                        "object-id-change", slot, oldValue.AllocationEpoch,
+                        newValue.AllocationEpoch, oldValue.ObjectId, newValue.ObjectId));
                 }
 
                 continue;
@@ -732,6 +778,7 @@ internal static class B0DomainRawContract
     }
 
     private sealed record HeaderContext(
+        string RawSchema,
         string Producer,
         long FirstCompletedTick,
         int ExpectedTickCount,

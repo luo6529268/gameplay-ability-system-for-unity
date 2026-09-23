@@ -1,9 +1,11 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.DatParser;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
 using NUnit.Framework;
@@ -69,21 +71,102 @@ namespace NTSD.Test.Editor
                 "IsBlockedReleaseOidInteraction",
                 BindingFlags.NonPublic | BindingFlags.Static);
             Assert.That(method, Is.Not.Null);
+            Assert.That(method.GetParameters().Length, Is.EqualTo(5),
+                "Native kind-table gate needs target type and selected catalog.");
+
+            LoganKindCatalog catalog = ParseKind(
+                "effect: 209\nframe: 40\nbound: 3\nid: 8\nid: 209\nid: 213\nbound_end:\n" +
+                "respond: 7\nid: 200\nid: 203\nid: 205\nid: 206\nid: 207\nid: 215\nid: 216\nrespond_end:\n");
 
             foreach (int respondId in RespondIds)
             {
                 Assert.That(
-                    InvokeCandidateGate(method, respondId, 209, 0),
+                    InvokeCandidateGate(method, respondId, 209, 3, 0, catalog),
                     Is.True,
                     $"respond={respondId}");
                 Assert.That(
-                    InvokeCandidateGate(method, respondId, 209, 9),
+                    InvokeCandidateGate(method, respondId, 209, 3, 9, catalog),
                     Is.False,
                     $"kind9 respond={respondId}");
             }
 
-            Assert.That(InvokeCandidateGate(method, 209, 200, 0), Is.False);
-            Assert.That(InvokeCandidateGate(method, 210, 209, 0), Is.False);
+            Assert.That(InvokeCandidateGate(method, 209, 200, 3, 0, catalog), Is.False);
+            Assert.That(InvokeCandidateGate(method, 210, 209, 3, 0, catalog), Is.False);
+            Assert.That(InvokeCandidateGate(method, 200, 209, 0, 0, catalog), Is.False);
+        }
+
+        [Test]
+        public void SelectedRecordChangesCandidateAndTransformFrame()
+        {
+            LoganKindCatalog catalog = ParseKind(
+                "effect: 300\nframe: 41\nbound: 1\nid: 8\nbound_end:\n" +
+                "respond: 1\nid: 201\nrespond_end:\n");
+            MethodInfo gate = typeof(BruteForceSceneQuery).GetMethod(
+                "IsBlockedReleaseOidInteraction", BindingFlags.NonPublic | BindingFlags.Static);
+            Assert.That(gate, Is.Not.Null);
+            Assert.That(gate.GetParameters().Length, Is.EqualTo(5));
+            Assert.That(InvokeCandidateGate(gate, 201, 300, 3, 0, catalog), Is.True);
+            Assert.That(InvokeCandidateGate(gate, 201, 300, 0, 0, catalog), Is.False);
+            Assert.That(InvokeCandidateGate(gate, 201, 300, 3, 9, catalog), Is.False);
+            Assert.That(InvokeCandidateGate(gate, 200, 209, 3, 0, catalog), Is.False);
+
+            var world = new SimulationWorld();
+            SetKindCatalog(world, catalog);
+            TypedCharacter attacker = CreateEntity(world, 8, 0, LF2ObjectType.SpecialAttack);
+            TypedCharacter target = CreateEntity(world, 201, 1, LF2ObjectType.SpecialAttack);
+            PrepareTarget(target);
+            Assert.That(BattleDamageWriter.IsNativeLockedKindTransformCandidate(attacker, target), Is.True);
+            InvokeTail(world, attacker, target, Effect());
+            Assert.That(target.ObjectId, Is.EqualTo(8));
+            Assert.That(target.Frame.N, Is.EqualTo(41));
+            Assert.That(target.Frame.Prev, Is.EqualTo(41));
+            Assert.That(target.Trans.WaitCounter, Is.EqualTo(41));
+        }
+
+        [Test]
+        public void SelectedRecordOrderZeroFrameAndEmptyTableAreRespected()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(world, 8, 0, LF2ObjectType.SpecialAttack);
+            TypedCharacter target = CreateEntity(world, 201, 1, LF2ObjectType.SpecialAttack);
+            SetKindCatalog(world, ParseKind(
+                "effect: 300\nframe: 41\nbound: 1\nid: 8\nbound_end:\nrespond: 1\nid: 201\nrespond_end:\n" +
+                "<kind_end>\n<kind>\neffect: 301\nframe: 42\nbound: 1\nid: 8\nbound_end:\nrespond: 1\nid: 201\nrespond_end:\n"));
+            Assert.That(BattleDamageWriter.IsNativeLockedKindTransformCandidate(attacker, target), Is.True);
+            PrepareTarget(target);
+            InvokeTail(world, attacker, target, Effect());
+            Assert.That(target.Frame.Prev, Is.EqualTo(41));
+
+            target.ObjectId = 201;
+            target.FrameCache.Load(new LF2CharacterDataWrapper(201, target.FrameCache.Wrapper.characterData));
+            target.ImmediateFrame(0);
+            SetKindCatalog(world, ParseKind(
+                "effect: 300\nframe: 0\nbound: 1\nid: 8\nbound_end:\nrespond: 1\nid: 201\nrespond_end:\n"));
+            PrepareTarget(target);
+            InvokeTail(world, attacker, target, Effect());
+            Assert.That(target.Frame.Prev, Is.EqualTo(40));
+
+            SetKindCatalog(world, LoganKindCatalogParser.ParseText(string.Empty));
+            Assert.That(BattleDamageWriter.IsNativeLockedKindTransformCandidate(attacker, target), Is.False);
+        }
+
+        [Test]
+        public void SelectedMissingFrameStillTransfersNativeRawAction()
+        {
+            var world = new SimulationWorld();
+            SetKindCatalog(world, ParseKind(
+                "effect: 300\nframe: 999\nbound: 1\nid: 8\nbound_end:\n" +
+                "respond: 1\nid: 201\nrespond_end:\n"));
+            TypedCharacter attacker = CreateEntity(world, 8, 0, LF2ObjectType.SpecialAttack);
+            TypedCharacter target = CreateEntity(world, 201, 1, LF2ObjectType.SpecialAttack);
+            PrepareTarget(target);
+
+            Assert.That(attacker.FrameCache.HasNativeFrame(999), Is.False);
+            InvokeTail(world, attacker, target, Effect());
+            Assert.That(target.ObjectId, Is.EqualTo(8));
+            Assert.That(target.Frame.N, Is.EqualTo(999));
+            Assert.That(target.Frame.Prev, Is.EqualTo(999));
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
         }
 
         [TestCase(8)]
@@ -187,11 +270,26 @@ namespace NTSD.Test.Editor
             MethodInfo method,
             int attackerOid,
             int targetOid,
-            int kind)
+            int targetType,
+            int kind,
+            LoganKindCatalog catalog)
         {
             return (bool)method.Invoke(
                 null,
-                new object[] { attackerOid, targetOid, kind });
+                new object[] { attackerOid, targetOid, targetType, kind, catalog });
+        }
+
+        private static LoganKindCatalog ParseKind(string records)
+        {
+            LoganKindCatalog catalog = LoganKindCatalogParser.ParseText("<kind>\n" + records + "<kind_end>\n");
+            Assert.That(catalog.IsValid, Is.True);
+            return catalog;
+        }
+
+        private static void SetKindCatalog(SimulationWorld world, LoganKindCatalog catalog)
+        {
+            typeof(BattleRuntimeDataCatalog).GetProperty("KindCatalog")
+                .SetValue(world.RuntimeDataCatalog, catalog);
         }
 
         private static void PrepareTarget(TypedCharacter target)

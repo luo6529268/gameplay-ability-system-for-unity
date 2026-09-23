@@ -334,6 +334,10 @@ namespace NTSD.Simulation.Ecs
             {
                 credit.Runtime.KnockoutCount358 = unchecked(
                     credit.Runtime.KnockoutCount358 + 1);
+                world?.RecordNativeKnockout(
+                    victim.Runtime.SlotIndex,
+                    credit.Runtime.SlotIndex,
+                    credit.Runtime.SlotIndex);
             }
 
             victim.Health.HP -= damage;

@@ -58,6 +58,13 @@ internal static class B0DomainRawComparator
             unity.Header,
             B0DomainRawContract.UnityProducer,
             "unity");
+        if (!string.Equals(
+                RequireString(authority.Header, "schema"),
+                RequireString(unity.Header, "schema"),
+                StringComparison.Ordinal))
+        {
+            throw new InvalidDataException("raw-schema-mismatch");
+        }
         string authorityScenario = RequireString(authority.Header, "scenarioId");
         string unityScenario = RequireString(unity.Header, "scenarioId");
         if (!string.Equals(

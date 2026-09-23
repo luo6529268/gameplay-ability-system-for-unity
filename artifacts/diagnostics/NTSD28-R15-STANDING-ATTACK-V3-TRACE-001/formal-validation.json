@@ -1,0 +1,18 @@
+{
+  "schema": "ntsd28-authority-source-capture-validation-v2",
+  "contentIdentityKey": "logan-runtime|NTSD28_LOGAN_BATTLE_INPUTS_V3|E88C4CBAC231E6C6FF47A41EFC86D46B46F74B63A8E0F3ABD30ED37C5C05C36A|B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45|entityRuntime=17|aggregate=28|checksum=31|characterShell=2|entityBaseShell=2",
+  "source": "formal-a.jsonl",
+  "status": "valid-source-model-capture",
+  "valid": true,
+  "certificateEligible": false,
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scenarioId": "input-standing-attack-rng",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "7E2E023D4F0A69D12A09ABAF77BB282053A9E1F3022053C1E4C104E31391D8BA",
+  "captureBinarySha256": "017C9528A680AD3D384A491D047CE869F4019D8ECE46FFDB30AFB0A7CF6D72C0",
+  "scenarioDataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "expectedTicks": 3,
+  "validatedTicks": 3,
+  "entitySnapshots": 6,
+  "reason": null
+}

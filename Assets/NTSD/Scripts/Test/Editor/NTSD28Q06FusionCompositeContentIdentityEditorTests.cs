@@ -114,17 +114,20 @@ namespace NTSD.Test.Editor
             Assert.That(header["fusionSemanticSha256"], Is.EqualTo("81CA495386950C3F8D5F00B43A62934410D4F6F738CD7B720610241E88F8D369"));
             Assert.That(header["modeInputSha256"], Is.EqualTo("9E9FAC26E92E91DE1F8823E3CDFEF7A38C444D90724566BC38F5CACF068075DD"));
             Assert.That(header["modeSemanticSha256"], Is.EqualTo("B92B74AD174178FCBB8C7B11834964BA784A487449AE4EFE401A8EE50B76079B"));
-            Assert.That(header["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V2"));
-            Assert.That(header["rawDefinitionSha256"], Is.EqualTo("33B0341C58D2A708B208F2CA4A0C4DA740E942D49A8A9D82E106F1D1D9C419BE"));
-            Assert.That(header["semanticSha256"], Is.EqualTo("FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB"));
-            Assert.That(header["catalogFingerprint64"], Is.EqualTo("9F40EB3FFF1812FF"));
-            Assert.That(header["scope"], Is.EqualTo("catalog-object-fusion-mode-definitions"));
+            Assert.That(header["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
+            Assert.That(header["rawDefinitionSha256"], Is.EqualTo("E88C4CBAC231E6C6FF47A41EFC86D46B46F74B63A8E0F3ABD30ED37C5C05C36A"));
+            Assert.That(header["semanticSha256"], Is.EqualTo("B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45"));
+            Assert.That(header["catalogFingerprint64"], Is.EqualTo("96DE8D089438B1B8"));
+            Assert.That(header["kindInputSha256"], Is.EqualTo("B18E147AB26065B0668BB0ACCE9DF89C5352ABD6E467ABB89A4E01C3178AF5E0"));
+            Assert.That(header["kindSemanticSha256"], Is.EqualTo("48EE87992BACEC941C70E4176012D4AD4F060CAB7CA551EA8317555D40A703D5"));
+            Assert.That(header["scope"], Is.EqualTo("catalog-object-fusion-mode-kind-definitions"));
             var fallback = LoganFusionCatalogInput.Capture(null, "Temp/virtual", _ => null);
             Assert.That(fallback.SemanticFingerprint, Is.EqualTo(catalog.FusionInput.SemanticFingerprint));
             Assert.That(fallback.InputFingerprint, Is.Not.EqualTo(catalog.FusionInput.InputFingerprint));
             var other = LoganContentIdentity.FromBattleComponents(catalog.DefinitionFingerprint,
                 fallback.InputFingerprint, fallback.SemanticFingerprint,
-                catalog.ContentIdentity.ModeInputFingerprint, catalog.ContentIdentity.ModeSemanticFingerprint);
+                catalog.ContentIdentity.ModeInputFingerprint, catalog.ContentIdentity.ModeSemanticFingerprint,
+                catalog.KindInput.InputFingerprint, catalog.KindInput.SemanticFingerprint);
             Assert.That(other.BattleInputContractTag, Is.EqualTo(catalog.ContentIdentity.BattleInputContractTag));
             Assert.That(other.SemanticFingerprint, Is.Not.EqualTo(catalog.ContentIdentity.SemanticFingerprint));
             File.WriteAllText("Temp/Q06FusionComposite-formal-header.json", JsonConvert.SerializeObject(header, Formatting.Indented));

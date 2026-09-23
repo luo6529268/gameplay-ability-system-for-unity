@@ -1211,12 +1211,23 @@ namespace NTSD.Test
             Assert.That(scenario.CharacterVictim.Runtime.IsFacingLeft, Is.True);
         }
 
-        [Test]
-        public void ShadowCompare_KindTransformEffectOverrideReadsTransferredDefinition()
+        [TestCase(false, 40)]
+        [TestCase(true, 33)]
+        public void ShadowCompare_KindTransformEffectOverrideReadsTransferredDefinition(
+            bool selectedKind, int expectedKindFrame)
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.MobileExtended,
                 BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            if (selectedKind)
+            {
+                var catalog = NTSD.DatParser.LoganKindCatalogParser.ParseText(
+                    "<kind>\neffect: 300\nframe: 33\nbound: 1\nid: 209\nbound_end:\n" +
+                    "respond: 1\nid: 200\nrespond_end:\n<kind_end>\n");
+                Assert.That(catalog.IsValid, Is.True);
+                typeof(BattleRuntimeDataCatalog).GetProperty("KindCatalog")
+                    .SetValue(world.RuntimeDataCatalog, catalog);
+            }
             LF2SpecialAttack attacker = CreateSpecialAttackEntity(
                 world,
                 "HitPlanKindTransformEffectAttacker",
@@ -1266,8 +1277,8 @@ namespace NTSD.Test
             Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero);
             Assert.That(target.ObjectId, Is.EqualTo(209));
             Assert.That(target.Frame.N, Is.EqualTo(30));
-            Assert.That(target.Frame.Prev, Is.EqualTo(40));
-            Assert.That(target.Trans.WaitCounter, Is.EqualTo(40));
+            Assert.That(target.Frame.Prev, Is.EqualTo(expectedKindFrame));
+            Assert.That(target.Trans.WaitCounter, Is.EqualTo(expectedKindFrame));
         }
 
         [TestCase(false)]

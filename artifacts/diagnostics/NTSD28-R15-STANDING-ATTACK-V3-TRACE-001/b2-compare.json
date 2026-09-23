@@ -1,0 +1,10 @@
+{
+  "schema": "ntsd28-logan-b2-input-rng-joint-raw-comparison-v3",
+  "status": "equal-input-rng-joint-raw",
+  "scenarioId": "input-standing-attack-rng",
+  "equal": true,
+  "certificateEligible": false,
+  "ticksCompared": 3,
+  "entityPairsCompared": 6,
+  "firstDifference": null
+}

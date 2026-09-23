@@ -27,6 +27,7 @@ namespace NTSD.Test
             world.Runtime.StageProgression.WaveIdx = 2;
             world.Runtime.Flow.AiMoveMode = 3;
             world.Runtime.Flow.NeedClearInput = true;
+            world.Runtime.NativeKnockoutFeed.RestoreForSnapshot(true, 70);
             world.Rng.Seed(0x12345678U);
             world.Rng.NextRaw();
 
@@ -35,6 +36,7 @@ namespace NTSD.Test
             world.Runtime.Match.LocalGameModeId = 99;
             world.Runtime.Stage.ClearPhaseBound();
             world.Runtime.Flow.AiMoveMode = 0;
+            world.Runtime.NativeKnockoutFeed.Reset();
             world.Rng.NextRaw();
 
             Assert.That(snapshot.SchemaVersion,
@@ -50,6 +52,8 @@ namespace NTSD.Test
             Assert.That(snapshot.Progression.WaveIdx, Is.EqualTo(2));
             Assert.That(snapshot.Flow.AiMoveMode, Is.EqualTo(3));
             Assert.That(snapshot.Flow.NeedClearInput, Is.True);
+            Assert.That(snapshot.NativeKnockoutFeed.RecordPresent, Is.True);
+            Assert.That(snapshot.NativeKnockoutFeed.LifetimeTicks, Is.EqualTo(70));
             Assert.That(snapshot.RngCallCount, Is.EqualTo(1UL));
         }
 

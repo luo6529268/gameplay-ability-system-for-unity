@@ -1,0 +1,20 @@
+{
+    "runId": "q07-menu-scene-closure-2",
+    "status": "PASS",
+    "phase": "unload",
+    "message": "Actual Menu Scene component callbacks reached formal-content additive battle and ordered Menu return.",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime|FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB|B55CFD4C57BE28A5A8BCBF47840CD44BAF2AEFECCBC2D0428E07CCB3CC603B30",
+    "shutdownStage": "Stopped",
+    "selectedCharacterId": 2,
+    "worldObjects": 2,
+    "finalPoolBorrowers": 0,
+    "pendingLoadingTextsAfterPrewarm": 619,
+    "prewarmed": true,
+    "modeSelected": true,
+    "roleConfirmed": true,
+    "battleSceneLoaded": true,
+    "battleRunning": true,
+    "samePublishedKeys": true,
+    "stayedStopped": true,
+    "returnedToMenu": true
+}

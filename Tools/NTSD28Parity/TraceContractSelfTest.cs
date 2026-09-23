@@ -485,6 +485,36 @@ internal static class TraceContractSelfTest
         RunComparisonCase(report, "R15-V1-V2-header-difference", "different", "header", currentV1Authority, v2Unity);
         RunComparisonCase(report, "R15-V2-V1-header-difference", "different", "header", v2Authority, ReplaceContent(unity, currentV1));
         RunComparisonCase(report, "R15-V2-equal", TraceComparator.EqualStructureStatus, null, v2Authority, v2Unity);
+        JsonObject version3 = TraceContentIdentity.CreateLoganWithKind(
+            new string('A', 64), new string('C', 64), new string('D', 64),
+            new string('E', 64), new string('F', 64), new string('1', 64), new string('2', 64));
+        JsonObject kindOnly = TraceContentIdentity.CreateLoganWithKind(
+            new string('A', 64), new string('C', 64), new string('D', 64),
+            null, null, new string('1', 64), new string('2', 64));
+        RunCase(report, "R15-V3-seven-components", "match", null, () =>
+        {
+            TraceContentIdentity.Validate(version3, true);
+            TraceContentIdentity.Validate(kindOnly, true);
+            bool matches = version3.Count == 16 && kindOnly.Count == 14 &&
+                version3["battleInputContract"]!.GetValue<string>() == TraceContentIdentity.BattleInputV3 &&
+                kindOnly["battleInputContract"]!.GetValue<string>() == TraceContentIdentity.BattleInputV3KindOnly &&
+                version3["semanticSha256"]!.GetValue<string>() != version2["semanticSha256"]!.GetValue<string>() &&
+                kindOnly["semanticSha256"]!.GetValue<string>() != currentV1["semanticSha256"]!.GetValue<string>();
+            return (matches ? "match" : "mismatch", (string?)null, (string?)null);
+        });
+        string v3Authority = ReplaceContent(authority, version3);
+        string v3Unity = ReplaceContent(unity, version3);
+        RunComparisonCase(report, "R15-V3-equal", TraceComparator.EqualStructureStatus, null, v3Authority, v3Unity);
+        RunComparisonCase(report, "R15-V2-V3-header-difference", "different", "header", v2Authority, v3Unity);
+        RunComparisonCase(report, "R15-V3-kind-only-header-difference", "different", "header", v3Authority,
+            ReplaceContent(unity, kindOnly));
+        RunCase(report, "R15-V3-tampered-kind", "invalid", null, () =>
+        {
+            JsonObject invalid = version3.DeepClone().AsObject();
+            invalid["kindInputSha256"] = new string('0', 64);
+            TraceValidationReport validation = TraceComparator.ValidateTextForTest(ReplaceContent(authority, invalid));
+            return (validation.Status, validation.Reason, (string?)null);
+        });
         RunComparisonCase(report, "R15-V2-tick-first-difference", "different", "input", v2Authority,
             MutateTickDomain(v2Unity, 1, "input", input => input["phase"] = 1));
 

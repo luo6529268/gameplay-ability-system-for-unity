@@ -1,0 +1,11 @@
+# NTSD28-Q09-KILL-ICON-INPUT-IDENTITY-001
+
+Status: `PLANNED` before script changes, 2026-09-22. Parent BATCH-05/Q09, R17.
+
+Authority: formal NTSD 2.8-Logan root EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; playable `GameSession28` selects mode child `#killtext`, `render_snapshot.cpp:2019-2030` selects pic_type0..6 by source type and file availability, and `d3d11_renderer.cpp:2076-2094` draws it. The exact selected three PNGs are staged under `Assets/NTSD/Content/LoganRuntime/vfs/sprite/kill/`.
+
+Exact script ownership: `Assets/NTSD/Scripts/Animation/LoganVisualContentCandidate.cs` and new `Assets/NTSD/Scripts/Test/Editor/NTSD28Q09KillIconInputIdentityEditorTests.cs` with meta. Candidate is already dirty from the separate WORDS package; preserve those changes. No other scripts, Scene, Prefab, menu, regular HUD, audio, old resources, third-party or generated paths.
+
+Capture the selected feed's seven virtual icon paths, preserving index order and duplicate references. Resolve each nonempty path within the formal VFS; hash present file bytes and encode absence explicitly, because the native renderer allows a missing PNG and may see it appear later. Include the feed's selected mode DAT identity indirectly through the existing `LoganObjectCatalog` identity. Extend the visual fingerprint with an explicit V3 preimage only when a kill-feed record is present, preserving V1/V2 for roots without one. Recapture before publication to reject changed image bytes, appearance/removal, or changed selected path. Do not add icon bytes to battle-rule semantic identity or actor image counts. This package does not decode/publish/draw icons.
+
+Focused acceptance: formal/staged selected paths and icon input fingerprint equal; types 0..6/duplicates/absent path preserved; byte change and missing-to-present change invalidate the captured candidate; no-feed visual V1/V2 stability; path containment rejects escape. Compile current source using the original project only; original Editor NUnit and Play remain separate evidence. `git diff --check` and `Tools/Validate-ChangeLedger.ps1` are required. Rollback is a reviewed reversal of this package's exact code/test diff; never blanket-reset or delete unrelated work. No second Unity Editor or computer-use.

@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "e13957dd28f44e9baf7cab3206223363",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790132108566,
+      "finished_unix_ms": 1790132120540,
+      "last_update_unix_ms": 1790132120540,
+      "progress": {
+        "completed": 16,
+        "total": 8244,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790132120058,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07ModeComboPublishedActivationEditorTests.VersionedIdentityMatchesIndependentBytesAndAbsentV1Vector",
+        "last_finished_unix_ms": 1790132120059,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 16,
+          "passed": 16,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 6.4272499,
+          "resultState": "Passed"
+        },
+        "results": null
+      }
+    }
+  }
+}

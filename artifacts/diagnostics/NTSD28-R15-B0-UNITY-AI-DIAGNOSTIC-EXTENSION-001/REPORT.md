@@ -1,0 +1,11 @@
+# NTSD28-R15-B0-UNITY-AI-DIAGNOSTIC-EXTENSION-001
+
+Status: FOCUSED_TEST_PASS, tool-only. This package corrects the B0 trace consumer's producer-specific validation. It does not alter Unity gameplay/exporter, formal source, resource files or saved Scenes.
+
+Pre-change source-model and Unity V3 captures came from the same formal-root neutral-common-two-entity scenario, seed and three ticks under NTSD28-R15-NATIVE-KIND-V3-CAPTURE-001. The authority B0 tick has six shared fields. Unity's diagnostic exporter adds aiAcceptedTrace with committed, eligible, fallback, firstFallbackReason and oracleMismatch. Existing B0DomainRawContract rejected that Unity tick at tick-properties, so no B0 comparison could run.
+
+The validator now accepts the exact AI diagnostic object only when the producer is unity-diagnostic and the field is present. It checks exact subfield names, nonnegative integer counters and a nonempty reason. Historical Unity ticks without the field remain valid, authority ticks with the field remain invalid, and unknown/malformed fields remain invalid. The B0 comparator still compares only shared input, RNG availability topology, slots and lifecycle; it does not synthesize an authority AI diagnostic counterpart. Certificate eligibility stays false.
+
+RED: focused self-test had 15 cases with exactly one failure, unity-ai-diagnostic-valid. After the consumer change and an additional extra-subfield rejection case, Release self-test passed 16/16. Revalidating the original Unity V3 B0 file returned valid-b0-domain-raw at three ticks. Comparing original source/Unity B0 files returned shared-domains-equal-rng-topology-different: inputEqual=true, slotOccupantsEqual=true, lifecycleEqual=true, rngTopologyEqual=false. The first difference is rng.streamAvailability, authorityCrt/authoritySynchronized versus unityDeterministic. This topology distinction was already part of the B0 contract and is not a new gameplay difference or a claim that RNG streams are numerically equivalent.
+
+Evidence: red-self-test.json, final-self-test.json, unity-domain-validation.json and domain-compare.json in this directory. Formal EXE observable parity, kind-dependent runtime pair, Player cold start and full Q07/R15 closure remain open.

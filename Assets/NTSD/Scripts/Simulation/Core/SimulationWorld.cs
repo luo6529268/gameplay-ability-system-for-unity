@@ -559,28 +559,64 @@ namespace NTSD.Simulation
             int sourceSlot = physicalAttacker.Runtime.SlotIndex;
             if ((physicalAttacker.Runtime.Kind4SourceCount92 & 0xFFFF) != 0)
                 sourceSlot = unchecked((ushort)physicalAttacker.Runtime.CatchSourceSlot90);
-            LF2Entity source = FindEntityByRuntimeSlotForQuery(sourceSlot);
-            if (source?.Runtime == null)
+            RecordNativeKnockout(
+                victim.Runtime.SlotIndex,
+                sourceSlot,
+                credit.Runtime.SlotIndex);
+        }
+
+        internal void RecordNativeKnockout(
+            int victimSlot,
+            int sourceSlot,
+            int creditSlot)
+        {
+            if (!TryGetNativeKnockoutRuntime(creditSlot, out _))
                 return;
 
-            LF2Entity fourOwner = source;
-            for (int depth = 0; depth < 4; depth++)
+            // Alignment contract: NTSD28-Q08-NONSTANDARD-KNOCKOUT-EVENT-PRODUCERS-001.
+            // The formal result keeps a valid credit even when its source slot is absent.
+            const int nativeMissingSlot = 1000;
+            int sourceObjectType = -1;
+            int fourOwnerSlot = nativeMissingSlot;
+            if (TryGetNativeKnockoutRuntime(sourceSlot, out NTSDEntityRuntime source))
             {
-                int ownerSlot = fourOwner.Runtime.OwnerSlotIndex;
-                if (ownerSlot < 0)
-                    break;
-                LF2Entity next = FindEntityByRuntimeSlotForQuery(ownerSlot);
-                if (next?.Runtime == null)
-                    break;
-                fourOwner = next;
+                LF2Entity sourceEntity = FindEntityByRuntimeSlotForQuery(sourceSlot);
+                sourceObjectType = sourceEntity != null
+                    ? sourceEntity.GetCurrentDataObjectTypeForSimulation()
+                    : source.ObjType;
+                fourOwnerSlot = sourceSlot;
+                NTSDEntityRuntime fourOwner = source;
+                for (int depth = 0; depth < 4; depth++)
+                {
+                    int ownerSlot = fourOwner.OwnerSlotIndex;
+                    if (!TryGetNativeKnockoutRuntime(ownerSlot, out NTSDEntityRuntime next))
+                        break;
+                    fourOwnerSlot = ownerSlot;
+                    fourOwner = next;
+                }
             }
             battleBuffers.RecordNativeKnockout(new NativeKnockoutEvent(
                 CurrentTickIndex,
-                source.GetCurrentDataObjectTypeForSimulation(),
-                fourOwner.Runtime.SlotIndex,
-                victim.Runtime.SlotIndex,
+                sourceObjectType,
+                fourOwnerSlot,
+                victimSlot,
                 sourceSlot,
-                credit.Runtime.SlotIndex));
+                creditSlot));
+        }
+
+        private bool TryGetNativeKnockoutRuntime(
+            int slot,
+            out NTSDEntityRuntime runtime)
+        {
+            runtime = null;
+            if (slot < 0 || slot >= 1000 ||
+                !TryGetRuntimeSlotReadOnlyView(
+                    slot,
+                    out RuntimeSlotTable.ReadOnlySlotView view) ||
+                !view.Claimed)
+                return false;
+            runtime = view.Entity?.Runtime ?? view.RawRuntime;
+            return runtime != null;
         }
 
         internal int PruneNativeKnockoutTail(int currentTick, int lifetimeTicks)

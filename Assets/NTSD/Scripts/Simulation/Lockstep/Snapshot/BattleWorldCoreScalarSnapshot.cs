@@ -236,6 +236,19 @@ namespace NTSD.Simulation
         public int CaughtAct { get; }
     }
 
+    public readonly struct BattleWorldNativeKnockoutFeedScalarSnapshot
+    {
+        internal BattleWorldNativeKnockoutFeedScalarSnapshot(
+            NTSD28NativeKnockoutFeedRuntimeState state)
+        {
+            RecordPresent = state?.RecordPresent ?? false;
+            LifetimeTicks = state?.LifetimeTicks ?? 0;
+        }
+
+        public bool RecordPresent { get; }
+        public int LifetimeTicks { get; }
+    }
+
     public readonly struct BattleWorldNativeClockScalarSnapshot
     {
         internal BattleWorldNativeClockScalarSnapshot(
@@ -259,7 +272,7 @@ namespace NTSD.Simulation
     /// </summary>
     public readonly struct BattleWorldCoreScalarSnapshot
     {
-        public const int CurrentSchemaVersion = 12;
+        public const int CurrentSchemaVersion = 13;
 
         internal BattleWorldCoreScalarSnapshot(
             SimulationWorld world,
@@ -290,6 +303,8 @@ namespace NTSD.Simulation
                 world.Runtime?.NativeHitResourceRules);
             NativeCombo = new BattleWorldNativeComboScalarSnapshot(
                 world.Runtime?.NativeCombo);
+            NativeKnockoutFeed = new BattleWorldNativeKnockoutFeedScalarSnapshot(
+                world.Runtime?.NativeKnockoutFeed);
             StandardHitRest = new BattleWorldStandardHitRestScalarSnapshot(
                 world.Runtime?.NativeStandardHitRest);
             FusionFirstFeatureGate4A8428 = world.Runtime?.FusionFirstFeatureGate4A8428 ?? false;
@@ -319,6 +334,7 @@ namespace NTSD.Simulation
         public BattleWorldFunctionKeyScalarSnapshot FunctionKeys { get; }
         public BattleWorldHitResourceRulesScalarSnapshot HitResourceRules { get; }
         public BattleWorldNativeComboScalarSnapshot NativeCombo { get; }
+        public BattleWorldNativeKnockoutFeedScalarSnapshot NativeKnockoutFeed { get; }
         public BattleWorldStandardHitRestScalarSnapshot StandardHitRest { get; }
         public bool FusionFirstFeatureGate4A8428 { get; }
         public bool FusionSecondFeatureGate4A842C { get; }

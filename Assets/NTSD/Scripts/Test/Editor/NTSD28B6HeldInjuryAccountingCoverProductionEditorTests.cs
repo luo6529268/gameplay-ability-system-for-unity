@@ -112,6 +112,12 @@ namespace NTSD.Test
             Assert.That(directOwner.Runtime.KnockoutCount358, Is.EqualTo(21));
             Assert.That(secondOwner.Runtime.InputScoreTotal348, Is.EqualTo(30));
             Assert.That(secondOwner.Runtime.KnockoutCount358, Is.EqualTo(40));
+            Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.VictimSlot, Is.EqualTo(victim.Runtime.SlotIndex));
+            Assert.That(knockout.SourceSlot, Is.EqualTo(directOwner.Runtime.SlotIndex));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(directOwner.Runtime.SlotIndex));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(secondOwner.Runtime.SlotIndex));
         }
 
         [Test]
@@ -157,6 +163,7 @@ namespace NTSD.Test
             Assert.That(victim.Runtime.InputHpConsumedTotal34C, Is.EqualTo(30));
             Assert.That(catcher.Runtime.InputScoreTotal348, Is.EqualTo(5));
             Assert.That(catcher.Runtime.KnockoutCount358, Is.EqualTo(6));
+            Assert.That(world.NativeKnockoutEvents, Is.Empty);
         }
 
         [TestCase(20, -1, 1)]
@@ -187,6 +194,8 @@ namespace NTSD.Test
             Assert.That(
                 catcher.Runtime.KnockoutCount358,
                 Is.EqualTo(20 + expectedKnockoutDelta));
+            Assert.That(world.NativeKnockoutEvents.Count,
+                Is.EqualTo(expectedKnockoutDelta));
         }
 
         [TestCase(0, 2, -3)]

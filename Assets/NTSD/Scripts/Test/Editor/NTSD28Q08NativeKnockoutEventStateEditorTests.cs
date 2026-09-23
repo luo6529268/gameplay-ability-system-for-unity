@@ -52,12 +52,16 @@ namespace NTSD.Test.Editor
             var checksum = new BattleLockstepChecksumModule();
             world.ResetRuntimeState();
             ulong before = checksum.Capture(world, 0, null);
+            world.Runtime.NativeKnockoutFeed.RestoreForSnapshot(true, 70);
+            ulong withFeed = checksum.Capture(world, 0, null);
+            Assert.That(withFeed, Is.Not.EqualTo(before));
             world.BattleBuffersForServices.RecordNativeKnockout(Event(1, 2));
             ulong withEvent = checksum.Capture(world, 0, null);
-            Assert.That(withEvent, Is.Not.EqualTo(before));
+            Assert.That(withEvent, Is.Not.EqualTo(withFeed));
 
             world.ResetRuntimeState();
             Assert.That(world.NativeKnockoutEvents, Is.Empty);
+            Assert.That(world.Runtime.NativeKnockoutFeed.RecordPresent, Is.False);
             Assert.That(checksum.Capture(world, 0, null), Is.EqualTo(before));
         }
 

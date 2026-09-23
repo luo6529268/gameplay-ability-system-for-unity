@@ -1,0 +1,11 @@
+# R15 B0 source-model v2 producer
+
+Status: `FOCUSED_TEST_PASS_SOURCE_MODEL_ONLY`. This package changed only the repository diagnostic runner, with an explicit `--domain-version 2`; its default remains B0 v1. It does not change the formal Logan EXE, paired playable C++ gameplay, Unity battle code, saved Scenes or resources.
+
+The runner was rebuilt from the current formal playable/core source. The build manifest and full capture artifacts are under `Temp/diagnostics/NTSD28-R15-B0-SOURCE-V2-PRODUCER-001/`; the machine-readable summary is `focused-evidence.json`. Formal EXE SHA is `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; source manifest SHA is `07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F`. The runner source and binary SHA are recorded in the build manifest and embedded in main-capture provenance.
+
+For the previously frozen [kind scenario](../NTSD28-R15-KIND-DEPENDENT-SOURCE-PREFLIGHT-001/kind213-action176-to-206-action0-candidate.json), two full three-tick runs each exited0. Main, B0 and B2 were byte-identical between runs, with respective SHA-256 `740FCC226C51DF66FAFEB846C7E0D0E1F744641BE61685F83732E6CDC52063C2`, `CBAE21104951C0A39888880D7B58F87409042E04C35CC7806933C6CBEA0D3422`, and `3A9897F8ECCE5BAB95D8E0C18019A54AAC178AB34593A8B06D806D853F18F66E`. All six main/B0/B2 strict validations passed. Tick1 B0 reports slot0 death, then slot1 `object-id-change` from OID206 to OID213 with previous/current allocation epoch both1. Main tick rows equal the prior B0-disabled capture; its header differs only in runner/binary provenance SHA. B2 file SHA equals the prior capture.
+
+The default neutral three-tick scenario still emitted raw v1 and passed its three strict validators. Explicit v1 for the kind scenario still failed exit91 and marked main/B0/B2 `INVALID_CAPTURE_BUNDLE`. Invalid/duplicate/misplaced version options failed exit2. These checks protect the historical v1 meaning. `git diff --check` passed, and the global Change Ledger validator is run at the package integration step.
+
+The source-model capture has `certificateEligible=false`. Unity has not yet emitted B0 v2 or represented the same type3/action initial state, and the formal EXE was not run for this scenario. No cross-engine kind-parity claim follows from this report.

@@ -124,7 +124,7 @@ namespace NTSD.Test
                 "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime",
                 NTSD.EditorTools.NTSD28UnityRawCaptureEditor.DefaultScenario, profile, 3, (driver, inputs, identity) =>
             {
-                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("9F40EB3FFF1812FF"));
+                Assert.That(identity.CatalogFingerprint.ToString("X16"), Is.EqualTo("96DE8D089438B1B8"));
                 foreach (string line in File.ReadLines(Artifact + "native-actual.tsv").Skip(1))
                 {
                     int[] v = line.Split('\t').Select(x => int.Parse(x, CultureInfo.InvariantCulture)).ToArray();
@@ -138,7 +138,7 @@ namespace NTSD.Test
                 }
             });
             Assert.That(count, Is.EqualTo(329), "OID0 is intentionally not materialized by native OPoint.");
-            File.WriteAllText(Artifact + profile + "-actual-births.json", JsonConvert.SerializeObject(new { profile, count, catalog = "9F40EB3FFF1812FF" }));
+            File.WriteAllText(Artifact + profile + "-actual-births.json", JsonConvert.SerializeObject(new { profile, count, catalog = "96DE8D089438B1B8" }));
         }
 
         private static Action<LF2Entity, ObjectPoint> Resolve()

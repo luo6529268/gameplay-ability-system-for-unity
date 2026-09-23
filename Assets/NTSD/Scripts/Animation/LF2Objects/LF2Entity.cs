@@ -1501,6 +1501,12 @@ namespace NTSD.Animation.LF2Objects
                 return;
             }
 
+            if (GetCurrentDataObjectTypeForSimulation() != (int)LF2ObjectType.Character)
+            {
+                RunNonCharacterHitFa7FrameLogic();
+                return;
+            }
+
             RunHitFa7FrameLogic();
         }
 
@@ -1974,6 +1980,52 @@ namespace NTSD.Animation.LF2Objects
                     SetFrameTickDirect(curFrame + 50);
                 }
             }
+        }
+
+        private void RunNonCharacterHitFa7FrameLogic()
+        {
+            if (Health == null || Health.HP <= 0 || Match == null)
+                return;
+
+            int targetSlot = ObjectAiTargetSlot3F8;
+            LF2Entity target = targetSlot >= 0
+                ? Match.FindEntityByRuntimeSlotForQuery(targetSlot)
+                : null;
+            if (target == null)
+                return;
+
+            int selfX = GetRuntimeXInt();
+            int targetX = target.GetRuntimeXInt();
+            if (selfX < targetX)
+                Runtime.Vx += 0.7;
+            if (targetX < selfX)
+                Runtime.Vx -= 0.7;
+            if (selfX < targetX)
+                Runtime.Vx += 0.7;
+            if (targetX < selfX)
+                Runtime.Vx -= 0.7;
+
+            int selfZ = Runtime.ZInt;
+            int targetZ = target.Runtime.ZInt;
+            if (selfZ + 5 < targetZ)
+                Runtime.Vz += 0.4;
+            if (targetZ < selfZ - 5)
+                Runtime.Vz -= 0.4;
+
+            if (Runtime.Vy < 4.0)
+                Runtime.Vy += 0.4;
+            Runtime.Y += Runtime.Vy;
+            if (Runtime.YInt > -25)
+            {
+                SetFrameTickDirect(60);
+                Runtime.Vx = 0f;
+                Runtime.Vy = 0f;
+                Runtime.Vz = 0f;
+            }
+
+            Runtime.Vx = System.Math.Clamp(Runtime.Vx, -14.0, 14.0);
+            Runtime.Vz = System.Math.Clamp(Runtime.Vz, -2.2, 2.2);
+            SwitchDir(Runtime.Vx > 0f ? "right" : "left");
         }
 
         private void RunHitFa7FrameLogic()
@@ -5732,6 +5784,13 @@ namespace NTSD.Animation.LF2Objects
                 credit != null)
             {
                 credit.KnockoutCount358++;
+                int sourceSlot = Runtime.EnvironmentSourceSlot160 >= 0
+                    ? Runtime.EnvironmentSourceSlot160
+                    : Runtime.SlotIndex;
+                world.RecordNativeKnockout(
+                    Runtime.SlotIndex,
+                    sourceSlot,
+                    credit.SlotIndex);
             }
 
             Runtime.HP -= damage;

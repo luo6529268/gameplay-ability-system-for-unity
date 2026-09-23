@@ -119,7 +119,8 @@ namespace NTSD.EditorTools
                 observedWorld = driver.World;
                 observedPool = new BattleLogicReferencePool();
                 observedWorld.BindLogicReferencePool(observedPool);
-                ConfigureWorldAndRoster(observedWorld, dataScope.Configs, scenario, true);
+                ConfigureWorldAndRoster(observedWorld, dataScope.Configs, scenario, true,
+                    dataScope.Catalog);
                 observedWorld.PrepareRuntimeDataCatalogForBattle(dataScope.Catalog.Entries
                     .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
                     id => dataScope.Configs.TryGetValue(id, out LF2CharacterDataWrapper wrapper) ? wrapper : null,
@@ -163,13 +164,15 @@ namespace NTSD.EditorTools
             string scenarioPath,
             string outputPath,
             string domainOutputPath,
-            string inputRngOutputPath)
+            string inputRngOutputPath,
+            string domainVersion = null)
         {
             return RunScenario(
                 scenarioPath,
                 outputPath,
                 domainOutputPath,
-                inputRngOutputPath);
+                inputRngOutputPath,
+                domainVersion: domainVersion);
         }
 
         private static void PollRequest()
@@ -200,7 +203,8 @@ namespace NTSD.EditorTools
                     output,
                     request.domainOutputPath,
                     request.inputRngOutputPath,
-                    request.loganRuntimeRoot);
+                    request.loganRuntimeRoot,
+                    request.domainVersion);
             }
             finally
             {
@@ -222,7 +226,8 @@ namespace NTSD.EditorTools
             string outputPath,
             string domainOutputPath = null,
             string inputRngOutputPath = null,
-            string loganRuntimeRoot = null)
+            string loganRuntimeRoot = null,
+            string domainVersion = null)
         {
             string resultPath = ProjectPath(ResultFile);
             Directory.CreateDirectory(
@@ -234,7 +239,8 @@ namespace NTSD.EditorTools
                     outputPath,
                     domainOutputPath,
                     inputRngOutputPath,
-                    loganRuntimeRoot);
+                    loganRuntimeRoot,
+                    domainVersion);
                 File.WriteAllText(
                     resultPath,
                     $"PASS{Environment.NewLine}{resolvedOutput}",
@@ -258,8 +264,17 @@ namespace NTSD.EditorTools
             string outputPath,
             string domainOutputPath,
             string inputRngOutputPath,
-            string loganRuntimeRoot = null)
+            string loganRuntimeRoot = null,
+            string domainVersion = null)
         {
+            if (domainVersion != null &&
+                ((domainVersion != "v1" && domainVersion != "v2") ||
+                 string.IsNullOrWhiteSpace(domainOutputPath)))
+            {
+                throw new InvalidDataException(
+                    "Explicit domainVersion must be v1 or v2 and requires domainOutputPath.");
+            }
+            domainVersion ??= "v1";
             if (EditorApplication.isPlayingOrWillChangePlaymode)
             {
                 throw new InvalidOperationException(
@@ -322,7 +337,11 @@ namespace NTSD.EditorTools
             using var driverScope = new TemporarySimulationDriverScope();
             SimulationTickDriver driver = driverScope.Driver;
             SimulationWorld world = driver.World;
-            ConfigureWorldAndRoster(world, dataScope.Configs, scenario, dataScope.IsLogan);
+            bool requiresLogicOnlyMaterialization = dataScope.Catalog?.Entries.Any(entry =>
+                requestedObjectIds.Contains(entry.Id) &&
+                entry.Type == (int)LF2ObjectType.SpecialAttack) == true;
+            ConfigureWorldAndRoster(world, dataScope.Configs, scenario, dataScope.IsLogan,
+                dataScope.Catalog);
             if (dataScope.IsLogan)
                 world.PrepareRuntimeDataCatalogForBattle(dataScope.Catalog.Entries
                     .Select(entry => new ObjectDefinition(entry.Id, entry.Type, entry.DatPath)).ToArray(),
@@ -340,6 +359,11 @@ namespace NTSD.EditorTools
                 captureFullFrameSnapshotForDiagnostics = false,
             });
             driver.SetPaused(false);
+            if (requiresLogicOnlyMaterialization)
+            {
+                driver.BeginBattleAllocationSeal();
+                world.SetLogicOnlyEntityMaterialization(true);
+            }
 
             using var writer = new StreamWriter(
                 resolvedOutputPath,
@@ -373,13 +397,17 @@ namespace NTSD.EditorTools
                     resolvedScenarioPath,
                     scenario,
                     world,
-                    previousOccupants));
+                    previousOccupants,
+                    domainVersion));
                 inputRngWriter?.WriteLine(BuildInputRngHeaderJson(
                     resolvedScenarioPath,
                     scenario,
                     world,
                     previousNativeRandom));
 
+                int exactCharacterCountExpected = scenario.combatants.Count(combatant =>
+                    dataScope.Catalog == null || dataScope.Catalog.Entries.Any(entry =>
+                        entry.Id == combatant.oid && entry.Type == (int)LF2ObjectType.Character));
                 for (int tick = 1; tick <= scenario.ticks; tick++)
                 {
                     FrameInputSet frameInput = frameInputs[tick - 1];
@@ -401,11 +429,11 @@ namespace NTSD.EditorTools
                             .ExactCharacterCount;
                     long exactCharacterDelta =
                         exactCharacterCountAfter - exactCharacterCountBefore;
-                    if (exactCharacterDelta != scenario.combatants.Length)
+                    if (exactCharacterDelta != exactCharacterCountExpected)
                     {
                         throw new InvalidOperationException(
                             $"Unity tick {tick} did not reach the exact character " +
-                            $"frame-tick boundary: expected {scenario.combatants.Length}, " +
+                            $"frame-tick boundary: expected {exactCharacterCountExpected}, " +
                             $"actual {exactCharacterDelta}.");
                     }
 
@@ -422,7 +450,8 @@ namespace NTSD.EditorTools
                             frameInput,
                             previousRngCalls,
                             previousOccupants,
-                            currentOccupants));
+                            currentOccupants,
+                            domainVersion));
                         domainWriter.Flush();
                         previousRngCalls = world.Rng.CallCount;
                         previousOccupants = currentOccupants;
@@ -530,7 +559,9 @@ namespace NTSD.EditorTools
                 if (combatant.oid <= 0 || combatant.team <= 0 ||
                     combatant.hp <= 0 || combatant.baseHp <= 0 ||
                     combatant.mp < 0 || combatant.facing < 0 ||
-                    combatant.facing > 1 || combatant.z < Stage23ZMin ||
+                    combatant.facing > 1 || combatant.action < 0 ||
+                    combatant.action >= LF2FrameCache.MaxFrameIdExclusive ||
+                    combatant.z < Stage23ZMin ||
                     combatant.z > Stage23ZMax)
                 {
                     throw new InvalidDataException(
@@ -632,7 +663,8 @@ namespace NTSD.EditorTools
             SimulationWorld world,
             IReadOnlyDictionary<int, LF2CharacterDataWrapper> configs,
             UnityRawScenario scenario,
-            bool loganContent)
+            bool loganContent,
+            LoganObjectCatalog catalog)
         {
             world.ResetRuntimeState();
             if (world.AiExecutionProfile !=
@@ -669,11 +701,17 @@ namespace NTSD.EditorTools
             foreach (UnityRawCombatant source in
                      scenario.combatants.OrderBy(value => value.slot))
             {
-                LF2Character character = CreateCharacter(
-                    world,
-                    configs[source.oid],
-                    source,
-                    loganContent);
+                int objectType = catalog?.Entries.FirstOrDefault(entry =>
+                    entry.Id == source.oid)?.Type ?? (int)LF2ObjectType.Character;
+                LF2Entity entity = objectType switch
+                {
+                    (int)LF2ObjectType.Character => CreateCharacter(
+                        world, configs[source.oid], source, loganContent),
+                    (int)LF2ObjectType.SpecialAttack => CreateSpecialAttack(
+                        world, configs[source.oid], source),
+                    _ => throw new InvalidDataException(
+                        $"Scenario oid {source.oid} has unsupported catalog type {objectType}."),
+                };
                 BattleSlotRuntimeState rosterSlot =
                     runtime.Roster.Slots[source.slot];
                 bool aiControlled =
@@ -684,8 +722,8 @@ namespace NTSD.EditorTools
                 rosterSlot.Team = source.team;
                 rosterSlot.InputId = source.slot;
                 rosterSlot.AiId = aiControlled ? source.slot : -1;
-                rosterSlot.RuntimeSlotIndex = character.Runtime.SlotIndex;
-                rosterSlot.StableId = character.Runtime.StableId;
+                rosterSlot.RuntimeSlotIndex = entity.Runtime.SlotIndex;
+                rosterSlot.StableId = entity.Runtime.StableId;
                 runtime.Roster.ActiveSlotCount++;
             }
             world.ConfigureFusionFeatureGates(scenario.fusionFirstFeatureGate4A8428,
@@ -736,8 +774,67 @@ namespace NTSD.EditorTools
             character.Runtime.Vx = 0.0;
             character.Runtime.Vy = 0.0;
             character.Runtime.Vz = 0.0;
+            if (source.action != 0)
+                ApplyInitialAction(character, source);
             character.RefreshRuntimeSnapshot();
             return character;
+        }
+
+        private static void ApplyInitialAction(LF2Entity entity,
+            UnityRawCombatant source)
+        {
+            if (!entity.FrameCache.HasFrame(source.action))
+                throw new InvalidDataException(
+                    $"Scenario oid {source.oid} has no authored action {source.action}.");
+
+            entity.ImmediateFrame(source.action);
+            entity.Frame.PN = source.action;
+            entity.Frame.Prev = source.action;
+            entity.Frame.Prev2 = source.action;
+            entity.Frame.Prev2D = entity.Frame.D;
+            entity.Runtime.PrevFrame2 = source.action;
+            entity.Trans.SyncWaitCounterFrame(source.action);
+        }
+
+        private static LF2SpecialAttack CreateSpecialAttack(
+            SimulationWorld world,
+            LF2CharacterDataWrapper wrapper,
+            UnityRawCombatant source)
+        {
+            var entity = new LF2SpecialAttack();
+            entity.ObjectId = source.oid;
+            entity.FrameCache.Load(wrapper);
+            ApplyInitialAction(entity, source);
+            entity.InitializeNativeDefinitionIdentityForSpawn();
+            entity.InitializeNativeArmorRuntimeFromCurrentDefinitionForSpawn();
+            entity.Runtime.HP = source.hp;
+            entity.Runtime.HPBound = source.hp;
+            entity.Runtime.HP3 = source.baseHp;
+            entity.Runtime.MP = source.mp;
+            entity.Runtime.MPMax = wrapper.characterData.NativeMetadata.Stats
+                .Int32OrDefault("max_mp", source.mp);
+            entity.Runtime.PP = source.mp;
+            entity.Team = source.team;
+            entity.RelationTeam = source.team;
+            entity.OwnerEntityIndex = source.slot;
+            entity.HP2Orig = source.reviveLives30c;
+            entity.HPOrig = source.reviveNextLives310;
+            entity.RespawnCount = source.reviveNextHp314;
+            entity.HitStun = source.renderPhase008;
+            entity.AiControlled = source.nativeAi || source.nativeComputerState1b8 > 0;
+            entity.SwitchDir(source.facing == 1 ? "left" : "right");
+            WritePosition(entity.Runtime, source.x, source.y, source.z);
+            entity.Runtime.Vx = 0.0;
+            entity.Runtime.Vy = 0.0;
+            entity.Runtime.Vz = 0.0;
+            entity.SetRequiredRuntimeSlot(source.slot);
+            world.Register(entity);
+            if (!ReferenceEquals(entity.RegisteredWorldForSimulation, world) ||
+                entity.Runtime.SlotIndex != source.slot)
+                throw new InvalidOperationException(
+                    $"Scenario oid {source.oid} failed to register at physical slot {source.slot}.");
+            entity.RefreshRuntimeSnapshot();
+            return entity;
         }
 
         private static void WritePosition(
@@ -793,7 +890,8 @@ namespace NTSD.EditorTools
             string scenarioPath,
             UnityRawScenario scenario,
             SimulationWorld world,
-            IReadOnlyList<DomainOccupant> initialOccupants)
+            IReadOnlyList<DomainOccupant> initialOccupants,
+            string domainVersion)
         {
             return BattleCanonicalJson.Serialize(DictionaryOf(
                 ("certificateEligible", false),
@@ -815,7 +913,8 @@ namespace NTSD.EditorTools
                     ("unityDeterministic", "missing"))),
                 ("producer", "unity-diagnostic"),
                 ("scenarioId", Path.GetFileNameWithoutExtension(scenarioPath)),
-                ("schema", DomainCaptureSchema),
+                ("schema", domainVersion == "v2"
+                    ? "ntsd28-logan-b0-domain-raw-v2" : DomainCaptureSchema),
                 ("slotCapacity", world.RuntimeSlotCapacityForDiagnostics),
                 ("streamAvailability", (object)DictionaryOf(
                     ("authorityCrt", "missing"),
@@ -829,7 +928,8 @@ namespace NTSD.EditorTools
             FrameInputSet frameInput,
             ulong previousRngCalls,
             IReadOnlyList<DomainOccupant> previousOccupants,
-            IReadOnlyList<DomainOccupant> currentOccupants)
+            IReadOnlyList<DomainOccupant> currentOccupants,
+            string domainVersion)
         {
             ulong currentRngCalls = world.Rng.CallCount;
             if (currentRngCalls < previousRngCalls)
@@ -865,7 +965,8 @@ namespace NTSD.EditorTools
                 ("lifecycleDelta", (object)DictionaryOf(
                     ("events", (object)DeriveLifecycleEvents(
                         previousOccupants,
-                        currentOccupants)),
+                        currentOccupants,
+                        domainVersion)),
                     ("provenance", "snapshot-derived"))),
                 ("rng", (object)DictionaryOf(
                     ("authorityCrt", (object)MissingRngStream()),
@@ -1165,9 +1266,10 @@ namespace NTSD.EditorTools
                 .ToArray();
         }
 
-        private static object[] DeriveLifecycleEvents(
+        internal static object[] DeriveLifecycleEvents(
             IReadOnlyList<DomainOccupant> previous,
-            IReadOnlyList<DomainOccupant> current)
+            IReadOnlyList<DomainOccupant> current,
+            string domainVersion)
         {
             Dictionary<int, DomainOccupant> previousBySlot = previous
                 .ToDictionary(occupant => occupant.Slot);
@@ -1215,8 +1317,14 @@ namespace NTSD.EditorTools
                 {
                     if (oldValue.ObjectId != newValue.ObjectId)
                     {
-                        throw new InvalidOperationException(
-                            "Domain occupant changed without allocation epoch.");
+                        if (domainVersion != "v2" || oldValue.AllocationEpoch == 0)
+                        {
+                            throw new InvalidOperationException(
+                                "Domain occupant changed without allocation epoch.");
+                        }
+                        result.Add(ProjectLifecycleEvent(
+                            "object-id-change", slot, oldValue.AllocationEpoch,
+                            newValue.AllocationEpoch, oldValue.ObjectId, newValue.ObjectId));
                     }
                     continue;
                 }
@@ -1389,13 +1497,16 @@ namespace NTSD.EditorTools
             private readonly FieldInfo objectsByTypeField;
             private readonly FieldInfo backgroundLookupField;
             private readonly FieldInfo frameConfigField;
+            private readonly FieldInfo publishedCandidateField;
             private readonly object originalCachedConfig;
             private readonly object originalObjectLookup;
             private readonly object originalFrameConfig;
+            private readonly object originalPublishedCandidate;
             private readonly List<DictionaryEntry> originalObjectsByType;
             private readonly List<DictionaryEntry> originalBackgroundLookup;
 
             private readonly LoganObjectCatalog loganCatalog;
+            private readonly LoganVisualContentCandidate diagnosticCandidate;
             private readonly FieldInfo registryField;
             private readonly object originalRegistry;
             private readonly string originalPublishedKey;
@@ -1406,7 +1517,12 @@ namespace NTSD.EditorTools
                 // Prepare source values before any singleton publication is changed.
                 if (!string.IsNullOrWhiteSpace(loganRuntimeRoot))
                 {
-                    loganCatalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(loganRuntimeRoot));
+                    BattleContentSource source = BattleContentSource.ForLoganRuntime(loganRuntimeRoot);
+                    LoganObjectCatalog selected = LoganObjectCatalog.Read(source);
+                    if (selected.Entries.Any(entry => requestedObjectIds.Contains(entry.Id) &&
+                        entry.Type == (int)LF2ObjectType.SpecialAttack))
+                        diagnosticCandidate = LoganVisualContentCandidate.Capture(source);
+                    loganCatalog = diagnosticCandidate?.Catalog ?? selected;
                     Configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(loganCatalog);
                     Content = NTSD28TraceContentIdentity.FromLoganCatalog(loganCatalog);
                 }
@@ -1442,10 +1558,13 @@ namespace NTSD.EditorTools
                     typeof(CharacterAnimtorManager),
                     "TotalCharacterFrameConfig",
                     flags);
+                publishedCandidateField = RequireField(
+                    typeof(CharacterAnimtorManager), "publishedLoganCandidate", flags);
 
                 originalCachedConfig = cachedConfigField.GetValue(dataManager);
                 originalObjectLookup = objectLookupField.GetValue(dataManager);
                 originalFrameConfig = frameConfigField.GetValue(animationManager);
+                originalPublishedCandidate = publishedCandidateField.GetValue(animationManager);
                 IDictionary objectsByType =
                     (IDictionary)objectsByTypeField.GetValue(dataManager);
                 IDictionary backgroundLookup =
@@ -1491,6 +1610,8 @@ namespace NTSD.EditorTools
                     typeof(GameDataManager).GetProperty("PublishedVisualContentKey").SetValue(dataManager, null);
                     typeof(GameDataManager).GetProperty("PublishedLoganContentIdentity").SetValue(dataManager, loganCatalog?.ContentIdentity);
                     frameConfigField.SetValue(animationManager, Configs);
+                    if (diagnosticCandidate != null)
+                        publishedCandidateField.SetValue(animationManager, diagnosticCandidate);
                     AssertInputsCurrent();
                 }
                 catch
@@ -1529,6 +1650,7 @@ namespace NTSD.EditorTools
                         frameConfigField.SetValue(
                             animationManager,
                             originalFrameConfig);
+                        publishedCandidateField.SetValue(animationManager, originalPublishedCandidate);
                     }
                 }
 
@@ -1666,6 +1788,7 @@ namespace NTSD.EditorTools
             public string scenarioPath;
             public string outputPath;
             public string domainOutputPath;
+            public string domainVersion;
             public string inputRngOutputPath;
             public string loganRuntimeRoot;
         }
@@ -1702,6 +1825,7 @@ namespace NTSD.EditorTools
             public int baseHp;
             public int mp;
             public int facing;
+            public int action;
             public int reviveLives30c;
             public int reviveNextLives310;
             public int reviveNextHp314;
@@ -1718,7 +1842,7 @@ namespace NTSD.EditorTools
             public string[] keys;
         }
 
-        private sealed class DomainOccupant
+        internal sealed class DomainOccupant
         {
             public DomainOccupant(
                 int slot,

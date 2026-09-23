@@ -10,6 +10,12 @@ namespace NTSD.App
 
         public List<PlayerSlotConfig> players = new List<PlayerSlotConfig>();
 
+        // Optional battle-only overrides of the native ten-name/eight-bracket tables.
+        // Empty lists retain the formal GameSession defaults.
+        public List<string> nativeBattlePlayerNames = new List<string>();
+        public List<bool> nativeBracketPlayerNames = new List<bool>();
+        public bool nativeKnockoutFeedRuntimeDisplayEnabled = true;
+
         public int backgroundId = -1;
         public int difficulty = 2;
 

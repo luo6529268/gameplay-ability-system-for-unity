@@ -3,6 +3,7 @@
 using NTSD.App;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.DatParser;
 
 namespace NTSD.Simulation.Ecs
 {
@@ -3839,13 +3840,12 @@ namespace NTSD.Simulation.Ecs
             LF2Entity targetPairDefinitionSource = target;
             int targetPairActionLatch =
                 target.Trans?.WaitCounter ?? target.Runtime.WaitCounter;
-            bool kindTransformCandidate =
-                BattleDamageWriter.IsNativeLockedKindTransformCandidate(
-                    attacker,
-                    target);
+            LoganKindRecord kindTransformRecord =
+                BattleKindTableRules.FindTransform(attacker, target);
+            bool kindTransformCandidate = kindTransformRecord != null;
             if (kindTransformCandidate)
             {
-                targetFrame = 40;
+                targetFrame = BattleKindTableRules.ResponseFrame(kindTransformRecord);
                 projection.TargetRelationTeam = attacker.RelationTeam;
                 projection.TargetOwnerSlot = attacker.Runtime.OwnerSlotIndex;
                 projection.TargetSpecialHitLatch0EB = true;

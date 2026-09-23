@@ -43,11 +43,14 @@ namespace NTSD.EditorTools
         private static Dictionary<string, object> Build(string profile, LoganContentIdentity identity)
         {
             bool hasMode = profile == "logan-runtime" && identity.ModeInputFingerprint != null;
+            bool hasKind = profile == "logan-runtime" && identity.KindInputFingerprint != null;
             var result = new Dictionary<string, object>
             {
                 ["policy"] = "logan-dat-character-images",
                 ["scope"] = profile == "logan-runtime"
-                    ? (hasMode ? "catalog-object-fusion-mode-definitions" : "catalog-object-fusion-definitions")
+                    ? (hasKind
+                        ? (hasMode ? "catalog-object-fusion-mode-kind-definitions" : "catalog-object-fusion-kind-definitions")
+                        : (hasMode ? "catalog-object-fusion-mode-definitions" : "catalog-object-fusion-definitions"))
                     : "unity-legacy-dat-files",
                 ["profile"] = profile,
                 ["rawDefinitionSha256"] = identity.RawDefinitionFingerprint,
@@ -69,8 +72,10 @@ namespace NTSD.EditorTools
                     identity.ObjectDefinitionFingerprint == null || identity.FusionInputFingerprint == null ||
                     identity.FusionSemanticFingerprint == null ||
                     (hasMode != (identity.ModeSemanticFingerprint != null)) ||
-                    identity.BattleInputContractTag != (hasMode
-                        ? "NTSD28_LOGAN_BATTLE_INPUTS_V2" : "NTSD28_LOGAN_BATTLE_INPUTS_V1"))
+                    (hasKind != (identity.KindSemanticFingerprint != null)) ||
+                    identity.BattleInputContractTag != (hasKind
+                        ? (hasMode ? "NTSD28_LOGAN_BATTLE_INPUTS_V3" : "NTSD28_LOGAN_BATTLE_INPUTS_V3_KIND_ONLY")
+                        : (hasMode ? "NTSD28_LOGAN_BATTLE_INPUTS_V2" : "NTSD28_LOGAN_BATTLE_INPUTS_V1")))
                     throw new InvalidOperationException("Current Logan trace requires complete battle content identity.");
                 result["objectDefinitionSha256"] = identity.ObjectDefinitionFingerprint;
                 result["fusionInputSha256"] = identity.FusionInputFingerprint;
@@ -80,6 +85,12 @@ namespace NTSD.EditorTools
                     result["battleInputContract"] = identity.BattleInputContractTag;
                     result["modeInputSha256"] = identity.ModeInputFingerprint;
                     result["modeSemanticSha256"] = identity.ModeSemanticFingerprint;
+                }
+                if (hasKind)
+                {
+                    result["battleInputContract"] = identity.BattleInputContractTag;
+                    result["kindInputSha256"] = identity.KindInputFingerprint;
+                    result["kindSemanticSha256"] = identity.KindSemanticFingerprint;
                 }
             }
             return result;

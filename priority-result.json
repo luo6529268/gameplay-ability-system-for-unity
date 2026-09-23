@@ -1,0 +1,12 @@
+{
+  "headerVisibleBeforeMutation": true,
+  "processAliveBeforeMutation": true,
+  "kindCreated": true,
+  "exitCode": 91,
+  "tails": [
+    "INVALID_CAPTURE_BUNDLE",
+    "INVALID_CAPTURE_BUNDLE",
+    "INVALID_CAPTURE_BUNDLE"
+  ],
+  "stderr": "unhandled_std_exception=content inputs changed during simulation\n"
+}

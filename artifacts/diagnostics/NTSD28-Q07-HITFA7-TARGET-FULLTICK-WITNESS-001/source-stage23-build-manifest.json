@@ -1,0 +1,11 @@
+{
+  "schema": "ntsd28-authority-source-capture-build/2.0",
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "authoritySourceManifestSha256": "07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F",
+  "captureRunnerSourceSha256": "E09082407F562DA711B61DE5C6FCAF1B8A29A6C58E35B62E637C150C332364D1",
+  "captureBinarySha256": "DA8297D82DBF792E4866B56EC630C93448131F1851BA4C58FD88D7B8BFFA18FE",
+  "compiler": "G:\\GoggleDownload\\x86_64-15.1.0-release-win32-seh-msvcrt-rt_v12-rev0\\mingw64\\bin\\g++.exe",
+  "executable": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\diagnostics\\NTSD28-Q07-HITFA7-TARGET-FULLTICK-WITNESS-001\\build-stage23\\hitfa7_target_fulltick.exe",
+  "authorityWriteAllowed": false
+}

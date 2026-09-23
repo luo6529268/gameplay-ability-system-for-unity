@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using NTSD.Animation;
 using NTSD.Simulation;
+using NTSD.Simulation.Lockstep;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -12,6 +13,82 @@ namespace NTSD.EditorTools.Tests
     {
         private const string OutputRoot =
             "Temp/NTSD28UnityTrace/FocusedTests";
+        private const string KindType3Scenario =
+            "artifacts/diagnostics/NTSD28-R15-KIND-DEPENDENT-SOURCE-PREFLIGHT-001/kind213-action176-to-206-action0-candidate.json";
+        private const string StagedLoganRuntime =
+            "Assets/NTSD/Content/LoganRuntime";
+
+        [Test]
+        public void KindType3ScenarioCapturesThreeTicksWithAuthoredAction()
+        {
+            string output = ProjectPath($"{OutputRoot}/kind-type3-action.raw.jsonl");
+            NTSD28UnityRawCaptureEditor.RunLoganScenarioForTests(
+                ProjectPath(StagedLoganRuntime), ProjectPath(KindType3Scenario), output);
+            string[] lines = File.ReadAllLines(output);
+            Assert.That(lines, Has.Length.EqualTo(4));
+            StringAssert.Contains("\"completedTick\":1", lines[1]);
+            StringAssert.Contains("\"completedTick\":3", lines[3]);
+            StringAssert.Contains("\"objectId\":213", lines[0] + lines[1] + lines[2] + lines[3]);
+        }
+
+        [Test]
+        public void KindType3ScenarioRejectsMissingAuthoredActionBeforeOutput()
+        {
+            string original = File.ReadAllText(ProjectPath(KindType3Scenario));
+            string invalid = original.Replace("\"action\": 176", "\"action\": 856");
+            Assert.That(invalid, Is.Not.EqualTo(original));
+            string scenario = ProjectPath($"{OutputRoot}/kind-missing-action.json");
+            string output = ProjectPath($"{OutputRoot}/kind-missing-action-{Guid.NewGuid():N}.raw.jsonl");
+            Directory.CreateDirectory(Path.GetDirectoryName(scenario));
+            File.WriteAllText(scenario, invalid);
+            InvalidDataException error = Assert.Throws<InvalidDataException>(() =>
+                NTSD28UnityRawCaptureEditor.RunLoganScenarioForTests(
+                    ProjectPath(StagedLoganRuntime), scenario, output));
+            StringAssert.Contains("no authored action 856", error.Message);
+            Assert.That(File.Exists(output), Is.False);
+        }
+
+        [Test]
+        public void DomainV2WritesVersionedHeaderAndPreservesAiTrace()
+        {
+            string output = ProjectPath($"{OutputRoot}/v2-entity.raw.jsonl");
+            string domain = ProjectPath($"{OutputRoot}/v2-domain.raw.jsonl");
+            NTSD28UnityRawCaptureEditor.RunScenarioForTests(
+                NTSD28UnityRawCaptureEditor.InputScenario, output, domain, null, "v2");
+            string[] lines = File.ReadAllLines(domain);
+            StringAssert.Contains("\"schema\":\"ntsd28-logan-b0-domain-raw-v2\"", lines[0]);
+            StringAssert.Contains("\"aiAcceptedTrace\":", lines[1]);
+            StringAssert.Contains("\"events\":[]", lines[1]);
+        }
+
+        [TestCase("v3", "unused.domain.jsonl")]
+        [TestCase("V2", "unused.domain.jsonl")]
+        [TestCase("v2", null)]
+        [TestCase("v1", null)]
+        public void DomainVersionRejectsInvalidRequestBeforeOutput(string version, string domain)
+        {
+            Assert.Throws<InvalidDataException>(() =>
+                NTSD28UnityRawCaptureEditor.RunScenarioForTests(
+                    "missing-scenario.json", "unused-output.jsonl", domain, null, version));
+        }
+
+        [Test]
+        public void DomainV2RecordsExactSameEpochIdChangeAndV1RejectsIt()
+        {
+            var before = new[] { new NTSD28UnityRawCaptureEditor.DomainOccupant(1, 1, 206) };
+            var after = new[] { new NTSD28UnityRawCaptureEditor.DomainOccupant(1, 1, 213) };
+            string json = BattleCanonicalJson.Serialize(
+                NTSD28UnityRawCaptureEditor.DeriveLifecycleEvents(before, after, "v2"));
+            Assert.That(json, Is.EqualTo("[{\"currentAllocationEpoch\":1,\"currentObjectId\":213," +
+                "\"kind\":\"object-id-change\",\"previousAllocationEpoch\":1," +
+                "\"previousObjectId\":206,\"slot\":1}]"));
+            Assert.Throws<InvalidOperationException>(() =>
+                NTSD28UnityRawCaptureEditor.DeriveLifecycleEvents(before, after, "v1"));
+            Assert.That(NTSD28UnityRawCaptureEditor.DeriveLifecycleEvents(before, before, "v2"), Is.Empty);
+            var backwards = new[] { new NTSD28UnityRawCaptureEditor.DomainOccupant(1, 0, 213) };
+            Assert.Throws<InvalidOperationException>(() =>
+                NTSD28UnityRawCaptureEditor.DeriveLifecycleEvents(before, backwards, "v2"));
+        }
 
         [NUnit.Framework.Test]
         public void OriginalAuthorityScenarioFailsClosedForMissingUnityOid99()

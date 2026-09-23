@@ -1536,6 +1536,7 @@ namespace NTSD.Animation
             BattleAtlasDiagnosticInputs atlasDiagnosticInputs = null;
             SparkPublicationStaging stagedSpark = null;
             WordPublicationStaging stagedWords = null;
+            Sprite[] stagedKillIcons = null;
             BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
@@ -1555,6 +1556,14 @@ namespace NTSD.Animation
                 if (native?.Candidate.WordsInput != null)
                     stagedWords = await BuildWordPublicationAsync(
                         native.Candidate.WordsInput,
+                        invocation,
+                        stagedCreatedSprites,
+                        stagedTextures,
+                        stagedResources);
+
+                if (native?.Candidate.KillIconInput != null)
+                    stagedKillIcons = await BuildKillIconPublicationAsync(
+                        native.Candidate.KillIconInput,
                         invocation,
                         stagedCreatedSprites,
                         stagedTextures,
@@ -1617,6 +1626,8 @@ namespace NTSD.Animation
                     throw new InvalidOperationException($"Battle atlas publication failed: {atlasDiagnostic}");
                 }
                 stagedResources.UnionWith(atlasResources);
+                if (stagedKillIcons != null)
+                    stagedCatalog = stagedCatalog.WithNativeKillIcons(stagedKillIcons);
                 atlasDiagnostic = CombineAtlasDiagnostics(atlasDiagnostic, commonSourceDiagnostic);
             }
             catch
@@ -1766,6 +1777,66 @@ namespace NTSD.Animation
             for (int index = 0; index < colors.Length; index++)
                 pixels[index] = colors[index];
             return pixels;
+        }
+
+        private async UniTask<Sprite[]> BuildKillIconPublicationAsync(
+            LoganVisualContentCandidate.NativeKillIconInput input,
+            int invocation,
+            HashSet<Sprite> stagedSprites,
+            HashSet<Texture2D> stagedTextures,
+            HashSet<UnityEngine.Object> stagedResources)
+        {
+            var icons = new Sprite[BattleSpriteCatalog.NativeKillIconTypeCount];
+            var decodedByImage = new Dictionary<string, Sprite>(StringComparer.OrdinalIgnoreCase);
+            for (int type = 0; type < icons.Length; type++)
+            {
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native kill icon publication was cancelled.");
+                LoganVisualContentCandidate.ImageInput image = input.Images[type];
+                if (image == null)
+                    continue;
+                string key = image.Path + "|" + image.Sha256;
+                if (decodedByImage.TryGetValue(key, out Sprite shared))
+                {
+                    icons[type] = shared;
+                    continue;
+                }
+
+                BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+                    BMPLoader.LoadVerifiedImageData(image.Path, image.Sha256));
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native kill icon publication was cancelled.");
+                if (decoded?.Pixels == null || !decoded.IsPng ||
+                    decoded.Width <= 0 || decoded.Height <= 0)
+                    throw new InvalidDataException("Native kill icon is not a valid PNG: " + image.Path);
+
+                Color32[] pixels = ConvertToColor32(decoded.Pixels);
+                await UniTask.SwitchToMainThread();
+                if (!CanCompleteSpritePrewarmInvocation(invocation))
+                    throw new OperationCanceledException("Native kill icon publication was cancelled.");
+
+                var texture = new Texture2D(decoded.Width, decoded.Height, TextureFormat.RGBA32, false);
+                stagedTextures.Add(texture);
+                stagedResources.Add(texture);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels32(pixels);
+                texture.Apply(false, true);
+                texture.name = "KILL_" + Path.GetFileNameWithoutExtension(image.Path);
+
+                Sprite sprite = Sprite.Create(
+                    texture,
+                    new Rect(0f, 0f, decoded.Width, decoded.Height),
+                    new Vector2(0.5f, 0.5f),
+                    100f,
+                    0,
+                    SpriteMeshType.FullRect);
+                stagedSprites.Add(sprite);
+                sprite.name = texture.name;
+                decodedByImage.Add(key, sprite);
+                icons[type] = sprite;
+            }
+            return icons;
         }
 
         private async UniTask<WordPublicationStaging> BuildWordPublicationAsync(
@@ -3591,6 +3662,11 @@ namespace NTSD.Animation
                 for (int index = 0; index < frames.Count; index++)
                     AddBattleSoundId(destination, frames[index]?.sound);
             }
+
+            LoganModeKnockoutFeedInput feed =
+                PublishedLoganCatalog?.ModeComboInput?.KnockoutFeed;
+            AddBattleSoundId(destination, feed?.StageTeam1DeathSoundPath);
+            AddBattleSoundId(destination, feed?.StageTeam5DeathSoundPath);
         }
 
         private static void AddBattleSoundId(

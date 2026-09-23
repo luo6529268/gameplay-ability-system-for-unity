@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 30;
+        internal const int CurrentSchemaVersion = 31;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -374,6 +374,10 @@ namespace NTSD.Simulation
                 NTSD28NativeComboRuntimeState.DefaultRespond);
             builder.AddInt32(nativeCombo?.CaughtAct ??
                 NTSD28NativeComboRuntimeState.DefaultCaughtAct);
+            NTSD28NativeKnockoutFeedRuntimeState knockoutFeed =
+                battle?.NativeKnockoutFeed;
+            builder.AddBoolean(knockoutFeed?.RecordPresent ?? false);
+            builder.AddInt32(knockoutFeed?.LifetimeTicks ?? 0);
             NTSD28StandardHitRestRuntimeState standardHitRest =
                 battle?.NativeStandardHitRest;
             builder.AddInt32(standardHitRest?.TimingReduction4A9FF4 ??

@@ -1,0 +1,10 @@
+{
+    "runId": "menu-first-v2-20260923-01",
+    "status": "PASS",
+    "message": "Windows Mono Development Player build completed; audit packaged content separately.",
+    "buildResult": "Succeeded",
+    "outputPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07-MenuFirst-Windows-Player\\menu-first-v2-20260923-01\\NTSD-Q07-MenuFirst.exe",
+    "totalErrors": 0,
+    "totalSize": 191574181,
+    "scenes": "Assets/NTSD/Scene/NTSD_Menu.unity;Assets/NTSD/Scene/NTSD_Battle.unity"
+}

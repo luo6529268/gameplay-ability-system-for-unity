@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 using NTSD.DatParser;
 
 namespace NTSD.Simulation
@@ -55,6 +56,7 @@ namespace NTSD.Simulation
 
         public bool IsReady { get; private set; }
         public LoganFusionCatalog FusionCatalog { get; private set; }
+        public LoganKindCatalog KindCatalog { get; private set; }
         public LoganContentIdentity LoganContentIdentity { get; private set; }
         public bool IsSealedForBattle => sealedForBattle;
         public int Generation => generation;
@@ -91,7 +93,11 @@ namespace NTSD.Simulation
                 if (identity.DecodeContractTag != Animation.LoganContentIdentity.CurrentDecodeContractTag ||
                     identity.ObjectDefinitionFingerprint != loganCatalog.DefinitionFingerprint ||
                     identity.FusionInputFingerprint != loganCatalog.FusionInput.InputFingerprint ||
-                    identity.FusionSemanticFingerprint != loganCatalog.FusionInput.SemanticFingerprint)
+                    identity.FusionSemanticFingerprint != loganCatalog.FusionInput.SemanticFingerprint ||
+                    identity.ModeInputFingerprint != loganCatalog.ModeComboInput?.InputFingerprint ||
+                    identity.ModeSemanticFingerprint != loganCatalog.ModeComboInput?.SemanticFingerprint ||
+                    identity.KindInputFingerprint != loganCatalog.KindInput.InputFingerprint ||
+                    identity.KindSemanticFingerprint != loganCatalog.KindInput.SemanticFingerprint)
                     throw new ArgumentException("Prepared fusion data requires its complete current content identity.", nameof(loganCatalog));
                 if (definitions.Count != loganCatalog.Entries.Count)
                     throw new ArgumentException("Prepared objects do not match the captured Logan catalog.", nameof(definitions));
@@ -135,6 +141,7 @@ namespace NTSD.Simulation
             generation = generation == int.MaxValue ? 1 : generation + 1;
             HitRecordLifecycleCatalog = hitRecordLifecycleCatalog;
             FusionCatalog = loganCatalog?.FusionInput.Catalog;
+            KindCatalog = loganCatalog?.KindInput.Catalog;
             LoganContentIdentity = loganCatalog?.ContentIdentity;
             IsReady = objectDefinitions.Count > 0;
         }
@@ -173,5 +180,42 @@ namespace NTSD.Simulation
         {
             sealedForBattle = false;
         }
+    }
+
+    internal static class BattleKindTableRules
+    {
+        internal static LoganKindCatalog ResolveCatalog(LF2Entity entity)
+        {
+            SimulationWorld world = entity?.RegisteredWorldForSimulation ?? entity?.Match;
+            return world?.RuntimeDataCatalog?.KindCatalog ?? LoganKindCatalogInput.LockedCatalog;
+        }
+
+        internal static bool RejectCandidate(LoganKindCatalog catalog,
+            int attackerOid, int targetOid, int targetType, int interactionKind)
+        {
+            if (targetType != (int)LF2ObjectType.SpecialAttack || interactionKind == 9)
+                return false;
+            return catalog?.FindEffect(targetOid)?.RespondsTo(attackerOid) == true;
+        }
+
+        internal static LoganKindRecord FindTransform(LF2Entity attacker, LF2Entity target)
+        {
+            if (attacker?.Runtime == null || target?.Runtime == null ||
+                attacker.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.SpecialAttack ||
+                target.GetCurrentDataObjectTypeForSimulation() !=
+                    (int)LF2ObjectType.SpecialAttack)
+                return null;
+
+            int attackerOid = LF2Entity.ResolveCurrentDataObjectId(attacker);
+            int targetOid = LF2Entity.ResolveCurrentDataObjectId(target);
+            foreach (LoganKindRecord record in ResolveCatalog(attacker).Records)
+                if (record.Binds(attackerOid) && record.RespondsTo(targetOid))
+                    return record;
+            return null;
+        }
+
+        internal static int ResponseFrame(LoganKindRecord record) =>
+            record == null ? 0 : record.Frame == 0 ? 40 : record.Frame;
     }
 }

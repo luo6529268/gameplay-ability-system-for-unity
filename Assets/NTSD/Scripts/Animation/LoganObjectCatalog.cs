@@ -44,6 +44,7 @@ namespace NTSD.Animation
         public string DefinitionFingerprint { get; }
         public LoganFusionCatalogInput FusionInput { get; }
         public LoganModeComboInput ModeComboInput { get; }
+        public LoganKindCatalogInput KindInput { get; }
         public string BattleDefinitionFingerprint => ContentIdentity.RawDefinitionFingerprint;
         public LoganContentIdentity ContentIdentity { get; }
         public string SourceCacheKey { get; }
@@ -72,9 +73,11 @@ namespace NTSD.Animation
             // Canonical portable layout: both native roots are RuntimeRoot; DatRoot is its decoded_dat.
             FusionInput = LoganFusionCatalogInput.Capture(source.DatRoot, source.RuntimeRoot);
             ModeComboInput = LoganModeComboInput.Capture(source);
+            KindInput = LoganKindCatalogInput.Capture(source.DatRoot, source.RuntimeRoot);
             ContentIdentity = LoganContentIdentity.FromBattleComponents(DefinitionFingerprint,
                 FusionInput.InputFingerprint, FusionInput.SemanticFingerprint,
-                ModeComboInput?.InputFingerprint, ModeComboInput?.SemanticFingerprint);
+                ModeComboInput?.InputFingerprint, ModeComboInput?.SemanticFingerprint,
+                KindInput.InputFingerprint, KindInput.SemanticFingerprint);
             SourceCacheKey = ContentIdentity.CreateSourceCacheKey(source.RuntimeRoot);
         }
 

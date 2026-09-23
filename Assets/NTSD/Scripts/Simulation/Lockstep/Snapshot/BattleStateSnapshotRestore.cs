@@ -775,6 +775,11 @@ namespace NTSD.Simulation
                 nativeCombo.Facing,
                 nativeCombo.Respond,
                 nativeCombo.CaughtAct);
+            Runtime.NativeKnockoutFeed ??=
+                new NTSD28NativeKnockoutFeedRuntimeState();
+            Runtime.NativeKnockoutFeed.RestoreForSnapshot(
+                core.NativeKnockoutFeed.RecordPresent,
+                core.NativeKnockoutFeed.LifetimeTicks);
             Runtime.NativeStandardHitRest ??=
                 new NTSD28StandardHitRestRuntimeState();
             Runtime.NativeStandardHitRest.RestoreForSnapshot(

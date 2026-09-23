@@ -1,0 +1,5 @@
+capture_schema=ntsd28-authority-source-capture-v2
+capture_ticks=3
+domain_capture=disabled
+b2_input_rng_capture=enabled
+evidence_class=SOURCE_MODEL_DIAGNOSTIC_ONLY

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using NTSD.Animation.LF2Objects;
+using NTSD.DatParser;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
 using NTSD.Simulation.Spatial;
@@ -6851,7 +6852,8 @@ namespace NTSD.Animation
             int targetType = GetCurrentDataObjectType(target);
             int targetState = targetFrame?.state ?? 0;
 
-            if (IsBlockedReleaseOidInteraction(attackerOid, targetOid, kind))
+            if (IsBlockedReleaseOidInteraction(attackerOid, targetOid, targetType, kind,
+                    BattleKindTableRules.ResolveCatalog(attacker)))
                 return false;
             if (kind == 3 && targetType != (int)LF2ObjectType.Character)
                 return false;
@@ -6911,18 +6913,11 @@ namespace NTSD.Animation
             return true;
         }
 
-        private static bool IsBlockedReleaseOidInteraction(int attackerOid, int targetOid, int kind)
+        private static bool IsBlockedReleaseOidInteraction(int attackerOid, int targetOid,
+            int targetType, int kind, LoganKindCatalog catalog)
         {
-            if (kind == 9 || targetOid != 209)
-                return false;
-
-            return attackerOid == 200 ||
-                   attackerOid == 203 ||
-                   attackerOid == 205 ||
-                   attackerOid == 206 ||
-                   attackerOid == 207 ||
-                   attackerOid == 215 ||
-                   attackerOid == 216;
+            return BattleKindTableRules.RejectCandidate(
+                catalog, attackerOid, targetOid, targetType, kind);
         }
 
         private static bool DeferState3005Kind8LeadIn(LF2Entity attacker, LF2FrameData activeFrame)

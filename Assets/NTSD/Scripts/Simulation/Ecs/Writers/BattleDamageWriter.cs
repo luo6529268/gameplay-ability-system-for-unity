@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.DatParser;
 using UnityEngine;
 
 namespace NTSD.Simulation.Ecs
@@ -2233,10 +2234,10 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity target)
         {
-            const int responseAction = 40;
-            if (!IsNativeLockedKindTransformCandidate(attacker, target) ||
-                attacker.FrameCache?.Wrapper == null ||
-                attacker.FrameCache.HasNativeFrame(responseAction) != true)
+            LoganKindRecord record = BattleKindTableRules.FindTransform(attacker, target);
+            int responseAction = BattleKindTableRules.ResponseFrame(record);
+            if (record == null ||
+                attacker.FrameCache?.Wrapper == null)
             {
                 return false;
             }
@@ -2248,10 +2249,17 @@ namespace NTSD.Simulation.Ecs
             target.ObjectId = sourceObjectId;
             target.FrameCache.Load(sourceWrapper);
             target.DirectWriteNativeRawFramePreserveWaitCounter(responseAction);
-            target.Trans?.SyncDirectFrameData(
-                target.Frame.D.wait,
-                target.Frame.D.next,
-                responseAction);
+            if (target.Frame.D != null)
+            {
+                target.Trans?.SyncDirectFrameData(
+                    target.Frame.D.wait,
+                    target.Frame.D.next,
+                    responseAction);
+            }
+            else
+            {
+                target.Trans?.SyncWaitCounterFrame(responseAction);
+            }
             target.Frame.Prev = responseAction;
             target.AttackingCounter = 0;
             target.Runtime.SpecialHitLatch0EB = true;
@@ -2266,18 +2274,7 @@ namespace NTSD.Simulation.Ecs
             LF2Entity attacker,
             LF2Entity target)
         {
-            if (attacker?.Runtime == null || target?.Runtime == null ||
-                attacker.GetCurrentDataObjectTypeForSimulation() !=
-                    (int)LF2ObjectType.SpecialAttack)
-            {
-                return false;
-            }
-
-            int attackerOid = LF2Entity.ResolveCurrentDataObjectId(attacker);
-            int targetOid = LF2Entity.ResolveCurrentDataObjectId(target);
-            bool bound = attackerOid == 8 || attackerOid == 209 ||
-                         attackerOid == 213;
-            return bound && IsKarasuOid(targetOid);
+            return BattleKindTableRules.FindTransform(attacker, target) != null;
         }
 
         private static void ResetType3HitMotion(LF2Entity entity)
@@ -2311,12 +2308,6 @@ namespace NTSD.Simulation.Ecs
                 return null;
 
             return world.FindEntityByRuntimeSlotForQuery(holderSlot);
-        }
-
-        private static bool IsKarasuOid(int oid)
-        {
-            return oid == 200 || oid == 203 || oid == 205 || oid == 206 ||
-                   oid == 207 || oid == 215 || oid == 216;
         }
 
         private static void ApplyKind0WeaponVictimTail(

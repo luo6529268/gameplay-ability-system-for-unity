@@ -1166,12 +1166,14 @@ namespace NTSD.Animation
     /// </summary>
     public sealed class BattleSpriteCatalog
     {
+        public const int NativeKillIconTypeCount = 7;
         private static readonly IReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry> EmptyEntries =
             new ReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry>(
                 new Dictionary<BattleSpriteKey, BattleSpriteEntry>());
 
         private readonly IReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry> _entries;
         private readonly IReadOnlyDictionary<Sprite, BattleSpriteKey[]> _reverseKeys;
+        private readonly Sprite[] nativeKillIcons;
 
         public static BattleSpriteCatalog Empty { get; } =
             new BattleSpriteCatalog(EmptyEntries);
@@ -1179,16 +1181,46 @@ namespace NTSD.Animation
         public int Count => _entries.Count;
 
         internal BattleSpriteCatalog(IDictionary<BattleSpriteKey, BattleSpriteEntry> entries)
+            : this(entries, null)
         {
-            var immutableEntries = new Dictionary<BattleSpriteKey, BattleSpriteEntry>(entries);
-            _entries = new ReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry>(immutableEntries);
-            _reverseKeys = BuildReverseKeys(immutableEntries);
+        }
+
+        private BattleSpriteCatalog(IDictionary<BattleSpriteKey, BattleSpriteEntry> entries,
+            Sprite[] killIcons)
+            : this((IReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry>)
+                new ReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry>(
+                    new Dictionary<BattleSpriteKey, BattleSpriteEntry>(entries)), killIcons)
+        {
         }
 
         private BattleSpriteCatalog(IReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry> entries)
+            : this(entries, null)
+        {
+        }
+
+        private BattleSpriteCatalog(IReadOnlyDictionary<BattleSpriteKey, BattleSpriteEntry> entries,
+            Sprite[] killIcons)
         {
             _entries = entries;
             _reverseKeys = BuildReverseKeys(entries);
+            nativeKillIcons = killIcons == null
+                ? new Sprite[NativeKillIconTypeCount]
+                : (Sprite[])killIcons.Clone();
+        }
+
+        public bool TryGetNativeKillIcon(int type, out Sprite sprite)
+        {
+            sprite = type >= 0 && type < nativeKillIcons.Length
+                ? nativeKillIcons[type]
+                : null;
+            return sprite != null;
+        }
+
+        internal BattleSpriteCatalog WithNativeKillIcons(Sprite[] icons)
+        {
+            if (icons == null || icons.Length != NativeKillIconTypeCount)
+                throw new ArgumentException("Native kill icons require seven type slots.", nameof(icons));
+            return new BattleSpriteCatalog(_entries, icons);
         }
 
         public bool TryGet(int visualDataId, int effectivePic, out BattleSpriteEntry entry)
@@ -1258,7 +1290,9 @@ namespace NTSD.Animation
                     throw new InvalidOperationException($"Missing central atlas binding for battle sprite {pair.Key}.");
                 entries.Add(pair.Key, pair.Value.WithCentralBinding(binding));
             }
-            return new BattleSpriteCatalog((IDictionary<BattleSpriteKey, BattleSpriteEntry>)entries);
+            return new BattleSpriteCatalog(
+                (IDictionary<BattleSpriteKey, BattleSpriteEntry>)entries,
+                nativeKillIcons);
         }
 
         private static IReadOnlyDictionary<Sprite, BattleSpriteKey[]> BuildReverseKeys(

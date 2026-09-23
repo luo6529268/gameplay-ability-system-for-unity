@@ -113,8 +113,65 @@ internal static class B0DomainRawComparatorSelfTest
             }
         });
 
+        string authorityV2 = authority.Replace(B0DomainRawContract.Schema, "ntsd28-logan-b0-domain-raw-v2", StringComparison.Ordinal);
+        string unityV2 = unity.Replace(B0DomainRawContract.Schema, "ntsd28-logan-b0-domain-raw-v2", StringComparison.Ordinal);
+        RunCase(report, "v2-shared-domains-equal", true, () =>
+        {
+            B0DomainRawComparisonReport comparison = B0DomainRawComparator.CompareTextForTest(authorityV2, unityV2);
+            return comparison.InputEqual && comparison.SlotOccupantsEqual && comparison.LifecycleEqual && !comparison.CertificateEligible;
+        });
+        string authorityIdChange = WithObjectIdChange(authorityV2, 9);
+        string unityIdChange = WithObjectIdChange(unityV2, 9);
+        RunCase(report, "v2-object-id-change-equal", true, () =>
+        {
+            B0DomainRawComparisonReport comparison = B0DomainRawComparator.CompareTextForTest(authorityIdChange, unityIdChange);
+            return comparison.SlotOccupantsEqual && comparison.LifecycleEqual && !comparison.CertificateEligible;
+        });
+        RunCase(report, "v2-object-id-change-difference", true, () =>
+        {
+            B0DomainRawComparisonReport comparison = B0DomainRawComparator.CompareTextForTest(
+                authorityIdChange, WithObjectIdChange(unityV2, 10));
+            return !comparison.SlotOccupantsEqual && !comparison.LifecycleEqual && !comparison.CertificateEligible;
+        });
+        foreach ((string name, string left, string right) in new[]
+        {
+            ("mixed-v1-v2-rejected", authority, unityV2),
+            ("mixed-v2-v1-rejected", authorityV2, unity),
+        })
+        {
+            RunCase(report, name, true, () =>
+            {
+                try
+                {
+                    _ = B0DomainRawComparator.CompareTextForTest(left, right);
+                    return false;
+                }
+                catch (InvalidDataException exception)
+                {
+                    return exception.Message == "raw-schema-mismatch";
+                }
+            });
+        }
+
         report.Passed = report.Cases.All(test => test.Passed);
         return report;
+    }
+
+    private static string WithObjectIdChange(string capture, int currentObjectId)
+    {
+        string[] lines = capture.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+        JsonObject tick = JsonNode.Parse(lines[1])!.AsObject();
+        tick["slots"]!["occupants"]![0]!["objectId"] = currentObjectId;
+        tick["lifecycleDelta"]!["events"] = new JsonArray
+        {
+            new JsonObject
+            {
+                ["kind"] = "object-id-change", ["slot"] = 0,
+                ["previousAllocationEpoch"] = 1, ["currentAllocationEpoch"] = 1,
+                ["previousObjectId"] = 2, ["currentObjectId"] = currentObjectId,
+            },
+        };
+        return lines[0] + Environment.NewLine + Serialize(tick) + Environment.NewLine;
     }
 
     private static void RunCase(

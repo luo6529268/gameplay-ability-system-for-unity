@@ -54,7 +54,7 @@ namespace NTSD.Test.Editor
             Assert.That(staged.ModeComboInput.Facing, Is.EqualTo(1));
             Assert.That(staged.ModeComboInput.Respond, Is.EqualTo(50));
             Assert.That(staged.ModeComboInput.CaughtAct, Is.EqualTo(1));
-            Assert.That(staged.ContentIdentity.BattleInputContractTag, Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V2"));
+            Assert.That(staged.ContentIdentity.BattleInputContractTag, Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
             Assert.That(staged.ContentIdentity.SemanticFingerprint, Is.EqualTo(formal.ContentIdentity.SemanticFingerprint));
         }
 

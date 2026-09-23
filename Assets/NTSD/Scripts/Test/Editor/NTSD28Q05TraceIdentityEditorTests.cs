@@ -77,7 +77,7 @@ namespace NTSD.Test
                 var catalog = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(root));
                 Assert.That((string)header["content"]["rawDefinitionSha256"], Is.EqualTo(catalog.BattleDefinitionFingerprint));
                 Assert.That((string)header["content"]["semanticSha256"], Is.EqualTo(catalog.ContentIdentity.SemanticFingerprint));
-                Assert.That((string)header["content"]["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V2"));
+                Assert.That((string)header["content"]["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
                 Assert.That((string)header["content"]["modeInputSha256"], Is.EqualTo(catalog.ContentIdentity.ModeInputFingerprint));
                 Assert.That((string)header["content"]["modeSemanticSha256"], Is.EqualTo(catalog.ContentIdentity.ModeSemanticFingerprint));
                 Assert.That((string)header["content"]["profile"], Is.EqualTo("logan-runtime"));
@@ -143,17 +143,19 @@ namespace NTSD.Test
                 LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime"))
             });
             Assert.That(content["rawDefinitionSha256"], Is.EqualTo("33B0341C58D2A708B208F2CA4A0C4DA740E942D49A8A9D82E106F1D1D9C419BE"));
-            Assert.That(content["semanticSha256"], Is.EqualTo("FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB"));
-            Assert.That(content["catalogFingerprint64"], Is.EqualTo("9F40EB3FFF1812FF"));
-            Assert.That(content["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V2"));
+            Assert.That(content["semanticSha256"], Is.EqualTo("B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45"));
+            Assert.That(content["catalogFingerprint64"], Is.EqualTo("96DE8D089438B1B8"));
+            Assert.That(content["battleInputContract"], Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
             Assert.That(content["modeInputSha256"], Is.EqualTo("9E9FAC26E92E91DE1F8823E3CDFEF7A38C444D90724566BC38F5CACF068075DD"));
             Assert.That(content["modeSemanticSha256"], Is.EqualTo("B92B74AD174178FCBB8C7B11834964BA784A487449AE4EFE401A8EE50B76079B"));
-            Assert.That(content["scope"], Is.EqualTo("catalog-object-fusion-mode-definitions"));
+            Assert.That(content["kindInputSha256"], Is.EqualTo("B18E147AB26065B0668BB0ACCE9DF89C5352ABD6E467ABB89A4E01C3178AF5E0"));
+            Assert.That(content["kindSemanticSha256"], Is.EqualTo("48EE87992BACEC941C70E4176012D4AD4F060CAB7CA551EA8317555D40A703D5"));
+            Assert.That(content["scope"], Is.EqualTo("catalog-object-fusion-mode-kind-definitions"));
             Assert.That(content["profile"], Is.EqualTo("logan-runtime"));
             var schemas = (IDictionary)content["schemas"];
             Assert.That(schemas["entityRuntime"], Is.EqualTo(17));
-            Assert.That(schemas["aggregate"], Is.EqualTo(26));
-            Assert.That(schemas["checksum"], Is.EqualTo(29));
+            Assert.That(schemas["aggregate"], Is.EqualTo(BattleStateSnapshotBuffer.CurrentSchemaVersion));
+            Assert.That(schemas["checksum"], Is.EqualTo(BattleLockstepChecksumModule.CurrentSchemaVersion));
             Assert.That(schemas["characterShell"], Is.EqualTo(2));
             Assert.That(schemas["entityBaseShell"], Is.EqualTo(2));
         }

@@ -2561,7 +2561,7 @@ namespace NTSD.Test
             Expect(authorityChecksum is BattleParityFrameSnapshot &&
                    authorityChecksum.Schema == BattleParityFrameSnapshot.SchemaId &&
                    mobileRested.Schema == BattleExtendedChecksumSnapshot.SchemaId &&
-                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v2\"") &&
+                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v3\"") &&
                    SimulationTickDriver.CaptureSupportedFrameSnapshot(
                        mobileWorld,
                        11,

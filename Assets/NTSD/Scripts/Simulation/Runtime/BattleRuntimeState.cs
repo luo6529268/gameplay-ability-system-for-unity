@@ -545,6 +545,25 @@ namespace NTSD.Simulation
         }
     }
 
+    [Serializable]
+    public sealed class NTSD28NativeKnockoutFeedRuntimeState
+    {
+        public bool RecordPresent;
+        public int LifetimeTicks;
+
+        public void Reset()
+        {
+            RecordPresent = false;
+            LifetimeTicks = 0;
+        }
+
+        internal void RestoreForSnapshot(bool recordPresent, int lifetimeTicks)
+        {
+            RecordPresent = recordPresent;
+            LifetimeTicks = lifetimeTicks;
+        }
+    }
+
     /// <summary>
     /// Unity 侧的战斗唯一运行态根节点。
     /// 让 SimulationWorld 对齐 C++ GameWorld 的“职责中心”，但避免重新长成一个巨型类。
@@ -580,6 +599,8 @@ namespace NTSD.Simulation
             new NTSD28HitResourceRulesRuntimeState();
         public NTSD28NativeComboRuntimeState NativeCombo =
             new NTSD28NativeComboRuntimeState();
+        public NTSD28NativeKnockoutFeedRuntimeState NativeKnockoutFeed =
+            new NTSD28NativeKnockoutFeedRuntimeState();
         public NTSD28StandardHitRestRuntimeState NativeStandardHitRest =
             new NTSD28StandardHitRestRuntimeState();
         [NonSerialized]
@@ -618,6 +639,8 @@ namespace NTSD.Simulation
             NativeHitResourceRules.Reset();
             NativeCombo ??= new NTSD28NativeComboRuntimeState();
             NativeCombo.Reset();
+            NativeKnockoutFeed ??= new NTSD28NativeKnockoutFeedRuntimeState();
+            NativeKnockoutFeed.Reset();
             NativeStandardHitRest ??= new NTSD28StandardHitRestRuntimeState();
             NativeStandardHitRest.Reset();
             FunctionKeys ??= new NTSD28NativeFunctionKeySessionState();

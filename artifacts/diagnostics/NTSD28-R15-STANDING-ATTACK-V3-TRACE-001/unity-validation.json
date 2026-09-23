@@ -1,0 +1,18 @@
+{
+  "schema": "ntsd28-authority-source-capture-validation-v2",
+  "contentIdentityKey": "",
+  "source": "unity.raw.jsonl",
+  "status": "invalid",
+  "valid": false,
+  "certificateEligible": false,
+  "evidenceClass": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scenarioId": "",
+  "authoritySourceManifestSha256": "",
+  "captureRunnerSourceSha256": "",
+  "captureBinarySha256": "",
+  "scenarioDataSha256": "",
+  "expectedTicks": 0,
+  "validatedTicks": 0,
+  "entitySnapshots": 0,
+  "reason": "header-property-set-mismatch"
+}

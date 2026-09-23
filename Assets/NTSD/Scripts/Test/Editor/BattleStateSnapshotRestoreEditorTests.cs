@@ -14,6 +14,30 @@ namespace NTSD.Test
     public sealed class BattleStateSnapshotRestoreEditorTests
     {
         [Test]
+        public void KnockoutFeedPresenceAndLifetimeRestoreWithChecksum()
+        {
+            using var scope = new DriverScope();
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var session = new BattleLockstepSession(scope.Driver, identity, 0, 8, 8);
+            BattleStateSnapshotBuffer snapshot =
+                session.CreateBattleStateSnapshotBufferForBootstrap();
+            SimulationWorld world = scope.Driver.World;
+            world.Runtime.NativeKnockoutFeed.RestoreForSnapshot(true, 70);
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            ulong expected = world.CaptureRuntimeChecksum64(0, null);
+
+            world.Runtime.NativeKnockoutFeed.RestoreForSnapshot(false, 0);
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.Not.EqualTo(expected));
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out BattleStateSnapshotRestoreFailure failure),
+                Is.True, failure.ToString());
+            Assert.That(world.Runtime.NativeKnockoutFeed.RecordPresent, Is.True);
+            Assert.That(world.Runtime.NativeKnockoutFeed.LifetimeTicks, Is.EqualTo(70));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.EqualTo(expected));
+        }
+
+        [Test]
         public void NativeResultFlowRestoresChecksumAndRejectsInvalidMaskBeforeMutation()
         {
             using var scope = new DriverScope();

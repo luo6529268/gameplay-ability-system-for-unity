@@ -1,0 +1,13 @@
+# NTSD28-R15-NATIVE-KIND-V3-CAPTURE-001
+
+Status: FOCUSED_TEST_PASS. Parent: BATCH-04/Q07 and R15. Scope: repository diagnostic source-model runner only. See matching Change Record and diagnostic REPORT for scoped proof and residual gates.
+
+Authority: formal `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable `game_session.cpp` `optional_global_dat(..., "kind.dat")`, `KindCatalog28::load_file`/locked fallback and `tick_options()`; formal `resources/runtime` bytes. Unity V3 identity in `LoganKindCatalogInput` and `LoganContentIdentity` is the target trace header contract, not a gameplay-rule authority.
+
+Pre-change first difference: `Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp` captures object/fusion/mode V2 only, while current Unity trace and validator include kind input+semantic SHA and V3/V3_KIND_ONLY scope/schema. Existing native V2 captures remain historical and must not be rewritten or relabeled.
+
+Declared script path: `Tools/NTSD28AuthorityTrace/authority_source_capture_main.cpp`. Task/Change/Ledger/STATE/handoff/alignment documentation and new diagnostic outputs under `artifacts/diagnostics/NTSD28-R15-NATIVE-KIND-V3-CAPTURE-001` or repository Temp. No formal J: source, Unity runtime, Scene, Prefab, resource or nonbattle path edit.
+
+Behavior: select kind with the same decoded-first candidate order as formal host/Unity capture. Parse selected bytes with formal `KindCatalog28`; absent file uses formal locked table. Fail closed on selected invalid content. Hash exact Unity BinaryWriter preimages for kind semantic and input SHA; compose V3 (mode present) or V3_KIND_ONLY (mode absent) with seven/five components respectively, then existing semantics tag and little-endian 64-bit projection. Recheck selected path, priority and hashes after initialization and after simulation; preserve bundle fail-closed behavior. Emit exact V3 fields and current trace compatibility schema; keep `SOURCE_MODEL_DIAGNOSTIC_ONLY` and `certificateEligible=false`.
+
+Acceptance: fresh build from unchanged formal source; formal same-seed source capture twice byte-equal across main/domain/B2, validator and independent Unity projection match; no-mode kind-only fixture, selected-invalid and late-byte/priority mutation reject. Narrow tests and `Validate-ChangeLedger.ps1`/diff check. A Unity same-seed capture, first-difference trace, real Scene kind pair and formal EXE observable comparison are separate R15/Q07 gates. Rollback only the declared runner diff after review/required deletion approval; preserve all existing dirty work and historical outputs.

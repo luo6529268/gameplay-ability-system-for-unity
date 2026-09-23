@@ -257,7 +257,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleExtendedChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v2";
+        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v3";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -339,7 +339,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleLockstepChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-lockstep-core-checksum-v2";
+        public const string SchemaId = "ntsd-lockstep-core-checksum-v3";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -1240,6 +1240,9 @@ namespace NTSD.Simulation
                 new NTSD28HitResourceRulesRuntimeState();
             NTSD28NativeComboRuntimeState nativeCombo =
                 battle.NativeCombo ?? new NTSD28NativeComboRuntimeState();
+            NTSD28NativeKnockoutFeedRuntimeState knockoutFeed =
+                battle.NativeKnockoutFeed ??
+                new NTSD28NativeKnockoutFeedRuntimeState();
             NTSD28StandardHitRestRuntimeState standardHitRest =
                 battle.NativeStandardHitRest ??
                 new NTSD28StandardHitRestRuntimeState();
@@ -1313,6 +1316,9 @@ namespace NTSD.Simulation
                     ("facing", nativeCombo.Facing),
                     ("respond", nativeCombo.Respond),
                     ("caughtact", nativeCombo.CaughtAct))),
+                ("nativeKnockoutFeed", DictionaryOf(
+                    ("recordPresent", (object)knockoutFeed.RecordPresent),
+                    ("lifetimeTicks", knockoutFeed.LifetimeTicks))),
                 ("standardHitRest", DictionaryOf(
                     ("timingReduction4A9FF4",
                         (object)standardHitRest.TimingReduction4A9FF4))),

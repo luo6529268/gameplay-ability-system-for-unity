@@ -1,0 +1,66 @@
+{
+  "schema": "ntsd28-logan-b0-domain-raw-comparison-v1",
+  "status": "shared-domains-equal-rng-topology-different",
+  "scenarioId": "kind213-action176-to-206-action0-candidate",
+  "ticksCompared": 3,
+  "inputEqual": true,
+  "rngTopologyEqual": false,
+  "slotOccupantsEqual": true,
+  "lifecycleEqual": true,
+  "authoritySlotCapacity": 1000,
+  "unitySlotCapacity": 400,
+  "slotCapacityExceptionApplied": true,
+  "authorityRng": [
+    {
+      "stream": "authorityCrt",
+      "initialTotalCalls": 3000,
+      "finalTotalCalls": 3002,
+      "tickCallCounts": [
+        2,
+        0,
+        0
+      ]
+    },
+    {
+      "stream": "authoritySynchronized",
+      "initialTotalCalls": 1,
+      "finalTotalCalls": 1,
+      "tickCallCounts": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "unityRng": [
+    {
+      "stream": "unityDeterministic",
+      "initialTotalCalls": 0,
+      "finalTotalCalls": 3,
+      "tickCallCounts": [
+        1,
+        1,
+        1
+      ]
+    }
+  ],
+  "differences": [
+    {
+      "domain": "rng",
+      "path": "rng.streamAvailability",
+      "classification": "STREAM_TOPOLOGY_DIFFERENCE",
+      "completedTick": null,
+      "authorityValue": "authorityCrt,authoritySynchronized",
+      "unityValue": "unityDeterministic"
+    }
+  ],
+  "firstDifference": {
+    "domain": "rng",
+    "path": "rng.streamAvailability",
+    "classification": "STREAM_TOPOLOGY_DIFFERENCE",
+    "completedTick": null,
+    "authorityValue": "authorityCrt,authoritySynchronized",
+    "unityValue": "unityDeterministic"
+  },
+  "certificateEligible": false
+}
