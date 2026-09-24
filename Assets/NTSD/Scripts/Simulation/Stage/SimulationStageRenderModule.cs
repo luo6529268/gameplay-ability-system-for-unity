@@ -37,6 +37,11 @@ namespace NTSD.Simulation
         private bool skipLateRendererUpdateForDiagnostics;
         private bool forceLegacyPerPassStageRefreshForDiagnostics;
         private int preparedStageRuntimeTick = int.MinValue;
+        private BoundaryWallManager walkableAreaManager;
+        private BattleMapBoundaryDefinition walkableAreaDefinition;
+        private BattleWalkableAreaSnapshot walkableAreaSnapshot;
+        private bool walkableAreaTestOverride;
+        private readonly List<Vector2> walkableVerticesScratch = new List<Vector2>(32);
 
         internal SimulationStageRenderModule(SimulationWorld world)
         {
@@ -54,6 +59,11 @@ namespace NTSD.Simulation
             skipLateRendererUpdateForDiagnostics = false;
             forceLegacyPerPassStageRefreshForDiagnostics = false;
             preparedStageRuntimeTick = int.MinValue;
+            walkableAreaManager = null;
+            walkableAreaDefinition = null;
+            walkableAreaSnapshot = null;
+            walkableAreaTestOverride = false;
+            walkableVerticesScratch.Clear();
             StageRuntimeSceneRefreshCountForDiagnostics = 0;
             StageRuntimeHostPrepareCountForDiagnostics = 0;
             StageRuntimeHostReuseCountForDiagnostics = 0;
@@ -126,6 +136,7 @@ namespace NTSD.Simulation
             }
 
             RefreshStageRuntimeSnapshotFromScene();
+            RefreshWalkableAreaSnapshotFromScene();
             preparedStageRuntimeTick = tickIndex;
             StageRuntimeHostPrepareCountForDiagnostics++;
         }
@@ -224,6 +235,67 @@ namespace NTSD.Simulation
                 return true;
 
             return manager.IsPointWalkable(pointXY);
+        }
+
+        internal bool TryIsGroundPixelWalkable(double battleX, double battleZ,
+            out bool walkable)
+        {
+            BattleWalkableAreaSnapshot snapshot = walkableAreaSnapshot;
+            walkable = snapshot == null || snapshot.ContainsGroundPixel(battleX, battleZ);
+            return snapshot != null;
+        }
+
+        internal void SetWalkableAreaSnapshotForTesting(BattleWalkableAreaSnapshot snapshot)
+        {
+            walkableAreaSnapshot = snapshot;
+            walkableAreaTestOverride = true;
+        }
+
+        private void RefreshWalkableAreaSnapshotFromScene()
+        {
+            if (walkableAreaTestOverride)
+                return;
+
+            BoundaryWallManager manager = BoundaryWallManager.Instance;
+            BattleMapBoundaryDefinition definition = manager?.LoadedBoundaryDefinition;
+            if (walkableAreaSnapshot != null &&
+                ReferenceEquals(manager, walkableAreaManager) &&
+                ReferenceEquals(definition, walkableAreaDefinition))
+                return;
+
+            walkableAreaManager = manager;
+            walkableAreaDefinition = definition;
+            walkableAreaSnapshot = null;
+            if (manager == null)
+                return;
+
+            var polygons = new List<Vector2[]>();
+            IReadOnlyList<BoundaryWall> boundaries = manager.EnabledBoundaries;
+            for (int boundaryIndex = 0; boundaryIndex < boundaries.Count; boundaryIndex++)
+            {
+                BoundaryWall boundary = boundaries[boundaryIndex];
+                if (boundary == null || !boundary.IsEnabled)
+                    continue;
+                IReadOnlyList<BoundaryPolygon> source = boundary.Polygons;
+                if (source == null)
+                    continue;
+                for (int polygonIndex = 0; polygonIndex < source.Count; polygonIndex++)
+                {
+                    BoundaryPolygon polygon = source[polygonIndex];
+                    if (polygon == null || !boundary.IsPolygonSimple(polygon) ||
+                        !boundary.TryGetWorldVertices(polygon, walkableVerticesScratch))
+                        continue;
+                    polygons.Add(walkableVerticesScratch.ToArray());
+                }
+            }
+
+            if (polygons.Count == 0)
+                return;
+
+            Vector2 origin = NTSDRenderSpace.GroundPixelToWorld(0, 0);
+            walkableAreaSnapshot = new BattleWalkableAreaSnapshot(
+                polygons, origin, NTSDRenderSpace.UnitsPerPixelX,
+                NTSDRenderSpace.UnitsPerPixelY);
         }
 
         public void RefreshStageRuntimeSnapshotFromScene()

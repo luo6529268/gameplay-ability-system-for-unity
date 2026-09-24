@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 32;
+        internal const int CurrentSchemaVersion = 33;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -505,6 +505,7 @@ namespace NTSD.Simulation
             builder.AddBoolean(runtime?.SourceRuleXBoundNegative ?? false);
             builder.AddBoolean(runtime?.SourceRuleZBoundPositive ?? false);
             builder.AddBoolean(runtime?.SourceRuleZBoundNegative ?? false);
+            builder.AddInt32(runtime?.OutsideWalkableSinceTick ?? -1);
         }
 
         private void AppendEntityRuntime(

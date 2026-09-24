@@ -75,7 +75,11 @@ namespace NTSD.Simulation.Ecs
             int attackerXInt = attacker.Runtime.XInt;
             int attackerYInt = attacker.Runtime.YInt;
             int victimXInt = victim.Runtime.XInt;
-            bool attackerFacesLeft = attackerXInt > victimXInt;
+            // Alignment contract: NTSD28-USER-SOURCE-GRAB-FACING-001.
+            bool attackerFacesLeft = attacker.Runtime.SourceRulePositionInitialized &&
+                victim.Runtime.SourceRulePositionInitialized
+                    ? attacker.Runtime.SourceRuleXInt > victim.Runtime.SourceRuleXInt
+                    : attackerXInt > victimXInt;
             attacker.SwitchDir(attackerFacesLeft ? "left" : "right");
             victim.SwitchDir(attackerFacesLeft ? "right" : "left");
 
@@ -114,7 +118,11 @@ namespace NTSD.Simulation.Ecs
             int attackerXInt = attacker.Runtime.XInt;
             int attackerYInt = attacker.Runtime.YInt;
             int victimXInt = victim.Runtime.XInt;
-            bool attackerFacesLeft = attackerXInt > victimXInt;
+            // Alignment contract: NTSD28-USER-SOURCE-GRAB-FACING-001.
+            bool attackerFacesLeft = attacker.Runtime.SourceRulePositionInitialized &&
+                victim.Runtime.SourceRulePositionInitialized
+                    ? attacker.Runtime.SourceRuleXInt > victim.Runtime.SourceRuleXInt
+                    : attackerXInt > victimXInt;
             bool victimFacesLeft = !attackerFacesLeft;
             int catchingFrame = ResolveRelationAction(
                 itr.catchingact,

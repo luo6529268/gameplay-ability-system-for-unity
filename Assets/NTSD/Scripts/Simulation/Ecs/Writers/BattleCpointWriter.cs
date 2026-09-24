@@ -407,7 +407,8 @@ namespace NTSD.Simulation.Ecs
             int victimCenterX = victimFrame?.centerx ?? 0;
             int victimCenterY = victimFrame?.centery ?? 0;
 
-            victim.Runtime.X = victim.Runtime.Dir == "right"
+            bool victimFacesRightForPose = victim.Runtime.Dir == "right";
+            victim.Runtime.X = victimFacesRightForPose
                 ? victimCenterX - victimCpointX + dx
                 : victimCpointX - victimCenterX + dx;
             victim.Runtime.Y = victimCenterY - victimCpointY + dy;
@@ -432,6 +433,26 @@ namespace NTSD.Simulation.Ecs
             {
                 victim.SwitchDir(
                     attacker.Runtime.Dir == "right" ? "left" : "right");
+            }
+
+            if (attacker.Runtime.SourceRulePositionInitialized &&
+                victim.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-CPOINT-HELD-POSITION-001.
+                int sourceDx = attacker.Runtime.Dir == "right"
+                    ? attacker.Runtime.SourceRuleXInt - catcherFrame.centerx + cpoint.X
+                    : catcherFrame.centerx - cpoint.X + attacker.Runtime.SourceRuleXInt;
+                int sourceX = victimFacesRightForPose
+                    ? victimCenterX - victimCpointX + sourceDx
+                    : victimCpointX - victimCenterX + sourceDx;
+                int sourceZ = attacker.Runtime.SourceRuleZInt;
+                if (cpoint.Z == 0)
+                    sourceZ += coverRem == 0 ? -1 : 1;
+                else
+                    sourceZ += cpoint.Z;
+                victim.Runtime.SourceRuleX = sourceX;
+                victim.Runtime.SourceRuleZ = sourceZ;
+                victim.Runtime.SyncSourceRuleIntegerPosition();
             }
 
             victim.Runtime.SyncIntegerPosition();
@@ -472,6 +493,16 @@ namespace NTSD.Simulation.Ecs
             victim.Runtime.Y = y;
             victim.Runtime.XInt = x;
             victim.Runtime.YInt = y;
+            if (attacker.Runtime.SourceRulePositionInitialized &&
+                victim.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-CPOINT-THROW-POSITION-001.
+                int sourceX = attacker.Runtime.Dir == "right"
+                    ? attacker.Runtime.SourceRuleXInt - centerX + cpoint.X
+                    : centerX - cpoint.X + attacker.Runtime.SourceRuleXInt;
+                victim.Runtime.SourceRuleX = sourceX;
+                victim.Runtime.SourceRuleXInt = sourceX;
+            }
 
             int nextFrame = throwFrame?.next ?? 0;
             // Alignment contract: NTSD28-Q06-CPOINT-THROW-NATIVE-RAW-BINDING-001.

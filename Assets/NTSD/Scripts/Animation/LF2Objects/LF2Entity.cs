@@ -2241,8 +2241,12 @@ namespace NTSD.Animation.LF2Objects
                 task.directY = Runtime.Y;
                 task.directZ = Runtime.Z;
                 task.useDirectVelocity = true;
-                // Alignment contract: NTSD28-USER-HITFA5-TARGET-VELOCITY-001.
-                task.directVx = (double)((ally.GetRuntimeXInt() - GetRuntimeXInt()) / 50);
+                bool sourceHistoryComplete = Runtime.SourceRulePositionInitialized &&
+                    ally.Runtime.SourceRulePositionInitialized;
+                // Alignment contract: NTSD28-USER-SOURCE-HITFA5-TARGET-VELOCITY-001.
+                task.directVx = sourceHistoryComplete
+                    ? (double)((ally.Runtime.SourceRuleXInt - Runtime.SourceRuleXInt) / 50)
+                    : (double)((ally.GetRuntimeXInt() - GetRuntimeXInt()) / 50);
                 task.directVy = 0.0;
                 task.directVz = 0.0;
                 task.ownerEntityIndex = OwnerEntityIndex;
@@ -2251,6 +2255,15 @@ namespace NTSD.Animation.LF2Objects
                 task.initialRuntimeX = Runtime.XInt;
                 task.initialRuntimeY = Runtime.YInt;
                 task.initialRuntimeZ = Runtime.ZInt;
+                if (sourceHistoryComplete)
+                {
+                    task.useSourceRulePosition = true;
+                    task.sourceRuleX = Runtime.SourceRuleX;
+                    task.sourceRuleZ = Runtime.SourceRuleZ;
+                    task.useInitialSourceRuleIntPosition = true;
+                    task.initialSourceRuleX = Runtime.SourceRuleXInt;
+                    task.initialSourceRuleZ = Runtime.SourceRuleZInt;
+                }
                 PublishFrameLogicObjectImmediate(factory, referencePool, task, freeSlot);
             }
 
@@ -2463,6 +2476,9 @@ namespace NTSD.Animation.LF2Objects
             {
                 int bestDist = 10000;
                 int bestSlot = -1;
+                int sourceBestDist = 10000;
+                int sourceBestSlot = -1;
+                bool sourceRankingComplete = Runtime.SourceRulePositionInitialized;
                 for (int slot = 0;
                      slot < Match.MaxRuntimeSlotsForServices;
                      slot++)
@@ -2497,7 +2513,24 @@ namespace NTSD.Animation.LF2Objects
                         bestDist = dist;
                         bestSlot = GetRuntimeSlotOrNegative(obj);
                     }
+                    if (!obj.Runtime.SourceRulePositionInitialized)
+                        sourceRankingComplete = false;
+                    if (sourceRankingComplete)
+                    {
+                        int sourceDist =
+                            System.Math.Abs(obj.Runtime.SourceRuleXInt - Runtime.SourceRuleXInt) +
+                            System.Math.Abs(obj.Runtime.SourceRuleZInt - Runtime.SourceRuleZInt);
+                        if (sourceDist < sourceBestDist)
+                        {
+                            sourceBestDist = sourceDist;
+                            sourceBestSlot = GetRuntimeSlotOrNegative(obj);
+                        }
+                    }
                 }
+
+                // Alignment contract: NTSD28-USER-SOURCE-OBJECT-AI-TARGET-001.
+                if (sourceRankingComplete)
+                    bestSlot = sourceBestSlot;
 
                 if (bestSlot >= 0)
                     ObjectAiTargetSlot3F8 = bestSlot;
@@ -2658,16 +2691,9 @@ namespace NTSD.Animation.LF2Objects
         internal virtual bool ApplyPreFrameXBounds(float baseStageWidth, int xMaxOverride)
         {
             int currentDataType = GetCurrentDataObjectTypeForSimulation();
-            if (currentDataType == (int)LF2ObjectType.SpecialAttack)
+            if (currentDataType == (int)LF2ObjectType.Character)
             {
-                if (Runtime.X < -300f || Runtime.X > baseStageWidth + 300f)
-                {
-                    FreeEntityLikeExe();
-                    return true;
-                }
-            }
-            else if (currentDataType == (int)LF2ObjectType.Character)
-            {
+                Runtime.OutsideWalkableSinceTick = -1;
                 int slotIndex = Runtime?.SlotIndex ?? StableId;
                 if (slotIndex >= 20)
                 {
@@ -2704,21 +2730,51 @@ namespace NTSD.Animation.LF2Objects
                     slotIndex, RelationTeam, HitStun,
                     baseStageWidth, xMaxOverride);
             }
-            else if ((ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
+            else if (currentDataType != (int)LF2ObjectType.SpecialAttack &&
+                     (ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
             {
                 if (Runtime.X < 10f)
                     Runtime.X = 10f;
                 if (Runtime.X > baseStageWidth - 10f)
                     Runtime.X = baseStageWidth - 10f;
             }
-            else if (Runtime.YInt == 0 && (Runtime.X < 0f || Runtime.X > baseStageWidth))
+
+            if (currentDataType != (int)LF2ObjectType.Character &&
+                ApplyNonCharacterWalkableTimeout())
             {
-                FreeEntityLikeExe();
                 return true;
             }
 
             Runtime.XInt = (int)Runtime.X;
             return false;
+        }
+
+        private bool ApplyNonCharacterWalkableTimeout()
+        {
+            SimulationWorld world = RegisteredWorldForSimulation;
+            if (world == null ||
+                !world.TryIsGroundPixelWalkable(Runtime.X, Runtime.Z, out bool walkable) ||
+                walkable)
+            {
+                Runtime.OutsideWalkableSinceTick = -1;
+                return false;
+            }
+
+            int tick = world.CurrentTickIndex;
+            if (Runtime.OutsideWalkableSinceTick < 0 ||
+                tick < Runtime.OutsideWalkableSinceTick)
+            {
+                Runtime.OutsideWalkableSinceTick = tick;
+                return false;
+            }
+
+            // Alignment contract: NTSD28-USER-NONCHAR-WALKABLE-TTL-001.
+            const int requiredElapsedTicks = 304;
+            if (tick - Runtime.OutsideWalkableSinceTick < requiredElapsedTicks)
+                return false;
+
+            FreeEntityLikeExe();
+            return true;
         }
 
         /// <summary>
@@ -4104,7 +4160,10 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             LF2Entity best = null;
+            LF2Entity sourceBest = null;
             int bestDistance = toEnemy ? 10000 : -1;
+            int sourceBestDistance = bestDistance;
+            bool sourceRankingComplete = Runtime.SourceRulePositionInitialized;
 
             for (int i = 0; i < entities.Count; i++)
             {
@@ -4132,7 +4191,25 @@ namespace NTSD.Animation.LF2Objects
                     bestDistance = distance;
                     best = target;
                 }
+
+                if (!target.Runtime.SourceRulePositionInitialized)
+                    sourceRankingComplete = false;
+                if (sourceRankingComplete)
+                {
+                    int sourceDistance =
+                        System.Math.Abs(target.Runtime.SourceRuleZInt - Runtime.SourceRuleZInt) +
+                        System.Math.Abs(target.Runtime.SourceRuleXInt - Runtime.SourceRuleXInt);
+                    if (toEnemy ? sourceDistance < sourceBestDistance : sourceDistance > sourceBestDistance)
+                    {
+                        sourceBestDistance = sourceDistance;
+                        sourceBest = target;
+                    }
+                }
             }
+
+            // Alignment contract: NTSD28-USER-SOURCE-TELEPORT-TARGET-001.
+            if (sourceRankingComplete)
+                best = sourceBest;
 
             if (best == null)
             {
@@ -4213,7 +4290,10 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             LF2Entity best = null;
+            LF2Entity sourceBest = null;
             int bestDistance = toEnemy ? 10000 : -1;
+            int sourceBestDistance = bestDistance;
+            bool sourceRankingComplete = Runtime.SourceRulePositionInitialized;
             for (int i = 0; i < entities.Count; i++)
             {
                 LF2Entity candidate = entities[i];
@@ -4236,12 +4316,29 @@ namespace NTSD.Animation.LF2Objects
                 bool selected = toEnemy
                     ? distance < bestDistance
                     : distance > bestDistance;
-                if (!selected)
-                    continue;
-
-                best = candidate;
-                bestDistance = distance;
+                if (selected)
+                {
+                    best = candidate;
+                    bestDistance = distance;
+                }
+                if (!candidate.Runtime.SourceRulePositionInitialized)
+                    sourceRankingComplete = false;
+                if (sourceRankingComplete)
+                {
+                    int sourceDistance =
+                        System.Math.Abs(candidate.Runtime.SourceRuleZInt - Runtime.SourceRuleZInt) +
+                        System.Math.Abs(candidate.Runtime.SourceRuleXInt - Runtime.SourceRuleXInt);
+                    if (toEnemy ? sourceDistance < sourceBestDistance : sourceDistance > sourceBestDistance)
+                    {
+                        sourceBest = candidate;
+                        sourceBestDistance = sourceDistance;
+                    }
+                }
             }
+
+            // Alignment contract: NTSD28-USER-SOURCE-TELEPORT-TARGET-001.
+            if (sourceRankingComplete)
+                best = sourceBest;
 
             double nextX = Runtime.XInt;
             int nextZ = Runtime.ZInt;

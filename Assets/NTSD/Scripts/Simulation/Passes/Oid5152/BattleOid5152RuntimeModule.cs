@@ -109,7 +109,16 @@ namespace NTSD.Simulation
                     continue;
                 int x = primary.GetRuntimeXInt(), px = partner.GetRuntimeXInt();
                 int z = primary.GetRenderZInt(), pz = partner.GetRenderZInt();
-                if (Math.Abs((long)x - px) >= 50 || Math.Abs((long)z - pz) >= 8 || (slot <= 9 && x <= px))
+                bool sourceHistoryComplete = primary.Runtime.SourceRulePositionInitialized &&
+                    partner.Runtime.SourceRulePositionInitialized;
+                int ruleX = sourceHistoryComplete ? primary.Runtime.SourceRuleXInt : x;
+                int rulePartnerX = sourceHistoryComplete ? partner.Runtime.SourceRuleXInt : px;
+                int ruleZ = sourceHistoryComplete ? primary.Runtime.SourceRuleZInt : z;
+                int rulePartnerZ = sourceHistoryComplete ? partner.Runtime.SourceRuleZInt : pz;
+                // Alignment contract: NTSD28-USER-SOURCE-FUSION-DISTANCE-001.
+                if (Math.Abs((long)ruleX - rulePartnerX) >= 50 ||
+                    Math.Abs((long)ruleZ - rulePartnerZ) >= 8 ||
+                    (slot <= 9 && ruleX <= rulePartnerX))
                     continue;
                 if (!TryResolve(record.Id3, record.Action, out var fused)) continue;
 
@@ -124,6 +133,13 @@ namespace NTSD.Simulation
                 int midpointX = unchecked(x + px) / 2, midpointZ = unchecked(z + pz) / 2;
                 primary.Runtime.X = primary.Runtime.XInt = midpointX;
                 primary.Runtime.Z = primary.Runtime.ZInt = midpointZ;
+                if (sourceHistoryComplete)
+                {
+                    int sourceMidpointX = unchecked(ruleX + rulePartnerX) / 2;
+                    int sourceMidpointZ = unchecked(ruleZ + rulePartnerZ) / 2;
+                    primary.Runtime.SourceRuleX = primary.Runtime.SourceRuleXInt = sourceMidpointX;
+                    primary.Runtime.SourceRuleZ = primary.Runtime.SourceRuleZInt = sourceMidpointZ;
+                }
                 primary.Runtime.Unk32C = slot;
                 primary.Runtime.Unk338 = record.Decrease;
                 primary.Runtime.FusionDisplayTimer190 = record.Decrease;
@@ -171,6 +187,15 @@ namespace NTSD.Simulation
             partner.Runtime.XInt = primary.Runtime.XInt;
             partner.Runtime.YInt = primary.Runtime.YInt;
             partner.Runtime.ZInt = primary.Runtime.ZInt;
+            partner.Runtime.SourceRulePositionInitialized =
+                primary.Runtime.SourceRulePositionInitialized;
+            if (primary.Runtime.SourceRulePositionInitialized)
+            {
+                partner.Runtime.SourceRuleX = primary.Runtime.SourceRuleX;
+                partner.Runtime.SourceRuleZ = primary.Runtime.SourceRuleZ;
+                partner.Runtime.SourceRuleXInt = primary.Runtime.SourceRuleXInt;
+                partner.Runtime.SourceRuleZInt = primary.Runtime.SourceRuleZInt;
+            }
             partner.Runtime.CollisionYReference = primary.Runtime.CollisionYReference;
             primary.Runtime.Vx = partner.Runtime.Vx = partner.Runtime.Vy = 0;
             partner.SwitchDir(primary.Runtime.Dir == "right" ? "left" : "right");

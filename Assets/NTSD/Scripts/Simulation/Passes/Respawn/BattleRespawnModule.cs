@@ -83,6 +83,9 @@ namespace NTSD.Simulation
             int relationTeam = entity.RelationTeam;
             int sumX = 0;
             int sumZ = 0;
+            int sourceSumX = 0;
+            int sourceSumZ = 0;
+            bool sourceHistoryComplete = entity.Runtime.SourceRulePositionInitialized;
             int count = 0;
 
             for (int index = 0; index < entityScratch.Count; index++)
@@ -104,20 +107,35 @@ namespace NTSD.Simulation
 
                 sumX += other.Runtime.XInt;
                 sumZ += other.Runtime.ZInt;
+                if (other.Runtime.SourceRulePositionInitialized)
+                {
+                    sourceSumX += other.Runtime.SourceRuleXInt;
+                    sourceSumZ += other.Runtime.SourceRuleZInt;
+                }
+                else
+                {
+                    sourceHistoryComplete = false;
+                }
                 count++;
             }
 
-            if (sumX != 0 && count > 0)
+            // Alignment contract: NTSD28-USER-SOURCE-REVIVAL-AVERAGE-001.
+            if ((sourceHistoryComplete ? sourceSumX : sumX) != 0 && count > 0)
             {
                 int avgX = sumX / count;
                 int avgZ = sumZ / count;
+                int rawOffsetX = world.NativeRandom.SynchronizedNext(0x90u, 0x33) - 25;
+                int rawOffsetZ = world.NativeRandom.SynchronizedNext(0x91u, 0x1f) - 15;
                 // Alignment contract: NTSD28-USER-REVIVAL-OFFSET-RATIO-001.
                 entity.Runtime.X = avgX +
-                    (world.NativeRandom.SynchronizedNext(0x90u, 0x33) - 25.0) *
-                    world.FixedViewRunDistanceScale;
+                    rawOffsetX * world.FixedViewRunDistanceScale;
                 entity.Runtime.Z = avgZ +
-                    (world.NativeRandom.SynchronizedNext(0x91u, 0x1f) - 15.0) *
-                    world.FixedViewRunVerticalDistanceScale;
+                    rawOffsetZ * world.FixedViewRunVerticalDistanceScale;
+                if (sourceHistoryComplete)
+                {
+                    entity.Runtime.SourceRuleX = sourceSumX / count + rawOffsetX;
+                    entity.Runtime.SourceRuleZ = sourceSumZ / count + rawOffsetZ;
+                }
                 entity.PS.x = entity.Runtime.X;
                 entity.PS.z = entity.Runtime.Z;
             }

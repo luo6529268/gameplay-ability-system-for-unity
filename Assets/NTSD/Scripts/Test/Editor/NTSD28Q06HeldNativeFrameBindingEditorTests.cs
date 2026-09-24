@@ -45,6 +45,10 @@ namespace NTSD.Test
                 LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
                 LF2Entity held = world.FindEntityByRuntimeSlotForQuery(70);
                 Assert.That(held, Is.InstanceOf<LF2WeaponBase>());
+                holder.Runtime.SetSourceRulePosition(holder.Runtime.XInt, holder.Runtime.ZInt);
+                held.Runtime.SetSourceRulePosition(held.Runtime.XInt, held.Runtime.ZInt);
+                holder.Runtime.SyncSourceRuleIntegerPosition();
+                held.Runtime.SyncSourceRuleIntegerPosition();
                 Assert.That(holder.Runtime.XInt, Is.EqualTo(300));
                 holder.Runtime.SetVelocity(48, 0, 0);
                 new CharacterMechanics().StepBattleLogic(
@@ -60,6 +64,10 @@ namespace NTSD.Test
                 Assert.That(held.Runtime.XInt, Is.EqualTo(expectedHeldXInt));
                 Assert.That(held.Runtime.XInt - holder.Runtime.XInt, Is.EqualTo(11));
                 Assert.That(held.Runtime.ZInt, Is.EqualTo(251));
+                Assert.That(holder.Runtime.SourceRuleXInt, Is.EqualTo(348));
+                Assert.That(held.Runtime.SourceRuleXInt, Is.EqualTo(359));
+                Assert.That(held.Runtime.SourceRuleX, Is.EqualTo(359));
+                Assert.That(held.Runtime.SourceRuleZInt, Is.EqualTo(251));
             }
             finally
             {
@@ -86,6 +94,10 @@ namespace NTSD.Test
                 world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
                 LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
                 LF2Entity held = world.FindEntityByRuntimeSlotForQuery(70);
+                holder.Runtime.SetSourceRulePosition(holder.Runtime.XInt, holder.Runtime.ZInt);
+                held.Runtime.SetSourceRulePosition(held.Runtime.XInt, held.Runtime.ZInt);
+                holder.Runtime.SyncSourceRuleIntegerPosition();
+                held.Runtime.SyncSourceRuleIntegerPosition();
                 Assert.That(holder.Runtime.XInt, Is.EqualTo(300));
                 Assert.That(holder.Runtime.ZInt, Is.EqualTo(250));
                 holder.Runtime.SetVelocity(48, 0, 0);
@@ -102,6 +114,36 @@ namespace NTSD.Test
                 Assert.That(held.Runtime.XInt, Is.EqualTo(expectedHeldXInt));
                 Assert.That(held.Runtime.XInt - holder.Runtime.XInt, Is.EqualTo(11));
                 Assert.That(held.Runtime.ZInt, Is.EqualTo(251));
+                Assert.That(holder.Runtime.SourceRuleXInt, Is.EqualTo(348));
+                Assert.That(held.Runtime.SourceRuleXInt, Is.EqualTo(359));
+                Assert.That(held.Runtime.SourceRuleX, Is.EqualTo(359));
+                Assert.That(held.Runtime.SourceRuleZInt, Is.EqualTo(251));
+            }
+            finally
+            {
+                Shutdown(world, false);
+            }
+        }
+
+        [Test]
+        public void HeldWPointWithIncompleteSourceCarrier_DoesNotInventRuleHistory()
+        {
+            JObject row = JObject.Parse(File.ReadLines(Output + "source/first.jsonl")
+                .Skip(1).First());
+            SimulationWorld world = CreateWorld(row, BattleRuntimeProfile.Authority400, false);
+            try
+            {
+                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
+                LF2Entity held = world.FindEntityByRuntimeSlotForQuery(70);
+                holder.Runtime.SourceRulePositionInitialized = false;
+                held.Runtime.SetSourceRulePosition(999, 777);
+                held.Runtime.SyncSourceRuleIntegerPosition();
+
+                world.HeldObjectProcessAll(1);
+                Assert.That(held.Runtime.SourceRuleX, Is.EqualTo(999));
+                Assert.That(held.Runtime.SourceRuleZ, Is.EqualTo(777));
+                Assert.That(held.Runtime.SourceRuleXInt, Is.EqualTo(999));
+                Assert.That(held.Runtime.SourceRuleZInt, Is.EqualTo(777));
             }
             finally
             {

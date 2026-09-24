@@ -1669,6 +1669,11 @@ namespace NTSD.Simulation
         }
 
         public bool IsGroundPointWalkable(Vector2 pointXY) => stageRenderModule.IsGroundPointWalkable(pointXY);
+        internal bool TryIsGroundPixelWalkable(double battleX, double battleZ,
+            out bool walkable) => stageRenderModule.TryIsGroundPixelWalkable(
+                battleX, battleZ, out walkable);
+        internal void SetWalkableAreaSnapshotForTesting(BattleWalkableAreaSnapshot snapshot) =>
+            stageRenderModule.SetWalkableAreaSnapshotForTesting(snapshot);
 
         public void RefreshStageRuntimeSnapshotFromScene() => stageRenderModule.RefreshStageRuntimeSnapshotFromScene();
 
@@ -3917,7 +3922,27 @@ namespace NTSD.Simulation
         internal string AiNearestBestFirstFirstShadowMismatchForDiagnostics { get => aiRuntime.Input.NearestBestFirstFirstShadowMismatch; private set => aiRuntime.Input.NearestBestFirstFirstShadowMismatch = value; }
         internal int AiNearestAirPassCountForDiagnostics { get => aiRuntime.Input.NearestAirPassCount; private set => aiRuntime.Input.NearestAirPassCount = value; }
 
-        internal void BuildAiInputSlotSnapshot() => aiRuntime.Input.BuildInputSlotSnapshot(this);
+        internal void BuildAiInputSlotSnapshot()
+        {
+            bool sourceComplete = false;
+            foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
+            {
+                if (entity == null || !IsActiveForCurrentPass(entity))
+                    continue;
+                if (entity.Runtime == null ||
+                    !entity.Runtime.SourceRulePositionInitialized)
+                {
+                    sourceComplete = false;
+                    break;
+                }
+
+                sourceComplete = true;
+            }
+
+            // Alignment contract: NTSD28-USER-SOURCE-CHARACTER-AI-DOMAIN-001.
+            aiRuntime.Input.UseSourceRulePosition = sourceComplete;
+            aiRuntime.Input.BuildInputSlotSnapshot(this);
+        }
 
         internal bool AiInputUsesSoACandidateForModule => aiSensingMode == AiSensingMode.SoAAiSensing;
 
@@ -5283,6 +5308,8 @@ namespace NTSD.Simulation
 
         private void CaptureAiSoASensingShadowSnapshot(ulong expectedEpoch)
         {
+            aiRuntime.Sensing.Rows.UseSourceRulePosition =
+                aiRuntime.Input.UseSourceRulePosition;
             if (!aiRuntime.Sensing.TryBuildShadowSnapshot(
                     aiInputSlots,
                     expectedEpoch))

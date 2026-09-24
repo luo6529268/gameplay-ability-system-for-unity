@@ -1071,6 +1071,7 @@ namespace NTSD.Simulation
                     UnifiedSnapshotScratchState;
                 candidate.Reset(epoch, capacity);
                 AiSoASensingRows rows = candidate.Rows;
+                rows.UseSourceRulePosition = input.UseSourceRulePosition;
 
                 ThrowUnifiedSnapshotExceptionForSelfCheck(stage);
                 stage = AiUnifiedSnapshotExceptionStage.Capture;
@@ -1192,6 +1193,8 @@ namespace NTSD.Simulation
             ulong epoch = runtimeSlots.OccupancyEpoch;
             if (!rowPublisher.Active ||
                 published == null ||
+                input.UseSourceRulePosition ||
+                published.Rows.UseSourceRulePosition != input.UseSourceRulePosition ||
                 capacity <= 0 ||
                 published.Capacity != capacity ||
                 published.Epoch != epoch ||
@@ -1477,9 +1480,13 @@ namespace NTSD.Simulation
             rows.ObjectId[slot] = objectId;
             rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
             rows.DataObjectType[slot] = identity.DataObjectType;
-            rows.X[slot] = frameMotion.X;
+            rows.X[slot] = rows.UseSourceRulePosition
+                ? runtime.SourceRuleXInt
+                : frameMotion.X;
             rows.Y[slot] = frameMotion.Y;
-            rows.Z[slot] = frameMotion.Z;
+            rows.Z[slot] = rows.UseSourceRulePosition
+                ? runtime.SourceRuleZInt
+                : frameMotion.Z;
             rows.Hp[slot] = vital.Hp;
             rows.Hp3[slot] = vital.Hp3;
             rows.HpMax[slot] = vital.HpBound;
@@ -1664,6 +1671,10 @@ namespace NTSD.Simulation
         {
             if (!UnifiedSnapshotExecutionCommittedThisPass)
                 return;
+
+            // Source-rule position writes do not publish through the physical
+            // FrameMotionStore. Recapture this AI row at the existing boundary.
+            forceFullPostRefresh |= input.UseSourceRulePosition;
 
             AiUnifiedSnapshotExceptionStage stage =
                 AiUnifiedSnapshotExceptionStage.Refresh;
@@ -2116,8 +2127,12 @@ namespace NTSD.Simulation
                             entity.Runtime.HP > 0;
             if (eligible != UnifiedMoveModeFirst10Eligible[slot] ||
                 eligible &&
-                (entity.Runtime.XInt != UnifiedMoveModeFirst10X[slot] ||
-                 entity.Runtime.ZInt != UnifiedMoveModeFirst10Z[slot]))
+                ((input.UseSourceRulePosition
+                    ? entity.Runtime.SourceRuleXInt
+                    : entity.Runtime.XInt) != UnifiedMoveModeFirst10X[slot] ||
+                 (input.UseSourceRulePosition
+                    ? entity.Runtime.SourceRuleZInt
+                    : entity.Runtime.ZInt) != UnifiedMoveModeFirst10Z[slot]))
             {
                 UnifiedMoveModeFirst10Valid = false;
             }
@@ -2143,6 +2158,7 @@ namespace NTSD.Simulation
             EnsureUnifiedShadowCapacity(capacity);
             AiSoASensingRows rows = UnifiedSnapshotRows;
             rows.Reset(UnifiedSnapshotPassEpoch);
+            rows.UseSourceRulePosition = input.UseSourceRulePosition;
             Array.Clear(UnifiedSnapshotSoASensingBoundaryFlags, 0, capacity);
             Array.Clear(UnifiedSnapshotDecisionBoundaryFlags, 0, capacity);
             Array.Clear(UnifiedSnapshotFallbackSlots, 0, capacity);
@@ -2323,8 +2339,12 @@ namespace NTSD.Simulation
             if (!eligible)
                 return;
 
-            int x = entity.Runtime.XInt;
-            int z = entity.Runtime.ZInt;
+            int x = input.UseSourceRulePosition
+                ? entity.Runtime.SourceRuleXInt
+                : entity.Runtime.XInt;
+            int z = input.UseSourceRulePosition
+                ? entity.Runtime.SourceRuleZInt
+                : entity.Runtime.ZInt;
             UnifiedMoveModeFirst10X[slot] = x;
             UnifiedMoveModeFirst10Z[slot] = z;
             if (x <= -1)
@@ -2520,6 +2540,7 @@ namespace NTSD.Simulation
                 return AiDecisionAvailability.SnapshotMissing;
 
             AiSensingSnapshot rows = snapshot.Rows;
+            rows.UseSourceRulePosition = input.UseSourceRulePosition;
             for (int slot = 0; slot < capacity; slot++)
             {
                 if (!runtimeSlots.IsAddressable(slot))
@@ -2555,9 +2576,13 @@ namespace NTSD.Simulation
                 rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
                 rows.DataObjectType[slot] =
                     entity.GetCurrentDataObjectTypeForSimulation();
-                rows.X[slot] = runtime.XInt;
+                rows.X[slot] = rows.UseSourceRulePosition
+                    ? runtime.SourceRuleXInt
+                    : runtime.XInt;
                 rows.Y[slot] = runtime.YInt;
-                rows.Z[slot] = runtime.ZInt;
+                rows.Z[slot] = rows.UseSourceRulePosition
+                    ? runtime.SourceRuleZInt
+                    : runtime.ZInt;
                 rows.Hp[slot] = runtime.HP;
                 rows.Hp3[slot] = runtime.HP3;
                 rows.HpMax[slot] = runtime.HPBound;
@@ -4222,7 +4247,9 @@ namespace NTSD.Simulation
         internal int X(LF2Entity entity) =>
             TryGetAiSoADecisionRemainderRow(entity, out AiSoASensingRows rows, out int slot)
                 ? rows.X[slot]
-                : entity.Runtime.XInt;
+                : input.UseSourceRulePosition
+                    ? entity.Runtime.SourceRuleXInt
+                    : entity.Runtime.XInt;
 
         internal int Y(LF2Entity entity) =>
             TryGetAiSoADecisionRemainderRow(entity, out AiSoASensingRows rows, out int slot)
@@ -4232,7 +4259,9 @@ namespace NTSD.Simulation
         internal int Z(LF2Entity entity) =>
             TryGetAiSoADecisionRemainderRow(entity, out AiSoASensingRows rows, out int slot)
                 ? rows.Z[slot]
-                : entity.Runtime.ZInt;
+                : input.UseSourceRulePosition
+                    ? entity.Runtime.SourceRuleZInt
+                    : entity.Runtime.ZInt;
 
         internal int Hp(LF2Entity entity) =>
             TryGetAiSoADecisionRemainderRow(entity, out AiSoASensingRows rows, out int slot)

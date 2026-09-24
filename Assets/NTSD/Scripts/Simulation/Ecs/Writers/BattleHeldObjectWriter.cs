@@ -165,6 +165,25 @@ namespace NTSD.Simulation.Ecs
                 held.Runtime.Y += 1.0;
             }
 
+            if (holder.Runtime.SourceRulePositionInitialized &&
+                held.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-WPOINT-HELD-POSITION-001.
+                LF2FrameData holderFrame = holder.Frame.D;
+                int sourceAnchorX = holder.Runtime.Dir == "right"
+                    ? holder.Runtime.SourceRuleXInt - holderFrame.centerx + holderWPoint.X
+                    : holder.Runtime.SourceRuleXInt + holderFrame.centerx - holderWPoint.X;
+                int sourceX = held.Runtime.Dir == "right"
+                    ? sourceAnchorX + heldCenterX - heldWPointX
+                    : sourceAnchorX + heldWPointX - heldCenterX;
+                int sourceZ = holder.Runtime.SourceRuleZInt;
+                if (holderWPoint.Cover != 2)
+                    sourceZ += holderWPoint.Cover == 0 ? 1 : -1;
+                held.Runtime.SourceRuleX = sourceX;
+                held.Runtime.SourceRuleZ = sourceZ;
+                held.Runtime.SyncSourceRuleIntegerPosition();
+            }
+
             held.Runtime.SyncIntegerPosition();
         }
 

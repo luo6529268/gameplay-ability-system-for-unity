@@ -243,6 +243,8 @@ namespace NTSD.Simulation
         public double X;
         public double Y;
         public double Z;
+        // Alignment contract: NTSD28-USER-NONCHAR-WALKABLE-TTL-001; -1 means inside or unavailable.
+        public int OutsideWalkableSinceTick = -1;
         // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-STATE-001; independent of scaled battle motion.
         public double SourceRuleX;
         public double SourceRuleZ;
@@ -1015,6 +1017,7 @@ namespace NTSD.Simulation
             destination.PickerStableId = PickerStableId;
             destination.AiControlled = AiControlled;
             destination.X = X;
+            destination.OutsideWalkableSinceTick = OutsideWalkableSinceTick;
             destination.SourceRuleX = SourceRuleX;
             destination.SourceRuleZ = SourceRuleZ;
             destination.SourceRuleXInt = SourceRuleXInt;
@@ -1210,6 +1213,7 @@ namespace NTSD.Simulation
             PickerStableId = -1;
             AiControlled = false;
             X = 0f;
+            OutsideWalkableSinceTick = -1;
             SourceRuleX = 0.0;
             SourceRuleZ = 0.0;
             SourceRuleXInt = 0;

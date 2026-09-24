@@ -194,6 +194,26 @@ namespace NTSD.Animation.LF2Objects
                 weapon.Runtime.Y += 1.0;
             }
 
+            if (holder.Runtime.SourceRulePositionInitialized &&
+                weapon.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-WPOINT-HELD-POSITION-001.
+                LF2FrameData holderFrame = holder.Frame.D;
+                LF2FrameData heldFrame = weapon.Frame.D;
+                int sourceAnchorX = holder.Runtime.Dir == "right"
+                    ? holder.Runtime.SourceRuleXInt - holderFrame.centerx + holderWPoint.X
+                    : holder.Runtime.SourceRuleXInt + holderFrame.centerx - holderWPoint.X;
+                int sourceX = weapon.Runtime.Dir == "right"
+                    ? sourceAnchorX + (heldFrame?.centerx ?? 0) - heldWPoint.X
+                    : sourceAnchorX + heldWPoint.X - (heldFrame?.centerx ?? 0);
+                int sourceZ = holder.Runtime.SourceRuleZInt;
+                if (cover != 2)
+                    sourceZ += cover == 0 ? 1 : -1;
+                weapon.Runtime.SourceRuleX = sourceX;
+                weapon.Runtime.SourceRuleZ = sourceZ;
+                weapon.Runtime.SyncSourceRuleIntegerPosition();
+            }
+
             weapon.Runtime.SyncIntegerPosition();
         }
 

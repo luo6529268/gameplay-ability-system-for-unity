@@ -938,6 +938,232 @@ namespace NTSD.Test
                 context: "equal-distance candidates in different allowed team spans");
         }
 
+        [TestCase(BattleAiExecutionProfile.DataOrientedCanonical, true, 1)]
+        [TestCase(BattleAiExecutionProfile.LegacyCanonical, true, 1)]
+        [TestCase(BattleAiExecutionProfile.DataOrientedCanonical, false, 2)]
+        [TestCase(BattleAiExecutionProfile.LegacyCanonical, false, 2)]
+        public void CharacterNearest_SourceOrderDiffersFromPhysicalOrder(
+            BattleAiExecutionProfile profile,
+            bool completeSource,
+            int expectedSlot)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(profile);
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2Character self = RegisterCharacter(
+                world, 0, 1, 1, 100, 0, 100, 9, 500, true);
+            LF2Character sourceWinner = RegisterCharacter(
+                world, 1, 1, 2, 200, 0, 100, 0, 500, false);
+            LF2Character physicalWinner = RegisterCharacter(
+                world, 2, 1, 2, 130, 0, 100, 0, 500, false);
+            self.Runtime.SetSourceRulePosition(100, 100);
+            sourceWinner.Runtime.SetSourceRulePosition(120, 100);
+            physicalWinner.Runtime.SetSourceRulePosition(140, 100);
+            self.Runtime.SyncSourceRuleIntegerPosition();
+            sourceWinner.Runtime.SyncSourceRuleIntegerPosition();
+            physicalWinner.Runtime.SyncSourceRuleIntegerPosition();
+            if (!completeSource)
+                physicalWinner.Runtime.SourceRulePositionInitialized = false;
+            Assert.That(sourceWinner.Runtime.SourceRuleXInt - self.Runtime.SourceRuleXInt,
+                Is.EqualTo(20));
+            Assert.That(physicalWinner.Runtime.SourceRuleXInt - self.Runtime.SourceRuleXInt,
+                Is.EqualTo(40));
+            Assert.That(sourceWinner.Runtime.XInt - self.Runtime.XInt, Is.EqualTo(100));
+            Assert.That(physicalWinner.Runtime.XInt - self.Runtime.XInt, Is.EqualTo(30));
+
+            int selected;
+            if (profile == BattleAiExecutionProfile.DataOrientedCanonical)
+            {
+                Assert.That(CaptureAiSoANearest(
+                    world, self, 2, out selected, out _, out _), Is.True);
+            }
+            else
+            {
+                object[] arguments = { self, 2, true, true, 0, 0, false };
+                Invoke(world, "CaptureAiNearestFactsTargetForSelfCheck", arguments);
+                selected = (int)arguments[4];
+                Invoke(world, "BuildAiInputSlotSnapshot");
+                object input = GetAiRuntimeChild(world, "Input");
+                PropertyInfo factsProperty = input.GetType().GetProperty(
+                    "NearestFactsBySlot", InstanceMembers);
+                Assert.That(factsProperty, Is.Not.Null);
+                Array facts = (Array)factsProperty.GetValue(input);
+                object sourceWinnerFacts = facts.GetValue(1);
+                int capturedX = (int)sourceWinnerFacts.GetType()
+                    .GetField("X", InstanceMembers).GetValue(sourceWinnerFacts);
+                Assert.That(capturedX, Is.EqualTo(completeSource ? 120 : 200),
+                    "legacy nearest facts must match the pass coordinate domain");
+            }
+
+            Assert.That(selected, Is.EqualTo(expectedSlot), profile.ToString());
+
+            world.Rng.Seed(0x5EEDu);
+            world.CharacterInputAll(2);
+            Assert.That(self.Runtime.Unk360, Is.EqualTo(expectedSlot),
+                profile + " production CharacterInput target");
+            if (completeSource)
+            {
+                sourceWinner.Runtime.SetSourceRulePosition(180, 100);
+                sourceWinner.Runtime.SyncSourceRuleIntegerPosition();
+                if (profile == BattleAiExecutionProfile.DataOrientedCanonical)
+                {
+                    Assert.That(CaptureAiSoANearest(
+                        world, self, 2, out int refreshedSlot, out _, out _), Is.True);
+                    Assert.That(refreshedSlot, Is.EqualTo(2),
+                        profile + " recaptured source nearest");
+                }
+                else
+                {
+                    object[] refreshedArguments = { self, 2, true, true, 0, 0, false };
+                    Invoke(world, "CaptureAiNearestFactsTargetForSelfCheck", refreshedArguments);
+                    Assert.That((int)refreshedArguments[4], Is.EqualTo(2),
+                        profile + " recaptured source nearest");
+                }
+            }
+        }
+
+        [Test]
+        public void CharacterNearest_SourceDomainWarmedPassDoesNotAllocate()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+            LF2Character self = RegisterCharacter(
+                world, 0, 1, 1, 100, 0, 100, 9, 500, true);
+            LF2Character target = RegisterCharacter(
+                world, 1, 1, 2, 200, 0, 100, 0, 500, false);
+            self.Runtime.SetSourceRulePosition(100, 100);
+            target.Runtime.SetSourceRulePosition(120, 100);
+            self.Runtime.SyncSourceRuleIntegerPosition();
+            target.Runtime.SyncSourceRuleIntegerPosition();
+
+            int tick = 2;
+            for (int index = 0; index < 32; index++)
+                world.CharacterInputAll(tick++);
+
+            _ = GC.GetAllocatedBytesForCurrentThread();
+            long before = GC.GetAllocatedBytesForCurrentThread();
+            for (int index = 0; index < 128; index++)
+                world.CharacterInputAll(tick++);
+            long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
+            Assert.That(allocated, Is.Zero);
+        }
+
+        [TestCase(false, 12)]
+        [TestCase(true, 3)]
+        public void CharacterNearest_FormalContentFullDriverKeepsSourceCarrierComplete(
+            bool aiControlled,
+            int ticks)
+        {
+            NTSD.EditorTools.NTSD28UnityRawCaptureEditor.WithLoganScenarioForReplayTests(
+                "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime",
+                NTSD.EditorTools.NTSD28UnityRawCaptureEditor.DefaultScenario,
+                BattleRuntimeProfile.Authority400,
+                ticks,
+                (driver, inputs, identity) =>
+                {
+                    int initializedParticipants = 0;
+                    double initialPlayerX = double.NaN;
+                    for (int slot = 0;
+                         slot < driver.World.RuntimeSlotCapacityForDiagnostics;
+                         slot++)
+                    {
+                        LF2Entity participant =
+                            driver.World.FindEntityByRuntimeSlotForQuery(slot);
+                        if (participant == null)
+                            continue;
+                        participant.Runtime.SetSourceRulePosition(
+                            participant.Runtime.X,
+                            participant.Runtime.Z);
+                        participant.Runtime.SyncSourceRuleIntegerPosition();
+                        if (slot == 0)
+                            initialPlayerX = participant.Runtime.X;
+                        initializedParticipants++;
+                    }
+                    Assert.That(initializedParticipants, Is.EqualTo(2),
+                        "legacy replay fixture participant count");
+                    LF2Entity aiParticipant =
+                        driver.World.FindEntityByRuntimeSlotForQuery(1);
+                    if (aiControlled)
+                    {
+                        Assert.That(aiParticipant, Is.Not.Null, "AI fixture participant");
+                        aiParticipant.AiControlled = true;
+                        Assert.That(driver.World.Runtime.Roster.Slots[1],
+                            Is.Not.Null, "AI fixture roster slot");
+                        driver.World.Runtime.Roster.Slots[1].IsHuman = false;
+                        driver.World.Runtime.Roster.Slots[1].AiId = 1;
+                    }
+                    driver.World.ConfigureFixedViewRunDistance(2048, 1152);
+                    bool observedScaledMotion = false;
+                    bool observedAiTarget = false;
+                    var positionByTick = new List<string>();
+                    for (int tick = 1; tick <= ticks; tick++)
+                    {
+                        var movementInput = new FrameInputSet(tick, new[]
+                        {
+                            new SimulationPlayerInput(0, SimulationInputButtons.Right),
+                            new SimulationPlayerInput(1, SimulationInputButtons.None),
+                        });
+                        try
+                        {
+                            Assert.That(driver.StepOneTick(movementInput, true, false),
+                                Is.True, "tick=" + tick);
+                        }
+                        catch (Exception error)
+                        {
+                            Assert.Fail("AI full Driver tick=" + tick + " " + error);
+                        }
+                        if (aiControlled)
+                            observedAiTarget |= aiParticipant.Runtime.Unk360 == 0;
+                        int active = 0;
+                        int missingSource = 0;
+                        var missingSlots = new List<string>();
+                        for (int slot = 0;
+                             slot < driver.World.RuntimeSlotCapacityForDiagnostics;
+                             slot++)
+                        {
+                            LF2Entity entity =
+                                driver.World.FindEntityByRuntimeSlotForQuery(slot);
+                            if (entity == null)
+                                continue;
+                            active++;
+                            observedScaledMotion |=
+                                Math.Abs(entity.Runtime.X -
+                                    entity.Runtime.SourceRuleX) > 0.01;
+                            if (slot == 0)
+                                positionByTick.Add($"{tick}:{entity.Runtime.X}/{entity.Runtime.SourceRuleX}/vx{entity.Runtime.Vx}");
+                            if (!entity.Runtime.SourceRulePositionInitialized)
+                            {
+                                missingSource++;
+                                missingSlots.Add(
+                                    $"slot={slot},oid={entity.ObjectId},type={entity.GetCurrentDataObjectTypeForSimulation()},x={entity.Runtime.XInt},z={entity.Runtime.ZInt}");
+                            }
+                        }
+
+                        Assert.That(active, Is.GreaterThanOrEqualTo(2),
+                            "formal participants tick=" + tick);
+                        Assert.That(missingSource, Is.Zero,
+                            "incomplete AI source domain tick=" + tick +
+                            " missing=" + string.Join(";", missingSlots));
+                    }
+                    Assert.That(observedScaledMotion, Is.True,
+                        "configured full-view motion must separate display and rule X; " +
+                        string.Join(";", positionByTick));
+                    if (aiControlled)
+                    {
+                        Assert.That(observedAiTarget, Is.True,
+                            "production full Driver AI never selected its human opponent");
+                    }
+                    LF2Entity movedPlayer =
+                        driver.World.FindEntityByRuntimeSlotForQuery(0);
+                    Assert.That(movedPlayer.Runtime.X - initialPlayerX,
+                        Is.EqualTo(
+                            (movedPlayer.Runtime.SourceRuleX - initialPlayerX) *
+                            2048.0 / 1333.0).Within(0.000001),
+                        "physical/source X displacement ratio, ticks=" + ticks);
+                    TestContext.WriteLine(string.Join(";", positionByTick));
+                });
+        }
+
         [Test]
         public void Candidate_RoleIndexes_UseExactGroundAndAirSupersets()
         {

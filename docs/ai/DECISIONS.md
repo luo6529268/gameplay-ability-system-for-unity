@@ -1,5 +1,14 @@
 # NTSD 长期项目决策记录
 
+## D-025 — 非角色战斗对象离开项目可行走区域后按战斗逻辑时间延迟清除
+
+- **状态**：`USER_CONFIRMED / FOCUSED_TEST_PASS / RUNTIME_PENDING`。
+- **日期**：2026-09-24。
+- **用户明确要求**：项目自己的可行走区域是离场判据；仅非角色战斗对象连续离开该区域超过 10 秒才清除。10 秒按战斗逻辑时间计，正常 33 ms tick 需约 304 tick，F5 快速模式只缩短现实等待时间，不改变逻辑 tick 数。
+- **边界**：实体地面点应以实际战斗 X/Z 投影到项目的可行走多边形判定；重新进入区域重置连续离区计时。角色现有边界/生命周期不由此决定改变。该用户例外取代 NTSD 正式版非角色 X 越界即时销毁时机，但不自动取消其他正式规则或修改 DAT。没有有效可行走多边形时不得把“无数据”误判为“已离区”。
+- **实现依赖**：地图准备阶段冻结可供 dedicated worker 安全读取的多边形数据；计时进入实体 runtime 的 reset、池复用、snapshot/restore 与 checksum；按现有有序关闭回收。先定向 RED，再验证场景接线、304 tick 边界、重入、F5、不同非角色类型及保存恢复。详 `artifacts/diagnostics/NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001/NONCHAR-WALKABLE-10S-CONTRACT.md`。
+
+
 ## D-024 — 固定完整背景下战斗实体位移以画面比例一致为目标
 
 - **状态**：`USER_CONFIRMED / POLICY_DECIDED / FULL_IMPLEMENTATION_PENDING`。

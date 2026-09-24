@@ -256,6 +256,7 @@ namespace NTSD.Simulation
             int expectedCapacity,
             ulong expectedEpoch)
         {
+            Rows.UseSourceRulePosition = input.UseSourceRulePosition;
             CandidateFusedSnapshotBuildCount++;
             SnapshotValid = false;
             PassInvalidated = false;
@@ -1647,9 +1648,13 @@ namespace NTSD.Simulation
             rows.ObjectId[slot] = objectId;
             rows.NativeAiProfileObjectId[slot] = runtime.NativeAiProfileObjectId;
             rows.DataObjectType[slot] = dataObjectType;
-            rows.X[slot] = runtime.XInt;
+            rows.X[slot] = rows.UseSourceRulePosition
+                ? runtime.SourceRuleXInt
+                : runtime.XInt;
             rows.Y[slot] = runtime.YInt;
-            rows.Z[slot] = runtime.ZInt;
+            rows.Z[slot] = rows.UseSourceRulePosition
+                ? runtime.SourceRuleZInt
+                : runtime.ZInt;
             rows.Hp[slot] = runtime.HP;
             rows.Hp3[slot] = runtime.HP3;
             rows.HpMax[slot] = runtime.HPBound;

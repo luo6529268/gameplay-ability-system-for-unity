@@ -32,6 +32,9 @@ namespace NTSD.Test.Editor
             SetPosition(dead, 40, -100, 60, 11, -100, 12);
             SetPosition(peerA, 100, 0, 40, 100, 0, 40);
             SetPosition(peerB, 160, 0, 20, 160, 0, 20);
+            SetSourcePosition(dead, 11, 12);
+            SetSourcePosition(peerA, 100, 40);
+            SetSourcePosition(peerB, 160, 20);
 
             var expectedRandom = new NTSD28NativeRandom();
             expectedRandom.RestoreSynchronized(
@@ -50,9 +53,79 @@ namespace NTSD.Test.Editor
             Assert.That(dead.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
             Assert.That(dead.Runtime.XInt, Is.EqualTo(11));
             Assert.That(dead.Runtime.ZInt, Is.EqualTo(12));
+            Assert.That(dead.Runtime.SourceRuleX,
+                Is.EqualTo(130 + randomX));
+            Assert.That(dead.Runtime.SourceRuleZ,
+                Is.EqualTo(30 + randomZ));
+            Assert.That(dead.Runtime.SourceRuleXInt, Is.EqualTo(11));
+            Assert.That(dead.Runtime.SourceRuleZInt, Is.EqualTo(12));
             Assert.That(dead.Runtime.Y, Is.EqualTo(-37));
             Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
                 Is.EqualTo(beforeCalls + 2));
+        }
+
+        [Test]
+        public void SourcePeerSumZero_PhysicalSumNonzero_SkipsBothRngCalls()
+        {
+            var world = new SimulationWorld();
+            LF2Character dead = CreateCharacter(world, 0, 9660, 3);
+            LF2Character peerA = CreateCharacter(world, 1, 9661, 3);
+            LF2Character peerB = CreateCharacter(world, 2, 9662, 3);
+            ConfigureNormal(dead, collisionYReference: 0);
+            SetPosition(dead, 40, -100, 60, 11, -100, 12);
+            SetPosition(peerA, 100, 0, 40, 100, 0, 40);
+            SetPosition(peerB, 160, 0, 20, 160, 0, 20);
+            SetSourcePosition(dead, 11, 12);
+            SetSourcePosition(peerA, 100, 40);
+            SetSourcePosition(peerB, -100, 20);
+            ulong callsBefore = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+
+            world.PostFrameAdvanceDeathCleanupAll(1);
+
+            Assert.That(dead.Runtime.X, Is.EqualTo(40));
+            Assert.That(dead.Runtime.Z, Is.EqualTo(60));
+            Assert.That(dead.Runtime.SourceRuleX, Is.EqualTo(11));
+            Assert.That(dead.Runtime.SourceRuleZ, Is.EqualTo(12));
+            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                Is.EqualTo(callsBefore));
+        }
+
+        [Test]
+        public void SourcePeerSumNonzero_PhysicalSumZero_UsesOneRngPairInBothDomains()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2Character dead = CreateCharacter(world, 0, 9670, 3);
+            LF2Character peerA = CreateCharacter(world, 1, 9671, 3);
+            LF2Character peerB = CreateCharacter(world, 2, 9672, 3);
+            ConfigureNormal(dead, collisionYReference: 0);
+            SetPosition(dead, 40, -100, 60, 11, -100, 12);
+            SetPosition(peerA, 100, 0, 40, 100, 0, 40);
+            SetPosition(peerB, -100, 0, 20, -100, 0, 20);
+            SetSourcePosition(dead, 11, 12);
+            SetSourcePosition(peerA, 100, 40);
+            SetSourcePosition(peerB, 160, 20);
+            var expectedRandom = new NTSD28NativeRandom();
+            expectedRandom.RestoreSynchronized(
+                world.NativeRandom.CaptureSynchronizedState());
+            int rawX = expectedRandom.SynchronizedNext(0x90u, 0x33) - 25;
+            int rawZ = expectedRandom.SynchronizedNext(0x91u, 0x1f) - 15;
+            ulong callsBefore = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+
+            world.PostFrameAdvanceDeathCleanupAll(1);
+
+            Assert.That(dead.Runtime.X,
+                Is.EqualTo(rawX * 2048.0 / 1333.0).Within(0.000001));
+            Assert.That(dead.Runtime.Z,
+                Is.EqualTo(30 + rawZ * 1152.0 / 730.0).Within(0.000001));
+            Assert.That(dead.Runtime.SourceRuleX, Is.EqualTo(130 + rawX));
+            Assert.That(dead.Runtime.SourceRuleZ, Is.EqualTo(30 + rawZ));
+            Assert.That(dead.Runtime.XInt, Is.EqualTo(11));
+            Assert.That(dead.Runtime.ZInt, Is.EqualTo(12));
+            Assert.That(dead.Runtime.SourceRuleXInt, Is.EqualTo(11));
+            Assert.That(dead.Runtime.SourceRuleZInt, Is.EqualTo(12));
+            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                Is.EqualTo(callsBefore + 2));
         }
 
         [Test]
@@ -257,6 +330,12 @@ namespace NTSD.Test.Editor
             entity.PS.x = preciseX;
             entity.PS.y = preciseY;
             entity.PS.z = preciseZ;
+        }
+
+        private static void SetSourcePosition(LF2Entity entity, int x, int z)
+        {
+            entity.Runtime.SetSourceRulePosition(x, z);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
         }
 
         private static LF2Character CreateCharacter(
@@ -474,6 +553,9 @@ namespace NTSD.Test.Editor
                     new NTSD28B4RevivalNormalFloorRngProductionEditorTests();
                 tests.NormalRevival_UsesSynchronizedRngAndPreservesIntegerXZ();
                 tests.SumXZero_PreservesPreciseXZAndConsumesNoRng();
+                tests.SourcePeerSumZero_PhysicalSumNonzero_SkipsBothRngCalls();
+                tests.SourcePeerSumNonzero_PhysicalSumZero_UsesOneRngPairInBothDomains();
+                tests.NormalRevivalRandomOffsetUsesViewRatio(true);
                 tests.NonTypeZeroAndOtherGroup_DoNotEnterPeerAverage();
                 tests.NormalRevival_UsesSameEffectiveFloorAsC06(-25, -25);
                 tests.NormalRevival_UsesSameEffectiveFloorAsC06(0, 0);
@@ -481,9 +563,9 @@ namespace NTSD.Test.Editor
                 tests.NegativeIntegerAverages_TruncateTowardZeroBeforeRng();
                 File.WriteAllText(
                     ResultPath,
-                    "state=Passed\nlogicalCases=7\n" +
+                    "state=Passed\nlogicalCases=10\n" +
                     "rngCallSites=0x90,0x91\nfloors=-25,0,25\n" +
-                    "sumX=nonzero,zero\nintegerXZDeferred=true\n" +
+                    "sumX=source-zero,physical-zero,nonzero\nintegerXZDeferred=true\n" +
                     "sceneMutation=none\n",
                     new UTF8Encoding(false));
             }

@@ -77,6 +77,46 @@ namespace NTSD.Test.Editor
             Assert.That(source.Runtime.Vz, Is.EqualTo(0.17).Within(0.000001));
         }
 
+        [TestCase(true, 0)]
+        [TestCase(false, 1)]
+        public void CommonScan_UsesSourceDistanceWhenPhysicalOrderDiffers(
+            bool completeSource,
+            int expectedSlot)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2Character sourceWinner = CreateCharacter(91010, LF2States.Standing, 0);
+            LF2Character physicalWinner = CreateCharacter(91011, LF2States.Standing, 0);
+            LF2OtherObject source = CreateOther(91012, hitFa: 3);
+            sourceWinner.SetRequiredRuntimeSlot(0);
+            physicalWinner.SetRequiredRuntimeSlot(1);
+            source.SetRequiredRuntimeSlot(50);
+            sourceWinner.Team = sourceWinner.RelationTeam = 2;
+            physicalWinner.Team = physicalWinner.RelationTeam = 2;
+            source.Team = source.RelationTeam = 1;
+            source.Runtime.SetPosition(100, 0, 100);
+            sourceWinner.Runtime.SetPosition(200, 0, 100);
+            physicalWinner.Runtime.SetPosition(130, 0, 100);
+            source.Runtime.SyncIntegerPosition();
+            sourceWinner.Runtime.SyncIntegerPosition();
+            physicalWinner.Runtime.SyncIntegerPosition();
+            source.Runtime.SetSourceRulePosition(100, 100);
+            sourceWinner.Runtime.SetSourceRulePosition(120, 100);
+            if (completeSource)
+                physicalWinner.Runtime.SetSourceRulePosition(140, 100);
+            source.Runtime.SyncSourceRuleIntegerPosition();
+            sourceWinner.Runtime.SyncSourceRuleIntegerPosition();
+            if (completeSource)
+                physicalWinner.Runtime.SyncSourceRuleIntegerPosition();
+            world.Register(sourceWinner);
+            world.Register(physicalWinner);
+            world.Register(source);
+
+            source.RunFrameLogicBeforeAdvance();
+
+            Assert.That(source.ObjectAiTargetSlot3F8, Is.EqualTo(expectedSlot));
+        }
+
         [Test]
         public void CommonScanMiss_PreservesNonSentinelStaleTargetAndOwner()
         {

@@ -38,10 +38,10 @@ namespace NTSD.Test
             RunImmediate(index, BattleRuntimeProfile.Authority400, false);
         }
 
-        [TestCase(1333, true)]
-        [TestCase(2048, false)]
-        public void FusionDistanceAfterTwentyPixelMotion_CharacterizesFixedViewFirstDifference(
-            int referenceWidth, bool expectedCurrentMerge)
+        [TestCase(1333, 320)]
+        [TestCase(2048, 325)]
+        public void FusionDistanceAfterTwentyPixelMotion_UsesSourceGateAndDualMidpoints(
+            int referenceWidth, int expectedPhysicalMidpoint)
         {
             JObject row = File.ReadLines(Source).Select(JObject.Parse)
                 .Single(value => (int)value["index"] == 0);
@@ -54,9 +54,15 @@ namespace NTSD.Test
                 LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(1);
                 Assert.That(primary.Runtime.XInt, Is.EqualTo(340));
                 Assert.That(partner.Runtime.XInt, Is.EqualTo(300));
+                primary.Runtime.SetSourceRulePosition(340, primary.Runtime.ZInt);
+                partner.Runtime.SetSourceRulePosition(300, partner.Runtime.ZInt);
+                primary.Runtime.SyncSourceRuleIntegerPosition();
+                partner.Runtime.SyncSourceRuleIntegerPosition();
 
                 primary.Runtime.SetPosition(320, primary.Runtime.Y, primary.Runtime.Z);
                 primary.Runtime.XInt = 320;
+                primary.Runtime.SetSourceRulePosition(320, primary.Runtime.SourceRuleZ);
+                primary.Runtime.SyncSourceRuleIntegerPosition();
                 primary.Runtime.SetVelocity(20, 0, 0);
                 new CharacterMechanics().StepBattleLogic(
                     new CharacterMechanicsContext(primary.Runtime, null, 0f, 0f, 0.0,
@@ -67,11 +73,59 @@ namespace NTSD.Test
                 int formalGap = (320 + 20) - 300;
                 Assert.That(formalGap, Is.EqualTo(40));
                 Assert.That(currentGap, Is.EqualTo(referenceWidth == 1333 ? 40 : 50));
+                Assert.That(primary.Runtime.SourceRuleXInt - partner.Runtime.SourceRuleXInt,
+                    Is.EqualTo(40));
 
                 world.Oid5152FusionScanAll(0);
                 bool merged = primary.Runtime.Unk328 == 1 && partner.Runtime.OidMergeDormant;
-                Assert.That(merged, Is.EqualTo(expectedCurrentMerge),
+                Assert.That(merged, Is.True,
                     $"formal gap={formalGap}, Unity gap={currentGap}, scale={world.FixedViewRunDistanceScale}");
+                Assert.That(primary.Runtime.XInt, Is.EqualTo(expectedPhysicalMidpoint));
+                Assert.That(primary.Runtime.SourceRuleX, Is.EqualTo(320));
+                Assert.That(primary.Runtime.SourceRuleXInt, Is.EqualTo(320));
+
+                primary.Runtime.Unk338 = 0;
+                world.Oid5152FusionScanAll(0);
+                Assert.That(partner.Runtime.OidMergeDormant, Is.False);
+                Assert.That(partner.Runtime.XInt, Is.EqualTo(expectedPhysicalMidpoint));
+                Assert.That(partner.Runtime.SourceRulePositionInitialized, Is.True);
+                Assert.That(partner.Runtime.SourceRuleX, Is.EqualTo(320));
+                Assert.That(partner.Runtime.SourceRuleXInt, Is.EqualTo(320));
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
+        [Test]
+        public void FusionDepthGate_UsesSourceIntegerGapAndCopiesBothDepthMidpoints()
+        {
+            JObject row = File.ReadLines(Source).Select(JObject.Parse)
+                .Single(value => (int)value["index"] == 0);
+            var world = CreateWorld(row);
+            try
+            {
+                LF2Entity primary = world.FindEntityByRuntimeSlotIncludingDormant(0);
+                LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(1);
+                primary.Runtime.SetPosition(primary.Runtime.X, primary.Runtime.Y, 258);
+                primary.Runtime.ZInt = 258;
+                primary.Runtime.SetSourceRulePosition(primary.Runtime.XInt, 257);
+                partner.Runtime.SetSourceRulePosition(partner.Runtime.XInt, 250);
+                primary.Runtime.SyncSourceRuleIntegerPosition();
+                partner.Runtime.SyncSourceRuleIntegerPosition();
+
+                world.Oid5152FusionScanAll(0);
+                Assert.That(partner.Runtime.OidMergeDormant, Is.True);
+                Assert.That(primary.Runtime.ZInt, Is.EqualTo(254));
+                Assert.That(primary.Runtime.SourceRuleZInt, Is.EqualTo(253));
+
+                primary.Runtime.Unk338 = 0;
+                world.Oid5152FusionScanAll(0);
+                Assert.That(partner.Runtime.OidMergeDormant, Is.False);
+                Assert.That(partner.Runtime.ZInt, Is.EqualTo(254));
+                Assert.That(partner.Runtime.SourceRuleZInt, Is.EqualTo(253));
             }
             finally
             {

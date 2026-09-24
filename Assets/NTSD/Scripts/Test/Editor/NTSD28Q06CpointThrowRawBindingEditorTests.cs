@@ -42,6 +42,10 @@ namespace NTSD.Test
                 world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
                 LF2Entity catcher = entities[0];
                 LF2Entity caught = entities[1];
+                catcher.Runtime.SetSourceRulePosition(catcher.Runtime.XInt, catcher.Runtime.ZInt);
+                caught.Runtime.SetSourceRulePosition(caught.Runtime.XInt, caught.Runtime.ZInt);
+                catcher.Runtime.SyncSourceRuleIntegerPosition();
+                caught.Runtime.SyncSourceRuleIntegerPosition();
                 Assert.That(catcher.Runtime.XInt, Is.EqualTo(100));
                 catcher.Runtime.SetVelocity(48, 0, 0);
                 new CharacterMechanics().StepBattleLogic(
@@ -58,6 +62,10 @@ namespace NTSD.Test
                 Assert.That(caught.Runtime.XInt - catcher.Runtime.XInt, Is.EqualTo(11));
                 Assert.That(caught.Runtime.YInt, Is.EqualTo(-24));
                 Assert.That(caught.Runtime.ZInt, Is.EqualTo(200));
+                Assert.That(catcher.Runtime.SourceRuleXInt, Is.EqualTo(148));
+                Assert.That(caught.Runtime.SourceRuleX, Is.EqualTo(159));
+                Assert.That(caught.Runtime.SourceRuleXInt, Is.EqualTo(159));
+                Assert.That(caught.Runtime.SourceRuleZInt, Is.EqualTo(200));
                 Assert.That(caught.Runtime.Vx, Is.EqualTo(1.5));
                 Assert.That(caught.Runtime.Vy, Is.EqualTo(-2.25));
             }

@@ -60,6 +60,7 @@ namespace NTSD.Simulation
 
         public int Capacity => Included.Length;
         public ulong CapturedOccupancyEpoch;
+        public bool UseSourceRulePosition;
         public readonly bool[] Included;
         public readonly bool[] SpecialScanMember;
         public readonly int[] SpecialSlots;
@@ -107,6 +108,7 @@ namespace NTSD.Simulation
         public void Reset(ulong occupancyEpoch)
         {
             CapturedOccupancyEpoch = occupancyEpoch;
+            UseSourceRulePosition = false;
             Array.Clear(Included, 0, Capacity);
             Array.Clear(SpecialScanMember, 0, Capacity);
             Array.Clear(SpecialSlots, 0, Capacity);
@@ -125,6 +127,7 @@ namespace NTSD.Simulation
         {
             int count = Capacity;
             grown.CapturedOccupancyEpoch = CapturedOccupancyEpoch;
+            grown.UseSourceRulePosition = UseSourceRulePosition;
             Array.Copy(Included, grown.Included, count);
             Array.Copy(SpecialScanMember, grown.SpecialScanMember, count);
             Array.Copy(SpecialSlots, grown.SpecialSlots, SpecialSlotCount);

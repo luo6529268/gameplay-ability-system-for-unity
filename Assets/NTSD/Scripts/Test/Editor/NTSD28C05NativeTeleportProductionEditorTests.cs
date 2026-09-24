@@ -102,6 +102,43 @@ namespace NTSD.Test.Editor
             Assert.That(source.Runtime.ZInt, Is.EqualTo(501));
         }
 
+        [TestCase(400)]
+        [TestCase(401)]
+        public void TeleportTargetRankingUsesSourceCoordinatesWhenViewOrderDiffers(int state)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2OtherObject source = CreateOther(world, 50, 1020, state, relationTeam: 1);
+            LF2Character sourceWinner = CreateCharacter(world, 1, 1021,
+                relationTeam: state == 400 ? 2 : 1);
+            LF2Character physicalWinner = CreateCharacter(world, 2, 1022,
+                relationTeam: state == 400 ? 2 : 1);
+            SetPosition(source, 100, 0, 100);
+            SetPosition(sourceWinner, state == 400 ? 200 : 130, 0, 100);
+            SetPosition(physicalWinner, state == 400 ? 130 : 200, 0, 100);
+            source.Runtime.SetSourceRulePosition(100, 100);
+            source.Runtime.SyncSourceRuleIntegerPosition();
+            sourceWinner.Runtime.SetSourceRulePosition(state == 400 ? 120 : 200, 100);
+            sourceWinner.Runtime.SyncSourceRuleIntegerPosition();
+            physicalWinner.Runtime.SetSourceRulePosition(state == 400 ? 140 : 120, 100);
+            physicalWinner.Runtime.SyncSourceRuleIntegerPosition();
+            sourceWinner.PS.groundY = -21;
+            physicalWinner.PS.groundY = -42;
+
+            world.NativeTeleportAll();
+            Assert.That(source.Runtime.YInt, Is.EqualTo(-21));
+            Assert.That(source.Runtime.SourceRuleXInt,
+                Is.EqualTo((state == 400 ? 120 : 200) - (state == 400 ? 120 : 60)));
+
+            SetPosition(source, 100, 0, 100);
+            source.Runtime.SetSourceRulePosition(100, 100);
+            source.Runtime.SyncSourceRuleIntegerPosition();
+            source.RunEarlyTeleportSpecialsPhase(
+                new List<LF2Entity> { source, sourceWinner, physicalWinner }, false);
+            Assert.That(source.Runtime.SourceRuleXInt,
+                Is.EqualTo((state == 400 ? 120 : 200) - (state == 400 ? 120 : 60)));
+        }
+
         [TestCase(false, false, 400)]
         [TestCase(false, true, 400)]
         [TestCase(true, false, 400)]

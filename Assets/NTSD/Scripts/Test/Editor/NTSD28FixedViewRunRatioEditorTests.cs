@@ -16,7 +16,7 @@ namespace NTSD.Test.Editor
     {
         [TestCase(1, 3, 4)]
         [TestCase(2, 4, 5)]
-        public void IndexedHitFa5MovedTarget_CharacterizesCurrentHistoryFirstDifference(
+        public void IndexedHitFa5MovedTarget_UsesNativeSourceHistoryForChildVelocity(
             int targetMoveTicks,
             int formalVx,
             int currentUnityVx)
@@ -55,6 +55,8 @@ namespace NTSD.Test.Editor
                 world.Register(source);
                 source.Runtime.SetPosition(100, 0, 200);
                 source.Runtime.SyncIntegerPosition();
+                source.Runtime.SetSourceRulePosition(100, 200);
+                source.Runtime.SyncSourceRuleIntegerPosition();
 
                 var target = new LF2Character { ObjectId = 77 };
                 target.ModuleInitialize();
@@ -67,6 +69,8 @@ namespace NTSD.Test.Editor
                 world.Register(target);
                 target.Runtime.SetPosition(251, 0, 200);
                 target.Runtime.SyncIntegerPosition();
+                target.Runtime.SetSourceRulePosition(251, 200);
+                target.Runtime.SyncSourceRuleIntegerPosition();
 
                 for (int tick = 0; tick < targetMoveTicks; tick++)
                 {
@@ -86,15 +90,20 @@ namespace NTSD.Test.Editor
                 var child = world.FindEntityByRuntimeSlotForQuery(50);
                 Assert.That(child, Is.Not.Null);
                 Assert.That(child.ObjectId, Is.EqualTo(219));
-                // Characterization only: the current mixed-coordinate result is a known open D-024 difference.
-                Assert.That(child.Runtime.Vx, Is.EqualTo(currentUnityVx));
+                Assert.That((target.GetRuntimeXInt() - source.GetRuntimeXInt()) / 50,
+                    Is.EqualTo(currentUnityVx));
+                Assert.That(child.Runtime.Vx, Is.EqualTo(formalVx));
                 Assert.That(currentUnityVx, Is.GreaterThan(formalVx));
+                Assert.That(child.Runtime.SourceRulePositionInitialized, Is.True);
+                Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(100));
+                Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(200));
+                Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(100));
                 double beforeX = child.Runtime.X;
                 CharacterMechanics.StepNonCharacterBattleLogic(child.Runtime, 0,
                     world.FixedViewRunDistanceScale,
                     world.FixedViewRunVerticalDistanceScale);
                 Assert.That((child.Runtime.X - beforeX) / 2048.0,
-                    Is.EqualTo(currentUnityVx / 1333.0).Within(1e-12));
+                    Is.EqualTo(formalVx / 1333.0).Within(1e-12));
             }
             finally
             {
@@ -104,14 +113,16 @@ namespace NTSD.Test.Editor
             }
         }
 
-        [TestCase(false, 151)]
-        [TestCase(true, 151)]
-        [TestCase(false, -151)]
-        [TestCase(true, -151)]
-        [TestCase(true, 224)]
+        [TestCase(false, 151, true)]
+        [TestCase(true, 151, true)]
+        [TestCase(false, -151, true)]
+        [TestCase(true, -151, true)]
+        [TestCase(true, 224, true)]
+        [TestCase(true, 151, false)]
         public void IndexedHitFa5ChildUsesNativeIntegerVelocityAndOneViewFactor(
             bool configuredView,
-            int targetDeltaX)
+            int targetDeltaX,
+            bool initializeSource)
         {
             string contentRoot = Path.GetFullPath(
                 "Assets/NTSD/Content/LoganRuntime");
@@ -148,6 +159,11 @@ namespace NTSD.Test.Editor
                 world.Register(source);
                 source.Runtime.SetPosition(100, 0, 200);
                 source.Runtime.SyncIntegerPosition();
+                if (initializeSource)
+                {
+                    source.Runtime.SetSourceRulePosition(100, 200);
+                    source.Runtime.SyncSourceRuleIntegerPosition();
+                }
 
                 var target = new LF2Character { ObjectId = 77 };
                 target.ModuleInitialize();
@@ -160,6 +176,11 @@ namespace NTSD.Test.Editor
                 world.Register(target);
                 target.Runtime.SetPosition(100 + targetDeltaX, 0, 200);
                 target.Runtime.SyncIntegerPosition();
+                if (initializeSource)
+                {
+                    target.Runtime.SetSourceRulePosition(100 + targetDeltaX, 200);
+                    target.Runtime.SyncSourceRuleIntegerPosition();
+                }
 
                 source.RunFrameLogicBeforeAdvance();
 
@@ -168,6 +189,13 @@ namespace NTSD.Test.Editor
                 Assert.That(child.ObjectId, Is.EqualTo(219));
                 double expectedRawVx = targetDeltaX / 50;
                 Assert.That(child.Runtime.Vx, Is.EqualTo(expectedRawVx));
+                if (initializeSource)
+                {
+                    Assert.That(child.Runtime.SourceRulePositionInitialized, Is.True);
+                    Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(100));
+                    Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(200));
+                    Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(100));
+                }
                 double beforeX = child.Runtime.X;
                 CharacterMechanics.StepNonCharacterBattleLogic(child.Runtime, 0,
                     world.FixedViewRunDistanceScale,

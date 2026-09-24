@@ -12,6 +12,7 @@ namespace NTSD.Simulation
     internal sealed class SimulationAiInputModule
     {
         private readonly SimulationWorld world;
+        internal bool UseSourceRulePosition { get; set; }
         internal struct AiInputContext
         {
             internal int Difficulty;
@@ -525,6 +526,7 @@ namespace NTSD.Simulation
 
         internal void ClearSlotSnapshot(bool useSoACandidate)
         {
+            UseSourceRulePosition = false;
             SlotSnapshotOccupancyEpoch = 0;
             NearestFactsActiveVersion = 0;
             if (useSoACandidate)
@@ -763,10 +765,14 @@ namespace NTSD.Simulation
                 SnapshotVersion = snapshotVersion,
                 OccupancyEpoch = occupancyEpoch,
                 Slot = slot,
-                X = runtime.XInt,
+                X = UseSourceRulePosition
+                    ? runtime.SourceRuleXInt
+                    : runtime.XInt,
                 Y = y,
                 HitStop = hitStop,
-                Z = runtime.ZInt,
+                Z = UseSourceRulePosition
+                    ? runtime.SourceRuleZInt
+                    : runtime.ZInt,
                 Hp = runtime.HP,
                 Team = runtime.RelationTeam,
                 State = state,

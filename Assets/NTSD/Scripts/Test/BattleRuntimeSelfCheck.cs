@@ -13684,8 +13684,9 @@ namespace NTSD.Test
                 "type3 exact -300/base+300 edges must remain active");
             FlowSelfCheckEntity type3Outside = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsType3Outside", LF2ObjectType.SpecialAttack, 0, 1, 1101, 200, 4);
-            Expect(type3Outside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
-                "type3 outside base stage width plus 300 must be freed");
+            Expect(!type3Outside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   type3Outside.Runtime.OutsideWalkableSinceTick == -1,
+                "type3 must remain active when no walkable area is available");
 
             FlowSelfCheckEntity oid122 = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsOid122", LF2ObjectType.LightWeapon, 0, 1, 0, 200, 5);
@@ -13719,13 +13720,14 @@ namespace NTSD.Test
             FlowSelfCheckEntity groundedOutside = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsGroundedOutside", LF2ObjectType.Other, 0, 1, -1, 200, 10);
             groundedOutside.Runtime.YInt = 0;
-            Expect(groundedOutside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
-                "ordinary grounded non-character outside the base stage must be freed");
+            Expect(!groundedOutside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   groundedOutside.Runtime.OutsideWalkableSinceTick == -1,
+                "grounded non-character must remain active when no walkable area is available");
             FlowSelfCheckEntity airborneOutside = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsAirborneOutside", LF2ObjectType.Other, 0, 1, 900, 200, 11);
             airborneOutside.Runtime.YInt = 1;
             Expect(!airborneOutside.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && airborneOutside.Runtime.X == 900f,
-                "ordinary airborne non-character outside the base stage must remain active");
+                "airborne non-character must remain active when no walkable area is available");
 
             FlowSelfCheckEntity truncation = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsXInt", LF2ObjectType.Character, 0, 1, 123, 200, 12);
@@ -13737,8 +13739,9 @@ namespace NTSD.Test
             transformedCharacter.BindData("SelfCheck_BoundsClrCharacterDatType3", 912, BuildCatchingFrames());
             transformedCharacter.SetRuntimeSlotIndex(13);
             transformedCharacter.Runtime.X = 1101f;
-            Expect(transformedCharacter.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride),
-                "current DAT type must select type3 bounds even for a character CLR shell");
+            Expect(!transformedCharacter.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) &&
+                   transformedCharacter.Runtime.OutsideWalkableSinceTick == -1,
+                "current DAT type must not trigger immediate culling without a walkable area");
 
             var world = new SimulationWorld();
             FlowSelfCheckEntity hitStopped = CreateFlowSelfCheckEntity(
@@ -13755,11 +13758,24 @@ namespace NTSD.Test
             FlowSelfCheckEntity worldFreed = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsWorldFree", LF2ObjectType.SpecialAttack, 0, 1, 5000, 200, 14);
             world.Register(worldFreed);
+            world.SetWalkableAreaSnapshotForTesting(new BattleWalkableAreaSnapshot(
+                new[] { new[] { new Vector2(0, 0), new Vector2(1, 0),
+                    new Vector2(1, -1), new Vector2(0, -1) } },
+                Vector2.zero, 0.01, 0.01));
+            world.AdvanceBattleFlowTick(1);
+            world.ApplyPreFrameBoundsAll();
+            world.AdvanceBattleFlowTick(304);
             world.ApplyPreFrameBoundsAll();
             var entities = new List<LF2Entity>();
             world.GetAllEntities(entities);
+            Expect(entities.Contains(worldFreed),
+                "PreFrame must keep a non-character through 303 elapsed outside logic ticks");
+            world.AdvanceBattleFlowTick(305);
+            world.ApplyPreFrameBoundsAll();
+            entities.Clear();
+            world.GetAllEntities(entities);
             Expect(!entities.Contains(worldFreed),
-                "PreFrame out-of-bounds free must remove the entity through the world lifecycle");
+                "PreFrame must remove a non-character through the world lifecycle after 304 elapsed outside logic ticks");
         }
 
         private static void CheckRenderSpaceHorizontalOriginContracts()

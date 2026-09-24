@@ -136,6 +136,37 @@ namespace NTSD.Test
             }
         }
 
+        [TestCase(1)]
+        [TestCase(3)]
+        public void GrabFacingUsesSourceOrderWhenPhysicalOrderIsReversed(int kind)
+        {
+            SimulationWorld world = CreateWorld(out TestCharacter attacker,
+                out TestCharacter target);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+                attacker.Runtime.SetPosition(200, 0, 200);
+                target.Runtime.SetPosition(130, 0, 200);
+                attacker.Runtime.SyncIntegerPosition();
+                target.Runtime.SyncIntegerPosition();
+                attacker.Runtime.SetSourceRulePosition(100, 200);
+                target.Runtime.SetSourceRulePosition(140, 200);
+                attacker.Runtime.SyncSourceRuleIntegerPosition();
+                target.Runtime.SyncSourceRuleIntegerPosition();
+
+                Assert.That(world.InteractionWriter.TryApplyGrab(attacker,
+                    target, CreateItr(10, 20, 1), kind), Is.True);
+                Assert.That(attacker.Runtime.IsFacingLeft, Is.False);
+                Assert.That(target.Runtime.IsFacingLeft, Is.True);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _,
+                    out string reason), Is.True, reason);
+            }
+        }
+
         [Test]
         public void Kind3Success_WritesExactReciprocalAndRespondTimeout()
         {
