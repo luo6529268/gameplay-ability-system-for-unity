@@ -33,8 +33,10 @@ namespace NTSD.Simulation.Ecs
                         : -(random.SynchronizedNext(0x004206A8u, 8) / 2) - 6;
                     int vx = random.SynchronizedNext(0x004206D6u, 11) - 5;
                     int action = BuiltinAction(random, oid, ordinal, ref vy);
-                    if (Spawn(world, factory, slot, 999, action, x + dx, y + dy, z,
-                        vx, vy, 0, -1, 0, false) == null) break;
+                    // Alignment contract: NTSD28-USER-WEAPON-PIECE-BIRTH-RATIO-001.
+                    if (Spawn(world, factory, slot, 999, action,
+                        x + dx * world.FixedViewRunDistanceScale, y + dy, z,
+                        vx, vy, 0, -1, 0, false, source, dx, 0) == null) break;
                 }
             }
 
@@ -69,8 +71,11 @@ namespace NTSD.Simulation.Ecs
                     bool negateZ = random.SynchronizedNext(0x00416436u, 2) != 0;
                     int vz = random.SynchronizedNext(0x0041643Eu, fields.Int32OrDefault("dvz", 0));
                     if (negateZ) vz = -vz;
-                    Spawn(world, factory, slot, target, action, x + dx, y + dy, z + dz,
-                        vx, vy, vz, source.OwnerEntityIndex, groupId, source.Runtime.IsFacingLeft);
+                    Spawn(world, factory, slot, target, action,
+                        x + dx * world.FixedViewRunDistanceScale, y + dy,
+                        z + dz * world.FixedViewRunVerticalDistanceScale,
+                        vx, vy, vz, source.OwnerEntityIndex, groupId, source.Runtime.IsFacingLeft,
+                        source, dx, dz);
                 }
             }
         }
@@ -83,7 +88,8 @@ namespace NTSD.Simulation.Ecs
 
         private static LF2Entity Spawn(SimulationWorld world,
             IBattleObjectPointStructuralMaterializer factory, int slot, int oid, int action,
-            int x, int y, int z, int vx, int vy, int vz, int owner, int group, bool facingLeft)
+            double x, int y, double z, int vx, int vy, int vz, int owner, int group, bool facingLeft,
+            LF2Entity source, int sourceOffsetX, int sourceOffsetZ)
         {
             var wrapper = world.RuntimeDataCatalog.GetCharacterConfig(oid);
             if (!IsInitialActionAdmitted(wrapper, action))
@@ -102,7 +108,18 @@ namespace NTSD.Simulation.Ecs
                 task.useDirectRuntimePosition = true;
                 task.directX = x; task.directY = y; task.directZ = z;
                 task.useInitialRuntimeIntPosition = true;
-                task.initialRuntimeX = x; task.initialRuntimeY = y; task.initialRuntimeZ = z;
+                task.initialRuntimeX = (int)System.Math.Round(x, System.MidpointRounding.ToEven);
+                task.initialRuntimeY = y;
+                task.initialRuntimeZ = (int)System.Math.Round(z, System.MidpointRounding.ToEven);
+                if (source.Runtime.SourceRulePositionInitialized)
+                {
+                    task.useSourceRulePosition = true;
+                    task.sourceRuleX = source.Runtime.SourceRuleXInt + sourceOffsetX;
+                    task.sourceRuleZ = source.Runtime.SourceRuleZInt + sourceOffsetZ;
+                    task.useInitialSourceRuleIntPosition = true;
+                    task.initialSourceRuleX = source.Runtime.SourceRuleXInt + sourceOffsetX;
+                    task.initialSourceRuleZ = source.Runtime.SourceRuleZInt + sourceOffsetZ;
+                }
                 task.skipPostInitZOffset = true;
                 task.useDirectVelocity = true;
                 task.directVx = vx; task.directVy = vy; task.directVz = vz;

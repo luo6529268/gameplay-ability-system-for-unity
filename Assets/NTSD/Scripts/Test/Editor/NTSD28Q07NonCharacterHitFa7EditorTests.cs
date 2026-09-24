@@ -119,6 +119,37 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void RealOid875PreassignedEmptySlotUsesRawTargetPosition()
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(ProjectPath(RuntimeRoot)));
+            var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            Assert.That(configs[875].characterData.frames.Any(frame =>
+                frame.frameId == 55 && frame.hit_Fa == 7), Is.True);
+
+            var world = new SimulationWorld();
+            var subject = new LF2SpecialAttack { ObjectId = 875 };
+            subject.FrameCache.Load(configs[875]);
+            subject.ImmediateFrame(55);
+            subject.SetRequiredRuntimeSlot(50);
+            subject.Team = 1;
+            subject.Health.HP = 100;
+            subject.Runtime.SetPosition(100, -30, 0);
+            subject.Runtime.SyncIntegerPosition();
+            subject.ObjectAiTargetSlot3F8 = 10;
+            world.Register(subject);
+
+            Assert.That(world.FindEntityByRuntimeSlotIncludingPending(10), Is.Null);
+            Assert.That(world.GetRawRuntimeSlotState(10).XInt, Is.Zero);
+            Assert.That(world.ObjectCount, Is.EqualTo(1));
+            subject.RunFrameLogicBeforeAdvance();
+
+            Assert.That(subject.ObjectAiTargetSlot3F8, Is.EqualTo(10));
+            Assert.That(subject.Runtime.Vx, Is.EqualTo(-1.4).Within(1e-9));
+            Assert.That(world.ObjectCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void RealOid875PreassignedTargetMatchesSourceModelFullTicks()
         {
             string sourcePath = ProjectPath(

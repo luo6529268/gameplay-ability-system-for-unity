@@ -16,6 +16,301 @@ namespace NTSD.Test
     public sealed class NTSD28Q06FrameMotionTailEditorTests
     {
         private const string Root = "artifacts/diagnostics/NTSD28-Q06-FRAME-MOTION-TAIL-001/";
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void FormalOid736Frame120DirectDepthUsesViewRatio(bool configuredView)
+        {
+            const string formalPath =
+                "Assets/NTSD/Content/LoganRuntime/decoded_dat/a/wal/wal.dat";
+            string dat = File.ReadAllText(formalPath);
+            var definition = Definition(736, dat);
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(new[]
+            {
+                new ObjectDefinition(736, 3, "a/wal/wal.dat")
+            }, id => id == 736 ? definition : null);
+            try
+            {
+                var entity = new LF2Weapon { ObjectId = 736 };
+                entity.FrameCache.Load(definition);
+                var frame = entity.FrameCache.GetNativeFrameDataById(120);
+                Assert.That(frame, Is.Not.Null);
+                Assert.That(frame.dz, Is.EqualTo(-2));
+                Assert.That(frame.dvz, Is.EqualTo(550));
+                entity.Frame.D = frame;
+                entity.Trans.SyncDirectFrameData(frame.wait, frame.next, 120);
+                entity.SetRequiredRuntimeSlot(20);
+                world.Register(entity);
+                entity.Runtime.ZInt = 250;
+                entity.Runtime.Z = 250;
+                entity.Runtime.SetSourceRulePosition(-12.75, 31.25);
+                entity.Runtime.SourceRuleXInt = -14;
+                entity.Runtime.SourceRuleZInt = 29;
+                entity.Runtime.Vz = 0;
+                entity.Runtime.DelayTimer134 = 0;
+                entity.ApplyNativeFrameMotionForWorldPass();
+
+                double expectedZ = 250 - 2.0 *
+                    (configuredView ? 1152.0 / 730.0 : 1.0);
+                Assert.That(entity.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
+                Assert.That(entity.Runtime.ZInt,
+                    Is.EqualTo((int)Math.Round(expectedZ, MidpointRounding.ToEven)));
+                Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(-12.75));
+                Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo(-14));
+                Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(27));
+                Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo(27));
+                Assert.That(entity.Runtime.Vz, Is.Zero);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var reason),
+                    Is.True, reason);
+            }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void DirectFrameDxUsesViewRatioAndFacing(
+            bool configuredView,
+            bool faceLeft)
+        {
+            var data = new LF2CharacterData { type_sub = 1 };
+            data.frames.Add(new LF2FrameData
+            {
+                frameId = 0, wait = 100, next = 0,
+                dx = 4, dvx = 550,
+            });
+            var definition = new LF2CharacterDataWrapper(888, data);
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(new[]
+            {
+                new ObjectDefinition(888, 1, "direct-frame.dat")
+            }, id => id == 888 ? definition : null);
+            try
+            {
+                var entity = new LF2Weapon { ObjectId = 888 };
+                entity.FrameCache.Load(definition);
+                entity.Frame.D = entity.FrameCache.GetNativeFrameDataById(0);
+                entity.Trans.SyncDirectFrameData(100, 0, 0);
+                entity.SetRequiredRuntimeSlot(20);
+                world.Register(entity);
+                entity.Runtime.XInt = 200;
+                entity.Runtime.X = 200;
+                entity.Runtime.SetSourceRulePosition(-12.75, 31.25);
+                entity.Runtime.SourceRuleXInt = -14;
+                entity.Runtime.SourceRuleZInt = 29;
+                entity.Runtime.Vx = 0;
+                entity.SwitchDir(faceLeft ? "left" : "right");
+                entity.ApplyNativeFrameMotionForWorldPass();
+
+                double expectedX = 200 + (faceLeft ? -4.0 : 4.0) *
+                    (configuredView ? 2048.0 / 1333.0 : 1.0);
+                Assert.That(entity.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+                Assert.That(entity.Runtime.XInt,
+                    Is.EqualTo((int)Math.Round(expectedX, MidpointRounding.ToEven)));
+                Assert.That(entity.Runtime.SourceRuleX,
+                    Is.EqualTo(faceLeft ? -18 : -10));
+                Assert.That(entity.Runtime.SourceRuleXInt,
+                    Is.EqualTo(faceLeft ? -18 : -10));
+                Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(31.25));
+                Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo(29));
+                Assert.That(entity.Runtime.Vx, Is.Zero);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var reason),
+                    Is.True, reason);
+            }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void LinkedPlatformCarryUsesViewRatioAndFacing(
+            bool configuredView,
+            bool faceLeft)
+        {
+            var platformData = new LF2CharacterData { type_sub = 3 };
+            platformData.frames.Add(new LF2FrameData
+            {
+                frameId = 0, wait = 100, next = 0,
+                state = 3003, dvx = 4, dvy = 550, dvz = 2,
+            });
+            var riderData = new LF2CharacterData { type_sub = 3 };
+            riderData.frames.Add(new LF2FrameData
+            {
+                frameId = 0, wait = 100, next = 0,
+                state = 3003, dvx = 550, dvy = 550, dvz = 550,
+            });
+            var platformDefinition = new LF2CharacterDataWrapper(887, platformData);
+            var riderDefinition = new LF2CharacterDataWrapper(888, riderData);
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(new[]
+            {
+                new ObjectDefinition(887, 3, "platform-carry.dat"),
+                new ObjectDefinition(888, 3, "rider-carry.dat")
+            }, id => id == 887 ? platformDefinition : id == 888 ? riderDefinition : null);
+            try
+            {
+                var platform = new LF2Weapon { ObjectId = 887 };
+                platform.FrameCache.Load(platformDefinition);
+                platform.Frame.D = platform.FrameCache.GetNativeFrameDataById(0);
+                platform.Trans.SyncDirectFrameData(100, 0, 0);
+                platform.SetRequiredRuntimeSlot(20);
+                world.Register(platform);
+                platform.SwitchDir(faceLeft ? "left" : "right");
+
+                var rider = new LF2Weapon { ObjectId = 888 };
+                rider.FrameCache.Load(riderDefinition);
+                rider.Frame.D = rider.FrameCache.GetNativeFrameDataById(0);
+                rider.Trans.SyncDirectFrameData(100, 0, 0);
+                rider.SetRequiredRuntimeSlot(21);
+                world.Register(rider);
+                rider.Runtime.SetPosition(200, -10, 250);
+                rider.Runtime.SyncIntegerPosition();
+                rider.Runtime.SetSourceRulePosition(-12.75, 31.25);
+                rider.Runtime.SourceRuleXInt = -14;
+                rider.Runtime.SourceRuleZInt = 29;
+                rider.Runtime.CollisionYReference = -10;
+                rider.Runtime.PlatformSourceSlotF4 = 20;
+                rider.ApplyNativeFrameMotionForWorldPass();
+
+                double expectedX = 200 + (faceLeft ? -4.0 : 4.0) *
+                    (configuredView ? 2048.0 / 1333.0 : 1.0);
+                double expectedZ = 250 + 2.0 *
+                    (configuredView ? 1152.0 / 730.0 : 1.0);
+                Assert.That(rider.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+                Assert.That(rider.Runtime.XInt,
+                    Is.EqualTo((int)Math.Round(expectedX, MidpointRounding.ToEven)));
+                Assert.That(rider.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
+                Assert.That(rider.Runtime.ZInt,
+                    Is.EqualTo((int)Math.Round(expectedZ, MidpointRounding.ToEven)));
+                Assert.That(rider.Runtime.SourceRuleX,
+                    Is.EqualTo(faceLeft ? -18 : -10));
+                Assert.That(rider.Runtime.SourceRuleXInt,
+                    Is.EqualTo(faceLeft ? -18 : -10));
+                Assert.That(rider.Runtime.SourceRuleZ, Is.EqualTo(31));
+                Assert.That(rider.Runtime.SourceRuleZInt, Is.EqualTo(31));
+                Assert.That(rider.Runtime.Y, Is.EqualTo(-10));
+                Assert.That(rider.Runtime.CollisionYReference, Is.EqualTo(-10));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var reason),
+                    Is.True, reason);
+            }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void PlatformThenDelayedDirectFrameUsesIndependentSourceIntegerBase(
+            bool configuredView,
+            bool initializedSource)
+        {
+            var platformData = new LF2CharacterData { type_sub = 3 };
+            platformData.frames.Add(new LF2FrameData
+            {
+                frameId = 0, wait = 100, next = 0,
+                state = 3003, dvx = 3, dvy = 550, dvz = 1,
+            });
+            var riderData = new LF2CharacterData { type_sub = 3 };
+            riderData.frames.Add(new LF2FrameData
+            {
+                frameId = 0, wait = 100, next = 0,
+                state = 3003, dvx = 550, dvy = 550, dvz = 550,
+                dx = 4.5, dz = -2.5,
+            });
+            var platformDefinition = new LF2CharacterDataWrapper(887, platformData);
+            var riderDefinition = new LF2CharacterDataWrapper(888, riderData);
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(new[]
+            {
+                new ObjectDefinition(887, 3, "platform-carry.dat"),
+                new ObjectDefinition(888, 3, "rider-carry.dat")
+            }, id => id == 887 ? platformDefinition : id == 888 ? riderDefinition : null);
+            try
+            {
+                var platform = new LF2Weapon { ObjectId = 887 };
+                platform.FrameCache.Load(platformDefinition);
+                platform.Frame.D = platform.FrameCache.GetNativeFrameDataById(0);
+                platform.Trans.SyncDirectFrameData(100, 0, 0);
+                platform.SetRequiredRuntimeSlot(20);
+                world.Register(platform);
+
+                var rider = new LF2Weapon { ObjectId = 888 };
+                rider.FrameCache.Load(riderDefinition);
+                rider.Frame.D = rider.FrameCache.GetNativeFrameDataById(0);
+                rider.Trans.SyncDirectFrameData(100, 0, 0);
+                rider.SetRequiredRuntimeSlot(21);
+                world.Register(rider);
+                rider.Runtime.SetPosition(200, -10, 250);
+                rider.Runtime.SyncIntegerPosition();
+                rider.Runtime.CollisionYReference = -10;
+                rider.Runtime.PlatformSourceSlotF4 = 20;
+                rider.Runtime.DelayTimer134 = 1;
+                if (initializedSource)
+                {
+                    rider.Runtime.SetSourceRulePosition(-12.75, 31.25);
+                    rider.Runtime.SourceRuleXInt = -14;
+                    rider.Runtime.SourceRuleZInt = 29;
+                }
+
+                rider.ApplyNativeFrameMotionForWorldPass();
+
+                double scaleX = configuredView ? 2048.0 / 1333.0 : 1.0;
+                double scaleZ = configuredView ? 1152.0 / 730.0 : 1.0;
+                double physicalX = Math.Round(200 + 3.0 * scaleX,
+                    MidpointRounding.ToEven) + 4.5 * 0.25 * scaleX;
+                double physicalZ = Math.Round(250 + 1.0 * scaleZ,
+                    MidpointRounding.ToEven) - 2.5 * 0.25 * scaleZ;
+                Assert.That(rider.Runtime.X, Is.EqualTo(physicalX).Within(0.000001));
+                Assert.That(rider.Runtime.XInt,
+                    Is.EqualTo((int)Math.Round(physicalX, MidpointRounding.ToEven)));
+                Assert.That(rider.Runtime.Z, Is.EqualTo(physicalZ).Within(0.000001));
+                Assert.That(rider.Runtime.ZInt,
+                    Is.EqualTo((int)Math.Round(physicalZ, MidpointRounding.ToEven)));
+                Assert.That(rider.Runtime.SourceRulePositionInitialized,
+                    Is.EqualTo(initializedSource));
+                Assert.That(rider.Runtime.SourceRuleX,
+                    Is.EqualTo(initializedSource ? -9.875 : 0));
+                Assert.That(rider.Runtime.SourceRuleXInt,
+                    Is.EqualTo(initializedSource ? -10 : 0));
+                Assert.That(rider.Runtime.SourceRuleZ,
+                    Is.EqualTo(initializedSource ? 29.375 : 0));
+                Assert.That(rider.Runtime.SourceRuleZInt,
+                    Is.EqualTo(initializedSource ? 29 : 0));
+                Assert.That(rider.Runtime.Vx, Is.Zero);
+                Assert.That(rider.Runtime.Vz, Is.Zero);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var reason),
+                    Is.True, reason);
+            }
+        }
+
         private static IEnumerable<TestCaseData> Cases()
         {
             for (int index = 0; index < 12; index++)

@@ -1,0 +1,20 @@
+<!-- CHANGE-RECORD
+id: NTSD28-USER-KIND14-PRECISE-COORDINATES-001
+status: SUPERSEDED
+change-kind: D024_KIND14_PRECISE_POSITION_OPERAND_CORRECTION
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleBoundaryWriter.cs; Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs; Assets/NTSD/Scripts/Animation/LF2Objects/LF2CharacterDatHitResolver.cs; Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs; Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs; Assets/NTSD/Scripts/Test/Editor/BattleHitExecutionPlanEditorTests.cs; Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
+authority: shipped Logan playable BattleWorld28::resolve_special_relation_hit kind14 and original Editor first difference; user D-024 fixed-view exception
+evidence: docs/ai/TASKS/NTSD28-USER-KIND14-PRECISE-COORDINATES-001.md
+-->
+
+# NTSD28-USER-KIND14-PRECISE-COORDINATES-001
+
+2026-09-24 authority correction: `NTSD28-USER-KIND14-INTEGER-OPERAND-AUTHORITY-CORRECTION-001` supersedes this package's parity conclusion. The playable source `Position28::x/z` are `int`, and the live kind-14 branch compares those members, not `precise_x/z`. The prior original-Editor RED/GREEN jobs remain real observations, but their expected precise rule was wrong. They do not establish formal parity. The successor corrects six branches and the focused assertions; its compile/NUnit/EXE evidence is still pending.
+
+Ledger verification: `Tools/Validate-ChangeLedger.ps1` ran after all script edits and passed (`740` Records, `35` governed code files in the current diff). The repository-wide warnings about older Records declaring unchanged files did not fail validation. `git diff --check` and Scene/content status are checked in the acceptance report; this ledger pass does not turn the failed full SelfCheck or untested Driver/Play path into a parity exit.
+
+2026-09-24 execution correction: the pre-edit `PLANNED` prose below is historical. Actual code paths: `BattleBoundaryWriter.TryApplyKind14DirectionalBlock`, the ECS kind14 hit-plan projection, and fallback kind14 comparisons in `LF2CharacterDatHitResolver`, `LF2Entity`, `LF2SpecialAttack` now read precise battle X/Z at the unchanged strict ±5/±2 thresholds. The original C32 self-check expectations that explicitly required integer truncation were updated to precise semantics. The witness method was renamed/extended to six strict-boundary cases, and a direct focused wrapper invokes the existing C32-containing self-check method.
+
+Original Editor job `7e9ebbb74d9b41cd9e49ec42a1dc3d92` provided expected formal RED (X5.5 failed true-versus-false; X6.5 passed). After production edit and recompilation, job `7415d299cd274aa48246d79623563d6b` passed 7/7: X5.5, X6.5, exact X5.0, negative X-5.5, positive Z2.5, negative Z-2.5 and existing kind14 ShadowCompare. Direct C32-containing method job `b2274720e02043ed852b3d5b898ea645` passed 1/1. Full `BattleRuntimeSelfCheck.RunAllChecksStatic` was attempted once and failed before C32 at FL-05 hit_Fa7 empty-slot target (`vx=0` vs expected `-1.4`); this is a separate unresolved self-check/authority issue, not a full-pass claim. Full Driver, Battle Scene Play, formal EXE visible comparison and D-024 source-domain position/flag carrier remain open. Battle Scene SHA unchanged. No DAT/image/camera/nonbattle edit. Rollback remains the exact operand/assertion changes in this package, preserving unrelated dirty work. Report: `artifacts/diagnostics/NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001/KIND14-PRECISE-THRESHOLD-ACCEPTANCE.md`. Ledger validator result follows separately.
+
+Status: `FOCUSED_TEST_PASS / FULL_SELFCHECK_FAILS_EARLIER_FL05 / D024_HISTORY_OPEN`. The Task declares the authority, original branch, exact code paths/symbols, test-first RED, expected side effects, D-024 and nonbattle boundaries, validation and rollback. No production or test assertion under this ID has been edited yet. Record actual code/test diffs, original Editor job IDs, failure/success, unverified full Driver/Play/EXE and ledger validation after execution.

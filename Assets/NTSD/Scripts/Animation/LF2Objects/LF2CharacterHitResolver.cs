@@ -222,10 +222,10 @@ namespace NTSD.Animation.LF2Objects
             {
                 if (_character.PS != null && attacker?.PS != null)
                 {
-                    double aix = attacker.PS.x;
-                    double aiz = attacker.PS.z;
-                    double vix = _character.PS.x;
-                    double viz = _character.PS.z;
+                    int aix = attacker.Runtime.XInt;
+                    int aiz = attacker.Runtime.ZInt;
+                    int vix = _character.Runtime.XInt;
+                    int viz = _character.Runtime.ZInt;
 
                     // C++ release apply_kind14 同时检查当前速度和击退速度。
                     if (aix > vix + 5f && (_character.PS.vx > 0f || _character.KnockbackVx > 0f)) _character.PS.xBoundPositive = true;
@@ -233,6 +233,9 @@ namespace NTSD.Animation.LF2Objects
 
                     if (aiz > viz + 2f && (_character.PS.vz > 0f || _character.KnockbackVz > 0f)) _character.PS.zBoundPositive = true;
                     else if (aiz < viz - 2f && (_character.PS.vz < 0f || _character.KnockbackVz < 0f)) _character.PS.zBoundNegative = true;
+
+                    NTSD.Simulation.Ecs.BattleBoundaryWriter.ApplySourceRuleKind14DirectionalBlock(
+                        attacker, _character);
                 }
                 return false;   // 不触发 vrest，每帧可持续生效。
             }

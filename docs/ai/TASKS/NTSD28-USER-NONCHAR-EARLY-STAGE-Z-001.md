@@ -1,0 +1,20 @@
+# NTSD28-USER-NONCHAR-EARLY-STAGE-Z-001
+
+Status: `FOCUSED_TEST_PASS / RUNTIME_PENDING`. Parent: `NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001` (D-024 non-perceptual audit). Original Editor RED job `da79757f77b140d4939946d45af63fa8` failed exactly where non-character Z500 remained500 instead of formal first-pass351. After the battle-only pass-order correction, focused DataOriented/Legacy/Shadow plus updated bounds tests passed 4/4 (`7463df56318e47dc8ea0465508be5086`), and the final strengthened related-stage/held test selection passed 16/16 (`6d4d1ee15b2e40fd8f623242963b3180`). This does not change DAT, camera, stage dimensions, Scene, Unity/GAS framework or nonbattle functions.
+
+Authority: root formal EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` and paired playable `SimulationTickDriver28::step` (`simulation_tick_driver.cpp`: stage-depth passes before geometry and after hits), `BattleWorld28::clamp_type0_stage_depth` (`battle_world.cpp`: despite the name, loops every active entity, clamps type0 Z to near..far and non-type0 Z to near-1..far+1, then always refreshes integer Z). Unity's corresponding `NTSDBattleTickSystem.ClampCharacterZToStageBounds` runs twice in the same positions but `BattleEcsCharacterStageZPass.IsEligible` admits only type0. Non-character Z reaches the same ±1 final range only later through `PreFrameBounds` → `LF2Entity.ApplyPreFrameZBounds`, so held/candidate/hit phases can observe a different Z.
+
+Pre-change Unity state: default DataOriented StageZ pass skips non-character entities; Legacy/ShadowCompare oracle in `SimulationStageRenderModule.ClampCharacterZToStageBoundsAll` also skips them. `StageBoundsRuntimeSyncEditorTests.ClampPass_RefreshesOnlyActiveCharacterEntities` explicitly freezes that former behavior. No formal-authority evidence supports the skip.
+
+Declared exact code paths:
+
+- `Assets/NTSD/Scripts/Simulation/Ecs/Passes/BattleEcsCharacterStageZPass.cs`: expand the existing stage-depth writer and its expected/diagnostic path to active non-type0 entities, using the paired ±1 margin and existing precise-to-int truncation. Keep active, pending-destroy and dormant membership boundaries.
+- `Assets/NTSD/Scripts/Simulation/Stage/SimulationStageRenderModule.cs`: keep explicit Legacy and ShadowCompare oracle aligned with the same all-active type-specific depth rule.
+- `Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterStageZPassEditorTests.cs`: test-first registered non-character first-pass RED, then default/legacy/shadow parity and repeated pass; retain existing character behavior.
+- `Assets/NTSD/Scripts/Test/Editor/StageBoundsRuntimeSyncEditorTests.cs`: update the test that asserts the known old non-character skip, while retaining pending/dormant exclusions.
+
+Side effects/risk: earlier non-character Z may alter WPoint held pose, collision candidate geometry, hit resolution and integer mirrors; this is the intended formal pass-order correction. It must not alter X/Y, frame/rng, stage width, direct physical D-024 scale, or DAT content. Run exact RED before production edit, then original Editor compile, targeted StageZ/StageBounds tests and a representative held pass regression; broaden only on a new first difference. Distinguish source-code rule equivalence from formal EXE/Play proof. Do not run another Unity project or use computer-use.
+
+Acceptance: at far350, active type1/type3 with precise Z500 become351/ZInt351 at the first StageZ pass, while active type0 becomes350; at in-range fractional non-character Z, integer mirror refreshes without moving precise Z. Default and Legacy/ShadowCompare agree. Pending-destroy/dormant remain untouched. A second StageZ invocation yields the same state. Existing target tests pass after correcting the formerly stale skip assertion; `Tools/Validate-ChangeLedger.ps1` passes and Scene/DAT status remain unchanged. Full Driver/Play, formal EXE visible capture and D-024 source-rule coordinate carrier remain open.
+
+Rollback is a scoped reversal of this Change's two production and two test file hunks after recording why; it does not roll back unrelated dirty work or the approved D-024 displacement outlets.

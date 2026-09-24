@@ -51,8 +51,36 @@ namespace NTSD.Simulation.Ecs
                 runtime.ZBoundNegative = true;
             }
 
+            ApplySourceRuleKind14DirectionalBlock(attacker, victim);
             characterInputWriter.SyncBoundaryFlagsFromRuntime(runtime);
             return true;
+        }
+
+        internal static void ApplySourceRuleKind14DirectionalBlock(
+            LF2Entity attacker,
+            LF2Entity victim)
+        {
+            NTSDEntityRuntime source = attacker?.Runtime;
+            NTSDEntityRuntime runtime = victim?.Runtime;
+            if (source == null || runtime == null ||
+                !source.SourceRulePositionInitialized ||
+                !runtime.SourceRulePositionInitialized)
+                return;
+
+            // Alignment contract: NTSD28-USER-SOURCE-KIND14-DIRECTION-FLAGS-001.
+            if (source.SourceRuleXInt > runtime.SourceRuleXInt + 5 &&
+                (runtime.Vx > 0.0 || victim.KnockbackVx > 0.0))
+                runtime.SourceRuleXBoundPositive = true;
+            else if (source.SourceRuleXInt < runtime.SourceRuleXInt - 5 &&
+                     (runtime.Vx < 0.0 || victim.KnockbackVx < 0.0))
+                runtime.SourceRuleXBoundNegative = true;
+
+            if (source.SourceRuleZInt > runtime.SourceRuleZInt + 2 &&
+                (runtime.Vz > 0.0 || victim.KnockbackVz > 0.0))
+                runtime.SourceRuleZBoundPositive = true;
+            else if (source.SourceRuleZInt < runtime.SourceRuleZInt - 2 &&
+                     (runtime.Vz < 0.0 || victim.KnockbackVz < 0.0))
+                runtime.SourceRuleZBoundNegative = true;
         }
 
         internal void SyncConsumedFlags(NTSDEntityRuntime runtime)

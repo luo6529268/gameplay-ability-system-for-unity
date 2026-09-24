@@ -320,11 +320,15 @@ namespace NTSD.Simulation
             LF2FrameData frame,
             BattleObjectPointValue opoint)
         {
-            int spawnX = spawner.Runtime.Dir == "right"
-                ? spawner.Runtime.XInt - frame.centerx + opoint.X
-                : spawner.Runtime.XInt + frame.centerx - opoint.X;
+            int relativeX = spawner.Runtime.Dir == "right"
+                ? opoint.X - frame.centerx
+                : frame.centerx - opoint.X;
+            double spawnX = spawner.Runtime.XInt +
+                relativeX * (task.targetWorld?.FixedViewRunDistanceScale ?? 1.0);
             int spawnY = spawner.Runtime.YInt - frame.centery + opoint.Y;
-            double spawnZ = spawner.Runtime.ZInt + opoint.Z + 1.0;
+            double spawnZ = spawner.Runtime.ZInt +
+                (opoint.Z + 1.0) *
+                (task.targetWorld?.FixedViewRunVerticalDistanceScale ?? 1.0);
 
             task.z = (float)spawnZ;
             task.useDirectRuntimePosition = true;
@@ -333,9 +337,15 @@ namespace NTSD.Simulation
             task.directZ = spawnZ;
             task.skipPostInitZOffset = true;
             task.useInitialRuntimeIntPosition = true;
-            task.initialRuntimeX = spawnX;
+            task.initialRuntimeX = (int)spawnX;
             task.initialRuntimeY = spawnY;
             task.initialRuntimeZ = (int)spawnZ;
+            if (spawner.Runtime.SourceRulePositionInitialized)
+            {
+                task.useSourceRulePosition = true;
+                task.sourceRuleX = spawner.Runtime.SourceRuleXInt + relativeX;
+                task.sourceRuleZ = spawner.Runtime.SourceRuleZInt + opoint.Z + 1.0;
+            }
         }
 
         private static void CopyMultipleTaskToSingle(

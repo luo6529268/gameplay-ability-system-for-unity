@@ -257,7 +257,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleExtendedChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v3";
+        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v4";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -339,7 +339,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleLockstepChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-lockstep-core-checksum-v3";
+        public const string SchemaId = "ntsd-lockstep-core-checksum-v4";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -842,6 +842,7 @@ namespace NTSD.Simulation
                     ("claimed", (object)view.Claimed),
                     ("currentDataOid", currentDataOid),
                     ("generation", view.Generation),
+                    ("occupiedRawSourceRule", entity == null ? null : ProjectSourceRuleCoordinates(view.RawRuntime)),
                     ("runtime", entity == null
                         ? ProjectEntityRuntime(
                             null,
@@ -849,12 +850,14 @@ namespace NTSD.Simulation
                             false,
                             view.RawRuntime,
                             projectRawState: view.RawRuntime != null,
-                            includePresentationHitRecords: includePresentationHitRecords)
+                            includePresentationHitRecords: includePresentationHitRecords,
+                            includeSourceRuleCoordinates: true)
                         : ProjectEntityRuntime(
                             entity,
                             runtimeSlot,
                             IsActiveForCurrentPass(entity),
-                            includePresentationHitRecords: includePresentationHitRecords)),
+                            includePresentationHitRecords: includePresentationHitRecords,
+                            includeSourceRuleCoordinates: true)),
                     ("runtimeSlot", runtimeSlot),
                     ("stableId", stableId));
             }
@@ -970,7 +973,8 @@ namespace NTSD.Simulation
             bool active,
             NTSDEntityRuntime runtimeOverride = null,
             bool projectRawState = false,
-            bool includePresentationHitRecords = true)
+            bool includePresentationHitRecords = true,
+            bool includeSourceRuleCoordinates = false)
         {
             NTSDEntityRuntime runtime = entity?.Runtime ?? runtimeOverride;
             bool isDefault = entity == null && !projectRawState;
@@ -1212,7 +1216,7 @@ namespace NTSD.Simulation
                 ("unk3FC", isDefault ? -1000 : runtime.Unk3FC),
                 ("unk400", isDefault ? -1000 : runtime.Unk400));
 
-            return DictionaryOf(
+            SortedDictionary<string, object> result = DictionaryOf(
                 ("frame", frame),
                 ("identity", identity),
                 ("input", input),
@@ -1225,6 +1229,26 @@ namespace NTSD.Simulation
                 ("stats", stats),
                 ("transform", transform),
                 ("transient", transient));
+            // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-JSON-CHECKSUM-001; frozen trace v3 omits this domain.
+            if (includeSourceRuleCoordinates)
+            {
+                result.Add("sourceRule", ProjectSourceRuleCoordinates(isDefault ? null : runtime));
+            }
+            return result;
+        }
+
+        private static object ProjectSourceRuleCoordinates(NTSDEntityRuntime runtime)
+        {
+            return DictionaryOf(
+                ("initialized", (object)(runtime?.SourceRulePositionInitialized ?? false)),
+                ("x", runtime?.SourceRuleX ?? 0.0),
+                ("z", runtime?.SourceRuleZ ?? 0.0),
+                ("xInt", runtime?.SourceRuleXInt ?? 0),
+                ("zInt", runtime?.SourceRuleZInt ?? 0),
+                ("xBoundPositive", runtime?.SourceRuleXBoundPositive ?? false),
+                ("xBoundNegative", runtime?.SourceRuleXBoundNegative ?? false),
+                ("zBoundPositive", runtime?.SourceRuleZBoundPositive ?? false),
+                ("zBoundNegative", runtime?.SourceRuleZBoundNegative ?? false));
         }
 
         private object ProjectWorldDomain()

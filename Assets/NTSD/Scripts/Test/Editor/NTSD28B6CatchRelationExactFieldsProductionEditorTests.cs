@@ -20,6 +20,122 @@ namespace NTSD.Test
     [Category("NTSD28_B6_CatchRelation")]
     public sealed class NTSD28B6CatchRelationExactFieldsProductionEditorTests
     {
+        [TestCase(false, 188, 148.0, 140.0)]
+        [TestCase(true, 213, 160.5, 152.5)]
+        public void Kind3GrabAfterTargetMotion_KeepsRawLocalPoseWhileBattleHistoryChanges(
+            bool configuredView,
+            int expectedTargetBeforeGrab,
+            double expectedAttackerX,
+            double expectedTargetX)
+        {
+            SimulationWorld world = CreateWorld(out TestCharacter attacker,
+                out TestCharacter target);
+            try
+            {
+                if (configuredView)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                attacker.Runtime.SetPosition(100, 0, 200);
+                target.Runtime.SetPosition(140, 0, 200);
+                attacker.Runtime.SyncIntegerPosition();
+                target.Runtime.SyncIntegerPosition();
+                attacker.Runtime.SetSourceRulePosition(100, 200);
+                target.Runtime.SetSourceRulePosition(140, 200);
+                attacker.Runtime.SyncSourceRuleIntegerPosition();
+                target.Runtime.SyncSourceRuleIntegerPosition();
+
+                target.Runtime.Vx = 48;
+                var motion = new CharacterMechanicsContext(target.Runtime,
+                    null, 0f, 0f, 0.0, world.FixedViewRunDistanceScale,
+                    world.FixedViewRunVerticalDistanceScale);
+                new CharacterMechanics().StepBattleLogic(motion);
+                target.Runtime.SyncIntegerPosition();
+                Assert.That(target.Runtime.XInt,
+                    Is.EqualTo(expectedTargetBeforeGrab));
+
+                Assert.That(world.InteractionWriter.TryApplyGrab(attacker,
+                    target, CreateItr(10, 20, 1), 3), Is.True);
+                Assert.That(attacker.Runtime.X,
+                    Is.EqualTo(expectedAttackerX));
+                Assert.That(target.Runtime.X,
+                    Is.EqualTo(expectedTargetX));
+                Assert.That(attacker.Runtime.XInt,
+                    Is.EqualTo((int)expectedAttackerX));
+                Assert.That(target.Runtime.XInt,
+                    Is.EqualTo((int)expectedTargetX));
+                Assert.That(target.Runtime.X - attacker.Runtime.X,
+                    Is.EqualTo(-8.0));
+                Assert.That(target.Runtime.SourceRuleX,
+                    Is.EqualTo(140.0));
+                Assert.That(attacker.Runtime.SourceRuleX,
+                    Is.EqualTo(148.0));
+                Assert.That(target.Runtime.SourceRuleXInt,
+                    Is.EqualTo(140));
+                Assert.That(attacker.Runtime.SourceRuleXInt,
+                    Is.EqualTo(148));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _,
+                    out string reason), Is.True, reason);
+            }
+        }
+
+        [Test]
+        public void Kind3GrabWithIncompleteSourceCarrier_DoesNotInventSourceHistory()
+        {
+            SimulationWorld world = CreateWorld(out TestCharacter attacker,
+                out TestCharacter target);
+            try
+            {
+                attacker.Runtime.SetSourceRulePosition(100, 200);
+                attacker.Runtime.SyncSourceRuleIntegerPosition();
+
+                Assert.That(world.InteractionWriter.TryApplyGrab(attacker,
+                    target, CreateItr(10, 20, 1), 3), Is.True);
+                Assert.That(attacker.Runtime.SourceRuleX, Is.EqualTo(100));
+                Assert.That(attacker.Runtime.SourceRuleXInt, Is.EqualTo(100));
+                Assert.That(target.Runtime.SourceRulePositionInitialized, Is.False);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _,
+                    out string reason), Is.True, reason);
+            }
+        }
+
+        [Test]
+        public void Kind1Grab_UsesIndependentSourceIntegerPairWithoutScalingLocalPose()
+        {
+            SimulationWorld world = CreateWorld(out TestCharacter attacker,
+                out TestCharacter target);
+            try
+            {
+                attacker.Runtime.SetPosition(100, 0, 200);
+                target.Runtime.SetPosition(213, 0, 200);
+                attacker.Runtime.SyncIntegerPosition();
+                target.Runtime.SyncIntegerPosition();
+                attacker.Runtime.SetSourceRulePosition(100, 200);
+                target.Runtime.SetSourceRulePosition(140, 200);
+                attacker.Runtime.SyncSourceRuleIntegerPosition();
+                target.Runtime.SyncSourceRuleIntegerPosition();
+
+                Assert.That(world.InteractionWriter.TryApplyGrab(attacker,
+                    target, CreateItr(10, 20, 1), 1), Is.True);
+                Assert.That(attacker.Runtime.SourceRuleX, Is.EqualTo(124));
+                Assert.That(target.Runtime.SourceRuleX, Is.EqualTo(116));
+                Assert.That(attacker.Runtime.SourceRuleXInt, Is.EqualTo(124));
+                Assert.That(target.Runtime.SourceRuleXInt, Is.EqualTo(116));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _,
+                    out string reason), Is.True, reason);
+            }
+        }
+
         [Test]
         public void Kind3Success_WritesExactReciprocalAndRespondTimeout()
         {

@@ -42,6 +42,12 @@ namespace NTSD.Animation.LF2Tasks
         public int initialRuntimeX;
         public int initialRuntimeY;
         public int initialRuntimeZ;
+        public bool useSourceRulePosition;
+        public double sourceRuleX;
+        public double sourceRuleZ;
+        public bool useInitialSourceRuleIntPosition;
+        public int initialSourceRuleX;
+        public int initialSourceRuleZ;
         public int ownerEntityIndex = -1;
         public int spawnerEntityIndex = -1;
         public int trackedTargetSlot = -1;
@@ -87,6 +93,12 @@ namespace NTSD.Animation.LF2Tasks
             initialRuntimeX = 0;
             initialRuntimeY = 0;
             initialRuntimeZ = 0;
+            useSourceRulePosition = false;
+            sourceRuleX = 0.0;
+            sourceRuleZ = 0.0;
+            useInitialSourceRuleIntPosition = false;
+            initialSourceRuleX = 0;
+            initialSourceRuleZ = 0;
             ownerEntityIndex = -1;
             spawnerEntityIndex = -1;
             trackedTargetSlot = -1;

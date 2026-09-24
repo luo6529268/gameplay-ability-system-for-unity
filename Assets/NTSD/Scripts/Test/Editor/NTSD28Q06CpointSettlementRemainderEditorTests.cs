@@ -17,6 +17,89 @@ namespace NTSD.Test
     {
         private const string Root = "artifacts/diagnostics/NTSD28-Q06-CPOINT-SETTLEMENT-REMAINDER-FRAME-BINDING-001/";
 
+        [TestCase(1333, 730, 348.0, 348, 373)]
+        [TestCase(2048, 1152, 373.7464366091523, 373, 398)]
+        public void MovedCatcherHeldCPointPose_KeepsSourceLocalAnchorAtBothViews(
+            int viewWidth,
+            int viewHeight,
+            double expectedCatcherX,
+            int expectedCatcherXInt,
+            int expectedCaughtXInt)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Root + "source/first.jsonl").Skip(1).First());
+            Assert.That((int)row["index"], Is.EqualTo(1));
+            Assert.That((int)row["mode"], Is.Zero);
+            Assert.That((int)row["after"][1]["raw"]["position"]["x"], Is.EqualTo(325));
+            var world = new SimulationWorld(BattleRuntimeProfile.Authority400, 400);
+            try
+            {
+                world.ConfigureAiExecutionProfile(BattleAiExecutionProfile.DataOrientedCanonical);
+                world.SetLogicOnlyEntityMaterialization(true);
+                var definitions = new[]
+                {
+                    Definition(77, (string)row["catcherDat"]),
+                    Definition(78, (string)row["victimDat"])
+                };
+                world.PrepareRuntimeDataCatalogForBattle(new[]
+                {
+                    new ObjectDefinition(77, 0, "catcher.dat"),
+                    new ObjectDefinition(78, 0, "victim.dat")
+                }, id => id >= 77 && id <= 78 ? definitions[id - 77] : null);
+                for (int slot = 0; slot < 2; slot++)
+                {
+                    var task = new OPointCreateTask
+                    {
+                        targetWorld = world,
+                        requiredRuntimeSlot = slot,
+                        nativeWeaponPieceSpawn = true,
+                        dir = "right",
+                        relationTeam = 0,
+                        preserveActionZero = true,
+                        opoint = new ObjectPoint
+                        {
+                            oid = 77 + slot,
+                            action = (int)row["before"][slot]["raw"]["frame"]["action"]
+                        }
+                    };
+                    LF2Entity entity = world.LogicEntityFactory.Create(task, out _);
+                    Assert.That(entity, Is.Not.Null);
+                    entity.AiControlled = false;
+                    RestoreBefore(entity, row["before"][slot]);
+                }
+
+                world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
+                LF2Entity catcher = world.FindEntityByRuntimeSlotForQuery(0);
+                LF2Entity caught = world.FindEntityByRuntimeSlotForQuery(1);
+                catcher.Runtime.SetSourceRulePosition(catcher.Runtime.XInt, catcher.Runtime.ZInt);
+                caught.Runtime.SetSourceRulePosition(caught.Runtime.XInt, caught.Runtime.ZInt);
+                catcher.Runtime.SyncSourceRuleIntegerPosition();
+                caught.Runtime.SyncSourceRuleIntegerPosition();
+                Assert.That(catcher.Runtime.XInt, Is.EqualTo(300));
+                catcher.Runtime.SetVelocity(48, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(catcher.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                Assert.That(catcher.Runtime.X, Is.EqualTo(expectedCatcherX).Within(1e-10));
+                catcher.Runtime.SyncIntegerPosition();
+                Assert.That(catcher.Runtime.XInt, Is.EqualTo(expectedCatcherXInt));
+
+                catcher.RunWeaponSyncHeldStep10();
+                Assert.That(caught.Runtime.XInt, Is.EqualTo(expectedCaughtXInt));
+                Assert.That(caught.Runtime.XInt - catcher.Runtime.XInt, Is.EqualTo(25));
+                Assert.That(caught.Runtime.YInt, Is.EqualTo(4));
+                Assert.That(caught.Runtime.ZInt, Is.EqualTo(249));
+                Assert.That(catcher.Runtime.SourceRuleXInt, Is.EqualTo(348));
+                Assert.That(caught.Runtime.SourceRuleXInt, Is.EqualTo(373));
+                Assert.That(caught.Runtime.SourceRuleX, Is.EqualTo(373));
+                Assert.That(caught.Runtime.SourceRuleZInt, Is.EqualTo(249));
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+            }
+        }
+
         [TestCase(BattleRuntimeProfile.Authority400)]
         [TestCase(BattleRuntimeProfile.MobileExtended)]
         public void RemainingPassMatchesSource(BattleRuntimeProfile profile)

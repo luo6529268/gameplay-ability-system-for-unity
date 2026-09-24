@@ -111,10 +111,13 @@ namespace NTSD.Simulation
             {
                 int avgX = sumX / count;
                 int avgZ = sumZ / count;
+                // Alignment contract: NTSD28-USER-REVIVAL-OFFSET-RATIO-001.
                 entity.Runtime.X = avgX +
-                    world.NativeRandom.SynchronizedNext(0x90u, 0x33) - 25.0;
+                    (world.NativeRandom.SynchronizedNext(0x90u, 0x33) - 25.0) *
+                    world.FixedViewRunDistanceScale;
                 entity.Runtime.Z = avgZ +
-                    world.NativeRandom.SynchronizedNext(0x91u, 0x1f) - 15.0;
+                    (world.NativeRandom.SynchronizedNext(0x91u, 0x1f) - 15.0) *
+                    world.FixedViewRunVerticalDistanceScale;
                 entity.PS.x = entity.Runtime.X;
                 entity.PS.z = entity.Runtime.Z;
             }
@@ -239,6 +242,16 @@ namespace NTSD.Simulation
             task.initialRuntimeX = entity.GetRuntimeXInt();
             task.initialRuntimeY = entity.GetRuntimeYInt();
             task.initialRuntimeZ = entity.GetRenderZInt() + 1;
+            if (entity.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-REVIVAL-EFFECT-BIRTH-001.
+                task.useSourceRulePosition = true;
+                task.sourceRuleX = entity.Runtime.SourceRuleXInt;
+                task.sourceRuleZ = entity.Runtime.SourceRuleZInt;
+                task.useInitialSourceRuleIntPosition = true;
+                task.initialSourceRuleX = entity.Runtime.SourceRuleXInt;
+                task.initialSourceRuleZ = entity.Runtime.SourceRuleZInt + 1;
+            }
             task.deferPresentationToNextTick = false;
             task.suppressLateFrameTickThisTick = false;
             task.deferFrameTickToNextTick = false;

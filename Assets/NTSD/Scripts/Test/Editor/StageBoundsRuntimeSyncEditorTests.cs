@@ -66,7 +66,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ClampPass_RefreshesOnlyActiveCharacterEntities()
+        public void ClampPass_RefreshesActiveEntitiesWithTypeSpecificDepthMargins()
         {
             using var logging = new DisabledLoggingScope();
             SimulationWorld world = CreateWorld();
@@ -97,10 +97,12 @@ namespace NTSD.Test
             Assert.That(pending.Runtime.Z, Is.EqualTo(500.0));
             Assert.That(dormant.PS.z, Is.EqualTo(500.0));
             Assert.That(dormant.Runtime.Z, Is.EqualTo(500.0));
-            Assert.That(weapon.PS.z, Is.EqualTo(500.0));
-            Assert.That(weapon.Runtime.Z, Is.EqualTo(500.0));
-            Assert.That(special.PS.z, Is.EqualTo(500.0));
-            Assert.That(special.Runtime.Z, Is.EqualTo(500.0));
+            Assert.That(weapon.PS.z, Is.EqualTo(351.0));
+            Assert.That(weapon.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(weapon.Runtime.ZInt, Is.EqualTo(351));
+            Assert.That(special.PS.z, Is.EqualTo(351.0));
+            Assert.That(special.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(special.Runtime.ZInt, Is.EqualTo(351));
         }
 
         [Test]

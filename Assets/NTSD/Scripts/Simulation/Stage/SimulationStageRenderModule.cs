@@ -250,12 +250,17 @@ namespace NTSD.Simulation
 
             foreach (LF2Entity entity in world.ActiveEntitiesByRuntimeSlotForModule)
             {
-                if (!entity.IsStageBoundedCharacter() || entity.PS == null)
+                if (entity.PS == null)
                     continue;
 
-                if (entity.PS.z > zMax) entity.PS.z = zMax;
-                if (entity.PS.z < zMin) entity.PS.z = zMin;
+                double margin = entity.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character ? 0.0 : 1.0;
+                if (entity.PS.z > zMax + margin)
+                    entity.PS.z = zMax + margin;
+                if (entity.PS.z < zMin - margin)
+                    entity.PS.z = zMin - margin;
                 entity.Runtime.ZInt = (int)entity.Runtime.Z;
+                entity.Runtime.ClampSourceRuleZ(zMin - margin, zMax + margin);
                 entity.RefreshRuntimeSnapshot();
             }
         }
@@ -875,4 +880,3 @@ namespace NTSD.Simulation
 
     }
 }
-

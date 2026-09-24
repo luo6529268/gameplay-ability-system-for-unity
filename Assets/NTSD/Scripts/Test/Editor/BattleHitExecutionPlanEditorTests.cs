@@ -5714,6 +5714,74 @@ namespace NTSD.Test
             Assert.That(scenario.CharacterVictim.Runtime.ZBoundPositive, Is.True);
         }
 
+        [TestCase(5.5, 0.0, 2.0, 0.0, false, false, false, false)]
+        [TestCase(6.5, 0.0, 2.0, 0.0, true, false, false, false)]
+        [TestCase(5.0, 0.0, 2.0, 0.0, false, false, false, false)]
+        [TestCase(-5.5, 0.0, -2.0, 0.0, false, false, false, false)]
+        [TestCase(-6.5, 0.0, -2.0, 0.0, false, true, false, false)]
+        [TestCase(0.0, 2.5, 0.0, 2.0, false, false, false, false)]
+        [TestCase(0.0, 3.5, 0.0, 2.0, false, false, true, false)]
+        [TestCase(0.0, -2.5, 0.0, -2.0, false, false, false, false)]
+        [TestCase(0.0, -3.5, 0.0, -2.0, false, false, false, true)]
+        public void Kind14NearStrictThreshold_UsesIntegerPositions(
+            double attackerPreciseX,
+            double attackerPreciseZ,
+            double victimVx,
+            double victimVz,
+            bool expectedPositiveX,
+            bool expectedNegativeX,
+            bool expectedPositiveZ,
+            bool expectedNegativeZ)
+        {
+            Scenario scenario = CreateScenario();
+            scenario.CharacterAttacker.GetCollisionFrameData().itrs[0].kind = 14;
+            scenario.CharacterAttacker.Runtime.SetPosition(attackerPreciseX, 0, attackerPreciseZ);
+            scenario.CharacterAttacker.Runtime.SyncIntegerPosition();
+            scenario.CharacterVictim.Runtime.SetPosition(0, 0, 0);
+            scenario.CharacterVictim.Runtime.SyncIntegerPosition();
+            scenario.CharacterVictim.Runtime.SetVelocity(victimVx, 0, victimVz);
+            scenario.World.CaptureCollisionFrameSnapshotsAll();
+            scenario.World.CollectCollisionCandidatesAll();
+
+            Assert.That(scenario.CharacterAttacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            Assert.That(scenario.CharacterAttacker.Runtime.XInt, Is.EqualTo((int)attackerPreciseX));
+            Assert.That(scenario.CharacterAttacker.Runtime.ZInt, Is.EqualTo((int)attackerPreciseZ));
+            scenario.World.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            scenario.World.PostInteractionTickAll(750);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                scenario.World.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(diagnostics.CurrentTickPlanValid, Is.True, DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.ObservedDispatchCount, Is.EqualTo(1));
+            Assert.That(scenario.CharacterVictim.Runtime.XBoundPositive,
+                Is.EqualTo(expectedPositiveX),
+                "Kind14 must compare integer position mirrors at the strict source threshold.");
+            Assert.That(scenario.CharacterVictim.Runtime.XBoundNegative, Is.EqualTo(expectedNegativeX));
+            Assert.That(scenario.CharacterVictim.Runtime.ZBoundPositive, Is.EqualTo(expectedPositiveZ));
+            Assert.That(scenario.CharacterVictim.Runtime.ZBoundNegative, Is.EqualTo(expectedNegativeZ));
+        }
+
+        [Test]
+        public void Kind14FocusedSelfCheck_UsesIntegerPositionForFallbacks()
+        {
+            System.Reflection.MethodInfo method = typeof(BattleRuntimeSelfCheck).GetMethod(
+                "CheckSpecialAttackHitResolveAuditContracts",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            try
+            {
+                method.Invoke(null, null);
+            }
+            catch (System.Reflection.TargetInvocationException exception)
+            {
+                if (exception.InnerException != null)
+                    throw exception.InnerException;
+                throw;
+            }
+        }
+
         [TestCase(1, 9.25, 3.5)]
         [TestCase(3, 8.5, 3.5)]
         public void ShadowCompare_GrabWriterEffectMatchesAuthorityState(

@@ -571,6 +571,8 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.ZBoundPositive = true;
             else if (attackerZ < victimZ - 2 && (Runtime.Vz < 0.0 || KnockbackVz < 0.0))
                 Runtime.ZBoundNegative = true;
+
+            BattleBoundaryWriter.ApplySourceRuleKind14DirectionalBlock(attacker, this);
         }
 
         private bool Hit_State3000(LF2Entity attacker, InteractionArea itr)

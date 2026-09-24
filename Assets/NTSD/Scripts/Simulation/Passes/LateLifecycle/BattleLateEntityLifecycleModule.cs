@@ -686,7 +686,7 @@ namespace NTSD.Simulation
                         out LF2CharacterDataWrapper targetWrapper))
                     continue;
 
-                int spawnX = spawner.Runtime.XInt + NextState9996Random(
+                int relativeX = NextState9996Random(
                     useNativeSynchronizedRandom,
                     0x0041F792u,
                     7) - 3;
@@ -694,7 +694,11 @@ namespace NTSD.Simulation
                     useNativeSynchronizedRandom,
                     0x0041F7B6u,
                     7) - 9;
-                int spawnZ = spawner.Runtime.ZInt + 1;
+                // Alignment contract: NTSD28-USER-STATE9996-CHILD-RATIO-001.
+                double spawnX = spawner.Runtime.XInt +
+                    relativeX * world.FixedViewRunDistanceScale;
+                double spawnZ = spawner.Runtime.ZInt +
+                    world.FixedViewRunVerticalDistanceScale;
                 double spawnVy = -(NextState9996Random(
                     useNativeSynchronizedRandom,
                     0x0041F818u,
@@ -793,9 +797,18 @@ namespace NTSD.Simulation
                 task.directY = spawnY;
                 task.directZ = spawnZ;
                 task.useInitialRuntimeIntPosition = true;
-                task.initialRuntimeX = spawnX;
+                task.initialRuntimeX = (int)spawnX;
                 task.initialRuntimeY = spawnY;
-                task.initialRuntimeZ = spawnZ;
+                task.initialRuntimeZ = (int)spawnZ;
+                if (spawner.Runtime.SourceRulePositionInitialized)
+                {
+                    task.useSourceRulePosition = true;
+                    task.sourceRuleX = spawner.Runtime.SourceRuleXInt + relativeX;
+                    task.sourceRuleZ = spawner.Runtime.SourceRuleZInt + 1;
+                    task.useInitialSourceRuleIntPosition = true;
+                    task.initialSourceRuleX = spawner.Runtime.SourceRuleXInt + relativeX;
+                    task.initialSourceRuleZ = spawner.Runtime.SourceRuleZInt + 1;
+                }
                 task.useDirectVelocity = true;
                 task.directVx = spawnVx;
                 task.directVy = spawnVy;

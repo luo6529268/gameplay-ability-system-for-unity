@@ -30,16 +30,32 @@ namespace NTSD.Simulation.Ecs
 
             if (point.kind == 1)
             {
-                runtime.XInt += RandomDelta(child.Match, point.centerx);
+                int rawDeltaX = RandomDelta(child.Match, point.centerx);
+                double nextX = runtime.XInt +
+                    rawDeltaX *
+                    (child.Match?.FixedViewRunDistanceScale ?? 1.0);
+                runtime.XInt = (int)nextX;
                 runtime.YInt += RandomDelta(child.Match, point.centery);
-                runtime.ZInt += RandomDelta(child.Match, point.centerz);
+                int rawDeltaZ = RandomDelta(child.Match, point.centerz);
+                double nextZ = runtime.ZInt +
+                    rawDeltaZ *
+                    (child.Match?.FixedViewRunVerticalDistanceScale ?? 1.0);
+                runtime.ZInt = (int)nextZ;
                 int action = point.action + RandomDelta(child.Match, point.framea);
                 child.WriteCurrentFrameId(action);
                 // Descriptor follows the current action; transition latch and previous action stay at birth.
                 child.Frame.D = child.FrameCache.GetNativeFrameDataById(action);
-                runtime.X = runtime.XInt;
+                runtime.X = nextX;
                 runtime.Y = runtime.YInt;
-                runtime.Z = runtime.ZInt;
+                runtime.Z = nextZ;
+                // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-KIND1-RANDOM-001; reuse draws in the unscaled history.
+                if (runtime.SourceRulePositionInitialized)
+                {
+                    runtime.SourceRuleXInt += rawDeltaX;
+                    runtime.SourceRuleZInt += rawDeltaZ;
+                    runtime.SourceRuleX = runtime.SourceRuleXInt;
+                    runtime.SourceRuleZ = runtime.SourceRuleZInt;
+                }
             }
 
             runtime.HitResourceInjuryDouble1A0 = parent.Runtime.HitResourceInjuryDouble1A0;

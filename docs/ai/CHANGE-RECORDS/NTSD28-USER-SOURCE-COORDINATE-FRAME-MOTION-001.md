@@ -1,0 +1,20 @@
+<!-- CHANGE-RECORD
+id: NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001
+status: FOCUSED_TEST_PASS
+change-kind: D024_SOURCE_RULE_FRAME_AND_PLATFORM_MOTION_WRITER
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs; Assets/NTSD/Scripts/Test/Editor/NTSD28Q06FrameMotionTailEditorTests.cs
+authority: root formal EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 and declared playable BattleWorld28::apply_frame_motion; user D-024
+evidence: docs/ai/TASKS/NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001.md
+-->
+
+# NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001
+
+2026-09-24 original-project Editor focused result: PID10576/bridge6403 loaded the current scripts after the old broad job's Editor exited. Two first filter requests mistakenly used namespace `NTSD.Test.Editor` and each executed zero cases; neither is evidence. Correct exact `NTSD.Test.NTSD28Q06FrameMotionTailEditorTests` filter job `1abe66cd561d4338a08c539a9263b414` executed direct OID736 Z, direct X/facing, linked-platform and compound platform→delayed-direct cases, 14/14 PASS. Adjacent full tick/replay three cases passed job `19be14efbec74ea08df688f4840d5407`, 3/3. No DAT, scene, camera or nonbattle edit; source-rule physics/teleport/bounds/flags and gameplay readers remain inactive. Formal EXE same-input and Battle Scene Play not run. Status `FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`.
+
+2026-09-24 actual change: `LF2Entity.ApplyLinkedPlatformMotion` now writes source-rule X/Z precise/int from its independent source integer base and the unscaled decoded platform displacement, with the same immediate rounding as the physical writer. `ApplyNativeFrameMotionTail` then writes source-rule X/Z from its *updated* source integer base plus unscaled facing/delay-adjusted `dx/dz`. Both act only when `SourceRulePositionInitialized`; no gameplay reader is enabled, no source velocity/Y/flag semantics added, and physical D-024 output remains on its existing scale. The existing official OID736 direct-Z, synthetic direct-X/facing and platform tests gained source-domain assertions; a four-case platform→delayed-direct test covers factor1/configured view and initialized/uninitialized carrier. Script edits are confined to the two declared paths. The first draft synthetic platform speed used fractional `dvx/dvz`, but `LF2FrameData` stores those as integers; this was corrected to integer 3/1 before any compile/test attempt. No Unity compile or NUnit has run yet because the original broad Editor job has no terminal status and C: is full.
+
+Structural checks after edit: `git diff --check` exit 0, scoped Git status finds no changed DAT/content/Scene/ProjectSettings, and `NTSD_Battle.unity` SHA-256 remains `9E7B8A91ADD396D8A3674915BB5AC9A03B8D1A2EC817BA3B12F135D03EBA0AC0`. Run the ledger validator and focused original-Editor cases once the existing job is terminal; full Driver/Play/EXE evidence remains absent. Status is `CODE_WRITTEN / COMPILE_PENDING / CARRIER_NOT_ACTIVE`.
+
+Post-edit audit update: `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <repo>` returned `VALIDATOR_PASS`, and repository `git diff --check` returned `DIFF_CHECK_PASS`. These are static governance checks; Editor compilation, focused tests, SelfCheck and Play remain unrun for this revision.
+
+Created before script edits. The current Unity battle writer scales physical direct frame and linked-platform X/Z but leaves the versioned source-rule carrier at birth. This package updates only the same two writer methods with unscaled raw X/Z source precise/int writes when `SourceRulePositionInitialized`, preserving formal platform-before-direct order, integer-base midpoint rounding, delay/facing semantics, physical displacement and existing velocity/Y. Tests cover initialized and uninitialized source, factor1/configured view, and a compound sequence. No source-rule reader is activated. Validate narrowly in the original Editor after the existing unrelated broad test job and C: full condition are resolved; do not claim compile or runtime success from static inspection. Rollback: reviewed patch only within the two declared scripts, preserving all unrelated work.

@@ -175,11 +175,16 @@ namespace NTSD.Animation.LF2Objects
             var fD = Frame.D;
             int frameState = fD?.state ?? -1;
 
-            Runtime.X += BattleNativeIdentityXExtraKernel.ResolveExtra(
-                wt,
-                ObjectId,
-                typeSub,
-                Runtime.Vx);
+            // Alignment contract: NTSD28-USER-WEAPON-IDENTITY-X-RATIO-001.
+            Runtime.X += (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0) *
+                BattleNativeIdentityXExtraKernel.ResolveExtra(
+                    wt,
+                    ObjectId,
+                    typeSub,
+                    Runtime.Vx);
+            if (Runtime.SourceRulePositionInitialized)
+                Runtime.SourceRuleX += BattleNativeIdentityXExtraKernel.ResolveExtra(
+                    wt, ObjectId, typeSub, Runtime.Vx);
 
             if (wt == 6)
             {
@@ -210,8 +215,12 @@ namespace NTSD.Animation.LF2Objects
             if (wt == 3 && fD != null && fD.hit_j > 0)
             {
                 float visualZ = fD.hit_j - 50;
-                Runtime.Z += visualZ;
+                // Alignment contract: NTSD28-USER-WEAPON-TYPE3-Z-RATIO-001.
+                Runtime.Z += visualZ *
+                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                 Runtime.Type3VisualZOffset += visualZ;
+                if (Runtime.SourceRulePositionInitialized)
+                    Runtime.SourceRuleZ += visualZ;
             }
 
         }

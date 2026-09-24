@@ -207,6 +207,10 @@ namespace NTSD.Simulation.Ecs
 
             runtime.X = x;
             runtime.XInt = (int)x;
+            // Alignment contract: NTSD28-USER-SOURCE-CHARACTER-STAGE-X-001.
+            runtime.ClampSourceRuleCharacterX(
+                slot, runtime.RelationTeam, runtime.HitStop,
+                baseStageWidth, xMaxOverride);
             return true;
         }
 

@@ -2561,7 +2561,7 @@ namespace NTSD.Test
             Expect(authorityChecksum is BattleParityFrameSnapshot &&
                    authorityChecksum.Schema == BattleParityFrameSnapshot.SchemaId &&
                    mobileRested.Schema == BattleExtendedChecksumSnapshot.SchemaId &&
-                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v3\"") &&
+                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v4\"") &&
                    SimulationTickDriver.CaptureSupportedFrameSnapshot(
                        mobileWorld,
                        11,
@@ -18646,13 +18646,15 @@ namespace NTSD.Test
                 baseAttacker.Runtime.SyncIntegerPosition();
                 baseVictim.Hit(new InteractionArea { kind = 14 }, baseAttacker);
                 Expect(!baseVictim.Runtime.XBoundPositive && !baseVictim.Runtime.ZBoundPositive,
-                    "BATTLE-C32: base kind14 must use truncated XInt=5/ZInt=2 rather than fractional X/Z above the threshold");
+                    "BATTLE-C32: base kind14 must use integer X5/Z2 at the strict source thresholds");
 
+                baseVictim.Runtime.XBoundPositive = false;
+                baseVictim.Runtime.ZBoundPositive = false;
                 baseAttacker.Runtime.SetPosition(6.1, 0.0, 3.1);
                 baseAttacker.Runtime.SyncIntegerPosition();
                 baseVictim.Hit(new InteractionArea { kind = 14 }, baseAttacker);
                 Expect(baseVictim.Runtime.XBoundPositive && baseVictim.Runtime.ZBoundPositive,
-                    "BATTLE-C32: base kind14 must arm block flags once integer XInt=6/ZInt=3 crosses the thresholds");
+                    "BATTLE-C32: base kind14 must block at integer X6/Z3 above the strict source thresholds");
 
                 FlowSelfCheckEntity sharedDatVictim = Entity(
                     baseWorld,
@@ -18671,8 +18673,10 @@ namespace NTSD.Test
                     Vector3.zero,
                     default);
                 Expect(!sharedDatVictim.Runtime.XBoundPositive && !sharedDatVictim.Runtime.ZBoundPositive,
-                    "BATTLE-C32: shared-DAT kind14 must use truncated XInt=5/ZInt=2 rather than fractional X/Z above the threshold");
+                    "BATTLE-C32: shared-DAT kind14 must use integer X5/Z2 at the strict source thresholds");
 
+                sharedDatVictim.Runtime.XBoundPositive = false;
+                sharedDatVictim.Runtime.ZBoundPositive = false;
                 baseAttacker.Runtime.SetPosition(6.1, 0.0, 3.1);
                 baseAttacker.Runtime.SyncIntegerPosition();
                 LF2CharacterDatHitResolver.TryResolveHit(
@@ -18682,7 +18686,7 @@ namespace NTSD.Test
                     Vector3.zero,
                     default);
                 Expect(sharedDatVictim.Runtime.XBoundPositive && sharedDatVictim.Runtime.ZBoundPositive,
-                    "BATTLE-C32: shared-DAT kind14 must arm block flags once integer XInt=6/ZInt=3 crosses the thresholds");
+                    "BATTLE-C32: shared-DAT kind14 must block at integer X6/Z3 above the strict source thresholds");
 
                 InteractionArea kind14 = MakeInteractionItr(14, 0, 0, 0);
                 Expect(new NTSD.Extensions.NTSDItrKindService().IsAttackKind(14),
@@ -23442,6 +23446,17 @@ itr_end:
                 $"sourceOccupant={DescribeFrameLifecycleEntity(sourceOccupantAfter)}, " +
                 $"lastOccupant={DescribeFrameLifecycleEntity(childAtLastSlot)}, " +
                 $"rngBefore={callsBefore}, rngAfter={world.Rng.CallCount}, rngDelta={rngDelta}";
+            if (hitFa == 7)
+            {
+                Expect(childAtLastSlot == null && sourceOccupantAfter == source &&
+                       !source.Runtime.PendingFlushDestroy &&
+                       source.Runtime.SlotIndex == sourceSlot &&
+                       CountFrameLifecycleDynamicOccupants(world) == dynamicSlotCount - 1 &&
+                       rngDelta == expectedRngCalls,
+                    "FL-02/HITFA-7: noncharacter target chase must retain its source without publishing a clone; " +
+                    publicationDiagnostic);
+                return;
+            }
             Expect(childAtLastSlot != null && childAtLastSlot.ObjectId == childOid &&
                    childAtLastSlot.Runtime.SlotIndex == lastRuntimeSlot &&
                    childAtLastSlot.Runtime.SlotIndex != sourceSlot,
@@ -23467,11 +23482,6 @@ itr_end:
                        world.FindEntityByRuntimeSlotIncludingPending(sourceSlot) == producer.Newborn,
                     $"FL-02/HITFA-{hitFa}: later same-pass producer must reuse the pending source slot and survive old finalization; " +
                     publicationDiagnostic);
-            }
-            else
-            {
-                Expect(!source.Runtime.PendingFlushDestroy && source.Runtime.SlotIndex == sourceSlot,
-                    "FL-02/HITFA-7: clone publication must retain the active source and its original slot");
             }
         }
 

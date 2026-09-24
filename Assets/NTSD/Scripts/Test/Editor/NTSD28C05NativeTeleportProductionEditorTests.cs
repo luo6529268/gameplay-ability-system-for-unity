@@ -43,6 +43,8 @@ namespace NTSD.Test.Editor
             source.Runtime.ZInt = 200;
             source.PS.groundY = -17;
             source.Runtime.SetVelocity(4.0, -2.0, 3.0);
+            source.Runtime.SetSourceRulePosition(75.75, 180.75);
+            source.Runtime.SyncSourceRuleIntegerPosition();
 
             world.NativeTeleportAll();
 
@@ -52,6 +54,10 @@ namespace NTSD.Test.Editor
             Assert.That(source.Runtime.YInt, Is.EqualTo(-17));
             Assert.That(source.Runtime.Z, Is.EqualTo(200.0));
             Assert.That(source.Runtime.ZInt, Is.EqualTo(200));
+            Assert.That(source.Runtime.SourceRuleX, Is.EqualTo(75.0));
+            Assert.That(source.Runtime.SourceRuleXInt, Is.EqualTo(75));
+            Assert.That(source.Runtime.SourceRuleZ, Is.EqualTo(180.0));
+            Assert.That(source.Runtime.SourceRuleZInt, Is.EqualTo(180));
             AssertZeroMotion(source);
         }
 
@@ -94,6 +100,66 @@ namespace NTSD.Test.Editor
             Assert.That(source.Runtime.XInt, Is.EqualTo(560));
             Assert.That(source.Runtime.YInt, Is.EqualTo(-29));
             Assert.That(source.Runtime.ZInt, Is.EqualTo(501));
+        }
+
+        [TestCase(false, false, 400)]
+        [TestCase(false, true, 400)]
+        [TestCase(true, false, 400)]
+        [TestCase(true, true, 400)]
+        [TestCase(false, false, 401)]
+        [TestCase(false, true, 401)]
+        [TestCase(true, false, 401)]
+        [TestCase(true, true, 401)]
+        public void TeleportTargetRelativeHorizontalOffsetUsesViewRatio(
+            bool configuredView,
+            bool faceLeft,
+            int state)
+        {
+            var world = new SimulationWorld();
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2OtherObject source = CreateOther(world, 50, 1001, state, relationTeam: 1);
+            LF2Character target = CreateCharacter(world, 1, 1002,
+                relationTeam: state == 400 ? 2 : 1);
+            SetPosition(source, 100, -10, 100);
+            SetPosition(target, 300, -20, 130);
+            source.Runtime.SetSourceRulePosition(100, 100);
+            source.Runtime.SyncSourceRuleIntegerPosition();
+            target.Runtime.SetSourceRulePosition(251, 90);
+            target.Runtime.SyncSourceRuleIntegerPosition();
+            target.PS.groundY = -20;
+            source.SwitchDir(faceLeft ? "left" : "right");
+
+            double offset = (state == 400 ? 120.0 : 60.0) *
+                (configuredView ? 2048.0 / 1333.0 : 1.0);
+            double expectedX = 300 + (faceLeft ? offset : -offset);
+            int expectedXInt = (int)System.Math.Round(expectedX,
+                System.MidpointRounding.ToEven);
+            int rawOffset = state == 400 ? 120 : 60;
+            int expectedSourceX = 251 + (faceLeft ? rawOffset : -rawOffset);
+
+            world.NativeTeleportAll();
+            Assert.That(source.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+            Assert.That(source.Runtime.XInt, Is.EqualTo(expectedXInt));
+            Assert.That(source.Runtime.ZInt, Is.EqualTo(131));
+            Assert.That(source.Runtime.YInt, Is.EqualTo(-20));
+            Assert.That(source.Runtime.SourceRuleX, Is.EqualTo(expectedSourceX));
+            Assert.That(source.Runtime.SourceRuleXInt, Is.EqualTo(expectedSourceX));
+            Assert.That(source.Runtime.SourceRuleZ, Is.EqualTo(91));
+            Assert.That(source.Runtime.SourceRuleZInt, Is.EqualTo(91));
+
+            SetPosition(source, 100, -10, 100);
+            source.Runtime.SetSourceRulePosition(100, 100);
+            source.Runtime.SyncSourceRuleIntegerPosition();
+            source.RunEarlyTeleportSpecialsPhase(
+                new List<LF2Entity> { source, target }, false);
+            Assert.That(source.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+            Assert.That(source.Runtime.XInt, Is.EqualTo(expectedXInt));
+            Assert.That(source.Runtime.ZInt, Is.EqualTo(131));
+            Assert.That(source.Runtime.SourceRuleX, Is.EqualTo(expectedSourceX));
+            Assert.That(source.Runtime.SourceRuleXInt, Is.EqualTo(expectedSourceX));
+            Assert.That(source.Runtime.SourceRuleZ, Is.EqualTo(91));
+            Assert.That(source.Runtime.SourceRuleZInt, Is.EqualTo(91));
         }
 
         [Test]

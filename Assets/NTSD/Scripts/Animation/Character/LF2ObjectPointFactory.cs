@@ -344,13 +344,17 @@ namespace NTSD.Animation
             LF2FrameData frame,
             BattleObjectPointValue op)
         {
-            int spawnX = spawner.Runtime.Dir == "right"
-                ? spawner.Runtime.XInt - frame.centerx + op.X
-                : spawner.Runtime.XInt + frame.centerx - op.X;
+            int relativeX = spawner.Runtime.Dir == "right"
+                ? op.X - frame.centerx
+                : frame.centerx - op.X;
+            double spawnX = spawner.Runtime.XInt +
+                relativeX * (task.targetWorld?.FixedViewRunDistanceScale ?? 1.0);
             int spawnY = spawner.Runtime.YInt - frame.centery + op.Y;
-            double spawnZ = spawner.Runtime.ZInt + op.Z + 1.0;
+            double spawnZ = spawner.Runtime.ZInt +
+                (op.Z + 1.0) *
+                (task.targetWorld?.FixedViewRunVerticalDistanceScale ?? 1.0);
 
-            task.pos = new Vector3(spawnX, spawnY, (float)spawnZ);
+            task.pos = new Vector3((float)spawnX, spawnY, (float)spawnZ);
             task.z = (float)spawnZ;
             task.useDirectRuntimePosition = true;
             task.directX = spawnX;
@@ -358,9 +362,15 @@ namespace NTSD.Animation
             task.directZ = spawnZ;
             task.skipPostInitZOffset = true;
             task.useInitialRuntimeIntPosition = true;
-            task.initialRuntimeX = spawnX;
+            task.initialRuntimeX = (int)spawnX;
             task.initialRuntimeY = spawnY;
             task.initialRuntimeZ = (int)spawnZ;
+            if (spawner.Runtime.SourceRulePositionInitialized)
+            {
+                task.useSourceRulePosition = true;
+                task.sourceRuleX = spawner.Runtime.SourceRuleXInt + relativeX;
+                task.sourceRuleZ = spawner.Runtime.SourceRuleZInt + op.Z + 1.0;
+            }
         }
 
         void IBattleObjectPointStructuralMaterializer

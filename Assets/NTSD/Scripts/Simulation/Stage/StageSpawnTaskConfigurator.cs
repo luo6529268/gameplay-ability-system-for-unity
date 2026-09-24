@@ -99,6 +99,9 @@ namespace NTSD.Simulation
             task.useExplicitRelationIdentity = true;
             task.pos = new Vector3(spawnX, spawnY, 0f);
             task.z = spawnZ;
+            task.useSourceRulePosition = true;
+            task.sourceRuleX = spawnX;
+            task.sourceRuleZ = spawnZ;
             task.dir = facingDir;
             task.preserveActionZero = true;
             task.skipPostInitZOffset = true;

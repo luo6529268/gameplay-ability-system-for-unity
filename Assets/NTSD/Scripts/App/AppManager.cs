@@ -335,8 +335,7 @@ namespace NTSD.App
                 lf2.PS.vy = 0;
                 lf2.PS.vz = 0.1;
                 lf2.HitStun = 75;
-                lf2.Runtime.SyncIntegerPosition();
-                lf2.RefreshRuntimeSnapshot();
+                SyncParticipantBirthPosition(lf2, spawnX, spawnZ);
 
                 BattleSlotRuntimeState rosterSlot = rosterSlots[i];
                 if (rosterSlot != null && rosterSlot.Active)
@@ -345,6 +344,14 @@ namespace NTSD.App
                     rosterSlot.StableId = lf2.Runtime.StableId;
                 }
             }
+        }
+
+        internal static void SyncParticipantBirthPosition(LF2Character participant, double spawnX, int spawnZ)
+        {
+            participant.Runtime.SyncIntegerPosition();
+            participant.Runtime.SetSourceRulePosition(spawnX, spawnZ);
+            participant.Runtime.SyncSourceRuleIntegerPosition();
+            participant.RefreshRuntimeSnapshot();
         }
 
         public void SetMatchConfig(MatchConfig config)

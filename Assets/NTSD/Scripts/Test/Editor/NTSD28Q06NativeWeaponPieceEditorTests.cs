@@ -21,6 +21,156 @@ namespace NTSD.Test
         private const string Witness = "artifacts/diagnostics/NTSD28-Q06-WEAPON-PIECE-SOURCE-WITNESS-001/";
         private const string Output = "artifacts/diagnostics/NTSD28-Q06-NATIVE-WEAPON-PIECE-TRANSACTION-001/";
 
+        [TestCase(false, false, 0)]
+        [TestCase(false, true, 0)]
+        [TestCase(true, false, 0)]
+        [TestCase(true, true, 0)]
+        [TestCase(false, false, 93)]
+        [TestCase(false, true, 93)]
+        [TestCase(true, false, 93)]
+        [TestCase(true, true, 93)]
+        public void FragmentBirthPreservesIndependentSourceIntegerHistory(bool initialized, bool configuredView, int witnessIndex)
+        {
+            var row = JObject.Parse(File.ReadLines(Witness + "synthetic.jsonl").Skip(witnessIndex).First());
+            var input = row["input"];
+            int I(string key) => (int)input[key];
+            var parent = MakeWrapper(I("oid"), I("type"), ParentDat(I("block"), I("team")));
+            const string childDat = "<bmp_begin>\nweapon_hp: 17\n<bmp_end>\n" +
+                "<frame> 0 idle\nstate: 0 wait: 100 next: 0\n<frame_end>\n";
+            var wrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [I("oid")] = parent,
+                [999] = MakeWrapper(999, I("childType"), childDat),
+                [777] = MakeWrapper(777, I("childType"), childDat),
+            };
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView) world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(wrappers.Select(pair =>
+                new ObjectDefinition(pair.Key, pair.Value.characterData.type_sub, "piece-test.dat")).ToArray(), id => wrappers[id]);
+            try
+            {
+                var source = RegisterParent(world, parent, input);
+                if (initialized)
+                {
+                    source.Runtime.SetSourceRulePosition(-100.75, 87.5);
+                    source.Runtime.SourceRuleXInt = -102;
+                    source.Runtime.SourceRuleZInt = 85;
+                }
+                int countBefore = world.ObjectCount;
+                var observer = new Observer();
+                world.NativeRandom.ResetFromSeed((uint)input["seed"]);
+                world.NativeRandom.SetDiagnosticCallObserver(observer);
+                Assert.That(source.TryRunLatePostOpointCleanupPhase(), Is.True);
+                Assert.That(JToken.DeepEquals(JArray.FromObject(observer.Calls), row["calls"]), Is.True);
+                Assert.That(observer.CrtCalls, Is.Zero);
+                var random = world.NativeRandom.CaptureScalarState();
+                Assert.That(random.CrtState, Is.EqualTo((uint)row["rng"]["crtAfter"]));
+                Assert.That(random.SynchronizedCalls, Is.EqualTo((ulong)row["rng"]["syncCalls"]));
+                Assert.That(random.SynchronizedIndex, Is.EqualTo((int)row["rng"]["index"]));
+                Assert.That(random.SynchronizedCounter, Is.EqualTo((int)row["rng"]["counter"]));
+                Assert.That(random.SynchronizedTableHash, Is.EqualTo((ulong)row["rng"]["tableHash"]));
+                var births = row["events"].Where(e => e["entity"] is JObject).ToArray();
+                Assert.That(births, Is.Not.Empty);
+                Assert.That(world.ObjectCount - countBefore, Is.EqualTo(births.Length));
+                foreach (var birth in births)
+                {
+                    var child = world.FindEntityByRuntimeSlotForQuery((int)birth["slot"]);
+                    Assert.That(child, Is.Not.Null);
+                    var position = birth["entity"]["position"];
+                    int dx = (int)position["x"] - 100;
+                    int dz = (int)position["z"] - 200;
+                    double battleX = 100 + dx * world.FixedViewRunDistanceScale;
+                    double battleZ = 200 + dz * world.FixedViewRunVerticalDistanceScale;
+                    Assert.That(child.Runtime.X, Is.EqualTo(battleX).Within(1e-10));
+                    Assert.That(child.Runtime.Z, Is.EqualTo(battleZ).Within(1e-10));
+                    Assert.That(child.Runtime.XInt, Is.EqualTo((int)Math.Round(battleX, MidpointRounding.ToEven)));
+                    Assert.That(child.Runtime.ZInt, Is.EqualTo((int)Math.Round(battleZ, MidpointRounding.ToEven)));
+                    Assert.That(child.Runtime.SourceRulePositionInitialized, Is.EqualTo(initialized));
+                    Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(initialized ? -102 + dx : 0));
+                    Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(initialized ? 85 + dz : 0));
+                    Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(initialized ? -102 + dx : 0));
+                    Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(initialized ? 85 + dz : 0));
+                }
+                Assert.That(source.Runtime.SourceRulePositionInitialized, Is.EqualTo(initialized));
+                Assert.That(source.Runtime.SourceRuleX, Is.EqualTo(initialized ? -100.75 : 0));
+                Assert.That(source.Runtime.SourceRuleZ, Is.EqualTo(initialized ? 87.5 : 0));
+                Assert.That(source.Runtime.SourceRuleXInt, Is.EqualTo(initialized ? -102 : 0));
+                Assert.That(source.Runtime.SourceRuleZInt, Is.EqualTo(initialized ? 85 : 0));
+                Assert.That(source.Runtime.X, Is.EqualTo(100.25));
+                Assert.That(source.Runtime.Z, Is.EqualTo(200.75));
+                Assert.That(source.Runtime.XInt, Is.EqualTo(100));
+                Assert.That(source.Runtime.ZInt, Is.EqualTo(200));
+            }
+            finally
+            {
+                world.NativeRandom.SetDiagnosticCallObserver(null);
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
+        [TestCase(false, 0, 50)]
+        [TestCase(true, 0, 50)]
+        [TestCase(false, 93, 50)]
+        [TestCase(true, 93, 50)]
+        public void FragmentBirthRelativeXZUsesViewRatio(
+            bool configuredView,
+            int witnessIndex,
+            int fragmentSlot)
+        {
+            var row = JObject.Parse(File.ReadLines(Witness + "synthetic.jsonl")
+                .Skip(witnessIndex).First());
+            var input = row["input"];
+            int I(string key) => (int)input[key];
+            var parent = MakeWrapper(I("oid"), I("type"), ParentDat(I("block"), I("team")));
+            const string childDat = "<bmp_begin>\nweapon_hp: 17\n<bmp_end>\n" +
+                "<frame> 0 idle\nstate: 0 wait: 100 next: 0\n<frame_end>\n";
+            var wrappers = new Dictionary<int, LF2CharacterDataWrapper>
+            {
+                [I("oid")] = parent,
+                [999] = MakeWrapper(999, I("childType"), childDat),
+                [777] = MakeWrapper(777, I("childType"), childDat),
+            };
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.PrepareRuntimeDataCatalogForBattle(wrappers.Select(pair =>
+                new ObjectDefinition(pair.Key, pair.Value.characterData.type_sub,
+                    "piece-test.dat")).ToArray(), id => wrappers[id]);
+            try
+            {
+                var source = RegisterParent(world, parent, input);
+                world.NativeRandom.ResetFromSeed((uint)input["seed"]);
+                Assert.That(source.TryRunLatePostOpointCleanupPhase(), Is.True);
+                var fragment = world.FindEntityByRuntimeSlotForQuery(fragmentSlot);
+                Assert.That(fragment, Is.Not.Null);
+                var expectedEvent = row["events"].First(e =>
+                    (int)e["slot"] == fragmentSlot && e["entity"] is JObject);
+                var formalPosition = expectedEvent["entity"]["position"];
+                double expectedX = source.Runtime.XInt +
+                    ((double)formalPosition["x"] - source.Runtime.XInt) *
+                    (configuredView ? 2048.0 / 1333.0 : 1.0);
+                double expectedZ = source.Runtime.ZInt +
+                    ((double)formalPosition["z"] - source.Runtime.ZInt) *
+                    (configuredView ? 1152.0 / 730.0 : 1.0);
+                Assert.That(fragment.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+                Assert.That(fragment.Runtime.XInt,
+                    Is.EqualTo((int)Math.Round(expectedX, MidpointRounding.ToEven)));
+                Assert.That(fragment.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
+                Assert.That(fragment.Runtime.ZInt,
+                    Is.EqualTo((int)Math.Round(expectedZ, MidpointRounding.ToEven)));
+                Assert.That(fragment.Runtime.YInt, Is.EqualTo((int)formalPosition["y"]));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason),
+                    Is.True, reason);
+            }
+        }
+
         [TestCase(BattleRuntimeProfile.Authority400)]
         [TestCase(BattleRuntimeProfile.MobileExtended)]
         public void OriginalTwoStageVectorsMatchFullBirthsAndRandom(BattleRuntimeProfile profile)

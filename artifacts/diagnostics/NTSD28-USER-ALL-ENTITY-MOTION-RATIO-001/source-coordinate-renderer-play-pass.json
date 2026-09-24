@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "observation": {
+    "sourceX": -42.0,
+    "sourceZ": 126.0,
+    "sourceXInt": -42,
+    "sourceZInt": 126,
+    "sourceInitialized": true,
+    "battleX": 312.0,
+    "battleZ": 259.0,
+    "battleXInt": 312,
+    "battleZInt": 259,
+    "expectedSourceX": -42.0,
+    "expectedSourceZ": 126.0,
+    "expectedBattleX": 312.0,
+    "expectedBattleZ": 259.0,
+    "rendererPresent": true,
+    "materializer": "NTSD.Animation.LF2ObjectPointFactory",
+    "parentSourceXInt": -50,
+    "parentSourceZInt": 120
+  },
+  "errors": [],
+  "tickBefore": 5,
+  "tickAfter": 5,
+  "checksumBefore": 1226078659506514255,
+  "checksumAfter": 1226078659506514255,
+  "sceneChecksumUnchanged": true,
+  "rendererBorrowersBefore": 2,
+  "rendererBorrowersAfter": 2,
+  "scope": "Isolated World late OPoint birth using real Play pooled Renderer; parent source integer formula, configured 2048/1152 battle view, scene and borrower guards. No Q05 chain."
+}

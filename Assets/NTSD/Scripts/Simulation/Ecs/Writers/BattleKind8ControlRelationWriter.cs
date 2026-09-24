@@ -57,6 +57,14 @@ namespace NTSD.Simulation.Ecs
             if (syncMode != 0)
                 attacker.Runtime.Y = target.Runtime.Y;
             attacker.Runtime.Z = target.Runtime.Z + 1.0;
+            if (attacker.Runtime.SourceRulePositionInitialized &&
+                target.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-KIND8-RELATION-POSITION-001.
+                if (syncMode != 1)
+                    attacker.Runtime.SourceRuleX = target.Runtime.SourceRuleX;
+                attacker.Runtime.SourceRuleZ = target.Runtime.SourceRuleZ + 1.0;
+            }
             return true;
         }
 

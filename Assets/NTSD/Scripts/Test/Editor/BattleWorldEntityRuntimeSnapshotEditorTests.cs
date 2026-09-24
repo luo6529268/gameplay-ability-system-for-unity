@@ -12,6 +12,21 @@ namespace NTSD.Test
     public sealed class BattleWorldEntityRuntimeSnapshotEditorTests
     {
         [Test]
+        public void SourceRuleCoordinateCarrierHasIndependentExplicitOperations()
+        {
+            Type type = typeof(NTSDEntityRuntime);
+            foreach (string name in new[] { "SourceRuleX", "SourceRuleZ", "SourceRuleXInt", "SourceRuleZInt",
+                "SourceRulePositionInitialized", "SourceRuleXBoundPositive", "SourceRuleXBoundNegative",
+                "SourceRuleZBoundPositive", "SourceRuleZBoundNegative" })
+            {
+                Assert.That(type.GetField(name), Is.Not.Null, name);
+            }
+            Assert.That(type.GetMethod("SetSourceRulePosition"), Is.Not.Null);
+            Assert.That(type.GetMethod("SyncSourceRuleIntegerPosition"), Is.Not.Null);
+            Assert.That(type.GetMethod("ClearSourceRuleBounds"), Is.Not.Null);
+        }
+
+        [Test]
         public void CaptureCopiesEveryCanonicalRuntimeFieldAndKeepsRawSlotDistinct()
         {
             using var scope = new DriverScope();
@@ -69,6 +84,123 @@ namespace NTSD.Test
             Assert.That(destination.TryCopyEntityRuntime(3, entityCopy), Is.True);
             Assert.That(entityCopy.StableId, Is.EqualTo(capturedStableId));
             Assert.That(entityCopy.InputHistory[5], Is.EqualTo(capturedHistory));
+        }
+
+        [Test]
+        public void SourceRuleSyncAndClearRemainIndependentAndResetRemovesHistory()
+        {
+            var runtime = new NTSDEntityRuntime();
+            runtime.SetPosition(100.75, -30.0, 90.5);
+            runtime.SyncIntegerPosition();
+            runtime.SetSourceRulePosition(-12.75, 7.875);
+            runtime.SyncSourceRuleIntegerPosition();
+            Assert.That(runtime.SourceRulePositionInitialized, Is.True);
+            Assert.That(runtime.SourceRuleXInt, Is.EqualTo(-12));
+            Assert.That(runtime.SourceRuleZInt, Is.EqualTo(7));
+            runtime.SetSourceRulePosition(-13.75, 8.875);
+            runtime.SyncIntegerPosition();
+            runtime.SyncSourceRuleIntegerPosition();
+            Assert.That(runtime.SourceRuleXInt, Is.EqualTo(-13));
+            Assert.That(runtime.SourceRuleZInt, Is.EqualTo(8));
+            Assert.That(runtime.X, Is.EqualTo(100.75));
+            Assert.That(runtime.Z, Is.EqualTo(90.5));
+            Assert.That(runtime.XInt, Is.EqualTo(100));
+            Assert.That(runtime.ZInt, Is.EqualTo(90));
+            runtime.XBoundPositive = true;
+            runtime.SourceRuleXBoundPositive = true;
+            runtime.SourceRuleXBoundNegative = true;
+            runtime.SourceRuleZBoundPositive = true;
+            runtime.SourceRuleZBoundNegative = true;
+            runtime.ClearSourceRuleBounds();
+            Assert.That(runtime.XBoundPositive, Is.True);
+            Assert.That(runtime.SourceRuleXBoundPositive || runtime.SourceRuleXBoundNegative ||
+                runtime.SourceRuleZBoundPositive || runtime.SourceRuleZBoundNegative, Is.False);
+            runtime.SourceRuleXBoundPositive = true;
+            runtime.SourceRuleXBoundNegative = true;
+            runtime.SourceRuleZBoundPositive = true;
+            runtime.SourceRuleZBoundNegative = true;
+            runtime.Reset();
+            Assert.That(runtime.SourceRulePositionInitialized, Is.False);
+            Assert.That(runtime.SourceRuleX, Is.Zero);
+            Assert.That(runtime.SourceRuleZ, Is.Zero);
+            Assert.That(runtime.SourceRuleXInt, Is.Zero);
+            Assert.That(runtime.SourceRuleZInt, Is.Zero);
+            Assert.That(runtime.SourceRuleXBoundPositive || runtime.SourceRuleXBoundNegative ||
+                runtime.SourceRuleZBoundPositive || runtime.SourceRuleZBoundNegative, Is.False);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void PreviousSourceCoordinateSnapshotSchemaIsRejected(bool component)
+        {
+            using var scope = new DriverScope();
+            var session = new BattleLockstepSession(scope.Driver,
+                StrictDelayedInputBufferEditorTests.CreateIdentity(), 0, 8, 8);
+            BattleStateSnapshotBuffer snapshot = session.CreateBattleStateSnapshotBufferForBootstrap();
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            Assert.That(snapshot.IsValid, Is.True);
+            object target = component ? (object)snapshot.EntityRuntime : snapshot;
+            PropertyInfo schema = target.GetType().GetProperty("SchemaVersion");
+            schema.SetValue(target, (int)schema.GetValue(target) - 1);
+            Assert.That(snapshot.IsValid, Is.False);
+            Assert.That(session.TryRestoreAndReplay(snapshot), Is.False);
+        }
+
+        [Test]
+        public void AggregateRestoreRecoversIndependentEntityAndOccupiedRawSourceRuleState()
+        {
+            using var scope = new DriverScope();
+            scope.Driver.ApplySettings(new LockstepSimulationSettings
+            {
+                driveMode = SimulationDriveMode.Manual,
+                enableFrameChecksum = true,
+            });
+            var session = new BattleLockstepSession(scope.Driver,
+                StrictDelayedInputBufferEditorTests.CreateIdentity(), 0, 8, 8);
+            var entity = new LF2Character { ObjectId = 7 };
+            entity.SetRequiredRuntimeSlot(3);
+            scope.Driver.World.Register(entity);
+            NTSDEntityRuntime raw = scope.Driver.World.RuntimeSlotTableForModules.GetRawRuntime(3);
+            Assert.That(raw, Is.Not.SameAs(entity.Runtime));
+            entity.Runtime.SetPosition(400.5, -20.0, 300.5);
+            entity.Runtime.SyncIntegerPosition();
+            entity.Runtime.SetSourceRulePosition(123.75, -34.5);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
+            entity.Runtime.SourceRuleXBoundPositive = true;
+            entity.Runtime.SourceRuleZBoundNegative = true;
+            raw.SetSourceRulePosition(-77.25, 62.75);
+            raw.SyncSourceRuleIntegerPosition();
+            raw.SourceRuleXBoundNegative = true;
+            raw.SourceRuleZBoundPositive = true;
+            BattleStateSnapshotBuffer snapshot = session.CreateBattleStateSnapshotBufferForBootstrap();
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            var expectedEntity = new NTSDEntityRuntime();
+            var expectedRaw = new NTSDEntityRuntime();
+            Assert.That(snapshot.EntityRuntime.TryCopyEntityRuntime(3, expectedEntity), Is.True);
+            Assert.That(snapshot.EntityRuntime.TryCopyRawRuntime(3, expectedRaw), Is.True);
+            string[] fields = { "SourceRuleX", "SourceRuleZ", "SourceRuleXInt", "SourceRuleZInt",
+                "SourceRulePositionInitialized", "SourceRuleXBoundPositive", "SourceRuleXBoundNegative",
+                "SourceRuleZBoundPositive", "SourceRuleZBoundNegative" };
+            foreach (NTSDEntityRuntime runtime in new[] { entity.Runtime, raw })
+            {
+                foreach (string name in fields)
+                {
+                    FieldInfo field = typeof(NTSDEntityRuntime).GetField(name);
+                    object current = field.GetValue(runtime);
+                    field.SetValue(runtime, current is bool flag ? (object)!flag :
+                        current is double precise ? (object)(precise + 50.25) : (int)current + 50);
+                }
+            }
+            Assert.That(session.TryRestoreAndReplay(snapshot), Is.True, session.LastReason.ToString());
+            NTSDEntityRuntime restoredRaw = scope.Driver.World.RuntimeSlotTableForModules.GetRawRuntime(3);
+            foreach (string name in fields)
+            {
+                FieldInfo field = typeof(NTSDEntityRuntime).GetField(name);
+                Assert.That(field.GetValue(entity.Runtime), Is.EqualTo(field.GetValue(expectedEntity)), name);
+                Assert.That(field.GetValue(restoredRaw), Is.EqualTo(field.GetValue(expectedRaw)), name);
+            }
+            Assert.That(entity.Runtime.X, Is.EqualTo(400.5));
+            Assert.That(entity.Runtime.Z, Is.EqualTo(300.5));
         }
 
         [Test]

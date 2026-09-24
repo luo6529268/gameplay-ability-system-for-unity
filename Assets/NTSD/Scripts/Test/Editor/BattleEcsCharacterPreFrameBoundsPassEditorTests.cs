@@ -1,5 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
@@ -9,6 +10,33 @@ namespace NTSD.Test
 {
     public sealed class BattleEcsCharacterPreFrameBoundsPassEditorTests
     {
+        [TestCase(1333, 2040)]
+        [TestCase(2048, 2048)]
+        public void FixedViewMotionNearAbsoluteStageEdge_CharacterizesTwoDomainBoundary(
+            int referenceWidth,
+            int expectedBattleX)
+        {
+            SimulationWorld world = CreateWorld();
+            world.SetExplicitStageRuntimeSnapshotForTesting(2048, 180, 350, 0, 0);
+            world.ConfigureFixedViewRunDistance(referenceWidth,
+                referenceWidth == 1333 ? 730 : 1152);
+            LF2Character character = RegisterCharacter(world, 5, 2000, 250, 0, 0);
+            character.Runtime.XInt = 2000;
+            character.Runtime.ZInt = 250;
+            character.Runtime.SetVelocity(40, 0, 0);
+
+            new CharacterMechanics().StepBattleLogic(
+                new CharacterMechanicsContext(character.Runtime, null, 0f, 0f, 0.0,
+                    world.FixedViewRunDistanceScale,
+                    world.FixedViewRunVerticalDistanceScale));
+            Assert.That(character.Runtime.X,
+                Is.EqualTo(2000 + 40 * world.FixedViewRunDistanceScale).Within(1e-10));
+
+            world.ApplyPreFrameBoundsAll();
+            Assert.That(character.Runtime.X, Is.EqualTo(expectedBattleX));
+            Assert.That(character.Runtime.XInt, Is.EqualTo(expectedBattleX));
+        }
+
         [Test]
         public void DefaultMode_IsDataOrientedAndCannotChangeAfterTickBoundary()
         {

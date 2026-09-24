@@ -281,6 +281,22 @@ namespace NTSD.Simulation.Ecs
             attacker.Runtime.X += lerp;
             victim.Runtime.XInt = (int)victim.Runtime.X;
             attacker.Runtime.XInt = (int)attacker.Runtime.X;
+
+            if (attacker.Runtime.SourceRulePositionInitialized &&
+                victim.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-GRAB-RELATION-POSITION-001.
+                int sourceAttackerX = attacker.Runtime.SourceRuleXInt;
+                int sourceVictimX = victim.Runtime.SourceRuleXInt;
+                double sourceVictimAnchor = attacker.Runtime.Dir == "right"
+                    ? sourceAttackerX - attackerCx - victimCx + attackerWact + victimWact
+                    : attackerCx + victimCx + sourceAttackerX - attackerWact - victimWact;
+                double sourceBlend = (sourceVictimX - sourceVictimAnchor) * 0.5;
+                victim.Runtime.SourceRuleX = sourceVictimAnchor + sourceBlend;
+                attacker.Runtime.SourceRuleX = sourceAttackerX + sourceBlend;
+                victim.Runtime.SourceRuleXInt = (int)victim.Runtime.SourceRuleX;
+                attacker.Runtime.SourceRuleXInt = (int)attacker.Runtime.SourceRuleX;
+            }
         }
     }
 }

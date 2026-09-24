@@ -20,6 +20,372 @@ namespace NTSD.Test
 {
     public sealed class NTSD28Q06OpointMaterializerEditorTests
     {
+        [Test]
+        public void BirthTaskDeclaresExplicitSourceCoordinatePresence()
+        {
+            foreach (string name in new[] { "useSourceRulePosition", "sourceRuleX", "sourceRuleZ",
+                "useInitialSourceRuleIntPosition", "initialSourceRuleX", "initialSourceRuleZ" })
+            {
+                Assert.That(typeof(OPointCreateTask).GetField(name), Is.Not.Null, name);
+            }
+        }
+
+        [Test]
+        public void Kind1RandomBirthXZ_UsesOneFixedViewRatioAfterNativeDraw()
+        {
+            var rawBase = CaptureKind1RandomBirth(false, false);
+            var rawRandom = CaptureKind1RandomBirth(false, true);
+            var viewBase = CaptureKind1RandomBirth(true, false);
+            var viewRandom = CaptureKind1RandomBirth(true, true);
+            double rawDelta = rawRandom.x - rawBase.xInt;
+            double rawDepthDelta = rawRandom.z - rawBase.zInt;
+
+            Assert.That(rawDelta, Is.Not.Zero);
+            Assert.That(rawDepthDelta, Is.Not.Zero);
+            Assert.That(rawRandom.calls - rawBase.calls, Is.EqualTo(4UL));
+            Assert.That(viewRandom.calls - viewBase.calls, Is.EqualTo(4UL));
+            Assert.That(viewRandom.calls, Is.EqualTo(rawRandom.calls));
+            Assert.That(rawRandom.y, Is.EqualTo(rawBase.y));
+            Assert.That(viewRandom.y, Is.EqualTo(viewBase.y));
+            Assert.That(viewRandom.x - viewBase.xInt,
+                Is.EqualTo(rawDelta * 2048.0 / 1333.0).Within(1e-9));
+            Assert.That(viewRandom.z - viewBase.zInt,
+                Is.EqualTo(rawDepthDelta * 1152.0 / 730.0).Within(1e-9));
+            Assert.That(viewRandom.xInt, Is.EqualTo((int)viewRandom.x));
+            Assert.That(viewRandom.zInt, Is.EqualTo((int)viewRandom.z));
+        }
+
+        [TestCase(false, false, false)]
+        [TestCase(false, false, true)]
+        [TestCase(false, true, false)]
+        [TestCase(false, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(true, false, true)]
+        [TestCase(true, true, false)]
+        [TestCase(true, true, true)]
+        public void Kind1RandomBirthUpdatesOnlyInitializedSourceHistory(bool initialized, bool configuredView, bool randomExtent)
+        {
+            var baseline = CaptureKind1RandomBirth(configuredView, false);
+            JObject row = JObject.Parse(File.ReadLines(Source).First());
+            if (randomExtent)
+            {
+                string original = (string)row["sourceDat"];
+                string altered = original.Replace("centerx: 0 centery: 0 centerz: 0 framea: 0",
+                    "centerx: 600 centery: 0 centerz: 80 framea: 0");
+                Assert.That(altered, Is.Not.EqualTo(original));
+                row["sourceDat"] = altered;
+            }
+            SimulationWorld world = CreateWorld(row);
+            try
+            {
+                if (configuredView) world.ConfigureFixedViewRunDistance(2048, 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotForQuery(20);
+                if (initialized)
+                {
+                    parent.Runtime.SetSourceRulePosition(-50.75, 120.75);
+                    parent.Runtime.SyncSourceRuleIntegerPosition();
+                }
+                var observer = new Observer();
+                world.NativeRandom.SetDiagnosticCallObserver(observer);
+                world.StructuralWriter.ProcessLateOpointSegment(world.ResolveLateObjectPointStructuralMaterializerForModule(), parent, 1);
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(50);
+                Assert.That(child, Is.Not.Null);
+                var calls = (JArray)observer.Capture()["synchronized"];
+                int deltaX = 0;
+                int deltaZ = 0;
+                if (randomExtent)
+                {
+                    var randomCalls = calls.Where(call => (uint)call["callSite"] == 0x0044D3ABu ||
+                        (uint)call["callSite"] == 0x0044D3B5u).ToArray();
+                    Assert.That(randomCalls.Select(call => (uint)call["callSite"]),
+                        Is.EqualTo(new[] { 0x0044D3ABu, 0x0044D3B5u, 0x0044D3ABu, 0x0044D3B5u }));
+                    Assert.That(randomCalls.Select(call => (int)call["upperBound"]), Is.EqualTo(new[] { 600, 50, 80, 50 }));
+                    deltaX = (int)randomCalls[0]["result"] * ((int)randomCalls[1]["result"] >= 25 ? -1 : 1);
+                    deltaZ = (int)randomCalls[2]["result"] * ((int)randomCalls[3]["result"] >= 25 ? -1 : 1);
+                    Assert.That(deltaX, Is.Not.Zero);
+                    Assert.That(deltaZ, Is.Not.Zero);
+                }
+                Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls - baseline.calls,
+                    Is.EqualTo(randomExtent ? 4UL : 0UL));
+                Assert.That(child.Runtime.X, Is.EqualTo(baseline.xInt + deltaX * world.FixedViewRunDistanceScale).Within(1e-9));
+                Assert.That(child.Runtime.Z, Is.EqualTo(baseline.zInt + deltaZ * world.FixedViewRunVerticalDistanceScale).Within(1e-9));
+                Assert.That(child.Runtime.XInt, Is.EqualTo((int)child.Runtime.X));
+                Assert.That(child.Runtime.ZInt, Is.EqualTo((int)child.Runtime.Z));
+                Assert.That(child.Runtime.SourceRulePositionInitialized, Is.EqualTo(initialized));
+                Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(initialized ? -42 + deltaX : 0));
+                Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(initialized ? 126 + deltaZ : 0));
+                Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo((int)child.Runtime.SourceRuleX));
+                Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo((int)child.Runtime.SourceRuleZ));
+            }
+            finally
+            {
+                world.NativeRandom.SetDiagnosticCallObserver(null);
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
+        [Test]
+        public void ZeroExtentKind1ReprojectsSourcePreciseFromIndependentIntegers()
+        {
+            JObject row = JObject.Parse(File.ReadLines(Source).First());
+            SimulationWorld world = CreateWorld(row);
+            try
+            {
+                LF2Entity parent = world.FindEntityByRuntimeSlotForQuery(20);
+                world.StructuralWriter.ProcessLateOpointSegment(world.ResolveLateObjectPointStructuralMaterializerForModule(), parent, 1);
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(50);
+                child.Runtime.SetSourceRulePosition(-12.75, 51.5);
+                child.Runtime.SourceRuleXInt = -14;
+                child.Runtime.SourceRuleZInt = 49;
+                ulong callsBefore = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+                NTSD.Simulation.Ecs.BattleNativeOpointBirthWriter.InitializeBirth(child, new OPointCreateTask
+                {
+                    parent = parent, targetWorld = world,
+                    opoint = BattleObjectPointValueAdapter.ToLegacyTask(parent.Frame.D.opoints[0]),
+                });
+                Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls, Is.EqualTo(callsBefore));
+                Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(-14));
+                Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(49));
+                Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(-14));
+                Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(49));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ExplicitSourceBirthPreservesIndependentIntegersAndClearsPooledTask(bool explicitIntegers)
+        {
+            var task = new OPointCreateTask
+            {
+                useDirectRuntimePosition = true, directX = 400.5, directY = -20, directZ = 300.75,
+                useInitialRuntimeIntPosition = true, initialRuntimeX = 399, initialRuntimeY = -20, initialRuntimeZ = 299,
+                useSourceRulePosition = true, sourceRuleX = -12.75, sourceRuleZ = 8.5,
+                useInitialSourceRuleIntPosition = explicitIntegers, initialSourceRuleX = -13, initialSourceRuleZ = 7,
+            };
+            LF2ObjectPointFactory.PrepareFinalRuntimePositionForCreation(task);
+            LF2ObjectPointFactory.PrepareFinalRuntimePositionForCreation(task);
+            var entity = new LF2Character();
+            entity.ApplyInitialRuntimePosition(task);
+            Assert.That(entity.Runtime.SourceRulePositionInitialized, Is.True);
+            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(-12.75));
+            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(9.5));
+            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo(explicitIntegers ? -13 : -12));
+            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo(explicitIntegers ? 7 : 9));
+            Assert.That(entity.Runtime.XInt, Is.EqualTo(399));
+            Assert.That(entity.Runtime.Z, Is.EqualTo(301.75));
+            Assert.That(entity.Runtime.ZInt, Is.EqualTo(299));
+            task.Clear();
+            Assert.That(task.useSourceRulePosition || task.useInitialSourceRuleIntPosition, Is.False);
+            Assert.That(task.sourceRuleX, Is.Zero);
+            Assert.That(task.sourceRuleZ, Is.Zero);
+            Assert.That(task.initialSourceRuleX, Is.Zero);
+            Assert.That(task.initialSourceRuleZ, Is.Zero);
+            LF2ObjectPointFactory.PrepareFinalRuntimePositionForCreation(task);
+            var withoutHistory = new LF2Character();
+            withoutHistory.ApplyInitialRuntimePosition(task);
+            Assert.That(withoutHistory.Runtime.SourceRulePositionInitialized, Is.False);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void ActualLateMaterializerPublishesExplicitSourceBirth(bool component)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Source).First());
+            SimulationWorld world = CreateWorld(row);
+            GameObject host = null;
+            try
+            {
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotForQuery(20);
+                parent.Runtime.SetSourceRulePosition(-50.75, 120.75);
+                parent.Runtime.SyncSourceRuleIntegerPosition();
+                if (component)
+                {
+                    host = new GameObject("SourceBirthMaterializer") { hideFlags = HideFlags.HideAndDontSave };
+                    host.SetActive(false);
+                    var factory = host.AddComponent<LF2ObjectPointFactory>();
+                    typeof(LF2ObjectPointFactory).GetMethod("ProcessOpointSpawnCoreForStructuralWriter", BindingFlags.Instance | BindingFlags.NonPublic)
+                        .Invoke(factory, new object[] { parent });
+                }
+                else
+                {
+                    world.StructuralWriter.ProcessLateOpointSegment(world.ResolveLateObjectPointStructuralMaterializerForModule(), parent, 1);
+                }
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(50);
+                Assert.That(child, Is.Not.Null);
+                Assert.That(child.Runtime.SourceRulePositionInitialized, Is.True);
+                Assert.That(child.Runtime.SourceRuleX, Is.Not.EqualTo(child.Runtime.X));
+                Assert.That(child.Runtime.SourceRuleZ, Is.Not.EqualTo(child.Runtime.Z));
+                Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo((int)child.Runtime.SourceRuleX));
+                Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo((int)child.Runtime.SourceRuleZ));
+            }
+            finally
+            {
+                if (host != null) UnityEngine.Object.DestroyImmediate(host);
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+            }
+        }
+
+        internal static object VerifySourceCoordinateRendererBirthForPlay()
+        {
+            Assert.That(Application.isPlaying, Is.True, "The pooled Renderer acceptance requires the real Play lifecycle.");
+            JObject row = JObject.Parse(File.ReadLines(Source).First());
+            SimulationWorld world = CreateWorld(row);
+            try
+            {
+                world.SetLogicOnlyEntityMaterialization(false);
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotForQuery(20);
+                parent.Runtime.SetSourceRulePosition(-50.75, 120.75);
+                parent.Runtime.SyncSourceRuleIntegerPosition();
+                LF2FrameData frame = parent.Frame.D;
+                BattleObjectPointValue op = frame.opoints[0];
+                int relativeX = parent.Runtime.Dir == "right" ? op.X - frame.centerx : frame.centerx - op.X;
+                double expectedSourceX = parent.Runtime.SourceRuleXInt + relativeX;
+                double expectedSourceZ = parent.Runtime.SourceRuleZInt + op.Z + 1.0;
+                double expectedBattleX = parent.Runtime.XInt + relativeX * world.FixedViewRunDistanceScale;
+                double expectedBattleZ = parent.Runtime.ZInt + (op.Z + 1.0) * world.FixedViewRunVerticalDistanceScale;
+                Assert.That(op.Kind, Is.EqualTo(1));
+                Assert.That(op.CenterX, Is.Zero);
+                Assert.That(op.CenterZ, Is.Zero);
+                // Formal kind1 birth reprojects precise coordinates from integer mirrors even with zero random extent.
+                expectedBattleX = (int)expectedBattleX;
+                expectedBattleZ = (int)expectedBattleZ;
+                var materializer = world.ResolveLateObjectPointStructuralMaterializerForModule();
+                Assert.That(materializer, Is.InstanceOf<LF2ObjectPointFactory>());
+                world.StructuralWriter.ProcessLateOpointSegment(materializer, parent, 1);
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(50);
+                Assert.That(child, Is.Not.Null);
+                Assert.That(child.Renderer, Is.Not.Null, "This acceptance requires the pooled Renderer materializer.");
+                Assert.That(child.Runtime.SourceRulePositionInitialized, Is.True);
+                Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(expectedSourceX));
+                Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(expectedSourceZ));
+                Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedSourceX));
+                Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedSourceZ));
+                Assert.That(child.Runtime.X, Is.EqualTo(expectedBattleX).Within(1e-9));
+                Assert.That(child.Runtime.Z, Is.EqualTo(expectedBattleZ).Within(1e-9));
+                Assert.That(child.Runtime.XInt, Is.EqualTo((int)expectedBattleX));
+                Assert.That(child.Runtime.ZInt, Is.EqualTo((int)expectedBattleZ));
+                return new
+                {
+                    sourceX = child.Runtime.SourceRuleX,
+                    sourceZ = child.Runtime.SourceRuleZ,
+                    sourceXInt = child.Runtime.SourceRuleXInt,
+                    sourceZInt = child.Runtime.SourceRuleZInt,
+                    sourceInitialized = child.Runtime.SourceRulePositionInitialized,
+                    battleX = child.Runtime.X,
+                    battleZ = child.Runtime.Z,
+                    battleXInt = child.Runtime.XInt,
+                    battleZInt = child.Runtime.ZInt,
+                    expectedSourceX,
+                    expectedSourceZ,
+                    expectedBattleX,
+                    expectedBattleZ,
+                    rendererPresent = child.Renderer != null,
+                    materializer = materializer.GetType().FullName,
+                    parentSourceXInt = parent.Runtime.SourceRuleXInt,
+                    parentSourceZInt = parent.Runtime.SourceRuleZInt,
+                };
+            }
+            finally
+            {
+                for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
+                    world.FindEntityByRuntimeSlotIncludingPending(slot)?.FreeEntityLikeExe();
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason), Is.True, reason);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
+        [TestCase(false, false, false)]
+        [TestCase(false, false, true)]
+        [TestCase(false, true, false)]
+        [TestCase(false, true, true)]
+        [TestCase(true, false, false)]
+        [TestCase(true, false, true)]
+        [TestCase(true, true, false)]
+        [TestCase(true, true, true)]
+        public void LateBirthKeepsParentSourceIntegerHistorySeparate(bool component, bool configuredView, bool left)
+        {
+            var world = new SimulationWorld();
+            if (configuredView) world.ConfigureFixedViewRunDistance(2048, 1152);
+            var parent = new LF2Character();
+            parent.Runtime.SetPosition(401.75, -10, 302.75);
+            parent.Runtime.SyncIntegerPosition();
+            parent.Runtime.SetSourceRulePosition(100.75, 70.75);
+            parent.Runtime.SyncSourceRuleIntegerPosition();
+            parent.Runtime.Dir = left ? "left" : "right";
+            var frame = new LF2FrameData { centerx = 5, centery = 2 };
+            BattleObjectPointValue op = new ObjectPoint { x = 23, y = 4, z = -7 };
+            Type type = component ? typeof(LF2ObjectPointFactory) :
+                typeof(SimulationWorld).Assembly.GetType("NTSD.Simulation.BattleLogicObjectPointRuntime");
+            MethodInfo configure = type.GetMethod("ConfigureLateOpointPosition", BindingFlags.Static | BindingFlags.NonPublic);
+            var task = new OPointCreateTask { targetWorld = world };
+            configure.Invoke(null, new object[] { task, parent, frame, op });
+            LF2ObjectPointFactory.PrepareFinalRuntimePositionForCreation(task);
+            var child = new LF2Character();
+            child.ApplyInitialRuntimePosition(task);
+            int deltaX = left ? -18 : 18;
+            Assert.That(child.Runtime.SourceRulePositionInitialized, Is.True);
+            Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(100 + deltaX));
+            Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(64));
+            Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(100 + deltaX));
+            Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(64));
+            Assert.That(child.Runtime.X, Is.EqualTo(401 + deltaX * world.FixedViewRunDistanceScale).Within(1e-9));
+            Assert.That(child.Runtime.Z, Is.EqualTo(302 - 6 * world.FixedViewRunVerticalDistanceScale).Within(1e-9));
+            task.Clear();
+            task.targetWorld = world;
+            parent.Runtime.SourceRulePositionInitialized = false;
+            configure.Invoke(null, new object[] { task, parent, frame, op });
+            Assert.That(task.useSourceRulePosition, Is.False);
+        }
+
+        private static (double x, int xInt, double y, double z, int zInt,
+            ulong calls)
+            CaptureKind1RandomBirth(bool configuredView, bool randomX)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Source).First());
+            Assert.That((string)row["name"], Is.EqualTo("kind1_type0_full"));
+            if (randomX)
+            {
+                string original = (string)row["sourceDat"];
+                string altered = original.Replace(
+                    "centerx: 0 centery: 0 centerz: 0 framea: 0",
+                    "centerx: 600 centery: 0 centerz: 80 framea: 0");
+                Assert.That(altered, Is.Not.EqualTo(original));
+                row["sourceDat"] = altered;
+            }
+
+            SimulationWorld world = CreateWorld(row);
+            try
+            {
+                if (configuredView)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotForQuery(20);
+                world.StructuralWriter.ProcessLateOpointSegment(
+                    world.ResolveLateObjectPointStructuralMaterializerForModule(),
+                    parent, 1);
+                LF2Entity child = world.FindEntityByRuntimeSlotForQuery(50);
+                Assert.That(child, Is.Not.Null);
+                return (child.Runtime.X, child.Runtime.XInt, child.Runtime.Y,
+                    child.Runtime.Z, child.Runtime.ZInt,
+                    world.NativeRandom.CaptureScalarState().SynchronizedCalls);
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _,
+                    out string reason), Is.True, reason);
+            }
+        }
+
         private const string Source = "artifacts/diagnostics/NTSD28-Q06-OPOINT-MATERIALIZER-SOURCE-WITNESS-001/source-final/first.jsonl";
         private const string Output = "artifacts/diagnostics/NTSD28-Q06-OPOINT-MATERIALIZER-TRANSACTION-001/";
         private static readonly MethodInfo ProjectInput = typeof(NTSD28UnityRawCaptureEditor).GetMethod("ProjectExactInputEntities", BindingFlags.Static | BindingFlags.NonPublic);

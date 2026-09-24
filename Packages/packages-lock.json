@@ -1,11 +1,5 @@
 {
   "dependencies": {
-    "com.ntsd.battle-kernel": {
-      "version": "file:../../NTSD_Server/packages/com.ntsd.battle-kernel",
-      "depth": 0,
-      "source": "local",
-      "dependencies": {}
-    },
     "com.coplaydev.unity-mcp": {
       "version": "file:../../unity-mcp/MCPForUnity",
       "depth": 0,
@@ -21,6 +15,12 @@
       "source": "git",
       "dependencies": {},
       "hash": "5cc97c7f0085624b6ef57853d70b404440060cef"
+    },
+    "com.ntsd.battle-kernel": {
+      "version": "file:../../NTSD_Server/packages/com.ntsd.battle-kernel",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.2d.animation": {
       "version": "9.2.0",

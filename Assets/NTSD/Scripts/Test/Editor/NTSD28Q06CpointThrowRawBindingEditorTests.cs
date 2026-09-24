@@ -22,6 +22,51 @@ namespace NTSD.Test
         internal const string Output = "artifacts/diagnostics/NTSD28-Q06-CPOINT-THROW-NATIVE-RAW-BINDING-001/";
         private static readonly Dictionary<string, LF2CharacterDataWrapper> wrappers = new();
 
+        [TestCase(1333, 730, 148.0, 148, 159)]
+        [TestCase(2048, 1152, 173.7464366091523, 173, 184)]
+        public void MovedCatcherThrowPosition_KeepsSourceLocalAnchorAtBothViews(
+            int viewWidth,
+            int viewHeight,
+            double expectedCatcherX,
+            int expectedCatcherXInt,
+            int expectedCaughtXInt)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Output + "source/first.jsonl").First());
+            Assert.That((int)row["index"], Is.Zero);
+            Assert.That((int)row["thrown"], Is.EqualTo(1));
+            Assert.That((int)row["after"][1]["raw"]["position"]["x"], Is.EqualTo(111));
+            SimulationWorld world = MakeWorld(row, BattleRuntimeProfile.Authority400,
+                out LF2Entity[] entities);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
+                LF2Entity catcher = entities[0];
+                LF2Entity caught = entities[1];
+                Assert.That(catcher.Runtime.XInt, Is.EqualTo(100));
+                catcher.Runtime.SetVelocity(48, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(catcher.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                Assert.That(catcher.Runtime.X,
+                    Is.EqualTo(expectedCatcherX).Within(1e-10));
+                catcher.Runtime.SyncIntegerPosition();
+                Assert.That(catcher.Runtime.XInt, Is.EqualTo(expectedCatcherXInt));
+
+                catcher.RunCpointAdvanceStep10();
+                Assert.That(caught.Runtime.XInt, Is.EqualTo(expectedCaughtXInt));
+                Assert.That(caught.Runtime.XInt - catcher.Runtime.XInt, Is.EqualTo(11));
+                Assert.That(caught.Runtime.YInt, Is.EqualTo(-24));
+                Assert.That(caught.Runtime.ZInt, Is.EqualTo(200));
+                Assert.That(caught.Runtime.Vx, Is.EqualTo(1.5));
+                Assert.That(caught.Runtime.Vy, Is.EqualTo(-2.25));
+            }
+            finally
+            {
+                ShutdownWorld(world, false);
+            }
+        }
+
         [TestCase(BattleRuntimeProfile.Authority400)]
         [TestCase(BattleRuntimeProfile.MobileExtended)]
         public void FollowingFullTickMatchesNativeLifetime(BattleRuntimeProfile profile)

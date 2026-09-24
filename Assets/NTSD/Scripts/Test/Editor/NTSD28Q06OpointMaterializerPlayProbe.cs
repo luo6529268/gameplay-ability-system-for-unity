@@ -14,6 +14,8 @@ namespace NTSD.Test
     {
         private const string Request = "Temp/NTSD28_Q06_OpointMaterializerPlay.request";
         private const string Result = "Temp/NTSD28_Q06_OpointMaterializerPlay.result.json";
+        private const string SourceBirthRequest = "Temp/NTSD28_SourceCoordinateRendererBirthPlay.request";
+        private const string SourceBirthResult = "Temp/NTSD28_SourceCoordinateRendererBirthPlay.result.json";
 
         static NTSD28Q06OpointMaterializerPlayProbe()
         {
@@ -22,6 +24,9 @@ namespace NTSD.Test
 
         private static void Poll()
         {
+            if (EditorApplication.isPlaying && !EditorApplication.isCompiling && !EditorApplication.isUpdating &&
+                PollSourceCoordinateBirth())
+                return;
             if (!EditorApplication.isPlaying || EditorApplication.isCompiling || EditorApplication.isUpdating ||
                 !File.Exists(Request) || File.ReadAllText(Request).Trim() != "run")
                 return;
@@ -72,6 +77,56 @@ namespace NTSD.Test
             }, Formatting.Indented));
             File.WriteAllText(Request, "done");
             File.WriteAllText("Temp/NTSD28_Q05_ReplayPlay.request", "run");
+        }
+
+        private static bool PollSourceCoordinateBirth()
+        {
+            if (!File.Exists(SourceBirthRequest) || File.ReadAllText(SourceBirthRequest).Trim() != "run")
+                return false;
+            var driver = SimulationTickDriver.Instance;
+            var scene = driver?.World;
+            if (scene == null || driver.CurrentTickIndex < 5 || !scene.IsBattleSnapshotBoundaryReady)
+                return true;
+            if (!driver.IsPaused)
+            {
+                driver.SetPaused(true);
+                return true;
+            }
+            File.WriteAllText(SourceBirthRequest, "running");
+            int tickBefore = driver.CurrentTickIndex;
+            var input = new FrameInputSet(tickBefore, Array.Empty<SimulationPlayerInput>());
+            ulong checksumBefore = scene.CaptureRuntimeChecksum64(tickBefore, input);
+            int borrowersBefore = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance;
+            var errors = new List<string>();
+            object observation = null;
+            try
+            {
+                observation = NTSD28Q06OpointMaterializerEditorTests.VerifySourceCoordinateRendererBirthForPlay();
+            }
+            catch (Exception error)
+            {
+                errors.Add(error.ToString());
+            }
+            ulong checksumAfter = scene.CaptureRuntimeChecksum64(tickBefore, input);
+            int borrowersAfter = LF2ObjectPool.Instance.ActiveObjectCountForAcceptance;
+            bool tickUnchanged = driver.CurrentTickIndex == tickBefore;
+            File.WriteAllText(SourceBirthResult, JsonConvert.SerializeObject(new
+            {
+                status = errors.Count == 0 && observation != null && tickUnchanged &&
+                    checksumBefore == checksumAfter && borrowersBefore == borrowersAfter ? "PASS" : "FAIL",
+                observation,
+                errors,
+                tickBefore,
+                tickAfter = driver.CurrentTickIndex,
+                checksumBefore,
+                checksumAfter,
+                sceneChecksumUnchanged = checksumBefore == checksumAfter,
+                rendererBorrowersBefore = borrowersBefore,
+                rendererBorrowersAfter = borrowersAfter,
+                scope = "Isolated World late OPoint birth using real Play pooled Renderer; parent source integer formula, configured 2048/1152 battle view, scene and borrower guards. No Q05 chain."
+            }, Formatting.Indented));
+            File.WriteAllText(SourceBirthRequest, "done");
+            return true;
         }
     }
 }

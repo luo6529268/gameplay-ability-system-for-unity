@@ -1,0 +1,23 @@
+<!-- CHANGE-RECORD
+id: NTSD28-USER-SOURCE-COORDINATE-STATE-001
+status: FOCUSED_TEST_PASS
+change-kind: D024_SOURCE_RULE_COORDINATE_STATE_SCHEMA
+code-path: Assets/NTSD/Scripts/Simulation/Core/NTSDEntityRuntime.cs
+code-path: Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleWorldEntityRuntimeSnapshot.cs
+code-path: Assets/NTSD/Scripts/Simulation/Lockstep/Snapshot/BattleStateSnapshot.cs
+code-path: Assets/NTSD/Scripts/Simulation/Lockstep/Checksum/BattleLockstepChecksumModule.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/BattleWorldEntityRuntimeSnapshotEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/BattleLockstepChecksumEditorTests.cs
+authority: user D-024 proportional physical travel decision; shipped Logan playable NativeAi28 behavior5 and BattleWorld28 fusion source-position readers; original Editor OID219 and fusion first differences
+evidence: docs/ai/TASKS/NTSD28-USER-SOURCE-COORDINATE-STATE-001.md
+-->
+
+# NTSD28-USER-SOURCE-COORDINATE-STATE-001
+
+Status: `FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE / LOCKSTEP_JSON_PROJECTION_PENDING`. Before script edits, the Task recorded exact scope and rollback. The six declared files now contain source-rule precise/int X/Z, four directional flags and initialized marker; explicit set/sync/clear methods; canonical copy/reset; runtime snapshot 17→18, aggregate 28→29 and runtime checksum 31→32. No gameplay writer or reader was changed. This storage remains uninitialized for normal gameplay until source-history writers are connected.
+
+Original-project Editor test-first RED job `444c5cbd14b74df3a2f0650c9239e0d4` failed because `SourceRuleX` did not exist. Intermediate job `f1453556b0e44751898615577471e7ae` was 15 PASS/2 FAIL because the tests initially expected a separate JSON lockstep checksum projection to include the new fields. Corrected scope-specific tests ran as job `74ac44d63b0f45c99e5f2083c197a68d`: 17/17 PASS after Editor compile/domain reload. The focused tests cover independent coordinate sync/reset, canonical active/raw runtime copy, old component/aggregate schema rejection, and nine source-only field changes affecting `CaptureRuntimeChecksum64` for both active and raw-slot state. `git diff --check` PASS; Battle Scene SHA remains `9E7B8A91ADD396D8A3674915BB5AC9A03B8D1A2EC817BA3B12F135D03EBA0AC0`; scoped Content/Config/Scene/ProjectSettings status clear. `Tools/Validate-ChangeLedger.ps1` passed with 743 Records after the Record's six `code-path` declarations were put on separate lines. Full SelfCheck, Driver/Play and formal EXE comparison were not run for this storage-only batch.
+
+Important newly confirmed gap: `BattleParitySnapshot.cs::CaptureLockstepChecksumSnapshot` builds an independent canonical JSON slots projection used by `InProcessBattleKernelHost`; it does not include source-rule carrier state. Therefore this batch does **not** certify all checksum routes or replay parity. A separate bounded package must cover that projection/schema before any OID219/fusion reader activation. Birth, physics, direct motion, stage, relation/attachment, raw-slot lifecycle and independent collision-flag histories remain open. Rollback reverses only these six files and three schema increments, preserving unrelated dirty work.
+
+2026-09-24 independent review follow-up: current 64-bit `AppendSlots` hashed the entity runtime when a slot was occupied and hid the separately snapshotted raw runtime. The Task declared a test-first correction restricted to the already declared checksum/test files plus an aggregate successful restore readback case. Original Editor valid RED job `77ef44977e074f1f88351fb4e1c6ab19` failed the occupied-raw checksum case at unchanged checksum `5430443242904011088`; aggregate restore case passed. The intervening request `a309a22d54064a82bea48409ee38ffb7` ran before domain reload, returned a root `NTSD` node and is not used as evidence. `AppendSlots` now hashes only the nine independent raw SourceRule fields when an entity occupies the slot, while the main runtime projection remains unchanged. The new aggregate case captures, mutates and restores both entity and occupied raw SourceRule state, then checks every field and unchanged battle coordinates. After Editor reload, job `b21f1224090e4c19944b5da3858ff6e6` passed 19/19 in 15.567 seconds. `Tools/Validate-ChangeLedger.ps1` passed with 744 Records; `git diff --check` passed; Battle Scene SHA and scoped Content/Config/Scene/ProjectSettings status remained unchanged. This completes the bounded 64-bit state/schema package, **not** the separate Extended/Lockstep JSON checksum projection or gameplay carrier writers. JSON work is recorded under successor `NTSD28-USER-SOURCE-COORDINATE-JSON-CHECKSUM-001`.

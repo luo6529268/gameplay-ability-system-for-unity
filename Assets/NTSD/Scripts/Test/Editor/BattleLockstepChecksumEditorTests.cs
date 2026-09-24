@@ -13,6 +13,138 @@ namespace NTSD.Test
 {
     public sealed class BattleLockstepChecksumEditorTests
     {
+        [TestCase(0, false)]
+        [TestCase(1, false)]
+        [TestCase(2, false)]
+        [TestCase(0, true)]
+        [TestCase(1, true)]
+        [TestCase(2, true)]
+        public void SourceRuleOnlyStateChangesJsonChecksumsButPreservesFrozenTrace(int payload, bool extended)
+        {
+            SimulationWorld world = extended
+                ? new SimulationWorld(BattleRuntimeProfile.DesktopExtended, SimulationWorld.AuthorityRuntimeSlotCapacity)
+                : new SimulationWorld();
+            NTSDEntityRuntime runtime;
+            if (payload != 1)
+            {
+                var entity = new LockstepFixtureEntity(7012);
+                entity.SetRequiredRuntimeSlot(20);
+                world.Register(entity);
+                runtime = payload == 0 ? entity.Runtime : world.RuntimeSlotTableForModules.GetRawRuntime(20);
+            }
+            else
+            {
+                runtime = world.RuntimeSlotTableForModules.GetRawRuntime(300);
+            }
+            string frozenJson = extended ? null : world.CaptureParityFrameSnapshot(1).ToJson();
+            string frozenHash = extended ? null : world.CaptureParityFrameSnapshot(1).OverallChecksum;
+            foreach (string name in new[] { "SourceRuleX", "SourceRuleZ", "SourceRuleXInt", "SourceRuleZInt",
+                "SourceRulePositionInitialized", "SourceRuleXBoundPositive", "SourceRuleXBoundNegative",
+                "SourceRuleZBoundPositive", "SourceRuleZBoundNegative" })
+            {
+                FieldInfo field = typeof(NTSDEntityRuntime).GetField(name);
+                object prior = field.GetValue(runtime);
+                string extendedBefore = extended ? world.CaptureExtendedChecksumSnapshot(1).OverallChecksum : null;
+                string lockstepBefore = world.CaptureLockstepChecksumSnapshot(1).OverallChecksum;
+                object changed = field.FieldType == typeof(bool) ? (object)true :
+                    field.FieldType == typeof(double) ? (object)12.75 : 12;
+                field.SetValue(runtime, changed);
+                if (extended)
+                {
+                    Assert.That(world.CaptureExtendedChecksumSnapshot(1).OverallChecksum,
+                        Is.Not.EqualTo(extendedBefore), "extended " + name);
+                }
+                Assert.That(world.CaptureLockstepChecksumSnapshot(1).OverallChecksum,
+                    Is.Not.EqualTo(lockstepBefore), "lockstep " + name);
+                if (!extended)
+                {
+                    Assert.That(world.CaptureParityFrameSnapshot(1).ToJson(), Is.EqualTo(frozenJson), name);
+                    Assert.That(world.CaptureParityFrameSnapshot(1).OverallChecksum, Is.EqualTo(frozenHash), name);
+                }
+                field.SetValue(runtime, prior);
+                if (extended)
+                {
+                    Assert.That(world.CaptureExtendedChecksumSnapshot(1).OverallChecksum,
+                        Is.EqualTo(extendedBefore), name);
+                }
+                Assert.That(world.CaptureLockstepChecksumSnapshot(1).OverallChecksum,
+                    Is.EqualTo(lockstepBefore), name);
+            }
+            Assert.That(BattleParityFrameSnapshot.SchemaId, Is.EqualTo("ntsd-battle-trace-v3"));
+            if (!extended)
+            {
+                Assert.That(frozenJson.Contains("\"sourceRule\":"), Is.False,
+                    "Frozen trace must not publish the source-coordinate domain.");
+            }
+        }
+
+        [Test]
+        public void SourceRuleJsonProjectionRetainsExtendedSelfCheckContract()
+        {
+            MethodInfo check = typeof(BattleRuntimeSelfCheck).GetMethod("CheckExtendedChecksumContracts",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(check, Is.Not.Null);
+            check.Invoke(null, null);
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void SourceRuleOnlyStateChangesChecksumForEntityAndRawSlot(bool rawSlot)
+        {
+            AssertSourceRuleChecksumSensitivity(rawSlot, false);
+        }
+
+        [Test]
+        public void OccupiedRawSourceRuleStateChangesChecksumIndependently()
+        {
+            AssertSourceRuleChecksumSensitivity(true, true);
+        }
+
+        private static void AssertSourceRuleChecksumSensitivity(bool rawSlot, bool occupied)
+        {
+            SimulationWorld world = CreateWorld(BattleRuntimeProfile.Authority400);
+            NTSDEntityRuntime runtime;
+            if (occupied)
+            {
+                var occupant = new LockstepFixtureEntity(7011);
+                occupant.SetRequiredRuntimeSlot(300);
+                world.Register(occupant);
+            }
+            if (rawSlot)
+            {
+                runtime = world.RuntimeSlotTableForModules.GetRawRuntime(300);
+            }
+            else
+            {
+                var entity = new LockstepFixtureEntity(7010);
+                entity.SetRequiredRuntimeSlot(20);
+                world.Register(entity);
+                runtime = entity.Runtime;
+            }
+            runtime.SetPosition(200.5, -10.0, 100.5);
+            runtime.SyncIntegerPosition();
+            foreach (string name in new[] { "SourceRuleX", "SourceRuleZ", "SourceRuleXInt", "SourceRuleZInt",
+                "SourceRulePositionInitialized", "SourceRuleXBoundPositive", "SourceRuleXBoundNegative",
+                "SourceRuleZBoundPositive", "SourceRuleZBoundNegative" })
+            {
+                FieldInfo field = typeof(NTSDEntityRuntime).GetField(name);
+                object prior = field.GetValue(runtime);
+                var before = world.CaptureRuntimeChecksum64(1, FrameInputSet.Empty(1));
+                object changed = field.FieldType == typeof(bool) ? (object)true :
+                    field.FieldType == typeof(double) ? (object)12.75 : 12;
+                field.SetValue(runtime, changed);
+                Assert.That(world.CaptureRuntimeChecksum64(1, FrameInputSet.Empty(1)),
+                    Is.Not.EqualTo(before), name);
+                field.SetValue(runtime, prior);
+                Assert.That(world.CaptureRuntimeChecksum64(1, FrameInputSet.Empty(1)),
+                    Is.EqualTo(before), name);
+            }
+            Assert.That(runtime.X, Is.EqualTo(200.5));
+            Assert.That(runtime.Z, Is.EqualTo(100.5));
+            Assert.That(runtime.XInt, Is.EqualTo(200));
+            Assert.That(runtime.ZInt, Is.EqualTo(100));
+        }
+
         private static readonly ConstructorInfo BindingConstructor =
             typeof(BattleCommonVisualBinding).GetConstructor(
                 BindingFlags.Instance | BindingFlags.NonPublic,

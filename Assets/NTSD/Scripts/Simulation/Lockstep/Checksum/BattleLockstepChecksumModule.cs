@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 31;
+        internal const int CurrentSchemaVersion = 32;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -486,7 +486,25 @@ namespace NTSD.Simulation
                     : entity?.ObjectId ?? -1);
                 builder.AddInt32(runtime?.StableId ?? 0);
                 AppendEntityRuntime(world, entity, runtimeSlot, runtime, projectRawState);
+                if (entity != null)
+                {
+                    // Occupied slots retain an independent raw payload across snapshot restore.
+                    AppendSourceRuleCoordinates(view.RawRuntime);
+                }
             }
+        }
+
+        private void AppendSourceRuleCoordinates(NTSDEntityRuntime runtime)
+        {
+            builder.AddBoolean(runtime?.SourceRulePositionInitialized ?? false);
+            builder.AddDouble(runtime?.SourceRuleX ?? 0.0);
+            builder.AddDouble(runtime?.SourceRuleZ ?? 0.0);
+            builder.AddInt32(runtime?.SourceRuleXInt ?? 0);
+            builder.AddInt32(runtime?.SourceRuleZInt ?? 0);
+            builder.AddBoolean(runtime?.SourceRuleXBoundPositive ?? false);
+            builder.AddBoolean(runtime?.SourceRuleXBoundNegative ?? false);
+            builder.AddBoolean(runtime?.SourceRuleZBoundPositive ?? false);
+            builder.AddBoolean(runtime?.SourceRuleZBoundNegative ?? false);
         }
 
         private void AppendEntityRuntime(
@@ -519,6 +537,7 @@ namespace NTSD.Simulation
             builder.AddInt32(isDefault ? 0 : runtime.YInt);
             builder.AddDouble(isDefault ? 0.0 : runtime.Z);
             builder.AddInt32(isDefault ? 0 : runtime.ZInt);
+            AppendSourceRuleCoordinates(isDefault ? null : runtime);
 
             builder.AddInt32(isDefault ? 0 : runtime.Fall);
             builder.AddInt32(isDefault ? 0 : runtime.HitCount);

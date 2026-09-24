@@ -10,6 +10,70 @@ namespace NTSD.Test.Editor
 {
     public sealed class NTSD28B4IdentityXExtrasEditorTests
     {
+        [TestCase(false)]
+        [TestCase(true)]
+        public void RegisteredType3WeaponHitJPreciseZUsesViewRatio(
+            bool configuredView)
+        {
+            var world = new SimulationWorld();
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            ProbeWeapon weapon = CreateWeapon((int)LF2ObjectType.SpecialAttack,
+                900, 0);
+            weapon.Frame.D.hit_j = 60;
+            weapon.SetRequiredRuntimeSlot(20);
+            world.Register(weapon);
+            weapon.Runtime.Z = 250;
+            weapon.Runtime.ZInt = 250;
+            weapon.Runtime.Type3VisualZOffset = 0;
+            weapon.Runtime.SetSourceRulePosition(100.75, 30.25);
+            weapon.Runtime.SyncSourceRuleIntegerPosition();
+
+            weapon.InvokeFlightPhysics();
+
+            double expectedZ = 250 + 10.0 *
+                (configuredView ? 1152.0 / 730.0 : 1.0);
+            Assert.That(weapon.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
+            Assert.That(weapon.Runtime.ZInt, Is.EqualTo(250));
+            Assert.That(weapon.Runtime.Type3VisualZOffset, Is.EqualTo(10.0));
+            Assert.That(weapon.Runtime.SourceRuleZ, Is.EqualTo(40.25));
+            Assert.That(weapon.Runtime.SourceRuleZInt, Is.EqualTo(30));
+        }
+
+        [TestCase(false, 120, 2.0)]
+        [TestCase(true, 120, 2.0)]
+        [TestCase(false, 101, -2.0)]
+        [TestCase(true, 101, -2.0)]
+        public void RegisteredWeaponIdentityExtraUsesViewRatio(
+            bool configuredView,
+            int objectId,
+            double rawExtra)
+        {
+            var world = new SimulationWorld();
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            ProbeWeapon weapon = CreateWeapon((int)LF2ObjectType.LightWeapon,
+                objectId, 0);
+            weapon.SetRequiredRuntimeSlot(20);
+            world.Register(weapon);
+            weapon.Runtime.X = 200;
+            weapon.Runtime.XInt = 200;
+            weapon.Runtime.Vx = 10.0;
+            weapon.Runtime.SetSourceRulePosition(50.75, 20.25);
+            weapon.Runtime.SyncSourceRuleIntegerPosition();
+
+            weapon.InvokeFlightPhysics();
+
+            double expectedX = 200 + rawExtra *
+                (configuredView ? 2048.0 / 1333.0 : 1.0);
+            Assert.That(weapon.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+            Assert.That(weapon.Runtime.XInt, Is.EqualTo(200));
+            Assert.That(weapon.Runtime.Vx, Is.EqualTo(10.0));
+            Assert.That(weapon.Runtime.SourceRuleX,
+                Is.EqualTo(50.75 + rawExtra).Within(0.000001));
+            Assert.That(weapon.Runtime.SourceRuleXInt, Is.EqualTo(50));
+        }
+
         [TestCase((int)LF2ObjectType.ThrowWeapon, 900, 101, 0.0)]
         [TestCase((int)LF2ObjectType.LightWeapon, 120, 0, 2.0)]
         [TestCase((int)LF2ObjectType.LightWeapon, 101, 0, -2.0)]

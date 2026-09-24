@@ -38,6 +38,48 @@ namespace NTSD.Test
             RunImmediate(index, BattleRuntimeProfile.Authority400, false);
         }
 
+        [TestCase(1333, true)]
+        [TestCase(2048, false)]
+        public void FusionDistanceAfterTwentyPixelMotion_CharacterizesFixedViewFirstDifference(
+            int referenceWidth, bool expectedCurrentMerge)
+        {
+            JObject row = File.ReadLines(Source).Select(JObject.Parse)
+                .Single(value => (int)value["index"] == 0);
+            var world = CreateWorld(row);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(referenceWidth,
+                    referenceWidth == 1333 ? 730 : 1152);
+                LF2Entity primary = world.FindEntityByRuntimeSlotIncludingDormant(0);
+                LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(1);
+                Assert.That(primary.Runtime.XInt, Is.EqualTo(340));
+                Assert.That(partner.Runtime.XInt, Is.EqualTo(300));
+
+                primary.Runtime.SetPosition(320, primary.Runtime.Y, primary.Runtime.Z);
+                primary.Runtime.XInt = 320;
+                primary.Runtime.SetVelocity(20, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(primary.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                primary.Runtime.XInt = (int)primary.Runtime.X;
+                int currentGap = primary.Runtime.XInt - partner.Runtime.XInt;
+                int formalGap = (320 + 20) - 300;
+                Assert.That(formalGap, Is.EqualTo(40));
+                Assert.That(currentGap, Is.EqualTo(referenceWidth == 1333 ? 40 : 50));
+
+                world.Oid5152FusionScanAll(0);
+                bool merged = primary.Runtime.Unk328 == 1 && partner.Runtime.OidMergeDormant;
+                Assert.That(merged, Is.EqualTo(expectedCurrentMerge),
+                    $"formal gap={formalGap}, Unity gap={currentGap}, scale={world.FixedViewRunDistanceScale}");
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
         internal static void RunImmediate(int index, BattleRuntimeProfile profile, bool renderer)
         {
             JObject row = File.ReadLines(Source).Select(JObject.Parse).Single(value => (int)value["index"] == index);

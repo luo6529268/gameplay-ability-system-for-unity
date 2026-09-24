@@ -553,6 +553,8 @@ namespace NTSD.Simulation
                 return -1;
             }
             entity.SetPos(spawnX, spawn.Y, spawnZ);
+            entity.Runtime.SetSourceRulePosition(spawnX, spawnZ);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
             entity.Runtime?.SyncIntegerPosition();
             entity.SwitchDir(facingDir);
             entity.DirectWriteFrameImmediateWaitReset(spawn.Act);
@@ -646,6 +648,8 @@ namespace NTSD.Simulation
             }
 
             entity.SetPos(spawnX, spawnY, spawnZ);
+            entity.Runtime.SetSourceRulePosition(spawnX, spawnZ);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
             entity.Runtime.SyncIntegerPosition();
             entity.SwitchDir(facingDir);
             entity.DirectWriteFrameImmediateWaitReset(0);

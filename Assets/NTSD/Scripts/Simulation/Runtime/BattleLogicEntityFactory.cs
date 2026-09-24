@@ -254,7 +254,11 @@ namespace NTSD.Simulation
             double y = task.useDirectRuntimePosition ? task.directY : task.pos.y;
             double z = task.useDirectRuntimePosition ? task.directZ : task.z;
             if (!task.skipPostInitZOffset)
+            {
                 z += 1.0;
+                if (task.useSourceRulePosition)
+                    task.sourceRuleZ += 1.0;
+            }
 
             task.useDirectRuntimePosition = true;
             task.directX = x;

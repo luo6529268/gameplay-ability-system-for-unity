@@ -18,6 +18,43 @@ namespace NTSD.Test.Editor
     [Category("NTSD28_B4")]
     public sealed class NTSD28B4RevivalNormalFloorRngProductionEditorTests
     {
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NormalRevivalRandomOffsetUsesViewRatio(bool configuredView)
+        {
+            var world = new SimulationWorld();
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            LF2Character dead = CreateCharacter(world, 0, 9650, 3);
+            LF2Character peerA = CreateCharacter(world, 1, 9651, 3);
+            LF2Character peerB = CreateCharacter(world, 2, 9652, 3);
+            ConfigureNormal(dead, collisionYReference: -37);
+            SetPosition(dead, 40, -100, 60, 11, -100, 12);
+            SetPosition(peerA, 100, 0, 40, 100, 0, 40);
+            SetPosition(peerB, 160, 0, 20, 160, 0, 20);
+
+            var expectedRandom = new NTSD28NativeRandom();
+            expectedRandom.RestoreSynchronized(
+                world.NativeRandom.CaptureSynchronizedState());
+            int randomX = expectedRandom.SynchronizedNext(0x90u, 0x33) - 25;
+            int randomZ = expectedRandom.SynchronizedNext(0x91u, 0x1f) - 15;
+            double expectedX = 130 + randomX *
+                (configuredView ? 2048.0 / 1333.0 : 1.0);
+            double expectedZ = 30 + randomZ *
+                (configuredView ? 1152.0 / 730.0 : 1.0);
+            ulong beforeCalls = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+
+            world.PostFrameAdvanceDeathCleanupAll(1);
+
+            Assert.That(dead.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+            Assert.That(dead.Runtime.Z, Is.EqualTo(expectedZ).Within(0.000001));
+            Assert.That(dead.Runtime.XInt, Is.EqualTo(11));
+            Assert.That(dead.Runtime.ZInt, Is.EqualTo(12));
+            Assert.That(dead.Runtime.Y, Is.EqualTo(-37));
+            Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                Is.EqualTo(beforeCalls + 2));
+        }
+
         [Test]
         public void NormalRevival_UsesSynchronizedRngAndPreservesIntegerXZ()
         {

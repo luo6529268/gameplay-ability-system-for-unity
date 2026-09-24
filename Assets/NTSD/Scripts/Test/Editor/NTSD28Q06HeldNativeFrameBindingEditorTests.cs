@@ -24,6 +24,91 @@ namespace NTSD.Test
         private static readonly MethodInfo ProjectRandom = typeof(NTSD28UnityRawCaptureEditor).GetMethod("ProjectInitialNativeRandom", BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly Dictionary<string, LF2CharacterDataWrapper> wrappers = new();
 
+        [TestCase(1333, 730, 348.0, 348, 359)]
+        [TestCase(2048, 1152, 373.7464366091523, 373, 384)]
+        public void MovedHolderWeaponComponentWPointPose_KeepsSourceLocalAnchorAtBothViews(
+            int viewWidth,
+            int viewHeight,
+            double expectedHolderX,
+            int expectedHolderXInt,
+            int expectedHeldXInt)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Output + "source/first.jsonl")
+                .First(line => (int)JObject.Parse(line)["index"] == 21));
+            Assert.That((int)row["params"]["type"], Is.EqualTo(1));
+            Assert.That((int)row["after"]["entities"][1]["raw"]["position"]["x"],
+                Is.EqualTo(311));
+            SimulationWorld world = CreateWorld(row, BattleRuntimeProfile.Authority400, false);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
+                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
+                LF2Entity held = world.FindEntityByRuntimeSlotForQuery(70);
+                Assert.That(held, Is.InstanceOf<LF2WeaponBase>());
+                Assert.That(holder.Runtime.XInt, Is.EqualTo(300));
+                holder.Runtime.SetVelocity(48, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(holder.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                Assert.That(holder.Runtime.X,
+                    Is.EqualTo(expectedHolderX).Within(1e-10));
+                holder.Runtime.SyncIntegerPosition();
+                Assert.That(holder.Runtime.XInt, Is.EqualTo(expectedHolderXInt));
+
+                world.HeldObjectProcessAll(1);
+                Assert.That(held.Runtime.XInt, Is.EqualTo(expectedHeldXInt));
+                Assert.That(held.Runtime.XInt - holder.Runtime.XInt, Is.EqualTo(11));
+                Assert.That(held.Runtime.ZInt, Is.EqualTo(251));
+            }
+            finally
+            {
+                Shutdown(world, false);
+            }
+        }
+
+        [TestCase(1333, 730, 348.0, 348, 359)]
+        [TestCase(2048, 1152, 373.7464366091523, 373, 384)]
+        public void MovedHolderWPointPose_KeepsSourceLocalAnchorAtBothViews(
+            int viewWidth,
+            int viewHeight,
+            double expectedHolderX,
+            int expectedHolderXInt,
+            int expectedHeldXInt)
+        {
+            JObject row = JObject.Parse(File.ReadLines(Output + "source/first.jsonl").Skip(1).First());
+            Assert.That((int)row["index"], Is.EqualTo(1));
+            Assert.That((int)row["after"]["entities"][1]["raw"]["position"]["x"],
+                Is.EqualTo(311));
+            SimulationWorld world = CreateWorld(row, BattleRuntimeProfile.Authority400, false);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
+                LF2Entity holder = world.FindEntityByRuntimeSlotForQuery(0);
+                LF2Entity held = world.FindEntityByRuntimeSlotForQuery(70);
+                Assert.That(holder.Runtime.XInt, Is.EqualTo(300));
+                Assert.That(holder.Runtime.ZInt, Is.EqualTo(250));
+                holder.Runtime.SetVelocity(48, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(holder.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                Assert.That(holder.Runtime.X,
+                    Is.EqualTo(expectedHolderX).Within(1e-10));
+                holder.Runtime.SyncIntegerPosition();
+                Assert.That(holder.Runtime.XInt, Is.EqualTo(expectedHolderXInt));
+
+                world.HeldObjectProcessAll(1);
+                Assert.That(held.Runtime.XInt, Is.EqualTo(expectedHeldXInt));
+                Assert.That(held.Runtime.XInt - holder.Runtime.XInt, Is.EqualTo(11));
+                Assert.That(held.Runtime.ZInt, Is.EqualTo(251));
+            }
+            finally
+            {
+                Shutdown(world, false);
+            }
+        }
+
         [TestCase(BattleRuntimeProfile.Authority400, false)]
         [TestCase(BattleRuntimeProfile.MobileExtended, false)]
         public void HeldBindingAndFollowingTickMatchSource(BattleRuntimeProfile profile, bool renderer)

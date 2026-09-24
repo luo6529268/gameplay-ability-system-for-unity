@@ -1,5 +1,6 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
@@ -9,6 +10,99 @@ namespace NTSD.Test
 {
     public sealed class BattleEcsCharacterStageZPassEditorTests
     {
+        [TestCase(BattleEcsCharacterStageZPassMode.DataOriented)]
+        [TestCase(BattleEcsCharacterStageZPassMode.Legacy)]
+        [TestCase(BattleEcsCharacterStageZPassMode.ShadowCompare)]
+        public void FirstDepthPass_ClampsActiveNonCharactersBeforePreFrame(
+            BattleEcsCharacterStageZPassMode mode)
+        {
+            SimulationWorld world = CreateWorld();
+            world.ConfigureBattleEcsCharacterStageZPassForDiagnostics(mode);
+            LF2Character character = RegisterCharacter(world, 5, 500.0);
+            var weapon = new LF2Weapon();
+            weapon.SetWeaponType((int)LF2ObjectType.LightWeapon);
+            weapon.SetRequiredRuntimeSlot(70);
+            world.Register(weapon);
+            weapon.Runtime.SetPosition(0, 0, 500.0);
+            weapon.Runtime.ZInt = 499;
+            var special = new LF2SpecialAttack();
+            special.Runtime.EntityType = (int)LF2ObjectType.SpecialAttack;
+            special.SetRequiredRuntimeSlot(71);
+            world.Register(special);
+            special.Runtime.SetPosition(0, 0, 500.0);
+            special.Runtime.ZInt = 499;
+            var inRange = new LF2Weapon();
+            inRange.SetWeaponType((int)LF2ObjectType.LightWeapon);
+            inRange.SetRequiredRuntimeSlot(72);
+            world.Register(inRange);
+            inRange.Runtime.SetPosition(0, 0, 200.75);
+            inRange.Runtime.ZInt = -777;
+            var pending = new LF2Weapon();
+            pending.SetWeaponType((int)LF2ObjectType.LightWeapon);
+            pending.SetRequiredRuntimeSlot(73);
+            world.Register(pending);
+            pending.Runtime.SetPosition(0, 0, 500.0);
+            pending.Runtime.PendingFlushDestroy = true;
+            var dormant = new LF2SpecialAttack();
+            dormant.Runtime.EntityType = (int)LF2ObjectType.SpecialAttack;
+            dormant.SetRequiredRuntimeSlot(74);
+            world.Register(dormant);
+            dormant.Runtime.SetPosition(0, 0, 500.0);
+            dormant.Runtime.OidMergeDormant = true;
+
+            world.ClampCharacterZToStageBoundsAll();
+
+            Assert.That(character.Runtime.Z, Is.EqualTo(350.0));
+            Assert.That(weapon.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(weapon.Runtime.ZInt, Is.EqualTo(351));
+            Assert.That(special.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(special.Runtime.ZInt, Is.EqualTo(351));
+            Assert.That(inRange.Runtime.Z, Is.EqualTo(200.75));
+            Assert.That(inRange.Runtime.ZInt, Is.EqualTo(200));
+            Assert.That(pending.Runtime.Z, Is.EqualTo(500.0));
+            Assert.That(dormant.Runtime.Z, Is.EqualTo(500.0));
+
+            world.ClampCharacterZToStageBoundsAll();
+            Assert.That(weapon.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(special.Runtime.Z, Is.EqualTo(351.0));
+            Assert.That(inRange.Runtime.ZInt, Is.EqualTo(200));
+            Assert.That(pending.Runtime.Z, Is.EqualTo(500.0));
+            Assert.That(dormant.Runtime.Z, Is.EqualTo(500.0));
+            if (mode == BattleEcsCharacterStageZPassMode.ShadowCompare)
+                Assert.That(world.BattleEcsCharacterStageZPassDiagnosticsForDiagnostics.IsClean,
+                    Is.True);
+        }
+
+        [TestCase(1333, 730, 340.0, 340)]
+        [TestCase(2048, 1152, 363.1232876712329, 350)]
+        public void FixedViewMotionNearAbsoluteDepthEdge_CharacterizesTwoDomainBoundary(
+            int viewWidth,
+            int viewHeight,
+            double expectedPreBoundZ,
+            int expectedBattleZ)
+        {
+            SimulationWorld world = CreateWorld();
+            world.ConfigureFixedViewRunDistance(viewWidth, viewHeight);
+            LF2Character character = RegisterCharacter(world, 5, 300);
+            character.Runtime.ZInt = 300;
+            character.Runtime.SetVelocity(0, 0, 40);
+
+            Assert.That(world.BattleEcsCharacterStageZPassModeForDiagnostics,
+                Is.EqualTo(BattleEcsCharacterStageZPassMode.DataOriented));
+            Assert.That(world.FixedViewRunVerticalDistanceScale,
+                Is.EqualTo(viewHeight / 730.0).Within(1e-12));
+            new CharacterMechanics().StepBattleLogic(
+                new CharacterMechanicsContext(character.Runtime, null, 0f, 0f, 0.0,
+                    world.FixedViewRunDistanceScale,
+                    world.FixedViewRunVerticalDistanceScale));
+            Assert.That(character.Runtime.Z,
+                Is.EqualTo(expectedPreBoundZ).Within(1e-10));
+
+            world.ClampCharacterZToStageBoundsAll();
+            Assert.That(character.Runtime.Z, Is.EqualTo(expectedBattleZ));
+            Assert.That(character.Runtime.ZInt, Is.EqualTo(expectedBattleZ));
+        }
+
         [Test]
         public void DefaultMode_IsDataOrientedAfterCanonicalWriterClosureAndCannotSwitchAfterResetBoundary()
         {

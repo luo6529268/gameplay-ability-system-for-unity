@@ -243,6 +243,16 @@ namespace NTSD.Simulation
         public double X;
         public double Y;
         public double Z;
+        // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-STATE-001; independent of scaled battle motion.
+        public double SourceRuleX;
+        public double SourceRuleZ;
+        public int SourceRuleXInt;
+        public int SourceRuleZInt;
+        public bool SourceRulePositionInitialized;
+        public bool SourceRuleXBoundPositive;
+        public bool SourceRuleXBoundNegative;
+        public bool SourceRuleZBoundPositive;
+        public bool SourceRuleZBoundNegative;
         private int xInt;
         private int yInt;
         private int zInt;
@@ -580,6 +590,68 @@ namespace NTSD.Simulation
                 nextX,
                 nextY,
                 nextZ);
+        }
+
+        public void SetSourceRulePosition(double x, double z)
+        {
+            SourceRuleX = x;
+            SourceRuleZ = z;
+            SourceRulePositionInitialized = true;
+        }
+
+        public void SyncSourceRuleIntegerPosition()
+        {
+            SourceRuleXInt = (int)SourceRuleX;
+            SourceRuleZInt = (int)SourceRuleZ;
+        }
+
+        public void ClearSourceRuleBounds()
+        {
+            SourceRuleXBoundPositive = false;
+            SourceRuleXBoundNegative = false;
+            SourceRuleZBoundPositive = false;
+            SourceRuleZBoundNegative = false;
+        }
+
+        public void ClampSourceRuleZ(double minimum, double maximum)
+        {
+            if (!SourceRulePositionInitialized)
+                return;
+
+            SourceRuleZ = System.Math.Clamp(SourceRuleZ, minimum, maximum);
+            SourceRuleZInt = (int)SourceRuleZ;
+        }
+
+        public void ClampSourceRuleCharacterX(
+            int slot,
+            int relationTeam,
+            int hitStop,
+            double baseStageWidth,
+            int xMaxOverride)
+        {
+            if (!SourceRulePositionInitialized)
+                return;
+
+            double x = SourceRuleX;
+            if (slot >= 20)
+            {
+                x = System.Math.Clamp(x, -100.0, baseStageWidth + 100.0);
+            }
+            else
+            {
+                if (relationTeam == 5)
+                    x = System.Math.Max(x, -300.0);
+                else
+                    x = System.Math.Max(x, 0.0);
+
+                x = System.Math.Min(x, baseStageWidth);
+                if (xMaxOverride > 0 && x > xMaxOverride &&
+                    relationTeam != 5 && hitStop == 0)
+                    x = xMaxOverride;
+            }
+
+            SourceRuleX = x;
+            SourceRuleXInt = (int)x;
         }
 
         public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)
@@ -943,6 +1015,15 @@ namespace NTSD.Simulation
             destination.PickerStableId = PickerStableId;
             destination.AiControlled = AiControlled;
             destination.X = X;
+            destination.SourceRuleX = SourceRuleX;
+            destination.SourceRuleZ = SourceRuleZ;
+            destination.SourceRuleXInt = SourceRuleXInt;
+            destination.SourceRuleZInt = SourceRuleZInt;
+            destination.SourceRulePositionInitialized = SourceRulePositionInitialized;
+            destination.SourceRuleXBoundPositive = SourceRuleXBoundPositive;
+            destination.SourceRuleXBoundNegative = SourceRuleXBoundNegative;
+            destination.SourceRuleZBoundPositive = SourceRuleZBoundPositive;
+            destination.SourceRuleZBoundNegative = SourceRuleZBoundNegative;
             destination.Y = Y;
             destination.Z = Z;
             destination.xInt = xInt;
@@ -1129,6 +1210,12 @@ namespace NTSD.Simulation
             PickerStableId = -1;
             AiControlled = false;
             X = 0f;
+            SourceRuleX = 0.0;
+            SourceRuleZ = 0.0;
+            SourceRuleXInt = 0;
+            SourceRuleZInt = 0;
+            SourceRulePositionInitialized = false;
+            ClearSourceRuleBounds();
             Y = 0f;
             Z = 0f;
             XInt = 0;

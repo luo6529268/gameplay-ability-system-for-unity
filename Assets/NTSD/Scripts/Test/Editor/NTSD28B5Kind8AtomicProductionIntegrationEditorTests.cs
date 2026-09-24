@@ -143,6 +143,10 @@ namespace NTSD.Test.Editor
             TypedCharacter attacker = CreateEntity(world, 8750, 0, 0);
             TypedCharacter target = CreateEntity(world, 8751, 1, 3);
             ConfigurePositions(attacker, target);
+            attacker.Runtime.SetSourceRulePosition(-10.5, 90.5);
+            attacker.Runtime.SyncSourceRuleIntegerPosition();
+            target.Runtime.SetSourceRulePosition(150.75, 260.25);
+            target.Runtime.SyncSourceRuleIntegerPosition();
             InteractionArea interaction = Kind8(3, 0);
             interaction.injury = 5;
             interaction.caughtact = new[] { 7 };
@@ -163,6 +167,49 @@ namespace NTSD.Test.Editor
                 10,
                 20,
                 30);
+            double expectedSourceX = dvy == -1 || dvy == 1
+                ? -10.5 : 150.75;
+            double expectedSourceZ = dvy == -1
+                ? 90.5 : 261.25;
+            Assert.That(attacker.Runtime.SourceRuleX,
+                Is.EqualTo(expectedSourceX));
+            Assert.That(attacker.Runtime.SourceRuleZ,
+                Is.EqualTo(expectedSourceZ));
+            Assert.That(attacker.Runtime.SourceRuleXInt, Is.EqualTo(-10),
+                "Kind8 leaves native X integer mirror for the later physics pass.");
+            Assert.That(attacker.Runtime.SourceRuleZInt, Is.EqualTo(90),
+                "Kind8 leaves native Z integer mirror for the later physics pass.");
+        }
+
+        [Test]
+        public void Actual_SourcePreciseRelationSynchronizesIntegerMirrorAtFollowingPhysics()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(world, 8752, 0, 0);
+            TypedCharacter target = CreateEntity(world, 8753, 1, 3);
+            ConfigurePositions(attacker, target);
+            attacker.Runtime.SetSourceRulePosition(-10.5, 90.5);
+            attacker.Runtime.SyncSourceRuleIntegerPosition();
+            target.Runtime.SetSourceRulePosition(150.75, 260.25);
+            target.Runtime.SyncSourceRuleIntegerPosition();
+            InteractionArea interaction = Kind8(3, 0);
+            interaction.dvy = 0;
+            interaction.dvx = 999;
+
+            Assert.That(ApplyActual(world, attacker, target, interaction), Is.True);
+            Assert.That(attacker.Runtime.SourceRuleXInt, Is.EqualTo(-10));
+            Assert.That(attacker.Runtime.SourceRuleZInt, Is.EqualTo(90));
+
+            attacker.Runtime.Vx = 0;
+            attacker.Runtime.Vz = 0;
+            new CharacterMechanics().StepBattleLogic(new CharacterMechanicsContext(
+                attacker.Runtime, null, 0f, 0f, 0.0, 2048.0 / 1333.0,
+                1152.0 / 730.0));
+
+            Assert.That(attacker.Runtime.SourceRuleX, Is.EqualTo(150.75));
+            Assert.That(attacker.Runtime.SourceRuleZ, Is.EqualTo(261.25));
+            Assert.That(attacker.Runtime.SourceRuleXInt, Is.EqualTo(150));
+            Assert.That(attacker.Runtime.SourceRuleZInt, Is.EqualTo(261));
         }
 
         [Test]

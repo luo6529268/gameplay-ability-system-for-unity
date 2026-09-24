@@ -53,6 +53,85 @@ namespace NTSD.Test.Editor
             Assert.That(host.Health.HP, Is.EqualTo(80));
         }
 
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void ContinuationEffectBirthKeepsIndependentSourceIntegerPosition(
+            bool configuredView,
+            bool initializedSource)
+        {
+            var world = new SimulationWorld();
+            world.SetLogicOnlyEntityMaterialization(true);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
+            var effectData = new LF2CharacterData
+            {
+                name = "C07Effect998",
+                type_sub = (int)LF2ObjectType.Other,
+                frames = new List<LF2FrameData> { Frame(6, 0) },
+            };
+            var effectWrapper = new LF2CharacterDataWrapper(998, effectData);
+            world.PrepareRuntimeDataCatalogForBattle(
+                new[] { new ObjectDefinition(998, (int)LF2ObjectType.Other, "effect.dat") },
+                id => id == 998 ? effectWrapper : null);
+            try
+            {
+                LF2Character host = CreateHost(world, 50, 10703);
+                host.Runtime.X = 300.75;
+                host.Runtime.Z = 200.5;
+                host.Runtime.XInt = 300;
+                host.Runtime.ZInt = 200;
+                if (initializedSource)
+                {
+                    host.Runtime.SetSourceRulePosition(-12.75, 31.25);
+                    host.Runtime.SourceRuleXInt = -14;
+                    host.Runtime.SourceRuleZInt = 29;
+                }
+                uint legacyRngBefore = world.Rng.State;
+                ulong nativeCallsBefore = world.NativeRandom.CaptureScalarState().SynchronizedCalls;
+
+                world.PostFrameAdvanceDeathCleanupAll(24);
+
+                LF2Entity child = null;
+                foreach (LF2Entity candidate in world.ActiveEntitiesByRuntimeSlotForModule)
+                {
+                    if (candidate?.ObjectId == 998)
+                    {
+                        child = candidate;
+                        break;
+                    }
+                }
+                Assert.That(child, Is.Not.Null, "The production factory must materialize OID998.");
+                Assert.That(child.Frame.N, Is.EqualTo(6));
+                Assert.That(child.Runtime.X, Is.EqualTo(300));
+                Assert.That(child.Runtime.XInt, Is.EqualTo(300));
+                Assert.That(child.Runtime.Z, Is.EqualTo(201));
+                Assert.That(child.Runtime.ZInt, Is.EqualTo(201));
+                Assert.That(child.Runtime.SourceRulePositionInitialized, Is.EqualTo(initializedSource));
+                if (initializedSource)
+                {
+                    Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(-14));
+                    Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(-14));
+                    Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(30));
+                    Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(30));
+                    Assert.That(host.Runtime.SourceRuleX, Is.EqualTo(-12.75));
+                    Assert.That(host.Runtime.SourceRuleZ, Is.EqualTo(31.25));
+                }
+                Assert.That(host.Frame.N, Is.EqualTo(219));
+                Assert.That(host.Health.HP, Is.EqualTo(80));
+                Assert.That(world.Rng.State, Is.EqualTo(legacyRngBefore));
+                Assert.That(world.NativeRandom.CaptureScalarState().SynchronizedCalls,
+                    Is.EqualTo(nativeCallsBefore));
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out string reason),
+                    Is.True, reason);
+            }
+        }
+
         [Test]
         public void FullTick_RecordsRevivalAfterNestedPhysicsBeforeSerialRemainder()
         {
@@ -82,9 +161,11 @@ namespace NTSD.Test.Editor
             Assert.That(weaponCount, Is.EqualTo(BattleTickPhase.ActiveWeaponCount));
             Assert.That(diagnostics.TryGetLastPhaseAt(15, out BattleTickPhase hit), Is.True);
             Assert.That(hit, Is.EqualTo(BattleTickPhase.CharacterHitConsumePostInteraction));
-            Assert.That(diagnostics.TryGetLastPhaseAt(28, out BattleTickPhase serial), Is.True);
+            Assert.That(diagnostics.TryGetLastPhaseAt(27, out BattleTickPhase serial), Is.True);
             Assert.That(serial, Is.EqualTo(BattleTickPhase.FrameAdvance));
-            Assert.That(diagnostics.LastPhaseSequenceCount, Is.EqualTo(34));
+            Assert.That(diagnostics.TryGetLastPhaseAt(28, out BattleTickPhase stage), Is.True);
+            Assert.That(stage, Is.EqualTo(BattleTickPhase.Stage));
+            Assert.That(diagnostics.LastPhaseSequenceCount, Is.EqualTo(33));
         }
 
         private static LF2Character CreateHost(

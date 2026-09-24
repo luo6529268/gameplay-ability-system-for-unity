@@ -1,3 +1,88 @@
+> 2026-09-24 current D-024 focused state: original-project Editor PID10576/bridge6403, C: free space restored. Kind14 integer-source correction `NTSD28-USER-KIND14-INTEGER-OPERAND-AUTHORITY-CORRECTION-001` exact 11/11 PASS; continuation OID998 source-birth matrix4/4 and final C07 class7/7 PASS; C07 stale phase fixture corrected test-only. Prior broad job lost with old Editor PID288224 and never counted as acceptance. Formal EXE fractional, continuous source-rule motion/flags, full Driver/Play and OID219/fusion remain open; Q07 paused.
+
+> 2026-09-24 C07 phase-fixture correction FOCUSED_TEST_PASS: old job9155fd12 class6/7 failed slot28 FrameAdvance versus Stage, then focused RED total34 versus actual33; test-only `NTSD28-USER-C07-REVIVAL-PHASE-ASSERTION-ORDER-001` now asserts FrameAdvance27/Stage28/count33. Original Editor single1/1 and final class7/7 PASS. No production change under this ID; D-024/Q07 open.
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: source-rule linked-platform then direct-frame X/Z advances from independent integer mirrors with raw displacement and immediate rounding. Original Editor PID10576 exact frame/platform 14/14 and adjacent full tick/replay 3/3 PASS. Physical D-024 scale unchanged; source physics/teleport/bounds/flags, Play/EXE and gameplay readers remain open. D-024/Q07 open.
+
+> 2026-09-24 D-024 kind14 precision focused correction (historical, superseded): original Editor first difference X5.5/int5, formal-expected RED job7e9ebbb7, precise X/Z active/projection/fallback operand correction, GREEN job7415d299 7/7 and direct C32 b2274720 1/1. The formal-expected assertion was wrong because playable kind14 uses integer X/Z; those passes do not establish parity. D-024 source-rule coordinate/flag history, OID219/fusion, full Driver/Play/EXE remain open. Q07 paused. See successor correction Record.
+
+> 2026-09-24 D-024 non-perceptual audit: kind14 formal precise X/Z collision-block threshold versus Unity battle integer X/Z is a static first-difference candidate; official-content focused/runtime witness pending. Source-rule coordinate carrier cannot reuse battle-domain block flags after scaled travel. OID219/fusion defects remain; Q07 paused. See KIND14-COORDINATE-DOMAIN-AUDIT.md.
+
+> 2026-09-24 D-024 CPoint投掷位置双视野FOCUSED_TEST_PASS：原项目Editor精确job a75fa674dcb1434d9324c5a5fa351453 2/2；正式row0在实际投掷写入下，投掷者/目标整数X148/159及173/184，局部差11，目标Y-24/Z200和Vx1.5/Vy-2.25保持。双坐标carrier与OID219/fusion仍开放，Q07后置。详CPOINT-THROW-POSE-TWO-VIEW-WITNESS.md。
+
+> 2026-09-24 D-024 CPoint持有姿态双视野FOCUSED_TEST_PASS：原项目Editor精确job b1e0ecd2071448b580d1b62e66b45f0a 2/2；正式row1在实际持有同步写入下，持有者/被持有者整数X348/373及373/398，局部差25、Y4/Z249均保持。投掷与非零CPoint Z未验，OID219/fusion双坐标历史开放，Q07后置。详CPOINT-HELD-POSE-TWO-VIEW-WITNESS.md。
+
+> 2026-09-24 D-024 WPoint武器组件路径双视野FOCUSED_TEST_PASS：原项目Editor精确job 13805c76522f442cac6bc7917647d39b 2/2；正式row21/type1在Unity活跃`LF2WeaponBase` writer下，持有者/武器整数X为348/359及373/384，原始局部差11与Z251均保留。此为聚焦挂点算术见证，非完整Driver/Play/EXE；CPoint与OID219/fusion双坐标历史开放，Q07仍后置。详WPOINT-WEAPON-COMPONENT-TWO-VIEW-WITNESS.md。
+
+> 2026-09-24 非角色早期StageZ定向修复FOCUSED_TEST_PASS：正式两次stage-depth全active/非type0±1边界，Unity先前两次仅type0、非角色后续PreFrame才裁；原Editor RED type1 Z500≠351，修默认及Legacy/Shadow生产写入后4/4GREEN、最终相关StageZ/StageBounds/WPoint 16/16PASS。生产只改早期Z/ZInt与旧断言，DAT/相机/Scene/非战斗未改。完整Driver/命中/Play/EXE和双坐标carrier未验，OID219/fusion开放、Q07后置。详NONCHAR-EARLY-STAGE-Z-ACCEPTANCE.md及Record。
+
+> 2026-09-24 D-024 WPoint普通持有路径见证FOCUSED_TEST_PASS：原项目Editor job bdb426058e5f448da3a79d711c11d9f4两例2/2，formal row1持有者按raw Vx48移动后factor1 holder/held整数X348/359、全景373/384，局部间距均11/Z251。武器组件活跃另一写入分支未验。只读源码比对还发现正式两次stage-depth裁全部实体，Unity对应两次仅type0，非角色后续PreFrame才裁；后继NONCHAR-EARLY-STAGE-Z-001已聚焦修正。无生产/DAT/Scene/相机/非战斗改动的历史阶段，OID219/fusion开放、Q07后置。详WPOINT-POSE-TWO-DOMAIN-WITNESS.md和POSITION-WRITER-OWNERSHIP-GATE.md。
+
+> 2026-09-24 D-024 StageZ独立边界见证FOCUSED_TEST_PASS：原项目Editor最终强化job ddce615b36c54e6b902682f627431db7仅两例2/2，独立断言比例/裁剪前Z。原始视口raw Z340未触350，配置全景Battle Z363.123...被默认StageZ裁350；reference必须独立保留正式Z边界轨迹。仅测试脚本，DAT/Scene/相机/非战斗未改。非角色Z、正式EXE/Play及双坐标carrier仍待；OID219/fusion未修，Q07后置。详STAGE-DEPTH-TWO-DOMAIN-WITNESS.md及Change Record。
+
+> 2026-09-24 D-024 kind1 OPoint随机出生X/Z出口FOCUSED_TEST_PASS：原项目Editor先RED（raw X147、配置期望225.848462/实际147），共享出生写入处一次按X 2048/1333、投影Z 1152/730换算后，强化X/Z定向1/1GREEN、默认正式源World与组件物化2/2PASS。Y/动作/RNG调用顺序与DAT未改；Ledger732/22通过，Scene哈希保持。真实Yagura418 Play/正式EXE和双坐标历史仍待，OID219/fusion未修，Q07后置。详KIND1-OPOINT-RANDOM-BIRTH-RATIO-ACCEPTANCE.md。
+
+> 2026-09-24 D-024 kind1 OPoint随机出生包PLANNED：NTSD28-USER-OPOINT-KIND1-RANDOM-BIRTH-RATIO-001已在脚本修改前限定共享BattleNativeOpointBirthWriter与现有Q06物化器测试，正式Yagura418的kind1随机X/Z有非零幅度；先测配置视口RED，再仅在最终出生位移按比例换算，保留DAT/RNG次序/Y/动作。OID219/fusion和双坐标历史仍开放，Q07后置。
+
+> 2026-09-24 D-024抓取姿态见证已通过：原项目Editor job 6fe9428e5d1f45ea9bd5e4049b3eb22e仅新增两例2/2；正式局部挂点公式下factor1抓取后X148/140，配置全景X160.5/152.5，局部间距均-8。仅测试脚本，生产/DAT/Scene/相机/非战斗未改；双坐标载体及OID219/fusion仍待，Q07暂停。详GRAB-POSE-TWO-DOMAIN-WITNESS.md。
+
+> 2026-09-24 D-024抓取姿态定向见证PLANNED：NTSD28-USER-GRAB-POSE-VIEW-WITNESS-001已在脚本修改前声明一项Kind3抓取测试，复用正式局部centerx/cpoint公式与现有生产Writer，分别测factor1及2048/1333视口。仅测试脚本，未动生产/DAT/Scene/相机/非战斗；OID219/fusion未修，Q07暂停。
+
+> 2026-09-24 D-024 stage-edge dependency original Editor verified: focused job 57c29991fd964a428e6e856c41e1c209 2/2 after production character mechanics + default ECS preframe bounds; width2048/startX2000/rawVx40 gives factor1 X2040 inside edge, configured Sx2048/1333 battle X~2061.46 then clamps2048. Formal raw-reference position remains2040, so future source-rule carrier must not copy battle clamp/blocked state. Test-only; no production/DAT/Scene/camera edit. OID219/fusion defects open, Q07 paused.
+
+> 2026-09-24 D-024 stage-edge history witness PLANNED: NTSD28-USER-STAGE-EDGE-HISTORY-WITNESS-001 pre-script Task/Change/Ledger limits one existing Editor test to width2048, start X2000, raw Vx40, factor1/configured production physics and preframe bounds. This will distinguish formal raw X2040 from approved battle X2048 clamp before carrier implementation. No production/DAT/Scene/camera change authorized; OID219/fusion defects open, Q07 paused.
+
+> 2026-09-24 D-024 coordinate-history gate refined (read-only): POSITION-WRITER-OWNERSHIP-GATE.md maps current precise/int and PS.x/z aliases, actual spawn/physics/teleport/grab/fusion/respawn/attachment/bounds owners, canonical snapshot/reset/checksum and dead helper exclusions. It identifies a boundary issue: scaled battle position can reach an unchanged stage edge before formal raw position, so reference physics cannot blindly copy battle blocked flags. No carrier script edit yet; OID219/fusion defects OPEN, Q07 paused.
+
+> 2026-09-24 D-024 state9996 relative child birth FOCUSED_TEST_PASS/RUNTIME_PENDING: original Editor stricter configured-view RED 1/2 (child precise X327 vs target325.39084771192796), shared writer scales only final relative X/Z offsets, final all-five-child factor1/configured focused job f1dc8c0b632a43d4a36c33380a865e53 2/2 GREEN; exact formal row0 immediate/following 2/2. Raw RNG/Y/velocity/DAT, Scene/camera/nonbattle unchanged. OID219/fusion history defects, Play/EXE and Q07 gate remain open. See NTSD28-USER-STATE9996-CHILD-RATIO-001 Record.
+
+> 2026-09-24 D-024 state9996 child ratio fix PLANNED: original Editor job f2fbd17c1a1548b480ce8166db78f62f measured relative child X -3/1333 default versus -3/2048 configured; this is a birth ratio defect. NTSD28-USER-STATE9996-CHILD-RATIO-001 Task/Change/Ledger predeclare only shared state9996 writer plus focused test for precise X/Z relative offset RED->GREEN, raw RNG/Y/velocity unchanged. OID219/fusion history defects remain open; Q07 paused.
+
+> 2026-09-24 D-024 state9996 birth witness PLANNED: NTSD28-USER-STATE9996-CHILD-VIEW-RATIO-WITNESS-001 has pre-script Task/Change/Ledger for two original-Editor tests of formal row0 OID217 child relative X=-3 after raw20px parent motion at factor1/configured view. Production/DAT/Scene/camera unchanged; OID219 and fusion confirmed defects remain open, Q07 paused.
+
+> 2026-09-24 D-024 fusion witness VERIFIED_SCOPED_DEFECT: original Editor focused job 42504562540d48f29a0f42433c24eced 2/2 PASS; exact formal fusion row0 after raw20px movement merges at factor1 gap40 but configured Sx=2048/1333 current gap50 is rejected by production Oid5152 scan. Passing test characterizes a gameplay parity defect, not correction. See FUSION-VIEW-DISTANCE-FIRST-DIFFERENCE.md and NTSD28-USER-FUSION-VIEW-DISTANCE-WITNESS-001 Record. OID219 target-history defect also open; Q07 paused. No production/DAT/Scene/camera edit this package.
+
+> 2026-09-24 D-024 fusion witness PLANNED: NTSD28-USER-FUSION-VIEW-DISTANCE-WITNESS-001 has pre-script Task/Change/Ledger for one original-Editor test of the formal X<50/Z<8 gate after scaled movement. Production, DAT, Scene and camera untouched. OID219 confirmed history defect remains open; Q07 paused.
+
+> 2026-09-24 D-024 writer follow-up: measured OID219 same-current-gap Vx3/4 difference remains OPEN. X-WRITER-SEMANTIC-INVENTORY.md adds PS.x/SetPos aliases and source-matched fusion X<50/Z<8 risk; fusion, state9996 and grab are not yet runtime-confirmed defects. Dual-coordinate writer/snapshot contract precedes production fix. Q07 paused; no script/DAT/Scene/camera changes this pass.
+
+> 2026-09-24 D-024 same-current-gap proof: original Editor focused job d248af5583144fa4822db084fa43cee3 passed 11/11. Static initial gap224 and a target moved once from initial gap151 both yield Unity integer gap224, but playable source-rule hit_Fa5 velocities are respectively4 and3. Current Unity returns4 for both. Thus no stateless multiplier/divider of current gap can satisfy both histories. Test-only change this turn; general two-domain coordinate/history contract is required, including snapshot/reset/checksum and all position writers. D-024 OPEN, Q07 paused. See TARGET-HISTORY-VELOCITY-FIRST-DIFFERENCE.md.
+
+> 2026-09-24 D-024 target-history measured first difference: original Editor focused job 92b7728e66144755aafa43f9b4e8deb0 passed 10/10, including two defect-characterization cases using production character movement, formal-DAT-loaded OID219 child birth and next non-character step. One prior 48px target move yields formal/current child Vx 3/4; two yield 4/5. These passing tests prove a parity defect, not alignment. Equal-start controls remain GREEN. Mixed raw absolute spawn and scaled prior movement require a general coordinate-history contract; do not apply blanket inverse scaling. Full Driver/Play and formal EXE pending. D-024 OPEN; Q07 paused. See TARGET-HISTORY-VELOCITY-FIRST-DIFFERENCE.md.
+
+> 2026-09-24 target-history first difference: indexed OID219 hit_Fa5 equal-start birth/one-step passed, but source-derived velocity sees a scaled World target gap after prior D-024 movement. Initial gap151 plus one formal48px target move gives formal Vx3 versus Unity Vx4 and next screen fraction4/1333 rather than3/1333; two moves give formal4 versus Unity5. This is static source-formula evidence, not dynamic Editor/EXE trace. See artifacts/diagnostics/NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001/TARGET-HISTORY-VELOCITY-FIRST-DIFFERENCE.md. Blanket inverse scaling breaks the equal-start case. D-024 OPEN, Q07 paused.
+
+> 2026-09-24 D-024 HitFa5 UPDATED: FOCUSED_TEST_PASS; original Editor RED 4/4 (old 3.02 vs formal 3 at 151px), formal-DAT-loaded World birth plus one production mechanics step GREEN 8/8; configured screen fraction 3/1333. No inverse velocity scaling. Dynamic targets, full Driver/Play, formal EXE view and unindexed HitFa6 remain open. D-024 OPEN; Q07 paused. Supersedes earlier PLANNED snapshot.
+
+> 2026-09-24 D-024 `NTSD28-USER-HITFA5-TARGET-VELOCITY-001 / PLANNED`：正式索引OID219帧51 hit_Fa5 的子体X速度先对整数目标差/50截断，Unity当前/50.0；同起点151像素应3而非3.02。Task/Change/Ledger已先建，先实际World出生及下一物理步RED，验证配置视图无需逆向除比例，再修精确整数算法。Q07后置。
+
+> 2026-09-24 D-024 `NINE_BYPASS_FOCUSED_PASS / FULL_AUDIT_OPEN`：本轮九条非体感位移出口均有原Editor配置视图RED→聚焦GREEN，type3武器专用hit_j精确Z最后一包聚焦类12/12；DAT/Scene/相机/非战斗代码不改。HitFa11相对出生、抓持挂点、stage绝对/边界、Y/floor/碰撞与真实Play/正式EXE占比尚未闭合；不能说“无其他问题”，Q07仍后置。详parent Task、九Record、NON-INTEGRATOR-WRITER-AUDIT。
+
+> 2026-09-24 D-024 `NTSD28-USER-WEAPON-TYPE3-Z-RATIO-001 / PLANNED`：正式type3 frame hit_j使精确Z直移；Unity generic路径已调最终Z比例但武器专用路径仍原值。先注册World配置/默认RED，仅改武器最终精确Z，不动原始Type3VisualZOffset。前一武器identity额外X已旧2配置RED→聚焦类10/10。Q07后置。
+
+> 2026-09-24 D-024 `NTSD28-USER-WEAPON-IDENTITY-X-RATIO-001 / PLANNED`：正式物理积分含独立20% identity X位移，Unity在武器通用积分前直接加X，尚未按World比例。先实际注册World/配置默认RED后仅调该额外X出口，保留原始速度及identity分支。复活随机相对X/Z已旧配置RED→聚焦类9/9。Q07后置。
+
+> 2026-09-24 D-024 `NTSD28-USER-REVIVAL-OFFSET-RATIO-001 / PLANNED`：state14普通复活以队友整数均值为绝对底座，再加同步随机X/Z；Unity仍为原始像素。先原Editor实际Pass配置/默认RED，仅处理最终随机相对偏移；保留整数镜像、RNG、Y/floor、HP/帧。state18粒子精确X已配置旧1例RED→2/2 GREEN、正式源64例聚焦1/1；Play/EXE未验。Q07后置。
+
+> 2026-09-23 D-024 `NTSD28-USER-STATE18-PARTICLE-RATIO-001 / PLANNED`：正式state18/19破碎粒子以父体整数XYZ出生，只把子体精确X加随机偏移；Unity该精确X仍为原像素。先据正式见证原Editor实际结构出生RED，仅在最终精确X加World比例，整数镜像/RNG/Y/初速保持；Q07后置。
+
+> 2026-09-23 D-024当前 `NON_PERCEPTUAL_XZ_BYPASS_FOCUSED_PASS / FULL_AUDIT_OPEN`：晚生OPoint、native帧dx/dz、平台乘客X/Z、传送目标相对X、武器碎片X/Z五条同类出口均先原Editor配置视图RED后定向GREEN；碎片出生4/4且默认源随机全出生见证2配置×157行通过。DAT/Scene/相机/非战斗不改。继续分类state18粒子、复活随机位置、抓取/持有、Y/floor和stage边界；未完成全域Play/正式EXE可视比率，不得称“无其他问题”或恢复Q07新包。详五Change Record及NON-INTEGRATOR-WRITER-AUDIT。
+
+> 2026-09-23 D-024 `NTSD28-USER-WEAPON-PIECE-BIRTH-RATIO-001 / PLANNED`：正式和Unity武器碎片由父实体位置加随机dx/dz出生，D-024目前仍是原始偏移。先用现成源见证建实际structural birth RED，仅改最终子体X/Z相对偏移；随机调用序列、父体绝对坐标、Y、初速、DAT保持。传送包已原Editor配置旧4例RED→native+legacy 8/8、类13/13；Play/EXE未验。Q07继续后置。
+
+> 2026-09-23 D-024 `NTSD28-USER-TELEPORT-OFFSET-RATIO-001 / PLANNED`：正式playable state400/401把实体放到目标绝对X±120/60；Unity native与legacy传送路径仍加原始像素。只检验/修复目标相对X出口，保持目标绝对坐标、Y、Z+1、候选排序、DAT和相机；先原Editor实际World RED，后定向改动。Q07继续后置。
+
+> 2026-09-23 D-024 `NTSD28-USER-PLATFORM-CARRY-RATIO-001 / FOCUSED_TEST_PASS`：原Editor实际World乘客跟随RED配置视图左右X 204/196 vs 目标206.1455/193.8545；只改乘客X/Z最终出口，GREEN 4/4、既有正式源平台运动21/21。Y/floor/完整Play与正式EXE可视证据仍待。Q07继续后置。
+
+> 2026-09-23 D-024 `NTSD28-USER-PLATFORM-CARRY-RATIO-001 / PLANNED`：实际平台实体共用X/Z积分已按World比例，乘客ApplyLinkedPlatformMotion仍加原始帧DV，可能在全景相机下相对漂移。Task/Change/Ledger先建，只准LF2Entity linked X/Z出口及声明帧尾测试；先实际World配置/默认RED，再决定生产修正。Y/floor/碰撞与其他位移另包，Q07后置。
+
+> 2026-09-23 用户澄清“其他问题”指非体感差异，尤其其他实体位移原始像素相同而画面比例不一致；因此先完成D-024同类路径审计，不能按上一条试玩反馈直接回Q07。已测出并定向修复两个独立首差：late OPoint相对X/Z出生偏移（配置视口旧4例RED→kind1/kind2双物化共16/16PASS，旧深度6/6、源物化2/2）和native帧dx/dz直接位移（正式OID736及左右dx配置旧3例RED→6/6PASS，旧正式帧尾12/12）。只改通用位置出口，DAT/Scene/相机/非战斗不改；Scene SHA保持。平台携带、传送相对偏移、碎片随机出生、Y高度与floor/碰撞、stage边界和附件仍有已确认生产候选，尚不能说没有类似问题。D-024继续优先，Q07暂停新包；详NON-INTEGRATOR-WRITER-AUDIT与两Change Record。
+
+> 2026-09-23 D-024下一直接位移包 `NTSD28-USER-FRAME-DIRECT-MOTION-RATIO-001 / PLANNED`：正式可达OID736/action120有dz:-2、dvz:550；Unity NativeFrameMotionTail以原始dz直接写位置并清Vz，绕开已修共用积分，配置视口时预计Z250→248而目标为250-2×1152/730。Task/Change/Ledger已先建，只准两个声明脚本定向RED→X/Z出口修正，Y/平台另包，DAT不改；Q07仍后置。
+
+> 2026-09-23 D-024 非体感审计发现 `NTSD28-USER-OPOINT-BIRTH-RATIO-001 / IN_PROGRESS`：两个实际late OPoint物化生产者仍把原始DAT X/Z偏移加到已缩放父坐标，造成固定全景画面中子实体相对出生距离比例偏小。原Editor新鲜idle，Task/Change/Ledger先更新；先两路径左右/默认倍率定向RED，再仅修相对出口与聚焦验收。DAT/非战斗/Scene不动。用户要求先排此类问题，Q07继续后置。
+
+> 2026-09-23 用户试玩回访允许恢复BATCH-04/Q07：落地持续D+K局部Play比例通过，螺旋丸两处253物理J均下tick转301；用户体感基本正常。保留正式EXE画面时点、错过变招后的OID434 motionX首差和D-024全实体后续，不能声明完全修复。Q07本轮只读重入核对正式/暂存DAT405/338缺67、PNG1255/1031缺224，缺PNG仅b/110与sprite/114；详NTSD28-Q07-RESUME-CONTENT-GATE-001/REPORT.md。旧资源521项删除授权0，DAT数据不改，非战斗/双Scene保持，下一按可达caller路由Q07/Q08/Q09/Q10，不盲复制。
 > 2026-09-23 `NTSD28-USER-CORE-MOTION-OUTPUT-RATIO-001 / FOCUSED_TEST_PASS / RUNTIME_PENDING`：角色与非角色共用物理X/Z积分按World比例一次性写位置，跑/冲刺Writer恢复DAT原始速度；正式一单位摩擦后的逻辑速度不再被早乘。原Editor刷新编译后既有聚焦4/4、11/11、13/13、4/4、5/5通过；新增合成World完整core tick 1/1、生产物化type-1武器物理通道1/1通过。core tick夹具曾因Z=100低于stage最小180而在后续边界pass被夹至180，现以合法Z=250验证；这也说明边界坐标合同仍须单独处理。完整Driver tick/真实Play、Y高度、生成/持有/传送、边界/碰撞几何及其他视口未验。一次桥接测试误用`filter`字段导致非目标全量运行，不能作为本包通过证据；详Task/Record。DAT不改。
 
 > 2026-09-23 D-024语义审计新发现：当前角色跑/冲刺虽已按横向2048/1333、纵深投影1152/730通过聚焦Writer测试，但倍率在速度写入时应用；正式及Unity物理随后对该速度做每tick一单位摩擦，因此逻辑速度/后续速度读者可能改变。不能把该局部写法直接推广到武器、道具等所有实体，也不能在积分器再叠乘一次。须在全实体任务中先定唯一位移出口与生成/持有/边界坐标合同，再以完整tick同时验屏幕位移比例与保留的逻辑速度。详`artifacts/diagnostics/NTSD28-USER-ALL-ENTITY-MOTION-RATIO-001/INITIAL-INVENTORY.md`；D-024及自然Play仍未闭。
@@ -3520,3 +3605,58 @@ NTSD28-Q06-NATIVE-INPUT-ACTION-COST-FRAME-READERS-001 IN_PROGRESS / SOURCE_WITNE
 > 2026-09-23 鸣人持续D+K落地奔跑局部Play出口：原Editor日志显示Bootstrap完成后执行held探针，首次FAIL发现探针每tick释放/重按使canonical按钮有而2tu样本持续为0；仅修held探针分支后同原Battle Scene真实Play PASS，一次D/一次K，right725/jump730/airborne736/landing756，动作215→215→0→7。落地后3tick精确X位移Unity11.778944736/2048与正式源码模型7.666666667/1333均为0.005751437859画面宽；原Editor编译、正式源码40tick严格校验、Ledger PASS，Scene SHA不变且DAT/Scene无diff。只证明鸣人16:9该序列比例，正式EXE可见/其他实体D-024仍开放。下一优先螺旋丸真实物理J与画面时序，Q07新包后置。详LANDING-RATIO-PLAY.md。
 > 2026-09-23 用户技能物理输入优先包 `NTSD28-USER-RASENGAN-PHYSICAL-PLAY-001 / IN_PROGRESS`：脚本前Task/Change/Ledger已建，仅声明新Editor Play诊断菜单；将使用原项目已启动Battle Scene的鸣人OID2，Play-only置正式动作241，在首次可见253后排入物理J，逐tick记录画面动作/FrameInputSet/MP和wall time。正式EXE可见与任意生产修复仍待；DAT、Scene、相机、非战斗代码不改，Q07新包后置。
 > 2026-09-23 用户两项回归优先状态：鸣人持续D+K落地奔跑在原Battle Scene Play的3tick精确屏幕距离比例已与正式源码模型一致，仅16:9样本局部PASS；全实体D-024、正式EXE可见待。螺旋丸转手里剑的受控32tick三时点与源码模型一致，原项目Play首次253和第二次253后物理J均下tick经FrameInputSet转301；正式DAT动作254已无hit_a。第二问题用户体感未复现，正式EXE画面截止/真实晚按相位尚未核对，生产修复未实施，不可称已修好。`NTSD28-USER-RASENGAN-PHYSICAL-PLAY-001 / FOCUSED_TEST_PASS / USER_SYMPTOM_OPEN`；DAT、Scene未改，Q07新包仍后置。详FULL-WINDOW-COMPARISON.md。
+> 2026-09-24 D-024只读状态契约复核：已确认OID219同当前间距异历史速度与fusion阈值两个非体感首差仍未修，Q07继续后置。`COORDINATE-CARRIER-STATE-VERSION-GATE.md`记录双坐标载体的runtime reset/copy、entity/raw快照17、aggregate28、checksum31、历史旧版测试风险；未修改脚本或资源，未运行新测试。
+> 2026-09-24 D-024位置写入只读门槛继续推进：已核对`SyncIntegerPosition`在Battle整数不变时早退、`PhysicsState.BindRuntime`可能带旧Runtime历史重绑、OPoint物化带显式整数时跳过Sync，以及独立`BattleEcsCharacterStageZPass`写Z/ZInt。对应正式`clamp_type0_stage_depth`已核对；`POSITION-WRITER-OWNERSHIP-GATE.md`增精确入口、三项回归反例与待确认非角色Z/held路径。未改脚本/DAT/Scene/相机，OID219/fusion和双坐标实现仍开放，Q07后置。
+> 2026-09-24 D-024 StageZ独立边界见证已在脚本修改前立Task/Change/Ledger：NTSD28-USER-STAGE-DEPTH-HISTORY-WITNESS-001仅声明现有StageZ Editor测试文件的两例，raw Z300+40在正式180..350内，配置全景投影Z放大后生产物理位置触350边界。将经原项目Editor验证实际机械积分和StageZ写入；生产/DAT/Scene/相机/非战斗不在范围。OID219/fusion未修、Q07暂停。
+> 2026-09-24 D-024 WPoint姿态见证已在脚本前立Task/Change/Ledger：NTSD28-USER-WPOINT-POSE-VIEW-WITNESS-001只扩既有Q06 held源row1测试，原版持有者X300→held X311/Z251；双视口让持有者先经生产物理raw Vx48移动，再经生产HeldObjectProcessAll检验局部X间距11不随全景位移倍率放大。测试尚未运行，DAT/生产/Scene/相机/非战斗不在范围；OID219/fusion仍开放，Q07后置。
+> 2026-09-24 非角色早期StageZ源码顺序差异转入NTSD28-USER-NONCHAR-EARLY-STAGE-Z-001 / IN_PROGRESS：正式`clamp_type0_stage_depth`两次遍历全部active并按type0/非type0用0/±1深度边界；Unity对应两次StageZ只收type0，非角色至后续PreFrame才裁。脚本前Task/Change/Ledger限定StageZ默认/Legacy两生产入口与两现有Editor测试，先registered World RED再改生产，保持DAT/Scene/相机/非战斗及D-024物理比例。OID219/fusion仍待，Q07后置。
+> 2026-09-24 D-024 WPoint武器组件分支双视野见证PLANNED：`NTSD28-USER-WPOINT-WEAPON-COMPONENT-VIEW-WITNESS-001`已在脚本前立Task/Change/Ledger，仅扩既有Q06 held测试，复用正式source row21/type1；持有者raw Vx48后经实际HeldObjectProcessAll，检查两视野的原始局部挂点间距11。DAT/生产/Scene/相机/非战斗不在范围；OID219/fusion与Q07仍开放。
+> 2026-09-24 D-024 CPoint持有姿态双视野见证PLANNED：`NTSD28-USER-CPOINT-HELD-POSE-VIEW-WITNESS-001`已在脚本修改前建Task/Change/Ledger，仅扩既有Q06 CPoint Editor测试并复用正式source row1。持有者raw Vx48后调用实际`RunWeaponSyncHeldStep10`，预计两视野保持局部间距25/Y4/Z249。DAT/生产/Scene/相机/非战斗不在范围；OID219/fusion仍开放，Q07后置。
+> 2026-09-24 D-024 CPoint投掷姿态双视野见证PLANNED：`NTSD28-USER-CPOINT-THROW-POSE-VIEW-WITNESS-001`脚本前已立Task/Change/Ledger，仅扩既有Q06 throw测试并复用正式source row0。投掷者raw Vx48后经实际RunCpointAdvanceStep10，预计两视野局部X差11/Y-24/Z200；DAT/生产/Scene/相机/非战斗不在范围。OID219/fusion仍开放，Q07后置。
+> 2026-09-24 D-024 kind14 threshold test package PLANNED before script edit: NTSD28-USER-KIND14-PRECISE-THRESHOLD-WITNESS-001 owns only one BattleHitExecutionPlanEditorTests method, precise attacker X5.5/int5 versus control X6.5/int6 with target X0/Vx>0 and production candidate/dispatch. Formal precise +5 condition differs from current Unity integer condition at X5.5. Original Editor focused evidence pending; no DAT/Scene/nonbattle change, Q07 paused.
+> 2026-09-24 D-024 kind14 precise-coordinate correction PLANNED before script edit: NTSD28-USER-KIND14-PRECISE-COORDINATES-001 owns registered writer, hit-plan projection, three integer fallbacks and the focused test assertion. Existing original Editor witness job cbe5118f13804bc0ad603aa023dba18d is 2/2 characterization; X5.5/int5 gives no Unity block despite source precise >5. Run formal RED then correct operands, keep D-024 source-history carrier separate; Q07 paused.
+> 2026-09-24 D-024 文档完整性恢复：本轮追加状态行的字节写入操作使本文件及当前 handoff 正文变为 NUL。已先备份损坏字节文件，再从 03:18 的完整 Git 对象快照恢复正文；以下补记 03:18 后的 Task/Change Record 与实测进度。此恢复不改变战斗代码或 Scene；两文档需重新通过 Change Ledger 校验。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-WEAPON-FRAGMENTS-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`：正式内置和 DAT 武器碎片出生源坐标写入父实体源整数加原始 dx/dz，物理比例输出保持。原 Editor RED 初始化4例失败、GREEN 12/12，通过编译且 Console 0 error。源坐标读取者未启用，完整 Driver/Play/EXE 和 OID219/fusion 仍未闭，Q07 暂缓；详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-STATE9996-BIRTH-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`：正式五子实体源 X/Z 生成为父源整数加原始 X 随机值、Z+1；原 Editor RED 初始化2例失败、GREEN 6/6。物理比例和随机消耗未变，详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-STATE18-BIRTH-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`：state18/19 粒子源精确坐标按父源精确值加原始偏移、源整数继承父源整数；原 Editor RED 2例失败、GREEN 6/6，详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-PARTICIPANT-BIRTH-001 / RUNTIME_PENDING / CARRIER_NOT_ACTIVE`：菜单入战斗 participant 的原始绝对出生坐标写源精确/整数；原 Editor RED 2/2失败、GREEN 2/2通过。真实 Menu→Battle Play 未验，详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-KIND1-RANDOM-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`：kind1 随机原始 X/Z 偏移写入独立源整数，正式整数重投影精确坐标；原 Editor RED 3例失败、GREEN 14/14，四次 RNG 消耗和物理比例输出保持，详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-BIRTH-FOUNDATION-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`：OPoint task、World/component 物化及 late stage 绝对出生增加独立源坐标历史。聚焦 Editor 22/22；原 Battle Scene Play 的真实池化 Renderer 出生探针 PASS：源 X/Z 整数(-42,126)、战斗 X/Z 整数(312,259)，tick/checksum/借用数不变，Scene SHA 不变。此前探针错误地期望源精确 X 保留小数，已按正式 kind1 整数重投影修正测试，详 Task/Record 与 renderer-play-pass.json。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-JSON-CHECKSUM-001 / FOCUSED_TEST_PASS`：独立源坐标进入 JSON/lockstep 诊断投影并有聚焦检查；这是历史载体，尚未将源坐标读者接入正式规则。详 Task/Record。
+
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-STATE-001 / FOCUSED_TEST_PASS`：实体独立源坐标和边界 flag 历史加入 runtime、snapshot/checksum；聚焦检查通过，仍不宣称 OID219/fusion 全链等价。详 Task/Record。
+> 2026-09-24 `NTSD28-USER-HITFA7-RAW-SLOT-TARGET-001 / FOCUSED_TEST_PASS / FULL_SELFCHECK_PASS / EXE_EMPTY_SLOT_PENDING`：正式 OID875/action55 预分配空槽目标在 Unity 原 Editor RED 见证 Vx 应为-1.4 实际0；active 实体为空时改读可寻址 raw slot XInt/ZInt，GREEN 2/2；随后完整 SelfCheck 经另一测试断言修正后 PASS。正式 EXE 空槽直观行为和完整 Driver/D-024 双坐标仍待验。详 Task/Record 与 ACCEPTANCE.md。
+
+> 2026-09-24 `NTSD28-USER-HITFA7-NONCHAR-SELF-CHECK-CORRECTION-001 / FOCUSED_TEST_PASS / FULL_SELFCHECK_PASS / TEST_ONLY`：FL-02/HITFA-7 非角色行为7旧自检误期望同 OID clone，占用满槽；正式源码该分支不生成 clone。仅修自检断言，原 Editor 完整 SelfCheck PASS，生产逻辑未动。详 Task/Record。
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-REVIVAL-EFFECT-BIRTH-001 / PLANNED / CARRIER_NOT_ACTIVE`：正式 playable 续命 OID998/action6 从宿主原版整数 X/Z 出生且 Z+1，Unity 当前即时 task 只带已放大的物理整数、源历史缺失。准确 Task/Change 已建，下一步原项目 Editor RED/GREEN 实际工厂路径；普通复活平均/RNG 单独处理，Q07 暂缓。
+> 2026-09-24 `NTSD28-USER-SOURCE-COORDINATE-REVIVAL-EFFECT-BIRTH-001 / CODE_WRITTEN / COMPILE_PENDING / CARRIER_NOT_ACTIVE`：正式续命OID998/action6源整数出生写入已按 Task 限定落到现有即时task，原项目实际factory聚焦夹具已写。一次桥接请求把筛选字段放在错误JSON层级，意外启动8420项EditMode作业`2ed78c0b98214a5ba14ec92250d3b9f8`；该作业不是本包验收，仍在运行，不并发发新测试。待其终态后刷新编译并只跑C07聚焦组。Scene/DAT/非战斗未改，Ledger当前PASS。普通复活源坐标sum_x/RNG首差另列门禁，Q07暂缓。
+> 2026-09-24 authority correction CODE_WRITTEN: `NTSD28-USER-KIND14-INTEGER-OPERAND-AUTHORITY-CORRECTION-001` found that playable `BattleWorld28::resolve_special_relation_hit` kind14 compares integer `Position28::x/z`, not precise doubles. The prior precise-operand package is superseded as a parity conclusion. Six Unity branches plus focused expectations are corrected; original Editor PID288224 broad job remains nonterminal/bridge-timeout, C: free 0, compile/NUnit pending. D-024/Q07 remain open.
+# 2026-09-24 D-024 source physics writer package
+
+`NTSD28-USER-SOURCE-COORDINATE-PHYSICS-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor source physics7/7, weapon identity/type3 extras12/12, adjacent ratio11/11; ledger755 PASS and Battle Scene SHA unchanged. This closes only the source-rule physics writer. Source kind14 flag producers, teleport/stage/relation history and OID219/fusion readers remain open; Q07 and D-024 are not delivered.
+# 2026-09-24 D-024 source kind14 flag producer
+
+`NTSD28-USER-SOURCE-KIND14-DIRECTION-FLAGS-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor strict threshold/central/fallback/consume7/7 and adjacent ECS kind14 2/2 PASS. Physical flags unchanged; source gameplay readers, stage/teleport/relation history, formal Play/EXE and Q07 remain gated.
+# 2026-09-24 D-024 source teleport writer
+
+`NTSD28-USER-SOURCE-TELEPORT-WRITER-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor final C05 class13/13 PASS with divergent source/physical anchors and no-target snap. Physical view-offset output stays; target-ranking source operand remains a separate gate. Source gameplay readers and Q07 remain inactive/paused.
+# 2026-09-24 D-024 source stage-depth writer
+
+`NTSD28-USER-SOURCE-STAGE-DEPTH-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor new source-depth6/6, adjacent StageZ9/9 including no-allocation. Source stage X, other position writers, Driver/Play/EXE and source gameplay readers remain open; Q07 paused.
+# 2026-09-24 D-024 source character stage X
+
+`NTSD28-USER-SOURCE-CHARACTER-STAGE-X-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor new source X11/11 and adjacent PreFrame6/6 including zero allocation. Noncharacter edge destruction is a separate D-024 lifecycle gate; source readers and Q07 remain gated.
+
+Noncharacter X-edge destruction under D-024 remains undecided; 2026-09-24 async user preference pending: formal source-rule crossing preserves native lifetime but may leave view, physical crossing preserves edge but shortens lifetime. Do not alter its gate until clarified. Continue independent relation/respawn/source-writer work.
+# 2026-09-24 D-024 source kind8 relation position
+
+`NTSD28-USER-SOURCE-KIND8-RELATION-POSITION-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: original Editor final kind8 production class15/15 including next physics integer-sync. Physical output and source-domain decision readers remain unchanged; legacy direct reachability, other relation writers and Q07 remain open.
+2026-09-24 D-024 `NTSD28-USER-SOURCE-GRAB-RELATION-POSITION-001 / FOCUSED_TEST_PASS / CARRIER_NOT_ACTIVE`: shared kind1/kind3 grab source-rule X pair with original Editor final23/23 PASS. Source-domain facing/selection, other CPoint/WPoint relation writers, full Driver/Play/EXE and Q07 remain gated.
+2026-09-24 D-024 active `NTSD28-USER-SOURCE-CPOINT-HELD-POSITION-001 / IN_PROGRESS`: pre-edit Task/Change for held CPoint source-rule X/Z placement. Formal nonzero CPoint Z physical branch mismatch separately confirmed; Q07 paused.

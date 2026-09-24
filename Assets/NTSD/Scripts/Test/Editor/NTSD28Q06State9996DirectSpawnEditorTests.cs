@@ -74,6 +74,117 @@ namespace NTSD.Test
             }
         }
 
+        [TestCase(1333)]
+        [TestCase(2048)]
+        public void State9996ChildAfterParentMotion_PreservesFormalScreenFraction(
+            int referenceWidth)
+        {
+            var row = JObject.Parse(File.ReadAllLines(SourceFinal)[0]);
+            var world = CreateWorld(row);
+            try
+            {
+                world.ConfigureFixedViewRunDistance(referenceWidth,
+                    referenceWidth == 1333 ? 730 : 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotIncludingPending(0);
+                Assert.That(parent.Runtime.XInt, Is.EqualTo(300));
+                Assert.That((int)row["after"]["entities"][1]["raw"]["position"]["x"] - 300,
+                    Is.EqualTo(-3));
+
+                parent.Runtime.SetVelocity(20, 0, 0);
+                new CharacterMechanics().StepBattleLogic(
+                    new CharacterMechanicsContext(parent.Runtime, null, 0f, 0f, 0.0,
+                        world.FixedViewRunDistanceScale,
+                        world.FixedViewRunVerticalDistanceScale));
+                parent.Runtime.XInt = (int)parent.Runtime.X;
+                Assert.That(parent.Runtime.XInt,
+                    Is.EqualTo(300 + (int)(20 * world.FixedViewRunDistanceScale)));
+
+                InvokeNativeCloneBoundary(world);
+                for (int spawnIndex = 0; spawnIndex < 5; spawnIndex++)
+                {
+                    LF2Entity child = world.FindEntityByRuntimeSlotIncludingPending(50 + spawnIndex);
+                    Assert.That(child, Is.Not.Null);
+                    Assert.That(child.ObjectId, Is.EqualTo(spawnIndex == 4 ? 218 : 217));
+                    int formalChildOffset = (int)row["after"]["entities"][spawnIndex + 1]
+                        ["raw"]["position"]["x"] - 300;
+                    double expectedX = parent.Runtime.XInt +
+                        formalChildOffset * world.FixedViewRunDistanceScale;
+                    double expectedZ = parent.Runtime.ZInt +
+                        world.FixedViewRunVerticalDistanceScale;
+                    Assert.That(child.Runtime.X,
+                        Is.EqualTo(expectedX).Within(1e-10));
+                    Assert.That(child.Runtime.XInt, Is.EqualTo((int)expectedX));
+                    Assert.That(child.Runtime.Z,
+                        Is.EqualTo(expectedZ).Within(1e-10));
+                    Assert.That(child.Runtime.ZInt, Is.EqualTo((int)expectedZ));
+                    Assert.That((child.Runtime.X - parent.Runtime.XInt) / referenceWidth,
+                        Is.EqualTo(formalChildOffset / 1333.0).Within(1e-12));
+                    Assert.That((child.Runtime.Z - parent.Runtime.ZInt) /
+                        (referenceWidth == 1333 ? 730.0 : 1152.0),
+                        Is.EqualTo(1.0 / 730.0).Within(1e-12));
+                }
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void FiveChildBirthUsesIndependentSourceIntegerPosition(bool initialized, bool configuredView)
+        {
+            var row = JObject.Parse(File.ReadAllLines(SourceFinal)[0]);
+            var world = CreateWorld(row);
+            try
+            {
+                if (configuredView) world.ConfigureFixedViewRunDistance(2048, 1152);
+                LF2Entity parent = world.FindEntityByRuntimeSlotIncludingPending(0);
+                if (initialized)
+                {
+                    parent.Runtime.SetSourceRulePosition(-100.75, 87.5);
+                    parent.Runtime.SourceRuleXInt = -102;
+                    parent.Runtime.SourceRuleZInt = 85;
+                }
+                int countBefore = world.ObjectCount;
+                var observer = new Observer();
+                world.NativeRandom.SetDiagnosticCallObserver(observer);
+                InvokeNativeCloneBoundary(world);
+                Assert.That(JToken.DeepEquals(row["calls"], observer.Capture()), Is.True, "Formal RNG sequence");
+                var randomState = JObject.FromObject(ProjectRandom.Invoke(null,
+                    new object[] { world.NativeRandom.CaptureScalarState() }));
+                Assert.That(JToken.DeepEquals(row["after"]["random"], randomState), Is.True, "Formal final RNG state");
+                Assert.That(world.ObjectCount - countBefore, Is.EqualTo(5));
+                for (int i = 0; i < 5; i++)
+                {
+                    LF2Entity child = world.FindEntityByRuntimeSlotIncludingPending(50 + i);
+                    Assert.That(child, Is.Not.Null);
+                    Assert.That(child.ObjectId, Is.EqualTo(i == 4 ? 218 : 217));
+                    int dx = (int)row["after"]["entities"][i + 1]["raw"]["position"]["x"] - 300;
+                    double battleX = parent.Runtime.XInt + dx * world.FixedViewRunDistanceScale;
+                    double battleZ = parent.Runtime.ZInt + world.FixedViewRunVerticalDistanceScale;
+                    Assert.That(child.Runtime.X, Is.EqualTo(battleX).Within(1e-10));
+                    Assert.That(child.Runtime.XInt, Is.EqualTo((int)battleX));
+                    Assert.That(child.Runtime.Z, Is.EqualTo(battleZ).Within(1e-10));
+                    Assert.That(child.Runtime.ZInt, Is.EqualTo((int)battleZ));
+                    Assert.That(child.Runtime.SourceRulePositionInitialized, Is.EqualTo(initialized));
+                    Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(initialized ? -102 + dx : 0));
+                    Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(initialized ? 86 : 0));
+                    Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(initialized ? -102 + dx : 0));
+                    Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(initialized ? 86 : 0));
+                }
+            }
+            finally
+            {
+                world.NativeRandom.SetDiagnosticCallObserver(null);
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
         [TestCase(0)]
         [TestCase(2)]
         public void NativeDirectSpawnFollowingTickMatchesSource(int index)

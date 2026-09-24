@@ -67,9 +67,20 @@ namespace NTSD.Simulation.Ecs
                     task.useExplicitRelationIdentity = true;
                     task.relationTeam = 0;
                     task.useDirectRuntimePosition = true;
-                    task.directX = preciseX + dx; task.directY = preciseY - dy; task.directZ = preciseZ;
+                    // Alignment contract: NTSD28-USER-STATE18-PARTICLE-RATIO-001.
+                    task.directX = preciseX + dx * world.FixedViewRunDistanceScale;
+                    task.directY = preciseY - dy; task.directZ = preciseZ;
                     task.useInitialRuntimeIntPosition = true;
                     task.initialRuntimeX = x; task.initialRuntimeY = y; task.initialRuntimeZ = z;
+                    if (source.Runtime.SourceRulePositionInitialized)
+                    {
+                        task.useSourceRulePosition = true;
+                        task.sourceRuleX = source.Runtime.SourceRuleX + dx;
+                        task.sourceRuleZ = source.Runtime.SourceRuleZ;
+                        task.useInitialSourceRuleIntPosition = true;
+                        task.initialSourceRuleX = source.Runtime.SourceRuleXInt;
+                        task.initialSourceRuleZ = source.Runtime.SourceRuleZInt;
+                    }
                     task.skipPostInitZOffset = true;
                     task.useDirectVelocity = true;
                     task.directVx = motionX + dvx; task.directVy = -1; task.directVz = 0;

@@ -644,6 +644,8 @@ namespace NTSD.Animation.LF2Objects
                 _victim.Runtime.ZBoundPositive = true;
             else if (attackerZ < victimZ - 2 && (_victim.Runtime.Vz < 0f || _victim.KnockbackVz < 0f))
                 _victim.Runtime.ZBoundNegative = true;
+
+            BattleBoundaryWriter.ApplySourceRuleKind14DirectionalBlock(attacker, _victim);
         }
 
 

@@ -23,6 +23,91 @@ namespace NTSD.Test
         private static readonly Dictionary<(int, int, string), LF2CharacterDataWrapper> Definitions = new();
         private static IReadOnlyList<JObject> sourceVectors;
 
+        [TestCase(false, false)]
+        [TestCase(false, true)]
+        [TestCase(true, false)]
+        [TestCase(true, true)]
+        public void ParticleBirthPreservesIndependentSourcePreciseAndIntegerHistory(bool initialized, bool configuredView)
+        {
+            JObject row = File.ReadLines(Witness).Select(JObject.Parse).First(r =>
+                (int)r["phase"] == 0 && (int)r["delay"] == 0 && (int)r["source"] < 400 &&
+                ((JArray)r["children"]).Count > 0);
+            SimulationWorld world = MakeWorld(row, BattleRuntimeProfile.Authority400, out LF2Entity source);
+            try
+            {
+                if (configuredView) world.ConfigureFixedViewRunDistance(2048, 1152);
+                if (initialized)
+                {
+                    source.Runtime.SetSourceRulePosition(-100.75, 87.5);
+                    source.Runtime.SourceRuleXInt = -102;
+                    source.Runtime.SourceRuleZInt = 85;
+                }
+                double parentX = source.Runtime.X;
+                int countBefore = world.ObjectCount;
+                var observer = new Observer();
+                world.NativeRandom.ResetFromSeed((uint)row["seed"]);
+                world.NativeRandom.SetDiagnosticCallObserver(observer);
+                source.RunNativeC25State18BrokenWeaponParticles();
+                world.ResolveLateObjectPointStructuralMaterializerForModule().FlushTasks();
+                Assert.That(JToken.DeepEquals(JArray.FromObject(observer.Calls), row["calls"]), Is.True, "Formal RNG order and values");
+                Assert.That(observer.CrtCalls, Is.EqualTo((int)row["crtCalls"]));
+                Assert.That(world.ObjectCount - countBefore, Is.EqualTo(((JArray)row["children"]).Count));
+                foreach (JToken childRow in (JArray)row["children"])
+                {
+                    JToken position = childRow["raw"]["position"];
+                    LF2Entity child = world.FindEntityByRuntimeSlotForQuery((int)childRow["raw"]["slot"]);
+                    Assert.That(child, Is.Not.Null);
+                    double dx = (double)position["preciseX"] - parentX;
+                    Assert.That(child.Runtime.X, Is.EqualTo(parentX + dx * world.FixedViewRunDistanceScale).Within(1e-9));
+                    Assert.That(child.Runtime.XInt, Is.EqualTo((int)position["x"]));
+                    Assert.That(child.Runtime.Y, Is.EqualTo((double)position["preciseY"]));
+                    Assert.That(child.Runtime.Z, Is.EqualTo((double)position["preciseZ"]));
+                    Assert.That(child.Runtime.ZInt, Is.EqualTo((int)position["z"]));
+                    Assert.That(child.Runtime.SourceRulePositionInitialized, Is.EqualTo(initialized));
+                    Assert.That(child.Runtime.SourceRuleX, Is.EqualTo(initialized ? -100.75 + dx : 0));
+                    Assert.That(child.Runtime.SourceRuleZ, Is.EqualTo(initialized ? 87.5 : 0));
+                    Assert.That(child.Runtime.SourceRuleXInt, Is.EqualTo(initialized ? -102 : 0));
+                    Assert.That(child.Runtime.SourceRuleZInt, Is.EqualTo(initialized ? 85 : 0));
+                }
+            }
+            finally { world.NativeRandom.SetDiagnosticCallObserver(null); Shutdown(world); }
+        }
+
+        [TestCase(false)]
+        [TestCase(true)]
+        public void TransitionParticlePreciseXRelativeOffsetUsesViewRatio(
+            bool configuredView)
+        {
+            var row = JObject.Parse(File.ReadLines(Witness).Skip(114).First());
+            Assert.That((int)row["phase"], Is.Zero);
+            Assert.That((int)row["previous"], Is.EqualTo(18));
+            var world = MakeWorld(row, BattleRuntimeProfile.Authority400,
+                out var source);
+            try
+            {
+                if (configuredView)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+                world.NativeRandom.ResetFromSeed((uint)row["seed"]);
+                double parentPreciseX = source.Runtime.X;
+                source.RunNativeC25State18BrokenWeaponParticles();
+                world.ResolveLateObjectPointStructuralMaterializerForModule().FlushTasks();
+
+                var formal = row["children"][0]["raw"]["position"];
+                int slot = (int)row["children"][0]["raw"]["slot"];
+                var child = world.FindEntityByRuntimeSlotForQuery(slot);
+                Assert.That(child, Is.Not.Null);
+                double expectedX = parentPreciseX +
+                    ((double)formal["preciseX"] - parentPreciseX) *
+                    (configuredView ? 2048.0 / 1333.0 : 1.0);
+                Assert.That(child.Runtime.X, Is.EqualTo(expectedX).Within(0.000001));
+                Assert.That(child.Runtime.XInt, Is.EqualTo((int)formal["x"]));
+                Assert.That(child.Runtime.Y, Is.EqualTo((double)formal["preciseY"]));
+                Assert.That(child.Runtime.Z, Is.EqualTo((double)formal["preciseZ"]));
+                Assert.That(child.Runtime.ZInt, Is.EqualTo((int)formal["z"]));
+            }
+            finally { Shutdown(world); }
+        }
+
         private static IEnumerable<TestCaseData> MatrixCases()
         {
             foreach (var setting in new[]

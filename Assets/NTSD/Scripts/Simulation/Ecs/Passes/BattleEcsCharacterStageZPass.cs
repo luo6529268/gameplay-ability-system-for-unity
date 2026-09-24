@@ -53,8 +53,8 @@ namespace NTSD.Simulation.Ecs
     }
 
     /// <summary>
-    /// U4 character stage-Z migration slice. The authority pass only writes Z and
-    /// ZInt; the legacy path remains available as an explicit comparison oracle.
+    /// Formal stage-depth pass writes only Z and ZInt for every active entity,
+    /// with the non-character one-pixel margin. Legacy remains a comparison oracle.
     /// </summary>
     internal sealed class BattleEcsCharacterStageZPass
     {
@@ -156,7 +156,9 @@ namespace NTSD.Simulation.Ecs
                 if (!IsEligible(view, entity))
                     continue;
 
-                double z = ClampZ(entity.Runtime.Z, zMin, zMax);
+                double z = ClampZ(entity.Runtime.Z, zMin, zMax,
+                    entity.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character);
                 expectedSlots.Set(slot);
                 expectedGenerations[slot] = view.Generation;
                 expectedZBits[slot] = BitConverter.DoubleToInt64Bits(z);
@@ -179,9 +181,14 @@ namespace NTSD.Simulation.Ecs
                     continue;
 
                 NTSDEntityRuntime runtime = entity.Runtime;
-                double clampedZ = ClampZ(runtime.Z, zMin, zMax);
+                bool character = entity.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character;
+                double clampedZ = ClampZ(runtime.Z, zMin, zMax, character);
                 runtime.Z = clampedZ;
                 runtime.ZInt = (int)clampedZ;
+                // Alignment contract: NTSD28-USER-SOURCE-STAGE-DEPTH-001.
+                double margin = character ? 0.0 : 1.0;
+                runtime.ClampSourceRuleZ(zMin - margin, zMax + margin);
 
                 // The C# authority pass writes only Z/ZInt. Exact production
                 // characters keep those values directly in Runtime/PhysicsState,
@@ -247,8 +254,7 @@ namespace NTSD.Simulation.Ecs
             return view.Claimed &&
                    entity != null &&
                    entity.PS != null &&
-                   world.IsActiveForCurrentPassInternal(entity) &&
-                   entity.IsStageBoundedCharacter();
+                   world.IsActiveForCurrentPassInternal(entity);
         }
 
         private bool TryGetStageBounds(out int zMin, out int zMax)
@@ -258,12 +264,17 @@ namespace NTSD.Simulation.Ecs
             return zMax >= zMin;
         }
 
-        private static double ClampZ(double z, int zMin, int zMax)
+        private static double ClampZ(
+            double z,
+            int zMin,
+            int zMax,
+            bool character)
         {
-            if (z > zMax)
-                z = zMax;
-            if (z < zMin)
-                z = zMin;
+            double margin = character ? 0.0 : 1.0;
+            if (z > zMax + margin)
+                z = zMax + margin;
+            if (z < zMin - margin)
+                z = zMin - margin;
             return z;
         }
 

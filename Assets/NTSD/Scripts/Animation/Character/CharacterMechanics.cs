@@ -367,6 +367,7 @@ namespace NTSD.Animation
             // Alignment contract: NTSD28-USER-CORE-MOTION-OUTPUT-RATIO-001.
             if (!blockedX) runtime.X += runtime.Vx * ctx.motionScaleX;
             if (!blockedZ) runtime.Z += runtime.Vz * ctx.motionScaleZ;
+            IntegrateSourceRulePhysicsMotion(runtime);
 
             if (blockedX && blockedZ) boundaryMode = BoundaryResolveMode.Stop;
             else if (blockedX) boundaryMode = BoundaryResolveMode.ZOnly;
@@ -439,6 +440,8 @@ namespace NTSD.Animation
             else if (runtime.Vz < 0 && !runtime.ZBoundNegative)
                 runtime.Z += runtime.Vz * motionScaleZ;
 
+            IntegrateSourceRulePhysicsMotion(runtime);
+
             runtime.ClearBounds();
 
             int groundedSnapshotY = runtime.YInt;
@@ -481,6 +484,8 @@ namespace NTSD.Animation
             else if (runtime.Vz < 0 && !runtime.ZBoundNegative)
                 runtime.Z += runtime.Vz * motionScaleZ;
 
+            IntegrateSourceRulePhysicsMotion(runtime);
+
             runtime.ClearBounds();
 
             int collisionYReference = runtime.CollisionYReference;
@@ -506,6 +511,23 @@ namespace NTSD.Animation
                 collisionYReference,
                 verticalVelocityBeforeMove,
                 airborne);
+        }
+
+        private static void IntegrateSourceRulePhysicsMotion(NTSDEntityRuntime runtime)
+        {
+            if (!runtime.SourceRulePositionInitialized)
+                return;
+
+            // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-PHYSICS-001.
+            if (!((runtime.Vx > 0 && runtime.SourceRuleXBoundPositive) ||
+                  (runtime.Vx < 0 && runtime.SourceRuleXBoundNegative)))
+                runtime.SourceRuleX += runtime.Vx;
+            if (!((runtime.Vz > 0 && runtime.SourceRuleZBoundPositive) ||
+                  (runtime.Vz < 0 && runtime.SourceRuleZBoundNegative)))
+                runtime.SourceRuleZ += runtime.Vz;
+
+            runtime.ClearSourceRuleBounds();
+            runtime.SyncSourceRuleIntegerPosition();
         }
     }
 }

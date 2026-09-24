@@ -1179,6 +1179,8 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.ZBoundPositive = true;
             else if (attackerZ < victimZ - 2 && (Runtime.Vz < 0.0 || KnockbackVz < 0.0))
                 Runtime.ZBoundNegative = true;
+
+            BattleBoundaryWriter.ApplySourceRuleKind14DirectionalBlock(attacker, this);
         }
 
         /// <summary>立即写入指定帧，绕过 wait 推进。</summary>
@@ -1992,11 +1994,14 @@ namespace NTSD.Animation.LF2Objects
             LF2Entity target = targetSlot >= 0
                 ? Match.FindEntityByRuntimeSlotForQuery(targetSlot)
                 : null;
-            if (target == null)
+            NTSDEntityRuntime rawTargetRuntime = target == null && targetSlot >= 0
+                ? Match.GetRawRuntimeSlotState(targetSlot)
+                : null;
+            if (target == null && rawTargetRuntime == null)
                 return;
 
             int selfX = GetRuntimeXInt();
-            int targetX = target.GetRuntimeXInt();
+            int targetX = target?.GetRuntimeXInt() ?? rawTargetRuntime.XInt;
             if (selfX < targetX)
                 Runtime.Vx += 0.7;
             if (targetX < selfX)
@@ -2007,7 +2012,7 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Vx -= 0.7;
 
             int selfZ = Runtime.ZInt;
-            int targetZ = target.Runtime.ZInt;
+            int targetZ = target?.Runtime.ZInt ?? rawTargetRuntime.ZInt;
             if (selfZ + 5 < targetZ)
                 Runtime.Vz += 0.4;
             if (targetZ < selfZ - 5)
@@ -2236,7 +2241,8 @@ namespace NTSD.Animation.LF2Objects
                 task.directY = Runtime.Y;
                 task.directZ = Runtime.Z;
                 task.useDirectVelocity = true;
-                task.directVx = (ally.GetRuntimeXInt() - GetRuntimeXInt()) / 50.0;
+                // Alignment contract: NTSD28-USER-HITFA5-TARGET-VELOCITY-001.
+                task.directVx = (double)((ally.GetRuntimeXInt() - GetRuntimeXInt()) / 50);
                 task.directVy = 0.0;
                 task.directVz = 0.0;
                 task.ownerEntityIndex = OwnerEntityIndex;
@@ -2643,6 +2649,9 @@ namespace NTSD.Animation.LF2Objects
             }
 
             Runtime.ZInt = (int)Runtime.Z;
+            double sourceMargin = currentDataType == (int)LF2ObjectType.Character
+                ? 0.0 : 1.0;
+            Runtime.ClampSourceRuleZ(zMin - sourceMargin, zMax + sourceMargin);
         }
 
         // C++ PreFrame keeps the background width separate from the phase-only character override.
@@ -2690,6 +2699,10 @@ namespace NTSD.Animation.LF2Objects
                         Runtime.X = xMaxOverride;
                     }
                 }
+
+                Runtime.ClampSourceRuleCharacterX(
+                    slotIndex, RelationTeam, HitStun,
+                    baseStageWidth, xMaxOverride);
             }
             else if ((ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
             {
@@ -4133,14 +4146,27 @@ namespace NTSD.Animation.LF2Objects
 
             int offset = toEnemy ? 120 : 60;
             int nextZ = best.GetRenderZInt() + 1;
-            int nextX = Runtime.Dir == "right"
-                ? best.GetRuntimeXInt() - offset
-                : best.GetRuntimeXInt() + offset;
+            // Alignment contract: NTSD28-USER-TELEPORT-OFFSET-RATIO-001.
+            double relativeX = offset *
+                (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
+            double nextX = Runtime.Dir == "right"
+                ? best.GetRuntimeXInt() - relativeX
+                : best.GetRuntimeXInt() + relativeX;
 
             Runtime.Z = nextZ;
             Runtime.ZInt = nextZ;
             Runtime.X = nextX;
-            Runtime.XInt = nextX;
+            Runtime.XInt = RoundPlatformCoordinate(nextX);
+            if (Runtime.SourceRulePositionInitialized &&
+                best.Runtime.SourceRulePositionInitialized)
+            {
+                // Alignment contract: NTSD28-USER-SOURCE-TELEPORT-WRITER-001.
+                Runtime.SourceRuleX = best.Runtime.SourceRuleXInt +
+                    (Runtime.Dir == "right" ? -offset : offset);
+                Runtime.SourceRuleZ = best.Runtime.SourceRuleZInt + 1;
+                Runtime.SourceRuleXInt = RoundPlatformCoordinate(Runtime.SourceRuleX);
+                Runtime.SourceRuleZInt = (int)Runtime.SourceRuleZ;
+            }
             Runtime.Y = 0f;
             Runtime.YInt = 0;
             Runtime.Vx = 0f;
@@ -4217,24 +4243,45 @@ namespace NTSD.Animation.LF2Objects
                 bestDistance = distance;
             }
 
-            int nextX = Runtime.XInt;
+            double nextX = Runtime.XInt;
             int nextZ = Runtime.ZInt;
             int nextY = (int)(PS?.groundY ?? 0f);
             if (best != null)
             {
                 int offset = toEnemy ? 120 : 60;
+                // Alignment contract: NTSD28-USER-TELEPORT-OFFSET-RATIO-001.
                 nextX = best.GetRuntimeXInt() +
-                    (Runtime.IsFacingLeft ? offset : -offset);
+                    (Runtime.IsFacingLeft ? offset : -offset) *
+                    (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
                 nextY = (int)(best.PS?.groundY ?? 0f);
                 nextZ = best.GetRenderZInt() + 1;
             }
 
             Runtime.X = nextX;
-            Runtime.XInt = nextX;
+            Runtime.XInt = RoundPlatformCoordinate(nextX);
             Runtime.Y = nextY;
             Runtime.YInt = nextY;
             Runtime.Z = nextZ;
             Runtime.ZInt = nextZ;
+            if (Runtime.SourceRulePositionInitialized &&
+                (best == null || best.Runtime.SourceRulePositionInitialized))
+            {
+                if (best == null)
+                {
+                    Runtime.SourceRuleX = Runtime.SourceRuleXInt;
+                    Runtime.SourceRuleZ = Runtime.SourceRuleZInt;
+                }
+                else
+                {
+                    // Alignment contract: NTSD28-USER-SOURCE-TELEPORT-WRITER-001.
+                    int rawOffset = toEnemy ? 120 : 60;
+                    Runtime.SourceRuleX = best.Runtime.SourceRuleXInt +
+                        (Runtime.IsFacingLeft ? rawOffset : -rawOffset);
+                    Runtime.SourceRuleZ = best.Runtime.SourceRuleZInt + 1;
+                }
+
+                Runtime.SyncSourceRuleIntegerPosition();
+            }
             Runtime.Vx = 0.0;
             Runtime.Vy = 0.0;
             Runtime.Vz = 0.0;
@@ -5032,6 +5079,20 @@ namespace NTSD.Animation.LF2Objects
             Runtime.X = task.useDirectRuntimePosition ? task.directX : task.pos.x;
             Runtime.Y = task.useDirectRuntimePosition ? task.directY : task.pos.y;
             Runtime.Z = task.useDirectRuntimePosition ? task.directZ : task.z;
+
+            if (task.useSourceRulePosition)
+            {
+                Runtime.SetSourceRulePosition(task.sourceRuleX, task.sourceRuleZ);
+                if (task.useInitialSourceRuleIntPosition)
+                {
+                    Runtime.SourceRuleXInt = task.initialSourceRuleX;
+                    Runtime.SourceRuleZInt = task.initialSourceRuleZ;
+                }
+                else
+                {
+                    Runtime.SyncSourceRuleIntegerPosition();
+                }
+            }
 
             if (task.useInitialRuntimeIntPosition)
             {
@@ -5880,6 +5941,9 @@ namespace NTSD.Animation.LF2Objects
                 ObjectId,
                 objectIdAlias,
                 Runtime.Vx);
+            if (Runtime.SourceRulePositionInitialized)
+                Runtime.SourceRuleX += BattleNativeIdentityXExtraKernel.ResolveExtra(
+                    dataType, ObjectId, objectIdAlias, Runtime.Vx);
 
             if (dataType == (int)LF2ObjectType.SpecialAttack && frame.hit_j > 0)
             {
@@ -5887,6 +5951,8 @@ namespace NTSD.Animation.LF2Objects
                 Runtime.Z += visualZ *
                     (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                 Runtime.Type3VisualZOffset += visualZ;
+                if (Runtime.SourceRulePositionInitialized)
+                    Runtime.SourceRuleZ += visualZ;
             }
 
             if ((dataType == (int)LF2ObjectType.ThrowWeapon || dataType == (int)LF2ObjectType.Drink) &&
@@ -6864,6 +6930,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         // Alignment contract: NTSD28-Q06-FRAME-MOTION-TAIL-001.
+        // Alignment contract: NTSD28-USER-FRAME-DIRECT-MOTION-RATIO-001.
         private void ApplyNativeFrameMotionTail(LF2FrameData frame)
         {
             double scale = Runtime.DelayTimer134 > 0 ? 0.25 : 1.0;
@@ -6876,8 +6943,16 @@ namespace NTSD.Animation.LF2Objects
             if (frame.dx != 0.0)
             {
                 Runtime.Vx = 0.0;
-                Runtime.X = Runtime.XInt + (Runtime.IsFacingLeft ? -frame.dx : frame.dx) * scale;
+                double displacement = (Runtime.IsFacingLeft ? -frame.dx : frame.dx) * scale;
+                Runtime.X = Runtime.XInt + displacement *
+                    (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
                 Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+                if (Runtime.SourceRulePositionInitialized)
+                {
+                    // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001.
+                    Runtime.SourceRuleX = Runtime.SourceRuleXInt + displacement;
+                    Runtime.SourceRuleXInt = RoundPlatformCoordinate(Runtime.SourceRuleX);
+                }
             }
             if (frame.dy != 0.0)
             {
@@ -6888,12 +6963,19 @@ namespace NTSD.Animation.LF2Objects
             if (frame.dz != 0.0)
             {
                 Runtime.Vz = 0.0;
-                Runtime.Z = Runtime.ZInt + frame.dz * scale;
+                double displacement = frame.dz * scale;
+                Runtime.Z = Runtime.ZInt + displacement *
+                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                 Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+                if (Runtime.SourceRulePositionInitialized)
+                {
+                    Runtime.SourceRuleZ = Runtime.SourceRuleZInt + displacement;
+                    Runtime.SourceRuleZInt = RoundPlatformCoordinate(Runtime.SourceRuleZ);
+                }
             }
         }
 
-        // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001.
+        // Alignment contract: NTSD28-Q06-PLATFORM-TRANSACTION-001; NTSD28-USER-PLATFORM-CARRY-RATIO-001.
         private void ApplyLinkedPlatformMotion(LF2FrameData currentFrame)
         {
             if (Runtime.PlatformSourceSlotF4 == 0 || Runtime.YInt != Runtime.CollisionYReference)
@@ -6916,13 +6998,27 @@ namespace NTSD.Animation.LF2Objects
                 double displacement = x > 500.0 ? x - 550.0 : x;
                 if (x <= 500.0 && platform.Runtime.IsFacingLeft)
                     displacement = -displacement;
-                Runtime.X = Runtime.XInt + displacement;
+                Runtime.X = Runtime.XInt + displacement *
+                    (RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0);
                 Runtime.XInt = RoundPlatformCoordinate(Runtime.X);
+                if (Runtime.SourceRulePositionInitialized)
+                {
+                    // Alignment contract: NTSD28-USER-SOURCE-COORDINATE-FRAME-MOTION-001.
+                    Runtime.SourceRuleX = Runtime.SourceRuleXInt + displacement;
+                    Runtime.SourceRuleXInt = RoundPlatformCoordinate(Runtime.SourceRuleX);
+                }
             }
             if (z != 0.0)
             {
-                Runtime.Z = Runtime.ZInt + (z > 500.0 ? z - 550.0 : z);
+                double displacement = z > 500.0 ? z - 550.0 : z;
+                Runtime.Z = Runtime.ZInt + displacement *
+                    (RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
                 Runtime.ZInt = RoundPlatformCoordinate(Runtime.Z);
+                if (Runtime.SourceRulePositionInitialized)
+                {
+                    Runtime.SourceRuleZ = Runtime.SourceRuleZInt + displacement;
+                    Runtime.SourceRuleZInt = RoundPlatformCoordinate(Runtime.SourceRuleZ);
+                }
             }
             if (y != 0.0)
             {
