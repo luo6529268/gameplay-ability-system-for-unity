@@ -35,6 +35,7 @@ namespace NTSD.Animation
         private bool configuredPrewarmRunning;
         private string configuredPrewarmRoot;
         private NTSD.App.GameConfig configuredPrewarmConfig;
+        private string configuredPrewarmModeFingerprint;
         private UniTask<string> configuredPrewarmTask;
         private List<Action<string>> configuredProgressCallbacks;
         public long ConfiguredCandidateCacheHitCount { get; private set; }
@@ -70,7 +71,11 @@ namespace NTSD.Animation
         {
             if (!HasConfiguredLoganContent || spritePrewarmDisposed || !ReferenceEquals(TryGetInstance(), this) || !NativeContentBoundaryIsOpen())
                 throw new InvalidOperationException("Configured Logan prewarm requires an inactive battle and a selected source.");
-            if (configuredPrewarmRunning && CanContinueConfiguredContent(configuredContentGeneration))
+            NTSD.App.ProjectBattleModeConfig.Snapshot modeSnapshot =
+                NTSD.App.ProjectBattleModeConfig.LoadDefault().Capture();
+            if (configuredPrewarmRunning && CanContinueConfiguredContent(configuredContentGeneration) &&
+                string.Equals(configuredPrewarmModeFingerprint, modeSnapshot.Fingerprint,
+                    StringComparison.Ordinal))
             {
                 if (onProgressText != null) configuredProgressCallbacks.Add(onProgressText);
                 return configuredPrewarmTask;
@@ -79,18 +84,20 @@ namespace NTSD.Animation
             CancelConfiguredContentPrewarm();
             configuredPrewarmConfig = NTSD.App.GameConfig.Instance;
             configuredPrewarmRoot = ConfiguredContentRoot;
+            configuredPrewarmModeFingerprint = modeSnapshot.Fingerprint;
             int generation = configuredContentGeneration;
             var callbacks = new List<Action<string>>();
             if (onProgressText != null) callbacks.Add(onProgressText);
             configuredProgressCallbacks = callbacks;
             configuredPrewarmRunning = true;
             configuredPrewarmTask = PrewarmConfiguredLoganContentCoreAsync(
-                source, generation, callbacks).Preserve();
+                source, modeSnapshot, generation, callbacks).Preserve();
             return configuredPrewarmTask;
         }
 
         private async UniTask<string> PrewarmConfiguredLoganContentCoreAsync(
-            BattleContentSource source, int generation, List<Action<string>> callbacks)
+            BattleContentSource source, NTSD.App.ProjectBattleModeConfig.Snapshot modeSnapshot,
+            int generation, List<Action<string>> callbacks)
         {
             try
             {
@@ -99,7 +106,9 @@ namespace NTSD.Animation
                 LoganVisualContentCandidate candidate = null;
                 if (loader.TryGetCache(locatorKey, out object located) && located is string inputKey &&
                     loader.TryGetCache(inputKey, out object cached) && cached is LoganVisualContentCandidate existing &&
-                    string.Equals(existing.Catalog.Source.RuntimeRoot, source.RuntimeRoot, StringComparison.Ordinal))
+                    string.Equals(existing.Catalog.Source.RuntimeRoot, source.RuntimeRoot, StringComparison.Ordinal) &&
+                    string.Equals(existing.Catalog.ProjectModeSnapshot?.Fingerprint,
+                        modeSnapshot.Fingerprint, StringComparison.Ordinal))
                 {
                     try
                     {
@@ -112,13 +121,16 @@ namespace NTSD.Animation
                     }
                     await UniTask.SwitchToMainThread();
                     RequireConfiguredContentScope(generation);
+                    RequireProjectModeCurrent(modeSnapshot);
                     if (candidate != null) ConfiguredCandidateCacheHitCount++;
                     else loader.RemoveCache(locatorKey);
                 }
                 if (candidate == null)
-                    candidate = await UniTask.RunOnThreadPool(() => LoganVisualContentCandidate.Capture(source));
+                    candidate = await UniTask.RunOnThreadPool(() =>
+                        LoganVisualContentCandidate.Capture(source, modeSnapshot));
                 await UniTask.SwitchToMainThread();
                 RequireConfiguredContentScope(generation);
+                RequireProjectModeCurrent(modeSnapshot);
                 string candidateKey = "NTSD.LoganContent.Input::" + candidate.SourceCacheKey;
                 loader.CacheResult(candidateKey, candidate);
                 loader.CacheResult(locatorKey, candidateKey);
@@ -135,9 +147,11 @@ namespace NTSD.Animation
                             }
                         }, () => CanContinueConfiguredContent(generation));
                     RequireConfiguredContentScope(generation);
+                    RequireProjectModeCurrent(modeSnapshot);
                     if (!committed) throw new OperationCanceledException("Configured content publication was cancelled.");
                 }
                 RequireConfiguredContentScope(generation);
+                RequireProjectModeCurrent(modeSnapshot);
                 if (!IsLoganPublicationCurrent(candidate))
                     throw new InvalidOperationException("Configured content publication is incomplete.");
                 return candidate.SourceCacheKey;
@@ -501,6 +515,17 @@ namespace NTSD.Animation
             public Sprite[] Sprites;
             public string SourcePath;
             public Color32[] ProcessedPixels;
+            public bool IsNative;
+            public int CellWidth;
+            public int CellHeight;
+        }
+
+        private static void RequireProjectModeCurrent(
+            NTSD.App.ProjectBattleModeConfig.Snapshot captured)
+        {
+            if (!string.Equals(NTSD.App.ProjectBattleModeConfig.LoadDefault().Capture().Fingerprint,
+                captured.Fingerprint, StringComparison.Ordinal))
+                throw new OperationCanceledException("Project battle mode config changed during content publication.");
         }
 
         private sealed class WordPublicationStaging
@@ -590,6 +615,12 @@ namespace NTSD.Animation
             {
                 try
                 {
+                    if (HasConfiguredLoganContent)
+                    {
+                        await PrewarmConfiguredLoganContentAsync(t => Debug.Log($"[Editor] {t}"));
+                        Debug.Log("<color=cyan>[Editor] formal content loaded</color>");
+                        return;
+                    }
                     var dataManager = GameDataManager.Instance;
                     if (dataManager == null) { Debug.LogError("GameDataManager.Instance is null"); return; }
                     Debug.Log("<color=cyan>[Editor] start loading configs...</color>");
@@ -1541,7 +1572,8 @@ namespace NTSD.Animation
             try
             {
                 stagedCatalog = BuildBattleSpriteCatalog(stagedConfigs, stagedSprites);
-                stagedSpark = await BuildSparkPublicationAsync(invocation);
+                stagedSpark = await BuildSparkPublicationAsync(
+                    invocation, native?.Candidate.SparkInput);
                 if (stagedSpark == null || stagedSpark.Texture == null ||
                     stagedSpark.Sprites == null || stagedSpark.ProcessedPixels == null)
                     throw new InvalidOperationException("SPARK.bmp could not be decoded into the common 20-frame publication.");
@@ -1576,10 +1608,14 @@ namespace NTSD.Animation
                     return false;
                 }
 
-                commonVisualCatalog = BattleCommonVisualCatalog.Build(
-                    NTSD.App.GameConfig.Instance?.ShadowPrefab,
-                    stagedSpark.Texture,
-                    stagedSpark.Sprites);
+                BattleCommonVisualCatalog shadowCatalog = BattleCommonVisualCatalog.Build(
+                    NTSD.App.GameConfig.Instance?.ShadowPrefab);
+                commonVisualCatalog = stagedSpark.IsNative
+                    ? shadowCatalog.WithNativeSpark(stagedSpark.Texture,
+                        stagedSpark.Sprites, stagedSpark.CellWidth,
+                        stagedSpark.CellHeight)
+                    : shadowCatalog.WithSpark(stagedSpark.Texture,
+                        stagedSpark.Sprites);
                 if (stagedWords != null)
                     commonVisualCatalog = commonVisualCatalog.WithWords(
                         stagedWords.Textures,
@@ -1683,8 +1719,12 @@ namespace NTSD.Animation
             return true;
         }
 
-        private async UniTask<SparkPublicationStaging> BuildSparkPublicationAsync(int invocation)
+        private async UniTask<SparkPublicationStaging> BuildSparkPublicationAsync(
+            int invocation, LoganVisualContentCandidate.NativeSparkInput nativeInput)
         {
+            if (nativeInput != null)
+                return await BuildNativeSparkPublicationAsync(invocation, nativeInput);
+
             string sparkPath = Path.Combine(
                 Application.dataPath,
                 "NTSD", "Sprite", "UIPanels", "SPARK.bmp");
@@ -1776,6 +1816,89 @@ namespace NTSD.Animation
             var pixels = new Color32[colors.Length];
             for (int index = 0; index < colors.Length; index++)
                 pixels[index] = colors[index];
+            return pixels;
+        }
+
+        private async UniTask<SparkPublicationStaging> BuildNativeSparkPublicationAsync(
+            int invocation, LoganVisualContentCandidate.NativeSparkInput input)
+        {
+            BMPLoader.BmpData decoded = await UniTask.RunOnThreadPool(() =>
+                BMPLoader.LoadVerifiedImageData(input.Image.Path, input.Image.Sha256));
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return null;
+            if (decoded?.Pixels == null || !decoded.IsPng ||
+                decoded.Width != 500 || decoded.Height != 320 ||
+                input.Width != 99 || input.Height != 79)
+                throw new InvalidDataException(
+                    "Native SPARK PNG or system.dat geometry differs from the formal 20-cell surface.");
+
+            Color32[] pixels = await UniTask.RunOnThreadPool(() =>
+                ApplyNativeSparkBlackKey(ConvertToColor32(decoded.Pixels)));
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return null;
+
+            await UniTask.SwitchToMainThread();
+            if (!CanCompleteSpritePrewarmInvocation(invocation))
+                return null;
+            Texture2D texture = null;
+            Sprite[] sprites = null;
+            bool transfersOwnership = false;
+            try
+            {
+                texture = new Texture2D(decoded.Width, decoded.Height,
+                    TextureFormat.RGBA32, false);
+                texture.filterMode = FilterMode.Point;
+                texture.wrapMode = TextureWrapMode.Clamp;
+                texture.SetPixels32(pixels);
+                texture.Apply(false, true);
+                texture.name = "SPARK_native";
+
+                sprites = new Sprite[BattleCommonVisualCatalog.SparkFrameCount];
+                for (int pic = 0; pic < sprites.Length; pic++)
+                {
+                    if (!CanCompleteSpritePrewarmInvocation(invocation))
+                        return null;
+                    Rect rect = BattleCommonVisualCatalog.GetNativeSparkPixelRect(
+                        pic, decoded.Width, decoded.Height, input.Width, input.Height);
+                    if (rect.width <= 0 || rect.height <= 0)
+                        throw new InvalidDataException("Native SPARK has a missing drawable cell.");
+                    sprites[pic] = Sprite.Create(texture, rect,
+                        BattleCommonVisualCatalog.GetNativeSparkPivotNormalized(
+                            input.Width, input.Height), 100f, 0,
+                        SpriteMeshType.FullRect);
+                    sprites[pic].name = $"spark_native_{pic:D2}";
+                }
+
+                transfersOwnership = true;
+                return new SparkPublicationStaging
+                {
+                    Texture = texture,
+                    Sprites = sprites,
+                    SourcePath = input.Image.Path,
+                    ProcessedPixels = pixels,
+                    IsNative = true,
+                    CellWidth = input.Width,
+                    CellHeight = input.Height
+                };
+            }
+            finally
+            {
+                if (!transfersOwnership)
+                    DestroySparkPublicationStaging(texture, sprites);
+            }
+        }
+
+        private static Color32[] ApplyNativeSparkBlackKey(Color32[] pixels)
+        {
+            if (pixels == null)
+                return null;
+            for (int index = 0; index < pixels.Length; index++)
+            {
+                Color32 pixel = pixels[index];
+                if (pixel.r == 0 && pixel.g == 0 && pixel.b == 0)
+                    pixel.a = 0;
+                pixels[index] = pixel;
+            }
             return pixels;
         }
 

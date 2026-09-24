@@ -1,0 +1,28 @@
+{
+    "runId": "q07-project-mode-direct-1",
+    "mode": "direct",
+    "status": "PASS",
+    "message": "Actual configured-content caller, World preparation and ordered unload passed with a legal isolated source.",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\E3SourceCaller\\q07-project-mode-direct-1|5872FF73A3CF6A3584938884046C4A7249D4855B18ECA88FB1227B9182F15834|CCD72E5999E79A649DB6781869A9E78DAB8EA27E368CF240C7F852FCABB09DFF",
+    "shutdownStage": "RuntimeMapCleared",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "",
+    "failureLifecycle": "",
+    "sourceIds": [
+        0,
+        2,
+        50,
+        52
+    ],
+    "worldObjects": 4,
+    "trackedResources": 46,
+    "resourceSurvivors": 0,
+    "menuPreviousOwnerSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 0,
+    "menuReady": false,
+    "samePublishedKeys": true,
+    "stayedStoppedAfterTwoFrames": true,
+    "serializedRootSelected": false,
+    "rootFromAsset": ""
+}

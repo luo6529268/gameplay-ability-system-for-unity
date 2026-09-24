@@ -1,0 +1,8 @@
+name: _Rain_Village width: 1330 zboundary: 625 715 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Rai\t.png 
+layer: b\Rai\1.png width: 1330 x: 0 y: 0 layer_end
+layer: b\Rai\r1.png width: 1330 x: 0 y: 0 cc: 14 c1: 0 c2: 2 layer_end
+layer: b\Rai\r2.png width: 1330 x: 0 y: 0 cc: 14 c1: 3 c2: 5 layer_end
+layer: b\Rai\r3.png width: 1330 x: 0 y: 0 cc: 14 c1: 6 c2: 8 layer_end
+layer: b\Rai\r4.png width: 1330 x: 0 y: 0 cc: 14 c1: 9 c2: 11 layer_end
+layer: b\Rai\r5.png width: 1330 x: 0 y: 0 cc: 14 c1: 12 c2: 14 layer_end

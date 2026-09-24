@@ -1,0 +1,24 @@
+name: _Sand_Country width: 1330 zboundary: 375 575 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\San\t.png 
+layer: b\San\1.png width: 1330 x: 0 y: 0 layer_end
+layer: b\San\1a.png width: 1330 x: 0 y: 0 cc: 24 c1: 0 c2: 4 layer_end
+layer: b\San\1b.png width: 1330 x: 0 y: 0 cc: 24 c1: 5 c2: 9 layer_end
+layer: b\San\1c.png width: 1330 x: 0 y: 0 cc: 24 c1: 10 c2: 14 layer_end
+layer: b\San\1d.png width: 1330 x: 0 y: 0 cc: 24 c1: 15 c2: 19 layer_end
+layer: b\San\1e.png width: 1330 x: 0 y: 0 cc: 24 c1: 20 c2: 24 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 361 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 376 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 391 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 406 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 421 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 436 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 451 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 466 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 481 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 496 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 511 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 526 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 541 loop: 115 layer_end
+layer: b\San\5.png width: 1330 x: -3 y: 556 loop: 115 layer_end
+layer: b\San\4.png width: 1330 x: -3 y: 571 loop: 115 layer_end
+layer: b\San\6.png width: 1330 x: -3 y: 585 loop: 119 layer_end

@@ -73,7 +73,9 @@ namespace NTSD.Test
 
         private LoganVisualContentCandidate Candidate(string name)
         {
-            var candidate = (LoganVisualContentCandidate)Invoke(fixture, "Candidate", name, true);
+            var fixtureCandidate = (LoganVisualContentCandidate)Invoke(fixture, "Candidate", name, true);
+            var candidate = LoganVisualContentCandidate.Capture(fixtureCandidate.Catalog.Source,
+                ProjectBattleModeConfig.LoadDefault().Capture());
             roots.Add(candidate.Catalog.Source.RuntimeRoot);
             return candidate;
         }
@@ -180,6 +182,23 @@ namespace NTSD.Test
                 await (UniTask)Invoke(bootstrap, "LoadCharacterDataAsync");
                 Assert.That(await Validate(), Is.EqualTo(candidate.SourceCacheKey));
                 Assert.That(Manager.GetCharacterConfig(56).characterData.name, Is.EqualTo("DirectSource"));
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator InspectorRefresh_UsesSelectedFormalRoot()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                var candidate = Candidate("InspectorRefresh");
+                Select(candidate);
+                Invoke(Manager, "RefreshAllData");
+                DateTime deadline = DateTime.UtcNow.AddSeconds(15);
+                while (Manager.PublishedVisualContentKey != candidate.SourceCacheKey && DateTime.UtcNow < deadline)
+                    await UniTask.Yield();
+                Assert.That(Manager.PublishedVisualContentKey, Is.EqualTo(candidate.SourceCacheKey));
+                Assert.That(Manager.GetCharacterConfig(56).characterData.name, Is.EqualTo("InspectorRefresh"));
+                Assert.That(GameDataManager.TryGetInstance().GetObjectById(56), Is.Not.Null);
             });
         }
 

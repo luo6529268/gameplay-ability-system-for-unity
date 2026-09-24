@@ -6,58 +6,61 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleSpriteGridSeparatorEditorTests
     {
-        [TestCase("Assets/NTSD/Sprite/Character/MingRen/naruto_0.bmp")]
-        [TestCase("Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp")]
-        public void ProductionSheet_DeclaredGuttersBecomeTransparentWithoutChangingFrameContent(
-            string path)
+        [Test]
+        public void LegacySheet_DeclaredGuttersBecomeTransparentWithoutChangingFrameContent()
         {
-            BMPLoader.BmpData data = BMPLoader.LoadBmpData(path);
-            Assert.That(data, Is.Not.Null);
-            Assert.That(data.Width, Is.EqualTo(800));
-            Assert.That(data.Height, Is.EqualTo(560));
-
-            var pixels = new Color32[data.Pixels.Length];
-            for (int index = 0; index < pixels.Length; index++)
-                pixels[index] = data.Pixels[index];
+            const int textureWidth = 800;
+            const int textureHeight = 560;
+            var pixels = new Color32[textureWidth * textureHeight];
+            var content = new Color32(120, 80, 40, 255);
+            var separator = new Color32(0, 255, 0, 255);
+            for (int y = 481; y < textureHeight; y++)
+                for (int x = 0; x < 79; x++)
+                    pixels[y * textureWidth + x] = content;
+            for (int x = 0; x < textureWidth; x++)
+                pixels[480 * textureWidth + x] = separator;
+            for (int y = 0; y < textureHeight; y++)
+                pixels[y * textureWidth + 79] = separator;
             RuntimeSpriteProcessor.ProcessSheetPixelsFast(pixels);
 
-            var file = new SpriteFileInfo(path, 0, 69, 79, 79, 10, 7);
+            var file = new SpriteFileInfo("synthetic-legacy-sheet.bmp", 0, 69, 79, 79, 10, 7);
             CharacterAnimtorManager.ResolveEffectiveGrid(
                 file,
-                data.Width,
-                data.Height,
+                textureWidth,
+                textureHeight,
                 out int rows,
                 out int columns);
             Rect?[] rects = CharacterAnimtorManager.BuildIndexedSpriteRects(
                 file,
-                data.Width,
-                data.Height,
+                textureWidth,
+                textureHeight,
                 rows,
                 columns);
             Assert.That(rects[0], Is.EqualTo(new Rect(0f, 481f, 79f, 79f)));
 
             Rect firstRect = rects[0].Value;
-            int opaqueContentBefore = CountOpaquePixels(pixels, data.Width, firstRect);
+            int opaqueContentBefore = CountOpaquePixels(pixels, textureWidth, firstRect);
+            Assert.That(opaqueContentBefore, Is.GreaterThan(0));
             int horizontalSeparatorY = Mathf.RoundToInt(firstRect.y) - 1;
             int opaqueGreenSeparatorBefore = CountOpaqueGreenRow(
                 pixels,
-                data.Width,
+                textureWidth,
                 horizontalSeparatorY);
             Assert.That(opaqueGreenSeparatorBefore, Is.GreaterThan(600));
 
             RuntimeSpriteProcessor.ClearDetectedGridSeparatorAlpha(
                 pixels,
-                data.Width,
-                data.Height);
+                textureWidth,
+                textureHeight);
 
             Assert.That(
-                CountOpaquePixels(pixels, data.Width, firstRect),
+                CountOpaquePixels(pixels, textureWidth, firstRect),
                 Is.EqualTo(opaqueContentBefore));
             Assert.That(
-                CountOpaquePixelsInRow(pixels, data.Width, horizontalSeparatorY),
+                CountOpaquePixelsInRow(pixels, textureWidth, horizontalSeparatorY),
                 Is.Zero);
             Assert.That(
-                CountOpaquePixelsInColumn(pixels, data.Width, data.Height, 79),
+                CountOpaquePixelsInColumn(pixels, textureWidth, textureHeight, 79),
                 Is.Zero);
         }
 

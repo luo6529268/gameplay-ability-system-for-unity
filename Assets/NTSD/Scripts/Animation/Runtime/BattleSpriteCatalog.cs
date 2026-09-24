@@ -394,6 +394,7 @@ namespace NTSD.Animation
         private readonly Texture2D[] wordTextures;
         private readonly BattleCommonVisualBinding[][] wordGlyphs;
         private readonly BattleCommonVisualBinding[] comLabels;
+        private readonly bool nativeSpark;
 
         private BattleCommonVisualCatalog(
             BattleCommonVisualBinding shadow,
@@ -434,7 +435,8 @@ namespace NTSD.Animation
             Texture2D[] wordTextures,
             BattleCommonVisualBinding[][] wordGlyphs,
             BattleCommonVisualBinding[] comLabels,
-            string diagnostic)
+            string diagnostic,
+            bool nativeSpark = false)
         {
             Shadow = shadow;
             this.sparks = sparks ?? Array.Empty<BattleCommonVisualBinding>();
@@ -442,6 +444,7 @@ namespace NTSD.Animation
             this.wordGlyphs = wordGlyphs ?? Array.Empty<BattleCommonVisualBinding[]>();
             this.comLabels = comLabels ?? Array.Empty<BattleCommonVisualBinding>();
             Diagnostic = diagnostic ?? string.Empty;
+            this.nativeSpark = nativeSpark;
         }
 
         public static BattleCommonVisualCatalog Empty { get; } =
@@ -458,6 +461,7 @@ namespace NTSD.Animation
         public bool IsShadowValid => Shadow != null;
         public bool IsSparkValid => sparks.Length == SparkFrameCount &&
                                      Array.TrueForAll(sparks, binding => binding != null);
+        public bool IsNativeSpark => nativeSpark;
         public bool IsWordsValid
         {
             get
@@ -579,6 +583,60 @@ namespace NTSD.Animation
         public static bool TryResolveSparkAge(int age, out int pic)
         {
             return BattleHitRecordLifecycleCatalog.Available.TryResolveAge(age, out pic);
+        }
+
+        public bool TryGetSparkForAge(int age, out int pic,
+            out BattleCommonVisualBinding binding)
+        {
+            pic = -1;
+            binding = null;
+            if (!IsSparkValid)
+                return false;
+            if (!nativeSpark)
+                return TryResolveSparkAge(age, out pic) && TryGetSpark(pic, out binding);
+            if (age < 0 || age >= 100 || age % 10 == 9)
+                return false;
+
+            BattleCommonVisualBinding first = sparks[0];
+            Texture2D texture = first.Texture;
+            int width = (int)first.PixelRect.width;
+            int height = (int)first.PixelRect.height;
+            int sourceX = age % 10 * (width + 1);
+            int sourceY = age / 10 * (height + 1);
+            if (texture == null || width <= 0 || height <= 0 ||
+                sourceX + width > texture.width || sourceY + height > texture.height)
+                return false;
+
+            int columns = (texture.width - width) / (width + 1) + 1;
+            pic = age / 10 * columns + age % 10;
+            return TryGetSpark(pic, out binding);
+        }
+
+        public static Rect GetNativeSparkPixelRect(int pic, int textureWidth,
+            int textureHeight, int width, int height)
+        {
+            if (pic < 0 || textureWidth < width || textureHeight < height ||
+                width <= 0 || height <= 0)
+                return Rect.zero;
+            int columns = (textureWidth - width) / (width + 1) + 1;
+            int rows = (textureHeight - height) / (height + 1) + 1;
+            if (columns > 10 || rows > 10 || pic >= columns * rows)
+                return Rect.zero;
+            int column = pic % columns;
+            int row = pic / columns;
+            return new Rect(column * (width + 1),
+                textureHeight - row * (height + 1) - height,
+                width, height);
+        }
+
+        public static Vector2 GetNativeSparkPivotNormalized(int width, int height)
+        {
+            if (width <= 0 || height <= 0)
+                return Vector2.zero;
+            // Native draw uses integer screenX-width/2, screenY-height/2.
+            // Sprite pivot is measured from bottom-left while screen Y grows downward.
+            return new Vector2((float)(width / 2) / width,
+                (float)(height - height / 2) / height);
         }
 
         public static Rect GetSparkPixelRect(int pic)
@@ -802,6 +860,56 @@ namespace NTSD.Animation
                 IsWordsValid ? string.Empty : "WORDS bindings have not been published.");
         }
 
+        public BattleCommonVisualCatalog WithNativeSpark(Texture2D sparkTexture,
+            Sprite[] sparkSprites, int width, int height)
+        {
+            if (!IsShadowValid)
+                return this;
+            if (sparkTexture == null || sparkSprites == null ||
+                sparkSprites.Length != SparkFrameCount ||
+                width <= 0 || height <= 0)
+                return new BattleCommonVisualCatalog(Shadow, null, wordTextures,
+                    wordGlyphs, comLabels, "Native SPARK publication is incomplete.");
+
+            int columns = (sparkTexture.width - width) / (width + 1) + 1;
+            int rows = (sparkTexture.height - height) / (height + 1) + 1;
+            if (columns * rows != SparkFrameCount || columns > 10 || rows > 10)
+                return new BattleCommonVisualCatalog(Shadow, null, wordTextures,
+                    wordGlyphs, comLabels, "Native SPARK drawable cell count is not 20.");
+
+            var bindings = new BattleCommonVisualBinding[SparkFrameCount];
+            for (int pic = 0; pic < SparkFrameCount; pic++)
+            {
+                Sprite sprite = sparkSprites[pic];
+                Rect rect = GetNativeSparkPixelRect(pic, sparkTexture.width,
+                    sparkTexture.height, width, height);
+                if (sprite == null || sprite.texture != sparkTexture ||
+                    sprite.rect != rect ||
+                    new Vector2(sprite.pivot.x / rect.width,
+                        sprite.pivot.y / rect.height) !=
+                    GetNativeSparkPivotNormalized(width, height))
+                    return new BattleCommonVisualCatalog(Shadow, null, wordTextures,
+                        wordGlyphs, comLabels, "Native SPARK binding is invalid.");
+
+                bindings[pic] = new BattleCommonVisualBinding(
+                    BattleVisualResourceKey.CommonSpark(pic), sprite, sparkTexture,
+                    null, rect,
+                    new Rect(rect.x / sparkTexture.width,
+                        rect.y / sparkTexture.height,
+                        rect.width / sparkTexture.width,
+                        rect.height / sparkTexture.height),
+                    rect.size, GetNativeSparkPivotNormalized(width, height),
+                    new BattleSpriteRenderState(Color.white, false, false,
+                        SpriteMaskInteraction.None,
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha));
+            }
+
+            return new BattleCommonVisualCatalog(Shadow, bindings, wordTextures,
+                wordGlyphs, comLabels,
+                IsWordsValid ? string.Empty : "WORDS bindings have not been published.",
+                true);
+        }
+
         public BattleCommonVisualCatalog WithWords(Texture2D[] wordsTextures, Sprite[][] wordGlyphSprites)
         {
             if (!IsShadowValid || !IsSparkValid)
@@ -814,7 +922,9 @@ namespace NTSD.Animation
                     sparks,
                     null,
                     null,
-                    "WORDS0.bmp through WORDS5.bmp must publish six 251x257 glyph sheets.");
+                    comLabels,
+                    "WORDS0.bmp through WORDS5.bmp must publish six 251x257 glyph sheets.",
+                    nativeSpark);
             }
 
             var textures = new Texture2D[WordSheetCount];
@@ -831,7 +941,9 @@ namespace NTSD.Animation
                         sparks,
                         null,
                         null,
-                        $"WORDS{sheetIndex}.bmp is missing, corrupt, or does not contain 256 glyph bindings.");
+                        comLabels,
+                        $"WORDS{sheetIndex}.bmp is missing, corrupt, or does not contain 256 glyph bindings.",
+                        nativeSpark);
                 }
 
                 textures[sheetIndex] = texture;
@@ -849,7 +961,9 @@ namespace NTSD.Animation
                             sparks,
                             null,
                             null,
-                            $"WORDS{sheetIndex} glyph {charCode} is missing or references the wrong texture.");
+                            comLabels,
+                            $"WORDS{sheetIndex} glyph {charCode} is missing or references the wrong texture.",
+                            nativeSpark);
                     }
 
                     Rect pixelRect = sprite.rect;
@@ -885,7 +999,8 @@ namespace NTSD.Animation
                 textures,
                 bindings,
                 comLabels,
-                string.Empty);
+                string.Empty,
+                nativeSpark);
         }
 
         public BattleCommonVisualCatalog WithSpecialCom(
@@ -914,7 +1029,7 @@ namespace NTSD.Animation
                 sparks,
                 wordTextures,
                 wordGlyphs,
-                new BattleCommonVisualBinding(
+                BuildComLabelsFromSpecial(new BattleCommonVisualBinding(
                     BattleVisualResourceKey.CommonSpecialCom,
                     sprite,
                     texture,
@@ -928,8 +1043,9 @@ namespace NTSD.Animation
                         false,
                         false,
                         SpriteMaskInteraction.None,
-                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha)),
-                Diagnostic);
+                        BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha))),
+                Diagnostic,
+                nativeSpark);
         }
 
         public BattleCommonVisualCatalog WithComLabels(
@@ -990,7 +1106,8 @@ namespace NTSD.Animation
                 wordTextures,
                 wordGlyphs,
                 bindings,
-                Diagnostic);
+                Diagnostic,
+                nativeSpark);
         }
 
         internal BattleCommonVisualCatalog WithCentralBindings(
@@ -1033,7 +1150,8 @@ namespace NTSD.Animation
                 wordTextures,
                 remappedWords,
                 remappedComLabels,
-                Diagnostic);
+                Diagnostic,
+                nativeSpark);
         }
 
         private static BattleCommonVisualBinding RemapBinding(

@@ -23,6 +23,7 @@ namespace NTSD.Test.Editor
         private sealed class Report
         {
             public string status = "FAIL";
+            public string mode;
             public string error;
             public string scene;
             public string mapId;
@@ -35,6 +36,30 @@ namespace NTSD.Test.Editor
             public bool presentAt303;
             public bool removedAt304;
             public bool cleanupPassed;
+            public bool registered;
+            public bool activeForPass;
+            public bool physicsStatePresent;
+            public int timerAfterFirst;
+            public int currentDataType;
+            public int worldTickAfterFirst;
+            public int stageWidth;
+            public int stageZMin;
+            public int stageZMax;
+            public long passVisitsBefore;
+            public long passVisitsAfter;
+            public int driverSteps;
+            public int prematureRemovalTick;
+            public bool fastModeActive;
+            public float activeHostIntervalSeconds;
+        }
+
+        private sealed class ProbeWeapon : LF2Weapon
+        {
+            internal void LoadFormalFrames(LF2CharacterDataWrapper definition)
+            {
+                FrameCache.Load(definition);
+                ImmediateFrame(definition.characterData.frames[0].frameId);
+            }
         }
 
         static NTSD28NonCharacterWalkablePlayProbeEditor()
@@ -70,21 +95,29 @@ namespace NTSD.Test.Editor
 
             SimulationTickDriver driver = UnityEngine.Object.FindObjectOfType<SimulationTickDriver>();
             BoundaryWallManager manager = UnityEngine.Object.FindObjectOfType<BoundaryWallManager>();
-            if (driver?.World == null || manager?.LoadedBoundaryDefinition == null)
+            if (driver?.World == null ||
+                driver.LifecycleState != BattleRuntimeLifecycleState.Running ||
+                manager?.LoadedBoundaryDefinition == null)
             {
                 if (playRequestedAt != default &&
-                    (DateTime.UtcNow - playRequestedAt).TotalSeconds < 45)
+                    (DateTime.UtcNow - playRequestedAt).TotalSeconds < 360)
                     return;
                 Finish(new Report { scene = scene.path,
-                    error = "Battle World or loaded map boundary was unavailable in Play." }, true);
+                    error = $"Play readiness timeout: driver={driver != null}, " +
+                        $"world={driver?.World != null}, lifecycle={driver?.LifecycleState}, " +
+                        $"manager={manager != null}, " +
+                        $"map={manager?.LoadedBoundaryDefinition != null}." }, true);
                 return;
             }
 
             running = true;
-            var report = new Report { scene = scene.path };
+            string mode = File.ReadAllText(RequestPath).Trim();
+            var report = new Report { scene = scene.path, mode = mode };
             try
             {
-                Run(driver, manager, report);
+                Run(driver, manager, report,
+                    mode == "driver" || mode == "fast-driver",
+                    mode == "fast-driver");
             }
             catch (Exception exception)
             {
@@ -98,7 +131,8 @@ namespace NTSD.Test.Editor
         }
 
         private static void Run(SimulationTickDriver driver,
-            BoundaryWallManager manager, Report report)
+            BoundaryWallManager manager, Report report,
+            bool fullDriver, bool fastDriver)
         {
             SimulationWorld world = driver.World;
             report.mapId = manager.LoadedBoundaryDefinition.MapId;
@@ -120,12 +154,23 @@ namespace NTSD.Test.Editor
                 new Vector3(center.x, center.y, 0));
 
             bool wasPaused = driver.IsPaused;
+            bool wasFast = driver.IsFastMode;
             int baselineCount = world.ObjectCount;
             int baselineSlots = world.ClaimedRuntimeSlotCountForDiagnostics;
-            LF2Weapon weapon = null;
+            ProbeWeapon weapon = null;
             try
             {
                 driver.SetPaused(true);
+                if (fastDriver)
+                {
+                    driver.QueueNativeFunctionKeyForDiagnostics(NTSD28NativeFunctionKey.F5);
+                    driver.ProcessHostControlCommandsForDiagnostics();
+                    report.fastModeActive = driver.IsFastMode;
+                    report.activeHostIntervalSeconds = driver.ActiveHostIntervalSeconds;
+                    Require(report.fastModeActive &&
+                        Math.Abs(report.activeHostIntervalSeconds - 0.003f) < 0.00001f,
+                        "F5 host route did not select the 3 ms cadence.");
+                }
                 report.startTick = driver.CurrentTickIndex + 1;
                 world.PrepareStageRuntimeSnapshotForTick(report.startTick);
                 Require(world.TryIsGroundPixelWalkable(
@@ -139,25 +184,87 @@ namespace NTSD.Test.Editor
 
                 int slot = world.FindFirstFreeRuntimeSlotForDiagnostics(70, 1000);
                 Require(slot >= 70, "No transient slot is available.");
-                weapon = new LF2Weapon();
-                weapon.SetWeaponType((int)LF2ObjectType.LightWeapon);
+                weapon = new ProbeWeapon();
+                weapon.ObjectId = 150;
+                weapon.SetWeaponType((int)LF2ObjectType.HeavyWeapon);
                 weapon.SetRequiredRuntimeSlot(slot);
                 world.Register(weapon);
+                if (fullDriver)
+                {
+                    LF2CharacterDataWrapper formal = world.RuntimeCharacterConfigs.Resolve(150);
+                    Require(formal?.characterData?.frames != null &&
+                        formal.characterData.frames.Count > 0,
+                        "Formal OID150 frames are unavailable.");
+                    weapon.LoadFormalFrames(formal);
+                    weapon.FrameDelay = 1000;
+                    weapon.Health.HP = 1000;
+                    weapon.Runtime.SetVelocity(0, 0, 0);
+                }
+                report.registered = world.FindEntityByRuntimeSlotForQuery(slot) == weapon;
+                report.currentDataType = weapon.GetCurrentDataObjectTypeForSimulation();
+                report.activeForPass = world.IsActiveForCurrentPassInternal(weapon);
+                report.physicsStatePresent = weapon.PS != null;
+                report.stageWidth = world.Runtime.Stage.BaseStageWidthPx;
+                report.stageZMin = world.StageZMin;
+                report.stageZMax = world.StageZMax;
+                report.passVisitsBefore = world.BattleEcsCharacterPreFrameBoundsPassDiagnosticsForDiagnostics.SlotVisitCount;
+                Require(report.registered, "Play World rejected transient registration.");
+                Require(report.currentDataType != (int)LF2ObjectType.Character,
+                    "Probe OID resolved to character DAT type.");
                 weapon.Runtime.SetPosition(5000, 0, insidePixel.y);
-                world.AdvanceBattleFlowTick(report.startTick);
-                world.ApplyPreFrameBoundsAll();
+                if (fullDriver)
+                {
+                    Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
+                        "Driver rejected the first tick.");
+                    report.driverSteps = 1;
+                }
+                else
+                {
+                    world.AdvanceBattleFlowTick(report.startTick);
+                    world.ApplyPreFrameBoundsAll();
+                }
+                report.timerAfterFirst = weapon.Runtime.OutsideWalkableSinceTick;
+                report.worldTickAfterFirst = world.CurrentTickIndex;
+                report.passVisitsAfter = world.BattleEcsCharacterPreFrameBoundsPassDiagnosticsForDiagnostics.SlotVisitCount;
                 Require(weapon.Runtime.OutsideWalkableSinceTick == report.startTick,
                     "Outside timer did not start at the Play tick.");
 
                 report.beforeRemovalTick = report.startTick + 303;
-                world.AdvanceBattleFlowTick(report.beforeRemovalTick);
-                world.ApplyPreFrameBoundsAll();
+                if (fullDriver)
+                {
+                    while (driver.CurrentTickIndex < report.beforeRemovalTick)
+                    {
+                        Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
+                            "Driver rejected a tick before the threshold.");
+                        report.driverSteps++;
+                        if (world.FindEntityByRuntimeSlotForQuery(slot) != weapon)
+                        {
+                            report.prematureRemovalTick = driver.CurrentTickIndex;
+                            throw new InvalidOperationException(
+                                "Object left the World before the walkable TTL threshold.");
+                        }
+                    }
+                }
+                else
+                {
+                    world.AdvanceBattleFlowTick(report.beforeRemovalTick);
+                    world.ApplyPreFrameBoundsAll();
+                }
                 report.presentAt303 = world.FindEntityByRuntimeSlotForQuery(slot) == weapon;
                 Require(report.presentAt303, "Object disappeared before 10 logic seconds.");
 
                 report.removalTick = report.startTick + 304;
-                world.AdvanceBattleFlowTick(report.removalTick);
-                world.ApplyPreFrameBoundsAll();
+                if (fullDriver)
+                {
+                    Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
+                        "Driver rejected the removal tick.");
+                    report.driverSteps++;
+                }
+                else
+                {
+                    world.AdvanceBattleFlowTick(report.removalTick);
+                    world.ApplyPreFrameBoundsAll();
+                }
                 report.removedAt304 = world.FindEntityByRuntimeSlotForQuery(slot) == null;
                 Require(report.removedAt304, "Object remained after 304 elapsed ticks.");
                 report.status = "PASS";
@@ -166,6 +273,11 @@ namespace NTSD.Test.Editor
             {
                 if (weapon != null && weapon.RegisteredWorldForSimulation == world)
                     world.Unregister(weapon);
+                if (driver.IsFastMode != wasFast)
+                {
+                    driver.QueueNativeFunctionKeyForDiagnostics(NTSD28NativeFunctionKey.F5);
+                    driver.ProcessHostControlCommandsForDiagnostics();
+                }
                 driver.SetPaused(wasPaused);
                 report.cleanupPassed = world.ObjectCount == baselineCount &&
                     world.ClaimedRuntimeSlotCountForDiagnostics == baselineSlots;

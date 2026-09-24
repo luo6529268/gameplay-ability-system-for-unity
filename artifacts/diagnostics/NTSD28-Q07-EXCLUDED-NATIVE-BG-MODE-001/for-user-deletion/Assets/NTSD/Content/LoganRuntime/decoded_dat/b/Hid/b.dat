@@ -1,0 +1,8 @@
+name: _Orochimaru's_Hideout width: 1330 zboundary: 450 690 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Hid\t.png 
+layer: b\Hid\1.png width: 1500 x: 0 y: 0 loop: 576 layer_end
+layer: b\Hid\3.png width: 1500 x: -90 y: 415 loop: 1152 layer_end
+layer: b\Hid\2.png width: 1500 x: -25 y: 692 loop: 576 layer_end
+layer: b\Hid\c1.png width: 1500 x: 296 y: 312 loop: 480 cc: 20 c1: 0 c2: 6 layer_end
+layer: b\Hid\c2.png width: 1500 x: 296 y: 312 loop: 480 cc: 20 c1: 7 c2: 13 layer_end
+layer: b\Hid\c3.png width: 1500 x: 296 y: 312 loop: 480 cc: 20 c1: 14 c2: 20 layer_end

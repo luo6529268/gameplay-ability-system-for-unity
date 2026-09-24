@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -54,7 +55,7 @@ namespace NTSD.Test
         {
             Type type = typeof(BattleContentSource).Assembly.GetType("NTSD.Animation.LoganVisualContentCandidate");
             Assert.That(type, Is.Not.Null, "Bound visual content candidate is missing.");
-            return Invoke(type.GetMethod("Capture"), null, BattleContentSource.ForLoganRuntime(runtime));
+            return Invoke(type.GetMethod("Capture"), null, BattleContentSource.ForLoganRuntime(runtime), null);
         }
 
         private static object Property(object target, string name) => target.GetType().GetProperty(name).GetValue(target);
@@ -131,10 +132,72 @@ namespace NTSD.Test
         [Test]
         public void FormalCandidate_Captures330DefinitionsAnd906ReferencedImages()
         {
-            var candidate = (LoganVisualContentCandidate)Capture(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime");
+            var candidate = LoganVisualContentCandidate.Capture(
+                BattleContentSource.ForLoganRuntime(@"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime"),
+                ProjectBattleModeConfig.LoadDefault().Capture());
             Assert.That(candidate.Catalog.Entries.Count, Is.EqualTo(330));
             Assert.That(candidate.Images.Count, Is.EqualTo(906));
+            Assert.That(candidate.SparkInput, Is.Not.Null);
+            Assert.That(candidate.SparkInput.Width, Is.EqualTo(99));
+            Assert.That(candidate.SparkInput.Height, Is.EqualTo(79));
+            Assert.That(candidate.SparkInput.Image.Path.Replace('\\', '/'),
+                Does.EndWith("/sprite/UI/SPARK.png").IgnoreCase);
+            Assert.That(candidate.SparkInput.Image.Sha256,
+                Is.EqualTo("15D8843E0CE87FF63F46DFF7170D30C23BAEA0F2799434B26717AADFD5EC881B"));
             Verify(candidate);
+        }
+
+        [Test]
+        public void NativeSparkInputs_ChangeCandidateIdentityAndRejectStaleCapture()
+        {
+            string datDirectory = Path.Combine(root, "decoded_dat/data");
+            string spriteDirectory = Path.Combine(root, "vfs/sprite/UI");
+            Directory.CreateDirectory(datDirectory);
+            Directory.CreateDirectory(spriteDirectory);
+            string[] resourceRows = Enumerable.Range(0, 44)
+                .Select(index => "pic: " + (index == 43
+                    ? @"sprite\UI\SPARK.png" :
+                    index >= 16 && index <= 21 ? "c/body.png" :
+                    "unused/" + index + ".png"))
+                .ToArray();
+            File.WriteAllText(Path.Combine(datDirectory, "resource.dat"),
+                "<bmp_begin>\n" + string.Join("\n", resourceRows) + "\n<bmp_end>\n");
+            string systemPath = Path.Combine(datDirectory, "system.dat");
+            File.WriteAllText(systemPath, "spark_w: 99\nspark_h: 79\n");
+            string imagePath = Path.Combine(spriteDirectory, "SPARK.png");
+            File.Copy(Path.Combine(ProjectRoot,
+                "Assets/NTSD/Content/LoganRuntime/vfs/sprite/UI/SPARK.png"), imagePath);
+
+            var before = (LoganVisualContentCandidate)Capture(root);
+            Assert.That(before.Images.Count, Is.EqualTo(3));
+            Assert.That(before.SparkInput.Width, Is.EqualTo(99));
+            Assert.That(before.SparkInput.Height, Is.EqualTo(79));
+            Assert.That(before.SparkInput.Image.Sha256, Is.EqualTo(Hash(File.ReadAllBytes(imagePath))));
+
+            File.WriteAllText(systemPath, "spark_w: 98\nspark_h: 79\n");
+            var changedDimensions = (LoganVisualContentCandidate)Capture(root);
+            Assert.That(changedDimensions.VisualFingerprint, Is.Not.EqualTo(before.VisualFingerprint));
+            Assert.That(changedDimensions.SourceCacheKey, Is.Not.EqualTo(before.SourceCacheKey));
+            Assert.Throws<InvalidDataException>(() => before.AssertInputsCurrent());
+
+            File.WriteAllBytes(imagePath, imageBytes);
+            var changedImage = (LoganVisualContentCandidate)Capture(root);
+            Assert.That(changedImage.VisualFingerprint,
+                Is.Not.EqualTo(changedDimensions.VisualFingerprint));
+            Assert.Throws<InvalidDataException>(() => changedDimensions.AssertInputsCurrent());
+
+            string secondImagePath = Path.Combine(spriteDirectory, "SPARK2.png");
+            File.Copy(imagePath, secondImagePath);
+            resourceRows[43] = @"pic: sprite\UI\SPARK2.png";
+            File.WriteAllText(Path.Combine(datDirectory, "resource.dat"),
+                "<bmp_begin>\n" + string.Join("\n", resourceRows) + "\n<bmp_end>\n");
+            var changedSelection = (LoganVisualContentCandidate)Capture(root);
+            Assert.That(changedSelection.VisualFingerprint,
+                Is.Not.EqualTo(changedImage.VisualFingerprint));
+            Assert.Throws<InvalidDataException>(() => changedImage.AssertInputsCurrent());
+
+            File.Delete(systemPath);
+            Assert.Throws<InvalidDataException>(() => Capture(root));
         }
     }
 }

@@ -1,0 +1,27 @@
+{
+    "runId": "q07-project-mode-formal-1",
+    "mode": "direct",
+    "status": "FAIL",
+    "message": "System.InvalidOperationException: The selected production caller did not reach a running native-content battle.\r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:332 \r\n  at NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor.Run (NTSD.Test.Editor.NTSD28B11SourceCallerPlayProbeEditor+Request request) [0x00881] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28B11SourceCallerPlayProbeEditor.cs:180 ",
+    "sourceKey": "",
+    "shutdownStage": "",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "Assets/NTSD/Content/LoganRuntime",
+    "failureLifecycle": "Preparing",
+    "sourceIds": [
+        0,
+        50,
+        52
+    ],
+    "worldObjects": 0,
+    "trackedResources": 0,
+    "resourceSurvivors": 0,
+    "menuPreviousOwnerSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 0,
+    "menuReady": false,
+    "samePublishedKeys": false,
+    "stayedStoppedAfterTwoFrames": false,
+    "serializedRootSelected": false,
+    "rootFromAsset": ""
+}

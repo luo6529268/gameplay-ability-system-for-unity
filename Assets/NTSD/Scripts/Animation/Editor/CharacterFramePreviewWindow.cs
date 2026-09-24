@@ -1033,6 +1033,9 @@ namespace NTSD.Animation.Editor
         /// </summary>
         private void LoadDataFile()
         {
+            if (CharacterAnimtorManager.HasConfiguredLoganContent)
+                return;
+
             string dataFilePath = "Assets/NTSD/Config/data.txt";
             string fullPath = System.IO.Path.GetFullPath(dataFilePath);
 

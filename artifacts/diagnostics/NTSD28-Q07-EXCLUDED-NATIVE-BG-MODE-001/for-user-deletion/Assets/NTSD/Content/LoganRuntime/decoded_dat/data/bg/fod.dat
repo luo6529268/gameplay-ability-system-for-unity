@@ -1,0 +1,36 @@
+<mode>
+name: __normal_[no_regen_+_mp_gain]
+small: b\fod\t.png
+spark: 1
+etc_mode: 1
+etc_width: 80
+weapon_drop: 2
+regen_hp: 1
+regen_mp: 1
+gain_mp_a: 75
+gain_mp_v: 75
+type: 1
+hex: 16777215
+<mode_end>
+
+<mode>
+name: __casual_[regen_+_weapon_drop]
+small: b\fod\t.png
+spark: 1
+etc_mode: 1
+etc_width: 80
+type: 1
+hex: 16777215
+<mode_end>
+
+<mode>
+name: __practice_[chakra_regen_only]
+small: b\fod\t.png
+spark: 1
+etc_mode: 1
+etc_width: 80
+weapon_drop: 2
+regen_hp: 1
+type: 1
+hex: 16777215
+<mode_end>

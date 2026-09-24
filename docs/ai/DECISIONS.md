@@ -2,7 +2,7 @@
 
 ## D-025 — 非角色战斗对象离开项目可行走区域后按战斗逻辑时间延迟清除
 
-- **状态**：`USER_CONFIRMED / FOCUSED_TEST_PASS / RUNTIME_PENDING`。
+- **状态**：`USER_CONFIRMED / SCOPED_VERIFIED / Q12_INTEGRATION_REVISIT`。
 - **日期**：2026-09-24。
 - **用户明确要求**：项目自己的可行走区域是离场判据；仅非角色战斗对象连续离开该区域超过 10 秒才清除。10 秒按战斗逻辑时间计，正常 33 ms tick 需约 304 tick，F5 快速模式只缩短现实等待时间，不改变逻辑 tick 数。
 - **边界**：实体地面点应以实际战斗 X/Z 投影到项目的可行走多边形判定；重新进入区域重置连续离区计时。角色现有边界/生命周期不由此决定改变。该用户例外取代 NTSD 正式版非角色 X 越界即时销毁时机，但不自动取消其他正式规则或修改 DAT。没有有效可行走多边形时不得把“无数据”误判为“已离区”。
@@ -19,9 +19,9 @@
 - **现状与实施出口**：`NTSD28-USER-FIXED-VIEW-RUN-RATIO-001` 仅是角色跑/冲刺 X/Z 速度的局部实施，原 Editor 聚焦测试通过但自然 Play 未完成，不代表 D-024 全实体达成。后续先出可枚举生产入口/坐标轴/视口参考清单和共享换算合同，再按互不重叠的有界批次实施；每批检查多实体位置、显示位移比例、生成/碰撞/命中/边界副作用、正式行为例外记录及原项目 Play。不得因改成比例目标而宣称其他战斗规则已完全一致。
 - **恢复入口**：`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 顶部 D-024 跟踪项，`docs/ai/STATE.md` 和当前 handoff。
 
-## D-023 — DAT 与角色相关图片采用 NTSD 2.8-Logan 内容权威
+## D-023 — DAT 与角色相关图片采用 NTSD 2.8-Logan 内容权威（背景类 DAT 排除）
 
-- **状态**：`USER_CONFIRMED / CONTENT_TARGET_DECIDED / MIGRATION_NOT_STARTED`。
+- **状态**：`USER_CONFIRMED / CONTENT_TARGET_DECIDED / BACKGROUND_DAT_SCOPE_CORRECTED`。
 - **日期**：2026-09-12。
 - **用户明确要求**：“Dat文件和图片资源要用NTSD2.8-Logan版本的”，并指出当前 DAT 和角色相关图片估计需要全部删除；本轮重点另要求核对现有脚本、整理已对齐项目与真实剩余修改。
 - **决定**：DAT 及角色相关图片的正式目标采用当前权威 EXE 实际消费的 `resources/runtime` 版本；不采用“旧同名 DAT 数值继续保留、只补缺失”的方向。旧 Unity 138-DAT manifest/projection 与图片是迁移前基线，保留历史验证价值，不能再裁决目标内容。
@@ -29,6 +29,10 @@
 - **边界**：资源源版本已决定，实际迁移未执行。先列出旧→新 object/path/hash/GUID/引用关系、共享资源、parser 和 loader 必需修改，再按独立 Task/Change 分批接入；不能按 Config/Sprite 目录整体清空。精确删除集合尚待清单核验，不将“估计”扩张成无差别删除许可。
 - **保持项**：既有容量/相机/边界/随机掉落/保留 UI 例外和排除项不变；不自动扩大为所有 UI/地图图片或 WAV 全量迁移；默认 stage.dat 部署暂停仍须单独解决。
 - **恢复入口**：`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 的当前状态、第 4 节实时矩阵和 H 专项。
+
+> **2026-09-24 用户范围更正（覆盖本节上面的概括，不改写原始决定）：** 本项目不使用原版 NTSD 背景与两类模式 DAT。`b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat` 明确排除在 D-023 的迁移目标之外；使用项目自己的背景、地图及模式内容。原版源码或 DAT 可供只读规则分析，但调用链可达性不构成这些资源的部署或接线授权。此前 Q07 对背景类共50个 DAT 的暂存和未接入解析器是错误扩围；另两个 mode DAT 已进入生产内容身份、combo/KO消费者，需先安全脱钩再由用户清理。其他非排除 DAT 与角色相关图片的目标不变。
+
+> **2026-09-24 实施更新：** 用户选择独立 Unity ScriptableObject 资产替代 mode DAT。`ProjectBattleModeConfig.asset` 已建立并通过配置化生产预热传入不可变快照；正式模式 DAT 不再参与该入口的身份、combo/KO 输入。52个排除 DAT、对应meta和误加解析器/测试已移入单一`for-user-deletion/`文件夹，供用户自行删除。原 Editor 的定向测试、自检和两条受控 Play 记录在 Q07 ProjectMode 任务中；这不表示 Q07 其他内容与全部 KO/连击行为已闭合。
 
 > **2026-09-12 任务重整说明（不新增用户决策）：** 当前完整对齐执行视图见 `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md` 第 0 节，标识 `NTSD28-ALIGNMENT-REPLAN-20260912`。
 > D-020 的 IMPLEMENTATION_NOT_STARTED 仅是 9 月 2 日历史状态，不能覆盖 Goal17～20 后续限定成果；其用户例外与 H 策略边界在明确改判前仍有效。

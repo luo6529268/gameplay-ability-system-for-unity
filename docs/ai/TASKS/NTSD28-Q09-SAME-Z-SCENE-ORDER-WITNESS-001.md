@@ -1,0 +1,11 @@
+# NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001
+
+Status: VERIFIED_SCENE_ORDER_ONLY; original Editor compile and controlled original Battle Scene Play PASS; GPU/visual and formal EXE exits remain with parent P-04. Parent: BATCH-05/Q09 P-04; prerequisite `NTSD28-Q09-SAME-Z-PAINTER-ORDER-001` is `RUNTIME_PENDING`.
+
+Authority: formal root EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; playable `render_snapshot.cpp` final `entity_commands` use Z ascending, equal-Z physical slot descending, then phase; `d3d11_renderer.cpp` consumes this order. Unity's current P-04 producer change has Editor 14/14 and SelfCheck PASS, but its old R07B scene probe cannot enter the witness phase without a legacy `hit_Fa` fixture.
+
+Bounded work: add one Editor-only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q09SameZSceneOrderPlayProbeEditor.cs` and its Unity `.meta` (if imported). The new request/menu probe runs against the original saved `NTSD_Battle.unity` production World, with `CentralOnly` required. It creates two temporary same-Z battle presentation entities in free runtime slots; it must use the real production World and presentation dispatch, record their slot/handle/order, and remove them after capture. It must fail promptly with a specific prerequisite reason if the World, backend, slots, frame, or publication is unavailable. It must not depend on the R07B pending/free DAT frame. It must not edit DAT, Scene, Prefab, production battle scripts, project settings, logic time, camera, or nonbattle paths.
+
+Acceptance: Editor compile 0 errors; a real original Battle Scene Play request reports two distinct live handles/slots, same Z, greater slot first in materialized painter order and corresponding production rank, followed by object/slot cleanup and exit. Report original scene hash before/after and whether CentralOnly commands were actually submitted. This package proves scene runtime publication order only; color-specific overlap pixels, Legacy visual outlet, and formal EXE same-scene A/B remain separate P-04/Q09 exits. Failure must leave status `RUNTIME_PENDING` with first reason, not claim parity.
+
+Rollback: remove only the new test/probe script and matching `.meta` after reviewing its exact diff; preserve all existing user work. Do not automatically perform rollback or deletion.

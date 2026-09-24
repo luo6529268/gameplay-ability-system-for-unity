@@ -2483,20 +2483,16 @@ namespace NTSD.Simulation.Presentation
 
             EnsureEntitySortCapacity(count);
             int previousRuntimeSlot = int.MinValue;
-            int previousStableId = int.MinValue;
             for (int index = 0; index < count; index++)
             {
                 ref readonly BattlePresentationEntitySnapshot entity =
                     ref frame.GetEntityRef(index);
-                if (entity.RuntimeSlot < previousRuntimeSlot ||
-                    entity.RuntimeSlot == previousRuntimeSlot &&
-                    entity.StableId < previousStableId)
+                if (entity.RuntimeSlot <= previousRuntimeSlot)
                 {
                     return false;
                 }
 
                 previousRuntimeSlot = entity.RuntimeSlot;
-                previousStableId = entity.StableId;
                 presentationSortIndexSource[index] = index;
                 entitySortKeySource[index] = unchecked((uint)(entity.ZInt ^ int.MinValue));
             }
@@ -2542,6 +2538,23 @@ namespace NTSD.Simulation.Presentation
                     return false;
             }
 
+            // Alignment contract: NTSD28-Q09-SAME-Z-PAINTER-ORDER-001.
+            // The native interleaved entity command stream paints later physical
+            // slots first at equal depth. Reverse only equal-Z radix runs; the
+            // independent sprite/spark source arrays keep their own ordering.
+            for (int start = 0; start < count;)
+            {
+                int end = start + 1;
+                while (end < count && sourceKeys[end] == sourceKeys[start])
+                    end++;
+                for (int left = start, right = end - 1; left < right; left++, right--)
+                {
+                    (sourceIndices[left], sourceIndices[right]) =
+                        (sourceIndices[right], sourceIndices[left]);
+                }
+                start = end;
+            }
+
             frame.SetIndexedPresentationOrder(sourceIndices, count);
 
             return true;
@@ -2555,7 +2568,7 @@ namespace NTSD.Simulation.Presentation
             if (zComparison != 0)
                 return zComparison;
 
-            int slotComparison = left.RuntimeSlot.CompareTo(right.RuntimeSlot);
+            int slotComparison = right.RuntimeSlot.CompareTo(left.RuntimeSlot);
             if (slotComparison != 0)
                 return slotComparison;
 
@@ -3051,13 +3064,9 @@ namespace NTSD.Simulation.Presentation
                 {
                     ref readonly BattlePresentationHitRecordSnapshot hit =
                         ref frame.GetHitRecordRef(entity.HitRecordStart + hitIndex);
-                    if (!TryResolveSparkFrame(
-                            hit.Age,
-                            out int pic,
-                            out Vector2 size,
-                            out Rect pixelRect))
-                        continue;
-                    if (!frame.CommonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding spark))
+                    if (!frame.CommonVisualCatalog.TryGetSparkForAge(
+                            hit.Age, out int pic,
+                            out BattleCommonVisualBinding spark))
                         continue;
 
                     Vector3 hitPosition = viewportTransform.ScreenPixelToWorld(

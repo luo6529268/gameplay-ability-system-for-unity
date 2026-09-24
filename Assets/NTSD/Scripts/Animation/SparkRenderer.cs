@@ -9,10 +9,8 @@ namespace NTSD.Animation
     /// <summary>
     /// 命中闪光渲染器
     ///
-    /// 对应权威 C# host renderer 的 SPARK blit 逻辑。
-    ///
-    /// C# Host DrawHitRecords 按 HitRecordDamage 选取 SPARK.bmp 的 20 个图块，
-    /// 成功绘制后立即递增 age；无效 age 只在该 slot 是最后一个时回收。
+    /// 正式内容按原始 spark ID 读取 SPARK.png 的稀疏 99x79 图块；
+    /// 旧内容保留 SPARK.bmp 图块映射。逻辑 age 由 C01 tick pass 独占推进。
     /// </summary>
     public class SparkRenderer : MonoBehaviour
     {
@@ -144,13 +142,15 @@ namespace NTSD.Animation
             {
                 BattlePresentationHitRecordSnapshot hit = cycle.GetHitRecord(
                     owner.HitRecordStart + hitIndex);
-                if (!BattleCommonVisualCatalog.TryResolveSparkAge(hit.Age, out int pic) ||
-                    !cycle.CommonVisualCatalog.TryGetSpark(pic, out BattleCommonVisualBinding binding))
+                if (!cycle.CommonVisualCatalog.TryGetSparkForAge(
+                        hit.Age, out int pic, out BattleCommonVisualBinding binding))
                 {
                     continue;
                 }
 
-                Sprite sprite = GetSpriteForAge(hit.Age);
+                Sprite sprite = pic >= 0 && pic < _sparkSprites.Length
+                    ? _sparkSprites[pic]
+                    : null;
                 if (sprite == null)
                     continue;
 
@@ -208,14 +208,5 @@ namespace NTSD.Animation
             _activePools.Clear();
         }
 
-        private Sprite GetSpriteForAge(int age)
-        {
-            if (!BattleCommonVisualCatalog.TryResolveSparkAge(age, out int pic))
-                return null;
-
-            if (pic >= 0 && _sparkSprites != null && pic < _sparkSprites.Length)
-                return _sparkSprites[pic];
-            return null;
-        }
     }
 }

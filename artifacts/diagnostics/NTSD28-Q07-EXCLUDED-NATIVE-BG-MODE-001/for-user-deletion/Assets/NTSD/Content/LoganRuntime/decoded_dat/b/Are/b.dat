@@ -1,0 +1,7 @@
+name: _Arena width: 1330 zboundary: 570 700 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Are\t.png 
+layer: b\Are\1.png width: 1330 x: 5 y: 0 layer_end
+layer: b\Are\1.png width: 1330 x: 0 y: 0 layer_end
+layer: b\Are\3.png width: 1330 x: -10 y: 600 loop: 800 layer_end
+layer: b\Are\4.png width: 1330 x: -10 y: 645 loop: 800 layer_end
+layer: b\Are\3.png width: 1330 x: -150 y: 690 loop: 800 layer_end

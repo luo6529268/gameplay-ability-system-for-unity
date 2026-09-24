@@ -1,0 +1,8 @@
+name: _Uchiha_Hideout width: 1330 zboundary: 395 710 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Uch\t.png 
+layer: b\Uch\1.png width: 1335 x: 2 y: 0 cc: 20 c1: 0 c2: 6 layer_end
+layer: b\Uch\2.png width: 1335 x: 2 y: 0 cc: 20 c1: 7 c2: 13 layer_end
+layer: b\Uch\3.png width: 1335 x: 2 y: 0 cc: 20 c1: 14 c2: 20 layer_end
+layer: b\Uch\l1.png width: 1335 x: 2 y: 0 cc: 190 c1: 0 c2: 13 layer_end
+layer: b\Uch\l2.png width: 1335 x: 2 y: 0 cc: 190 c1: 7 c2: 20 layer_end
+layer: b\Uch\l3.png width: 1335 x: 2 y: 0 cc: 190 c1: 14 c2: 20 layer_end

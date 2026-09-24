@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using NTSD.App;
 
 namespace NTSD.Animation
 {
@@ -44,14 +45,17 @@ namespace NTSD.Animation
         public string DefinitionFingerprint { get; }
         public LoganFusionCatalogInput FusionInput { get; }
         public LoganModeComboInput ModeComboInput { get; }
+        public ProjectBattleModeConfig.Snapshot ProjectModeSnapshot { get; }
         public LoganKindCatalogInput KindInput { get; }
         public string BattleDefinitionFingerprint => ContentIdentity.RawDefinitionFingerprint;
         public LoganContentIdentity ContentIdentity { get; }
         public string SourceCacheKey { get; }
 
-        private LoganObjectCatalog(BattleContentSource source, byte[] catalogBytes, List<Entry> entries)
+        private LoganObjectCatalog(BattleContentSource source, byte[] catalogBytes, List<Entry> entries,
+            ProjectBattleModeConfig.Snapshot projectModeSnapshot)
         {
             Source = source;
+            ProjectModeSnapshot = projectModeSnapshot;
             entries.Sort((a, b) => a.RegistryIndex.CompareTo(b.RegistryIndex));
             Entries = entries.AsReadOnly();
             CatalogSha256 = Hash(catalogBytes);
@@ -72,7 +76,9 @@ namespace NTSD.Animation
             }
             // Canonical portable layout: both native roots are RuntimeRoot; DatRoot is its decoded_dat.
             FusionInput = LoganFusionCatalogInput.Capture(source.DatRoot, source.RuntimeRoot);
-            ModeComboInput = LoganModeComboInput.Capture(source);
+            ModeComboInput = projectModeSnapshot != null
+                ? LoganModeComboInput.FromProjectSnapshot(projectModeSnapshot)
+                : LoganModeComboInput.Capture(source);
             KindInput = LoganKindCatalogInput.Capture(source.DatRoot, source.RuntimeRoot);
             ContentIdentity = LoganContentIdentity.FromBattleComponents(DefinitionFingerprint,
                 FusionInput.InputFingerprint, FusionInput.SemanticFingerprint,
@@ -81,7 +87,8 @@ namespace NTSD.Animation
             SourceCacheKey = ContentIdentity.CreateSourceCacheKey(source.RuntimeRoot);
         }
 
-        public static LoganObjectCatalog Read(BattleContentSource source)
+        public static LoganObjectCatalog Read(BattleContentSource source,
+            ProjectBattleModeConfig.Snapshot projectModeSnapshot = null)
         {
             if (source == null || !source.IsLoganRuntime)
                 throw new ArgumentException("A Logan runtime content source is required.", nameof(source));
@@ -138,7 +145,7 @@ namespace NTSD.Animation
                         }
                         entries.Add(new Entry(index, id, type, sourcePath, folder, datPath, File.ReadAllBytes(datPath)));
                     }
-                    return new LoganObjectCatalog(source, catalogBytes, entries);
+                    return new LoganObjectCatalog(source, catalogBytes, entries, projectModeSnapshot);
                 }
             }
             catch (Exception error) when (error is IOException || error is UnauthorizedAccessException || error is ArgumentException)

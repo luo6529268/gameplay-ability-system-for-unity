@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Text;
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -20,10 +21,11 @@ namespace NTSD.Test.Editor
         {
             string stagedRoot = Path.GetFullPath(Path.Combine(
                 Application.dataPath, "NTSD/Content/LoganRuntime"));
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
             var formal = LoganVisualContentCandidate.Capture(
-                BattleContentSource.ForLoganRuntime(FormalRoot));
+                BattleContentSource.ForLoganRuntime(FormalRoot), mode);
             var staged = LoganVisualContentCandidate.Capture(
-                BattleContentSource.ForLoganRuntime(stagedRoot));
+                BattleContentSource.ForLoganRuntime(stagedRoot), mode);
 
             Assert.That(formal.Images.Count, Is.EqualTo(906));
             Assert.That(staged.Images.Count, Is.EqualTo(906));

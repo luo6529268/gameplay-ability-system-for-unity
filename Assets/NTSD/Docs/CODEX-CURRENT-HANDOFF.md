@@ -1,3 +1,65 @@
+> 2026-09-24 P-04并行Scene变动更正：同Z Play探针结果写于20:12:16，退出后首次磁盘核对Battle Scene仍为SHA 9409F2...3B3A39；20:14:05 Scene后续被写为7D7286...0E567，当前Git diff仅两台Camera的m_Enabled 1→0。写入者/意图未证，不回退、不归因探针。新排序见证仅证明原Scene当时的受控物化顺序；后续像素验收必须先复核当前相机可用性。
+
+> 2026-09-24 NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001 / VERIFIED_SCENE_ORDER_ONLY：原Battle Scene真实Play中CentralOnly生产World的受控同Z排序在tick5为slot51 rank0/order1、slot50 rank1/order5，两个handle generation1，对象/占用slot 4/2→4/2、pause恢复；Editor已退出Play且Battle Scene磁盘SHA不变。原Editor新脚本编译0错；首轮45秒启动等待超时与正式内容加载有关，保留首轮FAIL，第二轮180秒有界等待PASS。探针显式物化、夹具无sprite/绘制命令，故自然LateUpdate/GPU遮挡像素、Legacy视觉出口及正式EXE同场景仍待；P-04/Q09/总目标不关闭。详artifacts/diagnostics/NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001/ACCEPTANCE.md。
+
+> 2026-09-24 NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001 / PLANNED：P-04原Battle Scene旧R07B探针依赖旧DAT `hit_Fa` 前置而未给同Z见证；已建独立test-only Task/Change，以原Scene生产World的临时同Z实体和central materialized order补运行时顺序证据。当前仅合同，无脚本/Play结果；像素遮挡、Legacy视觉出口与正式EXE对照仍是后续出口。
+
+> 2026-09-24 NTSD28-Q09-SAME-Z-PAINTER-ORDER-001 / FOCUSED_TEST_PASS / RUNTIME_PENDING：按正式playable entity_commands 的同Z大物理slot先绘，已更正Unity Stage/Coordinator与central radix的战斗表现排序，冻结快照保持原物理slot存储；原Editor编译0错、定向14/14、fresh SelfCheck PASS。原Battle Scene旧R07B探针未建立正式内容下夹具，退出结果FAIL不构成P-04反证；遮挡像素/正式EXE同场景仍待。Scene哈希不变，DAT/相机/逻辑/非战斗未改。全量EditMode误触发提前失败不作本包证据。详artifacts/diagnostics/NTSD28-Q09-SAME-Z-PAINTER-ORDER-001/ACCEPTANCE.md。Q09/R16/总目标仍开放。
+
+> NTSD28-Q09-SAME-Z-PAINTER-ORDER-001 / PLANNED：正式playable的entity_commands同深度先绘较大物理slot，Unity Stage/Coordinator比较器和central radix快路均较小slot在前，P-04首差确认。已建Task/Change/Ledger，下一步test-first只改这两战斗表现脚本及两定向测试/探针，深度顺序、独立sprite/spark源数组和逻辑真相不动；正式例外与Q09总目标开放。
+
+> 2026-09-24 NTSD28-Q09-C01-PLAY-PROBE-RNG-001 / VERIFIED（仅测试探针）：原Battle Scene CentralOnly真实Play四tick 1928-1931 PASS；每tick正式原生CRT 2次、共享RNG武器门槛1次，HitRecord物化命令1/2/3/0，C01年龄与Late幂等通过，退出时两流和对象/slot/pool等基线恢复。原Editor编译0错、Battle/Menu Scene哈希不变。旧探针3次共享RNG断言已按Q06正式双流合同更正；正式EXE同种子像素、legacy出口和30/60/120采样仍待，Q09/R14/R17与总目标开放。证据：artifacts/diagnostics/NTSD28-Q09-C01-PLAY-PROBE-RNG-001/ACCEPTANCE.md。
+
+> NTSD28-Q09-C01-PLAY-PROBE-RNG-001 / PLANNED：原Battle Scene C01 Play探针仍把命中火花的原生CRT两次抽样算进共享world.Rng，旧断言3次与现Q06生产双流合同冲突。已建独立Task/Change/Ledger；拟仅改该Editor测试探针，逐tick记录原生CRT两次Y-X与共享武器门槛一次，并恢复两流基线。不改生产逻辑、DAT/图片/Scene；Q09与总目标开放。
+
+> 2026-09-24 NTSD28-Q09-NATIVE-SPARK-PUBLICATION-001 / RUNTIME_PENDING：正式SPARK.png黑键及20个有效格已通过原Unity Editor编译、几何/资源测试、330对象正式发布回收和BattleRuntimeSelfCheck；raw 0..99 ID在legacy与central出口共用可绘制映射，DAT/Scene/战斗逻辑未改。Battle Scene C01自然命中Play探针在tick3573先遇RNG delta 1 vs旧夹具期望3，尚未到SPARK画面断言；需按当前正式命中链审计该首差，另做两出口Play、30/60/120采样和正式EXE像素对照。Q09/R14/R17及总目标未关闭。证据：artifacts/diagnostics/NTSD28-Q09-NATIVE-SPARK-PUBLICATION-001/ACCEPTANCE.md。
+
+> NTSD28-Q09-NATIVE-SPARK-PUBLICATION-001 / IN_PROGRESS：正式全局SPARK发布和两个战斗渲染出口接线，脚本前Task/Change/Ledger已建。原始0..99 ID仅在可绘制资源查找时压缩为现有20键；不改C01逻辑生命周期、不改DAT/Scene/非战斗与已排除HUD，旧BMP分支保留。原Editor编译、聚焦与Play/正式像素尚待；Q09/总目标开放。
+
+> 2026-09-24 Q09正式SPARK输入前置已验收：NTSD28-Q09-NATIVE-SPARK-INPUT-001 / VERIFIED。候选现在捕获resource.dat索引43的正式SPARK.png、system.dat的99x79及图像SHA，三类变化使旧候选失效；正式与暂存候选身份1/1、原Editor候选8/8及追加变更反例1/1 PASS，编译0错、Scene哈希不变、Ledger785/21 PASS。角色图候选仍906，旧SPARK.bmp发布和两个绘制出口尚未替换；下一Q09须接正式PNG黑键、原始ID稀疏裁切和legacy/central消费，再验Play/正式像素，R14/R17与总目标仍开放。详artifacts/diagnostics/NTSD28-Q09-NATIVE-SPARK-INPUT-001/ACCEPTANCE.md。
+
+> NTSD28-Q09-NATIVE-SPARK-INPUT-001 / IN_PROGRESS：Q09正式全局SPARK输入捕获子包。脚本前Task/Change/Ledger已建；仅将resource.dat索引43、system.dat宽高与SPARK.png SHA纳入正式候选身份/新鲜度，保留906角色图候选与旧20图发布直到后续正式接线。原HUD/KO feed例外不受此包影响；Q09及总目标开放。
+
+> 2026-09-24 Q09 smallb权限纠正已验收：NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001 / VERIFIED。依据P-17，原生角色HUD为USER_EXCLUDED；已精确撤销误加的smallb候选、解码、发布和肖像API，生产候选恢复906张，磁盘正式/暂存图片1010/1010逐SHA证据仍有效。原Editor编译0错、聚焦5/5、候选7/7、Ledger与diff检查通过，Scene SHA不变；旧smallb发布记录仅为已SUPERSEDED历史。项目Battle HUD、HeadImg和用户HUDBg x30不变。后续仅推进非排除Q09战斗表现与Q07资源引用闭环，Q09及总目标均未关闭。详artifacts/diagnostics/NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001/ACCEPTANCE.md。
+
+> 2026-09-24 smallb权限更正：本表§0.2/§1.2及P-17、DECISIONS已将完整原生角色HUD列为USER_EXCLUDED。104张smallb正式图片的磁盘部署/SHA 1010/1010事实保留，但其HUD消费不是Q09/R17待修项。前两条把静态HUD首差误判为必修，并曾新增smallb运行时发布；该建议已被本条覆盖，代码正按NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001精确纠正。项目原Battle HUD、HeadImg、用户HUDBg x30保持，不重做非战斗UI。
+
+> NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001 / IN_PROGRESS：P-17明定完整原生HUD用户排除；前包smallb发布属于误扩范围。已先建Task/Change/Ledger，拟仅撤销本代理新增的smallb候选/解码/发布，保留正式1010图的磁盘SHA证据和项目mode Asset测试修正，不改Scene、DAT、图片或非战斗行为。
+
+> 2026-09-24 NTSD28-Q09-SMALLB-PUBLICATION-001 / FOCUSED_TEST_PASS：正式smallb图已进入候选SHA、预热与原子发布，独立BattlePortraitSprite供后续HUD读取；正式/暂存候选各1010图，原Editor聚焦5/5、330对象发布回收1/1、候选类8/8 PASS。Battle Scene HeadImg仍为静态small图，HUD槽消费者/Play像素/正式EXE同场景未验；Q09/R17/总目标保持开放。详 artifacts/diagnostics/NTSD28-Q09-SMALLB-PUBLICATION-001/ACCEPTANCE.md。
+
+> NTSD28-Q09-SMALLB-PUBLICATION-001 / IN_PROGRESS：脚本修改前Task/Change/Ledger已建；准确范围为候选哈希、smallb图预热/原子发布和5项聚焦夹具。正式HUD选择优先smallb，缺失回退small；Scene消费者与Play像素独立后续。保留HUDBg x30、菜单/Unity-GAS/DAT/旧资源。
+
+> 2026-09-24 Q09 smallb HUD静态首差已确认：正式HUD优先smallb；Unity当前HeadImg静态Naruto图实际是正式small字节，104张已部署smallb未入候选/发布，动态HUD consumer未见。只读报告 artifacts/diagnostics/NTSD28-Q09-SMALLB-HUD-CONSUMER-AUDIT-001/REPORT.md；Q09/R17及Play像素仍开放，保留用户HUDBg x30、非战斗UI和旧图。
+
+> 2026-09-24 Q07正式索引图片覆盖：正式/暂存VFS对Q01不同索引图1,010/1,010存在且SHA相同；现候选906与原始1,010差104全部为`smallb`独立图片。正式战斗HUD优先smallb、缺省small；Unity当前候选只收file/head/small，smallb生产读者未见，归Q09 HUD表现/R17而非Q07资源缺失。详 `artifacts/diagnostics/NTSD28-Q07-INDEXED-IMAGE-COVERAGE-001/REPORT.md`及逐图SHA表。旧资源退场、Q07/Q09实际表现仍开放；SPARK原始ID接线归Q09，未改资源/生产。
+
+> 2026-09-24 Q07旧资源动态owner门槛：旧data.txt当前SHA与Q01冻结值相同，137索引对象/type0 42；旧138 DAT+383索引图逐字节521/521与Q01相同，383图均有旧DAT声明owner。正式根默认预热不读旧内容，但菜单/测试bootstrap/Inspector/帧预览的空根legacy入口仍可达；静态0引用不是删除证书。详 `artifacts/diagnostics/NTSD28-Q07-LEGACY-DYNAMIC-OWNER-GATE-001/REPORT.md`。下一独立包处理空根兼容入口和历史夹具；旧资源未动、Q07开放。
+
+> 2026-09-24 Q07旧383角色图静态重扫：当前Assets所选9,825个文本/序列化文件中，同路径存在383、GUID owner 0、精确路径引用0，逐行 `deleteAuthorized=False`；只证静态文本/GUID，旧DAT动态声明和空根legacy运行时可达性待审，不能删图。新CSV见 `artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/post-formal-test-indexed-image-reference-scan.csv`。
+
+> 2026-09-24 Q07 NTSD28-Q07-FORMAL-CHARACTER-DEPLOYMENT-001 / VERIFIED（仅角色部署测试）：42旧DAT/BMP断言已改为正式/暂存158条type0的DAT、解析帧及声明图片逐项SHA检查；原项目Editor编译，目标+相邻内容身份+正式鸣人PNG/GPU 3/3 PASS（job 3bc6f024f2784e928d749118b17d4982），Scene dirty=false、双Scene SHA稳定、Ledger PASS。生产、DAT、图片、Scene未因本包修改；旧资源退场和Q07整体继续开放。
+
+> 2026-09-24 Q07 NTSD28-Q07-LEGACY-GRID-TEST-FIXTURE-001 / VERIFIED（仅测试夹具）：已将两条旧Naruto/Sasuke BMP精确路径换成800×560内存网格；原项目Editor重编译，旧网格/帧内绿色保护/正式鸣人PNG生产GPU聚焦3/3 PASS（job 91c3e05b90844d64ae160d2c24bd8003）。未改生产脚本、DAT、图片或Scene；旧383图删留及Q07整体继续开放。详Task/Record和本包ACCEPTANCE。
+
+> 2026-09-24 STATE/handoff 恢复说明：本轮写入故障曾产生 NUL 字节；已从 Git HEAD 完整正文及当前 Q07 对齐总表重建，原未提交顶部流水账不声明逐字节恢复。详 artifacts/diagnostics/NTSD28-Q07-STATE-HANDOFF-RECOVERY-001/REPORT.md；恢复后 Ledger PASS。
+
+> 2026-09-24 Q07 角色帧预览旧索引入口限定闭合：NTSD28-Q07-FRAME-PREVIEW-FORMAL-INDEX-001 / VERIFIED。正确单例夹具下原窗口正式根仍加载旧data.txt，RED1/2；现正式根打开窗口不读旧索引、空根保持旧行为，原Editor聚焦2/2、相邻Inspector/legacy2/2、Battle Scene dirty=false且双Scene SHA稳定。两次早期夹具失败不计行为证据。详Task/Change及 artifacts/diagnostics/NTSD28-Q07-FRAME-PREVIEW-FORMAL-INDEX-001/ACCEPTANCE.md；旧资源删留与Q07整组仍开放。
+
+> 2026-09-24 Q07 Inspector正式资源刷新限定完成：NTSD28-Q07-INSPECTOR-FORMAL-REFRESH-001 / VERIFIED。原Inspector按钮在配置正式根时仍读旧data.txt/BMP，actual-button测试先RED 0/1（发布键null）；现复用现有正式预热，按钮+相邻调用2/2、旧显式数据1/1，原Editor编译、Scene双SHA稳定、Ledger PASS。空根历史入口与383旧索引图删留仍开放。详Task/Change与 artifacts/diagnostics/NTSD28-Q07-INSPECTOR-FORMAL-REFRESH-001/ACCEPTANCE.md。
+
+> 2026-09-24 Q07 旧索引角色图片新鲜静态扫描：从旧Q01清单取383张，当前同路径存在383；扫描Assets内2901个文本Scene/Prefab/Asset/脚本/配置，序列化GUID owner为0，精确路径文本引用仅naruto_0.bmp与sasuke_0.bmp两项Editor网格测试。详 artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/current-indexed-image-reference-scan.csv 及REPORT.md。旧DAT动态声明与手动/空根加载仍开放，不能据381项无静态引用批准删除；Q07继续。
+
+> 2026-09-24 Q07 旧角色图片当前 owner 回访：当前 Battle Scene 禁用佐助预览已指向正式 `sasu.png` GUID，2026-09-22 图中旧 BMP Scene owner 结论过期。配置化默认预热使用正式根、项目模式 Asset，旧任务在该根非空时取消；但手动 Editor 刷新、空根旧加载路径、42 角色旧资源部署测试及两个 BMP 网格测试仍有旧内容依赖，不能据默认预热成功批量退场 383 个旧索引图。当前态与下一逐文件门槛见 `artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/REPORT.md`。本轮仅只读审计/文档回链，删除授权仍为零，Q07 开放。
+
+> 2026-09-24 Q07 排除后新鲜清单：正式405 DAT明确排除背景/两类模式52，当前范围上限353；项目目录现336 DAT均有正式同路径同SHA，额外0、不同0、缺17。17项分别进入原生菜单/HUD例外、Q09活动证据、Q10音频及Q08/stage部署暂缓，见 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/CURRENT-SCOPED-DAT-INVENTORY.md`，不得再机械复制。原版背景/模式资源统一待用户清理文件夹与项目模式Asset的限定验收见同目录REPORT及Q07 ProjectMode记录。随后原Editor再编译、与旧mode身份相关的三项Q07聚焦测试3/3 PASS（`c82592c1ad694d3dbf5cb4e358ab36af`），ProjectMode生产接线限定验收完成。下一Q07优先回到角色相关旧图的序列化引用/活动可达性与正式图重绑清单；先按既有owner分类作只读核对，不得按目录批量删除或把Q07整组写成完成。
+
+> 2026-09-24 Q07 范围修正已落地：按用户确认，原版背景24 DAT、背景模式26 DAT、`data/mode.dat` 与 `data/mode/ntsd.dat` 共52 DAT及配套meta，连同误加的未接入解析器/测试，已从 Assets 可读路径精确移入 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/for-user-deletion/` 单一文件夹（136文件，含已逐项SHA验证的135项zip），留给用户自行删除；未删原件。新的独立 `Assets/NTSD/Resources/ProjectBattleModeConfig.asset` 已接管配置化生产内容入口。原Editor Asset聚焦1/1、生产快照/首tick聚焦1/1、预热缓存2/2、SelfCheck PASS；无原版mode DAT的临时内容 Play 和正式内容 Play 均完成World4/发布键一致/有序关闭/零残留，Scene磁盘哈希不变。此前本文件下方“原件仍在Assets/下一步接线”文字均是被此项覆盖的历史阶段。Q07未整体关闭，后续按排除后的内容范围继续。
+
+> 2026-09-24 用户补充确认：不使用原版 NTSD 背景、背景模式和 mode DAT；排除 `b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat`。当前后两项已进入生产内容指纹及 combo/KO 消费链，先脱钩并验证，不直接移走造成战斗断链。本轮误加的背景类50 DAT及未接入解析器已核验打包到 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/excluded-native-background-and-mode-staging.zip`；原文件仍在 Assets，压缩包不是退场证明。下方旧接线计划均以本条及对齐总表 §0.2 为准。
+
+> 2026-09-24 用户范围更正（覆盖下文 D-023 DAT 概括及 Q07 背景接线计划）：本项目不采用原版 NTSD 背景和背景模式 DAT，包括 `b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`。项目自己的背景、地图、模式内容和既有例外保持。此前 50 个正式 DAT 暂存与未接入的背景模式解析器属于范围错误，停止接线，待精确退场；下文相关数量与计划只保留历史事实，不能作为当前任务指令。
+
 > 2026-09-24 D-024 AI child Play probe `NTSD28-USER-D024-AI-CHILD-SCENE-PLAY-001 / RUNTIME_PENDING`: first request dirty-Menu preflight; second entered Play but result missing; test-only phase-progress update gave third final `FAIL` at Menu prewarm (`Configured content request is no longer current`), tick0, no app birth/AI child. Editor ended non-Play with Battle active and both Scene disk hashes unchanged. Inspect prewarm ownership/loaded scenes before any retry; Q07 paused. See Task/Change.
 
 > 2026-09-24 latest D-024 controlled AI Driver: original Editor formal-content human12/AI-controlled3 parameterized full-Driver job `2e60f6a680704c2aacfd550852e7b1ab` 2/2 PASS: source carriers complete, AI target slot0 observed and physical/source X exact `2048/1333`; independent App participant birth initializer2/2 PASS. Isolated AI tick4 attempted OPoint without fixture Renderer pool, so child birth/natural Battle Scene Play/formal EXE remain open. Noncharacter X-edge decision pending; Q07 paused. See Task/Change.

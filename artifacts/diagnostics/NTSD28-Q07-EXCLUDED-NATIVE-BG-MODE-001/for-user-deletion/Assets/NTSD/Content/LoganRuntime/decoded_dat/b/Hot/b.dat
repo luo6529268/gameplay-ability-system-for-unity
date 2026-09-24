@@ -1,0 +1,5 @@
+name: _Hot_Springs width: 1330 zboundary: 615 730 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Hot\t.png 
+layer: b\Hot\1.png width: 1335 x: 0 y: 0 layer_end
+layer: b\Hot\2.png width: 1335 x: 0 y: 0 cc: 14 c1: 0 c2: 4 layer_end
+layer: b\Hot\3.png width: 1335 x: 0 y: 0 cc: 14 c1: 5 c2: 10 layer_end

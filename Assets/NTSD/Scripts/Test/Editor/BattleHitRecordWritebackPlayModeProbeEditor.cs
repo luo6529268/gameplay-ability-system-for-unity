@@ -61,10 +61,12 @@ namespace NTSD.Test.Editor
         private static int cycleIdBeforeTick;
         private static uint rngStateBeforeTick;
         private static ulong rngCallsBeforeTick;
+        private static NTSD28NativeRandomScalarState nativeRandomBeforeTick;
         private static int[] baselineKillStats;
         private static int[] baselineDamageStats;
         private static uint baselineRngState;
         private static ulong baselineRngCalls;
+        private static NTSD28NativeRandomScalarState baselineNativeRandom;
         private static int baselineObjectCount;
         private static int baselineClaimedSlots;
         private static int baselineObjectPoolActive;
@@ -213,6 +215,7 @@ namespace NTSD.Test.Editor
             baselineDamageStats = CloneArray(world.DamageStats);
             baselineRngState = world.Rng.State;
             baselineRngCalls = world.Rng.CallCount;
+            baselineNativeRandom = world.NativeRandom.CaptureScalarState();
             world.Rng.Seed(ProbeRngSeed);
             BaselineSounds.Clear();
             BaselineSounds.AddRange(world.PendingSounds);
@@ -236,6 +239,8 @@ namespace NTSD.Test.Editor
             report.baselineLogicPoolActive = baselineLogicPoolActive;
             report.baselineRngState = baselineRngState;
             report.baselineRngCalls = baselineRngCalls;
+            report.baselineNativeCrtState = baselineNativeRandom.CrtState;
+            report.baselineNativeCrtCalls = baselineNativeRandom.CrtCalls;
             report.probeRngSeed = ProbeRngSeed;
             report.suppressedBaselineAiEntityCount = BaselineAiControls.Count;
         }
@@ -322,6 +327,7 @@ namespace NTSD.Test.Editor
             expectedTick = driver.CurrentTickIndex + 1;
             rngStateBeforeTick = world.Rng.State;
             rngCallsBeforeTick = world.Rng.CallCount;
+            nativeRandomBeforeTick = world.NativeRandom.CaptureScalarState();
             cycleIdBeforeTick = world.BattlePresentation.PublishedHitRecordCycle?.CycleId ?? 0;
             bool accepted;
             if (workerPath)
@@ -390,23 +396,36 @@ namespace NTSD.Test.Editor
             Require(recordOwner.HitRecordCount == 1,
                 $"Tick {expectedTick} current victim produced {recordOwner.HitRecordCount} " +
                 "hit records, expected 1.");
-            var expectedRng = new DeterministicRng(rngStateBeforeTick);
-            int expectedHitZ = attacker.GetRenderZInt() + expectedRng.NextInt(0, 9) - 4;
-            int expectedHitX = FixtureX + 10 + expectedRng.NextInt(0, 9) - 4;
-            int randomWeaponDropGate = expectedRng.NextInt(0, 200);
+            var expectedNativeCrt = new NTSD28Msvcr80Random();
+            expectedNativeCrt.Restore(nativeRandomBeforeTick.CrtState,
+                nativeRandomBeforeTick.CrtCalls);
+            int expectedHitZ = attacker.GetRenderZInt() +
+                (int)(expectedNativeCrt.Next() % 9u) - 4;
+            int expectedHitX = FixtureX + 10 +
+                (int)(expectedNativeCrt.Next() % 9u) - 4;
+            var expectedSharedRng = new DeterministicRng(rngStateBeforeTick);
+            int randomWeaponDropGate = expectedSharedRng.NextInt(0, 200);
             ulong rngCallDelta = world.Rng.CallCount - rngCallsBeforeTick;
+            NTSD28NativeRandomScalarState nativeRandomAfterTick =
+                world.NativeRandom.CaptureScalarState();
+            ulong nativeCrtCallDelta = nativeRandomAfterTick.CrtCalls -
+                nativeRandomBeforeTick.CrtCalls;
             Require(randomWeaponDropGate != 0,
                 $"Tick {expectedTick} fixture seed unexpectedly opened the user-exception " +
                 "random weapon drop branch.");
-            Require(rngCallDelta == expectedRng.CallCount &&
-                    world.Rng.State == expectedRng.State,
-                $"Tick {expectedTick} RNG sequence was not exactly two kind0 anchor draws " +
-                $"plus one user-exception random-weapon gate: delta={rngCallDelta}, " +
-                $"expected={expectedRng.CallCount}.");
+            Require(rngCallDelta == expectedSharedRng.CallCount &&
+                    world.Rng.State == expectedSharedRng.State,
+                $"Tick {expectedTick} shared RNG weapon-gate sequence changed: " +
+                $"delta={rngCallDelta}, expected={expectedSharedRng.CallCount}.");
+            Require(nativeCrtCallDelta == 2 &&
+                    nativeRandomAfterTick.CrtState == expectedNativeCrt.State,
+                $"Tick {expectedTick} native CRT kind0 Y-X sequence changed: " +
+                $"delta={nativeCrtCallDelta}, expected=2, state={nativeRandomAfterTick.CrtState}, " +
+                $"expectedState={expectedNativeCrt.State}.");
             Require(recordOwner.GetHitRecordX(0) == expectedHitX &&
                     recordOwner.GetHitRecordZ(0) == expectedHitZ,
-                $"Tick {expectedTick} kind0 spark anchor did not consume the first two " +
-                $"isolated draws: actual=({recordOwner.GetHitRecordX(0)}," +
+                $"Tick {expectedTick} kind0 spark anchor did not consume the native CRT " +
+                $"Y-X draws: actual=({recordOwner.GetHitRecordX(0)}," +
                 $"{recordOwner.GetHitRecordZ(0)}), expected=({expectedHitX},{expectedHitZ}).");
 
             int[] liveAges = CopyLiveAgesThroughOrdinal(tickOrdinal);
@@ -424,6 +443,9 @@ namespace NTSD.Test.Editor
                 rngCalls = rngCallDelta,
                 rngStateBefore = rngStateBeforeTick,
                 rngStateAfter = world.Rng.State,
+                nativeCrtCalls = nativeCrtCallDelta,
+                nativeCrtStateBefore = nativeRandomBeforeTick.CrtState,
+                nativeCrtStateAfter = nativeRandomAfterTick.CrtState,
                 randomWeaponDropGate = randomWeaponDropGate,
                 hitRecordX = recordOwner.GetHitRecordX(0),
                 hitRecordZ = recordOwner.GetHitRecordZ(0),
@@ -719,6 +741,15 @@ namespace NTSD.Test.Editor
             world.PendingSounds.Clear();
             world.PendingSounds.AddRange(BaselineSounds);
             world.Rng.RestoreState(baselineRngState, baselineRngCalls);
+            try
+            {
+                Require(world.NativeRandom.TryRestoreScalarState(baselineNativeRandom),
+                    "Native CRT baseline could not be restored after the Play fixture.");
+            }
+            catch (Exception exception)
+            {
+                AppendCleanupError("native-rng-restore", exception);
+            }
 
             try
             {
@@ -749,6 +780,13 @@ namespace NTSD.Test.Editor
             report.rngRestored = world?.Rng != null &&
                                  world.Rng.State == baselineRngState &&
                                  world.Rng.CallCount == baselineRngCalls;
+            NTSD28NativeRandomScalarState nativeFinal =
+                world?.NativeRandom.CaptureScalarState() ?? default;
+            report.nativeRngRestored = world?.NativeRandom != null &&
+                                       nativeFinal.CrtState == baselineNativeRandom.CrtState &&
+                                       nativeFinal.CrtCalls == baselineNativeRandom.CrtCalls &&
+                                       nativeFinal.SynchronizedTableHash == baselineNativeRandom.SynchronizedTableHash &&
+                                       nativeFinal.SynchronizedCalls == baselineNativeRandom.SynchronizedCalls;
             report.statsRestored = ArraysEqual(world?.KillStats, baselineKillStats) &&
                                    ArraysEqual(world?.DamageStats, baselineDamageStats);
             report.soundsRestored = PendingSoundsEqual(world?.PendingSounds, BaselineSounds);
@@ -762,7 +800,8 @@ namespace NTSD.Test.Editor
                                       report.finalClaimedSlots == baselineClaimedSlots &&
                                       report.finalObjectPoolActive == baselineObjectPoolActive &&
                                        report.finalLogicPoolActive == baselineLogicPoolActive &&
-                                       report.rngRestored && report.statsRestored &&
+                                       report.rngRestored && report.nativeRngRestored &&
+                                       report.statsRestored &&
                                        report.soundsRestored && report.aiControlRestored &&
                                        report.presentationOwnerCleared &&
                                        report.pauseRestored;
@@ -868,10 +907,12 @@ namespace NTSD.Test.Editor
             cycleIdBeforeTick = 0;
             rngCallsBeforeTick = 0;
             rngStateBeforeTick = 0;
+            nativeRandomBeforeTick = default;
             baselineKillStats = null;
             baselineDamageStats = null;
             baselineRngState = 0;
             baselineRngCalls = 0;
+            baselineNativeRandom = default;
             baselineObjectCount = 0;
             baselineClaimedSlots = 0;
             baselineObjectPoolActive = 0;
@@ -1010,6 +1051,9 @@ namespace NTSD.Test.Editor
             public ulong rngCalls;
             public uint rngStateBefore;
             public uint rngStateAfter;
+            public ulong nativeCrtCalls;
+            public uint nativeCrtStateBefore;
+            public uint nativeCrtStateAfter;
             public int randomWeaponDropGate;
             public int hitRecordX;
             public int hitRecordZ;
@@ -1047,6 +1091,8 @@ namespace NTSD.Test.Editor
             public uint victimGeneration;
             public uint baselineRngState;
             public ulong baselineRngCalls;
+            public uint baselineNativeCrtState;
+            public ulong baselineNativeCrtCalls;
             public uint probeRngSeed;
             public int baselineObjectCount;
             public int baselineClaimedSlots;
@@ -1061,6 +1107,7 @@ namespace NTSD.Test.Editor
             public int finalObjectPoolActive;
             public int finalLogicPoolActive;
             public bool rngRestored;
+            public bool nativeRngRestored;
             public bool statsRestored;
             public bool soundsRestored;
             public bool aiControlRestored;

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
-using NTSD.DatParser;
+using System.Linq;
+using System.Security.Cryptography;
+using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -11,116 +13,93 @@ namespace NTSD.Test
 {
     public sealed class CharacterAssetDeploymentEditorTests
     {
-        private const string DatPassword = "odBearBecauseHeIsVeryGoodSiuHungIsAGo";
-        private const int ExpectedTypeZeroCharacterCount = 42;
+        private const string FormalRoot = @"J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime";
 
         [Test]
         [Category("CharacterAssetDeployment")]
-        public void TypeZeroCharacterCatalogDecryptsParsesAndResolvesDeclaredBitmaps()
+        public void FormalTypeZeroCharacterDatAndImagesAreDeployed()
         {
-            string projectRoot = Directory.GetParent(Application.dataPath)?.FullName;
-            Assert.That(projectRoot, Is.Not.Null.And.Not.Empty);
+            string stagedRoot = Path.GetFullPath(Path.Combine(Application.dataPath, "NTSD/Content/LoganRuntime"));
+            Assert.That(Directory.Exists(FormalRoot), Is.True, $"formal runtime missing: {FormalRoot}");
+            Assert.That(Directory.Exists(stagedRoot), Is.True, $"staged runtime missing: {stagedRoot}");
 
-            string dataPath = Path.Combine(projectRoot, "Assets", "NTSD", "Config", "data.txt");
-            Assert.That(File.Exists(dataPath), Is.True, $"data.txt missing: {dataPath}");
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
+            LoganObjectCatalog formal = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot), mode);
+            LoganObjectCatalog staged = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(stagedRoot), mode);
+            LoganObjectCatalog.Entry[] formalCharacters = formal.Entries.Where(entry => entry.Type == 0).ToArray();
+            Dictionary<int, LoganObjectCatalog.Entry> stagedCharacters = staged.Entries
+                .Where(entry => entry.Type == 0).ToDictionary(entry => entry.Id);
+            Assert.That(formalCharacters.Length, Is.EqualTo(158), "formal catalog type-0 count changed");
+            Assert.That(stagedCharacters.Count, Is.EqualTo(formalCharacters.Length), "staged type-0 catalog is incomplete");
 
-            var typeZeroEntries = ReadTypeZeroEntries(dataPath);
-            Assert.That(typeZeroEntries.Count, Is.EqualTo(ExpectedTypeZeroCharacterCount));
-
-            int bitmapReferenceCount = 0;
-            foreach (KeyValuePair<int, string> entry in typeZeroEntries)
+            Dictionary<int, LF2CharacterDataWrapper> formalConfigs =
+                CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(formal);
+            Dictionary<int, LF2CharacterDataWrapper> stagedConfigs =
+                CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(staged);
+            var imageHashes = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            int imageReferenceCount = 0;
+            foreach (LoganObjectCatalog.Entry entry in formalCharacters)
             {
-                Assert.That(
-                    entry.Value.StartsWith("Assets/NTSD/Config/Character/", StringComparison.OrdinalIgnoreCase),
-                    Is.True,
-                    $"type:0 oid {entry.Key} must resolve through the Character DAT catalog: {entry.Value}");
+                Assert.That(stagedCharacters.TryGetValue(entry.Id, out LoganObjectCatalog.Entry deployed), Is.True,
+                    $"type:0 oid {entry.Id} missing from staged catalog");
+                Assert.That(deployed.RegistryIndex, Is.EqualTo(entry.RegistryIndex), $"oid {entry.Id} registry index");
+                Assert.That(deployed.SourcePath, Is.EqualTo(entry.SourcePath), $"oid {entry.Id} source path");
+                Assert.That(deployed.PublishedFolder, Is.EqualTo(entry.PublishedFolder), $"oid {entry.Id} folder");
+                Assert.That(deployed.DatSha256, Is.EqualTo(entry.DatSha256), $"oid {entry.Id} DAT bytes");
 
-                string datPath = Path.Combine(projectRoot, entry.Value.Replace('/', Path.DirectorySeparatorChar));
-                Assert.That(File.Exists(datPath), Is.True, $"type:0 oid {entry.Key} DAT missing: {entry.Value}");
+                Assert.That(formalConfigs.TryGetValue(entry.Id, out LF2CharacterDataWrapper formalConfig), Is.True);
+                Assert.That(stagedConfigs.TryGetValue(entry.Id, out LF2CharacterDataWrapper stagedConfig), Is.True);
+                Assert.That(stagedConfig.characterData.frames.Count,
+                    Is.EqualTo(formalConfig.characterData.frames.Count), $"oid {entry.Id} parsed frame count");
 
-                string datText = Lf2DatDecryptor.DecryptFile(datPath, DatPassword);
-                Assert.That(datText, Is.Not.Null.And.Not.Empty, $"type:0 oid {entry.Key} DAT decrypt returned empty");
-
-                Lf2DatFile datFile = new Lf2DatParserV2().Parse(datText, datPath);
-                Assert.That(datFile, Is.Not.Null, $"type:0 oid {entry.Key} DAT parse returned null");
-                Assert.That(datFile.Frames, Is.Not.Null.And.Not.Empty, $"type:0 oid {entry.Key} DAT has no frames");
-
-                foreach (string bitmapPath in ReadBitmapPaths(datText, entry.Key))
+                string[] formalImages = DeclaredImages(formalConfig, formal.Source);
+                string[] stagedImages = DeclaredImages(stagedConfig, staged.Source);
+                Assert.That(stagedImages, Is.EqualTo(formalImages), $"oid {entry.Id} declared image paths");
+                foreach (string relativeImage in formalImages)
                 {
-                    bitmapReferenceCount++;
-                    Assert.That(
-                        bitmapPath.StartsWith("Assets/NTSD/Sprite/Character/", StringComparison.OrdinalIgnoreCase),
-                        Is.True,
-                        $"type:0 oid {entry.Key} bitmap must use the Character sprite catalog: {bitmapPath}");
-
-                    string absoluteBitmapPath = Path.Combine(
-                        projectRoot,
-                        bitmapPath.Replace('/', Path.DirectorySeparatorChar));
-                    Assert.That(
-                        File.Exists(absoluteBitmapPath),
-                        Is.True,
-                        $"type:0 oid {entry.Key} bitmap missing: {bitmapPath}");
+                    imageReferenceCount++;
+                    string formalImage = formal.Source.ResolveImagePath(relativeImage, null);
+                    string stagedImage = staged.Source.ResolveImagePath(relativeImage, null);
+                    Assert.That(File.Exists(formalImage), Is.True, $"oid {entry.Id} formal image: {relativeImage}");
+                    Assert.That(File.Exists(stagedImage), Is.True, $"oid {entry.Id} staged image: {relativeImage}");
+                    Assert.That(FileHash(stagedImage, imageHashes),
+                        Is.EqualTo(FileHash(formalImage, imageHashes)),
+                        $"oid {entry.Id} image bytes: {relativeImage}");
                 }
             }
-
-            Assert.That(bitmapReferenceCount, Is.GreaterThan(0));
+            Assert.That(imageReferenceCount, Is.GreaterThan(0));
         }
 
-        [MenuItem("Tools/NTSD/Tests/Verify Type0 Character Asset Deployment")]
-        private static void VerifyTypeZeroCharacterAssetDeployment()
+        [MenuItem("Tools/NTSD/Tests/Verify Formal Type0 Character Asset Deployment")]
+        private static void VerifyFormalTypeZeroCharacterAssetDeployment()
         {
             new CharacterAssetDeploymentEditorTests()
-                .TypeZeroCharacterCatalogDecryptsParsesAndResolvesDeclaredBitmaps();
-            Debug.Log("[CharacterAssetDeployment] type:0 DAT/BMP deployment contract passed.");
+                .FormalTypeZeroCharacterDatAndImagesAreDeployed();
+            Debug.Log("[CharacterAssetDeployment] formal type:0 DAT/image deployment contract passed.");
         }
 
-        private static List<KeyValuePair<int, string>> ReadTypeZeroEntries(string dataPath)
+        private static string[] DeclaredImages(LF2CharacterDataWrapper wrapper, BattleContentSource source)
         {
-            var entries = new List<KeyValuePair<int, string>>();
-            foreach (string line in File.ReadLines(dataPath))
-            {
-                Match match = Regex.Match(
-                    line,
-                    @"^\s*id:\s*(?<id>\d+)\s+type:\s*0\s+file:\s*(?<path>\S+\.dat)",
-                    RegexOptions.IgnoreCase);
-                if (match.Success)
-                {
-                    entries.Add(new KeyValuePair<int, string>(
-                        int.Parse(match.Groups["id"].Value),
-                        match.Groups["path"].Value));
-                }
-            }
-
-            return entries;
+            var paths = new List<string>();
+            foreach (SpriteFileInfo file in wrapper.characterData.files)
+                paths.Add(file.filePath);
+            if (!string.IsNullOrEmpty(wrapper.characterData.head))
+                paths.Add(wrapper.characterData.head);
+            if (!string.IsNullOrEmpty(wrapper.characterData.small))
+                paths.Add(wrapper.characterData.small);
+            return paths.Select(path => Path.GetRelativePath(source.ImageRoot, path).Replace('\\', '/'))
+                .OrderBy(path => path, StringComparer.Ordinal).ToArray();
         }
 
-        private static IEnumerable<string> ReadBitmapPaths(string datText, int oid)
+        private static string FileHash(string path, Dictionary<string, string> cache)
         {
-            Match bitmapBlock = Regex.Match(
-                datText,
-                @"<bmp_begin>(?<content>.*?)<bmp_end>",
-                RegexOptions.Singleline | RegexOptions.IgnoreCase);
-            Assert.That(bitmapBlock.Success, Is.True, $"type:0 oid {oid} has no bmp block");
-
-            foreach (string line in bitmapBlock.Groups["content"].Value.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None))
-            {
-                Match headOrSmall = Regex.Match(
-                    line,
-                    @"^\s*(?:head|small)\s*:\s*(?<path>\S+\.bmp)\s*$",
-                    RegexOptions.IgnoreCase);
-                if (headOrSmall.Success)
-                {
-                    yield return headOrSmall.Groups["path"].Value;
-                    continue;
-                }
-
-                Match frameSheet = Regex.Match(
-                    line,
-                    @"^\s*file\([^)]*\)\s*:\s*(?<path>\S+\.bmp)\b",
-                    RegexOptions.IgnoreCase);
-                if (frameSheet.Success)
-                    yield return frameSheet.Groups["path"].Value;
-            }
+            if (cache.TryGetValue(path, out string hash))
+                return hash;
+            using (var stream = File.OpenRead(path))
+            using (var sha = SHA256.Create())
+                hash = BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", string.Empty);
+            cache.Add(path, hash);
+            return hash;
         }
     }
 }

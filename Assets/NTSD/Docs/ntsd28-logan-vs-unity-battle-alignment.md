@@ -1,3 +1,49 @@
+> 2026-09-24 P-04并行Scene变动更正：同Z Play探针结果写于20:12:16，退出后首次磁盘核对Battle Scene仍为SHA 9409F2...3B3A39；20:14:05 Scene后续被写为7D7286...0E567，当前Git diff仅两台Camera的m_Enabled 1→0。写入者/意图未证，不回退、不归因探针。新排序见证仅证明原Scene当时的受控物化顺序；后续像素验收必须先复核当前相机可用性。
+
+> 2026-09-24 NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001 / VERIFIED_SCENE_ORDER_ONLY：原Battle Scene真实Play中CentralOnly生产World的受控同Z排序在tick5为slot51 rank0/order1、slot50 rank1/order5，两个handle generation1，对象/占用slot 4/2→4/2、pause恢复；Editor已退出Play且Battle Scene磁盘SHA不变。原Editor新脚本编译0错；首轮45秒启动等待超时与正式内容加载有关，保留首轮FAIL，第二轮180秒有界等待PASS。探针显式物化、夹具无sprite/绘制命令，故自然LateUpdate/GPU遮挡像素、Legacy视觉出口及正式EXE同场景仍待；P-04/Q09/总目标不关闭。详artifacts/diagnostics/NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001/ACCEPTANCE.md。
+
+> 2026-09-24 NTSD28-Q09-SAME-Z-PAINTER-ORDER-001 / FOCUSED_TEST_PASS / RUNTIME_PENDING：按正式playable entity_commands 的同Z大物理slot先绘，已更正Unity Stage/Coordinator与central radix的战斗表现排序，冻结快照保持原物理slot存储；原Editor编译0错、定向14/14、fresh SelfCheck PASS。原Battle Scene旧R07B探针未建立正式内容下夹具，退出结果FAIL不构成P-04反证；遮挡像素/正式EXE同场景仍待。Scene哈希不变，DAT/相机/逻辑/非战斗未改。全量EditMode误触发提前失败不作本包证据。详artifacts/diagnostics/NTSD28-Q09-SAME-Z-PAINTER-ORDER-001/ACCEPTANCE.md。Q09/R16/总目标仍开放。
+
+> 2026-09-24 NTSD28-Q09-C01-PLAY-PROBE-RNG-001 / VERIFIED（仅测试探针）：原Battle Scene CentralOnly真实Play四tick 1928-1931 PASS；每tick正式原生CRT 2次、共享RNG武器门槛1次，HitRecord物化命令1/2/3/0，C01年龄与Late幂等通过，退出时两流和对象/slot/pool等基线恢复。原Editor编译0错、Battle/Menu Scene哈希不变。旧探针3次共享RNG断言已按Q06正式双流合同更正；正式EXE同种子像素、legacy出口和30/60/120采样仍待，Q09/R14/R17与总目标开放。证据：artifacts/diagnostics/NTSD28-Q09-C01-PLAY-PROBE-RNG-001/ACCEPTANCE.md。
+
+> 2026-09-24 NTSD28-Q09-NATIVE-SPARK-PUBLICATION-001 / RUNTIME_PENDING：正式SPARK.png黑键及20个有效格已通过原Unity Editor编译、几何/资源测试、330对象正式发布回收和BattleRuntimeSelfCheck；raw 0..99 ID在legacy与central出口共用可绘制映射，DAT/Scene/战斗逻辑未改。Battle Scene C01自然命中Play探针在tick3573先遇RNG delta 1 vs旧夹具期望3，尚未到SPARK画面断言；需按当前正式命中链审计该首差，另做两出口Play、30/60/120采样和正式EXE像素对照。Q09/R14/R17及总目标未关闭。证据：artifacts/diagnostics/NTSD28-Q09-NATIVE-SPARK-PUBLICATION-001/ACCEPTANCE.md。
+
+> 2026-09-24 Q09正式SPARK输入前置已验收：NTSD28-Q09-NATIVE-SPARK-INPUT-001 / VERIFIED。候选现在捕获resource.dat索引43的正式SPARK.png、system.dat的99x79及图像SHA，三类变化使旧候选失效；正式与暂存候选身份1/1、原Editor候选8/8及追加变更反例1/1 PASS，编译0错、Scene哈希不变、Ledger785/21 PASS。角色图候选仍906，旧SPARK.bmp发布和两个绘制出口尚未替换；下一Q09须接正式PNG黑键、原始ID稀疏裁切和legacy/central消费，再验Play/正式像素，R14/R17与总目标仍开放。详artifacts/diagnostics/NTSD28-Q09-NATIVE-SPARK-INPUT-001/ACCEPTANCE.md。
+
+> 2026-09-24 Q09 smallb权限纠正已验收：NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001 / VERIFIED。依据P-17，原生角色HUD为USER_EXCLUDED；已精确撤销误加的smallb候选、解码、发布和肖像API，生产候选恢复906张，磁盘正式/暂存图片1010/1010逐SHA证据仍有效。原Editor编译0错、聚焦5/5、候选7/7、Ledger与diff检查通过，Scene SHA不变；旧smallb发布记录仅为已SUPERSEDED历史。项目Battle HUD、HeadImg和用户HUDBg x30不变。后续仅推进非排除Q09战斗表现与Q07资源引用闭环，Q09及总目标均未关闭。详artifacts/diagnostics/NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001/ACCEPTANCE.md。
+
+> 2026-09-24 smallb权限更正：本表§0.2/§1.2及P-17、DECISIONS已将完整原生角色HUD列为USER_EXCLUDED。104张smallb正式图片的磁盘部署/SHA 1010/1010事实保留，但其HUD消费不是Q09/R17待修项。前两条把静态HUD首差误判为必修，并曾新增smallb运行时发布；该建议已被本条覆盖，代码正按NTSD28-Q09-SMALLB-EXCEPTION-CORRECTION-001精确纠正。项目原Battle HUD、HeadImg、用户HUDBg x30保持，不重做非战斗UI。
+
+> 2026-09-24 NTSD28-Q09-SMALLB-PUBLICATION-001 / FOCUSED_TEST_PASS：正式smallb图已进入候选SHA、预热与原子发布，独立BattlePortraitSprite供后续HUD读取；正式/暂存候选各1010图，原Editor聚焦5/5、330对象发布回收1/1、候选类8/8 PASS。Battle Scene HeadImg仍为静态small图，HUD槽消费者/Play像素/正式EXE同场景未验；Q09/R17/总目标保持开放。详 artifacts/diagnostics/NTSD28-Q09-SMALLB-PUBLICATION-001/ACCEPTANCE.md。
+
+> 2026-09-24 Q09 smallb HUD首差：正式战斗HUD优先smallb，缺字段才回退small；当前Battle Scene HeadImg静态引用的naruto_s.png恰与正式small图同SHA，却与正式smallb图不同。Unity候选/发布尚无smallb，未见HUD动态消费者。Q09须独立接字段、候选、预热、发布及实体槽选择，保留选人UI和用户HUDBg x30；Play像素未验。详 artifacts/diagnostics/NTSD28-Q09-SMALLB-HUD-CONSUMER-AUDIT-001/REPORT.md。
+
+> 2026-09-24 Q07正式索引图片内容新鲜全量复核：Q01的2,005条对象图片声明形成1,010张不同图；当前正式/暂存两侧各1,010存在、正式对Q01 SHA 1,010/1,010、暂存对正式SHA 1,010/1,010。原生产候选906与原始1,010的104差额**全部**是独立`smallb`图：file703/head97/small106并集906，smallb104不重叠。正式`render_snapshot.cpp`的战斗HUD优先smallb、缺少回退small；Unity候选/生产仅收file/head/small，未见smallb读者，这是Q09 HUD表现/R17消费缺口，不是Q07资源缺失。详 `artifacts/diagnostics/NTSD28-Q07-INDEXED-IMAGE-COVERAGE-001/REPORT.md`与逐图SHA表；不得直接将smallb当菜单head替换，Q07资源整链及Q09实际像素仍开放。
+
+> 2026-09-24 Q07旧资源动态owner门槛新鲜复核：当前旧 `data.txt` SHA等于Q01冻结值`DB7A5F7A...2812B913`，137索引对象/type0 42；Q01旧138 DAT+383索引角色图的当前同路径字节521/521不变，383图均有旧DAT对象声明owner，另1份`effect/weapon4.dat`未索引。当前正式根非空的默认预热不用旧资源，但菜单/测试bootstrap/Inspector/帧预览的空根显式legacy入口仍可达；静态GUID/文本0引用不能作为删除证书。详 `artifacts/diagnostics/NTSD28-Q07-LEGACY-DYNAMIC-OWNER-GATE-001/REPORT.md`及逐文件CSV/JSON。下一独立包先处理空根兼容入口和历史夹具，旧资源不移动不删除，Q07/总目标开放。
+
+> 2026-09-24 Q07旧角色图静态重扫：在Inspector、帧预览和两项测试迁移后，以同一383图的路径/GUID遍历当前Assets所选9,825个文本/序列化文件，383张存在、序列化GUID owner 0、精确路径文本引用0；逐行均 `deleteAuthorized=False`。该结果只覆盖静态文本/GUID，不解析旧DAT动态声明或空根legacy路径，不能据此删图。新CSV见 `artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/post-formal-test-indexed-image-reference-scan.csv`，下方旧CSV“2张文本引用”是历史快照。Q07仍开放。
+
+> 2026-09-24 Q07正式角色部署测试限定闭合：`NTSD28-Q07-FORMAL-CHARACTER-DEPLOYMENT-001 / VERIFIED`。正式和项目暂存catalog均有158条object/type0；原测试仅验证42份旧DAT/BMP，现改为逐ID/注册序/路径/DAT SHA、解析帧数及声明的正式VFS图片路径/SHA验收。原Editor重编译、目标+相邻内容身份+正式鸣人PNG/GPU EditMode 3/3 PASS（job `3bc6f024f2784e928d749118b17d4982`）；活动Battle Scene dirty=false、双Scene磁盘SHA未变、Ledger PASS。此测试不再依赖旧Config/Character和Sprite/Character，但空根legacy入口、动态引用图、逐文件退场及Q07整体仍开放。详Task/Record与 `artifacts/diagnostics/NTSD28-Q07-FORMAL-CHARACTER-DEPLOYMENT-001/ACCEPTANCE.md`。
+
+> 2026-09-24 Q07旧角色BMP测试夹具限定闭合：`NTSD28-Q07-LEGACY-GRID-TEST-FIXTURE-001 / VERIFIED`。原Editor重编译后，合成800×560旧网格、帧内绿色保护、正式鸣人PNG生产/GPU三项EditMode 3/3 PASS（job `91c3e05b90844d64ae160d2c24bd8003`）；该测试文件旧Naruto/Sasuke BMP精确路径现为0。下方383图静态扫描CSV是改动前快照，其“2条文本引用”计数已过期；整个引用图尚未重扫，旧资源不准据此删除。仅测试脚本，不改生产、DAT、图片、Scene；Q07整体仍开放。详Task/Record和本包ACCEPTANCE。
+
+> 2026-09-24 Q07 角色帧预览旧索引入口限定闭合：NTSD28-Q07-FRAME-PREVIEW-FORMAL-INDEX-001 / VERIFIED。正确单例夹具下原窗口正式根仍加载旧data.txt，RED1/2；现正式根打开窗口不读旧索引、空根保持旧行为，原Editor聚焦2/2、相邻Inspector/legacy2/2、Battle Scene dirty=false且双Scene SHA稳定。两次早期夹具失败不计行为证据。详Task/Change及 artifacts/diagnostics/NTSD28-Q07-FRAME-PREVIEW-FORMAL-INDEX-001/ACCEPTANCE.md；旧资源删留与Q07整组仍开放。
+
+> 2026-09-24 Q07 Inspector正式资源刷新限定完成：NTSD28-Q07-INSPECTOR-FORMAL-REFRESH-001 / VERIFIED。原Inspector按钮在配置正式根时仍读旧data.txt/BMP，actual-button测试先RED 0/1（发布键null）；现复用现有正式预热，按钮+相邻调用2/2、旧显式数据1/1，原Editor编译、Scene双SHA稳定、Ledger PASS。空根历史入口与383旧索引图删留仍开放。详Task/Change与 artifacts/diagnostics/NTSD28-Q07-INSPECTOR-FORMAL-REFRESH-001/ACCEPTANCE.md。
+
+> 2026-09-24 Q07 旧索引角色图片新鲜静态扫描：从旧Q01清单取383张，当前同路径存在383；扫描Assets内2901个文本Scene/Prefab/Asset/脚本/配置，序列化GUID owner为0，精确路径文本引用仅naruto_0.bmp与sasuke_0.bmp两项Editor网格测试。详 artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/current-indexed-image-reference-scan.csv 及REPORT.md。旧DAT动态声明与手动/空根加载仍开放，不能据381项无静态引用批准删除；Q07继续。
+
+> 2026-09-24 Q07 旧角色图片当前 owner 回访：当前 Battle Scene 禁用佐助预览已指向正式 `sasu.png` GUID，2026-09-22 图中旧 BMP Scene owner 结论过期。配置化默认预热使用正式根、项目模式 Asset，旧任务在该根非空时取消；但手动 Editor 刷新、空根旧加载路径、42 角色旧资源部署测试及两个 BMP 网格测试仍有旧内容依赖，不能据默认预热成功批量退场 383 个旧索引图。当前态与下一逐文件门槛见 `artifacts/diagnostics/NTSD28-Q07-OLD-CHARACTER-IMAGE-CURRENT-OWNER-001/REPORT.md`。本轮仅只读审计/文档回链，删除授权仍为零，Q07 开放。
+
+> 2026-09-24 Q07 排除后新鲜清单：正式405 DAT明确排除背景/两类模式52，当前范围上限353；项目目录现336 DAT均有正式同路径同SHA，额外0、不同0、缺17。17项分别进入原生菜单/HUD例外、Q09活动证据、Q10音频及Q08/stage部署暂缓，见 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/CURRENT-SCOPED-DAT-INVENTORY.md`，不得再机械复制。原版背景/模式资源统一待用户清理文件夹与项目模式Asset的限定验收见同目录REPORT及Q07 ProjectMode记录。随后原Editor再编译、与旧mode身份相关的三项Q07聚焦测试3/3 PASS（`c82592c1ad694d3dbf5cb4e358ab36af`），ProjectMode生产接线限定验收完成。下一Q07优先回到角色相关旧图的序列化引用/活动可达性与正式图重绑清单；先按既有owner分类作只读核对，不得按目录批量删除或把Q07整组写成完成。
+
+> 2026-09-24 Q07 范围修正已落地：按用户确认，原版背景24 DAT、背景模式26 DAT、`data/mode.dat` 与 `data/mode/ntsd.dat` 共52 DAT及配套meta，连同误加的未接入解析器/测试，已从 Assets 可读路径精确移入 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/for-user-deletion/` 单一文件夹（136文件，含已逐项SHA验证的135项zip），留给用户自行删除；未删原件。新的独立 `Assets/NTSD/Resources/ProjectBattleModeConfig.asset` 已接管配置化生产内容入口。原Editor Asset聚焦1/1、生产快照/首tick聚焦1/1、预热缓存2/2、SelfCheck PASS；无原版mode DAT的临时内容 Play 和正式内容 Play 均完成World4/发布键一致/有序关闭/零残留，Scene磁盘哈希不变。此前本文件下方“原件仍在Assets/下一步接线”文字均是被此项覆盖的历史阶段。Q07未整体关闭，后续按排除后的内容范围继续。
+
+> 2026-09-24 用户补充确认：不使用原版 NTSD 背景、背景模式和 mode DAT；排除 `b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat`。当前后两项已进入生产内容指纹及 combo/KO 消费链，先脱钩并验证，不直接移走造成战斗断链。本轮误加的背景类50 DAT及未接入解析器已核验打包到 `artifacts/diagnostics/NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/excluded-native-background-and-mode-staging.zip`；原文件仍在 Assets，压缩包不是退场证明。下方旧接线计划均以本条及对齐总表 §0.2 为准。
+
+> 2026-09-24 用户范围更正（覆盖下文 D-023 DAT 概括及 Q07 背景接线计划）：本项目不采用原版 NTSD 背景和背景模式 DAT，包括 `b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`。项目自己的背景、地图、模式内容和既有例外保持。此前 50 个正式 DAT 暂存与未接入的背景模式解析器属于范围错误，停止接线，待精确退场；下文相关数量与计划只保留历史事实，不能作为当前任务指令。
+
 > 2026-09-24 D-024 AI 动态子体 Play 入口 `NTSD28-USER-D024-AI-CHILD-SCENE-PLAY-001 / RUNTIME_PENDING`：原项目新增测试专用请求入口已编译，但首个请求因当前 Menu Scene 有未保存修改，在进入 Play 前准确 `FAIL/preflight`；请求已消费，两个 Scene 磁盘哈希保持。晚期 OPoint 的规则坐标通过通用 task→entity Init 的静态链闭合，既有 Play 只直接测过真实对象池出生，尚不能替代 AI 决策经完整 tick 的自然子体见证。等待菜单保存后才可重跑；非角色 X 越界销毁仍待选择，Q07 后置。
 
 > 2026-09-24 D-024 AI 完整 Driver 新证据：原项目 Editor 正式资源受控回放现分人类持续方向 12 tick 和 AI 参战者 3 tick，参数化作业 `2e60f6a680704c2aacfd550852e7b1ab` 2/2 PASS。全程活跃规则坐标完整，AI 实际选择人类 slot0，画面/规则 X 位移精确 `2048/1333`；AppManager 生产参战者出生初始化另有 2/2 PASS。隔离夹具在 AI tick4 无 Renderer pool 物化 OPoint 时失败，故该结果仍不覆盖动态子体、自然 Battle Scene Play 或正式 EXE 同条件。非角色 X 越界销毁仍待选择，Q07 继续后置。
@@ -760,8 +806,8 @@
 
 ### 0.2 当前内容决定与保持的例外
 
-1. **例外范围保持**：既有容量、固定相机、多边形边界、随机掉武器、头顶血条、FootSelf、平台取景例外，以及 HUD、结果表现、背景多层/cycle、选择流程排除仍有效。本轮只明确改判 DAT/角色相关图片，不推断其他例外撤销，也不重复询问已确定范围。
-2. **H 内容方向已决定（D-023）**：DAT 与角色相关图片使用 NTSD 2.8-Logan 正式版本，旧 Unity 138-DAT 不再裁决目标值。迁移尚未执行，必须先闭合 parser、资源根/格式和引用清单；不再等待“只补缺失/整体切换”的选择。音频及非角色图片仍按原边界处理。
+1. **例外范围保持**：既有容量、固定相机、多边形边界、随机掉武器、头顶血条、FootSelf、平台取景例外，以及 HUD、结果表现、背景多层/cycle、选择流程排除仍有效。用户进一步明确：原版背景和背景模式 DAT 整类不用，项目地图/背景/模式内容保留；不能把原版战斗调用链可达当成资源迁移授权。
+2. **H 内容方向已决定（D-023，受上述范围限制）**：非排除范围的 DAT 与角色相关图片使用 NTSD 2.8-Logan 正式版本，旧 Unity 138-DAT 不再裁决这些目标值。迁移须先闭合 parser、资源根/格式和引用清单；不再等待“只补缺失/整体切换”的选择。`b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat` 不在迁移清单；音频及非角色图片仍按原边界处理。后两项目前已经接到生产内容身份/战斗初始化，须先完成调用者脱钩与项目模式数据映射，再移除资源，不能直接断开运行中的战斗。
 
 若保留例外，只能声明“非例外战斗域对齐”；若要求战斗域无差异，须逐项撤销相关例外并纳入验收。整应用一致还需要另行包含选择与结果等完整流程。
 默认 stage.dat 部署继续暂缓；测试夹具可以验证 stage 逻辑，但不能代表正式 stage 内容交付完成。若最终目标包含正式 stage 内容，该暂停必须单独解决。
@@ -859,7 +905,7 @@
 | D-022 reserved迁移 | `NTSDEntityRuntime` 保留GrabbedBy/ReleaseTick/HolderCopy/Tracker/WeaponState；runtime snapshot12、aggregate20、checksum23、character shell1仍在。 | Goal20已退行为，下一按已有联合路线处理声明字段、ECS/hash/capture/restore和版本；CPoint/OPoint内容契约与runtime schema分别声明依赖，不凭本表擅加第二次不兼容窗口。 |
 | B7 slot tail / L-02～L-07 | `Simulation/Passes/LateLifecycle/BattleLateEntityLifecycleModule.cs:48`、`Animation/Character/LF2ObjectPointFactory.cs`、`Simulation/Runtime/BattleLogicObjectPointRuntime.cs` 已有结构flush，但完整字段/materializer和terminal顺序尚未闭合。 | 跟随新OPoint合同验证重复zero-frame、已扫描低slot/未扫描高slot、fragment/terminal/reset；已有flush、previous commit及关系cleanup保留。需要逐分支首差再定最终改动清单，不把所有deferred机制判错。 |
 | B8结果 / G-05、G-06 | `Simulation/Ecs/Results/BattleResultsOutcomeHostWriter.cs:31,96` 使用HP>0、两bucket、HadBoth和>=11。 | 按 `battle_flow.cpp:16,42` 改living groups、revive_lives与group5排除、timer80/101/350和144后continue；结果UI排除保持。 |
-| B9排序 / P-04 | `Simulation/Stage/SimulationStageRenderModule.cs:812`、`Simulation/Presentation/BattlePresentationShadowBuild.cs:2496` 同Z都slot升序。 | 按 `render_snapshot.cpp:2265` 改同深度较大slot先绘制，并验证central排序与遮挡。 |
+| B9排序 / P-04 | 原Unity两比较器及central radix同Z均slot升序，已按正式`render_snapshot.cpp`的entity command顺序改为较大slot先绘；定向14/14、SelfCheck及原Battle Scene受控排序见证通过。 | 自然LateUpdate/GPU实际提交、同Z遮挡像素和正式EXE对照未验，详§4.11 P-04；Q09不关闭。 |
 | B9插值 / P-01、P-02 | `Simulation/Host/SimulationTickDriver.cs:904` 算alpha；`Animation/Rendering/BattleCentralRenderSystem.cs` 消费单published frame。 | 复用当前publication，增加previous/current展示消费及identity/teleport断点保护，保持逻辑只读；按 `presentation_interpolation.cpp:41` 验30/60/120。 |
 | B9命令 / P-05～P-13 | `Simulation/Presentation/BattlePresentationShadowBuild.BuildCommands`、`BattleCommonShadowDescriptor`、`BattleEntityOverlayLayout` 未闭合custom shadow/bleed/lives/nameplate/combo/earthquake。 | 按 `render_snapshot.cpp:1596,1777,1823,1857,1942` 与session earthquake接资源/gate/order。spark年龄已验证；正式index43 `SPARK.png`、`resource.dat`、`system.dat` 已精确暂存并逐哈希验证（Q07 `GLOBAL-SPARK-CONTENT-ENTRY-001`），但Unity仍读旧`SPARK.bmp`/20帧切片，99×79正式发布与原项目画面验收未做；详`artifacts/diagnostics/NTSD28-Q09-GLOBAL-SPARK-RESOURCE-BOUNDARY-001/REPORT.md`。旧oscillate仅producer退休，native shake仍待。 |
 | B10声音 / O-01～O-04 | `App/NTSDSoundPlayer.cs:280` 有Time.time节流和随机音高/音量；`Simulation/Input/NTSD28NativeFunctionKeyRouter.cs:193` 只路由音量命令。 | native audio event/channel/voice cap/BGM/stop/衰减与实际音量消费需闭合；先证实正式cue下哪些配置触发差异。QueueSound和checksum后publication已存在，复用设施。 |
@@ -1076,15 +1122,17 @@ R01～R18是稳定回访ID，不是重开整个阶段的指令。R15的Q01/Q05�
 
 > 2026-09-23 覆盖下表旧Q07游标：用户试玩两项回归体感基本正常，Q07恢复。Kind DAT联合身份、两战斗consumer和受控Scene tick均有各自限定证据；Menu第一/Battle第二的Windows Player回调及正式内容闭包已PASS。当前重入只读清点为正式DAT405/暂存338缺67、正式PNG1255/暂存1031缺224，按`NTSD28-Q07-RESUME-CONTENT-GATE-001/REPORT.md`先追缺失背景/战斗HUD可达caller并分配Q07/Q08/Q09/Q10 owner。下表“kind未接/Build Settings空/Player冷启动待”均为旧快照，不得据此重复实施。Q07仍IN_PROGRESS，旧资源521项删除授权0，DAT数值不可修改。
 
+> 2026-09-24 Q07当前入口：D-025限定VERIFIED后恢复BATCH-04/Q07。审计起点正式DAT405/暂存338、共有338/338同SHA、缺67；正式PNG1255/暂存1031、缺224，其中角色目录`vfs/c` 587/587同SHA且零缺失。随后正式0..23背景ID的24个`b/*/b.dat`获playable出生位置调用链证明；`bg_mode.dat`及25个child获正式战斗配置字段投影证明。两组共50个DAT按独立精确Task原字节暂存，现DAT388/405且同名388个SHA全部相等、缺17；旧67/43行CSV是暂存前快照。正式playable `frame.dat`固定活动索引0，未暂存的`INKHUD2`是索引1，不构成已证活动HUD首差。当前`INKHUD.dat`虽引用缺失的16张`radar`图，但其`bound:0`，正式snapshot仅在`bound:1`激活，故也不是已证显示缺图。背景mode资料在正式阵容选择后进入战斗配置，但Unity菜单Background分支当前无写者，属于非战斗保护边界；Unity `MatchConfig.backgroundId`只进入战斗Match状态，`BattleBootstrap`另读Scene固定`mapId: Sunagakure`，两者未接线。Battle MapCatalog目前仅Sunagakure，与正式ID1 `b/San/b.dat`的宽/Z数据不同，且用户保留项目可行走区/全景例外。精确审计报告`NTSD28-Q07-BACKGROUND-HUD-CALLER-AUDIT-001/REPORT.md`与两项暂存Task；不可因DAT暂存就批量复制110张背景图或修改菜单/地图/旧资源。下表的Q07实际下一入口以此行和最新Task为准。
+
 | 字段 | 当前状态 |
 |---|---|
 | Master goal | `NTSD28-UNITY-BATTLE-REALIGNMENT-001`；定义已准备，剩余campaign仍`FULL_ALIGNMENT_INCOMPLETE` |
 | Execution permission | `ACTIVE`；2026-09-13用户“现在开始启动”覆盖准备暂停，范围保证保持 |
 | Batch states | `BATCH-01 = DELIVERED`；`BATCH-02 = DELIVERED_SCOPED`；`BATCH-03 = DELIVERED_SCOPED`；`BATCH-04 = IN_PROGRESS / SERIALIZED_BATTLE_AND_MENU_CALLER_VERIFIED`；`BATCH-05..BATCH-06 = WAIT_DEPENDENCY` |
-| Active batch / Q / Task / Change | BATCH-04 / Q07；正式根、Player及Editor菜单caller、Naruto单例自然输入/中央像素和旧索引延迟加载均有各自限定证据；Menu→Additive Battle→有序回Menu在原Editor定向PASS。正式kind.dat虽已暂存，解析/联合身份/双consumer尚未接入；其余正式整域技能/表现、旧引用退休和Player冷启动仍待。Q08背景数量保持`AUTHORITY_MATCH_PENDING`。 |
+| Active batch / Q / Task / Change | BATCH-04 / Q07；正式根、Kind联合身份/两consumer、Player及Editor菜单caller、Naruto代表输入/中央像素、旧索引延迟加载各有已记录的限定证据。当前精确游标是`NTSD28-Q07-BACKGROUND-HUD-CALLER-AUDIT-001`后的正式背景战斗入口与例外映射；旧资源退场、其他正式技能/表现和Q08背景模式仍开放。 |
 | Current entry | BATCH-03/Q06 `CLOSED-EXIT.md`限定交付。BATCH-04/Q07正式内容和菜单预热、Naruto代表技能、旧索引延迟加载均有对应限定验收；旧695路径静态复核、52现存旧路径序列化引用及删除授权0保持。Q08审计确认正式24背景ID属于赛前菜单，Unity结果设置零计数尚非已证首差；详Q08 RESULT-STAGE-COUNT-AUTHORITY-AUDIT报告。旧资源、双Scene及非战斗保持。 |
 | Q/R mapping | 六批完整覆盖Q01～Q12，无重复归属；R01～R18保留原触发条件 |
-| Next action | Q07 parser/选源基础已13/13聚焦PASS；下一按`NTSD28-Q07-KIND-DAT-READER-AND-IDENTITY-CONTRACT-AUDIT-001/REPORT.md`建联合内容身份、prepared World目录发布的准确Task/Change，显式处理R15版本/固定指纹夹具，再接候选过滤和type-3变身两consumer，做type-3/非type-3、kind9、畸形文件及实际World trace；旧固定值在新路径验明前保留。独立后继仍有Player冷启动Menu→Battle→Menu、正式整域技能/可见表现和旧图片动态引用。Q08 mode-4结果设置数量需正式同条件见证。旧资源删除无授权，保护用户Scene变化与非战斗UI；音频可携带性归Q10。 |
+| Next action | 用户已明确不使用原版背景、背景模式及`data/mode.dat`/`data/mode/ntsd.dat`。这52个DAT、配套meta及误写未接入解析器已从`Assets`精确移入单一`NTSD28-Q07-EXCLUDED-NATIVE-BG-MODE-001/for-user-deletion/`文件夹，供用户自行删除；没有修改DAT数值或Scene。新的独立`ProjectBattleModeConfig.asset`已接管配置化生产入口，原Editor聚焦、自检、无原版mode DAT的Play及正式内容Play均有各自限定证据；旧 DAT 解析器只供历史显式诊断。新鲜目录对照：正式405减排除52＝353个目标上限，暂存336个均同路径同SHA，额外0、不同0、缺17；`CURRENT-SCOPED-DAT-INVENTORY.md`已将缺项交给Q08/Q09/Q10或原生菜单/HUD排除，不能机械复制17个。Q07下一步继续已证明活动的角色技能图片、旧资源引用退场和必要战斗表现，不重启背景/模式DAT接线。 |
 
 第0.13节“唯一READY_READ_ONLY为Q01”的验证文字和下面准备验证均为启动前历史结果；2026-09-13后续启动指令已覆盖PREPARED_HOLD。启动不改变任何已验证阶段/子包的历史结果。
 
@@ -1336,7 +1384,7 @@ NTSD 2.4、旧 C#、旧 `game_tick(...)`、旧 trace、旧测试名和旧 Change
 | P-01 | `DISPATCH_PLACEMENT_CORRECTED / SNAPSHOT_HANDOFF_PENDING` | 逻辑 tick 后由独立 `RenderSnapshot28` 建立展示快照。 | FramePostProcess已先于RenderDispatch；coordinator已有capture/publish。旧表提前dispatch描述过时。 | 完整post-host snapshot边界与previous/current publication仍需接入/联合验证，不能重做整个dispatch。 |
 | P-02 | `INTERPOLATION_CONSUMER_MISSING` | 正式支持 30/60/120 render FPS，启动器请求 120，并实际插值。 | Driver只计算/暴露RenderAlpha；central系统消费单published frame，未发现previous/current生产插值。 | 补只读相邻快照与identity/generation/teleport断点保护；30/60/120画面和checksum联验。 |
 | P-03 | `USER_ACCEPTED_EXCEPTION` | 新权威使用 camera X/Y 和 render offset。 | Unity 每帧清零 camera X 和 render offset，固定世界相机。 | 保留，不恢复完整权威相机；属于可观察表现例外。 |
-| P-04 | `SLOT_TIEBREAK_DIFFERENCE_CONFIRMED` | 同 Z 时后面的物理 slot 先绘制。 | StageRenderModule.ComparePresentationRenderOrder与ShadowBuild.ComparePresentationSnapshots均同Z按slot升序。 | 两比较器统一为正式同Z较大slot先，确认central无二次反转；专测遮挡，不重构无关渲染。 |
+| P-04 | `SCENE_MATERIALIZED_ORDER_PASS / PIXEL_PENDING` | 同 Z 时后面的物理 slot 先绘制。 | Stage/Coordinator比较器及central radix绘制索引已改为同Z较大slot先；冻结实体快照仍按原物理slot升序存放。 | 原Editor编译0错、定向EditMode 14/14及BattleRuntimeSelfCheck PASS；独立原Battle Scene受控Play在CentralOnly tick5见slot51 rank0/order1、slot50 rank1/order5，回收对象/slot基线。该探针显式物化顺序、无sprite/命令，不能证明自然LateUpdate、GPU提交或遮挡像素；Legacy视觉出口和正式EXE同场景对照待验。旧R07B夹具前置FAIL保留。详`NTSD28-Q09-SAME-Z-PAINTER-ORDER-001`及`NTSD28-Q09-SAME-Z-SCENE-ORDER-WITNESS-001`。 |
 | P-05 | `COMMAND_PHASE_GAP_CONFIRMED` | 每实体内部顺序为 shadow、body、bleed、lives、nameplate、combo、spark。 | ShadowBuild.BuildCommands已有shadow/entity/overlay/hit record，但未闭合正式各entity phase。 | 按body/bleed/lives/nameplate/combo/spark顺序补命令；保留Unity批准血条/标记例外。 |
 | P-06 | `C01_ADVANCE_VERIFIED / DRAW_RESOURCE_PENDING` | spark 在 tick 开头推进，终止列不绘制。 | B3-C01推进已在tick开头，Play age序列与single writer有证据。 | 不重做age；核验正式spark ID/cell/terminal/resource/host slot及draw order和新资源。 |
 | P-07 | `COMMON_SHADOW_PRESENT / CUSTOM_DATA_PENDING` | shadow 的 mode/state/object/DAT gate、custom picture/size 和位置由 2.8 定义。 | 已有common shadow gate/descriptor，未闭合正式shadow_pic/shadowsize自定义内容与命令。 | 按新DAT shadow数据、模式/状态/对象gate与挂点逐项接入/复验。 |
@@ -2627,3 +2675,11 @@ Q06新增依赖回访：NTSD28-Q06-NATIVE-INPUT-MISSING-STATE-ROUTING-001 → CP
 > 2026-09-24 D-025 用户例外已确认：仅非角色战斗对象按项目可行走区域判断，连续离区超过 10 秒战斗逻辑时间（正常33ms间隔约304个已流逝tick）才清除；F5只改变现实等待时间。此决定取代正式版非角色即时 X 离场时机，不改 DAT、角色边界或其他正式战斗规则。`NTSD28-USER-NONCHAR-WALKABLE-TTL-001 / IN_PROGRESS` 已建 Task/Change；先冻结 worker 可读的地图多边形，再接计时/reset/snapshot/checksum和原项目验证。详 D-025 与 `NONCHAR-WALKABLE-10S-CONTRACT.md`。Q07 后置。
 
 > 2026-09-24 D-025 实施更新：`NTSD28-USER-NONCHAR-WALKABLE-TTL-001 / RUNTIME_PENDING`。原项目 Editor 编译、离区 303/304 已流逝 tick 门槛、重入、type3/武器、角色排除、DataOriented/Legacy、无边界、快照/校验和聚焦 8/8 PASS；相邻边界/快照 29/29 与地图/stage 9/9 PASS；旧即时删除自检断言更新后全量 BattleRuntimeSelfCheck PASS。生产主线程冻结地图多边形，worker 只读快照；DAT、Scene、非战斗模块未因本包修改。真实 Battle Scene 地图接入与 Play 中对象清除/F5 尚无新鲜见证，故不得关闭 D-025，Q07 在此后续门槛之后。
+
+> 2026-09-24 D-025 Play 补证：原项目保存的 `NTSD_Battle` 场景在 Play 中到达 Running，正式 `Sunagakure` 的可行走快照正确区分内/外。正式 OID150 的非角色临时对象经生产 PreFrame 在 tick1 起计、tick304仍在、tick305（已流逝304 tick）由现有 World 生命周期清除；探针清理 PASS，Battle/Menu Scene 哈希未变。证据 `D025-WALKABLE-PLAY-RESULT.json`。此为真实 Play World 内手动推进逻辑 tick 的受控见证；自然对象移动、完整 Driver、F5物理切换、退出重进尚待，不宣称 D-025 全闭合。Q07 保持在剩余门槛之后。
+
+> 2026-09-24 D-025 限定关闭：正常/F5-route 两次独立 `NTSD_Battle` Play 均以正式OID150 type2经完整 Driver 走305/305 tick，离区起点tick1，tick304仍在、tick305清除，临时对象清理PASS；F5-route 的生产功能键命令把host间隔切到3ms而逻辑清除tick不变。两个Scene磁盘哈希均保持。`NTSD28-USER-NONCHAR-WALKABLE-TTL-001 / VERIFIED` 仅关闭用户例外的可行走区域逻辑计时；真实物理F5按键、自然飞行和dedicated-worker自由运行留Q12整合回访，不作为本证据已证事实。Q07恢复，正式内容缺口按Q07资源清单优先处理；总目标仍ACTIVE。
+
+> 2026-09-24 Q07背景正式DAT精确暂存：正式`data/data.txt`映射0..23共24个背景，playable开战位置读选中`b/*/b.dat`的width/Z；24个正式DAT的逐文件路径/SHA/几何目录见`NTSD28-Q07-BACKGROUND-HUD-CALLER-AUDIT-001/formal-background-catalog.csv`。`NTSD28-Q07-FORMAL-BACKGROUND-DAT-STAGING-001`仅复制这24个原文件并复核长度/SHA，原Editor导入生成24个互不冲突的meta GUID；当前暂存DAT362/405、缺43，PNG仍1031/1255。正式DAT被暂存不等于Unity已读取或地图ID/出生/画面已对齐。110张背景引用PNG未迁，P-18多层/cycle与非角色图片授权边界保持；菜单、Scene、DAT token/旧资源未改，Battle/Menu Scene磁盘SHA不变。Q07继续以整数背景ID到BattleBootstrap固定mapId的接线/例外合同为下一入口。
+
+> 2026-09-24 Q07背景模式DAT后续：正式`GameSession28::apply_native_background_mode_record`把所选`data/bg/*.dat`记录投影到命中/回血/受伤MP/掉落/stage/revive及recmp/caughtact等战斗字段，因此`NTSD28-Q07-FORMAL-BACKGROUND-MODE-DAT-STAGING-001`精确暂存`bg_mode.dat`及25个child共26个正式DAT。原Editor刷新并生成26个互不冲突meta GUID；全目录新鲜逐SHA为正式405/暂存388、同名相同388、缺17、不同0，现行缺项表为`NTSD28-Q07-BACKGROUND-HUD-CALLER-AUDIT-001/current-formal-dat-not-staged-after-bg-mode.csv`。仅内容就位；Unity模式记录选择、生产读取、完整战斗行为未验。Scene、菜单、DAT token、PNG与旧资源不变；Q07仍进行中。

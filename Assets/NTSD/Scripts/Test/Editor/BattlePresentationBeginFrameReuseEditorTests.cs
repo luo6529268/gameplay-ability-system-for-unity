@@ -128,9 +128,9 @@ namespace NTSD.Test
 
             world.RenderDispatchAll(40);
 
-            Assert.That(entities[2].GetRenderSortingOrder(), Is.EqualTo(1),
-                "same-Z entities must use their runtime slot as the tie-breaker");
-            Assert.That(entities[1].GetRenderSortingOrder(), Is.EqualTo(5));
+            Assert.That(entities[1].GetRenderSortingOrder(), Is.EqualTo(1),
+                "same-Z entity commands paint the larger physical slot first");
+            Assert.That(entities[2].GetRenderSortingOrder(), Is.EqualTo(5));
             Assert.That(entities[0].GetRenderSortingOrder(), Is.EqualTo(9));
             Assert.That(world.PresentationRenderOrderBuildCountForDiagnostics, Is.Zero,
                 "CentralOnly must not re-scan and sort the world before BeginFrame");
@@ -163,7 +163,7 @@ namespace NTSD.Test
 
             world.RenderDispatchAll(42);
 
-            List<PresentationFixtureEntity> expected = BuildReferenceTraversal(entities, 42);
+            List<PresentationFixtureEntity> expected = BuildPainterReferenceTraversal(entities, 42);
             for (int rank = 0; rank < expected.Count; rank++)
             {
                 Assert.That(
@@ -239,6 +239,45 @@ namespace NTSD.Test
             Assert.That(world.PresentationRenderOrderBuildCountForDiagnostics, Is.EqualTo(1));
             Assert.That(world.PresentationRenderOrderReusePublishCountForDiagnostics, Is.Zero);
             Assert.That(world.PresentationEntityScanAndSortCountForDiagnostics, Is.EqualTo(2));
+        }
+
+        [TestCase(BattlePresentationBackendMode.LegacyOnly)]
+        [TestCase(BattlePresentationBackendMode.CentralShadowBuild)]
+        public void NonCentralOnly_EqualZPaintsLargerPhysicalSlotFirst(
+            BattlePresentationBackendMode mode)
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(mode);
+            List<PresentationFixtureEntity> entities = RegisterFixtures(
+                world, (541, 2, 180), (542, 4, 180));
+
+            world.RenderDispatchAll(44);
+
+            Assert.That(entities[1].GetRenderSortingOrder(), Is.EqualTo(1));
+            Assert.That(entities[0].GetRenderSortingOrder(), Is.EqualTo(5));
+        }
+
+        [Test]
+        public void CentralOnly_ComparisonFallbackMatchesNativeEqualZPainterTie()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            RegisterFixtures(world, (551, 2, 180), (552, 4, 180));
+            world.BattlePresentation.BeginFrame(world, 45);
+            var frame = new BattlePresentationFrame();
+            frame.CopyFrom(world.BattlePresentation.PublishedFrame);
+            BattlePresentationEntitySnapshot first = frame.GetEntity(0);
+            BattlePresentationEntitySnapshot second = frame.GetEntity(1);
+            frame.SetEntity(0, in second);
+            frame.SetEntity(1, in first);
+
+            world.BattlePresentation.MaterializePresentationOrder(world, frame);
+
+            Assert.That(frame.GetEntity(0).RuntimeSlot, Is.EqualTo(4));
+            Assert.That(frame.GetEntity(1).RuntimeSlot, Is.EqualTo(2));
+            Assert.That(
+                world.BattlePresentation.ComparisonPresentationOrderFallbackCountForDiagnostics,
+                Is.EqualTo(1));
         }
 
         [Test]
@@ -363,6 +402,15 @@ namespace NTSD.Test
             return result;
         }
 
+        private static List<PresentationFixtureEntity> BuildPainterReferenceTraversal(
+            List<PresentationFixtureEntity> source,
+            int tickIndex)
+        {
+            List<PresentationFixtureEntity> result = BuildReferenceTraversal(source, tickIndex);
+            result.Sort(ComparePainterReferenceOrder);
+            return result;
+        }
+
         private static int GetCoordinatorScratchCount(BattlePresentationCoordinator coordinator)
         {
             var field = typeof(BattlePresentationCoordinator).GetField(
@@ -412,6 +460,24 @@ namespace NTSD.Test
 
             int slotComparison = (left?.Runtime?.SlotIndex ?? int.MaxValue)
                 .CompareTo(right?.Runtime?.SlotIndex ?? int.MaxValue);
+            if (slotComparison != 0)
+                return slotComparison;
+
+            return (left?.StableId ?? int.MaxValue).CompareTo(
+                right?.StableId ?? int.MaxValue);
+        }
+
+        private static int ComparePainterReferenceOrder(
+            PresentationFixtureEntity left,
+            PresentationFixtureEntity right)
+        {
+            int zComparison = (left?.Runtime?.ZInt ?? int.MaxValue)
+                .CompareTo(right?.Runtime?.ZInt ?? int.MaxValue);
+            if (zComparison != 0)
+                return zComparison;
+
+            int slotComparison = (right?.Runtime?.SlotIndex ?? int.MaxValue)
+                .CompareTo(left?.Runtime?.SlotIndex ?? int.MaxValue);
             if (slotComparison != 0)
                 return slotComparison;
 

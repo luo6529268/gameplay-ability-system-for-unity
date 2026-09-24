@@ -11,6 +11,83 @@ namespace NTSD.Animation.Rendering.Editor
 {
     public sealed class BattleCommonAtlasBindingEditorTests
     {
+        [Test]
+        public void NativeSparkBlackKey_RemovesOnlyExactRgbBlack()
+        {
+            MethodInfo method = typeof(CharacterAnimtorManager).GetMethod(
+                "ApplyNativeSparkBlackKey",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            var pixels = new[]
+            {
+                new Color32(0, 0, 0, 255),
+                new Color32(0, 0, 1, 255),
+                new Color32(1, 0, 0, 255),
+                new Color32(4, 5, 6, 127)
+            };
+            var result = (Color32[])method.Invoke(null, new object[] { pixels });
+            Assert.That(result, Is.SameAs(pixels));
+            Assert.That(result[0].a, Is.Zero);
+            Assert.That(result[1].a, Is.EqualTo(255));
+            Assert.That(result[2].a, Is.EqualTo(255));
+            Assert.That(result[3].a, Is.EqualTo(127));
+        }
+
+        [Test]
+        public void NativeSparkCatalog_MapsRawIdsToTwentyInBoundsCells()
+        {
+            using var fixture = new CommonFixture();
+            var texture = new Texture2D(500, 320, TextureFormat.RGBA32, false);
+            var sprites = new Sprite[BattleCommonVisualCatalog.SparkFrameCount];
+            try
+            {
+                for (int pic = 0; pic < sprites.Length; pic++)
+                {
+                    Rect rect = BattleCommonVisualCatalog.GetNativeSparkPixelRect(
+                        pic, texture.width, texture.height, 99, 79);
+                    Assert.That(rect.width, Is.EqualTo(99));
+                    Assert.That(rect.height, Is.EqualTo(79));
+                    sprites[pic] = Sprite.Create(texture, rect,
+                        BattleCommonVisualCatalog.GetNativeSparkPivotNormalized(
+                            99, 79), 100f, 0,
+                        SpriteMeshType.FullRect);
+                }
+
+                BattleCommonVisualCatalog native = fixture.Catalog.WithNativeSpark(
+                    texture, sprites, 99, 79);
+                Assert.That(native.IsRuntimeReady, Is.True, native.Diagnostic);
+                Assert.That(native.IsNativeSpark, Is.True);
+                foreach (int id in new[] { 0, 4, 10, 20, 21, 24, 30, 34 })
+                {
+                    Assert.That(native.TryGetSparkForAge(id, out int pic,
+                        out BattleCommonVisualBinding binding), Is.True, $"id {id}");
+                    int expectedPic = id / 10 * 5 + id % 10;
+                    Assert.That(pic, Is.EqualTo(expectedPic));
+                    Assert.That(binding.Key,
+                        Is.EqualTo(BattleVisualResourceKey.CommonSpark(expectedPic)));
+                    Assert.That(binding.PixelRect,
+                        Is.EqualTo(BattleCommonVisualCatalog.GetNativeSparkPixelRect(
+                            expectedPic, 500, 320, 99, 79)));
+                    Assert.That(binding.Pivot,
+                        Is.EqualTo(new Vector2(49f / 99f, 40f / 79f)));
+                }
+                foreach (int id in new[] { -1, 5, 9, 19, 25, 35, 39, 40, 99, 100 })
+                    Assert.That(native.TryGetSparkForAge(id, out _, out _), Is.False,
+                        $"id {id} must not draw");
+                Assert.That(fixture.Catalog.TryGetSparkForAge(20,
+                    out int legacyPic, out _), Is.True);
+                Assert.That(legacyPic, Is.EqualTo(10),
+                    "Legacy BMP mapping must remain available for nonformal content.");
+            }
+            finally
+            {
+                foreach (Sprite sprite in sprites)
+                    if (sprite != null)
+                        UnityEngine.Object.DestroyImmediate(sprite);
+                UnityEngine.Object.DestroyImmediate(texture);
+            }
+        }
+
         private static readonly MethodInfo ResetFrameMethod =
             typeof(BattlePresentationFrame).GetMethod(
                 "Reset",

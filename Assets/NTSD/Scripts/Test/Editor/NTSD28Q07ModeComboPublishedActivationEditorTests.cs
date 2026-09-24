@@ -47,13 +47,16 @@ namespace NTSD.Test.Editor
         [Test]
         public void FormalAndStagedCatalogsCaptureSameModeAndV2Identity()
         {
-            var formal = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot));
-            var staged = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(Path.GetFullPath("Assets/NTSD/Content/LoganRuntime")));
+            var projectMode = NTSD.App.ProjectBattleModeConfig.LoadDefault().Capture();
+            var formal = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot), projectMode);
+            var staged = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(Path.GetFullPath("Assets/NTSD/Content/LoganRuntime")), projectMode);
             Assert.That(staged.ModeComboInput, Is.Not.Null);
             Assert.That(staged.ModeComboInput.Bound, Is.EqualTo(1));
             Assert.That(staged.ModeComboInput.Facing, Is.EqualTo(1));
             Assert.That(staged.ModeComboInput.Respond, Is.EqualTo(50));
             Assert.That(staged.ModeComboInput.CaughtAct, Is.EqualTo(1));
+            Assert.That(staged.ModeComboInput.SelectedChildVirtualPath,
+                Is.EqualTo("unity:ProjectBattleModeConfig"));
             Assert.That(staged.ContentIdentity.BattleInputContractTag, Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
             Assert.That(staged.ContentIdentity.SemanticFingerprint, Is.EqualTo(formal.ContentIdentity.SemanticFingerprint));
         }

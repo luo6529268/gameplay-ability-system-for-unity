@@ -1,0 +1,9 @@
+name: _Valley_of_the_End width: 1330 zboundary: 450 710 shadow: b\s.png shadowsize: 37 9 hex: 16777215
+small: b\Val\t.png 
+layer: b\Val\0.png width: 1330 x: 0 y: 0 layer_end
+layer: b\Val\1.png width: 1330 x: 0 y: 0 cc: 40 c1: 0 c2: 5 layer_end
+layer: b\Val\2.png width: 1330 x: 0 y: 0 cc: 40 c1: 6 c2: 11 layer_end
+layer: b\Val\3.png width: 1330 x: 0 y: 0 cc: 40 c1: 12 c2: 17 layer_end
+layer: b\Val\4.png width: 1330 x: 0 y: 0 cc: 40 c1: 18 c2: 23 layer_end
+layer: b\Val\5.png width: 1330 x: 0 y: 0 cc: 40 c1: 24 c2: 29 layer_end
+layer: b\Val\6.png width: 1330 x: 0 y: 0 cc: 40 c1: 30 c2: 35 layer_end

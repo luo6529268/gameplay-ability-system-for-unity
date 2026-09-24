@@ -459,7 +459,7 @@ namespace NTSD.Test.Editor
             report.painterOrderingInputsSameZ = ordered[0].zInt == ordered[1].zInt;
             int expectedComparison = ordered[0].zInt.CompareTo(ordered[1].zInt);
             if (expectedComparison == 0)
-                expectedComparison = ordered[0].slot.CompareTo(ordered[1].slot);
+                expectedComparison = ordered[1].slot.CompareTo(ordered[0].slot);
             int actualComparison = ordered[0].presentationBaseOrder.CompareTo(
                 ordered[1].presentationBaseOrder);
             report.painterOrderStable =
@@ -467,7 +467,7 @@ namespace NTSD.Test.Editor
             report.sameZPainterSlotOrderStable =
                 report.painterOrderingInputsSameZ && report.painterOrderStable;
             Require(report.painterOrderStable,
-                "Painter base order no longer follows the Z/runtime-slot comparator.");
+                "Painter base order no longer follows the native Z/descending-slot comparator.");
         }
 
         private static IdentityEvidence CaptureFormalIdentity(

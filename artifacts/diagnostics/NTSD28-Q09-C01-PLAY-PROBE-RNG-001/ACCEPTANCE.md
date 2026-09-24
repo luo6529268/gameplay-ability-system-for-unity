@@ -1,0 +1,13 @@
+# NTSD28-Q09-C01-PLAY-PROBE-RNG-001 acceptance
+
+Status: `VERIFIED` for the test-only C01 Play probe correction. Parent Q09 remains `RUNTIME_PENDING`; this result proves central-path materialization and logical lifecycle for the exercised kind0 fixture, not same-seed original-EXE pixels or the legacy renderer.
+
+The archived pre-change Play result failed at tick 3573 before any visual assertion: `world.Rng` delta 1 versus the old fixture's expected 3. Formal playable `battle_world.cpp::append_confirmed_native_spark` and Unity's current `BattleNativeHitSparkWriter.Append` draw native CRT Y then X; `BattleRandomWeaponDropModule.RunNormalDrop` draws the one shared-RNG weapon gate. Only `BattleHitRecordWritebackPlayModeProbeEditor.cs` changed. It predicts and checks both streams independently, records native CRT state/calls, and restores both baseline states in cleanup.
+
+Original Editor refreshed and compiled with 0 console errors. Real `NTSD_Battle.unity` CentralOnly Play result: `PASS`, ticks 1928-1931. Every tick had native CRT delta 2 and shared RNG delta 1. Live ages were `[0]`, `[1,0]`, `[2,1,0]`, `[3,2,1,0]`; frozen ages matched on the three publication ticks. Materialized HitRecord command counts were 1, 2, 3; the no-publication tick was 0. Late fallback was idempotent on all four ticks. Cleanup restored both RNG streams and all existing object/slot/pool/stat/sound/pause/presentation baselines with no errors. The archived full result `c01-central-play-result.json` has SHA-256 `147D7F58014965F1FDE4F42E70B6F6DF3281CCB5BDF2B53E87AD40F119161A74`.
+
+Editor exited Play and returned idle. Battle Scene SHA-256 remained `9409F2BCFE3E657A6C3C88A7527045CC384D50AAACC99197D53AACA38F3B3A39`; Menu Scene remained `3B0F58AA88BEC495AA999D014CB2779E935B21F0374826357B4DC64AE5B80228`. No computer-use, second Editor, production RNG, DAT, image, Scene or nonbattle modification was involved.
+
+`Tools/Validate-ChangeLedger.ps1` passed with 787 Records and 26 current code diff files covered; `git -c core.safecrlf=false diff --check` passed. `BattleRuntimeSelfCheck` was not rerun because this package changes only the Editor Play probe, and that probe's actual production-tick, materialization and cleanup path was exercised directly. Native random scalar restoration intentionally invalidates synchronized cursors per the existing RNG API; the CRT state/call count, synchronized table hash and synchronized call count were checked after cleanup.
+
+Next Q09 gates: legacy renderer Play witness; 30/60/120 presentation sampling with stable logical checksum; same-seed formal EXE pixel comparison and any first-difference correction. This test-only package must not be used to mark Q09/R14/R17 or the total alignment goal complete.

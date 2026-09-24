@@ -1,6 +1,6 @@
 # D-025 非角色可行走区域延时清除合同
 
-状态：`USER_RULE_CONFIRMED / FOCUSED_TEST_PASS / RUNTIME_PENDING`，2026-09-24。此合同承接 D-024，正式 EXE 的非角色即时 X 边界规则在用户明确例外范围内不再作为 Unity 清除时机；DAT 不修改。正式版其他战斗规则仍按当前 release live path 裁决。下方“已核对的现状”是实施前快照；当前代码/验证见 Task 与 Change Record。
+状态：`USER_RULE_CONFIRMED / SCOPED_VERIFIED / Q12_INTEGRATION_REVISIT`，2026-09-24。此合同承接 D-024，正式 EXE 的非角色即时 X 边界规则在用户明确例外范围内不再作为 Unity 清除时机；DAT 不修改。正式版其他战斗规则仍按当前 release live path 裁决。下方“已核对的现状”是实施前快照；当前代码/验证见 Task 与 Change Record，受控 Battle Scene Play 的正常和 F5-route 完整 Driver 结果分别见 `D025-WALKABLE-DRIVER-PLAY-RESULT.json` 与 `D025-WALKABLE-FAST-DRIVER-PLAY-RESULT.json`。物理键和自然飞行属于 Q12 整合回访。
 
 ## 已核对的现状
 

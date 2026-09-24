@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using NTSD.Animation;
+using NTSD.App;
 using NTSD.Simulation;
 using NUnit.Framework;
 
@@ -17,27 +18,29 @@ namespace NTSD.Test.Editor
         [Test]
         public void FormalAndStagedSevenComponentIdentityMatchIndependentVector()
         {
-            var formal = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot));
+            var formalNative = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot));
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
+            var formal = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(FormalRoot), mode);
             var staged = LoganObjectCatalog.Read(BattleContentSource.ForLoganRuntime(
-                Path.GetFullPath("Assets/NTSD/Content/LoganRuntime")));
+                Path.GetFullPath("Assets/NTSD/Content/LoganRuntime")), mode);
             Assert.That(formal.KindInput.Catalog.Records.Count, Is.EqualTo(1));
             Assert.That(formal.KindInput.InputFingerprint,
                 Is.EqualTo("B18E147AB26065B0668BB0ACCE9DF89C5352ABD6E467ABB89A4E01C3178AF5E0"));
             Assert.That(formal.KindInput.SemanticFingerprint,
                 Is.EqualTo("48EE87992BACEC941C70E4176012D4AD4F060CAB7CA551EA8317555D40A703D5"));
-            Assert.That(formal.ContentIdentity.BattleInputContractTag,
+            Assert.That(formalNative.ContentIdentity.BattleInputContractTag,
                 Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V3"));
-            Assert.That(formal.ContentIdentity.RawDefinitionFingerprint,
+            Assert.That(formalNative.ContentIdentity.RawDefinitionFingerprint,
                 Is.EqualTo("E88C4CBAC231E6C6FF47A41EFC86D46B46F74B63A8E0F3ABD30ED37C5C05C36A"));
-            Assert.That(formal.ContentIdentity.SemanticFingerprint,
+            Assert.That(formalNative.ContentIdentity.SemanticFingerprint,
                 Is.EqualTo("B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45"));
-            Assert.That(formal.ContentIdentity.CatalogFingerprint.ToString("X16"),
+            Assert.That(formalNative.ContentIdentity.CatalogFingerprint.ToString("X16"),
                 Is.EqualTo("96DE8D089438B1B8"));
             Assert.That(staged.ContentIdentity.SemanticFingerprint,
                 Is.EqualTo(formal.ContentIdentity.SemanticFingerprint));
-            var prior = LoganContentIdentity.FromBattleComponents(formal.DefinitionFingerprint,
-                formal.FusionInput.InputFingerprint, formal.FusionInput.SemanticFingerprint,
-                formal.ModeComboInput.InputFingerprint, formal.ModeComboInput.SemanticFingerprint);
+            var prior = LoganContentIdentity.FromBattleComponents(formalNative.DefinitionFingerprint,
+                formalNative.FusionInput.InputFingerprint, formalNative.FusionInput.SemanticFingerprint,
+                formalNative.ModeComboInput.InputFingerprint, formalNative.ModeComboInput.SemanticFingerprint);
             Assert.That(prior.BattleInputContractTag, Is.EqualTo("NTSD28_LOGAN_BATTLE_INPUTS_V2"));
             Assert.That(prior.SemanticFingerprint,
                 Is.EqualTo("FF1218FF3FEB409FF6B2F8EDB1090591612B3D82D7FA91601E596D29CDF13DFB"));

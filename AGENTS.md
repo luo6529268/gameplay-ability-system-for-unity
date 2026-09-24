@@ -9,7 +9,7 @@
 - 当前工作范围：战斗场景与战斗 runtime
 - 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`；任何上下文压缩、交接或历史检索后必须先读该文件
 - 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码；该身份由用户于 2026-09-04 确认是其修复 Bug 后的新版，旧 `1277B70B...DAF75` 只保留为历史基线
-- 当前 DAT 与角色相关图片内容权威：用户已明确改为 NTSD 2.8-Logan 正式 `resources/runtime` 版本（决策 D-023）；Unity 原 138-DAT/图片仅为迁移前基线，不能继续裁决目标数值。迁移尚未实施；音频和其他图片不由该决定自动整体替换，既有表现例外保持。
+- 当前 DAT 与角色相关图片内容权威：用户已明确改为 NTSD 2.8-Logan 正式 `resources/runtime` 版本（决策 D-023），但用户明确排除原版背景及两类模式 DAT（`b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat`），项目自己的背景、地图和模式内容保留。Unity 原 138-DAT/图片仅为非排除范围的迁移前基线，不能继续裁决这些目标数值；音频和其他图片不由该决定自动整体替换，既有表现例外保持。2026-09-24 项目已创建独立 `ProjectBattleModeConfig.asset` 接管配置化生产入口，并将上述原版 DAT 移出 Assets 到单一待用户清理文件夹；历史显式诊断读取器不定义生产规则。
 - Unity 是实现目标；NTSD 2.8-Logan 正式 release runtime 用于判定规则、顺序、字段和可观察行为；NTSD 2.4 release、`ntsd_release_C#` 及其旧对齐结论仅保留为历史迁移辅助与交叉检查来源
 
 本文件中的规则适用于仓库根目录及其全部子目录；若更深目录存在自己的 `AGENTS.md`，则更深目录可补充局部约束，但不得改变本文件规定的唯一战斗逻辑权威。
@@ -21,7 +21,7 @@
 1. 用户在当前任务中的明确要求。
 2. 当前根目录正式 `NTSD2.8-Logan.exe` 的实际可观察战斗行为；正式 EXE 的精确身份以 `docs/ai/CURRENT-AUTHORITY.md` 的 SHA-256 为准。
 3. `source\README_SOURCE.md` 声明对应当前发行 EXE、并实际进入 `source\ntsd28_playable\scripts\build.ps1 -Target playable` 构建闭包的 C++ 源码。
-4. 正式启动参数及 `resources\runtime` 中被正式 EXE 实际消费的数据；DAT 与角色相关图片按 D-023 使用 NTSD 2.8-Logan 版本。
+4. 正式启动参数及 `resources\runtime` 中被正式 EXE 实际消费的数据；非排除范围的 DAT 与角色相关图片按 D-023 使用 NTSD 2.8-Logan 版本，背景和两类模式 DAT 按 2026-09-24 用户更正排除。
 5. Git 恢复的 Unity 138-DAT manifest/projection 保留为迁移前内容基线和历史测试证据；不再以其差异阻止已批准的 DAT/角色图片迁移。具体文件替换、引用重绑与删除清单须在独立迁移 Task 中声明。
 6. Unity runtime 实现与测试用于验证规则实现和已声明版本的内容；不能反过来定义当前发行战斗规则或目标内容。
 7. NTSD 2.4 release、`ntsd_release_C#`、旧 trace、旧 self-check 和旧对齐结论，只能用于历史比较、命名定位和夹具回归；与当前权威冲突时无裁决权。
@@ -31,9 +31,10 @@
 
 ### 2.2 DAT/角色图片内容权威与 Direction B 历史基线
 
-**当前规则（D-023，2026-09-12）：** 用户已明确要求 DAT 和角色相关图片使用 NTSD 2.8-Logan 版本，
-此范围不再等待“整体切换/只补缺失/分类权威”选择。旧 138-DAT 保留为迁移前基线；所有后继报告必须标明
-测试使用旧内容还是正式新版内容。角色图片包括由其正式引用图识别的角色/技能关联资源，不按目录名盲删。
+**当前规则（D-023，2026-09-12；2026-09-24 范围更正）：** 用户已明确要求非排除范围的 DAT 和角色相关图片使用 NTSD 2.8-Logan 版本；原版背景、背景模式以及 `data/mode.dat`/`data/mode/ntsd.dat` 不用，
+此范围不再等待“整体切换/只补缺失/分类权威”选择；2026-09-24 用户明确排除原版背景及两类模式 DAT。
+旧 138-DAT 保留为迁移前基线；所有后继报告必须标明测试使用旧内容、正式新版内容还是项目自有模式 Asset。
+角色图片包括由其正式引用图识别的角色/技能关联资源，不按目录名盲删。
 先核对 indexed catalog、parser、资源路径/格式、GUID 引用，再分批替换和验证，最后处理经清单确认的旧文件。
 “估计全部删除”不能代替具体删除范围；不得清空整个 Config/Sprite，连带删除 InputConfig、GameConfig、地图或保留 UI。
 本内容决定不自动撤销既有表现例外、默认 stage.dat 部署暂缓、音频边界或大型实现的 Task/Change 约束。

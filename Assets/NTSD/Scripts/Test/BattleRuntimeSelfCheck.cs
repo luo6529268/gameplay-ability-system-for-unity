@@ -4785,8 +4785,8 @@ namespace NTSD.Test
 
             Expect(mobileEntities[500].GetRenderSortingOrder() == 1 &&
                    mobileEntities[0].GetRenderSortingOrder() == 5 &&
-                   mobileEntities[999].GetRenderSortingOrder() == 3997,
-                "compact presentation sorting must order 1000 active MobileExtended entities by ZInt then runtime slot without using sparse slot values");
+                   mobileEntities[999].GetRenderSortingOrder() == 9,
+                "compact presentation sorting must order 1000 active MobileExtended entities by ZInt then descending runtime slot without using sparse slot values");
             Expect(mobileEntities[0].GetHitRecordRenderSortingOrder() == 7,
                 "each active entity must reserve the P3 overlay slot before its HitRecord sub-order");
             Expect(mobileEntities[999].Runtime.SlotIndex == retainedSlot &&
@@ -4805,9 +4805,9 @@ namespace NTSD.Test
             highSlot.Runtime.ZInt = 240;
             desktopWorld.RenderDispatchAll(0);
 
-            Expect(lowSlot.GetRenderSortingOrder() == 1 &&
-                   highSlot.GetRenderSortingOrder() == 5 &&
-                   highSlot.GetHitRecordRenderSortingOrder() == 7,
+            Expect(lowSlot.GetRenderSortingOrder() == 5 &&
+                   highSlot.GetRenderSortingOrder() == 1 &&
+                   highSlot.GetHitRecordRenderSortingOrder() == 3,
                 "DesktopExtended growth and high runtime slots must use compact active ranks with collision-free sub-order intervals");
 
             desktopWorld.Unregister(highSlot);
@@ -4818,7 +4818,7 @@ namespace NTSD.Test
             desktopWorld.RenderDispatchAll(1);
 
             Expect(highSlot.GetRenderSortingOrder() == 1 &&
-                   reusedHighSlot.GetRenderSortingOrder() == 5,
+                   reusedHighSlot.GetRenderSortingOrder() == 1,
                 "a stale presentation handle must not inherit the compact rank of a reused runtime slot");
 
             var isolatedWorld = new SimulationWorld();
@@ -4828,7 +4828,7 @@ namespace NTSD.Test
             isolatedEntity.Runtime.ZInt = 999;
             isolatedWorld.RenderDispatchAll(0);
             Expect(isolatedEntity.GetRenderSortingOrder() == 1 &&
-                   reusedHighSlot.GetRenderSortingOrder() == 5,
+                   reusedHighSlot.GetRenderSortingOrder() == 1,
                 "presentation rank publication must remain isolated to its owning SimulationWorld");
 
             Expect(SimulationWorld.LegacySpriteRendererMaxPresentationEntities == 8192,
@@ -4923,11 +4923,11 @@ namespace NTSD.Test
                        firstShadowSpriteRenderer.sortingLayerName == "Object" &&
                        secondEntitySpriteRenderer.sortingLayerName == "Object" &&
                        secondShadowSpriteRenderer.sortingLayerName == "Object" &&
-                       firstShadowSpriteRenderer.sortingOrder == 0 &&
-                       firstEntitySpriteRenderer.sortingOrder == 1 &&
-                       secondShadowSpriteRenderer.sortingOrder == 4 &&
-                       secondEntitySpriteRenderer.sortingOrder == 5,
-                    "ForceRefreshPresentation must restore all legacy renderers to Object and interleave Shadow(A), Entity(A), Shadow(B), Entity(B)");
+                       firstShadowSpriteRenderer.sortingOrder == 4 &&
+                       firstEntitySpriteRenderer.sortingOrder == 5 &&
+                       secondShadowSpriteRenderer.sortingOrder == 0 &&
+                       secondEntitySpriteRenderer.sortingOrder == 1,
+                    "ForceRefreshPresentation must restore all legacy renderers to Object and interleave Shadow(B), Entity(B), Shadow(A), Entity(A) at equal Z");
             }
             finally
             {

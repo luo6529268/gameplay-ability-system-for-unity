@@ -1,6 +1,6 @@
 # NTSD28-USER-NONCHAR-WALKABLE-TTL-001
 
-Status: RUNTIME_PENDING. D-025 code, original-Editor focused tests and standard BattleRuntimeSelfCheck passed; actual Battle Scene map capture/Play witness remains. It supersedes only formal noncharacter immediate offstage X destruction timing; character bounds, DAT, content, Scene and nonbattle modules remain unchanged.
+Status: VERIFIED for the scoped D-025 continuous off-walkable TTL rule. Code, original-Editor focused tests, standard BattleRuntimeSelfCheck and normal/F5-route 305-step complete Driver Play witnesses passed in two separate Battle Scene sessions. Physical keyboard F5, natural projectile travel and dedicated-worker free-run remain Q12 integration evidence, not part of this scoped claim. It supersedes only formal noncharacter immediate offstage X destruction timing; character bounds, DAT, content, Scene and nonbattle modules remain unchanged.
 
 Authority: user's 2026-09-24 choice: non-character battle objects continuously outside the project's walkable area for 10 seconds of battle logic time are cleared. F5 changes wall-clock cadence, not the required logical tick count. Map source is the current `BattleBootstrap`/`BattleMapCatalog`/`BoundaryWallManager` loaded walkable polygon union. The formal playable stage-bounds branch is comparison evidence, not the timing authority for this exception.
 

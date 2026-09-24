@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -20,14 +21,15 @@ namespace NTSD.Test.Editor
             Assert.That(Directory.Exists(stagedRoot), Is.True);
             Assert.That(Directory.Exists(FormalRoot), Is.True);
 
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
             LoganVisualContentCandidate formal = LoganVisualContentCandidate.Capture(
-                BattleContentSource.ForLoganRuntime(FormalRoot));
+                BattleContentSource.ForLoganRuntime(FormalRoot), mode);
             LoganVisualContentCandidate staged = LoganVisualContentCandidate.Capture(
-                BattleContentSource.ForLoganRuntime(stagedRoot));
+                BattleContentSource.ForLoganRuntime(stagedRoot), mode);
 
             Assert.That(formal.Catalog.Entries.Count, Is.EqualTo(330));
             Assert.That(staged.Catalog.Entries.Count, Is.EqualTo(330));
-            // Q01 indexed 1,010 raw PNG references; the current parsed candidate selects 906.
+            // Native HUD smallb images are deployed but excluded from this production candidate.
             Assert.That(formal.Images.Count, Is.EqualTo(906));
             Assert.That(staged.Images.Count, Is.EqualTo(formal.Images.Count));
             Assert.That(staged.Catalog.DefinitionFingerprint, Is.EqualTo(formal.Catalog.DefinitionFingerprint));

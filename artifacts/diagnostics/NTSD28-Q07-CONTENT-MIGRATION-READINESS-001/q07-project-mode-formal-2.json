@@ -1,0 +1,27 @@
+{
+    "runId": "q07-project-mode-formal-2",
+    "mode": "direct",
+    "status": "PASS",
+    "message": "Actual formal-staged content caller, World preparation and ordered unload passed.",
+    "sourceKey": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime|27CAE01489909C46A5145A5867988CCD8C10E20FEF165D847B7AC7A6DE2DE02D|B55CFD4C57BE28A5A8BCBF47840CD44BAF2AEFECCBC2D0428E07CCB3CC603B30",
+    "shutdownStage": "RuntimeMapCleared",
+    "failurePublishedKey": "",
+    "failureConfiguredRoot": "",
+    "failureLifecycle": "",
+    "sourceIds": [
+        0,
+        50,
+        52
+    ],
+    "worldObjects": 4,
+    "trackedResources": 30803,
+    "resourceSurvivors": 0,
+    "menuPreviousOwnerSurvivors": 0,
+    "actualPoolBorrowers": 0,
+    "candidateCacheHits": 0,
+    "menuReady": false,
+    "samePublishedKeys": true,
+    "stayedStoppedAfterTwoFrames": true,
+    "serializedRootSelected": false,
+    "rootFromAsset": ""
+}

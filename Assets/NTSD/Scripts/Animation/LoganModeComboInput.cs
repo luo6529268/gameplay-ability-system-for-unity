@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
+using NTSD.App;
 using NTSD.DatParser;
 
 namespace NTSD.Animation
@@ -61,6 +62,38 @@ namespace NTSD.Animation
             fields.TryGetValue("sound2", out string sound2);
             StageTeam1DeathSoundPath = sound1;
             StageTeam5DeathSoundPath = sound2;
+        }
+
+        private LoganModeKnockoutFeedInput(ProjectBattleModeConfig.Snapshot mode)
+        {
+            Enabled = mode.KnockoutEnabled;
+            Respond = mode.KnockoutRespond;
+            LifetimeTicks = mode.KnockoutLifetimeTicks;
+            RowSpacing = mode.KnockoutRowSpacing;
+            Transparency = mode.KnockoutTransparency;
+            AttackerTeamColor = mode.AttackerTeamColor;
+            VictimTeamColor = mode.VictimTeamColor;
+            ScreenTop = mode.ScreenTop;
+            ImageScreenLeft = mode.ImageScreenLeft;
+            AttackerScreenLeft = mode.AttackerScreenLeft;
+            VictimScreenLeft = mode.VictimScreenLeft;
+            AttackerAppendCharacterName = mode.AttackerAppendCharacterName;
+            VictimAppendCharacterName = mode.VictimAppendCharacterName;
+            AttackerRightAligned = mode.AttackerRightAligned;
+            VictimRightAligned = mode.VictimRightAligned;
+            AllowedBattleModes = Array.AsReadOnly(mode.AllowedBattleModes);
+            ExcludedVictimObjectIds = Array.AsReadOnly(mode.ExcludedVictimObjectIds);
+            typeResourcePaths = mode.TypeImagePaths;
+            StageTeam1DeathSoundPath = mode.StageTeam1DeathSoundPath;
+            StageTeam5DeathSoundPath = mode.StageTeam5DeathSoundPath;
+        }
+
+        public static LoganModeKnockoutFeedInput FromProjectSnapshot(
+            ProjectBattleModeConfig.Snapshot mode)
+        {
+            if (mode == null)
+                throw new ArgumentNullException(nameof(mode));
+            return new LoganModeKnockoutFeedInput(mode);
         }
 
         public string TypeResourcePath(int type)
@@ -147,6 +180,7 @@ namespace NTSD.Animation
         private readonly string childPath;
         private readonly string modeSha256;
         private readonly string childSha256;
+        private readonly ProjectBattleModeConfig.Snapshot projectSnapshot;
 
         public string SelectedChildVirtualPath { get; }
         public string InputFingerprint { get; }
@@ -178,6 +212,26 @@ namespace NTSD.Animation
                 Bound, Facing, Respond, CaughtAct);
         }
 
+        private LoganModeComboInput(ProjectBattleModeConfig.Snapshot mode)
+        {
+            projectSnapshot = mode ?? throw new ArgumentNullException(nameof(mode));
+            SelectedChildVirtualPath = "unity:ProjectBattleModeConfig";
+            Bound = mode.ComboBound;
+            Facing = mode.ComboFacing;
+            Respond = mode.ComboRespond;
+            CaughtAct = mode.ComboCaughtAct;
+            KnockoutFeed = LoganModeKnockoutFeedInput.FromProjectSnapshot(mode);
+            InputFingerprint = HashContract("PROJECT_MODE_INPUT_V1", mode.Fingerprint);
+            SemanticFingerprint = HashContract("PROJECT_MODE_SEMANTIC_V1",
+                Bound, Facing, Respond, CaughtAct);
+        }
+
+        public static LoganModeComboInput FromProjectSnapshot(
+            ProjectBattleModeConfig.Snapshot mode)
+        {
+            return new LoganModeComboInput(mode);
+        }
+
         public static LoganModeComboInput Capture(BattleContentSource source)
         {
             if (source == null || !source.IsLoganRuntime)
@@ -201,6 +255,8 @@ namespace NTSD.Animation
 
         public void AssertInputsCurrent()
         {
+            if (projectSnapshot != null)
+                return;
             if (!File.Exists(modePath) || !File.Exists(childPath) ||
                 !string.Equals(Hash(File.ReadAllBytes(modePath)), modeSha256, StringComparison.Ordinal) ||
                 !string.Equals(Hash(File.ReadAllBytes(childPath)), childSha256, StringComparison.Ordinal))

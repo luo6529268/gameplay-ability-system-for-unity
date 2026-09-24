@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -24,7 +25,8 @@ namespace NTSD.Test
             {
                 string root = Path.GetFullPath(Path.Combine(Application.dataPath, "NTSD/Content/LoganRuntime"));
                 LoganVisualContentCandidate candidate = LoganVisualContentCandidate.Capture(
-                    BattleContentSource.ForLoganRuntime(root));
+                    BattleContentSource.ForLoganRuntime(root),
+                    ProjectBattleModeConfig.LoadDefault().Capture());
                 Assert.That(candidate.Catalog.Entries.Count, Is.EqualTo(330));
                 Assert.That(candidate.Images.Count, Is.EqualTo(906));
 
@@ -55,6 +57,25 @@ namespace NTSD.Test
                     Assert.That(ui.PublishedVisualContentKey, Is.EqualTo(key));
                     Assert.That(manager.PublishedLoganContentIdentity.SemanticFingerprint,
                         Is.EqualTo(candidate.ContentIdentity.SemanticFingerprint));
+                    BattleCommonVisualCatalog sparkCatalog = manager.CommonVisualCatalog;
+                    Assert.That(sparkCatalog.IsNativeSpark, Is.True,
+                        "Formal staged publication must use the verified native SPARK PNG.");
+                    foreach (int id in new[] { 0, 4, 10, 20, 21, 24, 30, 34 })
+                    {
+                        Assert.That(sparkCatalog.TryGetSparkForAge(id, out int pic,
+                            out BattleCommonVisualBinding binding), Is.True,
+                            $"Native SPARK ID {id} was not published.");
+                        Assert.That(pic, Is.EqualTo(id / 10 * 5 + id % 10));
+                        Assert.That(binding.Texture.width, Is.EqualTo(500));
+                        Assert.That(binding.Texture.height, Is.EqualTo(320));
+                        Assert.That(binding.PixelRect,
+                            Is.EqualTo(BattleCommonVisualCatalog.GetNativeSparkPixelRect(
+                                pic, 500, 320, 99, 79)));
+                        Assert.That(binding.CentralBinding.IsValid, Is.True);
+                    }
+                    foreach (int id in new[] { 5, 9, 25, 35, 99 })
+                        Assert.That(sparkCatalog.TryGetSparkForAge(id, out _, out _),
+                            Is.False, $"Native SPARK ID {id} must not be drawn.");
                     foreach (LoganObjectCatalog.Entry entry in candidate.Catalog.Entries)
                     {
                         var config = manager.GetCharacterConfig(entry.Id);

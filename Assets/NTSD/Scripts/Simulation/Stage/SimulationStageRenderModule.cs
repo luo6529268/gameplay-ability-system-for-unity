@@ -895,7 +895,7 @@ namespace NTSD.Simulation
 
             int leftSlot = left?.Runtime?.SlotIndex ?? int.MaxValue;
             int rightSlot = right?.Runtime?.SlotIndex ?? int.MaxValue;
-            int slotComparison = leftSlot.CompareTo(rightSlot);
+            int slotComparison = rightSlot.CompareTo(leftSlot);
             if (slotComparison != 0)
                 return slotComparison;
 

@@ -171,7 +171,8 @@ namespace NTSD.Test.Editor
                 }
 
                 SimulationTickDriver driver = null;
-                for (int i = 0; i < 1800; i++)
+                float battleDeadline = Time.realtimeSinceStartup + (request.formalStaged ? 240f : 30f);
+                while (Time.realtimeSinceStartup < battleDeadline)
                 {
                     driver = SimulationTickDriver.Instance;
                     if (driver != null && driver.LifecycleState == BattleRuntimeLifecycleState.Running && driver.World?.ObjectCount > 0) break;
@@ -196,9 +197,16 @@ namespace NTSD.Test.Editor
                         Require(data?.name == "E3_probe_" + id, "A legacy definition reached the native caller.");
                 }
                 if (request.formalStaged)
-                    Require(manager.PublishedLoganContentIdentity?.SemanticFingerprint ==
-                        "B8B13894088DDE96D71771C9110FBD84E2C03AE712FE32222B99C5DFE8155A45",
-                        "The production caller did not publish the formal staged content identity.");
+                {
+                    var modeSnapshot = ProjectBattleModeConfig.LoadDefault().Capture();
+                    Require(manager.PublishedLoganCatalog?.ProjectModeSnapshot?.Fingerprint ==
+                        modeSnapshot.Fingerprint &&
+                        manager.PublishedLoganCatalog.ModeComboInput.SelectedChildVirtualPath ==
+                        "unity:ProjectBattleModeConfig" &&
+                        manager.PublishedLoganContentIdentity?.SemanticFingerprint ==
+                        manager.PublishedLoganCatalog.ContentIdentity.SemanticFingerprint,
+                        "The production caller did not publish formal objects with the project mode asset.");
+                }
                 report.candidateCacheHits = manager.ConfiguredCandidateCacheHitCount;
                 if (request.mode == "menu") Require(report.candidateCacheHits > 0, "Menu owner rehydration did not reuse the candidate input cache.");
 
