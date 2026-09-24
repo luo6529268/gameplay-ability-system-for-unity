@@ -1,0 +1,23 @@
+{
+    "status": "PASS",
+    "message": "",
+    "sourceTexturePath": "Assets/NTSD/Content/LoganRuntime/vfs/c/sasu/sasu.png",
+    "footMarkerPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/yellow/frame_01.png",
+    "commonShadowPrefabPath": "Assets/NTSD/Prefabs/Common/Shadow.prefab",
+    "imagePath": "Temp/BATTLE-CENTRAL-EDITOR-PREVIEW-001/editmode-preview.png",
+    "controllerBuilt": true,
+    "actorCount": 1,
+    "commonShadowCount": 1,
+    "commonShadowSegmentCount": 1,
+    "footMarkerCount": 1,
+    "footMarkerSegmentCount": 1,
+    "healthBarCount": 1,
+    "healthQuadCount": 3,
+    "nonClearPixelCount": 1131,
+    "redDominantPixelCount": 191,
+    "yellowDominantPixelCount": 218,
+    "greenSeparatorPixelCount": 0,
+    "sceneDirtyUnchanged": true,
+    "usedCharacterManagerSprite": false,
+    "usedProcessedSourceSheet": true
+}

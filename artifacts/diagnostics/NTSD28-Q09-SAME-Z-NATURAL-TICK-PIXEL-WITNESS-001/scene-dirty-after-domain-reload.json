@@ -1,0 +1,22 @@
+{
+    "sceneValid": true,
+    "sceneLoaded": true,
+    "sceneDirty": false,
+    "entries": [
+        "HUDCamera/Camera.enabled=True",
+        "ScenesCamera/Camera.enabled=True",
+        "HUDBg/CanvasRenderer",
+        "HpXu/CanvasRenderer",
+        "HP/CanvasRenderer",
+        "MP/CanvasRenderer",
+        "HeadImg/CanvasRenderer",
+        "ControBg/CanvasRenderer",
+        "ControPoint/CanvasRenderer",
+        "ComboBg/CanvasRenderer",
+        "ComboTemp/CanvasRenderer",
+        "ComboArraw/CanvasRenderer",
+        "AttackBtn/CanvasRenderer",
+        "JumpBtn/CanvasRenderer",
+        "DefendBtn/CanvasRenderer"
+    ]
+}

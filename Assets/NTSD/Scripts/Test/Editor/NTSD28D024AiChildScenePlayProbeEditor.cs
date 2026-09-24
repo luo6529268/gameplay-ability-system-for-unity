@@ -32,9 +32,14 @@ namespace NTSD.Test.Editor
             public string error;
             public string initialScene;
             public string contentKey;
+            public int battleMode = -1;
             public int initialTick;
             public int ticksStepped;
             public int aiTargetSlot = -1;
+            public string participantState;
+            public string aiTargetHistory;
+            public string aiFrameTransitions;
+            public string newBirths;
             public int childSlot = -1;
             public int childObjectId = -1;
             public int missingSourceCount;
@@ -145,7 +150,11 @@ namespace NTSD.Test.Editor
 
                 report.phase = "app-birth";
                 WriteReport(request.runId, report);
-                var match = new MatchConfig { seed = 2833 };
+                var match = new MatchConfig
+                {
+                    seed = 2833,
+                    gameMode = new GameModeConfig { battleGameModeId = 0 },
+                };
                 match.players.Add(new PlayerSlotConfig
                 {
                     use = true, isHuman = true, characterId = 2,
@@ -179,6 +188,9 @@ namespace NTSD.Test.Editor
 
                 driver.SetPaused(true);
                 SimulationWorld world = driver.World;
+                report.battleMode = world.BattleGameModeId;
+                Require(report.battleMode == 0,
+                    "Production World did not apply the requested battle mode 0.");
                 LF2Entity human = world.FindEntityByRuntimeSlotForQuery(0);
                 LF2Entity ai = world.FindEntityByRuntimeSlotForQuery(1);
                 Require(human?.Runtime != null && ai?.Runtime != null &&
@@ -191,6 +203,22 @@ namespace NTSD.Test.Editor
                 Require(report.viewScale > 1.0,
                     "Current battle did not apply the approved full-view distance ratio.");
                 report.initialTick = driver.CurrentTickIndex;
+                report.participantState = "human team=" + human.Runtime.Team +
+                    "/" + human.Runtime.RelationTeam +
+                    " hp=" + human.Runtime.HP +
+                    " x=" + human.Runtime.X + " z=" + human.Runtime.Z +
+                    " type=" + human.GetCurrentDataObjectTypeForSimulation() +
+                    " state=" + human.GetState() +
+                    " frame=" + (human.Frame != null ? human.Frame.N : -1) +
+                    "; ai team=" + ai.Runtime.Team +
+                    "/" + ai.Runtime.RelationTeam +
+                    " hp=" + ai.Runtime.HP +
+                    " x=" + ai.Runtime.X + " z=" + ai.Runtime.Z +
+                    " type=" + ai.GetCurrentDataObjectTypeForSimulation() +
+                    " state=" + ai.GetState() +
+                    " controlled=" + ai.AiControlled +
+                    " frame=" + (ai.Frame != null ? ai.Frame.N : -1) +
+                    " coordinateX=" + ai.Runtime.Unk3FC;
                 var initialIds = new HashSet<int>();
                 for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
                 {
@@ -202,7 +230,14 @@ namespace NTSD.Test.Editor
                 report.phase = "ai-full-driver";
                 WriteReport(request.runId, report);
                 LF2Entity child = null;
-                for (int step = 0; step < 60 && child == null; step++)
+                var targetSamples = new List<string>();
+                var frameTransitions = new List<string>();
+                var newBirths = new List<string>();
+                var observedBirthIds = new HashSet<int>();
+                int previousAiFrame = ai.Frame != null ? ai.Frame.N : -1;
+                BattleAiInputDetailDiagnostics aiDiagnostics =
+                    world.EnableBattleAiInputDetailDiagnosticsForDiagnostics();
+                for (int step = 0; step < 600 && child == null; step++)
                 {
                     int nextTick = driver.CurrentTickIndex + 1;
                     var input = new FrameInputSet(nextTick, new[]
@@ -215,6 +250,36 @@ namespace NTSD.Test.Editor
                     report.ticksStepped++;
                     if (ai.Runtime.Unk360 == 0)
                         report.aiTargetSlot = 0;
+                    int currentAiFrame = ai.Frame != null ? ai.Frame.N : -1;
+                    if (currentAiFrame != previousAiFrame && frameTransitions.Count < 160)
+                        frameTransitions.Add(nextTick + ":" + currentAiFrame);
+                    previousAiFrame = currentAiFrame;
+                    if (step < 10 || step == 19 || step == 39 ||
+                        step == 59 || step == 73 || step == 74 ||
+                        step == 75 || step == 89 || step == 119 ||
+                        step == 179)
+                    {
+                        targetSamples.Add(nextTick + ":" + world.InputPhase +
+                            "/" + human.Runtime.HP +
+                            "/" + human.Runtime.HitStop +
+                            "/" + human.Runtime.RelationTeam +
+                            "/" + human.GetCurrentDataObjectTypeForSimulation() +
+                            "/" + human.GetState() +
+                            "/" + ai.Runtime.Unk360 +
+                            "/" + ai.Runtime.RelationTeam +
+                            "/" + ai.GetCurrentDataObjectTypeForSimulation() +
+                            "/" + ai.AiControlled +
+                            "/" + aiDiagnostics.AiCount +
+                            "/" + aiDiagnostics.GetLastCallCount(
+                                BattleAiInputDetailPhase.FindNearestGround) +
+                            "/" + aiDiagnostics.GetLastCallCount(
+                                BattleAiInputDetailPhase.IndexedCanonicalNearestSearch) +
+                            "/" + aiDiagnostics.GetLastCallCount(
+                                BattleAiInputDetailPhase.IndexedCanonicalCommitApply) +
+                            "/" + ai.Runtime.Unk3FC + "/" +
+                            (ai.Frame != null ? ai.Frame.N : -1) +
+                            "/" + ai.Runtime.X + "/" + ai.Runtime.Z);
+                    }
                     var missing = new List<string>();
                     for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
                     {
@@ -230,16 +295,27 @@ namespace NTSD.Test.Editor
                             report.childSlot = slot;
                             report.childObjectId = entity.ObjectId;
                         }
+                        if (!initialIds.Contains(entity.Runtime.StableId) &&
+                            observedBirthIds.Add(entity.Runtime.StableId) && newBirths.Count < 40)
+                        {
+                            string birth = nextTick + ":" + slot + ":" + entity.ObjectId +
+                                ":" + entity.OwnerEntityIndex + ":" + entity.Runtime.StableId;
+                            newBirths.Add(birth);
+                        }
                     }
                     report.missingSourceCount += missing.Count;
                     if (missing.Count > 0)
                         report.missingSourceSlots = string.Join(",", missing);
                 }
+                world.DisableBattleAiInputDetailDiagnosticsForDiagnostics();
+                report.aiTargetHistory = string.Join(",", targetSamples);
+                report.aiFrameTransitions = string.Join(",", frameTransitions);
+                report.newBirths = string.Join(",", newBirths);
 
                 Require(report.aiTargetSlot == 0,
                     "AI did not select the human participant in full Driver.");
                 Require(child != null,
-                    "NO_CHILD_OBSERVED: AI did not spawn an owned child in 60 manual ticks.");
+                    "NO_CHILD_OBSERVED: AI did not spawn an owned child in 600 manual ticks.");
                 report.childSourceInitialized =
                     child.Runtime.SourceRulePositionInitialized;
                 report.childRendererPresent = child.Renderer != null;

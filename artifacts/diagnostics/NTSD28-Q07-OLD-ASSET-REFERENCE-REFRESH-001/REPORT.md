@@ -1,5 +1,7 @@
 # Q07 old-asset reference refresh after formal-root switch (2026-09-22)
 
+**2026-09-24 后继纠正：** 本报告以下的 Sasuke BMP 场景引用和 `CharacterAssetDeploymentEditorTests` 旧内容遍历已是历史快照。当前预览已重绑正式PNG并在原Editor完成可见图/11项测试；当前该部署测试已核正式Logan type-0 DAT及图片且原Editor 1/1 PASS。383个旧索引图片GUID在所列NTSD序列化文件范围内0命中，但空根legacy预热仍可达，不能据此删除旧文件。准确入口、扫描范围及退场门槛见 [CURRENT-DYNAMIC-REACHABILITY-20260924.md](CURRENT-DYNAMIC-REACHABILITY-20260924.md)。本报告原始695路径清单保留其审计时点，不覆盖当前证据。
+
 Owner-classification extension: the 52 present old paths with serialized references are now assigned exact owners in [SERIALIZED-OWNER-CLASSIFICATION.md](SERIALIZED-OWNER-CLASSIFICATION.md) and [serialized-owner-classification.csv](serialized-owner-classification.csv): 1 inactive Editor preview character sheet, 26 Battle HUD/UI, 14 Menu UI, 8 GameConfig UI, 2 maps, 1 common shadow. The preview's formal Sasuke candidate needs a separate Scene/editor-test rebind; deletion authorization remains zero.
 
 Status: `VERIFIED_STATIC_REFERENCE_REFRESH_ONLY / NO_DELETE_AUTHORIZATION`. This read-only audit reconciled all 695 Q01 pre-migration disposition rows against the current worktree after GameConfig selected `Assets/NTSD/Content/LoganRuntime`. Per-file evidence is [current-reference-graph.csv](current-reference-graph.csv) and aggregate counts are [audit-summary.json](audit-summary.json). No old resource, Scene, prefab, importer, production script or authority source was changed.

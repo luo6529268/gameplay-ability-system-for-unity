@@ -23,3 +23,5 @@
 交付前补查：上述 Battle Scene 哈希是探针退出后立即取得的观察。此后文件于 20:14:05 被另一次写入，当前哈希变成 `7D7286D5CBCDE396AFCA3BBA9ABBC199577D0833033603C71D627E3BD470E567`；Git diff 仅有两个 Camera 的 `m_Enabled: 1 → 0`。本探针代码没有写 Scene，且结果文件时间为 20:12:16；**无法仅凭时间判定后续写入者**。保留该并行变化，不回退、不将当前 Scene 称作仍未变化。后继实际像素验证须先复核这两个相机的当前意图与有效取景条件。
 
 只读定位两处 Scene 差异对应 HUDCamera 和 ScenesCamera 的 Camera 组件 m_Enabled，二者 GameObject 仍 active；中央渲染的 BattleCentralRenderSystem 要求 world camera enabled。已异步询问用户此设置是否有意，未修改 Scene。
+
+用户随后明确：两台相机默认都应显示，并指出该关闭来自本任务操作。已将这两个 `m_Enabled` 精确恢复为 1，并在原 Editor 中重新加载无未保存改动的 Battle Scene；磁盘 SHA 恢复为 `9409F2BCFE3E657A6C3C88A7527045CC384D50AAACC99197D53AACA38F3B3A39`，Scene Git diff 为空。受控 Play 的既有 `BattleCentralGameVisibilityPlayModeProbeEditor` 结果 `camera-visibility-after-restore.json` 于 20:25:31 为 PASS：`ScenesCamera` 找到、enabled/active 均为 true，central plan 有效且有 submission，source command 4、draw count 6、first difference 为 `NO_DIAGNOSTIC_DIFFERENCE`；退出 Play 后 Scene 哈希仍不变。HUDCamera 的磁盘值为 enabled 1，本次运行探针只直接检查了主世界相机。`BattleBootstrap.OnDisable()` 会调用关闭相机的方法，但一次独立 Play 进出未复现写盘，不能仅凭该调用链认定原写盘触发点；未修改生产脚本。

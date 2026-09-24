@@ -1,0 +1,10 @@
+{
+  "jobId": "ed1e857c29b84159bea5bbbe3c583f5c",
+  "status": "succeeded",
+  "test": "NTSD.Test.CharacterAssetDeploymentEditorTests.FormalTypeZeroCharacterDatAndImagesAreDeployed",
+  "total": 1,
+  "passed": 1,
+  "failed": 0,
+  "durationSeconds": 16.1066337,
+  "fullJobSha256": "50698DD865CE0EDC63D3B21ADB28F4193CAD00D44839806B0978B51F003C6AF3"
+}
