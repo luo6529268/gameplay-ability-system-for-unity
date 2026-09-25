@@ -1,0 +1,18 @@
+{
+  "status": "READ_ONLY_CURRENT_INDEXED_IMAGE_AUDIT",
+  "sourceCsv": "artifacts\\diagnostics\\NTSD28-Q07-INDEXED-IMAGE-COVERAGE-001\\indexed-formal-staged-image-sha.csv",
+  "referenceRows": 1010,
+  "distinctPaths": 1010,
+  "missingFormal": [],
+  "missingStaged": [],
+  "formalStagedMismatch": [],
+  "formalQ01Mismatch": [],
+  "roleRowCounts": {
+    "bmp:file": 703,
+    "sheet": 703,
+    "bmp:head": 97,
+    "bmp:small": 106,
+    "bmp:smallb": 104
+  },
+  "scope": "indexed images only; bytes not importer/runtime publication/pixels; smallb user HUD exception"
+}

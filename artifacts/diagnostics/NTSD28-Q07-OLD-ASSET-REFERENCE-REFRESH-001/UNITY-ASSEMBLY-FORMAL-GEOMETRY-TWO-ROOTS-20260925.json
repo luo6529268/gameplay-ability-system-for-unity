@@ -1,0 +1,36 @@
+{
+  "method": "Current Unity Assembly-CSharp; same default ProjectBattleModeConfig.Snapshot for both roots; independent .NET process with Unity Debug logging suppressed",
+  "assemblySha256": "5EF4A473DF1C99FCDF929E01349C3008C5CBA8C0508BB538E8AA0FDDDE266184",
+  "formalRoot": "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime",
+  "stagedRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime",
+  "formal": {
+    "objects": 330,
+    "authoredFrames": 55348,
+    "uniqueFrames0to856": 55348,
+    "outOfRangeFrames": 0,
+    "resolvedFrameVisits": 282810,
+    "itrs": 19461,
+    "bodies": 86383,
+    "invalidItr": 109,
+    "zeroWidthPositiveHeightItr": 27,
+    "missingItrGeometry": 82,
+    "invalidBody": 0,
+    "negHeightPosWidthBody": 0,
+    "missingBodyGeometry": 0
+  },
+  "staged": {
+    "objects": 330,
+    "authoredFrames": 55348,
+    "uniqueFrames0to856": 55348,
+    "outOfRangeFrames": 0,
+    "resolvedFrameVisits": 282810,
+    "itrs": 19461,
+    "bodies": 86383,
+    "invalidItr": 109,
+    "zeroWidthPositiveHeightItr": 27,
+    "missingItrGeometry": 82,
+    "invalidBody": 0,
+    "negHeightPosWidthBody": 0,
+    "missingBodyGeometry": 0
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "status": "READ_ONLY_STATIC_GATE_ONLY",
+  "sourceCsv": "artifacts\\diagnostics\\NTSD28-Q07-LEGACY-DAT-IMAGE-RETIREMENT-GATE-AUDIT-001\\retirement-gate.csv",
+  "rowCount": 521,
+  "byClass": {
+    "OLD_DAT": 138,
+    "OLD_INDEXED_IMAGE": 383
+  },
+  "existing": 521,
+  "metaExisting": 521,
+  "serializedFilesScanned": 877,
+  "withSerializedReferences": 0,
+  "missingPaths": [],
+  "missingMetaPaths": [],
+  "referencedRows": [],
+  "deleteAuthorizedCount": 0,
+  "limits": "selected serialized file extensions under Assets/NTSD only; dynamic path readers and external references remain; GUID zero is not deletion approval",
+  "serializedScope": "Assets and ProjectSettings selected serialized extensions, excluding LoganRuntime"
+}

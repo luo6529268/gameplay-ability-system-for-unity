@@ -1,0 +1,20 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Asset info retrieved.",
+    "data": {
+      "path": "Assets/NTSD/Content/LoganRuntime/decoded_dat/data/sound.dat",
+      "guid": "84222ed9e2854318a86a4b5d6ba591ee",
+      "assetType": "UnityEditor.DefaultAsset",
+      "name": "sound",
+      "fileName": "sound.dat",
+      "isFolder": false,
+      "instanceID": 39528,
+      "lastWriteTimeUtc": "2026-08-20T03:54:42.0703346Z",
+      "previewBase64": null,
+      "previewWidth": 0,
+      "previewHeight": 0
+    }
+  }
+}

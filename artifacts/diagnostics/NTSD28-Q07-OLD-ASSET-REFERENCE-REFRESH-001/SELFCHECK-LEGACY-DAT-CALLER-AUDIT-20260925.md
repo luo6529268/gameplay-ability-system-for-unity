@@ -1,0 +1,20 @@
+# Q07 full SelfCheck old-DAT caller audit, 2026-09-25
+
+Status: `CONFIRMED_ADDITIONAL_LEGACY_FIXTURE_DEPENDENCY / READ_ONLY`. This corrects the earlier geometry-only retirement plan. It is a current-source and formal-index audit, not a Unity converter run or formal EXE behavioral trace. No DAT, script, Scene, asset or test assertion was changed.
+
+`BattleRuntimeSelfCheck.RunAll` calls four old-content-dependent checks:
+
+| RunAll call | Old-content dependency | Required owner decision |
+| --- | --- | --- |
+| `CheckDeployableResolvedGeometryRisks` | `ParseCharacterFrameConfigs(dataManager)` reads old `Config/data.txt` and resolves old Config DAT. | Q07 formal geometry projection Task `NTSD28-Q07-SELFCHECK-FORMAL-GEOMETRY-001`. |
+| `CheckSpriteFileRangeParsingContracts` | `LoadProductionDatWrapper(214)` decrypts old Config flash DAT, then asserts the old sheet-range layout. | Separate legacy-fixture retirement Task. Keep the synthetic parser-range rule test. |
+| `CheckMovementDatLoadingContracts` | `LoadProductionDatWrapper` reads old Config DAT for OIDs 2/3/1/11/33/120, then asserts old content values. | Separate legacy-fixture retirement Task. Keep parser/default behavior tests independently. |
+| `CheckNarutoDdjSixCloneProductionChain` | `LoadProductionDatWrapper` reads old Config DAT for OIDs 2/33/204/205 and asserts old Naruto frame 272 generates OID205/action98. | Separate formal-chain reauthoring Task; do not silently substitute an OID or edit formal DAT. |
+
+The shared helper `LoadProductionDatWrapper` in `BattleRuntimeSelfCheck.cs` around lines 30381–30433 first resolves `definition.file` against `Assets/NTSD/Config`, then decrypts that path with the old key and calls the non-Logan `Lf2DatParserV2.Parse`/`BuildCharacterDataFromDat` path. It is a direct old-resource reader even when `GameDataManager` already carries formal definitions. A source search found its call sites only in the three checks above; `CheckDeployableResolvedGeometryRisks` uses a different old reader.
+
+Index identity makes a simple expected-number update unsound. Old `Assets/NTSD/Config/data.txt` SHA-256 is `DB7A5F7A02B45E8461701D5033F30DA7128A07ED1B07134B5E5822884121B913`; formal `decoded_dat/data/data.txt` SHA-256 is `3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0`. The old index includes OID205 `specialattack/poison.dat`; the formal index has no OID205. Formal Naruto `c/nar/nar.dat` SHA-256 `6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9` has frame 0 `hit_Dj: 271`, but frame 272 contains no OPoint. The old chain check's OID205/action98 assertion therefore describes the retired content graph, not an established current formal chain. The old movement check expects Naruto `running_speed=15`, Sasuke `running_speed=23.9`, clone `running_speed=15`; formal DAT headers carry 16, 20 and 14 respectively. These are raw DAT observations, not Unity converted values or permission to edit DAT.
+
+The formal DAT's authored frame links near that input are `271→459→272→495→273→497`; frame495 authors OID518/action708 and frame273 OID518/action390, while frame272 itself has no OPoint. Those links identify a new source-chain investigation, not a complete runtime route: `hit_a` branches, conditions, pass order and EXE output still need the formal playable/live-path check before an assertion is reauthored. Formal frame275/276 separately author OID33/action310, but this static observation does not establish that they belong to the same combo path.
+
+Consequence: changing only the geometry check cannot satisfy the prior Task wording “full BattleRuntimeSelfCheck executes without reading old Config DAT.” That aggregate exit depends on the separate legacy-fixture Task and a fresh full SelfCheck run after both changes. Each scoped edit still needs its own pre-edit Change Record, Ledger/STATE/handoff registration, focused validation and scene-hash check. The synthetic zero-dimension and inverted-body collision rule cases should remain intact; old-content fixtures should be replaced only after their formal behavior/fixture ownership is established.

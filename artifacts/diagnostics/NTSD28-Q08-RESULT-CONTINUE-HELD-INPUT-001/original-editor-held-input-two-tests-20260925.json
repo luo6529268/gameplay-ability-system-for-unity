@@ -1,0 +1,66 @@
+{
+  "requested": [
+    "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier",
+    "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly"
+  ],
+  "final": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "ab04cb260105498c929b6a1ff768c7c5",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1790290668160,
+        "finished_unix_ms": 1790290672042,
+        "last_update_unix_ms": 1790290672042,
+        "progress": {
+          "completed": 2,
+          "total": 8501,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1790290671425,
+          "last_finished_test_full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier",
+          "last_finished_unix_ms": 1790290671427,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 2,
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.4549566,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly",
+              "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly",
+              "state": "Passed",
+              "durationSeconds": 0.0226121,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "NativeResultContinueUsesHeldAttackAt144NotEarlier",
+              "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier",
+              "state": "Passed",
+              "durationSeconds": 0.0025175,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

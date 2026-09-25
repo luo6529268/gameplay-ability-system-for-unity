@@ -484,34 +484,12 @@ namespace NTSD.Test
                 return;
             }
 
-            if (CharacterAnimtorManager.HasConfiguredLoganContent)
-            {
-                await mgr.PrewarmConfiguredLoganContentAsync(text =>
-                    Debug.Log($"[BattleTestBootstrap] Loading content: {text}"));
-                return;
-            }
-            if (mgr.PublishedVisualContentKey != null)
-                throw new System.InvalidOperationException("Legacy bootstrap cannot reuse a Logan publication.");
-            if (mgr.IsPrewarmCompleted)
-            {
-                await mgr.ValidateConfiguredContentForBattleAsync();
-                Debug.Log("[BattleTestBootstrap] Character data already loaded, skipping.");
-                return;
-            }
+            if (!CharacterAnimtorManager.HasConfiguredLoganContent)
+                throw new System.InvalidOperationException(
+                    "Formal Logan battle content root is required for direct Battle bootstrap.");
 
-            Debug.Log("[BattleTestBootstrap] Loading character configs...");
-            var dataManager = GameDataManager.Instance;
-            var configs = await UniTask.RunOnThreadPool(() =>
-                mgr.ParseCharacterFrameConfigs(dataManager, text =>
-                    Debug.Log($"[BattleTestBootstrap] Parsing: {text}"))
-            );
-            mgr.ApplyLoadedCharacterConfigs(configs);
-            Debug.Log("[BattleTestBootstrap] Character configs loaded.");
-
-            Debug.Log("[BattleTestBootstrap] Loading character sprites...");
-            await mgr.LoadCharacterSpritesAsync(text =>
-                Debug.Log($"[BattleTestBootstrap] Loading sprite: {text}"));
-            Debug.Log("[BattleTestBootstrap] Character sprites loaded.");
+            await mgr.PrewarmConfiguredLoganContentAsync(text =>
+                Debug.Log($"[BattleTestBootstrap] Loading content: {text}"));
         }
 
         private void OnDestroy()

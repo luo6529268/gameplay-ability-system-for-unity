@@ -1,0 +1,662 @@
+{
+  "status": "READ_ONLY_CURRENT_GUID_SCAN_NOT_DELETE_AUTHORIZATION",
+  "priorCsvSha256": "3f609ac204d2a6dfa54c7d5d4d8f7641f8e3a164ee42ba10539cbc7deb2bc224",
+  "battleSceneSha256": "2ee465d83c7169a0589447f437e37caeff3cc6f1ba6c3aaa55b8068f2b48b77a",
+  "scannedSerializedFiles": 933,
+  "oldPathRows": 52,
+  "rowsWithCurrentReferences": 37,
+  "currentReferencePairs": 39,
+  "changedRows": 15,
+  "rows": [
+    {
+      "oldPath": "Assets/NTSD/Sprite/Character/Zuozhu/sasuke_0.bmp",
+      "ownerClass": "INACTIVE_EDITOR_PREVIEW_CHARACTER_SHEET",
+      "oldGuid": "6d174fff55a50784d9bbf85531fb7d86",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/OtherBg/Sunagakure.png",
+      "ownerClass": "MAP_BACKGROUND",
+      "oldGuid": "833ad1c9a686c2c4ba8f832b33f959c2",
+      "previousReferrers": [
+        "Assets/NTSD/Map/SunagakureMap.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Map/SunagakureMap.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/OtherBg/Training.png",
+      "ownerClass": "MAP_BACKGROUND",
+      "oldGuid": "702548827d06558478fd9a0d422fe8d9",
+      "previousReferrers": [
+        "Assets/NTSD/Map/TrainingGroundMap.asset",
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Map/TrainingGroundMap.asset",
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/Arrow.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "633440d0289a6e7419c3a8eb8676658b",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/AttackBtn.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "d109ef001c71c3848ba323ae77e36a11",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_bg.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "e7931736c6c9c334b96ef8fe0ecfd304",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_de.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "adf98f1469070624e9c15bda06bb36e0",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_jump.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "7971571d39c1ffd4c980001dfadf0d12",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Combo_up.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "202e34ba31d5e814796f6b880f87af61",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Contro_1.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "27fe2db1f431da54ea47bb87076fee68",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/Contro_2.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "3b270b79421cafa488da6858c55d1adc",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/DefendBtn.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "d79b0978bf6ea584b9c8cb3a0fb07650",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/HUD-BG.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "86e788cebde2bcd45bc365438367c189",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/JumpBtn.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "6eb12a2d6fc42cc418214d5a37347441",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/BattleHud/naruto_s.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "57bbfdb562466dc4fae25bf18a6a7fad",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/blue_Box.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "14aebecdc8768da41944028ed980aa34",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CHARMENU.bmp",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "0b08cc9478a2f1f48bea20c314ae0049",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CM1.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "54b88b064f519be44b1883716c12f6c0",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CM2.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "04580ace18fd3f6429462e56db4fb3eb",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CM3.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "4a0a0c26e3917614c8f90f044e9d607e",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CM4.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "a26a34b702058274ba4c0329a370ae47",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CM5.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "188dafa6c20928146b68e329d88e3320",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CMA.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "ff4153710d4407841b05383b6249b016",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset",
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity",
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CMA2.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "34379c25a465836419338c80151ebc54",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CMC.bmp",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "e1ccb754dd28c724c94c7b5d83cb884c",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/Combo_Arraw.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "049ee2be307496b4fafce0b6fbdba688",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/CS6.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "db4a1a85e6a2ff248a78e3a5b18d624a",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/FRAME.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "a2d5a298911be5f46835dab8c0232a26",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/FRAME3.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "9f4904aadb4543a4c87ba46d18633791",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/health_green.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "a3fd519f974f280429ffd02c7abb8214",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/health_red.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "9afe1fe4e773412488f46fedbf47568d",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/HP-Xu.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "8169844346b6b2040aa9b40db4de6101",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/HP.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "8b94b34686af0b844a865593d7dbcd87",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/HP_bg.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "a0ace5a8564f3c94ea0291d47f4d2850",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/HP_shi.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "b8c86b693fb31104e8e8b67029dd017b",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/HP_xu.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "c04ab4c1897f22341adf5a03e3b2f6c8",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/loading.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "9b74bb584773327409b6d2342bd660e2",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/MENU_CLIP2.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "afbd0bb2618b1f04e8434c679cd477a5",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/mode_select.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "0b70858fcef33844c9bb440417ce393e",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/MP.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "a73cbf7ec97b5c34b9e6ff7b51fec7c1",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/mp_blue.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "42b1529df1151f14ba284fed5cf478c8",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/NTSD_MP_Back_Simple_671x5.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "b5d28d8640e14cf4cb7ccf282cc614f3",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/NTSD_MP_Fill_Simple_671x5.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "1eb3808a9ad549046ba7bcade27ccf97",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/NTSD_MP_Frame_Simple_674x11.png",
+      "ownerClass": "BATTLE_HUD_UI",
+      "oldGuid": "c2191b30879321a4cb8d3f8aed88bb95",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Battle.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/NTSD_Title.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "dec0c1724ed50cd4c81e0202d9bf20da",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/Random.png",
+      "ownerClass": "GAMECONFIG_MENU_UI",
+      "oldGuid": "4d48d81e81179994c8ccf7daa5a7c546",
+      "previousReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Config/GameConfig/GameConfig.asset"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/Red_Box.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "fb48a0bdba5d23f4e8d48f9ca2390ece",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/select_bg.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "f8c6f08f282684146ac3537911debec3",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [],
+      "changed": true,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/selectmode_bg.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "9390d33f90031f0498aa03a907530627",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/white_box.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "912b40d9d1d0b594f957dd5581d7c066",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/UIPanels/white_box2.png",
+      "ownerClass": "MENU_UI",
+      "oldGuid": "1d0e63ef5f80a7e4288c3d5b2136fab7",
+      "previousReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Scene/NTSD_Menu.unity"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    },
+    {
+      "oldPath": "Assets/NTSD/Sprite/XueYuan/s.png",
+      "ownerClass": "COMMON_SHADOW_PREFAB",
+      "oldGuid": "04bffa57fa05fe44e8b259e1ba07141a",
+      "previousReferrers": [
+        "Assets/NTSD/Prefabs/Common/Shadow.prefab"
+      ],
+      "currentReferrers": [
+        "Assets/NTSD/Prefabs/Common/Shadow.prefab"
+      ],
+      "changed": false,
+      "deleteAuthorized": false
+    }
+  ]
+}

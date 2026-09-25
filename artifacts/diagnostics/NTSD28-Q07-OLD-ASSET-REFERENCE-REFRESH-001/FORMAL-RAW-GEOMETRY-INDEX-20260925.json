@@ -1,0 +1,160 @@
+{
+  "status": "SOURCE_MODEL_DIAGNOSTIC_ONLY",
+  "scope": "formal decoded_dat/data/data.txt indexed authored geometry; not Unity LF2FrameCache resolved geometry",
+  "indexPath": "Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\data\\data.txt",
+  "indexSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "parserJsonl": "artifacts\\diagnostics\\NTSD28-B11-CONTENT-ENTRY-INVENTORY-001\\native\\authority-content-rerun.jsonl",
+  "parserJsonlSha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+  "indexedUniqueDatPaths": 330,
+  "parserMatchedDatPaths": 330,
+  "missingDatPaths": [],
+  "counts": {
+    "bdy_authored_count": 86383,
+    "itr_authored_count": 19461,
+    "itr_nonpositive": 109,
+    "itr_zero_width_positive_height": 27,
+    "bdy_nonpositive": 0,
+    "bdy_positive_width_negative_height": 0,
+    "bdy_zero_width_positive_height": 0,
+    "itr_positive_width_negative_height": 0
+  },
+  "exampleNonpositive": [
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 123,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 124,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 125,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 126,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 127,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 128,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 129,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    },
+    {
+      "path": "c/chi/a/atk.dat",
+      "frame": 130,
+      "kind": "itr",
+      "x": 0,
+      "y": 8000,
+      "w": 0,
+      "h": 79
+    }
+  ],
+  "interpretation": "Old SelfCheck expected exactly five positive-width negative-height bodies; this formal authored projection has zero. A Unity resolved-frame audit remains required before replacing that assertion.",
+  "predictedSelfCheckDomain": {
+    "basis": "existing native source-model JSONL mapped to current LF2FrameCache last-frame-wins and 0..856 accessor range; prediction only, Unity parser/converter runtime unverified",
+    "counts": {
+      "authoredUniqueFramesInRange": 55348,
+      "bdyCount": 86383,
+      "cacheSlotsVisited": 282810,
+      "itrCount": 19461,
+      "itrNonpositive": 109
+    },
+    "zeroByZeroItrGroups": [
+      {
+        "oid": 854,
+        "path": "c/chi/pup5.dat",
+        "kind": 100100,
+        "count": 74,
+        "missingGeometryFieldCount": 74
+      },
+      {
+        "oid": 20,
+        "path": "c/oro/oro.dat",
+        "kind": 100100,
+        "count": 2,
+        "missingGeometryFieldCount": 2
+      },
+      {
+        "oid": 51,
+        "path": "c/saso/saso.dat",
+        "kind": 100100,
+        "count": 2,
+        "missingGeometryFieldCount": 2
+      },
+      {
+        "oid": 54,
+        "path": "c/kon/ang.dat",
+        "kind": 100100,
+        "count": 4,
+        "missingGeometryFieldCount": 4
+      }
+    ],
+    "zeroWidthPositiveHeightItrGroups": [
+      {
+        "oid": 419,
+        "path": "c/chi/a/atk.dat",
+        "kind": 0,
+        "height": 79,
+        "count": 20
+      },
+      {
+        "oid": 411,
+        "path": "c/gaa/a/san.dat",
+        "kind": 0,
+        "height": 79,
+        "count": 2
+      },
+      {
+        "oid": 422,
+        "path": "w/x.dat",
+        "kind": 0,
+        "height": 79,
+        "count": 5
+      }
+    ],
+    "note": "GetFrameDataById returns EmptyFrame for absent ids, so the current SelfCheck resolvedFrameCount increments for all 857 slots per definition rather than authored frames. HasFrame would distinguish them."
+  }
+}

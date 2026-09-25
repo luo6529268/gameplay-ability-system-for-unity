@@ -1,0 +1,1845 @@
+{
+  "status": "AUTHORITATIVE_PARSER_SOURCE_MODEL_ONLY",
+  "parserJsonl": "artifacts\\diagnostics\\NTSD28-B11-CONTENT-ENTRY-INVENTORY-001\\native\\authority-content-rerun.jsonl",
+  "parserJsonlSha256": "5F5C6C34CE907BB6D7855B8A1E69D410B3CD577807F202332B8A0DA30ED0146F",
+  "catalogSha256": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE",
+  "controlRecordCount": 82,
+  "uniqueFrameCount": 82,
+  "byPath": [
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "records": 74,
+      "framesWithOtherItr": 74
+    },
+    {
+      "path": "c/kon/ang.dat",
+      "oid": 54,
+      "type": 0,
+      "name": "KonanAngel",
+      "records": 4,
+      "framesWithOtherItr": 0
+    },
+    {
+      "path": "c/oro/oro.dat",
+      "oid": 20,
+      "type": 0,
+      "name": "Orochimaru",
+      "records": 2,
+      "framesWithOtherItr": 0
+    },
+    {
+      "path": "c/saso/saso.dat",
+      "oid": 51,
+      "type": 0,
+      "name": "Sasori",
+      "records": 2,
+      "framesWithOtherItr": 0
+    }
+  ],
+  "withOtherItr": 74,
+  "controlLast": 82,
+  "precedingKind8": 74,
+  "byState": {
+    "14": 1,
+    "15": 5,
+    "3": 74,
+    "86": 2
+  },
+  "rows": [
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 407,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 408,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 408,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 409,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 409,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 410,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 410,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 411,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 411,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 412,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 412,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 413,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 413,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 414,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 414,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 415,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 415,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 416,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 416,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 417,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 417,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 418,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 418,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 419,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 419,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 420,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 420,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 421,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 421,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 422,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 422,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 423,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 423,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 424,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 424,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 425,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 425,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 427,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 429,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 430,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 430,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 431,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 431,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 432,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 432,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 433,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 433,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 434,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 434,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 435,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 435,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 436,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 436,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 437,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 437,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 438,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 438,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 439,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 439,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 440,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 440,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 441,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 441,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 442,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 442,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 443,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 443,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 444,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 444,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 445,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 445,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 447,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 447,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 448,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 448,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 449,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 449,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 450,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 450,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 451,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 451,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 452,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 452,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 453,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 453,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 454,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 454,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 455,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 455,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 456,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 456,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 457,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 457,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 458,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 458,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 459,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 459,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 460,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 460,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 461,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 461,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 462,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 462,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 463,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 463,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 464,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 464,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 465,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 465,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 467,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 469,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 470,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 470,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 471,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 471,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 472,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 472,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 473,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 473,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 474,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 474,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 475,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 475,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 476,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 476,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 477,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 477,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 478,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 478,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 479,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 479,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 480,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 480,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 481,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 481,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 482,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 482,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 483,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 483,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 484,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 484,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 485,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 485,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 486,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 486,
+      "frameName": "special",
+      "state": 3,
+      "wait": 1,
+      "next": 487,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/chi/pup5.dat",
+      "oid": 854,
+      "type": 0,
+      "name": "Puppet5",
+      "frame": 487,
+      "frameName": "special",
+      "state": 3,
+      "wait": 0,
+      "next": 488,
+      "itrOrdinal": 1,
+      "itrCount": 2,
+      "precedingItrKinds": [
+        "8"
+      ],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 3
+    },
+    {
+      "path": "c/kon/ang.dat",
+      "oid": 54,
+      "type": 0,
+      "name": "KonanAngel",
+      "frame": 11,
+      "frameName": "running",
+      "state": 15,
+      "wait": 3,
+      "next": 67,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "x": "218",
+        "y": "218"
+      },
+      "bdyCount": 2
+    },
+    {
+      "path": "c/kon/ang.dat",
+      "oid": 54,
+      "type": 0,
+      "name": "KonanAngel",
+      "frame": 67,
+      "frameName": "running",
+      "state": 15,
+      "wait": 3,
+      "next": 68,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "x": "218",
+        "y": "218"
+      },
+      "bdyCount": 2
+    },
+    {
+      "path": "c/kon/ang.dat",
+      "oid": 54,
+      "type": 0,
+      "name": "KonanAngel",
+      "frame": 68,
+      "frameName": "running",
+      "state": 15,
+      "wait": 3,
+      "next": 69,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "x": "218",
+        "y": "218"
+      },
+      "bdyCount": 2
+    },
+    {
+      "path": "c/kon/ang.dat",
+      "oid": 54,
+      "type": 0,
+      "name": "KonanAngel",
+      "frame": 69,
+      "frameName": "running",
+      "state": 15,
+      "wait": 3,
+      "next": 11,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "x": "218",
+        "y": "218"
+      },
+      "bdyCount": 2
+    },
+    {
+      "path": "c/oro/oro.dat",
+      "oid": 20,
+      "type": 0,
+      "name": "Orochimaru",
+      "frame": 255,
+      "frameName": "shadow",
+      "state": 14,
+      "wait": 1,
+      "next": 256,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 0
+    },
+    {
+      "path": "c/oro/oro.dat",
+      "oid": 20,
+      "type": 0,
+      "name": "Orochimaru",
+      "frame": 256,
+      "frameName": "shadow",
+      "state": 15,
+      "wait": 1,
+      "next": 257,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 0
+    },
+    {
+      "path": "c/saso/saso.dat",
+      "oid": 51,
+      "type": 0,
+      "name": "Sasori",
+      "frame": 580,
+      "frameName": "start",
+      "state": 86,
+      "wait": 6,
+      "next": 581,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 1
+    },
+    {
+      "path": "c/saso/saso.dat",
+      "oid": 51,
+      "type": 0,
+      "name": "Sasori",
+      "frame": 581,
+      "frameName": "rowing",
+      "state": 86,
+      "wait": 1,
+      "next": 582,
+      "itrOrdinal": 0,
+      "itrCount": 1,
+      "precedingItrKinds": [],
+      "followingItrKinds": [],
+      "controlFields": {
+        "kind": "100100",
+        "z": "1"
+      },
+      "bdyCount": 1
+    }
+  ]
+}

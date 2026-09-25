@@ -1,0 +1,9 @@
+# Q07 `INKHUD2.dat` selected-index closure, 2026-09-25
+
+Status: `STATIC_PLAYABLE_SELECTED_INDEX_0 / INDEX_1_UNSELECTED_IN_THIS_PATH / NO_DEPLOYMENT_CHANGE`. This is a bounded current-authority source audit for one of the 16 nonexcluded DAT paths absent from Unity's staged Logan runtime. It is not a visual HUD acceptance or a claim that the formal EXE can never use index 1 through an uninspected path.
+
+The formal root `NTSD2.8-Logan.exe` SHA-256 is `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`. Its declared playable source build script includes `src/game_session.cpp` and core `src/rendering/native_frame_hud.cpp`. The formal `decoded_dat/data/frame.dat` has two ordered records: index 0 `INKHUD` → `data/frame/INKHUD.dat`, and index 1 `INKHUDV2` → `data/frame/INKHUD2.dat`.
+
+In `source/ntsd28_core/include/ntsd28/native_frame_hud.h`, `NativeFrameHudCatalog28::captured_active_index` is the constant 0. In `source/ntsd28_playable/src/game_session.cpp` around lines 1282–1305, `GameSession28` loads `frame.dat`, calls `native_frame_hud_catalog_.entry(captured_active_index)`, resolves only the selected record's child path, and loads that definition. A current source search across the playable/core trees found no other production `native_frame_hud_catalog_.entry` call or `INKHUD2` literal; a core test separately checks that the captured index is 0.
+
+Unity has staged the selected `data/frame/INKHUD.dat` and has not staged index 1 `data/frame/INKHUD2.dat`. Therefore the missing index-1 child is not a demonstrated gap for the selected playable HUD path. The project retains its approved HUD presentation boundary, and Q09 still owns any actual HUD appearance comparison. Do not copy `INKHUD2.dat` merely to make a directory count equal, and do not classify it as permanently excluded or authorize deletion from this static search alone. A runtime selection change or formal EXE observation contradicting index 0 would reopen this owner.

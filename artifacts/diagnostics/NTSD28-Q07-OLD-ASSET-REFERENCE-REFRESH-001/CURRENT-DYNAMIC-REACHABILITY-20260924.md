@@ -10,3 +10,9 @@
 下一有界出口：先冻结空根 fallback 的生产/Editor/test 调用者与用户需要保留的兼容能力，另建精确 Task/Change 才能改变入口；将需要旧内容的测试改用独立夹具并验证正式根不回落后，再生成逐文件删除清单及引用安全证据。旧文件删除仍按仓库明确批准规则执行。Q07 继续 `IN_PROGRESS`，D-024 非体感整链、正式自然技能与最终 Player/EXE 表现仍开放。
 
 验证备注：本报告与状态文档的 scoped `git diff --check` exit0，两个 Scene 磁盘 SHA 保持 `471396E7...7B9` / `785F828C...81E13`。全局 `Tools/Validate-ChangeLedger.ps1` 本轮返回 exit1；唯一 ERROR 是并行 UI 工作新 Record `NTSD28-BATTLE-UI-SCENE-HUD-COMBO-001` 把非代码 `Assets/NTSD/Scene/NTSD_Battle.unity` 声明为受治理 `code-path`。本只读审计没有编辑该 Record 或任何脚本；此全局校验未通过，不能写成 PASS。待该 Record 的所有者纠正后应重跑，不能通过改动无关 UI/Scene 使本包表面通过。
+
+后继验证（同日）：并行 Record 所有者更新工作树后，重新运行完全相同的 `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <project>` 返回 exit0，`Change ledger validation PASSED`，794 Records。上一段的 exit1 是修正前真实结果，保留为时间顺序证据；当前全局校验状态为 PASS。本审计仍未因此取得旧文件删除授权。
+
+并行提交后的现状边界：上一段所列 Battle Scene SHA 是本审计运行时快照；并行 UI/Scene 提交 `d18e1f5c` 后磁盘 Battle Scene SHA 变为 `2EE465D8...B77A`，Menu 仍 `785F828C...1E13`。新 Battle Scene 的禁用预览仍指向正式 `sasu.png` GUID；对同一383旧图GUID、同一文件扩展范围重跑 `rg` 仍 exit1、匹配0。没有将并行 Scene 内容纳入本 Q07 包，也没有用旧 SHA 声称当前 Scene 未变化。
+
+2026-09-25 续审：空根旧资源调用者和 SelfCheck/Editor fixture 的当前代码归属已列于 `EMPTY-ROOT-RETIREMENT-OWNER-MATRIX-20260925.md`。正式序列化根非空只证明当前默认预热选正式内容；旧 `data.txt`、索引 DAT 和图片仍是空根生产分支及历史测试的可达输入。未改脚本或删除资源，Q07退场门仍开。

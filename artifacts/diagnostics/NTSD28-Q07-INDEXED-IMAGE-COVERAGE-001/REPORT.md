@@ -11,3 +11,5 @@
 正式 playable 闭包 `source/ntsd28_core/src/rendering/render_snapshot.cpp` 的战斗 HUD 构建在角色type0且有HUD槽时优先读取定义的 `bmp.last("smallb")`，缺少才回退 `bmp.last("small")`，并检查所选图片文件可用；`source/ntsd28_playable/src/d3d11_renderer.cpp` 消费该 HUD 图像。当前Unity `Assets/NTSD/Scripts` 对 `smallb` 无生产读取，`CharacterUIResourceManager`只有head/small；当前源码搜索未找到 `GetSmallSprite` 的生产调用，已见选人UI调用的是 `GetHeadSprite`。因此这是正式战斗HUD图片选择/发布的静态对齐缺口，归Q09表现消费及R17回访；需在独立Task中沿HUD快照、资源预热、发布身份、布局和实际像素建立合同，不能只把104张图作为菜单头像或简单换路径。当前Battle HUD/项目既有UI例外和非战斗菜单不得顺手重做。
 
 Q07结论限定为图片内容就位。Q07的正式资源整链、旧资源退场和其他自然技能仍开放；Q09需对实际HUD头图建立权威同场景可见验收。`SPARK.png`仍属于已记录的Q09原始ID/图集接线，不能只替换旧`SPARK.bmp`文件名。没有资源删除授权。
+
+2026-09-25 current-disk rerun: `current-indexed-image-audit-20260925.json`逐SHA重读本报告CSV的1,010个唯一正式引用图片路径，正式/暂存均1,010/1,010存在、正式对Q01和暂存对正式均零差异。角色关联发布的906张与用户排除的原生HUD `smallb` 104张边界不变。这只确认当前文件字节，不证明Unity importer、发布、自然技能像素或旧图可删。

@@ -21,3 +21,5 @@ Production: `SimulationTickDriver.CanAdvanceTick` now rejects nonzero native res
 Postchange isolated Unity `UNITY-HOST-ADMISSION-POST.xml` 1/1 PASS, adjacent host/Q08/Results `UNITY-HOST-ADMISSION-ADJACENT.xml` 25/25 PASS, and `UNITY-HOST-ADMISSION-SELFCHECK.log` logs battle runtime PASS/editor completion. The preceding pending sentence is historical. `HOST-TICK-ADMISSION-ACCEPTANCE.md` states remaining AppManager routing and original real-battle limits. Current Record remains `RUNTIME_PENDING`, not Q08 complete.
 
 Final local governance: `Tools/Validate-ChangeLedger.ps1` PASS 666 records/eight governed code diff files, `git diff --check` exit0, original Battle Scene SHA unchanged. No computer-use, Scene/content/nonbattle edit, deletion, commit or push.
+
+2026-09-25 original Editor follow-up: the exact host admission focused test passed 1/1, failed0 in job `8500eef22ac443d68e0ea6daef54532a`; saved JSON and Scene hashes are in `HOST-TICK-ADMISSION-ACCEPTANCE.md`. No production or test code changed in this follow-up. `RUNTIME_PENDING` remains because natural battle transition and host command routing/Player behavior were not tested.

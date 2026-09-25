@@ -1,0 +1,70 @@
+{
+  "requested": [
+    "NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks"
+  ],
+  "start": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "8500eef22ac443d68e0ea6daef54532a",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  },
+  "final": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "8500eef22ac443d68e0ea6daef54532a",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1790291492404,
+        "finished_unix_ms": 1790291498503,
+        "last_update_unix_ms": 1790291498503,
+        "progress": {
+          "completed": 1,
+          "total": 8501,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1790291497860,
+          "last_finished_test_full_name": "NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks",
+          "last_finished_unix_ms": 1790291497863,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 1,
+            "passed": 1,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.4283715,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks",
+              "fullName": "NTSD.Test.SimulationTickHostPolicyEditorTests.NativeResultTransitionRejectsAutomaticExplicitAndPausedOldWorldTicks",
+              "state": "Passed",
+              "durationSeconds": 0.003193,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

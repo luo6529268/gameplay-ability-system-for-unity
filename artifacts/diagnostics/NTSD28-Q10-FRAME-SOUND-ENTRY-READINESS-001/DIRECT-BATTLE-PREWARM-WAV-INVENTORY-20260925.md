@@ -1,0 +1,9 @@
+# Q10 direct Battle WAV prewarm inventory, 2026-09-25
+
+Status: `READ_ONLY_RUNTIME_CONTENT_GAP / NO_AUDIO_DEPLOYMENT`. The original Unity Editor PID 11944 ran the current `NTSD_Battle` Scene directly and reached `[BattleTestBootstrap] === Test bootstrap complete ===`. This inventory derives from its `Editor.log`, after that run's sole `[BattleTestBootstrap] No AppManager detected` entry at line 2129. It does not establish sound playback or formal EXE audio parity.
+
+The run logged 905 `[NTSDSoundPlayer] Battle cue prewarm failed and was sealed without a streamed clip: ...; HTTP/1.1 404 Not Found` warnings, representing 903 distinct normalized WAV paths. Every one of those 903 paths exists in the formal `NTSD 2.8-Logan/resources/runtime/vfs`; none exists at the same path in Unity's `Assets/NTSD/Content/LoganRuntime/vfs`. The formal VFS has 981 WAV files total, while the staged VFS has zero. Example: `c/tobi/w/sp.wav` is referenced by formal `decoded_dat/c/tobi/a/kat.dat` and exists in formal VFS, but is absent from staged VFS.
+
+The 903-path runtime demand exceeds the separate 18 ordered `data/sound.dat` table references already staged in Q07. It is therefore unsafe to treat the 18 table WAVs as the complete Q10 audio deployment set. The exact 903-path set can be regenerated from the original Editor log by matching the stated warning prefix in the current direct Battle run and normalizing backslashes to slashes; no DAT token, audio resource, script, Scene or importer was changed by this audit.
+
+Next Q10 step under the alignment plan: inventory actual playable audio call sites and formal VFS WAV ownership, then define a bounded audio-content/cue deployment contract that preserves existing project audio exceptions. Copying all WAVs solely to silence prewarm warnings would exceed this read-only audit. The Q07 direct Battle startup passed its bounded bootstrap checkpoints despite these warnings; Q10 audio and full Q07 remain open.

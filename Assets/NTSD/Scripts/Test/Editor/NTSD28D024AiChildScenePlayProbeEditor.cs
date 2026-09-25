@@ -22,6 +22,7 @@ namespace NTSD.Test.Editor
         {
             public bool requested;
             public string runId;
+            public bool controlledNonSound;
         }
 
         private sealed class Report
@@ -40,6 +41,9 @@ namespace NTSD.Test.Editor
             public string aiTargetHistory;
             public string aiFrameTransitions;
             public string newBirths;
+            public bool controlledNonSound;
+            public int controlledTriggerTick = -1;
+            public int controlledFrameAfterTick = -1;
             public int childSlot = -1;
             public int childObjectId = -1;
             public int missingSourceCount;
@@ -51,6 +55,7 @@ namespace NTSD.Test.Editor
             public double viewScale;
             public bool childSourceInitialized;
             public bool childRendererPresent;
+            public bool logicOnlyMaterialization;
             public bool stopped;
             public bool returnedToMenu;
             public int poolBorrowersAfter;
@@ -228,6 +233,7 @@ namespace NTSD.Test.Editor
                 }
 
                 report.phase = "ai-full-driver";
+                report.controlledNonSound = request.controlledNonSound;
                 WriteReport(request.runId, report);
                 LF2Entity child = null;
                 var targetSamples = new List<string>();
@@ -240,6 +246,17 @@ namespace NTSD.Test.Editor
                 for (int step = 0; step < 600 && child == null; step++)
                 {
                     int nextTick = driver.CurrentTickIndex + 1;
+                    if (request.controlledNonSound &&
+                        report.controlledTriggerTick < 0 &&
+                        report.aiTargetSlot == 0 && nextTick >= 80)
+                    {
+                        ai.DirectWriteFrameImmediateWaitReset(22);
+                        ai.AttackingCounter = 0;
+                        Require(ai.Frame != null && ai.Frame.N == 22 &&
+                            ai.Frame.D != null,
+                            "Controlled Lee frame22 was not loaded.");
+                        report.controlledTriggerTick = nextTick;
+                    }
                     var input = new FrameInputSet(nextTick, new[]
                     {
                         new SimulationPlayerInput(0, SimulationInputButtons.Right),
@@ -247,6 +264,9 @@ namespace NTSD.Test.Editor
                     });
                     Require(driver.StepOneTick(input, true, true),
                         "Full Driver rejected tick " + nextTick);
+                    if (report.controlledTriggerTick == nextTick)
+                        report.controlledFrameAfterTick =
+                            ai.Frame != null ? ai.Frame.N : -1;
                     report.ticksStepped++;
                     if (ai.Runtime.Unk360 == 0)
                         report.aiTargetSlot = 0;
@@ -314,18 +334,24 @@ namespace NTSD.Test.Editor
 
                 Require(report.aiTargetSlot == 0,
                     "AI did not select the human participant in full Driver.");
+                if (request.controlledNonSound)
+                    Require(report.controlledTriggerTick >= 0,
+                        "Controlled non-sound action was never triggered.");
                 Require(child != null,
                     "NO_CHILD_OBSERVED: AI did not spawn an owned child in 600 manual ticks.");
                 report.childSourceInitialized =
                     child.Runtime.SourceRulePositionInitialized;
                 report.childRendererPresent = child.Renderer != null;
+                report.logicOnlyMaterialization =
+                    world.UsesLogicOnlyEntityMaterialization;
                 report.sourceX = child.Runtime.SourceRuleX;
                 report.sourceZ = child.Runtime.SourceRuleZ;
                 report.physicalX = child.Runtime.X;
                 report.physicalZ = child.Runtime.Z;
                 Require(report.missingSourceCount == 0 &&
-                    report.childSourceInitialized && report.childRendererPresent,
-                    "AI child lacks source history, Renderer or complete pass carriers.");
+                    report.childSourceInitialized &&
+                    report.childRendererPresent != report.logicOnlyMaterialization,
+                    "AI child lacks source history, expected materialization mode or complete pass carriers.");
                 report.status = "PASS";
             }
             catch (Exception error)

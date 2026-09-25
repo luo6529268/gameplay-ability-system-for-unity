@@ -1,0 +1,36 @@
+{
+  "status": "READ_ONLY_OWNER_CLASSIFICATION",
+  "sourceCsv": "artifacts\\diagnostics\\NTSD28-Q07-OLD-ASSET-REFERENCE-REFRESH-001\\current-reference-graph.csv",
+  "rows": 174,
+  "categories": {
+    "Character": 4,
+    "Common": 37,
+    "DropItem": 8,
+    "OtherBg": 24,
+    "UIPanels": 95,
+    "XueYuan": 6
+  },
+  "existing": 164,
+  "metaExisting": 164,
+  "missing": [
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_01.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_02.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_03.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_04.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_05.png",
+    "Assets/NTSD/Sprite/UIPanels/BattleHud/Foot/frame_06.png",
+    "Assets/NTSD/Sprite/UIPanels/FootEnemy.png",
+    "Assets/NTSD/Sprite/UIPanels/FootFirend.png",
+    "Assets/NTSD/Sprite/UIPanels/FootSelf.png",
+    "Assets/NTSD/Sprite/UIPanels/SPARK_preview.png"
+  ],
+  "serializedFilesScanned": 877,
+  "referencedRows": 38,
+  "referencedByCategory": {
+    "OtherBg": 2,
+    "UIPanels": 35,
+    "XueYuan": 1
+  },
+  "deleteAuthorizedCount": 0,
+  "limits": "Paths outside indexed character-image worksheet; project UI/maps/common/drop items may be nonbattle or approved presentation exceptions; no dynamic path proof or deletion permission"
+}

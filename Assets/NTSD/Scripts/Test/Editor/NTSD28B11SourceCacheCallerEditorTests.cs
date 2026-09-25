@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.ExceptionServices;
+using System.Text;
 using Cysharp.Threading.Tasks;
 using MoreMountains.Tools;
 using NTSD.Animation;
@@ -14,6 +15,8 @@ using NTSD.App;
 using NTSD.Load;
 using NTSD.UI;
 using NUnit.Framework;
+using UnityEditor;
+using UnityEditor.TestTools.TestRunner.Api;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -182,6 +185,31 @@ namespace NTSD.Test
                 await (UniTask)Invoke(bootstrap, "LoadCharacterDataAsync");
                 Assert.That(await Validate(), Is.EqualTo(candidate.SourceCacheKey));
                 Assert.That(Manager.GetCharacterConfig(56).characterData.name, Is.EqualTo("DirectSource"));
+            });
+        }
+
+        [UnityTest]
+        public IEnumerator DirectCaller_EmptyRootRejectsLegacyFallback()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                RootField().SetValue(GameConfig.Instance, string.Empty);
+                var data = (GameDataManager)Field("data");
+                Assert.That(data.IsLoaded(), Is.False);
+                var bootstrap = NewOwnedComponent<BattleTestBootstrap>();
+                InvalidOperationException failure = null;
+                try
+                {
+                    await (UniTask)Invoke(bootstrap, "LoadCharacterDataAsync");
+                }
+                catch (InvalidOperationException error)
+                {
+                    failure = error;
+                }
+                Assert.That(failure, Is.Not.Null);
+                StringAssert.Contains("Formal Logan battle content root is required", failure.Message);
+                Assert.That(data.IsLoaded(), Is.False);
+                Assert.That(Manager.PublishedVisualContentKey, Is.Null);
             });
         }
 
@@ -424,6 +452,111 @@ namespace NTSD.Test
                 Assert.That(Manager.PublishedVisualContentKey, Is.EqualTo(oldKey));
                 Assert.That(Manager.GetCharacterConfig(56).characterData.name, Is.EqualTo("Valid"));
             });
+        }
+    }
+
+    [InitializeOnLoad]
+    internal sealed class NTSD28Q07EmptyRootBattleEntryRequestRunner : ICallbacks
+    {
+        private const string RequestPrefix = "NTSD28-Q07-EmptyRootBattleEntry-";
+        private static readonly string RequestDirectory = Path.Combine(
+            Directory.GetParent(Application.dataPath).FullName, "Temp");
+        private static readonly string[] FocusedTests =
+        {
+            "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.DirectCaller_EmptyRootRejectsLegacyFallback",
+            "NTSD.Test.NTSD28B11SourceCacheCallerEditorTests.DirectCaller_LoadsTheSameConfiguredSource",
+        };
+        private static readonly StringBuilder FailureDetails = new StringBuilder(1024);
+        private static NTSD28Q07EmptyRootBattleEntryRequestRunner activeCallbacks;
+        private static TestRunnerApi activeApi;
+        private static string activeResultPath;
+
+        static NTSD28Q07EmptyRootBattleEntryRequestRunner()
+        {
+            EditorApplication.update += PollRequest;
+        }
+
+        private static void PollRequest()
+        {
+            if (activeCallbacks != null || EditorApplication.isCompiling ||
+                EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode ||
+                !Directory.Exists(RequestDirectory))
+                return;
+
+            foreach (string requestPath in Directory.GetFiles(RequestDirectory, RequestPrefix + "*.request"))
+            {
+                string resultPath = Path.ChangeExtension(requestPath, ".result");
+                string startedPath = Path.ChangeExtension(requestPath, ".started");
+                if (File.Exists(startedPath) || File.Exists(resultPath))
+                    continue;
+
+                File.WriteAllText(startedPath, DateTime.UtcNow.ToString("O"), new UTF8Encoding(false));
+                activeResultPath = resultPath;
+                activeCallbacks = new NTSD28Q07EmptyRootBattleEntryRequestRunner();
+                try
+                {
+                    activeApi = ScriptableObject.CreateInstance<TestRunnerApi>();
+                    activeApi.RegisterCallbacks(activeCallbacks);
+                    activeApi.Execute(new ExecutionSettings(new Filter
+                    {
+                        testMode = TestMode.EditMode,
+                        testNames = FocusedTests,
+                    })
+                    {
+                        runSynchronously = false,
+                    });
+                }
+                catch (Exception error)
+                {
+                    File.WriteAllText(resultPath, "runner_error=" + error + "\n", new UTF8Encoding(false));
+                    if (activeApi != null)
+                    {
+                        activeApi.UnregisterCallbacks(activeCallbacks);
+                        UnityEngine.Object.DestroyImmediate(activeApi);
+                    }
+                    activeApi = null;
+                    activeCallbacks = null;
+                    activeResultPath = null;
+                }
+                return;
+            }
+        }
+
+        public void RunStarted(ITestAdaptor testsToRun)
+        {
+            FailureDetails.Clear();
+        }
+
+        public void RunFinished(ITestResultAdaptor result)
+        {
+            string report =
+                $"state={result.ResultState}\n" +
+                $"passed={result.PassCount}\n" +
+                $"failed={result.FailCount}\n" +
+                $"skipped={result.SkipCount}\n" +
+                $"inconclusive={result.InconclusiveCount}\n" +
+                $"message={result.Message}\n" + FailureDetails;
+            File.WriteAllText(activeResultPath, report, new UTF8Encoding(false));
+            activeApi.UnregisterCallbacks(this);
+            UnityEngine.Object.DestroyImmediate(activeApi);
+            activeApi = null;
+            activeCallbacks = null;
+            activeResultPath = null;
+        }
+
+        public void TestStarted(ITestAdaptor test)
+        {
+        }
+
+        public void TestFinished(ITestResultAdaptor result)
+        {
+            if (result?.Test == null || result.Test.IsSuite || result.FailCount <= 0)
+                return;
+            FailureDetails.Append("--- failure ---\n");
+            FailureDetails.Append("test=").Append(result.FullName).Append('\n');
+            FailureDetails.Append("state=").Append(result.ResultState).Append('\n');
+            FailureDetails.Append("message=").Append(result.Message).Append('\n');
+            FailureDetails.Append("stack=").Append(result.StackTrace).Append('\n');
         }
     }
 }

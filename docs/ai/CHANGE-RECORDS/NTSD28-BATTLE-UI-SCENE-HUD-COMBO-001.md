@@ -1,11 +1,10 @@
 <!-- CHANGE-RECORD
 id: NTSD28-BATTLE-UI-SCENE-HUD-COMBO-001
-status: IN_PROGRESS
+status: FOCUSED_TEST_PASS
 change-kind: CODE_AND_SCENE_BINDING
 code-path: Assets/NTSD/Scripts/UI/Battle/BattleHudView.cs
 code-path: Assets/NTSD/Scripts/UI/Battle/BattleComboView.cs
 code-path: Assets/NTSD/Scripts/UI/Battle/BattleUiContracts.cs
-code-path: Assets/NTSD/Scene/NTSD_Battle.unity
 authority: Current user clarification that NTSD_Battle UI is scene-resident and default-visible; BattleControlsView logic is deferred to the user
 evidence: docs/ai/TASKS/NTSD28-BATTLE-UI-SCENE-HUD-COMBO-001.md
 -->
@@ -22,6 +21,14 @@ Non-goals: TEngine source or prefab integration, dynamic window lifecycle, butto
 
 ## Implementation and validation
 
-Implementation is in progress. Validation results will be appended after the scoped script and scene changes are complete.
+- `BattleHudView` remains a scene-bound `MonoBehaviour`; null snapshots leave the default scene UI unchanged, while an applied state explicitly controls the root visibility and updates the bound head/HP/preview/MP controls.
+- `BattleComboView` remains a scene-bound `MonoBehaviour`; null snapshots leave the default scene UI unchanged, while an applied state explicitly controls the ComboPanel visibility and optional text.
+- `BattleUiContext` documentation now distinguishes future dynamic TEngine UI from the current scene-resident HUD.
+- `NTSD_Battle.unity` binds `comboBackgroundImage` to Image fileID `278066489` (`ComboBg`), `comboContentImage` to Image fileID `521647144` (`ComboTemp`), and `comboArrowImage` to Image fileID `833747954` (`ComboArraw`).
+- `BattleControlsView.cs` and its scene references were not changed.
+- `dotnet build Assembly-CSharp.csproj --no-restore -v:minimal -clp:ErrorsOnly` passed with 0 errors and 65 warnings.
+- Focused scene-reference check passed as `SCENE_HUD_COMBO_BINDINGS_PASS`.
+- `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location)` passed; pre-existing historical-record warnings remain.
+- Unity Editor import, actual Canvas rendering and Battle Scene Play remain pending.
 
 Rollback is limited to the files and three scene reference fields declared above.

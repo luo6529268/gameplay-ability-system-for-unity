@@ -1,6 +1,6 @@
 <!-- TASK
 id: NTSD28-BATTLE-UI-SCENE-HUD-COMBO-001
-status: IN_PROGRESS
+status: FOCUSED_TEST_PASS / RUNTIME_PENDING
 -->
 
 # NTSD28-BATTLE-UI-SCENE-HUD-COMBO-001
@@ -32,6 +32,14 @@ The `NTSD_Battle` Canvas is a scene-resident UI that is enabled by default. It w
 - `BattleControlsView` has no new behavior or guessed input semantics.
 - Static C# validation, focused scene-reference validation and `Tools/Validate-ChangeLedger.ps1` pass.
 - Unity assembly compile and Battle Scene Play remain pending if the active Editor cannot be safely used.
+
+## Current evidence
+
+- `Assembly-CSharp.csproj` generated-project build passed with 0 errors and 65 warnings.
+- Focused scene reference check passed: HUD references remain `HeadImg`/`HP`/`HpXu`/`MP`, and Combo references resolve to `ComboBg`/`ComboTemp`/`ComboArraw`.
+- `BattleControlsView.cs` has no diff and its scene references were not changed.
+- `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location)` passed. Existing repository warnings about historical records remain.
+- Unity Editor import, actual Canvas rendering and Battle Scene Play were not run in this package.
 
 ## Rollback
 

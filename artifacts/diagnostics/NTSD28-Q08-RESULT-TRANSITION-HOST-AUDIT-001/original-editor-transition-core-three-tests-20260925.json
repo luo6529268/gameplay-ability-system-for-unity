@@ -1,0 +1,90 @@
+{
+  "requested": [
+    "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick",
+    "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld",
+    "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter"
+  ],
+  "start": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job started.",
+      "data": {
+        "job_id": "0a164411360a4854a799026c81256e40",
+        "status": "running",
+        "mode": "EditMode",
+        "include_details": true,
+        "include_failed_tests": false
+      }
+    }
+  },
+  "final": {
+    "status": "success",
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "data": {
+        "job_id": "0a164411360a4854a799026c81256e40",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1790291408003,
+        "finished_unix_ms": 1790291414860,
+        "last_update_unix_ms": 1790291414860,
+        "progress": {
+          "completed": 3,
+          "total": 8501,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1790291414222,
+          "last_finished_test_full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter",
+          "last_finished_unix_ms": 1790291414223,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 3,
+            "passed": 3,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 0.8779515,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "ModeFourTransitionStopsCombatWorldOn350AndFollowingTick",
+              "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick",
+              "state": "Passed",
+              "durationSeconds": 0.4479078,
+              "message": null,
+              "stackTrace": null,
+              "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:11585 (active clients: 1)\r\n"
+            },
+            {
+              "name": "OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld",
+              "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld",
+              "state": "Passed",
+              "durationSeconds": 0.0014243,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            },
+            {
+              "name": "TransitionTickDoesNotRunOldResultsSettingsWriter",
+              "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter",
+              "state": "Passed",
+              "durationSeconds": 0.0013363,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      }
+    }
+  }
+}

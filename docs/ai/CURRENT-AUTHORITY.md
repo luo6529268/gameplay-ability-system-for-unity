@@ -1,3 +1,5 @@
+> 2026-09-25 D-024最新：原Editor正式内容mode0受控Lee frame22经生产完整Driver于tick82生成OID706/owner1子体，`d024-ai-child-play-14` PASS；source载体、CentralOnly logic-only物化、有序关闭/借用0及双Scene SHA稳定。无自然非音效选招、像素、正式EXE同条件证据，D-024整链与Q07仍开放。旧`-10` AI无目标由测试漏设mode导致，非已证生产首差；`-12`自然600tick仅纯音效OPoint。只以当前正式EXE/playable定义规则，DAT数值和非战斗不改。详总表/Task/Record。
+
 > 2026-09-24 D-024最新补证：原Editor聚焦Play d024-ai-child-play-10 在tick76/90/120/180的 DataOrientedCanonical 最近目标检索计数均为1，AI目标仍-1、子体未出生；提交阶段的call计数0因生产代码未记录该计数而无诊断效力。停止重复180tick Play，下一步做同状态双profile候选/提交首差及现有 committed/fallback 计数见证。两相机序列化Enabled=1，Scene未写，Q07继续后置。
 
 > 2026-09-24 最新 D-024 门槛更正：OID219/hit_Fa5、fusion 距离和普通复活已有聚焦生产修复，仍缺完整 Driver/Play/EXE 验收，不能继续称这些分支未修。原项目 Menu→Battle AI 子体探针 d024-ai-child-play-9 完成正式内容预热及 180 个生产 Driver tick，AI 决策每 tick 计数 1，但目标持续 -1、子体未出生；tick76 后玩家 HP500、RelationTeam1、type0、HitStop0，AI RelationTeam2/type0/受控。原因待同状态 Legacy/DataOrientedCanonical 首差审计，D-024/Q07/总目标开放。Menu/Battle 场景 SHA 仍为 785F828...81E13 / 471396E7...7B9，Battle Scene 两 Camera 序列化 Enabled=1，未改场景或生产脚本。详 NTSD28-USER-D024-AI-CHILD-SCENE-PLAY-001 Task/Record。

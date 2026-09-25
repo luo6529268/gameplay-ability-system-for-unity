@@ -1,0 +1,9 @@
+# Q10 native BGM table boundary (2026-09-25)
+
+Status: `READ_ONLY_SOURCE_OWNER / NO_CONTENT_OR_RUNTIME_CHANGE`. The formal `decoded_dat/data/bgm.dat` is 454 bytes, SHA-256 `ADA6B4E9C8F5C6FBD9A9A85F5E6188CD1CEE5E85139CD9367915EF786B64CAEA`, with eight ordered name/WMA entries. The eight referenced WMA files exist in the formal VFS, while zero of the eight exist at the same paths under the staged Unity `LoganRuntime/vfs`.
+
+In the corresponding playable source, `GameSession28` reads the optional `bgm.dat` at construction (`game_session.cpp` around line 1442), parses its ordered names and paths, and uses the table in the post-roster music-selection flow; the selected path can carry into battle audio. The table is therefore an audio/selection input with a battle-observable effect, but its owner crosses the project's preserved Menu and Q10 audio boundary. `data/bgm.dat` is not one of the user's 52 excluded background/mode DATs. It remains one of the 16 nonexcluded DAT paths not staged after the separate active `data/sound.dat` addition.
+
+Do not infer that copying this DAT alone would enable BGM: its eight WMA files are absent from staged VFS, and Unity's selected-music consumer, source resolver and actual playback have not been compared here. Q10 should decide the precise DAT/WMA deployment and runtime route together, preserving the project's Menu behavior and existing audio exceptions. No formal or Unity file was modified by this audit, and it does not close Q10.
+
+2026-09-25 content/loader addendum: the eight formal WMA files total 4,529,950 bytes (4.32 MiB). The existing `NTSD_ResourceLoader.GetAudioType` recognizes WAV/OGG/MP3 but returns `UNKNOWN` for WMA, and no NTSD script currently references `bgm.dat`; staging bytes without a declared decoding/selection route is insufficient. The separate WAV and BGM deployment boundaries are inventoried in `FORMAL-AUDIO-DEPLOYMENT-BOUNDARY-20260925.md`. No WMA or menu logic was changed.
