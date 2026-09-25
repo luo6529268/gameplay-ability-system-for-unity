@@ -557,7 +557,7 @@ namespace NTSD.Animation.LF2Objects
                 int cameraX = Match?.ReleaseCameraX ?? 0;
                 int renderOffsetX = (int)GetRenderOffsetX();
                 float shadowCenterX = GetRuntimeXInt() + renderOffsetX - cameraX;
-                float shadowCenterY = GetRenderZInt();
+                float shadowCenterY = GetRenderZInt() + Runtime.RenderShadowOffset10C;
                 Vector3 worldPos = NTSDRenderSpace.ScreenPixelToPresentationWorld(
                     shadowCenterX,
                     shadowCenterY,
@@ -2733,10 +2733,14 @@ namespace NTSD.Animation.LF2Objects
             else if (currentDataType != (int)LF2ObjectType.SpecialAttack &&
                      (ObjectId == 122 || ObjectId == 123) && Unk344 > 0)
             {
-                if (Runtime.X < 10f)
-                    Runtime.X = 10f;
-                if (Runtime.X > baseStageWidth - 10f)
-                    Runtime.X = baseStageWidth - 10f;
+                double right = System.Math.Max(100.0, baseStageWidth - 100.0);
+                Runtime.X = System.Math.Clamp(Runtime.X, 100.0, right);
+                if (Runtime.SourceRulePositionInitialized)
+                {
+                    Runtime.SourceRuleX = System.Math.Clamp(
+                        Runtime.SourceRuleX, 100.0, right);
+                    Runtime.SourceRuleXInt = (int)Runtime.SourceRuleX;
+                }
             }
 
             if (currentDataType != (int)LF2ObjectType.Character &&

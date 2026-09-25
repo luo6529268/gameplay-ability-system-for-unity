@@ -1,0 +1,10 @@
+# NTSD28-Q07-OID32-FRAME95-RELEASE-VISIBILITY-001
+
+Status: `VERIFIED_SCOPED_SOURCE_AND_RELEASE_TRACE / UNITY_AND_GPU_PIXEL_PENDING`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001` / BATCH-04 Q07, with Q09/R17 visual follow-up.
+Result: controlled source and root release ticks0–8 matched 27/27 action/pic/aggregate sprite fields, with one OID32 command per source row. See the Task-named `REPORT-20260925.md`. Natural reachability, Unity actual publication and both GPU pixel paths remain open.
+
+Trigger: formal `data.txt` maps OID32 to `m/nin/hun.dat`. Its action95 has base pic64, whose formal source rectangle `(320,480,79,79)` starts below the 799×480 `hun.png`. The corresponding bottom-edge x320–398 has 79/79 opaque pixels; the formal renderer uses point/clamp sampling, while Unity's indexed sprite rect builder drops wholly outside rectangles. This is a static candidate, not a proven visible or reachable difference.
+
+Scope: add only `Tools/NTSD28Q07Diagnostics/hunter_frame95_lfr_probe.cpp`, a standalone diagnostic using the paired playable/core source closure and read-only formal runtime roots. Start OID32 type0 at explicit action95, distant OID7 opponent, seed `0x28A55A5A`, background23, no input for a bounded eight ticks. Record initial and subsequent source action/base/effective pic and per-slot/aggregate sprite counts, plus an LFR; replay the LFR through the root formal EXE with the same action override. Save create-new artifacts, check EXE hash, and compare shared trace fields. No Unity production, DAT, image, Scene, Prefab, resource, or nonbattle edit.
+
+Exit: diagnostic compile with zero errors; formal source and root EXE runs with explicit process exit, report and trace; compare overlapping action/pic/sprite-count fields without hiding a first difference; distinguish source sprite command from GPU pixels and natural gameplay reachability. If action95 is not retained, record that result and choose another candidate. Later Unity same-state publication/pixels and natural selection/input are separate gates. Rollback of the new tool only requires removing its newly added source under repository protection rules; retain evidence artifacts.

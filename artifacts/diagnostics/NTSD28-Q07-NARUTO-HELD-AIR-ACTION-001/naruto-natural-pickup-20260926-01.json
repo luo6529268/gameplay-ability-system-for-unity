@@ -1,0 +1,213 @@
+{
+    "status": "PASS",
+    "message": "",
+    "scope": "Formal OID2/OID120 production kind2 pickup plus discrete Driver input; no physical keyboard or formal EXE pixels",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "runId": "naruto-natural-pickup-20260926-01",
+    "startTick": 5,
+    "endTick": 20,
+    "holderSlot": 50,
+    "weaponSlot": 51,
+    "rosterSlot": 2,
+    "objectCountBefore": 4,
+    "objectCountAfter": 4,
+    "claimedSlotsBefore": 2,
+    "claimedSlotsAfter": 2,
+    "poolBefore": 2,
+    "poolAfter": 2,
+    "pickupAccepted": true,
+    "naturalPickupRequested": true,
+    "pickupAttackAttempts": 1,
+    "pickupAttackActions": [
+        115
+    ],
+    "holderLinkAfterPickup": 101,
+    "weaponLinkAfterPickup": -1,
+    "heldReferenceMatchesAfterPickup": true,
+    "targetSlotAfterPickup": 51,
+    "weaponHolderSlotAfterPickup": 50,
+    "reachedAirborne": true,
+    "reachedAction30": true,
+    "fixtureUnregistered": true,
+    "rosterRestored": true,
+    "catalogFound": true,
+    "catalogSourcePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\nar\\nar.png",
+    "catalogPixelRect": {
+        "serializedVersion": "2",
+        "x": 560.0,
+        "y": 801.0,
+        "width": 79.0,
+        "height": 79.0
+    },
+    "catalogCentralBindingValid": true,
+    "publicationTick": 20,
+    "publicationCommandCount": 10,
+    "matchingEntityCommands": 1,
+    "publishedStableId": 102,
+    "publishedVisualDataId": 2,
+    "publishedPic": 97,
+    "publishedSize": {
+        "x": 79.0,
+        "y": 79.0
+    },
+    "submissionAcquired": true,
+    "cameraPngPath": "artifacts/diagnostics/NTSD28-Q07-NARUTO-HELD-AIR-ACTION-001/naruto-natural-pickup-20260926-01.png",
+    "cameraRoiX": 66,
+    "cameraRoiY": 276,
+    "cameraRoiWidth": 57,
+    "cameraRoiHeight": 57,
+    "cameraRoiNonClearPixels": 481,
+    "cameraRestored": true,
+    "ticks": [
+        {
+            "tick": 6,
+            "input": "natural-pickup-attack:Jump",
+            "action": 115,
+            "state": 15,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 7,
+            "input": "pickup-return:None",
+            "action": 115,
+            "state": 15,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 8,
+            "input": "pickup-return:None",
+            "action": 115,
+            "state": 15,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 9,
+            "input": "pickup-return:None",
+            "action": 115,
+            "state": 15,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 10,
+            "input": "pickup-return:None",
+            "action": 115,
+            "state": 15,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 11,
+            "input": "pickup-return:None",
+            "action": 0,
+            "state": 0,
+            "pic": 0,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 12,
+            "input": "native-jump:Defend",
+            "action": 210,
+            "state": 4,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 13,
+            "input": "air-wait:None",
+            "action": 210,
+            "state": 4,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 14,
+            "input": "air-wait:None",
+            "action": 210,
+            "state": 4,
+            "pic": 60,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 15,
+            "input": "air-wait:None",
+            "action": 211,
+            "state": 4,
+            "pic": 61,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 16,
+            "input": "air-wait:None",
+            "action": 211,
+            "state": 4,
+            "pic": 61,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 17,
+            "input": "air-wait:None",
+            "action": 212,
+            "state": 4,
+            "pic": 62,
+            "y": 0,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 18,
+            "input": "air-wait:None",
+            "action": 212,
+            "state": 4,
+            "pic": 62,
+            "y": -16,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 19,
+            "input": "native-air-attack:Jump",
+            "action": 212,
+            "state": 4,
+            "pic": 62,
+            "y": -30,
+            "holderLink": 101,
+            "weaponLink": -1
+        },
+        {
+            "tick": 20,
+            "input": "native-air-attack:Jump",
+            "action": 30,
+            "state": 15,
+            "pic": 97,
+            "y": -43,
+            "holderLink": 101,
+            "weaponLink": -1
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "runId": "q07-empty-root-gate-20260925",
+    "status": "PASS",
+    "phase": "unload",
+    "message": "Legacy Menu prewarm completed, but empty-root Battle entry was rejected before BattleRunning.",
+    "expectEmptyRootReject": true,
+    "sourceKey": "",
+    "shutdownStage": "Stopped",
+    "selectedCharacterId": 2,
+    "worldObjects": 0,
+    "finalPoolBorrowers": 0,
+    "pendingLoadingTextsAfterPrewarm": 362,
+    "prewarmed": true,
+    "modeSelected": true,
+    "roleConfirmed": true,
+    "battleSceneLoaded": true,
+    "battleRunning": false,
+    "samePublishedKeys": false,
+    "stayedStopped": true,
+    "returnedToMenu": true
+}

@@ -1,0 +1,9 @@
+# NTSD28-Q09-OID434-CENTRAL-COMMAND-001
+
+Status: `VERIFIED_SCOPED_COMMAND_PUBLICATION`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001` / BATCH-05 Q09, dependent on scoped Q07 entity-binding witness `NTSD28-Q07-OID434-NATURAL-ATTACK-TAIL-001`; Q09 camera draw/pixels remain pending.
+
+Authority/evidence: formal Logan `ras.dat` frame396 uses `pic36`; staged/formal `ras.png` same SHA. Original Editor physical-device attack-tail Play has OID434/action396 entity bound to production `(434,36)` with valid central Sprite entry. Unity production CentralOnly path captures `BattlePresentationEntitySnapshot`, builds `BattleRenderCommandType.Entity`, then publishes a frozen `BattlePixelFramePlan`/`BattleCentralSubmission`. This task checks only whether the target live entity reaches that published command path.
+
+Exact script scope: extend only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid434NaturalBindingProbeEditor.cs` with an explicit new request mode and create-new result root. Reuse the already verified physical-device sequence, pause after the first OID434/action396 entity hit, allow the same tick to materialize in the original Editor, then read the production current central pixel plan and frozen command list for the matching stable ID/slot `(434,36)`. Do not edit production renderer, input, DAT, PNG, Scene, Prefab or nonbattle code. Preserve old Q07 results and request files.
+
+Exit: original Editor imported script/0 Console errors and generated Editor C# build 0 errors; one unique Play records entity tick, plan tick/generation/owner, frozen frame and exact Entity command or a precise missing stage. Exit Play with Scene/GameConfig SHA unchanged; validate ledger/diff. A PASS proves central command publication, not camera draw execution, GPU pixels, formal EXE same-image comparison or Q09 aggregate. Rollback limited to opt-in diagnostic extension under protected-file rules.

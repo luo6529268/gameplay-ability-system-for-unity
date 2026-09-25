@@ -1,0 +1,983 @@
+{
+  "authorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "scope": "formal-equivalent staged DAT with integer frame headers; base pic only; native cumulative row*col ranges; not runtime visual offset or reachable-action proof",
+  "summary": {
+    "object_dat": 330,
+    "sheet_ranges": 773,
+    "frames": 55347,
+    "pic_999": 4587,
+    "base_pic_in_native_range": 50676,
+    "authored_native_range_mismatches": 40,
+    "unique_referenced_png": 703,
+    "out_of_native_range_non999": 84,
+    "base_pic_rect_outside_image": 6,
+    "errors": 0
+  },
+  "uncoveredNon999": [
+    {
+      "dat": "a/fir/firz.dat",
+      "frame": 50,
+      "pic": 50,
+      "nativeCapacity": 20
+    },
+    {
+      "dat": "c/gaa/a/san.dat",
+      "frame": 340,
+      "pic": 1088,
+      "nativeCapacity": 102
+    },
+    {
+      "dat": "c/guy/a/bal.dat",
+      "frame": 432,
+      "pic": 111,
+      "nativeCapacity": 111
+    },
+    {
+      "dat": "c/guy/a/bal.dat",
+      "frame": 433,
+      "pic": 111,
+      "nativeCapacity": 111
+    },
+    {
+      "dat": "c/guy/a/bal.dat",
+      "frame": 434,
+      "pic": 111,
+      "nativeCapacity": 111
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 21,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 22,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 23,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 24,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 26,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 27,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 28,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 29,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 31,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 32,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 33,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 36,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 37,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 38,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 39,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 41,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 42,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 43,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 44,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 48,
+      "pic": 138,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 49,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 55,
+      "pic": 137,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 94,
+      "pic": 136,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 449,
+      "pic": 128,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 450,
+      "pic": 128,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 451,
+      "pic": 129,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jira/pre.dat",
+      "frame": 452,
+      "pic": 130,
+      "nativeCapacity": 128
+    },
+    {
+      "dat": "c/jiro/a/cav.dat",
+      "frame": 390,
+      "pic": 50,
+      "nativeCapacity": 21
+    },
+    {
+      "dat": "c/jiro/a/cav.dat",
+      "frame": 391,
+      "pic": 50,
+      "nativeCapacity": 21
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 370,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 371,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 372,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 373,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 374,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 375,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 376,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 377,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 378,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 379,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 380,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 381,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 382,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/jug/a/pao.dat",
+      "frame": 383,
+      "pic": 130,
+      "nativeCapacity": 62
+    },
+    {
+      "dat": "c/kaka/pak.dat",
+      "frame": 399,
+      "pic": 30,
+      "nativeCapacity": 30
+    },
+    {
+      "dat": "c/kaku/maskair.dat",
+      "frame": 118,
+      "pic": 176,
+      "nativeCapacity": 90
+    },
+    {
+      "dat": "c/kaku/maskfir.dat",
+      "frame": 118,
+      "pic": 176,
+      "nativeCapacity": 90
+    },
+    {
+      "dat": "c/kaku/maskthu.dat",
+      "frame": 118,
+      "pic": 176,
+      "nativeCapacity": 90
+    },
+    {
+      "dat": "c/kaku/maskwat.dat",
+      "frame": 118,
+      "pic": 176,
+      "nativeCapacity": 90
+    },
+    {
+      "dat": "c/kan/a/san.dat",
+      "frame": 40,
+      "pic": 905,
+      "nativeCapacity": 32
+    },
+    {
+      "dat": "c/kan/kan2.dat",
+      "frame": 16,
+      "pic": 475,
+      "nativeCapacity": 120
+    },
+    {
+      "dat": "c/kan/kan2.dat",
+      "frame": 17,
+      "pic": 476,
+      "nativeCapacity": 120
+    },
+    {
+      "dat": "c/kan/kan2.dat",
+      "frame": 18,
+      "pic": 477,
+      "nativeCapacity": 120
+    },
+    {
+      "dat": "c/kan/kan2.dat",
+      "frame": 19,
+      "pic": 478,
+      "nativeCapacity": 120
+    },
+    {
+      "dat": "c/kis/a/wat.dat",
+      "frame": 135,
+      "pic": 1082,
+      "nativeCapacity": 118
+    },
+    {
+      "dat": "c/kis/a/wat.dat",
+      "frame": 136,
+      "pic": 1082,
+      "nativeCapacity": 118
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 95,
+      "pic": 64,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 200,
+      "pic": 30,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 201,
+      "pic": 30,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 207,
+      "pic": 61,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 212,
+      "pic": 62,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 213,
+      "pic": 63,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 214,
+      "pic": 64,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 215,
+      "pic": 60,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 216,
+      "pic": 62,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 217,
+      "pic": 62,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/kis/sam.dat",
+      "frame": 399,
+      "pic": 30,
+      "nativeCapacity": 28
+    },
+    {
+      "dat": "c/oro/a/atk.dat",
+      "frame": 528,
+      "pic": 1045,
+      "nativeCapacity": 76
+    },
+    {
+      "dat": "c/oro/a/atk.dat",
+      "frame": 529,
+      "pic": 1045,
+      "nativeCapacity": 76
+    },
+    {
+      "dat": "c/shino/a/bug.dat",
+      "frame": 365,
+      "pic": 27,
+      "nativeCapacity": 25
+    },
+    {
+      "dat": "c/tsu/tsu.dat",
+      "frame": 280,
+      "pic": 95,
+      "nativeCapacity": 90
+    },
+    {
+      "dat": "c/yag/a/mir.dat",
+      "frame": 147,
+      "pic": 99,
+      "nativeCapacity": 49
+    },
+    {
+      "dat": "m/ton/ton.dat",
+      "frame": 95,
+      "pic": 64,
+      "nativeCapacity": 50
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 20,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 21,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 22,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 23,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 50,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 51,
+      "pic": 50,
+      "nativeCapacity": 12
+    },
+    {
+      "dat": "w/e.dat",
+      "frame": 52,
+      "pic": 50,
+      "nativeCapacity": 12
+    }
+  ],
+  "outOfImageBounds": [
+    {
+      "dat": "c/saso/pup.dat",
+      "frame": 105,
+      "pic": 44,
+      "path": "c/saso/pup.png",
+      "rect": [
+        320,
+        320,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        319
+      ]
+    },
+    {
+      "dat": "m/nin/hun.dat",
+      "frame": 95,
+      "pic": 64,
+      "path": "m/nin/hun.png",
+      "rect": [
+        320,
+        480,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        480
+      ]
+    },
+    {
+      "dat": "m/nin/nin.dat",
+      "frame": 31,
+      "pic": 81,
+      "path": "m/nin/nin.png",
+      "rect": [
+        80,
+        640,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        560
+      ]
+    },
+    {
+      "dat": "m/nin/nin.dat",
+      "frame": 41,
+      "pic": 91,
+      "path": "m/nin/nin.png",
+      "rect": [
+        80,
+        720,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        560
+      ]
+    },
+    {
+      "dat": "m/nin/nin2.dat",
+      "frame": 31,
+      "pic": 81,
+      "path": "m/nin/nin2.png",
+      "rect": [
+        80,
+        640,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        560
+      ]
+    },
+    {
+      "dat": "m/nin/nin2.dat",
+      "frame": 41,
+      "pic": 91,
+      "path": "m/nin/nin2.png",
+      "rect": [
+        80,
+        720,
+        79,
+        79
+      ],
+      "imageSize": [
+        799,
+        560
+      ]
+    }
+  ],
+  "errors": [],
+  "authoredVsNativeRangeExamples": [
+    {
+      "dat": "a/tra/tra.dat",
+      "path": "a/tra/tra.png",
+      "authoredFirst": 65,
+      "authoredLast": 80,
+      "nativeFirst": 0,
+      "nativeLast": 4,
+      "w": 125,
+      "h": 115,
+      "row": 5,
+      "col": 1
+    },
+    {
+      "dat": "a/wal/wal.dat",
+      "path": "a/wal/wal.png",
+      "authoredFirst": 14,
+      "authoredLast": 30,
+      "nativeFirst": 0,
+      "nativeLast": 15,
+      "w": 291,
+      "h": 191,
+      "row": 4,
+      "col": 4
+    },
+    {
+      "dat": "a/wat/wat.dat",
+      "path": "a/wat/wate.png",
+      "authoredFirst": 18,
+      "authoredLast": 29,
+      "nativeFirst": 36,
+      "nativeLast": 47,
+      "w": 345,
+      "h": 145,
+      "row": 2,
+      "col": 6
+    },
+    {
+      "dat": "c/ank/ssnk.dat",
+      "path": "c/ank/ssnk.png",
+      "authoredFirst": 0,
+      "authoredLast": 29,
+      "nativeFirst": 0,
+      "nativeLast": 49,
+      "w": 63,
+      "h": 63,
+      "row": 10,
+      "col": 5
+    },
+    {
+      "dat": "c/asu/a/ash.dat",
+      "path": "c/asu/a/ash3.png",
+      "authoredFirst": 22,
+      "authoredLast": 34,
+      "nativeFirst": 22,
+      "nativeLast": 33,
+      "w": 561,
+      "h": 401,
+      "row": 4,
+      "col": 3
+    },
+    {
+      "dat": "c/hid/hid.dat",
+      "path": "c/hid/hid2.png",
+      "authoredFirst": 62,
+      "authoredLast": 126,
+      "nativeFirst": 62,
+      "nativeLast": 116,
+      "w": 115,
+      "h": 110,
+      "row": 5,
+      "col": 11
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hin2.png",
+      "authoredFirst": 230,
+      "authoredLast": 242,
+      "nativeFirst": 230,
+      "nativeLast": 243,
+      "w": 99,
+      "h": 79,
+      "row": 7,
+      "col": 2
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hin8.png",
+      "authoredFirst": 243,
+      "authoredLast": 246,
+      "nativeFirst": 244,
+      "nativeLast": 247,
+      "w": 385,
+      "h": 180,
+      "row": 2,
+      "col": 2
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hin11.png",
+      "authoredFirst": 247,
+      "authoredLast": 376,
+      "nativeFirst": 248,
+      "nativeLast": 377,
+      "w": 79,
+      "h": 79,
+      "row": 10,
+      "col": 13
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hinatapunch.png",
+      "authoredFirst": 377,
+      "authoredLast": 406,
+      "nativeFirst": 378,
+      "nativeLast": 407,
+      "w": 79,
+      "h": 79,
+      "row": 10,
+      "col": 3
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hin12.png",
+      "authoredFirst": 407,
+      "authoredLast": 412,
+      "nativeFirst": 408,
+      "nativeLast": 414,
+      "w": 99,
+      "h": 79,
+      "row": 7,
+      "col": 1
+    },
+    {
+      "dat": "c/hin/hin.dat",
+      "path": "c/hin/hinatapunch2.png",
+      "authoredFirst": 413,
+      "authoredLast": 444,
+      "nativeFirst": 415,
+      "nativeLast": 444,
+      "w": 79,
+      "h": 79,
+      "row": 10,
+      "col": 3
+    },
+    {
+      "dat": "c/jira/a/toad.dat",
+      "path": "c/jira/a/toad3.png",
+      "authoredFirst": 60,
+      "authoredLast": 78,
+      "nativeFirst": 60,
+      "nativeLast": 77,
+      "w": 799,
+      "h": 239,
+      "row": 1,
+      "col": 18
+    },
+    {
+      "dat": "c/jira/a/toad.dat",
+      "path": "c/jira/a/toad4.png",
+      "authoredFirst": 79,
+      "authoredLast": 84,
+      "nativeFirst": 78,
+      "nativeLast": 83,
+      "w": 345,
+      "h": 145,
+      "row": 2,
+      "col": 3
+    },
+    {
+      "dat": "c/jiro/gol.dat",
+      "path": "c/jiro/gol2.png",
+      "authoredFirst": 0,
+      "authoredLast": 69,
+      "nativeFirst": 0,
+      "nativeLast": 39,
+      "w": 186,
+      "h": 173,
+      "row": 10,
+      "col": 4
+    },
+    {
+      "dat": "c/jiro/gol2.dat",
+      "path": "c/jiro/gol3.png",
+      "authoredFirst": 0,
+      "authoredLast": 69,
+      "nativeFirst": 0,
+      "nativeLast": 39,
+      "w": 93,
+      "h": 86,
+      "row": 10,
+      "col": 4
+    },
+    {
+      "dat": "c/jug/jugo.dat",
+      "path": "c/jug/jugo_02.png",
+      "authoredFirst": 250,
+      "authoredLast": 249,
+      "nativeFirst": 250,
+      "nativeLast": 270,
+      "w": 312,
+      "h": 95,
+      "row": 1,
+      "col": 21
+    },
+    {
+      "dat": "c/jug/jugoCS2.dat",
+      "path": "c/jug/jugoCS2_02.png",
+      "authoredFirst": 250,
+      "authoredLast": 249,
+      "nativeFirst": 250,
+      "nativeLast": 270,
+      "w": 312,
+      "h": 95,
+      "row": 1,
+      "col": 21
+    },
+    {
+      "dat": "c/kan/a/san.dat",
+      "path": "c/kan/a/san2.png",
+      "authoredFirst": 12,
+      "authoredLast": 50,
+      "nativeFirst": 12,
+      "nativeLast": 31,
+      "w": 125,
+      "h": 95,
+      "row": 5,
+      "col": 4
+    },
+    {
+      "dat": "c/kar/a/jug.dat",
+      "path": "c/kar/a/jug.png",
+      "authoredFirst": 120,
+      "authoredLast": 124,
+      "nativeFirst": 120,
+      "nativeLast": 149,
+      "w": 159,
+      "h": 159,
+      "row": 5,
+      "col": 6
+    },
+    {
+      "dat": "c/kib/a/aka.dat",
+      "path": "c/kib/a/aka3.png",
+      "authoredFirst": 24,
+      "authoredLast": 32,
+      "nativeFirst": 24,
+      "nativeLast": 35,
+      "w": 155,
+      "h": 95,
+      "row": 3,
+      "col": 4
+    },
+    {
+      "dat": "c/kid/a/kyo.dat",
+      "path": "c/kid/a/kyo.png",
+      "authoredFirst": 0,
+      "authoredLast": 27,
+      "nativeFirst": 0,
+      "nativeLast": 17,
+      "w": 316,
+      "h": 316,
+      "row": 6,
+      "col": 3
+    },
+    {
+      "dat": "c/kon/kon.dat",
+      "path": "c/kon/kon1.png",
+      "authoredFirst": 100,
+      "authoredLast": 135,
+      "nativeFirst": 110,
+      "nativeLast": 145,
+      "w": 179,
+      "h": 90,
+      "row": 4,
+      "col": 9
+    },
+    {
+      "dat": "c/kon/kon.dat",
+      "path": "c/kon/kon2.png",
+      "authoredFirst": 136,
+      "authoredLast": 141,
+      "nativeFirst": 146,
+      "nativeLast": 151,
+      "w": 239,
+      "h": 159,
+      "row": 3,
+      "col": 2
+    },
+    {
+      "dat": "c/kon/kon.dat",
+      "path": "c/kon/cra.png",
+      "authoredFirst": 142,
+      "authoredLast": 145,
+      "nativeFirst": 152,
+      "nativeLast": 155,
+      "w": 306,
+      "h": 288,
+      "row": 2,
+      "col": 2
+    },
+    {
+      "dat": "c/nar/a/4tk.dat",
+      "path": "c/nar/a/4tk3.png",
+      "authoredFirst": 20,
+      "authoredLast": 27,
+      "nativeFirst": 21,
+      "nativeLast": 28,
+      "w": 275,
+      "h": 75,
+      "row": 2,
+      "col": 4
+    },
+    {
+      "dat": "c/nar/a/4tk.dat",
+      "path": "c/nar/a/4tk4.png",
+      "authoredFirst": 28,
+      "authoredLast": 35,
+      "nativeFirst": 29,
+      "nativeLast": 36,
+      "w": 199,
+      "h": 404,
+      "row": 4,
+      "col": 2
+    },
+    {
+      "dat": "c/oro/a/atk.dat",
+      "path": "c/oro/a/edo.png",
+      "authoredFirst": 0,
+      "authoredLast": 29,
+      "nativeFirst": 46,
+      "nativeLast": 75,
+      "w": 79,
+      "h": 92,
+      "row": 10,
+      "col": 3
+    },
+    {
+      "dat": "c/saku/saku.dat",
+      "path": "c/saku/rage.png",
+      "authoredFirst": 140,
+      "authoredLast": 141,
+      "nativeFirst": 140,
+      "nativeLast": 151,
+      "w": 113,
+      "h": 123,
+      "row": 6,
+      "col": 2
+    },
+    {
+      "dat": "c/saku/saku2.dat",
+      "path": "c/saku/rage2.png",
+      "authoredFirst": 140,
+      "authoredLast": 141,
+      "nativeFirst": 140,
+      "nativeLast": 151,
+      "w": 113,
+      "h": 123,
+      "row": 6,
+      "col": 2
+    }
+  ]
+}

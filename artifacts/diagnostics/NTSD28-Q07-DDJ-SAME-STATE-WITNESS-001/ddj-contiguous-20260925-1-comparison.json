@@ -1,0 +1,40 @@
+{
+  "status": "SCOPED_FIELD_COMPARISON_ONLY",
+  "unityResultSha256": "6B6F2706E0D2CBA21E7708B4DC30B5ADA4545F571C1873B12EC2ED023476C9FA",
+  "formalTraceSha256": "769D3A734C72EE5FD165054383D6A237691F5401D286590CDF53472AC267F189",
+  "ticks": [
+    1,
+    26
+  ],
+  "tickCount": 26,
+  "inputSchema": "Unity proxy bitsets not numerically compared with formal masks",
+  "initialStateEqual": false,
+  "comparisons": {
+    "action": {
+      "equal": 25,
+      "total": 26,
+      "mismatches": [
+        {
+          "tick": 1,
+          "unity": 0,
+          "formal": 110
+        }
+      ]
+    },
+    "PP_vs_native_MP": {
+      "equal": 26,
+      "total": 26,
+      "mismatches": []
+    },
+    "input_phase": {
+      "equal": 26,
+      "total": 26,
+      "mismatches": []
+    },
+    "OID518_count": {
+      "equal": 26,
+      "total": 26,
+      "mismatches": []
+    }
+  }
+}

@@ -1,0 +1,24 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-NATIVE-CLAMPED-CELL-PUBLICATION-001
+status: RUNTIME_PENDING
+change-kind: BATTLE_PRESENTATION_CONTENT_ADAPTER
+code-path: Assets/NTSD/Scripts/Animation/Manager/CharacterAnimtorManager.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NativeClampedCellEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32PublishedCatalogProbeEditor.cs
+authority: formal EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 and paired playable D3D11 point/CLAMP renderer
+evidence: Q07 native clamped cell focused tests and two original Editor catalog Play reports; entity pixel and lifecycle pending
+-->
+
+# NTSD28-Q07-NATIVE-CLAMPED-CELL-PUBLICATION-001
+
+Before code edit: formal PNG bytes and DAT values are staged byte-identical; original Unity Battle Scene has no OID32/pic64 catalog entry, because `BuildIndexedSpriteRects` clips a wholly outside-image source cell to null and both sprite creation and catalog assembly skip it. Formal paired-source D3D11 WARP draws a 79×79 white action95 cell at the same state. `BattleSpriteCentralBinding.IsValid` requires in-bounds UV/rect, so merely passing native out-of-range UV would violate a central-render contract. `CharacterAnimtorManager` already owns prewarm staging, sprite/texture sets, atlas source inputs, publication and failure cleanup.
+
+Planned exact symbols: `ProcessAndCreateSpritesForCandidateAsync`, `BuildBattleSpriteCatalog` and focused private/internal pixel/identity helpers in `CharacterAnimtorManager.cs`; new `NTSD28Q07NativeClampedCellEditorTests.cs`; existing opt-in `NTSD28Q07Oid32PublishedCatalogProbeEditor` report fields only for the derived-source count/binding audit. The adapter applies only to formal PNG source and uses a common per-pixel point/CLAMP rule for all cell boundaries, not OID32-specific branching. It must preserve the existing normal-cell path, dedupe derived cells, add derived resources to current staged ownership, and bind legacy and central presentations to the same derived source without changing DAT/PNG/Scene or battle logic. Expected side effects are additional virtual atlas sources only for out-of-bounds formal cells and possible page/resource count changes. No change to 11-stage shutdown sequence or unrelated input/UI/mode paths.
+
+Acceptance, memory risk, failed-publication behavior and rollback are in the Task. Validation must distinguish focused helper tests, real publication/Play, paired-source GPU evidence, and root-EXE direct GPU (still unavailable). Do not mark VERIFIED from a unit test alone. The current dirty worktree is protected; do not overwrite unrelated modifications.
+
+After code edit: `CharacterAnimtorManager.cs` now samples complete out-of-bounds formal PNG cells with one point/CLAMP rule, hashes sampled dimensions/RGBA and reuses identical derived sprites/textures/source inputs within a staged publication. `BuildBattleSpriteCatalog` uses the derived in-bounds texture/rect/path when the staged sprite is derived; the old in-bounds path and central binding validation remain unchanged. New `NTSD28Q07NativeClampedCellEditorTests.cs` covers boundary sampling, formal OID32 and catalog contracts. Existing `NTSD28Q07Oid32PublishedCatalogProbeEditor.cs` gained read-only counts and binding fields, preserving its request and Play-exit flow. Unity generated the new test `.meta`; no Scene, Prefab, DAT, PNG or nonbattle script was edited by this package.
+
+Validation: original Editor current assemblies imported/compiled; selected new tests 3/3 PASS (`bc5e225232f44cf09162132df13c8761`), combined owner tests 5/5 PASS (`b4903168ddd143ff86a58328fc3250ba`), exact related native range/PNG alpha/atlas tests 6/6 PASS (`d52c41594bc84b5d847c2ef3a090724f`). Two original saved Battle Scene formal-root Play runs found OID32/pic64 present with valid central binding, while prior same-scene baseline omitted it. Second Play counted 1,212 clamped entries, 36 unique derived textures/sources, zero invalid central bindings; Legacy Sprite for pic64 present. Both exited Play with Scene disk hashes unchanged. Evidence and limits: `artifacts/diagnostics/NTSD28-Q07-NATIVE-CLAMPED-CELL-PUBLICATION-001/ACCEPTANCE-PARTIAL-20260925.md` and two JSONs under the prior OID32 published-catalog diagnostic. Entity pixel capture, memory high-water, derived-resource shutdown count, root-EXE direct GPU and natural entrance still pending. The Change remains `RUNTIME_PENDING`.
+
+2026-09-25 scoped follow-up: NTSD28-Q07-OID32-UNITY-ENTITY-PIXEL-001 supplies original-Editor controlled OID32/frame95/pic64 central Entity and Camera.Render white-pixel evidence, exact fixture pool-count restoration and post-Play live native_clamp_ Texture2D count zero. This closes those bounded observation gaps for OID32; transient peak memory, root-EXE direct GPU parity, natural entrance and all derived-cell consumers remain open. This production Change and aggregate Q07/R17 remain RUNTIME_PENDING.

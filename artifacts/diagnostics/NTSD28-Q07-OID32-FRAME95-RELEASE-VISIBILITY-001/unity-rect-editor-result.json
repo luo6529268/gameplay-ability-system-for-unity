@@ -1,0 +1,28 @@
+{
+  "schema": "ntsd28-q07-oid32-unity-rect-editor-result/1.0",
+  "jobId": "fe2dd9581b3b4f2791644341f2baf33e",
+  "status": "succeeded",
+  "mode": "EditMode",
+  "startedUnixMs": 1790343028041,
+  "finishedUnixMs": 1790343041638,
+  "summary": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 7.1525719,
+    "resultState": "Passed"
+  },
+  "selectedTest": "NTSD.Test.Editor.NTSD28Q07Oid32BoundarySpriteEditorTests.FormalHunterPic64CurrentIndexedRectResultIsMeasured",
+  "selectedTestState": "Passed",
+  "selectedTestDurationSeconds": 6.5973218,
+  "testOutputCharacterCount": 436016,
+  "priorZeroSelectedJobs": [
+    "c7784660d1984f87b6a9f48a7fd396db",
+    "56a30398c2c34f1c95622ab8a649ea46"
+  ],
+  "sceneMenuSha256": "785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13",
+  "sceneBattleSha256": "2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A",
+  "testFileSha256": "643D21D2096A8D85C583170405B4E7D031BDA5D352CF60F3C56F52E146F29C76",
+  "testMetaSha256": "F1449095F9D5E4C4227EDBF9BB60DA76278464924213134AFC2B93F86CA3B72C"
+}

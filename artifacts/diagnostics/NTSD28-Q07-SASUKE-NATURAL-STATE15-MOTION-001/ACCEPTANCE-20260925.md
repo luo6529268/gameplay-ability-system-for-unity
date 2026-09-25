@@ -1,0 +1,11 @@
+# Q07 Sasuke natural state15 motion witness (2026-09-25)
+
+Scope: original Unity Editor `gameplay-ability-system-for-unity@b1b02287`, saved `NTSD_Battle.unity`, formal non-excluded Logan content and project mode Asset. The dedicated diagnostic request used natural physical L/D/J at completed ticks 2/4/6. No DAT value, production rule, Scene, Menu or nonbattle code changed for this witness.
+
+Result: `q07-sasuke-natural-state15-motion-20260925-1.json` reports `PASS`. PP went 500→400; Sasuke reached frame264, four OID440 children were born and their formal `c/sasu/a/chi.png` pic0 binding was observed. At completed tick24 the four children (stable IDs 101–104, slots 50–53) were in action12 with Vx=0. All four were also sampled in actions13 and 14 with Vx=0, giving 12 target motion rows. The Editor observer missed two other tick samples; this does not affect the complete action12–14 target rows. The retained prior Sasuke request remained `requested:false` and was not overwritten.
+
+Original Editor returned to non-Play and was idle after the result. Import/Play produced no observed C# compiler errors. Disk SHA-256 values before and after this Play were unchanged: Battle Scene `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`, Menu Scene `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`.
+
+Governance checks after the script and status updates: `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <repository>` exited 0 (`Change ledger validation PASSED`, 18 governed code files covered in the current worktree diff); `git diff --check` exited 0. The validator reported historical Record path warnings, no errors. No broad suite was rerun for this focused diagnostic extension.
+
+Authority comparison: the prior controlled 26-tick root formal EXE/Unity trace reports four OID440 action12–14 Vx=0 and 3826/3826 listed fields equal after the generic state15 post-physics correction; see `../NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001/COMPARISON-20260925.md`. The present Play adds a natural Unity scene motion witness. It does not establish a formal EXE natural same-world trace, full collision/lifetime, pixel, audio, or Q07 completion. The alignment goal and Q07 remain open.

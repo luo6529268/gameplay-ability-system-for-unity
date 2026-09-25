@@ -1,0 +1,5 @@
+FAIL
+System.InvalidOperationException: Battle object and fusion publications do not share one content identity.
+  at NTSD.Simulation.SimulationTickDriver.BeginBattleAllocationSeal () [0x0015d] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Simulation\Host\SimulationTickDriver.cs:1261 
+  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.RunScenario (System.String scenarioPath, System.String outputPath, System.String domainOutputPath, System.String inputRngOutputPath, System.String loganRuntimeRoot, System.String domainVersion) [0x003b6] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28UnityRawCaptureEditor.cs:375 
+  at NTSD.EditorTools.NTSD28UnityRawCaptureEditor.RunAndWriteResult (System.String scenarioPath, System.String outputPath, System.String domainOutputPath, System.String inputRngOutputPath, System.String loganRuntimeRoot, System.String domainVersion) [0x00027] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\NTSD28UnityRawCaptureEditor.cs:239 

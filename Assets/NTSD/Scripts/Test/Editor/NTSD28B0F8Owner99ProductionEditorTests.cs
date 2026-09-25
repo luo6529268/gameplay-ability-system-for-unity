@@ -72,6 +72,11 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Runtime.X, Is.EqualTo(expectedPosition.x));
             Assert.That(entity.Runtime.Y, Is.EqualTo(expectedPosition.y));
             Assert.That(entity.Runtime.Z, Is.EqualTo(expectedPosition.z));
+            Assert.That(entity.Runtime.SourceRulePositionInitialized, Is.True);
+            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedPosition.x));
+            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedPosition.z));
+            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedPosition.x));
+            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedPosition.z));
             Assert.That(entity.OwnerEntityIndex, Is.EqualTo(-1));
             Assert.That(world.Rng.CallCount, Is.EqualTo(6UL));
             AssertActiveSlotOwnerSnapshot(world, expectedSlot, entity, -1);
@@ -99,6 +104,11 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Runtime.X, Is.EqualTo(expectedPosition.x));
             Assert.That(entity.Runtime.Y, Is.EqualTo(expectedPosition.y));
             Assert.That(entity.Runtime.Z, Is.EqualTo(expectedPosition.z));
+            Assert.That(entity.Runtime.SourceRulePositionInitialized, Is.True);
+            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedPosition.x));
+            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedPosition.z));
+            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedPosition.x));
+            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedPosition.z));
             Assert.That(world.Rng.CallCount, Is.EqualTo(4UL));
             AssertActiveSlotOwnerSnapshot(
                 world,

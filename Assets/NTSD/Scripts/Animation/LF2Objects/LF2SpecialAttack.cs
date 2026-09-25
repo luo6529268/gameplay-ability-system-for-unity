@@ -326,9 +326,6 @@ namespace NTSD.Animation.LF2Objects
                 _lastState = currentState;
             }
 
-            if (currentState == 15)
-                ProcessState15TU();
-
             if (Health.HP <= 0)
             {
                 DieEvent();

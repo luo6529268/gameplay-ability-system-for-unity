@@ -149,6 +149,8 @@ namespace NTSD.App
                 CharacterAnimtorManager contentManager = CharacterAnimtorManager.TryGetInstance();
                 if (contentManager == null)
                     throw new System.InvalidOperationException("Battle content was not prewarmed.");
+                if (CharacterAnimtorManager.ConfiguredContentRoot.Length == 0)
+                    throw new System.InvalidOperationException("Formal Logan battle content root is required.");
                 string contentKey = await contentManager.ValidateConfiguredContentForBattleAsync();
                 if (this == null || simulationDriver == null || !scene.IsValid() || !scene.isLoaded ||
                     !simulationDriver.IsBattlePreparationCurrent(preparationGeneration, preparationWorld))

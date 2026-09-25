@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Sirenix.OdinInspector;
@@ -1470,6 +1471,8 @@ namespace NTSD.Animation
             var stagedCreatedSprites = native?.Sprites ?? new HashSet<Sprite>();
             var stagedTextures = native?.Textures ?? new HashSet<Texture2D>();
             var stagedAtlasSources = new List<BattleAtlasSourcePixels>();
+            var clampedSpritesByContent = new Dictionary<string, Sprite>(StringComparer.Ordinal);
+            var clampedSourcePathsBySprite = new Dictionary<Sprite, string>();
 
             Debug.Log($"<color=cyan>开始加载精灵，角色配置数量: {stagedConfigs.Count}</color>");
 
@@ -1525,6 +1528,8 @@ namespace NTSD.Animation
                         stagedCreatedSprites,
                         stagedTextures,
                         stagedAtlasSources,
+                        clampedSpritesByContent,
+                        clampedSourcePathsBySprite,
                         onProgressText,
                         cpuSemaphore,
                         uploadSemaphore,
@@ -1571,7 +1576,8 @@ namespace NTSD.Animation
             BattleCommonVisualCatalog commonVisualCatalog = BattleCommonVisualCatalog.Empty;
             try
             {
-                stagedCatalog = BuildBattleSpriteCatalog(stagedConfigs, stagedSprites);
+                stagedCatalog = BuildBattleSpriteCatalog(
+                    stagedConfigs, stagedSprites, clampedSourcePathsBySprite);
                 stagedSpark = await BuildSparkPublicationAsync(
                     invocation, native?.Candidate.SparkInput);
                 if (stagedSpark == null || stagedSpark.Texture == null ||
@@ -2316,6 +2322,69 @@ namespace NTSD.Animation
             return pixels;
         }
 
+        internal static Color32[] BuildNativeClampedCellPixels(
+            Color32[] sourcePixels,
+            int sourceWidth,
+            int sourceHeight,
+            int sourceX,
+            int sourceY,
+            int cellWidth,
+            int cellHeight)
+        {
+            if (sourcePixels == null || sourceWidth <= 0 || sourceHeight <= 0 ||
+                cellWidth <= 0 || cellHeight <= 0 ||
+                (long)sourceWidth * sourceHeight != sourcePixels.Length ||
+                (long)cellWidth * cellHeight > int.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(sourcePixels),
+                    "Native clamped-cell source or dimensions are invalid.");
+
+            var cell = new Color32[checked(cellWidth * cellHeight)];
+            for (int y = 0; y < cellHeight; y++)
+            {
+                int sampledY = (int)Math.Max(0L,
+                    Math.Min(sourceHeight - 1L, (long)sourceY + y));
+                for (int x = 0; x < cellWidth; x++)
+                {
+                    int sampledX = (int)Math.Max(0L,
+                        Math.Min(sourceWidth - 1L, (long)sourceX + x));
+                    cell[y * cellWidth + x] = sourcePixels[sampledY * sourceWidth + sampledX];
+                }
+            }
+            return cell;
+        }
+
+        internal static string HashNativeClampedCellPixels(
+            Color32[] pixels, int width, int height)
+        {
+            if (pixels == null || width <= 0 || height <= 0 ||
+                (long)width * height != pixels.Length ||
+                pixels.Length > (int.MaxValue - 8) / 4)
+                throw new ArgumentOutOfRangeException(nameof(pixels));
+
+            var bytes = new byte[8 + pixels.Length * 4];
+            for (int index = 0; index < 4; index++)
+            {
+                bytes[index] = (byte)(width >> (index * 8));
+                bytes[index + 4] = (byte)(height >> (index * 8));
+            }
+            for (int index = 0; index < pixels.Length; index++)
+            {
+                int offset = 8 + index * 4;
+                bytes[offset] = pixels[index].r;
+                bytes[offset + 1] = pixels[index].g;
+                bytes[offset + 2] = pixels[index].b;
+                bytes[offset + 3] = pixels[index].a;
+            }
+            using (var hash = SHA256.Create())
+                return BitConverter.ToString(hash.ComputeHash(bytes)).Replace("-", string.Empty);
+        }
+
+        private static string NativeClampedCellSourcePath(string contentHash)
+        {
+            return Path.GetFullPath(Path.Combine(Application.dataPath, "..", "Temp",
+                "NTSD28NativeClampCells", contentHash + ".rgba"));
+        }
+
         internal static UniTask<int> ProcessAndCreateSpritesAsync(
             int characterId,
             SpriteFileInfo fileInfo,
@@ -2324,6 +2393,8 @@ namespace NTSD.Animation
             HashSet<Sprite> stagedCreatedSprites,
             HashSet<Texture2D> stagedTextures,
             List<BattleAtlasSourcePixels> stagedAtlasSources,
+            Dictionary<string, Sprite> clampedSpritesByContent,
+            Dictionary<Sprite, string> clampedSourcePathsBySprite,
             Action<string> onProgressText,
             System.Threading.SemaphoreSlim cpuSemaphore,
             System.Threading.SemaphoreSlim uploadSemaphore,
@@ -2331,6 +2402,7 @@ namespace NTSD.Animation
         {
             return ProcessAndCreateSpritesForCandidateAsync(characterId, fileInfo, ownedEffectivePics,
                 stagedSprites, stagedCreatedSprites, stagedTextures, stagedAtlasSources,
+                clampedSpritesByContent, clampedSourcePathsBySprite,
                 onProgressText, cpuSemaphore, uploadSemaphore, source, null, null);
         }
 
@@ -2342,6 +2414,8 @@ namespace NTSD.Animation
             HashSet<Sprite> stagedCreatedSprites,
             HashSet<Texture2D> stagedTextures,
             List<BattleAtlasSourcePixels> stagedAtlasSources,
+            Dictionary<string, Sprite> clampedSpritesByContent,
+            Dictionary<Sprite, string> clampedSourcePathsBySprite,
             Action<string> onProgressText,
             System.Threading.SemaphoreSlim cpuSemaphore,
             System.Threading.SemaphoreSlim uploadSemaphore,
@@ -2391,9 +2465,35 @@ namespace NTSD.Animation
                     textureHeight,
                     row,
                     col);
+                var clampedCells = new Dictionary<int, string>();
+                if (processedSheet != null && source != null && source.IsLoganRuntime &&
+                    bmpData.IsPng && spriteRects != null)
+                {
+                    for (int i = 0; i < spriteRects.Length; i++)
+                    {
+                        int effectivePic = fileInfo.startFrame + i;
+                        if (ownedEffectivePics == null ||
+                            !ownedEffectivePics.Contains(effectivePic))
+                            continue;
+
+                        int sourceX = checked((i % col) * (spriteWidth + 1));
+                        int sourceY = checked(textureHeight -
+                            (i / col + 1) * (spriteHeight + 1) + 1);
+                        if (sourceX >= 0 && sourceY >= 0 &&
+                            (long)sourceX + spriteWidth <= textureWidth &&
+                            (long)sourceY + spriteHeight <= textureHeight)
+                            continue;
+
+                        clampedCells.Add(i, HashNativeClampedCellPixels(
+                            BuildNativeClampedCellPixels(processedSheet,
+                                textureWidth, textureHeight, sourceX, sourceY,
+                                spriteWidth, spriteHeight), spriteWidth, spriteHeight));
+                    }
+                }
 
                 if (processedSheet == null || processedSheet.Length == 0 ||
-                    spriteRects == null || !spriteRects.Any(rect => rect.HasValue))
+                    spriteRects == null ||
+                    (!spriteRects.Any(rect => rect.HasValue) && clampedCells.Count == 0))
                 {
                     return -1;
                 }
@@ -2422,14 +2522,50 @@ namespace NTSD.Animation
 
                 for (int i = 0; i < spriteRects.Length; i++)
                 {
-                    Rect? spriteRect = spriteRects[i];
-                    if (!spriteRect.HasValue)
-                        continue;
-
                     int targetIndex = fileInfo.startFrame + i;
                     if (targetIndex < 0 || targetIndex >= allSprites.Count || targetIndex > fileInfo.endFrame)
                         continue;
                     if (ownedEffectivePics == null || !ownedEffectivePics.Contains(targetIndex))
+                        continue;
+
+                    if (clampedCells.TryGetValue(i, out string clampedHash))
+                    {
+                        if (clampedSpritesByContent == null || clampedSourcePathsBySprite == null)
+                            throw new InvalidOperationException("Native clamped-cell publication ownership is missing.");
+                        if (!clampedSpritesByContent.TryGetValue(clampedHash,
+                                out Sprite clampedSprite))
+                        {
+                            int sourceX = checked((i % col) * (spriteWidth + 1));
+                            int sourceY = checked(textureHeight -
+                                (i / col + 1) * (spriteHeight + 1) + 1);
+                            Color32[] clampedPixels = BuildNativeClampedCellPixels(
+                                processedSheet, textureWidth, textureHeight,
+                                sourceX, sourceY, spriteWidth, spriteHeight);
+                            var clampedTexture = new Texture2D(
+                                spriteWidth, spriteHeight, TextureFormat.RGBA32, false);
+                            clampedTexture.filterMode = FilterMode.Point;
+                            clampedTexture.wrapMode = TextureWrapMode.Clamp;
+                            stagedTextures.Add(clampedTexture);
+                            clampedTexture.SetPixels32(clampedPixels);
+                            clampedTexture.Apply(false, true);
+                            clampedTexture.name = "native_clamp_" + clampedHash.Substring(0, 12);
+                            var fullCell = new Rect(0, 0, spriteWidth, spriteHeight);
+                            clampedSprite = Sprite.Create(clampedTexture, fullCell,
+                                new Vector2(0.5f, 0f), 100f, 0, SpriteMeshType.FullRect);
+                            stagedCreatedSprites.Add(clampedSprite);
+                            string virtualPath = NativeClampedCellSourcePath(clampedHash);
+                            stagedAtlasSources.Add(new BattleAtlasSourcePixels(
+                                virtualPath, spriteWidth, spriteHeight, clampedPixels));
+                            clampedSourcePathsBySprite.Add(clampedSprite, virtualPath);
+                            clampedSpritesByContent.Add(clampedHash, clampedSprite);
+                        }
+                        allSprites[targetIndex] = clampedSprite;
+                        created++;
+                        continue;
+                    }
+
+                    Rect? spriteRect = spriteRects[i];
+                    if (!spriteRect.HasValue)
                         continue;
 
                     Vector2 pivot = ComputeIndexedSpritePivot(
@@ -2473,7 +2609,8 @@ namespace NTSD.Animation
 
         internal static BattleSpriteCatalog BuildBattleSpriteCatalog(
             Dictionary<int, LF2CharacterDataWrapper> configs,
-            Dictionary<int, List<Sprite>> spritesByVisualDataId)
+            Dictionary<int, List<Sprite>> spritesByVisualDataId,
+            IReadOnlyDictionary<Sprite, string> clampedSourcePathsBySprite = null)
         {
             var builder = new BattleSpriteCatalogBuilder();
 
@@ -2497,26 +2634,25 @@ namespace NTSD.Animation
                     Sprite firstSprite = null;
                     for (int pic = firstPic; pic <= lastPic && firstSprite == null; pic++)
                     {
-                        if (ownedEffectivePics.Contains(pic))
+                        if (ownedEffectivePics.Contains(pic) && sprites[pic] != null &&
+                            (clampedSourcePathsBySprite == null ||
+                             !clampedSourcePathsBySprite.ContainsKey(sprites[pic])))
                             firstSprite = sprites[pic];
                     }
 
                     Texture2D texture = firstSprite != null ? firstSprite.texture : null;
-                    if (texture == null)
-                        continue;
-
-                    ResolveEffectiveGrid(fileInfo, texture.width, texture.height, out int row, out int col);
-                    Rect?[] rects = BuildIndexedSpriteRects(
-                        fileInfo,
-                        texture.width,
-                        texture.height,
-                        row,
-                        col);
+                    int col = fileInfo.row;
+                    Rect?[] rects = Array.Empty<Rect?>();
+                    if (texture != null)
+                    {
+                        ResolveEffectiveGrid(fileInfo, texture.width, texture.height,
+                            out int row, out col);
+                        rects = BuildIndexedSpriteRects(
+                            fileInfo, texture.width, texture.height, row, col);
+                    }
 
                     int firstLocalPic = Mathf.Max(0, firstPic - fileInfo.startFrame);
-                    int lastLocalPic = Mathf.Min(
-                        rects.Length - 1,
-                        lastPic - fileInfo.startFrame);
+                    int lastLocalPic = lastPic - fileInfo.startFrame;
                     for (int localPic = firstLocalPic; localPic <= lastLocalPic; localPic++)
                     {
                         int effectivePic = fileInfo.startFrame + localPic;
@@ -2526,7 +2662,19 @@ namespace NTSD.Animation
                             continue;
 
                         Sprite legacySprite = sprites[effectivePic];
-                        if (legacySprite == null || !rects[localPic].HasValue)
+                        if (legacySprite == null)
+                            continue;
+                        if (clampedSourcePathsBySprite != null &&
+                            clampedSourcePathsBySprite.TryGetValue(legacySprite,
+                                out string clampedSourcePath))
+                        {
+                            builder.Add(visualDataId, effectivePic, clampedSourcePath,
+                                legacySprite.texture, legacySprite.rect,
+                                new Vector2(0.5f, 0f), legacySprite);
+                            continue;
+                        }
+                        if (texture == null || localPic >= rects.Length ||
+                            !rects[localPic].HasValue)
                             continue;
 
                         Vector2 pivot = ComputeIndexedSpritePivot(

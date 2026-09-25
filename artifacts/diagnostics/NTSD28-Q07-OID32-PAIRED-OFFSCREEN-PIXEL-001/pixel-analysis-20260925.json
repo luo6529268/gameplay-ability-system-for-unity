@@ -1,0 +1,33 @@
+{
+  "width": 1333,
+  "height": 730,
+  "roi_xyxy": [
+    461,
+    271,
+    540,
+    350
+  ],
+  "roi_area": 6241,
+  "action95_all_white_count": 6241,
+  "action95_center_rgb": [
+    255,
+    255,
+    255
+  ],
+  "action0_center_rgb": [
+    10,
+    10,
+    10
+  ],
+  "rgb_diff_bbox": [
+    461,
+    271,
+    540,
+    350
+  ],
+  "changed_pixels_total": 6241,
+  "changed_pixels_inside_roi": 6241,
+  "changed_pixels_outside_roi": 0,
+  "sha256_action95": "D886D6BD9AEA4786094FA1A69D41DC27688BE6DEB4D73510C2FEB4E88252B538",
+  "sha256_action0": "052DCA1014E75398C871F3F9EE302A3DFE27F03DA8A4255CA22951F8DFE501EF"
+}

@@ -1,0 +1,11 @@
+# NTSD28-Q07-OID32-PUBLISHED-CATALOG-001
+
+Status: `VERIFIED_SCOPED_PUBLICATION_OBSERVATION / PIXEL_AND_NATURAL_REACHABILITY_PENDING`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001` / BATCH-04 Q07, following the original-Editor OID32 rect witness.
+
+Result: one original-Editor saved Battle Scene Play entered, formal content published by tick5, OID32 data and authored pic0 descriptor/central binding present, authored pic64 absent from 27,825-entry SpriteCatalog, then clean Play exit with Menu/Battle disk SHA unchanged. Exact JSON SHA and limits: `artifacts/diagnostics/NTSD28-Q07-OID32-PUBLISHED-CATALOG-001/ACCEPTANCE-20260925.md`.
+
+Trigger: formal source/root EXE controlled OID32 action95/pic64 emits a sprite command, while the original Unity Editor's production indexed-rect builder returns no rect for actual staged `m/nin/hun.png` pic64. It is still unknown whether the complete production Battle Scene prewarm publishes any OID32/pic64 descriptor.
+
+Scope: add only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32PublishedCatalogProbeEditor.cs` plus Unity-generated `.meta`. An opt-in create-new request file in `Temp/` starts the existing saved Battle Scene in the original Editor, waits for formal content prewarm and a live driver, then reads the immutable published `BattleSpriteCatalog` at OID32 authored pic0 and pic64. Pic0 is the authored publication control; the earlier pic54 is only a geometry control and is not authored in this DAT. It records content root/key, tick, lookup outcomes, descriptor paths and central binding, and exits Play. No entity insertion, tick mutation, camera or Scene save, DAT/PNG modification, nonbattle flow or production code change. Existing Editor is the only Unity instance used. Pre/post Menu/Battle SHA and clean Scene are gates.
+
+Exit: original Editor compile zero errors, bounded probe result, explicit authored pic0 control and pic64 observed result, clean Play exit, Scene hashes unchanged, Change Ledger and diff check. A missing OID32 catalog entirely is a separate first difference, not evidence that only pic64 failed. This is publication evidence only: it does not prove a visible pixel, natural selectable path or final Q07 exit. Rollback is removal of the newly added diagnostic script/meta under protected-worktree rules; preserve request/result evidence.

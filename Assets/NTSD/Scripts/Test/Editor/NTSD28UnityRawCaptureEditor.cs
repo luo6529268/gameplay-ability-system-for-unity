@@ -59,6 +59,10 @@ namespace NTSD.EditorTools
             "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033";
         private const string LegacyScenarioReferenceSha256 =
             "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B";
+        private const string Q07DdjScenarioSchema = "ntsd28-q07-ddj/1.0";
+        private const string Q07SasukeNeedleScenarioSchema =
+            "ntsd28-q07-sasuke-needle/1.0";
+        private const int Q07DdjSeed = 0x28A55A5A;
         private const int Stage23Width = 1330;
         private const int Stage23ZMin = 542;
         private const int Stage23ZMax = 712;
@@ -298,6 +302,10 @@ namespace NTSD.EditorTools
             UnityRawScenario scenario = JsonUtility.FromJson<UnityRawScenario>(
                 File.ReadAllText(resolvedScenarioPath, Encoding.UTF8));
             ValidateScenario(scenario);
+            bool formalQ07Scenario = scenario.schema == Q07DdjScenarioSchema ||
+                scenario.schema == Q07SasukeNeedleScenarioSchema;
+            if (formalQ07Scenario && string.IsNullOrWhiteSpace(loganRuntimeRoot))
+                throw new InvalidDataException("Q07 formal trace requires the selected Logan runtime root.");
 
             Directory.CreateDirectory(
                 Path.GetDirectoryName(resolvedOutputPath) ?? ProjectPath("Temp"));
@@ -322,8 +330,13 @@ namespace NTSD.EditorTools
                 .OrderBy(value => value)
                 .ToArray();
 
-            using var dataScope = new UnityCurrentDatScope(requestedObjectIds, loganRuntimeRoot);
+            using var dataScope = new UnityCurrentDatScope(
+                requestedObjectIds, loganRuntimeRoot, formalQ07Scenario);
             dataScope.AssertInputsCurrent();
+            if (formalQ07Scenario &&
+                !string.Equals(dataScope.Catalog?.CatalogSha256,
+                    scenario.dataSha256, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidDataException("Q07 formal staged catalog SHA-256 does not match its scenario.");
             int[] missingObjectIds = requestedObjectIds
                 .Where(objectId => !dataScope.Configs.ContainsKey(objectId))
                 .ToArray();
@@ -337,7 +350,8 @@ namespace NTSD.EditorTools
             using var driverScope = new TemporarySimulationDriverScope();
             SimulationTickDriver driver = driverScope.Driver;
             SimulationWorld world = driver.World;
-            bool requiresLogicOnlyMaterialization = dataScope.Catalog?.Entries.Any(entry =>
+            bool requiresLogicOnlyMaterialization = formalQ07Scenario ||
+                dataScope.Catalog?.Entries.Any(entry =>
                 requestedObjectIds.Contains(entry.Id) &&
                 entry.Type == (int)LF2ObjectType.SpecialAttack) == true;
             ConfigureWorldAndRoster(world, dataScope.Configs, scenario, dataScope.IsLogan,
@@ -518,31 +532,37 @@ namespace NTSD.EditorTools
         {
             if (scenario == null)
                 throw new InvalidDataException("Scenario JSON is empty.");
-            if (!string.Equals(
-                    scenario.schema,
-                    "ntsd28-scenario/1.0",
-                    StringComparison.Ordinal))
+            bool q07DdjScenario = string.Equals(
+                scenario.schema, Q07DdjScenarioSchema, StringComparison.Ordinal);
+            bool q07SasukeNeedleScenario = string.Equals(
+                scenario.schema, Q07SasukeNeedleScenarioSchema, StringComparison.Ordinal);
+            bool formalQ07Scenario = q07DdjScenario || q07SasukeNeedleScenario;
+            if (!formalQ07Scenario && !string.Equals(
+                    scenario.schema, "ntsd28-scenario/1.0", StringComparison.Ordinal))
             {
                 throw new InvalidDataException("Scenario schema mismatch.");
             }
             if (!string.Equals(
                     scenario.referenceExeSha256,
-                    LegacyScenarioReferenceSha256,
+                    formalQ07Scenario ? FormalAuthorityExeSha256 : LegacyScenarioReferenceSha256,
                     StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidDataException(
-                    "Scenario legacy reference identity mismatch.");
+                    "Scenario reference EXE identity mismatch.");
             }
             if (!IsSha256(scenario.dataSha256))
                 throw new InvalidDataException("Scenario data SHA-256 is invalid.");
             if (!string.Equals(scenario.mode, "versus", StringComparison.Ordinal))
                 throw new InvalidDataException("Only the neutral versus baseline is supported.");
-            if (scenario.ticks != 3 || scenario.emitInitial ||
+            if (scenario.ticks != (formalQ07Scenario ? 26 : 3) || scenario.emitInitial ||
                 scenario.battleMode != 0 || scenario.stageId != 23 ||
-                scenario.difficultyLevel4A0C30 != 1)
+                scenario.difficultyLevel4A0C30 != 1 ||
+                (formalQ07Scenario && scenario.seed != Q07DdjSeed))
             {
                 throw new InvalidDataException(
-                    "Scenario must preserve the frozen 3-tick Stage 23 baseline.");
+                    formalQ07Scenario
+                        ? "Q07 formal scenario must preserve the 26-tick Stage 23 fixture."
+                        : "Scenario must preserve the frozen 3-tick Stage 23 baseline.");
             }
             if (scenario.combatants == null || scenario.combatants.Length != 2)
                 throw new InvalidDataException("Scenario must contain two combatants.");
@@ -561,12 +581,40 @@ namespace NTSD.EditorTools
                     combatant.mp < 0 || combatant.facing < 0 ||
                     combatant.facing > 1 || combatant.action < 0 ||
                     combatant.action >= LF2FrameCache.MaxFrameIdExclusive ||
-                    combatant.z < Stage23ZMin ||
+                    (!formalQ07Scenario && combatant.z < Stage23ZMin) ||
                     combatant.z > Stage23ZMax)
                 {
                     throw new InvalidDataException(
                         $"Combatant slot {combatant.slot} is outside the frozen baseline contract.");
                 }
+            }
+
+            if (q07DdjScenario)
+            {
+                UnityRawCombatant naruto = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                if (naruto.oid != 2 || naruto.team != 1 || naruto.x != 500 || naruto.y != 0 ||
+                    naruto.z != 350 || naruto.hp != 500 || naruto.baseHp != 500 ||
+                    naruto.mp != 500 || naruto.facing != 0 || naruto.action != 110 ||
+                    opponent.oid != 7 || opponent.team != 2 || opponent.x != 1200 ||
+                    opponent.y != 0 || opponent.z != 350 || opponent.hp != 500 ||
+                    opponent.baseHp != 500 || opponent.mp != 500 || opponent.facing != 0 ||
+                    opponent.action != 0 || naruto.nativeAi || opponent.nativeAi)
+                    throw new InvalidDataException("Q07 DDJ participant state differs from the formal fixture.");
+            }
+
+            if (q07SasukeNeedleScenario)
+            {
+                UnityRawCombatant sasuke = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                if (sasuke.oid != 11 || sasuke.team != 1 || sasuke.x != 500 || sasuke.y != 0 ||
+                    sasuke.z != 350 || sasuke.hp != 500 || sasuke.baseHp != 500 ||
+                    sasuke.mp != 500 || sasuke.facing != 0 || sasuke.action != 110 ||
+                    opponent.oid != 7 || opponent.team != 2 || opponent.x != 1200 ||
+                    opponent.y != 0 || opponent.z != 350 || opponent.hp != 500 ||
+                    opponent.baseHp != 500 || opponent.mp != 500 || opponent.facing != 0 ||
+                    opponent.action != 0 || sasuke.nativeAi || opponent.nativeAi)
+                    throw new InvalidDataException("Q07 Sasuke participant state differs from the formal fixture.");
             }
 
             ValidateInputs(scenario, slots);
@@ -1507,21 +1555,28 @@ namespace NTSD.EditorTools
 
             private readonly LoganObjectCatalog loganCatalog;
             private readonly LoganVisualContentCandidate diagnosticCandidate;
+            private readonly NTSD.App.ProjectBattleModeConfig.Snapshot projectModeSnapshot;
             private readonly FieldInfo registryField;
             private readonly object originalRegistry;
             private readonly string originalPublishedKey;
             private readonly LoganContentIdentity originalPublishedIdentity;
 
-            public UnityCurrentDatScope(IReadOnlyCollection<int> requestedObjectIds, string loganRuntimeRoot)
+            public UnityCurrentDatScope(IReadOnlyCollection<int> requestedObjectIds,
+                string loganRuntimeRoot, bool useProjectMode = false)
             {
                 // Prepare source values before any singleton publication is changed.
                 if (!string.IsNullOrWhiteSpace(loganRuntimeRoot))
                 {
                     BattleContentSource source = BattleContentSource.ForLoganRuntime(loganRuntimeRoot);
-                    LoganObjectCatalog selected = LoganObjectCatalog.Read(source);
-                    if (selected.Entries.Any(entry => requestedObjectIds.Contains(entry.Id) &&
+                    projectModeSnapshot = useProjectMode
+                        ? NTSD.App.ProjectBattleModeConfig.LoadDefault().Capture()
+                        : null;
+                    LoganObjectCatalog selected = LoganObjectCatalog.Read(source, projectModeSnapshot);
+                    if (useProjectMode || selected.Entries.Any(entry =>
+                        requestedObjectIds.Contains(entry.Id) &&
                         entry.Type == (int)LF2ObjectType.SpecialAttack))
-                        diagnosticCandidate = LoganVisualContentCandidate.Capture(source);
+                        diagnosticCandidate = LoganVisualContentCandidate.Capture(
+                            source, projectModeSnapshot);
                     loganCatalog = diagnosticCandidate?.Catalog ?? selected;
                     Configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(loganCatalog);
                     Content = NTSD28TraceContentIdentity.FromLoganCatalog(loganCatalog);
@@ -1631,7 +1686,8 @@ namespace NTSD.EditorTools
                 loganCatalog?.FusionInput.AssertInputsCurrent();
                 Dictionary<string, object> current = loganCatalog == null
                     ? NTSD28TraceContentIdentity.CaptureLegacy(ProjectPath(ProductionConfigRoot), ProjectPath(ProductionDataIndex))
-                    : NTSD28TraceContentIdentity.FromLoganCatalog(LoganObjectCatalog.Read(loganCatalog.Source));
+                    : NTSD28TraceContentIdentity.FromLoganCatalog(
+                        LoganObjectCatalog.Read(loganCatalog.Source, projectModeSnapshot));
                 if (!Equals(current["semanticSha256"], Content["semanticSha256"]))
                     throw new InvalidDataException("Capture content inputs changed during loading or simulation.");
             }

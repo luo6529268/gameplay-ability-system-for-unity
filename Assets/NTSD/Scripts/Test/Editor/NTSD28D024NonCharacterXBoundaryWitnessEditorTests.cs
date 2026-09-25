@@ -19,22 +19,53 @@ namespace NTSD.Test.Editor
 
         [TestCase(50.0, 100.0)]
         [TestCase(790.0, 700.0)]
-        public void ProtectedOid122_CurrentlyMissesFormalHundredPixelMargins(
+        public void ProtectedOid122_UsesFormalHundredPixelMargins(
             double initialX, double formalX)
         {
             var weapon = NewWeapon(122, 1, initialX);
+            weapon.Runtime.SetSourceRulePosition(initialX, 250);
+            weapon.Runtime.SyncSourceRuleIntegerPosition();
 
             bool destroyed = weapon.ApplyPreFrameXBounds(800, 0);
 
             Assert.That(destroyed, Is.False);
-            Assert.That(weapon.Runtime.X, Is.EqualTo(initialX));
-            Assert.That(weapon.Runtime.X, Is.Not.EqualTo(formalX));
+            Assert.That(weapon.Runtime.X, Is.EqualTo(formalX));
+            Assert.That(weapon.Runtime.XInt, Is.EqualTo((int)formalX));
+            Assert.That(weapon.Runtime.SourceRuleX, Is.EqualTo(formalX));
+            Assert.That(weapon.Runtime.SourceRuleXInt, Is.EqualTo((int)formalX));
+        }
+
+        [Test]
+        public void ProtectedOid123_ClampsIndependentSourceAndPhysicalPositions()
+        {
+            var weapon = NewWeapon(123, 2, 790);
+            weapon.Runtime.SetSourceRulePosition(50, 250);
+            weapon.Runtime.SyncSourceRuleIntegerPosition();
+
+            Assert.That(weapon.ApplyPreFrameXBounds(800, 0), Is.False);
+            Assert.That(weapon.Runtime.X, Is.EqualTo(700));
+            Assert.That(weapon.Runtime.SourceRuleX, Is.EqualTo(100));
+            Assert.That(weapon.Runtime.SourceRuleXInt, Is.EqualTo(100));
+        }
+
+        [Test]
+        public void ProtectedClamp_PreservesNonParticipantAndNarrowStageBehavior()
+        {
+            var nonParticipant = NewWeapon(122, 0, 50);
+            var narrow = NewWeapon(123, 1, 190);
+
+            Assert.That(nonParticipant.ApplyPreFrameXBounds(800, 0), Is.False);
+            Assert.That(nonParticipant.Runtime.X, Is.EqualTo(50));
+            Assert.That(narrow.ApplyPreFrameXBounds(150, 0), Is.False);
+            Assert.That(narrow.Runtime.X, Is.EqualTo(100));
         }
 
         private static LF2Weapon NewWeapon(int oid, int participantClass, double x)
         {
             var weapon = new LF2Weapon();
-            weapon.SetWeaponType((int)LF2ObjectType.LightWeapon);
+            weapon.SetWeaponType(oid == 122 || oid == 123
+                ? (int)LF2ObjectType.Drink
+                : (int)LF2ObjectType.LightWeapon);
             weapon.ObjectId = oid;
             weapon.Unk344 = participantClass;
             weapon.Runtime.SetPosition(x, 0, 250);

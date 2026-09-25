@@ -1,0 +1,26 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q08-COLLISION-TO-ORDINARY-REAL-MENU-WITNESS-001
+status: VERIFIED
+change-kind: Q08_COLLISION_TO_ORDINARY_REAL_MENU_DIAGNOSTIC
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07MenuSceneCallbackPlayProbeEditor.cs
+authority: formal NTSD2.8-Logan.exe B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 and paired playable GameSession28 precombat result classifier plus in-tick lethal collision
+evidence: docs/ai/TASKS/NTSD28-Q08-COLLISION-TO-ORDINARY-REAL-MENU-WITNESS-001.md
+-->
+
+# NTSD28-Q08-COLLISION-TO-ORDINARY-REAL-MENU-WITNESS-001
+
+2026-09-25 scoped verification: original Editor ran corrected request `q08-collision-real-menu-result-20260925-2` and emitted PASS (SHA-256 `CE2FAB62EF7DF31838847371F650B2C6A0D2646D14B3C3A78C9E16A49594CB39`). Actual Menu slots formed two teams; test-only attacker caused full-Driver KO at tick90, victim HP -10 and native knockout event, with result timer 0 on that tick, 1 next tick, output 80/101/350 and transition2. Production host unloaded Battle and returned to active selection, old Driver destroyed, borrowers0; no result field assignment. Failed first request (wrong diagnostic battle-mode assumption) remains as SHA-256 `FDDAD4AC92315F5C64106C1F5FC71BD8A53BBCFE6E18643B75D8B2C4C05EB133`. Menu/Battle/GameConfig SHA unchanged; `git diff --check` exited0. Acceptance details at `artifacts/diagnostics/NTSD28-Q08-COLLISION-TO-ORDINARY-REAL-MENU-WITNESS-001/ACCEPTANCE-20260925.md`. This verifies only the declared Editor diagnostic, not natural attack, formal EXE visible parity, Player or aggregate Q08.
+
+Post-record governance check: `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <repository>` exited 0 with `Change ledger validation PASSED`, 818 Records and 18 governed code files in the then-current working diff. It also emitted historical Record-path warnings, not errors. No additional runtime suite was run after the Play PASS; this package changed no production script.
+
+Diagnostic precondition corrected in the same owned script: record both `LocalGameModeId` and `BattleGameModeId`, then require the serialized project VS pair 0/1. No project mode Asset or production writer changed. Original Editor recompile and new unique Play pending; first FAIL retained.
+
+First original-Editor Play result: `q08-collision-real-menu-result-20260925-1.json` is FAIL at the diagnostic mode precondition, after real Menu callbacks, two selected slots, formal publication and BattleRunning World4. The code erroneously assumed `BattleGameModeId==0`; current VS has local ID0/battle ID1. This is a test precondition defect, not an observed battle-rule first difference. It occurred before fixture creation or result writes. Request was consumed, Editor exited Play and restored Battle Scene, zero pool borrowers, Menu/Battle/GameConfig SHA values unchanged. Keep the FAIL artifact and change only this probe's ID assertion/report fields before a new unique request; do not rewrite project mode config.
+
+Code written 2026-09-25: the declared Editor file now selects an independent collision-result request and output root, joins the second actual Menu role slot on team 2 only for this opt-in, pauses the real Battle Driver, creates the existing kind-0 lethal fixture in a free logic slot, enlarges its Play-only ITR to cover the actual formal victim body, and advances full Driver ticks while recording collision KO, timer 0/1/80/101/350 and transition 2. It does not assign any result-state field. After the production Update return it checks selection, old Driver destruction and zero pool borrowers. The Q07 and prior direct-result Q08 paths are guarded by their existing request identities. Compile, one Scene Play, hash and Ledger validation are pending. Current status `CODE_WRITTEN`.
+
+Pre-change: the existing Editor diagnostic drives real Menu callbacks into formal-content Battle, but its Q08 branch directly sets native result phase/timer/transition. The Unity synthetic full-tick lethal test separately proves timer 0→1; no single original-Scene witness connects collision-caused KO to timer 350 and production Menu return. One-slot CMC0 Menu start does not supply two living teams.
+
+Planned after: a separate opt-in request joins a second actual Menu slot on team 2, then creates one temporary controlled attacker and places the actual second participant inside its kind-0 ITR while paused. Full `SimulationTickDriver.StepOneTick` must cause the victim KO without writing result fields; subsequent explicit ticks advance the result to transition 2, and the production Update dispatches the existing ordered return. The former Q07 and injected-Q08 routes remain unchanged. This diagnostic must label controlled setup and distinguish it from natural physical input.
+
+Expected side effects and risks: one temporary logic combatant and Play-only victim health/position are confined to the live World; ordered shutdown must recycle them. Existing player input/AI and result timer may advance unexpectedly, so assert the roster/group and timer preconditions before intervention and stop on the first mismatch. No serialized Scene, Config, DAT, picture, nonbattle menu or production script edit. Exact code path, acceptance and rollback are in the Task. Compile, runtime JSON, Scene/GameConfig hashes, Ledger and diff evidence pending.

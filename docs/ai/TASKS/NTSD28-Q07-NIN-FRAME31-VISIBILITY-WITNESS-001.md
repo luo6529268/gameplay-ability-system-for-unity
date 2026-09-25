@@ -1,0 +1,9 @@
+# NTSD28-Q07-NIN-FRAME31-VISIBILITY-WITNESS-001
+
+Status: VERIFIED_SCOPED_SOURCE_AND_RELEASE_TRACE. Parent BATCH-04/Q07 and R17 remain open; controlled source/release witness only. Exact result: `artifacts/diagnostics/NTSD28-Q07-NIN-FRAME31-VISIBILITY-WITNESS-001/REPORT-20260925.md`.
+
+Authority: root formal `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, paired playable `GameSession28`/LFR implementation, formal `m/nin/nin.dat` and `m/nin/nin.png`. The formal index assigns OID30 to `nin.dat`; frame31 has `pic:81`, whose 79×79 source rectangle begins below the 799×560 PNG. This is one of six previously inventoried in-range but out-of-image base frames. Initializing action31 is a controlled fixture, not proof of natural input reachability.
+
+Scope: add only `Tools/NTSD28Q07Diagnostics/nin_frame31_lfr_probe.cpp`, which emits a new immutable 12-tick source CSV/LFR under this Task's diagnostic directory; run the root formal EXE with that LFR and compare action/effective pic/aggregate sprite counts. Read formal DAT/PNG and Unity source/catalog only. Do not modify formal resources, Unity production, DAT values, PNG, Scene, nonbattle modules or existing diagnostics. No computer-use. Abort if output names exist.
+
+Acceptance: tool compile 0 errors against paired playable closure, bounded source run, root EXE replay observed exit0/PASS, source/release trace comparison with any first difference explicit, exact hashes/identity, and a scoped conclusion on whether this controlled frame publishes a sprite command. GPU pixels and natural player route remain separate gates; Unity publication evidence may be gathered read-only but must not be inferred from the formal trace. Rollback consists solely of this new diagnostic tool, Record, and report under repository deletion-approval rules.

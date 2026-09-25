@@ -1,0 +1,11 @@
+# Q07 Naruto action30/pic97 source rectangle audit (2026-09-26)
+
+Scope: read-only source/content comparison following `naruto-held-air-20260925-04`. No Editor Play, script, DAT, image, Scene, or camera change in this audit.
+
+- Formal `resources/runtime/decoded_dat/c/nar/nar.dat` declares `file(0-199): c\nar\nar.png w:79 h:79 row:10 col:20`; frame30 `jump_weapon_atck` declares `pic:97 state:15 wait:6 next:53 centerx:41 centery:68`. The passing original-Editor Driver witness actually reached action30/state15/pic97 with OID120 held.
+- Formal `SpriteFrameResolver28::resolve` in `source/ntsd28_core/src/rendering/render_snapshot.cpp` uses horizontal DAT `row` and one separator pixel. For local pic97, `source_x=(97%10)*80=560`, `source_y=(97/10)*80=720` from the top, width/height 79. The playable `d3d11_renderer.cpp` draws that source rectangle.
+- Formal and Unity-staged `vfs/c/nar/nar.png` have the same SHA-256 `391E7A17A04A4DB5E103656571AA5EA2CE9DADB91E377F1FA917DF9920B57FB5`. The staged PNG measures 799×1600. A read-only Pillow crop at top-origin `[560,720,639,799)` has 79×79 pixels, 924 nonblack/opaque pixels and 5317 transparent pixels.
+- Unity `CharacterAnimtorManager.ResolveEffectiveGrid` uses DAT `row` as horizontal divisor; `BuildIndexedSpriteRects` yields bottom-origin Rect `(560,801,79,79)` for pic97. This is the same source cell in the 1600-high texture. It does not clamp at the image edge.
+- Prior original-Editor `FormalNar_ProductionStageCatalogAndGpu_PreserveNativeAlpha` passed five GPU samples from the same sheet, but its loop selects early available cells and did **not** specifically assert pic97. The current held-air Play probe used `buildPresentation:false`, so there is no production command or camera pixel for this reached frame yet.
+
+Conclusion: formal/staged bytes and static pic97 cell geometry agree. This is **not** a pic97 publication, camera-image, natural collision pickup, physical-keyboard, or same-world formal-EXE visual certificate. Q07/R17 and the overall alignment remain open. The next narrow runtime witness should bind an actual OID2 renderer in the original Battle Scene, drive the verified input route, and capture the reached frame's catalog entry and central command before any camera-pixel assertion.

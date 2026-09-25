@@ -1,0 +1,13 @@
+# NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001
+
+2026-09-25 scoped result: `FOCUSED_TEST_PASS`. The exact post-physics state15 raw-DVX call was removed; original Editor Sasuke same-state 26-tick trace changed from 12 Vx mismatches to zero among 2500 listed entity and 1326 input/phase fields. Original DDJ 26 tick rows are unchanged after the fix. See Sasuke `COMPARISON-20260925.md`; natural Play, full RNG/pixels/audio and Q07 aggregate exit remain pending. The older `IN_PROGRESS` line below is pre-exit history.
+
+Status: `IN_PROGRESS`; parent `BATCH-04 / Q07`, triggered by `NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001`, with R02/R18 return.
+
+Authority: formal root EXE release trace tick24–26 for four OID440/type3 state15 children, and playable/core `SimulationTickDriver28::step` → `BattleWorld28::apply_frame_motion` → `FrameMotion28::apply` → physics. `FrameMotion28` applies `dvx > 500 ? dvx - 550`; no second post-physics state15 assignment is present in the inspected source chain. Formal DAT `c/sasu/a/chi.dat` actions12–14 each declare `dvx:550` unchanged. Unity's `BattleNativeFrameMotionKernel.Apply` already implements the same 550→0 conversion before physics, but `LF2SpecialAttack.RunPostNativePhysicsSerialForWorldPass` invokes `ProcessState15TU`, which writes raw `Frame.D.dvx` into `PS.vx` after physics. Original Editor same-world trace has 12 mismatched X-velocity fields (four children × ticks24–26) and no slot mismatch in 26 ticks; all other 25-field entity comparisons matched.
+
+Exact production scope: `Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs::RunPostNativePhysicsSerialForWorldPass` only. Remove its late state15 raw X-velocity rewrite on the formal world path, leaving native frame motion and `TUEvent` legacy route, other state entry/death handling and DAT untouched. Do not add OID440/action-specific logic or edit DAT. If source review shows another active native state15 owner, stop and update this contract before modifying it.
+
+Acceptance: preserve the original RED artifacts; after the minimal edit, original Editor compile and a new immutable Sasuke 26-tick Manual request must show zero first difference for the listed entity/input fields, including action12–14 X velocity. Re-run the DDJ fixture or legacy three-tick diagnostic to check the shared runner, plus the narrow state15 regression if available. Check current Scene/GameConfig hashes, `git diff --check`, Change Ledger. Natural physical Play, full RNG/pixels/audio, other skills and Q07 aggregate remain open. The existing temporary Driver ordered shutdown remains owner; no new runtime manager.
+
+Rollback: restore only this precise late-call removal under repository deletion/overwrite approval rules, retaining user changes and all RED/PASS traces.

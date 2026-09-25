@@ -92,6 +92,50 @@ namespace NTSD.Test
                 null);
 
         [Test]
+        public void PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies()
+        {
+            BattleCommonVisualCatalog catalog = CreateCatalog(0, includeShadow: true);
+            var frame = new BattlePresentationFrame();
+            Reset(frame, catalog);
+            BattlePresentationEntitySnapshot entity = CreatePlatformShadowEntity(23);
+            Assert.That(entity.WithPresentationBaseOrder(104).RenderShadowOffset10C,
+                Is.EqualTo(23));
+            Assert.That(entity.WithResolvedSprite(1f, 1f, Rect.zero, Vector2.zero,
+                false, default, null).RenderShadowOffset10C, Is.EqualTo(23));
+            AddEntity(frame, entity);
+
+            var coordinator = new BattlePresentationCoordinator();
+            coordinator.BuildCommandsForSelfCheck(frame);
+            var baseline = new BattlePresentationFrame();
+            Reset(baseline, catalog);
+            AddEntity(baseline, CreatePlatformShadowEntity(0));
+            coordinator.BuildCommandsForSelfCheck(baseline);
+
+            Assert.That(frame.CommandCount, Is.EqualTo(baseline.CommandCount));
+            int shadowCount = 0;
+            for (int index = 0; index < frame.CommandCount; index++)
+            {
+                BattleRenderCommand actual = frame.GetCommand(index);
+                BattleRenderCommand original = baseline.GetCommand(index);
+                Assert.That(actual.Type, Is.EqualTo(original.Type));
+                Assert.That(actual.ZInt, Is.EqualTo(original.ZInt));
+                Assert.That(actual.SortOrder, Is.EqualTo(original.SortOrder));
+                if (actual.Type == BattleRenderCommandType.Shadow)
+                {
+                    shadowCount++;
+                    Assert.That(actual.Position, Is.EqualTo(
+                        NTSDRenderSpace.CaptureViewportTransform().ScreenPixelToWorld(
+                            120, 203, 0f)));
+                }
+                else
+                {
+                    Assert.That(actual.Position, Is.EqualTo(original.Position));
+                }
+            }
+            Assert.That(shadowCount, Is.EqualTo(1));
+        }
+
+        [Test]
         public void OptimizedWriter_MatchesReferenceForWords5ComCounterAndBracket()
         {
             BattleCommonVisualCatalog catalog = CreateCatalog(0);
@@ -586,10 +630,22 @@ namespace NTSD.Test
                 false);
         }
 
+        private static BattlePresentationEntitySnapshot CreatePlatformShadowEntity(int offset)
+        {
+            return new BattlePresentationEntitySnapshot(
+                new RuntimeEntityHandle(20, 7), 100, 1, 1, 999,
+                180, 20, 100, 0, true, 0, 0, 500, 1, 0,
+                120, 0, 180f, 0f, 0, 0, 0f, 0f, 1f, 1f,
+                Vector2.zero, Rect.zero, Vector2.zero, false, false,
+                default, 0, 0, entityVisible: false, shadowVisible: true,
+                renderShadowOffset10C: offset);
+        }
+
         private static BattleCommonVisualCatalog CreateCatalog(
             int variant,
             bool includeSpecialCom = false,
-            bool includeAllComLabels = false)
+            bool includeAllComLabels = false,
+            bool includeShadow = false)
         {
             Assert.That(BindingConstructor, Is.Not.Null);
             Assert.That(CatalogConstructor, Is.Not.Null);
@@ -633,12 +689,27 @@ namespace NTSD.Test
                 }
             }
 
+            BattleCommonVisualBinding shadow = includeShadow
+                ? (BattleCommonVisualBinding)BindingConstructor.Invoke(new object[]
+                {
+                    BattleVisualResourceKey.CommonShadow,
+                    null,
+                    null,
+                    null,
+                    new Rect(0f, 0f, 32f, 16f),
+                    new Rect(0f, 0f, 1f, 1f),
+                    new Vector2(32f, 16f),
+                    new Vector2(0.5f, 0.5f),
+                    BattleSpriteRenderState.Default(),
+                })
+                : null;
+
             if (!includeSpecialCom && !includeAllComLabels)
             {
                 return (BattleCommonVisualCatalog)CatalogConstructor.Invoke(
                     new object[]
                     {
-                        null,
+                        shadow,
                         Array.Empty<BattleCommonVisualBinding>(),
                         Array.Empty<Texture2D>(),
                         glyphs,

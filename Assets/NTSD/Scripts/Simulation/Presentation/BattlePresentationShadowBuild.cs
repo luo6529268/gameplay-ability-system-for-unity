@@ -416,7 +416,8 @@ namespace NTSD.Simulation.Presentation
             int recoverableHealth = 0,
             int maximumHealth = 0,
             float stableHealthAnchorHeightPixels = 0f,
-            bool showSelfFootMarker = false)
+            bool showSelfFootMarker = false,
+            int renderShadowOffset10C = 0)
         {
             Handle = handle;
             StableId = stableId;
@@ -462,6 +463,7 @@ namespace NTSD.Simulation.Presentation
             MaximumHealth = maximumHealth;
             StableCharacterHeightPixels = stableHealthAnchorHeightPixels;
             ShowSelfFootMarker = showSelfFootMarker;
+            RenderShadowOffset10C = renderShadowOffset10C;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -509,6 +511,7 @@ namespace NTSD.Simulation.Presentation
         public float StableCharacterHeightPixels { get; }
         public float StableHealthAnchorHeightPixels => StableCharacterHeightPixels;
         public bool ShowSelfFootMarker { get; }
+        public int RenderShadowOffset10C { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattlePresentationEntitySnapshot WithResolvedSprite(
@@ -564,7 +567,8 @@ namespace NTSD.Simulation.Presentation
                 RecoverableHealth,
                 MaximumHealth,
                 StableHealthAnchorHeightPixels,
-                ShowSelfFootMarker);
+                ShowSelfFootMarker,
+                RenderShadowOffset10C);
         }
 
         internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
@@ -614,7 +618,8 @@ namespace NTSD.Simulation.Presentation
                 RecoverableHealth,
                 MaximumHealth,
                 StableHealthAnchorHeightPixels,
-                ShowSelfFootMarker);
+                ShowSelfFootMarker,
+                RenderShadowOffset10C);
         }
 
     }
@@ -2346,7 +2351,8 @@ namespace NTSD.Simulation.Presentation
                             runtime.HPBound,
                             runtime.HP3,
                             stableCharacterHeightPixels,
-                            showSelfFootMarker));
+                            showSelfFootMarker,
+                            runtime.RenderShadowOffset10C));
                         if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
                             frame.RequiresCatalogPublicationBinding = true;
                     }
@@ -2779,6 +2785,12 @@ namespace NTSD.Simulation.Presentation
                                   LF2ObjectRenderer.ShouldDrawShadowForHitStop(entity.HitStop);
                 if (drawShadow)
                 {
+                    Vector3 shadowPosition = entity.RenderShadowOffset10C == 0
+                        ? stableGroundPosition
+                        : viewportTransform.ScreenPixelToWorld(
+                            entity.XInt + (int)entity.RenderOffsetX - entity.CameraX,
+                            unchecked(entity.ZInt + entity.RenderShadowOffset10C),
+                            0f);
                     writer.AddUnchecked(new BattleRenderCommand(
                         BattleRenderCommandType.Shadow,
                         entity.Handle,
@@ -2790,7 +2802,7 @@ namespace NTSD.Simulation.Presentation
                         baseOrder,
                         ObjectSortingLayerId,
                         localSequence++,
-                        stableGroundPosition,
+                        shadowPosition,
                         commonShadow.PixelSize,
                         commonShadow.Pivot,
                         commonShadow.NormalizedUv,

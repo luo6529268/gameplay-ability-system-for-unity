@@ -1,0 +1,11 @@
+# Q08 controlled collision to ordinary real-Menu result witness
+
+Scoped result: `VERIFIED_SCOPED`. The original Unity Editor ran a separate opt-in request against the saved Menu and additive Battle scenes. Two real Menu participant slots entered opposing teams in a formal-content Battle World. A test-only kind-0 attacker, broad Play-only ITR and reduced victim HP produced a KO through a full `SimulationTickDriver.StepOneTick`; the probe did not assign any result-state field.
+
+The first request, `q08-collision-real-menu-result-20260925-1.json` (SHA-256 `FDDAD4AC92315F5C64106C1F5FC71BD8A53BBCFE6E18643B75D8B2C4C05EB133`), failed before fixture creation because the diagnostic expected battle mode 0. The project VS pair is local mode 0 / battle mode 1. This was a probe precondition error, not a battle-rule first difference. The failed result remains unchanged.
+
+The corrected unique request, `q08-collision-real-menu-result-20260925-2.json` (SHA-256 `CE2FAB62EF7DF31838847371F650B2C6A0D2646D14B3C3A78C9E16A49594CB39`), reports `PASS`: World4, living group mask 6, fixture slot399, collision tick90, actual victim HP -10, native knockout event on tick90, result timer 0 on the lethal tick and 1 on the next tick, output timers 80/101/350, and ordinary transition 2 at 350. Production host returned to active character selection, unloaded Battle, destroyed the old Driver and left pool borrowers at 0. The request was consumed and its restore flag cleared.
+
+After the second Play, original Editor PID11944 remained running outside Play. Serialized SHA-256 values stayed at Menu `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, Battle `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`, and GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`. `git diff --check` exited 0. The original Editor executed the current diagnostic and returned a complete PASS result; this establishes its compile/run path for this scoped probe.
+
+This witness uses controlled fixture geometry and HP. It does not prove a natural player attack sequence, full formal-EXE same-input visible comparison, Player build, or the aggregate Q08 exit. No production battle script, DAT value, image, serialized Scene, GameConfig or nonbattle menu code was changed for this probe.

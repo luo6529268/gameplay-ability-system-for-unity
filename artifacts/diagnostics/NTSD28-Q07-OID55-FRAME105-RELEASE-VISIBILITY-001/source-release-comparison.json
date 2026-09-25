@@ -1,0 +1,23 @@
+{
+  "scope": "controlled action103 start; source actor sprite command per tick; release aggregate sprite count only",
+  "sourceRows": 12,
+  "releaseRows": 14,
+  "fieldComparisons": 36,
+  "firstDifference": null,
+  "differences": [],
+  "frame105Ticks": [
+    5,
+    6,
+    7
+  ],
+  "frame105SourceActorSpriteCounts": [
+    1,
+    1,
+    1
+  ],
+  "frame105ReleaseRenderSpriteCounts": [
+    2,
+    2,
+    2
+  ]
+}

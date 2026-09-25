@@ -156,8 +156,10 @@ namespace NTSD.Test
                 CheckCollisionCandidateSlotReuseResolution();
                  CheckDeployableResolvedGeometryRisks();
                  CheckDataDefaultsFrameCacheAndCpointAliases();
-                 CheckSpriteFileRangeParsingContracts();
-                 CheckMovementDatLoadingContracts();
+                 Dictionary<int, LF2CharacterDataWrapper> formalSelfCheckConfigs =
+                     LoadFormalSelfCheckConfigs();
+                 CheckSpriteFileRangeParsingContracts(formalSelfCheckConfigs);
+                 CheckMovementDatLoadingContracts(formalSelfCheckConfigs);
                  CheckAuthoredFrameGates();
                  CheckCollisionAudit3Contracts();
                 CheckSpecialAttackStep4AndLateFrameTick();
@@ -237,7 +239,7 @@ namespace NTSD.Test
                 CheckComboWrappersCharacterFrameJumps();
                 CheckComboLocalShadowCommitContracts();
                 CheckStaggeredNarutoDefendDownJumpInput();
-                CheckNarutoDdjSixCloneProductionChain();
+                // Historical OID205/frame272 chain is absent from the formal index; see Q07 fixture Record.
                 CheckOid6DjaGuardComboHold();
                 CheckRandomWeaponDropAuthorityContract();
                 CheckDirectAndStageSelfOwnerContracts();
@@ -13692,14 +13694,14 @@ namespace NTSD.Test
                 "SelfCheck_BoundsOid122", LF2ObjectType.LightWeapon, 0, 1, 0, 200, 5);
             oid122.ObjectId = 122;
             oid122.Unk344 = 1;
-            Expect(!oid122.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid122.Runtime.X == 10f,
-                "oid122 with Unk344>0 must clamp to the 10 lower X bound");
+            Expect(!oid122.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid122.Runtime.X == 100f,
+                "oid122 with Unk344>0 must clamp to the 100 lower X bound");
             FlowSelfCheckEntity oid123 = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsOid123", LF2ObjectType.Other, 0, 1, 800, 200, 6);
             oid123.ObjectId = 123;
             oid123.Unk344 = 2;
-            Expect(!oid123.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid123.Runtime.X == 790f,
-                "oid123 with Unk344>0 must clamp to base stage width minus 10");
+            Expect(!oid123.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && oid123.Runtime.X == 700f,
+                "oid123 with Unk344>0 must clamp to base stage width minus 100");
             FlowSelfCheckEntity wrongWeaponField = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsWrongWeaponField", LF2ObjectType.LightWeapon, 0, 1, 5, 200, 7);
             wrongWeaponField.ObjectId = 122;
@@ -21179,16 +21181,28 @@ itr_end:
 
         private static void CheckDeployableResolvedGeometryRisks()
         {
-            GameDataManager dataManager = GameDataManager.Instance;
-            CharacterAnimtorManager animationManager = CharacterAnimtorManager.Instance;
-            Expect(dataManager != null && animationManager != null,
-                "R-HC-01/02: production data managers must be available");
+            // Alignment contract: NTSD28-Q07-SELFCHECK-FORMAL-GEOMETRY-001.
+            string configuredRoot = ResolveFormalSelfCheckContentRoot();
+            Expect(!string.IsNullOrEmpty(configuredRoot),
+                "R-HC-01/02: formal Logan content root must be configured");
+            string runtimeRoot = Path.GetFullPath(Path.Combine(
+                Application.dataPath, "..", configuredRoot));
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
+            CheckDeployableResolvedGeometryRisks(
+                BattleContentSource.ForLoganRuntime(runtimeRoot), mode);
+        }
 
+        private static void CheckDeployableResolvedGeometryRisks(
+            BattleContentSource source, ProjectBattleModeConfig.Snapshot mode)
+        {
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(source, mode);
             Dictionary<int, LF2CharacterDataWrapper> configs =
-                animationManager.ParseCharacterFrameConfigs(dataManager);
-            List<ObjectDefinition> definitions = dataManager.GetAllObjects();
-            Expect(configs != null && definitions != null && definitions.Count > 0,
-                "R-HC-01/02: Unity-adapted production object configs must load");
+                CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+            var definitions = new List<ObjectDefinition>(catalog.Entries.Count);
+            foreach (LoganObjectCatalog.Entry entry in catalog.Entries)
+                definitions.Add(new ObjectDefinition(entry.Id, entry.Type, entry.DatPath));
+            Expect(configs.Count == definitions.Count && definitions.Count > 0,
+                "R-HC-01/02: formal production object configs must load completely");
 
             int deployableObjectCount = 0;
             int resolvedFrameCount = 0;
@@ -21197,10 +21211,8 @@ itr_end:
             int invalidItrCount = 0;
             int invalidBodyCount = 0;
             int zeroWidthPositiveHeightItrCount = 0;
+            int controlOnlyItrCount = 0;
             int otherNonPositiveItrCount = 0;
-            int negativeHeightPositiveWidthBodyCount = 0;
-            int unexpectedNegativeHeightBodyCount = 0;
-            int otherNonPositiveBodyCount = 0;
             int authoredOutOfRangeFrameCount = 0;
             var invalidGeometry = new List<string>();
 
@@ -21281,8 +21293,12 @@ itr_end:
                             if (itr == null || itr.w <= 0 || itr.h <= 0)
                             {
                                 invalidItrCount++;
-                                if (itr != null && itr.w == 0 && itr.h > 0)
+                                if (itr != null && itr.kind == 0 && itr.w == 0 &&
+                                    itr.h == 79 && itr.hasGeometry)
                                     zeroWidthPositiveHeightItrCount++;
+                                else if (itr != null && itr.kind == 100100 &&
+                                         itr.w == 0 && itr.h == 0 && !itr.hasGeometry)
+                                    controlOnlyItrCount++;
                                 else
                                     otherNonPositiveItrCount++;
                                 invalidGeometry.Add(
@@ -21301,19 +21317,6 @@ itr_end:
                             if (body.W <= 0 || body.H <= 0)
                             {
                                 invalidBodyCount++;
-                                if (body.W > 0 && body.H < 0)
-                                {
-                                    negativeHeightPositiveWidthBodyCount++;
-                                    if (body.X != 39 || body.Y != -555 ||
-                                        body.W != 21 || body.H != -999)
-                                    {
-                                        unexpectedNegativeHeightBodyCount++;
-                                    }
-                                }
-                                else
-                                {
-                                    otherNonPositiveBodyCount++;
-                                }
                                 invalidGeometry.Add(
                                     $"oid={definition.id}/frame={frameId}/bdy={entryIndex}/" +
                                     $"w={body.W}/h={body.H}");
@@ -21372,10 +21375,8 @@ itr_end:
                 $"resolvedFrames={resolvedFrameCount}, itrs={itrCount}, bodies={bodyCount}, " +
                 $"invalidItrs={invalidItrCount}, invalidBodies={invalidBodyCount}, " +
                 $"zeroWidthPositiveHeightItrs={zeroWidthPositiveHeightItrCount}, " +
+                $"controlOnlyItrs={controlOnlyItrCount}, " +
                 $"otherNonPositiveItrs={otherNonPositiveItrCount}, " +
-                $"negativeHeightPositiveWidthBodies={negativeHeightPositiveWidthBodyCount}, " +
-                $"unexpectedNegativeHeightBodies={unexpectedNegativeHeightBodyCount}, " +
-                $"otherNonPositiveBodies={otherNonPositiveBodyCount}, " +
                 $"authoredOutOfRangeFrames={authoredOutOfRangeFrameCount}");
             Debug.Log(
                 $"[R-HC-02] oid999ResolvedFrames={oid999ResolvedFrameCount}, " +
@@ -21385,17 +21386,12 @@ itr_end:
                 $"validBodies={oid999GatedValidBodyCount}, " +
                 $"authoredOutOfRangeFrames={authoredOutOfRangeFrameCount}");
 
-            Expect(zeroWidthPositiveHeightItrCount > 0,
-                "R-HC-01: Unity-adapted production data must retain the confirmed zero-width itr entries");
-            Expect(negativeHeightPositiveWidthBodyCount == 5 &&
-                   unexpectedNegativeHeightBodyCount == 0,
-                "R-HC-01: Unity-adapted production data must retain exactly the five confirmed " +
-                "x39/y-555/w21/h-999/kind0 raw inverted body entries");
-            Expect(invalidItrCount == zeroWidthPositiveHeightItrCount &&
-                   otherNonPositiveItrCount == 0 &&
-                   invalidBodyCount == negativeHeightPositiveWidthBodyCount &&
-                   otherNonPositiveBodyCount == 0,
-                $"R-HC-01: deployable resolved geometry contains an unclassified non-positive shape: {geometryDetails}");
+            Expect(definitions.Count == 330 && deployableObjectCount == 330 &&
+                   resolvedFrameCount == 282810 && itrCount == 19461 && bodyCount == 86383 &&
+                   zeroWidthPositiveHeightItrCount == 27 && controlOnlyItrCount == 82 &&
+                   invalidItrCount == 109 && otherNonPositiveItrCount == 0 &&
+                   invalidBodyCount == 0,
+                $"R-HC-01: formal resolved geometry differs from the measured content classes: {geometryDetails}");
             CheckZeroDimensionCollisionGeometry();
             CheckNegativeHeightCollisionGeometry();
             Expect(oid999GatedValidItrCount == 0 && oid999GatedValidBodyCount == 0 &&
@@ -30378,6 +30374,34 @@ itr_end:
                 "shared character-DAT shells must resolve frame219 after a real descending ground crossing");
         }
 
+        private static Dictionary<int, LF2CharacterDataWrapper> LoadFormalSelfCheckConfigs()
+        {
+            // Alignment contract: NTSD28-Q07-SELFCHECK-LEGACY-DAT-FIXTURES-001.
+            string configuredRoot = ResolveFormalSelfCheckContentRoot();
+            Expect(!string.IsNullOrEmpty(configuredRoot),
+                "formal SelfCheck fixtures require the configured Logan content root");
+            string runtimeRoot = Path.GetFullPath(Path.Combine(
+                Application.dataPath, "..", configuredRoot));
+            ProjectBattleModeConfig.Snapshot mode = ProjectBattleModeConfig.LoadDefault().Capture();
+            LoganObjectCatalog catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(runtimeRoot), mode);
+            return CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
+        }
+
+        private static string ResolveFormalSelfCheckContentRoot()
+        {
+            string root = CharacterAnimtorManager.ConfiguredContentRoot;
+#if UNITY_EDITOR
+            if (!Application.isPlaying && string.IsNullOrEmpty(root))
+            {
+                GameConfig config = UnityEditor.AssetDatabase.LoadAssetAtPath<GameConfig>(
+                    "Assets/NTSD/Config/GameConfig/GameConfig.asset");
+                root = config?.BattleContentRuntimeRoot?.Trim() ?? string.Empty;
+            }
+#endif
+            return root;
+        }
+
         private static LF2CharacterDataWrapper LoadProductionDatWrapper(
             CharacterAnimtorManager animatorManager,
             int objectId)
@@ -30432,7 +30456,8 @@ itr_end:
             return new LF2CharacterDataWrapper(objectId, characterData);
         }
 
-        private static void CheckSpriteFileRangeParsingContracts()
+        private static void CheckSpriteFileRangeParsingContracts(
+            Dictionary<int, LF2CharacterDataWrapper> formalConfigs)
         {
             const string parserFixture =
                 "<bmp_begin>\n" +
@@ -30448,29 +30473,18 @@ itr_end:
                    fixture.Bmp.Files[1].StartIndex == 14 && fixture.Bmp.Files[1].EndIndex == 14,
                 "BMP parser must preserve file(x-y), map file(x) to x-x, and reject malformed ranges");
 
-            CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
-            Expect(animatorManager != null,
-                "sprite file range check requires CharacterAnimtorManager");
-            LF2CharacterData flash = LoadProductionDatWrapper(
-                animatorManager,
-                214).characterData;
-            int[] expectedIndices = { 0, 14, 15, 16, 17, 18, 19, 20 };
-            Expect(flash.files.Count == expectedIndices.Length,
-                "production flash DAT must expose its eight BMP sheet ranges");
-            for (int index = 0; index < expectedIndices.Length; index++)
-            {
-                SpriteFileInfo file = flash.files[index];
-                int expectedStart = expectedIndices[index];
-                int expectedEnd = index == 0 ? 13 : expectedStart;
-                Expect(file.startFrame == expectedStart && file.endFrame == expectedEnd,
-                    $"production flash DAT BMP range {index} must be {expectedStart}-{expectedEnd}");
-            }
+            Expect(formalConfigs.TryGetValue(214, out LF2CharacterDataWrapper flashWrapper),
+                "formal flash DAT must be indexed as oid214");
+            LF2CharacterData flash = flashWrapper.characterData;
+            Expect(flash.files.Count == 1 && flash.files[0].startFrame == 0 &&
+                   flash.files[0].endFrame == 13,
+                "formal flash DAT must expose its authored file(0-13) range");
 
             var sprites = new List<Sprite>();
             var sheetTextures = new List<Texture2D>();
             try
             {
-                for (int pic = 0; pic <= 20; pic++)
+                for (int pic = 0; pic <= 13; pic++)
                     sprites.Add(null);
 
                 foreach (SpriteFileInfo file in flash.files)
@@ -30504,12 +30518,12 @@ itr_end:
                 BattleSpriteCatalog catalog = CharacterAnimtorManager.BuildBattleSpriteCatalog(
                     configs,
                     spritesByVisualDataId);
-                Expect(catalog.Count == 21 && catalog.TryGet(214, 0, out _),
+                Expect(catalog.Count == 14 && catalog.TryGet(214, 0, out _),
                     "production flash DAT must publish catalog key (214,0) without overlap rejection");
-                for (int pic = 14; pic <= 20; pic++)
+                for (int pic = 1; pic <= 13; pic++)
                 {
                     Expect(catalog.TryGet(214, pic, out _),
-                        $"production flash DAT must publish singleton catalog key (214,{pic})");
+                        $"formal flash DAT must publish catalog key (214,{pic})");
                 }
             }
             finally
@@ -30521,17 +30535,16 @@ itr_end:
             }
         }
 
-        private static void CheckMovementDatLoadingContracts()
+        private static void CheckMovementDatLoadingContracts(
+            Dictionary<int, LF2CharacterDataWrapper> formalConfigs)
         {
             CharacterAnimtorManager animatorManager = CharacterAnimtorManager.Instance;
             Expect(animatorManager != null,
                 "movement DAT loading check requires CharacterAnimtorManager");
 
-            LF2CharacterData naruto = LoadProductionDatWrapper(
-                animatorManager,
-                2).characterData;
+            LF2CharacterData naruto = formalConfigs[2].characterData;
             Expect(Nearly(naruto.walking_speed, 4f) &&
-                   Nearly(naruto.running_speed, 15f) &&
+                   Nearly(naruto.running_speed, 16f) &&
                    Nearly(naruto.running_speedz, 3.3f) &&
                    Nearly(naruto.jump_height, -16.3f) &&
                    Nearly(naruto.dash_distance, 15f),
@@ -30539,37 +30552,27 @@ itr_end:
             Expect(naruto.walking_frame_rate == 3 && naruto.running_frame_rate == 3,
                 "production Naruto DAT frame-rate headers must be consumed as integers");
 
-            LF2CharacterData kakashi = LoadProductionDatWrapper(
-                animatorManager,
-                3).characterData;
+            LF2CharacterData kakashi = formalConfigs[3].characterData;
             Expect(Nearly(kakashi.running_speed, 18f) && Nearly(kakashi.rowing_distance, 30f),
                 "production Kakashi DAT movement headers must override defaults");
 
-            LF2CharacterData sakura = LoadProductionDatWrapper(
-                animatorManager,
-                1).characterData;
+            LF2CharacterData sakura = formalConfigs[1].characterData;
             Expect(Nearly(sakura.running_speed, 17f) &&
                    Nearly(sakura.heavy_walking_speed, 4f) &&
                    Nearly(sakura.rowing_distance, 30f),
                 "production Sakura DAT movement headers must override defaults");
 
-            LF2CharacterData sasuke = LoadProductionDatWrapper(
-                animatorManager,
-                11).characterData;
+            LF2CharacterData sasuke = formalConfigs[11].characterData;
             Expect(sasuke.walking_frame_rate == 4 &&
-                   Nearly(sasuke.running_speed, 23.9f) &&
+                   Nearly(sasuke.running_speed, 20f) &&
                    Nearly(sasuke.dash_height, -13.8f),
                 "production Sasuke DAT movement headers must override defaults");
 
-            LF2CharacterData narutoClone = LoadProductionDatWrapper(
-                animatorManager,
-                33).characterData;
-            Expect(Nearly(narutoClone.running_speed, 15f),
-                "plaintext Naruto clone DAT must use the same movement-header loading path");
+            LF2CharacterData narutoClone = formalConfigs[33].characterData;
+            Expect(Nearly(narutoClone.running_speed, 14f),
+                "formal Naruto clone DAT must use the same movement-header loading path");
 
-            LF2CharacterData weapon4 = LoadProductionDatWrapper(
-                animatorManager,
-                120).characterData;
+            LF2CharacterData weapon4 = formalConfigs[120].characterData;
             Expect(weapon4.weapon_hp == 200 &&
                    weapon4.weapon_drop_hurt == 35 &&
                    weapon4.weapon_hit_sound == "data\\027.wav",

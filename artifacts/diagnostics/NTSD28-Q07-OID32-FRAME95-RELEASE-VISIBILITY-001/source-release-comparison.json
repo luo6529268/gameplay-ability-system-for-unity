@@ -1,0 +1,111 @@
+{
+  "scope": "controlled OID32 action95 ticks0-8; source command count belongs only to paired source",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "sourceRows": 9,
+  "releaseTraceRows": 10,
+  "comparedFields": 27,
+  "differentRows": 0,
+  "sourceActorSpriteCounts": [
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1
+  ],
+  "rows": [
+    {
+      "tick": 0,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 1,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 2,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 3,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 4,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 5,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 6,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 7,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    },
+    {
+      "tick": 8,
+      "sourceAction": 95,
+      "releaseAction": 95,
+      "sourceEffectivePic": 64,
+      "releasePic": 64,
+      "sourceAggregateSprites": 2,
+      "releaseAggregateSprites": 2,
+      "equal": true
+    }
+  ]
+}

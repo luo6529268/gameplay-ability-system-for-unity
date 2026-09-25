@@ -1,0 +1,13 @@
+# NTSD28-Q07-SIX-BOUNDARY-CATALOG-001
+
+Status: `VERIFIED_SCOPED_CATALOG_PUBLICATION`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001` / BATCH-04 Q07; R17 visual follow-up remains separate.
+
+Authority and trigger: the formal Logan `data/data.txt` indexes OID55 `c/saso/pup.dat`, OID32 `m/nin/hun.dat`, OID30 `m/nin/nin.dat`, and OID31 `m/nin/nin2.dat`. The all-frame census identified exactly six in-range base-pic cells beyond their PNG height: (55,44), (32,64), (30,81), (30,91), (31,81), (31,91). The paired playable point/CLAMP renderer and the current Unity formal prewarm's `BuildNativeClampedCellPixels` define the candidate mapping. Existing original-Editor evidence dynamically covers OID32/pic64 and OID30/pic81, not this six-key publication set.
+
+Scope and pre-change state: extend only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q07Oid32PublishedCatalogProbeEditor.cs` with an opt-in request flag and serializable six-key read-only catalog results. The existing default OID32 probe must remain unchanged. No production code, DAT, PNG, importer, Scene, Prefab, mode, audio, nonbattle flow, or old asset is to be modified. No asset deletion is authorized. The existing original Editor PID11944 and saved `NTSD_Battle` Scene are the only Unity runtime target.
+
+Acceptance: (1) original Editor compiles without C# errors; (2) a create-new opt-in request runs after formal prewarm and records six keys, each with OID/pic, entry presence, 79x79 derived texture, `LegacySprite` and valid central binding; (3) each entry has a derived `Temp/NTSD28NativeClampCells` source path, while the existing OID32/pic0 control remains formal `hun.png`; (4) output and clean Play exit are observed, Menu/Battle Scene disk SHA and Git Scene diff stay unchanged; (5) Change Ledger validator and `git diff --check` pass. If any key fails, record its exact first difference instead of broadening a fixture or editing DAT.
+
+Limits: this proves publication only. It does not prove that all six actions are naturally reachable, draw entity pixels, match the formal root EXE GPU output, or close Q07/Q09/R17. Risk is only probe lifecycle or stale request/output collision; rollback is a reviewed revert of this probe extension under protected-worktree rules, retaining diagnostic outputs.
+
+Result: original Editor compile and one opt-in Battle Scene Play passed; six of six derived catalog entries had valid 79×79 Legacy and central bindings. Editor exited Play, Console error filter was empty and Scene hashes were stable. Exact raw JSON SHA and remaining scope are in `artifacts/diagnostics/NTSD28-Q07-SIX-BOUNDARY-CATALOG-001/ACCEPTANCE-20260926.md`. No separate NUnit/SelfCheck was run because this package changes only an opt-in read-only probe.

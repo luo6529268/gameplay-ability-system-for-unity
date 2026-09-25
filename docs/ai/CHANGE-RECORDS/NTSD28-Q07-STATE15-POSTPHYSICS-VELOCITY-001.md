@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001
+status: FOCUSED_TEST_PASS
+change-kind: Q07_FORMAL_STATE15_TYPE3_POSTPHYSICS_VELOCITY
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2SpecialAttack.cs
+authority: formal NTSD2.8-Logan root EXE OID440 state15 trace and playable FrameMotion28 pass order
+evidence: original Editor same-state RED at tick24 and post-fix 26-tick 3826/3826 mapped PASS; DDJ regression tick rows identical
+-->
+
+# NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001
+
+2026-09-25 跨实体追加回归（不改变本 Change 的 `FOCUSED_TEST_PASS` 状态）：原 Editor 已有鸣人螺旋丸续按错过转换 `(26,2)` 单案例以重建的临时 seed 和正式 Logan RuntimeRoot 运行 1/1 PASS。旧首差锚点 tick30 的 OID434/slot52/action397/state15 现为 Vx0（旧 Unity 550，旧源码模型0）；32行 raw 与 seed 已归档，见 `artifacts/diagnostics/NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001/RASENGAN-OID434-CROSS-ENTITY-REGRESSION-20260925.md`。这不是本次正式 EXE 全链重跑，也未补视觉/物理时点，Q07/R18仍开放。无本轮脚本改动。
+
+2026-09-25 implementation and scoped result: removed only the `ProcessState15TU()` call from `LF2SpecialAttack.RunPostNativePhysicsSerialForWorldPass`; `TUEvent`, state entry/death and `BattleNativeFrameMotionKernel` are unchanged. Original Editor production assembly timestamp follows this source edit and consumed `manual-sasuke-20260925-2` runner PASS. The formal root-EXE 26-tick comparison has 2500/2500 listed entity fields and 1326/1326 semantically mapped input/phase fields equal; OID440 slot50–53 action12–14 Vx is now 0 on ticks24–26. The RED `-1` trace and full field/mapping/RNG evidence remain in the Sasuke `COMPARISON-20260925.md`. Old DDJ `manual-ddj-20260925-4` runner PASS with all 26 raw/domain/input-RNG tick records unchanged from pre-fix `-3`. The selected Battle/Menu Scene and GameConfig asset SHA remain their saved pre-run values; no DAT or nonbattle path changed. Natural physical Play, full RNG/pixel/audio and aggregate Q07 remain pending, so this Change is `FOCUSED_TEST_PASS` rather than whole-rule final verification.
+
+Post-change checks: `Tools/Validate-ChangeLedger.ps1` exit0 (`PASSED`, 806 Records, 10 governed code files in then-current diff); `git diff --check` exit0 with line-ending warnings only; scoped Content/Config/Scene/ProjectSettings diff empty. Battle/Menu Scene SHA-256 `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A` / `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, GameConfig asset `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`. No full SelfCheck or natural Play was run for this bounded correction; the existing Editor console contained one unrelated MCP disposed-object error, not a C# compile diagnostic.
+
+Pre-edit RED: `artifacts/diagnostics/NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001/manual-sasuke-20260925-1.raw.jsonl` is an original-Editor Manual 26-tick trace from formal staged content and the project mode Asset. Formal root-EXE `formal_release_explicit_vfs_trace.jsonl` has the same active slot sets for all ticks. The first of 12 field differences is tick24/slot50/vx, formal0 versus Unity550; slots50–53 each differ at ticks24–26. All four are OID440 entering state15/action12 at tick24, then actions13/14. Integer/precise positions, other velocity axes and action sequences remain equal in this window. Both sides use unchanged formal `c/sasu/a/chi.dat` with `dvx:550` in these frames.
+
+Inspected authoritative call chain: `SimulationTickDriver28::step` runs `BattleWorld28::apply_frame_motion` before per-slot `step_physics`; `FrameMotion28::apply` treats `dvx > 500` as `dvx - 550`, so 550 means zero. Unity production `LF2Entity.ApplyNativeFrameMotionForWorldPass` and `BattleNativeFrameMotionKernel.Apply` already perform this conversion. Its later `LF2SpecialAttack.RunPostNativePhysicsSerialForWorldPass` calls `ProcessState15TU`, which assigns `PS.vx = Dirh() * frame.dvx` without the conversion. This late writer is the bounded first-difference candidate. The edit must remove that duplicate native-path call, not change `TUEvent`, frame data, other states or the main FrameMotion kernel.
+
+Expected side effect: after native physics, type3 state15 retains the frame-motion/physics X velocity rather than restoring raw DAT 550. Position in the observed 26 ticks should remain equal; checksum and any later reader will see the formal zero. Potential risk: a legacy-only caller may rely on `TUEvent`; it remains untouched. No user file, DAT, image, Scene, Menu, HUD, GAS, nonbattle or shutdown contract changes. Acceptance/rollback in Task. Registered before code edit in Ledger/STATE/handoff.

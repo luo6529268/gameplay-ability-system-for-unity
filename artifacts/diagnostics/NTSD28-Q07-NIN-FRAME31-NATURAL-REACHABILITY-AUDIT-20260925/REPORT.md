@@ -1,0 +1,19 @@
+# Q07 OID30 frame31 natural-input reachability audit (2026-09-25)
+
+Status: `VERIFIED_STATIC_DEFAULT_ROUTE_ONLY / NATURAL_FRAME31_NOT_PROVEN`. This read-only audit corrects the next-step interpretation of `NTSD28-Q07-OID30-UNITY-BOUNDARY-PIXEL-001`; it does not invalidate that controlled catalog/camera witness.
+
+The paired playable build script includes `input_routing.cpp` and `battle_world.cpp`. In `InputRouter28::route_type0_builtins`, the state-4 airborne attack branch requires `position.y < collision_y_reference` and buffered attack. For `interaction_state % 100 == 1` with no direction input, it selects the linked definition's `jump_attack` stat or defaults to **action 30**. With direction input it selects `sky_light_throw` or defaults to 52. The state-5 dash branch selects linked `jump_attack` or defaults to 40. The current formal decoded DAT catalog search found no `jump_attack:` stat assignment, so the inspected default airborne route does not request 31.
+
+Formal `resources/runtime/decoded_dat/m/nin/nin.dat` defines frame30 as `pic:46 ... next:52` and frame31 as `pic:81 ... next:999`. A search of this DAT found no `next:31` or `hit_*:31` incoming selector. Other literal `weaponact:31` occurrences are weapon animation fields, not evidence that the character enters frame31. Unity's `LF2CharacterActionResolver.ProcessJumpingInput` uses linked `JumpAttack` with fallback30; `LF2Entity.TryRunSharedCharacterDatJumpAttackInputPhase` selects `JumpWeaponAtck` (30) for the no-direction linked case. These inspected branches agree with the formal default action, but this static comparison does not prove the entire pickup/input chain.
+
+Therefore the prior formal-source/root-EXE action31 trace and original-Editor OID30/pic81 camera readback are **controlled visual publication evidence** only. Do not label them a natural jump-with-weapon scenario, and do not promote Q07/R17 visual alignment from them. A non-default runtime selector, another producer, or an external relation could still reach 31; this audit did not exhaust all dynamic writers. The next representative natural-input witness should first identify an actually reached action/pic from physical pickup and airborne attack, then compare that exact frame and visible output. If frame31 is not reached, use it only as a boundary-sampling regression fixture. No DAT, PNG, script, Scene or production setting was changed for this audit.
+
+## Representative route selected for the next witness
+
+Formal `data/data.txt` assigns OID30 to `m/nin/nin.dat`, OID2 to `c/nar/nar.dat`, and light weapon OID120 to `w/4.dat`. The inspected OID30 DAT says `hidden: 1`; Naruto says `hidden: 0`. Naruto frame30 is `jump_weapon_atck`, `pic:97`, `state:15`, `next:53`; Naruto frame31 is labelled `sexy` and therefore is not an interchangeable jump-attack frame. The formal light-weapon `w/4.dat` has no `jump_attack:` override in its stats. Formal and staged `c/nar/nar.dat`, `w/4.dat` and `c/nar/nar.png` each have the same SHA-256 respectively:
+
+- `6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9`
+- `54CFFDA696CB220FEC8F606509A4408C954D9EE002E32CBAB5BC442B62A7BB26`
+- `391E7A17A04A4DB5E103656571AA5EA2CE9DADB91E377F1FA917DF9920B57FB5`
+
+Use selectable OID2 with OID120 for the first production pickup → jump → attack action/pic trace. The existing `BattleHeldWeaponLifecyclePlayModeProbeEditor` proves a scoped production pickup/held/throw path, and `NTSD28B6CompatWeaponActionSelectorEditorTests` proves the synthetic state-4 relation-1 fallback30 for both profiles; neither captures this physical-input sequence with formal content. The next witness must preserve that distinction and record the actual production frame transitions before requesting pixel comparison. No new Unity test or Play run occurred in this read-only audit.

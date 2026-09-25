@@ -157,6 +157,10 @@ namespace NTSD.Simulation
             spawnTask.directX = lf2X;
             spawnTask.directY = lf2Y;
             spawnTask.directZ = lf2Z;
+            // Alignment contract: NTSD28-USER-D024-RANDOM-WEAPON-SOURCE-BIRTH-001.
+            spawnTask.useSourceRulePosition = true;
+            spawnTask.sourceRuleX = lf2X;
+            spawnTask.sourceRuleZ = lf2Z;
             spawnTask.useDirectVelocity = true;
             spawnTask.directVx = 0.0;
             spawnTask.directVy = 0.0;
@@ -326,6 +330,9 @@ namespace NTSD.Simulation
                 spawnTask.team = 0;
                 spawnTask.pos = new Vector3(lf2X, lf2Y, 0f);
                 spawnTask.z = lf2Z;
+                spawnTask.useSourceRulePosition = true;
+                spawnTask.sourceRuleX = lf2X;
+                spawnTask.sourceRuleZ = lf2Z;
                 spawnTask.dir = "right";
                 spawnTask.dvz = 0f;
                 spawnTask.targetWorld = world;

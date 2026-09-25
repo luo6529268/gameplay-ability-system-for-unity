@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001
+status: FOCUSED_TEST_PASS
+change-kind: Q07_SASUKE_FORMAL_CONTENT_MANUAL_DIAGNOSTIC
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs
+authority: formal NTSD2.8-Logan root EXE Sasuke 26-tick LFR playback and project-mode staged Logan content
+evidence: original Editor 26-tick RED and post-fix PASS; formal release comparison 3826/3826 mapped fields; COMPARISON-20260925.md
+-->
+
+# NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001
+
+2026-09-25 scoped exit: Editor diagnostic script compiled in the original project, and unique `manual-sasuke-20260925-1` and `-2` requests each returned runner PASS with 26 contiguous ticks. The `-1` trace exposed 12 X-velocity first-difference fields beginning at tick24, which were corrected by independent `NTSD28-Q07-STATE15-POSTPHYSICS-VELOCITY-001`; the `-2` trace has 2500/2500 listed entity and 1326/1326 mapped input/phase fields equal to the formal release. All tick slot sets match, and four OID440 appear in slots50–53 at tick15. Full comparison, raw-mask mapping, exact SHA and RNG initialization limit are in `artifacts/diagnostics/NTSD28-Q07-SASUKE-FORMAL-MANUAL-TRACE-001/COMPARISON-20260925.md`. The only diagnostic code delta of this Change is the distinct Sasuke scenario branch in `Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs`; production fix is separately governed. Old DDJ request `manual-ddj-20260925-4` passed after the fix, with 26 tick JSON rows identical to prior `-3` in all raw/domain/input-RNG streams. Borrower count, natural same-world Play, full RNG, pixels, audio and Q07 total exit remain pending; this Change is `FOCUSED_TEST_PASS`, not final parity.
+
+Post-change safety: current Battle/Menu Scene SHA-256 are `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A` / `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, GameConfig asset `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`, equal to pre-run values. Scoped `git diff --name-only` for Content/Config/Scene/ProjectSettings is empty; `git diff --check` exit0 (line-ending warnings only). `Tools/Validate-ChangeLedger.ps1` exit0, `Change ledger validation PASSED`, 806 Records and 10 current governed code files in the then-current worktree. Original Editor `read_console` exposed one unrelated MCP disposed-object error and no C# compiler error entry; runner PASS and newer assemblies prove this diagnostic compiled and executed, but no independent numeric 0-error compile report was produced. No full SelfCheck or natural Play rerun is claimed for this narrow diagnostic.
+
+Pre-edit state: the Editor raw-capture tool now admits an exact Q07 DDJ formal scenario and retains legacy three-tick scenarios, but its formal validation/publication branch is named and gated only for Naruto DDJ. The formal Sasuke release trace already contains 26 ticks and four OID440 children; the previous saved Battle Scene physical-key Play started at another position and cannot be joined by world state. A new Sasuke diagnostic branch is needed for a comparable origin, without weakening DDJ or legacy fixture validation.
+
+Planned exact symbols: add a distinct Sasuke scenario schema and exact two-combatant fixture validation in `ValidateScenario`; share the already implemented formal catalog/mode/logic-only path in `RunScenario` and `UnityCurrentDatScope`. Keep the old branch's EXE identity, three-tick contract, content selection and output semantics unchanged. User-approved original background/mode DAT exclusion remains; project mode Asset supplies mode. Physical-key fixture uses L/D/J on held pairs corresponding to formal defend/right/attack on completed ticks2/4/6.
+
+Expected side effects and boundaries: new opt-in diagnostic request/output only. The temporary World may allocate OID440 children and must use its existing ordered shutdown; this is not a new production manager. No DAT, character image, Scene, GameConfig, Menu, rendering framework, Unity/GAS or production simulation behavior may change. There is no deletion authorization for old resources. If a first difference appears, preserve it and investigate against authority rather than patching to match the fixture.
+
+Acceptance, rollback and pending evidence are in the Task. This Record, Task, Ledger, STATE and handoff are registered before editing the declared C# file. Status is `IN_PROGRESS`; no compile or runtime claim yet.

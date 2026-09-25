@@ -7683,7 +7683,8 @@ namespace NTSD.Animation
 
         internal static bool IsReleaseItrGeometry(InteractionArea itr)
         {
-            return itr != null;
+            // Alignment contract: NTSD28-Q07-CONTROL-ONLY-ITR-CANDIDATE-001.
+            return itr != null && itr.hasGeometry;
         }
 
         private static void VerticalWorldRect(
