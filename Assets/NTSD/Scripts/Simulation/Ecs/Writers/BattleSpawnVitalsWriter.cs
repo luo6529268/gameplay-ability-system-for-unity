@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.Animation.LF2Tasks;
 
 namespace NTSD.Simulation.Ecs
 {
@@ -7,13 +8,25 @@ namespace NTSD.Simulation.Ecs
     {
         internal static void Apply(LF2Entity entity, ObjectPoint point)
         {
+            ApplyWithTask(entity, point, null);
+        }
+
+        internal static void ApplyWithTask(
+            LF2Entity entity,
+            ObjectPoint point,
+            OPointCreateTask task)
+        {
             if (entity?.Health == null || entity.Runtime == null)
                 return;
 
             // Alignment contract: NTSD28-Q06-OPOINT-SPAWN-VITALS-TRANSACTION-001.
             bool lowVitals = point.oid == 5 || point.oid == 52;
-            int hp = point.hp > 0 ? point.hp : lowVitals ? 10 : 500;
-            int mp = point.mp > 0 ? point.mp : lowVitals ? 5 : 500;
+            int hp = task?.useExplicitInitialVitals == true
+                ? task.initialHp
+                : point.hp > 0 ? point.hp : lowVitals ? 10 : 500;
+            int mp = task?.useExplicitInitialVitals == true
+                ? task.initialMp
+                : point.mp > 0 ? point.mp : lowVitals ? 5 : 500;
             var data = entity.FrameCache?.Wrapper?.characterData;
             var stats = data?.NativeMetadata?.Stats;
             int hpPercent = stats?.Int32OrDefault("ohp", 0) ?? 0;

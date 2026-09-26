@@ -11,6 +11,30 @@ namespace NTSD.Test.Editor
     [Category("NTSD28_B6")]
     public sealed class NTSD28B6CpointThrowAtomicProductionEditorTests
     {
+        [TestCase(true, 122)]
+        [TestCase(false, 100)]
+        public void PositiveThrowInjury_ResourceTransactionFollowsLocalModeGate(
+            bool localMode,
+            int expectedPp)
+        {
+            using (ThrowScope scope = CreateScope(
+                throwInjury: 30,
+                definitionAttacking: 0))
+            {
+                scope.Catcher.Runtime.PP = 100;
+                scope.Caught.Runtime.PP = 100;
+                scope.Catcher.Runtime.InputLocalResourceEnabled49D034 =
+                    localMode;
+
+                scope.RunThrow(up: false, down: false);
+
+                Assert.That(scope.Catcher.Runtime.PP, Is.EqualTo(expectedPp));
+                Assert.That(scope.Caught.Runtime.PP, Is.EqualTo(expectedPp));
+                Assert.That(scope.Caught.Runtime.EnvironmentState320, Is.EqualTo(30));
+                Assert.That(scope.Caught.Runtime.DisplayScoreStep1F4, Is.EqualTo(3));
+            }
+        }
+
         [Test]
         public void PositiveThrowInjury_RoutesDisplayEnvironmentAndPreservesLegacyWeaponCount()
         {
@@ -118,7 +142,10 @@ namespace NTSD.Test.Editor
             }
         }
 
-        private static ThrowScope CreateScope(int throwInjury, CatchPoint suppliedPoint = null)
+        private static ThrowScope CreateScope(
+            int throwInjury,
+            CatchPoint suppliedPoint = null,
+            int definitionAttacking = 200)
         {
             CatchPoint catcherPoint = new CatchPoint
             {
@@ -136,7 +163,7 @@ namespace NTSD.Test.Editor
             {
                 name = "B6ThrowCatcher",
                 type_sub = (int)LF2ObjectType.Character,
-                definition_attacking = 200,
+                definition_attacking = definitionAttacking,
                 frames = new List<LF2FrameData>
                 {
                     Frame(0, LF2States.Standing, 0, null),

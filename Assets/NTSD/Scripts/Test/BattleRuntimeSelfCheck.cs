@@ -19020,8 +19020,8 @@ namespace NTSD.Test
                 "alternate damage must overwrite both attacker and victim frame delays");
             Expect(victim.CurrentFrameId == 112 && victim.Trans.WaitCounter == 73,
                 "grounded defended alternate damage must enter frame 112 without resetting wait_counter");
-            Expect(Nearly(victim.KnockbackVx, 2f),
-                "ground alternate knockback must use integer dvx/2 for dvx=5");
+            Expect(Nearly(victim.KnockbackVx, 2.5f),
+                "ground alternate knockback must preserve half-unit precision for dvx=5");
             Expect(attacker.AttackExempt == 2 && victim.AttackExempt == 13,
                 "alternate damage must apply arest to the attacker only");
             Expect(holder.FrameDelay == 3,
@@ -19318,8 +19318,8 @@ namespace NTSD.Test
                 "LF2Character.Hit must resolve the shared alternate-damage branch");
             Expect(victim.Health.HP == 90 && victim.Health.HPBound == 97 && victim.Health.HPLost == 7,
                 "LF2Character.Hit alternate damage must apply reduced injury without changing HPLost");
-            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2f),
-                "LF2Character.Hit alternate damage must apply victim delay, hit count, and integer half-dvx");
+            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2.5f),
+                "LF2Character.Hit alternate damage must apply victim delay, hit count, and precise half-dvx");
             Expect(attacker.FrameDelay == 3 && attacker.AttackExempt == 4,
                 "LF2Character.Hit alternate damage must apply attacker delay and arest");
             Expect(attacker.HitRecordCount + victim.HitRecordCount == 1,
@@ -19395,8 +19395,8 @@ namespace NTSD.Test
                 "shared-DAT character entry must resolve the shared alternate-damage branch");
             Expect(victim.Health.HP == 90 && victim.Health.HPBound == 97 && victim.Health.HPLost == 7,
                 "shared-DAT alternate damage must apply reduced injury without changing HPLost");
-            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2f),
-                "shared-DAT alternate damage must apply victim delay, hit count, and integer half-dvx");
+            Expect(victim.FrameDelay == -5 && victim.HitCount == 1 && Nearly(victim.KnockbackVx, 2.5f),
+                "shared-DAT alternate damage must apply victim delay, hit count, and precise half-dvx");
             Expect(attacker.FrameDelay == 3 && attacker.AttackExempt == 4,
                 "shared-DAT alternate damage must apply attacker delay and arest");
             Expect(attacker.HitRecordCount + victim.HitRecordCount == 1,
@@ -19448,10 +19448,12 @@ namespace NTSD.Test
             Expect(characterResolved && characterVictim.Health.HP == 90,
                 "real-character alternate damage must use the heavy weapon's original injury");
             Expect(characterAttacker.Frame.N >= 0 && characterAttacker.Frame.N < 16 &&
-                   Nearly(characterAttacker.Runtime.Vx, -1.0) &&
+                   Nearly(characterAttacker.Runtime.Vx, -1.25) &&
                    Nearly(characterAttacker.Runtime.Vy, -4.0) &&
                    Nearly(characterAttacker.Runtime.Vz, -4.0),
-                "state1002 alternate tail must update frame and reflected velocity on a real weapon");
+                $"state1002 alternate tail must update frame and reflected velocity on a real weapon: " +
+                $"frame={characterAttacker.Frame.N}, vx={characterAttacker.Runtime.Vx}, " +
+                $"vy={characterAttacker.Runtime.Vy}, vz={characterAttacker.Runtime.Vz}");
             Expect(typeof(NTSDEntityRuntime).GetMember("WeaponState").Length == 0,
                 "state1002 alternate tail must not require a parallel runtime weapon state");
 

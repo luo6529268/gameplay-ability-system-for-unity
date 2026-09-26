@@ -1,0 +1,17 @@
+{
+  "schema": "ntsd28-q07-fusion-full-driver/1.0",
+  "referenceExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "dataSha256": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE",
+  "mode": "versus",
+  "seed": 681925210,
+  "ticks": 3,
+  "emitInitial": false,
+  "battleMode": 0,
+  "stageId": 23,
+  "difficultyLevel4A0C30": 0,
+  "combatants": [
+    {"slot": 0, "oid": 7, "team": 1, "x": 304, "y": 0, "z": 600, "hp": 100, "baseHp": 500, "mp": 500, "facing": 0, "action": 9, "reviveLives30c": 1},
+    {"slot": 1, "oid": 8, "team": 1, "x": 300, "y": 0, "z": 600, "hp": 100, "baseHp": 500, "mp": 500, "facing": 1, "action": 9, "reviveLives30c": 1}
+  ],
+  "inputs": []
+}

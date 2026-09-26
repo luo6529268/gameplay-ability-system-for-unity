@@ -1,0 +1,17 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-UNIFIED-AI-STRUCTURAL-EPOCH-001
+status: RUNTIME_PENDING
+change-kind: Q07_D024_GENERIC_NONCHARACTER_STRUCTURAL_EPOCH_SNAPSHOT_REPUBLICATION
+code-path: Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ai/Runtime/SimulationAiDecisionModule.cs
+authority: formal root NTSD2.8-Logan.exe paired playable SimulationTickDriver28 NativeAi28 hit_Fa5, indexed w/e.dat frame51
+evidence: NTSD28-Q07-HITFA5-FULL-SESSION-SOURCE-001 and NTSD28-Q07-HITFA5-UNITY-DRIVER-001 tick1 first difference
+-->
+
+# NTSD28-Q07-UNIFIED-AI-STRUCTURAL-EPOCH-001
+
+Pre-change: `SimulationWorld.CharacterInputAll` publishes a unified AI snapshot before non-character producer execution. A formally indexed OID219 `hit_Fa:5` branch births a child and removes the controller in the first producer scan; the runtime slot table epoch changes and invalidates `BattleAiUnifiedRowPublisher`. The second scan refreshes a character row against the old published epoch and intentionally hard-fails. The source complete Session finishes; Unity positive full Driver stops at tick1, while no-birth negative passes eight ticks. The task contract declares only an occupancy-aware re-publication at the known producer transaction boundary, with no postcommit fallback and no OID special case. Intended side effects, risk, exact paths, acceptance and rollback are in the Task Contract. Script implementation has not begun.
+
+Implementation: `SimulationWorld.CharacterInputAll` now compares slot occupancy epoch before and after any non-character authored `hit_Fa` producer plus queued structural flush. When that transaction changes membership under a committed unified authority pass, it uses the existing `BuildAiInputSlotSnapshot` capture/publish route before the next slot/second-scan consumer. `SimulationAiDecisionModule.TryPrepareUnifiedExecutionPass` now remembers whether this same pass had already published or started a consumer before ending the old publisher, so a failed re-publication still enters the hard-breach path instead of precommit legacy fallback. No identifier-specific branch, DAT edit, Scene edit, input/tick order change or nonbattle code change. Compile and focused runtime validation are pending at this status.
+
+2026-09-26 validation correction: original Editor MCP refresh compiled the two production scripts and focused tests with no C# error. The existing injected postpublication hard-breach family passed 5/5 (`be8e617162f5453580317ad9dcf52a60`). After the structural-epoch change, the full-Driver group3 no-birth control passed all eight source-row checks (`3a94155d834a4562bc2cc0aa1153d0a7`); group1 no longer throws the prior postcommit snapshot exception, but stops at a later **first difference** on completed tick1: formally spawned child action `1`, Unity action `0` (`f352278574024504a36125344b3f12c3`). The test asserts `PostCommitHardBreachCount == 0` before that action comparison. These results support only the exception repair at this producer boundary; eight-tick positive parity, same-world root EXE, natural Battle Play, and all structural mutation sites remain unverified. An intermediate whole-tick `PublishedEpochIsCurrent` assertion was removed because later passes may legitimately change occupancy after the character-input pass; its failed job remains in the diagnostic record. A zero-test wrong-name filter result is not evidence. Do not promote this Change or Q07 to `VERIFIED` while the child-action first difference remains.

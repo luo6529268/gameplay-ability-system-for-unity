@@ -1,0 +1,5 @@
+oid52_source=c\nar\kyu.dat action310_declared=0
+tick=0 slot0_oid=10 slot0_action=9 slot0_x=304 slot1_oid=11 slot1_action=9 slot1_x=300
+tick=1 slot0_oid=52 slot0_action=310 slot0_x=299 slot1_oid=-1 slot1_action=-1 slot1_x=-1 fused=1 unresolved=0 event=FUN_004064D0 merge state and inactive partner slot applied
+tick=2 slot0_oid=52 slot0_action=310 slot0_x=299 slot1_oid=-1 slot1_action=-1 slot1_x=-1 fused=0 unresolved=0
+tick=3 slot0_oid=52 slot0_action=310 slot0_x=299 slot1_oid=-1 slot1_action=-1 slot1_x=-1 fused=0 unresolved=0

@@ -1885,7 +1885,6 @@ namespace NTSD.Animation.LF2Objects
 
             if (Health == null || Health.HP <= 0)
             {
-                ApplyHitFa2Or4Or12Or14NoTargetCatch(hitFa);
                 return;
             }
 
@@ -2241,6 +2240,9 @@ namespace NTSD.Animation.LF2Objects
                 task.directY = Runtime.Y;
                 task.directZ = Runtime.Z;
                 task.useDirectVelocity = true;
+                task.useExplicitInitialVitals = true;
+                task.initialHp = 0;
+                task.initialMp = 0;
                 bool sourceHistoryComplete = Runtime.SourceRulePositionInitialized &&
                     ally.Runtime.SourceRulePositionInitialized;
                 // Alignment contract: NTSD28-USER-SOURCE-HITFA5-TARGET-VELOCITY-001.
@@ -3995,8 +3997,7 @@ namespace NTSD.Animation.LF2Objects
         }
 
         /// <summary>
-        /// 处理当前 DAT 仍是角色对象时的晚阶段 N30 输入触发。
-        /// 参考实现按 slot + 当前 DAT 类型参与，所以不能只挂在 LF2Character 上。
+        /// 历史 N30 输入触发辅助：保留供迁移自检，当前正式版生产晚尾不调用。
         /// </summary>
         private void RunLateCharacterDatInputTrigger()
         {
@@ -4408,7 +4409,8 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void RunLateTailBeforePrevFrame()
         {
-            RunLateCharacterDatInputTrigger();
+            // Alignment contract: NTSD28-Q07-N30-LEGACY-TAIL-RETIREMENT-001.
+            // Formal release retains matched input history and does not emit OID998 here.
             // Alignment contract: NTSD28-Q06-STATE13-EXIT-TAIL-RETIREMENT-001.
             // Current playable has no state13/action200 exit particle producer.
         }

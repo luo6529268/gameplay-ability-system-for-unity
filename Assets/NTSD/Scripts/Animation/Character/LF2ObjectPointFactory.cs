@@ -543,13 +543,14 @@ namespace NTSD.Animation
                     BattleNativeDirectSpawnWriter.InitializeBirth(living, task);
                 else if (task.IsLateOpointSpawn && task.parent != null)
                     BattleNativeOpointBirthWriter.InitializeBirth(living, task);
-                else PostInitLiving(
+                else PostInitLivingWithTask(
                     living,
                     task.parent,
                     task.opoint,
                     objType,
                     0f,
-                    task.releaseOpointSpawn);
+                    task.releaseOpointSpawn,
+                    task);
                 ApplyReleaseOpointDirectionalVz(living, task);
                 ApplyDirectVelocity(living, task);
 
@@ -718,13 +719,14 @@ namespace NTSD.Animation
                 if (logicObject is LF2Entity living)
                 {
                     // 过滤纯音效对象（pic=999, wait=0, next=1000）——播放 sound 后直接 Release
-                    PostInitLiving(
+                    PostInitLivingWithTask(
                         living,
                         task.parent,
                         task.opoint,
                         objType,
                         vz,
-                        task.releaseOpointSpawn);
+                        task.releaseOpointSpawn,
+                        singleTask);
                     ApplyReleaseOpointDirectionalVz(living, singleTask);
                     ApplyDirectVelocity(living, singleTask);
                 }
@@ -799,7 +801,20 @@ namespace NTSD.Animation
             float dvz,
             bool releaseOpointSpawn)
         {
-            BattleSpawnVitalsWriter.Apply(living, op);
+            PostInitLivingWithTask(
+                living, parent, op, objType, dvz, releaseOpointSpawn, null);
+        }
+
+        private void PostInitLivingWithTask(
+            LF2Entity living,
+            LF2Entity parent,
+            ObjectPoint op,
+            int objType,
+            float dvz,
+            bool releaseOpointSpawn,
+            OPointCreateTask task)
+        {
+            BattleSpawnVitalsWriter.ApplyWithTask(living, op, task);
 
             if (parent != null)
             {

@@ -271,7 +271,7 @@ namespace NTSD.Simulation.Ecs
 
             int injury = cpoint.Injury;
             if (injury != 0 && attacker.AttackingCounter == 0)
-                ApplyHeldInjury(world, attacker, victim, injury, cpoint.Cover);
+                ApplyHeldInjury(world, attacker, victim, cpoint);
 
             SyncHeldPosition(attacker, victim, catcherFrame, cpoint);
         }
@@ -294,9 +294,9 @@ namespace NTSD.Simulation.Ecs
             SimulationWorld world,
             LF2Entity attacker,
             LF2Entity victim,
-            int injury,
-            int cover)
+            BattleCatchPointValue cpoint)
         {
+            int injury = cpoint.Injury;
             if (attacker?.Runtime == null ||
                 victim?.Runtime == null ||
                 victim.Health == null ||
@@ -307,16 +307,7 @@ namespace NTSD.Simulation.Ecs
 
             // Alignment contract:
             // NTSD28-B6-HELD-INJURY-ACCOUNTING-COVER-PRODUCTION-001.
-            LF2Entity resourceAttacker =
-                BattleDamageWriter.ResolveNativeHitResourceAttacker(
-                    world,
-                    attacker.Runtime.SlotIndex);
-            if (resourceAttacker?.Runtime != null)
-            {
-                BattleDamageWriter.ApplyNativeHitDisplaySteps(
-                    victim.Runtime,
-                    injury);
-            }
+            ApplyCpointResourceTransfer(world, attacker, victim, cpoint, injury);
 
             int damage = injury;
             if (victim.Runtime.IncomingDamageScale340 > 0)
@@ -351,11 +342,11 @@ namespace NTSD.Simulation.Ecs
             }
 
             attacker.AttackingCounter = 1;
-            if (cover != 3)
+            if (cpoint.Cover != 3)
             {
-                if (cover != 1)
+                if (cpoint.Cover != 1)
                     attacker.FrameDelay = 2;
-                if (cover != 2)
+                if (cpoint.Cover != 2)
                     victim.FrameDelay = -3;
             }
 
@@ -468,10 +459,11 @@ namespace NTSD.Simulation.Ecs
         {
             if (cpoint.ThrowInjury > 0)
             {
-                ApplyThrowInjuryDisplayLead(
+                ApplyCpointResourceTransfer(
                     world,
                     attacker,
                     victim,
+                    cpoint,
                     cpoint.ThrowInjury);
                 victim.Runtime.EnvironmentState320 = cpoint.ThrowInjury;
                 victim.Runtime.EnvironmentSourceSlot160 =
@@ -528,10 +520,11 @@ namespace NTSD.Simulation.Ecs
             victim.AttackingCounter = 0;
         }
 
-        private static void ApplyThrowInjuryDisplayLead(
+        private static void ApplyCpointResourceTransfer(
             SimulationWorld world,
             LF2Entity attackEffectSource,
             LF2Entity target,
+            BattleCatchPointValue cpoint,
             int injury)
         {
             LF2Entity resourceAttacker =
@@ -544,6 +537,34 @@ namespace NTSD.Simulation.Ecs
             BattleDamageWriter.ApplyNativeHitDisplaySteps(
                 target.Runtime,
                 injury);
+
+            // Alignment contract: NTSD28-Q07-CPOINT-RESOURCE-TRANSACTION-001.
+            // Native resource transfer precedes held HP and throw environment writes.
+            NTSD28HitResourceRulesRuntimeState rules =
+                world.Runtime?.NativeHitResourceRules;
+            int resourceInjury = BattleDamageWriter.ResolveNativeHitResourceInjury(
+                injury,
+                attackEffectSource.Runtime.HitResourceInjuryDouble1A0,
+                LF2HitResolveRuntimeData.ResolveCharacterData(attackEffectSource)?
+                    .definition_attacking ?? 0,
+                rules?.ActiveModeAttackingPercent1C ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultActiveModeAttackingPercent1C);
+            BattleDamageWriter.ApplyNativeHitResourceTransaction(
+                resourceAttacker.Runtime,
+                target.Runtime,
+                resourceInjury,
+                attackEffectSource.Runtime.HitResourceSuppression15C,
+                cpoint.Drain,
+                cpoint.Gain,
+                attackEffectSource.Runtime.InputLocalResourceEnabled49D034,
+                rules?.AttackerInjuryMpPercent34 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultAttackerInjuryMpPercent34,
+                rules?.TargetInjuryMpPercent38 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultTargetInjuryMpPercent38,
+                resourceAttacker.Runtime.PPMax);
         }
 
         private void ApplyDirControl(

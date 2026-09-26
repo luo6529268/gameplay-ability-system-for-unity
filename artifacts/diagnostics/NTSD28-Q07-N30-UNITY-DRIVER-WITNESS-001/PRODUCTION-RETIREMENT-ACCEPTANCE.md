@@ -1,0 +1,15 @@
+# Q07 N30 legacy late-input production retirement
+
+Change: `NTSD28-Q07-N30-LEGACY-TAIL-RETIREMENT-001`. Result: `VERIFIED_SCOPED_PRODUCTION`, with Q07 and D-024 still open.
+
+The formal root EXE and paired playable source's L-K-L-K fixture retain `[-1,9,0,9,0]` and emit no OID998 at tick8. Before the change, the original Unity Editor's complete Driver matched the selected action/history through tick7, then cleared the history and birthed OID998 at tick8. A new focused late-tail test reproduced that clearing before the production edit: original-Editor job `146d081a81fe48968b71a781b82eb307` failed exactly at history index1 (`-1` expected, `0` actual).
+
+The only production change is removal of `RunLateCharacterDatInputTrigger()` from `LF2Entity.RunLateTailBeforePrevFrame()`. The historical helper and its direct SelfCheck hook remain, while the virtual tail and `LF2Character` cleanup still execute. This removes the legacy N30 birth rule for all three matched history patterns, rather than special-casing L-K-L-K or editing DAT values.
+
+After the edit, generated Editor-project build exited0 with 0 errors/215 warnings, and the original Editor was refreshed in place. The same focused test passed (`e8ffd626278842d0a182d53e96085289`). After the final test-name correction and another original-Editor compile, four focused late-tail tests passed (`a021de96fdfa49dfb693b922d8a0bea1`), covering history retention, low-slot execution, derived virtual-tail side effects and production-default tail execution. Console `read_console` returned no C# compile errors; three MCP client-exit messages were categorized as errors but did not affect the tests.
+
+Two existing exact 20-tick complete-Driver raw captures were rerun sequentially in the original Editor without changing their scenario JSON. Both returned `PASS`. Independent parsing of the formal root traces and post-fix Unity raw/input-rng/domain-v2 traces found 0 differences across 140 selected scalar fields per scenario (actor action, five history entries and OID998 count for 20 ticks; 280/280 total). Post-fix L-K-L-K at tick8 has actor action110, history `[-1,9,0,9,0]`, no OID998, and no OID998 birth through tick20. J-L-J-L remains the negative control with 0 selected-field differences. `postfix-selected-field-comparison.json` records the comparison. This is selected-field parity, not a full-state, GPU or every-character certificate; the root EXE's LFR reports `nativeParityClaim:false`.
+
+The original Menu and Battle Scene SHA-256 remained `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13` and `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`; both have empty Git Scene diff. No DAT values, image assets, Scene, nonbattle scripts or second Unity instance were changed. The old 521-file disposal and D-024 full entity/visual-coordinate chain remain separate Q07 gates.
+
+Change Ledger validation and `git diff --check` both exited0. The Ledger validator reported historical declared-path warnings, preserved in `change-ledger-validation.log`.

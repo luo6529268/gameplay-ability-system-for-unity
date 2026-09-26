@@ -16,11 +16,15 @@ namespace NTSD.Game
     /// - 不直接驱动动作、状态或帧切换，连招和帧播放由角色逻辑处理。
     ///
     /// </summary>
-    public sealed class CharacterInputModule: ILF2Controller, ILocalFrameInputSource
+    public sealed class CharacterInputModule:
+        ILF2Controller,
+        ILocalFrameInputSource,
+        IPlayerActionInputSink
     {
         private int _explicitInputId = -1;
         private bool _inputBound;
 
+        private NTSD.App.InputModule _inputModule;
         private InputActionMap _inputActionMap;
 
         public InputAction MoveAction { get; private set; }
@@ -43,6 +47,12 @@ namespace NTSD.Game
         private bool _isDefending;
         private bool _isAttacking;
         private bool _isJumping;
+        private bool _uiDefending;
+        private bool _uiAttacking;
+        private bool _uiJumping;
+        private bool _deviceDefending;
+        private bool _deviceAttacking;
+        private bool _deviceJumping;
 
         bool ILF2Controller.IsUp => _topPressed;
 
@@ -98,14 +108,18 @@ namespace NTSD.Game
             BindActionMap();
             BindInputEvents();
             _inputBound = true;
+            _inputModule?.RegisterPlayerActionInput(_explicitInputId, this);
         }
 
         public void ModuleUnbind()
         {
+            _inputModule?.UnregisterPlayerActionInput(_explicitInputId, this);
+
             if (_inputBound)
                 UnbindInputEvents();
 
             _inputBound = false;
+            _inputModule = null;
             _currentMoveInput = Vector2.zero;
             _lastDirectionMask = FuncKeyMask.None;
             _leftPressed = false;
@@ -115,6 +129,12 @@ namespace NTSD.Game
             _isAttacking = false;
             _isJumping = false;
             _isDefending = false;
+            _uiAttacking = false;
+            _uiJumping = false;
+            _uiDefending = false;
+            _deviceAttacking = false;
+            _deviceJumping = false;
+            _deviceDefending = false;
         }
 
         public void ResetForPoolReuse()
@@ -131,7 +151,8 @@ namespace NTSD.Game
         private void BindActionMap()
         {
             int inputId = _explicitInputId >= 0 ? _explicitInputId : 1;
-            _inputActionMap = AppManager.Instance.InputModule.GetActionMapByPlayerID(inputId);
+            _inputModule = AppManager.Instance.InputModule;
+            _inputActionMap = _inputModule.GetActionMapByPlayerID(inputId);
             _inputActionMap?.Enable();
 
             MoveAction = _inputActionMap?.FindAction("Move");
@@ -308,20 +329,71 @@ namespace NTSD.Game
         // Unity action names describe the physical layout; NTSD uses the crossed internal fields below.
         internal void SetAttackActionPressed(bool pressed)
         {
-            _isAttacking = pressed;
-            InputBuffer?.EnqueueForNextTick(FuncKeyMask.jump, pressed);
+            _deviceAttacking = pressed;
+            SetEffectiveActionPressed(
+                ref _isAttacking,
+                _deviceAttacking || _uiAttacking,
+                FuncKeyMask.jump);
         }
 
         internal void SetJumpActionPressed(bool pressed)
         {
-            _isJumping = pressed;
-            InputBuffer?.EnqueueForNextTick(FuncKeyMask.def, pressed);
+            _deviceJumping = pressed;
+            SetEffectiveActionPressed(
+                ref _isJumping,
+                _deviceJumping || _uiJumping,
+                FuncKeyMask.def);
         }
 
         internal void SetDefendActionPressed(bool pressed)
         {
-            _isDefending = pressed;
-            InputBuffer?.EnqueueForNextTick(FuncKeyMask.att, pressed);
+            _deviceDefending = pressed;
+            SetEffectiveActionPressed(
+                ref _isDefending,
+                _deviceDefending || _uiDefending,
+                FuncKeyMask.att);
+        }
+
+        void IPlayerActionInputSink.SetActionPressed(
+            BattleInputAction action,
+            bool pressed)
+        {
+            switch (action)
+            {
+                case BattleInputAction.Attack:
+                    _uiAttacking = pressed;
+                    SetEffectiveActionPressed(
+                        ref _isAttacking,
+                        _deviceAttacking || _uiAttacking,
+                        FuncKeyMask.jump);
+                    break;
+                case BattleInputAction.Jump:
+                    _uiJumping = pressed;
+                    SetEffectiveActionPressed(
+                        ref _isJumping,
+                        _deviceJumping || _uiJumping,
+                        FuncKeyMask.def);
+                    break;
+                case BattleInputAction.Defend:
+                    _uiDefending = pressed;
+                    SetEffectiveActionPressed(
+                        ref _isDefending,
+                        _deviceDefending || _uiDefending,
+                        FuncKeyMask.att);
+                    break;
+            }
+        }
+
+        private void SetEffectiveActionPressed(
+            ref bool currentState,
+            bool nextState,
+            FuncKeyMask logicalKey)
+        {
+            if (currentState == nextState)
+                return;
+
+            currentState = nextState;
+            InputBuffer?.EnqueueForNextTick(logicalKey, nextState);
         }
 
         private void CheckAndEnqueueDirectionChange(FuncKeyMask direction, FuncKeyMask oldMask, FuncKeyMask newMask)

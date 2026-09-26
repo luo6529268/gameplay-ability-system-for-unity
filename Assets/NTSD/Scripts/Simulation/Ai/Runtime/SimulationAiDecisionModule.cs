@@ -1043,6 +1043,9 @@ namespace NTSD.Simulation
                 return true;
             }
 
+            bool hadPublishedInThisPass =
+                UnifiedSnapshotExecutionCommittedThisPass ||
+                UnifiedSnapshotExecutionConsumerStartedThisPass;
             rowPublisher.EndPass();
             EndExecutionPassState();
             AiUnifiedSnapshotExceptionStage stage =
@@ -1164,7 +1167,8 @@ namespace NTSD.Simulation
             }
             catch (Exception exception)
             {
-                if (UnifiedSnapshotExecutionCommittedThisPass ||
+                if (hadPublishedInThisPass ||
+                    UnifiedSnapshotExecutionCommittedThisPass ||
                     UnifiedSnapshotExecutionConsumerStartedThisPass)
                 {
                     RecordUnifiedExecutionFailure(stage, exception, true);

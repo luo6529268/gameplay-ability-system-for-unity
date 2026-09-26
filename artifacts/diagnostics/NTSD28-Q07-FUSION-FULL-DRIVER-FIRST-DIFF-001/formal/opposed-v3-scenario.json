@@ -1,0 +1,38 @@
+{
+  "scenario": "opposed-v3",
+  "seed": "0x28A55A5A",
+  "battleMode": 0,
+  "backgroundId": 23,
+  "slots": [
+    {
+      "slot": 0,
+      "oid": 7,
+      "positiveX": 304,
+      "negativeX": 315,
+      "z": 600,
+      "hp": 100,
+      "baseHP": 500,
+      "mp": 500,
+      "action": 9,
+      "facing": false,
+      "initialVx": 20
+    },
+    {
+      "slot": 1,
+      "oid": 8,
+      "x": 300,
+      "z": 600,
+      "hp": 100,
+      "baseHP": 500,
+      "mp": 500,
+      "action": 9,
+      "facing": true,
+      "initialVx": 0
+    }
+  ],
+  "ticks": 3,
+  "inputs": "neutral",
+  "view": "formal source has no Unity physical carrier",
+  "suspendedFields": "unobserved via public API, emitted empty",
+  "source": "Tools/NTSD28Q07Diagnostics/fusion_full_session_source_probe.cpp"
+}

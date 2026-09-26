@@ -63,7 +63,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void LowRuntimeSlot_FailsClosedToN30AuthorityTail()
+        public void LowRuntimeSlot_ExecutesVirtualLateTail()
         {
             SimulationWorld world = CreateWorld(forceLegacy: false);
             LF2Character character =
@@ -74,6 +74,29 @@ namespace NTSD.Test
 
             Assert.That(world.LastLateTailNoOpSkipCountForDiagnostics, Is.Zero);
             Assert.That(world.LastLateTailExecutedCountForDiagnostics, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void MatchedLegacyInputHistory_RemainsIntactAfterProductionLateTail()
+        {
+            SimulationWorld world = CreateWorld(forceLegacy: true);
+            LF2Character character =
+                CreateCharacter<LF2Character>(world, 302, previousState: 0);
+            character.Runtime.SlotIndex = 5;
+            int[] history = character.Runtime.InputHistory;
+            history[1] = -1;
+            history[2] = 9;
+            history[3] = 0;
+            history[4] = 9;
+            history[5] = 0;
+            int[] before = (int[])history.Clone();
+            Assert.That(character.TryResolveLateN30InputTriggerCode(out int legacyCode), Is.True);
+            Assert.That(legacyCode, Is.EqualTo(100));
+
+            world.LateEntityUpdateAll(13);
+
+            Assert.That(world.LastLateTailExecutedCountForDiagnostics, Is.EqualTo(1));
+            Assert.That(history, Is.EqualTo(before));
         }
 
         [Test]

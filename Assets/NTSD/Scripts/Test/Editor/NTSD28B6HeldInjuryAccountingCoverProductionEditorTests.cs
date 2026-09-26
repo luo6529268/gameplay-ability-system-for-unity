@@ -14,6 +14,84 @@ namespace NTSD.Test
     [Category("NTSD28_B6_HeldInjury")]
     public sealed class NTSD28B6HeldInjuryAccountingCoverProductionEditorTests
     {
+        [TestCase(true, 122)]
+        [TestCase(false, 100)]
+        public void HeldInjury_ResourceTransactionFollowsLocalModeGate(
+            bool localMode,
+            int expectedPp)
+        {
+            SimulationWorld world = CreatePair(
+                injury: 30,
+                cover: 0,
+                catcherType: LF2ObjectType.Character,
+                out LF2Character catcher,
+                out LF2Character victim);
+            catcher.Runtime.PP = 100;
+            victim.Runtime.PP = 100;
+            catcher.Runtime.PPMax = 500;
+            catcher.Runtime.InputLocalResourceEnabled49D034 = localMode;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Assert.That(catcher.Runtime.PP, Is.EqualTo(expectedPp));
+            Assert.That(victim.Runtime.PP, Is.EqualTo(expectedPp));
+            Assert.That(victim.Health.HP, Is.EqualTo(70));
+            Assert.That(victim.Runtime.DisplayScoreStep1F4, Is.EqualTo(3));
+        }
+
+        [Test]
+        public void HeldInjury_NonzeroCounterSkipsResourceAndDamage()
+        {
+            SimulationWorld world = CreatePair(
+                injury: 30,
+                cover: 0,
+                catcherType: LF2ObjectType.Character,
+                out LF2Character catcher,
+                out LF2Character victim);
+            catcher.Runtime.PP = 100;
+            victim.Runtime.PP = 100;
+            catcher.AttackingCounter = 1;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Assert.That(catcher.Runtime.PP, Is.EqualTo(100));
+            Assert.That(victim.Runtime.PP, Is.EqualTo(100));
+            Assert.That(victim.Health.HP, Is.EqualTo(100));
+        }
+
+        [TestCase(true, 117, 112, 5, 10)]
+        [TestCase(false, 100, 100, 0, 0)]
+        public void HeldInjury_ForwardsDrainAndGainThroughSharedTransaction(
+            bool localMode,
+            int expectedCatcherPp,
+            int expectedVictimPp,
+            int expectedCatcherConsumed,
+            int expectedVictimConsumed)
+        {
+            SimulationWorld world = CreatePair(
+                injury: 30,
+                cover: 0,
+                catcherType: LF2ObjectType.Character,
+                out LF2Character catcher,
+                out LF2Character victim,
+                drain: 10,
+                gain: -5);
+            catcher.Runtime.PP = 100;
+            victim.Runtime.PP = 100;
+            catcher.Runtime.PPMax = 500;
+            catcher.Runtime.InputLocalResourceEnabled49D034 = localMode;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Assert.That(catcher.Runtime.PP, Is.EqualTo(expectedCatcherPp));
+            Assert.That(victim.Runtime.PP, Is.EqualTo(expectedVictimPp));
+            Assert.That(catcher.Runtime.InputMpConsumedTotal350,
+                Is.EqualTo(expectedCatcherConsumed));
+            Assert.That(victim.Runtime.InputMpConsumedTotal350,
+                Is.EqualTo(expectedVictimConsumed));
+            Assert.That(victim.Health.HP, Is.EqualTo(70));
+        }
+
         [Test]
         public void RawInjury_UsesCanonicalWritesAndIgnoresLegacyScaleAndStats()
         {
@@ -380,7 +458,9 @@ namespace NTSD.Test
             int cover,
             LF2ObjectType catcherType,
             out LF2Character catcher,
-            out LF2Character victim)
+            out LF2Character victim,
+            int drain = 0,
+            int gain = 0)
         {
             var world = new SimulationWorld();
             catcher = CreateEntity(
@@ -401,6 +481,8 @@ namespace NTSD.Test
                             vaction = 132,
                             hurtable = 2,
                             injury = injury,
+                            drain = drain,
+                            gain = gain,
                             x = 17,
                             y = 23,
                             cover = cover,

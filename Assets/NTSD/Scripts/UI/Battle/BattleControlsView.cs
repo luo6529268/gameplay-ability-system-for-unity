@@ -1,71 +1,47 @@
 using System.Collections.Generic;
-using NTSD.Animation.LF2Objects;
 using NTSD.App;
-using NTSD.Game;
-using NTSD.Simulation;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace NTSD.UI.Battle
 {
     /// <summary>
-    /// BattleControls 的动作按键绑定面。
-    ///
-    /// 这里复用 AppManager 持有的 NTSDInputConfig action map，不创建第二份输入资产。
-    /// Image 既是当前场景的视觉面，也是 PointerDown/Up 的输入面；这样不要求当前场景
-    /// 立即增加 UnityEngine.UI.Button 组件，同时保留按住和松开两个输入边沿。
+    /// NTSD_Battle 场景中攻击、跳跃和防御三个触摸按钮的 View。
+    /// Player ID 由外部战斗流程在进入场景后分配，本类不查找角色或 Roster。
     /// </summary>
     public sealed class BattleControlsView : MonoBehaviour
     {
-        private const string AttackActionName = "Attack";
-        private const string JumpActionName = "Jump";
-        private const string DefendActionName = "Defend";
+        private const int ControlCount = 3;
 
-        [Header("Input Binding")]
-        [SerializeField, Min(1)] private int playerId = 1;
+        private static readonly string[] ActionNames =
+        {
+            "Attack",
+            "Jump",
+            "Defend",
+        };
 
-        [Header("Action Button Surfaces")]
-        [SerializeField] private Image attackImage;
-        [SerializeField] private Image jumpImage;
-        [SerializeField] private Image defendImage;
+        [Header("Action Buttons")]
+        [SerializeField] private NTSDButton attackButton;
+        [SerializeField] private NTSDButton jumpButton;
+        [SerializeField] private NTSDButton defendButton;
 
-        [Header("Optional Pressed Overlays")]
-        [SerializeField] private GameObject attackPressedState;
-        [SerializeField] private GameObject jumpPressedState;
-        [SerializeField] private GameObject defendPressedState;
-
-        [Header("Color Feedback")]
-        [SerializeField] private Color normalColor = Color.white;
-        [SerializeField] private Color pressedColor = Color.white;
-
+        private readonly ControlState[] controls = new ControlState[ControlCount];
+        private InputModule inputModule;
         private InputActionMap actionMap;
-        private InputAction attackAction;
-        private InputAction jumpAction;
-        private InputAction defendAction;
+        private int playerId = -1;
+        private bool warnedMissingBinding;
 
-        private CharacterInputModule attackInputOwner;
-        private CharacterInputModule jumpInputOwner;
-        private CharacterInputModule defendInputOwner;
-
-        private bool attackPressed;
-        private bool jumpPressed;
-        private bool defendPressed;
-        private bool inputActionsResolved;
-        private bool warnedInputBinding;
-        private bool warnedTargetController;
+        public int PlayerId => playerId;
+        public bool IsPlayerBound => playerId > 0 && actionMap != null;
 
         private void Awake()
         {
-            BindPointerSurface(attackImage, BattleControlAction.Attack);
-            BindPointerSurface(jumpImage, BattleControlAction.Jump);
-            BindPointerSurface(defendImage, BattleControlAction.Defend);
-        }
-
-        private void OnEnable()
-        {
-            ResolveInputActions(logWarnings: false);
+            controls[(int)BattleInputAction.Attack] =
+                CreateControl(attackButton, BattleInputAction.Attack);
+            controls[(int)BattleInputAction.Jump] =
+                CreateControl(jumpButton, BattleInputAction.Jump);
+            controls[(int)BattleInputAction.Defend] =
+                CreateControl(defendButton, BattleInputAction.Defend);
         }
 
         private void OnDisable()
@@ -75,31 +51,89 @@ namespace NTSD.UI.Battle
 
         private void OnDestroy()
         {
-            ClearPointerSurface(attackImage);
-            ClearPointerSurface(jumpImage);
-            ClearPointerSurface(defendImage);
+            ReleaseAllActions();
+
+            for (int index = 0; index < controls.Length; index++)
+            {
+                ControlState control = controls[index];
+                if (control?.Button != null)
+                    control.Button.PressedStateChanged -= HandlePressedStateChanged;
+            }
+        }
+
+        /// <summary>
+        /// 由进入战斗后的 UI/玩家分配流程调用。
+        /// </summary>
+        public bool BindPlayer(int assignedPlayerId)
+        {
+            ReleaseAllActions();
+            ClearPlayerBinding();
+
+            if (assignedPlayerId < 1)
+            {
+                Debug.LogWarning(
+                    $"[BattleControlsView] Invalid player ID: {assignedPlayerId}.");
+                return false;
+            }
+
+            AppManager appManager = AppManager.Instance;
+            inputModule = appManager != null ? appManager.InputModule : null;
+            if (inputModule == null)
+            {
+                Debug.LogWarning(
+                    "[BattleControlsView] AppManager.InputModule is not ready.");
+                return false;
+            }
+
+            InputActionMap resolvedMap =
+                AppManager.Instance.InputModule.GetActionMapByPlayerID(assignedPlayerId);
+            if (resolvedMap == null)
+            {
+                Debug.LogWarning(
+                    $"[BattleControlsView] Player_{assignedPlayerId} action map was not found.");
+                ClearPlayerBinding();
+                return false;
+            }
+
+            for (int index = 0; index < controls.Length; index++)
+            {
+                InputAction action = resolvedMap.FindAction(
+                    ActionNames[index],
+                    throwIfNotFound: false);
+                if (action == null)
+                {
+                    Debug.LogWarning(
+                        $"[BattleControlsView] Player_{assignedPlayerId}/{ActionNames[index]} was not found.");
+                    ClearPlayerBinding();
+                    return false;
+                }
+
+                controls[index].Action = action;
+            }
+
+            playerId = assignedPlayerId;
+            actionMap = resolvedMap;
+            warnedMissingBinding = false;
+            return true;
+        }
+
+        public void UnbindPlayer()
+        {
+            ReleaseAllActions();
+            ClearPlayerBinding();
         }
 
         public void Apply(BattleControlsState state)
         {
-            if (state == null || !state.IsVisible)
-            {
-                ClearVisualState();
-                return;
-            }
-
-            gameObject.SetActive(true);
-            ApplyAction(attackImage, attackPressedState, state.IsAttackHeld);
-            ApplyAction(jumpImage, jumpPressedState, state.IsJumpHeld);
-            ApplyAction(defendImage, defendPressedState, state.IsDefendHeld);
+            bool visible = state != null && state.IsVisible;
+            if (gameObject.activeSelf != visible)
+                gameObject.SetActive(visible);
         }
 
         public void ClearVisualState()
         {
+            ReleaseAllActions();
             gameObject.SetActive(false);
-            ApplyAction(attackImage, attackPressedState, false);
-            ApplyAction(jumpImage, jumpPressedState, false);
-            ApplyAction(defendImage, defendPressedState, false);
         }
 
         public void CollectMissingBindings(string path, List<string> missing)
@@ -107,361 +141,112 @@ namespace NTSD.UI.Battle
             if (missing == null)
                 return;
 
-            if (attackImage == null)
-                missing.Add(path + ".attackImage");
-            if (jumpImage == null)
-                missing.Add(path + ".jumpImage");
-            if (defendImage == null)
-                missing.Add(path + ".defendImage");
+            if (attackButton == null)
+                missing.Add(path + ".attackButton");
+            if (jumpButton == null)
+                missing.Add(path + ".jumpButton");
+            if (defendButton == null)
+                missing.Add(path + ".defendButton");
         }
 
-        internal void HandlePointerDown(BattleControlAction action)
+        internal void SetActionPressed(BattleInputAction action, bool pressed)
         {
-            SetActionPressed(action, true);
-        }
-
-        internal void HandlePointerUp(BattleControlAction action)
-        {
-            SetActionPressed(action, false);
-        }
-
-        private void SetActionPressed(BattleControlAction action, bool pressed)
-        {
-            if (IsActionPressed(action) == pressed)
+            ControlState control = controls[(int)action];
+            if (control == null || control.IsPressed == pressed)
                 return;
 
-            SetActionPressedState(action, pressed);
-            ApplyAction(GetActionImage(action), GetPressedState(action), pressed);
-
-            if (!ResolveInputActions(logWarnings: true))
-                return;
-
-            CharacterInputModule inputController = pressed
-                ? ResolvePlayerInputController()
-                : GetInputOwner(action);
-            if (inputController == null)
+            if (pressed &&
+                (control.Button == null ||
+                 !control.Button.isActiveAndEnabled ||
+                 !control.Button.IsInteractable()))
             {
-                if (!warnedTargetController)
+                return;
+            }
+
+            if (!IsPlayerBound || control.Action == null || inputModule == null)
+            {
+                WarnMissingBinding();
+                return;
+            }
+
+            if (!inputModule.TrySetActionPressed(playerId, control.Action, pressed))
+            {
+                WarnMissingBinding();
+                return;
+            }
+
+            control.IsPressed = pressed;
+        }
+
+        private ControlState CreateControl(NTSDButton button, BattleInputAction action)
+        {
+            if (button != null)
+                button.PressedStateChanged += HandlePressedStateChanged;
+
+            return new ControlState(button, action);
+        }
+
+        private void HandlePressedStateChanged(NTSDButton button, bool pressed)
+        {
+            for (int index = 0; index < controls.Length; index++)
+            {
+                ControlState control = controls[index];
+                if (control?.Button == button)
                 {
-                    Debug.LogWarning(
-                        $"[BattleControlsView] No human CharacterInputModule was found for Player_{playerId}.");
-                    warnedTargetController = true;
-                }
-                return;
-            }
-
-            if (!TryDispatchAction(action, inputController, pressed))
-                return;
-
-            SetInputOwner(action, pressed ? inputController : null);
-        }
-
-        private bool ResolveInputActions(bool logWarnings)
-        {
-            if (inputActionsResolved)
-                return true;
-
-            AppManager appManager = AppManager.Instance;
-            if (appManager == null || appManager.InputModule == null)
-            {
-                WarnInputBinding(
-                    logWarnings,
-                    "AppManager.InputModule is not ready; the battle action buttons are not bound yet.");
-                return false;
-            }
-
-            actionMap = appManager.InputModule.GetActionMapByPlayerID(playerId);
-            if (actionMap == null)
-            {
-                WarnInputBinding(
-                    logWarnings,
-                    $"The NTSDInputConfig action map Player_{playerId} was not found.");
-                return false;
-            }
-
-            attackAction = actionMap.FindAction(AttackActionName, throwIfNotFound: false);
-            jumpAction = actionMap.FindAction(JumpActionName, throwIfNotFound: false);
-            defendAction = actionMap.FindAction(DefendActionName, throwIfNotFound: false);
-
-            inputActionsResolved = attackAction != null &&
-                                   jumpAction != null &&
-                                   defendAction != null;
-            if (!inputActionsResolved)
-            {
-                WarnInputBinding(
-                    logWarnings,
-                    $"Player_{playerId} must contain Attack, Jump and Defend actions.");
-                return false;
-            }
-
-            // CharacterInputModule shares this map for keyboard input. The view only
-            // enables it when necessary and never disables it during teardown.
-            actionMap.Enable();
-            return true;
-        }
-
-        private CharacterInputModule ResolvePlayerInputController()
-        {
-            SimulationWorld world = SimulationTickDriver.Instance?.World;
-            BattleSlotRuntimeState[] slots = world?.Runtime?.Roster?.Slots;
-            if (world == null || slots == null)
-                return null;
-
-            for (int slotIndex = 0; slotIndex < slots.Length; slotIndex++)
-            {
-                BattleSlotRuntimeState slot = slots[slotIndex];
-                if (slot == null || !slot.Active || !slot.IsHuman || slot.InputId != playerId)
-                    continue;
-
-                if (slot.RuntimeSlotIndex < 0)
-                    continue;
-
-                LF2Entity entity = world.FindEntityByRuntimeSlotIncludingPending(
-                    slot.RuntimeSlotIndex);
-                if (entity is LF2LivingObject livingObject &&
-                    livingObject.Controller is CharacterInputModule inputController)
-                {
-                    return inputController;
+                    SetActionPressed(control.ActionType, pressed);
+                    return;
                 }
             }
-
-            return null;
-        }
-
-        private bool TryDispatchAction(
-            BattleControlAction action,
-            CharacterInputModule inputController,
-            bool pressed)
-        {
-            InputAction inputAction = GetInputAction(action);
-            if (inputAction == null)
-                return false;
-
-            // These three calls intentionally use the same entry points as the
-            // generated InputAction performed/canceled callbacks. The controller
-            // remains responsible for the NTSD logical-key cross mapping and tick buffer.
-            if (inputAction == attackAction)
-            {
-                inputController.SetAttackActionPressed(pressed);
-                return true;
-            }
-
-            if (inputAction == jumpAction)
-            {
-                inputController.SetJumpActionPressed(pressed);
-                return true;
-            }
-
-            if (inputAction == defendAction)
-            {
-                inputController.SetDefendActionPressed(pressed);
-                return true;
-            }
-
-            return false;
-        }
-
-        private void BindPointerSurface(Image image, BattleControlAction action)
-        {
-            if (image == null)
-                return;
-
-            BattleControlPointerRelay relay =
-                image.GetComponent<BattleControlPointerRelay>() ??
-                image.gameObject.AddComponent<BattleControlPointerRelay>();
-            relay.Bind(this, action);
-        }
-
-        private void ClearPointerSurface(Image image)
-        {
-            if (image == null)
-                return;
-
-            image.GetComponent<BattleControlPointerRelay>()?.ClearOwner(this);
         }
 
         private void ReleaseAllActions()
         {
-            SetActionPressed(BattleControlAction.Attack, false);
-            SetActionPressed(BattleControlAction.Jump, false);
-            SetActionPressed(BattleControlAction.Defend, false);
+            for (int index = 0; index < controls.Length; index++)
+            {
+                if (controls[index]?.IsPressed == true)
+                    SetActionPressed((BattleInputAction)index, pressed: false);
+            }
         }
 
-        private void WarnInputBinding(bool logWarnings, string message)
+        private void ClearPlayerBinding()
         {
-            if (!logWarnings || warnedInputBinding)
+            playerId = -1;
+            actionMap = null;
+            inputModule = null;
+            warnedMissingBinding = false;
+
+            for (int index = 0; index < controls.Length; index++)
+            {
+                if (controls[index] != null)
+                {
+                    controls[index].Action = null;
+                    controls[index].IsPressed = false;
+                }
+            }
+        }
+
+        private void WarnMissingBinding()
+        {
+            if (warnedMissingBinding)
                 return;
 
-            warnedInputBinding = true;
-            Debug.LogWarning($"[BattleControlsView] {message}");
+            warnedMissingBinding = true;
+            Debug.LogWarning(
+                "[BattleControlsView] BindPlayer must succeed before using the battle buttons.");
         }
 
-        private InputAction GetInputAction(BattleControlAction action)
+        private sealed class ControlState
         {
-            switch (action)
+            public ControlState(NTSDButton button, BattleInputAction actionType)
             {
-                case BattleControlAction.Attack:
-                    return attackAction;
-                case BattleControlAction.Jump:
-                    return jumpAction;
-                case BattleControlAction.Defend:
-                    return defendAction;
-                default:
-                    return null;
+                Button = button;
+                ActionType = actionType;
             }
-        }
 
-        private Image GetActionImage(BattleControlAction action)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    return attackImage;
-                case BattleControlAction.Jump:
-                    return jumpImage;
-                case BattleControlAction.Defend:
-                    return defendImage;
-                default:
-                    return null;
-            }
-        }
-
-        private GameObject GetPressedState(BattleControlAction action)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    return attackPressedState;
-                case BattleControlAction.Jump:
-                    return jumpPressedState;
-                case BattleControlAction.Defend:
-                    return defendPressedState;
-                default:
-                    return null;
-            }
-        }
-
-        private bool IsActionPressed(BattleControlAction action)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    return attackPressed;
-                case BattleControlAction.Jump:
-                    return jumpPressed;
-                case BattleControlAction.Defend:
-                    return defendPressed;
-                default:
-                    return false;
-            }
-        }
-
-        private void SetActionPressedState(BattleControlAction action, bool pressed)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    attackPressed = pressed;
-                    break;
-                case BattleControlAction.Jump:
-                    jumpPressed = pressed;
-                    break;
-                case BattleControlAction.Defend:
-                    defendPressed = pressed;
-                    break;
-            }
-        }
-
-        private CharacterInputModule GetInputOwner(BattleControlAction action)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    return attackInputOwner;
-                case BattleControlAction.Jump:
-                    return jumpInputOwner;
-                case BattleControlAction.Defend:
-                    return defendInputOwner;
-                default:
-                    return null;
-            }
-        }
-
-        private void SetInputOwner(
-            BattleControlAction action,
-            CharacterInputModule inputController)
-        {
-            switch (action)
-            {
-                case BattleControlAction.Attack:
-                    attackInputOwner = inputController;
-                    break;
-                case BattleControlAction.Jump:
-                    jumpInputOwner = inputController;
-                    break;
-                case BattleControlAction.Defend:
-                    defendInputOwner = inputController;
-                    break;
-            }
-        }
-
-        private void ApplyAction(Image image, GameObject pressedState, bool pressed)
-        {
-            if (image != null)
-                image.color = pressed ? pressedColor : normalColor;
-            if (pressedState != null && pressedState.activeSelf != pressed)
-                pressedState.SetActive(pressed);
-        }
-    }
-
-    internal enum BattleControlAction
-    {
-        Attack,
-        Jump,
-        Defend,
-    }
-
-    /// <summary>
-    /// Runtime-only pointer bridge for the scene's Image action surfaces.
-    /// </summary>
-    internal sealed class BattleControlPointerRelay : MonoBehaviour,
-        IPointerDownHandler,
-        IPointerUpHandler,
-        IPointerExitHandler
-    {
-        private BattleControlsView owner;
-        private BattleControlAction action;
-
-        public void Bind(BattleControlsView nextOwner, BattleControlAction nextAction)
-        {
-            owner = nextOwner;
-            action = nextAction;
-        }
-
-        public void ClearOwner(BattleControlsView expectedOwner)
-        {
-            if (owner == expectedOwner)
-                owner = null;
-        }
-
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            owner?.HandlePointerDown(action);
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            owner?.HandlePointerUp(action);
-        }
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            owner?.HandlePointerUp(action);
-        }
-
-        private void OnDisable()
-        {
-            owner?.HandlePointerUp(action);
+            public NTSDButton Button { get; }
+            public BattleInputAction ActionType { get; }
+            public InputAction Action { get; set; }
+            public bool IsPressed { get; set; }
         }
     }
 }

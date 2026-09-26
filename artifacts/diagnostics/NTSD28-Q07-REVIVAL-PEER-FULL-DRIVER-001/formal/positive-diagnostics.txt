@@ -1,0 +1,9 @@
+step=0 sequence=0 phase=0 timer=0 transition=0
+step=1 sequence=1 phase=0 timer=1 transition=0
+last_tick=1 revival_success=1 revived=1 deferred=0
+revival_event=0,0,2,1,212,FUN_0041C3D0 state-14 life decrement and same-group respawn applied
+tick_message=slot 0 input: dead type-0 input suppressed until positive HP is restored
+step=2 sequence=2 phase=0 timer=2 transition=0
+last_tick=2 revival_success=1 revived=0 deferred=0
+step=3 sequence=3 phase=0 timer=3 transition=0
+last_tick=3 revival_success=1 revived=0 deferred=0

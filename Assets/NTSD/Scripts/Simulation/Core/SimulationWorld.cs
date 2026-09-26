@@ -3005,10 +3005,18 @@ namespace NTSD.Simulation
                             if (includeNonCharacterHitFa &&
                                 entity.Frame?.D?.hit_Fa > 0)
                             {
+                                ulong occupancyEpochBeforeProducer =
+                                    RuntimeSlotOccupancyEpochForServices;
                                 entity.RunFrameLogicBeforeAdvance();
                                 FlushQueuedObjectPointTasks();
                                 if (IsActiveForCurrentPass(entity))
                                     RefreshRuntimeSnapshot(entity);
+                                if (AiUnifiedSnapshotExecutionOwnsCurrentPass &&
+                                    RuntimeSlotOccupancyEpochForServices !=
+                                    occupancyEpochBeforeProducer)
+                                {
+                                    BuildAiInputSlotSnapshot();
+                                }
                             }
                             continue;
                         }

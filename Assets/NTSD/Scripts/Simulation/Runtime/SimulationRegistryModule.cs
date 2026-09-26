@@ -1178,6 +1178,7 @@ namespace NTSD.Simulation
             List<LF2Entity> entityScratch)
         {
             (world.SceneQuery as BruteForceSceneQuery)?.ResetFormalSpatialBroadphase();
+            world.AiUnifiedRowPublisherForServices.EndPass();
 
             registeredObjects.Clear();
             for (int bucketIndex = 0;
@@ -1233,7 +1234,6 @@ namespace NTSD.Simulation
             }
 
             ObjectBuckets.Clear();
-            world.AiUnifiedRowPublisherForServices.EndPass();
             RuntimeSlots.Reset();
             world.IdentityWriter.Reset();
             world.CharacterInputWriter.Reset();

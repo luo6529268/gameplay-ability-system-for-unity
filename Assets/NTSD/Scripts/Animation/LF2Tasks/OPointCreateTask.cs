@@ -36,6 +36,9 @@ namespace NTSD.Animation.LF2Tasks
         public double directVx;
         public double directVy;
         public double directVz;
+        public bool useExplicitInitialVitals;
+        public int initialHp;
+        public int initialMp;
         public bool preserveActionZero;
         public bool skipPostInitZOffset;
         public bool useInitialRuntimeIntPosition;
@@ -87,6 +90,7 @@ namespace NTSD.Animation.LF2Tasks
             requiredRuntimeSlot = -1;
             useDirectRuntimePosition = false; directX = 0.0; directY = 0.0; directZ = 0.0;
             useDirectVelocity = false; directVx = 0.0; directVy = 0.0; directVz = 0.0;
+            useExplicitInitialVitals = false; initialHp = 0; initialMp = 0;
             preserveActionZero = false;
             skipPostInitZOffset = false;
             useInitialRuntimeIntPosition = false;

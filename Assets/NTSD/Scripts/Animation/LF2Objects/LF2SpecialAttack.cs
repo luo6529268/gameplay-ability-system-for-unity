@@ -325,11 +325,6 @@ namespace NTSD.Animation.LF2Objects
                 StateEntryEvent();
                 _lastState = currentState;
             }
-
-            if (Health.HP <= 0)
-            {
-                DieEvent();
-            }
         }
 
         public override void SimObjectInteraction(int tickIndex)

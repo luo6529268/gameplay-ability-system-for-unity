@@ -1,0 +1,13 @@
+# Q07 fusion row1 native zero-frame gate
+
+Status: `FOCUSED_TEST_PASS` for the controlled OID10+11 row1 full-Session/full-Driver comparison at tick0–3 only. Q07/D-024 remain `IN_PROGRESS`.
+
+The first static hypothesis was false. Formal `fusion.dat` row1 selects OID52/action310 and indexed `c/nar/kyu.dat` does not declare frame310, but paired playable `DatDocument::frame(310)` resolves a native zero-initialized frame. `formal/source-run-1.txt` keeps the original diagnostic's mistaken rejection expectation (exit3). After correcting that expectation, `formal/source-run-2.txt` and the expanded `formal/source-run-3.txt` exit0: complete `GameSession28::step` merges at tick1, retains OID52/action310 at tick1–3, and leaves the partner dormant. No production `TryResolve` gate was added.
+
+The original Unity Editor compiled the new test and captured `unity/row1-20260926T141337384-a49e9a3cfe3649179094b9dceede9e0d.csv`. The first Editor job `087c61b3e2894e888b9102cde136742e` stopped before the Driver at a row0-only diagnostic fixture identity check. The helper was extended only for the exact OID10/11 row1 scenario. The corrected row1 focused job `9085a6e53aa34fc482ce2b6e37c4098a` passed 1/1, and the adjacent row0 positive/negative job `83d1c49835e5475385152470b1fba7f4` passed 2/2. Both were run through the existing original Editor bridge, without opening a second project. The shared helper completes ordered Driver shutdown after the test and throws unless World objects, claimed slots and pool borrowers are all zero; the passing jobs therefore passed that cleanup gate.
+
+`COMPARISON.json` compares `formal/row1-source-v3.csv` with the Unity capture by `(tick,slot)` over 30 declared native fields. Eight native and eight Unity rows match; 177 populated field values were compared with zero differences. The Unity capture also records the user-approved fixed-view physical position separately (`view_x=298` for source `x=299` at tick1); that presentation-domain field is not part of the native source-field comparison.
+
+`pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <project-root>` passed (897 records / 34 governed code files), and `git diff --check` passed. Menu Scene, Battle Scene, GameConfig asset and ProjectBattleModeConfig asset stayed at their protected SHA-256 values; no DAT, Scene, mode asset, PNG, production battle script or nonbattle script was changed by this gate.
+
+The controlled initial state does not prove a naturally triggered fusion, the row1 200-tick split, root EXE same-world behavior, or the entire Q07 exit. The false static candidate is closed as a parity result, while those independent exits retain their own status.

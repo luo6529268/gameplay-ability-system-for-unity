@@ -113,13 +113,14 @@ namespace NTSD.Simulation
                 BattleNativeDirectSpawnWriter.InitializeBirth(entity, task);
             else if (task.IsLateOpointSpawn && task.parent != null)
                 BattleNativeOpointBirthWriter.InitializeBirth(entity, task);
-            else PostInitLiving(
+            else PostInitLivingWithTask(
                 entity,
                 task.parent,
                 task.opoint,
                 definition.type,
                 spreadDvz,
-                task.releaseOpointSpawn);
+                task.releaseOpointSpawn,
+                task);
             ApplyReleaseOpointDirectionalVz(entity, task);
             ApplyDirectVelocity(entity, task);
 
@@ -283,10 +284,23 @@ namespace NTSD.Simulation
             float dvz,
             bool releaseOpointSpawn)
         {
+            PostInitLivingWithTask(
+                living, parent, op, objectType, dvz, releaseOpointSpawn, null);
+        }
+
+        private static void PostInitLivingWithTask(
+            LF2Entity living,
+            LF2Entity parent,
+            ObjectPoint op,
+            int objectType,
+            float dvz,
+            bool releaseOpointSpawn,
+            OPointCreateTask task)
+        {
             if (living == null)
                 return;
 
-            BattleSpawnVitalsWriter.Apply(living, op);
+            BattleSpawnVitalsWriter.ApplyWithTask(living, op, task);
 
             if (parent != null)
             {
