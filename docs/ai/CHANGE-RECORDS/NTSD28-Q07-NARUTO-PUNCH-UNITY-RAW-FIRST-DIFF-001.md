@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001
+status: VERIFIED
+change-kind: Q07_NARUTO_PUNCH_UNITY_RAW_SAME_INITIAL_FIRST_DIFFERENCE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs
+authority: formal root NTSD2.8-Logan EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 and paired playable Naruto punch LFR/trace
+evidence: docs/ai/TASKS/NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001.md; artifacts/diagnostics/NTSD28-Q07-NARUTO-PUNCH-FORMAL-HIT-001/REPORT.md
+-->
+
+# NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001
+
+Pre-change: the source/release Naruto punch diagnostic has a reproducible authored frame513 hit/KO and formal LFR, but the existing Q08 Unity physical-J witness lacks complete initial state. `NTSD28UnityRawCaptureEditor` already has formal-content exact-fixture schemas and 45-tick Lee source/Unity raw evidence; it rejects an undeclared 30-tick Naruto scenario. The original Editor process for this repository is present; the independent `I:\UnityPreject\test` Editor is not a validation target. Menu/Battle Scene disk hashes were checked before this package.
+
+Declared change: add one `ntsd28-q07-naruto-punch/1.0` schema predicate and exact fixture validation in the existing Editor-only raw capture script; reuse the previously established explicit-BGM RNG reset and formal project-mode data scope; add the scenario JSON and non-overwriting output/report. Preserve existing 3/26/45-tick contracts and all production behavior. Inputs: seed682973786, slot0/1 Naruto at X500/X525,Z650, HP500/10, team1/2, action0, one physical J at completed tick2, 30 ticks. Expected side effects are only Editor diagnostic output files and bounded temporary simulation; Scene and singleton state must restore. Risks: project-mode/candidate drift, input phase mapping, source LFR CRT seed difference, KO/result timing and request concurrency. Report first difference rather than rewriting expected values.
+
+No production, DAT, PNG, Scene, ProjectSettings, input asset, Q09 dirty or nonbattle file edit is authorized under this Change. After script edit record exact branches, compile/request/trace results, cleanup, governance and untested tiers. Rollback is an exact review of only this package's additions; protected pre-existing work must remain intact.
+
+First original-Editor request `original-editor-run1.result.txt` is preserved as FAIL before any tick: `ValidateScenario` rejected the declared difficulty 0 because the shared difficulty predicate still recognized only the older Lee schema as the zero-difficulty formal fixture. The scenario JSON matches the source's difficulty 0; correct only that new-schema predicate, then use unique run2 output paths. Generated Editor C# build had already passed with zero errors; original Editor DLL timestamp advanced before the request.
+
+Post-change: added only the Naruto schema predicate, exact 30-tick two-Naruto/seed/input fixture, and reuse of the Lee formal explicit-BGM `ResetFromSeed` branch in `NTSD28UnityRawCaptureEditor.cs`. Corrected the initial new-schema difficulty predicate after preserving run1 FAIL. Run2 in original Editor returned PASS, with 30/30 occupied slot sets, 1560/1560 mapped entity fields, 1140/1140 mapped input fields, 30/30 input phases, 30/30 synchronized RNG states and 30/30 CRT call counts matching the root EXE LFR trace. Tick8 attacker action513 and target action186/HP-10 agree. Root LFR CRT initial state differs due playback seed0 versus source/Unity seed682973786; complete RNG parity is not claimed. Full comparison and artifact SHA values are in `artifacts/diagnostics/NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001/ACCEPTANCE.md`. Generated Editor build exit0, 0 errors/208 warnings; original Editor request run2 PASS. Saved Menu/Battle Scene hashes remain unchanged. Physical Battle Scene keys, Unity KO event attribution, natural Menu path, GPU and aggregate Q07 remain unverified. No production, DAT, image, Scene, ProjectSettings or nonbattle changes.
+
+Final governance: original Editor bridge reports Battle scene in EditMode and idle; `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <repository>` exit0, 852 Records, seven current governed code files covered (historical non-diff warnings only); `git diff --check` exit0. The three live alignment/handoff/STATE documents are NUL-free. The prior approved v3 recovery was already installed, so no recovery candidate was recopied over later progress in this package.

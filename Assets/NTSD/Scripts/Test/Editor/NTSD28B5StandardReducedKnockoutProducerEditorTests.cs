@@ -106,6 +106,8 @@ namespace NTSD.Test.Editor
             source.Runtime.OwnerSlotIndex = credit.Runtime.SlotIndex;
             credit.Runtime.KnockoutCount358 = 7;
             victim.Health.HP = reduced ? 1 : 10;
+            world.Runtime.Flow.CurrentTickIndex = 8;
+            world.Runtime.NativeWorldClock.FrameSequence = 7UL;
 
             if (reduced)
             {
@@ -133,7 +135,8 @@ namespace NTSD.Test.Editor
             Assert.That(attacker.Runtime.KnockoutCount358, Is.Zero);
             Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
             NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
-            Assert.That(knockout.BattleTimeTick, Is.EqualTo(world.CurrentTickIndex));
+            Assert.That(knockout.BattleTimeTick, Is.EqualTo(7),
+                "An ordinary pre-C24 hit records the current native sequence, not the host tick.");
             Assert.That(knockout.SourceObjectType,
                 Is.EqualTo((int)LF2ObjectType.Character));
             Assert.That(knockout.SourceSlot, Is.EqualTo(attacker.Runtime.SlotIndex));

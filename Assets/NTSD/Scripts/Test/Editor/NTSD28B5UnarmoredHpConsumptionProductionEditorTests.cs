@@ -14,6 +14,106 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28B5UnarmoredHpConsumptionProductionEditorTests
     {
         [Test]
+        public void Type3ChildToType0Target_ResourceRewardGoesToRootOwner()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter root = CreateEntity(world, 8670, 0, 0);
+            TypedCharacter target = CreateEntity(world, 8671, 1, 0);
+            TypedCharacter child = CreateEntity(
+                world, 8672, 2, (int)LF2ObjectType.SpecialAttack);
+            child.Runtime.OwnerSlotIndex = root.Runtime.SlotIndex;
+            root.Health.PP = 400;
+            target.Health.PP = 300;
+
+            bool applied = world.DamageWriter.ApplyStandardCharacterDamage(
+                world,
+                child,
+                target,
+                target.HitCounters,
+                new InteractionArea
+                {
+                    kind = 0,
+                    injury = 35,
+                    fall = 1,
+                    dvx = 1,
+                    arest = 10,
+                });
+
+            Assert.That(applied, Is.True);
+            Assert.That(target.Health.HP, Is.EqualTo(465));
+            Assert.That(root.Health.PP, Is.EqualTo(426));
+            Assert.That(target.Health.PP, Is.EqualTo(326));
+            Assert.That(child.Health.PP, Is.EqualTo(500));
+        }
+
+        [Test]
+        public void Type3ChildToType0ArmorTarget_ReducedHitTransfersCurrentMp()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter root = CreateEntity(world, 8673, 0, 0);
+            LF2ArmorData armor = Armor();
+            TypedCharacter target = CreateEntity(world, 8674, 1, 0, armor);
+            TypedCharacter child = CreateEntity(
+                world, 8675, 2, (int)LF2ObjectType.SpecialAttack);
+            child.Runtime.OwnerSlotIndex = root.Runtime.SlotIndex;
+            root.Health.PP = 400;
+            target.Health.PP = 300;
+
+            world.DamageWriter.ApplyAlternateDamage(
+                world,
+                child,
+                target,
+                target.HitCounters,
+                new InteractionArea
+                {
+                    kind = 0,
+                    injury = 35,
+                    fall = 1,
+                    dvx = 1,
+                    arest = 10,
+                },
+                armor);
+
+            Assert.That(target.Health.HP, Is.LessThan(500));
+            Assert.That(root.Health.PP, Is.EqualTo(426));
+            Assert.That(target.Health.PP, Is.EqualTo(326));
+            Assert.That(child.Health.PP, Is.EqualTo(500));
+        }
+
+        [Test]
+        public void Type3ChildToType0ArmorTarget_OddGroundDvxKeepsFraction()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter root = CreateEntity(world, 8676, 0, 0);
+            LF2ArmorData armor = Armor();
+            TypedCharacter target = CreateEntity(world, 8677, 1, 0, armor);
+            TypedCharacter child = CreateEntity(
+                world, 8678, 2, (int)LF2ObjectType.SpecialAttack);
+            child.Runtime.OwnerSlotIndex = root.Runtime.SlotIndex;
+            double pendingXBefore = target.KnockbackVx;
+
+            world.DamageWriter.ApplyAlternateDamage(
+                world,
+                child,
+                target,
+                target.HitCounters,
+                new InteractionArea
+                {
+                    kind = 0,
+                    injury = 35,
+                    fall = 1,
+                    dvx = 7,
+                    arest = 10,
+                },
+                armor);
+
+            Assert.That(target.Health.HP, Is.LessThan(500));
+            Assert.That(target.KnockbackVx,
+                Is.EqualTo(pendingXBefore + 3.5).Within(0.0000001),
+                "Ground reduced hit retains the half-unit before impulse averaging.");
+        }
+
+        [Test]
         public void Actual_CharacterAccumulatesEffectiveHpDamage()
         {
             var world = new SimulationWorld();
@@ -333,4 +433,3 @@ namespace NTSD.Test.Editor
     }
 }
 #endif
-

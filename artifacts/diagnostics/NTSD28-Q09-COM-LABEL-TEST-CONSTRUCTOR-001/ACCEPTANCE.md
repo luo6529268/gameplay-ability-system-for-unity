@@ -1,0 +1,11 @@
+# Q09 com-label Editor fixture signature
+
+Status: `FOCUSED_TEST_PASS`, limited to this test-fixture repair. The current private `BattleCommonVisualCatalog` com-label constructor in `Assets/NTSD/Scripts/Animation/Runtime/BattleSpriteCatalog.cs` takes seven arguments, the last an optional `bool nativeSpark`. Reflection still needs that argument explicitly; the old six-argument lookup returned null before any command assertion.
+
+Only `BattlePresentationCommandWriterEditorTests.cs` changed for this package: its com-label lookup now includes `typeof(bool)`, and the corresponding invocation passes `false`, preserving the old fixture behavior. The pre-existing uncommitted platform-shadow test hunk in the same file was preserved. No production battle script, DAT, PNG, mode Asset, Scene or nonbattle file was edited for this package.
+
+The original Editor PID11944 on this project (raw MCP port6402) refreshed and compiled with zero current Console errors. Exact selected test `NTSD.Test.BattlePresentationCommandWriterEditorTests.CentralOnly_GenericComUsesRelationSheetComposite_LegacyKeepsThreeGlyphs` passed 1/1, job `fe0daaae3ce94054b2e5760c21b5f855`. `get_tests` then identified eight current tests in the class; those eight exact full names were run as job `81707241ca2a4013948bf66ec36b116d`, result 8/8 passed, zero failed/skipped. The job included the two existing platform-shadow assertions, but they do not prove GPU pixel ownership.
+
+Protected disk SHA-256 checks after the tests: Menu Scene `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, Battle Scene `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`, GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`, ProjectBattleModeConfig `88E10D43B047952FD3053A87B7E5F60D0F87A6CD1A23313F37EA1503C686F55C`; saved Scenes have no Git diff. `git diff --check` exited zero with only existing line-ending notices. Q09 platform-shadow pixel attribution, natural input and formal EXE same-condition graphics remain open.
+
+The required Change Ledger validator passed with 858 Records and 16 governed code files in the current dirty diff; the three live progress documents are NUL-free. No aggregate SelfCheck or Play run was performed for this test-only repair.

@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1a0561ebcf824988a5276eb605be861f",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790374324523,
+      "finished_unix_ms": 1790374353796,
+      "last_update_unix_ms": 1790374353796,
+      "progress": {
+        "completed": 1,
+        "total": 8519,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790374330983,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07KnockoutFeedProductionRowEditorTests.NarutoPunchPublishesKoFeedThroughNativeThirtyTickBoundary",
+        "last_finished_unix_ms": 1790374352449,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q07KnockoutFeedProductionRowEditorTests.NarutoPunchPublishesKoFeedThroughNativeThirtyTickBoundary",
+            "message": "System.InvalidOperationException : Replay validation shutdown retained objects=2, slots=2, borrowers=0, shutdown=Failed, stage=PendingObjectPointTasksDiscarded, reason=object-pool-runtime-state-is-invalid"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

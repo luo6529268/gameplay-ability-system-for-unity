@@ -1,0 +1,257 @@
+{
+  "x550": {
+    "completedTicks": 26,
+    "entityRows": 68,
+    "fieldCount": 21,
+    "fieldComparisons": 1428,
+    "differenceCount": 34,
+    "differences": [
+      {
+        "tick": 16,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 16,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 17,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 17,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 18,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 18,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 19,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 19,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 20,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 20,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 20,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 558.4,
+        "unity": 558
+      },
+      {
+        "tick": 21,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 21,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 21,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 565.8,
+        "unity": 565
+      },
+      {
+        "tick": 22,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 22,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 22,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 573.1999999999999,
+        "unity": 572
+      },
+      {
+        "tick": 22,
+        "slot": 1,
+        "field": "x",
+        "formal": 573,
+        "unity": 572
+      },
+      {
+        "tick": 23,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 23,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 23,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 580.5999999999999,
+        "unity": 579
+      },
+      {
+        "tick": 23,
+        "slot": 1,
+        "field": "x",
+        "formal": 580,
+        "unity": 579
+      },
+      {
+        "tick": 24,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 24,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 24,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 587.9999999999999,
+        "unity": 586
+      },
+      {
+        "tick": 24,
+        "slot": 1,
+        "field": "x",
+        "formal": 587,
+        "unity": 586
+      },
+      {
+        "tick": 25,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 25,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 25,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 595.3999999999999,
+        "unity": 593
+      },
+      {
+        "tick": 25,
+        "slot": 1,
+        "field": "x",
+        "formal": 595,
+        "unity": 593
+      },
+      {
+        "tick": 26,
+        "slot": 0,
+        "field": "mp",
+        "formal": 500,
+        "unity": 452
+      },
+      {
+        "tick": 26,
+        "slot": 1,
+        "field": "mp",
+        "formal": 404,
+        "unity": 352
+      },
+      {
+        "tick": 26,
+        "slot": 1,
+        "field": "preciseX",
+        "formal": 602.7999999999998,
+        "unity": 600
+      },
+      {
+        "tick": 26,
+        "slot": 1,
+        "field": "x",
+        "formal": 602,
+        "unity": 600
+      }
+    ]
+  },
+  "x1200": {
+    "completedTicks": 26,
+    "entityRows": 100,
+    "fieldCount": 21,
+    "fieldComparisons": 2100,
+    "differenceCount": 0,
+    "differences": []
+  }
+}

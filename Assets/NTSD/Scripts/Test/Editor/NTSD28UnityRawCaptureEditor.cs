@@ -62,7 +62,18 @@ namespace NTSD.EditorTools
         private const string Q07DdjScenarioSchema = "ntsd28-q07-ddj/1.0";
         private const string Q07SasukeNeedleScenarioSchema =
             "ntsd28-q07-sasuke-needle/1.0";
+        private const string Q07SasukeNeedleTargetHitScenarioSchema =
+            "ntsd28-q07-sasuke-needle-target-hit/1.0";
+        private const string Q07SasukeArmorTargetScenarioSchema =
+            "ntsd28-q07-sasuke-armor-target/1.0";
+        private const string Q07LeeJlChildScenarioSchema =
+            "ntsd28-q07-lee-jl-child/1.0";
+        private const string Q07NarutoPunchScenarioSchema =
+            "ntsd28-q07-naruto-punch/1.0";
+        private const string Q07KnockoutEventCaptureSchema =
+            "ntsd28-q07-knockout-events/1.0";
         private const int Q07DdjSeed = 0x28A55A5A;
+        private const int Q07LeeJlChildSeed = 682973786;
         private const int Stage23Width = 1330;
         private const int Stage23ZMin = 542;
         private const int Stage23ZMax = 712;
@@ -89,7 +100,8 @@ namespace NTSD.EditorTools
 
         internal static void WithLoganScenarioForReplayTests(
             string runtimeRoot, string scenarioPath, BattleRuntimeProfile profile, int totalTicks,
-            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify)
+            Action<SimulationTickDriver, FrameInputSet[], LockstepSessionIdentity> verify,
+            bool useProjectMode = false)
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode)
                 throw new InvalidOperationException("Replay validation requires Edit Mode.");
@@ -104,14 +116,18 @@ namespace NTSD.EditorTools
             for (int index = 0; index < inputs.Length; index++)
                 inputs[index] = index < original.Length ? original[index] : new FrameInputSet(index + 1,
                     slots.Select(slot => new SimulationPlayerInput(slot, SimulationInputButtons.None)).ToArray());
-            using var dataScope = new UnityCurrentDatScope(scenario.combatants.Select(value => value.oid).ToArray(), runtimeRoot);
+            using var dataScope = new UnityCurrentDatScope(
+                scenario.combatants.Select(value => value.oid).ToArray(),
+                runtimeRoot, useProjectMode);
             ulong fixtureIdentity = LoganContentIdentity.ForDecodeContract(ComputeFileSha256(path),
                 "NTSD28_Q05_SCENARIO_FIXTURE_V1").CatalogFingerprint;
             LockstepSessionIdentity identity = dataScope.Catalog.ContentIdentity.CreateLocalValidationSessionIdentity(
                 0x51305UL, unchecked((uint)scenario.seed), fixtureIdentity, slots);
+            using var poolScope = useProjectMode ? new TemporaryObjectPoolScope() : null;
             SimulationWorld observedWorld;
             BattleLogicReferencePool observedPool;
-            using (var driverScope = new TemporarySimulationDriverScope())
+            var driverScope = new TemporarySimulationDriverScope();
+            using (driverScope)
             {
                 SimulationTickDriver driver = driverScope.Driver;
                 int capacity = profile == BattleRuntimeProfile.Authority400
@@ -135,6 +151,8 @@ namespace NTSD.EditorTools
                     enableFrameChecksum = true,
                 });
                 driver.SetPaused(false);
+                if (useProjectMode)
+                    driver.BeginBattleAllocationSeal();
                 observedWorld.SetLogicOnlyEntityMaterialization(true);
                 dataScope.AssertInputsCurrent();
                 verify(driver, inputs, identity);
@@ -142,7 +160,10 @@ namespace NTSD.EditorTools
             }
             if (observedWorld.ObjectCount != 0 || observedWorld.ClaimedRuntimeSlotCountForDiagnostics != 0 || observedPool.ActiveCount != 0)
                 throw new InvalidOperationException("Replay validation shutdown retained objects=" + observedWorld.ObjectCount +
-                    ", slots=" + observedWorld.ClaimedRuntimeSlotCountForDiagnostics + ", borrowers=" + observedPool.ActiveCount);
+                    ", slots=" + observedWorld.ClaimedRuntimeSlotCountForDiagnostics + ", borrowers=" + observedPool.ActiveCount +
+                    ", shutdown=" + driverScope.LastShutdownReport.Status +
+                    ", stage=" + driverScope.LastShutdownReport.CompletedStage +
+                    ", reason=" + driverScope.LastShutdownReport.FailureReason);
         }
 
         internal static string RunScenarioForTests(
@@ -208,7 +229,9 @@ namespace NTSD.EditorTools
                     request.domainOutputPath,
                     request.inputRngOutputPath,
                     request.loganRuntimeRoot,
-                    request.domainVersion);
+                    request.domainVersion,
+                    request.resultPath,
+                    request.knockoutOutputPath);
             }
             finally
             {
@@ -231,11 +254,26 @@ namespace NTSD.EditorTools
             string domainOutputPath = null,
             string inputRngOutputPath = null,
             string loganRuntimeRoot = null,
-            string domainVersion = null)
+            string domainVersion = null,
+            string requestedResultPath = null,
+            string knockoutOutputPath = null)
         {
-            string resultPath = ProjectPath(ResultFile);
+            string resultPath = ProjectPath(string.IsNullOrWhiteSpace(requestedResultPath)
+                ? ResultFile : requestedResultPath);
             Directory.CreateDirectory(
                 Path.GetDirectoryName(resultPath) ?? ProjectPath("Temp"));
+            if (!string.IsNullOrWhiteSpace(requestedResultPath) && File.Exists(resultPath))
+            {
+                Debug.LogError("[NTSD28UnityRawCapture] Refusing to overwrite result: " + resultPath);
+                return;
+            }
+            if (!string.IsNullOrWhiteSpace(knockoutOutputPath) &&
+                string.Equals(ProjectPath(knockoutOutputPath), resultPath,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.LogError("[NTSD28UnityRawCapture] KO output and result paths must differ.");
+                return;
+            }
             try
             {
                 string resolvedOutput = RunScenario(
@@ -244,7 +282,8 @@ namespace NTSD.EditorTools
                     domainOutputPath,
                     inputRngOutputPath,
                     loganRuntimeRoot,
-                    domainVersion);
+                    domainVersion,
+                    knockoutOutputPath);
                 File.WriteAllText(
                     resultPath,
                     $"PASS{Environment.NewLine}{resolvedOutput}",
@@ -269,7 +308,8 @@ namespace NTSD.EditorTools
             string domainOutputPath,
             string inputRngOutputPath,
             string loganRuntimeRoot = null,
-            string domainVersion = null)
+            string domainVersion = null,
+            string knockoutOutputPath = null)
         {
             if (domainVersion != null &&
                 ((domainVersion != "v1" && domainVersion != "v2") ||
@@ -295,15 +335,29 @@ namespace NTSD.EditorTools
                 inputRngOutputPath)
                 ? null
                 : ProjectPath(inputRngOutputPath);
+            string resolvedKnockoutOutputPath = string.IsNullOrWhiteSpace(
+                knockoutOutputPath)
+                ? null
+                : ProjectPath(knockoutOutputPath);
             RequireDistinctOutputPaths(
                 resolvedOutputPath,
                 resolvedDomainOutputPath,
-                resolvedInputRngOutputPath);
+                resolvedInputRngOutputPath,
+                resolvedKnockoutOutputPath);
             UnityRawScenario scenario = JsonUtility.FromJson<UnityRawScenario>(
                 File.ReadAllText(resolvedScenarioPath, Encoding.UTF8));
             ValidateScenario(scenario);
             bool formalQ07Scenario = scenario.schema == Q07DdjScenarioSchema ||
-                scenario.schema == Q07SasukeNeedleScenarioSchema;
+                scenario.schema == Q07SasukeNeedleScenarioSchema ||
+                scenario.schema == Q07SasukeNeedleTargetHitScenarioSchema ||
+                scenario.schema == Q07SasukeArmorTargetScenarioSchema ||
+                scenario.schema == Q07LeeJlChildScenarioSchema ||
+                scenario.schema == Q07NarutoPunchScenarioSchema;
+            if (resolvedKnockoutOutputPath != null &&
+                scenario.schema != Q07NarutoPunchScenarioSchema)
+                throw new InvalidDataException("KO-event capture requires the exact Q07 Naruto punch scenario.");
+            if (resolvedKnockoutOutputPath != null && File.Exists(resolvedKnockoutOutputPath))
+                throw new IOException("Refusing to overwrite KO-event output: " + resolvedKnockoutOutputPath);
             if (formalQ07Scenario && string.IsNullOrWhiteSpace(loganRuntimeRoot))
                 throw new InvalidDataException("Q07 formal trace requires the selected Logan runtime root.");
 
@@ -319,6 +373,12 @@ namespace NTSD.EditorTools
             {
                 Directory.CreateDirectory(
                     Path.GetDirectoryName(resolvedInputRngOutputPath) ??
+                    ProjectPath("Temp"));
+            }
+            if (resolvedKnockoutOutputPath != null)
+            {
+                Directory.CreateDirectory(
+                    Path.GetDirectoryName(resolvedKnockoutOutputPath) ??
                     ProjectPath("Temp"));
             }
 
@@ -395,6 +455,12 @@ namespace NTSD.EditorTools
                     resolvedInputRngOutputPath,
                     false,
                     new UTF8Encoding(false));
+            StreamWriter knockoutWriter = resolvedKnockoutOutputPath == null
+                ? null
+                : new StreamWriter(
+                    resolvedKnockoutOutputPath,
+                    false,
+                    new UTF8Encoding(false));
             try
             {
                 writer.WriteLine(BuildHeaderJson(
@@ -418,6 +484,12 @@ namespace NTSD.EditorTools
                     scenario,
                     world,
                     previousNativeRandom));
+                knockoutWriter?.WriteLine(BattleCanonicalJson.Serialize(DictionaryOf(
+                    ("kind", "header"),
+                    ("schema", Q07KnockoutEventCaptureSchema),
+                    ("scenarioFileSha256", ComputeFileSha256(resolvedScenarioPath)),
+                    ("formalAuthorityExeSha256", FormalAuthorityExeSha256),
+                    ("expectedTickCount", scenario.ticks))));
 
                 int exactCharacterCountExpected = scenario.combatants.Count(combatant =>
                     dataScope.Catalog == null || dataScope.Catalog.Entries.Any(entry =>
@@ -454,6 +526,11 @@ namespace NTSD.EditorTools
                     writer.WriteLine(
                         NTSD28UnityEntityRawCapture.CaptureTickJson(world, tick));
                     writer.Flush();
+                    if (knockoutWriter != null)
+                    {
+                        knockoutWriter.WriteLine(BuildKnockoutTickJson(world, tick));
+                        knockoutWriter.Flush();
+                    }
                     if (domainWriter != null)
                     {
                         List<DomainOccupant> currentOccupants =
@@ -491,6 +568,7 @@ namespace NTSD.EditorTools
                 world.NativeRandom.SetDiagnosticCallObserver(null);
                 domainWriter?.Dispose();
                 inputRngWriter?.Dispose();
+                knockoutWriter?.Dispose();
             }
 
             try
@@ -536,7 +614,18 @@ namespace NTSD.EditorTools
                 scenario.schema, Q07DdjScenarioSchema, StringComparison.Ordinal);
             bool q07SasukeNeedleScenario = string.Equals(
                 scenario.schema, Q07SasukeNeedleScenarioSchema, StringComparison.Ordinal);
-            bool formalQ07Scenario = q07DdjScenario || q07SasukeNeedleScenario;
+            bool q07SasukeNeedleTargetHitScenario = string.Equals(
+                scenario.schema, Q07SasukeNeedleTargetHitScenarioSchema, StringComparison.Ordinal);
+            bool q07SasukeArmorTargetScenario = string.Equals(
+                scenario.schema, Q07SasukeArmorTargetScenarioSchema, StringComparison.Ordinal);
+            bool q07LeeJlChildScenario = string.Equals(
+                scenario.schema, Q07LeeJlChildScenarioSchema, StringComparison.Ordinal);
+            bool q07NarutoPunchScenario = string.Equals(
+                scenario.schema, Q07NarutoPunchScenarioSchema, StringComparison.Ordinal);
+            bool formalQ07Scenario = q07DdjScenario || q07SasukeNeedleScenario ||
+                                     q07SasukeNeedleTargetHitScenario ||
+                                     q07SasukeArmorTargetScenario ||
+                                     q07LeeJlChildScenario || q07NarutoPunchScenario;
             if (!formalQ07Scenario && !string.Equals(
                     scenario.schema, "ntsd28-scenario/1.0", StringComparison.Ordinal))
             {
@@ -554,13 +643,23 @@ namespace NTSD.EditorTools
                 throw new InvalidDataException("Scenario data SHA-256 is invalid.");
             if (!string.Equals(scenario.mode, "versus", StringComparison.Ordinal))
                 throw new InvalidDataException("Only the neutral versus baseline is supported.");
-            if (scenario.ticks != (formalQ07Scenario ? 26 : 3) || scenario.emitInitial ||
+            if (scenario.ticks != (q07LeeJlChildScenario ? 45 :
+                    q07NarutoPunchScenario ? 30 : formalQ07Scenario ? 26 : 3) ||
+                scenario.emitInitial ||
                 scenario.battleMode != 0 || scenario.stageId != 23 ||
-                scenario.difficultyLevel4A0C30 != 1 ||
-                (formalQ07Scenario && scenario.seed != Q07DdjSeed))
+                scenario.difficultyLevel4A0C30 !=
+                    (q07LeeJlChildScenario || q07NarutoPunchScenario ? 0 : 1) ||
+                ((q07LeeJlChildScenario || q07NarutoPunchScenario) &&
+                    scenario.seed != Q07LeeJlChildSeed) ||
+                (formalQ07Scenario && !q07LeeJlChildScenario &&
+                    !q07NarutoPunchScenario && scenario.seed != Q07DdjSeed))
             {
                 throw new InvalidDataException(
-                    formalQ07Scenario
+                    q07LeeJlChildScenario
+                        ? "Q07 Lee J,L scenario must preserve the 45-tick formal fixture."
+                        : q07NarutoPunchScenario
+                        ? "Q07 Naruto punch scenario must preserve the 30-tick formal fixture."
+                        : formalQ07Scenario
                         ? "Q07 formal scenario must preserve the 26-tick Stage 23 fixture."
                         : "Scenario must preserve the frozen 3-tick Stage 23 baseline.");
             }
@@ -617,7 +716,90 @@ namespace NTSD.EditorTools
                     throw new InvalidDataException("Q07 Sasuke participant state differs from the formal fixture.");
             }
 
+            if (q07SasukeNeedleTargetHitScenario)
+            {
+                UnityRawCombatant sasuke = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                if (sasuke.oid != 11 || sasuke.team != 1 || sasuke.x != 500 || sasuke.y != 0 ||
+                    sasuke.z != 350 || sasuke.hp != 500 || sasuke.baseHp != 500 ||
+                    sasuke.mp != 500 || sasuke.facing != 0 || sasuke.action != 110 ||
+                    opponent.oid != 7 || opponent.team != 2 ||
+                    (opponent.x != 550 && opponent.x != 1200) || opponent.y != 0 ||
+                    opponent.z != 350 || opponent.hp != 500 || opponent.baseHp != 500 ||
+                    opponent.mp != 500 || opponent.facing != 0 ||
+                    opponent.action != 0 || sasuke.nativeAi || opponent.nativeAi)
+                    throw new InvalidDataException("Q07 Sasuke target-hit participants differ from the formal fixture.");
+            }
+
+            if (q07SasukeArmorTargetScenario)
+            {
+                UnityRawCombatant sasuke = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                if (sasuke.oid != 11 || sasuke.team != 1 || sasuke.x != 500 || sasuke.y != 0 ||
+                    sasuke.z != 350 || sasuke.hp != 500 || sasuke.baseHp != 500 ||
+                    sasuke.mp != 500 || sasuke.facing != 0 || sasuke.action != 110 ||
+                    opponent.oid != 87 || opponent.team != 2 ||
+                    (opponent.x != 550 && opponent.x != 1200) || opponent.y != 0 ||
+                    opponent.z != 350 || opponent.hp != 500 || opponent.baseHp != 500 ||
+                    opponent.mp != 300 || opponent.facing != 0 ||
+                    opponent.action != 0 || sasuke.nativeAi || opponent.nativeAi)
+                    throw new InvalidDataException("Q07 Sasuke armor-target participants differ from the formal fixture.");
+            }
+
+            if (q07LeeJlChildScenario)
+            {
+                UnityRawCombatant lee = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                bool LeeState(UnityRawCombatant c, int oid, int team, int x) =>
+                    c.oid == oid && c.team == team && c.x == x && c.y == 0 &&
+                    c.z == 650 && c.hp == 500 && c.baseHp == 500 && c.mp == 500 &&
+                    c.facing == 0 && c.action == 0 && c.reviveLives30c == 1 &&
+                    !c.nativeAi && c.nativeComputerState1b8 == 0;
+                if (!LeeState(lee, 7, 1, 500) ||
+                    !LeeState(opponent, 2, 2, 1200) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C)
+                    throw new InvalidDataException("Q07 Lee participants differ from the formal fixture.");
+            }
+
+            if (q07NarutoPunchScenario)
+            {
+                UnityRawCombatant attacker = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant target = scenario.combatants.Single(combatant => combatant.slot == 1);
+                bool HasState(UnityRawCombatant c, int team, int x, int hp) =>
+                    c.oid == 2 && c.team == team && c.x == x && c.y == 0 &&
+                    c.z == 650 && c.hp == hp && c.baseHp == hp && c.mp == 500 &&
+                    c.facing == 0 && c.action == 0 && c.reviveLives30c == 1 &&
+                    c.reviveNextLives310 == 0 && c.reviveNextHp314 == 0 &&
+                    c.renderPhase008 == 0 && !c.nativeAi &&
+                    c.nativeComputerState1b8 == 0;
+                if (!HasState(attacker, 1, 500, 500) ||
+                    !HasState(target, 2, 525, 10) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C)
+                    throw new InvalidDataException("Q07 Naruto punch participants differ from the formal fixture.");
+            }
+
             ValidateInputs(scenario, slots);
+            if (q07LeeJlChildScenario)
+            {
+                UnityRawInput[] inputs = scenario.inputs ?? Array.Empty<UnityRawInput>();
+                bool HasSingleKey(int tick, string key) => inputs.Any(input =>
+                    input.tick == tick && input.slot == 0 &&
+                    input.keys != null && input.keys.Length == 1 &&
+                    input.keys[0] == key);
+                if (inputs.Length != 3 || !HasSingleKey(1, "J") ||
+                    !HasSingleKey(2, "L") || !HasSingleKey(3, "L"))
+                    throw new InvalidDataException("Q07 Lee input schedule differs from the formal J,L fixture.");
+            }
+            if (q07NarutoPunchScenario)
+            {
+                UnityRawInput[] inputs = scenario.inputs ?? Array.Empty<UnityRawInput>();
+                if (inputs.Length != 1 || inputs[0].tick != 1 ||
+                    inputs[0].slot != 0 || inputs[0].keys == null ||
+                    inputs[0].keys.Length != 1 || inputs[0].keys[0] != "J")
+                    throw new InvalidDataException("Q07 Naruto punch input differs from J on completed tick 2.");
+            }
         }
 
         private static void ValidateInputs(
@@ -722,8 +904,12 @@ namespace NTSD.EditorTools
                     BattleAiExecutionProfile.DataOrientedCanonical);
             }
             world.Rng.Seed(unchecked((uint)scenario.seed));
-            world.NativeRandom.ResetForDirectBattle(
-                unchecked((uint)scenario.seed));
+            if (scenario.schema == Q07LeeJlChildScenarioSchema ||
+                scenario.schema == Q07NarutoPunchScenarioSchema)
+                world.NativeRandom.ResetFromSeed(unchecked((uint)scenario.seed));
+            else
+                world.NativeRandom.ResetForDirectBattle(
+                    unchecked((uint)scenario.seed));
             world.SetExplicitStageRuntimeSnapshotForTesting(
                 Stage23Width,
                 Stage23ZMin,
@@ -932,6 +1118,27 @@ namespace NTSD.EditorTools
                 ("unityAssemblySha256", ComputeFileSha256(assemblyPath)),
                 ("runtimeAssemblySha256", ComputeFileSha256(typeof(NTSD28UnityEntityRawCapture).Assembly.Location)),
                 ("content", (object)content)));
+        }
+
+        private static string BuildKnockoutTickJson(
+            SimulationWorld world,
+            int completedTick)
+        {
+            object[] events = world.NativeKnockoutEvents
+                .Select(value => (object)DictionaryOf(
+                    ("battleTimeTick", value.BattleTimeTick),
+                    ("sourceObjectType", value.SourceObjectType),
+                    ("fourOwnerSlot", value.FourOwnerSlot),
+                    ("victimSlot", value.VictimSlot),
+                    ("sourceSlot", value.SourceSlot),
+                    ("creditSlot", value.CreditSlot)))
+                .ToArray();
+            return BattleCanonicalJson.Serialize(DictionaryOf(
+                ("kind", "tick"),
+                ("schema", Q07KnockoutEventCaptureSchema),
+                ("completedTick", completedTick),
+                ("eventCount", events.Length),
+                ("events", (object)events)));
         }
 
         private static string BuildDomainHeaderJson(
@@ -1480,6 +1687,52 @@ namespace NTSD.EditorTools
             }
         }
 
+        private sealed class TemporaryObjectPoolScope : IDisposable
+        {
+            private static readonly FieldInfo InstanceField =
+                typeof(MoreMountains.Tools.MMSingleton<LF2ObjectPool>).GetField(
+                    "_instance", BindingFlags.Static | BindingFlags.NonPublic);
+
+            private readonly object previousInstance;
+            private readonly GameObject host;
+
+            public TemporaryObjectPoolScope()
+            {
+                previousInstance = InstanceField.GetValue(null);
+                InstanceField.SetValue(null, null);
+                try
+                {
+                    host = new GameObject("__NTSD28_UnityRawCapturePool")
+                    {
+                        hideFlags = HideFlags.HideAndDontSave,
+                    };
+                    LF2ObjectPool pool = host.AddComponent<LF2ObjectPool>();
+                    if (!pool.IsRuntimeStateValidForAcceptance)
+                        typeof(LF2ObjectPool).GetMethod("Awake",
+                            BindingFlags.Instance | BindingFlags.NonPublic)
+                            .Invoke(pool, null);
+                    if (!pool.IsRuntimeStateValidForAcceptance)
+                        throw new InvalidOperationException(
+                            "The replay fixture pool did not initialize its runtime state.");
+                    InstanceField.SetValue(null, pool);
+                }
+                catch
+                {
+                    if (host != null)
+                        UnityEngine.Object.DestroyImmediate(host);
+                    InstanceField.SetValue(null, previousInstance);
+                    throw;
+                }
+            }
+
+            public void Dispose()
+            {
+                if (host != null)
+                    UnityEngine.Object.DestroyImmediate(host);
+                InstanceField.SetValue(null, previousInstance);
+            }
+        }
+
         private sealed class TemporarySimulationDriverScope : IDisposable
         {
             private static readonly PropertyInfo InstanceProperty =
@@ -1503,6 +1756,7 @@ namespace NTSD.EditorTools
             }
 
             public SimulationTickDriver Driver { get; }
+            public BattleRuntimeShutdownReport LastShutdownReport { get; private set; }
 
             public void Dispose()
             {
@@ -1510,6 +1764,7 @@ namespace NTSD.EditorTools
                 {
                     BattleRuntimeShutdownReport report =
                         Driver.ShutdownBattleRuntime();
+                    LastShutdownReport = report;
                     if (report.Status != BattleRuntimeShutdownStatus.Failed)
                     {
                         Driver.CompleteBattleRuntimeShutdownAfterMapCleanup(
@@ -1846,7 +2101,9 @@ namespace NTSD.EditorTools
             public string domainOutputPath;
             public string domainVersion;
             public string inputRngOutputPath;
+            public string knockoutOutputPath;
             public string loganRuntimeRoot;
+            public string resultPath;
         }
 
         [Serializable]

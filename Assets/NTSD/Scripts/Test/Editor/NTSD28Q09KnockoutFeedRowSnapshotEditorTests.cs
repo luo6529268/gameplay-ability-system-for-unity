@@ -21,7 +21,7 @@ namespace NTSD.Test.Editor
         private BattleKnockoutFeedRowProjection projection;
         private BattlePresentationFrame frame;
         private BattleContentSource source;
-        private string modeText;
+        private LoganModeKnockoutFeedInput modeFeed;
 
         [SetUp]
         public void SetUp()
@@ -29,8 +29,8 @@ namespace NTSD.Test.Editor
             string root = Path.Combine(Directory.GetParent(Application.dataPath).FullName,
                 "Assets/NTSD/Content/LoganRuntime");
             source = BattleContentSource.ForLoganRuntime(root);
-            modeText = File.ReadAllText(Path.Combine(root,
-                "decoded_dat/data/mode/ntsd.dat"));
+            modeFeed = LoganModeKnockoutFeedInput.FromProjectSnapshot(
+                ProjectBattleModeConfig.LoadDefault().Capture());
             world = new SimulationWorld();
             world.ResetRuntimeState();
             world.Runtime.Match.BattleGameModeId = 1;
@@ -47,7 +47,7 @@ namespace NTSD.Test.Editor
             world.Register(Character(4, 1, 2));
             world.Register(Character(5, 2, 3));
             projection = new BattleKnockoutFeedRowProjection();
-            projection.SetFeed(LoganModeKnockoutFeedInput.Parse(modeText), source);
+            projection.SetFeed(modeFeed, source);
             frame = new BattlePresentationFrame();
         }
 
@@ -91,9 +91,20 @@ namespace NTSD.Test.Editor
         [Test]
         public void MissingAndExcludedActorsConsumeRowsWithoutDrawing()
         {
-            string excludedText = modeText.Replace("<bmp_end>",
-                "id: 4\n<bmp_end>");
-            projection.SetFeed(LoganModeKnockoutFeedInput.Parse(excludedText), source);
+            ProjectBattleModeConfig fixture = UnityEngine.Object.Instantiate(
+                ProjectBattleModeConfig.LoadDefault());
+            LoganModeKnockoutFeedInput excludedFeed;
+            try
+            {
+                fixture.Knockout.excludedVictimObjectIds = new[] { 4 };
+                excludedFeed = LoganModeKnockoutFeedInput.FromProjectSnapshot(
+                    fixture.Capture());
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(fixture);
+            }
+            projection.SetFeed(excludedFeed, source);
             world.BattleBuffersForServices.RecordNativeKnockout(Event(10, 1, 0, 1));
             world.BattleBuffersForServices.RecordNativeKnockout(Event(11, 1, 9, 2));
             world.BattleBuffersForServices.RecordNativeKnockout(Event(12, 1, 0, 2));
@@ -120,7 +131,7 @@ namespace NTSD.Test.Editor
                 },
                 nativeBracketPlayerNames = new List<bool> { true },
             });
-            projection.SetFeed(LoganModeKnockoutFeedInput.Parse(modeText), source);
+            projection.SetFeed(modeFeed, source);
             world.BattleBuffersForServices.RecordNativeKnockout(Event(10, 1, 0, 1));
             frame.Reset(20);
             projection.Project(world, 20, frame);
@@ -138,7 +149,7 @@ namespace NTSD.Test.Editor
             {
                 nativeKnockoutFeedRuntimeDisplayEnabled = false,
             });
-            projection.SetFeed(LoganModeKnockoutFeedInput.Parse(modeText), source);
+            projection.SetFeed(modeFeed, source);
             frame.Reset(22);
             projection.Project(world, 22, frame);
             Assert.That(frame.KnockoutFeedNativeRecordCount, Is.EqualTo(1));
@@ -179,7 +190,7 @@ namespace NTSD.Test.Editor
             world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
             world.BattlePresentation.ConfigureKnockoutFeedNames(null);
             world.BattlePresentation.ConfigureKnockoutFeedContent(
-                LoganModeKnockoutFeedInput.Parse(modeText), source);
+                modeFeed, source);
             world.BattleBuffersForServices.RecordNativeKnockout(Event(10, 3, 0, 1));
 
             world.BattlePresentation.BeginSimulationWorkerFrame(world, 20);

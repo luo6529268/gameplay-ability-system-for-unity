@@ -7,10 +7,16 @@
 #include <vector>
 
 int wmain(int argc, wchar_t** argv) {
-    if (argc != 4) {
-        std::cerr << "usage: sasuke_needle_lfr_probe <decoded_dat> <vfs> <output_dir>\n";
+    if (argc != 4 && argc != 5) {
+        std::cerr << "usage: sasuke_needle_lfr_probe <decoded_dat> <vfs> <output_dir> [target_x: 550|1200]\n";
         return 2;
     }
+    const std::wstring target_x_text = argc == 5 ? argv[4] : L"1200";
+    if (target_x_text != L"550" && target_x_text != L"1200") {
+        std::cerr << "target_x must be 550 or 1200\n";
+        return 2;
+    }
+    const int target_x = target_x_text == L"550" ? 550 : 1200;
     const std::filesystem::path output(argv[3]);
     const auto lfr = output / "sasuke_needle_source_packets.lfr";
     const auto csv = output / "sasuke_needle_source_ticks.csv";
@@ -35,7 +41,7 @@ int wmain(int argc, wchar_t** argv) {
     ntsd28_playable::CombatantConfig28 opponent;
     opponent.slot = 1;
     opponent.object_id = 7;
-    opponent.x = 1200;
+    opponent.x = target_x;
     opponent.z = 350;
     opponent.hp = 500;
     opponent.mp = 500;
@@ -55,7 +61,9 @@ int wmain(int argc, wchar_t** argv) {
     }
     std::ofstream rows(csv, std::ios::binary);
     if (!rows) return 6;
-    rows << "tick,input,action,last_action_144,hp,mp,oid440_count\n";
+    rows << "tick,input,action,last_action_144,hp,mp,oid440_count";
+    if (argc == 5) rows << ",target_hp,target_action";
+    rows << '\n';
     for (int tick = 1; tick <= 26; ++tick) {
         ntsd28::InputButtons28 buttons;
         const char* name = "none";
@@ -85,9 +93,13 @@ int wmain(int argc, wchar_t** argv) {
             const auto* entity = world->entity(slot);
             if (entity != nullptr && entity->object_id == 440) ++oid440;
         }
+        const auto* target = world->entity(1);
+        if (target == nullptr) return 8;
         rows << tick << ',' << name << ',' << actor->frame.action << ','
              << actor->input_last_action_144 << ',' << actor->current_hp << ','
-             << actor->current_mp << ',' << oid440 << '\n';
+             << actor->current_mp << ',' << oid440;
+        if (argc == 5) rows << ',' << target->current_hp << ',' << target->frame.action;
+        rows << '\n';
     }
     rows.close();
     if (!rows) return 9;

@@ -1,0 +1,13 @@
+# NTSD28-Q07-NARUTO-PUNCH-KO-EVENT-TRACE-001
+
+Status: VERIFIED_SCOPED_DIAGNOSTIC / CONFIRMED_EVENT_TIME_FIRST_DIFFERENCE. Parent: BATCH-04/Q07, R09/R10/R18.
+
+Authority and trigger: unchanged formal root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable source's Naruto OID2 ordinary frame513 hit/KO trace, and the existing exact-initial-state Unity 30-tick fixture under `NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001`. That fixture already matches the selected entity/input/RNG states but did not export Unity's `NativeKnockoutEvents`.
+
+Scope: modify only Editor diagnostic `Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs` to accept an optional, unique KO-event JSONL output path in its request. On the same complete Driver tick, read the existing production `SimulationWorld.NativeKnockoutEvents` after `StepOneTick` and serialize the event fields; do not change event production, pruning, input, DAT, PNG, Scene, mode Asset or nonbattle code. Reuse the immutable seed682973786, mode0/stage23/BGM2 two-Naruto X500/X525 HP500/10 scenario, J on completed tick2, 30 ticks. Keep old raw output schemas byte-compatible by making the new output opt-in.
+
+Acceptance: pre-edit Change/Ledger/STATE/handoff/alignment registration; original Editor compile0 and one unique request; exact 30-tick input/entity tracks still match saved run2, and Unity KO event birth/tick/source/victim/credit/four-owner/type match formal source/root trace or a first difference is reported. Reject output-path collision, preserve old request behavior, restore Editor to idle EditMode and Scene disk hashes. Run only this focused scenario, `Tools/Validate-ChangeLedger.ps1` and `git diff --check`; full suites are unnecessary for this diagnostic-only change.
+
+Risk and rollback: optional request plumbing could alter existing capture or overwrite an output; guard distinct paths and use never-before-used artifact filenames. Rollback only the new optional diagnostic branch after exact diff review; preserve all pre-existing dirty files and previous evidence. The root LFR CRT seed0 limitation, physical-key and GPU/EXE pixel gates remain separate.
+
+Result: original Editor compile 0 errors, one 30-tick request PASS, old raw/domain/input-RNG tick payloads each 30/30 unchanged. KO first appears on completed tick 8 in both formal and Unity. Source type and four slot fields match; stored event time is formal 7 versus Unity 8. Cause is Unity using host CurrentTickIndex before the formal C24 native frame-sequence increment. Full evidence and limits: `artifacts/diagnostics/NTSD28-Q07-NARUTO-PUNCH-KO-EVENT-TRACE-001/ACCEPTANCE.md`. This closes the diagnostic only; production fix and Q07 exit remain open.

@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": true,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-SASUKE-NEEDLE-TARGET-HIT-FIRST-DIFF-001\\source-x1200\\sasuke_needle_source_packets.lfr",
+  "failureCode": 0,
+  "failureStage": "",
+  "error": "",
+  "declaredTicks": 26,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 110, "slot1": -1},
+  "initialFacingOverrides": {"slot0": -1, "slot1": -1},
+  "initialMpOverrides": {"slot0": -1, "slot1": -1},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 27,
+  "scene": {"p1ObjectId": 11, "p2ObjectId": 7, "backgroundId": 23},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-SASUKE-NEEDLE-TARGET-HIT-FIRST-DIFF-001\\formal-x1200-trace.jsonl", "rows": 28, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

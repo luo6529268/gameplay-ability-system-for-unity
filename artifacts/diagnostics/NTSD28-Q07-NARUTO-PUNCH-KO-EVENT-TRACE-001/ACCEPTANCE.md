@@ -1,0 +1,11 @@
+# Q07 Naruto ordinary-hit KO event: same-initial-state first difference
+
+Status: diagnostic verified; Q07 and battle alignment remain open.
+
+The existing two-Naruto fixture ran for 30 completed ticks in the original Unity Editor using the formal staged content. The optional event exporter did not change any of the saved raw, domain or input/RNG tick payloads (30/30 each compared with the prior run2). The request returned `PASS`; the Editor returned to idle EditMode with zero Console errors. The Menu, Battle and GameConfig disk hashes remained unchanged.
+
+Both the formal root EXE LFR trace and Unity produce their first KO event on **completed tick 8** after Naruto's ordinary frame-513 hit. Source type and source/victim/credit/four-owner slots match: `0 / 0 / 1 / 0 / 0`. The event's own battle-time field does not: formal `battleTimeTicks=7`, Unity `BattleTimeTick=8`. The machine comparison is `comparison.json`; the original Editor output is `original-editor-run1.ko-events.jsonl`, alongside the four tick tracks and request result.
+
+The paired playable source explains the difference. `BattleWorld28::record_native_knockout()` stores the current `sequence_`; `SimulationTickDriver28::step()` does not call `world.begin_frame_tick()` until after both hit passes, catch settlement, stage settlement and impulse finalization. Unity advances its host `CurrentTickIndex` before hit resolution and currently writes that host tick in `SimulationWorld.RecordNativeKnockout()`. Unity already has a separate `NativeFrameSequence` carrier advanced at the matching C24 boundary. This points to a shared event-clock bug, rather than Naruto-specific hit logic.
+
+Do not apply a uniform `tick-1` adjustment. Formal nonstandard KO producers can run both before and after `begin_frame_tick()`; the correct event time is the phase-specific native world sequence. The KO time participates in feed lifetime, presentation snapshots and checksums, so a production change needs its own Task/Change and focused pre-/post-C24 witnesses. This diagnostic only changes the opt-in Editor exporter. Physical-key Battle Play for this exact initial state, formal-versus-Unity pixels, complete KO consumer lifetime parity and Q07 aggregate exit remain unverified.

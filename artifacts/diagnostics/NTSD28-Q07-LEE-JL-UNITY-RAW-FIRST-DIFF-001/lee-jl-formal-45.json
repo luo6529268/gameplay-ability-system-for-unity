@@ -1,0 +1,47 @@
+{
+  "schema": "ntsd28-q07-lee-jl-child/1.0",
+  "referenceExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "dataSha256": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE",
+  "mode": "versus",
+  "seed": 682973786,
+  "ticks": 45,
+  "emitInitial": false,
+  "battleMode": 0,
+  "stageId": 23,
+  "difficultyLevel4A0C30": 0,
+  "combatants": [
+    {
+      "slot": 0,
+      "oid": 7,
+      "team": 1,
+      "x": 500,
+      "y": 0,
+      "z": 650,
+      "hp": 500,
+      "baseHp": 500,
+      "mp": 500,
+      "reviveLives30c": 1,
+      "facing": 0,
+      "action": 0
+    },
+    {
+      "slot": 1,
+      "oid": 2,
+      "team": 2,
+      "x": 1200,
+      "y": 0,
+      "z": 650,
+      "hp": 500,
+      "baseHp": 500,
+      "mp": 500,
+      "reviveLives30c": 1,
+      "facing": 0,
+      "action": 0
+    }
+  ],
+  "inputs": [
+    { "tick": 1, "slot": 0, "keys": ["J"] },
+    { "tick": 2, "slot": 0, "keys": ["L"] },
+    { "tick": 3, "slot": 0, "keys": ["L"] }
+  ]
+}

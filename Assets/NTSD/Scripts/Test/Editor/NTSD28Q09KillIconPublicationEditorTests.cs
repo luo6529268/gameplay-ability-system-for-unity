@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Cysharp.Threading.Tasks;
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
@@ -50,8 +51,10 @@ namespace NTSD.Test
                     dataSingleton.SetValue(null, data);
 
                     string root = CreateFixtureWithFormalIcons();
+                    ProjectBattleModeConfig.Snapshot modeSnapshot =
+                        ProjectBattleModeConfig.LoadDefault().Capture();
                     var candidate = LoganVisualContentCandidate.Capture(
-                        BattleContentSource.ForLoganRuntime(root));
+                        BattleContentSource.ForLoganRuntime(root), modeSnapshot);
                     Assert.That(candidate.KillIconInput, Is.Not.Null);
                     var load = (UniTask<bool>)fixtureType.GetMethod("Load", PrivateInstance)
                         .Invoke(publication, new object[] { candidate, null });
@@ -81,7 +84,7 @@ namespace NTSD.Test
                     File.WriteAllBytes(Path.Combine(root, "vfs/sprite/kill/c.png"),
                         new byte[] { 1, 2, 3, 4 });
                     var malformed = LoganVisualContentCandidate.Capture(
-                        BattleContentSource.ForLoganRuntime(root));
+                        BattleContentSource.ForLoganRuntime(root), modeSnapshot);
                     LogAssert.Expect(LogType.Error, new Regex(@"\[BMPLoader\]"));
                     try
                     {
@@ -138,14 +141,12 @@ namespace NTSD.Test
             string root = (string)typeof(NTSD28Q09WordsPublishedCatalogEditorTests)
                 .GetMethod("CreateFixtureWithFormalWords", PrivateStatic)
                 .Invoke(null, null);
-            string childFolder = Path.Combine(root, "decoded_dat/data/mode");
+            File.Copy(Path.Combine(formalRoot, "decoded_dat/data/system.dat"),
+                Path.Combine(root, "decoded_dat/data/system.dat"));
+            File.Copy(Path.Combine(formalRoot, "vfs/sprite/UI/SPARK.png"),
+                Path.Combine(root, "vfs/sprite/UI/SPARK.png"));
             string iconFolder = Path.Combine(root, "vfs/sprite/kill");
-            Directory.CreateDirectory(childFolder);
             Directory.CreateDirectory(iconFolder);
-            File.Copy(Path.Combine(formalRoot, "decoded_dat/data/mode.dat"),
-                Path.Combine(root, "decoded_dat/data/mode.dat"));
-            File.Copy(Path.Combine(formalRoot, "decoded_dat/data/mode/ntsd.dat"),
-                Path.Combine(childFolder, "ntsd.dat"));
             foreach (string name in new[] { "c", "sk1", "sk2" })
                 File.Copy(Path.Combine(formalRoot, "vfs/sprite/kill", name + ".png"),
                     Path.Combine(iconFolder, name + ".png"));

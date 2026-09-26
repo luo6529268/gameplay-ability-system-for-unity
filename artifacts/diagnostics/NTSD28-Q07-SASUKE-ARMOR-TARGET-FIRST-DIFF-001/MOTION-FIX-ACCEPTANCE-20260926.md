@@ -1,0 +1,16 @@
+# Q07 reduced-hit half-dvx precision: scoped acceptance
+
+`NTSD28-Q07-REDUCED-HIT-HALF-DVX-PRECISION-001` is `FOCUSED_TEST_PASS / SCOPED_RAW_PARITY`; BATCH-04/Q07 and the user's D-024 physical-displacement exception remain open. The formal root EXE SHA-256 is `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`. Paired playable `ntsd28_core/src/simulation/hit_response.cpp` calculates an ordinary ground reduced-hit horizontal contribution as signed `double(dvx) / 2.0`. Unity's shared `BattleDamageWriter.ApplyAlternateGroundKnockback` previously divided two integers before adding to a `double` accumulator. For the strict OID11 Sasuke versus armored OID87 case, the first two of four child hits lose their half-units, yielding formal target motion X8.4 versus Unity8 at tick19 and then precise X558.4 versus Unity558 at tick20.
+
+The declared battle writer now uses `double halfDvx = itr.dvx / 2.0`; there is no OID87 or ability-specific condition. A focused test creates a type-3 child, type-0 armored target and odd `dvx=7`, then requires pending-X to rise by 3.5. Its first draft used an absolute expected3.5 and failed because the existing runtime accumulator starts at0.1; the corrected test was run while production still used integer division. Valid RED job `f5e0867896414e778bea4aa97ae09bca` failed expected3.6/actual3.1. After the formula edit, the original Editor compiled with zero Console errors and GREEN job `9f762614b8064ea4b0713e500a3b5423` passed 2/2, including the neighboring MP resource test.
+
+The same unchanged source-authored seed, initial entities, inputs and native root-EXE traces were reused for both 26-tick Unity raw captures. Final files explicitly request domain `v2` and both result files report PASS. `entity-comparison-motionfix-v2.json` compares the 21 common mapped fields for every occupied entity:
+
+| Scenario | Rows | Comparisons | Differences | Witness |
+|---|---:|---:|---:|---|
+| X550 four-hit | 68 | 1428 | 0 | Formal and Unity motion X8.4 at tick19, precise X558.4 at tick20, X602.7999999999998 at tick26. |
+| X1200 miss | 100 | 2100 | 0 | No-hit control remains identical. |
+
+Against the post-resource pre-motion Unity trace, X550 changes only the target's `motion` rows at ticks19–26 and `position` rows at ticks20–26; X1200 entity rows have no change. Both cases' explicit-v2 domain rows and input/RNG rows decode identically before and after. Runtime and Editor assembly hashes in the raw headers change as expected from compilation. The first motion-fix raw exports omitted `domainVersion=v2`, so their domain files were v1 and cannot be directly compared to the earlier v2 set. They are preserved; the final `-motionfix-v2` files resolve the schema mismatch without replacing any earlier diagnostics.
+
+This is a controlled raw-track result. The capture's 21-field position mapping compares the current runtime `X` with formal precise X in this same-initial-state diagnostic; it does not certify the user-approved D-024 wider physical Battle Scene displacement ratio, naturally pressed keys, formal EXE GPU output, other reduced-hit combinations, or all Q07 content and presentation. No DAT numeric value, image, Scene, camera, project config or nonbattle code was modified by this package.

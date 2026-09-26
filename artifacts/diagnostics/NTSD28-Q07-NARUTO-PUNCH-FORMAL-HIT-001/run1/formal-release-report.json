@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": true,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-NARUTO-PUNCH-FORMAL-HIT-001\\run1\\first-attributed-punch-hit.lfr",
+  "failureCode": 0,
+  "failureStage": "",
+  "error": "",
+  "declaredTicks": 30,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": -1, "slot1": -1},
+  "initialFacingOverrides": {"slot0": -1, "slot1": -1},
+  "initialMpOverrides": {"slot0": -1, "slot1": -1},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 31,
+  "scene": {"p1ObjectId": 2, "p2ObjectId": 2, "backgroundId": 23},
+  "winnerGroup": 1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-NARUTO-PUNCH-FORMAL-HIT-001\\run1\\formal-release-trace.jsonl", "rows": 32, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

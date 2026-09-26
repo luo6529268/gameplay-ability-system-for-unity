@@ -1,0 +1,13 @@
+# Q09 project mode test fixture migration
+
+Status: `FOCUSED_TEST_PASS` for the three affected Editor test scripts only. Q07/Q09 aggregate alignment remains open.
+
+The user-excluded original mode DAT was not restored. The row and mode-input tests now take the approved `ProjectBattleModeConfig.asset` snapshot; the excluded-victim variant changes only an in-memory clone. The icon candidate takes the same snapshot. Its temporary formal-WORDS fixture already included `resource.dat`; it now includes the matching formal `system.dat` and `SPARK.png` so the existing SPARK input capture can complete, plus the three selected icon PNGs. No production script, saved mode Asset, DAT or Scene was edited for this package.
+
+The original-project Editor compiled with zero Console errors. Initial affected run `7f69277245334691b7237e7b04df84f2` completed nine selections with one failure, `Native SPARK requires both resource.dat and system.dat.` The failure report is `original-editor-focused-9-result.json`. After the fixture correction, icon rerun `1a47ea0b216f4b5a9bafb3415176ae1b` passed 1/1 and all affected cases in job `5a1f607e6235465bb15349eb5e892d1a` passed 9/9; both final reports are in this directory. These cases cover row spacing/30-tick boundary, missing or excluded actors, mode/name gating, worker publication, mode projection and synthetic parser errors, seven icon aliases, failed-publication retention and catalog lease release.
+
+The three test scripts contain no `decoded_dat/data/mode`, `data/mode.dat` or `modeText` reference. The final Editor assembly timestamp was later than the final source edit. Menu Scene SHA-256 `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, Battle Scene `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`, GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7` and project mode Asset `88E10D43B047952FD3053A87B7E5F60D0F87A6CD1A23313F37EA1503C686F55C` remained at their pre-change hashes. `git diff --check` exited 0; Change Ledger validation is recorded separately.
+
+The Q09 row test uses a synthetic event/Asset projection. It does not prove the exact Q07 Naruto event visible end tick in a same-state production scene, nor formal EXE pixel equality. Those remain Q07/Q09 exits.
+
+Final governance: `Tools/Validate-ChangeLedger.ps1` exited 0 (`PASSED`, 856 Records, 15 governed code files in current diff), with only historical metadata warnings; see `change-ledger-validation.log`. `git diff --check` exited 0. The Editor is idle EditMode. Post-test Console retained two intentional BMPLoader Error entries from the malformed-PNG rejection case; the test expected them with `LogAssert.Expect` and still passed. The pre-test compile check had zero Console errors.

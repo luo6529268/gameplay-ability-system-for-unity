@@ -1,0 +1,13 @@
+# NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001
+
+Status: `VERIFIED` for controlled CentralOnly GPU only. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001`, BATCH-05/Q09/P-08. This is a bounded original Battle Scene CentralOnly GPU witness, not the P-08 or Q09 aggregate exit.
+
+Authority: formal root EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable `render_snapshot.cpp` emits bpoint marks after drawable body, and `d3d11_renderer.cpp` draws the marks as solid rectangles. Current formal Ita/Sasu content has only bpoint X/Y, so the current release defaults are HP <= base max HP / 3, red 1x3 pixels. The central command/mesh outlet has focused evidence under `NTSD28-Q09-BPOINT-BLEED-CENTRAL-001`, but no Battle Scene camera pixel evidence.
+
+Declared script scope: add only `Assets/NTSD/Scripts/Test/Editor/NTSD28Q09BPointBleedScenePixelProbeEditor.cs` and its `.meta`. The probe is opt-in, original Editor only, uses the saved clean `NTSD_Battle.unity`, formal published content, and a controlled formal Ita character. It takes high-HP and low-HP camera captures from the same position/frame, checks the captured central body/mark command order and resource submission, and attributes red pixels to the projected mark through an A/B difference. It restores camera state, unregisters the fixture, exits Play, and compares Scene SHA and object/slot/pool counts. No production, DAT, image, Scene, Prefab, ProjectSettings or nonbattle edit.
+
+Validation: original Editor C# compile 0 errors; one bounded opt-in Play request, JSON and PNG evidence with explicit pixel attribution; original Scene and three other protected asset hashes unchanged; Change Ledger validator and diff check. A controlled camera capture does not establish natural input, LegacyOnly, formal EXE same-state pixel parity, or complete Q09. If the probe cannot safely isolate the mark, report `PIXEL_OWNERSHIP_UNPROVEN` without claiming a pass.
+
+Risk: an Editor Play probe can disturb an open Scene or leave temporary objects if cleanup fails. Preflight requires a clean original Battle Scene; capture must preserve and restore all camera fields. Rollback is review of this ID's two new files and its records only, without touching pre-existing dirty work or using destructive Git commands.
+
+Exit: original Editor final opt-in Play `bpoint-ita-central-03` passed: high HP500 0 marks, low HP166 one body-after mark and 3 independently verified new red pixels within its projected region. Camera restored, object/slot/borrower counts and four protected SHA stable. Earlier `-01` fixture-HP and `-02` color-predicate false negatives are retained. Detailed evidence and limits: `artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/ACCEPTANCE.md`.

@@ -1,0 +1,65 @@
+{
+  "formalEvents": [
+    {
+      "completedTick": 8,
+      "battleTimeTicks": 7,
+      "sourceObjectType": 0,
+      "fourOwnerSlot": 0,
+      "sourceSlot": 0,
+      "victimSlot": 1,
+      "creditSlot": 0
+    }
+  ],
+  "unityFirstObservedEvents": [
+    {
+      "completedTick": 8,
+      "battleTimeTick": 8,
+      "creditSlot": 0,
+      "fourOwnerSlot": 0,
+      "sourceObjectType": 0,
+      "sourceSlot": 0,
+      "victimSlot": 1
+    }
+  ],
+  "sameBirthTick": true,
+  "matchingFields": {
+    "battleTimeTick": false,
+    "sourceObjectType": true,
+    "fourOwnerSlot": true,
+    "victimSlot": true,
+    "sourceSlot": true,
+    "creditSlot": true
+  },
+  "eventCountByCompletedTick": {
+    "1": 0,
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 1,
+    "9": 1,
+    "10": 1,
+    "11": 1,
+    "12": 1,
+    "13": 1,
+    "14": 1,
+    "15": 1,
+    "16": 1,
+    "17": 1,
+    "18": 1,
+    "19": 1,
+    "20": 1,
+    "21": 1,
+    "22": 1,
+    "23": 1,
+    "24": 1,
+    "25": 1,
+    "26": 1,
+    "27": 1,
+    "28": 1,
+    "29": 1,
+    "30": 1
+  }
+}

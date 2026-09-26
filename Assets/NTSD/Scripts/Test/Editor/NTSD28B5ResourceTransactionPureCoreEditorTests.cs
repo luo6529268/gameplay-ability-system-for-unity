@@ -8,6 +8,25 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28B5ResourceTransactionPureCoreEditorTests
     {
         [Test]
+        public void CurrentMpTransaction_WritesPpWithoutChangingLegacyMpBank()
+        {
+            NTSDEntityRuntime attacker = CreateTypeZero(mp: 777);
+            NTSDEntityRuntime target = CreateTypeZero(mp: 888);
+            attacker.MP = 777;
+            target.MP = 888;
+            attacker.PP = 40;
+            target.PP = 40;
+
+            BattleDamageWriter.ApplyNativeHitResourceTransaction(
+                attacker, target, 20, 0, 50, -50, true, 50, 50, 500);
+
+            Assert.That(attacker.PP, Is.Zero);
+            Assert.That(target.PP, Is.Zero);
+            Assert.That(attacker.MP, Is.EqualTo(777));
+            Assert.That(target.MP, Is.EqualTo(888));
+        }
+
+        [Test]
         public void LocalModeDisabled_PreservesBothParticipants()
         {
             NTSDEntityRuntime attacker = CreateTypeZero(mp: 40);
@@ -18,8 +37,8 @@ namespace NTSD.Test.Editor
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 20, 0, 10, -10, false, 50, 50, 500);
 
-            Assert.That(attacker.MP, Is.EqualTo(40));
-            Assert.That(target.MP, Is.EqualTo(50));
+            Assert.That(attacker.PP, Is.EqualTo(40));
+            Assert.That(target.PP, Is.EqualTo(50));
             Assert.That(attacker.InputMpConsumedTotal350, Is.EqualTo(3));
             Assert.That(target.InputMpConsumedTotal350, Is.EqualTo(4));
         }
@@ -33,8 +52,8 @@ namespace NTSD.Test.Editor
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 20, 0, 50, -50, true, 50, 50, 500);
 
-            Assert.That(attacker.MP, Is.Zero);
-            Assert.That(target.MP, Is.Zero);
+            Assert.That(attacker.PP, Is.Zero);
+            Assert.That(target.PP, Is.Zero);
             Assert.That(attacker.InputMpConsumedTotal350, Is.EqualTo(50));
             Assert.That(target.InputMpConsumedTotal350, Is.EqualTo(50));
         }
@@ -48,8 +67,8 @@ namespace NTSD.Test.Editor
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 20, 1, 10, -10, true, 50, 50, 500);
 
-            Assert.That(attacker.MP, Is.EqualTo(30));
-            Assert.That(target.MP, Is.EqualTo(30));
+            Assert.That(attacker.PP, Is.EqualTo(30));
+            Assert.That(target.PP, Is.EqualTo(30));
             Assert.That(attacker.InputMpConsumedTotal350, Is.EqualTo(10));
             Assert.That(target.InputMpConsumedTotal350, Is.EqualTo(10));
         }
@@ -57,15 +76,15 @@ namespace NTSD.Test.Editor
         [Test]
         public void NonTypeZeroParticipants_KeepIndependentDrainAndGainGates()
         {
-            var attacker = new NTSDEntityRuntime { ObjType = 3, MP = 40 };
+            var attacker = new NTSDEntityRuntime { ObjType = 3, PP = 40 };
             NTSDEntityRuntime target = CreateTypeZero(mp: 40);
 
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 20, 0, 10, -10, true, 50, 50, 500);
 
-            Assert.That(attacker.MP, Is.EqualTo(40));
+            Assert.That(attacker.PP, Is.EqualTo(40));
             Assert.That(attacker.InputMpConsumedTotal350, Is.Zero);
-            Assert.That(target.MP, Is.EqualTo(30));
+            Assert.That(target.PP, Is.EqualTo(30));
             Assert.That(target.InputMpConsumedTotal350, Is.EqualTo(10));
         }
 
@@ -76,12 +95,12 @@ namespace NTSD.Test.Editor
             int expectedMp)
         {
             NTSDEntityRuntime attacker = CreateTypeZero(mp: 90);
-            var target = new NTSDEntityRuntime { ObjType = 3, MP = 0 };
+            var target = new NTSDEntityRuntime { ObjType = 3, PP = 0 };
 
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 0, 0, 0, gain, true, 0, 0, 100);
 
-            Assert.That(attacker.MP, Is.EqualTo(expectedMp));
+            Assert.That(attacker.PP, Is.EqualTo(expectedMp));
         }
 
         [Test]
@@ -93,8 +112,8 @@ namespace NTSD.Test.Editor
             BattleDamageWriter.ApplyNativeHitResourceTransaction(
                 attacker, target, 0, 0, 10, -10, true, 0, 0, 500);
 
-            Assert.That(attacker.MP, Is.EqualTo(9));
-            Assert.That(target.MP, Is.EqualTo(9));
+            Assert.That(attacker.PP, Is.EqualTo(9));
+            Assert.That(target.PP, Is.EqualTo(9));
             Assert.That(attacker.InputMpConsumedTotal350, Is.Zero);
             Assert.That(target.InputMpConsumedTotal350, Is.Zero);
         }
@@ -104,7 +123,7 @@ namespace NTSD.Test.Editor
             return new NTSDEntityRuntime
             {
                 ObjType = 0,
-                MP = mp,
+                PP = mp,
             };
         }
     }

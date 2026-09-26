@@ -479,9 +479,11 @@ namespace NTSD.Test
                         throw new InvalidOperationException("The paused live driver rejected the full lethal tick.");
                     result.victimHpAfterTick = victim.Health.HP;
                     result.knockoutCountAfter = world.NativeKnockoutEvents.Count;
+                    int expectedEventTime =
+                        unchecked((int)(world.NativeFrameSequence - 1UL));
                     result.targetKnockoutRecorded = world.NativeKnockoutEvents.Any(
                         hit => hit.VictimSlot == victimSlot &&
-                            hit.BattleTimeTick == result.tick);
+                            hit.BattleTimeTick == expectedEventTime);
                     result.targetCueQueued = world.PendingSounds.Any(
                         sound => sound.Cue == @"data\m_join.wav" && sound.Tick == result.tick);
                     if (result.victimHpAfterTick > 0 ||

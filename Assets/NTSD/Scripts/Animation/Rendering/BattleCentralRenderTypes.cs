@@ -494,6 +494,8 @@ namespace NTSD.Animation.Rendering
                 BattleRenderCommandType.HitRecord => key.IsCommonSpark,
                 BattleRenderCommandType.OverlayGlyph =>
                     key.IsCommonWordGlyph || key.IsCommonSpecialCom,
+                BattleRenderCommandType.BleedMark =>
+                    key.Kind == BattleVisualResourceKind.CommonSolid,
                 _ => false,
             };
         }
@@ -511,6 +513,33 @@ namespace NTSD.Animation.Rendering
 
             if (command.Type == BattleRenderCommandType.OverlayGlyph)
                 return ResolveCommonWordGlyph(command, out resource, validateCachedResource);
+
+            if (command.Type == BattleRenderCommandType.BleedMark)
+            {
+                if (!command.RenderState.IsSupported)
+                {
+                    resource = default;
+                    return BattleCentralResourceStatus.UnsupportedRenderState;
+                }
+                if (!command.SpriteDescriptor.HasLogicalResourceKey ||
+                    command.SpriteDescriptor.LogicalResourceKey !=
+                    BattleVisualResourceKey.CommonSolid ||
+                    !fallbackMaterialContractValid ||
+                    fallbackMaterial == null)
+                {
+                    resource = default;
+                    return BattleCentralResourceStatus.UnresolvedVisual;
+                }
+
+                resource = new BattleCentralResolvedResource(
+                    Texture2D.whiteTexture,
+                    fallbackMaterial,
+                    new Rect(0f, 0f, 1f, 1f),
+                    Vector2.zero,
+                    new Vector2(0f, 1f),
+                    command.Color);
+                return BattleCentralResourceStatus.Resolved;
+            }
 
             if (command.Type != BattleRenderCommandType.Entity)
             {

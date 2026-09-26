@@ -4401,6 +4401,107 @@ namespace NTSD.Simulation.Ecs
                 projection.AttackerKind4SourceCount--;
         }
 
+        private static void ProjectNativeStandardHitResourceTransfer(
+            LF2Entity attacker,
+            LF2Entity target,
+            InteractionArea itr,
+            ref WriterEffectSnapshot projection)
+        {
+            if (!projection.NativeResourceLocalMode ||
+                !projection.NativeResourceOwnerHandle.IsValid)
+                return;
+
+            SimulationWorld world = target.Match ?? attacker.Match;
+            NTSD28HitResourceRulesRuntimeState rules =
+                world?.Runtime?.NativeHitResourceRules;
+            int resourceInjury = BattleDamageWriter.ResolveNativeHitResourceInjury(
+                itr.injury,
+                attacker.Runtime.HitResourceInjuryDouble1A0,
+                LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?
+                    .definition_attacking ?? 0,
+                rules?.ActiveModeAttackingPercent1C ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultActiveModeAttackingPercent1C);
+            bool ownerIsCharacter = projection.NativeResourceOwnerType == 0;
+            bool targetIsCharacter = target.Runtime.ObjType == 0;
+            bool ownerIsTarget = projection.NativeResourceOwnerHandle ==
+                projection.TargetHandle;
+            int ownerPp = ownerIsTarget
+                ? projection.TargetPp
+                : projection.NativeResourceOwnerPp;
+            int targetPp = projection.TargetPp;
+            int ownerConsumed = ownerIsTarget
+                ? projection.TargetInputMpConsumedTotal
+                : projection.NativeResourceOwnerMpConsumed;
+            int targetConsumed = projection.TargetInputMpConsumedTotal;
+
+            if (resourceInjury > 0 &&
+                attacker.Runtime.HitResourceSuppression15C != 1 &&
+                ownerIsCharacter && targetIsCharacter)
+            {
+                int attackerPercent = rules?.AttackerInjuryMpPercent34 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultAttackerInjuryMpPercent34;
+                int targetPercent = rules?.TargetInjuryMpPercent38 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultTargetInjuryMpPercent38;
+                if (attackerPercent > 0)
+                {
+                    ownerPp = unchecked(ownerPp +
+                        (int)(((long)resourceInjury * attackerPercent) / 100L));
+                    if (ownerIsTarget)
+                        targetPp = ownerPp;
+                }
+                if (targetPercent > 0)
+                {
+                    targetPp = unchecked(targetPp +
+                        (int)(((long)resourceInjury * targetPercent) / 100L));
+                    if (ownerIsTarget)
+                        ownerPp = targetPp;
+                }
+            }
+
+            if (targetIsCharacter && itr.drain > 0 && itr.drain <= targetPp)
+            {
+                targetPp -= itr.drain;
+                targetConsumed = unchecked(targetConsumed + itr.drain);
+                if (ownerIsTarget)
+                {
+                    ownerPp = targetPp;
+                    ownerConsumed = targetConsumed;
+                }
+            }
+
+            if (ownerIsCharacter)
+            {
+                if (itr.gain < 0)
+                {
+                    int cost = unchecked(-itr.gain);
+                    if (cost <= ownerPp)
+                    {
+                        ownerPp = unchecked(ownerPp + itr.gain);
+                        ownerConsumed = unchecked(ownerConsumed + cost);
+                    }
+                }
+                else
+                {
+                    int candidate = unchecked(ownerPp + itr.gain);
+                    if (candidate <= projection.NativeResourceOwnerMpMax)
+                        ownerPp = candidate;
+                }
+                if (ownerIsTarget)
+                {
+                    targetPp = ownerPp;
+                    targetConsumed = ownerConsumed;
+                }
+            }
+
+            projection.NativeResourceOwnerPp = ownerPp;
+            projection.NativeResourceOwnerMpConsumed = ownerConsumed;
+            projection.TargetPp = targetPp;
+            projection.TargetInputMpConsumedTotal = targetConsumed;
+        }
+
         private static bool IsSupportedType3Effect(int effect)
         {
             // Ordinary kind 0 rejects effect 20 for non-character DAT, but original
@@ -4624,6 +4725,8 @@ namespace NTSD.Simulation.Ecs
                 target,
                 injury,
                 ref projection);
+            ProjectNativeStandardHitResourceTransfer(
+                attacker, target, resolvedItr, ref projection);
             projection.TargetComboCountVic += injury;
             if (target.Runtime.OrdinaryCreditGate2F4 == -1 &&
                 projection.HolderHandle.IsValid)
@@ -5240,6 +5343,8 @@ namespace NTSD.Simulation.Ecs
                 target,
                 reducedInjury,
                 ref projection);
+            ProjectNativeStandardHitResourceTransfer(
+                attacker, target, resolvedItr, ref projection);
             projection.TargetComboCountVic += reducedInjury;
             if (target.Runtime.OrdinaryCreditGate2F4 == -1 &&
                 projection.HolderHandle.IsValid)
@@ -5308,7 +5413,7 @@ namespace NTSD.Simulation.Ecs
                 }
                 else
                 {
-                    int halfDvx = resolvedItr.dvx / 2;
+                    double halfDvx = resolvedItr.dvx / 2.0;
                     projection.TargetKnockbackVx += attacker.Dirh() > 0
                         ? halfDvx
                         : -halfDvx;

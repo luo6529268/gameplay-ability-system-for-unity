@@ -612,7 +612,7 @@ namespace NTSD.Simulation
                 }
             }
             battleBuffers.RecordNativeKnockout(new NativeKnockoutEvent(
-                CurrentTickIndex,
+                unchecked((int)NativeFrameSequence),
                 sourceObjectType,
                 fourOwnerSlot,
                 victimSlot,

@@ -15,6 +15,7 @@ namespace NTSD.Simulation.Presentation
         Entity = 1,
         OverlayGlyph = 2,
         HitRecord = 3,
+        BleedMark = 4,
     }
 
     public enum BattlePresentationDifferenceKind : byte
@@ -417,7 +418,8 @@ namespace NTSD.Simulation.Presentation
             int maximumHealth = 0,
             float stableHealthAnchorHeightPixels = 0f,
             bool showSelfFootMarker = false,
-            int renderShadowOffset10C = 0)
+            int renderShadowOffset10C = 0,
+            BattleBloodPointCatalog bloodPoints = null)
         {
             Handle = handle;
             StableId = stableId;
@@ -464,6 +466,7 @@ namespace NTSD.Simulation.Presentation
             StableCharacterHeightPixels = stableHealthAnchorHeightPixels;
             ShowSelfFootMarker = showSelfFootMarker;
             RenderShadowOffset10C = renderShadowOffset10C;
+            BloodPoints = bloodPoints ?? BattleBloodPointCatalog.Empty;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -512,6 +515,7 @@ namespace NTSD.Simulation.Presentation
         public float StableHealthAnchorHeightPixels => StableCharacterHeightPixels;
         public bool ShowSelfFootMarker { get; }
         public int RenderShadowOffset10C { get; }
+        public BattleBloodPointCatalog BloodPoints { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattlePresentationEntitySnapshot WithResolvedSprite(
@@ -568,7 +572,8 @@ namespace NTSD.Simulation.Presentation
                 MaximumHealth,
                 StableHealthAnchorHeightPixels,
                 ShowSelfFootMarker,
-                RenderShadowOffset10C);
+                RenderShadowOffset10C,
+                BloodPoints);
         }
 
         internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
@@ -619,7 +624,8 @@ namespace NTSD.Simulation.Presentation
                 MaximumHealth,
                 StableHealthAnchorHeightPixels,
                 ShowSelfFootMarker,
-                RenderShadowOffset10C);
+                RenderShadowOffset10C,
+                BloodPoints);
         }
 
     }
@@ -1376,7 +1382,20 @@ namespace NTSD.Simulation.Presentation
     public sealed class BattlePresentationCoordinator
     {
         private const int MaximumCommandsPerEntityWithoutHitRecords =
-            2 + BattleEntityOverlayLayout.MaximumGlyphCount;
+            3 + BattleEntityOverlayLayout.MaximumGlyphCount;
+        private static readonly BattleSpriteRenderState BleedMarkRenderState =
+            new BattleSpriteRenderState(
+                new Color32(255, 0, 0, 255),
+                false,
+                false,
+                SpriteMaskInteraction.None,
+                BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha);
+        private static readonly BattleSpriteValueDescriptor BleedMarkDescriptor =
+            new BattleSpriteValueDescriptor(
+                false, false, 0, 0, 0,
+                new Rect(0f, 0f, 1f, 1f),
+                new Vector2(0f, 1f),
+                BattleVisualResourceKey.CommonSolid);
         private const int WordGlyphTemplateCount =
             BattleCommonVisualCatalog.WordSheetCount *
             BattleCommonVisualCatalog.WordGlyphsPerSheet;
@@ -2352,7 +2371,8 @@ namespace NTSD.Simulation.Presentation
                             runtime.HP3,
                             stableCharacterHeightPixels,
                             showSelfFootMarker,
-                            runtime.RenderShadowOffset10C));
+                            runtime.RenderShadowOffset10C,
+                            currentFrame?.BloodPoints));
                         if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
                             frame.RequiresCatalogPublicationBinding = true;
                     }
@@ -2655,10 +2675,17 @@ namespace NTSD.Simulation.Presentation
             long buildCommandsStartedAt = collectPresentationTimings
                 ? System.Diagnostics.Stopwatch.GetTimestamp()
                 : 0;
+            int extraBloodPointCount = 0;
+            for (int entityIndex = 0; entityIndex < frame.EntityCount; entityIndex++)
+            {
+                int count = frame.GetEntity(entityIndex).BloodPoints.Count;
+                if (count > 1)
+                    extraBloodPointCount = checked(extraBloodPointCount + count - 1);
+            }
             int maximumCommandCount = checked(
                 frame.CommandCount +
                 checked(frame.EntityCount * MaximumCommandsPerEntityWithoutHitRecords) +
-                frame.HitRecordCount);
+                frame.HitRecordCount + extraBloodPointCount);
             BattlePresentationFrame.CommandWriter writer =
                 frame.BeginCommandWrite(Math.Max(16, maximumCommandCount));
             RefreshWordGlyphTemplateEpoch(frame.CommonVisualCatalog);
@@ -2886,6 +2913,55 @@ namespace NTSD.Simulation.Presentation
                         entity.ShowSelfFootMarker,
                         BattleFootMarkerSizing.ResolveStableCharacterScale(
                             entity.StableCharacterHeightPixels)));
+
+                    if (mode == BattlePresentationBackendMode.CentralOnly &&
+                        entity.FrameId < 1000 &&
+                        entity.BloodPoints.Count > 0 &&
+                        entity.CurrentHealth <= entity.MaximumHealth / 3)
+                    {
+                        float spriteWidthWorld = resolvedPixelWidth *
+                                                 NTSDRenderSpace.BattleVisualScale *
+                                                 NTSDRenderSpace.UnitsPerPixelX;
+                        float spriteHeightWorld = resolvedPixelHeight *
+                                                  NTSDRenderSpace.BattleVisualScale *
+                                                  NTSDRenderSpace.UnitsPerPixelY;
+                        float spriteLeftWorld = entityPosition.x -
+                                                resolvedPivot.x * spriteWidthWorld;
+                        float spriteTopWorld = entityPosition.y +
+                                               (1f - resolvedPivot.y) * spriteHeightWorld;
+                        for (int pointIndex = 0;
+                             pointIndex < entity.BloodPoints.Count;
+                             pointIndex++)
+                        {
+                            BattleBloodPointValue point = entity.BloodPoints[pointIndex];
+                            float offsetX = entity.FlipX ? 1f - point.X : point.X;
+                            Vector3 markPosition = new Vector3(
+                                spriteLeftWorld + offsetX *
+                                NTSDRenderSpace.BattleVisualScale *
+                                NTSDRenderSpace.UnitsPerPixelX,
+                                spriteTopWorld - point.Y *
+                                NTSDRenderSpace.BattleVisualScale *
+                                NTSDRenderSpace.UnitsPerPixelY,
+                                entityPosition.z);
+                            writer.AddUnchecked(new BattleRenderCommand(
+                                BattleRenderCommandType.BleedMark,
+                                entity.Handle,
+                                entity.StableId,
+                                entity.VisualDataId,
+                                entity.EffectivePic,
+                                entity.ZInt,
+                                entity.RuntimeSlot,
+                                baseOrder + 2,
+                                ObjectSortingLayerId,
+                                localSequence++,
+                                markPosition,
+                                new Vector2(1f, 3f),
+                                new Vector2(0f, 1f),
+                                new Rect(0f, 0f, 1f, 1f),
+                                BleedMarkRenderState,
+                                BleedMarkDescriptor));
+                        }
+                    }
                 }
                 if (collectCommandSectionTimings)
                 {

@@ -18,6 +18,80 @@ namespace NTSD.Animation.Rendering.Editor
                 BindingFlags.Instance | BindingFlags.NonPublic);
 
         [Test]
+        public void ResolvePrepared_BleedMarkUsesOpaqueSolidResourceAndFailsClosed()
+        {
+            using var fixture = new ResolverFixture(includeArrayBinding: false);
+            var color = new Color32(255, 0, 0, 255);
+            var state = new BattleSpriteRenderState(color, false, false,
+                SpriteMaskInteraction.None,
+                BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha);
+            var descriptor = new BattleSpriteValueDescriptor(false, false, 0, 0, 0,
+                new Rect(0f, 0f, 1f, 1f), new Vector2(0f, 1f),
+                BattleVisualResourceKey.CommonSolid);
+            BattleRenderCommand Create(BattleSpriteRenderState renderState,
+                BattleSpriteValueDescriptor spriteDescriptor) =>
+                new BattleRenderCommand(
+                    BattleRenderCommandType.BleedMark,
+                    new RuntimeEntityHandle(1, 1), 1, 9, 0, 180, 1, 102,
+                    0, 1, Vector3.zero, new Vector2(1f, 3f),
+                    new Vector2(0f, 1f), new Rect(0f, 0f, 1f, 1f),
+                    renderState, spriteDescriptor);
+
+            fixture.Resolver.Configure(BattleSpriteCatalog.Empty,
+                BattleCommonVisualCatalog.Empty,
+                fixture.Valid2DMaterial, fixture.ValidArrayMaterial);
+            var command = Create(state, descriptor);
+            Assert.That(fixture.Resolver.ResolvePrepared(command,
+                out BattleCentralResolvedResource resource),
+                Is.EqualTo(BattleCentralResourceStatus.Resolved));
+            Assert.That(resource.Texture, Is.SameAs(Texture2D.whiteTexture));
+            Assert.That(resource.Material, Is.SameAs(fixture.Valid2DMaterial));
+            Assert.That(resource.Color, Is.EqualTo(color));
+            Assert.That(resource.PixelSize, Is.EqualTo(Vector2.zero));
+
+            var frame = new BattlePresentationFrame();
+            MethodInfo resetFrame = typeof(BattlePresentationFrame).GetMethod(
+                "Reset", BindingFlags.Instance | BindingFlags.NonPublic);
+            MethodInfo addCommand = typeof(BattlePresentationFrame).GetMethod(
+                "AddCommand", BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(resetFrame, Is.Not.Null);
+            Assert.That(addCommand, Is.Not.Null);
+            resetFrame.Invoke(frame, new object[] { 1, BattleCommonVisualCatalog.Empty });
+            addCommand.Invoke(frame, new object[] { command });
+            using (var backend = new BattleDynamicMeshBackend())
+            {
+                backend.Build(frame, fixture.Resolver);
+                Assert.That(backend.Diagnostics.ResolvedCommandCount, Is.EqualTo(1));
+                Assert.That(backend.GetChunkActiveQuadCount(0), Is.EqualTo(1));
+                Assert.That(backend.GetChunkVertexColor(0, 0), Is.EqualTo(color));
+                Bounds bounds = backend.GetChunkMesh(0).GetSubMesh(0).bounds;
+                Assert.That(bounds.size.x, Is.EqualTo(
+                    NTSDRenderSpace.UnitsPerPixelX *
+                    NTSDRenderSpace.BattleVisualScale).Within(0.0001f));
+                Assert.That(bounds.size.y, Is.EqualTo(
+                    3f * NTSDRenderSpace.UnitsPerPixelY *
+                    NTSDRenderSpace.BattleVisualScale).Within(0.0001f));
+            }
+
+            var wrongKey = new BattleSpriteValueDescriptor(false, false, 0, 0, 0,
+                new Rect(0f, 0f, 1f, 1f), new Vector2(0f, 1f),
+                BattleVisualResourceKey.CommonShadow);
+            Assert.That(fixture.Resolver.ResolvePrepared(Create(state, wrongKey), out _),
+                Is.EqualTo(BattleCentralResourceStatus.UnresolvedVisual));
+            var masked = new BattleSpriteRenderState(color, false, false,
+                SpriteMaskInteraction.VisibleInsideMask,
+                BattleSpriteMaterialSemantic.PremultipliedSpriteAlpha);
+            Assert.That(fixture.Resolver.ResolvePrepared(Create(masked, descriptor), out _),
+                Is.EqualTo(BattleCentralResourceStatus.UnsupportedRenderState));
+
+            fixture.Resolver.Configure(BattleSpriteCatalog.Empty,
+                BattleCommonVisualCatalog.Empty,
+                fixture.Invalid2DMaterial, fixture.ValidArrayMaterial);
+            Assert.That(fixture.Resolver.ResolvePrepared(command, out _),
+                Is.Not.EqualTo(BattleCentralResourceStatus.Resolved));
+        }
+
+        [Test]
         public void Configure_ValidAndInvalid2DMaterials_PreserveResolverStatus()
         {
             using var fixture = new ResolverFixture(includeArrayBinding: false);
@@ -899,6 +973,10 @@ namespace NTSD.Animation.Rendering.Editor
                     typeof(int),
                     typeof(Vector2),
                     typeof(bool),
+                    typeof(Vector2),
+                    typeof(bool),
+                    typeof(bool),
+                    typeof(float),
                 },
                 null);
             Assert.That(constructor, Is.Not.Null);
@@ -928,6 +1006,10 @@ namespace NTSD.Animation.Rendering.Editor
                     source.MaximumHealth,
                     source.StableHealthAnchorWorld,
                     source.HasStableHealthAnchor,
+                    source.StableFootAnchorWorld,
+                    source.HasStableFootAnchor,
+                    source.ShowSelfFootMarker,
+                    source.FootMarkerScale,
                 });
         }
 

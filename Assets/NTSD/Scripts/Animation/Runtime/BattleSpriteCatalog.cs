@@ -138,6 +138,7 @@ namespace NTSD.Animation
         CommonSpark = 3,
         CommonWordGlyph = 4,
         CommonSpecialCom = 5,
+        CommonSolid = 6,
     }
 
     public readonly struct BattleVisualResourceKey : IEquatable<BattleVisualResourceKey>
@@ -172,6 +173,8 @@ namespace NTSD.Animation
         public int CommonWordCharCode => commonWordCharCode;
         public static BattleVisualResourceKey CommonShadow { get; } =
             new BattleVisualResourceKey(BattleVisualResourceKind.CommonShadow, default);
+        public static BattleVisualResourceKey CommonSolid { get; } =
+            new BattleVisualResourceKey(BattleVisualResourceKind.CommonSolid, default);
         public static BattleVisualResourceKey CommonSpecialCom { get; } =
             CommonComLabel(BattleCommonVisualCatalog.SpecialComSheetIndex);
 

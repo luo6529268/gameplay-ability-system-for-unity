@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NTSD.Animation;
+using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using NUnit.Framework;
@@ -88,8 +89,105 @@ namespace NTSD.Test
                     typeof(BattleCommonVisualBinding[][]),
                     typeof(BattleCommonVisualBinding[]),
                     typeof(string),
+                    typeof(bool),
                 },
                 null);
+
+        [Test]
+        public void LowHpBPoint_CentralCommandFollowsBodyAndCurrentContentDefaults()
+        {
+            var points = new BattleBloodPointCatalog(new[]
+            {
+                new BattleBloodPointValue(7, 9),
+                new BattleBloodPointValue(11, 13),
+            });
+            var coordinator = new BattlePresentationCoordinator();
+            coordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+
+            foreach (bool facingLeft in new[] { false, true })
+            {
+                var frame = new BattlePresentationFrame();
+                Reset(frame, BattleCommonVisualCatalog.Empty);
+                BattlePresentationEntitySnapshot entity = CreateBleedEntity(
+                    points, facingLeft, 33, true, 0);
+                Assert.That(entity.WithPresentationBaseOrder(104).BloodPoints,
+                    Is.SameAs(points));
+                Assert.That(entity.WithResolvedSprite(80f, 80f, Rect.zero,
+                    new Vector2(0.5f, 0f), true, default, null).BloodPoints,
+                    Is.SameAs(points));
+                AddEntity(frame, entity);
+                coordinator.BuildCommandsForSelfCheck(frame);
+
+                int bodyIndex = -1;
+                int markCount = 0;
+                BattleRenderCommand body = default;
+                for (int index = 0; index < frame.CommandCount; index++)
+                {
+                    BattleRenderCommand command = frame.GetCommand(index);
+                    if (command.Type == BattleRenderCommandType.Entity)
+                    {
+                        bodyIndex = index;
+                        body = command;
+                    }
+                    if (command.Type != BattleRenderCommandType.BleedMark)
+                        continue;
+
+                    Assert.That(index, Is.GreaterThan(bodyIndex));
+                    Assert.That(command.SortOrder, Is.EqualTo(body.SortOrder + 1));
+                    Assert.That(command.Size, Is.EqualTo(new Vector2(1f, 3f)));
+                    Assert.That(command.Color, Is.EqualTo(new Color32(255, 0, 0, 255)));
+                    Assert.That(command.SpriteDescriptor.LogicalResourceKey,
+                        Is.EqualTo(BattleVisualResourceKey.CommonSolid));
+                    int pointX = markCount == 0 ? 7 : 11;
+                    int pointY = markCount == 0 ? 9 : 13;
+                    float width = body.Size.x * NTSDRenderSpace.BattleVisualScale *
+                                  NTSDRenderSpace.UnitsPerPixelX;
+                    float height = body.Size.y * NTSDRenderSpace.BattleVisualScale *
+                                   NTSDRenderSpace.UnitsPerPixelY;
+                    float left = body.Position.x - body.Pivot.x * width;
+                    float top = body.Position.y + (1f - body.Pivot.y) * height;
+                    float expectedX = left + (facingLeft ? 1 - pointX : pointX) *
+                                      NTSDRenderSpace.BattleVisualScale *
+                                      NTSDRenderSpace.UnitsPerPixelX;
+                    float expectedY = top - pointY * NTSDRenderSpace.BattleVisualScale *
+                                      NTSDRenderSpace.UnitsPerPixelY;
+                    Assert.That(command.Position.x, Is.EqualTo(expectedX).Within(0.0001f));
+                    Assert.That(command.Position.y, Is.EqualTo(expectedY).Within(0.0001f));
+                    markCount++;
+                }
+                Assert.That(bodyIndex, Is.GreaterThanOrEqualTo(0));
+                Assert.That(markCount, Is.EqualTo(2));
+            }
+
+            foreach (var sample in new[]
+            {
+                (health: 34, visible: true, action: 0),
+                (health: 33, visible: false, action: 0),
+                (health: 33, visible: true, action: 1000),
+            })
+            {
+                var frame = new BattlePresentationFrame();
+                Reset(frame, BattleCommonVisualCatalog.Empty);
+                AddEntity(frame, CreateBleedEntity(points, false, sample.health,
+                    sample.visible, sample.action));
+                coordinator.BuildCommandsForSelfCheck(frame);
+                for (int index = 0; index < frame.CommandCount; index++)
+                    Assert.That(frame.GetCommand(index).Type,
+                        Is.Not.EqualTo(BattleRenderCommandType.BleedMark));
+            }
+
+            var belowThreshold = new BattlePresentationFrame();
+            Reset(belowThreshold, BattleCommonVisualCatalog.Empty);
+            AddEntity(belowThreshold, CreateBleedEntity(points, false, 32, true, 0));
+            coordinator.BuildCommandsForSelfCheck(belowThreshold);
+            int belowMarkCount = 0;
+            for (int index = 0; index < belowThreshold.CommandCount; index++)
+            {
+                if (belowThreshold.GetCommand(index).Type == BattleRenderCommandType.BleedMark)
+                    belowMarkCount++;
+            }
+            Assert.That(belowMarkCount, Is.EqualTo(2));
+        }
 
         [Test]
         public void PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies()
@@ -133,6 +231,46 @@ namespace NTSD.Test
                 }
             }
             Assert.That(shadowCount, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void PlatformShadowOffset_LegacyRendererUsesSameVisualOffset()
+        {
+            var shadowObject = new GameObject("Platform Shadow Offset Test");
+            var actor = new LF2Character();
+            try
+            {
+                SpriteRenderer renderer = shadowObject.AddComponent<SpriteRenderer>();
+                float worldDepth = renderer.transform.position.z;
+                actor.ObjectId = 2;
+                actor.Frame.D = new LF2FrameData { state = 0 };
+                actor.Runtime.LinkState = 0;
+                actor.Runtime.HitStop = 0;
+                actor.Runtime.XInt = 120;
+                actor.Runtime.ZInt = 180;
+                actor.Runtime.RenderShadowOffset10C = 23;
+                actor.SetShadowRenderer(renderer);
+
+                actor.UpdateShadow();
+                Assert.That(renderer.enabled, Is.True);
+                Assert.That(renderer.transform.position, Is.EqualTo(
+                    NTSDRenderSpace.SnapPresentationWorldPosition(
+                        NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                            120f, 203f, worldDepth))));
+
+                actor.Runtime.RenderShadowOffset10C = 0;
+                actor.UpdateShadow();
+                Assert.That(renderer.transform.position, Is.EqualTo(
+                    NTSDRenderSpace.SnapPresentationWorldPosition(
+                        NTSDRenderSpace.ScreenPixelToPresentationWorld(
+                            120f, 180f, worldDepth))));
+                Assert.That(actor.Runtime.ZInt, Is.EqualTo(180));
+            }
+            finally
+            {
+                actor.SetShadowRenderer(null);
+                UnityEngine.Object.DestroyImmediate(shadowObject);
+            }
         }
 
         [Test]
@@ -641,6 +779,24 @@ namespace NTSD.Test
                 renderShadowOffset10C: offset);
         }
 
+        private static BattlePresentationEntitySnapshot CreateBleedEntity(
+            BattleBloodPointCatalog points,
+            bool facingLeft,
+            int health,
+            bool visible,
+            int frameId)
+        {
+            return new BattlePresentationEntitySnapshot(
+                new RuntimeEntityHandle(5, 1), 5, 9, 9, 0,
+                180, 5, 100, 0, true, 0, 0, 500, 1, 0,
+                120, 0, 180f, 0f, 0, 0, 40f, 30f, 80f, 80f,
+                Vector2.zero, new Rect(0f, 0f, 1f, 1f),
+                new Vector2(0.5f, 0f), facingLeft, true,
+                default, 0, 0, entityVisible: visible, shadowVisible: false,
+                frameId: frameId, currentHealth: health, maximumHealth: 99,
+                bloodPoints: points);
+        }
+
         private static BattleCommonVisualCatalog CreateCatalog(
             int variant,
             bool includeSpecialCom = false,
@@ -753,6 +909,7 @@ namespace NTSD.Test
                         glyphs,
                         comLabels,
                         string.Empty,
+                        false,
                     });
             }
 

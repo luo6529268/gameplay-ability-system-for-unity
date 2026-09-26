@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "7f69277245334691b7237e7b04df84f2",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790372844159,
+      "finished_unix_ms": 1790372851150,
+      "last_update_unix_ms": 1790372851150,
+      "progress": {
+        "completed": 9,
+        "total": 8518,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790372850532,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q09KillIconPublicationEditorTests.FormalSelectedIconsPublishSevenAliasesAndRetireWithCatalog",
+        "last_finished_unix_ms": 1790372850662,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.NTSD28Q09KillIconPublicationEditorTests.FormalSelectedIconsPublishSevenAliasesAndRetireWithCatalog",
+            "message": "System.IO.InvalidDataException : Native SPARK requires both resource.dat and system.dat."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

@@ -1,0 +1,17 @@
+# Q07 six boundary cells: additional writer exclusions (2026-09-26)
+
+Status: `SCOPED_SOURCE_EXCLUSION / NATURAL_REACHABILITY_UNRESOLVED`. This is a read-only continuation of `NTSD28-Q07-SIX-BOUNDARY-ACTION-INGRESS-20260926.md`. The six formal SpriteCatalog cells remain published 6/6; this report neither proves nor denies that a live battle reaches their frames.
+
+The four relevant formal decoded DAT files are `c/saso/pup.dat` (OID55), `m/nin/hun.dat` (OID32), and `m/nin/nin.dat` / `nin2.dat` (OID30/31). Their previously recorded formal hashes remain the input identity. A frame-block field scan of these four files found **no** `next`, `hit_*`, `hold_*`, or encoded 1,000,000/2,000,000-state redirect to their respective target actions 103, 95, 31 or 41. Other occurrences of `weaponact:31` are WPoint child actions; they do not set the owning character's frame. The scan was confined to these four DAT files and these field forms.
+
+| Target frame/cell | Additional inspected writer | Observed limit |
+| --- | --- | --- |
+| OID55 frame105 / pic44 | Formal `pup.dat` frame102 is state3, wait0, next61; frame103 is state6 and begins the conditional 103→104→105 tail. `InputRouter28`'s state85 adjacent-action increment cannot turn 102 into 103 because 102 is not state85. | No natural entry to 103 was established. The tail remains valid only after some other writer selects 103. |
+| OID32 frame95 / pic64 | Formal `hun.dat` frame95 is state7, wait2, next0. The inspected ordinary type-0 run+defend branch assigns action102. | Run+defend does not establish 95; no authored direct field to 95 was found in this DAT. |
+| OID30/31 frame31 / pic81 and frame41 / pic91 | In both formal `nin.dat` and `nin2.dat`, frame30 and frame40 are state3, wait0, next52. `InputRouter28` increments an action only in state85; therefore that adjacent-action rule does not turn 30→31 or 40→41 in these definitions. | No natural owner-frame entry to 31/41 was established. WPoint child `weaponact:31` is a different entity's action. |
+
+Two more generic paths cannot supply these four target actions in the inspected conditions: `BattleWorld28::resolve_native_entity_next_999` resolves an ordinary type-0 999 to 0 or airborne 212, while `PhysicsIntegrator28::select_state12_action` selects from bases 180 or 186 (through +3). `InputRouter28::apply_action` can still redirect through a target frame's encoded state or a resource-failure fallback, and relation, collision, AI, result or externally selected initial actions can still write actions. The four DAT scan excluded only encoded redirects **within those four files** whose low three digits equal the target; it is not an exhaustive world-reachability proof.
+
+Next Q07 witness: choose an actual production writer and a reproducible ordinary input/state path before scheduling same-state root-EXE versus original-Unity pixels for a boundary cell. A forced initial action would only prove rendering and must be labelled controlled. Do not change formal DAT values, PNGs, battle rules or camera to manufacture reachability.
+
+Evidence anchors: formal decoded DAT frame rows `pup.dat` 102–105, `hun.dat` 95, `nin.dat`/`nin2.dat` 30/31/40/41; paired playable build-closure `source/ntsd28_core/src/simulation/input_routing.cpp` (`state == 85`, ordinary `state == 2` run+defend and `apply_action`), `battle_world.cpp` (`resolve_native_entity_next_999`), and `physics_integrator.cpp` (`select_state12_action`). No Unity, root-EXE or test was run for this source-only exclusion, and no project script, asset or Scene was changed.

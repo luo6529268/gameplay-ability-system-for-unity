@@ -1,5 +1,123 @@
 # 2026-09-25 恢复后当前 STATE（覆盖下方候选期措辞）
 
+> 2026-09-26 `NTSD28-Q07-REDUCED-HIT-RESOURCE-TRANSACTION-001 / PLANNED`：OID87正式护甲受击tick16双方各缺52 MP已证，独立Task/Change/Ledger在脚本前准确声明共享`ApplyAlternateDamage`及聚焦测试；先RED再只接现有资源事务，保留tick20独立水平位移首差。DAT/图片/Scene/非战斗不改，Q07/D-024开放。
+
+> 2026-09-26 `NTSD28-Q07-SASUKE-ARMOR-TARGET-FIRST-DIFF-001 / VERIFIED_SCOPED_DIAGNOSTIC`：正式OID87护甲受击X550 tick16四千本依次3/3/35/35伤害，Unity HP424/action186与子体生命周期同；但双方当前MP各少52（正式佐助500/目标404，Unity452/352），这是减伤分支漏共享资源结算的已测首差。X1200未中对照2100/2100字段同值。另有独立目标X位移差始于tick20（正式精确558.4、Unity558），不能混同修复。正式根EXE与原Editor两轨PASS，生产/DAT/Scene/非战斗未动；下一独立减伤资源修复先建Task/Change。Q07/D-024开放；下方PLANNED为旧态。
+
+> 2026-09-26 `NTSD28-Q07-SASUKE-ARMOR-TARGET-FIRST-DIFF-001 / PLANNED`：正式/Unity暂存OID87 `sus.dat`同SHA且含type-1护甲；以既有佐助千本26tick改受击者为OID87、初始MP300、X550/X1200，先核正式实际护甲命中再对照Unity。新增Tools诊断与原Editor严格schema的准确Task/Change/Ledger已在脚本前建立。尚未测到护甲选择或首差，生产/DAT/Scene/非战斗不动；Q07/D-024开放。
+
+> 2026-09-26 Q07 `NTSD28-Q07-STANDARD-HIT-RESOURCE-TRANSACTION-001 / FOCUSED_TEST_PASS / SCOPED_RAW_PARITY`：原Editor先RED2/2后GREEN2/2、共享资源纯核8/8，编译0错。同初态佐助千本X550正式根EXE/Unity 26tick实体1428/1428字段同值，X1200未命中2100/2100；前后Unity raw唯一变动为X550佐助tick16–26当前MP。通用type0未护甲受击结算现用PP并追溯两跳owner，DAT/图片/Scene/非战斗未改。邻接类23/24，一项反射参数异常基线未证；自然Battle Play与其它受击分支、Q07/D-024及总目标仍开放。详同ID `RESOURCE-FIX-ACCEPTANCE-20260926.md`；下方PLANNED为旧态。
+
+> 2026-09-26 `NTSD28-Q07-STANDARD-HIT-RESOURCE-TRANSACTION-001 / PLANNED`：基于已证X550 tick16通用MP结算首差，精确三脚本Task/Change/Ledger已在代码修改前建立；下一先RED再给共享type0未护甲受击路径补原生资源事务，当前PP与旧MP分开，X1200未命中对照保持。仅Q07战斗逻辑，不改DAT/图片/Scene/非战斗；Q07/D-024开放。
+
+> 2026-09-26 Q07佐助千本有目标诊断 `NTSD28-Q07-SASUKE-NEEDLE-TARGET-HIT-FIRST-DIFF-001 / VERIFIED_SCOPED_DIAGNOSTIC`：配对源码/根正式EXE与原项目Editor的X550命中、X1200未命中26tick均PASS。X1200共2100字段同值；X550首差为tick16佐助MP正式500、Unity400，目标HP同为500→360且四OID440生命周期一致。通用type0受击资源结算在Unity生产路径缺失，须另立修复包；诊断未改生产/DAT/图片/Scene/非战斗。Q07/D-024及总目标仍开放。详同ID `ACCEPTANCE-20260926.md`；下方PLANNED为历史。
+
+> 2026-09-26 `NTSD28-Q07-SASUKE-NEEDLE-TARGET-HIT-FIRST-DIFF-001 / PLANNED`：正式chi.dat动作2 ITR和原Battle自然OID440动作2均有证据；下一以X550几何重叠候选、X1200无命中对照，扩现有正式LFR与Unity raw诊断各一个严格入口。两脚本准确路径已在Task/Change/Ledger预声明，尚未改脚本/运行；生产/DAT/Scene/非战斗不动。X550是否真正命中待实测，Q07/D-024开放。
+
+> 2026-09-26 Q07目标命中入口只读补证：正式/暂存OID440 `chi.dat` SHA一致，动作2有kind0 ITR；原Battle Scene既有物理L/D/J产生四个OID440/action2。该入口替代无ITR的Lee OID204动作20–23作为下一有目标命中首差场景。目标重叠、候选/命中、Play同条件及正式EXE仍未验证；无脚本/DAT/Scene/非战斗修改，详`artifacts/diagnostics/NTSD28-Q07-SASUKE-NEEDLE-ITR-ENTRY-AUDIT-20260926.md`。三份v3文档已恢复且NUL-free，勿用旧候选覆盖后续记录；Q07/D-024及总目标开放。
+
+> 2026-09-26 Q07最新 `NTSD28-Q07-SASUKE-NEEDLE-CAMERA-PIXEL-001 / VERIFIED_SCOPED_UNITY_CHILD_GROUP_CAMERA_AND_SHUTDOWN`：原Editor物理L/D/J第四轮自然四OID440、正式`chi.png/pic1`四中央命令、tick18全黑基线ROI新增424像素；退出时既有owner已Stopped，报告`AlreadyStopped / RuntimeMapCleared`且World对象/槽/池借用0/0/0。Editor回EditMode、Console0 C#错、四保护SHA稳定。限Unity相机子体组与关闭，不证明四剪影单独可辨或正式EXE GPU；Q07/BATCH-04/总目标开放。详同ID验收报告；下条RUNTIME_PENDING为补证前快照。
+
+> 2026-09-26 当前Q07 `NTSD28-Q07-SASUKE-NEEDLE-CAMERA-PIXEL-001 / RUNTIME_PENDING / SCOPED_UNITY_CHILD_GROUP_CAMERA_PASS`：原Editor正式内容物理L/D/J第三轮四自然OID440、四个分离投影中心的正式`chi.png/pic1`中央命令；tick18全黑基线ROI出生后424非黑像素，PNG目检/Pillow独立复数一致。首轮FAIL与第二轮出生重叠ROI均保留。编译0 C#错、相机恢复、退出Play、四保护SHA不变；后退出World/slot/pool借用计数和正式EXE同画面GPU未测，Q07/BATCH-04/总目标开放。详`artifacts/diagnostics/NTSD28-Q07-SASUKE-NEEDLE-CAMERA-PIXEL-001/ACCEPTANCE-20260926.md`；三份v3文档已恢复且NUL-free，不重装候选。
+
+> 2026-09-26 Q07下一执行包 `NTSD28-Q07-SASUKE-NEEDLE-CAMERA-PIXEL-001 / PLANNED`：正式/Unity同初态佐助26tick字段及原Battle物理L/D/J四OID440出生已有证据，尚无自然子体相机像素。已在脚本前登记Task/Change/Ledger；仅新增默认关闭的Editor相机观察者与meta，复用既有物理键探针，不改生产/DAT/Scene/非战斗。编译/Play待，Q07/R17/R18与总目标开放。
+
+> 2026-09-26 Q07旧内容owner边界：空根Menu预热仍读取旧DAT/图片且其完成是模式/选人页面的前置；当前非空正式根与空根Battle拒绝已有原Editor限定Play。直接删旧521项或改即时失败会改变保留的Menu/loading行为，故删除授权仍0；正式Battle当前选中Logan路径不受此历史分支替代。详`artifacts/diagnostics/NTSD28-Q07-LEGACY-MENU-FALLBACK-BOUNDARY-20260926.md`。本次仅只读审计和文档回链；Q07/总目标开放。
+
+> 2026-09-26 Q07六个边界图格续审：正式四DAT与配对playable的字面/编码动作及相邻state85、`next=999`、state12物理写者均未给对应目标帧自然入口；动态关系/碰撞/AI与外部初态仍未排除。目录发布6/6不等于自然战斗或像素对齐。证据`artifacts/diagnostics/NTSD28-Q07-SIX-BOUNDARY-WRITER-EXCLUSION-20260926.md`。只读，无脚本/DAT/图片/Scene修改；Q07/BATCH-04/总目标保持开放。
+
+> 2026-09-26 最新 Q09/P-08：`NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001` 的原 Battle Scene 正式 Ita HP500/166 受控 CentralOnly 相机 A/B 已有3个独立复核红像素，原Editor编译0错并退出Play，对象/槽/池和四保护SHA稳定；两次探针误判原始报告保留。Ledger861/21与diff check通过。Legacy 生产所有权只读审计发现 `BattleEntityOverlayRenderer` 只有测试调用者，不能补其代码便宣称生产生效。自然Ita/Sasu、Legacy、正式EXE同状态仍待；P-08/Q09/总目标开放。详总表P-08及 `artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/ACCEPTANCE.md`。
+
+> 2026-09-26 Q09/P-08 `NTSD28-Q09-BPOINT-BLEED-CENTRAL-001 / FOCUSED_TEST_PASS / RUNTIME_PENDING`：正式当前内容318个bpoint的中央有序实心标记已接快照/命令/白纹理解析/网格；原Editor编译0错、新例2/2、相邻两类经独立旧反射夹具修正后32/32、网格1/1、低于阈值1/1。首轮28/32四个旧夹具失败保留。Ledger860/20、差异及四保护SHA稳定。仅中央命令/网格证据，原Battle Scene像素、Legacy和正式EXE同状态仍待，P-08/Q09/总目标开放。详 `NTSD28-Q09-BPOINT-BLEED-CENTRAL-001/ACCEPTANCE.md`。
+
+> 2026-09-26 Q09测试门 `NTSD28-Q09-TRUSTED-COMMAND-TEST-CONSTRUCTOR-001 / FOCUSED_TEST_PASS`：只补旧resolver反射夹具的四个现有末参数，不改生产；原Editor选定两类32/32恢复通过、编译0错，旧28/32失败保留。P-08场景/正式画面不由此证明。
+
+> 2026-09-26 Q09 `NTSD28-Q09-TRUSTED-COMMAND-TEST-CONSTRUCTOR-001 / IN_PROGRESS`：P-08新增两例2/2通过后，相邻两类32例28过、4例在旧trusted-command反射构造函数签名处失败。已于脚本前单独登记Task/Change/Ledger；下一只补现有构造函数末四参数的测试夹具，不改生产/资源/Scene。原失败job保留，Q09仍开放。
+
+> 2026-09-26 Q09/P-08 `NTSD28-Q09-BPOINT-BLEED-CENTRAL-001 / IN_PROGRESS`：正式当前内容318个bpoint的坐标已在Unity目录，展示命令与实心资源出口缺失。脚本前已建Task/Change/Ledger；只做现有中央有序命令中的低血量标记与聚焦验证，Legacy/原Battle Play/正式EXE像素另待。DAT、资源、Scene、非战斗不改，Q09和总目标开放。
+
+> 2026-09-26 Q09 `NTSD28-Q09-COM-LABEL-TEST-CONSTRUCTOR-001 / FOCUSED_TEST_PASS`：旧com-label反射夹具只改七参数签名与false实参；原项目Editor编译0错、旧失败单例1/1和当前整类8/8通过。现有阴影测试hunk保留；四保护SHA与Scene Git状态稳定。此结果只恢复测试门，平台阴影GPU独占像素/正式EXE同条件及Q09总出口仍待。下方PLANNED为改前记录。
+
+> 2026-09-26 Q09 `NTSD28-Q09-COM-LABEL-TEST-CONSTRUCTOR-001 / PLANNED`：相邻com-label测试反射六参数、当前构造函数七参数，已先建Task/Change/Ledger；下一只修测试夹具签名与false实参，并在原Editor定向编译/运行。平台阴影GPU独占像素、正式EXE同条件与Q09总出口仍开放。DAT、Scene和非战斗不动。
+
+> 2026-09-26 Q07 `NTSD28-Q07-KO-FEED-PRODUCTION-ROW-WITNESS-001 / FOCUSED_TEST_PASS`：原项目Editor编译0错，同初态正式鸣人30tick场景续到38tick的单例1/1通过；KO出生tick8/time7，生产发布行tick8–36为1、tick37/38为0，尾记录仍1，有序关闭后World对象/槽/借用0。前三轮夹具失败与修正保留；四保护哈希不变。只证明此EditMode生产行时窗，不是正式EXE/Unity像素或Q07/Q09聚合关闭。下方CODE_WRITTEN/PLANNED为历史状态。
+
+> 2026-09-26 Q07 `NTSD28-Q07-KO-FEED-PRODUCTION-ROW-WITNESS-001 / CODE_WRITTEN`：现有Editor回放帮助器只加默认关闭的项目模式Asset参数，新单测对正式鸣人场景延长至38tick，记录KO事件及发布行；原Editor编译与1例定向待验。生产/DAT/Scene/非战斗未改。下方PLANNED为脚本前登记。
+
+> 2026-09-26 Q07 下一精确包 `NTSD28-Q07-KO-FEED-PRODUCTION-ROW-WITNESS-001 / PLANNED`：同初态鸣人事件tick8/time7已有，拟只给现有Editor回放帮助器增加默认关闭的项目mode Asset选项，另加单个聚焦测试延长中性输入至tick38并观察真实Driver发布的feed行；Task/Change/Ledger已在脚本前登记。若角色门槛或行实际不同保留首差，不改生产/DAT/Scene/非战斗。Q07/Q09/总目标开放。
+
+> 2026-09-26 Q09 `NTSD28-Q09-PROJECT-MODE-TEST-FIXTURES-001 / FOCUSED_TEST_PASS`：三处历史Editor夹具已改用项目 `ProjectBattleModeConfig` 快照，排除受击者用内存克隆；原版mode DAT未恢复。原项目Editor编译0错；首轮图标夹具缺现有SPARK依赖，补齐正式system.dat与SPARK.png后受影响9/9通过，含30tick行边界、七图别名及失败发布保留。双Scene/GameConfig/模式Asset哈希不变；只关闭测试夹具迁移，Q07/Q09及总目标开放。下方CODE_WRITTEN/PLANNED为历史阶段。
+
+> Q09 `NTSD28-Q09-PROJECT-MODE-TEST-FIXTURES-001 / CODE_WRITTEN`：行投影、模式输入与图标发布三处旧Editor夹具已迁移到现有ProjectBattleModeConfig Asset快照；图标夹具只复制正式PNG，排除ID变体使用并销毁内存克隆。原Editor编译和聚焦待；生产/Asset/DAT/Scene/非战斗未改。下方PLANNED为改前登记。
+
+> Q07 `NTSD28-Q07-NATIVE-KNOCKOUT-EVENT-CLOCK-001 / FOCUSED_TEST_PASS`：共享 KO writer 改用现有 C24 `NativeFrameSequence`；原Editor编译0错，前/后C24 2/2、Q08事件3/3、Q10声音5/5，鸣人同初态30tick首次KO现为完成tick8/事件时间7，其他三轨30/30不变。Q09行测试因读取用户已排除的mode/ntsd.dat在SetUp失败，不恢复DAT；行可见终点与更新的Play探针仍待。Scene/GameConfig哈希不变，Q07/总目标开放。下方CODE_WRITTEN为改前记录。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-KO-EVENT-TRACE-001 / VERIFIED_SCOPED_DIAGNOSTIC`：原Editor同初态30tick PASS且旧raw/domain/input-RNG轨各30/30不变；正式/Unity KO同于完成tick8出生，归属/类型五字段同值，但事件时间正式7、Unity8。共享生产时钟修复须另建Task/Change，以既有 `NativeFrameSequence` 和C24前后producer为准，覆盖feed寿命/快照/校验。诊断没有改生产/正式DAT/PNG/Scene/非战斗；旧521删除授权0；Q07/R09/R10/R18和总目标开放。详同ID ACCEPTANCE。下条CODE_WRITTEN为改前记录。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-SEEDED-RNG-TRACE-001 / VERIFIED_SCOPED_SEEDED_SOURCE_UNITY_RNG_STATE_PARITY`：配对playable仅扩既有Tools诊断CSV七个RNG字段，新36例作者KO与旧1080×15字段、summary/LFR字节不变；seed682973786首例源/Unity逐tick 210/210 CRT及同步状态同值，tick8 state2524509468/calls3002。根正式EXE LFR默认seed0未序列化CRT，不能据此报发行版全RNG状态同值。链接依赖与路径失败留证后新运行PASS，正式DAT/Unity生产/Scene/非战斗未动；旧521文件不删。下一Q07自然技能/生命周期、旧动态reader、非例外表现，Q07/R09/R10/R18与总目标开放。详同ID REPORT；覆盖下条PLANNED前态。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-SEEDED-RNG-TRACE-001 / PLANNED`：根EXE LFR回放未序列化配对源seed682973786的CRT初态；原Editor同条件raw已存，下一只扩现有Tools正式源36例诊断CSV的每tick RNG观察列，新目录运行并与Unity run2同种子逐tick比较，不改正式源码/生产/DAT/Scene。旧521文件动态reader尚在、删除授权0；Q08物理J→KO另有范围证据，勿重复。Q07/R09/R10/R18和总目标仍开放，详同ID Task/Record。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001 / VERIFIED_SCOPED_EDITMODE_NARUTO_PUNCH_ENTITY_INPUT_PARITY`：原项目Editor 30tick完整Driver run2 PASS，根正式EXE LFR逐tick占用槽30/30、实体1560/1560、输入1140/1140、相位及同步RNG各30/30同值；tick8 frame513命中后双方目标action186/HP-10。首轮新夹具difficulty校验FAIL留证并已限域修正。根LFR CRT初始种子不同，仅调用次数同值，不称完整RNG状态对齐。只改原Editor诊断，生产/DAT/图片/Scene/非战斗未动；下一独立Battle Scene物理键/KO归属/画面验证，Q07/R09/R10/R18与总目标仍开放。详同ID ACCEPTANCE；覆盖下条PLANNED前态。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-UNITY-RAW-FIRST-DIFF-001 / PLANNED`：已凭正式源/根EXE LFR定义Naruto双人X500/X525、seed682973786、物理J@完成tick2、30tick的严格同初态对照；下一只扩原Editor raw-capture诊断schema并取逐tick首差，旧Q08物理J Play初态不全不可替代。Task/Change/Ledger先行，DAT/生产/Scene/非战斗不改；Q07/R09/R10/R18及总目标开放。
+
+> Q07 `NTSD28-Q07-NARUTO-PUNCH-FORMAL-HIT-001 / VERIFIED_SCOPED_FORMAL_SOURCE_RELEASE_AUTHORED_PUNCH_HIT`：36/36声明初态/普通攻击有界例自然达到作者出拳和归属KO；首例targetX525、attack tick2x1在tick8的frame513造成HP10→-10、归属0/1/0/0。根正式EXE同LFR无头回放PASS，30tick所选动作/目标HP动作/输入阶段一致。仅Tools诊断及记录，正式/暂存Naruto DAT同SHA，生产/Scene/非战斗不改。Q08原Editor物理J记录缺完整初态，下一另建Unity同条件包；Q07/R09/R10/R18及总目标开放。详同ID REPORT。
+
+> Q07 `NTSD28-Q07-RASENGAN-ACTION35-TARGET-SOURCE-001 / VERIFIED_SCOPED_FORMAL_SOURCE_NEGATIVE_CONSUMER_GATE`：正式自然OID434/action35在11目标位置/605tick有五位置10条几何候选，10/10被正式kind5 holder/wpoint-strength门拒绝；Naruto frame254 wpoint `attacking:0`未达1..9，目标HP全程500。最终源扫描双跑逐字节一致，未生成有效目标LFR，根正式EXE仅复核SHA、Unity未跑。下一选真正可消费自然hit链，先审Q08鸣人frame513物理J/KO证据。只新增诊断/记录，DAT/生产/Scene/非战斗不改，Q07/R09/R12/R18及总目标开放；详同ID REPORT。
+
+> Q07 Lee子体目标位置扫描已按正式数据/源码更正（2026-09-26）：已对齐的普通J→L五OID204动作20–23无ITR，正式/暂存DAT同SHA；playable几何命中候选对无ITR源帧返回。该扫描不能证明子体主动命中，应转向自然可达且带ITR动作。目标击中子体及其他交互待证；Q07/D-024/R17/R18/总目标开放。无脚本/DAT/图片/Scene修改，详 `NTSD28-Q07-LEE-CHILD-LIFECYCLE-TRACE-001` Task。
+
+> Q07 Lee自然J→L五OID204无目标生命周期 `NTSD28-Q07-LEE-CHILD-LIFECYCLE-TRACE-001 / VERIFIED_SCOPED_NO_TARGET_CHILD_BIRTH_TO_DESPAWN_TRACE`：复用根正式EXE LFR/原Editor完整Driver原始轨迹，五槽tick6出生、tick6–13动作轨迹及tick14正式code1000销毁/Unity快照death一致，45/45槽位集和640/640字段0首差。仅这条无目标出生→退场已覆盖，碰撞目标、内部回收/复用、物理键、全角色/Q07总验仍待。只读证据无脚本/资源/Scene/非战斗修改；详同ID REPORT/JSON。
+
+> Q07当前正式内容字节门 `NTSD28-Q07-CURRENT-SELECTED-CONTENT-BYTE-GATE-001 / VERIFIED_SCOPED_SELECTED_BATTLE_BYTE_GATE`：独立复核根EXE及当前338/353非排除DAT、1031/1255 PNG，公共路径SHA差异0；缺15 DAT为已声明保留/例外/stage暂缓owner，缺224 PNG为用户排除背景110及114 sprite，114逐项集合/SHA复核100%。106张受保护或例外；8张仅声明，在所检playable目录解析/暂停绘制路径未见战斗选用，正式EXE其它读者未排除。活动战斗WORDS0..5/SPARK七图在位同SHA。下一Q07优先自然技能/生命周期首差和旧动态读者；8行维持R17/Q09待证、521旧资源删除授权0，Q07/总目标开放。详同ID REPORT。
+
+> Q07 Lee背景合成世界相机 `NTSD28-Q07-LEE-CHILD-COMPOSED-WORLD-CAMERA-001 / VERIFIED_SCOPED_UNITY_COMPOSED_WORLD_CAMERA_PIXEL`：原Editor保存Battle Scene普通J→L、正式内容/完整Driver使五OID204/pic28自然出生；保持原相机场景层/清屏配置的tick11→12读回，ROI58×58有600变化，其中574与独立黑底中央捕获变化位置相同，ROI外背景在前帧515004/515036像素非黑。相机/RenderTexture恢复、关闭借用0、退出Play/Console0错、双Scene SHA不变；只改Editor诊断，生产/DAT/图片/Scene/非战斗未改。Game view完整栈、物理键、全寿命及正式EXE同条件GPU A/B仍待，Q07/D-024/总目标开放；详同ID COMPOSED-CAMERA-ANALYSIS。覆盖下一条预登记前态。
+
+> Q07 Lee正常背景世界相机下一门 `NTSD28-Q07-LEE-CHILD-COMPOSED-WORLD-CAMERA-001 / IN_PROGRESS`：前轮隔离相机已证OID204/pic28像素，但禁用了场景层。已预登记仅Editor诊断新增独立可选模式，在原Battle Scene普通J→L出生前/后保留原相机层和清屏配置读回，独立核对PNG及恢复/关闭；不改生产、DAT、图片、Scene和非战斗。完整Game view与正式EXE同条件画面、Q07/D-024/总目标仍待。
+
+> Q07 Lee OID204实际相机像素限定通过 `NTSD28-Q07-LEE-CHILD-CAMERA-PIXEL-001 / VERIFIED_SCOPED_UNITY_ISOLATED_CENTRAL_CAMERA_PIXEL`：原Editor正式内容/保存Battle Scene普通J→L五子体pic28与正式trace同值；隔离中央世界相机tick11→12首命令ROI58×58从0到574变化非黑，独立解码288精确正式图格RGB、471色距≤5；cha.png正式/暂存整SHA一致。相机恢复、关闭借用0、Editor EditMode/Console0错、双Scene SHA不变。首诊断编译错修后才运行；未改生产/DAT/Scene/非战斗。正常合成、物理输入、子体寿命及正式EXE GPU A/B仍待，Q07/D-024/总目标开放。详同ID PIXEL-ANALYSIS；覆盖下条待像素快照。
+
+> Q07 Lee子体像素门 `NTSD28-Q07-LEE-CHILD-CAMERA-PIXEL-001 / IN_PROGRESS`：原Battle Scene run3仅证明五OID204中央命令，尚无实际相机像素。已预登记仅Editor探针可选出生前/后双帧读回及命令ROI的Task/Change/Ledger；下一原Editor编译/Play/PNG独立分析和相机恢复。生产/DAT/图片/Scene/非战斗不改，正式EXE同画面与Q07/D-024/总目标开放。
+
+> Q07 Lee原Battle Scene限定Play通过：`NTSD28-Q07-LEE-JL-BATTLE-PLAY-001 / VERIFIED_SCOPED_BATTLE_PLAY_NATURAL_CHILD_PUBLICATION`，原Editor run3正式内容/完整Driver 45tick PASS，J@完成tick8/InputPhase0、L@9–10使Lee frame145/PP500→300，tick12五个OID204源规则(437,651)、物理(403,-35,651)及五条中央Entity命令。关闭完整/借用0、Editor EditMode、Console0错和双Scene SHA稳定。前两轮诊断夹具FAIL保留；生产/DAT/Scene/非战斗不改。物理按键、真实GPU像素、完整寿命及正式EXE同画面未证，Q07/D-024/总目标开放。详同ID ACCEPTANCE；覆盖下条run2待run3快照。
+
+> Q07 Lee Battle Scene run2相位修正证据：J@完成tick8/InputPhase0、L@9–10自然到frame60/61/145/146/164，tick12五个OID204及五条中央Entity命令；最终FAIL是新探针漏了生产出生源坐标初始化，五子体标志false。旧记录MP500为误读字段，成本和正式raw实际用PP；不可推断生产漏扣费。现只修改探针夹具与日志并独立run3；run1/run2保留，Editor退出Play、有序关闭/借用0/双Scene SHA稳定，Q07/D-024/总目标开放。
+
+> Q07 Lee原Battle Scene首次Play：新Editor-only探针编译0错，`lee-jl-battle-play-01` 的45完整Driver tick保留为FAIL；J@完成tick7未使Lee离开frame0，L@8进frame110，OID204未生。正式/原EditMode J在完成tick2；输入相位差异须先校正夹具再判生产。原Editor退出Play，stopped=true、pool借用0、Menu/Battle Scene SHA稳定。`NTSD28-Q07-LEE-JL-BATTLE-PLAY-001`保持IN_PROGRESS，下一新runId测偶数完成tick J及相位记录；Q07/D-024/总目标开放。
+
+> Q07下一 `NTSD28-Q07-LEE-JL-BATTLE-PLAY-001 / IN_PROGRESS`：前包原Editor EditMode完整Driver 45tick的2557项实体/输入及45tick同步RNG对正式EXE LFR同值已证。现已预登记新Editor-only原Battle Scene Play探针的准确Task/Change/Ledger，下一编译并按离散J→L测自然OID204出生、源坐标/表现载体/有序关闭；生产/DAT/图片/Scene/非战斗不改，Play、物理键、像素及Q07/D-024整体待。
+
+> Q07 Lee同输入原Editor第二轮 `NTSD28-Q07-LEE-JL-UNITY-RAW-FIRST-DIFF-001 / VERIFIED_SCOPED_EDITMODE_JL_ENTITY_RNG_PARITY`：原项目EditMode完整Driver 45tick PASS，正式EXE LFR对照输入相位和占用实体映射2557/2557、同步RNG逐tick counter/index/calls/site 45/45同值；tick6五个OID204子体slot/action/owner/位置同值。只校正新Lee诊断夹具的显式BGM前置，保留旧夹具及run1；原Temp结果/双Scene SHA稳定，生产/DAT/非战斗不改。根LFR CRT默认seed0与source/Unity seed682973786不同，不能宣称其初态同值。Battle Play、物理键、像素、完整寿命和Q07/D-024整体出口未验。详同ID ACCEPTANCE；覆盖下条待run2快照。
+
+> Q07 Lee同输入原Editor首轮：严格45tick场景已在原项目EditMode完整Driver运行PASS，映射输入/全部slot实体字段2557/2557匹配正式LFR；初始同步RNG因诊断多一次随机BGM选择偏1，CRT根EXE回放用默认seed0而source/Unity为682973786。`NTSD28-Q07-LEE-JL-UNITY-RAW-FIRST-DIFF-001`仍IN_PROGRESS，下一仅修正新Lee夹具的明确BGM前置并跑独立run2；旧Temp结果、双Scene SHA不变，生产/DAT/非战斗不改，Play/物理/像素/Q07整体待。
+
+> Q07 `NTSD28-Q07-LEE-JL-UNITY-RAW-FIRST-DIFF-001 / IN_PROGRESS`：现有原Editor raw capture的旧冻结3/26tick合同不能直接接正式Lee 45tick LFR；已预登记仅Editor诊断的严格新schema与唯一结果文件，下一跑正式内容完整Driver并报首差。原有Temp结果/用户改动保留，生产/DAT/Scene/非战斗不改；Battle Play/物理/像素/Q07整组待。
+
+> Q07/D-024 `NTSD28-Q07-LEE-NATURAL-NONSOUND-CHILD-001 / VERIFIED_SCOPED_FORMAL_SOURCE_RELEASE`：普通J→L输入已在正式source完整session和根正式EXE回放中于tick6得到Lee frame164及五个owned OID204/action20子体；45tick×4选定字段180/180一致，完整状态/画面等价未据此宣称。下一原Editor同输入完整Driver、子体源坐标/像素/退出清理；物理输入及Q07整体仍待。详同ID ACCEPTANCE；覆盖下条预登记快照。
+
+> Q07/D-024 `NTSD28-Q07-LEE-NATURAL-NONSOUND-CHILD-001 / IN_PROGRESS`：正式Lee frame145→146→164→非音效OID204/action20及native J→L `hit_ad`候选已定位；既有AI自然600tick与受控frame22证明不了这条自然链。准确Task/Change/Ledger在新诊断CPP前登记，下一聚焦正常输入source→根EXE回放，失败保留首阻断；无DAT或生产特例，Unity Play/Q07整组待。
+
+> Q07/R17 `NTSD28-Q07-OUT-OF-RANGE-FRAME-VISIBILITY-AUDIT-001 / VERIFIED_STATIC_VISIBILITY_SCOPE_ONLY`：正式/暂存对象DAT 330/330逐SHA相同；旧帧清单84个非999越图集base pic经21 DAT重算84/84成立、最大累计容量560。正式playable已查图片偏移只取零或正值，84个不会进入选中图格，不按84张缺图处理。六个范围内超PNG格子、自然技能与正式/Unity同条件像素另验；Q07/R17/BATCH-04及总目标开放。只新增Task/报告与进度记录，没有脚本、DAT、图片、Scene或旧资源变更。
+
+> Q07/R17 `NTSD28-Q07-REMAINING-SPRITE-CONSUMER-AUDIT-001 / DELIVERED_SCOPED_STATIC_CLASSIFICATION`：114张正式未暂存sprite PNG已逐路径SHA/DAT声明入CSV；106张为用户保留原生前端/结果/HUD或P-14例外，8张`UI/extra/*`及`PAUSE.png`仅有声明、所检playable选中消费者未证。正式已选WORDS0..5/SPARK 7/7同SHA。此为静态范围裁决，不能替代根EXE可见性/Unity发布像素，Q07/R17/BATCH-04与总目标均开放。详同ID报告；未改代码、DAT、图片、Scene或旧资源。
+
+> Q09平台阴影相机诊断最终脚本回访：`platform-shadow-camera-03` 在原项目新程序集/原Battle Scene第三次唯一Play，顶层PARTIAL、两次相机恢复累计true、正式OID56完整tick6载体/中央命令及零独占像素与上条一致；对象/slot/池/双Scene SHA稳定。显式选中原Unity实例后确认Editor非Play、Console错误0。默认MCP连接曾短暂指向另一个已开Editor，未对其发Play或Scene/内容写入。Q09像素归属仍未证。
+
+> Q09 `NTSD28-Q09-FORMAL-PLATFORM-SHADOW-CAMERA-WITNESS-001 / RUNTIME_PENDING / PIXEL_OWNERSHIP_UNPROVEN`：原Editor新探针编译0 C#错误、两次唯一Battle Play均重现正式OID56完整tick6平台slot50/10C=-5及唯一中央Shadow命令；第二次明确顶层PARTIAL。1920×1080白底前后PNG已查看，目标投影53×11全部与其它命令框重叠，独占候选和变化像素均0，不能算阴影GPU归属通过。相机/夹具/对象/slot/池及双Scene SHA恢复、退出非Play、Console错误0；下一须独立分辨性像素见证，Legacy/自然/正式EXE待。详同ID ACCEPTANCE，Q09/总目标开放。
+
+> Q09 `NTSD28-Q09-FORMAL-PLATFORM-SHADOW-CAMERA-WITNESS-001 / CODE_WRITTEN / COMPILE_PENDING`：仅同一Editor探针加可选前后白底读回、相机finally恢复及排除其余命令后的目标阴影像素计数；原默认请求不变。编译/原Editor Play尚待，零独占像素必须标归属未证。DAT/Scene/生产/非战斗未改，Q09/总目标开放。
+
+> Q09 `NTSD28-Q09-FORMAL-PLATFORM-SHADOW-CAMERA-WITNESS-001 / IN_PROGRESS`：受控正式OID56完整Driver已证10C与中央Shadow命令；现预登记仅扩原Editor测试探针的可选白底相机前后读回和排除其他命令后的像素归属。脚本、编译和Play尚未执行；不改DAT/Scene/生产/非战斗，Q09与总目标开放。
+
+> Q09正式平台阴影 `NTSD28-Q09-FORMAL-PLATFORM-DRIVER-PLAY-001 / VERIFIED_SCOPED_FULL_DRIVER_CENTRAL_COMMAND`：原Editor原Battle Scene正式根受控OID56/frame130及异组OID2完整tick6得10C=-5与唯一目标中央Shadow命令，Z排序不变、Y符合Z+偏移；临时体与Scene均恢复，Editor非Play。仅关闭受控完整Driver→中央命令子门，正常输入/Legacy Play/相机像素/正式EXE仍未证。详同ID ACCEPTANCE，Q09及总目标开放。
+
+> Q09 `NTSD28-Q09-FORMAL-PLATFORM-DRIVER-PLAY-001 / CODE_WRITTEN / COMPILE_PENDING`：按正式OID56平台ITR静态候选，脚本前准确Task/Change/Ledger已有，现仅新增原Editor Battle Scene opt-in完整Driver/10C/中央阴影诊断脚本/Meta；编译和Play待，DAT/Scene/生产/非战斗不在范围。自然输入/EXE画面/Q09整体仍开放。
+
+> Q09正式内容触发候选 `NTSD28-Q09-FORMAL-PLATFORM-REACHABILITY-AUDIT-001 / STATIC_FORMAL_CONTENT_CANDIDATE / PLAY_PENDING`：正式OID56/type0 `c/hid/rea.dat`含17条kind50 ITR（被抓5、下落12），与Unity暂存DAT逐SHA一致；配对playable对不同组type0/3归一operation30，Y大值不参与该扫描。尚无原Battle Play真实链接/非零10C/像素或EXE同条件证据；下一按REPORT的定向完整Driver入口推进，Q09及总目标保持开放。已批准v3恢复此前完成，不重拷贝旧候选。
+
+> Q09 `NTSD28-Q09-PLATFORM-SHADOW-OFFSET-PUBLICATION-001 / RUNTIME_PENDING / FOCUSED_TEST_PASS`：正式Z+10C阴影显示已仅接Legacy中心与中央snapshot/Shadow命令，Z排序及稳定ground位置未改；原Editor test-first编译RED后编译0错、最终Legacy+中央聚焦2/2 PASS、双Scene SHA稳定。相邻命令类6/7的唯一FAIL在旧com-label反射构造器前置，非影子命令；真实Battle Play/EXE像素及Q09整体仍待。详同ID验收。
+
 > Q09 `NTSD28-Q09-PLATFORM-SHADOW-OFFSET-PUBLICATION-001 / IN_PROGRESS`：正式源码阴影 `Z+RenderShadowOffset10C`/depth仍Z 与 Unity 现有字段消费缺口已定位。Task/Change/Ledger先于脚本登记，拟仅接Legacy阴影位置与中央snapshot/Shadow命令并验证排序/脚下标记不变；测试/代码/Play待。Q07/Q08/Q09与总目标仍开放。
 
 > Q07 `NTSD28-Q07-SIX-BOUNDARY-CATALOG-001 / VERIFIED_SCOPED_CATALOG_PUBLICATION`：原Editor正式根Battle Scene tick5一次只读请求，六个越界图格目录条目6/6均为79×79派生纹理，Legacy Sprite与中央绑定有效；原Editor退出Play/Console0错、双Scene SHA稳定。仅目录发布，不代替自然可达、实体像素或正式EXE同世界GPU；Q07/R17/总目标仍开放。详同ID `ACCEPTANCE-20260926.md`。
@@ -4062,3 +4180,12 @@ Noncharacter X-edge destruction under D-024 remains undecided; 2026-09-24 async 
 > 2026-09-24 D-024 AI子体原项目Play请求11/12：显式battle mode0修正早先夹具错误，AI tick75选中玩家；600完整Driver tick无持久owner1子体，但记录到的Lee含OPoint帧61/486只产生正式OID814 `pic999/wait0`纯音效，所以不构成生成链生产故障。源carrier0缺失、ordered shutdown、pool零借用、双Scene SHA保持。Task/Record已更正；改用正式非音效可达动作后再验，D-024和Q07总门槛仍开放。
 > 2026-09-24 Q07预览子包限定关闭：旧`serialized-owner-classification.csv`记的Sasuke BMP Scene引用1已由正式`sasu.png` GUID/y881重绑取代。原项目Editor当前干净Battle Scene现场菜单预览PASS，JSON/PNG归档并已看图，原Editor定向预览类11/11 PASS、Console0、双Scene SHA未变。`NTSD28-Q07-SASUKE-EDITOR-PREVIEW-FORMAL-IMAGE-001 / VERIFIED`只针对禁用作者预览；旧BMP删除与Q07整组仍开放。此前“原Editor Reload待”为历史快照。
 > 2026-09-24 Q07旧图片可达性现状：当前正式根的菜单/战斗预热使用Logan候选，原Editor正式type-0 DAT/图片SHA部署测试1/1 PASS；旧索引383 GUID在指定NTSD序列化文件0命中。然而空根旧`data.txt`/DAT/图片fallback和Editor刷新仍可达，旧文件删除授权0。2026-09-22报告称部署测试遍历旧资源已过期，纠正证据在`NTSD28-Q07-OLD-ASSET-REFERENCE-REFRESH-001/CURRENT-DYNAMIC-REACHABILITY-20260924.md`。Q07/D-024及总目标保持开放。
+> 2026-09-26 Q09/P-08 next `NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001 / IN_PROGRESS`: before editing, declared one new opt-in Editor probe and meta for original clean Battle Scene formal Ita high/low-HP central camera A/B. Compile/Play/pixel not yet run; Legacy/formal EXE and P-08/Q09/full goal remain open. Formal DAT, Scene, production and nonbattle scope protected.
+> 2026-09-26 Q09/P-08 `NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001 / VERIFIED_CONTROLLED_CENTRAL_GPU_ONLY`: original Battle Scene formal Ita frame0 highHP500→lowHP166 A/B final Play `-03` has body index1→1x3 mark index2 and 3 new pure-red pixels within projected mark ROI, independently verified from PNG. Probe `-01` HP3 and `-02` green-channel false negatives retained. Editor compile0, non-Play idle, camera restored, World/slot/borrowers4/2/2 stable, four protected SHA stable. Natural Ita/Sasu, Legacy and formal EXE same-state remain; P-08/Q09/full goal open. See `artifacts/diagnostics/NTSD28-Q09-BPOINT-BLEED-SCENE-PIXEL-001/ACCEPTANCE.md`.
+> 2026-09-26 `NTSD28-Q07-REDUCED-HIT-RESOURCE-TRANSACTION-001 / FOCUSED_TEST_PASS / SCOPED_MP_PARITY_POSITION_PENDING`：原Editor减伤命中聚焦RED后GREEN 2/2，生产通用减伤writer复用既有PP资源事务；正式根EXE对照X550共1428映射字段，资源差异0、仍有12处目标水平位置差，X1200未命中2100/2100全同。前后Unity raw除X550双方tick16–26当前MP外实体字段不变，domain和input/RNG不变。tick20位移首差另追，不能称Q07完成；Scene/配置四保护SHA稳定、三份v3文档仍NUL-free。下条PLANNED为实施前记录。
+> 2026-09-26 Q07下一独立包 `NTSD28-Q07-REDUCED-HIT-HALF-DVX-PRECISION-001 / PLANNED`：正式共享减伤地面命中将奇数dvx作为double除2，Unity通用writer先以int除2；X550剩余首差在tick19速度8.4/8、tick20位置558.4/558。准确Task/Change/Ledger已在脚本前声明，先聚焦RED再修公式并重跑原两例；D-024比例例外保持，Q07开放。
+> 2026-09-26 Q07通用减伤位移修复 `NTSD28-Q07-REDUCED-HIT-HALF-DVX-PRECISION-001 / FOCUSED_TEST_PASS / SCOPED_RAW_PARITY`：共享地面减伤`dvx/2`改为浮点，原Editor有效RED3.6/3.1→GREEN2/2、编译0错。正式根EXE/原Editor同seed X550 68行×21=1428/1428、X1200 100行×21=2100/2100映射字段同值；X550前后只变目标tick19–26速度、tick20–26位置，显式v2 domain和input/RNG不变。D-024项目场景画面比例及自然Play仍未由此证明；Q07/总目标开放。下方PLANNED为实施前记录。
+> 2026-09-26 Q07下一独立诊断路径 `NTSD28-Q07-HIT-PROJECTION-RESOURCE-MOTION-SYNC-001 / PLANNED`：生产writer修复后，原Editor既有减伤ShadowCompare两例2/2 FAIL，writer mask0x20000000000000；投影未包含资源事务且奇数dvx仍整数半量。Task/Change/Ledger已先立，下一加奇数用例RED、同步投影、跑标准/减伤聚焦；生产raw 1428/1428与2100/2100证据保留，Q07开放。
+> 2026-09-26 Q07 ShadowCompare投影 `NTSD28-Q07-HIT-PROJECTION-RESOURCE-MOTION-SYNC-001 / FOCUSED_TEST_PASS / SCOPED_SHADOW_FIELD_PARITY`：正式资源与奇数dvx生产修复后，投影遗漏导致原Editor既有减伤观察2/2首差；独立补标准/减伤投影后，新奇数dvx+非满PP聚焦1/1 PASS、编译0错。相邻21例已通过各自字段mask0与plan-valid门，但全部在其后旧预期值断言失败，整组报FAIL且未无依据改期望；需独立审计。生产X550/X1200原同轨不因这项诊断代码变化而更新证据，Q07/总目标开放。下方PLANNED为实施前记录。
+> 2026-09-26 `NTSD28-Q07-HIT-SHADOW-HISTORICAL-EXPECTATIONS-001 / IN_PROGRESS`：上一Q07 ShadowCompare邻接job 21例字段mask0但旧`HitStateCount`/fall断言失败。正式`battle_world.cpp`给出未护甲bdefend赋45、减伤bdefend加10及fall>60归80；已先立精确Task/Change/Ledger，仅更正对应测试期望并用原Editor当前程序集重跑。生产/DAT/Scene/非战斗不动，Q07开放。
+> 2026-09-26 `NTSD28-Q07-HIT-SHADOW-HISTORICAL-EXPECTATIONS-001 / FOCUSED_TEST_PASS / TEST_ONLY`：正式源码的bdefend/80档和原生CRT火花随机流纠正旧测试期望，原Editor当前18+2聚焦20/20 PASS；临时堆栈探针移除后重编译/Console0错。只改测试，生产raw沿用前包限定证据，自然Play、正式EXE GPU及Q07/总目标开放。详同ID验收；上一IN_PROGRESS为前态。

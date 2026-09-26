@@ -2,6 +2,7 @@
 using System.IO;
 
 using NTSD.Animation;
+using NTSD.App;
 using NUnit.Framework;
 
 namespace NTSD.Test.Editor
@@ -11,13 +12,11 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28Q09KilltextModeInputEditorTests
     {
         [Test]
-        public void StagedFormalModeChildProjectsSelectedKilltextFields()
+        public void ProjectModeAssetProjectsSelectedKilltextFields()
         {
-            string path = Path.Combine(Directory.GetCurrentDirectory(),
-                "Assets", "NTSD", "Content", "LoganRuntime", "decoded_dat",
-                "data", "mode", "ntsd.dat");
             LoganModeKnockoutFeedInput input =
-                LoganModeKnockoutFeedInput.Parse(File.ReadAllText(path));
+                LoganModeKnockoutFeedInput.FromProjectSnapshot(
+                    ProjectBattleModeConfig.LoadDefault().Capture());
 
             Assert.That(input, Is.Not.Null);
             Assert.That(input.Enabled, Is.True);
@@ -37,10 +36,10 @@ namespace NTSD.Test.Editor
             Assert.That(input.VictimRightAligned, Is.False);
             Assert.That(input.AllowedBattleModes, Is.EqualTo(new[] { 0, 1, 4 }));
             Assert.That(input.ExcludedVictimObjectIds, Is.Empty);
-            Assert.That(input.TypeResourcePath(0), Is.EqualTo(@"sprite\kill\c.png"));
-            Assert.That(input.TypeResourcePath(3), Is.EqualTo(@"sprite\kill\sk1.png"));
-            Assert.That(input.StageTeam1DeathSoundPath, Is.EqualTo(@"data\m_ok.wav"));
-            Assert.That(input.StageTeam5DeathSoundPath, Is.EqualTo(@"data\m_join.wav"));
+            Assert.That(input.TypeResourcePath(0), Is.EqualTo("sprite/kill/c.png"));
+            Assert.That(input.TypeResourcePath(3), Is.EqualTo("sprite/kill/sk1.png"));
+            Assert.That(input.StageTeam1DeathSoundPath, Is.EqualTo("data/m_ok.wav"));
+            Assert.That(input.StageTeam5DeathSoundPath, Is.EqualTo("data/m_join.wav"));
         }
 
         [Test]

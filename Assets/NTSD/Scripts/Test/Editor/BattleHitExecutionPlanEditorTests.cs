@@ -965,10 +965,10 @@ namespace NTSD.Test
         [TestCase(0, false, 10, 0, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 30, 0, LF2StandardFrames.Injured4, 40, 1.1, "SFX_001")]
         [TestCase(0, false, 50, 0, LF2StandardFrames.Injured6, 60, 1.1, "SFX_001")]
-        [TestCase(0, false, 70, 0, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_001")]
+        [TestCase(0, false, 70, 0, LF2StandardFrames.FallingBack, 80, 1.1, "SFX_001")]
         [TestCase(9, true, 10, 0, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 1, LF2StandardFrames.Injured, 20, 1.1, "SFX_002")]
-        [TestCase(0, false, 70, 1, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_002")]
+        [TestCase(0, false, 70, 1, LF2StandardFrames.FallingBack, 80, 1.1, "SFX_002")]
         [TestCase(0, false, 10, 2, 203, 20, 1.1, "SFX_006")]
         [TestCase(0, false, 10, 3, 200, 20, 1.1, "SFX_010")]
         [TestCase(0, false, 10, 5, LF2StandardFrames.Injured, 20, 1.1, "SFX_004")]
@@ -979,7 +979,7 @@ namespace NTSD.Test
         [TestCase(0, false, 10, 30, 200, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 6, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
         [TestCase(0, false, 10, 7000, LF2StandardFrames.Injured, 20, 1.1, "SFX_001")]
-        [TestCase(9, true, 10, 4, LF2StandardFrames.FallingBack, 0, 1.1, "SFX_011")]
+        [TestCase(9, true, 10, 4, LF2StandardFrames.FallingBack, 80, 1.1, "SFX_011")]
         public void ShadowCompare_StandardCharacterDamageWriterEffectMatchesAuthorityState(
             int sourceKind,
             bool expectAttackerHpZero,
@@ -1009,12 +1009,13 @@ namespace NTSD.Test
             scenario.CharacterAttacker.FrameDelay = 0;
             scenario.CharacterVictim.FrameDelay = 0;
             scenario.World.DamageStats[1] = 4;
-            scenario.World.Rng.Seed(0x10203040u);
+            scenario.World.NativeRandom.ResetFromSeed(0x10203040u);
+            var initialNativeRandom = scenario.World.NativeRandom.CaptureScalarState();
             uint firstRngState;
             uint secondRngState;
             unchecked
             {
-                firstRngState = 0x10203040u * 0x343FDu + 0x269EC3u;
+                firstRngState = initialNativeRandom.CrtState * 0x343FDu + 0x269EC3u;
                 secondRngState = firstRngState * 0x343FDu + 0x269EC3u;
             }
             int expectedHitZ = (int)((firstRngState >> 16) & 0x7FFFu) % 9 - 4;
@@ -1048,7 +1049,7 @@ namespace NTSD.Test
                 Is.EqualTo(expectedFrame));
             Assert.That(scenario.CharacterVictim.FallCounter, Is.EqualTo(expectedFall));
             Assert.That(scenario.CharacterVictim.HitCount, Is.EqualTo(1));
-            Assert.That(scenario.CharacterVictim.HitStateCount, Is.EqualTo(45));
+            Assert.That(scenario.CharacterVictim.Runtime.Bdefend, Is.EqualTo(45));
             Assert.That(
                 scenario.CharacterVictim.KnockbackVx,
                 Is.EqualTo(expectedKnockbackVx).Within(0.0000001));
@@ -1071,8 +1072,10 @@ namespace NTSD.Test
                         : (effect == 1 ? 30 : 10)));
             Assert.That(scenario.CharacterVictim.GetHitRecordX(0), Is.EqualTo(expectedHitX));
             Assert.That(scenario.CharacterVictim.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
-            Assert.That(scenario.World.Rng.State, Is.EqualTo(secondRngState));
-            Assert.That(scenario.World.Rng.CallCount, Is.EqualTo(2));
+            Assert.That(scenario.World.NativeRandom.CaptureScalarState().CrtState,
+                Is.EqualTo(secondRngState));
+            Assert.That(scenario.World.NativeRandom.CaptureScalarState().CrtCalls,
+                Is.EqualTo(initialNativeRandom.CrtCalls + 2));
             Assert.That(
                 scenario.World.PendingSounds.Count,
                 Is.EqualTo(effect == 1 ? 4 : 2));
@@ -2260,12 +2263,13 @@ namespace NTSD.Test
             itr.bdefend = 10;
             itr.arest = 20;
             itr.vrest = 9;
-            world.Rng.Seed(0x11223344u);
+            world.NativeRandom.ResetFromSeed(0x11223344u);
+            var initialNativeRandom = world.NativeRandom.CaptureScalarState();
             uint firstRngState;
             uint secondRngState;
             unchecked
             {
-                firstRngState = 0x11223344u * 0x343FDu + 0x269EC3u;
+                firstRngState = initialNativeRandom.CrtState * 0x343FDu + 0x269EC3u;
                 secondRngState = firstRngState * 0x343FDu + 0x269EC3u;
             }
             int expectedHitZ = (int)((firstRngState >> 16) & 0x7FFFu) % 9 - 4;
@@ -2292,7 +2296,7 @@ namespace NTSD.Test
             Assert.That(target.Health.HPBound, Is.EqualTo(99));
             Assert.That(target.ComboCountVic, Is.EqualTo(5));
             Assert.That(target.AttackingCounter, Is.Zero);
-            Assert.That(target.HitStateCount, Is.EqualTo(15));
+            Assert.That(target.Runtime.Bdefend, Is.EqualTo(10));
             Assert.That(target.HitCount, Is.EqualTo(1));
             Assert.That(target.FallCounter, Is.EqualTo(lethal ? 80 : 0));
             Assert.That(
@@ -2312,11 +2316,77 @@ namespace NTSD.Test
             Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
             Assert.That(target.GetHitRecordX(0), Is.EqualTo(expectedHitX));
             Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
-            Assert.That(world.Rng.State, Is.EqualTo(secondRngState));
-            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtState,
+                Is.EqualTo(secondRngState));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtCalls,
+                Is.EqualTo(initialNativeRandom.CrtCalls + 2));
             Assert.That(world.PendingSounds.Count, Is.EqualTo(1));
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_017"));
             Assert.That(world.PendingSounds[0].WorldX, Is.EqualTo(target.Runtime.XInt));
+        }
+
+        [Test]
+        public void ShadowCompare_ReducedOddGroundDvxAndResourceMatchWriter()
+        {
+            var world = new SimulationWorld(
+                BattleRuntimeProfile.MobileExtended,
+                BattleRuntimeProfilePolicy.MobileRuntimeSlotCapacity);
+            TypedCharacter attacker = CreateEntity(
+                world, "ReducedOddDvxAttacker", 7283, 0,
+                LF2ObjectType.Character, 1, 0, hasItr: true, hasBody: false);
+            var defendFrame = new LF2FrameData
+            {
+                frameId = 7,
+                state = LF2States.Defending,
+                wait = 1,
+                next = 7,
+            };
+            defendFrame.bodies.Add(new BodyBox
+            {
+                kind = 0,
+                x = -10,
+                y = -10,
+                w = 20,
+                h = 20,
+            });
+            TypedCharacter target = CreateEntity(
+                world, "ReducedOddDvxTarget", 7284, 1,
+                LF2ObjectType.Character, 2, 10,
+                hasItr: false, hasBody: true, extraFrame: defendFrame);
+            target.DirectWriteFramePreserveWaitCounter(defendFrame.frameId);
+            target.RefreshRuntimeSnapshot();
+            target.Runtime.PrevFrame2 = defendFrame.frameId;
+            target.Frame.Prev2 = defendFrame.frameId;
+            target.Frame.Prev2D = defendFrame;
+            attacker.Health.PP = 400;
+            target.Health.PP = 300;
+
+            InteractionArea itr = attacker.GetCollisionFrameData().itrs[0];
+            itr.injury = 50;
+            itr.fall = 10;
+            itr.dvx = -5;
+            itr.bdefend = 10;
+            itr.arest = 20;
+            itr.vrest = 9;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1));
+            world.ConfigureBattleHitExecutionPlanForDiagnostics(
+                BattleHitExecutionPlanMode.ShadowCompare);
+
+            world.PostInteractionTickAll(774);
+
+            BattleHitExecutionPlanDiagnostics diagnostics =
+                world.BattleHitExecutionPlanDiagnosticsForDiagnostics;
+            Assert.That(diagnostics.ObservedWriterEffectCount, Is.EqualTo(1));
+            Assert.That(diagnostics.LastWriterEffectDifferenceMask, Is.Zero,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(diagnostics.CurrentTickPlanValid, Is.True,
+                DescribeDiagnostics(diagnostics));
+            Assert.That(target.KnockbackVx,
+                Is.EqualTo(-2.4).Within(0.0000001));
+            Assert.That(attacker.Health.PP, Is.GreaterThan(400));
+            Assert.That(target.Health.PP, Is.GreaterThan(300));
         }
 
         [Test]

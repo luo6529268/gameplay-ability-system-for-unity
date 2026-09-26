@@ -1,0 +1,288 @@
+{
+  "x550": {
+    "completedTicks": 26,
+    "entityRows": 68,
+    "fieldComparisons": 1428,
+    "differences": [],
+    "changedEntityGroups": [
+      {
+        "tick": 19,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 8,
+          "y": -5.6,
+          "z": 0
+        },
+        "after": {
+          "x": 8.4,
+          "y": -5.6,
+          "z": 0
+        }
+      },
+      {
+        "tick": 20,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 558,
+          "preciseY": -5.6,
+          "preciseZ": 542,
+          "x": 558,
+          "y": -5,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 558.4,
+          "preciseY": -5.6,
+          "preciseZ": 542,
+          "x": 558,
+          "y": -5,
+          "z": 542
+        }
+      },
+      {
+        "tick": 20,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": -3.8999999999999995,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": -3.8999999999999995,
+          "z": 0
+        }
+      },
+      {
+        "tick": 21,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 565,
+          "preciseY": -9.5,
+          "preciseZ": 542,
+          "x": 565,
+          "y": -9,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 565.8,
+          "preciseY": -9.5,
+          "preciseZ": 542,
+          "x": 565,
+          "y": -9,
+          "z": 542
+        }
+      },
+      {
+        "tick": 21,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": -2.1999999999999993,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": -2.1999999999999993,
+          "z": 0
+        }
+      },
+      {
+        "tick": 22,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 572,
+          "preciseY": -11.7,
+          "preciseZ": 542,
+          "x": 572,
+          "y": -11,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 573.1999999999999,
+          "preciseY": -11.7,
+          "preciseZ": 542,
+          "x": 573,
+          "y": -11,
+          "z": 542
+        }
+      },
+      {
+        "tick": 22,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": -0.49999999999999933,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": -0.49999999999999933,
+          "z": 0
+        }
+      },
+      {
+        "tick": 23,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 579,
+          "preciseY": -12.2,
+          "preciseZ": 542,
+          "x": 579,
+          "y": -12,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 580.5999999999999,
+          "preciseY": -12.2,
+          "preciseZ": 542,
+          "x": 580,
+          "y": -12,
+          "z": 542
+        }
+      },
+      {
+        "tick": 23,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": 1.2000000000000006,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": 1.2000000000000006,
+          "z": 0
+        }
+      },
+      {
+        "tick": 24,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 586,
+          "preciseY": -10.999999999999998,
+          "preciseZ": 542,
+          "x": 586,
+          "y": -10,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 587.9999999999999,
+          "preciseY": -10.999999999999998,
+          "preciseZ": 542,
+          "x": 587,
+          "y": -10,
+          "z": 542
+        }
+      },
+      {
+        "tick": 24,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": 2.9000000000000004,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": 2.9000000000000004,
+          "z": 0
+        }
+      },
+      {
+        "tick": 25,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 593,
+          "preciseY": -8.099999999999998,
+          "preciseZ": 542,
+          "x": 593,
+          "y": -8,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 595.3999999999999,
+          "preciseY": -8.099999999999998,
+          "preciseZ": 542,
+          "x": 595,
+          "y": -8,
+          "z": 542
+        }
+      },
+      {
+        "tick": 25,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": 4.6000000000000005,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": 4.6000000000000005,
+          "z": 0
+        }
+      },
+      {
+        "tick": 26,
+        "slot": 1,
+        "group": "position",
+        "before": {
+          "preciseX": 600,
+          "preciseY": -3.4999999999999973,
+          "preciseZ": 542,
+          "x": 600,
+          "y": -3,
+          "z": 542
+        },
+        "after": {
+          "preciseX": 602.7999999999998,
+          "preciseY": -3.4999999999999973,
+          "preciseZ": 542,
+          "x": 602,
+          "y": -3,
+          "z": 542
+        }
+      },
+      {
+        "tick": 26,
+        "slot": 1,
+        "group": "motion",
+        "before": {
+          "x": 7,
+          "y": 6.300000000000001,
+          "z": 0
+        },
+        "after": {
+          "x": 7.4,
+          "y": 6.300000000000001,
+          "z": 0
+        }
+      }
+    ],
+    "domain.jsonlUnchanged": true,
+    "input-rng.jsonlUnchanged": true
+  },
+  "x1200": {
+    "completedTicks": 26,
+    "entityRows": 100,
+    "fieldComparisons": 2100,
+    "differences": [],
+    "changedEntityGroups": [],
+    "domain.jsonlUnchanged": true,
+    "input-rng.jsonlUnchanged": true
+  }
+}

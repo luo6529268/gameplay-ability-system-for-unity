@@ -1,0 +1,54 @@
+{
+  "scenario": "two Naruto, X500/X525, HP500/10, J@completed tick2, seed682973786, 30 ticks",
+  "formalEvent": {
+    "completedTick": 8,
+    "battleTimeTicks": 7,
+    "sourceObjectType": 0,
+    "fourOwnerSlot": 0,
+    "sourceSlot": 0,
+    "victimSlot": 1,
+    "creditSlot": 0
+  },
+  "trackComparisons": {
+    "raw": {
+      "oldTicks": 30,
+      "newTicks": 30,
+      "firstChangedCompletedTick": null,
+      "changedTickCount": 0
+    },
+    "domain": {
+      "oldTicks": 30,
+      "newTicks": 30,
+      "firstChangedCompletedTick": null,
+      "changedTickCount": 0
+    },
+    "input-rng": {
+      "oldTicks": 30,
+      "newTicks": 30,
+      "firstChangedCompletedTick": null,
+      "changedTickCount": 0
+    },
+    "ko-events": {
+      "oldTicks": 30,
+      "newTicks": 30,
+      "firstChangedCompletedTick": 8,
+      "changedTickCount": 23
+    }
+  },
+  "sha256": {
+    "raw": "A3CB6C545E7DD11BCE787BAE1313EB4337338C3D53C24D4492243DF4E206FB04",
+    "domain": "BD93E86F3D64C3A7ABB6E2FFEBA8AE2BD1A0897817CA2E81D3C5BD6D7007147D",
+    "input-rng": "E3CC3F55D299F00624AAB0BF839EEBF1CB96C2B3A142EE9C03D346B400145BCD",
+    "ko-events": "B7ED79F284A51C91579BF4307E8EF8D64FB74E51C8B5154D07FB87A69E881015"
+  },
+  "newFirstObservedEvent": {
+    "completedTick": 8,
+    "battleTimeTick": 7,
+    "creditSlot": 0,
+    "fourOwnerSlot": 0,
+    "sourceObjectType": 0,
+    "sourceSlot": 0,
+    "victimSlot": 1
+  },
+  "eventMatchesFormal": true
+}

@@ -646,20 +646,20 @@ namespace NTSD.Simulation.Ecs
                 {
                     int delta = (int)(((long)resourceInjury *
                         attackerInjuryMpPercent) / 100L);
-                    resourceAttacker.MP = unchecked(
-                        resourceAttacker.MP + delta);
+                    resourceAttacker.PP = unchecked(
+                        resourceAttacker.PP + delta);
                 }
                 if (targetInjuryMpPercent > 0)
                 {
                     int delta = (int)(((long)resourceInjury *
                         targetInjuryMpPercent) / 100L);
-                    target.MP = unchecked(target.MP + delta);
+                    target.PP = unchecked(target.PP + delta);
                 }
             }
 
-            if (target.ObjType == 0 && drain > 0 && drain <= target.MP)
+            if (target.ObjType == 0 && drain > 0 && drain <= target.PP)
             {
-                target.MP -= drain;
+                target.PP -= drain;
                 target.InputMpConsumedTotal350 = unchecked(
                     target.InputMpConsumedTotal350 + drain);
             }
@@ -670,19 +670,19 @@ namespace NTSD.Simulation.Ecs
             if (gain < 0)
             {
                 int cost = unchecked(-gain);
-                if (cost <= resourceAttacker.MP)
+                if (cost <= resourceAttacker.PP)
                 {
-                    resourceAttacker.MP = unchecked(
-                        resourceAttacker.MP + gain);
+                    resourceAttacker.PP = unchecked(
+                        resourceAttacker.PP + gain);
                     resourceAttacker.InputMpConsumedTotal350 = unchecked(
                         resourceAttacker.InputMpConsumedTotal350 + cost);
                 }
                 return;
             }
 
-            int candidateMp = unchecked(resourceAttacker.MP + gain);
+            int candidateMp = unchecked(resourceAttacker.PP + gain);
             if (candidateMp <= resourceAttackerBaseMaxMp)
-                resourceAttacker.MP = candidateMp;
+                resourceAttacker.PP = candidateMp;
         }
 
         internal static LF2Entity ResolveNativeHitResourceAttacker(
@@ -767,6 +767,44 @@ namespace NTSD.Simulation.Ecs
 
             if ((attacker.Runtime.Kind4SourceCount92 & 0xFFFF) != 0)
                 attacker.Runtime.Kind4SourceCount92--;
+        }
+
+        private static void ApplyNativeStandardHitResourceTransfer(
+            SimulationWorld world,
+            LF2Entity attacker,
+            LF2Entity victim,
+            InteractionArea itr)
+        {
+            LF2Entity resourceAttacker = ResolveNativeHitResourceAttacker(
+                world, attacker.Runtime.SlotIndex);
+            if (resourceAttacker?.Runtime == null)
+                return;
+
+            NTSD28HitResourceRulesRuntimeState rules =
+                world.Runtime?.NativeHitResourceRules;
+            int resourceInjury = ResolveNativeHitResourceInjury(
+                itr.injury,
+                attacker.Runtime.HitResourceInjuryDouble1A0,
+                LF2HitResolveRuntimeData.ResolveCharacterData(attacker)?
+                    .definition_attacking ?? 0,
+                rules?.ActiveModeAttackingPercent1C ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultActiveModeAttackingPercent1C);
+            ApplyNativeHitResourceTransaction(
+                resourceAttacker.Runtime,
+                victim.Runtime,
+                resourceInjury,
+                attacker.Runtime.HitResourceSuppression15C,
+                itr.drain,
+                itr.gain,
+                attacker.Runtime.InputLocalResourceEnabled49D034,
+                rules?.AttackerInjuryMpPercent34 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultAttackerInjuryMpPercent34,
+                rules?.TargetInjuryMpPercent38 ??
+                    NTSD28HitResourceRulesRuntimeState
+                        .DefaultTargetInjuryMpPercent38,
+                resourceAttacker.Runtime.PPMax);
         }
 
         private static void ApplyNativeStandardHitKnockout(
@@ -1116,6 +1154,9 @@ namespace NTSD.Simulation.Ecs
                 attacker,
                 victim,
                 effectiveInjury);
+            // Alignment contract: NTSD28-Q07-STANDARD-HIT-RESOURCE-TRANSACTION-001.
+            ApplyNativeStandardHitResourceTransfer(
+                world, attacker, victim, itr);
             ApplyNativeHitDisplaySteps(victim.Runtime, itr.injury);
             ApplyConfirmedInputStatuses(world.NativeRandom, victim.Runtime, itr);
             ApplyNativeJoinAndMimicSideEffects(
@@ -1719,6 +1760,9 @@ namespace NTSD.Simulation.Ecs
                 attacker,
                 victim,
                 reducedInjury);
+            // Alignment contract: NTSD28-Q07-REDUCED-HIT-RESOURCE-TRANSACTION-001.
+            ApplyNativeStandardHitResourceTransfer(
+                world, attacker, victim, itr);
 
             int damageStatIndex = victim.Unk344;
             if (damageStatIndex > 0 && damageStatIndex < world.DamageStats.Length)
@@ -2631,7 +2675,7 @@ namespace NTSD.Simulation.Ecs
             }
             else
             {
-                int halfDvx = itr.dvx / 2;
+                double halfDvx = itr.dvx / 2.0;
                 victim.KnockbackVx += attacker.Dirh() > 0 ? halfDvx : -halfDvx;
             }
         }

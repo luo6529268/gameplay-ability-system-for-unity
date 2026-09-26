@@ -637,13 +637,15 @@ namespace NTSD.Test.Editor
                     report.victimHpAfterCollision = victim.Health.HP;
                     report.attackerFrameAtKo = attacker.Frame.N;
                     report.timerAfterCollision = world.Runtime.Results.NativeResultTimer;
+                    int expectedEventTime =
+                        unchecked((int)(world.NativeFrameSequence - 1UL));
                     NativeKnockoutEvent knockout = world.NativeKnockoutEvents.FirstOrDefault(hit =>
                         hit.VictimSlot == victim.Runtime.SlotIndex &&
-                        hit.BattleTimeTick == tick);
+                        hit.BattleTimeTick == expectedEventTime);
                     report.nativeKnockoutEventFound =
                         world.NativeKnockoutEvents.Any(hit =>
                             hit.VictimSlot == victim.Runtime.SlotIndex &&
-                            hit.BattleTimeTick == tick);
+                            hit.BattleTimeTick == expectedEventTime);
                     if (report.nativeKnockoutEventFound)
                     {
                         report.nativeKnockoutSourceSlot = knockout.SourceSlot;
@@ -777,11 +779,13 @@ namespace NTSD.Test.Editor
                 "The live Driver rejected the full collision tick.");
             report.victimHpAfterCollision = victim.Health.HP;
             report.timerAfterCollision = world.Runtime.Results.NativeResultTimer;
+            int expectedCollisionEventTime =
+                unchecked((int)(world.NativeFrameSequence - 1UL));
             Require(report.victimHpAfterCollision <= 0 &&
                 report.timerAfterCollision == 0 &&
                 world.NativeKnockoutEvents.Any(hit =>
                     hit.VictimSlot == victim.Runtime.SlotIndex &&
-                    hit.BattleTimeTick == report.collisionTick),
+                    hit.BattleTimeTick == expectedCollisionEventTime),
                 "The collision tick did not KO the real second participant before result timing.");
 
             Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),

@@ -135,6 +135,8 @@ namespace NTSD.Test.Editor
             victim.Runtime.ImpactSourceSlot164 = 2;
             victim.Runtime.InputHpConsumedTotal34C = 23;
             world.Runtime.NativeHitResourceRules.NegativeEnvironmentDamage90 = 9;
+            world.Runtime.Flow.CurrentTickIndex = 9;
+            world.Runtime.NativeWorldClock.FrameSequence = 8UL;
 
             world.LateEntityUpdateAll(1);
 
@@ -149,6 +151,8 @@ namespace NTSD.Test.Editor
             Assert.That(released.Runtime.KnockoutCount358, Is.EqualTo(103));
             Assert.That(world.NativeKnockoutEvents.Count, Is.EqualTo(1));
             NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.BattleTimeTick, Is.EqualTo(8),
+                "A post-C24 resource KO records the advanced native sequence, not the host tick.");
             Assert.That(knockout.VictimSlot, Is.EqualTo(0));
             Assert.That(knockout.SourceSlot, Is.EqualTo(2));
             Assert.That(knockout.CreditSlot, Is.EqualTo(2));

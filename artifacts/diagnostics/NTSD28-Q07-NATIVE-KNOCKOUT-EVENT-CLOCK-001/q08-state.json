@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "0f1c7f586f154bbc8b3ac627792cd468",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790371870352,
+      "finished_unix_ms": 1790371874834,
+      "last_update_unix_ms": 1790371874834,
+      "progress": {
+        "completed": 3,
+        "total": 8518,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790371874106,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q08NativeKnockoutEventStateEditorTests.PendingSnapshotOwnsOrderedKnockoutsAndRestoresThem",
+        "last_finished_unix_ms": 1790371874107,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.5703794,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "LockstepChecksumAndResetTrackKnockoutEventState",
+            "fullName": "NTSD.Test.Editor.NTSD28Q08NativeKnockoutEventStateEditorTests.LockstepChecksumAndResetTrackKnockoutEventState",
+            "state": "Passed",
+            "durationSeconds": 0.0267272,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NewestTailExpiryRetainsOlderRecordsUntilTheNewestExpires",
+            "fullName": "NTSD.Test.Editor.NTSD28Q08NativeKnockoutEventStateEditorTests.NewestTailExpiryRetainsOlderRecordsUntilTheNewestExpires",
+            "state": "Passed",
+            "durationSeconds": 0.0005569,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PendingSnapshotOwnsOrderedKnockoutsAndRestoresThem",
+            "fullName": "NTSD.Test.Editor.NTSD28Q08NativeKnockoutEventStateEditorTests.PendingSnapshotOwnsOrderedKnockoutsAndRestoresThem",
+            "state": "Passed",
+            "durationSeconds": 0.0006405,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

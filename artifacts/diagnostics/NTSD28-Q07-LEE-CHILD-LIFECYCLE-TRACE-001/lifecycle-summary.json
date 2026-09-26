@@ -1,0 +1,172 @@
+{
+  "status": "PASS",
+  "authorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "inputs": {
+    "nativeTraceSha256": "33FE38881ADB397F0D4667EE76D8FBA1C449FB231B285601BD5160915D1B5A8F",
+    "unityRawSha256": "62BC27E269948033A3A6C6CB4F661CB42A9C64206B5393EA0B75719C082B538D",
+    "unityDomainSha256": "4FE4DAA76355F353A436CCAC7E5CC686A1D800ABD3A857AF4266CFF622BAC753"
+  },
+  "comparedTicks": [
+    1,
+    45
+  ],
+  "nativeAdditionalTick46": true,
+  "slotSetChecks": 45,
+  "childStateFieldChecks": 640,
+  "fieldNames": [
+    "slot",
+    "oid",
+    "action",
+    "state",
+    "frameCounter",
+    "facing",
+    "x",
+    "y",
+    "z",
+    "vx",
+    "vy",
+    "vz",
+    "hp",
+    "mp",
+    "team",
+    "owner"
+  ],
+  "firstDifferences": [],
+  "events": {
+    "nativeBirthTick6": [
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "unityBirthTick6": [
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "nativeDespawnTick14": [
+      51,
+      52,
+      53,
+      54,
+      55
+    ],
+    "unityDeathTick14": [
+      51,
+      52,
+      53,
+      54,
+      55
+    ]
+  },
+  "aliveTicksBySlot": {
+    "51": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "52": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "53": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "54": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ],
+    "55": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ]
+  },
+  "actionsBySlot": {
+    "51": [
+      20,
+      20,
+      21,
+      21,
+      22,
+      22,
+      23,
+      23
+    ],
+    "52": [
+      20,
+      20,
+      21,
+      21,
+      22,
+      22,
+      23,
+      23
+    ],
+    "53": [
+      20,
+      20,
+      21,
+      21,
+      22,
+      22,
+      23,
+      23
+    ],
+    "54": [
+      20,
+      20,
+      21,
+      21,
+      22,
+      22,
+      23,
+      23
+    ],
+    "55": [
+      20,
+      20,
+      21,
+      21,
+      22,
+      22,
+      23,
+      23
+    ]
+  },
+  "lastObservedChildTick": 13,
+  "firstAbsentChildTick": 14,
+  "observedScope": "ordinary Lee J-L, no target hit; snapshot/entity presence and native lifecycle event, not internal cleanup reason or all interactions"
+}
