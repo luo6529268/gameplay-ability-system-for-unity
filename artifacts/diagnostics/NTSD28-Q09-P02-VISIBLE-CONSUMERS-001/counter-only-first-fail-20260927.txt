@@ -1,0 +1,17 @@
+RUNNING counter-only
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=4 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=False app=MenuMain
+candidate slot=0 source=True
+candidate slot=1 source=True
+ready tick=3
+FAIL System.InvalidOperationException: The controlled revive-lives counter was not published.
+  at NTSD.Test.Editor.BattlePresentationDisplayMotionPlayModeProbeEditor.Check (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattlePresentationDisplayMotionPlayModeProbeEditor.cs:466 
+  at NTSD.Test.Editor.BattlePresentationDisplayMotionPlayModeProbeEditor.BeginCounterCase () [0x000f6] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattlePresentationDisplayMotionPlayModeProbeEditor.cs:286 
+  at NTSD.Test.Editor.BattlePresentationDisplayMotionPlayModeProbeEditor.Observe () [0x003bf] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattlePresentationDisplayMotionPlayModeProbeEditor.cs:162 

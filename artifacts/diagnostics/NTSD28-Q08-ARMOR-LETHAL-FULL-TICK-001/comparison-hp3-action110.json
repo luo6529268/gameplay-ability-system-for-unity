@@ -1,0 +1,52 @@
+{
+  "schema": "ntsd28-q08-selected-armor-lethal-comparison/1.1",
+  "rootReplayInitialActionOverride": 110,
+  "ticks": 26,
+  "entityRows": 68,
+  "fieldsPerEntity": 25,
+  "fieldComparisons": 1700,
+  "fieldDifferenceCount": 0,
+  "firstFieldDifferences": [],
+  "formalKnockoutEvents": [
+    {
+      "firstSeenTick": 16,
+      "event": {
+        "battleTimeTick": 15,
+        "creditSlot": 0,
+        "fourOwnerSlot": 0,
+        "sourceObjectType": 3,
+        "sourceSlot": 50,
+        "victimSlot": 1
+      }
+    }
+  ],
+  "unityKnockoutFirstAppearances": [
+    {
+      "firstSeenTick": 16,
+      "event": {
+        "battleTimeTick": 15,
+        "creditSlot": 0,
+        "fourOwnerSlot": 0,
+        "sourceObjectType": 3,
+        "sourceSlot": 50,
+        "victimSlot": 1
+      }
+    }
+  ],
+  "knockoutFirstAppearanceMatches": true,
+  "unityFeedRetentionTicks": [
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26
+  ],
+  "rootReplayPass": true,
+  "unityCapturePass": true
+}

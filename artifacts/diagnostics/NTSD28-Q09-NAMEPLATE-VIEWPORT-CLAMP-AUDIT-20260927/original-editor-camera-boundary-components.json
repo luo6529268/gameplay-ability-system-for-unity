@@ -1,0 +1,321 @@
+{
+  "observedAtUtc": "2026-09-27T07:21:34.329812+00:00",
+  "source": "original Unity Editor PID 11944 via read-only Unity MCP get_gameobject_component",
+  "queries": {
+    "camera": {
+      "success": true,
+      "data": {
+        "gameObjectID": 149014,
+        "gameObjectName": "ScenesCamera",
+        "component": {
+          "typeName": "UnityEngine.Camera",
+          "instanceID": 149018,
+          "properties": {
+            "nearClipPlane": 0.30000001192092896,
+            "farClipPlane": 1000.0,
+            "fieldOfView": 60.0,
+            "renderingPath": -1,
+            "actualRenderingPath": 1,
+            "allowHDR": true,
+            "allowMSAA": true,
+            "allowDynamicResolution": false,
+            "forceIntoRenderTexture": false,
+            "orthographicSize": 5.759999752044678,
+            "orthographic": true,
+            "opaqueSortMode": 0,
+            "transparencySortMode": 0,
+            "depth": -1.0,
+            "aspect": 1.7777777910232544,
+            "cullingMask": 32727,
+            "eventMask": -1,
+            "backgroundColor": {
+              "r": 0.0,
+              "g": 0.0,
+              "b": 0.0,
+              "a": 0.0
+            },
+            "clearFlags": 3,
+            "stereoEnabled": false,
+            "stereoSeparation": 0.02199999988079071,
+            "stereoConvergence": 10.0,
+            "enabled": true,
+            "name": "ScenesCamera",
+            "tag": "MainCamera",
+            "gameObject": {
+              "name": "ScenesCamera",
+              "instanceID": 149014
+            }
+          }
+        }
+      }
+    },
+    "cameraTransform": {
+      "success": true,
+      "data": {
+        "gameObjectID": 149014,
+        "gameObjectName": "ScenesCamera",
+        "component": {
+          "typeName": "UnityEngine.Transform",
+          "instanceID": 149020,
+          "position": {
+            "x": -1.79,
+            "y": -4.80000067,
+            "z": -10.0
+          },
+          "localPosition": {
+            "x": -1.79,
+            "y": -4.80000067,
+            "z": -10.0
+          },
+          "eulerAngles": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localEulerAngles": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "right": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "up": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "forward": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "parentInstanceID": 0,
+          "rootInstanceID": 149014,
+          "childCount": 0,
+          "name": "ScenesCamera",
+          "tag": "MainCamera",
+          "gameObjectInstanceID": 149014
+        }
+      }
+    },
+    "boundaryManager": {
+      "success": true,
+      "data": {
+        "gameObjectID": 148876,
+        "gameObjectName": "BoundaryWallEditor",
+        "component": {
+          "typeName": "NTSD.LevelEditor.BoundaryWallManager",
+          "instanceID": 148882,
+          "properties": {
+            "UsesLoadedBoundaryDefinition": false,
+            "LoadedBoundaryDefinition": null,
+            "AuthoringBoundaryDefinition": "Assets/NTSD/Map/TrainingGroundMap.asset",
+            "EnabledBoundaries": [
+              {
+                "name": "BoundaryWallEditor",
+                "instanceID": 148878
+              }
+            ],
+            "AllBoundaries": [
+              {
+                "name": "BoundaryWallEditor",
+                "instanceID": 148878
+              }
+            ],
+            "_autoRefresh": false,
+            "_debugMode": false,
+            "_authoringBoundaryDefinition": "Assets/NTSD/Map/TrainingGroundMap.asset",
+            "SpawnPoints": []
+          }
+        }
+      }
+    },
+    "boundary": {
+      "success": true,
+      "data": {
+        "gameObjectID": 148876,
+        "gameObjectName": "BoundaryWallEditor",
+        "component": {
+          "typeName": "NTSD.LevelEditor.BoundaryWall",
+          "instanceID": 148878,
+          "properties": {
+            "BoundaryName": "关卡边界",
+            "IsEnabled": true,
+            "ActivePolygonIndex": 0,
+            "PolygonCount": 1,
+            "Polygons": [
+              {
+                "name": "多边形 1",
+                "vertices": [
+                  {
+                    "x": -12.071429252624512,
+                    "y": -6.994326591491699
+                  },
+                  {
+                    "x": 8.30781078338623,
+                    "y": -6.979555130004883
+                  },
+                  {
+                    "x": 8.303545951843262,
+                    "y": -2.534280776977539
+                  },
+                  {
+                    "x": -12.09072494506836,
+                    "y": -2.533034324645996
+                  }
+                ],
+                "color": {
+                  "r": 0.0,
+                  "g": 1.0,
+                  "b": 0.0,
+                  "a": 0.30000001192092896
+                }
+              }
+            ],
+            "ActivePolygon": {
+              "name": "多边形 1",
+              "vertices": [
+                {
+                  "x": -12.071429252624512,
+                  "y": -6.994326591491699
+                },
+                {
+                  "x": 8.30781078338623,
+                  "y": -6.979555130004883
+                },
+                {
+                  "x": 8.303545951843262,
+                  "y": -2.534280776977539
+                },
+                {
+                  "x": -12.09072494506836,
+                  "y": -2.533034324645996
+                }
+              ],
+              "color": {
+                "r": 0.0,
+                "g": 1.0,
+                "b": 0.0,
+                "a": 0.30000001192092896
+              }
+            },
+            "_polygons": [
+              {
+                "name": "多边形 1",
+                "vertices": [
+                  {
+                    "x": -12.071429252624512,
+                    "y": -6.994326591491699
+                  },
+                  {
+                    "x": 8.30781078338623,
+                    "y": -6.979555130004883
+                  },
+                  {
+                    "x": 8.303545951843262,
+                    "y": -2.534280776977539
+                  },
+                  {
+                    "x": -12.09072494506836,
+                    "y": -2.533034324645996
+                  }
+                ],
+                "color": {
+                  "r": 0.0,
+                  "g": 1.0,
+                  "b": 0.0,
+                  "a": 0.30000001192092896
+                }
+              }
+            ],
+            "_activePolygonIndex": 0,
+            "_boundaryName": "关卡边界",
+            "_isEnabled": true
+          }
+        }
+      }
+    },
+    "boundaryTransform": {
+      "success": true,
+      "data": {
+        "gameObjectID": 148876,
+        "gameObjectName": "BoundaryWallEditor",
+        "component": {
+          "typeName": "UnityEngine.Transform",
+          "instanceID": 148880,
+          "position": {
+            "x": 0.09,
+            "y": -2.29,
+            "z": 0.00418684
+          },
+          "localPosition": {
+            "x": 0.09,
+            "y": -2.29,
+            "z": 0.00418684
+          },
+          "eulerAngles": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localEulerAngles": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "localScale": {
+            "x": 1.0,
+            "y": 1.0,
+            "z": 1.0
+          },
+          "right": {
+            "x": 1.0,
+            "y": 0.0,
+            "z": 0.0
+          },
+          "up": {
+            "x": 0.0,
+            "y": 1.0,
+            "z": 0.0
+          },
+          "forward": {
+            "x": 0.0,
+            "y": 0.0,
+            "z": 1.0
+          },
+          "parentInstanceID": 0,
+          "rootInstanceID": 148876,
+          "childCount": 0,
+          "name": "BoundaryWallEditor",
+          "tag": "Untagged",
+          "gameObjectInstanceID": 148876
+        }
+      }
+    }
+  },
+  "calculation": {
+    "boundaryLeftWorld": -12.00072494506836,
+    "cameraCenterWorldX": -1.79,
+    "cameraAspect": 1.7777777910232544,
+    "cameraOrthographicHalfHeight": 5.759999752044678,
+    "cameraWorldLeft": -12.02999963548448,
+    "cameraWorldRight": 8.449999635484481,
+    "visibleLogicalLeft": -2.9274690416119853,
+    "visibleLogicalRight": 2045.072458055284,
+    "bodyX1000World": -2.0007249450683595,
+    "formalFiveGlyphX978World": -2.22072494506836,
+    "unityFiveGlyphX749World": -4.510724945068359
+  },
+  "limits": [
+    "Component reads are sequential, not a same-tick presentation frame.",
+    "Viewport mapping assumes NTSDRenderSpace uses the active boundary minimum as its origin, as current source specifies."
+  ]
+}

@@ -646,31 +646,39 @@ namespace NTSD.Simulation
             int relationTeam,
             int hitStop,
             double baseStageWidth,
-            int xMaxOverride)
+            int xMaxOverride,
+            int selectedModeStageGate50 = 0)
         {
             if (!SourceRulePositionInitialized)
                 return;
 
-            double x = SourceRuleX;
-            if (slot >= 20)
-            {
-                x = System.Math.Clamp(x, -100.0, baseStageWidth + 100.0);
-            }
-            else
-            {
-                if (relationTeam == 5)
-                    x = System.Math.Max(x, -300.0);
-                else
-                    x = System.Math.Max(x, 0.0);
+            SourceRuleX = ClampSelectedModeType0StageX(
+                SourceRuleX, slot, relationTeam, hitStop,
+                baseStageWidth, xMaxOverride, selectedModeStageGate50);
+            SourceRuleXInt = (int)SourceRuleX;
+        }
 
-                x = System.Math.Min(x, baseStageWidth);
-                if (xMaxOverride > 0 && x > xMaxOverride &&
-                    relationTeam != 5 && hitStop == 0)
-                    x = xMaxOverride;
-            }
+        internal static double ClampSelectedModeType0StageX(
+            double x, int slot, int relationTeam, int hitStop,
+            double baseStageWidth, int xMaxOverride,
+            int selectedModeStageGate50)
+        {
+            // Alignment contract: NTSD28-Q08-PROJECT-STAGE-GATE-001.
+            bool protectedMode = selectedModeStageGate50 == 1 ||
+                                 selectedModeStageGate50 == 3;
+            bool specialGroup = protectedMode
+                ? relationTeam == -1
+                : relationTeam == 5;
+            if (!protectedMode && slot >= 20)
+                return System.Math.Clamp(x, -100.0, baseStageWidth + 10.0);
 
-            SourceRuleX = x;
-            SourceRuleXInt = (int)x;
+            x = System.Math.Clamp(x,
+                specialGroup ? -300.0 : 0.0,
+                baseStageWidth);
+            if (xMaxOverride > 0 && x > xMaxOverride &&
+                !specialGroup && hitStop == 0)
+                x = xMaxOverride;
+            return x;
         }
 
         public void UpdateSpriteOrigin(int centerx, int centery, float spriteWidthPx)

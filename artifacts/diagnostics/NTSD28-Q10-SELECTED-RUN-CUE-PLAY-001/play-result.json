@@ -1,0 +1,41 @@
+{
+    "status": "PASS",
+    "error": "",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "startTick": 2,
+    "endTick": 13,
+    "startX": 620,
+    "endX": 787,
+    "initialDispatchedCount": 0,
+    "finalDispatchedCount": 2,
+    "initialPooledPlayCount": 0,
+    "finalPooledPlayCount": 2,
+    "initialRejectedCueCount": 0,
+    "finalRejectedCueCount": 0,
+    "battleUnloaded": true,
+    "events": [
+        {
+            "cue": "data\\003.wav",
+            "eventTick": 8,
+            "callbackTick": 8,
+            "worldEventPresent": true,
+            "onMainThread": true,
+            "poolCountBefore": 0,
+            "poolCountAfter": 1,
+            "preparedClipAssigned": true,
+            "voiceIsPlaying": true
+        },
+        {
+            "cue": "data\\004.wav",
+            "eventTick": 13,
+            "callbackTick": 13,
+            "worldEventPresent": true,
+            "onMainThread": true,
+            "poolCountBefore": 1,
+            "poolCountAfter": 2,
+            "preparedClipAssigned": true,
+            "voiceIsPlaying": true
+        }
+    ]
+}

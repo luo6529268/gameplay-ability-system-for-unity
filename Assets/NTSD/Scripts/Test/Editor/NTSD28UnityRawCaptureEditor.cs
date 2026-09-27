@@ -66,6 +66,12 @@ namespace NTSD.EditorTools
             "ntsd28-q07-sasuke-needle-target-hit/1.0";
         private const string Q07SasukeArmorTargetScenarioSchema =
             "ntsd28-q07-sasuke-armor-target/1.0";
+        private const string Q08SelectedArmorLethalScenarioSchema =
+            "ntsd28-q08-selected-armor-lethal/1.0";
+        private const string Q08SelectedArmorResultMilestonesScenarioSchema =
+            "ntsd28-q08-selected-armor-result-milestones/1.0";
+        private const string Q08NarutoCloneStageGateScenarioSchema =
+            "ntsd28-q08-naruto-clone-stage-gate/1.0";
         private const string Q07HidanCatchScenarioSchema =
             "ntsd28-q07-hidan-catch/1.0";
         private const string Q07HidanNaturalCatchScenarioSchema =
@@ -86,6 +92,8 @@ namespace NTSD.EditorTools
             "ntsd28-q07-revival-peer-full-driver/1.0";
         private const string Q07KnockoutEventCaptureSchema =
             "ntsd28-q07-knockout-events/1.0";
+        private const string Q08ResultFlowCaptureSchema =
+            "ntsd28-q08-result-flow/1.0";
         private const string Q08State12KoFullTickScenarioSchema =
             "ntsd28-q08-state12-ko-full-tick/1.0";
         private const string Q08NegativeEnvironmentKoFullTickScenarioSchema =
@@ -251,7 +259,8 @@ namespace NTSD.EditorTools
                     request.loganRuntimeRoot,
                     request.domainVersion,
                     request.resultPath,
-                    request.knockoutOutputPath);
+                    request.knockoutOutputPath,
+                    request.resultFlowOutputPath);
             }
             finally
             {
@@ -276,7 +285,8 @@ namespace NTSD.EditorTools
             string loganRuntimeRoot = null,
             string domainVersion = null,
             string requestedResultPath = null,
-            string knockoutOutputPath = null)
+            string knockoutOutputPath = null,
+            string resultFlowOutputPath = null)
         {
             string resultPath = ProjectPath(string.IsNullOrWhiteSpace(requestedResultPath)
                 ? ResultFile : requestedResultPath);
@@ -294,6 +304,13 @@ namespace NTSD.EditorTools
                 Debug.LogError("[NTSD28UnityRawCapture] KO output and result paths must differ.");
                 return;
             }
+            if (!string.IsNullOrWhiteSpace(resultFlowOutputPath) &&
+                string.Equals(ProjectPath(resultFlowOutputPath), resultPath,
+                    StringComparison.OrdinalIgnoreCase))
+            {
+                Debug.LogError("[NTSD28UnityRawCapture] Result-flow output and result paths must differ.");
+                return;
+            }
             try
             {
                 string resolvedOutput = RunScenario(
@@ -303,7 +320,8 @@ namespace NTSD.EditorTools
                     inputRngOutputPath,
                     loganRuntimeRoot,
                     domainVersion,
-                    knockoutOutputPath);
+                    knockoutOutputPath,
+                    resultFlowOutputPath);
                 File.WriteAllText(
                     resultPath,
                     $"PASS{Environment.NewLine}{resolvedOutput}",
@@ -329,7 +347,8 @@ namespace NTSD.EditorTools
             string inputRngOutputPath,
             string loganRuntimeRoot = null,
             string domainVersion = null,
-            string knockoutOutputPath = null)
+            string knockoutOutputPath = null,
+            string resultFlowOutputPath = null)
         {
             if (domainVersion != null &&
                 ((domainVersion != "v1" && domainVersion != "v2") ||
@@ -359,29 +378,58 @@ namespace NTSD.EditorTools
                 knockoutOutputPath)
                 ? null
                 : ProjectPath(knockoutOutputPath);
+            string resolvedResultFlowOutputPath = string.IsNullOrWhiteSpace(
+                resultFlowOutputPath)
+                ? null
+                : ProjectPath(resultFlowOutputPath);
             RequireDistinctOutputPaths(
                 resolvedOutputPath,
                 resolvedDomainOutputPath,
                 resolvedInputRngOutputPath,
-                resolvedKnockoutOutputPath);
+                resolvedKnockoutOutputPath,
+                resolvedResultFlowOutputPath);
             UnityRawScenario scenario = JsonUtility.FromJson<UnityRawScenario>(
                 File.ReadAllText(resolvedScenarioPath, Encoding.UTF8));
             ValidateScenario(scenario);
+            bool q08NarutoCloneStageGate =
+                scenario.schema == Q08NarutoCloneStageGateScenarioSchema;
+            if (scenario.hasSelectedStageGateOverride &&
+                (!q08NarutoCloneStageGate || scenario.selectedStageGateOverride < 0))
+                throw new InvalidDataException(
+                    "Stage-gate override requires the Q08 Naruto clone schema and a nonnegative value.");
+            string cloneStageSourceOutputPath = q08NarutoCloneStageGate
+                ? resolvedOutputPath + ".stage-source.jsonl"
+                : null;
+            if (cloneStageSourceOutputPath != null &&
+                File.Exists(cloneStageSourceOutputPath))
+                throw new IOException("Refusing to overwrite clone stage-source output: " +
+                                      cloneStageSourceOutputPath);
             bool formalQ07Scenario = scenario.schema == Q07DdjScenarioSchema ||
                 scenario.schema == Q07SasukeNeedleScenarioSchema ||
                 scenario.schema == Q07SasukeNeedleTargetHitScenarioSchema ||
                 scenario.schema == Q07SasukeArmorTargetScenarioSchema ||
+                scenario.schema == Q08SelectedArmorLethalScenarioSchema ||
+                scenario.schema == Q08SelectedArmorResultMilestonesScenarioSchema ||
                 scenario.schema == Q07HidanCatchScenarioSchema ||
                 scenario.schema == Q07HidanNaturalCatchScenarioSchema ||
                 scenario.schema == Q07LeeJlChildScenarioSchema ||
+                q08NarutoCloneStageGate ||
                 scenario.schema == Q07NarutoPunchScenarioSchema ||
                 scenario.schema == Q07HeldWeaponMotionScenarioSchema ||
                 scenario.schema == Q07N30LateInputScenarioSchema;
             if (resolvedKnockoutOutputPath != null &&
-                scenario.schema != Q07NarutoPunchScenarioSchema)
-                throw new InvalidDataException("KO-event capture requires the exact Q07 Naruto punch scenario.");
+                scenario.schema != Q07NarutoPunchScenarioSchema &&
+                scenario.schema != Q08SelectedArmorLethalScenarioSchema &&
+                scenario.schema != Q08SelectedArmorResultMilestonesScenarioSchema)
+                throw new InvalidDataException("KO-event capture requires an approved formal scenario.");
             if (resolvedKnockoutOutputPath != null && File.Exists(resolvedKnockoutOutputPath))
                 throw new IOException("Refusing to overwrite KO-event output: " + resolvedKnockoutOutputPath);
+            if (resolvedResultFlowOutputPath != null &&
+                scenario.schema != Q08SelectedArmorLethalScenarioSchema &&
+                scenario.schema != Q08SelectedArmorResultMilestonesScenarioSchema)
+                throw new InvalidDataException("Result-flow capture requires the exact Q08 selected-armor lethal scenario.");
+            if (resolvedResultFlowOutputPath != null && File.Exists(resolvedResultFlowOutputPath))
+                throw new IOException("Refusing to overwrite result-flow output: " + resolvedResultFlowOutputPath);
             if (formalQ07Scenario && string.IsNullOrWhiteSpace(loganRuntimeRoot))
                 throw new InvalidDataException("Q07 formal trace requires the selected Logan runtime root.");
 
@@ -405,6 +453,12 @@ namespace NTSD.EditorTools
                     Path.GetDirectoryName(resolvedKnockoutOutputPath) ??
                     ProjectPath("Temp"));
             }
+            if (resolvedResultFlowOutputPath != null)
+            {
+                Directory.CreateDirectory(
+                    Path.GetDirectoryName(resolvedResultFlowOutputPath) ??
+                    ProjectPath("Temp"));
+            }
 
             FrameInputSet[] frameInputs = BuildFrameInputs(scenario);
 
@@ -420,7 +474,9 @@ namespace NTSD.EditorTools
             if (formalQ07Scenario &&
                 !string.Equals(dataScope.Catalog?.CatalogSha256,
                     scenario.dataSha256, StringComparison.OrdinalIgnoreCase))
-                throw new InvalidDataException("Q07 formal staged catalog SHA-256 does not match its scenario.");
+                throw new InvalidDataException(
+                    $"Formal staged catalog SHA-256 differs: expected {scenario.dataSha256}, " +
+                    $"actual {dataScope.Catalog?.CatalogSha256}.");
             int[] missingObjectIds = requestedObjectIds
                 .Where(objectId => !dataScope.Configs.ContainsKey(objectId))
                 .ToArray();
@@ -462,6 +518,9 @@ namespace NTSD.EditorTools
                 driver.BeginBattleAllocationSeal();
                 world.SetLogicOnlyEntityMaterialization(true);
             }
+            if (q08NarutoCloneStageGate && scenario.hasSelectedStageGateOverride)
+                world.Runtime.SelectedModeStageGate50 =
+                    scenario.selectedStageGateOverride;
 
             using var writer = new StreamWriter(
                 resolvedOutputPath,
@@ -483,6 +542,18 @@ namespace NTSD.EditorTools
                 ? null
                 : new StreamWriter(
                     resolvedKnockoutOutputPath,
+                    false,
+                    new UTF8Encoding(false));
+            StreamWriter resultFlowWriter = resolvedResultFlowOutputPath == null
+                ? null
+                : new StreamWriter(
+                    resolvedResultFlowOutputPath,
+                    false,
+                    new UTF8Encoding(false));
+            StreamWriter cloneStageSourceWriter = cloneStageSourceOutputPath == null
+                ? null
+                : new StreamWriter(
+                    cloneStageSourceOutputPath,
                     false,
                     new UTF8Encoding(false));
             try
@@ -514,6 +585,18 @@ namespace NTSD.EditorTools
                     ("scenarioFileSha256", ComputeFileSha256(resolvedScenarioPath)),
                     ("formalAuthorityExeSha256", FormalAuthorityExeSha256),
                     ("expectedTickCount", scenario.ticks))));
+                resultFlowWriter?.WriteLine(BattleCanonicalJson.Serialize(DictionaryOf(
+                    ("kind", "header"),
+                    ("schema", Q08ResultFlowCaptureSchema),
+                    ("scenarioFileSha256", ComputeFileSha256(resolvedScenarioPath)),
+                    ("formalAuthorityExeSha256", FormalAuthorityExeSha256),
+                    ("expectedTickCount", scenario.ticks))));
+                cloneStageSourceWriter?.WriteLine(BattleCanonicalJson.Serialize(DictionaryOf(
+                    ("kind", "header"),
+                    ("schema", Q08NarutoCloneStageGateScenarioSchema),
+                    ("scenarioFileSha256", ComputeFileSha256(resolvedScenarioPath)),
+                    ("formalAuthorityExeSha256", FormalAuthorityExeSha256),
+                    ("expectedTickCount", scenario.ticks))));
 
                 int exactCharacterCountExpected = scenario.combatants.Count(combatant =>
                     dataScope.Catalog == null || dataScope.Catalog.Entries.Any(entry =>
@@ -539,21 +622,56 @@ namespace NTSD.EditorTools
                             .ExactCharacterCount;
                     long exactCharacterDelta =
                         exactCharacterCountAfter - exactCharacterCountBefore;
-                    if (exactCharacterDelta != exactCharacterCountExpected)
+                    bool transitionFrozeCombat =
+                        scenario.schema == Q08SelectedArmorResultMilestonesScenarioSchema &&
+                        world.Runtime.Results.NativeTransitionState != 0;
+                    int expectedExactCharacterCount =
+                        q08NarutoCloneStageGate && tick >= 2
+                            ? exactCharacterCountExpected + 1
+                            : exactCharacterCountExpected;
+                    if (exactCharacterDelta !=
+                        (transitionFrozeCombat ? 0 : expectedExactCharacterCount))
                     {
                         throw new InvalidOperationException(
                             $"Unity tick {tick} did not reach the exact character " +
-                            $"frame-tick boundary: expected {exactCharacterCountExpected}, " +
+                            $"frame-tick boundary: expected {expectedExactCharacterCount}, " +
                             $"actual {exactCharacterDelta}.");
                     }
 
                     writer.WriteLine(
                         NTSD28UnityEntityRawCapture.CaptureTickJson(world, tick));
                     writer.Flush();
+                    if (cloneStageSourceWriter != null)
+                    {
+                        LF2Entity clone = world.FindEntityByRuntimeSlotForQuery(50);
+                        if ((tick == 1 && clone != null) ||
+                            (tick >= 2 && (clone == null || clone.ObjectId != 33 ||
+                                           clone.Runtime.SlotIndex != 50)))
+                            throw new InvalidOperationException(
+                                $"Unity tick {tick} clone birth/identity differs from the exact fixture.");
+                        cloneStageSourceWriter.WriteLine(BattleCanonicalJson.Serialize(DictionaryOf(
+                            ("kind", "tick"),
+                            ("schema", Q08NarutoCloneStageGateScenarioSchema),
+                            ("completedTick", tick),
+                            ("clonePresent", clone != null),
+                            ("cloneSlot", clone?.Runtime.SlotIndex ?? -1),
+                            ("cloneOid", clone?.ObjectId ?? -1),
+                            ("cloneSourceRuleInitialized",
+                                clone?.Runtime.SourceRulePositionInitialized ?? false),
+                            ("cloneSourceRuleX", clone?.Runtime.SourceRuleX ?? 0.0),
+                            ("cloneSourceRuleXInt", clone?.Runtime.SourceRuleXInt ?? 0),
+                            ("clonePhysicalX", clone?.Runtime.X ?? 0.0))));
+                        cloneStageSourceWriter.Flush();
+                    }
                     if (knockoutWriter != null)
                     {
                         knockoutWriter.WriteLine(BuildKnockoutTickJson(world, tick));
                         knockoutWriter.Flush();
+                    }
+                    if (resultFlowWriter != null)
+                    {
+                        resultFlowWriter.WriteLine(BuildResultFlowTickJson(world, tick));
+                        resultFlowWriter.Flush();
                     }
                     if (domainWriter != null)
                     {
@@ -593,6 +711,8 @@ namespace NTSD.EditorTools
                 domainWriter?.Dispose();
                 inputRngWriter?.Dispose();
                 knockoutWriter?.Dispose();
+                resultFlowWriter?.Dispose();
+                cloneStageSourceWriter?.Dispose();
             }
 
             try
@@ -642,6 +762,16 @@ namespace NTSD.EditorTools
                 scenario.schema, Q07SasukeNeedleTargetHitScenarioSchema, StringComparison.Ordinal);
             bool q07SasukeArmorTargetScenario = string.Equals(
                 scenario.schema, Q07SasukeArmorTargetScenarioSchema, StringComparison.Ordinal);
+            bool q08SelectedArmorLethalScenario = string.Equals(
+                scenario.schema, Q08SelectedArmorLethalScenarioSchema, StringComparison.Ordinal);
+            bool q08SelectedArmorResultMilestonesScenario = string.Equals(
+                scenario.schema, Q08SelectedArmorResultMilestonesScenarioSchema,
+                StringComparison.Ordinal);
+            bool q08NarutoCloneStageGateScenario = string.Equals(
+                scenario.schema, Q08NarutoCloneStageGateScenarioSchema,
+                StringComparison.Ordinal);
+            bool q08SelectedArmorFixture = q08SelectedArmorLethalScenario ||
+                q08SelectedArmorResultMilestonesScenario;
             bool q07HidanCatchScenario = string.Equals(
                 scenario.schema, Q07HidanCatchScenarioSchema, StringComparison.Ordinal);
             bool q07HidanNaturalCatchScenario = string.Equals(
@@ -673,13 +803,15 @@ namespace NTSD.EditorTools
             bool formalReleaseScenario = q07DdjScenario || q07SasukeNeedleScenario ||
                                      q07SasukeNeedleTargetHitScenario ||
                                      q07SasukeArmorTargetScenario ||
+                                     q08SelectedArmorFixture ||
                                      q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
                                      q07LeeJlChildScenario ||
                                      q07NarutoPunchScenario || q07HeldWeaponMotionScenario ||
                                      q07N30LateInputScenario ||
                                       q07HitFa5FullDriverScenario || q07FusionFullDriverScenario ||
-                                     q07RevivalPeerFullDriverScenario ||
-                                     q08State12KoFullTickScenario ||
+                                       q07RevivalPeerFullDriverScenario ||
+                                       q08NarutoCloneStageGateScenario ||
+                        q08State12KoFullTickScenario ||
                                       q08NegativeEnvironmentKoFullTickScenario ||
                                       q08HeldCpointKoFullTickScenario;
             if (!formalReleaseScenario && !string.Equals(
@@ -706,10 +838,12 @@ namespace NTSD.EditorTools
                     q07N30LateInputScenario ? 20 :
                      q07HitFa5FullDriverScenario ? 8 :
                      q07FusionFullDriverScenario ? 3 :
-                     q07RevivalPeerFullDriverScenario ? 3 :
-                      q08State12KoFullTickScenario ? 3 :
+                      q07RevivalPeerFullDriverScenario ? 3 :
+                       q08NarutoCloneStageGateScenario ? 3 :
+                       q08State12KoFullTickScenario ? 3 :
                       q08NegativeEnvironmentKoFullTickScenario ? 13 :
                       q08HeldCpointKoFullTickScenario ? 3 :
+                    q08SelectedArmorResultMilestonesScenario ? 366 :
                     formalReleaseScenario ? 26 : 3) ||
                 scenario.emitInitial ||
                 scenario.battleMode != 0 || scenario.stageId != 23 ||
@@ -719,14 +853,16 @@ namespace NTSD.EditorTools
                      q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
                      q07N30LateInputScenario || q07HitFa5FullDriverScenario ||
                       q07FusionFullDriverScenario ||
-                      q07RevivalPeerFullDriverScenario ||
-                      q08State12KoFullTickScenario ||
+                       q07RevivalPeerFullDriverScenario ||
+                        q08State12KoFullTickScenario ||
                        q08NegativeEnvironmentKoFullTickScenario ||
                        q08HeldCpointKoFullTickScenario ? 0 : 1) ||
-                ((q07LeeJlChildScenario || q07NarutoPunchScenario) &&
+                ((q07LeeJlChildScenario || q07NarutoPunchScenario ||
+                  q08NarutoCloneStageGateScenario) &&
                     scenario.seed != Q07LeeJlChildSeed) ||
                 (formalReleaseScenario && !q07LeeJlChildScenario &&
-                    !q07NarutoPunchScenario && scenario.seed != Q07DdjSeed))
+                    !q07NarutoPunchScenario && !q08NarutoCloneStageGateScenario &&
+                    scenario.seed != Q07DdjSeed))
             {
                 throw new InvalidDataException(
                     q07LeeJlChildScenario
@@ -818,6 +954,23 @@ namespace NTSD.EditorTools
                     opponent.mp != 300 || opponent.facing != 0 ||
                     opponent.action != 0 || sasuke.nativeAi || opponent.nativeAi)
                     throw new InvalidDataException("Q07 Sasuke armor-target participants differ from the formal fixture.");
+            }
+
+            if (q08SelectedArmorFixture)
+            {
+                UnityRawCombatant sasuke = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                if (sasuke.oid != 11 || sasuke.team != 1 || sasuke.x != 500 || sasuke.y != 0 ||
+                    sasuke.z != 350 || sasuke.hp != 500 || sasuke.baseHp != 500 ||
+                    sasuke.mp != 500 || sasuke.facing != 0 || sasuke.action != 110 ||
+                    opponent.oid != 87 || opponent.team != 2 || opponent.x != 550 ||
+                    opponent.y != 0 || opponent.z != 350 || opponent.hp != 3 ||
+                    opponent.baseHp != 3 || opponent.mp != 300 || opponent.facing != 0 ||
+                    opponent.action != 0 || sasuke.nativeAi || opponent.nativeAi ||
+                    sasuke.reviveLives30c != 1 || opponent.reviveLives30c != 1 ||
+                    sasuke.reviveNextLives310 != 0 || opponent.reviveNextLives310 != 0 ||
+                    sasuke.reviveNextHp314 != 0 || opponent.reviveNextHp314 != 0)
+                    throw new InvalidDataException("Q08 selected-armor lethal participants differ from the formal fixture.");
             }
 
             if (q07HidanCatchScenario)
@@ -989,6 +1142,27 @@ namespace NTSD.EditorTools
                     scenario.fusionSecondFeatureGate4A842C)
                     throw new InvalidDataException("Q07 Naruto punch participants differ from the formal fixture.");
             }
+            if (q08NarutoCloneStageGateScenario)
+            {
+                UnityRawCombatant actor = scenario.combatants.Single(value => value.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(value => value.slot == 1);
+                bool HasState(UnityRawCombatant value, int oid, int team,
+                    int x, int facing, int action) =>
+                    value.oid == oid && value.team == team && value.x == x &&
+                    value.y == 0 && value.z == 650 && value.hp == 500 &&
+                    value.baseHp == 500 && value.mp == 500 &&
+                    value.facing == facing && value.action == action &&
+                    value.reviveLives30c == 1 && value.reviveNextLives310 == 0 &&
+                    value.reviveNextHp314 == 0 && value.renderPhase008 == 0 &&
+                    !value.nativeAi && value.nativeComputerState1b8 == 0;
+                if (!HasState(actor, 2, 1, 0, 0, 121) ||
+                    !HasState(opponent, 7, 2, 1200, 1, 0) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                    throw new InvalidDataException(
+                        "Q08 Naruto clone stage-gate participants differ from the paired source fixture.");
+            }
 
             if (q07HeldWeaponMotionScenario)
             {
@@ -1073,6 +1247,17 @@ namespace NTSD.EditorTools
             }
 
             ValidateInputs(scenario, slots);
+            if (q08SelectedArmorFixture)
+            {
+                UnityRawInput[] inputs = scenario.inputs ?? Array.Empty<UnityRawInput>();
+                string[] expectedKeys = { "L", "L", "D", "D", "J", "J" };
+                if (inputs.Length != expectedKeys.Length ||
+                    Enumerable.Range(0, expectedKeys.Length).Any(index =>
+                        inputs[index].tick != index + 1 || inputs[index].slot != 0 ||
+                        inputs[index].keys == null || inputs[index].keys.Length != 1 ||
+                        inputs[index].keys[0] != expectedKeys[index]))
+                    throw new InvalidDataException("Q08 selected-armor lethal input differs from the formal six-key fixture.");
+            }
             if (q07N30LateInputScenario)
             {
                 UnityRawInput[] inputs = scenario.inputs ?? Array.Empty<UnityRawInput>();
@@ -1246,6 +1431,7 @@ namespace NTSD.EditorTools
             }
             world.Rng.Seed(unchecked((uint)scenario.seed));
             if (scenario.schema == Q07LeeJlChildScenarioSchema ||
+                scenario.schema == Q08NarutoCloneStageGateScenarioSchema ||
                 scenario.schema == Q07NarutoPunchScenarioSchema ||
                 scenario.schema == Q07HeldWeaponMotionScenarioSchema ||
                 scenario.schema == Q07HitFa5FullDriverScenarioSchema ||
@@ -1294,6 +1480,11 @@ namespace NTSD.EditorTools
                     _ => throw new InvalidDataException(
                         $"Scenario oid {source.oid} has unsupported catalog type {objectType}."),
                 };
+                if (scenario.schema == Q08NarutoCloneStageGateScenarioSchema)
+                {
+                    entity.Runtime.SetSourceRulePosition(source.x, source.z);
+                    entity.Runtime.SyncSourceRuleIntegerPosition();
+                }
                 BattleSlotRuntimeState rosterSlot =
                     runtime.Roster.Slots[source.slot];
                 bool aiControlled =
@@ -1487,6 +1678,23 @@ namespace NTSD.EditorTools
                 ("completedTick", completedTick),
                 ("eventCount", events.Length),
                 ("events", (object)events)));
+        }
+
+        private static string BuildResultFlowTickJson(
+            SimulationWorld world,
+            int completedTick)
+        {
+            BattleResultsRuntimeState results = world.Runtime?.Results ??
+                throw new InvalidOperationException("Q08 result-flow capture has no battle results state.");
+            return BattleCanonicalJson.Serialize(DictionaryOf(
+                ("kind", "tick"),
+                ("schema", Q08ResultFlowCaptureSchema),
+                ("completedTick", completedTick),
+                ("nativeResultTimer", results.NativeResultTimer),
+                ("nativeResultOutputTimer", results.NativeResultOutputTimer),
+                ("nativeResultPhase", results.NativeResultPhase),
+                ("nativeTransitionState", results.NativeTransitionState),
+                ("nativeLivingGroupMask", results.NativeLivingGroupMask)));
         }
 
         private static string BuildDomainHeaderJson(
@@ -2450,6 +2658,7 @@ namespace NTSD.EditorTools
             public string domainVersion;
             public string inputRngOutputPath;
             public string knockoutOutputPath;
+            public string resultFlowOutputPath;
             public string loganRuntimeRoot;
             public string resultPath;
         }
@@ -2467,6 +2676,8 @@ namespace NTSD.EditorTools
             public int battleMode;
             public int stageId;
             public int difficultyLevel4A0C30;
+            public bool hasSelectedStageGateOverride;
+            public int selectedStageGateOverride;
             public bool fusionFirstFeatureGate4A8428;
             public bool fusionSecondFeatureGate4A842C;
             public UnityRawCombatant[] combatants;

@@ -1,0 +1,4 @@
+{"expectedTickCount":3,"formalAuthorityExeSha256":"B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033","kind":"header","scenarioFileSha256":"84C60DD2E559506A96E3C15A3E8EC8CBCAEFA29E3BBE5682B9A2860C40E1F3BC","schema":"ntsd28-q08-naruto-clone-stage-gate/1.0"}
+{"cloneOid":-1,"clonePhysicalX":0,"clonePresent":false,"cloneSlot":-1,"cloneSourceRuleInitialized":false,"cloneSourceRuleX":0,"cloneSourceRuleXInt":0,"completedTick":1,"kind":"tick","schema":"ntsd28-q08-naruto-clone-stage-gate/1.0"}
+{"cloneOid":33,"clonePhysicalX":-42,"clonePresent":true,"cloneSlot":50,"cloneSourceRuleInitialized":false,"cloneSourceRuleX":0,"cloneSourceRuleXInt":0,"completedTick":2,"kind":"tick","schema":"ntsd28-q08-naruto-clone-stage-gate/1.0"}
+{"cloneOid":33,"clonePhysicalX":-49,"clonePresent":true,"cloneSlot":50,"cloneSourceRuleInitialized":false,"cloneSourceRuleX":0,"cloneSourceRuleXInt":0,"completedTick":3,"kind":"tick","schema":"ntsd28-q08-naruto-clone-stage-gate/1.0"}

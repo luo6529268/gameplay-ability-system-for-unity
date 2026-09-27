@@ -105,6 +105,46 @@ namespace NTSD.Test.Editor
             Assert.That(target.HitCounters.HitStateCount, Is.Zero);
         }
 
+        [TestCase(10, true)]
+        [TestCase(11, false)]
+        public void Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(
+            int startingHp,
+            bool lethal)
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateCharacter(world, 21, 0);
+            LF2ArmorData armor = Armor();
+            armor.hp = 100;
+            TypedCharacter target = CreateCharacter(world, 22, 1, armor);
+            target.Health.HP = startingHp;
+            target.Runtime.RuntimeArmorHp118 = 100;
+            target.Runtime.OrdinaryCreditGate2F4 = -1;
+            attacker.Runtime.OwnerSlotIndex = -1;
+            world.Runtime.NativeWorldClock.FrameSequence = 7UL;
+
+            bool applied = world.DamageWriter.ApplyStandardCharacterDamage(
+                world, attacker, target, target.HitCounters, Hit(20));
+
+            Assert.That(applied, Is.True);
+            Assert.That(target.Health.HP, Is.EqualTo(startingHp - 10));
+            Assert.That(target.Runtime.RuntimeArmorHp118, Is.EqualTo(80));
+            Assert.That(attacker.Runtime.KnockoutCount358,
+                Is.EqualTo(lethal ? 1 : 0));
+            Assert.That(world.NativeKnockoutEvents.Count,
+                Is.EqualTo(lethal ? 1 : 0));
+            if (!lethal)
+                return;
+
+            NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+            Assert.That(knockout.BattleTimeTick, Is.EqualTo(7));
+            Assert.That(knockout.SourceObjectType,
+                Is.EqualTo((int)LF2ObjectType.Character));
+            Assert.That(knockout.SourceSlot, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(knockout.CreditSlot, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(knockout.FourOwnerSlot, Is.EqualTo(attacker.Runtime.SlotIndex));
+            Assert.That(knockout.VictimSlot, Is.EqualTo(target.Runtime.SlotIndex));
+        }
+
         [Test]
         public void Actual_SelectedMpArmorWritesPpAndMpConsumptionOnly()
         {

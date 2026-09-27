@@ -1,0 +1,32 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "0db923c5709f43c8940ee98ba4a5b29b",
+    "status": "failed",
+    "mode": "EditMode",
+    "started_unix_ms": 1790494066460,
+    "finished_unix_ms": 1790494077354,
+    "last_update_unix_ms": 1790494077354,
+    "progress": {
+      "completed": 1,
+      "total": 8589,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790494075954,
+      "last_finished_test_full_name": "NTSD.Test.BattlePresentationCommandWriterEditorTests.CentralNameplate_StaysWithVisibleBodyBeyondLegacyViewportEdge",
+      "last_finished_unix_ms": 1790494076892,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [
+        {
+          "full_name": "NTSD.Test.BattlePresentationCommandWriterEditorTests.CentralNameplate_StaysWithVisibleBodyBeyondLegacyViewportEdge",
+          "message": "  Expected: (4.02, -4.95, 0.00)\r\n  But was:  (1.73, -4.95, 0.00)\r\n"
+        }
+      ],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": null
+  }
+}

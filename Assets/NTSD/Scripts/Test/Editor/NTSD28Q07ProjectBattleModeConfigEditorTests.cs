@@ -1,3 +1,4 @@
+using System.Reflection;
 using NUnit.Framework;
 using NTSD.App;
 using UnityEngine;
@@ -6,6 +7,34 @@ namespace NTSD.Test.Editor
 {
     public sealed class NTSD28Q07ProjectBattleModeConfigEditorTests
     {
+        [Test]
+        public void ProjectModeAsset_CapturesSelectedStageGateInFrozenIdentity()
+        {
+            ProjectBattleModeConfig asset = ProjectBattleModeConfig.LoadDefault();
+            FieldInfo field = typeof(ProjectBattleModeConfig).GetField(
+                "selectedStageGate50", BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo property = typeof(ProjectBattleModeConfig.Snapshot).GetProperty(
+                "SelectedStageGate50", BindingFlags.Public | BindingFlags.Instance);
+            Assert.That(field, Is.Not.Null);
+            Assert.That(property, Is.Not.Null);
+            ProjectBattleModeConfig.Snapshot original = asset.Capture();
+            Assert.That(property.GetValue(original), Is.EqualTo(1));
+
+            ProjectBattleModeConfig clone = Object.Instantiate(asset);
+            try
+            {
+                field.SetValue(clone, 3);
+                ProjectBattleModeConfig.Snapshot changed = clone.Capture();
+                Assert.That(property.GetValue(changed), Is.EqualTo(3));
+                Assert.That(original.Fingerprint, Is.Not.EqualTo(changed.Fingerprint));
+                Assert.That(property.GetValue(original), Is.EqualTo(1));
+            }
+            finally
+            {
+                Object.DestroyImmediate(clone);
+            }
+        }
+
         [Test]
         public void ProjectModeAsset_LoadsSerializedFieldsAndCapturesIndependentSnapshot()
         {

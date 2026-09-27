@@ -4,6 +4,7 @@ using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
+using NTSD.App;
 using NTSD.Simulation;
 using NTSD.Simulation.Lockstep;
 using NUnit.Framework;
@@ -13,6 +14,49 @@ namespace NTSD.Test
 {
     public sealed class BattleStateSnapshotRestoreEditorTests
     {
+        [Test]
+        public void SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion()
+        {
+            using var scope = new DriverScope();
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var session = new BattleLockstepSession(scope.Driver, identity, 0, 8, 8);
+            BattleStateSnapshotBuffer snapshot =
+                session.CreateBattleStateSnapshotBufferForBootstrap();
+            SimulationWorld world = scope.Driver.World;
+            world.Runtime.SelectedModeStageGate50 = 3;
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            ulong expected = world.CaptureRuntimeChecksum64(0, null);
+
+            world.Runtime.SelectedModeStageGate50 = 0;
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.Not.EqualTo(expected));
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out BattleStateSnapshotRestoreFailure failure),
+                Is.True, failure.ToString());
+            Assert.That(world.Runtime.SelectedModeStageGate50, Is.EqualTo(3));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.EqualTo(expected));
+            var catalog = LoganObjectCatalog.Read(
+                BattleContentSource.ForLoganRuntime(
+                    "J:/QQFile/NTSD2.8.3.3 zip/NTSD2.8.3.3/NTSD 2.8-Logan/resources/runtime"),
+                ProjectBattleModeConfig.LoadDefault().Capture());
+            typeof(SimulationTickDriver).GetMethod(
+                    "ApplyPublishedStageGateBeforeFirstTick",
+                    BindingFlags.Instance | BindingFlags.NonPublic)
+                .Invoke(scope.Driver, new object[] { catalog });
+            Assert.That(world.Runtime.SelectedModeStageGate50, Is.EqualTo(3),
+                "A tick-zero restore must survive repeated battle preparation.");
+
+            typeof(BattleStateSnapshotBuffer)
+                .GetProperty(nameof(BattleStateSnapshotBuffer.SchemaVersion))
+                .SetValue(snapshot, BattleStateSnapshotBuffer.CurrentSchemaVersion - 1);
+            Assert.That(snapshot.IsValid, Is.False);
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out failure), Is.False);
+            Assert.That(failure, Is.EqualTo(BattleStateSnapshotRestoreFailure.InvalidSnapshot));
+            Assert.That(world.Runtime.SelectedModeStageGate50, Is.EqualTo(3));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null), Is.EqualTo(expected));
+        }
+
         [Test]
         public void KnockoutFeedPresenceAndLifetimeRestoreWithChecksum()
         {

@@ -13,6 +13,31 @@ namespace NTSD.Test
 {
     public sealed class BattleLockstepChecksumEditorTests
     {
+        [Test]
+        public void SelectedStageGateAffectsExtendedAndLockstepButNotFrozenAuthorityTrace()
+        {
+            var world = new SimulationWorld();
+            string frozen = world.CaptureParityFrameSnapshot(1).ToJson();
+            string lockstep = world.CaptureLockstepChecksumSnapshot(1).OverallChecksum;
+            ulong runtime = world.CaptureRuntimeChecksum64(1, FrameInputSet.Empty(1));
+            world.Runtime.SelectedModeStageGate50 = 1;
+            Assert.That(world.CaptureParityFrameSnapshot(1).ToJson(), Is.EqualTo(frozen));
+            Assert.That(world.CaptureLockstepChecksumSnapshot(1).OverallChecksum,
+                Is.Not.EqualTo(lockstep));
+            Assert.That(world.CaptureRuntimeChecksum64(1, FrameInputSet.Empty(1)),
+                Is.Not.EqualTo(runtime));
+
+            var extended = new SimulationWorld(
+                BattleRuntimeProfile.DesktopExtended,
+                SimulationWorld.AuthorityRuntimeSlotCapacity);
+            string before = extended.CaptureExtendedChecksumSnapshot(1).OverallChecksum;
+            extended.Runtime.SelectedModeStageGate50 = 3;
+            Assert.That(extended.CaptureExtendedChecksumSnapshot(1).OverallChecksum,
+                Is.Not.EqualTo(before));
+            Assert.That(extended.CaptureExtendedChecksumSnapshot(1).ToJson(),
+                Does.Contain("\"selectedModeStageGate50\":3"));
+        }
+
         [TestCase(0, false)]
         [TestCase(1, false)]
         [TestCase(2, false)]

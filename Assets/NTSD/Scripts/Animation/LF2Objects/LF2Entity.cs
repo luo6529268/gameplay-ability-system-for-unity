@@ -2686,40 +2686,15 @@ namespace NTSD.Animation.LF2Objects
             {
                 Runtime.OutsideWalkableSinceTick = -1;
                 int slotIndex = Runtime?.SlotIndex ?? StableId;
-                if (slotIndex >= 20)
-                {
-                    if (Runtime.X < -100f)
-                        Runtime.X = -100f;
-                    if (Runtime.X > baseStageWidth + 100f)
-                        Runtime.X = baseStageWidth + 100f;
-                }
-                else
-                {
-                    if (RelationTeam == 5)
-                    {
-                        if (Runtime.X < -300f)
-                            Runtime.X = -300f;
-                    }
-                    else if (Runtime.X < 0f)
-                    {
-                        Runtime.X = 0f;
-                    }
-
-                    if (Runtime.X > baseStageWidth)
-                        Runtime.X = baseStageWidth;
-
-                    if (xMaxOverride > 0 &&
-                        Runtime.X > xMaxOverride &&
-                        RelationTeam != 5 &&
-                        HitStun == 0)
-                    {
-                        Runtime.X = xMaxOverride;
-                    }
-                }
+                int selectedModeStageGate50 =
+                    RegisteredWorldForSimulation?.Runtime?.SelectedModeStageGate50 ?? 0;
+                Runtime.X = NTSDEntityRuntime.ClampSelectedModeType0StageX(
+                    Runtime.X, slotIndex, RelationTeam, HitStun,
+                    baseStageWidth, xMaxOverride, selectedModeStageGate50);
 
                 Runtime.ClampSourceRuleCharacterX(
                     slotIndex, RelationTeam, HitStun,
-                    baseStageWidth, xMaxOverride);
+                    baseStageWidth, xMaxOverride, selectedModeStageGate50);
             }
             else if (currentDataType != (int)LF2ObjectType.SpecialAttack &&
                      (ObjectId == 122 || ObjectId == 123) && Unk344 > 0)

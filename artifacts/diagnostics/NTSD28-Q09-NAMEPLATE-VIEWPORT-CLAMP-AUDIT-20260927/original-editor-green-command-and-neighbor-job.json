@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "e9886dec420446b99ee18f90d17af62a",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1790494316090,
+    "finished_unix_ms": 1790494327020,
+    "last_update_unix_ms": 1790494327020,
+    "progress": {
+      "completed": 2,
+      "total": 8589,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790494326566,
+      "last_finished_test_full_name": "NTSD.Test.BattlePresentationCommandWriterEditorTests.OptimizedWriter_MatchesReferenceForWords5ComCounterAndBracket",
+      "last_finished_unix_ms": 1790494326575,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": null
+  }
+}

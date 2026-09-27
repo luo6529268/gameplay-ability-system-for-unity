@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "b0a81d840ffd41eba573085700383377",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1790477534390,
+    "finished_unix_ms": 1790477548522,
+    "last_update_unix_ms": 1790477548522,
+    "progress": {
+      "completed": 2,
+      "total": 8565,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790477546622,
+      "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5Type1ArmorAtomicProductionIntegrationEditorTests.Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(11,False)",
+      "last_finished_unix_ms": 1790477546624,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 2.0106954,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(10,True)",
+          "fullName": "NTSD.Test.Editor.NTSD28B5Type1ArmorAtomicProductionIntegrationEditorTests.Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(10,True)",
+          "state": "Passed",
+          "durationSeconds": 0.8337956,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(11,False)",
+          "fullName": "NTSD.Test.Editor.NTSD28B5Type1ArmorAtomicProductionIntegrationEditorTests.Actual_SelectedHpArmorRecordsKnockoutOnlyWhenReducedDamageIsLethal(11,False)",
+          "state": "Passed",
+          "durationSeconds": 0.0022422,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  }
+}

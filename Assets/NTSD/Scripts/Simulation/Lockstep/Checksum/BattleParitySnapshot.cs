@@ -257,7 +257,7 @@ namespace NTSD.Simulation
     /// </summary>
     public sealed class BattleExtendedChecksumSnapshot : IBattleChecksumSnapshot
     {
-        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v4";
+        public const string SchemaId = "ntsd-unity-extended-battle-checksum-v5";
 
         internal object InputDomain;
         internal object MetadataDomain;
@@ -692,7 +692,7 @@ namespace NTSD.Simulation
             object rngDomain = DictionaryOf(
                 ("callCount", (object)(Rng?.CallCount ?? 0UL)),
                 ("seed", Rng?.State ?? 0U));
-            object worldDomain = ProjectWorldDomain();
+            object worldDomain = ProjectWorldDomain(includeSelectedStageGate: true);
             object metadataDomain = DictionaryOf(
                 ("claimedCount", (object)_runtimeSlots.ClaimedCount),
                 ("logicalCapacity", logicalCapacity),
@@ -762,7 +762,7 @@ namespace NTSD.Simulation
             object rngDomain = DictionaryOf(
                 ("callCount", (object)(Rng?.CallCount ?? 0UL)),
                 ("seed", Rng?.State ?? 0U));
-            object worldDomain = ProjectWorldDomain();
+            object worldDomain = ProjectWorldDomain(includeSelectedStageGate: true);
             object metadataDomain = DictionaryOf(
                 ("claimedCount", (object)_runtimeSlots.ClaimedCount),
                 ("logicalCapacity", logicalCapacity),
@@ -1251,7 +1251,7 @@ namespace NTSD.Simulation
                 ("zBoundNegative", runtime?.SourceRuleZBoundNegative ?? false));
         }
 
-        private object ProjectWorldDomain()
+        private object ProjectWorldDomain(bool includeSelectedStageGate = false)
         {
             BattleRuntimeState battle = Runtime ?? new BattleRuntimeState();
             BattleMatchRuntimeState match = battle.Match ?? new BattleMatchRuntimeState();
@@ -1359,6 +1359,13 @@ namespace NTSD.Simulation
                     ("xMaxOverride", stage.XMaxOverride),
                     ("zMax", stage.ZMax),
                     ("zMin", stage.ZMin))));
+
+            if (includeSelectedStageGate)
+            {
+                var runtimeFields = (SortedDictionary<string, object>)runtimeDomain;
+                var stageFields = (SortedDictionary<string, object>)runtimeFields["stage"];
+                stageFields["selectedModeStageGate50"] = battle.SelectedModeStageGate50;
+            }
 
             return DictionaryOf(
                 ("aiDifficulty", (object)flow.AiDifficulty),

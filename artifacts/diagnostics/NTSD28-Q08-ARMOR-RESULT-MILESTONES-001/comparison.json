@@ -1,0 +1,85 @@
+{
+  "schema": "ntsd28-q08-armor-result-milestones-comparison/1.0",
+  "completedTicks": 366,
+  "rootAcceptedTicks": 365,
+  "rootTerminalStepRecordedButPlaybackFailed": true,
+  "rootFailure": "LFR playback GameSession did not advance exactly one tick at terminal result transition",
+  "fieldsPerTick": 5,
+  "comparisons": 1830,
+  "differenceCount": 0,
+  "firstDifferences": [],
+  "old26RawTickRowsEqual": 26,
+  "milestones": [
+    {
+      "completedTick": 15,
+      "formalTraceTick": 15,
+      "formalTimer": 0,
+      "unityOutputTimer": 0,
+      "formalPhase": 0,
+      "unityPhase": 0,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 16,
+      "formalTraceTick": 16,
+      "formalTimer": 0,
+      "unityOutputTimer": 0,
+      "formalPhase": 0,
+      "unityPhase": 0,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 17,
+      "formalTraceTick": 17,
+      "formalTimer": 1,
+      "unityOutputTimer": 1,
+      "formalPhase": 0,
+      "unityPhase": 0,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 96,
+      "formalTraceTick": 96,
+      "formalTimer": 80,
+      "unityOutputTimer": 80,
+      "formalPhase": 1,
+      "unityPhase": 1,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 117,
+      "formalTraceTick": 117,
+      "formalTimer": 101,
+      "unityOutputTimer": 101,
+      "formalPhase": 2,
+      "unityPhase": 2,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 365,
+      "formalTraceTick": 365,
+      "formalTimer": 349,
+      "unityOutputTimer": 349,
+      "formalPhase": 2,
+      "unityPhase": 2,
+      "formalTransition": 0,
+      "unityTransition": 0
+    },
+    {
+      "completedTick": 366,
+      "formalTraceTick": 365,
+      "formalTimer": 350,
+      "unityOutputTimer": 350,
+      "formalPhase": 3,
+      "unityPhase": 3,
+      "formalTransition": 2,
+      "unityTransition": 2
+    }
+  ],
+  "scope": "Root trace terminal row is observed but not a passed LFR certificate; Unity exact scenario PASS."
+}

@@ -115,7 +115,8 @@ namespace NTSD.Simulation.Presentation
                 Vector3 bodyOffset = ToWorldBody(delta);
                 Vector3 groundOffset = ToWorldGround(delta);
                 Vector3 positionOffset = command.Type == BattleRenderCommandType.Shadow ||
-                                         command.Type == BattleRenderCommandType.OverlayGlyph
+                                         (command.Type == BattleRenderCommandType.OverlayGlyph &&
+                                          command.MotionAnchor == BattlePresentationMotionAnchor.Ground)
                     ? groundOffset
                     : bodyOffset;
                 capturedFrame.ReplaceCommand(index,

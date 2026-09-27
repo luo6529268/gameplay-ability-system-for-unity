@@ -272,7 +272,7 @@ namespace NTSD.Simulation
     /// </summary>
     public readonly struct BattleWorldCoreScalarSnapshot
     {
-        public const int CurrentSchemaVersion = 13;
+        public const int CurrentSchemaVersion = 14;
 
         internal BattleWorldCoreScalarSnapshot(
             SimulationWorld world,
@@ -309,6 +309,7 @@ namespace NTSD.Simulation
                 world.Runtime?.NativeStandardHitRest);
             FusionFirstFeatureGate4A8428 = world.Runtime?.FusionFirstFeatureGate4A8428 ?? false;
             FusionSecondFeatureGate4A842C = world.Runtime?.FusionSecondFeatureGate4A842C ?? false;
+            SelectedModeStageGate50 = world.Runtime?.SelectedModeStageGate50 ?? 0;
             OneTuInput = world.OneTuInput;
             RngState = world.Rng?.State ?? 0U;
             RngCallCount = world.Rng?.CallCount ?? 0UL;
@@ -338,6 +339,7 @@ namespace NTSD.Simulation
         public BattleWorldStandardHitRestScalarSnapshot StandardHitRest { get; }
         public bool FusionFirstFeatureGate4A8428 { get; }
         public bool FusionSecondFeatureGate4A842C { get; }
+        public int SelectedModeStageGate50 { get; }
         public bool OneTuInput { get; }
         public uint RngState { get; }
         public ulong RngCallCount { get; }

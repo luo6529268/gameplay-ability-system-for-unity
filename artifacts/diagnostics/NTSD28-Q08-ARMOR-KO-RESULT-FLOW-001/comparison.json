@@ -1,0 +1,51 @@
+{
+  "schema": "ntsd28-q08-armor-ko-result-flow-comparison/1.0",
+  "ticks": 26,
+  "fieldsPerTick": 5,
+  "comparisons": 130,
+  "differenceCount": 0,
+  "firstDifferences": [],
+  "selectedBoundaries": [
+    {
+      "tick": 15,
+      "formalTimer": 0,
+      "unityOutputTimer": 0,
+      "formalWinner": -1,
+      "unityMask": 6,
+      "derivedWinner": -1
+    },
+    {
+      "tick": 16,
+      "formalTimer": 0,
+      "unityOutputTimer": 0,
+      "formalWinner": -1,
+      "unityMask": 6,
+      "derivedWinner": -1
+    },
+    {
+      "tick": 17,
+      "formalTimer": 1,
+      "unityOutputTimer": 1,
+      "formalWinner": 1,
+      "unityMask": 2,
+      "derivedWinner": 1
+    },
+    {
+      "tick": 18,
+      "formalTimer": 2,
+      "unityOutputTimer": 2,
+      "formalWinner": 1,
+      "unityMask": 2,
+      "derivedWinner": 1
+    },
+    {
+      "tick": 26,
+      "formalTimer": 10,
+      "unityOutputTimer": 10,
+      "formalWinner": 1,
+      "unityMask": 2,
+      "derivedWinner": 1
+    }
+  ],
+  "scope": "post-completed-tick result timer/output timer/phase/transition and winner derived from native living-group mask; no 80/101/350 evidence"
+}

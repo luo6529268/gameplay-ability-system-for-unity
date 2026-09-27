@@ -1,0 +1,11 @@
+# NTSD28-Q08-SELECTED-ARMOR-KO-FOCUSED-001
+
+Status: `FOCUSED_TEST_PASS / SYNTHETIC_SELECTED_ARMOR_PREDICATE_ONLY`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q08`. Acceptance: `artifacts/diagnostics/NTSD28-Q08-SELECTED-ARMOR-KO-FOCUSED-001/ACCEPTANCE.md`.
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, paired playable `battle_world.cpp::resolve_confirmed_reduced_hit` selected-armor branch (pre-HP-subtraction knockout gate at the current 7123 call site), and `GameSession28::step`. Existing OID11 Sasuke versus OID87 type-1 armor root-EXE/Unity trace proves the selected route can occur with shipped content; its HP500 case is nonlethal. Existing `NTSD28B5StandardReducedKnockoutProducerEditorTests` reduced lethal case passes no `selectedArmor`, so it does not exercise the actual selected-armor operand.
+
+Before script edit: modify only `Assets/NTSD/Scripts/Test/Editor/NTSD28B5Type1ArmorAtomicProductionIntegrationEditorTests.cs` to add one focused selected-armor lethal/nonlethal pair through the existing production `ApplyStandardCharacterDamage` entry. Use the existing type-1 armor fixture (`decrease=50`, injury20, available armor HP) and explicit KO gate `-1`; HP10 must create exactly one credited event before subtraction, while HP11 must create none. Assert event time/source/credit/victim and the corresponding HP/armor-HP writes. Do not alter existing route tests, production scripts, DAT, assets, Scene or nonbattle code.
+
+Acceptance: original Editor compiles with zero error; run only the new focused test and, if needed, the immediate type-1 armor neighbor. A passing synthetic fixture proves this production branch's scoped predicate, not formal root-EXE same-state lethal parity, natural Battle Play, or Q08 completion. If it fails, preserve RED and determine whether fixture conditions or production differ before any production edit. Check `Tools/Validate-ChangeLedger.ps1`, `git diff --check`, and protected Scene/Asset hashes. No full suite.
+
+Rollback: revert only this Task's test hunk after provenance review under repository deletion/restore rules; preserve all pre-existing dirty work and prior evidence. No production rollback is needed for this test-only package.

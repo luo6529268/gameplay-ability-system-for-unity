@@ -1,0 +1,20 @@
+# NTSD28-Q10-PER-TICK-SOUND-PUBLICATION-001
+
+Status: `RUNTIME_PENDING / FOCUSED_EDITOR_PASS`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q10 / O-01/O-03`. Current checkpoint: `artifacts/diagnostics/NTSD28-Q10-PER-TICK-SOUND-PUBLICATION-001/ACCEPTANCE-PENDING.md`.
+
+Latest scoped evidence: original Editor test-only sound-producing sealed worker tick 1/1 PASS and four affected sound neighbors 4/4 PASS. The worker sink callback is on the main thread after matched publication; this does not certify selected-content Battle audio or formal audible parity. Details and raw job hashes are in the checkpoint above.
+
+Authority: formal root EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable `source/ntsd28_playable/src/main.cpp:2525-2555,2572-2599` submits each successful tick's battle audio after `advance_native_volume`, and `audio_backend.cpp:503-595,689-695` starts its voice during submit and later retunes all active voices. First-difference report: `artifacts/diagnostics/NTSD28-Q10-AUDIO-PER-TICK-PUBLICATION-AUDIT-20260927/REPORT.md`.
+
+Unity before: `SimulationTickDriver` copies each tick's logical `PendingSoundEvent` into `_publishedSoundEvents` after checksum, applies F11/F12 volume after successful local tick or accepted worker publication, and calls the sound sink only once in `LateUpdate`. Two ticks in one Update therefore start both sounds together after the second tick. This is a battle sound presentation timing difference, not a simulation-field or DAT difference.
+
+Declared self-authored code paths:
+
+- `Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs`: dispatch the just-published battle sound events on the Unity main thread immediately after each accepted local tick's volume adjustment, including automatic catch-up, accepted paused F2, and explicit public tick entries. For worker ticks, dispatch after the matching publication has been consumed and volume applied, never from the worker thread or on submission. Retain LateUpdate as a safe no-op/fallback if no events remain. Do not let sound callbacks mutate tick truth, checksum or Scene.
+- `Assets/NTSD/Scripts/Test/Editor/SoundPresentationDispatchEditorTests.cs`: test-first revise the existing three-tick catch-up sound test to require exactly one ordered, checksum-ready sound callback before the next tick; keep logical event/checksum and suppression assertions. Add only focused neighboring assertions needed for rejected tick/no duplicate and worker owner if a reproducible worker fixture is available.
+
+Expected change: battle voices begin after their own accepted tick and volume adjustment; a later percent change retunes earlier active voices through the existing `NTSDSoundPlayer`. Sound events remain separate from parity/checksum, have unchanged cue/tick/worldX, and cannot be dispatched twice. Presentation build flags do not suppress sound. Manual/Lockstep explicit ticks dispatch only after success. Stopping/Stopped and worker submission without publication cannot dispatch. No change to menu, settings, nonbattle audio, DAT, image, WAV, Asset, Scene or user camera/boundary exception.
+
+Risk/validation: dispatch moves from LateUpdate into main-thread host completion, which can affect voice start time and sound sink callback order. Establish RED in original Editor before production edit. Then compile/import, run the exact catch-up, suppression, checksum and native-volume neighbors; run bounded saved-Battle Play with two accepted ticks and a selected cue if reachable, plus worker publication or report its exact remaining gate. Check no Scene diff, `git diff --check` and `Tools/Validate-ChangeLedger.ps1`. A narrow EditMode pass does not close O-01/O-03/Q10 or prove audible parity. Keep the first failure if behavior differs; do not change expectations to hide it.
+
+Rollback: review and reverse only this Change ID's hunks after checking the dirty tree. Preserve pre-existing Q08/Q10 edits in `SimulationTickDriver`. Do not use restore/reset/clean or delete any existing file without explicit authorization.

@@ -1,0 +1,18 @@
+{
+    "status": "PASS",
+    "error": "",
+    "initialScene": "Assets/NTSD/Scene/NTSD_Menu.unity",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "startTick": 2,
+    "initialPercent": 100,
+    "pausedNoTickPassed": true,
+    "downTick": 3,
+    "downPercent": 99,
+    "releaseAfterDownPassed": true,
+    "f12PriorityPassed": true,
+    "upTick": 4,
+    "upPercent": 100,
+    "finalReleasePassed": true,
+    "endTick": 4,
+    "battleUnloaded": true
+}

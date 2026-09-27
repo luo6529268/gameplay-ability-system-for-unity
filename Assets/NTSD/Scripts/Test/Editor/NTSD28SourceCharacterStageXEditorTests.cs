@@ -1,3 +1,4 @@
+using System.Reflection;
 using NUnit.Framework;
 
 using NTSD.Animation;
@@ -9,6 +10,41 @@ namespace NTSD.Test.Editor
 {
     public sealed class NTSD28SourceCharacterStageXEditorTests
     {
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 0, 20, 0, -150.0, -100.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 0, 20, 0, -150.0, -100.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 0, 20, 0, 900.0, 810.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 0, 20, 0, 900.0, 810.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 1, 20, 0, -49.0, 0.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 1, 20, 0, -49.0, 0.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 3, 20, 0, 900.0, 800.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 3, 20, 0, 900.0, 800.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 1, 5, 5, -100.0, 0.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 1, 5, 5, -100.0, 0.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 1, 5, -1, -350.0, -300.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 1, 5, -1, -350.0, -300.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented, 0, 5, 5, -350.0, -300.0)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy, 0, 5, 5, -350.0, -300.0)]
+        public void SelectedStageGate_UsesFormalType0BoundsInBothProfilesAndCoordinateDomains(
+            BattleEcsCharacterPreFrameBoundsPassMode mode, int gate, int slot,
+            int relationTeam, double start, double expected)
+        {
+            SimulationWorld world = CreateWorld(800);
+            FieldInfo selectedGate = typeof(BattleRuntimeState).GetField(
+                "SelectedModeStageGate50", BindingFlags.Public | BindingFlags.Instance);
+            Assert.That(selectedGate, Is.Not.Null,
+                "Selected mode stage gate must be a deterministic battle runtime scalar.");
+            selectedGate.SetValue(world.Runtime, gate);
+            world.ConfigureBattleEcsCharacterPreFrameBoundsPassForDiagnostics(mode);
+            LF2Character character = RegisterCharacter(world, slot, start);
+            character.Runtime.RelationTeam = relationTeam;
+            world.ApplyPreFrameBoundsAll();
+
+            Assert.That(character.Runtime.X, Is.EqualTo(expected));
+            Assert.That(character.Runtime.SourceRuleX, Is.EqualTo(expected));
+            Assert.That(character.Runtime.XInt, Is.EqualTo((int)expected));
+            Assert.That(character.Runtime.SourceRuleXInt, Is.EqualTo((int)expected));
+        }
+
         [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented)]
         [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy)]
         public void StageEdge_ClampsPhysicalWhileKeepingRawSourceTravel(
@@ -39,7 +75,7 @@ namespace NTSD.Test.Editor
         [TestCase(5, 0, 0, -50.75, 0.0)]
         [TestCase(5, 5, 0, -350.75, -300.0)]
         [TestCase(20, 0, 0, -150.75, -100.0)]
-        [TestCase(20, 0, 0, 950.75, 900.0)]
+        [TestCase(20, 0, 0, 950.75, 810.0)]
         [TestCase(5, 0, 0, 750.75, 700.0)]
         [TestCase(5, 0, 10, 750.75, 750.75)]
         [TestCase(5, 5, 0, 750.75, 750.75)]

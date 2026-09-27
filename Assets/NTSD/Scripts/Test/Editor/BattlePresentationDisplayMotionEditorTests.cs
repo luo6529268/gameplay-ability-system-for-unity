@@ -74,6 +74,34 @@ namespace NTSD.Test
             Assert.That(display.SampledCount, Is.Zero);
         }
 
+        [Test]
+        public void ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion()
+        {
+            BattlePresentationFrame published = FrameWithMotion(10, 11, 100, 120);
+            published.AddCommand(Command(BattleRenderCommandType.OverlayGlyph,
+                motionAnchor: BattlePresentationMotionAnchor.Body));
+            published.AddCommand(Command(BattleRenderCommandType.OverlayGlyph,
+                motionAnchor: BattlePresentationMotionAnchor.Ground));
+            var frame = new BattlePresentationFrame();
+            frame.CopyFrom(published);
+            var display = new BattlePresentationDisplayMotion();
+
+            display.Prepare(frame, 0.5, 1.5, 2.0);
+            display.ApplyToCapturedCommands(frame);
+
+            float unitsY = NTSD.Animation.NTSDRenderSpace.UnitsPerPixelY;
+            Assert.That(frame.GetCommand(0).MotionAnchor,
+                Is.EqualTo(BattlePresentationMotionAnchor.Body));
+            Assert.That(frame.GetCommand(0).Position.y,
+                Is.EqualTo(15f * unitsY).Within(1e-6));
+            Assert.That(frame.GetCommand(1).MotionAnchor,
+                Is.EqualTo(BattlePresentationMotionAnchor.Ground));
+            Assert.That(frame.GetCommand(1).Position.y,
+                Is.EqualTo(10f * unitsY).Within(1e-6));
+            Assert.That(published.GetCommand(0).Position, Is.EqualTo(Vector3.zero));
+            Assert.That(published.GetCommand(1).Position, Is.EqualTo(Vector3.zero));
+        }
+
         [UnityTest]
         [Timeout(180000)]
         public IEnumerator OriginalBattleScene_RebuildsSameTickOnlyAboveThirtyFps()
@@ -174,6 +202,59 @@ namespace NTSD.Test
                     Assert.That(laterPosition.x, Is.GreaterThan(firstPosition.x));
                 }
             }
+
+            renderFpsField.SetValue(driver, 120);
+            world.ConfigureBattlePresentationDisplayPolicy(
+                120, SimulationConstants.SIM_DT);
+            actor.HP2Orig = 2;
+            BattlePresentationFrame beforeHeight = world.BattlePresentation.PublishedFrame;
+            double sourceY = actor.Runtime.Y;
+            actor.Runtime.Y = sourceY + 10;
+            actor.Runtime.SyncIntegerPosition();
+            actor.RefreshRuntimeSnapshot();
+            world.BattlePresentation.BeginFrame(world, beforeHeight.TickIndex + 1);
+            BattlePresentationFrame publishedHeight =
+                world.BattlePresentation.PublishedFrame;
+            Assert.That(publishedHeight.PreviousMotionTickIndex,
+                Is.EqualTo(beforeHeight.TickIndex));
+            Assert.That(PublishedActor(publishedHeight).HP2Orig,
+                Is.EqualTo(2));
+
+            BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
+            BattlePixelFramePlan firstHeightPlan = world.CurrentPixelFramePlan;
+            Assert.That(firstHeightPlan.Owner, Is.EqualTo(BattlePixelFrameOwner.Central));
+            Assert.That(TryOverlayCommand(firstHeightPlan.CapturedFrame,
+                BattlePresentationMotionAnchor.Body, out BattleRenderCommand firstCounter),
+                Is.True);
+            bool hasFirstLabel = TryOverlayCommand(firstHeightPlan.CapturedFrame,
+                BattlePresentationMotionAnchor.Ground, out BattleRenderCommand firstLabel);
+
+            yield return new WaitForSecondsRealtime(0.05f);
+            BattlePixelFramePlan laterHeightPlan = world.CurrentPixelFramePlan;
+            Assert.That(TryOverlayCommand(laterHeightPlan.CapturedFrame,
+                BattlePresentationMotionAnchor.Body, out BattleRenderCommand laterCounter),
+                Is.True);
+            Assert.That(Mathf.Abs(laterCounter.Position.y - firstCounter.Position.y),
+                Is.GreaterThan(1e-6f));
+            if (hasFirstLabel)
+            {
+                Assert.That(TryOverlayCommand(laterHeightPlan.CapturedFrame,
+                    BattlePresentationMotionAnchor.Ground, out BattleRenderCommand laterLabel),
+                    Is.True);
+                Assert.That(firstLabel.Position.y,
+                    Is.EqualTo(laterLabel.Position.y).Within(1e-6));
+            }
+
+            File.AppendAllText(tracePath,
+                $"counter firstY={firstCounter.Position.y:R} " +
+                $"laterY={laterCounter.Position.y:R} " +
+                $"label={hasFirstLabel}\n");
+            Assert.That(driver.CurrentTickIndex, Is.EqualTo(logicTick));
+            Assert.That(actor.Runtime.Y, Is.EqualTo(sourceY + 10));
+            Assert.That(world.BattlePresentation.PublishedFrame,
+                Is.SameAs(publishedHeight));
+            Assert.That(PublishedActor(publishedHeight).HP2Orig,
+                Is.EqualTo(2));
             File.AppendAllText(tracePath, "assertions-passed\n");
         }
 
@@ -196,6 +277,43 @@ namespace NTSD.Test
             }
 
             Assert.Fail("The original battle actor has no central body command.");
+            return default;
+        }
+
+        private static bool TryOverlayCommand(
+            BattlePresentationFrame frame,
+            BattlePresentationMotionAnchor anchor,
+            out BattleRenderCommand result)
+        {
+            if (frame != null)
+            {
+                for (int index = 0; index < frame.CommandCount; index++)
+                {
+                    BattleRenderCommand command = frame.GetCommand(index);
+                    if (command.Type == BattleRenderCommandType.OverlayGlyph &&
+                        command.RuntimeSlot == 0 && command.MotionAnchor == anchor)
+                    {
+                        result = command;
+                        return true;
+                    }
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static BattlePresentationEntitySnapshot PublishedActor(
+            BattlePresentationFrame frame)
+        {
+            for (int index = 0; index < frame.EntityCount; index++)
+            {
+                BattlePresentationEntitySnapshot entity = frame.GetEntity(index);
+                if (entity.RuntimeSlot == 0)
+                    return entity;
+            }
+
+            Assert.Fail("The controlled actor is missing from the published logical frame.");
             return default;
         }
 
@@ -234,19 +352,22 @@ namespace NTSD.Test
 
         private static BattleRenderCommand Command(
             BattleRenderCommandType type,
-            bool anchors = false)
+            bool anchors = false,
+            BattlePresentationMotionAnchor motionAnchor = BattlePresentationMotionAnchor.Ground)
         {
             return new BattleRenderCommand(
                 type, new RuntimeEntityHandle(3, 1), 5, 2, 0,
                 0, 3, 1, 0, 0, Vector3.zero,
-                Vector2.one, Vector2.zero, Rect.zero, false,
+                Vector2.one, Vector2.zero, Rect.zero,
+                BattleSpriteRenderState.Default(false),
                 default,
                 showOverheadHealthBar: anchors,
                 stableHealthAnchorWorld: Vector2.zero,
                 hasStableHealthAnchor: anchors,
                 stableFootAnchorWorld: Vector2.zero,
                 hasStableFootAnchor: anchors,
-                showSelfFootMarker: anchors);
+                showSelfFootMarker: anchors,
+                motionAnchor: motionAnchor);
         }
     }
 }

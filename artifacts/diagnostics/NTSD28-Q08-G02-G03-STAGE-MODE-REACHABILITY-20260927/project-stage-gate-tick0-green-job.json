@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "26ac636f266a4761894961f8396f4523",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790488344326,
+      "finished_unix_ms": 1790488362709,
+      "last_update_unix_ms": 1790488362709,
+      "progress": {
+        "completed": 3,
+        "total": 8583,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790488362202,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07ProjectBattleModeConfigEditorTests.ProjectModeAsset_CapturesSelectedStageGateInFrozenIdentity",
+        "last_finished_unix_ms": 1790488362204,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 9.2844606,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion",
+            "fullName": "NTSD.Test.BattleStateSnapshotRestoreEditorTests.SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion",
+            "state": "Passed",
+            "durationSeconds": 2.1894649,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "PublishedModeFlowsThroughDirectSealMatchResetAndTickZeroRestore",
+            "fullName": "NTSD.Test.Editor.NTSD28Q07ModeComboPublishedActivationEditorTests.PublishedModeFlowsThroughDirectSealMatchResetAndTickZeroRestore",
+            "state": "Passed",
+            "durationSeconds": 6.1407654,
+            "message": null,
+            "stackTrace": null,
+            "output": "<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=mode, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07ModeCombo\\59a05999a71644cbb507aa6345b40079\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>[Converter] 帧 0 (standing): pic=0, state=0, wait=1, next=0, bodies=0, itrs=0, wpoints=0, opoint=无, 属性数=4</color>\r\n<color=cyan>[BMP 解析] 角色=mode, 找到 1 个精灵文件定义</color>\r\n<color=cyan>[BMP 文件] c/body.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\Q07ModeCombo\\59a05999a71644cbb507aa6345b40079\\vfs\\c\\body.png, 范围=[0-0], 尺寸=5x1, 行列=1x1</color>\r\n<color=cyan>开始加载精灵，角色配置数量: 1</color>\r\n<color=cyan>共 1 个文件需要处理</color>\r\n[BMPLoader] 调色板偏移: 54, 最大颜色: 256, 实际颜色: 6\r\n[BattleStageCampaignLoader] stage wave disabled; campaign file not found: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/StreamingAssets\\NTSD\\data\\stage.dat\r\n[BattleStageCampaignLoader] stage wave disabled; campaign file not found: I:/GitHub/Unity_GAS/gameplay-ability-system-for-unity/Assets/StreamingAssets\\NTSD\\data\\stage.dat\r\n"
+          },
+          {
+            "name": "ProjectModeAsset_CapturesSelectedStageGateInFrozenIdentity",
+            "fullName": "NTSD.Test.Editor.NTSD28Q07ProjectBattleModeConfigEditorTests.ProjectModeAsset_CapturesSelectedStageGateInFrozenIdentity",
+            "state": "Passed",
+            "durationSeconds": 0.0014384,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

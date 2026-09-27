@@ -1,0 +1,73 @@
+{
+  "scope": "paired playable diagnostic, initial Naruto action 121, two mode stage gates",
+  "formalRootExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "scenarioLoaderReferenceSha256": "5EDA51440039099069D041E5BD13FDE8BE9FD8C7B20983985B1712A59719D86B",
+  "sameSeed": 682973786,
+  "sameRoster": true,
+  "sameInputs": true,
+  "onlyScenarioDifference": "selectedModeStageGate50 0 vs 1",
+  "rows": [
+    {
+      "ordinal": 1,
+      "tick": 1,
+      "gate0Clone": null,
+      "gate1Clone": null,
+      "actorActionEqual": true,
+      "rngEqual": true
+    },
+    {
+      "ordinal": 2,
+      "tick": 2,
+      "gate0Clone": {
+        "slot": 50,
+        "oid": 33,
+        "type": 0,
+        "action": 241,
+        "x": -42,
+        "preciseX": -42,
+        "team": 1
+      },
+      "gate1Clone": {
+        "slot": 50,
+        "oid": 33,
+        "type": 0,
+        "action": 241,
+        "x": -42,
+        "preciseX": -42,
+        "team": 1
+      },
+      "actorActionEqual": true,
+      "rngEqual": true
+    },
+    {
+      "ordinal": 3,
+      "tick": 3,
+      "gate0Clone": {
+        "slot": 50,
+        "oid": 33,
+        "type": 0,
+        "action": 242,
+        "x": -49,
+        "preciseX": -49,
+        "team": 1
+      },
+      "gate1Clone": {
+        "slot": 50,
+        "oid": 33,
+        "type": 0,
+        "action": 242,
+        "x": 0,
+        "preciseX": 0,
+        "team": 1
+      },
+      "actorActionEqual": true,
+      "rngEqual": true
+    }
+  ],
+  "sha256": {
+    "naruto-clone-stage-gate0-action121.scenario.json": "382ec5bda062cc4fe363d60ed1aaecbd6a263488d30008265f27d57413173d21",
+    "naruto-clone-stage-gate0-action121.trace.jsonl": "31e82bb3068da88d55d4bd222cce46b89e40666ef9667e0e63cc7be6aded4b27",
+    "naruto-clone-stage-gate1-action121.scenario.json": "439c4ae84b00fe1b5b87f0907e025e42a5b85c7cf05f12aaf06ff8aa7b04d8e1",
+    "naruto-clone-stage-gate1-action121.trace.jsonl": "8928b76b46e92303ad39770ff361fff5117c1cecb953fe3eb3ace40caed3f814"
+  }
+}

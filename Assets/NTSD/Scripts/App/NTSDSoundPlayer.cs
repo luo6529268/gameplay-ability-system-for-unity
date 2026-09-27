@@ -52,6 +52,9 @@ namespace NTSD.App
         private AudioSource[] oneShotVoices = Array.Empty<AudioSource>();
         private MMFollowTarget[] oneShotVoiceFollowers = Array.Empty<MMFollowTarget>();
         private double[] oneShotVoiceAvailableDspTimes = Array.Empty<double>();
+        private float[] oneShotVoiceBaseVolumes = Array.Empty<float>();
+        private int nativeBattleVolumePercent = 100;
+        private float nativeBattleSfxGain = 1f;
         private int nextOneShotVoiceIndex;
         private long pooledOneShotPlayCount;
         private long oneShotVoiceLimitDropCount;
@@ -75,6 +78,40 @@ namespace NTSD.App
             rejectedUnpreparedCueCount;
         public long FailedPreparedCueLoadCountForDiagnostics =>
             failedPreparedCueLoadCount;
+        public int NativeBattleVolumePercentForDiagnostics => nativeBattleVolumePercent;
+
+        internal void ApplyNativeBattleVolumeHostTick(
+            NTSD28NativeFunctionKeyHostCommand command)
+        {
+            int delta = command == NTSD28NativeFunctionKeyHostCommand.VolumeDown
+                ? -1
+                : command == NTSD28NativeFunctionKeyHostCommand.VolumeUp
+                    ? 1
+                    : 0;
+            if (delta == 0)
+                return;
+
+            int nextPercent = Mathf.Clamp(nativeBattleVolumePercent + delta, 0, 100);
+            if (nextPercent == nativeBattleVolumePercent)
+                return;
+
+            nativeBattleVolumePercent = nextPercent;
+            nativeBattleSfxGain = ComputeNativeBattleSfxGain(nextPercent);
+            for (int index = 0; index < oneShotVoices.Length; index++)
+            {
+                AudioSource voice = oneShotVoices[index];
+                if (voice != null)
+                    voice.volume = oneShotVoiceBaseVolumes[index] * nativeBattleSfxGain;
+            }
+        }
+
+        private static float ComputeNativeBattleSfxGain(int volumePercent)
+        {
+            if (volumePercent == 0)
+                return 0f;
+            int hundredthDb = ((volumePercent - 100) * 0xED8) / 100;
+            return Mathf.Pow(10f, hundredthDb / 2000f);
+        }
 
         private void Awake()
         {
@@ -327,7 +364,8 @@ namespace NTSD.App
             voice.transform.position = playbackPosition;
             voice.clip = clip;
             voice.pitch = pitch;
-            voice.volume = volume;
+            oneShotVoiceBaseVolumes[voiceIndex] = volume;
+            voice.volume = volume * nativeBattleSfxGain;
             voice.spatialBlend = audioItem.range > 0f ? 1f : 0f;
             voice.rolloffMode = AudioRolloffMode.Custom;
             voice.minDistance = audioItem.range > 3f
@@ -407,6 +445,7 @@ namespace NTSD.App
             oneShotVoices = new AudioSource[voiceLimit];
             oneShotVoiceFollowers = new MMFollowTarget[voiceLimit];
             oneShotVoiceAvailableDspTimes = new double[voiceLimit];
+            oneShotVoiceBaseVolumes = new float[voiceLimit];
             nextOneShotVoiceIndex = 0;
             for (int i = 0; i < voiceLimit; i++)
             {

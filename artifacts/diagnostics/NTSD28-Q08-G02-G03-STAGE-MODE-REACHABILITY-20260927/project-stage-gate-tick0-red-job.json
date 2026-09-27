@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "4cb1954aa0764447a6be0b0299361126",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790488233808,
+      "finished_unix_ms": 1790488244387,
+      "last_update_unix_ms": 1790488244387,
+      "progress": {
+        "completed": 1,
+        "total": 8583,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790488241592,
+        "last_finished_test_full_name": "NTSD.Test.BattleStateSnapshotRestoreEditorTests.SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion",
+        "last_finished_unix_ms": 1790488243828,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.BattleStateSnapshotRestoreEditorTests.SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion",
+            "message": "  A tick-zero restore must survive repeated battle preparation.\r\n  Expected: 3\r\n  But was:  1\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

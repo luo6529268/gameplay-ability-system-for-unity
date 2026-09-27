@@ -1,0 +1,48 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "ffc645602a7444d3aaf6348a44a3c007",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1790482200340,
+    "finished_unix_ms": 1790482211054,
+    "last_update_unix_ms": 1790482211054,
+    "progress": {
+      "completed": 1,
+      "total": 8566,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790482209623,
+      "last_finished_test_full_name": "NTSD.Test.NTSD28Q08CombatLethalPrecombatTimingEditorTests.NaturalKoResultSettingsAttackWritesOldWorldBeforeNativeTransition",
+      "last_finished_unix_ms": 1790482210601,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 1,
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 1.6563223,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "NaturalKoResultSettingsAttackWritesOldWorldBeforeNativeTransition",
+          "fullName": "NTSD.Test.NTSD28Q08CombatLethalPrecombatTimingEditorTests.NaturalKoResultSettingsAttackWritesOldWorldBeforeNativeTransition",
+          "state": "Passed",
+          "durationSeconds": 0.9750026,
+          "message": null,
+          "stackTrace": null,
+          "output": "Q08 result-settings full tick: noAttack=0, attack=100, nativeTimer=14, transition=0\r\n"
+        }
+      ]
+    }
+  }
+}

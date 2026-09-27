@@ -552,6 +552,145 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void OverlayLayoutSelfCheck_UsesFormalInclusiveRightEdge()
+        {
+            MethodInfo check = typeof(BattleRuntimeSelfCheck).GetMethod(
+                "CheckBattleEntityOverlayLayoutContracts",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(check, Is.Not.Null);
+            Assert.DoesNotThrow(() => check.Invoke(null, null));
+        }
+
+        [Test]
+        public void CentralNameplate_StaysWithVisibleBodyBeyondLegacyViewportEdge()
+        {
+            var cameraObject = new GameObject("Nameplate Viewport Clamp Test Camera");
+            Camera camera = cameraObject.AddComponent<Camera>();
+            camera.orthographic = true;
+            camera.orthographicSize = 5.76f;
+            camera.aspect = 16f / 9f;
+            camera.transform.position = new Vector3(-1.79f, -4.8f, -10f);
+            NTSDRenderSpace.BindWorldCamera(camera);
+            try
+            {
+                var frame = new BattlePresentationFrame();
+                Reset(frame, CreateCatalog(0));
+                char[,] labels = GetLabels(frame);
+                const string name = "Remie";
+                for (int index = 0; index < name.Length; index++)
+                    labels[0, index] = name[index];
+                AddEntity(frame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(0, 9), 101, 0, 1, 1, 0, 2,
+                    1000, 287));
+
+                var coordinator = new BattlePresentationCoordinator();
+                coordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+                coordinator.BuildCommandsForSelfCheck(frame);
+
+                Assert.That(frame.CommandCount, Is.EqualTo(name.Length));
+                Assert.That(frame.GetCommand(0).Type,
+                    Is.EqualTo(BattleRenderCommandType.OverlayGlyph));
+                Assert.That(frame.GetCommand(0).Position,
+                    Is.EqualTo(NTSDRenderSpace.CaptureViewportTransform()
+                        .ScreenPixelToWorld(978, 290, 0f)));
+
+                NTSDRenderSpace.ViewportTransformSnapshot viewport =
+                    NTSDRenderSpace.CaptureViewportTransform();
+                float halfWidth = camera.orthographicSize * camera.aspect;
+                int visibleLeft = Mathf.CeilToInt(
+                    (camera.transform.position.x - halfWidth - viewport.Left) /
+                    viewport.UnitsPerPixelX);
+                int visibleRight = Mathf.FloorToInt(
+                    (camera.transform.position.x + halfWidth - viewport.Left) /
+                    viewport.UnitsPerPixelX);
+
+                var leftFrame = new BattlePresentationFrame();
+                Reset(leftFrame, CreateCatalog(0));
+                char[,] leftLabels = GetLabels(leftFrame);
+                for (int index = 0; index < name.Length; index++)
+                    leftLabels[0, index] = name[index];
+                int leftBodyX = visibleLeft + 1;
+                AddEntity(leftFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(0, 10), 102, 0, 2, 1, 0, 2,
+                    leftBodyX, 287));
+                coordinator.BuildCommandsForSelfCheck(leftFrame);
+                Assert.That(leftFrame.CommandCount, Is.EqualTo(name.Length + 2));
+                Assert.That(leftFrame.GetCommand(0).Position,
+                    Is.EqualTo(viewport.ScreenPixelToWorld(leftBodyX - 13, 280, 0f)),
+                    "revive counter must stay at its source position");
+                Assert.That(leftFrame.GetCommand(2).Position,
+                    Is.EqualTo(viewport.ScreenPixelToWorld(visibleLeft, 290, 0f)),
+                    "nameplate must clamp to the visible left edge");
+
+                var rightFrame = new BattlePresentationFrame();
+                Reset(rightFrame, CreateCatalog(0));
+                char[,] rightLabels = GetLabels(rightFrame);
+                for (int index = 0; index < name.Length; index++)
+                    rightLabels[0, index] = name[index];
+                AddEntity(rightFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(0, 11), 103, 0, 1, 1, 0, 2,
+                    visibleRight - 1, 287));
+                coordinator.BuildCommandsForSelfCheck(rightFrame);
+                Assert.That(rightFrame.CommandCount, Is.EqualTo(name.Length));
+                Assert.That(rightFrame.GetCommand(0).Position,
+                    Is.EqualTo(viewport.ScreenPixelToWorld(
+                        visibleRight - name.Length *
+                        BattleEntityOverlayLayout.GlyphAdvance - 1,
+                        290, 0f)),
+                    "nameplate must clamp to the visible right edge");
+            }
+            finally
+            {
+                NTSDRenderSpace.ClearBoundWorldCamera(camera);
+                UnityEngine.Object.DestroyImmediate(cameraObject);
+            }
+        }
+
+        [Test]
+        public void CentralNameplate_UsesCapturedPlatformHeight()
+        {
+            BattleCommonVisualCatalog catalog = CreateCatalog(0, includeAllComLabels: true);
+            int[] offsets = { 0, -5 };
+            for (int index = 0; index < offsets.Length; index++)
+            {
+                var frame = new BattlePresentationFrame();
+                Reset(frame, catalog);
+                AddEntity(frame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(51, 8), 101, 51, 1, 2, 0, 2,
+                    205, 287, offsets[index]));
+                var coordinator = new BattlePresentationCoordinator();
+                coordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+                coordinator.BuildCommandsForSelfCheck(frame);
+
+                Assert.That(frame.CommandCount, Is.EqualTo(1));
+                Assert.That(frame.GetCommand(0).Type,
+                    Is.EqualTo(BattleRenderCommandType.OverlayGlyph));
+                Assert.That(frame.GetCommand(0).Position,
+                    Is.EqualTo(NTSDRenderSpace.ScreenPixelToWorld(
+                        205 - (3 * BattleEntityOverlayLayout.GlyphAdvance / 2),
+                        287 + offsets[index] + 3, 0f)));
+            }
+
+            var counterAndLabel = new BattleEntityOverlayRuntimeSlot(
+                0, 2, 2, 0, 2, 0, 205, 0, 287, 0, 0, 0, -5);
+            var glyphs = new BattleEntityOverlayGlyph[
+                BattleEntityOverlayLayout.MaximumGlyphCount];
+            var labels = new char[
+                BattleEntityOverlayLayout.SlotCount,
+                BattleEntityOverlayLayout.SlotLabelCharacterCapacity];
+            labels[0, 0] = 'P';
+            Assert.That(BattleEntityOverlayLayout.TryBuild(
+                in counterAndLabel,
+                labels,
+                new int[BattleEntityOverlayLayout.SlotCount],
+                glyphs,
+                out int glyphCount), Is.True);
+            Assert.That(glyphCount, Is.EqualTo(3));
+            Assert.That(glyphs[0].PixelY, Is.EqualTo(287 - 7));
+            Assert.That(glyphs[2].PixelY, Is.EqualTo(287 - 5 + 3));
+        }
+
+        [Test]
         public void DeferredSpriteMaterialization_BuildsCommandWithoutMutatingFrozenSnapshot()
         {
             Texture2D texture = null;
@@ -667,7 +806,8 @@ namespace NTSD.Test
                     entity.ZInt,
                     (int)entity.RenderOffsetX,
                     entity.CameraX,
-                    (int)entity.CenterY);
+                    (int)entity.CenterY,
+                    entity.RenderShadowOffset10C);
                 Assert.That(
                     BattleEntityOverlayLayout.TryBuild(
                         in runtime,
@@ -712,7 +852,10 @@ namespace NTSD.Test
                             binding.MaterialInstanceId,
                             binding.PixelRect,
                             binding.Pivot,
-                            binding.Key)));
+                            binding.Key),
+                        motionAnchor: glyph.Type == BattleEntityOverlayGlyphType.Counter
+                            ? BattlePresentationMotionAnchor.Body
+                            : BattlePresentationMotionAnchor.Ground));
                 }
             }
 
@@ -728,7 +871,8 @@ namespace NTSD.Test
             int objType,
             int oid,
             int x,
-            int z)
+            int z,
+            int renderShadowOffset10C = 0)
         {
             return new BattlePresentationEntitySnapshot(
                 handle,
@@ -765,7 +909,8 @@ namespace NTSD.Test
                 0,
                 0,
                 false,
-                false);
+                false,
+                renderShadowOffset10C: renderShadowOffset10C);
         }
 
         private static BattlePresentationEntitySnapshot CreatePlatformShadowEntity(int offset)
@@ -1010,6 +1155,7 @@ namespace NTSD.Test
             in BattleRenderCommand actual)
         {
             Assert.That(actual.Type, Is.EqualTo(expected.Type));
+            Assert.That(actual.MotionAnchor, Is.EqualTo(expected.MotionAnchor));
             Assert.That(actual.Handle, Is.EqualTo(expected.Handle));
             Assert.That(actual.StableId, Is.EqualTo(expected.StableId));
             Assert.That(actual.VisualDataId, Is.EqualTo(expected.VisualDataId));

@@ -1,0 +1,15 @@
+# NTSD28-Q08-ARMOR-KO-RESULT-FLOW-001
+
+Status: `VERIFIED_SCOPED`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q08`. Predecessor: `NTSD28-Q08-ARMOR-LETHAL-FULL-TICK-001 / VERIFIED_SCOPED` proves 26-tick selected armor KO state/event equality but does not export Unity result-flow state.
+
+Authority and fixed fixture: unchanged root Logan EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, paired `BattleFlow28::step` and `GameSession28::step`, corrected HP3 LFR playback with explicit initial action 110, formal `resources/runtime`. Original Unity Editor uses the same strict HP3 scenario, selected formal LoganRuntime root and 26-tick Manual complete Driver. The formal root trace's `battleFlow` object is the comparison source; project-native mode Asset and approved result-page visual exception remain unchanged.
+
+Declared code ownership before edit: only `Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs`, to add an optional, exact-Q08-schema result-flow sidecar to the existing request/exporter. Capture `NativeResultTimer`, output timer, phase, transition state, and living group mask after each completed tick. Preserve old request signatures, Q07 schemas, other outputs, production battle and UI. No DAT/PNG/Scene/Prefab/ProjectSettings/mode Asset or nonbattle edit. Evidence artifacts under `artifacts/diagnostics/NTSD28-Q08-ARMOR-KO-RESULT-FLOW-001/` must not overwrite prior Q08/Q07 files.
+
+Sequence: recheck original Editor idle/compilation and protected hashes; edit only declared diagnostic script; refresh that Editor (no second project/Editor, no computer-use); run one exact HP3 request with result-flow sidecar and compare every completed tick 1–26 to the saved corrected formal root trace. Keep a first-difference report, including no-difference if true. A production mismatch requires a separate Task/Change before any runtime code edit.
+
+Acceptance: original Editor compiles 0 C# errors, exact request says PASS, sidecar covers 26 rows and the KO tick16→tick17 result start, mapped formal/Unity timer/phase/transition/living-group fields are compared without extrapolating to timer80/101/350. Run Change Ledger validator and `git diff --check`; protected Battle/Menu/ProjectBattleModeConfig hashes remain stable. This closes only this limited Q08 result-entry check, not Q08 or BATCH-04.
+
+Rollback: under repo rules, revert only this new optional diagnostic sidecar hunk if necessary; preserve existing dirty work and all prior evidence.
+
+Exit: original Editor newly compiled the optional exporter and emitted the exact 26-tick result-flow sidecar with `PASS`. The corrected formal root replay and Unity agree on all five mapped flow values for ticks 1–26, 130/130 with no first difference. At fatal tick16 timer remains 0; tick17 starts timer1/winner1. See `artifacts/diagnostics/NTSD28-Q08-ARMOR-KO-RESULT-FLOW-001/ACCEPTANCE.md`. This closes only the fixed-fixture result-entry check; timer80/101/350, Q08 and BATCH-04 stay open.

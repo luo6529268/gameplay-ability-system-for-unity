@@ -1,0 +1,104 @@
+{
+  "display-green": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "b08fff621d3f4ed7a15f417d90a01fb8",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790473025104,
+      "finished_unix_ms": 1790473034827,
+      "last_update_unix_ms": 1790473034827,
+      "progress": {
+        "completed": 3,
+        "total": 8563,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790473034378,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+        "last_finished_unix_ms": 1790473034378,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  },
+  "counter-copy-green": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "61cd9db145c5490d88994ece4ad26ee1",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790473324586,
+      "finished_unix_ms": 1790473334437,
+      "last_update_unix_ms": 1790473334437,
+      "progress": {
+        "completed": 1,
+        "total": 8563,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790473333467,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+        "last_finished_unix_ms": 1790473333988,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.0961368,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+            "fullName": "NTSD.Test.BattlePresentationDisplayMotionEditorTests.ReviveLivesCounterUsesHeightWhileNameplateUsesGroundMotion",
+            "state": "Passed",
+            "durationSeconds": 0.5169314,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  },
+  "publisher-green": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "2dacee5b29d84cf8898d632deb2bcb26",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790473211373,
+      "finished_unix_ms": 1790473221384,
+      "last_update_unix_ms": 1790473221384,
+      "progress": {
+        "completed": 1,
+        "total": 8563,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790473220151,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationCommandWriterEditorTests.OptimizedWriter_MatchesReferenceForWords5ComCounterAndBracket",
+        "last_finished_unix_ms": 1790473220938,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

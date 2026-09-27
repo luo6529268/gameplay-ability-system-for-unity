@@ -170,44 +170,17 @@ namespace NTSD.Simulation.Ecs
                 zMax,
                 world.FixedViewRunVerticalDistanceScale);
 
-            double x = runtime.X;
-            if (slot >= 20)
-            {
-                if (x < -100.0)
-                    x = -100.0;
-                if (x > baseStageWidth + 100.0)
-                    x = baseStageWidth + 100.0;
-            }
-            else
-            {
-                int relationTeam = runtime.RelationTeam;
-                if (relationTeam == 5)
-                {
-                    if (x < -300.0)
-                        x = -300.0;
-                }
-                else if (x < 0.0)
-                {
-                    x = 0.0;
-                }
-
-                if (x > baseStageWidth)
-                    x = baseStageWidth;
-                if (xMaxOverride > 0 &&
-                    x > xMaxOverride &&
-                    relationTeam != 5 &&
-                    runtime.HitStop == 0)
-                {
-                    x = xMaxOverride;
-                }
-            }
-
+            int selectedModeStageGate50 =
+                world.Runtime?.SelectedModeStageGate50 ?? 0;
+            double x = NTSDEntityRuntime.ClampSelectedModeType0StageX(
+                runtime.X, slot, runtime.RelationTeam, runtime.HitStop,
+                baseStageWidth, xMaxOverride, selectedModeStageGate50);
             runtime.X = x;
             runtime.XInt = (int)x;
             // Alignment contract: NTSD28-USER-SOURCE-CHARACTER-STAGE-X-001.
             runtime.ClampSourceRuleCharacterX(
                 slot, runtime.RelationTeam, runtime.HitStop,
-                baseStageWidth, xMaxOverride);
+                baseStageWidth, xMaxOverride, selectedModeStageGate50);
             return true;
         }
 

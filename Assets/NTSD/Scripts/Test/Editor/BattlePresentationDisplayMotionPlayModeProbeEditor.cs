@@ -18,6 +18,8 @@ namespace NTSD.Test.Editor
     {
         private const string MenuPath =
             "NTSD/Battle Diagnostics/Q09/Run Display Motion Live Probe";
+        private const string CounterMenuPath =
+            "NTSD/Battle Diagnostics/Q09/Run Revive Lives Anchor Probe";
         private static readonly int[] RenderFps = { 30, 60, 120 };
         private static readonly string ResultPath = Path.GetFullPath(Path.Combine(
             Application.dataPath, "..", "artifacts", "diagnostics",
@@ -45,12 +47,32 @@ namespace NTSD.Test.Editor
         private static SpriteRenderer legacyShadow;
         private static double legacyFirstBodyX;
         private static double legacyFirstShadowX;
+        private static bool counterOnly;
+        private static double originalY;
+        private static int originalHp2Orig;
+        private static bool counterStateChanged;
+        private static BattlePresentationFrame counterPublishedFrame;
+        private static bool hasFirstLabel;
+        private static float firstCounterY;
+        private static float firstLabelY;
 
         [MenuItem(MenuPath)]
         public static void RunFromMenu()
         {
+            Start(false);
+        }
+
+        [MenuItem(CounterMenuPath)]
+        public static void RunCounterFromMenu()
+        {
+            Start(true);
+        }
+
+        private static void Start(bool runCounterOnly)
+        {
             EditorApplication.update -= Observe;
-            File.WriteAllText(ResultPath, "RUNNING\n");
+            File.WriteAllText(ResultPath,
+                runCounterOnly ? "RUNNING counter-only\n" : "RUNNING\n");
             if (!EditorApplication.isPlaying)
             {
                 Finish("FAIL Play Mode is not active.");
@@ -64,6 +86,8 @@ namespace NTSD.Test.Editor
             fpsIndex = 0;
             pausedByProbe = false;
             switchedBackend = false;
+            counterOnly = runCounterOnly;
+            counterStateChanged = false;
             deadline = EditorApplication.timeSinceStartup + 180.0;
             lastStatusLogTime = 0.0;
             EditorApplication.update += Observe;
@@ -133,7 +157,16 @@ namespace NTSD.Test.Editor
                         driver.DedicatedSimulationWorkerTickInFlightForDiagnostics)
                         return;
                     fixedTick = driver.CurrentTickIndex;
-                    BeginFpsCase();
+                    if (counterOnly)
+                        BeginCounterCase();
+                    else
+                        BeginFpsCase();
+                    return;
+                }
+
+                if (phase == 5)
+                {
+                    ObserveCounterCase();
                     return;
                 }
 
@@ -230,6 +263,128 @@ namespace NTSD.Test.Editor
             }
 
             throw new InvalidOperationException("The actor has no captured body command.");
+        }
+
+        private static void BeginCounterCase()
+        {
+            renderFpsField.SetValue(driver, 120);
+            world.ConfigureBattlePresentationDisplayPolicy(
+                120, SimulationConstants.SIM_DT);
+            originalY = actor.Runtime.Y;
+            originalHp2Orig = actor.HP2Orig;
+            BattlePresentationFrame previous = world.BattlePresentation.PublishedFrame;
+            actor.HP2Orig = 2;
+            actor.Runtime.Y = originalY + 10;
+            counterStateChanged = true;
+            actor.Runtime.SyncIntegerPosition();
+            actor.RefreshRuntimeSnapshot();
+            world.BattlePresentation.BeginFrame(world, previous.TickIndex + 1);
+            counterPublishedFrame = world.BattlePresentation.PublishedFrame;
+            Check(counterPublishedFrame.PreviousMotionTickIndex == previous.TickIndex,
+                "Counter motion history is not adjacent.");
+            Check(TryPublishedActor(counterPublishedFrame,
+                    out BattlePresentationEntitySnapshot publishedActor) &&
+                  publishedActor.HP2Orig == 2,
+                "The controlled revive-lives value is missing from the logical snapshot.");
+
+            BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
+            BattlePixelFramePlan first = world.CurrentPixelFramePlan;
+            Check(first.Owner == BattlePixelFrameOwner.Central,
+                $"Counter central submission unavailable: {first.Reason}");
+            Check(TryOverlayCommand(first.CapturedFrame,
+                BattlePresentationMotionAnchor.Body, out BattleRenderCommand firstCounter),
+                "The first captured counter is missing.");
+            firstCounterY = firstCounter.Position.y;
+            hasFirstLabel = TryOverlayCommand(first.CapturedFrame,
+                BattlePresentationMotionAnchor.Ground, out BattleRenderCommand firstLabel);
+            if (hasFirstLabel)
+            {
+                firstLabelY = firstLabel.Position.y;
+            }
+
+            File.AppendAllText(ResultPath,
+                $"counter firstY={firstCounterY:R} " +
+                $"label={hasFirstLabel} " +
+                $"alpha={BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world):R}\n");
+            dueTime = EditorApplication.timeSinceStartup + 0.05;
+            deadline = EditorApplication.timeSinceStartup + 5.0;
+            phase = 5;
+        }
+
+        private static void ObserveCounterCase()
+        {
+            if (EditorApplication.timeSinceStartup < dueTime)
+                return;
+
+            BattlePixelFramePlan later = world.CurrentPixelFramePlan;
+            Check(TryOverlayCommand(later.CapturedFrame,
+                BattlePresentationMotionAnchor.Body, out BattleRenderCommand laterCounter),
+                "The later captured counter is missing.");
+            Check(Math.Abs(laterCounter.Position.y - firstCounterY) > 1e-6,
+                "Counter did not move across display alpha.");
+            if (hasFirstLabel)
+            {
+                Check(TryOverlayCommand(later.CapturedFrame,
+                    BattlePresentationMotionAnchor.Ground, out BattleRenderCommand laterLabel),
+                    "The later captured ground label is missing.");
+                Check(Math.Abs(laterLabel.Position.y - firstLabelY) < 1e-6,
+                    "Ground label moved with the actor height.");
+            }
+            Check(ReferenceEquals(world.BattlePresentation.PublishedFrame,
+                    counterPublishedFrame) &&
+                  TryPublishedActor(counterPublishedFrame,
+                      out BattlePresentationEntitySnapshot unchangedActor) &&
+                  unchangedActor.HP2Orig == 2,
+                "Display sampling changed the published logical snapshot.");
+            Check(driver.CurrentTickIndex == fixedTick &&
+                  Math.Abs(actor.Runtime.Y - (originalY + 10)) < 1e-6,
+                "Display sampling changed the logic tick or actor height.");
+            File.AppendAllText(ResultPath,
+                $"counter laterY={laterCounter.Position.y:R} " +
+                $"alpha={BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world):R}\n");
+            Finish("PASS counter Body Y sampled; Label Ground Y unchanged when present; published and logic truth unchanged.");
+        }
+
+        private static bool TryOverlayCommand(
+            BattlePresentationFrame frame,
+            BattlePresentationMotionAnchor anchor,
+            out BattleRenderCommand result)
+        {
+            if (frame != null)
+            {
+                for (int index = 0; index < frame.CommandCount; index++)
+                {
+                    BattleRenderCommand command = frame.GetCommand(index);
+                    if (command.Type == BattleRenderCommandType.OverlayGlyph &&
+                        command.RuntimeSlot == actorSlot &&
+                        command.MotionAnchor == anchor)
+                    {
+                        result = command;
+                        return true;
+                    }
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        private static bool TryPublishedActor(
+            BattlePresentationFrame frame,
+            out BattlePresentationEntitySnapshot result)
+        {
+            for (int index = 0; index < frame.EntityCount; index++)
+            {
+                BattlePresentationEntitySnapshot entity = frame.GetEntity(index);
+                if (entity.RuntimeSlot == actorSlot)
+                {
+                    result = entity;
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
         }
 
         private static void BeginLegacyCase()
@@ -348,6 +503,14 @@ namespace NTSD.Test.Editor
         {
             EditorApplication.update -= Observe;
             File.AppendAllText(ResultPath, result + "\n");
+            if (counterStateChanged && actor != null && EditorApplication.isPlaying)
+            {
+                actor.HP2Orig = originalHp2Orig;
+                actor.Runtime.Y = originalY;
+                actor.Runtime.SyncIntegerPosition();
+                actor.RefreshRuntimeSnapshot();
+            }
+            counterStateChanged = false;
             if (switchedBackend && world != null && EditorApplication.isPlaying)
                 world.SetBattlePresentationBackend(originalBackend);
             switchedBackend = false;

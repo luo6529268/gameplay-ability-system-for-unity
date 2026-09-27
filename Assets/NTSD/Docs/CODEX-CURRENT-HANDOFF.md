@@ -1,5 +1,125 @@
 # 2026-09-25 恢复后当前 handoff（覆盖下方候选期措辞）
 
+> 2026-09-27 Q09/P-13 `NTSD28-Q09-HAN-EARTHQUAKE-SESSION-TRACE-001 / VERIFIED_SCOPED_DIRECT_FRAME_CONSUMER`：当前正式Han DAT经配对playable全Session直接frame150初态在tick1发布背景(+2,0)、tick2 frame151归(0,0)，owner0；两条间接入口149因无CPoint关系退action0、264停269无落地，各FAIL留档。g++最终0错，根EXE仅重核身份未运行设备画面，Unity未编译/Play，双Scene SHA不变，Ledger935/41及diff check PASS。只关闭当前DAT消费门；自然技能/Unity背景消费者/P-13/Q09仍开。详同ID ACCEPTANCE；下方PLANNED是前态。
+
+> 2026-09-27 `NTSD28-Q09-HAN-EARTHQUAKE-SESSION-TRACE-001 / PLANNED`：在Q10两项用户决策等待期间独立推进Q09/P-13。脚本前Task/Record/Ledger/STATE完备；唯一拟写Tools/NTSD28Q09Diagnostics/han_earthquake_session_trace.cpp，以当前正式Han DAT、受控frame149、完整配对playable Session逐tick观察150/151和背景专用偏移。仅中途初态诊断，不能称自然技能/根EXE画面或Unity消费者已过；不碰背景DAT、Scene、生产或非战斗。
+
+> 2026-09-27 Q10/O-05 `EXACT_CANDIDATE_PREPARED / USER_AUDIO_SCOPE_CONFIRMATION_PENDING`：正式根EXE SHA复核，978个帧/sound.dat/对象武器/项目mode引用的正式WAV候选33,300,049字节已出逐项源SHA manifest（A335C409...B566FA25），正式978/978、当前暂存0/978，旧Sound同路径75；余3个m_cancel/m_end/m_pass无已证战斗reader而排除。因AGENTS/D-023不自动授权整批WAV，已异步问用户是否批准仅新增该批并配套战斗播放器读取路径；未复制或改代码。答复前可推进其它独立Q项，不碰旧Sound、Menu、WMA/BGM。详Q10-FRAME-SOUND-ENTRY-READINESS-001/FORMAL-BATTLE-WAV-DEPLOYMENT-CANDIDATE-20260927.md。O-05/Q10/总目标开放。
+
+> 2026-09-27 Q10/O-02 `NTSD28-Q10-AUDIORENDERER-MATRIX-CALIBRATION-001 / VERIFIED_SCOPED_UNITY_OUTPUT`：原Editor编译0错/保存Menu Play五组mono AudioRenderer主输出校准完成；53/47实测0.52992970/0.46993765、41/59实测0.40998980/0.58998531，误差均<0.00008。v1采样失败、v2反算RED和v3 JSON均保留；captureStopped、临时source/clip清理、退出Play idle Menu、双Scene SHA不变。仅校准门关闭；用户固定全景相机/D-024物理位移例外下的**左右定位策略已异步询问用户**，待选择可见位置比例或正式虚拟相机后，新建战斗专用生产Task/Change；不先改事件坐标或生产voice。正式EXE设备输出、其它cue、O-02/Q10/BATCH-05及总目标开放。详同ID ACCEPTANCE/NEXT-PRODUCTION-GATE。下方CODE_WRITTEN/PLANNED为历史快照。
+
+> 2026-09-27 `NTSD28-Q10-AUDIORENDERER-MATRIX-CALIBRATION-001 / CODE_WRITTEN`：仅新Editor探针，五组mono输出RMS实测/退出清理/结果拒覆盖已写。下一原Editor经现有UnityMCP refresh编译并在保存Menu Play运行，核JSON、Scene SHA及停止录制；不改生产音频或DAT。O-02/Q10仍开。
+
+> 2026-09-27 当前Q10/O-02 `NTSD28-Q10-AUDIORENDERER-MATRIX-CALIBRATION-001 / PLANNED`：Task/Change/Ledger已先于单个Editor测试脚本登记。现有原Editor PID11944 idle Menu、UnityMCP TCP桥6402 ping/状态成功；Unity CLI因无Pipeline不接，临时代码执行器本机报错。下一只测Unity mono 1→2实际输出校准、异常清理及Scene SHA，不改生产、DAT或相机。正式根EXE设备输出与通用声像仍待，O-02/Q10开放。
+
+> 2026-09-27 当前Q10/O-02 source门 `NTSD28-Q10-NATIVE-STEREO-CAMERA-TRACE-001 / VERIFIED`：正式根EXE SHA、paired source 28 core+2 playable编译0错；受控mode0/stage23、Naruto X620/Lee X1200右键tap2/release2/hold，003 tick6源X649/camera0/53:47，004 tick11源X729/camera0/41:59。前轮Unity真实Play两cue源规则X正好649/729，但送声事件物理X664/787、mono voice居中。正式stage23宽1330只作native camera解释，用户排除背景DAT不得接入Unity。源码受控≠根EXE同整World/RNG/设备输出；下一Q10战斗专用坐标+混音输出合同与RED/Play，O-02/Q10/BATCH-05/总目标仍开放。详同ID ACCEPTANCE。
+
+> 2026-09-27 当前独立子包 `NTSD28-Q10-NATIVE-STEREO-CAMERA-TRACE-001 / CODE_WRITTEN`：正式根EXE headless/LFR无camera/声道矩阵；脚本前Task/Change/Ledger已建，Tools单个paired playable受控Naruto/Lee诊断源已写，原版DAT/VFS只读。下一编译并输出cameraX、event规则X和左右整数比例；若003/004不达则保留全行/失败。不能伪称根EXE同状态听感；Unity生产/Scene/非战斗不动。
+
+> 2026-09-27 当前Q10/O-02限定出口 `NTSD28-Q10-STEREO-SELECTED-EVENT-PROBE-001 / VERIFIED`：原Editor保存Menu→正式内容Battle真实物理D，003 tick8 event/物理X664/源规则X649，004 tick13 X787/729；两mono声音池voice均2D、pan0、volume1且播放，确认Unity所选声像不随位置。新JSON SHA `15E137B9...A5B70C2`，旧cue JSON不变；Battle卸、Editor idle Menu，双Scene SHA不变。正式同条件camera/event、固定全景例外下声像映射、左右声道输出和其它cue仍待；**O-02/Q10/BATCH-05/总目标不关闭**，Q07按有限出口/Q08独立门。详同ID ACCEPTANCE和静态首差REPORT。
+
+> 2026-09-27 当前执行子包 `NTSD28-Q10-STEREO-SELECTED-EVENT-PROBE-001 / CODE_WRITTEN`：Task/Change/Ledger先于脚本；既有Editor探针新增独立菜单/JSON并采两cue的event WorldX、角色源规则/物理X、真实voice spatialBlend/panStereo/channels/volume，旧结果路径保持。下一用原Editor编译与真实Play，并核双Scene哈希/validator；formal camera与声道输出仍待，不以此关O-02/Q10。生产/DAT/Scene/非战斗不改。
+
+> 2026-09-27 Q10/O-02 下一门：只读核正式playable战斗音效按规则世界X-动态战斗相机X设置mono左右矩阵，Unity所选003/004 fallback为2D居中，确认通用后端静态首差。现有真实Play没有记录逐cue事件X、源规则X、正式相机X或可听声道；先补这些定向证据与用户固定全景视口映射，再建立精确生产Task/Change，不能拿声音已开声当输出对齐，也不改DAT/Scene/非战斗。报告 `artifacts/diagnostics/NTSD28-Q10-STEREO-MATRIX-FIRST-DIFF-20260927/REPORT.md`；Q07有限出口和Q08独立门保持，O-02/Q10/BATCH-05/总目标开放。本轮仅文档审计。
+
+> 2026-09-27 Q10选中鸣人奔跑cue `NTSD28-Q10-SELECTED-RUN-CUE-PLAY-001 / VERIFIED`限定Unity Play：正式根EXE身份、所选nar.dat同SHA；原Editor Menu→正式内容Battle物理D双击，P1 X620→787，003/004事件与主线程声音回调各在tick8/13，预热clip/真实声音池0→1→2并播放。Battle已卸、Editor idle非Play，双Scene SHA保持。脚本前Task/Change/Ledger完备，只有新Editor诊断脚本/meta；两WAV容器逐SHA不同但格式与完整PCM同值。正式输出增益/时序、BGM/WMA及O-01~03/Q10整体仍待。详同ID ACCEPTANCE和PCM-AUDIT，Q07有限出口保持。
+
+> 2026-09-27 Q10逐tick声音提交 `NTSD28-Q10-PER-TICK-SOUND-PUBLICATION-001 / RUNTIME_PENDING`：原Editor RED 后，生产Driver在成功本地tick或匹配worker发布后由主线程派发；新增封存LocalFreeRun有声worker发布1/1、最终四项声音邻接4/4 PASS，sink只在主线程对匹配tick回调一次。双Scene SHA稳定；下一窄门为正式内容Battle真实双tick cue，正式EXE听感及BGM/WMA仍单列。详同ID `ACCEPTANCE-PENDING.md`。Q07有限出口、O-01/O-03/Q10和总目标均开放。
+
+> 2026-09-27 Q10/O-03逐tick声音时序首差：正式playable每成功tick调音量后立即向XAudio2提交本tick战斗事件，下一tick调音量会重调前tick已开voice；Unity晚到LateUpdate把两tick音效一起开。不能用事件冻结不同增益冒充等价。实际设备听感未测；下一精确包先验双tick提交/worker与活动voice，不碰BGM/WMA或非战斗。详`artifacts/diagnostics/NTSD28-Q10-AUDIO-PER-TICK-PUBLICATION-AUDIT-20260927/REPORT.md`。Q07有限出口不变。
+
+> 2026-09-27 Q10物理音量门 `NTSD28-Q10-NATIVE-BATTLE-VOLUME-PHYSICAL-PLAY-001 / VERIFIED`（限定）：原Editor Menu→正式内容Battle，物理F11+F2 tick2/100→tick3/99；F11+F12+F2按F12优先 tick4/100；暂停无tick及释放保持。探针卸Battle/退出Play，双Scene SHA稳定、Ledger/diff PASS。详同ID ACCEPTANCE；worker、双tick各cue增益、BGM/WMA和同条件听感待，O-03/Q10不关闭。Q07§0.14.4有限出口不变。
+
+> 2026-09-27 Q10/O-03最新：原Editor重编译后旧声音事件夹具3/3与新音量2/2均PASS；旧零事件原因是假实体缺帧被Q06物理保护跳过，测试仅加正FrameDelay，生产/断言不动。先前F2宿主1/1和路由2/2保留。实际Battle物理F11/F12/F2 Play、worker发布、双tick各cue增益、BGM/WMA及听感仍待；O-03/Q10不关闭，Q07§0.14.4有限出口保持。详同ID ACCEPTANCE-PENDING。
+
+> 2026-09-27 `NTSD28-Q10-NATIVE-BATTLE-VOLUME-001 / RUNTIME_PENDING`：原Editor新音量/宿主与声音池聚焦3/3、既有F11/F12物理路由2/2；test-first两个实质RED保留。旧声音事件批处理3项当前零事件FAIL，首个丢失写者未诊断，不报回归通过或归咎本包。原Scene哈希保持、Ledger/diff通过。下一窄门是实际Battle物理F11/F12与暂停F2、worker发布；双tick各cue增益及BGM/WMA另列Q10后继，O-03/Q10不关。Q07§0.14.4有限出口不变，详`artifacts/diagnostics/NTSD28-Q10-NATIVE-BATTLE-VOLUME-001/ACCEPTANCE-PENDING.md`。
+
+> 2026-09-27 `NTSD28-Q10-NATIVE-BATTLE-VOLUME-001 / CODE_WRITTEN`：原Editor指定测试RED 1例缺播放器音量属性，生产仅按Task改Driver成功LocalFreeRun/worker发布和战斗SoundPlayer SFX整数dB/活动voice重调，测试脚本只加单项。下一须原Editor编译、指定GREEN、相关声音池邻接、物理F11/F12与暂停F2 Play；BGM/WMA、双tick各cue瞬时增益未解决，O-03/Q10不能关。Driver原Q08 dirty hunks保留；Q07有限出口不变。
+
+> 2026-09-27 `NTSD28-Q10-NATIVE-BATTLE-VOLUME-001 / PLANNED`：独立Q10音量接线的Task/Change/Ledger已先立，三脚本精确范围为`SimulationTickDriver`成功LocalFreeRun tick及worker发布、战斗`NTSDSoundPlayer` SFX增益/活动voice重调、现有聚焦Editor测试。须保留Driver原Q08 stage-gate dirty hunks；BGM/WMA与同Update双tick各cue瞬时增益另立后继，不得因SFX通过关O-03/Q10。Q07仍按§0.14.4有限出口。本条为脚本前状态。
+
+> 2026-09-27 Q10/O-03 F11/F12只读首差已归档：正式Host每成功tick（含F2单步）调整百分比，F12双按优先，活动SFX/BGM立即重调；Unity physical latch/router及Driver连续命令存在，但无播放端消费。`NTSDSoundPlayer`无百分比/活动voice重调，BGM生产owner未识别。下一独立Q10实现须先建精确Task/Change，验证成功tick、暂停/worker、SFX活动voice、Manual/Lockstep和设置系统不变；BGM/WMA另有依赖，仅SFX不关闭O-03。报告`artifacts/diagnostics/NTSD28-Q10-NATIVE-VOLUME-FIRST-DIFF-20260927/REPORT.md`。Q07按§0.14.4有限出口，不重跑既过矩阵；Q08独立门、Q09/Q10/BATCH-05及总目标仍开。本轮只读审计/文档，无脚本/DAT/音频/Scene修改或Unity运行。
+
+> 2026-09-27 P-13权威源码新构建/运行：按正式core build清单编译原`render_snapshot_tests.cpp`到项目诊断目录，原版根不写，PASS/退出0；现有Han无自然LFR且根headless trace不暴露earthquake渲染偏移，故不得将其冒充根EXE自然GPU。P-13保持待自然触发/Unity Play。Q08/F4现状已按当前代码和总表旧行复核：`NTSD28-Q08-F4-PLAYER-CLOSE-OWNER-001`已接生产Battle宿主并有两次Windows Player物理F4限定验收；早期`F4-CLOSE-OWNER-AUDIT-001`“仅诊断消费”是实施前历史，不得重复实现。其录像save-pending保护因Unity无对应owner仍待，Q08其余正式可达mode/结果/事件独立继续。Q07有限出口、Q08/Q09/BATCH-04/05及总目标开放；本轮仅诊断产物/文档。详P-13报告及F4 Player `ACCEPTANCE.md`。
+
+> 2026-09-27 Q09/P-13下一窄门：只读复核正式`NativeEarthquake28`→Session snapshot→D3D11，确认只偏移背景layer、不偏移实体；正式所选Han OID726/727含55052→55050。Unity目前仅有`SessionEarthquake` pass标识，项目自己的Map Sprite及固定取景已接场景，未见背景震动视觉consumer。先取自然技能/同tick正式可观察首差和原Editor背景/实体相对画面，再建精确Task/Change；不得搬原版背景/模式DAT、移动全局相机或改战斗逻辑位置。Q07有限出口/Q08独立门/Q09/BATCH-05/总目标仍开。本轮只更新文档；报告在`NTSD28-Q09-P13-EARTHQUAKE-AUTHORITY-AUDIT-20260927/REPORT.md`。
+
+> 2026-09-27 Q09/P-10 `NTSD28-Q09-NAMEPLATE-GAMEVIEW-PHYSICAL-001 / VERIFIED`限定Unity屏幕帧：复用原Editor保存Menu→AppManager正式内容及物理D，P1 X620→865；完整tick43中央本体/阴影/字形同帧，Unity `ScreenCapture`真实Game View 1920×1080 PNG含项目背景/HUD/双角色。投影X810.2376附近蓝字形X805–815，旧794候选X739附近同色0；完整JSON/PNG与SHA在Q09视口报告。原Editor已退出Play idle且双Scene SHA稳定。正式根EXE GUI报告未提供同视口图像，禁止用这个Unity图关P-10/Q09；下一找当前正式EXE可观察的同视口画面途径，若没有则继续独立Q09非例外分支，不用computer-use或候选EXE替代权威。Q07有限出口和Q08独立门保持；生产/DAT/图片/Scene/相机/模式/非战斗不改。
+
+> 2026-09-27 Q09/P-10下一门 `NTSD28-Q09-NAMEPLATE-GAMEVIEW-PHYSICAL-001 / PLANNED`：既有自然物理D同tick中央命令已过；新精确Task/Change/Ledger已在脚本前建立，仅扩展现有Editor诊断脚本的单独菜单路径，用Unity ScreenCapture取得原Editor真实Game View PNG并记录投影/同tick，不用Camera.Render。若Game View不可用只报诊断前置失败。Q07有限出口和Q08独立出口不重复旧案例；Q09、正式根EXE同视口及总目标仍开放，生产/DAT/图片/Scene/相机/模式/非战斗不改。
+
+> 2026-09-27 Q09/P-10 `NTSD28-Q09-NAMEPLATE-NATURAL-PLAY-001 / VERIFIED`限定自然命令门：原Editor保存Menu→生产预热/AppManager Battle，所选正式LoganRuntime鸣人P1物理D X620→865；完整tick43发布/中央捕获/Driver同tick，P1 body/Shadow/OverlayGlyph均有，名牌首字形像素X861及世界X -3.387465238571167与当前相机可见[-3,2044]的独立公式精确一致。X853/tick41旧FAIL因Unity现有HitStop35闪烁门而非sprite缺失，原始JSON全保留。原Editor已卸Battle/退出Play且双Scene SHA稳定，生成Editor编译0错。下一仅按§0.14/Q09-P-10补真实合成GPU及正式EXE同视口对照；Q07有限出口与Q08独立出口不重复旧矩阵，Q07/Q08/Q09/总目标保持开放。只增新Editor诊断脚本/meta，生产/DAT/图片/Scene/相机/模式/非战斗未动。
+
+> 2026-09-27 Q09/P-10 `NTSD28-Q09-NAMEPLATE-NATURAL-PLAY-001`第二次原Editor Menu→Battle：正式鸣人P1物理D X620→853，tick41发布/捕获同tick，slot0 OverlayGlyph/Ground名牌及WORDS sheet1`1`绑定真实存在；无Entity body命令，实体快照HasCurrentFrame/EntityVisible均true，原始`original-menu-body-missing-second-fail.json`保留。下一仅补诊断的state/pic/hit-stop/选中sprite catalog，不先归咎名牌或修改生产。自动退出Play、双Scene SHA保持；Q07/Q08/Q09总目标开放。
+
+> 2026-09-27 Q09/P-10菜单入口Play自然越界已到P1 X620→853/38观察tick、发布与中央捕获tick41；`NTSD28-Q09-NAMEPLATE-NATURAL-PLAY-001`首次命令捕获因合并body/label缺失断言FAIL，原始`original-menu-natural-command-first-fail.json`保留。原Editor自动有序返回idle Menu、双Scene SHA稳定。下一仅在该诊断脚本加body/label分离、slot0命令和WORDS绑定证据，再判生产缺口或探针误选；不改DAT/生产/Scene/非战斗。
+
+> 2026-09-27 Q09/P-10自然名牌探针首轮 `NTSD28-Q09-NAMEPLATE-NATURAL-PLAY-001 / IN_PROGRESS`：原Editor直开Battle虽正式LoganRuntime和Running，但slot0标签NUL，输入前FAIL、退出Play及双Scene SHA稳定；不能称视口生产首差。Task/Change在同一新诊断脚本修改前改为清洁Menu预热→AppManager匹配配置→Additive Battle生成真实标签，再物理方向键走过794并同tick核中央命令。生产/DAT/Scene/非战斗不改；Q07/Q08/Q09总目标开放。
+
+> 2026-09-27 Q09/P-10下一门 `NTSD28-Q09-NAMEPLATE-NATURAL-PLAY-001 / PLANNED`：上个修复只有受控命令2/2；新精确Task/Change/Ledger已在脚本前建立，仅新增原Editor Play诊断入口。用现有物理Input System方向键让正式内容P1自然走过旧794边界，同tick对照中央body/名牌命令与固定相机可见区；不得手写角色位置。根EXE像素及整个Q09仍待；Q07/Q08独立出口不重复测试。
+
+> 2026-09-27 Q09/P-10 `NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-001 / FOCUSED_TEST_PASS`：原Editor定向RED后，通用叠字布局按当前固定相机可见逻辑X夹取；主/邻命令2/2及聚焦SelfCheck1/1通过，生成Editor编译0错、双Scene SHA保持。后续只补所选正式内容自然同tick名牌/Game-view及正式EXE同视口，不重跑Q07代表矩阵；Q07/Q08/Q09/总目标仍开放。详同ID Task/Record和`NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-AUDIT-20260927/REPORT.md`。
+
+> 2026-09-27 Q09/P-10视口夹取实现包`NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-001 / PLANNED`：正式公式X978/Unity当前749、原Editor组件可见区已存JSON；三精确脚本路径的Task/Change/Ledger已先建。下一先原Editor焦点RED，随后动态可见区夹取和定向GREEN；自然Game-view/正式EXE仍待，Q07/Q08/Q09/总目标开放。
+
+> 2026-09-27 Q09/P-10视口夹取候选：正式按当前camera.width、Unity旧布局写死794；五字母/X1000公式落点978对749。固定完整背景例外下须先在原Battle Scene量可见逻辑区及同tick body/label，不能直接写1333/2048。仅只读报告`NTSD28-Q09-NAMEPLATE-VIEWPORT-CLAMP-AUDIT-20260927/REPORT.md`，未改脚本/资源/Scene；P-10/Q09及总目标开放，Q07有限出口和Q08独立出口不变。
+
+> 同候选原Editor只读组件补证：相机aspect1.777777791/ortho5.759999752、中心X=-1.79，启用边界左端X=-12.000724945，现行映射可见逻辑X[-2.92747,2045.07246]；X1000 body与X978名牌均在画内，Unity旧夹取X749偏229。原始五组件JSON在同ID诊断目录；Editor状态仍报Play切换旧序号，不干预或跑测试。下一门同tick名牌命令；无生产/Scene改动。
+
+> 2026-09-27 独立Q09/P-10平台名牌高度 `NTSD28-Q09-NAMEPLATE-PLATFORM-HEIGHT-001 / FOCUSED_TEST_PASS`：原Battle正式OID56 offset=-5已可达；原Editor新命令RED期望世界Y-4.90/实际-4.95，接入已冻结快照offset后GREEN2/2，追加counter不随动/label随动1/1。生成Editor工程0错，自然合成GPU与正式EXE同视口待。Q07有限出口及Q08独立mode/结果继续按§0.14.4，不重跑旧案例；P-10/Q09/总目标仍开。详同ID ACCEPTANCE。
+
+> 2026-09-27 Q09/P-10新已可达首差 `NTSD28-Q09-NAMEPLATE-PLATFORM-HEIGHT-001 / PLANNED`：正式名牌Y为Z+10C+3，原Battle平台target曾产生10C=-5，Unity当前叠字未读取已捕获10C。已先建精确Task/Change/Ledger；下一先聚焦RED，再最小接线及原Editor验收，不碰DAT/Scene/非战斗。Q07/Q08/Q09/总目标仍开放。
+
+> 2026-09-27 独立Q09/P-09 `NTSD28-Q09-REVIVE-LIVES-GLYPH-ANCHOR-001 / FOCUSED_TEST_PASS`：正式固定X-13及999截断已接入共用战斗叠字布局；原Editor精确4/4、邻接1/1、0编译错，Ledger923/33 PASS。没有可执行修前RED，只有源码公式首差；自然GPU/正式EXE同状态、mode/可见性仍待，不关闭P-09/Q09。Q07有限出口按§0.14.4复用，Q08独立推进；DAT/Scene/非战斗未动。详同ID ACCEPTANCE。
+
+> 2026-09-27 当前独立Q09/P-09子包 `NTSD28-Q09-REVIVE-LIVES-GLYPH-ANCHOR-001 / PLANNED`：正式剩余生命首字形固定X-13，Unity现双字形为X-9且三位数不完整。Task/Change/Ledger已先立，下一步仅战斗叠字通用布局及精确Editor测试，不重跑Q07已过案例。模式门/自然GPU仍待；Q07/Q08/Q09/总目标均开放，DAT/Scene/非战斗不动。
+
+> 2026-09-27 Q08/G-04选中普通战斗字段当前出口：正式根EXE mode0 trace中hit/resource/regen标量与Unity已有默认值一致，stage gate1已有原Scene限定Play；drop由用户例外、revive/等效特效显示门归Q09，dynamic gate0且stage progress0未进入动态收窄。没有新证据要求复制排除的mode/background DAT或为默认值再改Asset。下一Q08生产Task仅在项目选中非默认值+正式消费者+同条件首差，或新正式可达结果/事件入口成立后启动。详`artifacts/diagnostics/NTSD28-Q08-G04-SELECTED-MODE-FIELD-AUDIT-20260927/REPORT.md`。Q07/Q08/BATCH-04/总目标均开放；本轮未改脚本、Asset、DAT、Scene或非战斗。
+
+> 2026-09-27 Q08结果里程碑下一入口更正：正式根EXE在选中护甲结果350宿主调用保持World tick365/hash不变，而结果timer349→350、transition0→2；配对LFR只接受逐行World序号+1，现有`failureCode=46`须保留为FAIL，不再重复同一LFR求绿。根trace与原Editor五字段1830/1830零差仅关闭该场景的限定可观察结果边界，不证明全状态/RNG。下一先选Q08其他正式可达mode/结果/事件首差；Q07只因新可达首差重开，已过代表门不重跑。详`artifacts/diagnostics/NTSD28-Q08-ARMOR-RESULT-MILESTONES-001/TERMINAL-LFR-ADAPTER-BOUNDARY-20260927.md`。Q07/Q08/BATCH-04/总目标仍开放；本次无脚本、DAT、Scene、Asset或非战斗修改。
+
+> 2026-09-27 Q08当前游标：`NTSD28-Q08-PROJECT-STAGE-GATE-001 / VERIFIED_SCOPED`。原Battle Scene请求文件探针已在Running/tick2取到运行时/项目Asset gate1、两名角色、正式目录ready；退出后MCP为idle/non-Play且双Scene SHA稳定。原Editor完整Driver gate1三tick未生/-42/0、诊断gate0未生/-42/-49，聚焦26/26、相邻18/18及恢复3/3均过。只关项目所选stage gate；旧TestRunner跨域孤儿FAIL保留，正式LFR录制/回放RNG仍不同。下一按总表§0.14.4处理Q08其它正式可达模式/结果门或新可达Q07首差，不重跑已过角色矩阵。下方`RUNTIME_PENDING`为独立Play探针前态；Q07/Q08/BATCH-04/总目标开放，详同目录`PROJECT-STAGE-GATE-PRODUCTION-ACCEPTANCE-20260927.md`。
+
+> 2026-09-27 Play job 末态：Q08 stage gate 旧双轮自然KO TestRunner job `20b6cc8dd0cf4094ae7b46c1bbb1c458` 跨域孤儿，0完成；在原 Editor 空闲/非 Play 后已用 `clear_stuck` 标记failed并保存末态JSON。下条`running`是清理前快照；不算生产失败或Play通过。下一只做能独立留证的原Scene gate1发布及有序退出定向门，不重复Q07已过矩阵。
+
+> 2026-09-27 当前游标：`NTSD28-Q08-PROJECT-STAGE-GATE-001 / RUNTIME_PENDING`。项目模式Asset gate1→冻结身份→首次battle seal→Client runtime→DataOriented/Legacy type0源/物理X、快照/校验已接线。原Editor RED15/15→GREEN26/26、相邻18/18、tick0恢复RED→GREEN3/3，完整Driver鸣人分身gate1未生/-42/0与诊断gate0未生/-42/-49均PASS；正式根EXE对应gate1直接X同值，但LFR录制/回放RNG不同，不称完整同状态。旧双轮自然KO Play job跨域停在`running`/0完成，Editor已退出Play且空闲；下一只补一个能留下独立结果的原Scene配置标量/有序退出门，不重跑Q07旧角色矩阵。见`artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/PROJECT-STAGE-GATE-PRODUCTION-ACCEPTANCE-20260927.md`。下方`TEST_FIRST`为旧态；Q07/Q08/BATCH-04/总目标仍开，DAT数值/双Scene/非战斗未改。
+
+> 2026-09-27 当前执行：`NTSD28-Q08-PROJECT-STAGE-GATE-001 / IN_PROGRESS / TEST_FIRST`，Task/Change/Ledger均先于脚本与Asset建立。正式根EXE gate1分身X直接见证、Unity三tick限定首差及跨DataOriented/Legacy/源规则/快照/校验的精确范围见Task和 `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/PRODUCTION-SCOPE-20260927.md`。先RED聚焦测试再生产接线；根LFR RNG仍不同，不能宣称全状态同态。Q07已过门复用，Q07/Q08/BATCH-04/总目标开放；DAT、Scene、非战斗保持。
+
+> 2026-09-27 Q08边缘分身stage gate：`NTSD28-Q08-NARUTO-CLONE-STAGE-GATE-FIRST-DIFF-001 / FOCUSED_TEST_PASS / TEST_ONLY`。原Editor精确三tick及相邻raw case PASS；鸣人OID33 type0 slot50 tick2配对源码/Unity源X均-42，tick3配对源码gate1 X0 vs Unity源及物理X-49，源码gate0对照X-49。先前源坐标未初始化是临时诊断夹具缺口，已补齐，不得冒充生产缺陷。正式根EXE同边缘证书及生产stage gate载体/边界修复待独立Task；原Editor编译、Ledger PASS，受保护Scene/Mode SHA稳定。仅测试脚本/诊断/文档变动，不碰DAT/Scene/非战斗；详 `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/ORIGINAL-EDITOR-3TICK-ACCEPTANCE.md`。Q07/Q08/BATCH-04/总目标开放。
+
+> 2026-09-27 Q08 G-02/G-03 下一门：正式根EXE既有普通战斗HP3 trace的 `selectedModeStageGate50=1`，与Unity现有按slot/team选择type0边界的公式形成条件性差异；但该trace无slot>=20的type0，尚未证正式自然可达首差。只读审计见 `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/REPORT.md`。先证具体formal对象/位置/模式分支可达，再在原Editor同态完整Driver核C21/C22。D-025非角色10秒清除、项目地图、背景/模式DAT排除及Q07有限出口不变；本轮只改文档，Q07/Q08/BATCH-04/总目标开放。
+
+> 2026-09-27 Q08 `NTSD28-Q08-RESULT-SETTINGS-FULL-TICK-WITNESS-001 / FOCUSED_TEST_PASS`：原Editor编译0错、精确EditMode1/1；自然KO后Unity结果页Settings cursor0最后tick，noAttack旧角色FallDamageDiv0→0、Attack0→100，native timer均14/transition0。原始MCP job JSON在同ID目录，原Editor末态idle/non-Play，保护哈希稳定。仅Unity当前态耦合见证，正式发行无同设置入口；`PendingHostAction`无生产reader。下一Q08修复先指定下一场配置事务和实际consumer，保留结果UI并阻止旧World战斗字段提前改写；Q07已过代表门不重复。Q07/Q08/BATCH-04/总目标仍开。
+
+> 2026-09-27 Q08 `NTSD28-Q08-RESULT-SETTINGS-FULL-TICK-WITNESS-001 / IN_PROGRESS`：测试脚本前Task/Change/Ledger已建；只在现有完整tick致死夹具新增自然KO后旧页设置Attack正反见证，原Editor编译/运行待。正式root无对应结果设置动作，此包仅判Unity旧World字段是否被提前写入，不改生产或声称正式first difference。Q07/Q08/BATCH-04及总目标仍开放。
+
+> 2026-09-27 BATCH-04/Q07节奏：§0.14.4只让新证明可达的内容/双坐标首差或自然技能出口重开Q07；四类D-024代表门不例行重跑，旧521项保留且删除授权0。独立Q08当前结果设置旧页在native转场前可对角色`FallDamageDiv`等旧World字段写入，静态链已复核，但不是正式EXE/Unity同条件first difference。原Editor MCP临时C#编译器报文件名/扩展名过长，Roslyn不可用；没有新Play见证或生产改动。下一窄门是自然KO后native timer<144的设置Attack正反full-tick，再决定下一场配置事务；详总表顶部及`NTSD28-Q08-RESULT-SETTINGS-PRETRANSITION-AUDIT-20260927/REPORT.md`。Q07/Q08/BATCH-04/总目标开放。
+
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-RESULT-MILESTONES-001 / FOCUSED_TEST_PASS / FORMAL_TERMINAL_LFR_CERT_PENDING`：原Editor同态366tick严格诊断PASS、前26tick旧raw一致；正式根EXE trace对Unity结果载体1830/1830同值（80/101/350含末行transition2）。正式LFR报告在结果停战末步的World序号门FAIL，故这不是通过的根回放终点证书；下方IN_PROGRESS行是开工快照。Q07/Q08/BATCH-04/总目标继续开放，下一只追正式可达首差/独立mode战斗门或精确终点验收边界，不重复旧Play。详同ID `ACCEPTANCE.md`。
+
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-KO-RESULT-FLOW-001 / VERIFIED_SCOPED`：已闭HP3选中护甲致死后的结果入口限定门。原Editor新编可选sidecar 26tick PASS，正式根EXE起始动作110校正trace与Unity的计时/phase/transition/胜组130/130同值；tick16结果计时0、tick17计时1/胜组1。Q08后续80/101/350、正式可达mode/项目模式战斗门及自然整场仍按原owner，不重复本26tick夹具。Q07/Q08/BATCH-04/总目标开放；DAT、Scene、模式Asset、生产/非战斗不改。详同ID `ACCEPTANCE.md`。
+
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-KO-RESULT-FLOW-001 / PLANNED`：前包HP3护甲首个致死KO根EXE↔原Editor 1700字段及事件首现已限定闭合；现在只用同一固定26tick取Unity结果载体post-tick状态，与正式`battleFlow`核tick16→17结果启动，避免重复其它KO/角色矩阵。准确Task/Change/Ledger先于诊断脚本已建；原Editor编译/导出待。Q07/Q08/BATCH-04/总目标开放，DAT数值、Scene、生产和非战斗不改。
+
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-LETHAL-FULL-TICK-001 / VERIFIED_SCOPED`：正式根EXE HP3选中护甲首次致死KO的同初态26tick诊断已完成。LFR播放须显式`--lfr-slot0-action 110`恢复源码初始动作；否则6项早期差异属于夹具。校正后原Editor完整Driver 68实体行×25共同字段1700/1700、KO首现tick16归属/时间同值；Unity侧后续KO行是事件留存。原Editor导出PASS，双Scene/模式Asset SHA稳定；DAT/生产/Scene/非战斗不改。下一按总表§0.14继续Q07新可达首差或Q08其它结果/事件/项目模式门，不重跑本护甲分支；Q07/Q08/BATCH-04/总目标开放。详同ID `ACCEPTANCE.md`。
+
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-LETHAL-FULL-TICK-001 / IN_PROGRESS`：OID87 HP500正式见证在tick16的先两次选中护甲伤害为3/3，合成type-1 KO聚焦2/2已过但非正式同初态。本包脚本前Task/Change/Ledger已登记，只新增HP3源LFR诊断tool；根正式EXE回放实证首个护甲命中致死后，才在既有Unity raw exporter增精确HP3 schema并跑原Editor完整Driver/KO sidecar。HP500旧证据复用，不重跑普通/非标准KO；DAT、正式EXE/源码、生产、Scene、非战斗不改。Q07/Q08/BATCH-04/总目标开放。
+
+> 2026-09-27 Q08 `NTSD28-Q08-SELECTED-ARMOR-KO-FOCUSED-001 / FOCUSED_TEST_PASS`：正式OID87根EXE已证护甲选中路线可达，旧减伤KO测试却无selectedArmor。原Editor刷新编译后，新type-1护甲HP10致死/HP11非致死正反精确2/2 PASS，事件/计数与减伤HP、护甲HP字段符合正式门控；原始job JSON归档。此为合成生产入口限定证据，下一另立同初态正式EXE LFR/Unity完整Driver致死包，不重跑旧普通/非标准KO。生产、DAT、Scene、非战斗未改；Q07/Q08/BATCH-04/总目标仍开放。
+
+> 2026-09-27 BATCH-04恢复提示：Q07 `PhysicsState.x/z` alias/直接坐标写者当前调用链补核没有新已证可达首差，四类已过D-024完整Driver不例行重跑；旧521项仍保留、删除授权0。Q08正式KO事件5源码调用点归四类，2026-09-22三条“Missing append”已由后续生产接线和各自完整tick限定验收覆盖，勿按旧报告重做；`NTSD28-Q08-KNOCKOUT-PRODUCER-COVERAGE-001/REPORT.md`顶部与总表新增游标为准。下一只追新可达Q07首差，或Q08其它正式可达结果/事件及项目模式战斗门；无新实测、脚本、DAT、Scene或非战斗改动，Q07/Q08/BATCH-04/总目标继续开放。
+
+> 2026-09-27 Q07按§0.14仍`IN_PROGRESS`且为最早未闭组：所选新版内容与代表整链证据保留，旧521因辅助读者仍在精确保留、`deleteAuthorized=false`；下一只接新可达首差和自然技能，已过案例不例行重跑。独立Q09/P-02 `NTSD28-Q09-P02-VISIBLE-CONSUMERS-001`在原Battle Scene单项Counter Play以HP2Orig=2/Y+10同tick捕获Y -8.33→-8.43 PASS，逻辑/发布引用保持；该场景无Label，GPU合成、Legacy、checksum、正式EXE同视口仍未验。UnityTest跨域orphan、首次CentralOnly发布帧误断言FAIL均留证；生成Editor编译0错、Ledger/diff检查通过，原Editor idle非Play，Battle/Menu/模式Asset SHA稳定。只改已登记Q09测试/探针及记录，生产/DAT/Scene/非战斗不动。Change仍`RUNTIME_PENDING`，Q07/Q08/Q09/总目标开放。详`artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/COUNTER-PLAY-ACCEPTANCE-20260927.md`。
+
+> 2026-09-27 Q08剧情结果门根发行可达性更正：正式根EXE SHA重核；对应playable `main.cpp`默认BattleConfig/选项和`GameSession28`普通选择路径没有story mission/child ID写者，内置`transition_native_story_stage`只续已激活剧情。受控scenario/test的story跳过普通BattleFlow分支保留，但根发行入口不能由默认状态进入。Unity菜单现有MatchConfig也无等价选中story；不要把`StageProgressionValid`作为代理或误禁普通结果。无新增GUI/Editor运行、脚本/DAT/Scene/非战斗修改；Q08/BATCH-04/总目标继续开放，后续只对新正式可达caller重开story。详`artifacts/diagnostics/NTSD28-Q08-RESULT-GROUP-CARRIER-AUDIT-001/STORY-SELECTOR-CALLER-CORRECTION.md`最新节。
+
+> 2026-09-27 Q09/P-02展示锚点首差限定修复：正式`revive_lives`按Y+Z、`entity_nameplate`按Z插值；Unity原OverlayGlyph统一地面。既有`NTSD28-Q09-P02-VISIBLE-CONSUMERS-001`内捕获命令新增Counter→Body/Label→Ground分类，RED预期0.15/实际0.10，最终原Editor新例1/1、生产writer作业succeeded，Runtime/Editor编译0错。自然Counter合成像素/checksum/正式同视口未证；Change仍`RUNTIME_PENDING`，Q07/BATCH-04最早未闭，Q09为独立先行子包，均不可报整体完成。详情`artifacts/diagnostics/NTSD28-Q09-P02-VISIBLE-CONSUMERS-001/REVIVE-LIVES-ANCHOR-ACCEPTANCE-20260927.md`。DAT/Scene/非战斗未改。
+
+> 2026-09-27 Q08自然结果held输入 `NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001 / VERIFIED_SCOPED_NATURAL_PLAY`：原Battle Scene双轮鸣人物理J致死精确Play1/1，首轮中性350；第二轮143→144 tick物理J held在canonical输入可见并直接350/transition2，后同World冻结/逻辑selection1。两轮KO寿命/Q07出生断言仍过。终态XML SHA `6CE58DF13B4425BAA4EF6ACE4DEA362BD4DF18A7BFC7D96971222983B095D02F`；Editor idle非Play、双Scene/模式Asset SHA稳定。生产/DAT/Scene/非战斗不改；原生产held-input Change更广出口及Q07/Q08/BATCH-04/总目标仍开。详同ID `ACCEPTANCE.md`。
+
+> 2026-09-27 Q08自然KO事件寿命 `NTSD28-Q08-NATURAL-KO-FEED-LIFETIME-PLAY-001 / VERIFIED_SCOPED_NATURAL_PLAY`：原Editor双轮物理J真实KO与结果测试加项目模式Asset寿命70边界，首跑物理输入前置RED并保留原始XML；不改代码复核Play 1/1，两个World均过time+70留存/time+71清除。终态XML SHA `2B6B5C6F2A61BF2D21E991805CDDEC46210DC7516DE03E3C01B6DEA8A5E23475`；Editor idle非Play、双Scene/模式Asset哈希稳定。未重复负环境168行；生产/DAT/Scene/非战斗未改，Q07/Q08/BATCH-04/总目标继续开放。详同ID `ACCEPTANCE.md`。
+
 > 2026-09-27 Q07直接Battle源坐标出生/重赛 `NTSD28-Q07-DIRECT-BATTLE-SOURCE-BIRTH-001 / VERIFIED_SCOPED`：沿用已有Q08双轮物理J真实KO原Editor用例，仅在两次共用前置各断言攻击者/受害者源规则坐标初始化；正确EditMode注册的UnityTest进入Play、精确1/1 PASS，原始XML已存Q07包，SHA `391EBF9FC7DBA51EF9F9CC0F907DC2877AF1D5A84AD5BF4081B42CFCC1E8451E`。误用PlayMode过滤0项不计。MCP正确作业跨Play重载遗留running，终态XML/Editor idle非Play核对后清除；双Scene和模式Asset SHA不变。仅测试两断言，无生产/DAT/Scene/非战斗改动。该出生/一次直接重赛子包关闭，但Q07/D-024聚合、BATCH-04、总目标开放；下方旧RUNTIME_PENDING/“重赛待验”为历史态。详`artifacts/diagnostics/NTSD28-Q07-DIRECT-BATTLE-SOURCE-BIRTH-001/ACCEPTANCE.md`。
 
 > 2026-09-27 BATCH-04/Q08正式根host mode可达性：正式EXE SHA重核；对应playable构建闭包的`main.cpp`用默认`battle_mode=0`初始化Session，无2/3/4启动选项或后续生产写者，普通窗口/selection-loop/smoke不能选这些mode，LFR显式拒绝非0。独立scenario gate不属于根EXE启动入口。28/128/202的受控源码命令/停战仍保留，根发行上层目的地没有可执行见证面；旧“再用根GUI验目的地”待办被静态闭包审计覆盖，若出现新正式可达入口才重开。Unity不新接非战斗页面/普通命令2；继续Q08可达普通结果/事件与其他独立门。仅源码及哈希只读，无EXE GUI/Unity运行或脚本、DAT、Scene改动。详`artifacts/diagnostics/NTSD28-Q08-RESULT-TRANSITION-HOST-AUDIT-001/MODE-SPECIFIC-COMMAND-CURRENT-GATE-20260927.md`最新节；Q07/Q08/BATCH-04/总目标均开放。
@@ -3568,3 +3688,5 @@ Noncharacter X-edge death product choice pending async user reply from 2026-09-2
 > 2026-09-26 Q07 `NTSD28-Q07-TYPE3-DEAD-SERIAL-COUNTER-001 / PLANNED`：正式配对源子体tick1 counter1，原Editor完整Driver latch1过而counter0 RED。正式普通type3死亡转帧在C25前，Unity晚序列`DieEvent -> SetFrameDirect(hit_d)`无条件重置是待验证候选。Task/Change/Ledger已先立，下一仅改战斗`LF2SpecialAttack`晚帧尾并复跑正反8tick、type3邻接；Q07仍开放，DAT/Scene/非战斗不动。
 > 2026-09-26 Q07 `NTSD28-Q07-TYPE3-DEAD-SERIAL-COUNTER-001 / CODE_WRITTEN`：仅移除`LF2SpecialAttack`原生type3晚序列HP≤0时重复`DieEvent`调用，保留正式C25前转帧与state entry。原Editor正反8tick/type3邻接和保护检查待跑；DAT/Scene/非战斗不动，Q07开放。
 > 2026-09-27 Q09/P-02 `NTSD28-Q09-P02-MOTION-HISTORY-CARRIER-001 / PLANNED`：已按正式render snapshot和插值采样合同，先登记Task/Change/Ledger；下一仅改BattlePresentation帧纯值current/previous motion历史及现有Editor复用测试。A/B旧帧引用不可长期持有，前后行需在published tick自身冻结；仅载体不等于可见插值。原Editor、30/60/120及正式EXE画面待，Q07/Q08/Q09和总目标开放。
+> 2026-09-27 Q08 `NTSD28-Q08-ARMOR-RESULT-MILESTONES-001 / IN_PROGRESS`：§0.14.2独立结果里程碑门已建Task/Change/Ledger；已有同初态HP3护甲KO只到timer10，原Editor另一自然KO已到350。本包只扩严格诊断夹具补根EXE↔Unity同初态80/101/350逐tick对照，旧26tick与真实Play不例行重跑。生产、DAT数值、Scene、模式Asset及非战斗保持；Q07/Q08/BATCH-04/总目标开放。
+> 2026-09-27 Q08根EXE边缘回放：`NTSD28-Q08-CLONE-STAGE-GATE-ROOT-LFR-001 / RUNTIME_PENDING / SCOPED_ROOT_TRACE_PASS_RNG_UNMATCHED`。根EXE直接输出gate1鸣人OID33 type0 slot50 X未生/-42/0，原Editor分身X未生/-42/-49；但录制Session tick1 CRT state1758127634与根LFR回放3374725112不同，故根对Unity的完整同状态证书**未取得**，只保留根直接边界输出与限定分身X比较。根报告`nativeParityClaim=false`、额外包装tick4排除。详 `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/root-lfr/ROOT-LFR-ACCEPTANCE.md`。下一生产Task须独立声明项目自有模式Asset stage gate及两种type0边界writer/确定性状态，gate1/gate0正反；不得接回排除mode DAT或改非战斗。Q07/Q08/BATCH-04/总目标开放。

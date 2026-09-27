@@ -17,6 +17,7 @@ MonoBehaviour:
     facing: 1
     respond: 50
     caughtAct: 1
+  selectedStageGate50: 1
   knockout:
     enabled: 1
     respond: 5

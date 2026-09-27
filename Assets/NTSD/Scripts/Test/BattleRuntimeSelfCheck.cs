@@ -2563,7 +2563,7 @@ namespace NTSD.Test
             Expect(authorityChecksum is BattleParityFrameSnapshot &&
                    authorityChecksum.Schema == BattleParityFrameSnapshot.SchemaId &&
                    mobileRested.Schema == BattleExtendedChecksumSnapshot.SchemaId &&
-                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v4\"") &&
+                   mobileRested.ToJson().Contains("\"schema\":\"ntsd-unity-extended-battle-checksum-v5\"") &&
                    SimulationTickDriver.CaptureSupportedFrameSnapshot(
                        mobileWorld,
                        11,
@@ -5323,8 +5323,8 @@ namespace NTSD.Test
                     x, 20, 30, 4, 5, 6);
             }
 
-            int[] hp2Cases = { 0, 1, 2, 9, 10, 99, 100 };
-            int[] expectedCounterLengths = { 0, 0, 2, 2, 3, 3, 3 };
+            int[] hp2Cases = { 0, 1, 2, 9, 10, 99, 100, 1000 };
+            int[] expectedCounterLengths = { 0, 0, 2, 2, 3, 3, 4, 4 };
             for (int index = 0; index < hp2Cases.Length; index++)
             {
                 Array.Clear(glyphs, 0, glyphs.Length);
@@ -5334,7 +5334,8 @@ namespace NTSD.Test
                 if (expectedCounterLengths[index] != 0)
                 {
                     Expect(glyphs[0].CharCode == 'x' && glyphs[0].Type == BattleEntityOverlayGlyphType.Counter &&
-                           glyphs[expectedCounterLengths[index] - 1].CharCode == '0' + (hp2Cases[index] % 10),
+                           glyphs[expectedCounterLengths[index] - 1].CharCode ==
+                               '0' + (Math.Min(hp2Cases[index], 999) % 10),
                         "Batch6 overlay HP2 must emit x plus the authority low digits");
                 }
             }
@@ -5377,7 +5378,7 @@ namespace NTSD.Test
             Expect(BattleEntityOverlayLayout.TryBuild(Slot(2, -1, 0, 0, 1, 0, -100), labels, states, glyphs, out int leftCount) &&
                    glyphs[0].PixelX < 0 && glyphs[2].PixelX == 0 &&
                    BattleEntityOverlayLayout.TryBuild(Slot(0, -1, 0, 0, 1, 0, 1000), labels, states, glyphs, out int rightCount) &&
-                   glyphs[0].PixelX == 794 - 3 * BattleEntityOverlayLayout.GlyphAdvance,
+                   glyphs[0].PixelX == 794 - 3 * BattleEntityOverlayLayout.GlyphAdvance - 1,
                 "Batch6 overlay labels must clamp while counters retain their unclamped position");
 
             var tooSmall = new BattleEntityOverlayGlyph[2];

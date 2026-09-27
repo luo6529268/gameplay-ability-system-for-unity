@@ -36,7 +36,10 @@ namespace NTSD.Simulation.Presentation
             int zInt,
             int renderOffsetX,
             int cameraX,
-            int centerY)
+            int centerY,
+            int renderShadowOffset10C = 0,
+            int visibleLeftPixel = 0,
+            int visibleRightPixel = 794)
         {
             SlotIndex = slotIndex;
             HP2Orig = hp2Orig;
@@ -50,6 +53,9 @@ namespace NTSD.Simulation.Presentation
             RenderOffsetX = renderOffsetX;
             CameraX = cameraX;
             CenterY = centerY;
+            RenderShadowOffset10C = renderShadowOffset10C;
+            VisibleLeftPixel = visibleLeftPixel;
+            VisibleRightPixel = visibleRightPixel;
         }
 
         public int SlotIndex { get; }
@@ -64,6 +70,9 @@ namespace NTSD.Simulation.Presentation
         public int RenderOffsetX { get; }
         public int CameraX { get; }
         public int CenterY { get; }
+        public int RenderShadowOffset10C { get; }
+        public int VisibleLeftPixel { get; }
+        public int VisibleRightPixel { get; }
     }
 
     /// <summary>
@@ -74,7 +83,7 @@ namespace NTSD.Simulation.Presentation
         public const int SlotCount = 10;
         public const int SlotLabelCharacterCapacity = 12;
         public const int GlyphAdvance = 9;
-        public const int MaximumGlyphCount = 3 + SlotLabelCharacterCapacity + 2;
+        public const int MaximumGlyphCount = 4 + SlotLabelCharacterCapacity + 2;
 
         public static bool TryBuild(
             in BattleEntityOverlayRuntimeSlot entity,
@@ -95,7 +104,10 @@ namespace NTSD.Simulation.Presentation
             }
 
             bool specialCom = IsSpecialCom(in entity);
-            int counterLength = entity.HP2Orig > 1 ? (entity.HP2Orig <= 9 ? 2 : 3) : 0;
+            int displayedLives = entity.HP2Orig > 999 ? 999 : entity.HP2Orig;
+            int counterLength = displayedLives > 1
+                ? (displayedLives >= 100 ? 4 : displayedLives >= 10 ? 3 : 2)
+                : 0;
             int labelLength = GetLabelLength(in entity, slotLabelChars, specialCom);
 
             bool bracketed = entity.SlotIndex >= 0 && entity.SlotIndex < SlotCount &&
@@ -111,12 +123,13 @@ namespace NTSD.Simulation.Presentation
             int sequence = 0;
             if (counterLength != 0)
             {
-                int counterX = entity.XInt + entity.RenderOffsetX - ((GlyphAdvance * counterLength) >> 1) - entity.CameraX;
+                int counterX = entity.XInt + entity.RenderOffsetX - 13 - entity.CameraX;
                 int counterY = entity.ZInt + entity.YInt - entity.CenterY - 7;
                 WriteGlyph(glyphBuffer, ref sequence, 'x', 0, counterX, counterY, BattleEntityOverlayGlyphType.Counter);
-                if (counterLength == 3)
-                    WriteGlyph(glyphBuffer, ref sequence, (char)('0' + ((entity.HP2Orig / 10) % 10)), 0, counterX + GlyphAdvance, counterY, BattleEntityOverlayGlyphType.Counter);
-                WriteGlyph(glyphBuffer, ref sequence, (char)('0' + (entity.HP2Orig % 10)), 0, counterX + (counterLength - 1) * GlyphAdvance, counterY, BattleEntityOverlayGlyphType.Counter);
+                int divisor = counterLength == 4 ? 100 : counterLength == 3 ? 10 : 1;
+                for (int index = 1; index < counterLength; index++, divisor /= 10)
+                    WriteGlyph(glyphBuffer, ref sequence, (char)('0' + (displayedLives / divisor) % 10), 0,
+                        counterX + index * GlyphAdvance, counterY, BattleEntityOverlayGlyphType.Counter);
             }
 
             if (labelLength != 0)
@@ -261,12 +274,12 @@ namespace NTSD.Simulation.Presentation
         {
             labelX = entity.XInt + entity.RenderOffsetX -
                      ((GlyphAdvance * labelLength) >> 1) - entity.CameraX;
-            int maxX = 794 - GlyphAdvance * labelLength;
-            if (labelX < 0)
-                labelX = 0;
+            int maxX = entity.VisibleRightPixel - GlyphAdvance * labelLength - 1;
+            if (labelX < entity.VisibleLeftPixel)
+                labelX = entity.VisibleLeftPixel;
             if (labelX > maxX)
                 labelX = maxX;
-            labelY = entity.ZInt + 3;
+            labelY = entity.ZInt + entity.RenderShadowOffset10C + 3;
         }
 
         private static void WriteGlyph(

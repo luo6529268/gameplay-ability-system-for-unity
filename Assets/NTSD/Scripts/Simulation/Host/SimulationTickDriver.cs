@@ -330,6 +330,8 @@ namespace NTSD.Simulation
             _nativeFunctionKeyMaintenanceCommand;
         private NTSD28NativeFunctionKeyHostCommand
             _nativeFunctionKeyContinuousHostCommand;
+        private NTSD28NativeFunctionKeyHostCommand
+            _submittedNativeVolumeHostCommand;
         private long _setPausedCallCount;
         private bool _setPausedLastValue;
         private long _dedicatedSimulationWorkerLastExecutionElapsedTimestampTicks;
@@ -429,6 +431,9 @@ namespace NTSD.Simulation
                         lockstepSettings);
                     if (!StepOneTickInternal(nextTickIndex, buildPresentation))
                         break;
+
+                    if (_tickIndex == nextTickIndex)
+                        DispatchPublishedSoundsAfterSuccessfulTick();
 
                     policy.CommitAutomaticTick();
                     _timeAccumulator = policy.Accumulator;
@@ -601,7 +606,11 @@ namespace NTSD.Simulation
                     buildPresentation,
                     !functionKeysDispatched);
                 if (stepped)
+                {
+                    ApplyNativeBattleVolumeAfterCompletedTick(
+                        _nativeFunctionKeyContinuousHostCommand);
                     provider.AfterSimTick(tickIndex);
+                }
                 return stepped;
             }
             finally
@@ -734,6 +743,12 @@ namespace NTSD.Simulation
             }
         }
 
+        private void DispatchPublishedSoundsAfterSuccessfulTick()
+        {
+            if (lifecycleState == BattleRuntimeLifecycleState.Running)
+                DispatchPublishedSounds();
+        }
+
         private bool ShouldSubmitToDedicatedSimulationWorker()
         {
             TryCompleteDedicatedSimulationWorkerPresentationConsumption();
@@ -799,6 +814,8 @@ namespace NTSD.Simulation
                 _simulationWorkerSubmittedPlayers);
             _simulationWorkerSubmittedProvider = provider;
             _simulationWorkerSubmittedTick = tickIndex;
+            _submittedNativeVolumeHostCommand =
+                _nativeFunctionKeyContinuousHostCommand;
             _simulationWorkerTickInFlight = true;
             dedicatedSimulationWorkerTickInFlight = true;
             _dedicatedSimulationWorkerLastSubmissionFailureReason = string.Empty;
@@ -852,6 +869,11 @@ namespace NTSD.Simulation
             if (_world.Runtime?.Flow != null)
                 _world.Runtime.Flow.SparkRenderFrame = publication.TickIndex;
 
+            ApplyNativeBattleVolumeAfterCompletedTick(
+                _submittedNativeVolumeHostCommand);
+            _submittedNativeVolumeHostCommand =
+                NTSD28NativeFunctionKeyHostCommand.None;
+
             _lastFrameSnapshot = null;
             _lastChecksumSnapshot = null;
             lastFrameChecksum = string.Empty;
@@ -860,6 +882,7 @@ namespace NTSD.Simulation
                 ? publication.StateChecksum
                 : 0UL;
             PublishPendingSoundsAfterChecksum();
+            DispatchPublishedSoundsAfterSuccessfulTick();
             _simulationWorkerSubmittedProvider?.AfterSimTick(publication.TickIndex);
             _simulationWorkerSubmittedProvider = null;
             _simulationWorkerPresentationAwaitingAcknowledgement =
@@ -1228,6 +1251,7 @@ namespace NTSD.Simulation
         }
 
         private SimulationWorld modeComboConfiguredWorld;
+        private SimulationWorld stageGateConfiguredWorld;
         private bool nativeKnockoutAudioDisplayEnabled = true;
 
         public void BeginBattleAllocationSeal()
@@ -1274,6 +1298,7 @@ namespace NTSD.Simulation
                         : BattleHitRecordLifecycleCatalog.Unavailable,
                     loganCatalog);
                 ApplyPublishedModeComboBeforeFirstTick(loganCatalog);
+                ApplyPublishedStageGateBeforeFirstTick(loganCatalog);
                 ApplyPublishedKnockoutFeedBeforeFirstTick(loganCatalog);
             }
 
@@ -1339,6 +1364,17 @@ namespace NTSD.Simulation
                 feed?.StageTeam5DeathSoundPath,
                 nativeKnockoutAudioDisplayEnabled);
             _world.BattlePresentation.ConfigureKnockoutFeedContent(catalog);
+        }
+
+        private void ApplyPublishedStageGateBeforeFirstTick(LoganObjectCatalog catalog)
+        {
+            if (_world == null || ReferenceEquals(stageGateConfiguredWorld, _world) ||
+                _world.CurrentTickIndex != 0 ||
+                catalog?.ProjectModeSnapshot == null)
+                return;
+            _world.Runtime.SelectedModeStageGate50 =
+                catalog.ProjectModeSnapshot.SelectedStageGate50;
+            stageGateConfiguredWorld = _world;
         }
 
         private void StartDedicatedSimulationWorkerIfEligible()
@@ -1606,6 +1642,7 @@ namespace NTSD.Simulation
                 _world?.BindSnapshotHostBusyObserver(null);
                 _world = null;
                 modeComboConfiguredWorld = null;
+                stageGateConfiguredWorld = null;
                 _localFrameInputProvider.BindWorld(null);
                 _battleTickSystem = null;
                 ResetLastAppliedFrameInput(_tickIndex);
@@ -1716,6 +1753,7 @@ namespace NTSD.Simulation
 
             _world.ResetRuntimeState();
             modeComboConfiguredWorld = null;
+            stageGateConfiguredWorld = null;
             _world.BeginBattlePreparation();
             _battleObjectPointFactory = LF2ObjectPointFactory.TryGetInstance();
             _battleObjectPool = LF2ObjectPool.TryGetInstance();
@@ -1893,6 +1931,25 @@ namespace NTSD.Simulation
                 NTSD28NativeFunctionKeyMaintenanceCommand.None;
             _nativeFunctionKeyContinuousHostCommand =
                 NTSD28NativeFunctionKeyHostCommand.None;
+            _submittedNativeVolumeHostCommand =
+                NTSD28NativeFunctionKeyHostCommand.None;
+        }
+
+        private void ApplyNativeBattleVolumeAfterCompletedTick(
+            NTSD28NativeFunctionKeyHostCommand command)
+        {
+            if (lockstepSettings.driveMode != SimulationDriveMode.LocalFreeRun ||
+                lifecycleState != BattleRuntimeLifecycleState.Running ||
+                (command != NTSD28NativeFunctionKeyHostCommand.VolumeDown &&
+                 command != NTSD28NativeFunctionKeyHostCommand.VolumeUp))
+            {
+                return;
+            }
+
+            NTSDSoundPlayer soundPlayer =
+                _soundPresentationSinkForDiagnostics as NTSDSoundPlayer ??
+                AppManager.Instance?.SoundPlayer;
+            soundPlayer?.ApplyNativeBattleVolumeHostTick(command);
         }
 
         private void CaptureHostControlEdges()
@@ -2021,6 +2078,8 @@ namespace NTSD.Simulation
                 buildPresentation: true);
             if (advanced)
             {
+                if (_tickIndex == nextTick)
+                    DispatchPublishedSoundsAfterSuccessfulTick();
                 _hostControlLastFailureReason = string.Empty;
                 _pendingHostControlCommands &=
                     ~SimulationHostControlCommand.SingleStep;
@@ -2212,6 +2271,8 @@ namespace NTSD.Simulation
 
             StopDedicatedSimulationWorker();
             bool stepped = StepOneTickInternal(frameInput, buildPresentation);
+            if (stepped)
+                DispatchPublishedSoundsAfterSuccessfulTick();
             RefreshInspectorState();
             return stepped;
         }
@@ -2230,7 +2291,10 @@ namespace NTSD.Simulation
                 return false;
 
             StopDedicatedSimulationWorker();
-            bool stepped = StepOneTickInternal(_tickIndex + 1, buildPresentation);
+            int nextTickIndex = _tickIndex + 1;
+            bool stepped = StepOneTickInternal(nextTickIndex, buildPresentation);
+            if (stepped && _tickIndex == nextTickIndex)
+                DispatchPublishedSoundsAfterSuccessfulTick();
             RefreshInspectorState();
             return stepped;
         }
@@ -2275,6 +2339,7 @@ namespace NTSD.Simulation
 
             _tickIndex = snapshot.CapturedTick;
             modeComboConfiguredWorld = _world;
+            stageGateConfiguredWorld = _world;
             _sparkRenderFrame = snapshot.Core.Flow.SparkRenderFrame;
             _offlineLocalTickPolicy.Reset();
             _manualReplayTickPolicy.Reset();

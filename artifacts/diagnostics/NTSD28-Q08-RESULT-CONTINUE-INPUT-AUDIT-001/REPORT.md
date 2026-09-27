@@ -2,6 +2,8 @@
 
 Status: `SOURCE_AND_UNITY_CALLER_AUDITED / IMPLEMENTATION_PENDING` (2026-09-22). This is a read-only audit of the current `81cacc3e` worktree, not an acceptance result.
 
+2026-09-27 follow-up (supersedes only the historical implementation-pending/current-Unity paragraphs below): the current production code passes same-tick `FrameInputSet` through `NTSDBattleTickSystem` to `BattleResultsOutcomeHostWriter`, and the original Editor focused held-input tests passed 2/2. Its natural direct-Battle Play seam has now passed the two-cycle physical-J test with neutral first result350 and second result shortcut at143→144, archived in `NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001/ACCEPTANCE.md`. The broader production Change and parent Q08 remain open for their other declared gates; the 2026-09-22 audit remains historical pre-implementation evidence.
+
 ## Formal playable rule
 
 `source/ntsd28_playable/src/game_session.cpp` lines 2731-2742 computes `result_continue_requested` immediately before `BattleFlow28::step`, by iterating `effective_combatants(config_)` and OR-ing the **held** Attack or Jump byte in `slot_inputs_[combatant.slot]`. It checks configured combatant slots, not only P1/P2, living entities, or a just-pressed edge. `set_input` at lines 2447-2450 supplies that slot array. A slot outside its capacity is skipped. A paired `story_mission_id` and `story_child_stage_id` bypasses ordinary BattleFlow entirely; a direct mode-1 fight without that pair does not.

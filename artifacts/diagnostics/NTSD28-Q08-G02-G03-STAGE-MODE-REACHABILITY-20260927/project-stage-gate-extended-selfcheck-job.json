@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "fc6e057da3dd4b71bb939839280f6aaf",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790489465936,
+      "finished_unix_ms": 1790489485090,
+      "last_update_unix_ms": 1790489485090,
+      "progress": {
+        "completed": 1,
+        "total": 8583,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790489475246,
+        "last_finished_test_full_name": "NTSD.Test.BattleLockstepChecksumEditorTests.SourceRuleJsonProjectionRetainsExtendedSelfCheckContract",
+        "last_finished_unix_ms": 1790489484383,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 9.8540398,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "SourceRuleJsonProjectionRetainsExtendedSelfCheckContract",
+            "fullName": "NTSD.Test.BattleLockstepChecksumEditorTests.SourceRuleJsonProjectionRetainsExtendedSelfCheckContract",
+            "state": "Passed",
+            "durationSeconds": 9.133209,
+            "message": null,
+            "stackTrace": null,
+            "output": "<b><color=#2EA3FF>MCP-FOR-UNITY</color></b>: Client connected 127.0.0.1:5942 (active clients: 1)\r\n"
+          }
+        ]
+      }
+    }
+  }
+}

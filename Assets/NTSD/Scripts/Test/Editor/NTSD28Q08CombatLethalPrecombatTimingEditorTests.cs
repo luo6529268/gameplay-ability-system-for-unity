@@ -37,6 +37,97 @@ namespace NTSD.Test
                 Is.EqualTo(1UL << 1));
         }
 
+        [Test]
+        public void NaturalKoResultSettingsAttackWritesOldWorldBeforeNativeTransition()
+        {
+            ResultSettingsObservation idle = CaptureResultSettingsCase(false);
+            ResultSettingsObservation pressed = CaptureResultSettingsCase(true);
+
+            Assert.That(idle.FallDamageBefore, Is.Zero);
+            Assert.That(idle.FallDamageAfter, Is.Zero);
+            Assert.That(pressed.FallDamageBefore, Is.Zero);
+            Assert.That(pressed.FallDamageAfter, Is.EqualTo(100));
+            Assert.That(pressed.NativeTimer, Is.EqualTo(idle.NativeTimer));
+            Assert.That(pressed.NativeTimer, Is.LessThan(144));
+            Assert.That(pressed.NativeTransition, Is.Zero);
+            TestContext.WriteLine(
+                $"Q08 result-settings full tick: noAttack={idle.FallDamageAfter}, " +
+                $"attack={pressed.FallDamageAfter}, nativeTimer={pressed.NativeTimer}, " +
+                $"transition={pressed.NativeTransition}");
+        }
+
+        private static ResultSettingsObservation CaptureResultSettingsCase(
+            bool pressAttack)
+        {
+            var world = new SimulationWorld();
+            world.Runtime.Match.BattleGameModeId = 0;
+            world.Runtime.FunctionKeys.ResetForBattle(true);
+            TestCombatant attacker = CreateCombatant(
+                world, 0, 1, 7100, 0, true, 500);
+            TestCombatant victim = CreateCombatant(
+                world, 1, 2, 7101, 200, false, 20);
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            tickSystem.RunReleaseTick(1, buildPresentation: false);
+            Assert.That(world.Runtime.Results.HadBoth, Is.True,
+                "The natural results page requires a prior tick with two living groups.");
+
+            victim.Runtime.SetPosition(10, 0, 0);
+            victim.Runtime.SyncIntegerPosition();
+            victim.RefreshRuntimeSnapshot();
+            tickSystem.RunReleaseTick(2, buildPresentation: false);
+            Assert.That(victim.Health.HP, Is.LessThanOrEqualTo(0),
+                "The controlled overlap must cause a KO in the production full tick.");
+
+            int tick = 2;
+            while (!world.Runtime.Results.IsActive && tick < 30)
+                tickSystem.RunReleaseTick(++tick, buildPresentation: false);
+
+            var results = world.Runtime.Results;
+            Assert.That(results.Phase, Is.EqualTo(200),
+                "The Unity-owned results page must activate through the KO flow.");
+            Assert.That(results.NativeResultTimer, Is.LessThan(144));
+            Assert.That(results.NativeTransitionState, Is.Zero);
+
+            tickSystem.RunReleaseTick(++tick, false, ResultInput(tick,
+                SimulationInputButtons.Attack));
+            Assert.That(results.Phase, Is.EqualTo(202));
+            tickSystem.RunReleaseTick(++tick, false, ResultInput(tick,
+                SimulationInputButtons.Left));
+            tickSystem.RunReleaseTick(++tick, false, ResultInput(tick,
+                SimulationInputButtons.Left));
+            Assert.That(results.SettingsCursor, Is.Zero);
+
+            int before = attacker.FallDamageDiv;
+            tickSystem.RunReleaseTick(++tick, false, ResultInput(tick,
+                pressAttack ? SimulationInputButtons.Attack :
+                    SimulationInputButtons.None));
+            return new ResultSettingsObservation
+            {
+                FallDamageBefore = before,
+                FallDamageAfter = attacker.FallDamageDiv,
+                NativeTimer = results.NativeResultTimer,
+                NativeTransition = results.NativeTransitionState,
+            };
+        }
+
+        private static FrameInputSet ResultInput(
+            int tick, SimulationInputButtons pressed)
+        {
+            return new FrameInputSet(tick, new[]
+            {
+                new SimulationPlayerInput(0, pressed, pressed),
+            });
+        }
+
+        private sealed class ResultSettingsObservation
+        {
+            public int FallDamageBefore;
+            public int FallDamageAfter;
+            public int NativeTimer;
+            public int NativeTransition;
+        }
+
         private static TestCombatant CreateCombatant(
             SimulationWorld world, int slot, int group, int objectId,
             int x, bool attacker, int hp)

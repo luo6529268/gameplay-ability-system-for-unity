@@ -691,6 +691,7 @@ namespace NTSD.Simulation
             Runtime.Match.RuntimeStageCount = match.RuntimeStageCount;
             Runtime.Match.Seed = match.Seed;
             Runtime.Match.PpMode = match.PpMode;
+            Runtime.SelectedModeStageGate50 = core.SelectedModeStageGate50;
 
             BattleWorldStageScalarSnapshot stage = core.Stage;
             Runtime.Stage.BaseStageWidthPx = stage.BaseStageWidthPx;

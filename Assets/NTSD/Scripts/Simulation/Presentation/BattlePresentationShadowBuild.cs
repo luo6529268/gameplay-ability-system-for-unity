@@ -18,6 +18,12 @@ namespace NTSD.Simulation.Presentation
         BleedMark = 4,
     }
 
+    public enum BattlePresentationMotionAnchor : byte
+    {
+        Ground = 0,
+        Body = 1,
+    }
+
     public enum BattlePresentationDifferenceKind : byte
     {
         None = 0,
@@ -774,7 +780,8 @@ namespace NTSD.Simulation.Presentation
             Vector2 stableFootAnchorWorld = default(Vector2),
             bool hasStableFootAnchor = false,
             bool showSelfFootMarker = false,
-            float footMarkerScale = 1f)
+            float footMarkerScale = 1f,
+            BattlePresentationMotionAnchor motionAnchor = BattlePresentationMotionAnchor.Ground)
             : this(
                 type,
                 handle,
@@ -802,7 +809,8 @@ namespace NTSD.Simulation.Presentation
                 stableFootAnchorWorld,
                 hasStableFootAnchor,
                 showSelfFootMarker,
-                footMarkerScale)
+                footMarkerScale,
+                motionAnchor)
         {
         }
 
@@ -833,7 +841,8 @@ namespace NTSD.Simulation.Presentation
             Vector2 stableFootAnchorWorld = default(Vector2),
             bool hasStableFootAnchor = false,
             bool showSelfFootMarker = false,
-            float footMarkerScale = 1f)
+            float footMarkerScale = 1f,
+            BattlePresentationMotionAnchor motionAnchor = BattlePresentationMotionAnchor.Ground)
         {
             Type = type;
             Handle = handle;
@@ -862,6 +871,7 @@ namespace NTSD.Simulation.Presentation
             HasStableFootAnchor = hasStableFootAnchor;
             ShowSelfFootMarker = showSelfFootMarker;
             FootMarkerScale = footMarkerScale > 0f ? footMarkerScale : 1f;
+            MotionAnchor = motionAnchor;
         }
 
         public BattleRenderCommandType Type { get; }
@@ -893,6 +903,7 @@ namespace NTSD.Simulation.Presentation
         public bool HasStableFootAnchor { get; }
         public bool ShowSelfFootMarker { get; }
         public float FootMarkerScale { get; }
+        public BattlePresentationMotionAnchor MotionAnchor { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattleRenderCommand WithPresentationOffsets(
@@ -910,7 +921,8 @@ namespace NTSD.Simulation.Presentation
                 StableHealthAnchorWorld + healthAnchorOffset,
                 HasStableHealthAnchor,
                 StableFootAnchorWorld + footAnchorOffset,
-                HasStableFootAnchor, ShowSelfFootMarker, FootMarkerScale);
+                HasStableFootAnchor, ShowSelfFootMarker, FootMarkerScale,
+                MotionAnchor);
         }
     }
 
@@ -2878,6 +2890,27 @@ namespace NTSD.Simulation.Presentation
             }
             NTSDRenderSpace.ViewportTransformSnapshot viewportTransform =
                 NTSDRenderSpace.CaptureViewportTransform();
+            int overlayVisibleLeft = 0;
+            int overlayVisibleRight = NTSDRenderSpace.SourceScreenWidth;
+            Camera overlayCamera = NTSDRenderSpace.WorldCamera;
+            if (overlayCamera != null && overlayCamera.orthographic &&
+                overlayCamera.aspect > 0f && overlayCamera.orthographicSize > 0f &&
+                viewportTransform.UnitsPerPixelX > 0f)
+            {
+                float halfWidth = overlayCamera.orthographicSize * overlayCamera.aspect;
+                float worldX = overlayCamera.transform.position.x;
+                int visibleLeft = Mathf.CeilToInt(
+                    (worldX - halfWidth - viewportTransform.Left) /
+                    viewportTransform.UnitsPerPixelX);
+                int visibleRight = Mathf.FloorToInt(
+                    (worldX + halfWidth - viewportTransform.Left) /
+                    viewportTransform.UnitsPerPixelX);
+                if (visibleRight > visibleLeft)
+                {
+                    overlayVisibleLeft = visibleLeft;
+                    overlayVisibleRight = visibleRight;
+                }
+            }
             BattleCommonVisualBinding commonShadow = frame.CommonShadowBinding;
             bool hasCommonShadow = commonShadow != null;
             BattleSpriteValueDescriptor commonShadowDescriptor = hasCommonShadow
@@ -3126,7 +3159,10 @@ namespace NTSD.Simulation.Presentation
                         entity.ZInt,
                         (int)entity.RenderOffsetX,
                         entity.CameraX,
-                        (int)entity.CenterY);
+                        (int)entity.CenterY,
+                        entity.RenderShadowOffset10C,
+                        overlayVisibleLeft,
+                        overlayVisibleRight);
                     if (mode == BattlePresentationBackendMode.CentralOnly &&
                         BattleEntityOverlayLayout.TryGetComCompositeLayout(
                             in overlayRuntimeSlot,
@@ -3278,7 +3314,10 @@ namespace NTSD.Simulation.Presentation
                                     baseOrder + 2,
                                     ObjectSortingLayerId,
                                     localSequence++,
-                                    glyphPosition));
+                                    glyphPosition,
+                                    glyph.Type == BattleEntityOverlayGlyphType.Counter
+                                        ? BattlePresentationMotionAnchor.Body
+                                        : BattlePresentationMotionAnchor.Ground));
                             }
                         }
                     }
@@ -3583,7 +3622,8 @@ namespace NTSD.Simulation.Presentation
                 int sortOrder,
                 int sortingLayerId,
                 int localSequence,
-                Vector3 position)
+                Vector3 position,
+                BattlePresentationMotionAnchor motionAnchor = BattlePresentationMotionAnchor.Ground)
             {
                 return new BattleRenderCommand(
                     BattleRenderCommandType.OverlayGlyph,
@@ -3602,7 +3642,8 @@ namespace NTSD.Simulation.Presentation
                     NormalizedUv,
                     RenderState,
                     SpriteDescriptor,
-                    TrustedResourceIdentity);
+                    TrustedResourceIdentity,
+                    motionAnchor: motionAnchor);
             }
 
         }

@@ -1,0 +1,198 @@
+{
+  "schema": "ntsd28-q08-selected-armor-lethal-comparison/1.0",
+  "ticks": 26,
+  "entityRows": 68,
+  "comparedFieldsPerEntity": 25,
+  "fieldComparisons": 1700,
+  "fieldDifferenceCount": 6,
+  "firstFieldDifferences": [
+    {
+      "tick": 1,
+      "slot": 0,
+      "path": "action",
+      "formal": 0,
+      "unity": 110
+    },
+    {
+      "tick": 1,
+      "slot": 0,
+      "path": "state",
+      "formal": 0,
+      "unity": 7
+    },
+    {
+      "tick": 2,
+      "slot": 0,
+      "path": "frameCounter",
+      "formal": 1,
+      "unity": 2
+    },
+    {
+      "tick": 3,
+      "slot": 0,
+      "path": "frameCounter",
+      "formal": 2,
+      "unity": 3
+    },
+    {
+      "tick": 4,
+      "slot": 0,
+      "path": "frameCounter",
+      "formal": 3,
+      "unity": 4
+    },
+    {
+      "tick": 5,
+      "slot": 0,
+      "path": "frameCounter",
+      "formal": 4,
+      "unity": 5
+    }
+  ],
+  "knockoutEventCount": 11,
+  "knockoutDifferenceCount": 10,
+  "knockoutDifferences": [
+    {
+      "tick": 17,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 18,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 19,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 20,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 21,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 22,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 23,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 24,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 25,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    },
+    {
+      "tick": 26,
+      "formal": [],
+      "unity": [
+        {
+          "battleTimeTick": 15,
+          "creditSlot": 0,
+          "fourOwnerSlot": 0,
+          "sourceObjectType": 3,
+          "sourceSlot": 50,
+          "victimSlot": 1
+        }
+      ]
+    }
+  ],
+  "formalRootReplayPass": true,
+  "unityCapturePass": true
+}

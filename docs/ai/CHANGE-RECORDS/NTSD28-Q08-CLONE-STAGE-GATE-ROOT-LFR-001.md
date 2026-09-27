@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q08-CLONE-STAGE-GATE-ROOT-LFR-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Tools/NTSD28Q08Diagnostics/naruto_clone_stage_gate_lfr_probe.cpp
+authority: root Logan EXE; paired playable GameSession28/GameSessionLfr28 and three-tick Naruto clone stage gate
+evidence: docs/ai/TASKS/NTSD28-Q08-CLONE-STAGE-GATE-ROOT-LFR-001.md
+-->
+
+# NTSD28-Q08-CLONE-STAGE-GATE-ROOT-LFR-001
+
+Before edit: paired playable gate1 vs original Unity Editor has a three-tick stage-bound first difference, but no root formal EXE same-edge replay. The existing selected-armor LFR diagnostic producer is unrelated and must remain untouched. Exact code scope, initial state, protected paths, validation and rollback are in the Task Contract. The new helper may only emit fresh artifact files and must refuse overwrite. No production script, DAT, Scene, mode Asset or nonbattle change is declared.
+
+After edit: added the one declared helper. It refuses existing CSV/LFR outputs, initializes an exact Stage23/mode0/seed682973786 Naruto action121 versus Lee roster, records three no-input GameSession ticks, asserts mode stage gate1, writes slot0/1/50 rows, and serializes an LFR with `GameSessionLfr28`. Compile, root EXE replay, comparison, protected-file check and remaining uncertainty: pending. No authority source or production runtime file was changed.
+
+Final scoped evidence: helper compiled with the 28 playable core sources plus GameSession/selection/LFR sources, `g++` exit0; source recording produced three rows/tick and 9976-byte LFR. Formal root EXE SHA `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` verified before/after; its direct headless LFR replay report passed with failureCode0, declaredTicks3 and expected actors/stage/action/facing/MP. Root trace tick0 validates initial roster; tick1–3 gate1 clone slot50 X absent/-42/0, versus original-Editor sidecar absent/-42/-49, first difference tick3. Replay emits an extra wrapper tick4, excluded from the declared three-tick comparison; report `nativeParityClaim=false`, so no broad parity claim. Helper source SHA `7B87585A0AB20F23131CD800BC25F3169926AD0141C0B93358A9902C16598691`, executable SHA `F8A9E1C1B47A58AE6C8445744429B6A6289B063AAFE82D5F7D9D4AA340B990C1`. Full report: `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/root-lfr/ROOT-LFR-ACCEPTANCE.md`. This Change is VERIFIED only as a diagnostic root-EXE trace; production stage-gate repair, broader Q08 and total alignment remain open. Ledger/diff/protected SHA final checks pending below.
+
+RNG audit reopening: comparison with the earlier paired `scenario28` trace found different tick1 RNG scalar/provenance despite matching roster/input/gate and OID33 X. The initial scoped report cannot be treated as a full same-state certificate. Add only diagnostic RNG columns to the helper and rerun to see whether the *recording GameSession* matches formal-root LFR replay; preserve the earlier outputs. Status temporarily returns to CODE_WRITTEN until this check and corrected scope report are complete.
+
+RNG audit result and current status: helper v2 source SHA `A352E24E55D43D5BEE78E20EE5607946B745373AA8CDDD40944B494EB8AD74BD` compiled `g++` exit0 and recorded a byte-identical LFR (SHA `43F87FAFAEF4D329F1E8462C5FEE73DB2EE1EFEBFFCD397FDE435D8501164155`). Recording Session tick1 CRT state1758127634/synchronized calls1, whereas formal-root LFR replay tick1 CRT state3374725112/synchronized calls0. Thus the root directly witnesses gate1/clone X0, but not full same-state parity with the seed682973786 recording. Status is `RUNTIME_PENDING` for the declared full-initial-state acceptance; scoped root trace and root-vs-Unity *clone X* difference remain valid. Corrected report and RNG audit are in `artifacts/diagnostics/NTSD28-Q08-G02-G03-STAGE-MODE-REACHABILITY-20260927/root-lfr/`. Production code remains untouched; Ledger/diff/protected hashes to recheck.
+
+Final hygiene check: `Tools/Validate-ChangeLedger.ps1` PASSED and covers this new helper; `git diff --check` exited 0, and the new helper/Task/Record have no trailing-space matches. Battle/Menu/ProjectBattleModeConfig Asset hashes remain `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A` / `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13` / `88E10D43B047952FD3053A87B7E5F60D0F87A6CD1A23313F37EA1503C686F55C`; formal root EXE hash is unchanged. No Unity compile/Play was needed for this C++ diagnostic-only follow-up, and none is claimed.

@@ -222,8 +222,9 @@ namespace NTSD.Animation
             CaughtAct = mode.ComboCaughtAct;
             KnockoutFeed = LoganModeKnockoutFeedInput.FromProjectSnapshot(mode);
             InputFingerprint = HashContract("PROJECT_MODE_INPUT_V1", mode.Fingerprint);
-            SemanticFingerprint = HashContract("PROJECT_MODE_SEMANTIC_V1",
-                Bound, Facing, Respond, CaughtAct);
+            SemanticFingerprint = HashContract("PROJECT_MODE_SEMANTIC_V2",
+                Bound, Facing, Respond, CaughtAct,
+                mode.SelectedStageGate50);
         }
 
         public static LoganModeComboInput FromProjectSnapshot(

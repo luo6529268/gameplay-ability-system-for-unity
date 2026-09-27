@@ -1,0 +1,25 @@
+{
+  "schema": "ntsd28-q08-stage-gate-rng-carrier-audit/1.0",
+  "pairedScenarioTick1Rng": {
+    "crtState": 1758127634,
+    "crtCalls": 3000,
+    "customCounter": 1,
+    "customIndex": 1,
+    "customCalls": 1,
+    "lastCallSite": 4202976,
+    "tableHash": "a1ba1b90ea55796d",
+    "provenance": "scenario_seed"
+  },
+  "formalRootLfrTick1Rng": {
+    "crtState": 3374725112,
+    "crtCalls": 3000,
+    "customCounter": 0,
+    "customIndex": 1,
+    "customCalls": 0,
+    "lastCallSite": 0,
+    "tableHash": "a1ba1b90ea55796d",
+    "provenance": "locked_lfr_manager"
+  },
+  "rngScalarSame": false,
+  "scope": "Source-paired scenario and formal-root LFR have matching roster, action, inputs and gate, but different RNG carrier; clone-X comparison is a scoped observable rule witness, not full-state parity."
+}

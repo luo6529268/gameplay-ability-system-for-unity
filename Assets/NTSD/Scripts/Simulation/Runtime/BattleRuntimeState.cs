@@ -575,6 +575,7 @@ namespace NTSD.Simulation
 
         public bool FusionFirstFeatureGate4A8428;
         public bool FusionSecondFeatureGate4A842C;
+        public int SelectedModeStageGate50;
         public BattleMatchRuntimeState Match = new BattleMatchRuntimeState();
         public BattleStageRuntimeState Stage = new BattleStageRuntimeState();
         [NonSerialized]
@@ -618,6 +619,7 @@ namespace NTSD.Simulation
         {
             FusionFirstFeatureGate4A8428 = false;
             FusionSecondFeatureGate4A842C = false;
+            SelectedModeStageGate50 = 0;
             Match?.Reset();
             Stage?.Reset();
             StageProgression?.Reset();

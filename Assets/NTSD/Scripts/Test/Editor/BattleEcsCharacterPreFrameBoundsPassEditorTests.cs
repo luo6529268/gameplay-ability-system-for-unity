@@ -86,7 +86,7 @@ namespace NTSD.Test
             Assert.That(dataCharacters[2].Runtime.X, Is.EqualTo(700.0));
             Assert.That(dataCharacters[3].Runtime.X, Is.EqualTo(750.0));
             Assert.That(dataCharacters[4].Runtime.X, Is.EqualTo(-100.0));
-            Assert.That(dataCharacters[5].Runtime.X, Is.EqualTo(900.0));
+            Assert.That(dataCharacters[5].Runtime.X, Is.EqualTo(810.0));
             Assert.That(dataCharacters[6].Runtime.XInt, Is.EqualTo(123));
 
             BattleEcsCharacterPreFrameBoundsPassDiagnostics diagnostics =

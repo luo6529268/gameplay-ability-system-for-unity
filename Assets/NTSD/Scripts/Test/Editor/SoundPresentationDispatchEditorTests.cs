@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Animation.LF2Tasks;
@@ -62,6 +63,8 @@ namespace NTSD.Test
         public void Driver_CatchUpPublishesEveryTickAndPresentationHostDispatchesOnceWithoutDropOrDuplication()
         {
             using var scope = new DriverScope();
+            scope.Driver.SetPaused(false);
+            scope.Driver.SetPaused(true);
             var sink = new RecordingSoundSink(scope.Driver);
             scope.Driver.SetSoundPresentationSinkForDiagnostics(sink);
             scope.Driver.World.Register(new TickSoundEmitter(scope.Driver.World));
@@ -84,18 +87,25 @@ namespace NTSD.Test
                     FrameInputSet.Empty(tick),
                     ignorePaused: true,
                     buildPresentation: buildPresentation), Is.True);
+                Assert.That(sink.Batches, Has.Count.EqualTo(tick),
+                    "Each accepted tick must submit its battle sound before the next tick.");
+                Assert.That(sink.Batches[tick - 1], Has.Length.EqualTo(1));
+                Assert.That(sink.Batches[tick - 1][0].Cue,
+                    Is.EqualTo("SFX_TICK_" + tick));
             }
             Assert.That(scope.Driver.PendingPublishedSoundEventCountForDiagnostics,
-                Is.EqualTo(catchUpTickCount));
+                Is.Zero);
+            Assert.That(scope.Driver.StepOneTick(
+                FrameInputSet.Empty(catchUpTickCount),
+                ignorePaused: true,
+                buildPresentation: false), Is.False);
             scope.Driver.FlushPublishedSoundEventsForTesting();
 
             Assert.That(presentationFlags, Is.EqualTo(new[] { false, false, true }));
-            Assert.That(sink.Batches, Has.Count.EqualTo(1));
-            Assert.That(sink.Batches[0], Has.Length.EqualTo(catchUpTickCount));
-            Assert.That(sink.Batches[0][0].Cue, Is.EqualTo("SFX_TICK_1"));
-            Assert.That(sink.Batches[0][1].Cue, Is.EqualTo("SFX_TICK_2"));
-            Assert.That(sink.Batches[0][2].Cue, Is.EqualTo("SFX_TICK_3"));
-            Assert.That(sink.ChecksumWasReady, Is.EqualTo(new[] { true }));
+            Assert.That(sink.Batches, Has.Count.EqualTo(catchUpTickCount),
+                "LateUpdate fallback must not dispatch accepted tick sounds twice.");
+            Assert.That(sink.ChecksumWasReady,
+                Is.EqualTo(new[] { true, true, true }));
             Assert.That(scope.Driver.DispatchedSoundEventCountForDiagnostics, Is.EqualTo(3));
             Assert.That(scope.Driver.SuppressedSoundEventCountForDiagnostics, Is.Zero);
             Assert.That(scope.Driver.RejectedPublishedSoundEventCountForDiagnostics, Is.Zero);
@@ -106,6 +116,8 @@ namespace NTSD.Test
         public void Driver_SuppressionKeepsLogicalEventAndChecksumWithoutCallingSink()
         {
             using var scope = new DriverScope();
+            scope.Driver.SetPaused(false);
+            scope.Driver.SetPaused(true);
             var sink = new RecordingSoundSink(scope.Driver);
             scope.Driver.SetSoundPresentationSinkForDiagnostics(sink);
             scope.Driver.SetSoundPresentationSuppressedForDiagnostics(true);
@@ -115,6 +127,10 @@ namespace NTSD.Test
                 FrameInputSet.Empty(1),
                 ignorePaused: true,
                 buildPresentation: false), Is.True);
+            Assert.That(scope.Driver.PendingPublishedSoundEventCountForDiagnostics,
+                Is.Zero);
+            Assert.That(scope.Driver.SuppressedSoundEventCountForDiagnostics,
+                Is.EqualTo(1));
             scope.Driver.FlushPublishedSoundEventsForTesting();
 
             Assert.That(sink.Batches, Is.Empty);
@@ -133,6 +149,8 @@ namespace NTSD.Test
             string dispatchedSnapshot;
             using (var dispatched = new DriverScope())
             {
+                dispatched.Driver.SetPaused(false);
+                dispatched.Driver.SetPaused(true);
                 dispatched.Driver.SetSoundPresentationSinkForDiagnostics(
                     new RecordingSoundSink(dispatched.Driver));
                 dispatched.Driver.World.Register(new TickSoundEmitter(dispatched.Driver.World));
@@ -145,6 +163,8 @@ namespace NTSD.Test
             }
 
             using var suppressed = new DriverScope();
+            suppressed.Driver.SetPaused(false);
+            suppressed.Driver.SetPaused(true);
             suppressed.Driver.SetSoundPresentationSinkForDiagnostics(
                 new RecordingSoundSink(suppressed.Driver));
             suppressed.Driver.SetSoundPresentationSuppressedForDiagnostics(true);
@@ -160,6 +180,96 @@ namespace NTSD.Test
             Assert.That(suppressed.Driver.World.PendingSounds, Has.Count.EqualTo(1));
             Assert.That(suppressed.Driver.World.PendingSounds[0].Cue,
                 Is.EqualTo("SFX_TICK_1"));
+        }
+
+        [Test]
+        public void Driver_WorkerSoundDispatchesOnceOnMainThreadAfterMatchedPublication()
+        {
+            using var scope = new DriverScope();
+            SimulationTickDriver driver = scope.Driver;
+            SimulationWorld world = driver.World;
+            driver.ApplySettings(new LockstepSimulationSettings
+            {
+                driveMode = SimulationDriveMode.LocalFreeRun,
+                requireInputFrameReady = false,
+                enableFrameChecksum = true,
+                captureFullFrameSnapshotForDiagnostics = false,
+            });
+            driver.SetFrameInputProvider(new EmptyFrameInputProvider());
+            var characterData = new LF2CharacterData();
+            characterData.frames.Add(new LF2FrameData
+            {
+                frameId = 0,
+                state = 0,
+                pic = 0,
+                wait = 1,
+                next = 0,
+            });
+            var wrapper = new LF2CharacterDataWrapper(31996, characterData);
+            world.PrepareRuntimeDataCatalogForBattle(
+                new[]
+                {
+                    new ObjectDefinition(
+                        31996,
+                        (int)LF2ObjectType.Other,
+                        "worker-sound.dat"),
+                },
+                id => id == 31996 ? wrapper : null);
+            world.Register(new TickSoundEmitter(world, fixedCue: true));
+            driver.SetPaused(false);
+            driver.SetPaused(true);
+            var sink = new RecordingSoundSink(driver);
+            driver.SetSoundPresentationSinkForDiagnostics(sink);
+            int mainThreadId = Thread.CurrentThread.ManagedThreadId;
+            bool battleSealStarted = false;
+            try
+            {
+                battleSealStarted = true;
+                driver.BeginBattleAllocationSeal();
+                Assert.That(driver.DedicatedSimulationWorkerActiveForDiagnostics,
+                    Is.True,
+                    driver.DedicatedSimulationWorkerIneligibilityReasonForDiagnostics);
+
+                Assert.That(
+                    driver.TryScheduleDedicatedSimulationWorkerTickForDiagnostics(
+                        buildPresentation: false),
+                    Is.True,
+                    driver.DedicatedSimulationWorkerLastSubmissionFailureReasonForDiagnostics);
+                Assert.That(sink.Batches, Is.Empty,
+                    "Submission alone must not present the worker's sound.");
+
+                MethodInfo consumeMethod = typeof(SimulationTickDriver).GetMethod(
+                    "ConsumeDedicatedSimulationWorkerPublication",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(consumeMethod, Is.Not.Null);
+                Assert.That(SpinWait.SpinUntil(
+                    () =>
+                    {
+                        consumeMethod.Invoke(driver, null);
+                        return driver.CurrentTickIndex == 1 ||
+                               driver.DedicatedSimulationWorkerFailureForDiagnostics != null;
+                    },
+                    2000), Is.True,
+                    "The sound-producing worker tick was not consumed.");
+                Assert.That(driver.DedicatedSimulationWorkerFailureForDiagnostics,
+                    Is.Null);
+                Assert.That(driver.CurrentTickIndex, Is.EqualTo(1));
+                Assert.That(sink.Batches, Has.Count.EqualTo(1));
+                Assert.That(sink.Batches[0], Has.Length.EqualTo(1));
+                Assert.That(sink.Batches[0][0].Cue, Is.EqualTo("SFX_WORKER"));
+                Assert.That(sink.Batches[0][0].Tick, Is.EqualTo(1));
+                Assert.That(sink.CallbackThreadIds,
+                    Is.EqualTo(new[] { mainThreadId }));
+                Assert.That(driver.PendingPublishedSoundEventCountForDiagnostics,
+                    Is.Zero);
+                driver.FlushPublishedSoundEventsForTesting();
+                Assert.That(sink.Batches, Has.Count.EqualTo(1));
+            }
+            finally
+            {
+                if (battleSealStarted)
+                    driver.EndBattleAllocationSeal();
+            }
         }
 
         [Test]
@@ -266,6 +376,129 @@ namespace NTSD.Test
             }
         }
 
+        [Test]
+        public void NativeBattleVolume_RetunesPlayingVoiceAndNewCueAtFormalSfxGain()
+        {
+            const string soundId = "__TEST_PREPARED__\\native-volume.wav";
+            var host = new GameObject("NativeBattleVolumeTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            AudioClip clip = null;
+            try
+            {
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                clip = AudioClip.Create("NativeBattleVolumeClip", 44100, 1, 44100, false);
+                PrepareLoadedCue(player, soundId, clip);
+                SetPrivateField(player, "cachedListenerTransform", host.transform);
+                var sounds = new List<PendingSoundEvent>(1)
+                {
+                    new PendingSoundEvent(soundId, 0, 1),
+                };
+
+                player.PresentSounds(sounds);
+                AudioSource[] voices = host.GetComponentsInChildren<AudioSource>();
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(100));
+                Assert.That(voices[0].volume, Is.EqualTo(1f).Within(0.00001f));
+
+                AdvanceNativeBattleVolume(player,
+                    NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(99));
+                Assert.That(voices[0].volume,
+                    Is.EqualTo(Mathf.Pow(10f, -38f / 2000f)).Within(0.00001f));
+
+                for (int index = 0; index < 99; index++)
+                    AdvanceNativeBattleVolume(player,
+                        NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.Zero);
+                Assert.That(voices[0].volume, Is.Zero);
+
+                AdvanceNativeBattleVolume(player,
+                    NTSD28NativeFunctionKeyHostCommand.VolumeUp);
+                float expectedOnePercentGain = Mathf.Pow(10f, -3762f / 2000f);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(1));
+                Assert.That(voices[0].volume,
+                    Is.EqualTo(expectedOnePercentGain).Within(0.00001f));
+
+                player.PresentSounds(sounds);
+                Assert.That(voices[1].volume,
+                    Is.EqualTo(expectedOnePercentGain).Within(0.00001f));
+
+                for (int index = 0; index < 99; index++)
+                    AdvanceNativeBattleVolume(player,
+                        NTSD28NativeFunctionKeyHostCommand.VolumeUp);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(100));
+                Assert.That(voices[0].volume, Is.EqualTo(1f).Within(0.00001f));
+                Assert.That(voices[1].volume, Is.EqualTo(1f).Within(0.00001f));
+            }
+            finally
+            {
+                if (clip != null)
+                    UnityEngine.Object.DestroyImmediate(clip);
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void NativeBattleVolume_AppliesOnlyAfterSuccessfulLocalHostTick()
+        {
+            using var scope = new DriverScope();
+            var soundHost = new GameObject("NativeBattleHostTickVolumeTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            try
+            {
+                NTSDSoundPlayer player = soundHost.AddComponent<NTSDSoundPlayer>();
+                scope.Driver.SetSoundPresentationSinkForDiagnostics(player);
+                scope.Driver.ApplySettings(new LockstepSimulationSettings
+                {
+                    driveMode = SimulationDriveMode.LocalFreeRun,
+                    requireInputFrameReady = false,
+                    enableFrameChecksum = false,
+                });
+                scope.Driver.SetFrameInputProvider(null);
+                scope.Driver.SetPaused(false);
+                SetPrivateField(scope.Driver, "_nativeFunctionKeyContinuousHostCommand",
+                    NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+
+                Assert.That(InvokeHostTick(scope.Driver, 1), Is.True);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(99));
+                Assert.That(InvokeHostTick(scope.Driver, 1), Is.False);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(99));
+
+                SetPrivateField(scope.Driver, "_nativeFunctionKeyContinuousHostCommand",
+                    NTSD28NativeFunctionKeyHostCommand.VolumeUp);
+                Assert.That(InvokeHostTick(scope.Driver, 2), Is.True);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(100));
+
+                scope.Driver.SetPaused(true);
+                SetPrivateField(scope.Driver, "_nativeFunctionKeyContinuousHostCommand",
+                    NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+                Assert.That(scope.Driver.ProcessHostControlCommandsForDiagnostics(), Is.False);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(100));
+                scope.Driver.QueueHostControlCommandsForDiagnostics(
+                    SimulationHostControlCommand.SingleStep);
+                Assert.That(scope.Driver.ProcessHostControlCommandsForDiagnostics(), Is.True);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(99));
+
+                scope.Driver.ApplySettings(new LockstepSimulationSettings
+                {
+                    driveMode = SimulationDriveMode.Manual,
+                    requireInputFrameReady = false,
+                    enableFrameChecksum = false,
+                });
+                SetPrivateField(scope.Driver, "_nativeFunctionKeyContinuousHostCommand",
+                    NTSD28NativeFunctionKeyHostCommand.VolumeDown);
+                Assert.That(InvokeHostTick(scope.Driver, 4), Is.True);
+                Assert.That(GetNativeBattleVolumePercent(player), Is.EqualTo(99));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(soundHost);
+            }
+        }
+
         private static void PrepareLoadedCue(
             NTSDSoundPlayer player,
             string soundId,
@@ -306,6 +539,45 @@ namespace NTSD.Test
             method.Invoke(target, null);
         }
 
+        private static int GetNativeBattleVolumePercent(NTSDSoundPlayer player)
+        {
+            const BindingFlags flags = BindingFlags.Instance |
+                                       BindingFlags.Public |
+                                       BindingFlags.NonPublic;
+            PropertyInfo property = typeof(NTSDSoundPlayer).GetProperty(
+                "NativeBattleVolumePercentForDiagnostics",
+                flags);
+            Assert.That(property, Is.Not.Null);
+            return (int)property.GetValue(player);
+        }
+
+        private static void AdvanceNativeBattleVolume(
+            NTSDSoundPlayer player,
+            NTSD28NativeFunctionKeyHostCommand command)
+        {
+            const BindingFlags flags = BindingFlags.Instance |
+                                       BindingFlags.Public |
+                                       BindingFlags.NonPublic;
+            MethodInfo method = typeof(NTSDSoundPlayer).GetMethod(
+                "ApplyNativeBattleVolumeHostTick",
+                flags);
+            Assert.That(method, Is.Not.Null);
+            method.Invoke(player, new object[] { command });
+        }
+
+        private static bool InvokeHostTick(SimulationTickDriver driver, int tickIndex)
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+            MethodInfo method = typeof(SimulationTickDriver).GetMethod(
+                "StepOneTickInternal",
+                flags,
+                null,
+                new[] { typeof(int), typeof(bool) },
+                null);
+            Assert.That(method, Is.Not.Null);
+            return (bool)method.Invoke(driver, new object[] { tickIndex, false });
+        }
+
         private static void SetPrivateField(
             object target,
             string fieldName,
@@ -320,13 +592,17 @@ namespace NTSD.Test
         private sealed class TickSoundEmitter : LF2Entity
         {
             private readonly SimulationWorld world;
+            private readonly bool fixedCue;
 
             public override LF2ObjectType ObjectTypeEnum => LF2ObjectType.Other;
 
-            public TickSoundEmitter(SimulationWorld world)
+            public TickSoundEmitter(SimulationWorld world, bool fixedCue = false)
             {
                 this.world = world;
+                this.fixedCue = fixedCue;
                 Name = "SoundPresentationDispatchEmitter";
+                // Keep this frameless publication fixture outside the native missing-frame guard.
+                FrameDelay = 4;
                 Health = new LF2Health();
                 Health.BindRuntime(Runtime);
                 ItrRest = new LF2ItrRestTracker();
@@ -336,7 +612,9 @@ namespace NTSD.Test
 
             public override void SimTransit(int tickIndex)
             {
-                world.QueueSound("SFX_TICK_" + tickIndex, tickIndex * 10);
+                world.QueueSound(
+                    fixedCue ? "SFX_WORKER" : "SFX_TICK_" + tickIndex,
+                    tickIndex * 10);
             }
 
             public override void SimTU(int tickIndex) { }
@@ -358,6 +636,7 @@ namespace NTSD.Test
             public List<PendingSoundEvent[]> Batches { get; } =
                 new List<PendingSoundEvent[]>();
             public List<bool> ChecksumWasReady { get; } = new List<bool>();
+            public List<int> CallbackThreadIds { get; } = new List<int>();
 
             public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
             {
@@ -365,10 +644,28 @@ namespace NTSD.Test
                 for (int i = 0; i < sounds.Count; i++)
                     copy[i] = sounds[i];
                 Batches.Add(copy);
+                CallbackThreadIds.Add(Thread.CurrentThread.ManagedThreadId);
                 ChecksumWasReady.Add(
                     driver.LastChecksumSnapshot != null &&
                     copy.Length > 0 &&
                     driver.LastChecksumSnapshot.Tick == copy[copy.Length - 1].Tick);
+            }
+        }
+
+        private sealed class EmptyFrameInputProvider : ISimulationFrameInputProvider
+        {
+            private readonly FrameInputSet frame =
+                FrameInputSetPreallocation.CreateReusable();
+
+            public bool IsFrameInputReady(int tickIndex) => true;
+
+            public FrameInputSet GetFrameInput(int tickIndex)
+            {
+                FrameInputSetPreallocation.ResetPreallocated(
+                    frame,
+                    tickIndex,
+                    null);
+                return frame;
             }
         }
 

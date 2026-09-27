@@ -1,0 +1,41 @@
+{
+  "schema": "ntsd28-q08-clone-stage-gate-root-comparison/1.0",
+  "rootExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "rootReportSha256": "EA8771D2CDF2348D61FAC0FFF7330EAAA4D4A5A83711941265AEC4C40836C7BC",
+  "rootTraceSha256": "69E1DFB15CC6D67398DCF2730F75E1C8187BF7AA69EA6E0ABE9102E0FCCB8B0C",
+  "unitySidecarSha256": "A09E114316323C7661FB4335CE849AD06B2528D344D3E766EEA29F5F7CC6B765",
+  "lfrSha256": "43F87FAFAEF4D329F1E8462C5FEE73DB2EE1EFEBFFCD397FDE435D8501164155",
+  "rootReplayPassed": true,
+  "nativeParityClaim": false,
+  "declaredTicks": 3,
+  "traceExtraFinalTick": 4,
+  "rows": [
+    {
+      "tick": 1,
+      "formalRootClonePresent": false,
+      "formalRootCloneX": null,
+      "formalRootCloneAction": null,
+      "unityCloneSourceX": null,
+      "unityClonePhysicalX": null,
+      "firstDifference": false
+    },
+    {
+      "tick": 2,
+      "formalRootClonePresent": true,
+      "formalRootCloneX": -42,
+      "formalRootCloneAction": 241,
+      "unityCloneSourceX": -42,
+      "unityClonePhysicalX": -42,
+      "firstDifference": false
+    },
+    {
+      "tick": 3,
+      "formalRootClonePresent": true,
+      "formalRootCloneX": 0,
+      "formalRootCloneAction": 242,
+      "unityCloneSourceX": -49,
+      "unityClonePhysicalX": -49,
+      "firstDifference": true
+    }
+  ]
+}

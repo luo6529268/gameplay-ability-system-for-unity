@@ -41,7 +41,8 @@ namespace NTSD.Test
             Assert.That(keyboard, Is.Not.Null);
 
             SimulationWorld firstWorld = driver.World;
-            AdvanceToNaturalResult(driver, firstWorld, keyboard);
+            AdvanceToNaturalResult(driver, firstWorld, keyboard,
+                heldContinueAt144: false);
             for (int frame = 0; frame < 10 &&
                  ReferenceEquals(driver.World, firstWorld); frame++)
                 yield return null;
@@ -60,7 +61,8 @@ namespace NTSD.Test
                 yield return new WaitForSecondsRealtime(1f);
             Assert.That(driver.CurrentTickIndex, Is.GreaterThan(rematchTick),
                 "The recreated battle did not resume before its second collision fixture.");
-            AdvanceToNaturalResult(driver, secondWorld, keyboard);
+            AdvanceToNaturalResult(driver, secondWorld, keyboard,
+                heldContinueAt144: true);
             int frozenTick = driver.CurrentTickIndex;
             for (int frame = 0; frame < 5; frame++)
                 yield return null;
@@ -86,7 +88,8 @@ namespace NTSD.Test
         }
 
         private static void AdvanceToNaturalResult(
-            SimulationTickDriver driver, SimulationWorld world, Keyboard keyboard)
+            SimulationTickDriver driver, SimulationWorld world, Keyboard keyboard,
+            bool heldContinueAt144)
         {
             driver.SetPaused(true);
             Assert.That(driver.World, Is.SameAs(world));
@@ -104,6 +107,8 @@ namespace NTSD.Test
             Assert.That(input?.AttackAction?.enabled, Is.True);
             Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
             Assert.That(world.Runtime.Results.NativeTransitionState, Is.Zero);
+            Assert.That(world.Runtime.NativeKnockoutFeed.RecordPresent, Is.True);
+            Assert.That(world.Runtime.NativeKnockoutFeed.LifetimeTicks, Is.EqualTo(70));
 
             int direction = attacker.Runtime.IsFacingLeft ? -1 : 1;
             victim.Runtime.SetPosition(attacker.Runtime.XInt + direction * 40,
@@ -122,6 +127,7 @@ namespace NTSD.Test
             bool physicalAttackSeen = false;
             bool authoredPunchSeen = false;
             bool knockoutSeen = false;
+            int knockoutBattleTime = -1;
             var trace = new StringBuilder(4096);
             trace.Append("mode=").Append(world.BattleGameModeId)
                 .Append(" inputPhase=").Append(world.InputPhase)
@@ -182,7 +188,10 @@ namespace NTSD.Test
                             knockout.BattleTimeTick == eventTime &&
                             (knockout.CreditSlot == attacker.Runtime.SlotIndex ||
                              knockout.FourOwnerSlot == attacker.Runtime.SlotIndex))
+                        {
                             knockoutSeen = true;
+                            knockoutBattleTime = knockout.BattleTimeTick;
+                        }
                     }
                     break;
                 }
@@ -200,16 +209,78 @@ namespace NTSD.Test
             Assert.That(victim.Health.HP, Is.LessThanOrEqualTo(0),
                 "The live Naruto attack did not knock out the opposing participant.\n" + trace);
             Assert.That(knockoutSeen, Is.True);
+            Assert.That(knockoutBattleTime, Is.GreaterThan(0));
             Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
             Assert.That(driver.StepOneTick(ignorePaused: true,
                 buildPresentation: false), Is.True);
             Assert.That(world.Runtime.Results.NativeResultTimer, Is.EqualTo(1));
-            for (int timer = 2; timer <= 350; timer++)
+            bool retainedAtLifetime = false;
+            bool removedAfterLifetime = false;
+            bool heldContinueInputSeen = false;
+            int finalRetainedTick = knockoutBattleTime +
+                world.Runtime.NativeKnockoutFeed.LifetimeTicks;
+            try
             {
-                Assert.That(driver.StepOneTick(ignorePaused: true,
-                    buildPresentation: false), Is.True,
-                    "Natural result timer stopped at " + timer);
+                int finalTimer = heldContinueAt144 ? 144 : 350;
+                for (int timer = 2; timer <= finalTimer; timer++)
+                {
+                    if (heldContinueAt144 && timer == 144)
+                    {
+                        InputSystem.QueueStateEvent(keyboard,
+                            new KeyboardState(Key.J));
+                        InputSystem.Update();
+                    }
+                    Assert.That(driver.StepOneTick(ignorePaused: true,
+                        buildPresentation: false), Is.True,
+                        "Natural result timer stopped at " + timer);
+                    if (heldContinueAt144 && timer == 144 &&
+                        driver.LastAppliedFrameInput?.Players != null)
+                    {
+                        foreach (SimulationPlayerInput player in
+                                 driver.LastAppliedFrameInput.Players)
+                        {
+                            if (player.PlayerSlot == 0 &&
+                                (player.Buttons & (SimulationInputButtons.Attack |
+                                                   SimulationInputButtons.Jump)) != 0)
+                                heldContinueInputSeen = true;
+                        }
+                    }
+
+                    int tick = driver.CurrentTickIndex;
+                    if (tick != finalRetainedTick && tick != finalRetainedTick + 1)
+                        continue;
+
+                    bool naturalEventPresent = false;
+                    foreach (NativeKnockoutEvent knockout in world.NativeKnockoutEvents)
+                    {
+                        if (knockout.BattleTimeTick == knockoutBattleTime &&
+                            knockout.VictimSlot == victim.Runtime.SlotIndex)
+                            naturalEventPresent = true;
+                    }
+                    if (tick == finalRetainedTick)
+                    {
+                        Assert.That(naturalEventPresent, Is.True,
+                            "Natural KO event expired before its configured last tick.");
+                        retainedAtLifetime = true;
+                    }
+                    else
+                    {
+                        Assert.That(naturalEventPresent, Is.False,
+                            "Natural KO event survived past its configured lifetime.");
+                        removedAfterLifetime = true;
+                    }
+                }
             }
+            finally
+            {
+                InputSystem.QueueStateEvent(keyboard, new KeyboardState());
+                InputSystem.Update();
+            }
+            if (heldContinueAt144)
+                Assert.That(heldContinueInputSeen, Is.True,
+                    "Physical held result input did not enter the canonical tick.");
+            Assert.That(retainedAtLifetime, Is.True);
+            Assert.That(removedAfterLifetime, Is.True);
             Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
             Assert.That(world.Runtime.Results.NativeResultPhase, Is.EqualTo(3));
             Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
