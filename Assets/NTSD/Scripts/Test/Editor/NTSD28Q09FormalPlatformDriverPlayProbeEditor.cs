@@ -1,6 +1,7 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
 using System.IO;
+using System.Reflection;
 using System.Security.Cryptography;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
@@ -10,6 +11,7 @@ using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NTSD.Test.Editor
@@ -24,8 +26,14 @@ namespace NTSD.Test.Editor
             "artifacts/diagnostics/NTSD28-Q09-FORMAL-PLATFORM-DRIVER-PLAY-001";
         private const string CameraResultRoot =
             "artifacts/diagnostics/NTSD28-Q09-FORMAL-PLATFORM-SHADOW-CAMERA-WITNESS-001";
+        private const string IsolatedResultRoot =
+            "artifacts/diagnostics/NTSD28-Q09-PLATFORM-SHADOW-ISOLATED-PIXEL-001";
+        private const string DifferenceResultRoot =
+            "artifacts/diagnostics/NTSD28-Q09-PLATFORM-SHADOW-CENTRAL-DIFFERENCE-001";
         private const int CaptureWidth = 1920;
         private static readonly Color32 Clear = new Color32(255, 255, 255, 255);
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
 
         private static int stableTick = -1;
         private static int stableUpdates;
@@ -40,6 +48,8 @@ namespace NTSD.Test.Editor
             public string runId;
             public long startedUtcTicks;
             public bool captureCamera;
+            public bool captureIsolatedShadow;
+            public bool captureCentralDifference;
         }
 
         [Serializable]
@@ -96,6 +106,31 @@ namespace NTSD.Test.Editor
             public int sampleX;
             public int sampleY;
             public string samplePostRgb;
+            public bool isolatedShadowRequested;
+            public string isolatedShadowStatus;
+            public string isolatedShadowImage;
+            public int isolatedResolvedCommands;
+            public int isolatedSegments;
+            public int isolatedShadowPixels;
+            public int isolatedBoundsX;
+            public int isolatedBoundsY;
+            public int isolatedBoundsWidth;
+            public int isolatedBoundsHeight;
+            public bool centralDifferenceRequested;
+            public string centralDifferenceStatus;
+            public string centralAllImage;
+            public string centralWithoutTargetImage;
+            public int centralAllCommandCount;
+            public int centralWithoutTargetCommandCount;
+            public int centralAllResolvedCommands;
+            public int centralWithoutTargetResolvedCommands;
+            public int centralAllSegments;
+            public int centralWithoutTargetSegments;
+            public int centralChangedPixels;
+            public int centralChangedBoundsX;
+            public int centralChangedBoundsY;
+            public int centralChangedBoundsWidth;
+            public int centralChangedBoundsHeight;
             public int objectsBefore;
             public int objectsAfter;
             public int slotsBefore;
@@ -137,7 +172,8 @@ namespace NTSD.Test.Editor
                 Scene scene = SceneManager.GetActiveScene();
                 if (!ValidRunId(request.runId) || scene.path != ScenePath ||
                     scene.isDirty || File.Exists(ResultPath(request.runId,
-                        request.captureCamera)))
+                        request.captureCamera, request.captureIsolatedShadow,
+                        request.captureCentralDifference)))
                 {
                     Finish(request, new Report
                     {
@@ -165,7 +201,15 @@ namespace NTSD.Test.Editor
                 contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot,
                 cameraRequested = request.captureCamera,
                 cameraPixelStatus = request.captureCamera ? "PENDING" : "NOT_REQUESTED",
-                scope = request.captureCamera
+                isolatedShadowRequested = request.captureIsolatedShadow,
+                isolatedShadowStatus = request.captureIsolatedShadow
+                    ? "PENDING" : "NOT_REQUESTED",
+                centralDifferenceRequested = request.captureCentralDifference,
+                centralDifferenceStatus = request.captureCentralDifference
+                    ? "PENDING" : "NOT_REQUESTED",
+                scope = request.captureCentralDifference
+                    ? "Controlled formal OID56/frame130 + OID2 full Driver tick; copy its captured central commands into complete and target-Shadow-removed temporary offscreen layers. Natural Game view, Legacy and root EXE pixels are not covered."
+                    : request.captureCamera
                     ? "Controlled formal OID56 frame130 + OID2, one complete production Driver tick, CentralOnly Shadow command and conservative original-camera pixel attribution; natural input, Legacy Play and root EXE graphics are not covered."
                     : "Controlled formal OID56 frame130 + OID2, one complete production Driver tick and CentralOnly Shadow command; natural input, camera pixels and root EXE graphics are not covered.",
             };
@@ -338,10 +382,30 @@ namespace NTSD.Test.Editor
                     CompareShadowPixels(camera, frame, shadowIndex,
                         shadowCommand, baselinePixels, postPixels, report);
                 }
-                report.status = !request.captureCamera ||
-                    report.cameraPixelStatus == "PASS_EXCLUSIVE_SHADOW"
-                    ? "PASS"
-                    : "PARTIAL_PIXEL_OWNERSHIP_UNPROVEN";
+                if (request.captureIsolatedShadow)
+                {
+                    Require(camera != null && shadowIndex >= 0,
+                        "Isolated shadow capture needs the original camera and formal Shadow command.");
+                    CaptureIsolatedShadowPixels(camera, frame, shadowCommand,
+                        request.runId, report);
+                }
+                if (request.captureCentralDifference)
+                {
+                    Require(camera != null && shadowIndex >= 0,
+                        "Central difference needs the original camera and target Shadow index.");
+                    CaptureCentralDifferencePixels(camera, frame, shadowIndex,
+                        request.runId, report);
+                }
+                report.status = request.captureCentralDifference
+                    ? report.centralDifferenceStatus
+                    : request.captureIsolatedShadow
+                    ? report.isolatedShadowStatus == "PASS_ISOLATED_SHADOW_PIXEL"
+                        ? "PASS_ISOLATED_ONLY_FULL_FRAME_UNPROVEN"
+                        : "FAIL_ISOLATED_SHADOW_PIXEL"
+                    : !request.captureCamera ||
+                      report.cameraPixelStatus == "PASS_EXCLUSIVE_SHADOW"
+                        ? "PASS"
+                        : "PARTIAL_PIXEL_OWNERSHIP_UNPROVEN";
             }
             catch (Exception error)
             {
@@ -376,6 +440,8 @@ namespace NTSD.Test.Editor
                     runId = report.runId,
                     running = true,
                     captureCamera = request.captureCamera,
+                    captureIsolatedShadow = request.captureIsolatedShadow,
+                    captureCentralDifference = request.captureCentralDifference,
                 }, report);
             }
         }
@@ -415,7 +481,9 @@ namespace NTSD.Test.Editor
                 readback.ReadPixels(new Rect(0, 0, CaptureWidth, height),
                     0, 0, false);
                 readback.Apply(false, false);
-                string relative = CameraResultRoot + "/" + runId + "-" +
+                string relative = (report.centralDifferenceRequested
+                    ? DifferenceResultRoot : report.isolatedShadowRequested
+                        ? IsolatedResultRoot : CameraResultRoot) + "/" + runId + "-" +
                     name + ".png";
                 string path = ProjectPath(relative);
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
@@ -449,8 +517,13 @@ namespace NTSD.Test.Editor
                 post != null && baseline.Length == post.Length &&
                 report.cameraStateRestored,
                 "Camera capture or state restoration was incomplete.");
+            BattleCatalogCentralResourceResolver resolver =
+                CreateProductionResolver(frame);
+            Require(resolver.Resolve(shadowCommand, out BattleCentralResolvedResource
+                    shadowResource) == BattleCentralResourceStatus.Resolved,
+                "The target Shadow resource did not resolve for camera projection.");
             RectInt shadow = ProjectCommandBounds(camera, shadowCommand,
-                report.captureHeight);
+                shadowResource, report.captureHeight);
             report.shadowBoundsX = shadow.x;
             report.shadowBoundsY = shadow.y;
             report.shadowBoundsWidth = shadow.width;
@@ -461,8 +534,12 @@ namespace NTSD.Test.Editor
             {
                 if (index == shadowIndex)
                     continue;
+                BattleRenderCommand command = frame.GetCommand(index);
+                if (resolver.Resolve(command, out BattleCentralResolvedResource
+                        resource) != BattleCentralResourceStatus.Resolved)
+                    continue;
                 RectInt bounds = ProjectCommandBounds(camera,
-                    frame.GetCommand(index), report.captureHeight);
+                    command, resource, report.captureHeight);
                 exclusions[exclusionCount++] = RectFromLimits(
                     Mathf.Max(0, bounds.xMin - 2),
                     Mathf.Max(0, bounds.yMin - 2),
@@ -506,15 +583,302 @@ namespace NTSD.Test.Editor
                 : "PIXEL_OWNERSHIP_UNPROVEN";
         }
 
-        private static RectInt ProjectCommandBounds(Camera camera,
-            BattleRenderCommand command, int height)
+        private static void CaptureIsolatedShadowPixels(Camera camera,
+            BattlePresentationFrame productionFrame,
+            BattleRenderCommand shadowCommand, string runId, Report report)
         {
-            float width = command.Size.x * NTSDRenderSpace.UnitsPerPixelX *
+            var isolated = new BattlePresentationFrame();
+            MethodInfo addCommand = typeof(BattlePresentationFrame).GetMethod(
+                "AddCommand", BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(addCommand != null, "The frame command writer is unavailable.");
+            addCommand.Invoke(isolated, new object[] { shadowCommand });
+            Require(isolated.CommandCount == 1 &&
+                    isolated.GetCommand(0).Type == BattleRenderCommandType.Shadow,
+                "The isolated frame does not contain exactly the target Shadow command.");
+            BattleCatalogCentralResourceResolver resolver =
+                CreateProductionResolver(productionFrame);
+            Require(resolver.Resolve(shadowCommand, out BattleCentralResolvedResource
+                    shadowResource) == BattleCentralResourceStatus.Resolved,
+                "The isolated Shadow resource is unavailable.");
+            using var backend = new BattleDynamicMeshBackend();
+            backend.Build(isolated, resolver);
+            report.isolatedResolvedCommands = backend.Diagnostics.ResolvedCommandCount;
+            report.isolatedSegments = backend.SegmentCount;
+            Require(report.isolatedResolvedCommands == 1 &&
+                    report.isolatedSegments >= 1,
+                "The formal Shadow command did not resolve into isolated central geometry.");
+
+            int height = report.captureHeight;
+            Require(height > 0, "The full-frame camera size is unavailable.");
+            var target = new RenderTexture(CaptureWidth, height, 0,
+                RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            var commands = new CommandBuffer { name = "Q09 Isolated Formal Shadow" };
+            RenderTexture previousActive = RenderTexture.active;
+            Texture2D readback = null;
+            try
+            {
+                target.Create();
+                commands.SetRenderTarget(target);
+                commands.SetViewport(new Rect(0, 0, CaptureWidth, height));
+                commands.ClearRenderTarget(false, true, Color.white);
+                commands.SetViewProjectionMatrices(camera.worldToCameraMatrix,
+                    GL.GetGPUProjectionMatrix(camera.projectionMatrix, true));
+                var properties = new MaterialPropertyBlock();
+                for (int index = 0; index < backend.SegmentCount; index++)
+                {
+                    BattleCentralRenderSegment segment = backend.GetSegment(index);
+                    Require(segment.Material != null && segment.Texture != null,
+                        "Isolated Shadow segment has no material or texture.");
+                    properties.Clear();
+                    properties.SetTexture(
+                        segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray
+                            ? MainTexArrayId : MainTexId,
+                        segment.Texture);
+                    commands.DrawMesh(backend.GetChunkMesh(segment.ChunkIndex),
+                        Matrix4x4.identity, segment.Material,
+                        segment.SubMeshIndex, 0, properties);
+                }
+                Graphics.ExecuteCommandBuffer(commands);
+                RenderTexture.active = target;
+                readback = new Texture2D(CaptureWidth, height,
+                    TextureFormat.RGBA32, false, true);
+                readback.ReadPixels(new Rect(0, 0, CaptureWidth, height),
+                    0, 0, false);
+                readback.Apply(false, false);
+                Color32[] pixels = readback.GetPixels32();
+                int minX = CaptureWidth;
+                int minY = height;
+                int maxX = -1;
+                int maxY = -1;
+                for (int y = 0; y < height; y++)
+                {
+                    for (int x = 0; x < CaptureWidth; x++)
+                    {
+                        if (Near(pixels[y * CaptureWidth + x], Clear, 2))
+                            continue;
+                        report.isolatedShadowPixels++;
+                        minX = Mathf.Min(minX, x);
+                        minY = Mathf.Min(minY, y);
+                        maxX = Mathf.Max(maxX, x);
+                        maxY = Mathf.Max(maxY, y);
+                    }
+                }
+                if (report.isolatedShadowPixels > 0)
+                {
+                    report.isolatedBoundsX = minX;
+                    report.isolatedBoundsY = minY;
+                    report.isolatedBoundsWidth = maxX - minX + 1;
+                    report.isolatedBoundsHeight = maxY - minY + 1;
+                    RectInt projected = ProjectCommandBounds(camera,
+                        shadowCommand, shadowResource, height);
+                    RectInt actual = new RectInt(minX, minY,
+                        report.isolatedBoundsWidth,
+                        report.isolatedBoundsHeight);
+                    if (!projected.Overlaps(actual))
+                        report.cameraPixelStatus =
+                            "PIXEL_OWNERSHIP_UNPROVEN_PROJECTION_MISMATCH";
+                }
+                string relative = IsolatedResultRoot + "/" + runId +
+                    "-isolated-shadow.png";
+                string path = ProjectPath(relative);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllBytes(path, readback.EncodeToPNG());
+                report.isolatedShadowImage = relative;
+                report.isolatedShadowStatus = report.isolatedShadowPixels > 0
+                    ? "PASS_ISOLATED_SHADOW_PIXEL"
+                    : "NO_ISOLATED_SHADOW_PIXEL";
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+                commands.Release();
+                if (readback != null)
+                    UnityEngine.Object.DestroyImmediate(readback);
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+            }
+        }
+
+        private static void CaptureCentralDifferencePixels(Camera camera,
+            BattlePresentationFrame productionFrame, int shadowIndex,
+            string runId, Report report)
+        {
+            Require(productionFrame != null && productionFrame.CommandsMaterialized &&
+                    shadowIndex >= 0 && shadowIndex < productionFrame.CommandCount,
+                "The complete production command frame is unavailable.");
+            MethodInfo addCommand = typeof(BattlePresentationFrame).GetMethod(
+                "AddCommand", BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(addCommand != null, "The temporary frame command writer is unavailable.");
+            var all = new BattlePresentationFrame();
+            var withoutTarget = new BattlePresentationFrame();
+            for (int index = 0; index < productionFrame.CommandCount; index++)
+            {
+                BattleRenderCommand command = productionFrame.GetCommand(index);
+                addCommand.Invoke(all, new object[] { command });
+                if (index != shadowIndex)
+                    addCommand.Invoke(withoutTarget, new object[] { command });
+            }
+            report.centralAllCommandCount = all.CommandCount;
+            report.centralWithoutTargetCommandCount = withoutTarget.CommandCount;
+            Require(all.CommandCount == productionFrame.CommandCount &&
+                    withoutTarget.CommandCount == all.CommandCount - 1,
+                "The central difference did not remove exactly one target command.");
+
+            BattleCatalogCentralResourceResolver resolver =
+                CreateProductionResolver(productionFrame);
+            var mode = (BattleCentralDrawMode)typeof(BattleCentralRenderSystem)
+                .GetField("drawMode", BindingFlags.Static | BindingFlags.NonPublic)
+                .GetValue(null);
+            using var allBackend = new BattleDynamicMeshBackend();
+            using var withoutBackend = new BattleDynamicMeshBackend();
+            allBackend.Build(all, resolver, mode);
+            withoutBackend.Build(withoutTarget, resolver, mode);
+            report.centralAllResolvedCommands =
+                allBackend.Diagnostics.ResolvedCommandCount;
+            report.centralWithoutTargetResolvedCommands =
+                withoutBackend.Diagnostics.ResolvedCommandCount;
+            report.centralAllSegments = allBackend.SegmentCount;
+            report.centralWithoutTargetSegments = withoutBackend.SegmentCount;
+            Require(report.centralAllResolvedCommands ==
+                    report.centralWithoutTargetResolvedCommands + 1 &&
+                    report.centralAllSegments > 0 &&
+                    report.centralWithoutTargetSegments > 0,
+                "The target Shadow was not the one resolved command removed.");
+
+            Color32[] allPixels = RenderTemporaryCentralBackend(camera,
+                allBackend, runId, "all-central", report.captureHeight,
+                out report.centralAllImage);
+            Color32[] withoutPixels = RenderTemporaryCentralBackend(camera,
+                withoutBackend, runId, "without-target-shadow",
+                report.captureHeight, out report.centralWithoutTargetImage);
+            Require(allPixels.Length == withoutPixels.Length,
+                "The central difference captures have different sizes.");
+            int minX = CaptureWidth;
+            int minY = report.captureHeight;
+            int maxX = -1;
+            int maxY = -1;
+            for (int index = 0; index < allPixels.Length; index++)
+            {
+                Color32 left = allPixels[index];
+                Color32 right = withoutPixels[index];
+                if (Near(left, right, 2) &&
+                    Math.Abs(left.a - right.a) <= 2)
+                    continue;
+                int x = index % CaptureWidth;
+                int y = index / CaptureWidth;
+                report.centralChangedPixels++;
+                minX = Mathf.Min(minX, x);
+                minY = Mathf.Min(minY, y);
+                maxX = Mathf.Max(maxX, x);
+                maxY = Mathf.Max(maxY, y);
+            }
+            if (report.centralChangedPixels > 0)
+            {
+                report.centralChangedBoundsX = minX;
+                report.centralChangedBoundsY = minY;
+                report.centralChangedBoundsWidth = maxX - minX + 1;
+                report.centralChangedBoundsHeight = maxY - minY + 1;
+            }
+            report.centralDifferenceStatus = report.centralChangedPixels > 0
+                ? "PASS_CENTRAL_LAYER_TARGET_CONTRIBUTION"
+                : "NO_CENTRAL_LAYER_TARGET_CONTRIBUTION_IN_CASE";
+        }
+
+        private static Color32[] RenderTemporaryCentralBackend(Camera camera,
+            BattleDynamicMeshBackend backend, string runId, string imageName,
+            int height, out string relativePath)
+        {
+            Require(height > 0, "The world-camera capture dimensions are unavailable.");
+            var target = new RenderTexture(CaptureWidth, height, 0,
+                RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            var commands = new CommandBuffer { name = "Q09 Central Difference " + imageName };
+            RenderTexture previousActive = RenderTexture.active;
+            Texture2D readback = null;
+            relativePath = string.Empty;
+            try
+            {
+                target.Create();
+                commands.SetRenderTarget(target);
+                commands.SetViewport(new Rect(0, 0, CaptureWidth, height));
+                commands.ClearRenderTarget(false, true, Color.white);
+                commands.SetViewProjectionMatrices(camera.worldToCameraMatrix,
+                    GL.GetGPUProjectionMatrix(camera.projectionMatrix, true));
+                var properties = new MaterialPropertyBlock();
+                for (int index = 0; index < backend.SegmentCount; index++)
+                {
+                    BattleCentralRenderSegment segment = backend.GetSegment(index);
+                    Require(segment.Material != null && segment.Texture != null,
+                        "A captured central segment has no material or texture.");
+                    properties.Clear();
+                    properties.SetTexture(
+                        segment.BindingMode == BattleSpriteCentralBindingMode.AtlasTextureArray
+                            ? MainTexArrayId : MainTexId,
+                        segment.Texture);
+                    commands.DrawMesh(backend.GetChunkMesh(segment.ChunkIndex),
+                        Matrix4x4.identity, segment.Material,
+                        segment.SubMeshIndex, 0, properties);
+                }
+                Graphics.ExecuteCommandBuffer(commands);
+                RenderTexture.active = target;
+                readback = new Texture2D(CaptureWidth, height,
+                    TextureFormat.RGBA32, false, true);
+                readback.ReadPixels(new Rect(0, 0, CaptureWidth, height),
+                    0, 0, false);
+                readback.Apply(false, false);
+                relativePath = DifferenceResultRoot + "/" + runId +
+                    "-" + imageName + ".png";
+                string path = ProjectPath(relativePath);
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
+                File.WriteAllBytes(path, readback.EncodeToPNG());
+                return readback.GetPixels32();
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+                commands.Release();
+                if (readback != null)
+                    UnityEngine.Object.DestroyImmediate(readback);
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+            }
+        }
+
+        private static BattleCatalogCentralResourceResolver CreateProductionResolver(
+            BattlePresentationFrame frame)
+        {
+            const BindingFlags flags = BindingFlags.Static | BindingFlags.NonPublic;
+            Material material = (Material)typeof(BattleCentralRenderSystem)
+                .GetField("featureMaterial", flags)?.GetValue(null);
+            Material arrayMaterial = (Material)typeof(BattleCentralRenderSystem)
+                .GetField("featureArrayMaterial", flags)?.GetValue(null);
+            Require(material != null && arrayMaterial != null,
+                "The production central feature materials are unavailable.");
+            var resolver = new BattleCatalogCentralResourceResolver();
+            resolver.Configure(frame.BoundCatalogForAcceptance,
+                frame.CommonVisualCatalog, material, arrayMaterial);
+            return resolver;
+        }
+
+        private static RectInt ProjectCommandBounds(Camera camera,
+            BattleRenderCommand command,
+            BattleCentralResolvedResource resource, int height)
+        {
+            float width = resource.PixelSize.x * NTSDRenderSpace.UnitsPerPixelX *
                 NTSDRenderSpace.BattleVisualScale;
-            float bodyHeight = command.Size.y * NTSDRenderSpace.UnitsPerPixelY *
+            float bodyHeight = resource.PixelSize.y * NTSDRenderSpace.UnitsPerPixelY *
                 NTSDRenderSpace.BattleVisualScale;
-            float left = command.Position.x - command.Pivot.x * width;
-            float bottom = command.Position.y - command.Pivot.y * bodyHeight;
+            float left = command.Position.x - resource.Pivot.x * width;
+            float bottom = command.Position.y - resource.Pivot.y * bodyHeight;
             Vector3 lower = camera.WorldToViewportPoint(
                 new Vector3(left, bottom, command.Position.z));
             Vector3 upper = camera.WorldToViewportPoint(
@@ -617,7 +981,8 @@ namespace NTSD.Test.Editor
             if (ValidRunId(request.runId))
             {
                 string output = ResultPath(request.runId,
-                    request.captureCamera);
+                    request.captureCamera, request.captureIsolatedShadow,
+                    request.captureCentralDifference);
                 Directory.CreateDirectory(Path.GetDirectoryName(output));
                 if (!File.Exists(output))
                     File.WriteAllText(output, JsonUtility.ToJson(report, true));
@@ -642,8 +1007,11 @@ namespace NTSD.Test.Editor
             return true;
         }
 
-        private static string ResultPath(string runId, bool captureCamera) =>
-            ProjectPath((captureCamera ? CameraResultRoot : ResultRoot) +
+        private static string ResultPath(string runId, bool captureCamera,
+            bool captureIsolatedShadow, bool captureCentralDifference) =>
+            ProjectPath((captureCentralDifference ? DifferenceResultRoot :
+                captureIsolatedShadow ? IsolatedResultRoot :
+                captureCamera ? CameraResultRoot : ResultRoot) +
                 "/" + runId + ".json");
 
         private static string ProjectPath(string relative) =>

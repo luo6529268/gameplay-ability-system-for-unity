@@ -1,0 +1,32 @@
+RUNNING
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=4 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=False app=MenuMain
+candidate slot=0 source=True
+candidate slot=1 source=True
+ready tick=2
+fps=30 firstGeneration=6 firstX=-3.6799652576446533 alpha=1
+fps=30 laterGeneration=6 firstX=-3.6799652576446533 laterX=-3.6799652576446533 alpha=1
+fps=60 firstGeneration=7 firstX=-3.6772420406341553 alpha=0
+fps=60 laterGeneration=12 firstX=-3.6772420406341553 laterX=-3.3699653148651123 alpha=1
+fps=120 firstGeneration=13 firstX=-3.3772420883178711 alpha=0
+fps=120 laterGeneration=18 firstX=-3.3772420883178711 laterX=-3.0699653625488281 alpha=1
+legacy bornInCentralOnly shadowRenderer=False
+legacy firstBodyX=-3.06724214553833 firstShadowX=NaN shadowEnabled= alpha=0.21656060701630209
+legacy laterBodyX=-2.7599654197692871 laterShadowX=NaN alpha=1
+PASS central 30 discrete; 60/120 sampled; Legacy 120 body sampled; logic coordinates unchanged. Shadow requires a Legacy-born actor.

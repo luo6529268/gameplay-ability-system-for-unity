@@ -72,6 +72,19 @@ namespace NTSD.Simulation
         private const int FormalRunViewHeightPx = 730;
         public double FixedViewRunDistanceScale { get; private set; } = 1.0;
         public double FixedViewRunVerticalDistanceScale { get; private set; } = 1.0;
+        internal int BattlePresentationRenderFps { get; private set; } = 120;
+        internal float BattlePresentationLogicIntervalSeconds { get; private set; } =
+            SimulationConstants.SIM_DT;
+
+        internal void ConfigureBattlePresentationDisplayPolicy(
+            int renderFps,
+            float logicIntervalSeconds)
+        {
+            BattlePresentationRenderFps = Math.Max(1, renderFps);
+            BattlePresentationLogicIntervalSeconds = logicIntervalSeconds > 0f
+                ? logicIntervalSeconds
+                : SimulationConstants.SIM_DT;
+        }
 
         internal void ConfigureFixedViewRunDistance(int referenceWidthPx, int referenceHeightPx = FormalRunViewHeightPx)
         {

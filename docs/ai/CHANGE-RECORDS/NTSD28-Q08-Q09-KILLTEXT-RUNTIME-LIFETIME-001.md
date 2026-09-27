@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q08-Q09-KILLTEXT-RUNTIME-LIFETIME-001
-status: CODE_WRITTEN
+status: FOCUSED_TEST_PASS
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Simulation/Runtime/BattleRuntimeState.cs
 code-path: Assets/NTSD/Scripts/Simulation/Host/SimulationTickDriver.cs
@@ -31,3 +31,5 @@ Pre-edit test-path amendment: existing `BattleStateSnapshotRestoreEditorTests.cs
 Validation: original-project Temp-only absolute-targets `dotnet msbuild Assembly-CSharp-Editor.csproj -t:Build -clp:ErrorsOnly -nologo` returned 0; the targets include new Q08/Q09 Editor test sources omitted by Unity's stale generated csproj. Twelve-path `git diff --check` returned 0. Targeted search found no remaining old extended/lockstep v2 schema literal in `Assets/NTSD/Scripts` or `Tools/NTSD28Parity`. This is **offline compile/static evidence only**; original Editor compilation, focused NUnit, SelfCheck, same-seed full-tick trace, Battle Scene Play and exit/re-entry are pending. Q09 icon identity, complete row projection and Q10 sound are separate open work; R15 versioned trace fixtures must be revisited with the new Unity v3 schemas. Status `CODE_WRITTEN`, not runtime verified.
 
 `Tools/Validate-ChangeLedger.ps1` returned 0 after code and Record updates. It reported only existing unrelated historical declared-but-not-current-diff warnings.
+
+2026-09-27 scoped correction: the original Editor ran six exact focused methods in three terminal jobs, each 2/2 PASS, covering project mode snapshot publication/first-tick activation, knockout newest-tail pruning, scalar capture, aggregate restore/checksum, and reset/checksum. See `artifacts/diagnostics/NTSD28-Q08-Q09-KILLTEXT-RUNTIME-LIFETIME-001/ORIGINAL-EDITOR-FOCUSED-20260927.md` for job IDs and the initial namespace-filter correction. Status is now `FOCUSED_TEST_PASS` for those methods only; same-seed complete tick, natural KO row expiry, Battle Scene Play/exit/re-entry and Q09 visual/Q10 audio acceptance remain pending. The 2026-09-22 offline-only statement above is historical, not the current verification level. This update did not edit scripts or assets.

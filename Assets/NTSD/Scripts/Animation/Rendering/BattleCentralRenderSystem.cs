@@ -138,6 +138,13 @@ namespace NTSD.Animation.Rendering
         private static int lastMaterializedPublishedTick = -1;
         private static int lastMaterializedUnityFrame = -1;
         private static int materializationInProgress;
+        private static SimulationWorld displayClockWorld;
+        private static int displayClockPublicationVersion;
+        private static double displayClockStartedAt;
+        private static double lastBuiltDisplayAlpha = double.NaN;
+        private static double lastResolvedDisplayAlpha = 1.0;
+        private static readonly BattlePresentationDisplayMotion DisplayMotion =
+            new BattlePresentationDisplayMotion();
 
         public static BattleDynamicMeshBackend MeshBackend => lastBuiltBackend;
         public static BattleFootMarkerBatchBackend FootMarkerMeshBackend =>
@@ -384,10 +391,16 @@ namespace NTSD.Animation.Rendering
                     : CurrentPixelFramePlan;
             }
 
+            double displayAlpha = ResolveDisplayAlpha(world, publicationVersion);
+            bool displaySampleChanged =
+                world.BattlePresentation?.Mode == BattlePresentationBackendMode.CentralOnly &&
+                displayAlpha != lastBuiltDisplayAlpha;
+
             if (!force)
             {
                 if (Volatile.Read(ref lastMaterializedUnityFrame) == unityFrame ||
-                    Volatile.Read(ref lastMaterializedPublicationVersion) == publicationVersion)
+                    Volatile.Read(ref lastMaterializedPublicationVersion) == publicationVersion &&
+                    !displaySampleChanged)
                 {
                     return CurrentPixelFramePlan;
                 }
@@ -405,7 +418,7 @@ namespace NTSD.Animation.Rendering
                                          detailDiagnostics?.BeginDeferredRenderMaterialization() == true;
             try
             {
-                if (!force)
+                if (!force || Application.isPlaying)
                     Volatile.Write(ref lastMaterializedUnityFrame, unityFrame);
                 Volatile.Write(ref lastMaterializedPublicationVersion, publicationVersion);
 
@@ -416,7 +429,7 @@ namespace NTSD.Animation.Rendering
                 BattlePixelFramePlan plan;
                 try
                 {
-                    plan = PrepareFrameImmediate(world);
+                    plan = PrepareFrameImmediate(world, displayAlpha);
                 }
                 finally
                 {
@@ -440,7 +453,9 @@ namespace NTSD.Animation.Rendering
             }
         }
 
-        private static BattlePixelFramePlan PrepareFrameImmediate(SimulationWorld world)
+        private static BattlePixelFramePlan PrepareFrameImmediate(
+            SimulationWorld world,
+            double displayAlpha)
         {
             using ProfilerMarker.AutoScope materializeFrameScope =
                 MaterializeFrameMarker.Auto();
@@ -453,7 +468,9 @@ namespace NTSD.Animation.Rendering
                 current.SimulationTick == simulationTick &&
                 current.RequestedMode == mode && CurrentPixelFramePlan.Generation == current.Generation)
             {
-                return current;
+                if (mode != BattlePresentationBackendMode.CentralOnly ||
+                    displayAlpha == lastBuiltDisplayAlpha)
+                    return current;
             }
 
             requestedMode = mode;
@@ -599,6 +616,14 @@ namespace NTSD.Animation.Rendering
                                     buildFrame,
                                     detailDiagnostics,
                                     presentationDiagnostics);
+                                if (mode == BattlePresentationBackendMode.CentralOnly)
+                                {
+                                    DisplayMotion.Prepare(
+                                        buildFrame, displayAlpha,
+                                        world.FixedViewRunDistanceScale,
+                                        world.FixedViewRunVerticalDistanceScale);
+                                    DisplayMotion.ApplyToCapturedCommands(buildFrame);
+                                }
                             }
                             finally
                             {
@@ -734,6 +759,7 @@ namespace NTSD.Animation.Rendering
                 string.Empty,
                 submission);
             PublishPlan(world, plan);
+            lastBuiltDisplayAlpha = displayAlpha;
             RuntimeDiagnostics.SubmissionReady = true;
             RuntimeDiagnostics.EffectivePixelMode = BattlePresentationBackendMode.CentralOnly;
             SetPlanDiagnostics(plan);
@@ -1018,6 +1044,46 @@ namespace NTSD.Animation.Rendering
                 worldCamera,
                 camera != null ? camera.cameraType : CameraType.Game,
                 Application.isPlaying);
+        }
+
+        internal static double LastResolvedDisplayAlphaForWorld(SimulationWorld world)
+        {
+            return ReferenceEquals(displayClockWorld, world)
+                ? lastResolvedDisplayAlpha
+                : 1.0;
+        }
+
+        private static double ResolveDisplayAlpha(
+            SimulationWorld world,
+            int publicationVersion)
+        {
+            if (!Application.isPlaying || world.BattlePresentationRenderFps <= 30)
+            {
+                lastResolvedDisplayAlpha = 1.0;
+                return 1.0;
+            }
+
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (!ReferenceEquals(displayClockWorld, world) ||
+                displayClockPublicationVersion != publicationVersion)
+            {
+                displayClockWorld = world;
+                displayClockPublicationVersion = publicationVersion;
+                displayClockStartedAt = now;
+            }
+
+            BattlePresentationFrame frame = world.BattlePresentation?.PublishedFrame;
+            if (frame == null || frame.PreviousMotionTickIndex < 0 ||
+                (long)frame.PreviousMotionTickIndex + 1 != frame.TickIndex)
+            {
+                lastResolvedDisplayAlpha = 1.0;
+                return 1.0;
+            }
+
+            double interval = world.BattlePresentationLogicIntervalSeconds;
+            lastResolvedDisplayAlpha = Math.Max(0.0,
+                Math.Min(1.0, (now - displayClockStartedAt) / interval));
+            return lastResolvedDisplayAlpha;
         }
 
         internal static bool TryGetEditorPreview(
@@ -1541,6 +1607,11 @@ namespace NTSD.Animation.Rendering
             Volatile.Write(ref lastMaterializedPublishedTick, -1);
             Volatile.Write(ref lastMaterializedUnityFrame, -1);
             Volatile.Write(ref materializationInProgress, 0);
+            displayClockWorld = null;
+            displayClockPublicationVersion = 0;
+            displayClockStartedAt = 0.0;
+            lastBuiltDisplayAlpha = double.NaN;
+            lastResolvedDisplayAlpha = 1.0;
             BattlePixelFramePlan previous = CurrentPixelFramePlan;
             Volatile.Write(ref publishedPlanGeneration, 0);
             Volatile.Write(ref publishedPlanWorld, null);

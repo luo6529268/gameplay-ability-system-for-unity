@@ -894,6 +894,73 @@ namespace NTSD.Simulation.Presentation
         public bool ShowSelfFootMarker { get; }
         public float FootMarkerScale { get; }
         internal object TrustedResourceIdentity { get; }
+
+        internal BattleRenderCommand WithPresentationOffsets(
+            Vector3 positionOffset,
+            Vector2 healthAnchorOffset,
+            Vector2 footAnchorOffset)
+        {
+            return new BattleRenderCommand(
+                Type, Handle, StableId, VisualDataId, EffectivePic, ZInt,
+                RuntimeSlot, SortOrder, SortingLayerId, LocalSequence,
+                Position + positionOffset, Size, Pivot, NormalizedUv,
+                RenderState, SpriteDescriptor, TrustedResourceIdentity,
+                ShowOverheadHealthBar, CurrentHealth, RecoverableHealth,
+                MaximumHealth,
+                StableHealthAnchorWorld + healthAnchorOffset,
+                HasStableHealthAnchor,
+                StableFootAnchorWorld + footAnchorOffset,
+                HasStableFootAnchor, ShowSelfFootMarker, FootMarkerScale);
+        }
+    }
+
+    public readonly struct BattlePresentationMotionState
+    {
+        public BattlePresentationMotionState(
+            RuntimeEntityHandle handle,
+            int objectId,
+            NTSDEntityRuntime runtime)
+        {
+            Handle = handle;
+            ObjectId = objectId;
+            HasSourceRulePosition = runtime.SourceRulePositionInitialized;
+            PreciseX = runtime.SourceRulePositionInitialized
+                ? runtime.SourceRuleX : runtime.X;
+            PreciseY = runtime.Y;
+            PreciseZ = runtime.SourceRulePositionInitialized
+                ? runtime.SourceRuleZ : runtime.Z;
+            ViewX = runtime.X;
+            ViewY = runtime.Y;
+            ViewZ = runtime.Z;
+            MotionX = runtime.Vx;
+            MotionY = runtime.Vy;
+            MotionZ = runtime.Vz;
+            OwnerSlot = runtime.OwnerSlotIndex;
+            LinkedParentSlot = runtime.HolderStableId;
+            LinkedChildSlot = runtime.TargetSlotIndex;
+            CatchTargetSlot = runtime.CaughtSlotIndex;
+            CatchSourceSlot = runtime.CatchSourceSlot90;
+            InteractionState = runtime.LinkState;
+        }
+
+        public RuntimeEntityHandle Handle { get; }
+        public int ObjectId { get; }
+        public bool HasSourceRulePosition { get; }
+        public double PreciseX { get; }
+        public double PreciseY { get; }
+        public double PreciseZ { get; }
+        public double ViewX { get; }
+        public double ViewY { get; }
+        public double ViewZ { get; }
+        public double MotionX { get; }
+        public double MotionY { get; }
+        public double MotionZ { get; }
+        public int OwnerSlot { get; }
+        public int LinkedParentSlot { get; }
+        public int LinkedChildSlot { get; }
+        public int CatchTargetSlot { get; }
+        public int CatchSourceSlot { get; }
+        public int InteractionState { get; }
     }
 
     public sealed class BattlePresentationFrame
@@ -901,6 +968,10 @@ namespace NTSD.Simulation.Presentation
         private static readonly ProfilerMarker FrozenFrameCopyMarker =
             new ProfilerMarker("NTSD.BattlePresentation.FrozenFrameCopy");
         private BattlePresentationEntitySnapshot[] entities = new BattlePresentationEntitySnapshot[16];
+        private BattlePresentationMotionState[] motionStates =
+            new BattlePresentationMotionState[16];
+        private BattlePresentationMotionState[] previousMotionStates =
+            new BattlePresentationMotionState[16];
         private int[] presentationOrderIndices = new int[16];
         private BattlePresentationHitRecordSnapshot[] hitRecords = new BattlePresentationHitRecordSnapshot[16];
         private BattleKnockoutFeedRowSnapshot[] knockoutFeedRows =
@@ -914,6 +985,9 @@ namespace NTSD.Simulation.Presentation
 
         public int TickIndex { get; internal set; }
         public int EntityCount { get; internal set; }
+        public int MotionStateCount { get; private set; }
+        public int PreviousMotionStateCount { get; private set; }
+        public int PreviousMotionTickIndex { get; private set; } = -1;
         public int HitRecordCount { get; internal set; }
         public int KnockoutFeedRowCount { get; internal set; }
         public int KnockoutFeedNativeRecordCount { get; internal set; }
@@ -953,6 +1027,20 @@ namespace NTSD.Simulation.Presentation
                 : entity;
         }
 
+        public BattlePresentationMotionState GetMotionState(int index)
+        {
+            if ((uint)index >= (uint)MotionStateCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return motionStates[index];
+        }
+
+        public BattlePresentationMotionState GetPreviousMotionState(int index)
+        {
+            if ((uint)index >= (uint)PreviousMotionStateCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return previousMotionStates[index];
+        }
+
         internal ref readonly BattlePresentationEntitySnapshot GetEntityRef(int index)
         {
             if ((uint)index >= (uint)EntityCount)
@@ -988,6 +1076,13 @@ namespace NTSD.Simulation.Presentation
             return commands[index];
         }
 
+        internal void ReplaceCommand(int index, in BattleRenderCommand command)
+        {
+            if ((uint)index >= (uint)CommandCount)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            commands[index] = command;
+        }
+
         internal ref readonly BattleRenderCommand GetCommandRef(int index)
         {
             if ((uint)index >= (uint)CommandCount)
@@ -1012,10 +1107,17 @@ namespace NTSD.Simulation.Presentation
                 {
                     ReleasePublicationBinding();
                     EnsureEntityCapacity(source.EntityCount);
+                    EnsureMotionStateCapacity(source.MotionStateCount);
+                    EnsureCapacity(ref previousMotionStates,
+                        source.PreviousMotionStateCount);
                     EnsureHitRecordCapacity(source.HitRecordCount);
                     EnsureCapacity(ref knockoutFeedRows, source.KnockoutFeedRowCount);
                     EnsureCommandCapacity(source.CommandCount);
                     Array.Copy(source.entities, entities, source.EntityCount);
+                    Array.Copy(source.motionStates, motionStates,
+                        source.MotionStateCount);
+                    Array.Copy(source.previousMotionStates, previousMotionStates,
+                        source.PreviousMotionStateCount);
                     if (source.usesIndexedPresentationOrder)
                     {
                         Array.Copy(
@@ -1032,6 +1134,9 @@ namespace NTSD.Simulation.Presentation
 
                     TickIndex = source.TickIndex;
                     EntityCount = source.EntityCount;
+                    MotionStateCount = source.MotionStateCount;
+                    PreviousMotionStateCount = source.PreviousMotionStateCount;
+                    PreviousMotionTickIndex = source.PreviousMotionTickIndex;
                     HitRecordCount = source.HitRecordCount;
                     KnockoutFeedRowCount = source.KnockoutFeedRowCount;
                     KnockoutFeedNativeRecordCount =
@@ -1066,6 +1171,9 @@ namespace NTSD.Simulation.Presentation
             ReleasePublicationBinding();
             TickIndex = tickIndex;
             EntityCount = 0;
+            MotionStateCount = 0;
+            PreviousMotionStateCount = 0;
+            PreviousMotionTickIndex = -1;
             HitRecordCount = 0;
             KnockoutFeedRowCount = 0;
             KnockoutFeedNativeRecordCount = 0;
@@ -1142,6 +1250,28 @@ namespace NTSD.Simulation.Presentation
         {
             EnsureCapacity(ref entities, required);
             EnsureCapacity(ref presentationOrderIndices, required);
+        }
+        internal void EnsureMotionStateCapacity(int required) =>
+            EnsureCapacity(ref motionStates, required);
+
+        internal void AddMotionState(in BattlePresentationMotionState state)
+        {
+            EnsureMotionStateCapacity(MotionStateCount + 1);
+            motionStates[MotionStateCount++] = state;
+        }
+
+        internal void CopyPreviousMotionStatesFrom(BattlePresentationFrame source)
+        {
+            PreviousMotionStateCount = 0;
+            PreviousMotionTickIndex = -1;
+            if (source == null || (long)source.TickIndex + 1 != TickIndex)
+                return;
+
+            EnsureCapacity(ref previousMotionStates, source.MotionStateCount);
+            Array.Copy(source.motionStates, previousMotionStates,
+                source.MotionStateCount);
+            PreviousMotionStateCount = source.MotionStateCount;
+            PreviousMotionTickIndex = source.TickIndex;
         }
         internal void EnsureHitRecordCapacity(int required) => EnsureCapacity(ref hitRecords, required);
         internal void EnsureCommandCapacity(int required) => EnsureCapacity(ref commands, required);
@@ -2160,6 +2290,7 @@ namespace NTSD.Simulation.Presentation
                 tickIndex,
                 commonVisualCatalog,
                 hitRecordCycle,
+                previousFrame,
                 writeFrame,
                 manager,
                 buildCommands);
@@ -2214,6 +2345,7 @@ namespace NTSD.Simulation.Presentation
             int tickIndex,
             BattleCommonVisualCatalog commonVisualCatalog,
             BattleHitRecordPresentationCycle hitRecordCycle,
+            BattlePresentationFrame previousFrame,
             BattlePresentationFrame frame,
             CharacterAnimtorManager manager,
             bool buildCommands)
@@ -2232,6 +2364,7 @@ namespace NTSD.Simulation.Presentation
                 {
                     spriteCaptureCache.Clear();
                     frame.Reset(tickIndex, commonVisualCatalog);
+                    frame.CopyPreviousMotionStatesFrom(previousFrame);
                     knockoutFeedRowProjection.Project(world, tickIndex, frame);
                     Array.Copy(
                         world.Runtime.SlotLabels.BattleSlotLabels,
@@ -2242,6 +2375,7 @@ namespace NTSD.Simulation.Presentation
                         frame.SlotLabelState,
                         frame.SlotLabelState.Length);
                     frame.EnsureEntityCapacity(sortedEntities.Count);
+                    frame.EnsureMotionStateCapacity(sortedEntities.Count);
                     int hitRecordOwnerCursor = 0;
                     LastHitRecordOwnerLookupCount = 0;
 
@@ -2250,6 +2384,14 @@ namespace NTSD.Simulation.Presentation
                         LF2Entity entity = sortedEntities[i];
                         NTSDEntityRuntime runtime = entity?.Runtime;
                         int slot = runtime?.SlotIndex ?? -1;
+                        if (entity != null && runtime != null && slot >= 0 &&
+                            !runtime.OidMergeDormant &&
+                            world.TryGetCurrentRuntimeHandle(
+                                slot, entity, out RuntimeEntityHandle motionHandle))
+                        {
+                            frame.AddMotionState(new BattlePresentationMotionState(
+                                motionHandle, entity.ObjectId, runtime));
+                        }
                         if (entity == null || runtime == null || slot < 0 ||
                             runtime.OidMergeDormant || runtime.PendingFlushDestroy ||
                             tickIndex < runtime.FirstPresentationTick ||

@@ -2670,23 +2670,12 @@ namespace NTSD.Animation.LF2Objects
                 return;
 
             int currentDataType = GetCurrentDataObjectTypeForSimulation();
-            if (currentDataType == (int)LF2ObjectType.SpecialAttack)
-            {
-                Runtime.Z = System.Math.Clamp(Runtime.Z, zMin - 1.0, zMax + 1.0);
-            }
-            else if (currentDataType == (int)LF2ObjectType.Character)
-            {
-                Runtime.Z = System.Math.Clamp(Runtime.Z, zMin, zMax);
-            }
-            else
-            {
-                Runtime.Z = System.Math.Clamp(Runtime.Z, zMin - 1.0, zMax + 1.0);
-            }
-
-            Runtime.ZInt = (int)Runtime.Z;
             double sourceMargin = currentDataType == (int)LF2ObjectType.Character
                 ? 0.0 : 1.0;
-            Runtime.ClampSourceRuleZ(zMin - sourceMargin, zMax + sourceMargin);
+            Runtime.ClampStageZ(
+                zMin - sourceMargin,
+                zMax + sourceMargin,
+                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
         }
 
         // C++ PreFrame keeps the background width separate from the phase-only character override.

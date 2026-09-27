@@ -74,6 +74,8 @@ namespace NTSD.EditorTools
             "ntsd28-q07-lee-jl-child/1.0";
         private const string Q07NarutoPunchScenarioSchema =
             "ntsd28-q07-naruto-punch/1.0";
+        private const string Q07HeldWeaponMotionScenarioSchema =
+            "ntsd28-q07-naruto-held-weapon-motion/1.0";
         private const string Q07N30LateInputScenarioSchema =
             "ntsd28-q07-n30-late-input/1.0";
         private const string Q07HitFa5FullDriverScenarioSchema =
@@ -84,6 +86,12 @@ namespace NTSD.EditorTools
             "ntsd28-q07-revival-peer-full-driver/1.0";
         private const string Q07KnockoutEventCaptureSchema =
             "ntsd28-q07-knockout-events/1.0";
+        private const string Q08State12KoFullTickScenarioSchema =
+            "ntsd28-q08-state12-ko-full-tick/1.0";
+        private const string Q08NegativeEnvironmentKoFullTickScenarioSchema =
+            "ntsd28-q08-negative-environment-ko-full-tick/1.0";
+        private const string Q08HeldCpointKoFullTickScenarioSchema =
+            "ntsd28-q08-held-cpoint-ko-full-tick/1.0";
         private const int Q07DdjSeed = 0x28A55A5A;
         private const int Q07LeeJlChildSeed = 682973786;
         private const int Stage23Width = 1330;
@@ -367,6 +375,7 @@ namespace NTSD.EditorTools
                 scenario.schema == Q07HidanNaturalCatchScenarioSchema ||
                 scenario.schema == Q07LeeJlChildScenarioSchema ||
                 scenario.schema == Q07NarutoPunchScenarioSchema ||
+                scenario.schema == Q07HeldWeaponMotionScenarioSchema ||
                 scenario.schema == Q07N30LateInputScenarioSchema;
             if (resolvedKnockoutOutputPath != null &&
                 scenario.schema != Q07NarutoPunchScenarioSchema)
@@ -641,6 +650,8 @@ namespace NTSD.EditorTools
                 scenario.schema, Q07LeeJlChildScenarioSchema, StringComparison.Ordinal);
             bool q07NarutoPunchScenario = string.Equals(
                 scenario.schema, Q07NarutoPunchScenarioSchema, StringComparison.Ordinal);
+            bool q07HeldWeaponMotionScenario = string.Equals(
+                scenario.schema, Q07HeldWeaponMotionScenarioSchema, StringComparison.Ordinal);
             bool q07N30LateInputScenario = string.Equals(
                 scenario.schema, Q07N30LateInputScenarioSchema, StringComparison.Ordinal);
             bool q07HitFa5FullDriverScenario = string.Equals(
@@ -650,22 +661,35 @@ namespace NTSD.EditorTools
             bool q07RevivalPeerFullDriverScenario = string.Equals(
                 scenario.schema, Q07RevivalPeerFullDriverScenarioSchema,
                 StringComparison.Ordinal);
-            bool formalQ07Scenario = q07DdjScenario || q07SasukeNeedleScenario ||
+            bool q08State12KoFullTickScenario = string.Equals(
+                scenario.schema, Q08State12KoFullTickScenarioSchema,
+                StringComparison.Ordinal);
+            bool q08NegativeEnvironmentKoFullTickScenario = string.Equals(
+                scenario.schema, Q08NegativeEnvironmentKoFullTickScenarioSchema,
+                StringComparison.Ordinal);
+            bool q08HeldCpointKoFullTickScenario = string.Equals(
+                scenario.schema, Q08HeldCpointKoFullTickScenarioSchema,
+                StringComparison.Ordinal);
+            bool formalReleaseScenario = q07DdjScenario || q07SasukeNeedleScenario ||
                                      q07SasukeNeedleTargetHitScenario ||
                                      q07SasukeArmorTargetScenario ||
                                      q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
                                      q07LeeJlChildScenario ||
-                                     q07NarutoPunchScenario || q07N30LateInputScenario ||
+                                     q07NarutoPunchScenario || q07HeldWeaponMotionScenario ||
+                                     q07N30LateInputScenario ||
                                       q07HitFa5FullDriverScenario || q07FusionFullDriverScenario ||
-                                      q07RevivalPeerFullDriverScenario;
-            if (!formalQ07Scenario && !string.Equals(
+                                     q07RevivalPeerFullDriverScenario ||
+                                     q08State12KoFullTickScenario ||
+                                      q08NegativeEnvironmentKoFullTickScenario ||
+                                      q08HeldCpointKoFullTickScenario;
+            if (!formalReleaseScenario && !string.Equals(
                     scenario.schema, "ntsd28-scenario/1.0", StringComparison.Ordinal))
             {
                 throw new InvalidDataException("Scenario schema mismatch.");
             }
             if (!string.Equals(
                     scenario.referenceExeSha256,
-                    formalQ07Scenario ? FormalAuthorityExeSha256 : LegacyScenarioReferenceSha256,
+                    formalReleaseScenario ? FormalAuthorityExeSha256 : LegacyScenarioReferenceSha256,
                     StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidDataException(
@@ -676,24 +700,32 @@ namespace NTSD.EditorTools
             if (!string.Equals(scenario.mode, "versus", StringComparison.Ordinal))
                 throw new InvalidDataException("Only the neutral versus baseline is supported.");
             if (scenario.ticks != (q07LeeJlChildScenario ? 45 :
-                    q07NarutoPunchScenario ? 30 : q07HidanCatchScenario ? 24 :
+                    q07NarutoPunchScenario ? 30 :
+                    q07HeldWeaponMotionScenario ? 24 : q07HidanCatchScenario ? 24 :
                     q07HidanNaturalCatchScenario ? 40 :
                     q07N30LateInputScenario ? 20 :
                      q07HitFa5FullDriverScenario ? 8 :
                      q07FusionFullDriverScenario ? 3 :
                      q07RevivalPeerFullDriverScenario ? 3 :
-                    formalQ07Scenario ? 26 : 3) ||
+                      q08State12KoFullTickScenario ? 3 :
+                      q08NegativeEnvironmentKoFullTickScenario ? 13 :
+                      q08HeldCpointKoFullTickScenario ? 3 :
+                    formalReleaseScenario ? 26 : 3) ||
                 scenario.emitInitial ||
                 scenario.battleMode != 0 || scenario.stageId != 23 ||
                 scenario.difficultyLevel4A0C30 !=
                     (q07LeeJlChildScenario || q07NarutoPunchScenario ||
+                     q07HeldWeaponMotionScenario ||
                      q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
-                      q07N30LateInputScenario || q07HitFa5FullDriverScenario ||
+                     q07N30LateInputScenario || q07HitFa5FullDriverScenario ||
                       q07FusionFullDriverScenario ||
-                      q07RevivalPeerFullDriverScenario ? 0 : 1) ||
+                      q07RevivalPeerFullDriverScenario ||
+                      q08State12KoFullTickScenario ||
+                       q08NegativeEnvironmentKoFullTickScenario ||
+                       q08HeldCpointKoFullTickScenario ? 0 : 1) ||
                 ((q07LeeJlChildScenario || q07NarutoPunchScenario) &&
                     scenario.seed != Q07LeeJlChildSeed) ||
-                (formalQ07Scenario && !q07LeeJlChildScenario &&
+                (formalReleaseScenario && !q07LeeJlChildScenario &&
                     !q07NarutoPunchScenario && scenario.seed != Q07DdjSeed))
             {
                 throw new InvalidDataException(
@@ -701,7 +733,7 @@ namespace NTSD.EditorTools
                         ? "Q07 Lee J,L scenario must preserve the 45-tick formal fixture."
                         : q07NarutoPunchScenario
                         ? "Q07 Naruto punch scenario must preserve the 30-tick formal fixture."
-                        : formalQ07Scenario
+                        : formalReleaseScenario
                         ? "Q07 formal scenario must preserve its fixed Stage 23 fixture."
                         : "Scenario must preserve the frozen 3-tick Stage 23 baseline.");
             }
@@ -722,7 +754,7 @@ namespace NTSD.EditorTools
                     combatant.mp < 0 || combatant.facing < 0 ||
                     combatant.facing > 1 || combatant.action < 0 ||
                     combatant.action >= LF2FrameCache.MaxFrameIdExclusive ||
-                    (!formalQ07Scenario && combatant.z < Stage23ZMin) ||
+                    (!formalReleaseScenario && combatant.z < Stage23ZMin) ||
                     combatant.z > Stage23ZMax)
                 {
                     throw new InvalidDataException(
@@ -958,6 +990,88 @@ namespace NTSD.EditorTools
                     throw new InvalidDataException("Q07 Naruto punch participants differ from the formal fixture.");
             }
 
+            if (q07HeldWeaponMotionScenario)
+            {
+                UnityRawCombatant actor = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant opponent = scenario.combatants.Single(combatant => combatant.slot == 1);
+                bool HasState(UnityRawCombatant c, int oid, int team, int x) =>
+                    c.oid == oid && c.team == team && c.x == x && c.y == 0 &&
+                    c.z == 542 && c.hp == 500 && c.baseHp == 500 && c.mp == 500 &&
+                    c.facing == 0 && c.action == 0 && c.reviveLives30c == 1 &&
+                    c.reviveNextLives310 == 0 && c.reviveNextHp314 == 0 &&
+                    c.renderPhase008 == 0 && !c.nativeAi &&
+                    c.nativeComputerState1b8 == 0;
+                if (!HasState(actor, 2, 1, 200) ||
+                    !HasState(opponent, 7, 2, 1200) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C)
+                    throw new InvalidDataException(
+                        "Q07 held-weapon participants differ from the formal fixture.");
+            }
+
+            if (q08State12KoFullTickScenario)
+            {
+                UnityRawCombatant victim = scenario.combatants.Single(value => value.slot == 0);
+                UnityRawCombatant credit = scenario.combatants.Single(value => value.slot == 1);
+                bool HasState(UnityRawCombatant value, int team, int x, int hp, int action) =>
+                    value.oid == 2 && value.team == team && value.x == x &&
+                    value.y == 0 && value.z == 542 && value.hp == hp &&
+                    value.baseHp == hp && value.mp == 300 &&
+                    value.facing == 0 && value.action == action &&
+                    value.reviveLives30c == 1 && !value.nativeAi &&
+                    value.nativeComputerState1b8 == 0;
+                if ((!HasState(victim, 1, 200, 5, 180) &&
+                     !HasState(victim, 1, 200, 50, 180)) ||
+                    !HasState(credit, 2, 1200, 500, 0) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                    throw new InvalidDataException(
+                        "Q08 state12 KO participants differ from the formal full-tick fixture.");
+            }
+
+            if (q08NegativeEnvironmentKoFullTickScenario)
+            {
+                UnityRawCombatant victim = scenario.combatants.Single(value => value.slot == 0);
+                UnityRawCombatant credit = scenario.combatants.Single(value => value.slot == 1);
+                bool HasState(UnityRawCombatant value, int team, int x, int hp) =>
+                    value.oid == 2 && value.team == team && value.x == x &&
+                    value.y == 0 && value.z == 542 && value.hp == hp &&
+                    value.baseHp == hp && value.mp == 300 &&
+                    value.facing == 0 && value.action == 0 &&
+                    value.reviveLives30c == 1 && !value.nativeAi &&
+                    value.nativeComputerState1b8 == 0;
+                if ((!HasState(victim, 1, 200, 5) &&
+                     !HasState(victim, 1, 200, 50)) ||
+                    !HasState(credit, 2, 1200, 500) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                    throw new InvalidDataException(
+                        "Q08 negative-environment participants differ from the formal full-tick fixture.");
+            }
+
+            if (q08HeldCpointKoFullTickScenario)
+            {
+                UnityRawCombatant catcher = scenario.combatants.Single(value => value.slot == 0);
+                UnityRawCombatant caught = scenario.combatants.Single(value => value.slot == 1);
+                bool HasState(UnityRawCombatant value, int team, int x, int hp, int action) =>
+                    value.oid == 2 && value.team == team && value.x == x &&
+                    value.y == 0 && value.z == 542 && value.hp == hp &&
+                    value.baseHp == hp && value.mp == 300 &&
+                    value.facing == 0 && value.action == action &&
+                    value.reviveLives30c == 1 && !value.nativeAi &&
+                    value.nativeComputerState1b8 == 0;
+                if (!HasState(catcher, 1, 200, 500, 260) ||
+                    (!HasState(caught, 2, 220, 30, 132) &&
+                     !HasState(caught, 2, 220, 100, 132)) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                    throw new InvalidDataException(
+                        "Q08 held-CPoint participants differ from the formal full-tick fixture.");
+            }
+
             ValidateInputs(scenario, slots);
             if (q07N30LateInputScenario)
             {
@@ -1012,6 +1126,20 @@ namespace NTSD.EditorTools
                     inputs[0].slot != 0 || inputs[0].keys == null ||
                     inputs[0].keys.Length != 1 || inputs[0].keys[0] != "J")
                     throw new InvalidDataException("Q07 Naruto punch input differs from J on completed tick 2.");
+            }
+            if (q07HeldWeaponMotionScenario)
+            {
+                UnityRawInput[] inputs = scenario.inputs ?? Array.Empty<UnityRawInput>();
+                bool HasSingleKey(int tick, string key) => inputs.Any(input =>
+                    input.tick == tick && input.slot == 0 &&
+                    input.keys != null && input.keys.Length == 1 &&
+                    input.keys[0] == key);
+                if (inputs.Length != 16 || !HasSingleKey(0, "J") ||
+                    !HasSingleKey(1, "J") ||
+                    !Enumerable.Range(7, 7).All(tick => HasSingleKey(tick, "D")) ||
+                    !Enumerable.Range(14, 7).All(tick => HasSingleKey(tick, "S")))
+                    throw new InvalidDataException(
+                        "Q07 held-weapon input differs from attack 1-2, right 8-14, down 15-21.");
             }
         }
 
@@ -1119,9 +1247,13 @@ namespace NTSD.EditorTools
             world.Rng.Seed(unchecked((uint)scenario.seed));
             if (scenario.schema == Q07LeeJlChildScenarioSchema ||
                 scenario.schema == Q07NarutoPunchScenarioSchema ||
+                scenario.schema == Q07HeldWeaponMotionScenarioSchema ||
                 scenario.schema == Q07HitFa5FullDriverScenarioSchema ||
                 scenario.schema == Q07FusionFullDriverScenarioSchema ||
-                scenario.schema == Q07RevivalPeerFullDriverScenarioSchema)
+                scenario.schema == Q07RevivalPeerFullDriverScenarioSchema ||
+                scenario.schema == Q08State12KoFullTickScenarioSchema ||
+                scenario.schema == Q08NegativeEnvironmentKoFullTickScenarioSchema ||
+                scenario.schema == Q08HeldCpointKoFullTickScenarioSchema)
                 world.NativeRandom.ResetFromSeed(unchecked((uint)scenario.seed));
             else
                 world.NativeRandom.ResetForDirectBattle(

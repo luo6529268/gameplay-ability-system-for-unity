@@ -156,9 +156,12 @@ namespace NTSD.Simulation.Ecs
                 if (!IsEligible(view, entity))
                     continue;
 
-                double z = ClampZ(entity.Runtime.Z, zMin, zMax,
-                    entity.GetCurrentDataObjectTypeForSimulation() ==
-                    (int)LF2ObjectType.Character);
+                double margin = entity.GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character ? 0.0 : 1.0;
+                double z = entity.Runtime.PreviewStageZViewClamp(
+                    zMin - margin,
+                    zMax + margin,
+                    world.FixedViewRunVerticalDistanceScale);
                 expectedSlots.Set(slot);
                 expectedGenerations[slot] = view.Generation;
                 expectedZBits[slot] = BitConverter.DoubleToInt64Bits(z);
@@ -183,12 +186,11 @@ namespace NTSD.Simulation.Ecs
                 NTSDEntityRuntime runtime = entity.Runtime;
                 bool character = entity.GetCurrentDataObjectTypeForSimulation() ==
                     (int)LF2ObjectType.Character;
-                double clampedZ = ClampZ(runtime.Z, zMin, zMax, character);
-                runtime.Z = clampedZ;
-                runtime.ZInt = (int)clampedZ;
-                // Alignment contract: NTSD28-USER-SOURCE-STAGE-DEPTH-001.
                 double margin = character ? 0.0 : 1.0;
-                runtime.ClampSourceRuleZ(zMin - margin, zMax + margin);
+                runtime.ClampStageZ(
+                    zMin - margin,
+                    zMax + margin,
+                    world.FixedViewRunVerticalDistanceScale);
 
                 // The C# authority pass writes only Z/ZInt. Exact production
                 // characters keep those values directly in Runtime/PhysicsState,
@@ -262,20 +264,6 @@ namespace NTSD.Simulation.Ecs
             zMin = world.Runtime?.Stage?.ZMin ?? 180;
             zMax = world.Runtime?.Stage?.ZMax ?? 350;
             return zMax >= zMin;
-        }
-
-        private static double ClampZ(
-            double z,
-            int zMin,
-            int zMax,
-            bool character)
-        {
-            double margin = character ? 0.0 : 1.0;
-            if (z > zMax + margin)
-                z = zMax + margin;
-            if (z < zMin - margin)
-                z = zMin - margin;
-            return z;
         }
 
         private void RecordMismatch(

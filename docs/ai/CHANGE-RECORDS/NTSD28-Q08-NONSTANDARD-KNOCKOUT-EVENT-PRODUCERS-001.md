@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-Q08-NONSTANDARD-KNOCKOUT-EVENT-PRODUCERS-001
-status: CODE_WRITTEN
+status: FOCUSED_TEST_PASS
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
@@ -24,3 +24,5 @@ Risks: source and credit differ for environment paths; a negative impact source 
 2026-09-22 implementation: `SimulationWorld` now has a slot-based append path, validates the credited runtime, follows up to four source owners, reads source type from the registered entity or raw runtime, and preserves formal `-1/1000` defaults when source is absent. Existing standard-hit publication reuses this path, so an unresolved source no longer drops a valid-credit event. The environment floor-contact, negative-environment recovery, and held CPoint writers append beside their existing single KO count increment before HP subtraction; no damage/score/count formula or pass schedule was changed. Existing focused fixture files now assert event fields, missing-source defaults and zero records on representative rejected gates. Script-diff whitespace check passed.
 
 Validation: `Tools/Validate-ChangeLedger.ps1` returned 0 (existing unrelated declared-but-not-current-diff warnings remain). A Temp-only absolute targets file added the earlier Q08 new test to the original project's generated Editor csproj input; `dotnet msbuild Assembly-CSharp-Editor.csproj -t:Build -clp:ErrorsOnly -nologo` returned 0 with runtime and Editor DLLs under `Temp/diagnostics/NTSD28-Q08-NONSTANDARD-KNOCKOUT-EVENT-PRODUCERS-001/Build`. `-getItem:Compile` showed the three edited existing Editor fixture files and earlier Q08 test as evaluated compile inputs. This is offline compilation only: it did not refresh the live Unity Editor or run NUnit. Original Editor compile, focused NUnit, SelfCheck, same-seed full-tick trace, Play and shutdown remain pending; status stays `CODE_WRITTEN`.
+
+2026-09-26 current-tree follow-up (supersedes only the preceding pending verification status): original Editor runtime/Editor assemblies postdate all seven owned sources; filtered job `98a9079c675a4a9b88bfde9767f49251` ran the three producer groups' seven selected lethal/nonlethal event checks, `7/7 PASS`. A prior same-production-tree full `BattleRuntimeSelfCheck` result at `15:08:56Z` is `PASS`; it was not repeated. Four protected Scene/config SHA values are unchanged. See `artifacts/diagnostics/NTSD28-Q08-NONSTANDARD-KNOCKOUT-EVENT-PRODUCERS-001/LIVE-EDITOR-FOCUSED-20260926.md` for exact scope. Status is now `FOCUSED_TEST_PASS`; formal same-seed complete-tick comparison, natural Play, Player/exit-reentry and downstream Q09/Q10 remain unverified. The older `CODE_WRITTEN` paragraph is historical.

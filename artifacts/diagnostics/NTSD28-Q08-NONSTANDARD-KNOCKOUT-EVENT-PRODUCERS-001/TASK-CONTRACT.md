@@ -1,6 +1,6 @@
 # NTSD28-Q08-NONSTANDARD-KNOCKOUT-EVENT-PRODUCERS-001
 
-Latest status (2026-09-22): `CODE_WRITTEN / OFFLINE_COMPILE_PASS / ORIGINAL_EDITOR_RUNTIME_PENDING`. The `PLANNED` statement below is the preserved pre-edit contract; current validation and remaining gates are in the Change Record and `ACCEPTANCE-PENDING.md`.
+Latest status (2026-09-26): `FOCUSED_TEST_PASS / FORMAL_FULL_TICK_AND_PLAY_PENDING`. The `PLANNED` statement below is the preserved pre-edit contract; original-Editor 7/7 evidence and remaining gates are in the Change Record and `LIVE-EDITOR-FOCUSED-20260926.md`. The older `CODE_WRITTEN / OFFLINE_COMPILE_PASS` state remains a historical step.
 
 Status: `PLANNED` before script edits, 2026-09-22. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001`, BATCH-04/Q08. Source audit: `../NTSD28-Q08-KNOCKOUT-PRODUCER-COVERAGE-001/REPORT.md`.
 

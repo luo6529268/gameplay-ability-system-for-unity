@@ -1,5 +1,7 @@
 # Nonstandard knockout event producers: current evidence
 
+2026-09-26 follow-up: the original Editor's current runtime/Editor DLLs include these seven owned scripts; selected lethal, missing-source/owner and no-event cases passed `7/7` in filtered job `98a9079c675a4a9b88bfde9767f49251`. The same production tree's complete SelfCheck result was `PASS` at `15:08:56Z`. Status is now `FOCUSED_TEST_PASS`, with formal same-seed complete-tick, Play/Player and downstream consumers still pending. See `LIVE-EDITOR-FOCUSED-20260926.md`. The 2026-09-22 status below is the historical pre-Editor snapshot.
+
 2026-09-22. `CODE_WRITTEN / OFFLINE_COMPILE_PASS / ORIGINAL_EDITOR_RUNTIME_PENDING`.
 
 Formal `battle_world.cpp` record calls 1898, 2262 and 6133 are mapped to the original Unity project's floor-contact environment, negative-environment recovery and held CPoint writers. Each writes the new event beside its pre-HP existing KO increment; the shared world writer handles source/credit/four-owner independently and preserves formal -1/1000 defaults for an absent source. The two standard-hit branches reuse that writer. Scope is seven declared script paths; no Scene, Prefab, resource, audio or nonbattle code was edited.

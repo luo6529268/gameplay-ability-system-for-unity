@@ -165,13 +165,10 @@ namespace NTSD.Simulation.Ecs
             }
 
             NTSDEntityRuntime runtime = entity.Runtime;
-            double z = runtime.Z;
-            if (z < zMin)
-                z = zMin;
-            if (z > zMax)
-                z = zMax;
-            runtime.Z = z;
-            runtime.ZInt = (int)z;
+            runtime.ClampStageZ(
+                zMin,
+                zMax,
+                world.FixedViewRunVerticalDistanceScale);
 
             double x = runtime.X;
             if (slot >= 20)

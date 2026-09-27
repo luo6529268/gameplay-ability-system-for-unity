@@ -353,6 +353,7 @@ namespace NTSD.Test
                 lf2.PS.x = NTSDRenderSpace.WorldToGroundPixel(spawnPos).x;
                 lf2.PS.z = PhysicsState.UnityYToDepth(spawnPos.y);
                 lf2.PS.y = 0;
+                AppManager.SyncParticipantBirthPosition(lf2, lf2.PS.x, (int)lf2.PS.z);
 
                 if (i == 0)
                 {

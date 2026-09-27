@@ -49,6 +49,9 @@ namespace NTSD.Test.Editor
                             participant.Runtime.X, participant.Runtime.Z);
                         participant.Runtime.SyncSourceRuleIntegerPosition();
                     }
+                    LF2Entity firstParticipant = world.FindEntityByRuntimeSlotForQuery(0);
+                    double initialParticipantSourceZ = firstParticipant.Runtime.SourceRuleZ;
+                    double initialParticipantViewZ = firstParticipant.Runtime.Z;
 
                     try
                     {
@@ -56,6 +59,16 @@ namespace NTSD.Test.Editor
                         {
                             Assert.That(driver.StepOneTick(inputs[tick - 1], true, false),
                                 Is.True, "complete Driver tick=" + tick);
+                            if (tick == 1)
+                            {
+                                Assert.That(firstParticipant.Runtime.SourceRuleZ,
+                                    Is.EqualTo(542).Within(1e-6),
+                                    "formal stage near-boundary at tick1");
+                                Assert.That(firstParticipant.Runtime.Z - initialParticipantViewZ,
+                                    Is.EqualTo((firstParticipant.Runtime.SourceRuleZ -
+                                        initialParticipantSourceZ) * ZFactor).Within(1e-6),
+                                    "character stage-clamp view travel at tick1");
+                            }
                             if (tick < 15)
                                 continue;
 
@@ -113,13 +126,10 @@ namespace NTSD.Test.Editor
                                         Is.EqualTo((native.PreciseX - birth.PreciseX) * XFactor)
                                             .Within(1e-6),
                                         "physical X travel tick=" + tick + " slot=" + slot);
-                                    if (slot == 53)
-                                    {
-                                        Assert.That(runtime.Z - birthViewZ[slot],
-                                            Is.EqualTo((native.PreciseZ - birth.PreciseZ) * ZFactor)
-                                                .Within(1e-6),
-                                            "unblocked positive-Z travel tick=" + tick);
-                                    }
+                                    Assert.That(runtime.Z - birthViewZ[slot],
+                                        Is.EqualTo((native.PreciseZ - birth.PreciseZ) * ZFactor)
+                                            .Within(1e-6),
+                                        "physical Z travel tick=" + tick + " slot=" + slot);
                                 }
                             }
                         }

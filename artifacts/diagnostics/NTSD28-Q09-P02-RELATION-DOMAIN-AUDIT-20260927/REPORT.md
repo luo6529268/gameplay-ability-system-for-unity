@@ -1,0 +1,30 @@
+# Q09/P-02 relation and coordinate-domain gate (2026-09-27)
+
+Status: `READ_ONLY_MAPPING / SAMPLER_NOT_STARTED`. This is a follow-up to `NTSD28-Q09-P02-MOTION-HISTORY-CARRIER-001`; it does not close Q09/P-02, BATCH-05 or the total goal.
+
+## Current formal contract
+
+The formal `render_snapshot.cpp:1383-1405` emits one `RenderEntityPresentationState28` per occupied World slot before body-sprite visibility gates. `presentation_interpolation.cpp:42-101` samples only adjacent ticks. It matches physical slot, object ID and presentation generation, then requires all six raw relation fields to match. It rejects an axis jump greater than `max(64, max(abs(previousMotion), abs(currentMotion))*4+4)` in the formal precise-coordinate domain. Each accepted delta is `lround(lerp(previousPrecise,currentPrecise,alpha))-lround(currentPrecise)`; `lround` is away from zero. The sampled delta changes render output, not the World. Camera interpolation belongs to the formal moving-camera path; the Unity fixed/full-background camera is a user-approved exception.
+
+The current Unity carrier in `BattlePresentationShadowBuild.cs:899-949` captures the corresponding candidates:
+
+| Formal snapshot field | Unity carrier source | Current evidence and remaining gate |
+|---|---|---|
+| `owner_slot` | `runtime.OwnerSlotIndex` | Native spawn and kind-2 pickup write owner; Unity `BattleInteractionWriter` writes the same slot candidate. Verify representative birth/reset rows. |
+| `linked_parent_slot` | `runtime.HolderStableId` | Native kind-2 child and Unity OPoint/held writers put the parent slot here. Native default is `0`; Unity runtime reset defaults `-1` but native OPoint birth sets `0`. Compare actual published rows, not names alone. |
+| `linked_child_slot` | `runtime.TargetSlotIndex` | Native kind-2 parent and Unity OPoint/held writers put the child slot here. Native default is `0`; Unity runtime reset defaults `-1` but native OPoint birth sets `0`. Compare actual published rows, including unlink. |
+| `catch_target_slot` | `runtime.CaughtSlotIndex` | Native `+0x8C` and Unity interaction writer record the target. Both use `-1` for the reset/catch-clear candidate; verify active and dormant rows. |
+| `catch_source_slot` | `runtime.CatchSourceSlot90` | Native `+0x90` includes the `0x2000+creditSlot` encoded impact form (`battle_world.cpp:5426-5446`); Unity damage and interaction writers target `CatchSourceSlot90`. Do not substitute `CatcherSlotIndex` or decode before the relation comparison. Verify an encoded and an ordinary row. |
+| `interaction_state` | `runtime.LinkState` | Native kind-2 pickup/OPoint and Unity corresponding writers use this state. Verify transitions and reset alongside parent/child slots. |
+
+The six pairings are a **static writer mapping**, not yet proof that the published values agree in all producers. In particular, default parent/child sentinels differ in some initialization paths. A sampler must compare raw previous/current Unity fields to prevent smoothing across a relation change, while the paired formal/Unity trace determines whether a newly observed difference is a separate Q07/Q08 logic issue.
+
+An existing same-state Q07 held-weapon 24-tick trace supplies one measured subset: `NTSD28-Q07-HELD-WEAPON-DUAL-DOMAIN-FULL-TICK-001/native-24-v2.csv` and the accepted original-Editor `unity/held-weapon-20260926T162808722-6d4cb57bfdb34ba2adaa224b75ed2ec3.csv` have 24 matching ticks. Comparing actor/weapon link state and child/parent slot gives only two differences in 96 values: tick 1 before pickup has native actor child `0` versus Unity `-1`, and native weapon parent `0` versus Unity `-1`. Both become the same slots when pickup occurs at tick 2; all four fields match through tick 24. This is a real raw-state difference, but the two unset slots have inactive link states at tick 1, so the trace does not establish a battle-behavior first difference. Because current Unity checksum, tests and consumers use `-1` as an unset value in several paths, changing the runtime default to `0` based only on this trace would be unsafe. The presentation sampler can use each Unity row's raw relation fields without rewriting gameplay state. Other relation producers, especially encoded impact, remain unmeasured here.
+
+`NTSDEntityRuntime.SourceRuleX/Z` and `X/Z` are separate under D-024. `CharacterMechanics.cs:516-532` integrates source X/Z by unscaled `Vx/Vz`, while the physical view movement multiplies by `motionScaleX/Z` (`:368-369`). The existing carrier stores source precise X/Z when initialized, Y directly, source-domain `Vx/Vy/Vz`, and separate view XYZ. The formal continuity threshold therefore belongs to source precise XYZ and source motion. For approved full-background presentation, convert the accepted source X/Z delta once with the configured `SimulationWorld.FixedViewRunDistanceScale`/`FixedViewRunVerticalDistanceScale` (`SimulationWorld.cs:70-85`), never by editing DAT or source-rule state. If source position is unavailable, leave that row discrete until a same-domain fallback is proved.
+
+## Narrow next gate
+
+Before a visible sampler, capture same-tick formal and original-Editor rows for one unlinked, one held/OPoint-linked and one catch or encoded-impact transition, including slot, object ID, generation, source XYZ, motion and the six raw relations. Compare the rows at birth, adjacent stable ticks, relation change and unlink. The test must show source-domain thresholds, away-from-zero rounding, identity/relationship/teleport/skip-tick rejection and approved view conversion without touching logic checksums. Then address the central render system's two same-tick caches and Legacy per-display-frame path; carrier-only tests do not prove visible interpolation. Reuse already passing scene/skill evidence and run only affected neighbors plus 30/60/120 visual checks required by §0.14.2.
+
+This note used current formal playable and Unity source only. No Editor/EXE run or code, DAT, image, Scene, camera, ProjectSettings or nonbattle change was made for this audit.

@@ -1,0 +1,131 @@
+{
+  "59357cf8635444d3ae2ac91cc0744b7f": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "59357cf8635444d3ae2ac91cc0744b7f",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790450718645,
+      "finished_unix_ms": 1790450725997,
+      "last_update_unix_ms": 1790450725997,
+      "progress": {
+        "completed": 1,
+        "total": 8556,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790450724786,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationBeginFrameReuseEditorTests.BeginFrame_MotionHistorySurvivesFrameReuseAndFrozenCopy",
+        "last_finished_unix_ms": 1790450725558,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  },
+  "11647e5053054ee1b366bf5ca6767858": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "11647e5053054ee1b366bf5ca6767858",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790450750647,
+      "finished_unix_ms": 1790450756643,
+      "last_update_unix_ms": 1790450756643,
+      "progress": {
+        "completed": 3,
+        "total": 8556,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790450756213,
+        "last_finished_test_full_name": "NTSD.Test.W08PresentationPurityEditorTests.SpawnPositionContract_FourEntityKindsPreserveExplicitFloatAndIntegerValuesAcrossSnapshot",
+        "last_finished_unix_ms": 1790450756216,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  },
+  "5f0c5950794b47a9923cf7a6a9b7b72b": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5f0c5950794b47a9923cf7a6a9b7b72b",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790450811422,
+      "finished_unix_ms": 1790450817320,
+      "last_update_unix_ms": 1790450817320,
+      "progress": {
+        "completed": 1,
+        "total": 8556,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790450815040,
+        "last_finished_test_full_name": "NTSD.Test.BattleSimulationWorkerBoundaryEditorTests.FormalLocalDriverPublishesCentralFramesAcknowledgesAndAdvancesNextTick",
+        "last_finished_unix_ms": 1790450816848,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  },
+  "6bf5b77d24644238b185a9a63e75422e": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "6bf5b77d24644238b185a9a63e75422e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790450913233,
+      "finished_unix_ms": 1790450922630,
+      "last_update_unix_ms": 1790450922630,
+      "progress": {
+        "completed": 1,
+        "total": 8556,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790450921339,
+        "last_finished_test_full_name": "NTSD.Test.BattlePresentationBeginFrameReuseEditorTests.BeginFrame_MotionHistorySurvivesFrameReuseAndFrozenCopy",
+        "last_finished_unix_ms": 1790450922120,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.3259573,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "BeginFrame_MotionHistorySurvivesFrameReuseAndFrozenCopy",
+            "fullName": "NTSD.Test.BattlePresentationBeginFrameReuseEditorTests.BeginFrame_MotionHistorySurvivesFrameReuseAndFrozenCopy",
+            "state": "Passed",
+            "durationSeconds": 0.7782733,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

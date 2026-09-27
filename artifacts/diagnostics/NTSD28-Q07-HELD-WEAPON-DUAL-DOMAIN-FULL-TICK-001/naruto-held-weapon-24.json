@@ -1,0 +1,42 @@
+{
+  "schema": "ntsd28-q07-naruto-held-weapon-motion/1.0",
+  "referenceExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "dataSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "mode": "versus",
+  "seed": 681925210,
+  "ticks": 24,
+  "emitInitial": false,
+  "battleMode": 0,
+  "stageId": 23,
+  "difficultyLevel4A0C30": 0,
+  "combatants": [
+    {
+      "slot": 0, "oid": 2, "team": 1, "x": 200, "y": 0, "z": 542,
+      "hp": 500, "baseHp": 500, "mp": 500, "reviveLives30c": 1,
+      "facing": 0, "action": 0
+    },
+    {
+      "slot": 1, "oid": 7, "team": 2, "x": 1200, "y": 0, "z": 542,
+      "hp": 500, "baseHp": 500, "mp": 500, "reviveLives30c": 1,
+      "facing": 0, "action": 0
+    }
+  ],
+  "inputs": [
+    { "tick": 0, "slot": 0, "keys": ["J"] },
+    { "tick": 1, "slot": 0, "keys": ["J"] },
+    { "tick": 7, "slot": 0, "keys": ["D"] },
+    { "tick": 8, "slot": 0, "keys": ["D"] },
+    { "tick": 9, "slot": 0, "keys": ["D"] },
+    { "tick": 10, "slot": 0, "keys": ["D"] },
+    { "tick": 11, "slot": 0, "keys": ["D"] },
+    { "tick": 12, "slot": 0, "keys": ["D"] },
+    { "tick": 13, "slot": 0, "keys": ["D"] },
+    { "tick": 14, "slot": 0, "keys": ["S"] },
+    { "tick": 15, "slot": 0, "keys": ["S"] },
+    { "tick": 16, "slot": 0, "keys": ["S"] },
+    { "tick": 17, "slot": 0, "keys": ["S"] },
+    { "tick": 18, "slot": 0, "keys": ["S"] },
+    { "tick": 19, "slot": 0, "keys": ["S"] },
+    { "tick": 20, "slot": 0, "keys": ["S"] }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "success": true,
+  "message": "Test job status retrieved.",
+  "data": {
+    "job_id": "435639a6cfce46498288a04dbddd62a6",
+    "status": "succeeded",
+    "mode": "EditMode",
+    "started_unix_ms": 1790452258476,
+    "finished_unix_ms": 1790452267353,
+    "last_update_unix_ms": 1790452267353,
+    "progress": {
+      "completed": 3,
+      "total": 8559,
+      "current_test_full_name": null,
+      "current_test_started_unix_ms": 1790452266907,
+      "last_finished_test_full_name": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_UsesNativeRoundingBeforeApprovedViewScale",
+      "last_finished_unix_ms": 1790452266908,
+      "stuck_suspected": false,
+      "editor_is_focused": false,
+      "blocked_reason": null,
+      "failures_so_far": [],
+      "failures_capped": false
+    },
+    "error": null,
+    "result": {
+      "mode": "EditMode",
+      "summary": {
+        "total": 3,
+        "passed": 3,
+        "failed": 0,
+        "skipped": 0,
+        "durationSeconds": 0.9409587,
+        "resultState": "Passed"
+      },
+      "results": [
+        {
+          "name": "Sample_RejectsTeleportButAcceptsMotionSupportedDash",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_RejectsTeleportButAcceptsMotionSupportedDash",
+          "state": "Passed",
+          "durationSeconds": 0.3841541,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_RejectsTickIdentityAndEveryRelationChange",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_RejectsTickIdentityAndEveryRelationChange",
+          "state": "Passed",
+          "durationSeconds": 0.0005819,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        },
+        {
+          "name": "Sample_UsesNativeRoundingBeforeApprovedViewScale",
+          "fullName": "NTSD.Test.BattlePresentationMotionSamplerEditorTests.Sample_UsesNativeRoundingBeforeApprovedViewScale",
+          "state": "Passed",
+          "durationSeconds": 0.000511,
+          "message": null,
+          "stackTrace": null,
+          "output": ""
+        }
+      ]
+    }
+  }
+}

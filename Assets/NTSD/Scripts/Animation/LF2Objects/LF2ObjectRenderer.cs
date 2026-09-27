@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.Rendering;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using MoreMountains.Tools;
 
 namespace NTSD.Animation.LF2Objects
@@ -489,6 +490,34 @@ namespace NTSD.Animation.LF2Objects
 
             // 阴影按 C++ 逻辑坐标 x/z 独立更新，不跟随图片 pivot。
             _logicObject.UpdateShadow(_renderFrameCount);
+        }
+
+        internal void ApplyDisplayMotion(
+            BattlePresentationDisplayMotion displayMotion,
+            int tickIndex)
+        {
+            if (displayMotion == null || _logicObject?.Runtime == null ||
+                _logicObject.Runtime.OidMergeDormant ||
+                tickIndex < _logicObject.Runtime.FirstPresentationTick ||
+                !displayMotion.TryGet(
+                    ResolveCurrentRuntimeHandle(_logicObject),
+                    out BattlePresentationMotionDelta delta))
+            {
+                return;
+            }
+
+            // Alignment contract: NTSD28-Q09-P02-VISIBLE-CONSUMERS-001.
+            // Move only the rendered transforms after the discrete Legacy update.
+            Transform rootTransform = transform.parent != null ? transform.parent : transform;
+            Vector3 shadowDiscretePosition = _shadowRenderer != null
+                ? _shadowRenderer.transform.position
+                : default;
+            rootTransform.position += BattlePresentationDisplayMotion.ToWorldBody(delta);
+            if (_shadowRenderer != null && _shadowRenderer.enabled)
+            {
+                _shadowRenderer.transform.position = shadowDiscretePosition +
+                    BattlePresentationDisplayMotion.ToWorldGround(delta);
+            }
         }
 
         private void RefreshLegacySortingMetadata()

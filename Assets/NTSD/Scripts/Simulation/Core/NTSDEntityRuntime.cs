@@ -624,6 +624,23 @@ namespace NTSD.Simulation
             SourceRuleZInt = (int)SourceRuleZ;
         }
 
+        public double PreviewStageZViewClamp(double minimum, double maximum, double viewScale)
+        {
+            if (!SourceRulePositionInitialized || viewScale <= 1.0)
+                return System.Math.Clamp(Z, minimum, maximum);
+
+            double clampedSourceZ = System.Math.Clamp(SourceRuleZ, minimum, maximum);
+            return Z + (clampedSourceZ - SourceRuleZ) * viewScale;
+        }
+
+        public void ClampStageZ(double minimum, double maximum, double viewScale)
+        {
+            // Alignment contract: NTSD28-Q07-D024-STAGE-Z-VIEW-CLAMP-001.
+            Z = PreviewStageZViewClamp(minimum, maximum, viewScale);
+            ZInt = (int)Z;
+            ClampSourceRuleZ(minimum, maximum);
+        }
+
         public void ClampSourceRuleCharacterX(
             int slot,
             int relationTeam,

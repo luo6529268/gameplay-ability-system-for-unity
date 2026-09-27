@@ -1,0 +1,20 @@
+{
+  "status": "CONFIRMED_VIEW_RATIO_FIRST_DIFFERENCE",
+  "ratio": "1152/730",
+  "formalSourceRowsMatch": 48,
+  "deviationRows": 22,
+  "firstDifference": {
+    "tick": 16,
+    "slot": 50,
+    "sourceZ": 541.0,
+    "viewZ": 541.0,
+    "ratioExpectedViewZ": 539.8438356164384,
+    "viewMinusExpected": 1.156164383561645
+  },
+  "affectedSlots": [
+    50,
+    51
+  ],
+  "sourceFixture": "formal-x1200-oid440-ticks15-26.csv",
+  "unityCapture": "unity/configured-view-20260926T143115612-dc3ef3a5b40445f5a515cb8ae75064c4.csv"
+}

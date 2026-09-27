@@ -1,5 +1,7 @@
 # Conditional knockout-feed lifetime: current evidence
 
+2026-09-27 scoped update (supersedes only the original-Editor NUnit pending wording below): the original Editor has now run six exact focused methods in three jobs, each 2/2 PASS. Project Asset snapshot publication/first-tick activation, newest-tail expiry, scalar/aggregate snapshot restoration, and checksum/reset are covered. Status `FOCUSED_TEST_PASS / SAME_SEED_FULL_TICK_AND_PLAY_PENDING`; see [original-Editor evidence](ORIGINAL-EDITOR-FOCUSED-20260927.md). The earlier `CODE_WRITTEN / OFFLINE_COMPILE_PASS` paragraph remains as historical pre-run evidence. No natural KO row-lifetime Play, formal same-seed complete tick, Q09 pixel, or Q10 sound proof was added.
+
 2026-09-22 status `CODE_WRITTEN / OFFLINE_COMPILE_PASS / ORIGINAL_EDITOR_RUNTIME_PENDING`.
 
 The original project's battle preparation now publishes `RecordPresent/LifetimeTicks` from the captured and identity-matched formal mode child before first tick. Q08 post-results/post-core expiry uses that optional lifetime; absent config no longer expires, while bound0 with a present config still expires. Negative lifetime continues to be a no-op in the existing newest-tail writer. World reset and aggregate snapshot/restore/checksum cover these scalars; Unity extended and lockstep parity schemas advance to v3, frozen Authority400 v3 remains unchanged. No Scene, resource, nonbattle, renderer or audio file was changed.

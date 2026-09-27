@@ -206,6 +206,10 @@ namespace NTSD.Simulation
         [Tooltip("正式 CentralOnly 单机战斗完成预热后，将 BattleKernel 固定到专用线程；Unity 主线程只消费已发布表现。")]
         [SerializeField] private bool useDedicatedSimulationWorker = true;
 
+        [Header("战斗展示")]
+        [Tooltip("正式版默认120；30及以下按离散当前帧显示，60/120按相邻逻辑帧采样。")]
+        [SerializeField] private int battleRenderFps = 120;
+
         [Header("调试信息（只读）")]
         [SerializeField][MMReadOnly] private int currentTickIndex = 0;
         [SerializeField][MMReadOnly] private float timeAccumulator = 0f;
@@ -493,6 +497,8 @@ namespace NTSD.Simulation
                 if (_world == null)
                     return;
 
+                _world.ConfigureBattlePresentationDisplayPolicy(
+                    battleRenderFps, ActiveHostIntervalSeconds);
                 using (PresentLatestFrameMarker.Auto())
                     _world.PresentLatestFrame(_tickIndex);
                 using (DispatchSoundsMarker.Auto())

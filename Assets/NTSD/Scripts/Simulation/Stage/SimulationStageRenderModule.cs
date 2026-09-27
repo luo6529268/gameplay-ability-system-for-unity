@@ -31,6 +31,8 @@ namespace NTSD.Simulation
             ComparePresentationRenderOrder;
         private readonly List<LF2Entity> _presentationRenderScratch = new List<LF2Entity>(128);
         private readonly List<ISimObject> _rendererSnapshotScratch = new List<ISimObject>(128);
+        private readonly BattlePresentationDisplayMotion _legacyDisplayMotion =
+            new BattlePresentationDisplayMotion();
         private readonly BattlePresentationCoordinator _battlePresentation =
             new BattlePresentationCoordinator();
         private BattlePixelFramePlan _currentPixelFramePlan;
@@ -327,12 +329,10 @@ namespace NTSD.Simulation
 
                 double margin = entity.GetCurrentDataObjectTypeForSimulation() ==
                     (int)LF2ObjectType.Character ? 0.0 : 1.0;
-                if (entity.PS.z > zMax + margin)
-                    entity.PS.z = zMax + margin;
-                if (entity.PS.z < zMin - margin)
-                    entity.PS.z = zMin - margin;
-                entity.Runtime.ZInt = (int)entity.Runtime.Z;
-                entity.Runtime.ClampSourceRuleZ(zMin - margin, zMax + margin);
+                entity.Runtime.ClampStageZ(
+                    zMin - margin,
+                    zMax + margin,
+                    world.FixedViewRunVerticalDistanceScale);
                 entity.RefreshRuntimeSnapshot();
             }
         }
@@ -939,6 +939,11 @@ namespace NTSD.Simulation
             }
 
             LateRendererUpdateInvocationCountForDiagnostics++;
+            _legacyDisplayMotion.Prepare(
+                _battlePresentation.PublishedFrame,
+                BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world),
+                world.FixedViewRunDistanceScale,
+                world.FixedViewRunVerticalDistanceScale);
             var snapshot = BuildRendererSnapshot();
             for (int i = 0; i < snapshot.Count; i++)
             {
@@ -947,6 +952,8 @@ namespace NTSD.Simulation
                     continue;
 
                 obj.SimLateTick(tickIndex);
+                if (obj is LF2ObjectRenderer renderer)
+                    renderer.ApplyDisplayMotion(_legacyDisplayMotion, tickIndex);
             }
         }
 

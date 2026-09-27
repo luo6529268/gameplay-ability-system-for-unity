@@ -1,0 +1,34 @@
+{
+  "source": "original-project Unity Editor MCP get_test_job, exact filtered EditMode requests",
+  "editorVersion": "2022.3.62f3",
+  "primary": {
+    "jobId": "9a5f3b154ea64cd88246e3a1697242b7",
+    "testName": "NTSD.Test.Editor.NTSD28Q07HeldWeaponDualDomainEditorTests.NaturalPickupMovingHeldWeapon_KeepsRuleAndScaledViewDomains",
+    "status": "succeeded",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 23.6047936,
+    "startedUnixMs": 1790438629488,
+    "finishedUnixMs": 1790438661591
+  },
+  "adjacentStrictScenario": {
+    "jobId": "c5e067c6db0a4d62bdc8f75a67e55faf",
+    "testName": "NTSD.Test.Editor.NTSD28Q07LeeChildDualDomainEditorTests.FormalLeeChildren_KeepSourceTraceAndScalePhysicalTravel",
+    "status": "succeeded",
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 21.5371365,
+    "startedUnixMs": 1790438714025,
+    "finishedUnixMs": 1790438742168
+  },
+  "historicalFirstAttempt": {
+    "jobId": "30631c5d810a46b89561da4b1dc81738",
+    "status": "failed",
+    "reason": "test-only unlinked slot sentinel 0 versus -1 at tick 1; active relation assertion corrected before the successful rerun"
+  },
+  "discoveredSuiteCountIsNotSelectedTestCount": 8550
+}

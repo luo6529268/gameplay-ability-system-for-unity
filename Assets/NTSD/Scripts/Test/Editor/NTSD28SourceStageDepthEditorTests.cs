@@ -12,7 +12,7 @@ namespace NTSD.Test.Editor
         [TestCase(BattleEcsCharacterStageZPassMode.DataOriented)]
         [TestCase(BattleEcsCharacterStageZPassMode.Legacy)]
         [TestCase(BattleEcsCharacterStageZPassMode.ShadowCompare)]
-        public void EarlyStageZ_ClampsPhysicalAndSourceIndependentlyForAllTypes(
+        public void EarlyStageZ_ProjectsSourceClampIntoConfiguredViewForAllTypes(
             BattleEcsCharacterStageZPassMode mode)
         {
             var world = CreateWorld();
@@ -43,15 +43,46 @@ namespace NTSD.Test.Editor
 
             world.ClampCharacterZToStageBoundsAll();
 
-            Assert.That(character.Runtime.Z, Is.EqualTo(350));
+            Assert.That(character.Runtime.Z,
+                Is.EqualTo(300 + 40 * 1152.0 / 730.0).Within(1e-9));
             Assert.That(character.Runtime.SourceRuleZ, Is.EqualTo(340));
             Assert.That(character.Runtime.SourceRuleZInt, Is.EqualTo(340));
-            Assert.That(weapon.Runtime.Z, Is.EqualTo(351));
+            Assert.That(weapon.Runtime.Z,
+                Is.EqualTo(500 + (351 - 400.75) * 1152.0 / 730.0).Within(1e-9));
             Assert.That(weapon.Runtime.SourceRuleZ, Is.EqualTo(351));
             Assert.That(weapon.Runtime.SourceRuleZInt, Is.EqualTo(351));
+            world.ClampCharacterZToStageBoundsAll();
+            Assert.That(character.Runtime.Z,
+                Is.EqualTo(300 + 40 * 1152.0 / 730.0).Within(1e-9));
+            Assert.That(weapon.Runtime.Z,
+                Is.EqualTo(500 + (351 - 400.75) * 1152.0 / 730.0).Within(1e-9));
             if (mode == BattleEcsCharacterStageZPassMode.ShadowCompare)
                 Assert.That(world.BattleEcsCharacterStageZPassDiagnosticsForDiagnostics.IsClean,
                     Is.True);
+        }
+
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.DataOriented)]
+        [TestCase(BattleEcsCharacterPreFrameBoundsPassMode.Legacy)]
+        public void PreFrameCharacter_ProjectsNearBoundaryCorrectionInBothPaths(
+            BattleEcsCharacterPreFrameBoundsPassMode mode)
+        {
+            var world = CreateWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            world.ConfigureBattleEcsCharacterPreFrameBoundsPassForDiagnostics(mode);
+            var character = new LF2Character();
+            character.SetRequiredRuntimeSlot(5);
+            world.Register(character);
+            character.Runtime.SetPosition(0, 0, 175);
+            character.Runtime.SetSourceRulePosition(0, 177);
+            character.Runtime.SyncSourceRuleIntegerPosition();
+
+            world.ApplyPreFrameBoundsAll();
+
+            Assert.That(character.Runtime.SourceRuleZ, Is.EqualTo(180));
+            Assert.That(character.Runtime.SourceRuleZInt, Is.EqualTo(180));
+            Assert.That(character.Runtime.Z,
+                Is.EqualTo(175 + 3 * 1152.0 / 730.0).Within(1e-9));
+            Assert.That(character.Runtime.ZInt, Is.EqualTo(179));
         }
 
         [TestCase(true, 180.0, 350.0)]
@@ -73,6 +104,7 @@ namespace NTSD.Test.Editor
             entity.ApplyPreFrameZBounds(180, 350);
             Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedFar));
             Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedFar));
+            Assert.That(entity.Runtime.Z, Is.EqualTo(expectedFar));
 
             entity.Runtime.SetPosition(0, 0, 100);
             entity.Runtime.SetSourceRulePosition(0, 100.75);
@@ -80,6 +112,7 @@ namespace NTSD.Test.Editor
             entity.ApplyPreFrameZBounds(180, 350);
             Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedNear));
             Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedNear));
+            Assert.That(entity.Runtime.Z, Is.EqualTo(expectedNear));
         }
 
         [Test]

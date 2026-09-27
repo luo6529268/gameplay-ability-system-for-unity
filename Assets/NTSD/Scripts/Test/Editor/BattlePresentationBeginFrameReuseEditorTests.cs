@@ -93,6 +93,93 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void BeginFrame_MotionHistorySurvivesFrameReuseAndFrozenCopy()
+        {
+            var world = new SimulationWorld();
+            world.SetBattlePresentationBackend(BattlePresentationBackendMode.CentralOnly);
+            PresentationFixtureEntity entity = RegisterFixtures(world, (305, 2, 180))[0];
+            entity.Runtime.SetSourceRulePosition(100.25, 180.5);
+            entity.Runtime.X = 150.375;
+            entity.Runtime.Y = -10.5;
+            entity.Runtime.Z = 270.75;
+            entity.Runtime.SyncIntegerPosition();
+            entity.Runtime.Vx = 4.5;
+            entity.Runtime.Vy = 2.25;
+            entity.Runtime.Vz = -1.5;
+            entity.Runtime.OwnerSlotIndex = 1;
+            entity.Runtime.HolderStableId = 3;
+            entity.Runtime.TargetSlotIndex = 4;
+            entity.Runtime.CaughtSlotIndex = 5;
+            entity.Runtime.CatchSourceSlot90 = 6;
+            entity.Runtime.LinkState = 7;
+
+            world.BattlePresentation.BeginFrame(world, 10);
+            BattlePresentationFrame first = world.BattlePresentation.PublishedFrame;
+            Assert.That(first.MotionStateCount, Is.EqualTo(1));
+            Assert.That(first.PreviousMotionStateCount, Is.Zero);
+            BattlePresentationMotionState firstMotion = first.GetMotionState(0);
+            Assert.That(firstMotion.HasSourceRulePosition, Is.True);
+            Assert.That(firstMotion.PreciseX, Is.EqualTo(100.25));
+            Assert.That(firstMotion.PreciseY, Is.EqualTo(-10.5));
+            Assert.That(firstMotion.PreciseZ, Is.EqualTo(180.5));
+            Assert.That(firstMotion.ViewX, Is.EqualTo(150.375));
+            Assert.That(firstMotion.ViewZ, Is.EqualTo(270.75));
+            Assert.That(firstMotion.MotionX, Is.EqualTo(4.5));
+            Assert.That(firstMotion.OwnerSlot, Is.EqualTo(1));
+            Assert.That(firstMotion.LinkedParentSlot, Is.EqualTo(3));
+            Assert.That(firstMotion.LinkedChildSlot, Is.EqualTo(4));
+            Assert.That(firstMotion.CatchTargetSlot, Is.EqualTo(5));
+            Assert.That(firstMotion.CatchSourceSlot, Is.EqualTo(6));
+            Assert.That(firstMotion.InteractionState, Is.EqualTo(7));
+
+            entity.Runtime.SetSourceRulePosition(120.25, 181.5);
+            entity.Runtime.X = 180.375;
+            world.BattlePresentation.BeginFrame(world, 11);
+            BattlePresentationFrame second = world.BattlePresentation.PublishedFrame;
+            Assert.That(second.PreviousMotionTickIndex, Is.EqualTo(10));
+            Assert.That(second.PreviousMotionStateCount, Is.EqualTo(1));
+            Assert.That(second.GetPreviousMotionState(0).PreciseX, Is.EqualTo(100.25));
+            Assert.That(second.GetMotionState(0).PreciseX, Is.EqualTo(120.25));
+
+            var frozen = new BattlePresentationFrame();
+            frozen.CopyFrom(second);
+            entity.Runtime.SetSourceRulePosition(140.25, 182.5);
+            world.BattlePresentation.BeginFrame(world, 12);
+            entity.Runtime.SetSourceRulePosition(160.25, 183.5);
+            world.BattlePresentation.BeginFrame(world, 13);
+            Assert.That(frozen.TickIndex, Is.EqualTo(11));
+            Assert.That(frozen.GetPreviousMotionState(0).PreciseX, Is.EqualTo(100.25));
+            Assert.That(frozen.GetMotionState(0).PreciseX, Is.EqualTo(120.25));
+            Assert.That(world.BattlePresentation.PublishedFrame
+                .GetPreviousMotionState(0).PreciseX, Is.EqualTo(140.25));
+
+            entity.Runtime.FirstPresentationTick = 20;
+            world.BattlePresentation.BeginFrame(world, 14);
+            BattlePresentationFrame hidden = world.BattlePresentation.PublishedFrame;
+            Assert.That(hidden.EntityCount, Is.Zero);
+            Assert.That(hidden.MotionStateCount, Is.EqualTo(1));
+            Assert.That(hidden.GetMotionState(0).PreciseX, Is.EqualTo(160.25));
+
+            world.BattlePresentation.BeginFrame(world, 16);
+            Assert.That(world.BattlePresentation.PublishedFrame
+                .PreviousMotionStateCount, Is.Zero);
+            Assert.That(world.BattlePresentation.PublishedFrame
+                .PreviousMotionTickIndex, Is.EqualTo(-1));
+            entity.Runtime.SourceRulePositionInitialized = false;
+            world.BattlePresentation.BeginFrame(world, 17);
+            BattlePresentationMotionState noSource =
+                world.BattlePresentation.PublishedFrame.GetMotionState(0);
+            Assert.That(noSource.HasSourceRulePosition, Is.False);
+            Assert.That(noSource.PreciseX, Is.EqualTo(noSource.ViewX));
+            world.BattlePresentation.Reset();
+            Assert.That(world.BattlePresentation.PublishedFrame, Is.Null);
+            frozen.Reset(17);
+            Assert.That(frozen.MotionStateCount, Is.Zero);
+            Assert.That(frozen.PreviousMotionStateCount, Is.Zero);
+            Assert.That(frozen.PreviousMotionTickIndex, Is.EqualTo(-1));
+        }
+
+        [Test]
         public void BeginFrame_ExceptionClearsScratchAndNextCaptureDoesNotLeak()
         {
             var world = new SimulationWorld();
