@@ -1,0 +1,69 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "12b918e6f3a54513a9761b5916104b83",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790544089918,
+      "finished_unix_ms": 1790544094730,
+      "last_update_unix_ms": 1790544094730,
+      "progress": {
+        "completed": 3,
+        "total": 8604,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790544094230,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07ProjectBattleModeConfigEditorTests.ProjectModeAsset_LoadsSerializedFieldsAndCapturesIndependentSnapshot",
+        "last_finished_unix_ms": 1790544094234,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.7068305,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "CentralNameplate_StaysWithVisibleBodyBeyondLegacyViewportEdge",
+            "fullName": "NTSD.Test.BattlePresentationCommandWriterEditorTests.CentralNameplate_StaysWithVisibleBodyBeyondLegacyViewportEdge",
+            "state": "Passed",
+            "durationSeconds": 0.0175408,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "CentralNameplate_UsesCapturedPlatformHeight",
+            "fullName": "NTSD.Test.BattlePresentationCommandWriterEditorTests.CentralNameplate_UsesCapturedPlatformHeight",
+            "state": "Passed",
+            "durationSeconds": 0.0107354,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ProjectModeAsset_LoadsSerializedFieldsAndCapturesIndependentSnapshot",
+            "fullName": "NTSD.Test.Editor.NTSD28Q07ProjectBattleModeConfigEditorTests.ProjectModeAsset_LoadsSerializedFieldsAndCapturesIndependentSnapshot",
+            "state": "Passed",
+            "durationSeconds": 0.0037322,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

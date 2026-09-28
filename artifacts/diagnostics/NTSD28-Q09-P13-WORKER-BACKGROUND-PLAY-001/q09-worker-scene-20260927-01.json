@@ -1,0 +1,68 @@
+{
+    "runId": "q09-worker-scene-20260927-01",
+    "status": "FAIL",
+    "error": "System.InvalidOperationException: The original Battle Scene did not start the dedicated worker: unity-presentation-bindings-are-still-attached\r\n  at NTSD.Test.Editor.NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor.TryBegin (NTSD.Test.Editor.NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor+Request current) [0x0007b] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor.cs:238 \r\n  at NTSD.Test.Editor.NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor.Poll () [0x00223] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q09EarthquakeWorkerBattlePlayProbeEditor.cs:192 ",
+    "sceneHashBefore": "2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A",
+    "sceneHashAfter": "2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A",
+    "contentRoot": "",
+    "startTick": 0,
+    "activeTick": 0,
+    "resetTick": 0,
+    "hanSlot": -1,
+    "workerActiveAtStart": false,
+    "workerActiveAfterReset": false,
+    "workerFailure": "",
+    "activeRuntimeOwner": 0,
+    "activeRuntimeX": 0,
+    "activeRuntimeY": 0,
+    "activeFrameOwner": 0,
+    "activeFrameX": 0,
+    "activeFrameY": 0,
+    "activeFrameTick": 0,
+    "resetRuntimeOwner": 0,
+    "resetRuntimeX": 0,
+    "resetRuntimeY": 0,
+    "resetFrameOwner": 0,
+    "resetFrameX": 0,
+    "resetFrameY": 0,
+    "resetFrameTick": 0,
+    "baselinePng": "",
+    "activePng": "",
+    "resetPng": "",
+    "mapPositionBefore": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "mapPositionAfter": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "mapBoundsCenterBefore": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "mapBoundsCenterAfter": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "cameraPositionBefore": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "cameraPositionAfter": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "cameraSizeBefore": 0.0,
+    "cameraSizeAfter": 0.0,
+    "materialRestored": true,
+    "cameraRestored": true,
+    "stopped": true,
+    "borrowersAfter": 0
+}

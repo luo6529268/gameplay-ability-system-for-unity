@@ -1,0 +1,29 @@
+{
+  "width": 1280,
+  "height": 720,
+  "changedPixels": 1245,
+  "topLeftBounds": [
+    459,
+    464,
+    514,
+    532
+  ],
+  "unityBottomLeftBounds": [
+    459,
+    187,
+    514,
+    255
+  ],
+  "reportPixels": 1245,
+  "reportUnityBounds": [
+    459,
+    187,
+    514,
+    255
+  ],
+  "exactMatch": true,
+  "sha256": {
+    "artifacts\\diagnostics\\NTSD28-Q09-P12-KARIN-LEGACY-GPU-PIXEL-001\\karin-x500-state9997-legacy-gpu-04-body-on.png": "ACF3F331D381605D7E269385ADBC77D34B286D8F1FA19F44CF5EECEFEB1C8D8C",
+    "artifacts\\diagnostics\\NTSD28-Q09-P12-KARIN-LEGACY-GPU-PIXEL-001\\karin-x500-state9997-legacy-gpu-04-body-off.png": "973917DA6B493EBD8D76ADF7D977CB52CAA9B8E1C754415612A307D82ACDF81E"
+  }
+}

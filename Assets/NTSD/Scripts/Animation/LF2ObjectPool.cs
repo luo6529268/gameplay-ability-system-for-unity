@@ -6,6 +6,7 @@ using NTSD.Animation.Rendering;
 using NTSD.Tools;
 using NTSD.App;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using Cysharp.Threading.Tasks;
 
 namespace NTSD.Animation
@@ -145,6 +146,13 @@ namespace NTSD.Animation
                 Destroy(go);
                 return null;
             }
+
+            // Alignment contract: NTSD28-Q09-LEGACY-BODY-PREWARM-001
+            // Legacy pixels need a body renderer before the battle allocation seal.
+            if (BattlePresentationBackendResolver.Resolve(Cfg) !=
+                    BattlePresentationBackendMode.CentralOnly &&
+                r.GetComponent<SpriteRenderer>() == null)
+                r.gameObject.AddComponent<SpriteRenderer>();
 
             _availableObjects.Enqueue(go);
             return r;

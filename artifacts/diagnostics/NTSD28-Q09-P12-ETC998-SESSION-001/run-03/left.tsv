@@ -1,0 +1,4 @@
+host_x	host_y	call	sequence	continuation	presentation_spawned	depth_before_culls	depth_after_culls	settlement_culls	selected_etc_mode	camera_x	effect_slot	effect_oid	effect_action	effect_state	effect_owner	effect_x	effect_y	effect_z	effect_physical_facing	sprite_found	sprite_facing	sprite_left	sprite_top	sprite_width	sprite_center_x	sprite_shake_x	fallback_expected_left	fallback_match
+50	-20	0	0	0	0	0	0	0	1	0	-1	-1	-1	-1	-2	0	0	0	0	0	0	0	0	0	0	0	0	0
+50	-20	1	1	1	1	0	0	0	1	0	50	998	6	9997	-1	50	-20	601	0	1	0	0	431	79	68	0	0	1
+50	-20	2	2	0	0	0	0	0	1	0	50	998	7	9997	-1	50	-20	601	0	1	0	0	431	79	68	0	0	1

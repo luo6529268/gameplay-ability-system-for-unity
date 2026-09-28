@@ -573,6 +573,9 @@ namespace NTSD.Simulation
                 world.Runtime?.NativeKnockoutFeed;
             if (feed?.RecordPresent == true)
                 world.PruneNativeKnockoutTail(tickIndex, feed.LifetimeTicks);
+            // Alignment contract: NTSD28-Q09-P13-EARTHQUAKE-STATE-PUBLICATION-001.
+            // This must run for successful ticks even when no frame is built.
+            world.Runtime?.Earthquake?.Advance(world);
             diagnostics?.BeginPhase(BattleTickPhase.RenderDispatch);
             RenderDispatch(tickIndex, buildPresentation, simulationWorker);
             diagnostics?.EndPhase(BattleTickPhase.RenderDispatch);
@@ -605,7 +608,7 @@ namespace NTSD.Simulation
                         ? nativeKnockoutTeam5SoundPath
                         : null;
                 if (!string.IsNullOrEmpty(soundPath))
-                    world.QueueSound(soundPath, victim.XInt);
+                    world.QueueSound(soundPath, victim.ResolveBattleSoundWorldXInt(victim.XInt));
             }
         }
 

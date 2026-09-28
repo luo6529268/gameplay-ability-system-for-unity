@@ -13,6 +13,7 @@ namespace NTSD.App
 {
     public sealed class NTSDSoundPlayer : MonoBehaviour, ISimulationSoundPresentationSink
     {
+        private const int NativeBattleVoiceLimit = 64;
         [SerializeField] private string soundRootFolder = "NTSD/Sound";
         [SerializeField, Min(1)] private int desktopOneShotVoiceLimit = 48;
         [SerializeField, Min(1)] private int mobileOneShotVoiceLimit = 24;
@@ -53,6 +54,8 @@ namespace NTSD.App
         private MMFollowTarget[] oneShotVoiceFollowers = Array.Empty<MMFollowTarget>();
         private double[] oneShotVoiceAvailableDspTimes = Array.Empty<double>();
         private float[] oneShotVoiceBaseVolumes = Array.Empty<float>();
+        private long[] oneShotVoiceStartSequences = Array.Empty<long>();
+        private long nextOneShotVoiceStartSequence;
         private int nativeBattleVolumePercent = 100;
         private float nativeBattleSfxGain = 1f;
         private int nextOneShotVoiceIndex;
@@ -63,6 +66,7 @@ namespace NTSD.App
         private bool battleCatalogSealed;
         private long rejectedUnpreparedCueCount;
         private long failedPreparedCueLoadCount;
+        private long skippedMissingBattleCueFileCount;
         private Transform cachedListenerTransform;
         private UnityEngine.Audio.AudioMixerGroup cachedSfxMixerGroup;
 
@@ -78,6 +82,8 @@ namespace NTSD.App
             rejectedUnpreparedCueCount;
         public long FailedPreparedCueLoadCountForDiagnostics =>
             failedPreparedCueLoadCount;
+        public long SkippedMissingBattleCueFileCountForDiagnostics =>
+            skippedMissingBattleCueFileCount;
         public int NativeBattleVolumePercentForDiagnostics => nativeBattleVolumePercent;
 
         internal void ApplyNativeBattleVolumeHostTick(
@@ -139,6 +145,8 @@ namespace NTSD.App
         {
             battleCatalogSealed = false;
             PrepareBattlePresentationHotPath();
+            EnsureOneShotVoiceCapacity(NativeBattleVoiceLimit);
+            long skippedMissingBefore = skippedMissingBattleCueFileCount;
 
             AudioController controller = AudioController.Instance;
             if (!ReferenceEquals(controller, preparedAudioController))
@@ -170,19 +178,28 @@ namespace NTSD.App
                 }
             }
 
+            long skippedMissing = skippedMissingBattleCueFileCount -
+                skippedMissingBefore;
+            if (skippedMissing > 0)
+            {
+                Debug.LogWarning(
+                    $"[NTSDSoundPlayer] Battle cue prewarm used configured fallback for " +
+                    $"{skippedMissing} absent local audio files.");
+            }
             battleCatalogSealed = true;
         }
 
         public void PlaySfx(string soundId, Vector3? position = null, Transform parent = null)
         {
-            PlaySfx(soundId, position, parent, ResolveListenerTransform());
+            PlaySfx(soundId, position, parent, ResolveListenerTransform(), false);
         }
 
         private void PlaySfx(
             string soundId,
             Vector3? position,
             Transform parent,
-            Transform listenerTransform)
+            Transform listenerTransform,
+            bool isBattleEvent)
         {
             PreparedSoundCue preparedCue = GetOrPrepareCue(soundId);
             if (preparedCue == null)
@@ -190,7 +207,8 @@ namespace NTSD.App
 
             if (preparedCue.IsLoaded)
             {
-                PlayPreparedCue(preparedCue, position, parent, listenerTransform);
+                PlayPreparedCue(preparedCue, position, parent, listenerTransform,
+                    isBattleEvent);
                 return;
             }
 
@@ -205,7 +223,8 @@ namespace NTSD.App
                 preparedCue,
                 position,
                 parent,
-                listenerTransform).Forget();
+                listenerTransform,
+                isBattleEvent).Forget();
         }
 
         public void PresentSounds(IReadOnlyList<PendingSoundEvent> sounds)
@@ -230,7 +249,8 @@ namespace NTSD.App
                 sound.Cue,
                 new Vector3(groundPoint.x, groundPoint.y, 0f),
                 null,
-                listenerTransform);
+                listenerTransform,
+                true);
         }
 
         public bool TryGetPreparedSingleFileWrapperForDiagnostics(
@@ -301,12 +321,14 @@ namespace NTSD.App
             PreparedSoundCue preparedCue,
             Vector3? position,
             Transform parent,
-            Transform listenerTransform)
+            Transform listenerTransform,
+            bool isBattleEvent)
         {
             try
             {
                 await LoadPreparedClipsAsync(preparedCue);
-                PlayPreparedCue(preparedCue, position, parent, listenerTransform);
+                PlayPreparedCue(preparedCue, position, parent, listenerTransform,
+                    isBattleEvent);
             }
             finally
             {
@@ -318,7 +340,8 @@ namespace NTSD.App
             PreparedSoundCue preparedCue,
             Vector3? position,
             Transform parent,
-            Transform listenerTransform)
+            Transform listenerTransform,
+            bool isBattleEvent)
         {
             AudioItem audioItem = preparedCue.AudioItem;
 
@@ -352,7 +375,7 @@ namespace NTSD.App
                 -3f,
                 3f);
 
-            AudioSource voice = AcquireOneShotVoice(out int voiceIndex);
+            AudioSource voice = AcquireOneShotVoice(out int voiceIndex, isBattleEvent);
             if (voice == null)
             {
                 oneShotVoiceLimitDropCount++;
@@ -392,6 +415,8 @@ namespace NTSD.App
             }
 
             voice.Play();
+            oneShotVoiceStartSequences[voiceIndex] =
+                ++nextOneShotVoiceStartSequence;
             float absolutePitch = Mathf.Max(0.01f, Mathf.Abs(pitch));
             oneShotVoiceAvailableDspTimes[voiceIndex] =
                 audioItem.loop
@@ -403,51 +428,81 @@ namespace NTSD.App
                 pooledOneShotPlayCount++;
         }
 
-        private AudioSource AcquireOneShotVoice(out int voiceIndex)
+        private AudioSource AcquireOneShotVoice(
+            out int voiceIndex, bool isBattleEvent)
         {
-            EnsureOneShotVoicePool();
+            int voiceLimit = isBattleEvent
+                ? NativeBattleVoiceLimit
+                : ResolveOneShotVoiceLimit();
+            EnsureOneShotVoiceCapacity(voiceLimit);
             voiceIndex = -1;
-            int voiceCount = oneShotVoices.Length;
             double currentDspTime = AudioSettings.dspTime;
-            for (int offset = 0; offset < voiceCount; offset++)
+            for (int offset = 0; offset < voiceLimit; offset++)
             {
-                int index = (nextOneShotVoiceIndex + offset) % voiceCount;
+                int index = (nextOneShotVoiceIndex + offset) % voiceLimit;
                 AudioSource voice = oneShotVoices[index];
                 if (voice == null || oneShotVoiceAvailableDspTimes[index] > currentDspTime)
                 {
                     continue;
                 }
-
-                MMFollowTarget follower = oneShotVoiceFollowers[index];
-                if (follower != null)
-                {
-                    follower.Target = null;
-                    follower.enabled = false;
-                }
-
-                voice.transform.SetParent(transform, false);
-                nextOneShotVoiceIndex = (index + 1) % voiceCount;
-                voiceIndex = index;
-                return voice;
+                return PrepareOneShotVoice(index, voiceLimit, out voiceIndex);
             }
 
-            return null;
+            if (!isBattleEvent)
+                return null;
+
+            int oldestIndex = -1;
+            long oldestSequence = long.MaxValue;
+            for (int index = 0; index < voiceLimit; index++)
+            {
+                if (oneShotVoices[index] == null ||
+                    oneShotVoiceStartSequences[index] >= oldestSequence)
+                    continue;
+                oldestIndex = index;
+                oldestSequence = oneShotVoiceStartSequences[index];
+            }
+            if (oldestIndex < 0)
+                return null;
+
+            // Alignment contract: NTSD28-Q10-BATTLE-VOICE-CAP-001.
+            oneShotVoiceLimitDropCount++;
+            return PrepareOneShotVoice(oldestIndex, voiceLimit, out voiceIndex);
+        }
+
+        private AudioSource PrepareOneShotVoice(
+            int index, int voiceLimit, out int voiceIndex)
+        {
+            MMFollowTarget follower = oneShotVoiceFollowers[index];
+            if (follower != null)
+            {
+                follower.Target = null;
+                follower.enabled = false;
+            }
+
+            AudioSource voice = oneShotVoices[index];
+            voice.transform.SetParent(transform, false);
+            nextOneShotVoiceIndex = (index + 1) % voiceLimit;
+            voiceIndex = index;
+            return voice;
         }
 
         private void EnsureOneShotVoicePool()
         {
-            int voiceLimit = ResolveOneShotVoiceLimit();
-            if (oneShotVoices.Length == voiceLimit)
-            {
-                return;
-            }
+            EnsureOneShotVoiceCapacity(ResolveOneShotVoiceLimit());
+        }
 
-            oneShotVoices = new AudioSource[voiceLimit];
-            oneShotVoiceFollowers = new MMFollowTarget[voiceLimit];
-            oneShotVoiceAvailableDspTimes = new double[voiceLimit];
-            oneShotVoiceBaseVolumes = new float[voiceLimit];
-            nextOneShotVoiceIndex = 0;
-            for (int i = 0; i < voiceLimit; i++)
+        private void EnsureOneShotVoiceCapacity(int voiceLimit)
+        {
+            int previousCount = oneShotVoices.Length;
+            if (previousCount >= voiceLimit)
+                return;
+
+            Array.Resize(ref oneShotVoices, voiceLimit);
+            Array.Resize(ref oneShotVoiceFollowers, voiceLimit);
+            Array.Resize(ref oneShotVoiceAvailableDspTimes, voiceLimit);
+            Array.Resize(ref oneShotVoiceBaseVolumes, voiceLimit);
+            Array.Resize(ref oneShotVoiceStartSequences, voiceLimit);
+            for (int i = previousCount; i < voiceLimit; i++)
             {
                 var voiceHost = new GameObject($"NTSD SFX Voice {i}");
                 voiceHost.transform.SetParent(transform, false);
@@ -517,6 +572,14 @@ namespace NTSD.App
 
             try
             {
+                if (preparedCue.IsSingleFile && !File.Exists(preparedCue.SourcePath))
+                {
+                    failedPreparedCueLoadCount++;
+                    skippedMissingBattleCueFileCount++;
+                    UseConfiguredClipOrEmpty(preparedCue);
+                    return;
+                }
+
                 // 单文件模式：soundId 以音频扩展名结尾（如 data\003.wav）
                 if (preparedCue.IsSingleFile)
                 {

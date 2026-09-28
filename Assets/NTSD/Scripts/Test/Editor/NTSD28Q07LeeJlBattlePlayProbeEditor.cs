@@ -19,6 +19,8 @@ namespace NTSD.Test.Editor
     internal static class NTSD28Q07LeeJlBattlePlayProbeEditor
     {
         private const string RequestPath = "Temp/NTSD28_Q07_LeeJlBattlePlay.request.json";
+        private const string NativeShadowRequestPath =
+            "Temp/NTSD28_Q09_P07_LeeShadow.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-Q07-LEE-JL-BATTLE-PLAY-001";
         private const string PixelResultRoot =
@@ -31,6 +33,7 @@ namespace NTSD.Test.Editor
         private static int stableTick = -1;
         private static int stableUpdates;
         private static bool running;
+        private static string activeRequestPath;
 
         [Serializable]
         private sealed class Request
@@ -39,6 +42,7 @@ namespace NTSD.Test.Editor
             public string runId;
             public bool captureCamera;
             public bool captureComposedCamera;
+            public bool captureNativeShadowGate;
         }
 
         [Serializable]
@@ -62,12 +66,18 @@ namespace NTSD.Test.Editor
             public int firstOid204SourceInitializedCount;
             public int firstOid204RendererCount;
             public int firstOid204CentralCommands;
+            public int firstOid204BmpShadowOneCount;
+            public int firstOid204ShadowSnapshotCount;
+            public int firstOid204SuppressedSnapshotCount;
+            public int firstOid204ShadowCommandCount;
+            public int firstOrdinaryShadowCommandCount;
             public bool centralPlanValid;
             public bool logicOnlyMaterialization;
             public bool stopped;
             public int borrowersAfter = -1;
             public bool captureCamera;
             public bool captureComposedCamera;
+            public bool captureNativeShadowGate;
             public int baselineTick = -1;
             public string baselinePngPath;
             public string postPngPath;
@@ -87,6 +97,7 @@ namespace NTSD.Test.Editor
             public int roiChangedNonblackPixels;
             public List<string> leeFrames = new List<string>(45);
             public List<string> births = new List<string>(24);
+            public List<string> childShadowRows = new List<string>(5);
         }
 
         [InitializeOnLoadMethod]
@@ -101,11 +112,27 @@ namespace NTSD.Test.Editor
             if (running || EditorApplication.isCompiling || EditorApplication.isUpdating)
                 return;
             string requestFile = ProjectPath(RequestPath);
+            string nativeShadowRequestFile = ProjectPath(NativeShadowRequestPath);
+            if (File.Exists(nativeShadowRequestFile))
+            {
+                try
+                {
+                    Request nativeShadowRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(nativeShadowRequestFile));
+                    if (nativeShadowRequest?.requested == true)
+                        requestFile = nativeShadowRequestFile;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
             if (!File.Exists(requestFile))
             {
                 Reset();
                 return;
             }
+            activeRequestPath = requestFile;
             Request request;
             try
             {
@@ -140,6 +167,7 @@ namespace NTSD.Test.Editor
                     runId = request.runId,
                     captureCamera = request.captureCamera,
                     captureComposedCamera = request.captureComposedCamera,
+                    captureNativeShadowGate = request.captureNativeShadowGate,
                 }));
                 return;
             }
@@ -197,6 +225,7 @@ namespace NTSD.Test.Editor
                 runId = request.runId,
                 captureCamera = request.captureCamera,
                 captureComposedCamera = request.captureComposedCamera,
+                captureNativeShadowGate = request.captureNativeShadowGate,
             }));
             Run(request, driver, world);
         }
@@ -210,6 +239,7 @@ namespace NTSD.Test.Editor
                 status = "RUNNING",
                 captureCamera = request.captureCamera,
                 captureComposedCamera = request.captureComposedCamera,
+                captureNativeShadowGate = request.captureNativeShadowGate,
                 scenePath = SceneManager.GetActiveScene().path,
                 sceneHashBefore = HashFile(ProjectPath("Assets/NTSD/Scene/NTSD_Battle.unity")),
                 contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot,
@@ -334,6 +364,17 @@ namespace NTSD.Test.Editor
                                 report.firstOid204SourceInitializedCount++;
                             if (entity.Renderer != null)
                                 report.firstOid204RendererCount++;
+                            if (request.captureNativeShadowGate)
+                            {
+                                int bmpShadow = entity.FrameCache?.Wrapper?.characterData?
+                                    .NativeMetadata?.Bmp.Int32OrDefault("shadow", 0) ?? 0;
+                                if (bmpShadow == 1)
+                                    report.firstOid204BmpShadowOneCount++;
+                                report.childShadowRows.Add(nextTick + ":" +
+                                    entity.Runtime.StableId + ":" + slot + ":" +
+                                    entity.Frame.N + ":" + entity.Frame.D?.state +
+                                    ":" + entity.GetRenderPicIndex() + ":" + bmpShadow);
+                            }
                         }
                     }
                     if (oid204Count <= 0 || report.firstOid204Tick >= 0)
@@ -347,6 +388,20 @@ namespace NTSD.Test.Editor
                     if (report.centralPlanValid)
                     {
                         BattlePresentationFrame presentation = plan.CapturedFrame;
+                        if (request.captureNativeShadowGate)
+                        {
+                            for (int entityIndex = 0;
+                                entityIndex < presentation.EntityCount; entityIndex++)
+                            {
+                                BattlePresentationEntitySnapshot snapshot =
+                                    presentation.GetEntity(entityIndex);
+                                if (!childIds.Contains(snapshot.StableId))
+                                    continue;
+                                report.firstOid204ShadowSnapshotCount++;
+                                if (!snapshot.ShadowVisible)
+                                    report.firstOid204SuppressedSnapshotCount++;
+                            }
+                        }
                         BattleRenderCommand firstChildCommand = default;
                         bool firstChildCommandFound = false;
                         for (int commandIndex = 0;
@@ -354,6 +409,14 @@ namespace NTSD.Test.Editor
                         {
                             BattleRenderCommand command =
                                 presentation.GetCommand(commandIndex);
+                            if (request.captureNativeShadowGate &&
+                                command.Type == BattleRenderCommandType.Shadow)
+                            {
+                                if (childIds.Contains(command.StableId))
+                                    report.firstOid204ShadowCommandCount++;
+                                else
+                                    report.firstOrdinaryShadowCommandCount++;
+                            }
                             if (command.Type == BattleRenderCommandType.Entity &&
                                 childIds.Contains(command.StableId))
                             {
@@ -384,6 +447,15 @@ namespace NTSD.Test.Editor
                       report.centralPlanValid && report.firstOid204CentralCommands == 5
                     : report.firstOid204RendererCount == 5,
                     "Child presentation carrier is incomplete.");
+                if (request.captureNativeShadowGate)
+                {
+                    Require(report.firstOid204BmpShadowOneCount == 5 &&
+                        report.firstOid204ShadowSnapshotCount == 5 &&
+                        report.firstOid204SuppressedSnapshotCount == 5 &&
+                        report.firstOid204ShadowCommandCount == 0 &&
+                        report.firstOrdinaryShadowCommandCount > 0,
+                        "Formal OID204 BMP shadow gate or ordinary shadow control failed.");
+                }
                 report.status = "PASS";
             }
             catch (Exception error)
@@ -656,13 +728,14 @@ namespace NTSD.Test.Editor
 
         private static void Finish(Request request, Report report)
         {
-            File.WriteAllText(ProjectPath(RequestPath),
+            File.WriteAllText(activeRequestPath ?? ProjectPath(RequestPath),
                 JsonUtility.ToJson(new Request
                 {
                     requested = false,
                     runId = request?.runId,
                     captureCamera = request?.captureCamera ?? false,
                     captureComposedCamera = request?.captureComposedCamera ?? false,
+                    captureNativeShadowGate = request?.captureNativeShadowGate ?? false,
                 }));
             if (request != null && !string.IsNullOrEmpty(request.runId) &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'))
@@ -684,6 +757,7 @@ namespace NTSD.Test.Editor
             stableTick = -1;
             stableUpdates = 0;
             running = false;
+            activeRequestPath = null;
         }
 
         private static string GetResultRoot(Request request)

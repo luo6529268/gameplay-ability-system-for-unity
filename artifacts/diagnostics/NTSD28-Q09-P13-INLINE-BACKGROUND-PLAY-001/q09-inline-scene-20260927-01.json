@@ -1,0 +1,69 @@
+{
+    "runId": "q09-inline-scene-20260927-01",
+    "executionPath": "inline",
+    "status": "PASS_INLINE_FRAME_CAPTURED_PIXEL_ANALYSIS_PENDING",
+    "error": "",
+    "sceneHashBefore": "2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A",
+    "sceneHashAfter": "2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "startTick": 5,
+    "activeTick": 6,
+    "resetTick": 7,
+    "hanSlot": 50,
+    "workerActiveAtStart": false,
+    "workerActiveAfterReset": false,
+    "workerFailure": "",
+    "activeRuntimeOwner": 50,
+    "activeRuntimeX": 2,
+    "activeRuntimeY": 0,
+    "activeFrameOwner": 50,
+    "activeFrameX": 2,
+    "activeFrameY": 0,
+    "activeFrameTick": 6,
+    "resetRuntimeOwner": 50,
+    "resetRuntimeX": 0,
+    "resetRuntimeY": 0,
+    "resetFrameOwner": 50,
+    "resetFrameX": 0,
+    "resetFrameY": 0,
+    "resetFrameTick": 7,
+    "baselinePng": "artifacts/diagnostics/NTSD28-Q09-P13-INLINE-BACKGROUND-PLAY-001/q09-inline-scene-20260927-01-baseline.png",
+    "activePng": "artifacts/diagnostics/NTSD28-Q09-P13-INLINE-BACKGROUND-PLAY-001/q09-inline-scene-20260927-01-active.png",
+    "resetPng": "artifacts/diagnostics/NTSD28-Q09-P13-INLINE-BACKGROUND-PLAY-001/q09-inline-scene-20260927-01-reset.png",
+    "mapPositionBefore": {
+        "x": -1.7899999618530274,
+        "y": -4.800000190734863,
+        "z": 0.0
+    },
+    "mapPositionAfter": {
+        "x": -1.7899999618530274,
+        "y": -4.800000190734863,
+        "z": 0.0
+    },
+    "mapBoundsCenterBefore": {
+        "x": -1.7899999618530274,
+        "y": -4.800000190734863,
+        "z": 0.0
+    },
+    "mapBoundsCenterAfter": {
+        "x": -1.7899999618530274,
+        "y": -4.800000190734863,
+        "z": 0.0
+    },
+    "cameraPositionBefore": {
+        "x": -1.7899999618530274,
+        "y": -4.8000006675720219,
+        "z": -10.0
+    },
+    "cameraPositionAfter": {
+        "x": -1.7899999618530274,
+        "y": -4.8000006675720219,
+        "z": -10.0
+    },
+    "cameraSizeBefore": 5.759999752044678,
+    "cameraSizeAfter": 5.759999752044678,
+    "materialRestored": true,
+    "cameraRestored": true,
+    "stopped": true,
+    "borrowersAfter": 0
+}

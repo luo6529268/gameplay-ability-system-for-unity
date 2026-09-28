@@ -1,0 +1,18 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q10-MISSING-CUE-PREWARM-FAST-PATH-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs
+authority: formal root NTSD2.8-Logan audio events plus user audio-resource exclusion; Unity missing-file prewarm adapter
+evidence: docs/ai/TASKS/NTSD28-Q10-MISSING-CUE-PREWARM-FAST-PATH-001.md
+-->
+
+# NTSD28-Q10-MISSING-CUE-PREWARM-FAST-PATH-001
+
+PLANNED before production script edit. Before: current Battle prewarm issues one UnityWebRequest per missing local single-file cue, then HTTP404 causes the same configured-clip-or-empty fallback; the Q09 mode-0 original Battle Scene Play timed out at tick0/180 seconds while the log showed many such failures. Intended after: skip only the provably absent file request, preserve fallback and failed-load accounting, report a single aggregate missing-file diagnostic. Present files, directory-mode, playback order, routing, volume and resource bytes remain untouched. Exact one-script scope, authority, tests, protection, rollback and remaining 903-WAV/WMA audio parity gap are in the Task. No script has yet been edited for this Change.
+
+CODE_WRITTEN / RUNTIME_PENDING: changed only `Assets/NTSD/Scripts/App/NTSDSoundPlayer.cs`. `LoadPreparedClipsAsync` now checks absent local single-file `SourcePath` before UnityWebRequest, increments the existing failure counter and a new skipped-file diagnostic counter, calls the pre-existing `UseConfiguredClipOrEmpty`, then returns through the existing loaded-state `finally`. `PrepareBattleCuesAsync` emits one aggregate warning for skips within that prewarm. Present single-file and directory-mode paths, playback order/routing/volume and content bytes remain unchanged. Generated runtime build 0 errors/53 warnings and Editor build 0 errors/191 warnings. Original Editor selected present-WAV decode test `NTSD.Test.NTSD28Q10KnockoutModeSoundEditorTests.SelectedModeWavsResolveAndDecodeThroughBattleAudioPath` passed 1/1, job `c1dffeac60df4550ae529f4cea989861`, raw `artifacts/diagnostics/NTSD28-Q09-P09-P10-SELECTED-MODE0-BATTLE-PLAY-001/q10-present-wav-regression.json`. Q09 v2 Battle Play report observed 905 skipped missing-file requests and one aggregate warning in Editor.log, but its request-created clock timed out at tick0 before a ready frame; this is not a Q10 full audio parity PASS. The newly declared v3 Play observation-clock correction will distinguish actual Play readiness. Missing formal WAV/WMA inventory remains open. Final validator/diff audit pending.
+
+Later scoped runtime correction: Q09 v3 Play reached Running/tick2803 and v4 selected mode0 Play PASS_CAPTURED at tick2. V4 read `skippedMissingCueFiles=905` and `failedCueLoads=905` after successful battle preparation, proving this fast path preserved missing-cue failure accounting while removing futile local-file requests in the actual Battle Scene. Present-WAV decode remained the separate original Editor 1/1 witness. No claim that absent formal WAVs are audibly aligned; overall Q10 remains open. Original Editor returned idle/non-Play and protected Scene/Input/GameConfig/mode Asset hashes stayed stable. Post-exit borrower count was not captured by this Q09 probe. Final validator/diff audit pending.
+
+Final audit: `Tools/Validate-ChangeLedger.ps1 -RepositoryRoot <workspace>` exit 0 and `git diff --check` exit 0; logs under `artifacts/diagnostics/NTSD28-Q09-P09-P10-SELECTED-MODE0-BATTLE-PLAY-001/`. Historical record warnings did not fail validation. The production fast path remains RUNTIME_PENDING only because Q10 formal sound-content and full playback exit are separate; no missing WAV/WMA content was added.

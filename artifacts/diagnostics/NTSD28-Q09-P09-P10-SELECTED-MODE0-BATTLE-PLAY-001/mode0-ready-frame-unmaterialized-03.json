@@ -1,0 +1,22 @@
+{
+    "status": "FAIL",
+    "error": "Battle did not publish a ready frame within 180 seconds.",
+    "scene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+    "currentTick": 2803,
+    "frameTick": 2803,
+    "assetGate": 0,
+    "catalogGate": 0,
+    "frameGate": 0,
+    "assetFingerprint": "",
+    "catalogFingerprint": "",
+    "formalCatalogReady": false,
+    "entityCount": 2,
+    "commandCount": 0,
+    "commandsMaterialized": false,
+    "skippedMissingCueFiles": 905,
+    "failedCueLoads": 0,
+    "exitRequested": false,
+    "lifecycleState": "Running",
+    "isPaused": false,
+    "observedPlaySeconds": 180.00286865234376
+}

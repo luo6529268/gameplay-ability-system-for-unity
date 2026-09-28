@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 34;
+        internal const int CurrentSchemaVersion = 35;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -379,6 +379,10 @@ namespace NTSD.Simulation
                 battle?.NativeKnockoutFeed;
             builder.AddBoolean(knockoutFeed?.RecordPresent ?? false);
             builder.AddInt32(knockoutFeed?.LifetimeTicks ?? 0);
+            NTSD28EarthquakeRuntimeState earthquake = battle?.Earthquake;
+            builder.AddInt32(earthquake?.OwnerSlot ?? -1);
+            builder.AddInt32(earthquake?.BackgroundOffsetX ?? 0);
+            builder.AddInt32(earthquake?.BackgroundOffsetY ?? 0);
             NTSD28StandardHitRestRuntimeState standardHitRest =
                 battle?.NativeStandardHitRest;
             builder.AddInt32(standardHitRest?.TimingReduction4A9FF4 ??

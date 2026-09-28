@@ -55,6 +55,7 @@ namespace NTSD.Test.Editor
         private static bool hasFirstLabel;
         private static float firstCounterY;
         private static float firstLabelY;
+        private static string counterLogicChecksum;
 
         [MenuItem(MenuPath)]
         public static void RunFromMenu()
@@ -286,6 +287,9 @@ namespace NTSD.Test.Editor
                     out BattlePresentationEntitySnapshot publishedActor) &&
                   publishedActor.HP2Orig == 2,
                 "The controlled revive-lives value is missing from the logical snapshot.");
+            counterLogicChecksum = world.CaptureParityFrameSnapshot(fixedTick).OverallChecksum;
+            Check(!string.IsNullOrEmpty(counterLogicChecksum),
+                "The paused World parity checksum is unavailable.");
 
             BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
             BattlePixelFramePlan first = world.CurrentPixelFramePlan;
@@ -339,6 +343,12 @@ namespace NTSD.Test.Editor
             Check(driver.CurrentTickIndex == fixedTick &&
                   Math.Abs(actor.Runtime.Y - (originalY + 10)) < 1e-6,
                 "Display sampling changed the logic tick or actor height.");
+            string laterLogicChecksum =
+                world.CaptureParityFrameSnapshot(fixedTick).OverallChecksum;
+            File.AppendAllText(ResultPath,
+                $"logicChecksum first={counterLogicChecksum} later={laterLogicChecksum}\n");
+            Check(laterLogicChecksum == counterLogicChecksum,
+                "Display sampling changed the paused World parity checksum.");
             File.AppendAllText(ResultPath,
                 $"counter laterY={laterCounter.Position.y:R} " +
                 $"alpha={BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world):R}\n");

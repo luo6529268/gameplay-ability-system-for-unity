@@ -425,7 +425,11 @@ namespace NTSD.Simulation.Presentation
             float stableHealthAnchorHeightPixels = 0f,
             bool showSelfFootMarker = false,
             int renderShadowOffset10C = 0,
-            BattleBloodPointCatalog bloodPoints = null)
+            BattleBloodPointCatalog bloodPoints = null,
+            int ownerSlot = -1,
+            int ownerNativeYOffset = 0,
+            bool hasState9997OwnerFrame = false,
+            Vector3 state9997OwnerPosition = default(Vector3))
         {
             Handle = handle;
             StableId = stableId;
@@ -473,6 +477,10 @@ namespace NTSD.Simulation.Presentation
             ShowSelfFootMarker = showSelfFootMarker;
             RenderShadowOffset10C = renderShadowOffset10C;
             BloodPoints = bloodPoints ?? BattleBloodPointCatalog.Empty;
+            OwnerSlot = ownerSlot;
+            OwnerNativeYOffset = ownerNativeYOffset;
+            HasState9997OwnerFrame = hasState9997OwnerFrame;
+            State9997OwnerPosition = state9997OwnerPosition;
         }
 
         public RuntimeEntityHandle Handle { get; }
@@ -522,6 +530,10 @@ namespace NTSD.Simulation.Presentation
         public bool ShowSelfFootMarker { get; }
         public int RenderShadowOffset10C { get; }
         public BattleBloodPointCatalog BloodPoints { get; }
+        public int OwnerSlot { get; }
+        public int OwnerNativeYOffset { get; }
+        public bool HasState9997OwnerFrame { get; }
+        public Vector3 State9997OwnerPosition { get; }
         internal object TrustedResourceIdentity { get; }
 
         internal BattlePresentationEntitySnapshot WithResolvedSprite(
@@ -579,7 +591,11 @@ namespace NTSD.Simulation.Presentation
                 StableHealthAnchorHeightPixels,
                 ShowSelfFootMarker,
                 RenderShadowOffset10C,
-                BloodPoints);
+                BloodPoints,
+                OwnerSlot,
+                OwnerNativeYOffset,
+                HasState9997OwnerFrame,
+                State9997OwnerPosition);
         }
 
         internal BattlePresentationEntitySnapshot WithPresentationBaseOrder(
@@ -631,7 +647,11 @@ namespace NTSD.Simulation.Presentation
                 StableHealthAnchorHeightPixels,
                 ShowSelfFootMarker,
                 RenderShadowOffset10C,
-                BloodPoints);
+                BloodPoints,
+                OwnerSlot,
+                OwnerNativeYOffset,
+                HasState9997OwnerFrame,
+                State9997OwnerPosition);
         }
 
     }
@@ -996,6 +1016,11 @@ namespace NTSD.Simulation.Presentation
         private bool usesIndexedPresentationOrder;
 
         public int TickIndex { get; internal set; }
+        public int EarthquakeOwnerSlot { get; internal set; } = -1;
+        public int EarthquakeBackgroundOffsetX { get; internal set; }
+        public int EarthquakeBackgroundOffsetY { get; internal set; }
+        public int SelectedModeReviveLivesGate54 { get; internal set; }
+        public int SelectedModeEtcMode { get; internal set; }
         public int EntityCount { get; internal set; }
         public int MotionStateCount { get; private set; }
         public int PreviousMotionStateCount { get; private set; }
@@ -1145,6 +1170,11 @@ namespace NTSD.Simulation.Presentation
                     Array.Copy(source.slotLabelState, slotLabelState, source.slotLabelState.Length);
 
                     TickIndex = source.TickIndex;
+                    EarthquakeOwnerSlot = source.EarthquakeOwnerSlot;
+                    EarthquakeBackgroundOffsetX = source.EarthquakeBackgroundOffsetX;
+                    EarthquakeBackgroundOffsetY = source.EarthquakeBackgroundOffsetY;
+                    SelectedModeReviveLivesGate54 = source.SelectedModeReviveLivesGate54;
+                    SelectedModeEtcMode = source.SelectedModeEtcMode;
                     EntityCount = source.EntityCount;
                     MotionStateCount = source.MotionStateCount;
                     PreviousMotionStateCount = source.PreviousMotionStateCount;
@@ -1182,6 +1212,11 @@ namespace NTSD.Simulation.Presentation
         {
             ReleasePublicationBinding();
             TickIndex = tickIndex;
+            EarthquakeOwnerSlot = -1;
+            EarthquakeBackgroundOffsetX = 0;
+            EarthquakeBackgroundOffsetY = 0;
+            SelectedModeReviveLivesGate54 = 0;
+            SelectedModeEtcMode = 0;
             EntityCount = 0;
             MotionStateCount = 0;
             PreviousMotionStateCount = 0;
@@ -2376,6 +2411,14 @@ namespace NTSD.Simulation.Presentation
                 {
                     spriteCaptureCache.Clear();
                     frame.Reset(tickIndex, commonVisualCatalog);
+                    NTSD28EarthquakeRuntimeState earthquake = world.Runtime?.Earthquake;
+                    frame.EarthquakeOwnerSlot = earthquake?.OwnerSlot ?? -1;
+                    frame.EarthquakeBackgroundOffsetX = earthquake?.BackgroundOffsetX ?? 0;
+                    frame.EarthquakeBackgroundOffsetY = earthquake?.BackgroundOffsetY ?? 0;
+                    frame.SelectedModeReviveLivesGate54 = world.RuntimeDataCatalog
+                        .ProjectModeSnapshot?.SelectedModeReviveLivesGate54 ?? 0;
+                    frame.SelectedModeEtcMode = world.RuntimeDataCatalog
+                        .ProjectModeSnapshot?.SelectedModeEtcMode ?? 0;
                     frame.CopyPreviousMotionStatesFrom(previousFrame);
                     knockoutFeedRowProjection.Project(world, tickIndex, frame);
                     Array.Copy(
@@ -2465,12 +2508,36 @@ namespace NTSD.Simulation.Presentation
                                 NTSDRenderSpace.BattleVisualScale);
                         LF2Sprite entitySprite = entity.Sprite;
                         bool entityVisible = entitySprite?.EntityVisible ?? true;
-                        bool shadowVisible = entitySprite?.ShadowVisible ?? true;
+                        bool shadowVisible = (entitySprite?.ShadowVisible ?? true) &&
+                            !entity.IsNativeShadowSuppressedForPresentation(currentFrame);
                         Vector2 localOffsetPixels = entitySprite?.LocalOffsetPixels ?? Vector2.zero;
                         LF2Character healthCharacter = entity as LF2Character;
                         bool showOverheadHealthBar = healthCharacter != null && runtime.HP3 > 0;
                         bool showSelfFootMarker = healthCharacter != null &&
                                                   world.IsBoundActiveHumanRosterInputEntity(entity);
+                        int state9997OwnerYOffset = 0;
+                        bool hasState9997OwnerFrame = false;
+                        Vector3 state9997OwnerPosition = default;
+                        if (currentFrame?.state == 9997 &&
+                            runtime.OwnerSlotIndex >= 0 &&
+                            runtime.OwnerSlotIndex <= 8)
+                        {
+                            LF2Entity presentationOwner =
+                                world.FindEntityByRuntimeSlotForQuery(
+                                    runtime.OwnerSlotIndex);
+                            state9997OwnerYOffset =
+                                LF2ObjectRenderer.ResolveNativeState9997OwnerYOffset(
+                                    presentationOwner);
+                            hasState9997OwnerFrame =
+                                presentationOwner?.Frame?.D != null;
+                            if (hasState9997OwnerFrame)
+                            {
+                                state9997OwnerPosition = new Vector3(
+                                    presentationOwner.GetRuntimeXInt(),
+                                    presentationOwner.GetRuntimeYInt(),
+                                    presentationOwner.GetDisplayZ());
+                            }
+                        }
                         float stableCharacterHeightPixels =
                             showOverheadHealthBar || showSelfFootMarker
                             ? BattleHealthBarAnchor.ResolveStableCharacterHeightPixels(
@@ -2526,7 +2593,11 @@ namespace NTSD.Simulation.Presentation
                             stableCharacterHeightPixels,
                             showSelfFootMarker,
                             runtime.RenderShadowOffset10C,
-                            currentFrame?.BloodPoints));
+                            currentFrame?.BloodPoints,
+                            runtime.OwnerSlotIndex,
+                            state9997OwnerYOffset,
+                            hasState9997OwnerFrame,
+                            state9997OwnerPosition));
                         if (buildCommands && hasCatalogKey && spriteDescriptor.HasSprite)
                             frame.RequiresCatalogPublicationBinding = true;
                     }
@@ -3039,6 +3110,23 @@ namespace NTSD.Simulation.Presentation
                         entity.CenterX,
                         entity.CenterY,
                         NTSDRenderSpace.BattleVisualScale);
+                    bool presentationFlipX = entity.FlipX;
+                    if (entity.State == 9997)
+                    {
+                        LF2ObjectRenderer.GetState9997CameraPixelBounds(
+                            viewportTransform, out float visibleLeft,
+                            out float visibleRight);
+                        pivotPixels = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                            entity.State, frame.SelectedModeEtcMode,
+                            entity.OwnerSlot, entity.HasState9997OwnerFrame,
+                            pivotPixels,
+                            entity.FlipX, resolvedPixelWidth, resolvedPixelHeight,
+                            entity.CenterX, entity.CenterY,
+                            NTSDRenderSpace.BattleVisualScale,
+                            entity.State9997OwnerPosition,
+                            entity.OwnerNativeYOffset, visibleLeft, visibleRight,
+                            out presentationFlipX);
+                    }
                     pivotPixels += entity.HeldVisualAttachmentOffsetPixels;
                     pivotPixels += entity.LocalOffsetPixels * NTSDRenderSpace.BattleVisualScale;
                     Vector3 entityPosition = viewportTransform.ScreenPixelToWorld(
@@ -3072,7 +3160,7 @@ namespace NTSD.Simulation.Presentation
                         new Vector2(resolvedPixelWidth, resolvedPixelHeight),
                         resolvedPivot,
                         resolvedNormalizedUv,
-                        entity.FlipX,
+                        presentationFlipX,
                         resolvedDescriptor,
                         resolvedIdentity,
                         entity.ShowOverheadHealthBar,
@@ -3109,7 +3197,7 @@ namespace NTSD.Simulation.Presentation
                              pointIndex++)
                         {
                             BattleBloodPointValue point = entity.BloodPoints[pointIndex];
-                            float offsetX = entity.FlipX ? 1f - point.X : point.X;
+                            float offsetX = presentationFlipX ? 1f - point.X : point.X;
                             Vector3 markPosition = new Vector3(
                                 spriteLeftWorld + offsetX *
                                 NTSDRenderSpace.BattleVisualScale *
@@ -3162,7 +3250,8 @@ namespace NTSD.Simulation.Presentation
                         (int)entity.CenterY,
                         entity.RenderShadowOffset10C,
                         overlayVisibleLeft,
-                        overlayVisibleRight);
+                        overlayVisibleRight,
+                        frame.SelectedModeReviveLivesGate54);
                     if (mode == BattlePresentationBackendMode.CentralOnly &&
                         BattleEntityOverlayLayout.TryGetComCompositeLayout(
                             in overlayRuntimeSlot,

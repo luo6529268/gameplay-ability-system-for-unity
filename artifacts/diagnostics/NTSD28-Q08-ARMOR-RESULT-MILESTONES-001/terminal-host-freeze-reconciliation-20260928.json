@@ -1,0 +1,97 @@
+{
+  "schema": "ntsd28-q08-terminal-host-freeze-reconciliation/1.0",
+  "status": "SCOPED_OBSERVATION_NOT_LFR_PASS",
+  "authorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "inputs": {
+    "formalTraceSha256": "464B0A342AAA59D06FBF004EC4A3779200A90830B11E05CDC4AC15D8D793BFC6",
+    "formalReportSha256": "04467AFC9DB4E217CAE97CA73DA25CCFCBD349345FFE58D6B223BB3D858F6AE3",
+    "unityRawSha256": "639FB4A1EFEC4FB25C839740A202B9CB817875D766CE5516F749166B06A95C59",
+    "unityResultFlowSha256": "6855B3E073882A8E0451CC919031AAD18F072322BE3D4832DEE84ABB6D76B561"
+  },
+  "formal": {
+    "rowCount": 367,
+    "lastTwoTicks": [
+      365,
+      365
+    ],
+    "worldStateHashes": [
+      "dbeb45e5030b3fbf",
+      "dbeb45e5030b3fbf"
+    ],
+    "worldStateHashStable": true,
+    "rngStable": true,
+    "deterministicHashes": [
+      "5d3dc679aea46860",
+      "3917ee6b881d56ef"
+    ],
+    "changedTopLevelKeys": [
+      "battleFlow",
+      "deterministicStateHash",
+      "diagnostics",
+      "events"
+    ],
+    "resultFlows": [
+      {
+        "timer": 349,
+        "phase": 2,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 349
+      },
+      {
+        "timer": 350,
+        "phase": 3,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": true,
+        "transitionStarted": true,
+        "upperSceneEntered": false,
+        "transitionState": 2,
+        "timerAfter": 0
+      }
+    ],
+    "lfrPassed": false,
+    "lfrFailureCode": 46,
+    "lfrCompletedTicks": 365
+  },
+  "unity": {
+    "rawRowCount": 367,
+    "resultFlowRowCount": 367,
+    "lastTwoCompletedCallOrdinals": [
+      365,
+      366
+    ],
+    "lastTwoEntityCounts": [
+      2,
+      2
+    ],
+    "entityRowsIdentical": true,
+    "lastTwoResultFlows": [
+      {
+        "nativeResultOutputTimer": 349,
+        "nativeResultTimer": 349,
+        "nativeResultPhase": 2,
+        "nativeTransitionState": 0,
+        "nativeLivingGroupMask": 2
+      },
+      {
+        "nativeResultOutputTimer": 350,
+        "nativeResultTimer": 0,
+        "nativeResultPhase": 3,
+        "nativeTransitionState": 2,
+        "nativeLivingGroupMask": 2
+      }
+    ]
+  },
+  "limits": [
+    "Unity raw exporter captures two active entities, not the entire World hash or every runtime registry.",
+    "Formal LFR report failed at the terminal host-only call; this is not a successful LFR certificate.",
+    "Different engine hashes are not compared to each other; only within-engine terminal freezing is checked."
+  ]
+}

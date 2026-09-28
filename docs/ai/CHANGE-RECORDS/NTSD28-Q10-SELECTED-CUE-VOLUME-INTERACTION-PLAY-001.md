@@ -1,0 +1,16 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q10-SELECTED-CUE-VOLUME-INTERACTION-PLAY-001
+status: VERIFIED
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q10SelectedRunCuePlayProbeEditor.cs
+authority: formal NTSD2.8-Logan root EXE and paired playable successful-tick audio volume/submission order
+evidence: docs/ai/TASKS/NTSD28-Q10-SELECTED-CUE-VOLUME-INTERACTION-PLAY-001.md
+-->
+
+# NTSD28-Q10-SELECTED-CUE-VOLUME-INTERACTION-PLAY-001
+
+Pre-edit `PLANNED`. The Task Contract records formal source, Unity current state, the single test-only path and symbols (`RunCore`, `Observe`, `ForwardingRecorder`, `CueRecord`, `Report`), the opt-in physical F11+D interaction, expected temporary sink/input side effects, cleanup, acceptance, risk and exact rollback. Existing selected cue and stereo probe entries must remain unchanged. No production script, DAT/resource, Scene, mode asset or nonbattle function may change. Validation will distinguish original Editor compile, selected Unity Play, formal EXE audible comparison and remaining BGM/WMA scope; only the first two are in this package. Preserve any RED/failed raw result rather than changing data or entry guards to force a pass.
+
+2026-09-28 `CODE_WRITTEN`: only the declared Editor probe script changed. `RunCore` gained an opt-in physical F11 mode and isolated result path; `Observe` holds F11 across the existing physical D tap-release-hold and checks two accepted cue ticks plus the first voice's later retune; `ForwardingRecorder` records current percent and the earlier voice volume before forwarding the second batch unchanged; `CueRecord`/`Report` gained diagnostic fields. Original two menu entries still call the same default path. No production/DAT/resource/Scene/nonbattle code changed. Generated Editor build, original Editor refresh/compile and real Play remain pending; no passing result claimed. Risk: selected cue voice may expire/reuse before the second tick, in which case preserve raw failure and diagnose actual lifetime. Rollback only these exact additions after checking the dirty tree.
+
+2026-09-28 `VERIFIED` for the bounded test-only interaction: generated Editor build 0 errors/191 warnings; original PID11944 refreshed and reloaded, compiled the script later than its timestamp, and ran the new menu item in saved Menu→Additive Battle. Raw `play-result.json` `PASS`, SHA `5904FAFBD4C1B0692A31FA987F9FA2BB8B3FFBCE416DB368D4B57D87524BF407`: physical D+F11 produced 003/004 at tick8/13 and volume percent94/89; pooled voices 0→1→2; the first voice volume changed 0.7691304684→0.6180163622 before the second batch was submitted, formal integer-gain independent recomputation error `6.0513e-8`. Probe unloaded Battle, original Editor exited Play and returned idle clean Menu; four protected file hashes unchanged. Exact acceptance and limitations: `artifacts/diagnostics/NTSD28-Q10-SELECTED-CUE-VOLUME-INTERACTION-PLAY-001/ACCEPTANCE.md`. `Tools/Validate-ChangeLedger.ps1` exited 0 (`PASSED`, 950 records / 18 governed code diff files; full output `ledger-validation.txt`); `git -c core.safecrlf=false diff --check` exited 0. Only the declared probe script changed under this ID (80 additions/5 replacements); formal audible EXE parity, other cues, BGM/WMA and Q10 remain open.

@@ -39,7 +39,8 @@ namespace NTSD.Simulation.Presentation
             int centerY,
             int renderShadowOffset10C = 0,
             int visibleLeftPixel = 0,
-            int visibleRightPixel = 794)
+            int visibleRightPixel = 794,
+            int selectedModeReviveLivesGate54 = 0)
         {
             SlotIndex = slotIndex;
             HP2Orig = hp2Orig;
@@ -56,6 +57,7 @@ namespace NTSD.Simulation.Presentation
             RenderShadowOffset10C = renderShadowOffset10C;
             VisibleLeftPixel = visibleLeftPixel;
             VisibleRightPixel = visibleRightPixel;
+            SelectedModeReviveLivesGate54 = selectedModeReviveLivesGate54;
         }
 
         public int SlotIndex { get; }
@@ -73,6 +75,7 @@ namespace NTSD.Simulation.Presentation
         public int RenderShadowOffset10C { get; }
         public int VisibleLeftPixel { get; }
         public int VisibleRightPixel { get; }
+        public int SelectedModeReviveLivesGate54 { get; }
     }
 
     /// <summary>
@@ -105,12 +108,15 @@ namespace NTSD.Simulation.Presentation
 
             bool specialCom = IsSpecialCom(in entity);
             int displayedLives = entity.HP2Orig > 999 ? 999 : entity.HP2Orig;
-            int counterLength = displayedLives > 1
+            int counterLength = displayedLives > 1 &&
+                entity.SelectedModeReviveLivesGate54 != 3 &&
+                entity.SelectedModeReviveLivesGate54 != 4
                 ? (displayedLives >= 100 ? 4 : displayedLives >= 10 ? 3 : 2)
                 : 0;
             int labelLength = GetLabelLength(in entity, slotLabelChars, specialCom);
 
-            bool bracketed = entity.SlotIndex >= 0 && entity.SlotIndex < SlotCount &&
+            bool bracketed = labelLength > 0 &&
+                             entity.SlotIndex >= 0 && entity.SlotIndex < SlotCount &&
                              slotLabelState[entity.SlotIndex] == -1 &&
                              !specialCom;
             if (bracketed)
@@ -184,7 +190,7 @@ namespace NTSD.Simulation.Presentation
             out int labelY,
             out int sheetIndex)
         {
-            if (!IsSpecialCom(in entity))
+            if (!IsNameplateAllowedByMode(in entity) || !IsSpecialCom(in entity))
             {
                 labelX = 0;
                 labelY = 0;
@@ -203,7 +209,8 @@ namespace NTSD.Simulation.Presentation
             out int labelY,
             out int sheetIndex)
         {
-            if (entity.HP2Orig > 1 || entity.HitStop <= -25)
+            if (!IsNameplateAllowedByMode(in entity) ||
+                entity.HP2Orig > 1 || entity.HitStop <= -25)
             {
                 labelX = 0;
                 labelY = 0;
@@ -240,6 +247,8 @@ namespace NTSD.Simulation.Presentation
             char[,] slotLabelChars,
             bool specialCom)
         {
+            if (!IsNameplateAllowedByMode(in entity))
+                return 0;
             if ((entity.SlotIndex >= 20 && (entity.RelationTeam == 5 || entity.ObjType != 0)) || entity.HitStop <= -25)
                 return specialCom ? 3 : 0;
 
@@ -250,6 +259,14 @@ namespace NTSD.Simulation.Presentation
             while (length < SlotLabelCharacterCapacity && slotLabelChars[entity.SlotIndex, length] != '\0')
                 length++;
             return length;
+        }
+
+        private static bool IsNameplateAllowedByMode(
+            in BattleEntityOverlayRuntimeSlot entity)
+        {
+            int gate = entity.SelectedModeReviveLivesGate54;
+            return gate != 2 && gate != 4 &&
+                   ((gate != 1 && gate != 3) || entity.SlotIndex <= 18);
         }
 
         private static bool IsSpecialCom(in BattleEntityOverlayRuntimeSlot entity)

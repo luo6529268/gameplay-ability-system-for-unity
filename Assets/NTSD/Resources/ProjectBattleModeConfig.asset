@@ -18,6 +18,8 @@ MonoBehaviour:
     respond: 50
     caughtAct: 1
   selectedStageGate50: 1
+  selectedModeReviveLivesGate54: 0
+  selectedModeEtcMode: 1
   knockout:
     enabled: 1
     respond: 5

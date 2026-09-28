@@ -1,5 +1,6 @@
 using NTSD.Animation;
 using NTSD.Animation.LF2Tasks;
+using NTSD.DatParser;
 using NTSD.Input;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
@@ -526,7 +527,7 @@ namespace NTSD.Animation.LF2Objects
                 Frame?.D,
                 Runtime.LinkState,
                 ResolveCurrentDataObjectId(this),
-                Runtime.HitStop);
+                Runtime.HitStop) || IsNativeShadowSuppressedForPresentation(Frame?.D);
 
             if (hide)
                 Sprite?.HideShadow();
@@ -577,8 +578,23 @@ namespace NTSD.Animation.LF2Objects
                 Frame?.D,
                 Runtime.LinkState,
                 ResolveCurrentDataObjectId(this),
-                Runtime.HitStop);
+                Runtime.HitStop) || IsNativeShadowSuppressedForPresentation(Frame?.D);
             Sprite?.SetShadowVisibleManagedOnly(!hide);
+        }
+
+        internal bool IsNativeShadowSuppressedForPresentation(LF2FrameData currentFrame)
+        {
+            LF2CharacterData data =
+                (this as LF2LivingObject)?._FrameDataWrapper?.characterData ??
+                FrameCache?.Wrapper?.characterData;
+            if (data?.NativeMetadata?.Bmp.Int32OrDefault("shadow", 0) == 1)
+                return true;
+
+            return currentFrame?.UsesLoganFrameNumbers == true &&
+                   currentFrame.rawProperties != null &&
+                   currentFrame.rawProperties.TryGetValue("shadow", out string value) &&
+                   LoganNumericDecoder.TryParseInt32(value, out int shadow) &&
+                   shadow == 1;
         }
 
         internal static bool ShouldHideShadowForPresentation(
@@ -4436,7 +4452,7 @@ namespace NTSD.Animation.LF2Objects
             if (hasEffectResources)
             {
                 int availableSlots = CountAvailableTransitionEffectSlots();
-                Match?.QueueSound("SFX_066", Runtime.XInt);
+                Match?.QueueSound("SFX_066", Runtime.ResolveBattleSoundWorldXInt(Runtime.XInt));
                 spawned |= SpawnTransitionEffectBranch1(ref availableSlots);
             }
 
@@ -4986,7 +5002,7 @@ namespace NTSD.Animation.LF2Objects
             if (string.IsNullOrWhiteSpace(soundId))
                 return;
 
-            Match?.QueueSound(soundId, GetRuntimeXInt());
+            Match?.QueueSound(soundId, Runtime.ResolveBattleSoundWorldXInt(GetRuntimeXInt()));
         }
 
         public virtual int ResolveReleaseNeutralHolderSlotOrImplicitZero()
@@ -5480,7 +5496,7 @@ namespace NTSD.Animation.LF2Objects
             if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))
                 return;
 
-            Match?.QueueSound(soundId, Runtime.XInt);
+            Match?.QueueSound(soundId, Runtime.ResolveBattleSoundWorldXInt(Runtime.XInt));
         }
 
         // FrameTransistor 在真正比较 wait 之前，会先进这里。

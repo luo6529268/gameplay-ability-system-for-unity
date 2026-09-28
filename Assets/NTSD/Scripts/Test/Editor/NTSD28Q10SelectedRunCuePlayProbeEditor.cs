@@ -24,13 +24,31 @@ namespace NTSD.Test.Editor
             "NTSD/Battle Diagnostics/Q10/Run Selected Naruto Run Cue Play Probe";
         private const string StereoMenuPath =
             "NTSD/Battle Diagnostics/Q10/Run Selected Naruto Stereo Event Probe";
+        private const string VolumeMenuPath =
+            "NTSD/Battle Diagnostics/Q10/Run Selected Naruto Cue Volume Interaction Probe";
+        private const string SourceXMenuPath =
+            "NTSD/Battle Diagnostics/Q10/Run Selected Naruto Source X Probe";
+        private const string VoiceCapMenuPath =
+            "NTSD/Battle Diagnostics/Q10/Run Selected Naruto Voice Cap Probe";
         private static readonly string DefaultResultPath = Path.GetFullPath(Path.Combine(
             Application.dataPath, "..", "artifacts", "diagnostics",
             "NTSD28-Q10-SELECTED-RUN-CUE-PLAY-001", "play-result.json"));
         private static readonly string StereoResultPath = Path.GetFullPath(Path.Combine(
             Application.dataPath, "..", "artifacts", "diagnostics",
             "NTSD28-Q10-STEREO-SELECTED-EVENT-PROBE-001", "play-result.json"));
+        private static readonly string VolumeResultPath = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-Q10-SELECTED-CUE-VOLUME-INTERACTION-PLAY-001", "play-result.json"));
+        private static readonly string SourceXResultPath = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-Q10-ENTITY-AUDIO-SOURCE-X-001", "play-result.json"));
+        private static readonly string VoiceCapResultPath = Path.GetFullPath(Path.Combine(
+            Application.dataPath, "..", "artifacts", "diagnostics",
+            "NTSD28-Q10-BATTLE-VOICE-CAP-001", "play-result.json"));
         private static string resultPath = DefaultResultPath;
+        private static bool holdVolumeDown;
+        private static bool captureEntitySourceX;
+        private static bool captureVoiceCap;
 
         private static SimulationTickDriver driver;
         private static NTSDSoundPlayer soundPlayer;
@@ -58,18 +76,47 @@ namespace NTSD.Test.Editor
             RunCore(true);
         }
 
-        private static void RunCore(bool captureStereoParameters)
+        [MenuItem(VolumeMenuPath)]
+        public static void RunCueVolumeInteractionProbe()
+        {
+            RunCore(false, true);
+        }
+
+        [MenuItem(SourceXMenuPath)]
+        public static void RunEntitySourceXProbe()
+        {
+            RunCore(false, false, true);
+        }
+
+        [MenuItem(VoiceCapMenuPath)]
+        public static void RunBattleVoiceCapProbe()
+        {
+            RunCore(false, false, false, true);
+        }
+
+        private static void RunCore(
+            bool captureStereoParameters, bool captureVolumeInteraction = false,
+            bool captureSourceX = false, bool captureBattleVoiceCap = false)
         {
             EditorApplication.update -= Observe;
             if (finishing)
                 return;
 
-            resultPath = captureStereoParameters ? StereoResultPath : DefaultResultPath;
+            holdVolumeDown = captureVolumeInteraction;
+            captureEntitySourceX = captureSourceX;
+            captureVoiceCap = captureBattleVoiceCap;
+            resultPath = captureBattleVoiceCap ? VoiceCapResultPath :
+                captureSourceX ? SourceXResultPath :
+                captureVolumeInteraction ? VolumeResultPath :
+                captureStereoParameters ? StereoResultPath : DefaultResultPath;
             report = new Report
             {
                 status = "RUNNING",
                 initialScene = SceneManager.GetActiveScene().path,
                 captureStereoParameters = captureStereoParameters,
+                captureVolumeInteraction = captureVolumeInteraction,
+                captureEntitySourceX = captureSourceX,
+                captureBattleVoiceCap = captureBattleVoiceCap,
             };
             previousStressSuppression =
                 BattleTestBootstrap.SuppressEntityCreationForProductionStress;
@@ -179,6 +226,13 @@ namespace NTSD.Test.Editor
                         "Production P1 movement action is disabled.");
                     Check(soundPlayer.BattleCatalogSealedForDiagnostics,
                         "Battle sound catalog has not been sealed.");
+                    if (captureVoiceCap)
+                    {
+                        report.battleVoiceCount =
+                            soundPlayer.OneShotVoiceCountForDiagnostics;
+                        Check(report.battleVoiceCount == 64,
+                            "Battle voice pool was not prewarmed to native capacity.");
+                    }
                     Check(PreparedClipExists("data\\003.wav") &&
                           PreparedClipExists("data\\004.wav"),
                         "Selected running cues do not have preloaded Unity clips.");
@@ -195,7 +249,8 @@ namespace NTSD.Test.Editor
                     recorder = new ForwardingRecorder(driver, soundPlayer);
                     driver.SetSoundPresentationSinkForDiagnostics(recorder);
                     phaseStartTick = driver.CurrentTickIndex;
-                    QueueKeys(Key.D);
+                    QueueKeys(holdVolumeDown ? new[] { Key.D, Key.F11 } :
+                        new[] { Key.D });
                     phase = 1;
                     deadline = EditorApplication.timeSinceStartup + 35.0;
                     return;
@@ -204,14 +259,16 @@ namespace NTSD.Test.Editor
                 int tick = driver.CurrentTickIndex;
                 if (phase == 1 && tick >= phaseStartTick + 2)
                 {
-                    QueueKeys();
+                    QueueKeys(holdVolumeDown ? new[] { Key.F11 } :
+                        Array.Empty<Key>());
                     phaseStartTick = tick;
                     phase = 2;
                     return;
                 }
                 if (phase == 2 && tick >= phaseStartTick + 2)
                 {
-                    QueueKeys(Key.D);
+                    QueueKeys(holdVolumeDown ? new[] { Key.D, Key.F11 } :
+                        new[] { Key.D });
                     phaseStartTick = tick;
                     phase = 3;
                     return;
@@ -242,6 +299,35 @@ namespace NTSD.Test.Editor
                     "A selected running cue did not start its prepared pooled voice.");
                 Check(report.finalRejectedCueCount == report.initialRejectedCueCount,
                     "The selected battle rejected an unprepared cue.");
+                if (captureEntitySourceX)
+                {
+                    CueRecord first = recorder.FindFirstRunningCue("data\\003.wav");
+                    CueRecord second = recorder.FindFirstRunningCue("data\\004.wav");
+                    Check(first.sourceRulePositionInitialized &&
+                          second.sourceRulePositionInitialized &&
+                          first.eventWorldX == first.actorSourceRuleX &&
+                          second.eventWorldX == second.actorSourceRuleX,
+                        "Entity battle sound WorldX differs from its rule-source X.");
+                }
+                if (holdVolumeDown)
+                {
+                    CueRecord first = recorder.FindFirstRunningCue("data\\003.wav");
+                    CueRecord second = recorder.FindFirstRunningCue("data\\004.wav");
+                    Check(first != null && second != null &&
+                          first.volumePercent > second.volumePercent &&
+                          second.volumePercent < 100,
+                        "Physical F11 did not lower volume across both accepted cue ticks.");
+                    Check(first.voiceVolume > 0f &&
+                          second.firstCueVoiceFoundAtSecondCue,
+                        "The first cue voice was not available for the later retune witness.");
+                    float expected = first.voiceVolume *
+                        NativeSfxGain(second.volumePercent) /
+                        NativeSfxGain(first.volumePercent);
+                    report.expectedFirstCueVolumeAtSecondCue = expected;
+                    Check(Mathf.Abs(second.firstCueVoiceVolumeAtSecondCue -
+                          expected) <= 0.002f,
+                        "The earlier running voice was not retuned to the later tick's native SFX gain.");
+                }
                 Finish(true, string.Empty);
             }
             catch (Exception exception)
@@ -257,6 +343,14 @@ namespace NTSD.Test.Editor
             return soundPlayer.TryGetPreparedSingleFileWrapperForDiagnostics(
                        cue, out AudioClip[] clips) &&
                    clips?.Length > 0 && clips[0] != null;
+        }
+
+        private static float NativeSfxGain(int percent)
+        {
+            if (percent == 0)
+                return 0f;
+            int hundredthDb = ((percent - 100) * 0xED8) / 100;
+            return Mathf.Pow(10f, hundredthDb / 2000f);
         }
 
         private static void QueueKeys(params Key[] keys)
@@ -414,7 +508,26 @@ namespace NTSD.Test.Editor
                         onMainThread =
                             Thread.CurrentThread.ManagedThreadId == mainThreadId,
                         poolCountBefore = before,
+                        volumePercent = player.NativeBattleVolumePercentForDiagnostics,
                     });
+                }
+
+                foreach (CueRecord record in batch)
+                {
+                    if (!holdVolumeDown || !string.Equals(record.cue,
+                            "data\\004.wav", StringComparison.OrdinalIgnoreCase) ||
+                        !player.TryGetPreparedSingleFileWrapperForDiagnostics(
+                            "data\\003.wav", out AudioClip[] firstClips) ||
+                        firstClips?.Length <= 0 || firstClips[0] == null)
+                        continue;
+                    foreach (AudioSource voice in player.GetComponentsInChildren<AudioSource>(true))
+                    {
+                        if (voice == null || voice.clip != firstClips[0])
+                            continue;
+                        record.firstCueVoiceFoundAtSecondCue = true;
+                        record.firstCueVoiceVolumeAtSecondCue = voice.volume;
+                        break;
+                    }
                 }
 
                 player.PresentSounds(sounds);
@@ -443,6 +556,11 @@ namespace NTSD.Test.Editor
                     }
                     Events.Add(record);
                 }
+            }
+
+            public CueRecord FindFirstRunningCue(string cue)
+            {
+                return FindFirst(cue);
             }
 
             private CueRecord FindFirst(string cue)
@@ -485,6 +603,9 @@ namespace NTSD.Test.Editor
             public float voiceSpatialBlend;
             public float voicePanStereo;
             public float voiceVolume;
+            public int volumePercent;
+            public bool firstCueVoiceFoundAtSecondCue;
+            public float firstCueVoiceVolumeAtSecondCue;
         }
 
         [Serializable]
@@ -495,6 +616,11 @@ namespace NTSD.Test.Editor
             public string initialScene;
             public string contentRoot;
             public bool captureStereoParameters;
+            public bool captureVolumeInteraction;
+            public bool captureEntitySourceX;
+            public bool captureBattleVoiceCap;
+            public int battleVoiceCount;
+            public float expectedFirstCueVolumeAtSecondCue;
             public int startTick;
             public int endTick;
             public int startX;

@@ -607,6 +607,12 @@ namespace NTSD.Simulation
             SourceRuleZInt = (int)SourceRuleZ;
         }
 
+        public int ResolveBattleSoundWorldXInt(int physicalFallbackX)
+        {
+            // Alignment contract: NTSD28-Q10-ENTITY-AUDIO-SOURCE-X-001.
+            return SourceRulePositionInitialized ? SourceRuleXInt : physicalFallbackX;
+        }
+
         public void ClearSourceRuleBounds()
         {
             SourceRuleXBoundPositive = false;

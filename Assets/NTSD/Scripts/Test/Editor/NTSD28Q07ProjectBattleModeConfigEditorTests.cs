@@ -8,6 +8,58 @@ namespace NTSD.Test.Editor
     public sealed class NTSD28Q07ProjectBattleModeConfigEditorTests
     {
         [Test]
+        public void ProjectModeAsset_CapturesSelectedEtcModeInFrozenIdentity()
+        {
+            ProjectBattleModeConfig asset = ProjectBattleModeConfig.LoadDefault();
+            FieldInfo field = typeof(ProjectBattleModeConfig).GetField(
+                "selectedModeEtcMode", BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.That(field, Is.Not.Null);
+            ProjectBattleModeConfig.Snapshot original = asset.Capture();
+            Assert.That(original.SelectedModeEtcMode, Is.EqualTo(1));
+
+            ProjectBattleModeConfig clone = Object.Instantiate(asset);
+            try
+            {
+                field.SetValue(clone, 0);
+                ProjectBattleModeConfig.Snapshot changed = clone.Capture();
+                Assert.That(changed.SelectedModeEtcMode, Is.Zero);
+                Assert.That(changed.Fingerprint, Is.Not.EqualTo(original.Fingerprint));
+                Assert.That(original.SelectedModeEtcMode, Is.EqualTo(1));
+                field.SetValue(clone, -1);
+                Assert.Throws<System.IO.InvalidDataException>(() => clone.Capture());
+            }
+            finally
+            {
+                Object.DestroyImmediate(clone);
+            }
+        }
+
+        [Test]
+        public void ProjectModeAsset_CapturesPresentationGateInFrozenIdentity()
+        {
+            ProjectBattleModeConfig asset = ProjectBattleModeConfig.LoadDefault();
+            FieldInfo field = typeof(ProjectBattleModeConfig).GetField(
+                "selectedModeReviveLivesGate54", BindingFlags.NonPublic | BindingFlags.Instance);
+            Assert.That(field, Is.Not.Null);
+            ProjectBattleModeConfig.Snapshot original = asset.Capture();
+            Assert.That(original.SelectedModeReviveLivesGate54, Is.Zero);
+
+            ProjectBattleModeConfig clone = Object.Instantiate(asset);
+            try
+            {
+                field.SetValue(clone, 3);
+                ProjectBattleModeConfig.Snapshot changed = clone.Capture();
+                Assert.That(changed.SelectedModeReviveLivesGate54, Is.EqualTo(3));
+                Assert.That(changed.Fingerprint, Is.Not.EqualTo(original.Fingerprint));
+                Assert.That(original.SelectedModeReviveLivesGate54, Is.Zero);
+            }
+            finally
+            {
+                Object.DestroyImmediate(clone);
+            }
+        }
+
+        [Test]
         public void ProjectModeAsset_CapturesSelectedStageGateInFrozenIdentity()
         {
             ProjectBattleModeConfig asset = ProjectBattleModeConfig.LoadDefault();

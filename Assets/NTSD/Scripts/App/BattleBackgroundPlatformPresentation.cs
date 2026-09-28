@@ -1,4 +1,7 @@
 using UnityEngine;
+using UnityEngine.Rendering;
+using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 
 namespace NTSD.App
 {
@@ -30,6 +33,10 @@ namespace NTSD.App
         public const float DefaultAndroidBottomGapNormalized = 1f / 9f;
         public const float MaximumAndroidBottomGapNormalized = 0.5f;
         private const float MinimumAspect = 0.0001f;
+        private const string EarthquakeShaderResourcePath =
+            "BattleEarthquakeBackground";
+        private static readonly int EarthquakeLocalOffsetId =
+            Shader.PropertyToID("_EarthquakeLocalOffset");
 
         [SerializeField] private Camera targetCamera;
         [SerializeField] private SpriteRenderer sourceRenderer;
@@ -50,6 +57,10 @@ namespace NTSD.App
         private Vector3 capturedCameraPosition;
         private float capturedOrthographicSize;
         private bool hasCapturedCameraFrame;
+        private Material earthquakeMaterial;
+        private Material materialBeforeEarthquake;
+        private bool earthquakeMaterialApplied;
+        private bool earthquakeShaderErrorLogged;
 
         public BattleBackgroundEditorPreviewMode EditorPreviewMode
         {
@@ -85,6 +96,8 @@ namespace NTSD.App
         private void OnEnable()
         {
             ResolveDependencies();
+            RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
             RefreshPresentation();
         }
 
@@ -104,6 +117,8 @@ namespace NTSD.App
 
         private void OnDisable()
         {
+            RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
             ReleasePresentation();
         }
 
@@ -275,9 +290,121 @@ namespace NTSD.App
 
         private void ReleasePresentation()
         {
+            RestoreBackgroundMaterial();
+            if (earthquakeMaterial != null)
+            {
+                if (Application.isPlaying)
+                    Destroy(earthquakeMaterial);
+                else
+                    DestroyImmediate(earthquakeMaterial);
+                earthquakeMaterial = null;
+            }
             bottomOverlayPresenter?.Dispose();
             bottomOverlayPresenter = null;
             RestoreCapturedCameraFrame();
+        }
+
+        private void OnBeginCameraRendering(
+            ScriptableRenderContext context,
+            Camera camera)
+        {
+            if (!Application.isPlaying || camera != targetCamera)
+                return;
+
+            SimulationTickDriver driver = SimulationTickDriver.Instance;
+            BattlePresentationFrame frame =
+                driver != null &&
+                driver.LifecycleState == BattleRuntimeLifecycleState.Running
+                    ? driver.World?.BattlePresentation?.PublishedFrame
+                    : null;
+            ApplyEarthquakeFrame(frame);
+        }
+
+        private void OnEndCameraRendering(
+            ScriptableRenderContext context,
+            Camera camera)
+        {
+            if (camera == targetCamera)
+                RestoreBackgroundMaterial();
+        }
+
+#if UNITY_EDITOR
+        private void ApplyEarthquakeFrameForDiagnostics(BattlePresentationFrame frame)
+        {
+            ApplyEarthquakeFrame(frame);
+        }
+#endif
+
+        private void ApplyEarthquakeFrame(BattlePresentationFrame frame)
+        {
+            if (sourceRenderer == null || sourceRenderer.sprite == null ||
+                frame == null ||
+                (frame.EarthquakeBackgroundOffsetX == 0 &&
+                 frame.EarthquakeBackgroundOffsetY == 0))
+            {
+                RestoreBackgroundMaterial();
+                return;
+            }
+
+            float pixelsPerUnit = sourceRenderer.sprite.pixelsPerUnit;
+            if (pixelsPerUnit <= 0f || !EnsureEarthquakeMaterial())
+            {
+                RestoreBackgroundMaterial();
+                return;
+            }
+
+            if (!earthquakeMaterialApplied ||
+                sourceRenderer.sharedMaterial != earthquakeMaterial)
+            {
+                materialBeforeEarthquake = sourceRenderer.sharedMaterial;
+                sourceRenderer.sharedMaterial = earthquakeMaterial;
+                earthquakeMaterialApplied = true;
+            }
+
+            // Alignment contract: NTSD28-Q09-P13-PROJECT-BACKGROUND-VISUAL-CONSUMER-001.
+            // Native screen Y is downward; this shader changes only drawn vertices.
+            earthquakeMaterial.SetVector(EarthquakeLocalOffsetId, new Vector4(
+                frame.EarthquakeBackgroundOffsetX / pixelsPerUnit,
+                -frame.EarthquakeBackgroundOffsetY / pixelsPerUnit,
+                0f,
+                0f));
+        }
+
+        private bool EnsureEarthquakeMaterial()
+        {
+            if (earthquakeMaterial != null)
+                return true;
+
+            Shader shader = Resources.Load<Shader>(EarthquakeShaderResourcePath);
+            if (shader == null || !shader.isSupported)
+            {
+                if (!earthquakeShaderErrorLogged)
+                {
+                    Debug.LogError("Battle earthquake background shader is unavailable.", this);
+                    earthquakeShaderErrorLogged = true;
+                }
+                return false;
+            }
+
+            earthquakeMaterial = new Material(shader)
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+                name = "NTSD Battle Earthquake Background (Runtime)",
+            };
+            return true;
+        }
+
+        private void RestoreBackgroundMaterial()
+        {
+            if (!earthquakeMaterialApplied)
+                return;
+
+            if (sourceRenderer != null &&
+                sourceRenderer.sharedMaterial == earthquakeMaterial)
+                sourceRenderer.sharedMaterial = materialBeforeEarthquake;
+
+            materialBeforeEarthquake = null;
+            earthquakeMaterialApplied = false;
         }
 
         private bool TryApplyWorldCameraFrame(float bottomGap)

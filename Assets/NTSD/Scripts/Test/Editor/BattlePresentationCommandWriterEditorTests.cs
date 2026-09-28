@@ -17,6 +17,18 @@ namespace NTSD.Test
             typeof(BattlePresentationFrame).GetMethod(
                 "Reset",
                 BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly MethodInfo CopyFrameMethod =
+            typeof(BattlePresentationFrame).GetMethod(
+                "CopyFrom",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+        private static readonly PropertyInfo ModeOverlayGateProperty =
+            typeof(BattlePresentationFrame).GetProperty(
+                "SelectedModeReviveLivesGate54",
+                BindingFlags.Instance | BindingFlags.Public);
+        private static readonly PropertyInfo ModeEtcProperty =
+            typeof(BattlePresentationFrame).GetProperty(
+                "SelectedModeEtcMode",
+                BindingFlags.Instance | BindingFlags.Public);
         private static readonly MethodInfo AddEntityMethod =
             typeof(BattlePresentationFrame).GetMethod(
                 "AddEntity",
@@ -92,6 +104,94 @@ namespace NTSD.Test
                     typeof(bool),
                 },
                 null);
+
+        [Test]
+        public void State9997BodyPlacement_UsesOwnerOnlyForSelectedModeAndValidOwner()
+        {
+            Vector2 ordinary = new Vector2(485f, 123f);
+            Vector3 owner = new Vector3(500f, 10f, 350f);
+            Vector2 ownerPivot = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                9997, 1, 8, true, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, owner, 5f, -3.25f, 2044.75f,
+                out bool ownerFlip);
+            Assert.That(ownerFlip, Is.False);
+            Assert.That(ownerPivot.x, Is.EqualTo(515f).Within(0.0001f));
+            Assert.That(ownerPivot.y, Is.EqualTo(457.5f).Within(0.0001f));
+
+            foreach (int selectedMode in new[] { 0, 2 })
+            {
+                Vector2 fallback = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                    9997, selectedMode, 8, true, ordinary, true, 100f, 80f,
+                    40f, 20f, 1.5f, owner, 5f, -3.25f, 2044.75f,
+                    out bool fallbackFlip);
+                Assert.That(fallbackFlip, Is.True);
+                Assert.That(fallback, Is.EqualTo(ordinary));
+            }
+
+            foreach (int ownerSlot in new[] { -1, 9 })
+            {
+                Vector2 fallback = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                    9997, 1, ownerSlot, true, ordinary, true, 100f, 80f,
+                    40f, 20f, 1.5f, owner, 5f, -3.25f, 2044.75f,
+                    out bool fallbackFlip);
+                Assert.That(fallbackFlip, Is.True);
+                Assert.That(fallback, Is.EqualTo(ordinary));
+            }
+
+            Vector2 missingOwner = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                9997, 1, 8, false, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, owner, 5f, -3.25f, 2044.75f,
+                out bool missingOwnerFlip);
+            Assert.That(missingOwnerFlip, Is.True);
+            Assert.That(missingOwner, Is.EqualTo(ordinary));
+        }
+
+        [Test]
+        public void State9997BodyPlacement_ClampsToLiveCameraAndLeavesOtherStatesUnchanged()
+        {
+            Vector2 ordinary = new Vector2(2200f, 200f);
+            Vector3 owner = new Vector3(2100f, 0f, 350f);
+            Vector2 ownerPivot = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                9997, 1, 0, true, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, owner, 0f, -3.25f, 2044.75f,
+                out bool ownerFlip);
+            Assert.That(ownerFlip, Is.False);
+            Assert.That(ownerPivot.x, Is.EqualTo(1969.75f).Within(0.0001f));
+
+            Vector2 fallback = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                9997, 0, 0, true, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, owner, 0f, -3.25f, 2044.75f,
+                out bool fallbackFlip);
+            Assert.That(fallbackFlip, Is.True);
+            Assert.That(fallback.x, Is.EqualTo(1968.75f).Within(0.0001f));
+            Assert.That(fallback.y, Is.EqualTo(ordinary.y));
+
+            Vector2 otherState = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                0, 1, 0, true, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, owner, 0f, -3.25f, 2044.75f,
+                out bool otherFlip);
+            Assert.That(otherFlip, Is.True);
+            Assert.That(otherState, Is.EqualTo(ordinary));
+
+            Vector2 leftEdge = LF2ObjectRenderer.ResolveState9997BodyPivotPixels(
+                9997, 1, 0, true, ordinary, true, 100f, 80f,
+                40f, 20f, 1.5f, new Vector3(0f, 0f, 350f),
+                0f, -3.25f, 2044.75f, out _);
+            Assert.That(leftEdge.x, Is.EqualTo(71.75f).Within(0.0001f));
+        }
+
+        [Test]
+        public void State9997ModeGate_FrozenFrameCopyAndResetPreserveBoundary()
+        {
+            var source = new BattlePresentationFrame();
+            Reset(source, BattleCommonVisualCatalog.Empty);
+            ModeEtcProperty.SetValue(source, 1);
+            var frozen = new BattlePresentationFrame();
+            CopyFrameMethod.Invoke(frozen, new object[] { source, null });
+            Assert.That(ModeEtcProperty.GetValue(frozen), Is.EqualTo(1));
+            Reset(frozen, BattleCommonVisualCatalog.Empty);
+            Assert.That(ModeEtcProperty.GetValue(frozen), Is.EqualTo(0));
+        }
 
         [Test]
         public void LowHpBPoint_CentralCommandFollowsBodyAndCurrentContentDefaults()
@@ -691,6 +791,75 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void SelectedModeGate_ControlsCentralLivesAndNameplateCommands()
+        {
+            int[] gates = { 0, 1, 2, 3, 4 };
+            int[] ordinaryCounts = { 3, 3, 2, 1, 0 };
+            int[] highSlotCounts = { 5, 2, 2, 0, 0 };
+            var coordinator = new BattlePresentationCoordinator();
+            coordinator.SetMode(BattlePresentationBackendMode.CentralOnly);
+            for (int index = 0; index < gates.Length; index++)
+            {
+                var ordinaryFrame = new BattlePresentationFrame();
+                Reset(ordinaryFrame, CreateCatalog(0));
+                SetModeOverlayGate(ordinaryFrame, gates[index]);
+                GetLabels(ordinaryFrame)[0, 0] = 'P';
+                AddEntity(ordinaryFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(0, (uint)(80 + index)), 201 + index,
+                    0, 2, 1, 0, 2, 205, 287));
+                coordinator.BuildCommandsForSelfCheck(ordinaryFrame);
+                Assert.That(ordinaryFrame.CommandCount, Is.EqualTo(ordinaryCounts[index]),
+                    $"ordinary slot, gate {gates[index]}");
+
+                var highFrame = new BattlePresentationFrame();
+                Reset(highFrame, CreateCatalog(0));
+                SetModeOverlayGate(highFrame, gates[index]);
+                AddEntity(highFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(20, (uint)(90 + index)), 211 + index,
+                    20, 2, 2, 0, 2, 205, 287));
+                coordinator.BuildCommandsForSelfCheck(highFrame);
+                Assert.That(highFrame.CommandCount, Is.EqualTo(highSlotCounts[index]),
+                    $"high slot, gate {gates[index]}");
+
+                var compositeFrame = new BattlePresentationFrame();
+                Reset(compositeFrame, CreateCatalog(0, includeAllComLabels: true));
+                SetModeOverlayGate(compositeFrame, gates[index]);
+                AddEntity(compositeFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(20, (uint)(100 + index)), 221 + index,
+                    20, 1, 2, 0, 2, 205, 287));
+                coordinator.BuildCommandsForSelfCheck(compositeFrame);
+                Assert.That(compositeFrame.CommandCount,
+                    Is.EqualTo(gates[index] == 0 ? 1 : 0),
+                    $"composite high slot, gate {gates[index]}");
+
+                var specialFrame = new BattlePresentationFrame();
+                Reset(specialFrame, CreateCatalog(0, includeSpecialCom: true));
+                SetModeOverlayGate(specialFrame, gates[index]);
+                AddEntity(specialFrame, CreateOverlayEntity(
+                    new RuntimeEntityHandle(20, (uint)(110 + index)), 231 + index,
+                    20, 1, 5, 0, 2, 205, 287));
+                coordinator.BuildCommandsForSelfCheck(specialFrame);
+                Assert.That(specialFrame.CommandCount,
+                    Is.EqualTo(gates[index] == 0 ? 1 : 0),
+                    $"special Com high slot, gate {gates[index]}");
+            }
+        }
+
+        [Test]
+        public void SelectedModeGate_FrozenFrameCopyAndResetDoNotRetainStaleValue()
+        {
+            var source = new BattlePresentationFrame();
+            Reset(source, BattleCommonVisualCatalog.Empty);
+            SetModeOverlayGate(source, 4);
+            var frozen = new BattlePresentationFrame();
+            Assert.That(CopyFrameMethod, Is.Not.Null);
+            CopyFrameMethod.Invoke(frozen, new object[] { source, null });
+            Assert.That(ModeOverlayGateProperty.GetValue(frozen), Is.EqualTo(4));
+            Reset(frozen, BattleCommonVisualCatalog.Empty);
+            Assert.That(ModeOverlayGateProperty.GetValue(frozen), Is.Zero);
+        }
+
+        [Test]
         public void DeferredSpriteMaterialization_BuildsCommandWithoutMutatingFrozenSnapshot()
         {
             Texture2D texture = null;
@@ -1095,6 +1264,12 @@ namespace NTSD.Test
         {
             Assert.That(ResetFrameMethod, Is.Not.Null);
             ResetFrameMethod.Invoke(frame, new object[] { 1, catalog });
+        }
+
+        private static void SetModeOverlayGate(BattlePresentationFrame frame, int gate)
+        {
+            Assert.That(ModeOverlayGateProperty, Is.Not.Null);
+            ModeOverlayGateProperty.SetValue(frame, gate);
         }
 
         private static void AddEntity(

@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c15c76f63da344d7858c999a7759e832",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790569969417,
+      "finished_unix_ms": 1790569984768,
+      "last_update_unix_ms": 1790569984768,
+      "progress": {
+        "completed": 1,
+        "total": 8609,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790569983603,
+        "last_finished_test_full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.EntityBattleSoundWorldX_UsesInitializedRuleXAndPreservesPhysicalFallback",
+        "last_finished_unix_ms": 1790569984254,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.EntityBattleSoundWorldX_UsesInitializedRuleXAndPreservesPhysicalFallback",
+            "message": "  Entity-bound battle audio needs one source-position resolver.\r\n  Expected: not null\r\n  But was:  null\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

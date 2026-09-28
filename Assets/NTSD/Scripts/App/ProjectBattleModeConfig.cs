@@ -51,10 +51,14 @@ namespace NTSD.App
         [SerializeField] private ComboSettings combo = new ComboSettings();
         [SerializeField] private KnockoutSettings knockout = new KnockoutSettings();
         [SerializeField] private int selectedStageGate50 = 1;
+        [SerializeField] private int selectedModeReviveLivesGate54;
+        [SerializeField] private int selectedModeEtcMode = 1;
 
         public ComboSettings Combo => combo;
         public KnockoutSettings Knockout => knockout;
         public int SelectedStageGate50 => selectedStageGate50;
+        public int SelectedModeReviveLivesGate54 => selectedModeReviveLivesGate54;
+        public int SelectedModeEtcMode => selectedModeEtcMode;
 
         public static ProjectBattleModeConfig LoadDefault()
         {
@@ -68,9 +72,11 @@ namespace NTSD.App
         public Snapshot Capture()
         {
             if (combo == null || knockout == null || knockout.typeImagePaths == null ||
-                knockout.typeImagePaths.Length != 7 || selectedStageGate50 < 0)
+                knockout.typeImagePaths.Length != 7 || selectedStageGate50 < 0 ||
+                selectedModeReviveLivesGate54 < 0 || selectedModeEtcMode < 0)
                 throw new InvalidDataException("Project battle mode config is incomplete.");
-            return new Snapshot(combo, knockout, selectedStageGate50);
+            return new Snapshot(combo, knockout, selectedStageGate50,
+                selectedModeReviveLivesGate54, selectedModeEtcMode);
         }
 
         public sealed class Snapshot
@@ -84,6 +90,8 @@ namespace NTSD.App
             public int ComboRespond { get; }
             public int ComboCaughtAct { get; }
             public int SelectedStageGate50 { get; }
+            public int SelectedModeReviveLivesGate54 { get; }
+            public int SelectedModeEtcMode { get; }
             public bool KnockoutEnabled { get; }
             public int KnockoutRespond { get; }
             public int KnockoutLifetimeTicks { get; }
@@ -108,13 +116,16 @@ namespace NTSD.App
             public string[] TypeImagePaths => (string[])typeImagePaths.Clone();
 
             internal Snapshot(ComboSettings combo, KnockoutSettings knockout,
-                int selectedStageGate50)
+                int selectedStageGate50, int selectedModeReviveLivesGate54,
+                int selectedModeEtcMode)
             {
                 ComboBound = combo.enabled ? 1 : 0;
                 ComboFacing = combo.facing;
                 ComboRespond = combo.respond;
                 ComboCaughtAct = combo.caughtAct ? 1 : 0;
                 SelectedStageGate50 = selectedStageGate50;
+                SelectedModeReviveLivesGate54 = selectedModeReviveLivesGate54;
+                SelectedModeEtcMode = selectedModeEtcMode;
                 KnockoutEnabled = knockout.enabled;
                 KnockoutRespond = knockout.respond;
                 KnockoutLifetimeTicks = knockout.lifetimeTicks;
@@ -140,8 +151,10 @@ namespace NTSD.App
                 {
                     using (var writer = new BinaryWriter(bytes, Encoding.UTF8, true))
                     {
-                        writer.Write("PROJECT_BATTLE_MODE_CONFIG_V2");
+                        writer.Write("PROJECT_BATTLE_MODE_CONFIG_V4");
                         writer.Write(SelectedStageGate50);
+                        writer.Write(SelectedModeReviveLivesGate54);
+                        writer.Write(SelectedModeEtcMode);
                         writer.Write(ComboBound);
                         writer.Write(ComboFacing);
                         writer.Write(ComboRespond);

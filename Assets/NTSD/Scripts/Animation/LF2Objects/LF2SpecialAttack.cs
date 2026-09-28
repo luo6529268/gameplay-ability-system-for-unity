@@ -782,7 +782,7 @@ namespace NTSD.Animation.LF2Objects
             if (frameId < 0 || frameId >= LF2FrameCache.MaxFrameIdExclusive || string.IsNullOrWhiteSpace(soundId))
                 return;
 
-            Match?.QueueSound(soundId, Runtime.XInt);
+            Match?.QueueSound(soundId, Runtime.ResolveBattleSoundWorldXInt(Runtime.XInt));
         }
 
         // ========== 初始化子步骤 ==========

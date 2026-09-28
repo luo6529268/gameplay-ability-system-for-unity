@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NTSD.Animation.LF2Tasks;
 using NTSD.Animation.Rendering;
+using NTSD.DatParser;
 using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using MoreMountains.Tools;
@@ -557,6 +558,33 @@ namespace NTSD.Animation.LF2Objects
                 centerx,
                 centery,
                 NTSDRenderSpace.BattleVisualScale);
+            bool presentationFacingLeft = ps.dir == "left";
+            if (frame?.state == 9997)
+            {
+                LF2Entity owner = null;
+                int ownerSlot = _logicObject.Runtime?.OwnerSlotIndex ?? -1;
+                if (ownerSlot >= 0 && ownerSlot <= 8)
+                    owner = _logicObject.Match?.FindEntityByRuntimeSlotForQuery(ownerSlot);
+                NTSDRenderSpace.ViewportTransformSnapshot viewport =
+                    NTSDRenderSpace.CaptureViewportTransform();
+                GetState9997CameraPixelBounds(viewport, out float visibleLeft,
+                    out float visibleRight);
+                int selectedModeEtcMode = _logicObject.Match?.RuntimeDataCatalog
+                    .ProjectModeSnapshot?.SelectedModeEtcMode ?? 0;
+                Vector3 ownerPosition = owner == null
+                    ? default
+                    : new Vector3(owner.GetRuntimeXInt(), owner.GetRuntimeYInt(),
+                        owner.GetDisplayZ());
+                pivot = ResolveState9997BodyPivotPixels(
+                    frame.state, selectedModeEtcMode, ownerSlot,
+                    owner?.Frame?.D != null, pivot, presentationFacingLeft,
+                    spriteWidth, spriteHeight, centerx, centery,
+                    NTSDRenderSpace.BattleVisualScale, ownerPosition,
+                    ResolveNativeState9997OwnerYOffset(owner), visibleLeft,
+                    visibleRight, out presentationFacingLeft);
+                if (_spriteRenderer != null)
+                    _spriteRenderer.flipX = presentationFacingLeft;
+            }
             pivot += ResolveHeldVisualAttachmentOffsetPixels(frame);
 
             Transform rootTransform = transform.parent != null ? transform.parent : transform;
@@ -594,6 +622,92 @@ namespace NTSD.Animation.LF2Objects
                 : screenX + visualScale * (spriteWidth * 0.5f - centerx);
             float pivotY = screenY + visualScale * (spriteHeight - centery);
             return new Vector2(pivotX, pivotY);
+        }
+
+        internal static void GetState9997CameraPixelBounds(
+            NTSDRenderSpace.ViewportTransformSnapshot viewport,
+            out float visibleLeft,
+            out float visibleRight)
+        {
+            visibleLeft = 0f;
+            visibleRight = NTSDRenderSpace.SourceScreenWidth;
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            if (camera == null || !camera.orthographic || camera.aspect <= 0f ||
+                camera.orthographicSize <= 0f || viewport.UnitsPerPixelX <= 0f)
+                return;
+
+            float halfWidth = camera.orthographicSize * camera.aspect;
+            float left = (camera.transform.position.x - halfWidth - viewport.Left) /
+                         viewport.UnitsPerPixelX;
+            float right = (camera.transform.position.x + halfWidth - viewport.Left) /
+                          viewport.UnitsPerPixelX;
+            if (right > left)
+            {
+                visibleLeft = left;
+                visibleRight = right;
+            }
+        }
+
+        internal static int ResolveNativeState9997OwnerYOffset(LF2Entity owner)
+        {
+            if (owner?.Frame?.D == null)
+                return 0;
+            int statsY = owner.FrameCache?.Wrapper?.characterData?.NativeMetadata
+                ?.Stats.Int32OrDefault("y", 0) ?? 0;
+            if (statsY != 0)
+                return statsY;
+            if (owner.Frame.D.rawProperties != null &&
+                owner.Frame.D.rawProperties.TryGetValue("y", out string frameY) &&
+                LoganNumericDecoder.TryParseInt32(frameY, out int value))
+                return value;
+            return 0;
+        }
+
+        internal static Vector2 ResolveState9997BodyPivotPixels(
+            int state,
+            int selectedModeEtcMode,
+            int ownerSlot,
+            bool hasOwnerFrame,
+            Vector2 ordinaryPivot,
+            bool physicalFacingLeft,
+            float spriteWidth,
+            float spriteHeight,
+            float centerX,
+            float centerY,
+            float visualScale,
+            Vector3 ownerPosition,
+            float ownerYOffset,
+            float visibleLeft,
+            float visibleRight,
+            out bool presentationFacingLeft)
+        {
+            presentationFacingLeft = physicalFacingLeft;
+            if (state != 9997)
+                return ordinaryPivot;
+
+            float renderedWidth = spriteWidth * visualScale;
+            if (selectedModeEtcMode == 1 && ownerSlot >= 0 && ownerSlot <= 8 &&
+                hasOwnerFrame)
+            {
+                float maximumLeft = Mathf.Max(visibleLeft,
+                    visibleRight - renderedWidth);
+                float clampedLeft = Mathf.Clamp(
+                    ownerPosition.x - centerX * visualScale,
+                    visibleLeft, maximumLeft);
+                presentationFacingLeft = false;
+                return new Vector2(
+                    clampedLeft + renderedWidth * 0.5f,
+                    ownerPosition.z + ownerPosition.y +
+                    (spriteHeight - centerY + ownerYOffset) * visualScale);
+            }
+
+            float fallbackMaximumLeft = Mathf.Max(visibleLeft,
+                visibleRight - 1f - renderedWidth);
+            float fallbackLeft = Mathf.Clamp(
+                ordinaryPivot.x - renderedWidth * 0.5f,
+                visibleLeft, fallbackMaximumLeft);
+            return new Vector2(fallbackLeft + renderedWidth * 0.5f,
+                ordinaryPivot.y);
         }
 
         private Vector2 ResolveHeldVisualAttachmentOffsetPixels(LF2FrameData heldFrame)

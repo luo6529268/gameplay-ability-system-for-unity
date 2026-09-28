@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "22d4b25d19484b02827b005ddc6f21a8",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790572165286,
+      "finished_unix_ms": 1790572182187,
+      "last_update_unix_ms": 1790572182187,
+      "progress": {
+        "completed": 1,
+        "total": 8610,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790572179668,
+        "last_finished_test_full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattleVoicePool_AcceptsSixtyFiveAndEvictsOldest_WithoutChangingGenericCap",
+        "last_finished_unix_ms": 1790572181676,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.SoundPresentationDispatchEditorTests.BattleVoicePool_AcceptsSixtyFiveAndEvictsOldest_WithoutChangingGenericCap",
+            "message": "  The 49th through 65th accepted battle events must start voices.\r\n  Expected: 65\r\n  But was:  48\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

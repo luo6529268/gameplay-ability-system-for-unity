@@ -17,6 +17,32 @@ namespace NTSD.Test
     public sealed class SoundPresentationDispatchEditorTests
     {
         [Test]
+        public void EntityBattleSoundWorldX_UsesInitializedRuleXAndPreservesPhysicalFallback()
+        {
+            MethodInfo resolver = typeof(NTSDEntityRuntime).GetMethod(
+                "ResolveBattleSoundWorldXInt",
+                BindingFlags.Instance | BindingFlags.Public);
+            Assert.That(resolver, Is.Not.Null,
+                "Entity-bound battle audio needs one source-position resolver.");
+
+            var runtime = new NTSDEntityRuntime
+            {
+                SourceRuleXInt = 649,
+                SourceRulePositionInitialized = true,
+            };
+            Assert.That((int)resolver.Invoke(runtime, new object[] { 664 }),
+                Is.EqualTo(649));
+
+            runtime.SourceRuleXInt = 0;
+            Assert.That((int)resolver.Invoke(runtime, new object[] { 664 }),
+                Is.Zero, "Initialized source X=0 is a valid position.");
+
+            runtime.SourceRulePositionInitialized = false;
+            Assert.That((int)resolver.Invoke(runtime, new object[] { 664 }),
+                Is.EqualTo(664));
+        }
+
+        [Test]
         public void QueueSound_RecordsOrderedValueEventsWithoutSteadyStateAllocation()
         {
             var world = new SimulationWorld();
@@ -372,6 +398,61 @@ namespace NTSD.Test
             {
                 if (clip != null)
                     UnityEngine.Object.DestroyImmediate(clip);
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void BattleVoicePool_AcceptsSixtyFiveAndEvictsOldest_WithoutChangingGenericCap()
+        {
+            const string firstSoundId = "__TEST_PREPARED__\\battle-first.wav";
+            const string laterSoundId = "__TEST_PREPARED__\\battle-later.wav";
+            var host = new GameObject("BattleVoiceCapTests")
+            {
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            AudioClip firstClip = null;
+            AudioClip laterClip = null;
+            try
+            {
+                NTSDSoundPlayer player = host.AddComponent<NTSDSoundPlayer>();
+                firstClip = AudioClip.Create("BattleVoiceCapFirst", 88200, 1, 44100, false);
+                laterClip = AudioClip.Create("BattleVoiceCapLater", 88200, 1, 44100, false);
+                PrepareLoadedCue(player, firstSoundId, firstClip);
+                PrepareLoadedCue(player, laterSoundId, laterClip);
+                SetPrivateField(player, "cachedListenerTransform", host.transform);
+
+                var sounds = new List<PendingSoundEvent>(65);
+                sounds.Add(new PendingSoundEvent(firstSoundId, 0, 1));
+                for (int index = 1; index < 65; index++)
+                    sounds.Add(new PendingSoundEvent(laterSoundId, index, 1));
+                player.PresentSounds(sounds);
+
+                Assert.That(player.PooledOneShotPlayCountForDiagnostics, Is.EqualTo(65),
+                    "The 49th through 65th accepted battle events must start voices.");
+                Assert.That(player.OneShotVoiceCountForDiagnostics, Is.EqualTo(64));
+                Assert.That(player.OneShotVoiceLimitDropCountForDiagnostics, Is.EqualTo(1),
+                    "The 65th battle event must replace the oldest voice.");
+                AudioSource[] voices = host.GetComponentsInChildren<AudioSource>();
+                Assert.That(voices, Has.Length.EqualTo(64));
+                foreach (AudioSource voice in voices)
+                    Assert.That(voice.clip, Is.SameAs(laterClip));
+
+                long playedBeforeGeneric = player.PooledOneShotPlayCountForDiagnostics;
+                long droppedBeforeGeneric = player.OneShotVoiceLimitDropCountForDiagnostics;
+                player.PlaySfx(firstSoundId);
+                Assert.That(player.PooledOneShotPlayCountForDiagnostics,
+                    Is.EqualTo(playedBeforeGeneric),
+                    "Direct generic PlaySfx must keep its original configured cap.");
+                Assert.That(player.OneShotVoiceLimitDropCountForDiagnostics,
+                    Is.EqualTo(droppedBeforeGeneric + 1));
+            }
+            finally
+            {
+                if (firstClip != null)
+                    UnityEngine.Object.DestroyImmediate(firstClip);
+                if (laterClip != null)
+                    UnityEngine.Object.DestroyImmediate(laterClip);
                 UnityEngine.Object.DestroyImmediate(host);
             }
         }

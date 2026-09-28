@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
+using NTSD.App;
 using NTSD.DatParser;
 
 namespace NTSD.Simulation
@@ -58,6 +59,7 @@ namespace NTSD.Simulation
         public LoganFusionCatalog FusionCatalog { get; private set; }
         public LoganKindCatalog KindCatalog { get; private set; }
         public LoganContentIdentity LoganContentIdentity { get; private set; }
+        public ProjectBattleModeConfig.Snapshot ProjectModeSnapshot { get; private set; }
         public bool IsSealedForBattle => sealedForBattle;
         public int Generation => generation;
         public int ObjectDefinitionCount => objectDefinitions.Count;
@@ -143,6 +145,7 @@ namespace NTSD.Simulation
             FusionCatalog = loganCatalog?.FusionInput.Catalog;
             KindCatalog = loganCatalog?.KindInput.Catalog;
             LoganContentIdentity = loganCatalog?.ContentIdentity;
+            ProjectModeSnapshot = loganCatalog?.ProjectModeSnapshot;
             IsReady = objectDefinitions.Count > 0;
         }
 

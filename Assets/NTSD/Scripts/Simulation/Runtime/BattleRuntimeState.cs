@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NTSD.Animation.LF2Objects;
 using NTSD.App;
 
 namespace NTSD.Simulation
@@ -564,6 +565,58 @@ namespace NTSD.Simulation
         }
     }
 
+    [Serializable]
+    public sealed class NTSD28EarthquakeRuntimeState
+    {
+        public int OwnerSlot = -1;
+        public int BackgroundOffsetX;
+        public int BackgroundOffsetY;
+
+        public void Reset()
+        {
+            OwnerSlot = -1;
+            BackgroundOffsetX = 0;
+            BackgroundOffsetY = 0;
+        }
+
+        public void Advance(SimulationWorld world)
+        {
+            if (world == null)
+                return;
+
+            if (OwnerSlot >= 0)
+            {
+                LF2Entity owner = world.FindEntityByRuntimeSlotForQuery(OwnerSlot);
+                int ownerState = owner?.GetState() ?? 0;
+                if (ownerState < 50000 || ownerState >= 60000)
+                    OwnerSlot = -1;
+            }
+
+            for (int slot = 0; slot < world.MaxRuntimeSlotsForServices; slot++)
+            {
+                LF2Entity entity = world.FindEntityByRuntimeSlotForQuery(slot);
+                if (entity == null)
+                    continue;
+
+                int state = entity.GetState();
+                if (state / 10000 != 5 || (OwnerSlot != -1 && OwnerSlot != slot))
+                    continue;
+
+                int encoded = state % 10000;
+                BackgroundOffsetY = encoded / 100 - 50;
+                BackgroundOffsetX = encoded % 100 - 50;
+                OwnerSlot = slot;
+            }
+        }
+
+        internal void RestoreForSnapshot(int ownerSlot, int offsetX, int offsetY)
+        {
+            OwnerSlot = ownerSlot;
+            BackgroundOffsetX = offsetX;
+            BackgroundOffsetY = offsetY;
+        }
+    }
+
     /// <summary>
     /// Unity 侧的战斗唯一运行态根节点。
     /// 让 SimulationWorld 对齐 C++ GameWorld 的“职责中心”，但避免重新长成一个巨型类。
@@ -602,6 +655,8 @@ namespace NTSD.Simulation
             new NTSD28NativeComboRuntimeState();
         public NTSD28NativeKnockoutFeedRuntimeState NativeKnockoutFeed =
             new NTSD28NativeKnockoutFeedRuntimeState();
+        public NTSD28EarthquakeRuntimeState Earthquake =
+            new NTSD28EarthquakeRuntimeState();
         public NTSD28StandardHitRestRuntimeState NativeStandardHitRest =
             new NTSD28StandardHitRestRuntimeState();
         [NonSerialized]
@@ -643,6 +698,8 @@ namespace NTSD.Simulation
             NativeCombo.Reset();
             NativeKnockoutFeed ??= new NTSD28NativeKnockoutFeedRuntimeState();
             NativeKnockoutFeed.Reset();
+            Earthquake ??= new NTSD28EarthquakeRuntimeState();
+            Earthquake.Reset();
             NativeStandardHitRest ??= new NTSD28StandardHitRestRuntimeState();
             NativeStandardHitRest.Reset();
             FunctionKeys ??= new NTSD28NativeFunctionKeySessionState();

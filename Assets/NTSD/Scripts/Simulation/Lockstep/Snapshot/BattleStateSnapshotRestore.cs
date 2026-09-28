@@ -317,6 +317,12 @@ namespace NTSD.Simulation
             }
             if (core.RuntimeProfile != activeRuntimeProfile ||
                 core.RuntimeSlotCapacity != RuntimeSlotCapacity ||
+                core.Earthquake.OwnerSlot < -1 ||
+                core.Earthquake.OwnerSlot >= RuntimeSlotCapacity ||
+                core.Earthquake.BackgroundOffsetX < -50 ||
+                core.Earthquake.BackgroundOffsetX > 49 ||
+                core.Earthquake.BackgroundOffsetY < -50 ||
+                core.Earthquake.BackgroundOffsetY > 49 ||
                 core.CollisionBroadphase != CollisionBroadphaseForServices ||
                 core.ClaimedRuntimeSlotCount != snapshot.RuntimeSlots.ClaimedCount ||
                 snapshot.RuntimeSlots.SlotCapacity != RuntimeSlotCapacity ||
@@ -781,6 +787,11 @@ namespace NTSD.Simulation
             Runtime.NativeKnockoutFeed.RestoreForSnapshot(
                 core.NativeKnockoutFeed.RecordPresent,
                 core.NativeKnockoutFeed.LifetimeTicks);
+            Runtime.Earthquake ??= new NTSD28EarthquakeRuntimeState();
+            Runtime.Earthquake.RestoreForSnapshot(
+                core.Earthquake.OwnerSlot,
+                core.Earthquake.BackgroundOffsetX,
+                core.Earthquake.BackgroundOffsetY);
             Runtime.NativeStandardHitRest ??=
                 new NTSD28StandardHitRestRuntimeState();
             Runtime.NativeStandardHitRest.RestoreForSnapshot(

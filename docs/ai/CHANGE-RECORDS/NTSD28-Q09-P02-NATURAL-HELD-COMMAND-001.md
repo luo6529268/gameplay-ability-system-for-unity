@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q09-P02-NATURAL-HELD-COMMAND-001
+status: VERIFIED
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NarutoPhysicalPickupBattlePlayProbeEditor.cs
+authority: formal playable presentation_interpolation.cpp, current OID120 DAT, and accepted Q07 natural physical pickup Play evidence
+evidence: docs/ai/TASKS/NTSD28-Q09-P02-NATURAL-HELD-COMMAND-001.md
+-->
+
+# NTSD28-Q09-P02-NATURAL-HELD-COMMAND-001
+
+Before: the existing original Battle Scene natural physical pickup probe records a held-air actor central command, while the weapon command/resource/submission is unknown. After: only when a new request flag is set, the same near-X190 path records the current weapon handle and central entity command, resolved resource, actual camera submission and fixed-World checksum. Unflagged Q07 requests retain their prior behavior. Exact scope, authority, acceptance, risk and rollback are in the Task.
+
+Expected side effects: a new opt-in diagnostic report and one controlled active-camera render in Play; no production, DAT, image, Scene, mode Asset, camera serialization or nonbattle change. A missing/hidden weapon or camera refusal is a first difference, not a reason to change production speculatively.
+
+2026-09-28 code written: the only edited script is `NTSD28Q07NarutoPhysicalPickupBattlePlayProbeEditor.cs`. `Request.captureHeldCommand` opts into a near-only witness; `Report` records the weapon command, resource, camera submission and checksum. `CapturePublication` calls new `CaptureHeldCommand` only for that flag. The latter inspects the current OID120 weapon command/handle/resource, renders the active World camera once, checks submission and verifies the frozen World's parity checksum. The unflagged Q07 request and its actor-command assertion are unchanged. Generated build, original Editor compile/Play, Scene guards and validator are still pending; status is `CODE_WRITTEN`.
+
+2026-09-28 pre-second-edit isolation: the old Q07 request file still exists as `requested:false`. To avoid overwriting even that diagnostic input or routing Q09 output into Q07's evidence folder, Task now adds a distinct opt-in Q09 request/result path inside the same owned Editor script. Existing Q07 path handling remains. The first generated Editor build passed 0 errors/188 warnings and original Editor compiled/returned idle; Play has not yet been requested.
+
+2026-09-28 first original Editor Play: unique opt-in near request `q09-held-command-20260928-a` was accepted, but the existing physical-input precondition failed at relative tick1 (`J` queued, Keyboard/Dynamic Keyboard false, canonical P1 None); it stopped after four rows, before pickup or the new command assertion. This is not evidence of a weapon rendering defect. The same report shows ordered shutdown complete, World/slot/borrower residue 0, neutral keyboard, Editor exited Play and Battle Scene SHA unchanged. Current serialized Input System settings are background=0/editor-play=0; local package documentation says default editor-play setting routes keyboard away from unfocused Game View, and the bridge observed Editor unfocused. Task now declares a reversible opt-in-only focus-policy fixture, both values restored during close and asset SHA guarded, before one exact rerun. No production fix is authorized from this first result.
+
+2026-09-28 final scoped result: modified symbols in the sole owned diagnostic are `Request`/`Report` opt-in fields, `TryStartRequest` Q09 request/result isolation, `WaitForRoster` temporary focus policy, `CapturePublication`/`CaptureHeldCommand` weapon command and camera witness, `RestoreFocusPolicy` and protected completion paths. Generated Editor build 0 errors/188 warnings and original Editor compile passed. Final near run `q09-held-command-20260928-b.json` passed: pickup tick6, airborne tick18, held-air tick20; exactly one OID120/pic25 weapon entity command with resolved formal resource and mesh segment; camera execution changes diagnostic `NotSubmitted`→`None/Submitted`, World checksum unchanged. Input settings returned to original values, keyboard neutral, ordered shutdown zero residue, Editor idle/nonPlay; InputSystem/Battle/Menu/mode Asset SHA unchanged. Ledger validator and diff check passed. See `artifacts/diagnostics/NTSD28-Q09-P02-NATURAL-HELD-COMMAND-001/ACCEPTANCE-20260928.md`. This Change is `VERIFIED` for command/submission only; Q09/P-02/GPU pixels/formal same-view remain open.

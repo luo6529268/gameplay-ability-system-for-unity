@@ -1,0 +1,20 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q09-P02-NATURAL-HELD-PIXEL-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07NarutoPhysicalPickupBattlePlayProbeEditor.cs
+authority: formal playable presentation_interpolation.cpp and current natural OID120 central command/physical-input evidence
+evidence: docs/ai/TASKS/NTSD28-Q09-P02-NATURAL-HELD-PIXEL-001.md
+-->
+
+# NTSD28-Q09-P02-NATURAL-HELD-PIXEL-001
+
+Before: the original Battle Scene natural near pickup has a resolved and executed OID120 central command, but no attributable camera pixel or same-tick display-phase evidence. Its manually registered weapon lacks the source-position initialization required by the production interpolation sampler. After: only a new opt-in pixel request gives that manual fixture the formal birth source position and captures two controlled World-camera frames plus exclusive weapon-region statistics while the World tick/checksum is fixed. Existing Q07 and command-only request paths remain unchanged. Scope, authority, risks, acceptance and rollback are in the Task.
+
+Expected side effects are two new PNG/report artifacts and temporary in-Play camera target/state during the opt-in run; all camera state is restored immediately. No production, DAT, image, Scene, mode Asset, project input settings file or nonbattle modification is authorized.
+
+2026-09-28 code written: only the owned `NTSD28Q07NarutoPhysicalPickupBattlePlayProbeEditor.cs` changed. `Request`/`Report` gain opt-in held-pixel fields, `CreateGroundWeapon` initializes the manually spawned weapon's source position only for this request, `CaptureHeldCommand` invokes the two-camera-frame witness, and new `CaptureHeldPixelFrame`/projected-bounds/other-command-exclusion helpers save two PNGs and compare weapon-exclusive pixels. `CameraState` restores all modified camera fields; World checksum is checked after each readback. Unflagged Q07 and prior command-only request paths remain. Compile, original Editor Play, pixel inspection and protected-hash checks are pending; status `CODE_WRITTEN`.
+
+First original Editor run `q09-held-pixel-20260928-a` consumed the request and reached the same natural pickup/held-air tick20 (pickup6, standing11, airborne18, action30/held command20), then failed before readback at the probe's same-generation assertion. Ordered shutdown completed, Editor exited Play, Scene clean and focus policy restored, borrowers0. Source review shows CentralOnly camera materialization rebuilds a plan on display-alpha change while keeping logic tick fixed. This is a diagnostic expectation error, not a demonstrated production battle difference. Retain the FAIL JSON; amend only the opt-in camera assertion to require same World/tick, new submission and checksum, sampling alpha after render, then rerun with a unique ID. No production edits.
+
+After the diagnostic correction, generated Editor `dotnet build --no-restore` passed 0 errors/189 warnings and the original Editor recompiled. Run `-b` retained an `OBSERVED_DIFFERENCE` at physical J tick1 (focus-policy values restored, no battle first diff). Run `-c` reached natural OID120 pickup tick6, standing11, airborne18 and held action30 tick20; both controlled camera renders submitted the weapon command and left the same World checksum `e54a96d35593761bc585fd9bf8418b1b0507a20e78b75dded3dd080ebec2bf0b`. However both sampled alpha1 and identical command X -9.777465; the target rectangle 35x34 was entirely under other-command projected bounds, so exclusiveArea0/changedExclusivePixels0 and two PNG SHA were identical. This is a scoped pixel diagnostic limitation, not a production motion first difference or a Q09/P-02 pass. All three raw reports and two PNGs remain in the artifact folder; exact evidence and next gate are in `ACCEPTANCE-20260928.md`. Original Editor finished idle/nonPlay, restored input policy and camera state, ordered shutdown and zero borrowers; protected Scene/InputSettings hashes held. Status `RUNTIME_PENDING`; no production, DAT, Scene or nonbattle edits.

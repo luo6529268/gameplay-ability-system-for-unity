@@ -6,6 +6,7 @@ using System.IO;
 using NTSD.Animation.LF2Objects;
 using NTSD.EditorTools;
 using NTSD.Simulation;
+using NTSD.Simulation.Presentation;
 using NUnit.Framework;
 
 namespace NTSD.Test.Editor
@@ -76,7 +77,10 @@ namespace NTSD.Test.Editor
                     {
                         for (int tick = 1; tick <= 24; tick++)
                         {
-                            Assert.That(driver.StepOneTick(inputs[tick - 1], true, false),
+                            bool captureMotionPair = tick == 1 || tick == 2 ||
+                                tick == 8 || tick == 9 || tick == 16 || tick == 17;
+                            Assert.That(driver.StepOneTick(
+                                    inputs[tick - 1], true, captureMotionPair),
                                 Is.True, "complete Driver tick=" + tick);
                             LF2Entity currentWeapon =
                                 world.FindEntityByRuntimeSlotForQuery(50);
@@ -176,6 +180,68 @@ namespace NTSD.Test.Editor
                                         movingZ++;
                                 }
                             }
+                            if (tick == 2 || tick == 9 || tick == 17)
+                            {
+                                BattlePresentationFrame frame =
+                                    world.BattlePresentation.PublishedFrame;
+                                Assert.That(frame, Is.Not.Null,
+                                    "held motion publication tick=" + tick);
+                                Assert.That(frame.TickIndex, Is.EqualTo(tick));
+                                Assert.That(frame.PreviousMotionTickIndex,
+                                    Is.EqualTo(tick - 1));
+                                Assert.That(TryFindMotionState(frame, 50, true,
+                                    out BattlePresentationMotionState previousMotion),
+                                    Is.True, "previous weapon motion tick=" + tick);
+                                Assert.That(TryFindMotionState(frame, 50, false,
+                                    out BattlePresentationMotionState currentMotion),
+                                    Is.True, "current weapon motion tick=" + tick);
+
+                                string checksumBefore =
+                                    world.CaptureParityFrameSnapshot(tick).OverallChecksum;
+                                BattlePresentationMotionSampleStatus status =
+                                    BattlePresentationMotionSampler.Sample(
+                                        previousMotion, currentMotion, tick - 1, tick,
+                                        0.5, XFactor, ZFactor,
+                                        out BattlePresentationMotionDelta delta);
+                                var display = new BattlePresentationDisplayMotion();
+                                display.Prepare(frame, 0.5, XFactor, ZFactor);
+                                bool sampledWeapon = display.TryGet(
+                                    currentMotion.Handle,
+                                    out BattlePresentationMotionDelta publishedDelta);
+                                string checksumAfter =
+                                    world.CaptureParityFrameSnapshot(tick).OverallChecksum;
+                                Assert.That(checksumAfter, Is.EqualTo(checksumBefore),
+                                    "held display sampling changed logic tick=" + tick);
+
+                                if (tick == 2)
+                                {
+                                    Assert.That(status,
+                                        Is.EqualTo(BattlePresentationMotionSampleStatus.RelationChanged));
+                                    Assert.That(sampledWeapon, Is.False,
+                                        "pickup relation must break interpolation");
+                                }
+                                else
+                                {
+                                    Assert.That(status,
+                                        Is.EqualTo(BattlePresentationMotionSampleStatus.Sampled));
+                                    Assert.That(sampledWeapon, Is.True,
+                                        "held weapon motion must remain visible to the sampler");
+                                    Assert.That(publishedDelta.ViewX,
+                                        Is.EqualTo(delta.ViewX).Within(1e-9));
+                                    Assert.That(publishedDelta.ViewZ,
+                                        Is.EqualTo(delta.ViewZ).Within(1e-9));
+                                    if (tick == 9)
+                                        Assert.That(delta.ViewX,
+                                            Is.EqualTo(-2.0 * XFactor).Within(1e-9));
+                                    if (tick == 17)
+                                        Assert.That(delta.ViewZ,
+                                            Is.EqualTo(-1.0 * ZFactor).Within(1e-9));
+                                }
+                                TestContext.Progress.WriteLine(
+                                    $"Q09 held motion tick={tick} status={status} " +
+                                    $"viewDelta={delta.ViewX:R}/{delta.ViewZ:R} " +
+                                    $"checksum={checksumAfter}");
+                            }
                             previousActorX = a.XInt;
                             previousActorZ = a.ZInt;
                             previousWeaponX = w.XInt;
@@ -230,6 +296,30 @@ namespace NTSD.Test.Editor
                     "formal weapon present tick=" + index);
             }
             return rows;
+        }
+
+        private static bool TryFindMotionState(
+            BattlePresentationFrame frame,
+            int slot,
+            bool previous,
+            out BattlePresentationMotionState state)
+        {
+            int count = previous
+                ? frame.PreviousMotionStateCount
+                : frame.MotionStateCount;
+            for (int index = 0; index < count; index++)
+            {
+                BattlePresentationMotionState candidate = previous
+                    ? frame.GetPreviousMotionState(index)
+                    : frame.GetMotionState(index);
+                if (candidate.Handle.Slot != slot)
+                    continue;
+                state = candidate;
+                return true;
+            }
+
+            state = default;
+            return false;
         }
 
         private static int ParseInt(string textValue) =>
