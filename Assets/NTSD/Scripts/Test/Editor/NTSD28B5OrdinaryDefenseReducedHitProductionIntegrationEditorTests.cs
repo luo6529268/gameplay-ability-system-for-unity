@@ -79,7 +79,15 @@ namespace NTSD.Test.Editor
             Assert.That(
                 LF2AlternateDamageResolver.ShouldUseAlternateHurt(
                     attacker, target, itr),
-                Is.False);
+                Is.True,
+                "effect 61 must not close the ordinary bdefend defense gate");
+            itr.effect = 0;
+            itr.bdefend = 61;
+            Assert.That(
+                LF2AlternateDamageResolver.ShouldUseAlternateHurt(
+                    attacker, target, itr),
+                Is.False,
+                "bdefend 61 must close the ordinary defense gate");
         }
 
         [Test]

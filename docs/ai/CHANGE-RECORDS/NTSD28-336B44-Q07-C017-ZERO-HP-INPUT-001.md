@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-C017-ZERO-HP-INPUT-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Simulation/Input/NTSD28NativeComboStateMachine.cs
 code-path: Assets/NTSD/Scripts/Simulation/Input/NTSD28InputTwoPassModule.cs
@@ -12,6 +12,10 @@ evidence: docs/ai/TASKS/NTSD28-336B44-Q07-C017-ZERO-HP-INPUT-001.md
 -->
 
 # NTSD28-336B44-Q07-C017-ZERO-HP-INPUT-001
+
+2026-09-30 closure correction: scoped globalzeroHP input gate VERIFIED. Earlier focused4/4, fulltick standing/terminal/positive3/3 and poisoncountdown1/1 are supplemented by formal336B44 root natural Kankuro/Pur contact→HP0→standingAttack40ticks8fields320/320 and originalBattleScene uniquePlay same320/320, additional poison/Pur200/200. Source/root controlledinitialHP0 carrierfails46 remain excluded; state14 rejection has currentauthority source and Unitynegative evidence, not a valid controlledroot replay. Reports under NTSD28-336B44-Q07-C017-ROOT-INPUT-001 and NTSD28-336B44-Q07-C017-POISON-SCENE-PLAY-001. Scopeonly two globalgates; no more production code changed. Old pending/planned paragraphs below are historical checkpoints superseded by this closure. Q07/fullWorld/physicalkey selection remains open.
+
+Closurevalidation: sharedChangeLedger PASS1054/14, diffcheckexit0, originalEditoridle/nonPlay and protectedfourScene/config hashes equal. No new parentproductiondiff or fullsuite rerun; newnaturalwitnesses are separately owned/compiled/runtimechecked packages.
 
 Created before script edits. Scope, current first difference, invariants, test-first plan, acceptance and rollback are in the [Task](../TASKS/NTSD28-336B44-Q07-C017-ZERO-HP-INPUT-001.md). The source's state-14 negative control must remain negative after removing the global zero-HP branch; input samples themselves must remain available for state-specific routing. Current status is `PLANNED` and no C017 code has yet been changed.
 

@@ -1,0 +1,16 @@
+{
+  "beforeWorldTick": 152,
+  "afterWorldTick": 152,
+  "entityCount": 2,
+  "entityFieldDifferences": [
+    {
+      "slot": 0,
+      "field": "inputPendingMask",
+      "before": 16,
+      "after": 0
+    }
+  ],
+  "rngUnchanged": true,
+  "rootStateHashBefore": "b25fc5b428dbe5fe",
+  "rootStateHashAfter": "600d5d38f1db4b89"
+}

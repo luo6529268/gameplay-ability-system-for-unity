@@ -1,0 +1,4 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\airborne_relative_frame_lfr_probe.cpp: In function 'int main(int, char**)':
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\airborne_relative_frame_lfr_probe.cpp:76:86: error: 'const struct ntsd28::EntityState28' has no member named 'team'
+   76 |                 << entity->current_hp << ',' << entity->owner_slot << ',' << entity->team << '\n';
+      |                                                                                      ^~~~

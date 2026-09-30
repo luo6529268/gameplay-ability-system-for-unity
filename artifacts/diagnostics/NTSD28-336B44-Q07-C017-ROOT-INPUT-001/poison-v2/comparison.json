@@ -1,0 +1,47 @@
+{
+  "fields": [
+    [
+      "actor_action",
+      0,
+      "action"
+    ],
+    [
+      "actor_hp",
+      0,
+      "hp"
+    ],
+    [
+      "actor_attack",
+      0,
+      "inputCurrentMask"
+    ],
+    [
+      "actor_x",
+      0,
+      "x"
+    ],
+    [
+      "target_action",
+      1,
+      "action"
+    ],
+    [
+      "target_hp",
+      1,
+      "hp"
+    ],
+    [
+      "target_attack",
+      1,
+      "inputCurrentMask"
+    ],
+    [
+      "target_x",
+      1,
+      "x"
+    ]
+  ],
+  "checked": 320,
+  "differences": [],
+  "fullWorldParityClaim": false
+}

@@ -1,0 +1,34 @@
+[
+  {
+    "mode": "jump",
+    "status": "DIFFERENCE",
+    "entityRows": 64,
+    "comparedFields": 1283,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "ground",
+    "status": "DIFFERENCE",
+    "entityRows": 64,
+    "comparedFields": 1280,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "kar433",
+    "status": "DIFFERENCE",
+    "entityRows": 125,
+    "comparedFields": 2320,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "kar434",
+    "status": "DIFFERENCE",
+    "entityRows": 32,
+    "comparedFields": 739,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  }
+]

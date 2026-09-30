@@ -1,0 +1,36 @@
+{
+  "files": [
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\NTSD2.8-Logan.exe",
+      "sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+      "bytes": 5469312
+    },
+    {
+      "path": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime\\decoded_dat\\c\\nar\\nar.dat",
+      "sha256": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9",
+      "bytes": 166928
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\decoded_dat\\c\\nar\\nar.dat",
+      "sha256": "6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9",
+      "bytes": 166928
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Tools\\NTSD28Q07Diagnostics\\result_continue_host_lfr_probe.cpp",
+      "sha256": "4E75A9BA55A418A2F395C1A0C61A532AC0BC6617BA593A20E39BB5288E8E9E12",
+      "bytes": 5679
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q08-C008-ROOT-HOST-BOUNDARY-001\\probe-source-v3.cpp.txt",
+      "sha256": "4E75A9BA55A418A2F395C1A0C61A532AC0BC6617BA593A20E39BB5288E8E9E12",
+      "bytes": 5679
+    },
+    {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q08-C008-ROOT-HOST-BOUNDARY-001\\result-continue-source-probe-v3.exe",
+      "sha256": "7EC32DE683814C48A2EEF4E73755D8125FA242E7BEEE9336201AA4A944E8BDFC",
+      "bytes": 4809374
+    }
+  ],
+  "formalAndStagedNarutoDatEqual": true,
+  "currentProbeAndCompiledSourceSnapshotEqual": true
+}

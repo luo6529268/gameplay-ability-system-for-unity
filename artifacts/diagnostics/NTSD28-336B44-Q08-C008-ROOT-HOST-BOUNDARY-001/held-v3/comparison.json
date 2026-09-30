@@ -1,0 +1,106 @@
+{
+  "case": "held-v3",
+  "comparedHostRows": 153,
+  "fieldsPerRow": 12,
+  "comparisons": 1836,
+  "equalComparisons": 1836,
+  "firstDifference": null,
+  "differences": [],
+  "rootPassed": false,
+  "rootFailureCode": 46,
+  "rootError": "LFR playback GameSession did not advance exactly one tick",
+  "nativeParityClaim": false,
+  "lastBoundaryRows": [
+    {
+      "hostStep": 150,
+      "worldTick": 150,
+      "rootCurrentMask": 16,
+      "sourceRequestedAttack": 1,
+      "sourceSampledAttack": 1,
+      "flow": {
+        "timer": 142,
+        "phase": 2,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 142
+      }
+    },
+    {
+      "hostStep": 151,
+      "worldTick": 151,
+      "rootCurrentMask": 16,
+      "sourceRequestedAttack": 1,
+      "sourceSampledAttack": 1,
+      "flow": {
+        "timer": 143,
+        "phase": 2,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 143
+      }
+    },
+    {
+      "hostStep": 152,
+      "worldTick": 152,
+      "rootCurrentMask": 16,
+      "sourceRequestedAttack": 1,
+      "sourceSampledAttack": 1,
+      "flow": {
+        "timer": 350,
+        "phase": 3,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 350
+      }
+    },
+    {
+      "hostStep": 153,
+      "worldTick": 152,
+      "rootCurrentMask": 16,
+      "sourceRequestedAttack": 1,
+      "sourceSampledAttack": 1,
+      "flow": {
+        "timer": 350,
+        "phase": 3,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": true,
+        "transitionStarted": true,
+        "upperSceneEntered": false,
+        "transitionState": 2,
+        "timerAfter": 0
+      }
+    }
+  ],
+  "frozenEntityDifferences": [
+    {
+      "slot": 0,
+      "field": "inputPendingMask",
+      "before": 16,
+      "after": 0
+    }
+  ],
+  "frozenRngUnchanged": true,
+  "sha256": {
+    "source-host-rows.csv": "74B94B0727B4B98284474B43EEC2F700C7C27E3BF0807BA9C12477E9791212CB",
+    "source-packets.lfr": "10D4BEFFF5995385C191EBBCA806A04E9AD78D45393223AA2BA02CD3A8BDD7B9",
+    "root-report.json": "552A9B9C711E0A652B3524F2119AD857294166F2E4314A1EB5CC5811206D3A3A",
+    "root-trace.jsonl": "9FAB352C348EFD2C079AFC0E6A9101178A0DF08D8CDCB30389DB29A2D33655C2"
+  }
+}

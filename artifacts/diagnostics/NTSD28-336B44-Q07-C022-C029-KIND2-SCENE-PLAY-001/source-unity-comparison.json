@@ -1,0 +1,208 @@
+{
+  "status": "DIFFERENCE",
+  "comparedTicks": 32,
+  "declaredFieldCount": 30,
+  "comparedFields": 960,
+  "floatAbsTolerance": 1e-06,
+  "differences": [
+    {
+      "tick": 2,
+      "field": "target_action",
+      "source": 210.0,
+      "unity": 110
+    },
+    {
+      "tick": 2,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 3,
+      "field": "target_action",
+      "source": 210.0,
+      "unity": 110
+    },
+    {
+      "tick": 3,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 4,
+      "field": "target_action",
+      "source": 210.0,
+      "unity": 110
+    },
+    {
+      "tick": 4,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 5,
+      "field": "target_action",
+      "source": 211.0,
+      "unity": 110
+    },
+    {
+      "tick": 5,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 5,
+      "field": "target_counter",
+      "source": 0.0,
+      "unity": 4
+    },
+    {
+      "tick": 6,
+      "field": "target_action",
+      "source": 211.0,
+      "unity": 110
+    },
+    {
+      "tick": 6,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 6,
+      "field": "target_counter",
+      "source": 1.0,
+      "unity": 5
+    },
+    {
+      "tick": 7,
+      "field": "target_action",
+      "source": 212.0,
+      "unity": 411
+    },
+    {
+      "tick": 7,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 7,
+      "field": "target_vy",
+      "source": -16.299999,
+      "unity": 0.0
+    },
+    {
+      "tick": 8,
+      "field": "target_action",
+      "source": 212.0,
+      "unity": 411
+    },
+    {
+      "tick": 8,
+      "field": "target_state",
+      "source": 4.0,
+      "unity": 7
+    },
+    {
+      "tick": 8,
+      "field": "target_y",
+      "source": -16.0,
+      "unity": 0
+    },
+    {
+      "tick": 8,
+      "field": "target_vy",
+      "source": -14.599999,
+      "unity": 0.0
+    },
+    {
+      "tick": 9,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 10,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 11,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 12,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 13,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 14,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 15,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 16,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 17,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 18,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 19,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 20,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 21,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 22,
+      "field": "target_vy",
+      "source": -12.899999000000001,
+      "unity": 0.0
+    }
+  ],
+  "fullWorldParityClaim": false
+}

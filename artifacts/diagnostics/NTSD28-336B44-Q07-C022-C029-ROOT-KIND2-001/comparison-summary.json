@@ -1,0 +1,42 @@
+[
+  {
+    "case": "action255-x610-jump0",
+    "status": "PASS",
+    "ticks": 32,
+    "declaredFieldCount": 30,
+    "comparedFields": 960,
+    "floatAbsTolerance": 1e-06,
+    "differences": [],
+    "fullWorldParityClaim": false
+  },
+  {
+    "case": "action255-x650-jump1",
+    "status": "PASS",
+    "ticks": 32,
+    "declaredFieldCount": 30,
+    "comparedFields": 960,
+    "floatAbsTolerance": 1e-06,
+    "differences": [],
+    "fullWorldParityClaim": false
+  },
+  {
+    "case": "action255-x730-jump1",
+    "status": "PASS",
+    "ticks": 32,
+    "declaredFieldCount": 30,
+    "comparedFields": 960,
+    "floatAbsTolerance": 1e-06,
+    "differences": [],
+    "fullWorldParityClaim": false
+  },
+  {
+    "case": "action258-x1200-jump0",
+    "status": "PASS",
+    "ticks": 32,
+    "declaredFieldCount": 30,
+    "comparedFields": 960,
+    "floatAbsTolerance": 1e-06,
+    "differences": [],
+    "fullWorldParityClaim": false
+  }
+]

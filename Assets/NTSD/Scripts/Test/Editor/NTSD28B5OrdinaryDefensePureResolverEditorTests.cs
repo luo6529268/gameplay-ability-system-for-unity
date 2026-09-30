@@ -15,12 +15,12 @@ namespace NTSD.Test.Editor
         [TestCase(0, 0, 7, 0)]
         public void FrontGates_ReturnInactive(
             int kind,
-            int effect,
+            int bdefend,
             int defenderState,
             int defenderHp)
         {
             object result = Resolve(
-                kind, effect, 0, 0, 0, 1, 1, defenderState, defenderHp, 1);
+                kind, bdefend, 0, 0, 0, 1, 1, defenderState, defenderHp, 1);
 
             Assert.That(Decision(result), Is.EqualTo("Inactive"));
             Assert.That(UsedTwoWay(result), Is.False);
@@ -113,7 +113,7 @@ namespace NTSD.Test.Editor
 
         private static object Resolve(
             int kind,
-            int effect,
+            int bdefend,
             int spark,
             int dbdefend,
             int dvx,
@@ -136,7 +136,7 @@ namespace NTSD.Test.Editor
                 new object[]
                 {
                     kind,
-                    effect,
+                    bdefend,
                     spark,
                     dbdefend,
                     dvx,

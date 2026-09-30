@@ -1,0 +1,7 @@
+FAIL
+System.InvalidOperationException: R3-AI-LIFE-01: data-oriented HP=0 input must follow its configured input pipeline's death boundary; prevJump=1, keyJump=0, cdAttack=0, frame=0
+  at NTSD.Test.BattleRuntimeSelfCheck.Expect (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:33533 
+  at NTSD.Test.BattleRuntimeSelfCheck.AssertDeadAiNoTargetInputEligibility (NTSD.Simulation.BattleAiExecutionProfile profile, System.String label) [0x000d3] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:24890 
+  at NTSD.Test.BattleRuntimeSelfCheck.CheckDeadAiInputEligibility () [0x0000d] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:24856 
+  at NTSD.Test.BattleRuntimeSelfCheck.RunAllChecksStatic () [0x0050a] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\BattleRuntimeSelfCheck.cs:270 
+  at NTSD.EditorTools.BattleRuntimeSelfCheckEditor.RunAndWriteResult (System.Boolean exitBatchmode) [0x00002] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattleRuntimeSelfCheckEditor.cs:458 

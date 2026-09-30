@@ -1,0 +1,11 @@
+parent_oid,parent_type,parent_path,predecessor,op_action,child_oid,child_type,child_path,child_action,y_offset
+305,3,s\5\5.dat,22,21,402,3,c\jug\a\pao.dat,78,11
+305,3,s\5\5.dat,355,21,402,3,c\jug\a\pao.dat,78,11
+619,3,c\gur\a\cag.dat,267,268,85,0,c\gur\fakefan.dat,0,18
+619,3,c\gur\a\cag.dat,270,272,85,0,c\gur\fakefan.dat,325,18
+619,3,c\gur\a\cag.dat,272,273,85,0,c\gur\fakefan.dat,325,18
+65,0,c\ank\ank.dat,482,483,875,3,c\ank\a\atk.dat,110,439921
+44,0,c\ank\acl.dat,688,689,44,0,c\ank\acl.dat,0,0
+58,0,c\dei\bir.dat,317,318,225,3,c\dei\a\cla.dat,95,0
+10,0,c\dei\dei.dat,317,318,225,3,c\dei\a\cla.dat,95,1
+45,0,c\dei\ncd.dat,317,318,225,3,c\dei\a\cla.dat,95,1

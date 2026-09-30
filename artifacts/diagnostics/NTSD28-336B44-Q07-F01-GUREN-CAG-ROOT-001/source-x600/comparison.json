@@ -1,0 +1,33 @@
+{
+  "rootPassed": true,
+  "rootFailureCode": 0,
+  "declaredTicks": 20,
+  "nativeParityClaim": false,
+  "comparedTicks": 20,
+  "fieldsPerTick": 6,
+  "equalComparisons": 120,
+  "differences": [],
+  "sourceBdefend61HitTicks": [
+    12
+  ],
+  "rootOid619Hits": [
+    {
+      "tick": 12,
+      "event": {
+        "kind": "hit",
+        "status": "applied",
+        "attacker": 50,
+        "target": 1,
+        "candidate": 0,
+        "hpDamage": 50,
+        "mpDamage": 0
+      }
+    }
+  ],
+  "sha256": {
+    "source-ticks.csv": "BA158ACF14544FB8B79AB947FE835945DF6C7C324D2CD5FB730AECD212B9778D",
+    "source-packets.lfr": "EF5F8D10E713D037B85B8F7FC3B60670B8E20EE4489B9E171165257EC7AB10BA",
+    "root-report.json": "036FAFFFA4014764234866F20E7C1CA6B51C486A5F0F4B852A79D031517EB8B1",
+    "root-trace.jsonl": "51EEDA00E66A882A852E51EAC3ED1708D7B73A6174BD5411800BCF4533A74BAF"
+  }
+}

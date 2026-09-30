@@ -1,4 +1,8 @@
+> 2026-09-30 C011限定关闭：336B44正式根v3四例12tick/864声明字段PASS；原Battle Scene Lee02与Sakura01各12tick/144字段严格一致，合计288/288、首差0。李tick4 X680/Z401，小樱tick4 X740/Z401；两轮均PASS/DONE/exitedPlay/sceneCleanAfter，MCP确认原Editor idle/nonPlay。两Scene、GameConfig、ProjectBattleModeConfig四SHA保持，DAT与生产脚本未因补证修改。初次Lee01计数字段/地图边界夹具失败和根v1 EOF46原记录保留。该出口证明受控初态后的正式DAT自然帧链与相位，不声称物理键选招、全World/全画面或Q07整组完成。下一G1/C012。
+
 # NTSD28-336B44-Q07-C011 teleport phase
+
+2026-09-30 root/Scene addendum: newformalroot fourcases12tick18fields864/864/PASS, retainedBG23/Z650v2 and commonZ400/BG1v3 separately. NaturalLee350→242/Sakura96→97 teleporttick4, initiallyteleportframecontrols tick2; current frame is readbeforetailadvance. FirstrealDAT SceneLee01 finishedDIFFERENCE/exit/clean withonlyprobecounter(AnimSubwrong) andoutsideprojectwalkZ650→481 fields different; X/action/HP/timing match. Revisedprobe readsAttackingCounter/usescommonZ400 andUTC10min startup, compiledinoriginalEditor; uniqueLee02 inprogress, thenSakura01afterexit. [Root report](../NTSD28-336B44-Q07-C011-ROOT-TELEPORT-001/REPORT.md). Parent remainsopenfornaturalScene; rootpending statementsbelow are historical supersededbythisaddendum.
 
 Status: `UNITY_BATTLE_PLAY_PASS / FORMAL_ROOT_PENDING`. Parent: BATCH-04/Q07. This is a scoped state400/401 scheduling result, not whole Q07 closure.
 

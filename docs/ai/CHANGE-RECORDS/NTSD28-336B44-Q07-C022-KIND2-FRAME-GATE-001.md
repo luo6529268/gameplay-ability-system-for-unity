@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-C022-KIND2-FRAME-GATE-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28C022Kind2FrameGateEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
@@ -31,3 +31,10 @@ First post-fix original-Editor job `aa72aced155f4f7a9e08747292232424` ran all th
 Final selected original-Editor job `06938512781d4430aa5cadcf6b8058e7` passed 3/3 after the type3 fixture declared its actual data type: staged OID52/state1700/kind2 with reciprocal holder held action130/counter1 after a complete tick; state10/no-kind2 advanced counter1→2; type3 kind2 retained HP20/action0/counter1 while no-kind2 drained HP20→16 and advanced counter1→2. Original Editor runtime and Editor DLL timestamps are later than the source/test edits; this job reached NUnit after domain reload. The selected test output contains extensive existing catalog parse logs, so only job summary/individual states are counted.
 
 Adjacent native frame-body class: an initial request `f0fd19671e7b4040adf0baf553ee96d2` used the wrong `NTSD.Test` namespace, selected 0 tests and is excluded. Corrected exact request `78a2bd40f0be447ebf7dca9e09c0b9d1` selected and passed all four C25G cases (terminal type0, type3 state3007, type2 heavy-weapon, wrapper ownership). No full suite was run. `Tools/Validate-ChangeLedger.ps1` passed with 1036 records/83 governed diff files; scoped `git diff --check` passed. Battle/Menu Scene, GameConfig and ProjectBattleModeConfig SHA-256 remained at the prior baseline. The only production hunk for C022 is the shared native transaction early gate; the existing unrelated stage-boundary hunk in the same `LF2Entity.cs` diff was preserved. Current package is `UNITY_FULL_TICK_PASS / RUNTIME_PENDING`: formal root EXE same-state trace and original Battle Scene natural Play remain missing, so neither C022 nor Q07 is fully closed.
+
+2026-09-30 currentrootaddendum: NTSD28-336B44-Q07-C022-C029-ROOT-KIND2-001 four32tickcases/3840declaredfieldsstrictint/float1e-6 equal, rootexit0/PASS. Naturaljumpingtargetkind3captureto130/state1700/primarykind2 withnonzeroVy andsubsequentcounter/Vyheld. Currentformalparser20weapon860framesprimarykind2zero; weaponpositiveisconditionalcurrentcontent, no inventeddatfixture orallweaponcertificate. OriginalScene NTSD28-336B44-Q07-C022-C029-KIND2-SCENE-PLAY-001 compiled andawaitinguniquePlay. ParentRUNTIME_PENDINGuntilthatgate, existingfocusedGREEN notrerun.
+
+
+2026-09-30 C022/C029限定关闭：336B44根四自然/控制案例各32tick/960声明字段，合计3840/3840、exit0/PASS；原Scene修正输入后的kind2-catch-scene-02 PASS/DONE，32tick/960字段一致、首差0、速度差值实际0。OID52真实跳跃，tick9自然kind3抓取到130/state1700/primarykind2/counter1/Vy-12.899999，后继持有tick保持计数/Vy，挂点正常改位置，motionhold0/interaction0排除其他物理门。原Editoridle/nonPlay、Scene clean、四保护SHA稳定。首轮Scene01探针误用Attack产生防御而非跳跃，33字段差异保留；仅诊断flag按既有CharacterInputModule改Defend，无生产输入/战斗/DAT/Scene变更。当前正式parser20武器860帧无primarykind2：武器正例列条件性当前内容不可用，非全武器或全World证书。两父门限定通过，Q07/总目标仍开。
+
+最终关闭检查（2026-09-30）：`Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location).Path` 通过，1060 Records / 20 governed code files；完整输出保存于 Scene 证据目录的 ledger-check.txt。`git -c core.safecrlf=false diff --check` 退出 0。仅当前闭合记录与进度文档更新；本轮未改生产战斗脚本、DAT、Scene、配置 Asset 或非战斗逻辑。Q07及总目标仍 ACTIVE，下一出口 C023/C024。

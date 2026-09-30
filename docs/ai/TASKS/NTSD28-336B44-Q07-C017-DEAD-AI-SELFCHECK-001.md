@@ -1,0 +1,9 @@
+# NTSD28-336B44-Q07-C017-DEAD-AI-SELFCHECK-001
+
+Status: `FOCUSED_TEST_PASS / FULL_SELFCHECK_NEXT_FAILURE`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C017`.
+
+Selected 336B44 playable `InputRouter28::step_sampled` has no global HP gate; it always processes sampled edges and state-specific routes. The old `R3-AI-LIFE-01` full-self-check assertion still expects DataOrientedCanonical `PrevJump=0` at HP=0 from the former global dead-input suppression. The current original Editor full self-check advanced beyond the Q09/P-20 BMP fixture and failed here with `PrevJump=1`, `KeyJump=0`, `CdAttack=0`, `frame=0`. The same fixture's LegacyCanonical branch expects `PrevJump=1`; its current result passed before the DataOrientedCanonical assertion. This is a test-contract first difference, not a demonstrated production defect. Exact formal-root same-state EXE evidence remains separate.
+
+Own only `AssertDeadAiNoTargetInputEligibility` in `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs` and this package's governance/evidence files. Change the DataOrientedCanonical previous-key expectation to the no-global-HP sampled input result while retaining current-key, cooldown, frame and Legacy controls. Do not edit production input, DAT, images, Scenes, config, nonbattle or unrelated checks. Acceptance: original Editor compile, fresh full self-check outcome (PASS or next precise failure), C017 focused regression, Ledger/diff and protected hashes. Do not infer full Q07/C017/root parity from a self-check. Rollback only the assertion hunk after reviewing current shared-file state.
+
+Observed: original Editor C017 exact regression 4/4 PASS. Full self-check advanced beyond `R3-AI-LIFE-01` and failed at the F02 high-Vx type4 landing assertion; whole self-check remains FAIL. See the report.

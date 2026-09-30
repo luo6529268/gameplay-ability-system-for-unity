@@ -1,0 +1,20 @@
+{
+  "status": "PASS",
+  "comparedFields": 1982,
+  "entityRows": 107,
+  "maxVelocityDifference": 0,
+  "differences": [],
+  "naturalAirborneWitness": [
+    {
+      "tick": "21",
+      "slot": "51",
+      "oid": "85",
+      "from": "0",
+      "to": "212",
+      "raw_next": "0",
+      "message": ""
+    }
+  ],
+  "rootPlaybackPassed": true,
+  "scope": "14 active source entity fields,5 RNG scalar fields excluding CRTseedstate,3 frame-event fields tick1..32; rootEOF33 excluded"
+}

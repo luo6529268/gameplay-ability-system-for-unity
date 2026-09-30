@@ -1,3 +1,5 @@
+> 最新限定关闭：2026-09-30 C024相对next门限定关闭：正式Karin433→434自然OPoint315/43→44→50→300；tick8/9为300/counter0/1，tick10以next1320选314/counter0，同步调用恰增1/site0x452390。336B44根正例32tick2288声明字段一致，直接434无生成控制707字段一致；原Battle Scene唯一relative-next-scene-01 PASS/DONE，tick5→37，125实体行14字段及32tick六个源/Unity RNG标量共1942/1942，首差0、速度差0。原Editoridle/nonPlay/noncompiling，exit/Scene clean/四保护SHA稳。既有聚焦4/4、完整tick1/1和相邻证据有效；本轮只新增诊断，不改生产/DAT/Scene/Asset/非战斗。CRT初始seed未被LFR携带与根EOF33排除均保留，非全World/checksum或物理键选招证书。Q07/总目标仍开。
+
 # C024 relative next: scoped evidence
 
 Current authority is the selected root 336B44 EXE and corresponding playable source. `FrameMachine28::step` defers non-state80 raw `next` in `[1300,1400)` to `BattleWorld28::resolve_native_relative_next_13xx`; it selects `from_action + 1 + synchronized_next(0x00452390u, raw_next-1300)`. The current indexed OID315 `c/kar/a/sas.dat` action300 has state15/wait1/next1320, and formal/staged DAT SHA-256 both equal `7B95CE19C1B34870445E576EC49002C6AD256C11D5884631100F39C7A9845196`.

@@ -30,6 +30,28 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void Route_Effect61WithoutBdefendStillUsesOrdinaryDefense()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateCharacter(world, 1, 0);
+            TypedCharacter target = CreateCharacter(world, 2, 1, Armor());
+            attacker.SwitchDir("right");
+            target.SwitchDir("left");
+            target.ImmediateFrame(7);
+
+            object route = ResolveRoute(world, attacker, target,
+                new InteractionArea
+                {
+                    kind = 0,
+                    injury = 20,
+                    effect = 61,
+                    bdefend = 0,
+                });
+
+            AssertRoute(route, "ReducedDefense");
+        }
+
+        [Test]
         public void Route_FirstType1RequiresExactlyOneArmorRecord()
         {
             var world = new SimulationWorld();

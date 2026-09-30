@@ -1,0 +1,139 @@
+#include "ntsd28_playable/game_session_lfr.h"
+
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main(int argc, char** argv) {
+    if (argc < 4 || argc > 5) return 2;
+    const std::string selected(argv[3]);
+    const bool poison = selected == "poison";
+    if (!poison && selected != "standing" && selected != "terminal" &&
+        selected != "positive") return 2;
+    int poison_hp = 35;
+    if (argc == 5) {
+        try {
+            std::size_t parsed = 0;
+            poison_hp = std::stoi(argv[4], &parsed);
+            if (parsed != std::string(argv[4]).size() || poison_hp < 1 ||
+                poison_hp > 500) return 2;
+        } catch (...) { return 2; }
+    }
+    const std::filesystem::path root(argv[1]);
+    const std::filesystem::path output(argv[2]);
+    const auto csv_path = output / "source-ticks.csv";
+    const auto lfr_path = output / "source-packets.lfr";
+    if (std::filesystem::exists(csv_path) || std::filesystem::exists(lfr_path))
+        return 3;
+    std::filesystem::create_directories(output);
+    ntsd28_playable::BattleConfig28 config;
+    config.random_seed = 682973786u;
+    config.character_id = poison ? 14 : 2;
+    config.enemy_id = 2;
+    config.background_id = 23;
+    config.bgm_selection_49f18c = 2;
+    config.battle_mode = 0;
+    ntsd28_playable::CombatantConfig28 actor;
+    actor.slot = 0;
+    actor.object_id = config.character_id;
+    actor.x = 500;
+    actor.z = 650;
+    actor.hp = poison || selected == "positive" ? 500 : 0;
+    actor.base_hp = 500;
+    actor.mp = 500;
+    actor.team = 1;
+    actor.action = poison ? 297 : selected == "terminal" ? 230 : 0;
+    ntsd28_playable::CombatantConfig28 target = actor;
+    target.slot = 1;
+    target.object_id = 2;
+    target.x = poison ? 610 : 1000;
+    target.hp = poison ? poison_hp : 500;
+    target.action = 0;
+    target.team = 2;
+    config.combatants = {actor, target};
+    ntsd28_playable::GameSession28 session(root, root);
+    std::string error;
+    if (!session.initialize(config, error)) {
+        std::cerr << error << '\n'; return 4;
+    }
+    ntsd28_playable::GameSessionLfr28 recorder;
+    if (!recorder.begin(session, error)) {
+        std::cerr << error << '\n'; return 5;
+    }
+    std::ofstream csv(csv_path, std::ios::binary);
+    if (!csv) return 6;
+    csv << "tick,actor_action,actor_hp,actor_attack,actor_x,target_action,target_hp,target_attack,target_x,poison_timer,poison_type,poison_strength,pur_slot,pur_action,poison_contacts\n";
+    bool attack_held = !poison;
+    int first_poison = -1;
+    int zero_standing = -1;
+    int zero_attack = -1;
+    const int ticks = poison ? 180 : 12;
+    for (int tick = 1; tick <= ticks; ++tick) {
+        const auto* prior = session.world()->entity(poison ? 1 : 0);
+        if (poison && prior != nullptr && prior->current_hp == 0 &&
+            prior->frame.action == 0) {
+            attack_held = true;
+            if (zero_standing < 0) zero_standing = tick - 1;
+        }
+        ntsd28::InputButtons28 attack;
+        if (attack_held) attack.set(ntsd28::InputKey28::attack);
+        session.set_input(0, poison ? ntsd28::InputButtons28{} : attack);
+        session.set_input(1, poison ? attack : ntsd28::InputButtons28{});
+        session.step();
+        if (!recorder.capture_after_step(session, error)) {
+            std::cerr << error << '\n'; return 7;
+        }
+        const auto* world = session.world();
+        const auto* first = world->entity(0);
+        const auto* second = world->entity(1);
+        if (!first || !second) return 8;
+        int pur_slot = -1;
+        int pur_action = -1;
+        for (std::size_t slot = 2; slot < ntsd28::EngineProfile28::maximum_slots; ++slot) {
+            const auto* entity = world->entity(slot);
+            if (entity && entity->object_id == 222) {
+                pur_slot = static_cast<int>(slot);
+                pur_action = entity->frame.action;
+                break;
+            }
+        }
+        int contacts = 0;
+        for (const auto& hit : session.last_tick()->hits) {
+            if (hit.target_slot == 1 && hit.interaction &&
+                hit.interaction->poison != 0) ++contacts;
+        }
+        if (second->poison_timer_120 > 0 && first_poison < 0)
+            first_poison = tick;
+        const auto* controlled = poison ? second : first;
+        if (controlled->current_hp == 0 &&
+            (controlled->frame.action == 60 || controlled->frame.action == 65) &&
+            zero_attack < 0) zero_attack = tick;
+        csv << world->sequence() << ',' << first->frame.action << ','
+            << first->current_hp << ','
+            << first->input.current[ntsd28::InputKey28::attack] << ','
+            << first->position.x << ',' << second->frame.action << ','
+            << second->current_hp << ','
+            << second->input.current[ntsd28::InputKey28::attack] << ','
+            << second->position.x << ',' << second->poison_timer_120 << ','
+            << second->poison_type_124 << ',' << second->poison_strength_128 << ','
+            << pur_slot << ',' << pur_action << ',' << contacts << '\n';
+    }
+    csv.close();
+    if (!csv) return 9;
+    std::vector<std::uint8_t> bytes;
+    if (!recorder.finish_to_memory(session, bytes, error)) {
+        std::cerr << error << '\n'; return 10;
+    }
+    std::ofstream lfr(lfr_path, std::ios::binary);
+    lfr.write(reinterpret_cast<const char*>(bytes.data()),
+              static_cast<std::streamsize>(bytes.size()));
+    lfr.close();
+    if (!lfr) return 11;
+    std::cout << "case=" << selected << " ticks=" << ticks
+              << " first_poison=" << first_poison
+              << " zero_standing=" << zero_standing
+              << " zero_attack=" << zero_attack << '\n';
+    return 0;
+}

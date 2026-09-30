@@ -1,0 +1,95 @@
+#include "ntsd28_playable/game_session_lfr.h"
+
+#include <filesystem>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <string>
+#include <vector>
+
+int main(int argc, char** argv) {
+    if (argc != 4) return 2;
+    const std::string name(argv[3]);
+    const bool lee = name == "lee-enter" || name == "lee-skip";
+    if (!lee && name != "sakura-enter" && name != "sakura-skip") return 2;
+    const bool enter = name == "lee-enter" || name == "sakura-enter";
+    const std::filesystem::path root(argv[1]);
+    const std::filesystem::path output(argv[2]);
+    const auto csv_path = output / "source-ticks.csv";
+    const auto lfr_path = output / "source-packets.lfr";
+    if (std::filesystem::exists(csv_path) || std::filesystem::exists(lfr_path))
+        return 3;
+    std::filesystem::create_directories(output);
+    ntsd28_playable::BattleConfig28 config;
+    config.random_seed = 682973786u;
+    config.character_id = lee ? 7 : 1;
+    config.enemy_id = 2;
+    config.background_id = 1;
+    config.bgm_selection_49f18c = 2;
+    config.battle_mode = 0;
+    ntsd28_playable::CombatantConfig28 actor;
+    actor.slot = 0;
+    actor.object_id = config.character_id;
+    actor.action = lee ? (enter ? 350 : 242) : (enter ? 96 : 97);
+    actor.x = 500;
+    actor.z = 400;
+    actor.hp = actor.base_hp = actor.mp = 500;
+    actor.team = 1;
+    ntsd28_playable::CombatantConfig28 target = actor;
+    target.slot = 1;
+    target.object_id = 2;
+    target.action = 0;
+    target.x = 800;
+    target.team = lee ? 2 : 1;
+    config.combatants = {actor, target};
+    ntsd28_playable::GameSession28 session(root, root);
+    std::string error;
+    if (!session.initialize(config, error)) {
+        std::cerr << error << '\n'; return 4;
+    }
+    ntsd28_playable::GameSessionLfr28 recorder;
+    if (!recorder.begin(session, error)) {
+        std::cerr << error << '\n'; return 5;
+    }
+    std::ofstream csv(csv_path, std::ios::binary);
+    if (!csv) return 6;
+    csv << std::setprecision(17);
+    csv << "tick,actor_action,actor_state,actor_counter,actor_x,actor_y,actor_z,actor_precise_x,actor_precise_y,actor_precise_z,actor_vx,actor_vy,actor_vz,actor_hp,target_action,target_x,target_y,target_z,target_hp\n";
+    for (int tick = 1; tick <= 12; ++tick) {
+        session.set_input(0, {});
+        session.set_input(1, {});
+        session.step();
+        if (!recorder.capture_after_step(session, error)) {
+            std::cerr << error << '\n'; return 7;
+        }
+        const auto* world = session.world();
+        const auto* first = world->entity(0);
+        const auto* second = world->entity(1);
+        if (!first || !second) return 8;
+        const auto* frame = first->definition->frame(first->frame.action);
+        if (!frame) return 9;
+        csv << world->sequence() << ',' << first->frame.action << ','
+            << frame->values.integer("state").value_or(0) << ','
+            << first->frame.frame_counter << ',' << first->position.x << ','
+            << first->position.y << ',' << first->position.z << ','
+            << first->position.precise_x << ',' << first->position.precise_y << ','
+            << first->position.precise_z << ',' << first->motion.x << ','
+            << first->motion.y << ',' << first->motion.z << ','
+            << first->current_hp << ',' << second->frame.action << ','
+            << second->position.x << ',' << second->position.y << ','
+            << second->position.z << ',' << second->current_hp << '\n';
+    }
+    csv.close();
+    if (!csv) return 10;
+    std::vector<std::uint8_t> bytes;
+    if (!recorder.finish_to_memory(session, bytes, error)) {
+        std::cerr << error << '\n'; return 11;
+    }
+    std::ofstream lfr(lfr_path, std::ios::binary);
+    lfr.write(reinterpret_cast<const char*>(bytes.data()),
+              static_cast<std::streamsize>(bytes.size()));
+    lfr.close();
+    if (!lfr) return 12;
+    std::cout << "case=" << name << " rows=" << recorder.row_count() << '\n';
+    return 0;
+}

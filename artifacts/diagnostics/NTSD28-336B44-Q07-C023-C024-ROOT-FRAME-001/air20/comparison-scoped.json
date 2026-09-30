@@ -1,0 +1,20 @@
+{
+  "mode": "air20",
+  "fixture": "CONTROLLED_INITIAL_AIRBORNE_NOT_NATURAL_PRODUCER",
+  "status": "PASS",
+  "comparedFields": 1248,
+  "differences": [],
+  "witnesses": [
+    {
+      "tick": "1",
+      "slot": "0",
+      "oid": "2",
+      "from": "0",
+      "to": "212",
+      "raw_next": "0",
+      "message": ""
+    }
+  ],
+  "rootPlaybackPassed": true,
+  "excluded": "Independent CRT state seed not encoded in LFR; EOFtick33 outside scope"
+}

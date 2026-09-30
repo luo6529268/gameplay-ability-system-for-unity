@@ -1,0 +1,184 @@
+{
+  "fields": {
+    "actor_action": "actorAction",
+    "actor_state": "actorState",
+    "actor_counter": "actorCounter",
+    "actor_x": "actorSourceX",
+    "actor_y": "actorY",
+    "actor_z": "actorSourceZ",
+    "actor_hp": "actorHp",
+    "target_action": "targetAction",
+    "target_x": "targetSourceX",
+    "target_y": "targetY",
+    "target_z": "targetSourceZ",
+    "target_hp": "targetHp"
+  },
+  "checked": 144,
+  "differences": [
+    {
+      "tick": 1,
+      "field": "actor_counter",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 1,
+      "field": "actor_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 1,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 2,
+      "field": "actor_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 2,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 3,
+      "field": "actor_counter",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 3,
+      "field": "actor_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 3,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 4,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 4,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 5,
+      "field": "actor_counter",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 5,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 5,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 6,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 6,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 7,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 7,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 8,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 8,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 9,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 9,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 10,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 10,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 11,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 11,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    },
+    {
+      "tick": 12,
+      "field": "actor_z",
+      "source": 651,
+      "unity": 481
+    },
+    {
+      "tick": 12,
+      "field": "target_z",
+      "source": 650,
+      "unity": 481
+    }
+  ],
+  "sourceTicks": 12,
+  "unityTicks": 12,
+  "fullWorldParityClaim": false
+}

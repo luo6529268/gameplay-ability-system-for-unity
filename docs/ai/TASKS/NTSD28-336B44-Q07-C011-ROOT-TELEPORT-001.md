@@ -1,0 +1,11 @@
+# NTSD28-336B44-Q07-C011-ROOT-TELEPORT-001
+
+Status: `VERIFIED_SCOPED_ROOT_TRACE`. Four12tick rootPASS/exit0/864declaredfields equal; v1eighttickLee extraEOFheader46 retained. OriginalScene formalDAT consumer pending. ParentQ07/C011/G1. Authority frozen336B44 rootEXE and its declared playable GameSession28/SimulationTickDriver28/BattleWorld28 teleport-phase. Formal untouched DAT Lee OID7 action350→242/state400, Sakura OID1 action96→97/state401, NarutoOID2 target. Existing Unity synthetic fulltick3/3 and fourtickBattlePlay are not root/natural-content proof.
+
+Ownership: only Tools/NTSD28Q07Diagnostics/teleport_phase_lfr_probe.cpp plus new package artifacts/documents. No formal code/binary/DAT or Unity production/Scene/config/nonbattle edits; preserve dirty work. Background23 is diagnostic only. Complete selected-source closure compiler arguments reused and saved exactly.
+
+Four cases,8 complete GameSession ticks each: Lee350 natural frame advance versus initially242; Sakura96 natural frame advance versus initially97. SourceX500/targetX800/Z650, HP/base/MP500, seed682973786, neutral human input. State400 enemy teams1/2; state401 teammate teams1/1. Same-team flow is recorded as such, not a full battle outcome test. Explicit root action and MP overrides are required by LFR; initial position/team/baseHP are serialized. No synthetic current HP/velocity or direct teleport call.
+
+Revision2 bounded extension: samefour cases12ticks, because Lee-enter's root extraEOFtick9 authoredhit changed finalscore relative to8tickrecord. Initial8tick576fields already matched, failed46 retained. Current-frame teleport is before tailframe advancement, so natural successor is visibletick2 but teleports attick4; initialteleportframe moves attick2. Do not interpret post-tailstate as the teleport pass state.
+
+Acceptance: compile/source run, root sameLFR exit/result, independently compare only exported action/state/counter/position/motion/HP fields and initial conditions. Confirm first phase skips and source-DAT successor frame enters on phase0; record any actual first difference. OriginalBattleScene formal-content production consumer remains separate. Ledger/diff/protected hashes checked. Scope cannot establish wholeWorld/physical-key parity. Rollback reviewed inversion of only the new diagnostic after concurrent-state review, no destructiveGit/cleanup.

@@ -1,0 +1,21 @@
+{
+  "fields": {
+    "actor_action": "actorAction",
+    "actor_state": "actorState",
+    "actor_counter": "actorCounter",
+    "actor_x": "actorSourceX",
+    "actor_y": "actorY",
+    "actor_z": "actorSourceZ",
+    "actor_hp": "actorHp",
+    "target_action": "targetAction",
+    "target_x": "targetSourceX",
+    "target_y": "targetY",
+    "target_z": "targetSourceZ",
+    "target_hp": "targetHp"
+  },
+  "checked": 144,
+  "differences": [],
+  "sourceTicks": 12,
+  "unityTicks": 12,
+  "fullWorldParityClaim": false
+}

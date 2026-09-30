@@ -1,0 +1,214 @@
+{
+  "mode": "kar434",
+  "status": "DIFFERENCE",
+  "entityRows": 32,
+  "comparedFields": 739,
+  "differences": [
+    {
+      "entitySetMismatch": {
+        "missing": [],
+        "extra": [
+          [
+            33,
+            1
+          ]
+        ]
+      }
+    },
+    {
+      "tick": 1,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 2,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 3,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 4,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 5,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 6,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 7,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 8,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 9,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 10,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 11,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 12,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 13,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 14,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 15,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 16,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 17,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 18,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 19,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 20,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 21,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 22,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 23,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 24,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 25,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 26,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 27,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 28,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 29,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 30,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 31,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 32,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    }
+  ],
+  "maxVelocityDifference": 0,
+  "relativeWitnesses": [],
+  "rootPlaybackPassed": true
+}

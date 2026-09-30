@@ -1,0 +1,31 @@
+[
+  {
+    "mode": "discover-v4",
+    "exitCode": 0,
+    "output": "catalog_entries=330 airborne_routes=10"
+  },
+  {
+    "mode": "air20",
+    "kind": "source",
+    "exitCode": 0,
+    "output": "mode=air20 ticks=32 airborne_redirects=1 relative_selections=0"
+  },
+  {
+    "mode": "air20",
+    "kind": "root",
+    "exitCode": 0,
+    "output": ""
+  },
+  {
+    "mode": "air40",
+    "kind": "source",
+    "exitCode": 0,
+    "output": "mode=air40 ticks=32 airborne_redirects=1 relative_selections=0"
+  },
+  {
+    "mode": "air40",
+    "kind": "root",
+    "exitCode": 0,
+    "output": ""
+  }
+]

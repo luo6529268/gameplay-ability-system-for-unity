@@ -1,3 +1,5 @@
+> 2026-09-30 C022/C029限定关闭：336B44根四自然/控制案例各32tick/960声明字段，合计3840/3840、exit0/PASS；原Scene修正输入后的kind2-catch-scene-02 PASS/DONE，32tick/960字段一致、首差0、速度差值实际0。OID52真实跳跃，tick9自然kind3抓取到130/state1700/primarykind2/counter1/Vy-12.899999，后继持有tick保持计数/Vy，挂点正常改位置，motionhold0/interaction0排除其他物理门。原Editoridle/nonPlay、Scene clean、四保护SHA稳定。首轮Scene01探针误用Attack产生防御而非跳跃，33字段差异保留；仅诊断flag按既有CharacterInputModule改Defend，无生产输入/战斗/DAT/Scene变更。当前正式parser20武器860帧无primarykind2：武器正例列条件性当前内容不可用，非全武器或全World证书。两父门限定通过，Q07/总目标仍开。
+
 # NTSD28 336B44 Q07/C022 current-frame kind2 gate
 
 Status: `UNITY_FULL_TICK_PASS / RUNTIME_PENDING`. Parent: BATCH-04/Q07. This report is scoped to the current action/counter gate, not C029 physics or all of Q07.

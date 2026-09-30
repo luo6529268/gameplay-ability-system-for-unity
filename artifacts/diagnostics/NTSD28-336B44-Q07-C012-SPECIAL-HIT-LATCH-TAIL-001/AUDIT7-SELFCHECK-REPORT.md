@@ -1,0 +1,5 @@
+# C012 Audit7 self-check rebaseline
+
+Formal 336B44 `SimulationTickDriver28` clears `special_hit_latch_0eb` at the active object's tail after hit consumers. Existing Unity C012 production already did so. The old `CheckAudit7HitConfirmCarrierTail` asserted that a type3 latch persisted **after** that tail; it has been corrected to require true immediately after Hit and false after `EntityPostFrameTailAll`, retaining weapon HitConfirm2 and transient-MP controls. Only `BattleRuntimeSelfCheck.cs` changed in this extension.
+
+The [original Editor failure](pre-selfcheck-audit7-failure.txt) was followed by exact C012 tail/complete-hit controls [3/3 PASS](audit7-tail-focused-job.json). The first test-start bridge call timed out, but a live Editor test job id was retrieved and polled to success without restarting it. A fresh full [BattleRuntimeSelfCheck PASS](post-audit7-full-self-check-pass.txt) followed. This resolves the self-check barrier; it does not supply formal-root same-state or natural Battle Play parity for C012/Q07.

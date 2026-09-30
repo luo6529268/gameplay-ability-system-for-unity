@@ -15,3 +15,13 @@
 验证边界：正式根 EXE 同初态完整 tick、Unity 正式 OID600 完整 Driver tick、自然 Battle Scene Play 及整个 Q07/Q12 均未验。用户的完整背景相机、比例位移、非战斗模式/背景例外不变。未改 scene、DAT、PNG、WAV、config 或非战斗流程。最终原Editor状态为 ready/非重载；正式 EXE、Battle/Menu Scene、GameConfig 和 ProjectBattleModeConfig 的 SHA-256 与包前记录一致，后两者分别为 `0527D737...CB8EA7`、`B57CFEF3...D85B82`。`Tools/Validate-ChangeLedger.ps1` 最终 1045 records / 99 governed code files PASS；`git -c core.safecrlf=false diff --check` PASS。现有工作树仍含此前未提交修改，本包未清理、恢复、暂存或提交它们。
 
 独立只读审查未发现本包新增代码的可执行缺陷；审查指出原 Unity job 终态需要落盘以便恢复，已按上方文件保存。审查不是正式根/自然 Play 验收。
+
+2026-09-30 后续独立 Q09/P-20 测试夹具更正已让全量自检越过上述图片预热断言，但该新鲜运行在更后的 `R3-AI-LIFE-01` 零血 AI 输入断言处 FAIL；见 [后续报告](../NTSD28-336B44-Q09-P20-BMP-SELFCHECK-GRID-001/REPORT.md)。F02 的隔离武器分支仍是 50/50 聚焦证据，不能由此把全量自检或 F02 整包升为 PASS。
+
+2026-09-30 F02 补验：独立 C017 旧零血 AI 断言修正后，全量自检进入本包 `CheckStateTransformLandingMatrix`，旧期望帧60/Vy0失败；按正式 `PhysicsIntegrator28` 的 action40 后硬着地覆盖，将合成夹具仅改为最终帧0/Vy-7、原Vx8.4/耐久15。原Editor重编译后自检通过此矩阵，在后面的 C012 旧特殊命中锁存尾断言失败；[改前失败](pre-transform-matrix-self-check-failure.txt)、[改后下一失败](post-transform-matrix-self-check-next-failure.txt)。整份 SelfCheck 仍 FAIL；F02 正式根同状态、完整 tick 和自然 Play 仍未验。
+
+随后独立 C012 旧帧尾断言按正式规则修正，原 Editor 新鲜[全量 SelfCheck 返回 PASS](post-c012-full-self-check-pass.txt)。这是本包目前最高的自动自检证据，覆盖旧 F02 武器分支与合成落地矩阵；正式根 EXE 同状态完整 tick、Unity 暂存 OID600 完整 Driver tick、自然 Battle Play 仍待，F02/Q07 整包不能关闭。
+
+后续只读核对正式 LFR 回放边界：`GameSessionLfr28::snapshot_entity` 的物理槽只保存 OID、阵营、整数位置、MP、owner、base HP 等，不保存运动速度；正式回放公开覆盖项只有初始 action/facing/MP 等，没有初始 Vx。因 F02 必须用 `|Vx|>9` 触发，把自定义高 Vx 源码 probe 录成 LFR 后让正式根 EXE 回放，不能构成**同初态**权威对照。下一证据先用所选336B44 playable live `GameSession28`/`SimulationTickDriver28` 源码在相同 OID600/速度下跑完整 tick，并让 Unity 生产 Driver 做配对；正式根 EXE 出口仍须由自然可达的武器生成链或等效正式入口独立补证。仅以当前 50/50、自检 PASS 或无速度的根 LFR 不能关闭 F02。
+
+该下一证据已在独立[完整 tick 报告](../NTSD28-336B44-Q07-F02-OID600-FULL-TICK-PAIR-001/REPORT.md)补齐：正式 playable 源码探针四组，原 Unity Editor 生产 Driver 四组 4/4，追加 2048 宽统一投影后五组 5/5 PASS。正式根 EXE 同态、自然武器与 Battle Scene Play 仍未证，F02/Q07 保持 `RUNTIME_PENDING`。

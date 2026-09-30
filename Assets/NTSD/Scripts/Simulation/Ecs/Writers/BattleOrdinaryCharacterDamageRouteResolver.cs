@@ -92,7 +92,7 @@ namespace NTSD.Simulation.Ecs
             BattleOrdinaryDefenseResult defense =
                 BattleOrdinaryDefenseResolver.Resolve(
                     interaction.kind,
-                    interaction.effect,
+                    interaction.bdefend,
                     interaction.spark,
                     interaction.dbdefend,
                     interaction.dvx,

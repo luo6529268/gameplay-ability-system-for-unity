@@ -27,7 +27,7 @@ namespace NTSD.Simulation.Ecs
 
         internal static BattleOrdinaryDefenseResult Resolve(
             int interactionKind,
-            int interactionEffect,
+            int interactionBdefend,
             int interactionSpark,
             int interactionDbdefend,
             int interactionDvx,
@@ -37,7 +37,7 @@ namespace NTSD.Simulation.Ecs
             int defenderHp,
             int attackerObjectId)
         {
-            if (interactionKind != 0 || interactionEffect >= 61 ||
+            if (interactionKind != 0 || interactionBdefend >= 61 ||
                 (defenderState != 7 &&
                  defenderState != 70 &&
                  defenderState != 75) ||

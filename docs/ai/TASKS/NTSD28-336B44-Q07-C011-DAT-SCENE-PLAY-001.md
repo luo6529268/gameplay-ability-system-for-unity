@@ -1,0 +1,14 @@
+# NTSD28-336B44-Q07-C011-DAT-SCENE-PLAY-001
+
+Status: `VERIFIED_SCOPED`. ParentQ07/C011. Frozen336B44 root fourformal DAT12tick cases PASS/864 declared fields equal; root/source naturalLee350→242 andSakura96→97 both teleport attick4, initialteleportframe controls attick2. Current frame before tailadvance owns teleport, not finalpost-tailstate. Root first8tick Lee-enter finalheader46 retained (extraEOFtick9hit); revision2 includeshit in12tickrecord andpasses.
+
+Ownership: only Assets/NTSD/Scripts/Test/Editor/NTSD28Q07TeleportDatBattlePlayProbeEditor.cs and generatedmeta plus package documents/artifacts. Reuse existing request/Playclone/bootstrap/pause/completeDriver/exit lifecycle pattern; no production, DAT, Scene/config/input/framework/nonbattle changes. Preserve existing dirty work. OriginalEditor only, sole clean savedBattleScene, idleEdit before each unique request.
+
+Two boundedPlay runs using samecompiledprobe: lee-enter roster7/2 with teams1/2, sourceaction350; sakura-enter roster1/2 with teams1/1, sourceaction96. Runtimeclone HP/base/MP500, X500/target800/Z650, seed682973786, phase0/FrameToggle0, neutralinput12ticks. Each is a controlled formalDAT initialaction, not physical-key skillselection. No directteleport/forcedoutcome. Record actoraction/state/counter/sourceX/Z/Y/HP, targetaction/sourceX/Z/Y/HP, andphase; compare selectedprintedfields withsame root trace. Record viewXYZ for proportionalexit without using Transform as truth.
+
+Acceptance: originalEditorcompile0errors; both actualPlay reports, declaredfield comparisons, expectedfirst3tickskip/fourthteleport, orderedexit/Scene clean/protectedhashes. A difference requires firsttick/field diagnosis, no per-character fix. Root counterpart and source identity checked. Ledger/diff checks; no fullsuite repeat unless newfirstdifference. Rollback only reviewed inversion of newprobe aftercheckingconcurrentstate, no cleanup/destructiveGit.
+
+FirstLee result retainedDIFFERENCE: onlyprobeAnimSub/canonicalcounter andsourceZ650outsideownmap fields differed, phase/X/action/HP already matched. RevisedcommonfixtureZ400/formalrootBG1z375..575; keepUnitymap/region. ReadAttackingCounter, notAnimSub; deadline UTCnormalized10min for measured6–7minEditorstartup. Newrootv3mustbeobserved beforevalidating revisedScene. This change narrows comparison to nonboundary conditions approvedby projectmapexception, without scaling/clamping either authority to fake a match.
+
+
+2026-09-30 C011限定关闭：336B44正式根v3四例12tick/864声明字段PASS；原Battle Scene Lee02与Sakura01各12tick/144字段严格一致，合计288/288、首差0。李tick4 X680/Z401，小樱tick4 X740/Z401；两轮均PASS/DONE/exitedPlay/sceneCleanAfter，MCP确认原Editor idle/nonPlay。两Scene、GameConfig、ProjectBattleModeConfig四SHA保持，DAT与生产脚本未因补证修改。初次Lee01计数字段/地图边界夹具失败和根v1 EOF46原记录保留。该出口证明受控初态后的正式DAT自然帧链与相位，不声称物理键选招、全World/全画面或Q07整组完成。下一G1/C012。

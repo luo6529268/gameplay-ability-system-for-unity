@@ -1,0 +1,20 @@
+# NTSD28-336B44-Q07-C012-ROOT-LATCH-001
+
+Status: `VERIFIED_SCOPED_ROOT_TRACE`. Parent Q07/C012. Authority is current formal 336B44 and its playable source. C011 scoped exit is closed; C012 existing focused/full-tick tests and SelfCheck pass, root same-state/natural Scene gates remain open.
+
+Observed source: BattleWorld28 ordinary type3 ownership-transfer branch sets special_hit_latch_0eb after a real hit, the same-tick candidate consumer refuses character targets while set, and SimulationTickDriver28 active entity tail clears it after resource/frame advance. An end-of-tick false value alone cannot prove a real producer occurred. Need record actual WorldStandardHitResult28.target_type3_ownership_transferred or relation special_hit_latch_set in addition to the resulting object/owner/action/tail flag.
+
+Owned script only Tools/NTSD28Q07Diagnostics/special_hit_latch_lfr_probe.cpp, package documents/artifacts. Reuse formal GameSession28/unchanged DAT/full driver/LFR recorder. Bounded source reachability matrix: Kankuro14 action297 emits formal Pur222; Naruto2 begins standing, turns via left input then attacks, targetX/attack-start are explicit bounded diagnostic parameters. No direct spawn, latch assignment, producer invocation, modified authority source/DAT, scene or production behavior. Source-only search evidence must be labelled separately; a valid natural producer case is then replayed by root EXE with supported initial-action/MP arguments. LFR input/initial-state encoding limits are enforced, no manual hidden latch/facing/velocity.
+
+Acceptance: compile diagnostics; demonstrate producer witness from actual full tick and active type3 tail false; save fresh source CSV/LFR and selected parameters; root same packets/initial state produces matching printed per-tick fields and final report. Preserve unsuccessful reachability trials. If unsupported trace fields are absent, restrict parity claim to printed fields and report unknowns. OriginalScene is a separate next gate, no whole-world certificate. Validate ledger/whitespace/protected hashes. Rollback only reviewed removal/inversion of owned new diagnostic after authorization, no destructive Git.
+
+# C012 formal-root natural special-hit latch
+
+Status: `VERIFIED_SCOPED_ROOT_TRACE`. OriginalScene remains pending in parentC012. Current formal336B44 EXE and unchanged corresponding source/DAT only; no nativeParityClaim/fullWorld certificate.
+
+Diagnostic g++ compile exit0 with no diagnostics, args/source snapshot saved. Twenty bounded reachability trials all execute40 fullGameSession ticks;18 produce no transfer, retained. x680/attack2 andx730/attack2 naturally emitPur222 tick6, Naruto's standardAttack reaches513 and transfersPur owner0→1/group1→2/action30 at tick8 or9. WorldStandardHitResult28.target_type3_ownership_transferred is1 there, not an injected latch. Full source activeentity tail clears special_hit_latch_0eb tofalse whilePur isstillactive. Root sameinput replay emits actual applied Naruto→Pur event followed by rejected Pur→Naruto event; NarutoHP stays500. Root trace prints post-tail flagfalse, transferredowner/group/action; it does notprint the producer boolean insideconsumer, so that precise internal witness is source-derived, not claimedroot-observed.
+
+Three root replays (two real-transfer cases and x640/attack2 no-transfer control) exit0/reportpassedtrue,40ticks each, declared14printedfields560/560 each,1680/1680total, zero firstdifference. Compare actor/targetaction/HP/X andPur slot/action/XYZ/owner/group/post-tailflag. Source-only transfer/relation counters excluded fromroot field parity. Cases cannot prove a next-tick character hit after reflection because formalPur action30 is a3005 destruction chain; existing focused complete-tick tests cover the reusable latch's next-tick eligibility independently. Natural originalScene fullDriver is stillrequired forparent closure.
+
+[Summary](comparison-summary.json),[reachability](reachability-matrix.json),[identities](artifact-hashes.json). Every output isfresh; no DAT/source mutation, no spawn/latch assignment, no Unityproduction/Scene changes.
+

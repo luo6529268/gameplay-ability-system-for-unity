@@ -1,0 +1,20 @@
+{
+  "mode": "kar434",
+  "status": "PASS",
+  "declaredTickRange": [
+    1,
+    32
+  ],
+  "entityRows": 32,
+  "comparedFields": 707,
+  "differences": [],
+  "velocityTolerance": 1e-06,
+  "maxVelocityDifference": 0,
+  "relativeWitnesses": [],
+  "rootPlaybackPassed": true,
+  "excludedObservations": {
+    "crtStateMismatch": "LFR snapshot encodes synchronized table but not independent CRT seed; all32 state differences preserved in comparison.json",
+    "extraRootEOFWorldTick": 33
+  },
+  "certificateScope": "14 active entity fields, 5 RNG scalar fields excluding CRT state, 3 frame-event fields per event at declared32 ticks; not entireWorld checksum"
+}

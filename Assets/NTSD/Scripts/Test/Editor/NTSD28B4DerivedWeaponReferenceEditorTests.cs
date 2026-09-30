@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -146,6 +147,77 @@ namespace NTSD.Test.Editor
             Assert.That(weapon.Frame.D.state, Is.EqualTo(1002));
             Assert.That(weapon.Runtime.Vx, Is.EqualTo(20.0));
             Assert.That(weapon.Runtime.Vy, Is.EqualTo(0.85).Within(1e-12));
+        }
+
+        [TestCase(-20.0, 41, 476, 476.0, false)]
+        [TestCase(20.0, 41, 524, 524.0, false)]
+        [TestCase(-9.0, 1, 489, 489.2, false)]
+        [TestCase(9.0, 1, 510, 510.8, false)]
+        [TestCase(20.0, 41, 524, 524.0, true)]
+        public void StagedFormalOid600MatchesPlayableCompleteTick(
+            double initialVx, int expectedAction, int expectedXInt,
+            double expectedPreciseX, bool projected)
+        {
+            string path = Path.Combine(Application.dataPath,
+                "NTSD/Content/LoganRuntime/decoded_dat/w/6.dat");
+            Assert.That(File.Exists(path), Is.True, "Formal staged OID600 DAT is required.");
+            var parsed = new Lf2DatParserV2().ParseLoganContent(File.ReadAllText(path));
+            var data = new LF2CharacterData();
+            foreach (var frame in parsed.Frames)
+                data.frames.Add(Lf2DatConverter.ConvertLoganFrameData(frame));
+
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            if (projected)
+                world.ConfigureFixedViewRunDistance(2048);
+
+            var weapon = new ProbeWeapon { ObjectId = 600 };
+            weapon.ConfigureType((int)LF2ObjectType.ThrowWeapon);
+            weapon.FrameCache.Load(new LF2CharacterDataWrapper(600, data));
+            weapon.ImmediateFrame(0);
+            weapon.SwitchDir("right");
+            weapon.SetRequiredRuntimeSlot(50);
+            weapon.Health.HP = 250;
+            weapon.Team = 1;
+            weapon.Runtime.OwnerSlotIndex = 0;
+            weapon.Runtime.SetPosition(
+                world.SpatialProjection.SourceToViewX(500.0), -20.0, 650.0);
+            weapon.Runtime.SetSourceRulePosition(500.0, 650.0);
+            weapon.Runtime.SyncIntegerPosition();
+            weapon.Runtime.SyncSourceRuleIntegerPosition();
+            weapon.Runtime.SetVelocity(initialVx, 0.0, 0.0);
+
+            world.Register(weapon);
+            try
+            {
+                Assert.That(weapon.Runtime.SlotIndex, Is.EqualTo(50));
+                var input = new FrameInputSet(1,
+                    Array.Empty<SimulationPlayerInput>());
+                new NTSDBattleTickSystem(world).RunReleaseTick(1, false, input);
+
+                string actual = $"frame={weapon.Frame.N}, x={weapon.Runtime.XInt}, " +
+                    $"sourceX={weapon.Runtime.SourceRuleXInt}, " +
+                    $"preciseX={weapon.Runtime.SourceRuleX:R}, " +
+                    $"y={weapon.Runtime.YInt}, vx={weapon.Runtime.Vx:R}, " +
+                    $"vy={weapon.Runtime.Vy:R}";
+                Assert.That(weapon.Frame.N, Is.EqualTo(expectedAction), actual);
+                Assert.That(weapon.Runtime.SourceRuleXInt,
+                    Is.EqualTo(expectedXInt), actual);
+                Assert.That(weapon.Runtime.SourceRuleX,
+                    Is.EqualTo(expectedPreciseX).Within(1e-9), actual);
+                Assert.That(weapon.Runtime.X,
+                    Is.EqualTo(world.SpatialProjection.SourceToViewX(
+                        expectedPreciseX)).Within(1e-9), actual);
+                Assert.That(weapon.Runtime.YInt, Is.EqualTo(-20), actual);
+                Assert.That(weapon.Runtime.Vx, Is.EqualTo(initialVx), actual);
+                Assert.That(weapon.Runtime.Vy,
+                    Is.EqualTo(0.85).Within(1e-12), actual);
+            }
+            finally
+            {
+                world.Unregister(weapon);
+            }
         }
 
         private static ProbeWeapon CreateFastWeapon(

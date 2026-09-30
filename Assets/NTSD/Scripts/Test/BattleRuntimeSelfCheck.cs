@@ -15026,8 +15026,8 @@ namespace NTSD.Test
             Expect(weapon.HitConfirm2 == 0 &&
                    !weapon.Runtime.SpecialHitLatch0EB &&
                    special.HitConfirm2 == 0 &&
-                   special.Runtime.SpecialHitLatch0EB,
-                "BATTLE-AUDIT7-F7: producing-tick entity post tail must clear weapon HitConfirm2 and preserve the type3 special-hit latch");
+                   !special.Runtime.SpecialHitLatch0EB,
+                "BATTLE-AUDIT7-F7: producing-tick entity post tail must clear weapon HitConfirm2 and the type3 special-hit latch");
             Expect(weapon.Runtime.TransientMp == 0 && weapon.Runtime.TransientMp2 == 1000 &&
                    weapon.Runtime.TransientMp3 == 1000 && weapon.Runtime.TransientMp4 == 1000 &&
                    special.Runtime.TransientMp == 0 && special.Runtime.TransientMp2 == 1000 &&
@@ -18911,10 +18911,14 @@ namespace NTSD.Test
             victim.ImmediateFrame(23);
             victim.SwitchDir("left");
             itr.effect = 61;
-            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
-                "effect61 must be outside ordinary defense");
-            itr.kind = 9;
+            Expect(LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "effect61 with bdefend0 must remain inside ordinary defense");
             itr.effect = 0;
+            itr.bdefend = 61;
+            Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
+                "bdefend61 must be outside ordinary defense");
+            itr.bdefend = 0;
+            itr.kind = 9;
             Expect(!LF2AlternateDamageResolver.ShouldUseAlternateHurt(attacker, victim, itr),
                 "kind9 must be inactive inside the resolver");
             itr.kind = 0;
@@ -24885,13 +24889,13 @@ itr_end:
 
             bool nativeInput =
                 profile == BattleAiExecutionProfile.DataOrientedCanonical;
-            int expectedPreviousJump = nativeInput ? 0 : 1;
+            int expectedPreviousJump = 1;
             int expectedAttackWindow = nativeInput ? 0 : 5;
             Expect(ai.Runtime.PrevJump == expectedPreviousJump &&
                    ai.Runtime.KeyJump == 0 &&
                    ai.Runtime.CdAttack == expectedAttackWindow &&
                    ai.Frame.N == 0,
-                $"R3-AI-LIFE-01: {label} HP=0 input must follow its configured input pipeline's death boundary; " +
+                $"R3-AI-LIFE-01: {label} HP=0 input must preserve the sampled previous key and follow its configured pipeline; " +
                 $"prevJump={ai.Runtime.PrevJump}, keyJump={ai.Runtime.KeyJump}, " +
                 $"cdAttack={ai.Runtime.CdAttack}, frame={ai.Frame.N}");
         }
@@ -27396,11 +27400,11 @@ itr_end:
                         runtimeCharacterConfigs, throwOid, false);
                     thrownBoomerang.Runtime.WeaponFlightCounter = 20;
                     RunTransformedLandingPasses(thrownBoomerang, 10.0, 12.0, 6);
-                    Expect(thrownBoomerang.Frame.N == 60 &&
+                    Expect(thrownBoomerang.Frame.N == 0 &&
                            thrownBoomerang.Runtime.WeaponFlightCounter == 15 &&
                            Nearly(thrownBoomerang.Runtime.Vx, 8.4) &&
-                           Nearly(thrownBoomerang.Runtime.Vy, 0.0),
-                        "type4 state1000 high-vx landing must apply boomerang frame40 selection before ground resolve");
+                           Nearly(thrownBoomerang.Runtime.Vy, -7.0),
+                        "type4 state1000 high-vx hard landing must override pending frame40 with bounce frame0");
 
                     TransformedLandingSelfCheckEntity thrownStop = CreateTransformedLandingShell(
                         runtimeCharacterConfigs, throwOid, false);

@@ -1,0 +1,54 @@
+[
+  {
+    "mode": "jump",
+    "status": "PASS",
+    "declaredTickRange": [
+      1,
+      32
+    ],
+    "entityRows": 64,
+    "comparedFields": 1251,
+    "velocityTolerance": 1e-06,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "ground",
+    "status": "PASS",
+    "declaredTickRange": [
+      1,
+      32
+    ],
+    "entityRows": 64,
+    "comparedFields": 1248,
+    "velocityTolerance": 1e-06,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "kar433",
+    "status": "PASS",
+    "declaredTickRange": [
+      1,
+      32
+    ],
+    "entityRows": 125,
+    "comparedFields": 2288,
+    "velocityTolerance": 1e-06,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  },
+  {
+    "mode": "kar434",
+    "status": "PASS",
+    "declaredTickRange": [
+      1,
+      32
+    ],
+    "entityRows": 32,
+    "comparedFields": 707,
+    "velocityTolerance": 1e-06,
+    "maxVelocityDifference": 0,
+    "rootPlaybackPassed": true
+  }
+]

@@ -1,0 +1,75 @@
+{
+  "unityStatus": "PASS",
+  "unitySamples": 40,
+  "sourceSamples": 40,
+  "checked": 320,
+  "fields": [
+    [
+      "actor_action",
+      "actorAction"
+    ],
+    [
+      "actor_hp",
+      "actorHp"
+    ],
+    [
+      "actor_attack",
+      "actorAttack"
+    ],
+    [
+      "actor_x",
+      "actorSourceX"
+    ],
+    [
+      "target_action",
+      "targetAction"
+    ],
+    [
+      "target_hp",
+      "targetHp"
+    ],
+    [
+      "target_attack",
+      "targetAttack"
+    ],
+    [
+      "target_x",
+      "targetSourceX"
+    ]
+  ],
+  "differences": [],
+  "sourceUnityAdditionalFields": [
+    [
+      "poison_timer",
+      "poisonTimer"
+    ],
+    [
+      "poison_type",
+      "poisonType"
+    ],
+    [
+      "poison_strength",
+      "poisonStrength"
+    ],
+    [
+      "pur_slot",
+      "purSlot"
+    ],
+    [
+      "pur_action",
+      "purAction"
+    ]
+  ],
+  "sourceUnityAdditionalDifferences": [],
+  "fullWorldParityClaim": false,
+  "sourceUnityAdditionalChecked": 200,
+  "formalRootAdditionalFieldsAvailable": [
+    "pur_slot",
+    "pur_action"
+  ],
+  "formalRootAdditionalFieldsUnavailable": [
+    "poison_timer",
+    "poison_type",
+    "poison_strength"
+  ]
+}

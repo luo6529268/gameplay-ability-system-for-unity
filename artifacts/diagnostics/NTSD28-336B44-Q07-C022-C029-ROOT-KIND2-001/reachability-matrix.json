@@ -1,0 +1,66 @@
+[
+  {
+    "action": 255,
+    "x": 610,
+    "jump": 0,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=610 jumping=0 first_catch=7 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 255,
+    "x": 610,
+    "jump": 1,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=610 jumping=1 first_catch=7 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 255,
+    "x": 650,
+    "jump": 0,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=650 jumping=0 first_catch=9 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 255,
+    "x": 650,
+    "jump": 1,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=650 jumping=1 first_catch=9 captured_vy=-14.6 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 255,
+    "x": 730,
+    "jump": 0,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=730 jumping=0 first_catch=11 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 255,
+    "x": 730,
+    "jump": 1,
+    "exitCode": 0,
+    "stdout": "action=255 target_x=730 jumping=1 first_catch=11 captured_vy=-11.2 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 258,
+    "x": 610,
+    "jump": 0,
+    "exitCode": 0,
+    "stdout": "action=258 target_x=610 jumping=0 first_catch=1 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  },
+  {
+    "action": 258,
+    "x": 1200,
+    "jump": 0,
+    "exitCode": 0,
+    "stdout": "action=258 target_x=1200 jumping=0 first_catch=-1 captured_vy=0 ticks=32\n",
+    "stderr": ""
+  }
+]

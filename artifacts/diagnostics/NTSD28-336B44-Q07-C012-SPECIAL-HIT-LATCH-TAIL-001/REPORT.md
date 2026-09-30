@@ -1,3 +1,5 @@
+> 2026-09-30 C012限定关闭：正式根两自然Pur222反射案例和未反射控制各40tick/560声明字段，合计1680/1680；原Battle唯一special-hit-latch-scene-01 PASS/DONE，40tick/560字段与源码严格相同、首差0，tick6自然OPoint出生、tick8 owner1/group2/action30、最终尾flagfalse/NarutoHP500。原Editoridle/nonPlay、Scene clean且四保护SHA稳定。结合已有尾部/前尾4/4、真实healthless type3 2/2、两tick命中资格1/1和SelfCheck，关闭共享特殊命中尾清门；Pur30自然销毁链不证明下一tick角色再命中，整World/物理键/整场与Q07仍未关闭。本轮补证未改生产/DAT/Scene/非战斗。
+
 # NTSD28-336B44-Q07-C012 special-hit latch tail
 
 Status: `UNITY_FULL_TICK_PASS / RUNTIME_PENDING`. Parent: BATCH-04/Q07. The Unity two-tick hit chain now passes; formal-root same-state and natural Battle Scene evidence are still open, so this is not a Q07 certificate.

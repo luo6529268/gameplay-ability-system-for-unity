@@ -1,0 +1,236 @@
+{
+  "mode": "kar433",
+  "status": "DIFFERENCE",
+  "entityRows": 125,
+  "comparedFields": 2320,
+  "differences": [
+    {
+      "entitySetMismatch": {
+        "missing": [],
+        "extra": [
+          [
+            33,
+            1
+          ],
+          [
+            33,
+            50
+          ],
+          [
+            33,
+            51
+          ],
+          [
+            33,
+            52
+          ]
+        ]
+      }
+    },
+    {
+      "tick": 1,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 2,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 3,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 4,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 5,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 6,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 7,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 8,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 9,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 10,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 11,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 12,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 13,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 14,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 15,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 16,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 17,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 18,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 19,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 20,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 21,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 22,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 23,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 24,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 25,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 26,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 27,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 28,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 29,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 30,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 31,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 32,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    }
+  ],
+  "maxVelocityDifference": 0,
+  "relativeWitnesses": [
+    {
+      "tick": "10",
+      "slot": "50",
+      "oid": "315",
+      "from": "300",
+      "to": "314",
+      "raw_next": "1320",
+      "message": "native relative next=13xx selected action"
+    }
+  ],
+  "rootPlaybackPassed": true
+}

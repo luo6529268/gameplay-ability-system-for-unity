@@ -1,0 +1,11 @@
+# NTSD28-336B44-Q07-C017-ROOT-INPUT-001
+
+Status: `VERIFIED_SCOPED_ROOT_TRACE`. Parent: Q07/C017 zero-HP input, current 336B44 execution table G1. Natural40tick/8field320/320 rootPASS; positive12tick96/96 rootPASS. Controlled initialHP0 is not carried by LFR, both failures46 retained; first180tick natural record crossed a frozenhost and failed7, revision2 valid40tick retained. This diagnostic package fills formal-root observation; it does not change Unity battle rules. OriginalUnityScene remains separate.
+
+Authority: frozen root NTSD2.8-Logan.exe SHA-256 336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3 and declared playable GameSession28 / InputRouter28::step_sampled. Formal Naruto OID2 and Kankuro OID14 action297→298→OPoint OID222 are read from unchanged resources/runtime/decoded_dat. Background23 is a formal diagnostic fixture, not a Unity background deployment.
+
+Ownership: only Tools/NTSD28Q07Diagnostics/zero_hp_input_lfr_probe.cpp and this package's new artifacts/documents. Preserve existing dirty work. Do not alter formal source, EXE, DAT, Unity runtime, Scene, config, framework or nonbattle logic.
+
+Cases: controlled initial Naruto HP0/action0, HP0/action230 (formal state14), and positive HP/action0, distant healthy opponent, held Attack across the actual alternating sample. Record at most12 GameSession ticks and encode LFR. Then a bounded Kankuro poison-bomb natural OPoint/contact investigation at most180 ticks with declared initial HP, without seeding poison fields. A failed reachability attempt is recorded as such. Root LFR must use explicit action/MP overrides; only printed fields can be compared. Do not claim whole-world parity or natural contact if no applied poison contact exists.
+
+Acceptance: selected-source closure compile; frozen root same-LFR replay, exact argv/results retained; initial state and declared tick/action/HP/current Attack/position fields independently compared. Natural zero-HP attack and original Unity Battle Scene remain separate exits until observed. Run ChangeLedger validator, diff check and protected Scene/config hashes. Rollback is reviewed inversion of only the new diagnostic file after checking concurrent state; no destructive Git or cleanup.

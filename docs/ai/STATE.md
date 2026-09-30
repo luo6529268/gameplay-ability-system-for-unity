@@ -1,6 +1,70 @@
 # 2026-09-25 恢复后当前 STATE（覆盖下方候选期措辞）
 
-> **2026-09-30 Q09/P-20 BMP 自检修正 `IN_PROGRESS`：** 原 Editor 全量 `BattleRuntimeSelfCheck` 在三张模拟 BMP 图集的旧声明范围断言处先失败；当前生产 BMP 加载已显式允许超过网格容量，自检调用未传该参数。按 [Task](TASKS/NTSD28-336B44-Q09-P20-BMP-SELFCHECK-GRID-001.md) 仅修三个测试调用并重跑；Q07/F02、Q09和总目标保持开放。
+> 活跃 NTSD28-336B44-Q07-C023-AIRBORNE-SCENE-PLAY-001 / PLANNED 已先登记。已有未改v5源诊断spawn84/388从地面技能自然619(-40)→85(-22)，tick21原生0→212/counter1/Vy0，源/336B44根32tick1982声明字段一致、exit0/PASS。非物理键选招证书；此前C023自然入口未证以本条补证，原Scene仍待。无生产/DAT/Scene变化，目标ACTIVE。
+
+> 最新：2026-09-30 C024相对next门限定关闭：正式Karin433→434自然OPoint315/43→44→50→300；tick8/9为300/counter0/1，tick10以next1320选314/counter0，同步调用恰增1/site0x452390。336B44根正例32tick2288声明字段一致，直接434无生成控制707字段一致；原Battle Scene唯一relative-next-scene-01 PASS/DONE，tick5→37，125实体行14字段及32tick六个源/Unity RNG标量共1942/1942，首差0、速度差0。原Editoridle/nonPlay/noncompiling，exit/Scene clean/四保护SHA稳。既有聚焦4/4、完整tick1/1和相邻证据有效；本轮只新增诊断，不改生产/DAT/Scene/Asset/非战斗。CRT初始seed未被LFR携带与根EOF33排除均保留，非全World/checksum或物理键选招证书。Q07/总目标仍开。 下一C023原Scene及自然空中idle入口，再F02。ROOT-FRAME-001/RELATIVE-SCENE-PLAY-001均VERIFIED限定诊断；C023父门仍RUNTIME_PENDING，其他活跃项沿用总表。当前没有活跃Play/待重启请求，目标ACTIVE。
+
+> 活跃 C023-C024-ROOT-FRAME-001 / COMPILE_PASS：源/根四例已运行；Karin433自然315到next1320/314 tick10，跳跃未触发C023、正式parser可直生成空中state0/212的OP路线0。CRT seed未被LFR携带和EOF tick33明确分开。C024-RELATIVE-SCENE-PLAY-001 / PLANNED 已先登记，下一原Scene自然子体完整tick；两父门未关闭，目标ACTIVE。
+
+> 活跃 NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001 / PLANNED：诊断Task/Record已先登记，下一C023鸣人自然跳跃idle转帧、C024香燐自然OPoint315相对next有界可达性及正式根对照。已有父门Unity聚焦不重跑；无生产/DAT/Scene改动，Q07/目标ACTIVE。
+
+> 2026-09-30 C022/C029限定关闭：336B44根四自然/控制案例各32tick/960声明字段，合计3840/3840、exit0/PASS；原Scene修正输入后的kind2-catch-scene-02 PASS/DONE，32tick/960字段一致、首差0、速度差值实际0。OID52真实跳跃，tick9自然kind3抓取到130/state1700/primarykind2/counter1/Vy-12.899999，后继持有tick保持计数/Vy，挂点正常改位置，motionhold0/interaction0排除其他物理门。原Editoridle/nonPlay、Scene clean、四保护SHA稳定。首轮Scene01探针误用Attack产生防御而非跳跃，33字段差异保留；仅诊断flag按既有CharacterInputModule改Defend，无生产输入/战斗/DAT/Scene变更。当前正式parser20武器860帧无primarykind2：武器正例列条件性当前内容不可用，非全武器或全World证书。两父门限定通过，Q07/总目标仍开。 下一G1：C023/C024共享帧推进，再F02对象运动。C024只读已定位正式Karin77 frame434 OPoint315/action43→44→50→300/next1320入口，实际可达/LFR记录与母体1000生命周期未证，不能当自然证书；下一包先有界验证。新输入探针须遵循既有CharacterInputModule编码（native跳跃=Sim.Defend、攻击=Sim.Jump、防御=Sim.Attack），不按枚举名字猜。当前无活跃Play，目标ACTIVE。
+
+> C022/C029最新：Scene01诊断输入错误33diff保留，跳跃flag已按现有CaptureHeldSimulationButtons改Defend；原Editor compile8.36s/reloadready/MCPidle/nonPlay后唯一kind2-catch-scene-02已提交，等待本轮DONE/退出，不重复启动。活跃KIND2-SCENE-PLAY-001 RUNTIME_PENDING，原Scene/生产/DAT不改。根四例3840字段PASS。
+
+> C022/C029 Scene01 DIFFERENCE/DONE/exit/clean：33字段差异首tick2目标防御110而正式跳跃210，probe误用Attack flag；现有CharacterInputModule跳跃编码Defend，nativeJump index5正确。抓取tick9/计数1/挂点已匹配，非零Vy前提未满足。先只修诊断flag/recompile，再唯一Scene02，不改生产输入/DAT/Scene；根四例3840字段PASS仍有效，两父门待。
+
+> C022/C029最新：原Editor compile4.00s/reloadready，MCPidle/nonPlay确认后唯一kind2-catch-scene-01已提交；活跃KIND2-SCENE-PLAY-001 RUNTIME_PENDING，等32tick/DONE/退出。根四例3840字段及武器无primarykind2正式parser已证，两父门/Q07仍开。
+
+> C022/C029原Scene探针已编译4.00s、原Editor reload中；活跃KIND2-SCENE-PLAY-001 RUNTIME_PENDING，尚未提交Play。根四例3840字段同态；正式parser武器20/860帧无primarykind2记录条件，不造DAT。先等原Editoridle再唯一请求，两父门/Q07仍开。
+
+> C022/C029根子包限定通过：四例32tick/3840声明字段同态，实际kind3抓取及kind2计数/非零Vy保持；正式parser20武器860帧无primarykind2，武器正例条件性保留。当前活跃 `NTSD28-336B44-Q07-C022-C029-KIND2-SCENE-PLAY-001 / IN_PROGRESS` 补原Scene跳跃抓取一例，不改DAT/Scene/生产。
+
+> 当前活跃 `NTSD28-336B44-Q07-C022-C029-ROOT-KIND2-001 / IN_PROGRESS`，按已写G1优先级补C022/C029自然OID52抓取关系与正式根对照；C011/C012限定闭合不重做。两门已有聚焦GREEN，先补出口、不改DAT/Scene/生产。原Editor空闲，无活跃Play。
+
+> 2026-09-30 C012限定关闭：正式根两自然Pur222反射案例和未反射控制各40tick/560声明字段，合计1680/1680；原Battle唯一special-hit-latch-scene-01 PASS/DONE，40tick/560字段与源码严格相同、首差0，tick6自然OPoint出生、tick8 owner1/group2/action30、最终尾flagfalse/NarutoHP500。原Editoridle/nonPlay、Scene clean且四保护SHA稳定。结合已有尾部/前尾4/4、真实healthless type3 2/2、两tick命中资格1/1和SelfCheck，关闭共享特殊命中尾清门；Pur30自然销毁链不证明下一tick角色再命中，整World/物理键/整场与Q07仍未关闭。本轮补证未改生产/DAT/Scene/非战斗。 下一G1：C022 kind2关系冻结并同条件回访C029物理门，再C023/C024共享帧推进、F02对象运动；旧聚焦GREEN不重做，补正式根/自然出口。当前无待完成Play；总目标保持ACTIVE。
+
+> C012最新：根三例1680字段通过；原Editor编译8.90s/reloadready且MCP确认idle/nonPlay后，唯一special-hit-latch-scene-01已提交。活跃LATCH-SCENE-PLAY-001 RUNTIME_PENDING，等本轮DONE/退出/40tick首差，不重复启动。C012父包/Q07尚开。
+
+> C012根子包ROOT-LATCH-001限定通过：自然反射tick8/9及未反射控制，三例40tick/1680字段一致，EXE均PASS。活跃 `NTSD28-336B44-Q07-C012-LATCH-SCENE-PLAY-001 / IN_PROGRESS` 补原Scene40tick，不改生产/DAT/Scene。C012父包仍待。
+
+> 当前活跃 `NTSD28-336B44-Q07-C012-ROOT-LATCH-001 / IN_PROGRESS`：C011限定关闭后，沿C012真实type3命中producer和最终帧尾清除追踪，有界正式DAT可达性诊断；不改DAT/Scene/生产逻辑，不预先宣称根或Scene通过。
+
+> 2026-09-30 C011限定关闭：336B44正式根v3四例12tick/864声明字段PASS；原Battle Scene Lee02与Sakura01各12tick/144字段严格一致，合计288/288、首差0。李tick4 X680/Z401，小樱tick4 X740/Z401；两轮均PASS/DONE/exitedPlay/sceneCleanAfter，MCP确认原Editor idle/nonPlay。两Scene、GameConfig、ProjectBattleModeConfig四SHA保持，DAT与生产脚本未因补证修改。初次Lee01计数字段/地图边界夹具失败和根v1 EOF46原记录保留。该出口证明受控初态后的正式DAT自然帧链与相位，不声称物理键选招、全World/全画面或Q07整组完成。下一G1/C012。
+
+> 最新C011Scene：Lee02在原Scene12tick/144字段PASS/exit/clean，根v3四例864字段PASS；初次Lee01仅counter/Z夹具失败保留。活跃DAT-SCENE-PLAY-001 RUNTIME_PENDING，已在Lee02DONE/原Editoridle后提交唯一teleport-sakura-scene-01，待其结果及退出再关C011，下一C012。
+
+> 最新C011：根v3共同Z400/BG1四例12tick/864字段PASS。原Scene第一Lee01仅probeAnimSub/canonicalCounter及Z650超ownwalkregion差异（27项）保留，X/动作/时点/HP已匹配，退出clean。新探针读AttackingCounter、Z400、UTC10min，原Editor编译成功；唯一Lee02正在原Editor入场，待DONE/退出再Sakura01，不修改Scene/DAT/生产逻辑。活跃`NTSD28-336B44-Q07-C011-DAT-SCENE-PLAY-001`。
+
+> C011根子包`ROOT-TELEPORT-001`已VERIFIED_SCOPED：四例12tick/864字段同态，均根exit0/PASS；v1EOF46保留。当前活跃`DAT-SCENE-PLAY-001`原Editor编译通过，唯一Lee请求teleport-lee-scene-01已在原Scene空闲Edit确认后提交；完成退出再运行Sakura，C011/Q07仍开。
+
+> G1/Q07/C011 `NTSD28-336B44-Q07-C011-DAT-SCENE-PLAY-001` IN_PROGRESS，正式根四例12tick/864字段相同，补原BattleScene李350→242及小樱96→97两例正式内容消费，运行副本初态，不改生产规则或DAT。
+
+> 2026-09-30 下一G1/Q07/C011：`NTSD28-336B44-Q07-C011-ROOT-TELEPORT-001` IN_PROGRESS，正式Lee350→242/state400、Sakura96→97/state401及初始已在传送帧四例根对照。只新增原生诊断；Scene正式内容消费仍独立待证。
+
+> **最新G1/Q07/C017 `VERIFIED_SCOPED`：** 根自然毒弹40tick320字段及原BattleScene唯一Play320主+200附加字段相同，6出生/7命中/19HP0/28Attack65；Editor已退出/idle，Scene clean/保护SHA不变。`NTSD28-336B44-Q07-C017-ZERO-HP-INPUT-001`、`...ROOT-INPUT-001`、`...POISON-SCENE-PLAY-001`限定闭合，初始HP0回放失败46保留。**下一Q07/C011，再C012**；Q07与总目标开放。[Play报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C017-POISON-SCENE-PLAY-001/REPORT.md)。
+
+> 最新C017根子包已`VERIFIED_SCOPED_ROOT_TRACE`：自然毒弹tick7命中、19零血、27站立、28Attack；根40tick/320字段与源一致/exit0。当前活跃为`NTSD28-336B44-Q07-C017-POISON-SCENE-PLAY-001`，原Editor编译成功等待重载/Play；C017/Q07仍开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C017-ROOT-INPUT-001/REPORT.md)。
+
+> 2026-09-30 Q07/C017 `NTSD28-336B44-Q07-C017-POISON-SCENE-PLAY-001` IN_PROGRESS：正式根自然毒弹链已证40tick/320字段，原Battle Scene运行副本补证，不写场景/DAT，不手动预设毒计时。
+
+> 2026-09-30 G1/Q07/C017：`NTSD28-336B44-Q07-C017-ROOT-INPUT-001` IN_PROGRESS，补正式根零血站立/终局输入正反例，并有界调查勘九郎自然OID222毒弹；不改DAT或Unity生产代码，原Battle Play仍是独立出口。
+
+> **2026-09-30 G1/Q08/C008 `VERIFIED_SCOPED`：** 根336B44自然KO后已确认current Attack在timer142/143持续按住，host152写350/transition0，host153转换2/World152冻结；源/根12字段1836/1836。自然350同轮转换2对照11字段3938/3938。真实根报告false/46为终步必须递增tick的载体限制，trace已输出，不能称LFR全回放PASS。结合原Editor聚焦/自然双轮KO Play，C008时点限定关闭；Q08整组开放，下一G1为Q07/C017，再C011/C012。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q08-C008-ROOT-HOST-BOUNDARY-001/REPORT.md)。
+
+> **2026-09-30 Q07/F01 原Battle Scene限定Play `VERIFIED_SCOPED`：** 原Editor编译成功，唯一Play在运行副本配置Guren/Lee后相对tick11出生OID619、tick12 Lee HP500→450/action186；20tick六字段对正式源120/120，无首差。Editor退出Play、保存Scene clean且SHA不变。F01字段门可限定关闭，物理按键/整场/Q07仍开。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F01-GUREN-CAG-SCENE-PLAY-001/REPORT.md)。
+
+> **2026-09-30 Q07/F01 正式根自然出口 `VERIFIED_SCOPED`：** 正式Guren action150自然生成OID619 tick11，CAG kind0 effect1/bdefend61在tick12命中防御state7的Lee，源侧记录非防御/HP500→450。冻结336B44根EXE同LFR回放exit0、报告PASS，tick12直接记录slot50→1 applied/伤害50；声明的20 tick 源/根 action、HP、子体字段120/120相等。根trace不直接打印bdefend，内建`nativeParityClaim=false`。只关闭这个根见证子包；Unity原Battle Scene自然Play、F01/Q07仍开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F01-GUREN-CAG-ROOT-001/REPORT.md)。
+
+> **2026-09-30 Q07/F01 `VERIFIED_SCOPED`：** 新版权威普通防御 `bdefend<61`；Unity 共用 resolver 和两个生产调用口已单点由 effect 改为 bdefend。原Editor精确RED2/2→GREEN2/2、相邻18/18、全量自检PASS；正式根自然CAG与原Battle Scene限定Play都完成20tick六字段120/120。只关闭F01字段门首差，Q07整组与物理按键/整场仍开。场景/DAT/非战斗不动。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F01-BDEFEND-DEFENSE-GATE-001/REPORT.md)。
+
+> **2026-09-30 Q07/F02 完整tick对照 `RUNTIME_PENDING`：** 正式/Unity暂存OID600 DAT同 SHA `2641D21E…E5C118A`。所选playable源码完整tick四组编译运行，原Editor生产Driver局部同初态4/4、2048比例增补后5/5 PASS；源规则X与物理投影分域符合预期。正式LFR不含初始Vx，不能伪称合成Vx20是根EXE同态；自然武器生成、原Battle Scene Play及整场同态仍待。Q07与总目标开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F02-OID600-FULL-TICK-PAIR-001/REPORT.md)。
+
+> **2026-09-30 Q07 最新自动自检出口：** 原 Editor 聚焦 C017 4/4、C012 3/3，P-20 2/2；BMP、零血AI、F02硬着地及C012旧测试契约逐一回基线后，`BattleRuntimeSelfCheck` 在06:28:29 UTC新鲜返回 **PASS**。四轮早期 FAIL 仍留证，生产战斗代码在这些自检修正中未改。F02/C012及Q07整组仍缺正式根同状态和自然Play，不升 `VERIFIED`。[F02报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F02-FAST-WEAPON-ACTION-001/REPORT.md)。
+
+> **2026-09-30 Q07/C017 AI 自检 `FOCUSED_TEST_PASS`：** 零血 data-oriented 上一帧键旧断言已按新版无全局HP门修正，原Editor C017精确4/4 PASS。全量自检越过 `R3-AI-LIFE-01` 后在 F02 高速 type4 落地矩阵旧断言 FAIL；整份自检仍 FAIL，F02/Q07/总目标不闭。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-C017-DEAD-AI-SELFCHECK-001/REPORT.md)。
+
+> **2026-09-30 Q09/P-20 BMP 自检 `FOCUSED_TEST_PASS`：** 三个旧 BMP 测试调用已显式使用生产既有声明范围索引；原 Editor P-20 聚焦2/2 PASS。全量 `BattleRuntimeSelfCheck` 已跨过原 BMP 断言，但在独立的 `R3-AI-LIFE-01` HP=0 AI 输入断言处 FAIL；整份自检和 Q07/F02、Q09、总目标仍开放。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q09-P20-BMP-SELFCHECK-GRID-001/REPORT.md)。
 
 > **2026-09-30 Q07/F02 最新 `UNITY_FOCUSED_PASS / RUNTIME_PENDING`：** 正式OID600/state1000无hit_Fa；Unity普通/共享武器物理现减速后共用选招，并按原帧处理落地覆盖。原Editor RED11/30（另4例X期望夹具更正），最终F02与相邻类50/50 PASS，含既有武器自检分支隔离调用。全量SelfCheck在更早图片预热分支FAIL；正式根EXE同态、OID600完整tick、自然Play及Q07整组待。[报告](../../artifacts/diagnostics/NTSD28-336B44-Q07-F02-FAST-WEAPON-ACTION-001/REPORT.md)。
 

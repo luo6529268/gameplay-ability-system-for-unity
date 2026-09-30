@@ -298,7 +298,7 @@ namespace NTSD.Animation.LF2Objects
             BattleOrdinaryDefenseResult result =
                 BattleOrdinaryDefenseResolver.Resolve(
                     itr.kind,
-                    itr.effect,
+                    itr.bdefend,
                     itr.spark,
                     itr.dbdefend,
                     itr.dvx,

@@ -1,9 +1,10 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-C012-SPECIAL-HIT-LATCH-TAIL-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/BattleEcsCharacterPostFrameTailPassEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs
 authority: selected 336B44 formal NTSD 2.8-Logan release playable C012 active-entity special-hit latch tail
 evidence: docs/ai/TASKS/NTSD28-336B44-Q07-C012-SPECIAL-HIT-LATCH-TAIL-001.md
 -->
@@ -31,3 +32,12 @@ Corrected original-Editor job `bcfc0fb61f17468bbe8ba6c106304322` passed 1/1, 0 f
 Post-run fixture audit before another test edit: the earlier `ActiveEntityTail_ClearsSpecialHitLatchForCharacterAndHealthlessType3` instantiated `LF2OtherObject`, whose default `Health` is non-null and whose object enum is type5; setting only `Runtime.ObjType=3` did not establish the claimed healthless type3 path. Replace it in the already-owned test file with a test-only subclass whose object enum is type3 and whose `Health` is set null after the base constructor. Assert those preconditions, then rerun the two parameterized tail cases in the original Editor. No production edit is needed.
 
 The corrected original-Editor tail job `b90ee5f82a6a491bb06ddca77e88b7fa` passed both Legacy and DataOriented cases 2/2, 0 failed/skipped. `HealthlessType3Entity` now has object enum type3 and `Health == null` asserted before calling the shared tail, and both its latch and the character latch clear. Earlier 4/4 includes the same two cases before fixture correction; cite this final 2/2 for the healthless claim. The complete type3 hit test job `bcfc0fb61f17468bbe8ba6c106304322` used the actual `LF2SpecialAttack` consumer and remains 1/1. No further production changes.
+
+2026-09-30 self-check extension declared before editing: a fresh full `BattleRuntimeSelfCheck` crossed F02's transformed-landing matrix, then failed at `CheckAudit7HitConfirmCarrierTail` because this older assertion still requires the type3 `SpecialHitLatch0EB` to persist after `EntityPostFrameTailAll`. Current selected formal `simulation_tick_driver.cpp` active-slot tail explicitly writes `special_hit_latch_0eb=false` after hit consumers, and this C012 package's shared Unity tail already does the same. Add only `BattleRuntimeSelfCheck.cs` to this ID's test ownership; change the one post-tail type3 latch predicate and message to expect cleared, retaining the pre-tail positive latch and independent weapon/MP controls. Do not change production, DAT or assets. Re-run the relevant exact tail tests and fresh full self-check; any later failure remains a failure.
+
+Original Editor result: the stale post-tail type3 assertion alone now expects latch false. The exact Legacy/DataOriented tail and two-complete-hit-tick job `212acf233e684324b761b350e972f727` passed 3/3. A fresh `BattleRuntimeSelfCheck` request then returned `PASS` at 2026-09-30 06:28:29 UTC; raw files are in this package's diagnostics folder. The initial test command timed out after 30 seconds but the Editor reported a live job id, which was polled to terminal success; it was not restarted. This changes only a historical self-check expectation, not production C012 or formal-root/natural Play status. Package remains `RUNTIME_PENDING` for those higher gates.
+
+
+2026-09-30 C012限定关闭：正式根两自然Pur222反射案例和未反射控制各40tick/560声明字段，合计1680/1680；原Battle唯一special-hit-latch-scene-01 PASS/DONE，40tick/560字段与源码严格相同、首差0，tick6自然OPoint出生、tick8 owner1/group2/action30、最终尾flagfalse/NarutoHP500。原Editoridle/nonPlay、Scene clean且四保护SHA稳定。结合已有尾部/前尾4/4、真实healthless type3 2/2、两tick命中资格1/1和SelfCheck，关闭共享特殊命中尾清门；Pur30自然销毁链不证明下一tick角色再命中，整World/物理键/整场与Q07仍未关闭。本轮补证未改生产/DAT/Scene/非战斗。
+
+Final governance checkpoint: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location).Path PASS/exit0,1058 records/18 governed code files; git -c core.safecrlf=false diff --check exit0. OriginalEditor idle/nonPlay, no compile/reloadpending; fourprotectedSHAs unchanged. These checks do not extend the declared behavior scope.

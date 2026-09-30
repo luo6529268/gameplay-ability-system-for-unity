@@ -1,0 +1,93 @@
+{
+  "case": "held",
+  "sourceRows": 154,
+  "rootRowsIncludingInitial": 154,
+  "comparedHostRows": 153,
+  "comparisons": 1683,
+  "equalComparisons": 1683,
+  "firstDifference": null,
+  "differences": [],
+  "rootPassed": false,
+  "rootFailureCode": 46,
+  "rootError": "LFR playback GameSession did not advance exactly one tick",
+  "nativeParityClaim": false,
+  "terminalCarrierLimitationExpected": true,
+  "rootAuthoredHit": [
+    {
+      "hostStep": 8,
+      "event": {
+        "kind": "hit",
+        "status": "applied",
+        "attacker": 0,
+        "target": 1,
+        "candidate": 0,
+        "hpDamage": 20,
+        "mpDamage": 0,
+        "knockout": {
+          "battleTimeTicks": 7,
+          "sourceObjectType": 0,
+          "fourOwnerSlot": 0,
+          "sourceSlot": 0,
+          "victimSlot": 1,
+          "creditSlot": 0
+        }
+      }
+    }
+  ],
+  "lastBoundaryRows": [
+    {
+      "hostStep": 151,
+      "worldTick": 151,
+      "flow": {
+        "timer": 143,
+        "phase": 2,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 143
+      }
+    },
+    {
+      "hostStep": 152,
+      "worldTick": 152,
+      "flow": {
+        "timer": 350,
+        "phase": 3,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": false,
+        "transitionStarted": false,
+        "upperSceneEntered": false,
+        "transitionState": 0,
+        "timerAfter": 350
+      }
+    },
+    {
+      "hostStep": 153,
+      "worldTick": 152,
+      "flow": {
+        "timer": 350,
+        "phase": 3,
+        "winnerGroup": 1,
+        "endSignal": false,
+        "resultRecord": false,
+        "resultComplete": true,
+        "transitionStarted": true,
+        "upperSceneEntered": false,
+        "transitionState": 2,
+        "timerAfter": 0
+      }
+    }
+  ],
+  "sha256": {
+    "source-host-rows.csv": "94802CC94F693CB8C6FC5D4C2E477E3F803E168DCCAFA4182A87B144B6E3216E",
+    "source-packets.lfr": "E2840CC4F7BBE04293DBA5E23770DE813E09E7302CAEB4C471FB51D6BCD6506B",
+    "root-report.json": "4176FD90A65258B7896E9F068B70E9181309EBB5514A99243AEE0143BE125260",
+    "root-trace.jsonl": "56A3CE8E10DF7B9087436A0644D63B163888BB8EBE1BAF64B772584527F7B714"
+  }
+}

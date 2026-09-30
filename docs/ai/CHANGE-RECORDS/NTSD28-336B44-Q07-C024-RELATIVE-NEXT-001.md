@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-C024-RELATIVE-NEXT-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28C024RelativeNextEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
@@ -21,3 +21,9 @@ After domain reload, exact original-Editor C024 job `786e3d29c11248aa861d6330432
 The owned test then gained a current OID315 complete-tick case without another production edit. Original Editor job `1c52448b091745d08c51f5b29d56ade5` passed1/1 through `NTSDBattleTickSystem.RunReleaseTick`: selected action/latch313, counter0, one synchronized call at `0x00452390u`. Tundra compiled the test-only addition with zero errors. The previous focused4/4 and adjacent jobs were not rerun because production did not change. Evidence tier advances to `UNITY_FULL_TICK_PASS / RUNTIME_PENDING`; natural Battle Play and formal root EXE same-state trace still absent. This paragraph supersedes the previous no-full-tick statement.
 
 Final checks after test-only addition: `Tools/Validate-ChangeLedger.ps1` passed (1,038 records/85 governed code files); `git -c core.safecrlf=false diff --check` passed. Battle/Menu Scene and GameConfig/ProjectBattleModeConfig SHA-256 exactly matched the protected prior values recorded in the report. Original Editor bridge returned ready/non-reloading. No DAT, image, Scene, config or nonbattle edit was made by this package.
+
+
+2026-09-30 C024相对next门限定关闭：正式Karin433→434自然OPoint315/43→44→50→300；tick8/9为300/counter0/1，tick10以next1320选314/counter0，同步调用恰增1/site0x452390。336B44根正例32tick2288声明字段一致，直接434无生成控制707字段一致；原Battle Scene唯一relative-next-scene-01 PASS/DONE，tick5→37，125实体行14字段及32tick六个源/Unity RNG标量共1942/1942，首差0、速度差0。原Editoridle/nonPlay/noncompiling，exit/Scene clean/四保护SHA稳。既有聚焦4/4、完整tick1/1和相邻证据有效；本轮只新增诊断，不改生产/DAT/Scene/Asset/非战斗。CRT初始seed未被LFR携带与根EOF33排除均保留，非全World/checksum或物理键选招证书。Q07/总目标仍开。
+
+
+最终检查（2026-09-30）：`Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location).Path` PASS，1062条Record/22个受治理代码文件，输出在RELATIVE-SCENE-PLAY-001/ledger-check.txt；`git -c core.safecrlf=false diff --check`退出0。诊断C#在原Editor编译0错，Scene01完成32tick、1942声明字段通过/正常退出/四SHA稳。源诊断各版本实际compile结果留证，当前源码对应v5快照。未跑无关角色/全量测试，既有聚焦证据没有被新生产改动失效。本轮新增诊断和证据/进度文档，没有生产脚本、DAT、Scene、配置Asset或非战斗改动。总目标ACTIVE，C023原Scene/自然门、F02及其余总表项继续开放。
