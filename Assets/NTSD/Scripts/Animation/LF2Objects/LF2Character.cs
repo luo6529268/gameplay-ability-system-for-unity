@@ -169,7 +169,7 @@ namespace NTSD.Animation.LF2Objects
             if (!useCanonicalBattlePath && Frame?.D != null && spriteWidthPx > 0f)
                 Runtime.UpdateSpriteOrigin(Frame.D.centerx, Frame.D.centery, spriteWidthPx);
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
-            ApplyCurrentDatType0State1218EnvironmentDamage(
+            ApplyCurrentDatType0State1218LandingPrelude(
                 Frame?.D,
                 stepResult);
             bool state1218ContactResolved =
@@ -203,6 +203,8 @@ namespace NTSD.Animation.LF2Objects
                 Frame?.D,
                 stepResult,
                 tickIndex);
+
+            ApplyCurrentDatType0EnvironmentPhysicsTail();
 
             Runtime.SyncIntegerPosition();
         }

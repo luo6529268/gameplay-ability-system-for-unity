@@ -36,7 +36,7 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
-        public void ExactAlreadyGroundedState12_UsesSoft230AndDefersStatus()
+        public void ExactAlreadyGroundedState12_PreservesActionAndDefersStatus()
         {
             LF2Character entity = CreateExact(170, LF2States.Falling);
             Prepare(entity, -10, -10.0, 6.0, 0.0);
@@ -44,19 +44,34 @@ namespace NTSD.Test.Editor
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
 
-            Assert.That(entity.Frame.N, Is.EqualTo(230));
+            Assert.That(entity.Frame.N, Is.EqualTo(170));
             Assert.That(entity.Runtime.Y, Is.EqualTo(-10.0));
-            Assert.That(entity.Runtime.Vx, Is.EqualTo(5.0 / 3.0));
+            Assert.That(entity.Runtime.Vx, Is.EqualTo(5.0));
             Assert.That(entity.Runtime.Vy, Is.Zero);
-            Assert.That(entity.AttackingCounter, Is.Zero);
+            Assert.That(entity.AttackingCounter, Is.EqualTo(9));
             AssertPendingStatus(entity.Runtime);
+        }
+
+        [TestCase(170, LF2States.Falling)]
+        [TestCase(200, LF2States.Burning)]
+        public void ExactFloorEquality_PreservesCurrentActionAndCounter(int action, int state)
+        {
+            LF2Character entity = CreateExact(action, state);
+            Prepare(entity, 0, -1.0, 0.0, 1.0);
+
+            Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
+
+            Assert.That(entity.Runtime.Y, Is.Zero);
+            Assert.That(entity.Frame.N, Is.EqualTo(action));
+            Assert.That(entity.AttackingCounter, Is.EqualTo(9));
+            Assert.That(entity.Runtime.Vy, Is.EqualTo(1.0));
         }
 
         [Test]
         public void SharedCrossingState12_CurrentAction186OrAboveUsesSoft231()
         {
             ProbeOther entity = CreateShared(187, LF2States.Falling);
-            Prepare(entity, 0, -1.0, 6.0, 1.0);
+            Prepare(entity, 0, -1.0, 6.0, 2.0);
             SetPendingStatus(entity.Runtime);
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
@@ -68,15 +83,15 @@ namespace NTSD.Test.Editor
             AssertPendingStatus(entity.Runtime);
         }
 
-        [TestCase(9.0001, 1.0)]
-        [TestCase(-9.0001, 1.0)]
+        [TestCase(9.0001, 2.0)]
+        [TestCase(-9.0001, 2.0)]
         [TestCase(0.0, 11.0001)]
         public void State12HardThresholds_AreStrictAndUse185WithoutGain(
             double vx,
             double vy)
         {
             LF2Character entity = CreateExact(170, LF2States.Falling);
-            Prepare(entity, 0, -vy, vx, vy);
+            Prepare(entity, 0, -vy + 1.0, vx, vy);
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
 
@@ -90,7 +105,7 @@ namespace NTSD.Test.Editor
         public void State12HardWithoutGain_CurrentAction186OrAboveUses191()
         {
             LF2Character entity = CreateExact(187, LF2States.Falling);
-            Prepare(entity, 0, -12.0, 0.0, 12.0);
+            Prepare(entity, 0, -11.0, 0.0, 12.0);
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
 
@@ -103,7 +118,7 @@ namespace NTSD.Test.Editor
         public void State12HardWithGain_ConsumesMotionAndUsesPickedAction()
         {
             LF2Character entity = CreateExact(187, LF2States.Falling);
-            Prepare(entity, 0, -12.0, 10.0, 12.0, 2.0);
+            Prepare(entity, 0, -11.0, 10.0, 12.0, 2.0);
             SetPendingStatus(entity.Runtime);
             entity.Runtime.StatusDx1C0 = 560;
             entity.Runtime.StatusDy1C4 = 501;
@@ -128,7 +143,7 @@ namespace NTSD.Test.Editor
         public void State18AlwaysHardAndUsesPickingActionWhenGainIsPending()
         {
             ProbeOther entity = CreateShared(200, LF2States.Burning);
-            Prepare(entity, 0, -1.0, 3.0, 1.0);
+            Prepare(entity, 0, -1.0, 3.0, 2.0);
             SetPendingStatus(entity.Runtime);
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);

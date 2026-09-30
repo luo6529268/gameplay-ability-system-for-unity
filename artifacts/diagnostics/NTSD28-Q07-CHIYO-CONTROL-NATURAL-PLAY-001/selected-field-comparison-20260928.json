@@ -1,0 +1,41 @@
+{
+  "comparison": "same relative tick; source first puppet slot:action vs Unity first runtime-slot OID854 action; excludes native MP, complete World/RNG and image",
+  "formalCsvSha256": "CA2A236CFB1C4D32198D32E593528F0D54F9FA16A85529FE0032884047246308",
+  "fields": [
+    {
+      "matches": 120,
+      "firstDifference": null,
+      "field": "inputPhase",
+      "total": 120
+    },
+    {
+      "matches": 119,
+      "firstDifference": {
+        "relativeTick": 54,
+        "formal": 60,
+        "unity": 65
+      },
+      "field": "chiyoAction",
+      "total": 120
+    },
+    {
+      "matches": 120,
+      "firstDifference": null,
+      "field": "oid419Count",
+      "total": 120
+    },
+    {
+      "matches": 120,
+      "firstDifference": null,
+      "field": "oid854Count",
+      "total": 120
+    },
+    {
+      "matches": 120,
+      "firstDifference": null,
+      "field": "puppetFirstAction",
+      "total": 120
+    }
+  ],
+  "unityReportSha256": "A088354FA242488B72612D6DB35D22BA4FD807C1B8A89284FB80B5AFCFB161A2"
+}

@@ -82,7 +82,7 @@ namespace NTSD.Test
         {
             object before = Capture(root);
             string file = Path.Combine(root, "vfs/c/head.png");
-            File.WriteAllBytes(file, File.ReadAllBytes(Path.Combine(ProjectRoot, "Temp/NTSD28PngDecode/generated/palette-8-filter-0.png")));
+            File.WriteAllBytes(file, imageBytes.Concat(new byte[] { 0x42 }).ToArray());
             object after = Capture(root);
             Assert.That(Property(Property(before, "Catalog"), "DefinitionFingerprint"), Is.EqualTo(Property(Property(after, "Catalog"), "DefinitionFingerprint")));
             Assert.That(Property(before, "VisualFingerprint"), Is.Not.EqualTo(Property(after, "VisualFingerprint")));
@@ -109,10 +109,49 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void MissingRequiredImage_DoesNotCreateCandidate()
+        public void MissingBodySheet_IsCapturedAndBecomesStaleWhenRestored()
         {
             string dat = Path.Combine(root, "decoded_dat/a.dat");
             File.WriteAllText(dat, File.ReadAllText(dat).Replace("c/body.png", "c/missing.png"));
+            var missing = (LoganVisualContentCandidate)Capture(root);
+            Verify(missing);
+            Assert.That(missing.Images.Count, Is.EqualTo(3));
+            Assert.That(missing.Images.Single(image =>
+                    Path.GetFileName(image.Path) == "missing.png").Sha256,
+                Is.EqualTo(LoganVisualContentCandidate.MissingBodySheetIdentity));
+
+            File.WriteAllBytes(Path.Combine(root, "vfs/c/missing.png"), imageBytes);
+            Assert.Throws<InvalidDataException>(() => Verify(missing));
+            var restored = (LoganVisualContentCandidate)Capture(root);
+            Verify(restored);
+            Assert.That(restored.VisualFingerprint,
+                Is.Not.EqualTo(missing.VisualFingerprint));
+            Assert.That(restored.Images.Single(image =>
+                    Path.GetFileName(image.Path) == "missing.png").Sha256,
+                Is.EqualTo(Hash(imageBytes)));
+        }
+
+        [Test]
+        public void PresentBodySheet_BecomesStaleWhenMissing()
+        {
+            var present = (LoganVisualContentCandidate)Capture(root);
+            string body = Path.Combine(root, "vfs/c/body.png");
+            File.Move(body, Path.Combine(root, "vfs/c/body-fixture-moved.png"));
+
+            Assert.Throws<InvalidDataException>(() => Verify(present));
+            var missing = (LoganVisualContentCandidate)Capture(root);
+            Verify(missing);
+            Assert.That(missing.VisualFingerprint,
+                Is.Not.EqualTo(present.VisualFingerprint));
+        }
+
+        [TestCase("head")]
+        [TestCase("small")]
+        public void MissingRequiredUiImage_StillRejectsCandidate(string role)
+        {
+            string dat = Path.Combine(root, "decoded_dat/a.dat");
+            File.WriteAllText(dat, File.ReadAllText(dat).Replace(
+                "c/" + role + ".png", "c/missing-" + role + ".png"));
             Assert.Throws<FileNotFoundException>(() => Capture(root));
         }
 
@@ -198,6 +237,26 @@ namespace NTSD.Test
 
             File.Delete(systemPath);
             Assert.Throws<InvalidDataException>(() => Capture(root));
+        }
+
+        [Test]
+        public void MissingNativeSparkImage_StillRejectsCandidate()
+        {
+            string datDirectory = Path.Combine(root, "decoded_dat/data");
+            Directory.CreateDirectory(datDirectory);
+            Directory.CreateDirectory(Path.Combine(root, "vfs/sprite/UI"));
+            string[] resourceRows = Enumerable.Range(0, 44)
+                .Select(index => "pic: " + (index == 43
+                    ? @"sprite\UI\SPARK.png" :
+                    index >= 16 && index <= 21 ? "c/body.png" :
+                    "unused/" + index + ".png"))
+                .ToArray();
+            File.WriteAllText(Path.Combine(datDirectory, "resource.dat"),
+                "<bmp_begin>\n" + string.Join("\n", resourceRows) + "\n<bmp_end>\n");
+            File.WriteAllText(Path.Combine(datDirectory, "system.dat"),
+                "spark_w: 99\nspark_h: 79\n");
+
+            Assert.Throws<FileNotFoundException>(() => Capture(root));
         }
     }
 }

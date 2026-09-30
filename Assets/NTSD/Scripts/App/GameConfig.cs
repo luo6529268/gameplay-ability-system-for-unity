@@ -101,8 +101,8 @@ namespace NTSD.App
         [Tooltip("Unity 战斗场景逻辑宽度（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
         public int BattleStageWidthPx = 800;
         [Tooltip("固定全背景战斗取景的水平参考像素宽度；1333保持正式奔跑位移，当前Training完整背景为2048。")]
-        public int BattleFixedViewRunReferenceWidthPx = 1333;
-        public int BattleFixedViewRunReferenceHeightPx = 730;
+        public int BattleFixedViewRunReferenceWidthPx = NTSD.Simulation.BattleSpatialProjection.FormalViewWidthPx;
+        public int BattleFixedViewRunReferenceHeightPx = NTSD.Simulation.BattleSpatialProjection.FormalViewHeightPx;
         [Tooltip("Unity 战斗场景逻辑 Z 最小值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]
         public int BattleStageZMinPx = 180;
         [Tooltip("Unity 战斗场景逻辑 Z 最大值（像素）。仅使用 Unity 配置，不读取 C++ 背景 dat。")]

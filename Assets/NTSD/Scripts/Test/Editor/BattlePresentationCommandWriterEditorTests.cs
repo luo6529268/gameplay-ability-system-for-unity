@@ -290,6 +290,85 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void LowHpBPoint_LegacyCommandFollowsBodyWithoutChangingShadowBuild()
+        {
+            var points = new BattleBloodPointCatalog(new[]
+            {
+                new BattleBloodPointValue(7, 9),
+            });
+            foreach (BattlePresentationBackendMode mode in new[]
+            {
+                BattlePresentationBackendMode.LegacyOnly,
+                BattlePresentationBackendMode.CentralShadowBuild,
+            })
+            {
+                var coordinator = new BattlePresentationCoordinator();
+                coordinator.SetMode(mode);
+                var frame = new BattlePresentationFrame();
+                Reset(frame, BattleCommonVisualCatalog.Empty);
+                AddEntity(frame, CreateBleedEntity(points, false, 33, true, 0));
+                coordinator.BuildCommandsForSelfCheck(frame);
+
+                int bodyIndex = -1;
+                int markIndex = -1;
+                for (int index = 0; index < frame.CommandCount; index++)
+                {
+                    BattleRenderCommand command = frame.GetCommand(index);
+                    if (command.Type == BattleRenderCommandType.Entity)
+                        bodyIndex = index;
+                    if (command.Type == BattleRenderCommandType.BleedMark)
+                        markIndex = index;
+                }
+
+                Assert.That(bodyIndex, Is.GreaterThanOrEqualTo(0));
+                if (mode == BattlePresentationBackendMode.LegacyOnly)
+                {
+                    Assert.That(markIndex, Is.GreaterThan(bodyIndex));
+                    Assert.That(frame.GetCommand(markIndex).SortOrder,
+                        Is.EqualTo(frame.GetCommand(bodyIndex).SortOrder + 1));
+                }
+                else
+                {
+                    Assert.That(markIndex, Is.EqualTo(-1));
+                }
+            }
+        }
+
+        [Test]
+        public void LegacyBleedOwner_PreparesSolidMarkersAndClearsIdempotently()
+        {
+            GameObject host = new GameObject("LegacyBleedOwnerTest");
+            try
+            {
+                BattleEntityOverlayRenderer owner =
+                    host.AddComponent<BattleEntityOverlayRenderer>();
+                owner.PrepareBattleCapacity(3);
+                SpriteRenderer[] markers =
+                    host.GetComponentsInChildren<SpriteRenderer>(true);
+                Assert.That(markers.Length, Is.EqualTo(3));
+                foreach (SpriteRenderer marker in markers)
+                {
+                    Assert.That(marker.sprite, Is.Not.Null);
+                    Assert.That(marker.sprite.texture,
+                        Is.SameAs(Texture2D.whiteTexture));
+                    Assert.That(marker.gameObject.activeSelf, Is.False);
+                }
+
+                owner.PrepareBattleCapacity(3);
+                Assert.That(host.GetComponentsInChildren<SpriteRenderer>(true).Length,
+                    Is.EqualTo(3));
+                owner.StopForBattleShutdown();
+                owner.StopForBattleShutdown();
+                Assert.That(owner.RejectedBleedMarkCountForDiagnostics,
+                    Is.EqualTo(0));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void PlatformShadowOffset_MovesShadowOnlyAndSurvivesSnapshotCopies()
         {
             BattleCommonVisualCatalog catalog = CreateCatalog(0, includeShadow: true);
@@ -659,6 +738,48 @@ namespace NTSD.Test
                 BindingFlags.Static | BindingFlags.NonPublic);
             Assert.That(check, Is.Not.Null);
             Assert.DoesNotThrow(() => check.Invoke(null, null));
+        }
+
+        [Test]
+        public void ReviveLivesCounter_UsesVisibleCameraLeftMarginWithoutHidingNameplate()
+        {
+            var labels = new char[
+                BattleEntityOverlayLayout.SlotCount,
+                BattleEntityOverlayLayout.SlotLabelCharacterCapacity];
+            labels[0, 0] = 'P';
+            var labelState = new int[BattleEntityOverlayLayout.SlotCount];
+            var glyphs = new BattleEntityOverlayGlyph[
+                BattleEntityOverlayLayout.MaximumGlyphCount];
+            var beyondLeft = new BattleEntityOverlayRuntimeSlot(
+                0, 2, 1, 0, 2, 0, 105, 0, 287, 0, 20, 0,
+                visibleLeftPixel: 100, visibleRightPixel: 500);
+            var atMargin = new BattleEntityOverlayRuntimeSlot(
+                0, 2, 1, 0, 2, 0, 106, 0, 287, 0, 20, 0,
+                visibleLeftPixel: 100, visibleRightPixel: 500);
+            var suppressedByMode = new BattleEntityOverlayRuntimeSlot(
+                0, 2, 1, 0, 2, 0, 106, 0, 287, 0, 20, 0,
+                visibleLeftPixel: 100, visibleRightPixel: 500,
+                selectedModeReviveLivesGate54: 3);
+
+            Assert.That(BattleEntityOverlayLayout.TryBuild(
+                in beyondLeft, labels, labelState, glyphs, out int beyondCount),
+                Is.True);
+            Assert.That(beyondCount, Is.EqualTo(1));
+            Assert.That(glyphs[0].Type, Is.EqualTo(BattleEntityOverlayGlyphType.Label));
+
+            Assert.That(BattleEntityOverlayLayout.TryBuild(
+                in atMargin, labels, labelState, glyphs, out int marginCount),
+                Is.True);
+            Assert.That(marginCount, Is.EqualTo(3));
+            Assert.That(glyphs[0].Type, Is.EqualTo(BattleEntityOverlayGlyphType.Counter));
+            Assert.That(glyphs[0].PixelX, Is.EqualTo(73));
+            Assert.That(glyphs[2].Type, Is.EqualTo(BattleEntityOverlayGlyphType.Label));
+
+            Assert.That(BattleEntityOverlayLayout.TryBuild(
+                in suppressedByMode, labels, labelState, glyphs,
+                out int suppressedCount), Is.True);
+            Assert.That(suppressedCount, Is.EqualTo(1));
+            Assert.That(glyphs[0].Type, Is.EqualTo(BattleEntityOverlayGlyphType.Label));
         }
 
         [Test]

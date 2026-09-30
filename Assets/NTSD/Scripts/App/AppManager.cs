@@ -337,7 +337,7 @@ namespace NTSD.App
                 lf2.PS.vy = 0;
                 lf2.PS.vz = 0.1;
                 lf2.HitStun = 75;
-                SyncParticipantBirthPosition(lf2, spawnX, spawnZ);
+                SyncParticipantPhysicalBirthPosition(lf2, spawnX, spawnZ);
 
                 BattleSlotRuntimeState rosterSlot = rosterSlots[i];
                 if (rosterSlot != null && rosterSlot.Active)
@@ -348,7 +348,20 @@ namespace NTSD.App
             }
         }
 
-        internal static void SyncParticipantBirthPosition(LF2Character participant, double spawnX, int spawnZ)
+        internal static void SyncParticipantPhysicalBirthPosition(
+            LF2Character participant,
+            double physicalX,
+            int physicalZ)
+        {
+            BattleSpatialProjection projection =
+                participant.RegisteredWorldForSimulation?.SpatialProjection ?? BattleSpatialProjection.Identity;
+            SyncParticipantBirthPosition(
+                participant,
+                projection.ViewToSourceX(physicalX),
+                projection.ViewToSourceZ(physicalZ));
+        }
+
+        internal static void SyncParticipantBirthPosition(LF2Character participant, double spawnX, double spawnZ)
         {
             participant.Runtime.SyncIntegerPosition();
             participant.Runtime.SetSourceRulePosition(spawnX, spawnZ);

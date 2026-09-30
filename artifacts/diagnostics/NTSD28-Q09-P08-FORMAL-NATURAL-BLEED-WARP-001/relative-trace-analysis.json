@@ -1,0 +1,24 @@
+{
+  "comparison": "selected action, HP, mark presence only; distinct initial worlds",
+  "alignedTickOffset": 4,
+  "rowsCompared": 21,
+  "rowsMatching": 20,
+  "mismatches": [
+    {
+      "sourceTick": 4,
+      "unityTick": 8,
+      "source": [
+        511,
+        1,
+        180,
+        false
+      ],
+      "unity": [
+        511,
+        0,
+        180,
+        false
+      ]
+    }
+  ]
+}

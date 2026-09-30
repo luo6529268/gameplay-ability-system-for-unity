@@ -85,24 +85,19 @@ namespace NTSD.Simulation
             if (runtime == null || !world.UsesNTSD28NativeInputPipeline)
                 return;
 
-            bool deadType0 = runtime.ObjType == 0 && runtime.HP <= 0;
-            if (!deadType0)
-                NTSD28NativeInputPreprocessor.ApplyCurrentButtonRemap(runtime);
+            NTSD28NativeInputPreprocessor.ApplyCurrentButtonRemap(runtime);
             bool suppressJumpEdge =
                 NTSD28NativeInputPreprocessor.ShouldSuppressJumpEdge(runtime);
             NTSD28NativeComboStateMachine.ProcessSampledInput(
                 runtime,
                 suppressJumpEdge);
-            if (!deadType0)
+            world.CharacterActionWriter.RouteNativeComboAction(entity);
+            world.CharacterActionWriter.RouteNativeThreeButtonFields(entity);
+            world.CharacterActionWriter.RouteNativeDirectionFields(entity);
+            if (!world.CharacterActionWriter.RouteNativeGroundBuiltins(entity))
             {
-                world.CharacterActionWriter.RouteNativeComboAction(entity);
-                world.CharacterActionWriter.RouteNativeThreeButtonFields(entity);
-                world.CharacterActionWriter.RouteNativeDirectionFields(entity);
-                if (!world.CharacterActionWriter.RouteNativeGroundBuiltins(entity))
-                {
-                    world.CharacterActionWriter
-                        .RouteNativeAirDashRedirectBuiltins(entity);
-                }
+                world.CharacterActionWriter
+                    .RouteNativeAirDashRedirectBuiltins(entity);
             }
             NTSD28NativeComboStateMachine.ProjectExactStateToLegacy(runtime);
             if (entity.AiControlled)

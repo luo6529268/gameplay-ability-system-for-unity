@@ -25,9 +25,15 @@ namespace NTSD.Simulation.Ecs
 
             if (results.NativeResultPhase == 3)
             {
+                results.NativeResultOutputTimer = results.NativeResultTimer;
+                if (results.NativeResultTimer == 350 &&
+                    results.NativeTransitionState == 0)
+                {
+                    BeginNativeResultTransition(results);
+                    return;
+                }
                 if (results.NativeTransitionState == 2)
                     results.NativeTransitionState = 1;
-                results.NativeResultOutputTimer = results.NativeResultTimer;
                 return;
             }
 
@@ -66,8 +72,11 @@ namespace NTSD.Simulation.Ecs
                 results.NativeLivingGroupMask = currentGroups;
 
             int timer = ++results.NativeResultTimer;
-            // Alignment contract: NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001.
-            if (timer >= 144 && ContinueRequestedByParticipant(frameInput))
+            // Alignment contract: NTSD28-336B44-Q08-C008-DEFERRED-RESULT-EXIT-001.
+            // The exit check precedes the held-input write to 350.
+            bool exitNow = timer == 350;
+            if (!exitNow && timer >= 144 &&
+                ContinueRequestedByParticipant(frameInput))
             {
                 timer = 350;
                 results.NativeResultTimer = timer;
@@ -80,18 +89,21 @@ namespace NTSD.Simulation.Ecs
                     : timer < 350
                         ? 2
                         : 3;
-            if (timer == 350)
-            {
-                int mode = world.BattleGameModeId;
-                results.NativeTransitionState = mode == 2
-                    ? 28
-                    : mode == 3
-                        ? 128
-                        : mode == 4
-                            ? 202
-                            : 2;
-                results.NativeResultTimer = 0;
-            }
+            if (exitNow)
+                BeginNativeResultTransition(results);
+        }
+
+        private void BeginNativeResultTransition(BattleResultsRuntimeState results)
+        {
+            int mode = world.BattleGameModeId;
+            results.NativeTransitionState = mode == 2
+                ? 28
+                : mode == 3
+                    ? 128
+                    : mode == 4
+                        ? 202
+                        : 2;
+            results.NativeResultTimer = 0;
         }
 
         private bool ContinueRequestedByParticipant(FrameInputSet frameInput)

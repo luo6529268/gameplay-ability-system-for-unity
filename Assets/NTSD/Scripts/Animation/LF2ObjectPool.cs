@@ -147,12 +147,58 @@ namespace NTSD.Animation
                 return null;
             }
 
-            // Alignment contract: NTSD28-Q09-LEGACY-BODY-PREWARM-001
-            // Legacy pixels need a body renderer before the battle allocation seal.
             if (BattlePresentationBackendResolver.Resolve(Cfg) !=
-                    BattlePresentationBackendMode.CentralOnly &&
-                r.GetComponent<SpriteRenderer>() == null)
-                r.gameObject.AddComponent<SpriteRenderer>();
+                BattlePresentationBackendMode.CentralOnly)
+            {
+                // Alignment contract: NTSD28-Q09-LEGACY-BODY-PREWARM-001
+                // Legacy pixels need a body renderer before the battle allocation seal.
+                if (r.GetComponent<SpriteRenderer>() == null)
+                    r.gameObject.AddComponent<SpriteRenderer>();
+
+                // Alignment contract: NTSD28-Q09-LEGACY-SHADOW-PREWARM-001
+                // Materialize and bind the configured shadow before the battle seal.
+                BattleCommonShadowDescriptor descriptor =
+                    Cfg?.ShadowPrefab?.GetComponent<BattleCommonShadowDescriptor>();
+                string diagnostic = "missing GameConfig.ShadowPrefab descriptor";
+                if (descriptor == null || !descriptor.TryValidate(out diagnostic))
+                {
+                    Log.Error("[LF2ObjectPool] Legacy shadow descriptor invalid: {0}",
+                        diagnostic);
+                    Destroy(go);
+                    return null;
+                }
+
+                BattleCentralPresentationMount shadowMount = null;
+                foreach (BattleCentralPresentationMount mount in
+                         go.GetComponentsInChildren<BattleCentralPresentationMount>(true))
+                {
+                    if (mount.Role == BattleCentralPresentationMountRole.Shadow &&
+                        mount.Purpose == BattleCentralPresentationMountPurpose.CommonShadow)
+                    {
+                        shadowMount = mount;
+                        break;
+                    }
+                }
+
+                if (shadowMount == null)
+                {
+                    Log.Error("[LF2ObjectPool] Legacy common Shadow mount missing");
+                    Destroy(go);
+                    return null;
+                }
+
+                SpriteRenderer shadowRenderer = shadowMount.GetComponent<SpriteRenderer>();
+                if (shadowRenderer == null)
+                    shadowRenderer = shadowMount.gameObject.AddComponent<SpriteRenderer>();
+                shadowRenderer.sprite = descriptor.Sprite;
+                shadowRenderer.sharedMaterial = descriptor.Material;
+                shadowRenderer.color = descriptor.Color;
+                shadowRenderer.flipX = descriptor.FlipX;
+                shadowRenderer.flipY = descriptor.FlipY;
+                shadowRenderer.maskInteraction = descriptor.MaskInteraction;
+                shadowRenderer.enabled = false;
+                r.SetShadowRenderer(shadowRenderer);
+            }
 
             _availableObjects.Enqueue(go);
             return r;

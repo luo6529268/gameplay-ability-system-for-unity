@@ -1,5 +1,7 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
+using System.Collections.Generic;
+using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
 using NTSD.Simulation.Ecs;
@@ -43,6 +45,127 @@ namespace NTSD.Test
             Assert.That(diagnostics.RunCount, Is.EqualTo(1));
             Assert.That(diagnostics.ExactCharacterCount, Is.EqualTo(1));
             Assert.That(diagnostics.CompatibilityFallbackCount, Is.Zero);
+        }
+
+        [TestCase(BattleEcsCharacterPostFrameTailPassMode.Legacy)]
+        [TestCase(BattleEcsCharacterPostFrameTailPassMode.DataOriented)]
+        public void ActiveEntityTail_ClearsSpecialHitLatchForCharacterAndHealthlessType3(
+            BattleEcsCharacterPostFrameTailPassMode mode)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleEcsCharacterPostFrameTailPassForDiagnostics(mode);
+            LF2Character character = RegisterCharacter(world, 50);
+            var projectile = new HealthlessType3Entity { ObjectId = 815 };
+            projectile.SetRequiredRuntimeSlot(51);
+            projectile.Runtime.ObjType = 3;
+            world.Register(projectile);
+            Assert.That(projectile.ObjectTypeEnum,
+                Is.EqualTo(LF2ObjectType.SpecialAttack));
+            Assert.That(projectile.Health, Is.Null);
+            character.Runtime.SpecialHitLatch0EB = true;
+            projectile.Runtime.SpecialHitLatch0EB = true;
+            character.HitConfirm2 = 7;
+
+            world.EntityPostFrameTailAll(1);
+
+            Assert.That(character.Runtime.SpecialHitLatch0EB, Is.False);
+            Assert.That(projectile.Runtime.SpecialHitLatch0EB, Is.False);
+            Assert.That(character.HitConfirm2, Is.Zero);
+        }
+
+        [Test]
+        public void Type3Latch_SuppressesFirstCompleteHitTickAndAllowsNextTick()
+        {
+            var world = new SimulationWorld();
+            var attackFrame = new LF2FrameData
+            {
+                frameId = 0,
+                state = 3000,
+                wait = 100,
+                next = 0,
+                itrs = new List<InteractionArea>
+                {
+                    new InteractionArea
+                    {
+                        kind = 0, x = -20, y = -20, w = 60, h = 40,
+                        zwidth = 30, injury = 10, vrest = 0,
+                    },
+                },
+            };
+            var targetFrame = new LF2FrameData
+            {
+                frameId = 0,
+                state = 0,
+                wait = 100,
+                next = 0,
+            };
+            targetFrame.bodies.Add(new BodyBox
+            {
+                kind = 0, x = -10, y = -10, w = 20, h = 20,
+            });
+
+            var attacker = new LF2SpecialAttack { ObjectId = 815 };
+            attacker.FrameCache.Load(new LF2CharacterDataWrapper(
+                815, new LF2CharacterData
+                {
+                    type_sub = 3,
+                    frames = new List<LF2FrameData> { attackFrame },
+                }));
+            attacker.Frame.N = 0;
+            attacker.Frame.PN = 0;
+            attacker.Frame.D = attackFrame;
+            attacker.SetRequiredRuntimeSlot(55);
+            attacker.Runtime.ObjType = 3;
+            attacker.Health.HP = 100;
+            attacker.Team = 1;
+            attacker.RelationTeam = 1;
+            attacker.Runtime.SetPosition(100, 0, 100);
+            attacker.Runtime.SyncIntegerPosition();
+            world.Register(attacker);
+
+            var target = new LF2Character { ObjectId = 7 };
+            target.ModuleInitialize();
+            target.FrameCache.Load(new LF2CharacterDataWrapper(
+                7, new LF2CharacterData
+                {
+                    type_sub = 0,
+                    frames = new List<LF2FrameData> { targetFrame },
+                }));
+            target.Frame.N = 0;
+            target.Frame.PN = 0;
+            target.Frame.D = targetFrame;
+            target.Initialize(500, 500);
+            target.SetRequiredRuntimeSlot(1);
+            target.Team = 2;
+            target.RelationTeam = 2;
+            target.Runtime.SetPosition(110, 0, 100);
+            target.Runtime.SyncIntegerPosition();
+            world.Register(target);
+
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.CollectCollisionCandidatesAll();
+            Assert.That(attacker.Runtime.HitCandidateCount, Is.EqualTo(1),
+                "The synthetic type3/character pair must form one real candidate.");
+            world.EndCollisionCandidateConsumption();
+
+            attacker.Runtime.SpecialHitLatch0EB = true;
+            var tickSystem = new NTSDBattleTickSystem(world);
+            tickSystem.RunReleaseTick(1, buildPresentation: false);
+
+            Assert.That(target.Health.HP, Is.EqualTo(500),
+                "The type3 latch must suppress the first tick's ordinary hit.");
+            Assert.That(attacker.Runtime.SpecialHitLatch0EB, Is.False,
+                "The shared active-entity tail must clear the latch.");
+
+            tickSystem.RunReleaseTick(2, buildPresentation: false);
+
+            Assert.That(target.Health.HP, Is.LessThan(500),
+                "The next complete tick must admit the same ordinary hit; " +
+                "candidateCount=" + attacker.Runtime.HitCandidateCount +
+                ", attackerAction=" + attacker.Frame.N +
+                ", targetAction=" + target.Frame.N +
+                ", attackerX=" + attacker.Runtime.XInt +
+                ", targetX=" + target.Runtime.XInt);
         }
 
         [Test]
@@ -137,6 +260,17 @@ namespace NTSD.Test
                 ClearCount++;
                 base.ClearHitCandidateCarriers();
             }
+        }
+
+        private sealed class HealthlessType3Entity : LF2OtherObject
+        {
+            internal HealthlessType3Entity()
+            {
+                Health = null;
+            }
+
+            public override LF2ObjectType ObjectTypeEnum =>
+                LF2ObjectType.SpecialAttack;
         }
     }
 }

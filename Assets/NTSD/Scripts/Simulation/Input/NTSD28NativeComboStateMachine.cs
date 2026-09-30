@@ -37,13 +37,6 @@ namespace NTSD.Simulation
                 return 0;
 
             NTSD28InputProxyBlock input = runtime.NativeInputProxy;
-            if (runtime.ObjType == 0 && runtime.HP <= 0)
-            {
-                input.Clear();
-                InitializeNativeHistory(runtime);
-                return 0;
-            }
-
             for (int index = 0; index < input.EdgeWindow.Length; index++)
             {
                 if (input.EdgeWindow[index] > 0)

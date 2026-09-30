@@ -11,6 +11,31 @@ namespace NTSD.Test.Editor
 {
     public sealed class NTSD28C05NativeTeleportProductionEditorTests
     {
+        [TestCase(400, 180)]
+        [TestCase(401, 240)]
+        public void NativeTeleport_CompleteTicksUseAlternatingPhase(
+            int state,
+            int expectedTeleportX)
+        {
+            var world = new SimulationWorld();
+            LF2OtherObject source = CreateOther(world, 50, 10411, state, relationTeam: 1);
+            LF2Character target = CreateCharacter(world, 1, 10412,
+                relationTeam: state == 400 ? 2 : 1);
+            SetPosition(source, 100, 0, 100);
+            SetPosition(target, 300, 0, 130);
+            var tickSystem = new NTSDBattleTickSystem(world);
+
+            tickSystem.RunReleaseTick(1, buildPresentation: false);
+            Assert.That(world.FrameToggle, Is.EqualTo(1));
+            Assert.That(source.Runtime.XInt, Is.EqualTo(100),
+                "phase 1 must skip state-400/401 teleport");
+
+            tickSystem.RunReleaseTick(2, buildPresentation: false);
+            Assert.That(world.FrameToggle, Is.Zero);
+            Assert.That(source.Runtime.XInt, Is.EqualTo(expectedTeleportX),
+                "phase 0 must execute state-400/401 teleport");
+        }
+
         [Test]
         public void NativeTeleport_RunsWhenLegacyFrameToggleWouldGate()
         {

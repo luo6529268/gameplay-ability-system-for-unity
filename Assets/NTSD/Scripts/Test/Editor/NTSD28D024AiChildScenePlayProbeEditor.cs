@@ -10,6 +10,7 @@ using NTSD.App;
 using NTSD.Simulation;
 using NTSD.UI;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -23,6 +24,7 @@ namespace NTSD.Test.Editor
             public bool requested;
             public string runId;
             public bool controlledNonSound;
+            public int stageEdgeTargetZ;
         }
 
         private sealed class Report
@@ -59,6 +61,20 @@ namespace NTSD.Test.Editor
             public bool stopped;
             public bool returnedToMenu;
             public int poolBorrowersAfter;
+            public int stagePhysicalNear;
+            public int stagePhysicalFar;
+            public int stageRuleNear;
+            public int stageRuleFar;
+            public int stageEdgeAiSourceZ;
+            public int stageEdgeHumanSourceZ;
+            public double stageEdgeAiViewZ;
+            public double stageEdgeHumanViewZ;
+            public int stageEdgeHumanHitStop;
+            public int stageEdgeAiTargetBefore;
+            public int stageEdgeAiTargetAfter;
+            public int stageEdgeAiKeyUp;
+            public int stageEdgeAiKeyDown;
+            public int stageEdgeDecisionTick;
         }
 
         private static bool running;
@@ -103,6 +119,12 @@ namespace NTSD.Test.Editor
                 if (EditorApplication.isPlayingOrWillChangePlaymode)
                     return;
                 Scene current = SceneManager.GetActiveScene();
+                if (request.stageEdgeTargetZ != 0 &&
+                    current.name == "NTSD_Battle" && !current.isDirty)
+                {
+                    EditorSceneManager.OpenScene("Assets/NTSD/Scene/NTSD_Menu.unity");
+                    return;
+                }
                 if (current.isDirty || current.name != "NTSD_Menu")
                 {
                     WriteImmediateFailure(request.runId,
@@ -224,6 +246,12 @@ namespace NTSD.Test.Editor
                     " controlled=" + ai.AiControlled +
                     " frame=" + (ai.Frame != null ? ai.Frame.N : -1) +
                     " coordinateX=" + ai.Runtime.Unk3FC;
+                if (request.stageEdgeTargetZ != 0)
+                {
+                    RunStageEdge(request, report, driver, world, human, ai);
+                    report.status = "PASS";
+                    return;
+                }
                 var initialIds = new HashSet<int>();
                 for (int slot = 0; slot < world.RuntimeSlotCapacityForDiagnostics; slot++)
                 {
@@ -410,6 +438,90 @@ namespace NTSD.Test.Editor
                         EditorApplication.ExitPlaymode();
                 };
             }
+        }
+
+        private static void RunStageEdge(
+            Request request,
+            Report report,
+            SimulationTickDriver driver,
+            SimulationWorld world,
+            LF2Entity human,
+            LF2Entity ai)
+        {
+            Require(request.stageEdgeTargetZ == 160 || request.stageEdgeTargetZ == 161,
+                "Stage edge target Z must be 160 or 161.");
+            report.phase = "ai-stage-edge-target-acquisition";
+            WriteReport(request.runId, report);
+            for (int step = 0; step < 120 && ai.Runtime.Unk360 != 0; step++)
+            {
+                int tick = driver.CurrentTickIndex + 1;
+                Require(driver.StepOneTick(new FrameInputSet(tick, new[]
+                {
+                    new SimulationPlayerInput(0, SimulationInputButtons.Right),
+                    new SimulationPlayerInput(1, SimulationInputButtons.None),
+                }), true, true), "Full Driver rejected target-acquisition tick " + tick);
+                report.ticksStepped++;
+            }
+            Require(ai.Runtime.Unk360 == 0 && human.Runtime.HP > 0 &&
+                ai.Runtime.HP > 0,
+                "Production AI did not acquire the live human target.");
+
+            BattleSpatialProjection projection = world.SpatialProjection;
+            report.stagePhysicalNear = world.Runtime.Stage.ZMin;
+            report.stagePhysicalFar = world.Runtime.Stage.ZMax;
+            report.stageRuleNear = (int)Math.Ceiling(
+                projection.ViewToSourceZ(report.stagePhysicalNear));
+            report.stageRuleFar = (int)Math.Ceiling(
+                projection.ViewToSourceZ(report.stagePhysicalFar));
+            Require(report.stagePhysicalNear == 237 && report.stagePhysicalFar == 760 &&
+                report.stageRuleNear == 151 && report.stageRuleFar == 482,
+                "Current production map no longer has the audited depth boundary.");
+
+            SetStageEdgePosition(human, projection, 500, request.stageEdgeTargetZ);
+            SetStageEdgePosition(ai, projection, 520, 155);
+            human.Runtime.HitStop = 8;
+            report.stageEdgeHumanHitStop = human.Runtime.HitStop;
+            report.stageEdgeAiTargetBefore = ai.Runtime.Unk360;
+            report.stageEdgeHumanSourceZ = human.Runtime.SourceRuleZInt;
+            report.stageEdgeAiSourceZ = ai.Runtime.SourceRuleZInt;
+            report.stageEdgeHumanViewZ = human.Runtime.Z;
+            report.stageEdgeAiViewZ = ai.Runtime.Z;
+            report.phase = "ai-stage-edge-full-driver";
+            WriteReport(request.runId, report);
+
+            int decisionTick = driver.CurrentTickIndex + 1;
+            Require(driver.StepOneTick(new FrameInputSet(decisionTick, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.None),
+                new SimulationPlayerInput(1, SimulationInputButtons.None),
+            }), true, true), "Full Driver rejected stage-edge decision tick.");
+            report.ticksStepped++;
+            report.stageEdgeDecisionTick = decisionTick;
+            report.stageEdgeAiTargetAfter = ai.Runtime.Unk360;
+            report.stageEdgeAiKeyUp = ai.Runtime.KeyUp;
+            report.stageEdgeAiKeyDown = ai.Runtime.KeyDown;
+            Require(report.stageEdgeAiTargetAfter == 0 && human.Runtime.HitStop > 2,
+                "AI abnormal-target branch preconditions did not survive the Driver tick.");
+            bool expectDown = request.stageEdgeTargetZ == 160;
+            Require(expectDown
+                    ? report.stageEdgeAiKeyDown == 1 && report.stageEdgeAiKeyUp == 0
+                    : report.stageEdgeAiKeyUp == 1 && report.stageEdgeAiKeyDown == 0,
+                "AI depth key did not match the formal strict source-Z boundary.");
+        }
+
+        private static void SetStageEdgePosition(
+            LF2Entity entity,
+            BattleSpatialProjection projection,
+            int sourceX,
+            int sourceZ)
+        {
+            entity.Runtime.SetPosition(
+                projection.SourceToViewX(sourceX),
+                entity.Runtime.Y,
+                projection.SourceToViewZ(sourceZ));
+            entity.Runtime.SetSourceRulePosition(sourceX, sourceZ);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
+            entity.Runtime.SyncIntegerPosition();
         }
 
         private static void WriteReport(string runId, Report report)

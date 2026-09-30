@@ -17,6 +17,12 @@ namespace NTSD.Simulation.Presentation
 
         public int SampledCount { get; private set; }
 
+        public void PrepareCapacity(int runtimeSlotCapacity)
+        {
+            if (runtimeSlotCapacity > 0)
+                EnsureCapacity(runtimeSlotCapacity);
+        }
+
         public void Prepare(
             BattlePresentationFrame frame,
             double alpha,

@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": true,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-Q07-D024-SAN-SAME-Z-ROOT-CANDIDATE-001\\native-san-z400\\han-action0-x520-jump3-bg1-z400.lfr",
+  "failureCode": 0,
+  "failureStage": "",
+  "error": "",
+  "declaredTicks": 50,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": -1, "slot1": -1},
+  "initialFacingOverrides": {"slot0": -1, "slot1": -1},
+  "initialMpOverrides": {"slot0": -1, "slot1": -1},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 51,
+  "scene": {"p1ObjectId": 726, "p2ObjectId": 7, "backgroundId": 1},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "artifacts\\diagnostics\\NTSD28-Q07-D024-SAN-SAME-Z-ROOT-CANDIDATE-001\\root-x520-bg1-z400-trace.jsonl", "rows": 52, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

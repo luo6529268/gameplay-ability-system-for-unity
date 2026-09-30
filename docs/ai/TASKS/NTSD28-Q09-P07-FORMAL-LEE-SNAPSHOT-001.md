@@ -1,0 +1,13 @@
+# NTSD28-Q09-P07-FORMAL-LEE-SNAPSHOT-001
+
+Status: `VERIFIED / SCOPED_FORMAL_SNAPSHOT_COMMANDS`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q09 / P-07`.
+
+Selected result: paired source tick6 five visible OID204 body commands, zero child shadows, three ordinary shadows; tick6–13 child slot/action/pic 40/40 matched previously saved root EXE LFR, and existing original Unity Battle Play has the same field-gate outcome. See [acceptance](../../../artifacts/diagnostics/NTSD28-Q09-P07-FORMAL-LEE-SNAPSHOT-001/ACCEPTANCE.md). This is not formal EXE GPU parity.
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable `GameSession28::step/snapshot` and live `RenderSnapshotBuilder28::build` in the playable build closure. Existing formal Lee J@2/L@3-4 LFR and original Unity Battle Scene natural OID204 Play are the fixed comparison inputs. This is diagnostic evidence, not promotion of a candidate EXE.
+
+Code scope before edit: add only `Tools/NTSD28Q09Diagnostics/lee_shadow_snapshot_probe.cpp`; output only in new `artifacts/diagnostics/NTSD28-Q09-P07-FORMAL-LEE-SNAPSHOT-001/`. The tool instantiates the same formal Lee/Opponent battle configuration and physical input schedule, steps 13 complete `GameSession28` ticks, reads the public render snapshot for ticks 5–13, and emits per-tick child OID204 sprite/shadow/command counts with action/pic/slot. It must assert visible OID204 bodies and zero child shadows at the chosen tick while ordinary actor shadows remain present. No Unity production/test scripts, DAT, PNG, Scene, Prefab, ProjectSettings, mode/background, official source or nonbattle files may change.
+
+Validation: compile against the exact paired playable core source list with the available MinGW compiler; retain full command, stdout/stderr, output hash and no-overwrite behavior. Compare formal selected tick and owned child IDs/actions/pics with the existing root LFR and original Unity Play evidence; distinguish slot mapping differences and do not claim same-pixel or same-camera proof. Verify `git diff --check`, ledger validator, and protected Battle/Menu hashes. Existing Unity Play and whole-suite tests are not rerun because no Unity code changes.
+
+Risk and rollback: only an additional diagnostic tool and output files; old evidence is untouched. If a paired-source snapshot differs from existing LFR/Unity command evidence, keep raw failure and audit the first differing tick before touching production. Removal/reversion of this new script requires repository-compliant explicit authorization.

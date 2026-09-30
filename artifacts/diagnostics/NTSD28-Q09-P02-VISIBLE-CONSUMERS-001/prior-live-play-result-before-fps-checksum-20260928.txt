@@ -1,0 +1,14 @@
+RUNNING counter-only
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=4 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=False app=MenuMain
+candidate slot=0 source=True
+candidate slot=1 source=True
+ready tick=2
+counter firstY=-8.33 label=False alpha=0
+logicChecksum first=1cd45b3a9d4369a96927c33d248b1cea101dbefde0ab9a44587a894915deeba8 later=1cd45b3a9d4369a96927c33d248b1cea101dbefde0ab9a44587a894915deeba8
+counter laterY=-8.43 alpha=1
+PASS counter Body Y sampled; Label Ground Y unchanged when present; published and logic truth unchanged.

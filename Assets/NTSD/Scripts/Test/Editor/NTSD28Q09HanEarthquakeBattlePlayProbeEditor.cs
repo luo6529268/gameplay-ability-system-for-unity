@@ -25,10 +25,25 @@ namespace NTSD.Test.Editor
             "Temp/NTSD28_Q07_D024_HanCandidateBranch.request.json";
         private const string FarCandidateRequestPath =
             "Temp/NTSD28_Q07_D024_HanFarCandidate.request.json";
+        private const string MappedNearRequestPath =
+            "Temp/NTSD28_Q07_D024_HanMappedNear.request.json";
+        private const string MappedFarRequestPath =
+            "Temp/NTSD28_Q07_D024_HanMappedFar.request.json";
+        private const string InMapNearRequestPath =
+            "Temp/NTSD28_Q07_D024_HanInMapNear.request.json";
+        private const string InMapFarRequestPath =
+            "Temp/NTSD28_Q07_D024_HanInMapFar.request.json";
+        private const string StageEdgeRequestPath =
+            "Temp/NTSD28_Q07_D024_ProjectStageEdge.request.json";
+        private static readonly string[] MappedRequestPaths =
+            { MappedNearRequestPath, MappedFarRequestPath,
+              InMapNearRequestPath, InMapFarRequestPath };
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-Q09-P13-HAN-NATURAL-BATTLE-PLAY-001";
         private const string CandidateResultRoot =
             "artifacts/diagnostics/NTSD28-Q07-D024-HAN-CANDIDATE-BRANCH-001";
+        private const string StageEdgeResultRoot =
+            "artifacts/diagnostics/NTSD28-Q07-D024-PROJECT-STAGE-EDGE-PLAY-001";
         private const string FormalContentRoot = "Assets/NTSD/Content/LoganRuntime";
         private const int CaptureWidth = 1024;
         private const int CaptureHeight = 576;
@@ -45,6 +60,9 @@ namespace NTSD.Test.Editor
             public string runId;
             public bool captureCandidateBranch;
             public int leeStartX;
+            public bool sourceMappedPositions;
+            public int sourceStartZ;
+            public bool stageEdgeOnly;
         }
 
         [Serializable]
@@ -137,6 +155,24 @@ namespace NTSD.Test.Editor
             public int hanSlot = -1;
             public int leeSlot = -1;
             public int leeStartX;
+            public bool sourceMappedPositions;
+            public int sourceStartZ;
+            public double horizontalScale;
+            public double depthScale;
+            public int stageWidth;
+            public int stageZMin;
+            public int stageZMax;
+            public double hanStartPhysicalX;
+            public double hanStartPhysicalZ;
+            public double leeStartPhysicalX;
+            public double leeStartPhysicalZ;
+            public double hanStartSourceX;
+            public double hanStartSourceZ;
+            public double leeStartSourceX;
+            public double leeStartSourceZ;
+            public bool walkableSnapshotAvailable;
+            public bool hanStartWalkable;
+            public bool leeStartWalkable;
             public int hanRosterSlot = -1;
             public int leeRosterSlot = -1;
             public int firstHan145 = -1;
@@ -178,6 +214,11 @@ namespace NTSD.Test.Editor
             string requestFile = ProjectPath(RequestPath);
             string candidateRequestFile = ProjectPath(CandidateRequestPath);
             string farCandidateRequestFile = ProjectPath(FarCandidateRequestPath);
+            string mappedNearRequestFile = ProjectPath(MappedNearRequestPath);
+            string mappedFarRequestFile = ProjectPath(MappedFarRequestPath);
+            string inMapNearRequestFile = ProjectPath(InMapNearRequestPath);
+            string inMapFarRequestFile = ProjectPath(InMapFarRequestPath);
+            string stageEdgeRequestFile = ProjectPath(StageEdgeRequestPath);
             if (File.Exists(candidateRequestFile))
             {
                 try
@@ -200,6 +241,37 @@ namespace NTSD.Test.Editor
                         File.ReadAllText(farCandidateRequestFile));
                     if (farCandidate?.requested == true)
                         requestFile = farCandidateRequestFile;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
+            foreach (string mappedRequestPath in MappedRequestPaths)
+            {
+                string mappedRequestFile = ProjectPath(mappedRequestPath);
+                if (!File.Exists(mappedRequestFile))
+                    continue;
+                try
+                {
+                    Request mappedRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(mappedRequestFile));
+                    if (mappedRequest?.requested == true)
+                        requestFile = mappedRequestFile;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
+            if (File.Exists(stageEdgeRequestFile))
+            {
+                try
+                {
+                    Request edgeRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(stageEdgeRequestFile));
+                    if (edgeRequest?.requested == true)
+                        requestFile = stageEdgeRequestFile;
                 }
                 catch (IOException)
                 {
@@ -236,7 +308,11 @@ namespace NTSD.Test.Editor
                 return;
             }
             if ((requestFile == candidateRequestFile ||
-                 requestFile == farCandidateRequestFile) &&
+                 requestFile == farCandidateRequestFile ||
+                 requestFile == mappedNearRequestFile ||
+                 requestFile == mappedFarRequestFile ||
+                 requestFile == inMapNearRequestFile ||
+                 requestFile == inMapFarRequestFile) &&
                 !request.captureCandidateBranch)
             {
                 request.captureCandidateBranch = true;
@@ -248,6 +324,37 @@ namespace NTSD.Test.Editor
             {
                 Finish(request, new Report { status = "FAIL",
                     error = "The far candidate request requires Lee X580." });
+                return;
+            }
+            if ((requestFile == mappedNearRequestFile ||
+                 requestFile == mappedFarRequestFile) &&
+                (!request.sourceMappedPositions ||
+                 (request.sourceStartZ != 0 && request.sourceStartZ != 650) ||
+                 request.leeStartX !=
+                 (requestFile == mappedNearRequestFile ? 520 : 580)))
+            {
+                Finish(request, new Report { status = "FAIL",
+                    error = "Mapped request requires the paired source start." });
+                return;
+            }
+            if ((requestFile == inMapNearRequestFile ||
+                 requestFile == inMapFarRequestFile) &&
+                (!request.sourceMappedPositions || request.sourceStartZ != 400 ||
+                 request.leeStartX !=
+                 (requestFile == inMapNearRequestFile ? 520 : 580)))
+            {
+                Finish(request, new Report { status = "FAIL",
+                    error = "In-map request requires paired source Z400/X." });
+                return;
+            }
+            if (requestFile == stageEdgeRequestFile &&
+                (!request.stageEdgeOnly || request.captureCandidateBranch ||
+                 !request.sourceMappedPositions ||
+                 (request.sourceStartZ != 100 && request.sourceStartZ != 600) ||
+                 request.leeStartX != 520))
+            {
+                Finish(request, new Report { status = "FAIL",
+                    error = "Stage edge request requires mapped Z100/600, Lee X520 and one-tick mode." });
                 return;
             }
             if (request.leeStartX != 0 && request.leeStartX != 520 &&
@@ -334,6 +441,13 @@ namespace NTSD.Test.Editor
                 contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot,
                 startTick = driver.CurrentTickIndex,
                 leeStartX = request.leeStartX == 0 ? 520 : request.leeStartX,
+                sourceMappedPositions = request.sourceMappedPositions,
+                sourceStartZ = request.sourceStartZ == 0 ? 650 : request.sourceStartZ,
+                horizontalScale = world.SpatialProjection.HorizontalScale,
+                depthScale = world.SpatialProjection.DepthScale,
+                stageWidth = world.Runtime.Stage.StageWidthPx,
+                stageZMin = world.Runtime.Stage.ZMin,
+                stageZMax = world.Runtime.Stage.ZMax,
             };
             try
             {
@@ -367,9 +481,57 @@ namespace NTSD.Test.Editor
                     "Two free human roster slots are required.");
 
                 LF2Character han = CreateCharacter(world, hanConfig, 726,
-                    report.hanSlot, 3, 500, 650);
+                    report.hanSlot, 3, 500, report.sourceStartZ,
+                    request.sourceMappedPositions);
                 LF2Character lee = CreateCharacter(world, leeConfig, 7,
-                    report.leeSlot, 4, report.leeStartX, 650);
+                    report.leeSlot, 4, report.leeStartX, report.sourceStartZ,
+                    request.sourceMappedPositions);
+                report.hanStartPhysicalX = han.Runtime.X;
+                report.hanStartPhysicalZ = han.Runtime.Z;
+                report.leeStartPhysicalX = lee.Runtime.X;
+                report.leeStartPhysicalZ = lee.Runtime.Z;
+                report.hanStartSourceX = han.Runtime.SourceRuleX;
+                report.hanStartSourceZ = han.Runtime.SourceRuleZ;
+                report.leeStartSourceX = lee.Runtime.SourceRuleX;
+                report.leeStartSourceZ = lee.Runtime.SourceRuleZ;
+                bool hanWalkableSnapshotAvailable = world.TryIsGroundPixelWalkable(
+                    report.hanStartPhysicalX, report.hanStartPhysicalZ,
+                    out bool hanStartWalkable);
+                bool leeWalkableSnapshotAvailable = world.TryIsGroundPixelWalkable(
+                    report.leeStartPhysicalX, report.leeStartPhysicalZ,
+                    out bool leeStartWalkable);
+                report.walkableSnapshotAvailable = hanWalkableSnapshotAvailable &&
+                    leeWalkableSnapshotAvailable;
+                report.hanStartWalkable = hanStartWalkable;
+                report.leeStartWalkable = leeStartWalkable;
+                if (currentRequestFile == ProjectPath(InMapNearRequestPath) ||
+                    currentRequestFile == ProjectPath(InMapFarRequestPath))
+                {
+                    Require(report.walkableSnapshotAvailable &&
+                            report.hanStartWalkable && report.leeStartWalkable &&
+                            report.hanStartPhysicalZ >= report.stageZMin &&
+                            report.hanStartPhysicalZ <= report.stageZMax &&
+                            report.leeStartPhysicalZ >= report.stageZMin &&
+                            report.leeStartPhysicalZ <= report.stageZMax,
+                        "Mapped source starts are outside the project walkable stage.");
+                }
+                if (request.sourceMappedPositions)
+                {
+                    BattleSpatialProjection projection = world.SpatialProjection;
+                    Require(Math.Abs(report.hanStartPhysicalX -
+                            projection.SourceToViewX(500, 0.0)) < 1e-9 &&
+                            Math.Abs(report.leeStartPhysicalX -
+                            projection.SourceToViewX(report.leeStartX, 0.0)) < 1e-9 &&
+                            Math.Abs(report.hanStartPhysicalZ -
+                            projection.SourceToViewZ(report.sourceStartZ, 0.0)) < 1e-9 &&
+                            Math.Abs(report.leeStartPhysicalZ -
+                            projection.SourceToViewZ(report.sourceStartZ, 0.0)) < 1e-9 &&
+                            report.hanStartSourceX == 500 &&
+                            report.leeStartSourceX == report.leeStartX &&
+                            report.hanStartSourceZ == report.sourceStartZ &&
+                            report.leeStartSourceZ == report.sourceStartZ,
+                        "Mapped physical and original source starts diverged.");
+                }
                 slots[report.hanRosterSlot] = new BattleSlotRuntimeState
                 {
                     Active = true, IsHuman = true, CharacterId = 726, Team = 3,
@@ -482,6 +644,9 @@ namespace NTSD.Test.Editor
                         "Runtime/frozen-frame earthquake first difference at " +
                         relativeTick);
 
+                    if (request.stageEdgeOnly)
+                        break;
+
                     if (row.hanAction == 145 && report.firstHan145 < 0)
                         report.firstHan145 = relativeTick;
                     if (row.hanAction == 149 && report.firstHan149 < 0)
@@ -528,7 +693,13 @@ namespace NTSD.Test.Editor
                         Mathf.Approximately(report.cameraSizeBefore,
                             report.cameraSizeAfter),
                     "Map geometry or fixed camera changed during the probe.");
-                if (request.captureCandidateBranch)
+                if (request.stageEdgeOnly)
+                {
+                    Require(report.ticks.Count == 1,
+                        "Stage edge probe did not complete exactly one Driver tick.");
+                    report.status = "OBSERVED_PROJECT_STAGE_EDGE";
+                }
+                else if (request.captureCandidateBranch)
                 {
                     Require(report.candidateBranch != null,
                         "The first collision action146 was not observed.");
@@ -614,7 +785,7 @@ namespace NTSD.Test.Editor
 
         private static LF2Character CreateCharacter(SimulationWorld world,
             LF2CharacterDataWrapper config, int oid, int runtimeSlot,
-            int team, int x, int z)
+            int team, int x, int z, bool sourceMappedPositions)
         {
             var character = new LF2Character();
             character.ModuleInitialize();
@@ -631,7 +802,11 @@ namespace NTSD.Test.Editor
             character.Team = team;
             character.RelationTeam = team;
             character.OwnerEntityIndex = runtimeSlot;
-            character.Runtime.SetPosition(x, 0, z);
+            BattleSpatialProjection projection = world.SpatialProjection;
+            character.Runtime.SetPosition(
+                sourceMappedPositions ? projection.SourceToViewX(x, 0.0) : x,
+                0,
+                sourceMappedPositions ? projection.SourceToViewZ(z, 0.0) : z);
             AppManager.SyncParticipantBirthPosition(character, x, z);
             return character;
         }
@@ -729,6 +904,7 @@ namespace NTSD.Test.Editor
         }
 
         private static string ResultRootFor(Request request) =>
+            request?.stageEdgeOnly == true ? StageEdgeResultRoot :
             request?.captureCandidateBranch == true ? CandidateResultRoot : ResultRoot;
 
         private static void WriteConsumedRequest(Request request)
@@ -743,6 +919,8 @@ namespace NTSD.Test.Editor
                         runId = request.runId,
                         captureCandidateBranch = true,
                         leeStartX = request.leeStartX,
+                        sourceMappedPositions = request.sourceMappedPositions,
+                        sourceStartZ = request.sourceStartZ,
                     })
                     : JsonUtility.ToJson(new LegacyRequest
                     {

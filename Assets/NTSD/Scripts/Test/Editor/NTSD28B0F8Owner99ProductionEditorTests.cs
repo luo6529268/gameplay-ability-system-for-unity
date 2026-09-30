@@ -23,12 +23,13 @@ namespace NTSD.Test.Editor
         private const int StageZMin = 180;
         private const int StageZMax = 350;
 
-        [Test]
-        public void Mode2Tail_LowestFreeSlotPublishesOwner99WithoutChangingRngFrameOrPosition()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void Mode2Tail_LowestFreeSlotPublishesOwner99WithoutChangingRngFrameOrPosition(bool configuredView)
         {
             const int expectedSlot = 50;
             const int seed = 0x1234;
-            SimulationWorld world = CreateWorld();
+            SimulationWorld world = CreateWorld(configuredView);
 
             AssertMode2Spawn(world, expectedSlot, seed);
         }
@@ -50,12 +51,13 @@ namespace NTSD.Test.Editor
             AssertMode2Spawn(world, expectedSlot, seed);
         }
 
-        [Test]
-        public void NormalDrop_PreservesOwnerSentinelAndExistingRngPositionContract()
+        [TestCase(false)]
+        [TestCase(true)]
+        public void NormalDrop_PreservesOwnerSentinelAndExistingRngPositionContract(bool configuredView)
         {
             const int expectedSlot = 50;
             int seed = FindSeedForFirstRemainder(200, 0);
-            SimulationWorld world = CreateWorld();
+            SimulationWorld world = CreateWorld(configuredView);
             var expectedRng = new DeterministicRng(seed);
             Assert.That(expectedRng.NextInt(0, 200), Is.Zero);
             Assert.That(expectedRng.NextInt(0, 1), Is.Zero);
@@ -73,10 +75,12 @@ namespace NTSD.Test.Editor
             Assert.That(entity.Runtime.Y, Is.EqualTo(expectedPosition.y));
             Assert.That(entity.Runtime.Z, Is.EqualTo(expectedPosition.z));
             Assert.That(entity.Runtime.SourceRulePositionInitialized, Is.True);
-            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedPosition.x));
-            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedPosition.z));
-            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedPosition.x));
-            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedPosition.z));
+            double expectedSourceX = world.SpatialProjection.ViewToSourceX(expectedPosition.x, 0.0);
+            double expectedSourceZ = world.SpatialProjection.ViewToSourceZ(expectedPosition.z, 0.0);
+            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedSourceX).Within(1e-9));
+            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedSourceZ).Within(1e-9));
+            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedSourceX));
+            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedSourceZ));
             Assert.That(entity.OwnerEntityIndex, Is.EqualTo(-1));
             Assert.That(world.Rng.CallCount, Is.EqualTo(6UL));
             AssertActiveSlotOwnerSnapshot(world, expectedSlot, entity, -1);
@@ -89,7 +93,11 @@ namespace NTSD.Test.Editor
         {
             var expectedRng = new DeterministicRng(seed);
             Vector3 expectedPosition = NextExpectedPosition(expectedRng);
-            expectedPosition.z += 1f;
+            double expectedPhysicalZ = expectedPosition.z +
+                world.SpatialProjection.SourceDeltaToViewZ(1.0);
+            double expectedSourceX = world.SpatialProjection.ViewToSourceX(expectedPosition.x, 0.0);
+            double expectedSourceZ =
+                world.SpatialProjection.ViewToSourceZ(expectedPosition.z, 0.0) + 1.0;
 
             world.Rng.Seed(seed);
             world.SetMode2Request(1);
@@ -103,12 +111,12 @@ namespace NTSD.Test.Editor
             Assert.That(entity.OwnerEntityIndex, Is.EqualTo(F8OwnerSlot));
             Assert.That(entity.Runtime.X, Is.EqualTo(expectedPosition.x));
             Assert.That(entity.Runtime.Y, Is.EqualTo(expectedPosition.y));
-            Assert.That(entity.Runtime.Z, Is.EqualTo(expectedPosition.z));
+            Assert.That(entity.Runtime.Z, Is.EqualTo(expectedPhysicalZ).Within(1e-4));
             Assert.That(entity.Runtime.SourceRulePositionInitialized, Is.True);
-            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedPosition.x));
-            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedPosition.z));
-            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedPosition.x));
-            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedPosition.z));
+            Assert.That(entity.Runtime.SourceRuleX, Is.EqualTo(expectedSourceX).Within(1e-9));
+            Assert.That(entity.Runtime.SourceRuleZ, Is.EqualTo(expectedSourceZ).Within(1e-9));
+            Assert.That(entity.Runtime.SourceRuleXInt, Is.EqualTo((int)expectedSourceX));
+            Assert.That(entity.Runtime.SourceRuleZInt, Is.EqualTo((int)expectedSourceZ));
             Assert.That(world.Rng.CallCount, Is.EqualTo(4UL));
             AssertActiveSlotOwnerSnapshot(
                 world,
@@ -117,12 +125,14 @@ namespace NTSD.Test.Editor
                 F8OwnerSlot);
         }
 
-        private static SimulationWorld CreateWorld()
+        private static SimulationWorld CreateWorld(bool configuredView = false)
         {
             LF2CharacterDataWrapper wrapper = CreateWeaponWrapper();
             var resolver = new RuntimeCharacterConfigResolver(
                 oid => oid == WeaponOid ? wrapper : null);
             var world = new SimulationWorld(resolver);
+            if (configuredView)
+                world.ConfigureFixedViewRunDistance(2048, 1152);
             world.SetLogicOnlyEntityMaterialization(true);
             world.PrepareRuntimeDataCatalogForBattle(
                 new[]

@@ -250,6 +250,7 @@ namespace NTSD.Simulation
         private SimulationWorld _world;
         private NTSDBattleTickSystem _battleTickSystem;
         private NTSD.Animation.SparkRenderer _sparkRenderer;
+        private BattleEntityOverlayRenderer _entityOverlayRenderer;
         private BattlePresentationBackendMode _presentationBackendMode =
             BattlePresentationBackendMode.CentralOnly;
         private BattleAiExecutionProfile _aiExecutionProfile =
@@ -526,6 +527,13 @@ namespace NTSD.Simulation
 
                 using (LegacySparkMarker.Auto())
                     _sparkRenderer.RenderAll(_world);
+                if (_world.BattlePresentation.Mode == BattlePresentationBackendMode.LegacyOnly)
+                {
+                    if (_entityOverlayRenderer != null)
+                        _entityOverlayRenderer.RenderAll(_world);
+                    else
+                        _rejectedLatePresentationComponentCreateCount++;
+                }
                 if (_simulationWorker == null)
                 {
                     using (AcknowledgeHitRecordMarker.Auto())
@@ -795,7 +803,8 @@ namespace NTSD.Simulation
             int tickIndex = frameInput.TickIndex;
             _world.PrepareStageRuntimeSnapshotForTick(tickIndex);
             BattleSimulationStageSnapshot stage =
-                BattleSimulationStageSnapshot.Capture(_world.Runtime?.Stage);
+                BattleSimulationStageSnapshot.Capture(
+                    _world.Runtime?.Stage, _world.StageDepthBoundsArePhysical);
             if (!_simulationWorker.TrySubmit(
                     frameInput,
                     buildPresentation,
@@ -1516,6 +1525,13 @@ namespace NTSD.Simulation
                 checked(
                     normalizedEntityCapacity *
                     NTSD.Animation.LF2Objects.LF2Entity.MaxHitRecordSlots));
+            if (_presentationBackendMode == BattlePresentationBackendMode.LegacyOnly)
+            {
+                if (_entityOverlayRenderer == null)
+                    _entityOverlayRenderer = gameObject.GetComponent<BattleEntityOverlayRenderer>() ??
+                                             gameObject.AddComponent<BattleEntityOverlayRenderer>();
+                _entityOverlayRenderer.PrepareBattleCapacity(normalizedEntityCapacity);
+            }
             BattleSpriteCatalog spriteCatalog =
                 CharacterAnimtorManager.Instance?.SpriteCatalog ?? BattleSpriteCatalog.Empty;
             BattleCentralRenderSystem.PrepareBattleCapacity(
@@ -1592,6 +1608,7 @@ namespace NTSD.Simulation
                 CompleteShutdownStage(BattleRuntimeShutdownStage.AllocationUnsealed);
 
                 _publishedSoundEvents.Clear();
+                _entityOverlayRenderer?.StopForBattleShutdown();
                 CharacterAnimtorManager.TryGetInstance()?.ReleaseCancelledNativeContentStaging();
                 BattleCentralRenderSystem.ResetRuntime();
                 _world?.BattlePresentation.ClearKnockoutFeedSession();
@@ -2508,8 +2525,8 @@ namespace NTSD.Simulation
                 settings.InitialRuntimeSlotCapacity,
                 settings.CollisionBroadphase);
             nextWorld.ConfigureFixedViewRunDistance(
-                GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? 1333,
-                GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? 730);
+                GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? BattleSpatialProjection.FormalViewWidthPx,
+                GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? BattleSpatialProjection.FormalViewHeightPx);
             nextWorld.BindLogicReferencePool(LF2ReferencePool.Instance.SimulationCore);
             nextWorld.ConfigureAiExecutionProfile(aiExecutionProfile);
             nextWorld.SetBattlePresentationBackend(presentationMode);
@@ -2585,8 +2602,8 @@ namespace NTSD.Simulation
                 if (_world.ObjectCount == 0)
                 {
                     _world.ConfigureFixedViewRunDistance(
-                        GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? 1333,
-                        GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? 730);
+                        GameConfig.Instance?.BattleFixedViewRunReferenceWidthPx ?? BattleSpatialProjection.FormalViewWidthPx,
+                        GameConfig.Instance?.BattleFixedViewRunReferenceHeightPx ?? BattleSpatialProjection.FormalViewHeightPx);
                 }
                 _presentationBackendMode = presentationMode;
                 _aiExecutionProfile = aiExecutionProfile;

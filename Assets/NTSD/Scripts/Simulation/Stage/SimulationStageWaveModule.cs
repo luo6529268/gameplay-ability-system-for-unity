@@ -568,6 +568,8 @@ namespace NTSD.Simulation
             entity.Health.MP = 500;
             entity.Health.MaxMP = 500;
             ApplyStageSpawnRuntimeContract(entity, hp);
+            // Alignment contract: NTSD28-R06-STAGE-QUEUED-JOIN-PRODUCER-001.
+            entity.RespawnCount = spawn.Join;
             entity.RefreshRuntimeSnapshot();
             return requiredRuntimeSlot;
         }

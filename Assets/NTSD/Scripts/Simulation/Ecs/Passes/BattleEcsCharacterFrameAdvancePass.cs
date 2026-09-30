@@ -129,7 +129,7 @@ namespace NTSD.Simulation.Ecs
 
             world.BoundaryWriter.SyncConsumedFlags(runtime);
             // Alignment contract: NTSD28-Q06-CANONICAL-CHARACTER-PHYSICS-TAIL-001.
-            character.ApplyCurrentDatType0State1218EnvironmentDamage(
+            character.ApplyCurrentDatType0State1218LandingPrelude(
                 character.Frame?.D,
                 stepResult);
             bool state1218ContactResolved =
@@ -152,6 +152,7 @@ namespace NTSD.Simulation.Ecs
                 character.Frame?.D,
                 stepResult,
                 tickIndex);
+            character.ApplyCurrentDatType0EnvironmentPhysicsTail();
             runtime.SyncIntegerPosition();
         }
 

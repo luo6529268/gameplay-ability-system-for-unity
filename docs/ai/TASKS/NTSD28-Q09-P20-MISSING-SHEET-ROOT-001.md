@@ -1,0 +1,13 @@
+# NTSD28-Q09-P20-MISSING-SHEET-ROOT-001
+
+Status: `VERIFIED_SCOPED_FORMAL_MISSING_SHEET_RUNTIME`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q09 / P-20 / R17`.
+
+Purpose: verify whether the formal root EXE rejects the whole selected battle when one declared character body sheet is absent, using the already proven Hidan natural frame430 LFR. This is an isolated negative resource case; all 703 selected formal/Unity character image files are present in normal deployment.
+
+Authority: root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, matching playable source `render_snapshot.cpp::SpriteFrameResolver28::resolve` and `GameSession28`. Input LFR is the existing 30-tick natural Hidan action430 fixture. Unity contrast is the original Editor's `MissingRequiredImage_DoesNotCreateCandidate` 1/1 PASS and `LoganVisualContentCandidate.Capture` code path.
+
+Scope: create an isolated runtime root outside both source trees. Junction unchanged formal `decoded_dat` and unrelated VFS folders, copy only the formal catalog and nine other Hidan image files, omit `vfs/c/hid/hid6.png`, then run the unchanged formal root EXE with both resource-root switches pointing to this isolated root. Never move/delete/overwrite any formal or Unity asset. Save the new report/trace and compare to the existing complete-root trace by row/tick/World hash/render sprite count.
+
+Exit: the root report is `passed:true`, `failureCode:0`, 30 declared ticks; 32 aligned diagnostic rows have 0 World state-hash differences and 16 render-sprite-count differences, precisely ticks 16–31 where Hidan pic119–126 uses the omitted sheet (complete 2, missing 1). This proves a scoped formal negative-runtime difference from Unity's current all-candidate rejection. It does not prove Unity repair, same-view GPU pixels, all missing-image classes, or Q09 completion. See [acceptance](../../../artifacts/diagnostics/NTSD28-Q09-P20-MISSING-SHEET-ROOT-20260929/ACCEPTANCE.md).
+
+Next production package: before changing scripts, create its own Change Record. Keep DAT/decoder/required WORDS/SPARK inputs atomic; define absent body-sheet identity and freshness when the file later appears; allow only that missing body sheet to yield an empty visual while publishing the rest. Preserve rollback on malformed images and required common resources. Cover missing selected and unselected sheets, restoration after capture, complete-root adjacency, original Editor compilation/focused test/Play, and formal/Unity observable output. No production script was edited in this diagnostic package.

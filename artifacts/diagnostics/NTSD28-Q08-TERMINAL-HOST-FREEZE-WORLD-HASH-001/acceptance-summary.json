@@ -1,0 +1,57 @@
+{
+  "schema": "ntsd28-q08-terminal-host-freeze-acceptance/1.0",
+  "status": "PASS_SCOPED_WITH_LFR_FAILURE_PRESERVED",
+  "generatedEditorCompileErrors": 0,
+  "originalEditorRequest": "PASS",
+  "rows": {
+    "terminalFreeze": 3,
+    "unityRaw": 367,
+    "unityResultFlow": 367
+  },
+  "completedCalls": [
+    365,
+    366
+  ],
+  "driverTicks": [
+    365,
+    366
+  ],
+  "snapshotTickArguments": [
+    365,
+    365
+  ],
+  "objectCounts": [
+    2,
+    2
+  ],
+  "claimedSlots": [
+    2,
+    2
+  ],
+  "slotsHashStable": true,
+  "rngHashStable": true,
+  "twoExportedEntitiesStable": true,
+  "resultOutputTimers": [
+    349,
+    350
+  ],
+  "transitionStates": [
+    0,
+    2
+  ],
+  "worldHashStable": false,
+  "overallHashStable": false,
+  "formalRootLfr": {
+    "passed": false,
+    "failureCode": 46,
+    "completedTicks": 365
+  },
+  "protectedFileCount": 8,
+  "protectedHashesStable": true,
+  "outputSha256": {
+    "unity-terminal-20260929-01.result.txt": "4FC54F0F162557ADF7288CDF6CF6D49526142C825BBE128931C1B165E7B4B174",
+    "unity-terminal-freeze-20260929-01.jsonl": "4EBB322DA81543C222A13A7298285AB37D46FCC6A0A4BB87C29DAD99B0C57C88",
+    "unity-terminal-raw-20260929-01.jsonl": "12F474F0544E449557D947FA48BD65ABE225CC447D25F6703E0E165B3767D461",
+    "unity-terminal-result-flow-20260929-01.jsonl": "6855B3E073882A8E0451CC919031AAD18F072322BE3D4832DEE84ABB6D76B561"
+  }
+}

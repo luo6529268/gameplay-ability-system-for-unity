@@ -214,9 +214,17 @@ namespace NTSD.Test
                 new SimulationPlayerInput(0, SimulationInputButtons.Attack),
             }));
             Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
-            Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
+            Assert.That(world.Runtime.Results.NativeResultTimer, Is.EqualTo(350));
             Assert.That(world.Runtime.Results.NativeResultPhase, Is.EqualTo(3));
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.Zero);
+
+            tickSystem.RunReleaseTick(3, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+            Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
             Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
+
+            tickSystem.RunReleaseTick(4, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(1));
         }
 
         [Test]
@@ -232,6 +240,8 @@ namespace NTSD.Test
                     new SimulationPlayerInput(2, SimulationInputButtons.Jump),
                 }));
             Assert.That(activeWorld.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
+            Assert.That(activeWorld.Runtime.Results.NativeResultTimer, Is.EqualTo(350));
+            Assert.That(activeWorld.Runtime.Results.NativeTransitionState, Is.Zero);
 
             var inactiveWorld = new SimulationWorld();
             Register(inactiveWorld, 0, 1);

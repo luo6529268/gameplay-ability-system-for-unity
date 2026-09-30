@@ -1,0 +1,26 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q07-C031-STRICT-FLOOR-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Animation/Character/CharacterMechanics.cs
+code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218ContactActionEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218EnvironmentCreditEditorTests.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B4State1218AirborneEditorTests.cs
+authority: selected formal 336B44 playable PhysicsIntegrator28::step and BattleWorld28::step_physics
+evidence: docs/ai/TASKS/NTSD28-336B44-Q07-C031-STRICT-FLOOR-001.md
+-->
+
+# NTSD28-336B44-Q07-C031-STRICT-FLOOR-001
+
+Created before script modification. The current Unity step result merges equality and penetration as `EffectiveFloorContact`; the action and environment-damage consumers both accept equality. The planned one-result change adds a post-integration strict `Y > effectiveFloorY` predicate before clamping; retains `EffectiveFloorContact` for existing non-C031 users; replaces only these two state12/18 gates. Expected side effects: equality preserves falling/burning action, wait counter and pending environmental credit; penetration continues existing soft/hard landing and damage flow. No DAT/Scene/config or nonbattle edits. Test-first equality controls will establish RED, then focused GREEN and adjacent checks. Rollback is the exact four-file hunk review. Formal root same-state and natural Play remain unverified.
+
+Original Editor RED job `70b84889490f48a99c71797655ad4233` executed three new equality cases: state12 expected action170 but got230; state18 expected200 but got185; environment equality expected170 but got230. After this RED, `CharacterMechanics.StepBattleLogic` now computes post-integration `PenetratedEffectiveFloor` before clamping; the `BattleMechanicsStepResult` constructor and its null return carry that shared bool while existing contact/landed semantics remain. The two `LF2Entity` state12/18 consumers use the strict bool. The existing already-grounded test expectation was updated from the obsolete B1E13 soft landing to preserved action/velocity/counter. Actual script paths are the four declared paths above. Current status `CODE_WRITTEN / UNITY_GREEN_PENDING`; original Editor compile and focused tests are still pending. Channel-6 event is only an adjacent C032 observation, not claimed changed here.
+
+Intermediate original Editor job `40c416f33a0643ecaf9a19e758a70dcc` rebuilt zero-error but the same three equality cases remained RED: both exact-character and environment tests still switched to landing actions. Call-chain inspection found the remaining declared `LF2Entity.ShouldResolveCharacterLanding` fallback reads `Landed` (previous Y below floor and current Y at/above), then invokes `HandleLandingEvent` or `ApplySharedCharacterDatLandingIfNeeded`, which can also queue `SFX_006`. This is the same C031 first difference, not a separate behavior request. Before further script edit, the declared `LF2Entity.cs` ownership is amended to gate that fallback for state12/18 using the same `PenetratedEffectiveFloor` bool while retaining ordinary-state `Landed` semantics. No extra script path or DAT/Scene scope is added.
+
+That shared fallback gate is now written. Existing positive B4 test fixtures had `Y=-1,Vy=1` (equality), so their penetration inputs were updated within the two declared test files to `Vy=2` or equivalent strictly positive contact Y; the new equality controls stay unchanged. The horizontal-threshold controls use `Vy=2` to keep the pre-step integer Y airborne and avoid an unrelated grounded-friction adjustment. Original Editor compile and focused result for this final script state remain pending.
+
+Original Editor focused contact/action and environment classes job `08a401bc513941d3a04bec6ed7d8a6ee` passed 19/19. A Q06 contact class filter with the wrong namespace returned 0 tests and is excluded. Adjacent airborne class job `65c04a2ceb3a42b787497204dd4e347b` executed 17 tests, 16 passed and one old expectation failed: `NegativeReferenceGroundContactIsNotAirborne` sets Y exactly equal to negative reference -20 and Vy0, expecting action230, but the new formal rule correctly preserves170. Before editing it, this Record adds `NTSD28B4State1218AirborneEditorTests.cs` solely to update that equality expectation and rerun the adjacent class. No production path changes.
+
+Final original Editor adjacent job `afc262e2844e4806982a690276115c25` passed 17/17 after the one old equality expectation correction. Contact/action/environment job remained 19/19. Latest inspected Unity log contains successful Tundra builds and no `error CS`; protected Battle/Menu Scenes and two config assets retained their prior SHA-256. `git diff --check` and ChangeLedger validator passed (1,040 records, 89 governed code files in dirty diff). The first hash command had wrong config paths and failed; corrected exact paths succeeded. Detailed evidence in [report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C031-STRICT-FLOOR-001/REPORT.md). Status `RUNTIME_PENDING`: formal root EXE same-state and natural Battle Play have not been observed, and C032 sound producer/clip proof is separate. Q07 and total goal remain open.

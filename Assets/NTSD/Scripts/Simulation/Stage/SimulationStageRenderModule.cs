@@ -203,6 +203,7 @@ namespace NTSD.Simulation
                 zMax,
                 perspectiveNear,
                 perspectiveFar);
+            world.SetStageDepthBoundsDomain(false);
             _hasExplicitStageRuntimeSnapshot = true;
             preparedStageRuntimeTick = int.MinValue;
         }
@@ -212,7 +213,8 @@ namespace NTSD.Simulation
             out int zMin,
             out int zMax,
             out int perspectiveNear,
-            out int perspectiveFar)
+            out int perspectiveFar,
+            out bool physicalDepthBounds)
         {
             var cfg = NTSD.App.GameConfig.Instance;
             stageWidth = cfg != null ? Mathf.Max(cfg.BattleStageWidthPx, NTSDRenderSpace.SourceScreenWidth) : 800;
@@ -220,6 +222,7 @@ namespace NTSD.Simulation
             zMax = cfg != null ? Mathf.Max(cfg.BattleStageZMaxPx, zMin + 1) : 350;
             perspectiveNear = cfg != null ? cfg.BattlePerspectiveNear : 0;
             perspectiveFar = cfg != null ? cfg.BattlePerspectiveFar : 0;
+            physicalDepthBounds = false;
 
             BoundaryWallManager manager = BoundaryWallManager.Instance;
             if (manager != null && manager.TryGetBattleStageRuntime(out int boundaryStageWidth, out int boundaryZMin, out int boundaryZMax))
@@ -227,6 +230,7 @@ namespace NTSD.Simulation
                 stageWidth = boundaryStageWidth;
                 zMin = boundaryZMin;
                 zMax = boundaryZMax;
+                physicalDepthBounds = true;
             }
         }
 
@@ -305,21 +309,22 @@ namespace NTSD.Simulation
             if (_hasExplicitStageRuntimeSnapshot)
                 return;
 
-            ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax, out int perspectiveNear, out int perspectiveFar);
+            ResolveUnityStageRuntime(out int stageWidth, out int zMin, out int zMax,
+                out int perspectiveNear, out int perspectiveFar, out bool physicalDepthBounds);
             world.Runtime?.Stage?.SetSceneSnapshot(
                 stageWidth,
                 zMin,
                 zMax,
                 perspectiveNear,
                 perspectiveFar);
+            world.SetStageDepthBoundsDomain(physicalDepthBounds);
             StageRuntimeSceneRefreshCountForDiagnostics++;
         }
 
         public void ClampCharacterZToStageBoundsAll()
         {
-            float zMin = world.Runtime?.Stage?.ZMin ?? 180;
-            float zMax = world.Runtime?.Stage?.ZMax ?? 350;
-            if (zMax < zMin)
+            if (!world.TryGetStageRuleDepthBounds(out double sourceMin,
+                    out double sourceMax, out double viewMin, out double viewMax))
                 return;
 
             foreach (LF2Entity entity in world.ActiveEntitiesByRuntimeSlotForModule)
@@ -330,9 +335,11 @@ namespace NTSD.Simulation
                 double margin = entity.GetCurrentDataObjectTypeForSimulation() ==
                     (int)LF2ObjectType.Character ? 0.0 : 1.0;
                 entity.Runtime.ClampStageZ(
-                    zMin - margin,
-                    zMax + margin,
-                    world.FixedViewRunVerticalDistanceScale);
+                    sourceMin - margin,
+                    sourceMax + margin,
+                    world.FixedViewRunVerticalDistanceScale,
+                    viewMin - world.SpatialProjection.SourceDeltaToViewZ(margin),
+                    viewMax + world.SpatialProjection.SourceDeltaToViewZ(margin));
                 entity.RefreshRuntimeSnapshot();
             }
         }
@@ -348,13 +355,10 @@ namespace NTSD.Simulation
             int stageWidthPx = world.Runtime?.Stage?.StageWidthPx ?? 800;
             int baseStageWidthPx = world.Runtime?.Stage?.BaseStageWidthPx ?? 800;
             int xMaxOverride = world.Runtime?.Stage?.XMaxOverride ?? 0;
-            int stageZMin = world.Runtime?.Stage?.ZMin ?? 180;
-            int stageZMax = world.Runtime?.Stage?.ZMax ?? 350;
-
-            float zMin = stageZMin;
-            float zMax = stageZMax;
             float baseStageWidth = baseStageWidthPx;
-            if (zMax < zMin || baseStageWidth <= 0f)
+            if (!world.TryGetStageRuleDepthBounds(out double sourceMin,
+                    out double sourceMax, out double viewMin, out double viewMax) ||
+                baseStageWidth <= 0f)
                 return;
 
             foreach (LF2Entity entity in world.ActiveEntitiesByRuntimeSlotForModule)
@@ -362,7 +366,7 @@ namespace NTSD.Simulation
                 if (entity.PS == null)
                     continue;
 
-                entity.ApplyPreFrameZBounds(zMin, zMax);
+                entity.ApplyPreFrameZBounds(sourceMin, sourceMax, viewMin, viewMax);
 
                 bool destroyed = entity.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride);
                 if (!destroyed)

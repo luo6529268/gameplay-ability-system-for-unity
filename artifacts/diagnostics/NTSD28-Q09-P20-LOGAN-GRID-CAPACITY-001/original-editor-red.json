@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "0780abf10c1246658da86de118cd21fd",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790638383844,
+      "finished_unix_ms": 1790638405377,
+      "last_update_unix_ms": 1790638405377,
+      "progress": {
+        "completed": 1,
+        "total": 8625,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790638402267,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.HidanFirstDeclaredSheet_StopsAtGridCapacityWithoutOverlappingFallback",
+        "last_finished_unix_ms": 1790638404791,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.HidanFirstDeclaredSheet_StopsAtGridCapacityWithoutOverlappingFallback",
+            "message": "  Formal playable rejects local pic 55+ even when the PNG has pixels there.\r\n  Expected: 55\r\n  But was:  65\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

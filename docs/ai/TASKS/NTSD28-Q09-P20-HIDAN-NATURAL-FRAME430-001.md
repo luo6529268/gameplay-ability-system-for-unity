@@ -1,0 +1,13 @@
+# NTSD28-Q09-P20-HIDAN-NATURAL-FRAME430-001
+
+Status: `VERIFIED_SCOPED_FORMAL_NATURAL_INPUT / UNITY_PLAY_AND_PIXEL_PENDING`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q09 / P-20`. Q07/BATCH-04 remains open independently on the D-024 collision-domain choice.
+
+Authority: root formal `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; matching playable `GameSession28::step`, `InputRouter28::step_sampled`, `advance_combos`, `route_combo_fields`, and `SpriteFrameResolver28::resolve`; formal `decoded_dat/c/hid/hid.dat` frame212 `hit_Fa:430`, frame430 pic119 and first sheet pic62-126/5x11. Prior paired Session trace in `NTSD28-Q07-HIDAN-NATURAL-INPUT-REACHABILITY-001` reaches actor action212 at ticks15-17 from action0 with attack1-2/jump9-10, but did not try the forward-attack combo.
+
+Pre-change: Unity's Logan PNG grid-capacity fix passed original Editor focused 4/4. It is not yet known whether ordinary formal input naturally reaches frame430; a static DAT reference cannot close natural visual acceptance.
+
+Declared code path before edit: add only `Tools/NTSD28Q09Diagnostics/hidan_natural_frame430_probe.cpp`. The diagnostic will initialize indexed Hidan OID24 actor and distant Hidan target through complete paired playable Session mode0, Stage23, fixed seed, record a bounded ordinary attack/jump path and vary only the one-sample defend+forward+attack timing around observed action212. It will write new JSONL and, for the first natural positive only, a source-authored LFR; refuse output overwrite. No formal source or resource edits, Unity production/test/Scene/DAT/PNG/audio/nonbattle edits, or old artifact overwrites.
+
+Acceptance: paired closure C++17 compile; bounded result identifies action430 or the exact first route obstacle, preserving raw per-tick input phase/action/combo; if positive, root formal EXE headless LFR replay is run without action override and selected tick fields independently compared. A positive root result opens one original Unity Battle Scene same-input/same-frame body-pixel gate under a separate declared Task/Change. A negative result documents the exact first action and does not widen to a character matrix. Report compile/runtime/EXE tiers distinctly; run Ledger and diff checks. Rollback is removal of only the new diagnostic and outputs after review; all pre-existing dirty work remains untouched.
+
+2026-09-29 result: first bounded same-sample combo candidate tick13–14 reached formal paired action430 at tick16, root formal EXE replayed source-authored LFR with failure0 and selected 120/120 fields equal. Unity and GPU remain separate gates. See [acceptance](../../../artifacts/diagnostics/NTSD28-Q09-P20-HIDAN-NATURAL-FRAME430-001/ACCEPTANCE.md).

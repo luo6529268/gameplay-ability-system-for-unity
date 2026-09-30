@@ -35,6 +35,7 @@ namespace NTSD.Test.Editor
         private static int fixedTick;
         private static int firstGeneration;
         private static double firstPositionX;
+        private static string firstFpsLogicChecksum;
         private static double expectedSourceX;
         private static double expectedViewX;
         private static double dueTime;
@@ -192,6 +193,13 @@ namespace NTSD.Test.Editor
                 Check(Math.Abs(actor.Runtime.SourceRuleX - expectedSourceX) < 1e-6 &&
                       Math.Abs(actor.Runtime.X - expectedViewX) < 1e-6,
                     "Presentation changed source/view logic coordinates.");
+                string laterFpsLogicChecksum =
+                    world.CaptureParityFrameSnapshot(fixedTick).OverallChecksum;
+                File.AppendAllText(ResultPath,
+                    $"fps={fps} logicChecksum first={firstFpsLogicChecksum} " +
+                    $"later={laterFpsLogicChecksum}\n");
+                Check(laterFpsLogicChecksum == firstFpsLogicChecksum,
+                    $"{fps} FPS display sampling changed the paused World parity checksum.");
                 if (fps == 30)
                 {
                     Check(later.Generation == firstGeneration &&
@@ -236,6 +244,10 @@ namespace NTSD.Test.Editor
             world.BattlePresentation.BeginFrame(world, nextTick);
             Check(world.BattlePresentation.PublishedFrame.PreviousMotionTickIndex ==
                 previous.TickIndex, "The display motion pair is not adjacent.");
+            firstFpsLogicChecksum =
+                world.CaptureParityFrameSnapshot(fixedTick).OverallChecksum;
+            Check(!string.IsNullOrEmpty(firstFpsLogicChecksum),
+                $"{fps} FPS paused World parity checksum is unavailable.");
 
             BattleCentralRenderSystem.FlushLatestPublishedFrame(world);
             BattlePixelFramePlan first = world.CurrentPixelFramePlan;

@@ -1078,8 +1078,9 @@ namespace NTSD.Simulation
                 ordinaryTimer--;
                 if (ordinaryTimer % 8 == 0 && hp < effectiveMaxHp)
                 {
-                    hp = System.Math.Min(hp + 8, effectiveMaxHp);
-                    if (hp >= effectiveMaxHp)
+                    int healingCandidate = hp + 8;
+                    hp = System.Math.Min(healingCandidate, effectiveMaxHp);
+                    if (healingCandidate > effectiveMaxHp)
                         ordinaryTimer = 0;
                 }
             }

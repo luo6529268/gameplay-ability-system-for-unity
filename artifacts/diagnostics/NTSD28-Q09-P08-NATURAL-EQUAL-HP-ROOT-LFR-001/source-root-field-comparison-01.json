@@ -1,0 +1,19 @@
+{
+  "status": "SELECTED_FIELDS_MATCH_RNG_INITIAL_STATE_DIFFERS_ROOT_MARK_NOT_EXPORTED",
+  "formalReportPassed": true,
+  "failureCode": 0,
+  "declaredTicks": 22,
+  "completedTicks": 23,
+  "nativeParityClaim": false,
+  "comparedTicks": 22,
+  "scalarChecks": 132,
+  "differences": [],
+  "initialTargetRootHp": 30,
+  "initialTargetRootBaseHp": 30,
+  "sourceTick22BleedCommandCount": 1,
+  "rootTraceExportsBleedCommand": false,
+  "pairedTick1CrtState": 1671198313,
+  "rootTick1CrtState": 3374725112,
+  "lfrSha256": "ABD2B83A72E7DC7496228CE56BD2310E3AC69C67BECCC69354A7FA50416C5C55",
+  "lfrRun02Sha256": "ABD2B83A72E7DC7496228CE56BD2310E3AC69C67BECCC69354A7FA50416C5C55"
+}

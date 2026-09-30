@@ -1,0 +1,45 @@
+{
+  "formalTrace": "artifacts\\diagnostics\\NTSD28-Q07-HIDAN-NATURAL-INPUT-REACHABILITY-001\\release-natural-x580-trace.jsonl",
+  "unityRaw": "hidan-x580.raw.jsonl",
+  "unityInputRng": "hidan-x580.input-rng.jsonl",
+  "tickCount": 40,
+  "selectedFieldsPerTick": [
+    "actor.action",
+    "target.action",
+    "actor.mp",
+    "target.mp",
+    "target.hp",
+    "actor.x",
+    "actor.y",
+    "actor.z",
+    "target.x",
+    "target.y",
+    "target.z"
+  ],
+  "selectedCompared": 440,
+  "selectedFirstDifference": [],
+  "selectedDifferenceCount": 0,
+  "synchronizedCompared": 200,
+  "synchronizedFirstDifference": [],
+  "synchronizedDifferenceCount": 0,
+  "inputPhaseCompared": 40,
+  "inputPhaseFirstDifference": [],
+  "inputPhaseDifferenceCount": 0,
+  "initialSynchronizedDifference": {},
+  "attackTick2": {
+    "formalRequested": 65,
+    "unityCalls": [
+      {
+        "callSite": 130,
+        "counterAfter": 1,
+        "indexAfter": 1,
+        "result": 1,
+        "totalCalls": 1,
+        "upperBound": 2
+      }
+    ],
+    "formalAction": 65,
+    "unityAction": 65
+  },
+  "crtCaveat": "Formal root LFR playback uses default seed 0; Unity fixture uses seed 681925210. CRT scalar state is not a same-seed parity claim."
+}

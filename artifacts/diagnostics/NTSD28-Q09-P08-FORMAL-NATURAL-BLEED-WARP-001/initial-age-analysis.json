@@ -1,0 +1,39 @@
+{
+  "comparison": "first four target life-ticks only; source roster initialization versus Unity test-time register",
+  "targetActionMatches": 4,
+  "rows": [
+    {
+      "sourceTick": 1,
+      "unityTick": 6,
+      "formalTargetAction": 0,
+      "unityTargetAction": 0,
+      "formalActorAction": 0,
+      "unityActorAction": 60
+    },
+    {
+      "sourceTick": 2,
+      "unityTick": 7,
+      "formalTargetAction": 0,
+      "unityTargetAction": 0,
+      "formalActorAction": 60,
+      "unityActorAction": 60
+    },
+    {
+      "sourceTick": 3,
+      "unityTick": 8,
+      "formalTargetAction": 0,
+      "unityTargetAction": 0,
+      "formalActorAction": 60,
+      "unityActorAction": 511
+    },
+    {
+      "sourceTick": 4,
+      "unityTick": 9,
+      "formalTargetAction": 1,
+      "unityTargetAction": 1,
+      "formalActorAction": 511,
+      "unityActorAction": 511
+    }
+  ],
+  "inferenceLimit": "actor input phase and complete initial world are not matched"
+}

@@ -1,0 +1,37 @@
+{
+  "runId": "karin-central-alpha-x500-20260928-01",
+  "onSha256": "dc80caf2984834546b2d88a3c1a7265ae6d14f6c0a64bf979a46d98ed8ef362f",
+  "offSha256": "4c20493d487a7a0b1dfbc7b84a05f557d584de2c8deaa1abbbc3dc7209941014",
+  "officialSourceSha256": "5bbd5c1af4061f891fe6cae1432498e2a7742908db54cd5bbf5d650b58799654",
+  "size": [
+    1280,
+    720
+  ],
+  "sourceCellSize": [
+    79,
+    79
+  ],
+  "sourceAlphaMax": 33,
+  "sourceNonzeroAlphaPixels": 1433,
+  "changedPixelsAnyChannelGt0": 1245,
+  "changedPixelsAnyChannelGt2": 609,
+  "changedBBoxTopLeft": [
+    459,
+    188,
+    506,
+    254
+  ],
+  "changedChannelMax": [
+    20,
+    22,
+    25,
+    0
+  ],
+  "changedChannelMean": [
+    6.032840722495895,
+    7.318555008210181,
+    7.9507389162561575,
+    0.0
+  ],
+  "changedRgbGtSourceAlphaMax": 0
+}

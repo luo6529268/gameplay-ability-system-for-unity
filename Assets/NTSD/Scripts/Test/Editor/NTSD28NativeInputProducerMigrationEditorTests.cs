@@ -142,7 +142,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void DataOrientedDeadType0SecondPass_ClearsAllDerivedInputState()
+        public void DataOrientedZeroHpSecondPass_PreservesSampledInputState()
         {
             var world = CreateDataOrientedWorld();
             LF2Character character = RegisterCharacter(world, 0, 808);
@@ -161,15 +161,16 @@ namespace NTSD.Test
 
             world.CharacterInputAll(2);
 
-            Assert.That(runtime.KeyJump, Is.Zero);
-            Assert.That(runtime.PrevJump, Is.Zero);
-            Assert.That(runtime.CdAttack, Is.Zero);
-            Assert.That(runtime.NativeInputProxy.ProxyTail, Is.Zero);
-            Assert.That(runtime.NativeInputProxy.EdgeWindow, Is.All.Zero);
-            Assert.That(runtime.NativeInputProxy.Current, Is.All.Zero);
-            Assert.That(runtime.NativeInputProxy.Previous, Is.All.Zero);
-            Assert.That(runtime.NativeInputProxy.ComboState, Is.All.Zero);
-            AssertNativeHistoryInitial(runtime);
+            Assert.That(runtime.KeyJump, Is.EqualTo(1));
+            Assert.That(runtime.PrevJump, Is.EqualTo(1));
+            Assert.That(runtime.CdAttack, Is.EqualTo(3));
+            Assert.That(runtime.NativeInputProxy.ProxyTail, Is.EqualTo(0x5A));
+            Assert.That(runtime.NativeInputProxy.EdgeWindow[0], Is.EqualTo(3));
+            Assert.That(runtime.NativeInputProxy.Current[4], Is.EqualTo(1));
+            Assert.That(runtime.NativeInputProxy.Previous[4], Is.EqualTo(1));
+            Assert.That(runtime.NativeInputProxy.ComboState[2], Is.EqualTo(3));
+            Assert.That(runtime.InputHistory[4], Is.EqualTo(9));
+            Assert.That(runtime.InputHistory[5], Is.EqualTo(5));
         }
 
         [Test]

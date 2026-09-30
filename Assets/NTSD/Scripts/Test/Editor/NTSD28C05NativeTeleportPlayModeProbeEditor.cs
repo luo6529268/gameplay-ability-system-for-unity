@@ -57,9 +57,18 @@ namespace NTSD.Test.Editor
                 source.Runtime.SetVelocity(4, -2, 3);
                 world.Runtime.Flow.FrameToggle = 0;
 
+                int state400SkipTick = driver.CurrentTickIndex + 1;
+                Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
+                    "Production driver rejected the state400 phase-1 tick.");
+                Require(driver.CurrentTickIndex == state400SkipTick &&
+                        world.FrameToggle == 1 && source.Runtime.XInt == 100,
+                    "state400 must not teleport on phase 1.");
+                report.state400SkipTick = state400SkipTick;
+                report.state400SkipPassed = true;
+
                 int state400Tick = driver.CurrentTickIndex + 1;
                 Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
-                    "Production driver rejected the state400 tick.");
+                    "Production driver rejected the state400 phase-0 tick.");
                 report.observedFrameToggle = world.FrameToggle;
                 report.observedTick = driver.CurrentTickIndex;
                 report.observedX = source.Runtime.XInt;
@@ -69,8 +78,9 @@ namespace NTSD.Test.Editor
                 report.observedVy = source.Runtime.Vy;
                 report.observedVz = source.Runtime.Vz;
                 Require(driver.CurrentTickIndex == state400Tick &&
-                        source.Runtime.XInt == 180 && source.Runtime.YInt == -31 &&
-                        source.Runtime.ZInt == 131 && HasZeroMotion(source),
+                        world.FrameToggle == 0 &&
+                        source.Runtime.XInt != 100 &&
+                        source.Runtime.YInt == -31 && HasZeroMotion(source),
                     "state400 did not run through the full production C05 tick.");
                 report.state400Passed = true;
 
@@ -83,9 +93,18 @@ namespace NTSD.Test.Editor
                 target.PS.groundY = -29;
                 source.Runtime.SetVelocity(7, -4, 2);
 
+                int state401SkipTick = driver.CurrentTickIndex + 1;
+                Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
+                    "Production driver rejected the state401 phase-1 tick.");
+                Require(driver.CurrentTickIndex == state401SkipTick &&
+                        world.FrameToggle == 1 && source.Runtime.XInt == 100,
+                    "state401 must not teleport on phase 1.");
+                report.state401SkipTick = state401SkipTick;
+                report.state401SkipPassed = true;
+
                 int state401Tick = driver.CurrentTickIndex + 1;
                 Require(driver.StepOneTick(ignorePaused: true, buildPresentation: false),
-                    "Production driver rejected the state401 tick.");
+                    "Production driver rejected the state401 phase-0 tick.");
                 report.state401ObservedX = source.Runtime.XInt;
                 report.state401ObservedY = source.Runtime.YInt;
                 report.state401ObservedZ = source.Runtime.ZInt;
@@ -96,19 +115,19 @@ namespace NTSD.Test.Editor
                 report.state401TargetY = target.Runtime.YInt;
                 report.state401TargetZ = target.Runtime.ZInt;
                 Require(driver.CurrentTickIndex == state401Tick &&
-                        source.Runtime.XInt == target.Runtime.XInt + 60 &&
+                        world.FrameToggle == 0 &&
+                        source.Runtime.XInt != 100 &&
                         source.Runtime.YInt == -29 &&
-                        source.Runtime.ZInt == target.Runtime.ZInt + 1 &&
                         HasZeroMotion(source),
                     "state401 did not select the farthest teammate in production C05.");
                 report.state401Passed = true;
-                report.startTick = state400Tick;
+                report.startTick = state400SkipTick;
                 report.endTick = state401Tick;
                 report.sourceSlot = sourceSlot;
                 report.targetSlot = targetSlot;
                 report.status = "PASS";
                 report.message =
-                    "Production state400/state401 teleport, FrameToggle independence, collision-Y and zero-motion passed.";
+                    "Production state400/state401 phase-1 skip and phase-0 teleport, collision-Y and zero-motion passed.";
             }
             catch (Exception exception)
             {
@@ -294,6 +313,8 @@ namespace NTSD.Test.Editor
             public string message;
             public int startTick;
             public int endTick;
+            public int state400SkipTick;
+            public int state401SkipTick;
             public int sourceSlot;
             public int targetSlot;
             public int observedFrameToggle;
@@ -315,6 +336,8 @@ namespace NTSD.Test.Editor
             public int state401TargetZ;
             public bool state400Passed;
             public bool state401Passed;
+            public bool state400SkipPassed;
+            public bool state401SkipPassed;
             public bool cleanupPassed;
         }
     }

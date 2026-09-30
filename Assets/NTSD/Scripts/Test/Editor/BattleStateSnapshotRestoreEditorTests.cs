@@ -15,6 +15,35 @@ namespace NTSD.Test
     public sealed class BattleStateSnapshotRestoreEditorTests
     {
         [Test]
+        public void ProjectPhysicalStageDomainRestoresWithCoreAndChecksum()
+        {
+            using var scope = new DriverScope();
+            LockstepSessionIdentity identity =
+                StrictDelayedInputBufferEditorTests.CreateIdentity();
+            var session = new BattleLockstepSession(scope.Driver, identity, 0, 8, 8);
+            BattleStateSnapshotBuffer snapshot =
+                session.CreateBattleStateSnapshotBufferForBootstrap();
+            SimulationWorld world = scope.Driver.World;
+            world.Runtime.Stage.SetSceneSnapshot(800, 237, 760, 0, 0);
+            world.SetStageDepthBoundsDomain(true);
+            Assert.That(session.TryCaptureBattleStateSnapshot(snapshot), Is.True);
+            Assert.That(snapshot.Core.Stage.PhysicalDepthBounds, Is.True);
+            ulong expected = world.CaptureRuntimeChecksum64(0, null);
+
+            world.SetStageDepthBoundsDomain(false);
+            Assert.That(world.CaptureRuntimeChecksum64(0, null),
+                Is.Not.EqualTo(expected));
+            Assert.That(scope.Driver.TryRestoreBattleStateSnapshot(
+                identity, snapshot, out BattleStateSnapshotRestoreFailure failure),
+                Is.True, failure.ToString());
+            Assert.That(world.StageDepthBoundsArePhysical, Is.True);
+            Assert.That(world.Runtime.Stage.ZMin, Is.EqualTo(237));
+            Assert.That(world.Runtime.Stage.ZMax, Is.EqualTo(760));
+            Assert.That(world.CaptureRuntimeChecksum64(0, null),
+                Is.EqualTo(expected));
+        }
+
+        [Test]
         public void SelectedStageGateRestoresChecksumAndRejectsPreviousAggregateVersion()
         {
             using var scope = new DriverScope();

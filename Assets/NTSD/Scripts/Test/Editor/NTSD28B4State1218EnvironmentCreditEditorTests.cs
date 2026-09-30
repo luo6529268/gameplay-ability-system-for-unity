@@ -1,4 +1,5 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
+using System;
 using System.Collections.Generic;
 
 using NTSD.Animation;
@@ -30,9 +31,78 @@ namespace NTSD.Test.Editor
             Assert.That(victim.Health.HP, Is.EqualTo(90));
             Assert.That(victim.Health.HPBound, Is.EqualTo(70));
             Assert.That(victim.Runtime.InputHpConsumedTotal34C, Is.EqualTo(10));
-            Assert.That(victim.Runtime.EnvironmentState320, Is.EqualTo(1));
+            Assert.That(victim.Runtime.EnvironmentState320, Is.Zero);
             Assert.That(credit.Runtime.InputScoreTotal348, Is.EqualTo(10));
             Assert.That(credit.Runtime.KnockoutCount358, Is.Zero);
+            Assert.That(world.PendingSounds, Has.Count.EqualTo(1));
+            Assert.That(world.PendingSounds[0].Cue, Is.EqualTo(@"data\016.wav"));
+        }
+
+        [Test]
+        public void ExactFloorEquality_DoesNotConsumePendingEnvironmentDamage()
+        {
+            var world = new SimulationWorld();
+            LF2Character victim = CreateExact(8330, 170, LF2States.Falling);
+            Register(world, victim, 0);
+            victim.Runtime.CollisionYReference = 0;
+            victim.Runtime.SetPosition(0.0, -1.0, 0.0);
+            victim.Runtime.SetVelocity(0.0, 1.0, 0.0);
+            victim.Runtime.SyncIntegerPosition();
+            victim.Health.HP = 100;
+            victim.Health.HPBound = 80;
+            victim.Runtime.EnvironmentState320 = 10;
+
+            Assert.That(victim.RunNativePhysicsForWorldPass(1), Is.True);
+
+            Assert.That(victim.Frame.N, Is.EqualTo(170));
+            Assert.That(victim.Health.HP, Is.EqualTo(100));
+            Assert.That(victim.Health.HPBound, Is.EqualTo(80));
+            Assert.That(victim.Runtime.InputHpConsumedTotal34C, Is.Zero);
+            Assert.That(victim.Runtime.EnvironmentState320, Is.EqualTo(10));
+            Assert.That(world.PendingSounds, Is.Empty);
+        }
+
+        [TestCase(1.0, 170, 0, 10, 100)]
+        [TestCase(2.0, 230, 1, 0, 90)]
+        public void CanonicalFullTick_QueuesChannel6OnlyAfterStrictPenetration(
+            double vy,
+            int expectedAction,
+            int expectedSounds,
+            int expectedEnvironmentState,
+            int expectedHp)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            LF2Character character = CreateExact(8331, 170, LF2States.Falling);
+            Register(world, character, 0);
+            try
+            {
+                character.Runtime.CollisionYReference = 0;
+                character.Runtime.SetPosition(0.0, -1.0, 0.0);
+                character.Runtime.SetVelocity(0.0, vy, 0.0);
+                character.Runtime.SyncIntegerPosition();
+                character.Health.HP = 100;
+                character.Health.HPBound = 100;
+                character.Runtime.EnvironmentState320 = 10;
+
+                var input = new FrameInputSet(1,
+                    Array.Empty<SimulationPlayerInput>());
+                new NTSDBattleTickSystem(world).RunReleaseTick(1, false, input);
+
+                Assert.That(character.Frame.N, Is.EqualTo(expectedAction));
+                Assert.That(character.Runtime.EnvironmentState320,
+                    Is.EqualTo(expectedEnvironmentState));
+                Assert.That(character.Health.HP, Is.EqualTo(expectedHp));
+                Assert.That(world.PendingSounds.Count, Is.EqualTo(expectedSounds));
+                if (expectedSounds != 0)
+                    Assert.That(world.PendingSounds[0].Cue,
+                        Is.EqualTo(@"data\016.wav"));
+            }
+            finally
+            {
+                world.Unregister(character);
+            }
         }
 
         [Test]
@@ -105,7 +175,7 @@ namespace NTSD.Test.Editor
             Assert.That(victim.Health.HP, Is.EqualTo(14));
             Assert.That(victim.Health.HPBound, Is.EqualTo(12));
             Assert.That(victim.Runtime.InputHpConsumedTotal34C, Is.EqualTo(6));
-            Assert.That(victim.Runtime.EnvironmentState320, Is.EqualTo(1));
+            Assert.That(victim.Runtime.EnvironmentState320, Is.Zero);
         }
 
         [Test]
@@ -174,6 +244,7 @@ namespace NTSD.Test.Editor
 
             Assert.That(airborne.RunNativePhysicsForWorldPass(1), Is.True);
             Assert.That(airborne.Health.HP, Is.EqualTo(20));
+            Assert.That(airborne.Frame.D.state, Is.EqualTo(LF2States.Falling));
             Assert.That(airborne.Runtime.EnvironmentState320, Is.EqualTo(8));
 
             LF2Character ordinary = CreateExact(8328, 0, LF2States.Standing);
@@ -184,7 +255,7 @@ namespace NTSD.Test.Editor
 
             Assert.That(ordinary.RunNativePhysicsForWorldPass(1), Is.True);
             Assert.That(ordinary.Health.HP, Is.EqualTo(20));
-            Assert.That(ordinary.Runtime.EnvironmentState320, Is.EqualTo(8));
+            Assert.That(ordinary.Runtime.EnvironmentState320, Is.Zero);
         }
 
         private static void Register(
@@ -200,7 +271,7 @@ namespace NTSD.Test.Editor
         {
             entity.Runtime.CollisionYReference = 0;
             entity.Runtime.SetPosition(0.0, -1.0, 0.0);
-            entity.Runtime.SetVelocity(0.0, 1.0, 0.0);
+            entity.Runtime.SetVelocity(0.0, 2.0, 0.0);
             entity.Runtime.SyncIntegerPosition();
         }
 
@@ -229,6 +300,10 @@ namespace NTSD.Test.Editor
             var frames = new List<LF2FrameData>
             {
                 Frame(action, state),
+                Frame(180, LF2States.Falling),
+                Frame(181, LF2States.Falling),
+                Frame(182, LF2States.Falling),
+                Frame(183, LF2States.Falling),
                 Frame(185, 0),
                 Frame(191, 0),
                 Frame(219, 0),

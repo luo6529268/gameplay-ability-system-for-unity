@@ -3177,7 +3177,8 @@ namespace NTSD.Simulation.Presentation
                         BattleFootMarkerSizing.ResolveStableCharacterScale(
                             entity.StableCharacterHeightPixels)));
 
-                    if (mode == BattlePresentationBackendMode.CentralOnly &&
+                    if ((mode == BattlePresentationBackendMode.CentralOnly ||
+                         mode == BattlePresentationBackendMode.LegacyOnly) &&
                         entity.FrameId < 1000 &&
                         entity.BloodPoints.Count > 0 &&
                         entity.CurrentHealth <= entity.MaximumHealth / 3)

@@ -110,7 +110,8 @@ namespace NTSD.Simulation.Presentation
             int displayedLives = entity.HP2Orig > 999 ? 999 : entity.HP2Orig;
             int counterLength = displayedLives > 1 &&
                 entity.SelectedModeReviveLivesGate54 != 3 &&
-                entity.SelectedModeReviveLivesGate54 != 4
+                entity.SelectedModeReviveLivesGate54 != 4 &&
+                (long)entity.XInt - entity.CameraX + 14 >= entity.VisibleLeftPixel
                 ? (displayedLives >= 100 ? 4 : displayedLives >= 10 ? 3 : 2)
                 : 0;
             int labelLength = GetLabelLength(in entity, slotLabelChars, specialCom);

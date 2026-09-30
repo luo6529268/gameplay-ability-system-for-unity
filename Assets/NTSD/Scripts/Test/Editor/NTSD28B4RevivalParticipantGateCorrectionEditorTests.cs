@@ -30,6 +30,43 @@ namespace NTSD.Test.Editor
             AssertC25ProductionCase(mode, 0, 999, 5, 1, 1, 0);
         }
 
+        [TestCase(BattleEcsCharacterFrameTickPassMode.DataOriented)]
+        [TestCase(BattleEcsCharacterFrameTickPassMode.Legacy)]
+        public void TerminalPrimaryHold_ClearsFrameCounterEachFramePass(
+            BattleEcsCharacterFrameTickPassMode mode)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(mode);
+            LF2Character character = CreateRegisteredCharacter(world, 0, 9409);
+            ConfigureDeadState14(character, 1, 0, 2, -1, 1);
+            Assert.That(character.AttackingCounter, Is.EqualTo(7));
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(character.Frame.N, Is.EqualTo(14));
+            Assert.That(character.AttackingCounter, Is.Zero);
+        }
+
+        [TestCase(0, 2, 0)]
+        [TestCase(0, 1, 80)]
+        [TestCase(20, 1, 0)]
+        public void TerminalHoldGate_DoesNotClearIneligibleFrameCounters(
+            int slot,
+            int lives,
+            int nextHp)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureBattleEcsCharacterFrameTickPassForDiagnostics(
+                BattleEcsCharacterFrameTickPassMode.DataOriented);
+            LF2Character character = CreateRegisteredCharacter(
+                world, slot, 9490 + slot + lives);
+            ConfigureDeadState14(character, lives, nextHp, 2, -1, 1);
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(character.AttackingCounter, Is.Not.Zero);
+        }
+
         [Test]
         public void LegacyCharacterHook_DoesNotArmRevivalRenderPhase()
         {

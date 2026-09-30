@@ -1,5 +1,9 @@
 # Q10 formal battle-WAV deployment candidate (read-only)
 
+2026-09-29 scope correction: this 978-row v1 union includes `data/085.wav`, currently supported only by formal character-selection `sound1`/`sound2` and sound-table owners, with no known battle producer. Do **not** use v1 as the exact battle-only copy list. The additive [v2 report](FORMAL-BATTLE-WAV-DEPLOYMENT-CANDIDATE-V2-20260929.md) and CSV retain 977 rows after excluding that one selection-only-known path; no WAV was copied. The earlier 978-row user-facing scope question was overbroad and needs a corrected decision before copying.
+
+2026-09-29 新鲜源/目标门复核：重新读取下述精确 CSV 的全部 978 行，对每个相对路径拒绝绝对路径、反斜线、冒号及 `..`，逐文件核正式 VFS 的长度与 SHA-256，并逐项检查 Unity `LoganRuntime/vfs` 同名文件及 `.meta` 占用。结果：路径不安全 0、正式源缺失 0、长度或 SHA 不同 0、目标文件或 meta 已占用 0，源总量仍为 33,300,049 字节；当前暂存 VFS 的 WAV 总数仍为 0。这只证明候选复制的字节和无覆盖前置，**没有复制音频、改路由、做 Unity 导入或证明声音已可播放**。下方 `USER_AUDIO_SCOPE_CONFIRMATION_PENDING` 保持；Q10 仍开放。
+
 Status: `EXACT_CANDIDATE_PREPARED / USER_AUDIO_SCOPE_CONFIRMATION_PENDING / NO_COPY / NO_CODE_CHANGE` on 2026-09-27. This belongs to the master alignment document's Q10/O-05; it does not alter the D-023 DAT and character-image scope or close Q10.
 
 The formal root EXE was rehashed to SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`. The candidate is an exact normalized, Windows-case-folded union of the already audited formal frame cue CSV, the byte-identical formal/staged `decoded_dat/data/sound.dat` 18-entry ordered table, the object-level `data/0.wav`, three weapon-level `data/037.wav` / `data/040.wav` / `data/079.wav` declarations, and `data/m_join.wav` used by the project mode asset. All paths resolve to existing formal `resources/runtime/vfs` files.

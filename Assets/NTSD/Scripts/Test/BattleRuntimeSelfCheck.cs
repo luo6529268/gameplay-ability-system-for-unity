@@ -4252,15 +4252,15 @@ namespace NTSD.Test
                 var weapon6 = new SpriteFileInfo("weapon6.bmp", 0, 99, 48, 48, 10, 10);
                 CharacterAnimtorManager.ResolveEffectiveGrid(weapon6, 490, 198, out int weapon6Row, out int weapon6Col);
                 Rect?[] weapon6Rects = CharacterAnimtorManager.BuildIndexedSpriteRects(
-                    weapon6, 490, 198, weapon6Row, weapon6Col);
+                    weapon6, 490, 198, weapon6Row, weapon6Col, allowBeyondGridCapacity: true);
                 var weapon3 = new SpriteFileInfo("weapon3.bmp", 0, 99, 58, 58, 10, 10);
                 CharacterAnimtorManager.ResolveEffectiveGrid(weapon3, 455, 59, out int weapon3Row, out int weapon3Col);
                 Rect?[] weapon3Rects = CharacterAnimtorManager.BuildIndexedSpriteRects(
-                    weapon3, 455, 59, weapon3Row, weapon3Col);
+                    weapon3, 455, 59, weapon3Row, weapon3Col, allowBeyondGridCapacity: true);
                 var etc = new SpriteFileInfo("etc.bmp", 0, 69, 79, 79, 4, 4);
                 CharacterAnimtorManager.ResolveEffectiveGrid(etc, 321, 84, out int etcRow, out int etcCol);
                 Rect?[] etcRects = CharacterAnimtorManager.BuildIndexedSpriteRects(
-                    etc, 321, 84, etcRow, etcCol);
+                    etc, 321, 84, etcRow, etcCol, allowBeyondGridCapacity: true);
                 Vector2 etcClippedPivot = CharacterAnimtorManager.ComputeIndexedSpritePivot(
                     etc,
                     321,
@@ -5376,10 +5376,11 @@ namespace NTSD.Test
                 "Batch6 overlay oid 38 exception, object type, and hit-stop gates changed");
 
             Expect(BattleEntityOverlayLayout.TryBuild(Slot(2, -1, 0, 0, 1, 0, -100), labels, states, glyphs, out int leftCount) &&
-                   glyphs[0].PixelX < 0 && glyphs[2].PixelX == 0 &&
+                   leftCount == 3 && glyphs[0].Type == BattleEntityOverlayGlyphType.Label &&
+                   glyphs[0].PixelX == 0 &&
                    BattleEntityOverlayLayout.TryBuild(Slot(0, -1, 0, 0, 1, 0, 1000), labels, states, glyphs, out int rightCount) &&
                    glyphs[0].PixelX == 794 - 3 * BattleEntityOverlayLayout.GlyphAdvance - 1,
-                "Batch6 overlay labels must clamp while counters retain their unclamped position");
+                "Batch6 overlay labels clamp while offscreen-left counters are suppressed");
 
             var tooSmall = new BattleEntityOverlayGlyph[2];
             tooSmall[0].CharCode = 999;
@@ -13675,8 +13676,8 @@ namespace NTSD.Test
             Expect(!reservedSlot.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && reservedSlot.Runtime.X == -100f,
                 "slot>=20 character must use the -100 lower X bound");
             reservedSlot.Runtime.X = 901f;
-            Expect(!reservedSlot.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && reservedSlot.Runtime.X == 900f,
-                "slot>=20 character must use base stage width plus 100 and ignore phase override");
+            Expect(!reservedSlot.ApplyPreFrameXBounds(baseStageWidth, xMaxOverride) && reservedSlot.Runtime.X == 810f,
+                "slot>=20 character must use base stage width plus 10 and ignore phase override");
 
             FlowSelfCheckEntity type3LowerEdge = CreateFlowSelfCheckEntity(
                 "SelfCheck_BoundsType3LowerEdge", LF2ObjectType.SpecialAttack, 0, 1, -300, 200, 2);
@@ -23121,11 +23122,11 @@ itr_end:
 
                 mismatch.RunFrameLogicBeforeAdvance();
 
-                Expect(mismatch.Frame.N == 40 &&
+                Expect(mismatch.Frame.N == 0 &&
                        Nearly(mismatch.Runtime.Vx, NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0) &&
                        mismatch.AttackingCounter == 23,
                     $"R-FL-02: a type1 CLR weapon shell with current {boomerangCurrentTypes[i]} DAT must " +
-                    "enter raw frame40 without changing velocity or attacking");
+                    "leave action unchanged before the physics-stage speed test");
             }
 
             LF2CharacterData missingDefinitionData = BuildFrameLifecycleHitFaData(
@@ -23181,8 +23182,8 @@ itr_end:
                 nativeLight.Runtime.Vx = NTSDGlobal.Gameplay.WeaponBoomerangVxMax + 1.0;
                 nativeLight.RunFrameLogicBeforeAdvance();
 
-                Expect(nativeThrow.Frame.N == 40 && nativeLight.Frame.N == 0,
-                    "R-FL-02: native type4 must retain boomerang frame40 while native type1 remains excluded");
+                Expect(nativeThrow.Frame.N == 0 && nativeLight.Frame.N == 0,
+                    "R-FL-02: neither native type4 nor type1 selects action40 before physics");
             }
 
             LF2CharacterData targetData = new LF2CharacterData

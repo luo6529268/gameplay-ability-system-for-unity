@@ -1,0 +1,9 @@
+# NTSD28-Q09-P20-HIDAN-NATURAL-WARP-001
+
+Status: `VERIFIED_SCOPED_FORMAL_PAIRED_GPU`. Q09/P-20 bounded formal-side visual witness; [acceptance](../../../artifacts/diagnostics/NTSD28-Q09-P20-HIDAN-NATURAL-WARP-001/ACCEPTANCE.md). P-20/Q09/BATCH-05 remain open.
+
+Authority: root NTSD2.8-Logan EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`, its declared playable source, `dat_parser.cpp::project_sprite_sheet`, `render_snapshot.cpp::SpriteFrameResolver28::resolve`, and formal `resources/runtime`. The prior root LFR/paired ordinary-input fixture reached Hidan OID24/action430/pic119 at tick16; runtime pic119 belongs to hid6, correcting the older textual-range inference.
+
+Allowed scope: add one diagnostic main under `Tools/NTSD28Q09Diagnostics/` and unique outputs under `artifacts/diagnostics/NTSD28-Q09-P20-HIDAN-NATURAL-WARP-001/`. Compile linked against the unmodified playable/core source closure. Reproduce the same 16 ordinary input ticks from action0; inspect sprite/command source sheet and source rect; render paired D3D11 WARP body-on/off copies of the **same** snapshot with no world mutation; compare pixel delta. Do not edit formal source/EXE, Unity scripts, DAT, PNG, Scene, camera, configuration, or nonbattle files. Never overwrite existing evidence.
+
+Acceptance: verify root EXE identity and usable runtime roots, successful compile and diagnostic exit0, natural action430/pic119 with exactly one actor sprite command from hid6 and expected local index2/source rect, distinct body-on/off PNGs with nonzero attributable pixel delta, independent pixel analysis and output hashes. Record limitations: paired-source WARP is not the root EXE's own GUI GPU and is not same-world/same-viewport Unity parity. Rollback: remove only this new diagnostic main and new output folder after explicit delete authorization; existing user work untouched.

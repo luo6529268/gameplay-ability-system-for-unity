@@ -1,0 +1,13 @@
+# Q09/P-20 图外 pic64 配对 WARP 复核与既有 Unity 出口对账
+
+状态：`VERIFIED_SCOPED_PAIRED_GPU / EXISTING_UNITY_CLAMP_PATH_RECONCILED / NO_NEW_FIRST_DIFFERENCE`。本包不关闭 P-20、Q09、BATCH-05 或总目标，也不构成新的 Unity 生产修复依据。
+
+正式根 EXE SHA-256 复核为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`。新增一份 Tools 诊断 `hun_outofimage_warp_probe.cpp`（SHA-256 `E2EECF516B53E3E931B5D71C5437C4E372C63E67207C0A2F9F5380C07D8ADE4D`），复用已验的正式配对 playable core/Session/D3D11 offscreen 编译参数，只换 main 与输出；`compile-argv.txt`、`compile-exit.txt=0` 和空 `compile.log` 留存。第一次编译命令自身在读取空日志时报 shell exit1，但编译器实际 exit0、EXE 存在且哈希为 `CA16DCD92B3B9DB4322C175B4F269132CAF28D7DFEF0D22E052267728DC42846`；该 shell 后处理错误不是编译失败。
+
+受控配对 Session：seed2833/mode0/background23，OID32/slot0/X500/Z650/action95、远处 OID11/slot1。初始化后未推进 tick，正式定义保持 action95；快照有唯一 OID32 本体 sprite 命令，pic64，正式 `m/nin/hun.png` 源矩形 `(320,480,79,79)`。复制同一快照，仅从副本移除该本体绘制命令，D3D11 WARP 1333×730 离屏渲染两图，诊断 exit0。独立 Pillow A/B 比较：恰好 6241 个变化像素，bbox `[460,571,539,650]`，与该 79×79 投影完全重合；完整图该 ROI 的 6241 像素全部 RGBA `(255,255,255,255)`。源 PNG 799×480，最底行所选 x 范围 79/79 非零 alpha。机器结果见 `pixel-analysis.json`，两图 SHA-256 分别为 `282C6B394096189820EFE38C290E087D5F29297A19E805F86AF74B91A0E56F65` 与 `0B9B4699E2954F0B2A213ABA070AB49061B675E93C30FC091963168EBC3A3DEC`。同名输出重跑拒绝 exit3，两图 SHA 保持，见 `no-overwrite-result.json`。
+
+**重要纠正：** 初始只读判断仅看到 Unity `BuildIndexedSpriteRects` 对完全图外 cell 返回空，误把该局部结果当成最终图片缺失。现行正式 Logan PNG 生产预热在同一方法后还执行 `BuildNativeClampedCellPixels`、建立派生满尺寸 Sprite/Texture，并在 `BuildBattleSpriteCatalog` 发布 Legacy 与中央绑定（`CharacterAnimtorManager.cs:2470–2566,2667–2677`）。既有原 Editor `NTSD28Q07NativeClampedCellEditorTests` 3/3 证明 OID32 pic64 派生白格，原 Battle Scene 两次真实 Play 证明 pic64 目录/中央绑定；另一个受控 OID32 实体相机像素见证已在 `NTSD28-Q07-OID32-UNITY-ENTITY-PIXEL-001`。正式配对 GPU 79×79 白方块也已在 `NTSD28-Q07-OID32-PAIRED-OFFSCREEN-PIXEL-001` 见证。本轮是重复确认，不可报新的首差或因此再改生产。最初 Task/STATE/总表中的“Unity rect 门拒绝”须按此全文更正为“rect 为空，但现有派生 CLAMP 出口发布”。
+
+剩余界限是正式根 EXE 自身 GPU、两端严格同世界同视口画面、OID32/action95 自然进入和 P-20 其它缺图/隐藏/terminal 分支；本诊断没有触碰它们。此轮未运行 Unity 或正式根 EXE GUI，也未改生产、DAT 数值、PNG、Scene、配置 Asset、非战斗脚本。受保护 Battle/Menu/ProjectBattleModeConfig/EditorBuildSettings SHA 分别为 `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`、`785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`、`B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82`、`8D621A077642B5154BA305861CA57DFB549FF4FDE5BC58F3E284536A5982F01E`，与此包前值一致。
+
+治理验证：本包文档纠正后 `Tools/Validate-ChangeLedger.ps1` 返回0并报告 `PASSED`、1001 Records、33个当前diff代码文件均被覆盖；大量旧Record所列文件未出现在当前diff的警告不属于本包错误。`git -c core.safecrlf=false diff --check` 返回0。后续独立只读清单又确认当前所选703张战斗对象sheet PNG在正式与Unity两端0缺失/703 SHA一致，见同父P-20目录 `SELECTED-SHEET-RESOURCE-CLOSURE-20260929.md`；这不扩大本WARP诊断结论。

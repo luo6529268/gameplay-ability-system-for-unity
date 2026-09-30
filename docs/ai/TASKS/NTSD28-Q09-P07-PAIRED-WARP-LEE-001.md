@@ -1,0 +1,13 @@
+# NTSD28-Q09-P07-PAIRED-WARP-LEE-001
+
+Status: `VERIFIED_SCOPED_PAIRED_WARP_PIXEL_ATTRIBUTION`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-05 / Q09 / P-07`.
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; paired playable build closure uses `GameSession28::step/snapshot`, `RenderSnapshotBuilder28` and `D3D11Renderer28`. The previous P-07 formal Lee Session snapshot and original Unity Battle Play are selected inputs. This diagnostic cannot be promoted to the root EXE's own GPU output.
+
+Before-script scope: add only `Tools/NTSD28Q09Diagnostics/lee_shadow_warp_probe.cpp` and new files under `artifacts/diagnostics/NTSD28-Q09-P07-PAIRED-WARP-LEE-001/`. Instantiate exactly the Lee J@2/L@3–4 formal Session from the previous snapshot package. At tick6, verify five OID204 owner0 child sprite commands, zero child shadow commands and an ordinary shadow control. Use the paired D3D11 WARP offscreen renderer at its native 1333×730 viewport to save a full snapshot PNG; save a second render of the **same snapshot** after filtering only those five child sprite commands from the command list. No battle tick, World, DAT or presentation-field mutation is allowed between A/B. The two output paths must be fresh and never overwritten.
+
+Acceptance: compile using the exact playable `offscreen_gate` source/link closure, replacing only its main with this diagnostic; retain full args/log/exit and PNG hashes. Independent PNG comparison must show nonzero child-attributable pixels; both PNGs must be valid 1333×730. A/B is an internal paired-renderer attribution test, not Unity/formal root same-camera pixel parity. Preserve the failed raw output if WARP/asset prerequisites block it. Check protected Battle/Menu SHA, ledger validator and diff. No Unity tests/Play are rerun because no Unity code changes.
+
+Risk/rollback: one new diagnostic executable/source and two PNG artifacts. Official EXE/source, Unity/GAS runtime, user backgrounds/modes, DAT/PNG, Scene and nonbattle content remain untouched. Removal/reversion of this new script requires repository-compliant explicit authorization.
+
+Result: the selected tick6 snapshot met 5 child bodies/0 child shadows/3 ordinary shadows. Same-frame WARP full versus child-body-filtered PNGs differed at 590 pixels; compiler and run exit 0, overwrite-negative exit 3, protected Scene hashes stable. This closes only the paired-renderer pixel-attribution diagnostic; the root formal EXE versus Unity same-state GPU gate remains open. [Evidence](../../../artifacts/diagnostics/NTSD28-Q09-P07-PAIRED-WARP-LEE-001/ACCEPTANCE.md).

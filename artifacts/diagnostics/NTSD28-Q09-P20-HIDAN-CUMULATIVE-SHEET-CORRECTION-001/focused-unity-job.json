@@ -1,0 +1,70 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"success\":true,\"message\":\"Test job status retrieved.\",\"error\":null,\"data\":{\"job_id\":\"067693fcdd0045d7ade4f7f08f7002ef\",\"status\":\"succeeded\",\"mode\":\"EditMode\",\"started_unix_ms\":1790647725830,\"finished_unix_ms\":1790647751869,\"last_update_unix_ms\":1790647751869,\"progress\":{\"completed\":2,\"total\":8626,\"current_test_full_name\":null,\"current_test_started_unix_ms\":1790647751306,\"last_finished_test_full_name\":\"NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.SyntheticDeclaredRange_StillStopsAtGridCapacity\",\"last_finished_unix_ms\":1790647751306,\"stuck_suspected\":false,\"editor_is_focused\":false,\"blocked_reason\":null,\"failures_so_far\":[],\"failures_capped\":false},\"error\":null,\"result\":{\"mode\":\"EditMode\",\"summary\":{\"total\":2,\"passed\":2,\"failed\":0,\"skipped\":0,\"durationSeconds\":4.3816179,\"resultState\":\"Passed\"},\"results\":[{\"name\":\"HidanRuntimeSheetRanges_AccumulateCapacityAndMapPic119ToHid6\",\"fullName\":\"NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.HidanRuntimeSheetRanges_AccumulateCapacityAndMapPic119ToHid6\",\"state\":\"Passed\",\"durationSeconds\":2.5376185,\"message\":null,\"stackTrace\":null,\"output\":\"<color=cyan>[BMP 文件] c/hid/hid.png -> I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Content\\\\LoganRuntime\\\\vfs\\\\c\\\\hid\\\\hid.png, 范围=[0-49], 尺寸=79x79, 行列=10x5</color>\\r\\n<color=cyan>[BMP 文件] c/hid/hid3.png -> I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Content\\\\LoganRuntime\\\\vfs\\\\c\\\\hid\\\\hid3.png, 范围=[50-55], 尺寸=165x165, 行列=3x2</color>\\r\\n<color=cyan>[BMP 文件] c/hid/hid4.png -> I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Content\\\\LoganRuntime\\\\vfs\\\\c\\\\hid\\\\hid4.png, 范围=[56-61], 尺寸=311x95, 行列=1x6</color>\\r\\n<color=cyan>[BMP 文件] c/hid/hid2.png -> I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Content\\\\LoganRuntime\\\\vfs\\\\c\\\\hid\\\\hid2.png, 范围=[62-116], 尺寸=115x110, 行列=5x11</color>\\r\\n<color=cyan>[BMP 文件] c/hid/hid6.png -> I:\\\\GitHub\\\\Unity_GAS\\\\gameplay-ability-system-for-unity\\\\Assets\\\\NTSD\\\\Content\\\\LoganRuntime\\\\vfs\\\\c\\\\hid\\\\hid6.png, 范围=[117-128], 尺寸=360x289, 行列=3x4</color>\\r\\n\"},{\"name\":\"SyntheticDeclaredRange_StillStopsAtGridCapacity\",\"fullName\":\"NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.SyntheticDeclaredRange_StillStopsAtGridCapacity\",\"state\":\"Passed\",\"durationSeconds\":0.0004222,\"message\":null,\"stackTrace\":null,\"output\":\"\"}]}},\"hint\":null}"
+    }
+  ],
+  "structuredContent": {
+    "result": {
+      "success": true,
+      "message": "Test job status retrieved.",
+      "error": null,
+      "data": {
+        "job_id": "067693fcdd0045d7ade4f7f08f7002ef",
+        "status": "succeeded",
+        "mode": "EditMode",
+        "started_unix_ms": 1790647725830,
+        "finished_unix_ms": 1790647751869,
+        "last_update_unix_ms": 1790647751869,
+        "progress": {
+          "completed": 2,
+          "total": 8626,
+          "current_test_full_name": null,
+          "current_test_started_unix_ms": 1790647751306,
+          "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.SyntheticDeclaredRange_StillStopsAtGridCapacity",
+          "last_finished_unix_ms": 1790647751306,
+          "stuck_suspected": false,
+          "editor_is_focused": false,
+          "blocked_reason": null,
+          "failures_so_far": [],
+          "failures_capped": false
+        },
+        "error": null,
+        "result": {
+          "mode": "EditMode",
+          "summary": {
+            "total": 2,
+            "passed": 2,
+            "failed": 0,
+            "skipped": 0,
+            "durationSeconds": 4.3816179,
+            "resultState": "Passed"
+          },
+          "results": [
+            {
+              "name": "HidanRuntimeSheetRanges_AccumulateCapacityAndMapPic119ToHid6",
+              "fullName": "NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.HidanRuntimeSheetRanges_AccumulateCapacityAndMapPic119ToHid6",
+              "state": "Passed",
+              "durationSeconds": 2.5376185,
+              "message": null,
+              "stackTrace": null,
+              "output": "<color=cyan>[BMP 文件] c/hid/hid.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\hid\\hid.png, 范围=[0-49], 尺寸=79x79, 行列=10x5</color>\r\n<color=cyan>[BMP 文件] c/hid/hid3.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\hid\\hid3.png, 范围=[50-55], 尺寸=165x165, 行列=3x2</color>\r\n<color=cyan>[BMP 文件] c/hid/hid4.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\hid\\hid4.png, 范围=[56-61], 尺寸=311x95, 行列=1x6</color>\r\n<color=cyan>[BMP 文件] c/hid/hid2.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\hid\\hid2.png, 范围=[62-116], 尺寸=115x110, 行列=5x11</color>\r\n<color=cyan>[BMP 文件] c/hid/hid6.png -> I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Content\\LoganRuntime\\vfs\\c\\hid\\hid6.png, 范围=[117-128], 尺寸=360x289, 行列=3x4</color>\r\n"
+            },
+            {
+              "name": "SyntheticDeclaredRange_StillStopsAtGridCapacity",
+              "fullName": "NTSD.Test.Editor.NTSD28Q09P20LoganGridCapacityEditorTests.SyntheticDeclaredRange_StillStopsAtGridCapacity",
+              "state": "Passed",
+              "durationSeconds": 0.0004222,
+              "message": null,
+              "stackTrace": null,
+              "output": ""
+            }
+          ]
+        }
+      },
+      "hint": null
+    }
+  },
+  "isError": false
+}

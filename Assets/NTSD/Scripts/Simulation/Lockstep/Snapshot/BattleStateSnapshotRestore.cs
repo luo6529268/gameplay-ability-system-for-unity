@@ -710,6 +710,7 @@ namespace NTSD.Simulation
             Runtime.Stage.BoundRight = stage.BoundRight;
             Runtime.Stage.XMaxOverride = stage.XMaxOverride;
             Runtime.Stage.CameraMaxOverride = stage.CameraMaxOverride;
+            world.SetStageDepthBoundsDomain(stage.PhysicalDepthBounds);
 
             BattleWorldProgressionScalarSnapshot progression = core.Progression;
             Runtime.StageProgression.StageSeriesIdx = progression.StageSeriesIdx;

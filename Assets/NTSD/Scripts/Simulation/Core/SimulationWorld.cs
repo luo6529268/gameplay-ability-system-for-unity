@@ -68,10 +68,42 @@ namespace NTSD.Simulation
     /// </summary>
     public class SimulationWorld
     {
-        private const int FormalRunViewWidthPx = 1333;
-        private const int FormalRunViewHeightPx = 730;
-        public double FixedViewRunDistanceScale { get; private set; } = 1.0;
-        public double FixedViewRunVerticalDistanceScale { get; private set; } = 1.0;
+        public BattleSpatialProjection SpatialProjection { get; private set; } =
+            BattleSpatialProjection.Identity;
+        public double FixedViewRunDistanceScale => SpatialProjection.HorizontalScale;
+        public double FixedViewRunVerticalDistanceScale => SpatialProjection.DepthScale;
+        internal bool StageDepthBoundsArePhysical { get; private set; }
+
+        internal void SetStageDepthBoundsDomain(bool physical)
+        {
+            StageDepthBoundsArePhysical = physical;
+        }
+
+        internal bool TryGetStageRuleDepthBounds(
+            out double sourceMin,
+            out double sourceMax,
+            out double viewMin,
+            out double viewMax)
+        {
+            int stageMin = Runtime?.Stage?.ZMin ?? 180;
+            int stageMax = Runtime?.Stage?.ZMax ?? 350;
+            viewMin = stageMin;
+            viewMax = stageMax;
+            if (StageDepthBoundsArePhysical)
+            {
+                sourceMin = SpatialProjection.ViewToSourceZ(stageMin);
+                sourceMax = SpatialProjection.ViewToSourceZ(stageMax);
+            }
+            else
+            {
+                sourceMin = stageMin;
+                sourceMax = stageMax;
+                viewMin = SpatialProjection.SourceToViewZ(stageMin);
+                viewMax = SpatialProjection.SourceToViewZ(stageMax);
+            }
+
+            return stageMax >= stageMin;
+        }
         internal int BattlePresentationRenderFps { get; private set; } = 120;
         internal float BattlePresentationLogicIntervalSeconds { get; private set; } =
             SimulationConstants.SIM_DT;
@@ -86,15 +118,13 @@ namespace NTSD.Simulation
                 : SimulationConstants.SIM_DT;
         }
 
-        internal void ConfigureFixedViewRunDistance(int referenceWidthPx, int referenceHeightPx = FormalRunViewHeightPx)
+        internal void ConfigureFixedViewRunDistance(
+            int referenceWidthPx,
+            int referenceHeightPx = BattleSpatialProjection.FormalViewHeightPx)
         {
-            // Alignment contract: NTSD28-USER-FIXED-VIEW-RUN-RATIO-001.
-            FixedViewRunDistanceScale = referenceWidthPx > FormalRunViewWidthPx
-                ? referenceWidthPx / (double)FormalRunViewWidthPx
-                : 1.0;
-            FixedViewRunVerticalDistanceScale = referenceHeightPx > FormalRunViewHeightPx
-                ? referenceHeightPx / (double)FormalRunViewHeightPx
-                : 1.0;
+            // Alignment contract: NTSD28-Q07-D024-UNIFIED-SPATIAL-PROJECTION-001.
+            SpatialProjection = BattleSpatialProjection.FromReferenceViewport(
+                referenceWidthPx, referenceHeightPx);
         }
 
         private readonly SimulationEntityTraversal entityTraversal;
@@ -405,6 +435,7 @@ namespace NTSD.Simulation
             NativeRandom = new NTSD28NativeRandom(0x4E545344u);
             Runtime = new BattleRuntimeState();
             Runtime.Reset();
+            StageDepthBoundsArePhysical = false;
         }
 
         internal int ActiveDataObjectTypeCacheTick { get; private set; } = -1;
@@ -1716,7 +1747,8 @@ namespace NTSD.Simulation
                 out zMin,
                 out zMax,
                 out perspectiveNear,
-                out perspectiveFar);
+                out perspectiveFar,
+                out _);
         }
 
         public void ClampCharacterZToStageBoundsAll()
@@ -2571,6 +2603,7 @@ namespace NTSD.Simulation
 
             Runtime ??= new BattleRuntimeState();
             Runtime.Reset();
+            StageDepthBoundsArePhysical = false;
             oneTuInput = false;
             // Unity lockstep owns one deterministic stream per SimulationWorld. The
             // explicit reset seed is an adapter boundary: it makes a world reset
@@ -3482,6 +3515,8 @@ namespace NTSD.Simulation
             LastEntityPostFrameTailRuntimeSnapshotSkipCountForDiagnostics = 0;
             foreach (LF2Entity entity in ActiveEntitiesByRuntimeSlot)
             {
+                // Alignment contract: NTSD28-336B44-Q07-C012-SPECIAL-HIT-LATCH-TAIL-001.
+                entity.Runtime.SpecialHitLatch0EB = false;
                 if (entity.Health == null)
                     continue;
 
@@ -4395,8 +4430,38 @@ namespace NTSD.Simulation
 
         private void CompleteAiSoADecisionRemainderInput() => aiRuntime.Decision.CompleteAiSoADecisionRemainderInput(this);
 
-        internal int StageZMin => Runtime?.Stage?.ZMin ?? 180;
-        internal int StageZMax => Runtime?.Stage?.ZMax ?? 350;
+        internal int StageZMin
+        {
+            get
+            {
+                ResolveAiStageDepthBounds(out int near, out _);
+                return near;
+            }
+        }
+
+        internal int StageZMax
+        {
+            get
+            {
+                ResolveAiStageDepthBounds(out _, out int far);
+                return far;
+            }
+        }
+
+        private void ResolveAiStageDepthBounds(out int near, out int far)
+        {
+            near = Runtime?.Stage?.ZMin ?? 180;
+            far = Runtime?.Stage?.ZMax ?? 350;
+            if (!aiRuntime.Input.UseSourceRulePosition ||
+                !TryGetStageRuleDepthBounds(out double sourceMin,
+                    out double sourceMax, out _, out _))
+                return;
+
+            // Integer source Z with a strict '<' keeps the fractional boundary
+            // comparison when its threshold is rounded upward.
+            near = (int)Math.Ceiling(sourceMin);
+            far = (int)Math.Ceiling(sourceMax);
+        }
         internal int Rand(int modulus)
         {
             int random = Rng.NextRaw();
@@ -6123,6 +6188,7 @@ namespace NTSD.Simulation
         private AiDecisionWorldState CaptureAiDecisionWorldState()
         {
             BattleFlowRuntimeState flow = Runtime?.Flow;
+            ResolveAiStageDepthBounds(out int stageZMin, out int stageZMax);
             return new AiDecisionWorldState
             {
                 Difficulty = Difficulty,
@@ -6132,8 +6198,8 @@ namespace NTSD.Simulation
                 StageTargetX = Runtime?.Stage?.XMaxOverride > 0
                     ? Runtime.Stage.XMaxOverride
                     : Runtime?.Stage?.StageWidthPx ?? 800,
-                StageZMin = Runtime?.Stage?.ZMin ?? 180,
-                StageZMax = Runtime?.Stage?.ZMax ?? 350,
+                StageZMin = stageZMin,
+                StageZMax = stageZMax,
                 FlowAiDifficulty = flow?.AiDifficulty ?? 0,
                 FlowRand3 = flow?.AiRand3 ?? 0,
                 FlowRand5 = flow?.AiRand5 ?? 0,

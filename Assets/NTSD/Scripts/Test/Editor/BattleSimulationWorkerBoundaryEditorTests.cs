@@ -103,7 +103,8 @@ namespace NTSD.Test
                 170,
                 390,
                 11,
-                29);
+                29,
+                true);
             Simulation.FrameInputSet destination =
                 Simulation.FrameInputSetPreallocation.CreateReusable();
             var destinationPlayers = new Simulation.SimulationPlayerInput[1];
@@ -133,6 +134,7 @@ namespace NTSD.Test
             Assert.That(request.Stage.ZMax, Is.EqualTo(390));
             Assert.That(request.Stage.PerspectiveNear, Is.EqualTo(11));
             Assert.That(request.Stage.PerspectiveFar, Is.EqualTo(29));
+            Assert.That(request.Stage.PhysicalDepthBounds, Is.True);
         }
 
         [Test]

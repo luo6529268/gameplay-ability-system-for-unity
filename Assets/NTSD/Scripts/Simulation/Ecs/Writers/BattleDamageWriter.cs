@@ -714,7 +714,7 @@ namespace NTSD.Simulation.Ecs
             SimulationWorld world,
             LF2Entity physicalAttacker)
         {
-            if (physicalAttacker?.Runtime == null)
+            if (world == null || physicalAttacker?.Runtime == null)
                 return null;
 
             int sourceSlot = physicalAttacker.Runtime.SlotIndex;
@@ -724,7 +724,24 @@ namespace NTSD.Simulation.Ecs
                     physicalAttacker.Runtime.CatchSourceSlot90);
             }
 
-            return ResolveNativeHitResourceAttacker(world, sourceSlot);
+            LF2Entity credit = world.FindEntityByRuntimeSlotForQuery(sourceSlot);
+            if (credit?.Runtime == null)
+                return null;
+
+            // Alignment contract: NTSD28-Q08-KO-MISSING-OWNER-CREDIT-001.
+            // KO keeps the last live credit when an owner lookup fails.
+            for (int depth = 0; depth < 2; depth++)
+            {
+                int ownerSlot = credit.Runtime.OwnerSlotIndex;
+                if (ownerSlot < 0)
+                    break;
+
+                LF2Entity next = world.FindEntityByRuntimeSlotForQuery(ownerSlot);
+                if (next?.Runtime == null)
+                    break;
+                credit = next;
+            }
+            return credit;
         }
 
         internal static int ResolveNativeAttackingInjury(

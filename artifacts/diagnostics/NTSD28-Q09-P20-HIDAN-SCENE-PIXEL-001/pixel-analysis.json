@@ -1,0 +1,52 @@
+{
+  "image_size": [
+    1333,
+    730
+  ],
+  "body_delta_pixels": 1812,
+  "flipped_body_bbox_xyxy": [
+    303,
+    531,
+    374,
+    597
+  ],
+  "raw_unregistered": {
+    "on": 0,
+    "off": 1812
+  },
+  "best_registration": {
+    "flip_y": true,
+    "dx": 8,
+    "dy": -10,
+    "tolerance": 8,
+    "on": 1540,
+    "off": 56,
+    "on_only": 1540,
+    "off_only": 56,
+    "both": 0,
+    "neither": 216
+  },
+  "next_best_score": 848,
+  "best_at_tolerance_2": {
+    "on": 1540,
+    "off": 56,
+    "on_only": 1540,
+    "off_only": 56,
+    "both": 0,
+    "neither": 216
+  },
+  "files": [
+    {
+      "name": "hidan-frame430-scene-pixel-20260929-01-scene-camera.png",
+      "sha256": "A6B15926E638827FFC6A126741EBF65D6AB04549E3764C1130ADFAF79F891048"
+    },
+    {
+      "name": "hidan-frame430-scene-pixel-20260929-01-body-on.png",
+      "sha256": "36C90BB16141529C9C6CA2E6967B544993F7D129D149500F80865DF4C5058CC4"
+    },
+    {
+      "name": "hidan-frame430-scene-pixel-20260929-01-body-off.png",
+      "sha256": "C2B6D7E33456AEAC4BF1AD40604509E5C3D178042007C5CE34A08B9D8B396B84"
+    }
+  ]
+}

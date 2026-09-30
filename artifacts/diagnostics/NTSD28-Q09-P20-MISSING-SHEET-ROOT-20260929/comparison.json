@@ -1,0 +1,139 @@
+{
+  "schema": "ntsd28-q09-p20-missing-sheet-formal-root-compare/1.0",
+  "formalExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "missingRelativePath": "vfs/c/hid/hid6.png",
+  "baselineTraceSha256": "85CBB5F140CBDF46C29BBAC2E7D6D5215F67D27B0BCF6E2FED37621B7E979F8C",
+  "missingTraceSha256": "6AE31ED931BDD6D2324E35E0E0CB6A5454D307444CA4EB95B46DA5C7057D311D",
+  "rows": 32,
+  "worldStateHashDifferences": [],
+  "renderSpriteDifferences": [
+    {
+      "tick": 16,
+      "action": 430,
+      "row": 16,
+      "missingSheet": 1,
+      "pic": 119,
+      "complete": 2
+    },
+    {
+      "tick": 17,
+      "action": 431,
+      "row": 17,
+      "missingSheet": 1,
+      "pic": 120,
+      "complete": 2
+    },
+    {
+      "tick": 18,
+      "action": 432,
+      "row": 18,
+      "missingSheet": 1,
+      "pic": 121,
+      "complete": 2
+    },
+    {
+      "tick": 19,
+      "action": 442,
+      "row": 19,
+      "missingSheet": 1,
+      "pic": 121,
+      "complete": 2
+    },
+    {
+      "tick": 20,
+      "action": 437,
+      "row": 20,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 21,
+      "action": 437,
+      "row": 21,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 22,
+      "action": 437,
+      "row": 22,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 23,
+      "action": 437,
+      "row": 23,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 24,
+      "action": 437,
+      "row": 24,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 25,
+      "action": 437,
+      "row": 25,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 26,
+      "action": 437,
+      "row": 26,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 27,
+      "action": 437,
+      "row": 27,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 28,
+      "action": 437,
+      "row": 28,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 29,
+      "action": 437,
+      "row": 29,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 30,
+      "action": 437,
+      "row": 30,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    },
+    {
+      "tick": 31,
+      "action": 437,
+      "row": 31,
+      "missingSheet": 1,
+      "pic": 126,
+      "complete": 2
+    }
+  ]
+}

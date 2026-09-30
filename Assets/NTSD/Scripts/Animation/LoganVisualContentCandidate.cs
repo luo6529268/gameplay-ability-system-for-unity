@@ -14,15 +14,26 @@ namespace NTSD.Animation
     /// <summary>A captured definition/image input set. It is not a published or decoded presentation.</summary>
     public sealed class LoganVisualContentCandidate
     {
+        internal const string MissingBodySheetIdentity = "MISSING_BODY_SHEET";
+
         public sealed class ImageInput
         {
             public string Path { get; }
             public string Sha256 { get; }
+            private readonly bool allowMissingBodySheet;
 
-            internal ImageInput(string path)
+            internal ImageInput(string path, bool allowMissingBodySheet = false)
             {
                 Path = path;
-                Sha256 = HashFile(path);
+                this.allowMissingBodySheet = allowMissingBodySheet;
+                Sha256 = CaptureSha256();
+            }
+
+            internal string CaptureSha256()
+            {
+                return allowMissingBodySheet
+                    ? HashBodySheetOrMissing(Path)
+                    : HashFile(Path);
             }
         }
 
@@ -284,18 +295,33 @@ namespace NTSD.Animation
             LoganObjectCatalog catalog = LoganObjectCatalog.Read(source, projectModeSnapshot);
             var configs = CharacterAnimtorManager.BuildCharacterFrameConfigsFromCatalog(catalog);
             var paths = new SortedSet<string>(StringComparer.Ordinal);
+            var bodySheetPaths = new HashSet<string>(StringComparer.Ordinal);
+            var requiredUiPaths = new HashSet<string>(StringComparer.Ordinal);
             foreach (LF2CharacterDataWrapper wrapper in configs.Values)
             {
                 foreach (SpriteFileInfo file in wrapper.characterData.files)
-                    paths.Add(Path.GetFullPath(file.filePath));
+                {
+                    string path = Path.GetFullPath(file.filePath);
+                    paths.Add(path);
+                    bodySheetPaths.Add(path);
+                }
                 if (!string.IsNullOrEmpty(wrapper.characterData.head))
-                    paths.Add(Path.GetFullPath(wrapper.characterData.head));
+                {
+                    string path = Path.GetFullPath(wrapper.characterData.head);
+                    paths.Add(path);
+                    requiredUiPaths.Add(path);
+                }
                 if (!string.IsNullOrEmpty(wrapper.characterData.small))
-                    paths.Add(Path.GetFullPath(wrapper.characterData.small));
+                {
+                    string path = Path.GetFullPath(wrapper.characterData.small);
+                    paths.Add(path);
+                    requiredUiPaths.Add(path);
+                }
             }
             var images = new List<ImageInput>(paths.Count);
             foreach (string path in paths)
-                images.Add(new ImageInput(path));
+                images.Add(new ImageInput(path,
+                    bodySheetPaths.Contains(path) && !requiredUiPaths.Contains(path)));
             var candidate = new LoganVisualContentCandidate(catalog, images,
                 NativeWordsInput.Capture(source),
                 NativeKillIconInput.Capture(source, catalog.ModeComboInput?.KnockoutFeed),
@@ -345,7 +371,7 @@ namespace NTSD.Animation
                 current.ContentIdentity.SemanticFingerprint != ContentIdentity.SemanticFingerprint)
                 throw new InvalidDataException("Logan catalog, DAT, mode or decoder contract changed after candidate capture.");
             foreach (ImageInput image in Images)
-                if (!string.Equals(HashFile(image.Path), image.Sha256, StringComparison.Ordinal))
+                if (!string.Equals(image.CaptureSha256(), image.Sha256, StringComparison.Ordinal))
                     throw new InvalidDataException("Logan image changed after candidate capture: " + image.Path);
         }
 
@@ -362,6 +388,28 @@ namespace NTSD.Animation
             if (!imageHashes.TryGetValue(fullPath, out string hash))
                 throw new InvalidDataException("Image is not part of this Logan candidate: " + fullPath);
             return hash;
+        }
+
+        internal bool IsMissingBodySheet(string path)
+        {
+            return string.Equals(GetImageSha256(path), MissingBodySheetIdentity,
+                StringComparison.Ordinal);
+        }
+
+        private static string HashBodySheetOrMissing(string path)
+        {
+            try
+            {
+                return HashFile(path);
+            }
+            catch (FileNotFoundException)
+            {
+                return MissingBodySheetIdentity;
+            }
+            catch (DirectoryNotFoundException)
+            {
+                return MissingBodySheetIdentity;
+            }
         }
 
         private static string HashFile(string path)

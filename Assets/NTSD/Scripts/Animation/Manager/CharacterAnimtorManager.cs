@@ -1514,6 +1514,8 @@ namespace NTSD.Animation
             foreach (var (characterId, fileInfo, ownedEffectivePics) in allFileInfos)
             {
                 if (native != null && !CanCompleteSpritePrewarmInvocation(invocation)) break;
+                if (native != null && native.Candidate.IsMissingBodySheet(fileInfo.filePath))
+                    continue;
                 await cpuSemaphore.WaitAsync();
                 if (native != null && !CanCompleteSpritePrewarmInvocation(invocation))
                 {
@@ -2464,7 +2466,9 @@ namespace NTSD.Animation
                     textureWidth,
                     textureHeight,
                     row,
-                    col);
+                    col,
+                    allowBeyondGridCapacity: source == null ||
+                                             !source.IsLoganRuntime || !bmpData.IsPng);
                 var clampedCells = new Dictionary<int, string>();
                 if (processedSheet != null && source != null && source.IsLoganRuntime &&
                     bmpData.IsPng && spriteRects != null)
@@ -2648,7 +2652,8 @@ namespace NTSD.Animation
                         ResolveEffectiveGrid(fileInfo, texture.width, texture.height,
                             out int row, out col);
                         rects = BuildIndexedSpriteRects(
-                            fileInfo, texture.width, texture.height, row, col);
+                            fileInfo, texture.width, texture.height, row, col,
+                            allowBeyondGridCapacity: true);
                     }
 
                     int firstLocalPic = Mathf.Max(0, firstPic - fileInfo.startFrame);
@@ -3408,7 +3413,8 @@ namespace NTSD.Animation
             int textureWidth,
             int textureHeight,
             int row,
-            int col)
+            int col,
+            bool allowBeyondGridCapacity = false)
         {
             if (fileInfo == null || row <= 0 || col <= 0 ||
                 fileInfo.width <= 0 || fileInfo.height <= 0)
@@ -3420,9 +3426,12 @@ namespace NTSD.Animation
             if (declaredCount <= 0)
                 return Array.Empty<Rect?>();
 
-            // Alignment contract: R8-SPRITEMAP-004. C++ bounds localPic by the
-            // declared file range, not by DAT row*col, then clips during blit.
-            var rects = new Rect?[declaredCount];
+            // Alignment contract: NTSD28-Q09-P20-LOGAN-GRID-CAPACITY-001.
+            // Formal Logan stops at the first declared range and rejects cells past row*col.
+            int rectCount = allowBeyondGridCapacity
+                ? declaredCount
+                : (int)Math.Min((long)declaredCount, (long)row * col);
+            var rects = new Rect?[rectCount];
             int cellWidth = fileInfo.width + 1;
             int cellHeight = fileInfo.height + 1;
             for (int localPic = 0; localPic < rects.Length; localPic++)

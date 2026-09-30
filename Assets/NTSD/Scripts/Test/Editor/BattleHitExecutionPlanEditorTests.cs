@@ -1948,12 +1948,13 @@ namespace NTSD.Test
             holder.Runtime.KnockoutCount358 = 6;
             world.DamageStats[1] = 5;
             world.KillStats[1] = 7;
-            world.Rng.Seed(0x13572468u);
+            world.NativeRandom.ResetFromSeed(0x13572468u);
+            var initialNativeRandom = world.NativeRandom.CaptureScalarState();
             uint firstRngState;
             uint secondRngState;
             unchecked
             {
-                firstRngState = 0x13572468u * 0x343FDu + 0x269EC3u;
+                firstRngState = initialNativeRandom.CrtState * 0x343FDu + 0x269EC3u;
                 secondRngState = firstRngState * 0x343FDu + 0x269EC3u;
             }
             int expectedHitZ = (int)((firstRngState >> 16) & 0x7FFFu) % 9 - 4;
@@ -1986,11 +1987,12 @@ namespace NTSD.Test
             Assert.That(world.KillStats[1], Is.EqualTo(8));
             Assert.That(target.Frame.N, Is.EqualTo(LF2StandardFrames.FallingBack));
             Assert.That(target.Runtime.Frame, Is.EqualTo(LF2StandardFrames.FallingBack));
-            Assert.That(target.FallCounter, Is.Zero);
+            Assert.That(target.FallCounter, Is.EqualTo(80));
             Assert.That(target.KnockbackVx, Is.EqualTo(5.1).Within(0.0000001));
             Assert.That(target.KnockbackVy, Is.EqualTo(-6.9).Within(0.0000001));
             Assert.That(target.HitCount, Is.EqualTo(1));
-            Assert.That(target.HitStateCount, Is.EqualTo(45));
+            Assert.That(target.Runtime.Bdefend, Is.EqualTo(45));
+            Assert.That(target.HitStateCount, Is.Zero);
             Assert.That(attacker.FrameDelay, Is.EqualTo(3));
             Assert.That(target.FrameDelay, Is.EqualTo(-3));
             Assert.That(attacker.AttackExempt, Is.EqualTo(2));
@@ -1999,8 +2001,10 @@ namespace NTSD.Test
             Assert.That(target.GetHitRecordAge(0), Is.EqualTo(10));
             Assert.That(target.GetHitRecordX(0), Is.EqualTo(expectedHitX));
             Assert.That(target.GetHitRecordZ(0), Is.EqualTo(expectedHitZ));
-            Assert.That(world.Rng.State, Is.EqualTo(secondRngState));
-            Assert.That(world.Rng.CallCount, Is.EqualTo(2));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtState,
+                Is.EqualTo(secondRngState));
+            Assert.That(world.NativeRandom.CaptureScalarState().CrtCalls,
+                Is.EqualTo(initialNativeRandom.CrtCalls + 2));
             Assert.That(world.PendingSounds.Count, Is.EqualTo(2));
             Assert.That(world.PendingSounds[0].Cue, Is.EqualTo("SFX_001"));
             Assert.That(world.PendingSounds[1].Cue, Is.EqualTo("SFX_006"));

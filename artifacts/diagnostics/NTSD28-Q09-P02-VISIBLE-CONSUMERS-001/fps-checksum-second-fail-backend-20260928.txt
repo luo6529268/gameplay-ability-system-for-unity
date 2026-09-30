@@ -1,0 +1,17 @@
+RUNNING
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=True disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=0 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=True app=MenuMain
+waiting driver=True state=Preparing tick=0 objects=4 frame=False prewarmGen=1 running=False disposed=False configSame=True rootSame=True boundaryOpen=False app=MenuMain
+FAIL System.InvalidOperationException: Battle Scene is not CentralOnly.
+  at NTSD.Test.Editor.BattlePresentationDisplayMotionPlayModeProbeEditor.Check (System.Boolean condition, System.String message) [0x00009] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattlePresentationDisplayMotionPlayModeProbeEditor.cs:495 
+  at NTSD.Test.Editor.BattlePresentationDisplayMotionPlayModeProbeEditor.Observe () [0x00206] in I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Assets\NTSD\Scripts\Test\Editor\BattlePresentationDisplayMotionPlayModeProbeEditor.cs:128 

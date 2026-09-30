@@ -159,8 +159,8 @@ namespace NTSD.Simulation
             spawnTask.directZ = lf2Z;
             // Alignment contract: NTSD28-USER-D024-RANDOM-WEAPON-SOURCE-BIRTH-001.
             spawnTask.useSourceRulePosition = true;
-            spawnTask.sourceRuleX = lf2X;
-            spawnTask.sourceRuleZ = lf2Z;
+            spawnTask.sourceRuleX = world.SpatialProjection.ViewToSourceX(lf2X);
+            spawnTask.sourceRuleZ = world.SpatialProjection.ViewToSourceZ(lf2Z);
             spawnTask.useDirectVelocity = true;
             spawnTask.directVx = 0.0;
             spawnTask.directVy = 0.0;
@@ -281,6 +281,8 @@ namespace NTSD.Simulation
                 float lf2Z =
                     r3 * ((zMax - zMin - 60) / 30) + r4 + zMin + 30;
                 const float lf2Y = -500f;
+                double finalPhysicalZ = lf2Z +
+                    world.SpatialProjection.SourceDeltaToViewZ(1.0);
 
                 LF2CharacterData charData =
                     world.ResolveRandomWeaponCharacterDataForModule(oid);
@@ -329,10 +331,17 @@ namespace NTSD.Simulation
                 spawnTask.parent = null;
                 spawnTask.team = 0;
                 spawnTask.pos = new Vector3(lf2X, lf2Y, 0f);
-                spawnTask.z = lf2Z;
+                spawnTask.z = (float)finalPhysicalZ;
                 spawnTask.useSourceRulePosition = true;
-                spawnTask.sourceRuleX = lf2X;
-                spawnTask.sourceRuleZ = lf2Z;
+                spawnTask.sourceRuleX = world.SpatialProjection.ViewToSourceX(lf2X);
+                spawnTask.sourceRuleZ =
+                    world.SpatialProjection.ViewToSourceZ(lf2Z) + 1.0;
+                // Alignment contract: NTSD28-Q07-D024-RANDOM-WEAPON-PHYSICAL-BIRTH-PROJECTION-001.
+                spawnTask.skipPostInitZOffset = true;
+                spawnTask.useDirectRuntimePosition = true;
+                spawnTask.directX = lf2X;
+                spawnTask.directY = lf2Y;
+                spawnTask.directZ = finalPhysicalZ;
                 spawnTask.dir = "right";
                 spawnTask.dvz = 0f;
                 spawnTask.targetWorld = world;

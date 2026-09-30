@@ -1,5 +1,7 @@
 # Q08 result-continue held input — focused acceptance
 
+2026-09-29 回访（覆盖下文旧 `REAL_BATTLE_PENDING` 的自然原 Editor 部分）：`NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001` 已在原 Battle Scene 双轮自然 KO 中验 held J 143→144 同 tick 跳 350/transition2，终态 XML 1/1 PASS；2026-09-29 增加 KO 事件字段的同一测试仍 1/1 PASS，当前源码保留 held 输入、结果、重赛和关闭断言。因此自然原 Editor Play 子门已闭，不例行重跑。正式根 EXE 同状态可见结果、Player 端及 Q08/BATCH-04 聚合仍待；本文件原有隔离测试和历史限制保留。[自然 held 证据](../NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001/ACCEPTANCE.md)、[回归证据](../NTSD28-Q08-NATURAL-KO-PLAY-EVENT-FIELDS-001/ACCEPTANCE.md)。
+
 Scope correction (2026-09-22): P-19/G-08 exclude the full native result/selection visuals. The old UI's phase11 appearance is not alone a mandatory visual change; its effects on input and battle state still require isolation. Timer101 logical result record and timer350 combat stop/transition remain pending. This supersedes any “old UI101” visual acceptance wording below.
 
 Status: `FOCUSED_TEST_PASS / ISOLATED_SELFCHECK_PASS / REAL_BATTLE_PENDING / Q08_PARENT_OPEN` (2026-09-22).

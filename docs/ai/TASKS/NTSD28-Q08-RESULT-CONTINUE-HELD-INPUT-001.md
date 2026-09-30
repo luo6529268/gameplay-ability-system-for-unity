@@ -1,5 +1,7 @@
 # NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001
 
+2026-09-29 出口回访：本 Task 的原 Editor 聚焦测试 2/2 与**自然 Battle Scene Play 子门**均已通过；后者由独立测试 Change `NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001` 在两轮鸣人物理 J 致死中验证首轮中性走到 350、第二轮 held J 于 143→144 同 tick 跳 350/transition2，终态 XML 1/1 PASS。2026-09-29 再次运行同一个双轮测试、增补 KO 事件字段后仍 1/1 PASS，保留的 held 断言未移除。下方 2026-09-25 的“自然 Play 待”是当时快照，不应触发重跑。生产 Change 仍为 `RUNTIME_PENDING`，剩余 Player/正式 EXE 同状态可观察结果和 Q08 聚合出口不能由这一个 Play 证明。[自然 held 验收](../../../artifacts/diagnostics/NTSD28-Q08-NATURAL-RESULT-HELD-CONTINUE-PLAY-001/ACCEPTANCE.md)、[当前双轮回归](../../../artifacts/diagnostics/NTSD28-Q08-NATURAL-KO-PLAY-EVENT-FIELDS-001/ACCEPTANCE.md)。
+
 Correction (2026-09-22): P-19/G-08 exclude the full native result-page/selection visuals. Any “101 UI consumer” pending language below refers to the logical result-record event and isolating old Unity UI input from battle truth; it does not require a visual page at native timer101.
 
 Status: `RUNTIME_PENDING / FOCUSED_AND_ISOLATED_SELFCHECK_PASS`. Parent BATCH-04/Q08 G-05/G-06. Authority and caller audit: `artifacts/diagnostics/NTSD28-Q08-RESULT-CONTINUE-INPUT-AUDIT-001/REPORT.md`. Actual diff/evidence/limits: `artifacts/diagnostics/NTSD28-Q08-RESULT-CONTINUE-HELD-INPUT-001/ACCEPTANCE-PENDING.md`.

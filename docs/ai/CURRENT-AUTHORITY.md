@@ -1,3 +1,7 @@
+> **2026-09-30 当前唯一战斗规则权威（覆盖下方旧版本身份）：** 用户已明确选择根目录更新后的 `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 及其对应 playable live source，要求依据 35 项差异重建对齐文档并继续实施。当前 `source` 159 文件/4,371,509 字节/树 SHA `2924DDD8C153EE34378081578D21D7EF9EB7E8BDF73799695C89C56DC3418CA1`，`resources/runtime` 2,656 文件/101,099,439 字节/树 SHA `F3EA4516BD903F10131217A856947F7C0F91DB72F506F6E2A7F88D6281F3FD41`，均已按发布说明算法复核。`build.ps1 -Target playable` 的 28 Core C++、10 playable C++ 与 44 header 共 82 文件闭包 SHA `B97DF3C5BB75058D13FD9CCC7A542536BB956A1F496A9140BD98C06D6F8638AA`；75 文件 source-capture 子闭包 SHA `066A8CDEEBB7A48706111443126E8F6EFCFD140B692E85EF9645149C8868520C`，均使用原 manifest 的路径排序、路径+NUL+原始字节算法，并以旧版已公布 SHA 复算一致作控制。当前执行入口是[336B44 对齐总表](../../Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md)；先前 B1E13 与 1277B 历史证据须逐项判定复用，不能自动改标签。D-023/D-024/D-025 与用户排除项不因升级撤销。
+
+> **历史快照（已由上段覆盖）：** 此前观察到根 EXE 从 B1E13 变为 336B44 时，用户尚未确认切换，所以当时暂停自动晋升。该身份门现已由用户选择解除；以下含 B1E13、82 文件旧闭包与旧 source-capture 的记录均须按时间和版本阅读，不再定义当前规则。
+
 > 2026-09-25 D-024最新：原Editor正式内容mode0受控Lee frame22经生产完整Driver于tick82生成OID706/owner1子体，`d024-ai-child-play-14` PASS；source载体、CentralOnly logic-only物化、有序关闭/借用0及双Scene SHA稳定。无自然非音效选招、像素、正式EXE同条件证据，D-024整链与Q07仍开放。旧`-10` AI无目标由测试漏设mode导致，非已证生产首差；`-12`自然600tick仅纯音效OPoint。只以当前正式EXE/playable定义规则，DAT数值和非战斗不改。详总表/Task/Record。
 
 > 2026-09-24 D-024最新补证：原Editor聚焦Play d024-ai-child-play-10 在tick76/90/120/180的 DataOrientedCanonical 最近目标检索计数均为1，AI目标仍-1、子体未出生；提交阶段的call计数0因生产代码未记录该计数而无诊断效力。停止重复180tick Play，下一步做同状态双profile候选/提交首差及现有 committed/fallback 计数见证。两相机序列化Enabled=1，Scene未写，Q07继续后置。
@@ -978,10 +982,10 @@
 > 生效日期：2026-09-02  
 > 状态：`USER_CONFIRMED_BUGFIXED_IDENTITY / ACTIVE / PROMOTION_VERIFIED / B3_ALIGNMENT_IN_PROGRESS`
 
-> **最高优先级恢复结论（2026-09-04 用户确认）：** 用户说明其发现并修复了 NTSD 2.8-Logan
+> **历史恢复结论（2026-09-04 用户确认；2026-09-30 已由 336B44 取代）：** 用户说明其发现并修复了 NTSD 2.8-Logan
 > Bug，并明确要求继续处理。指定根当前 `NTSD2.8-Logan.exe` 的
 > `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` 与当前82-file playable
-> C++/header closure manifest `39DDDA154F5632C43089E2D5F1A5755ABBFBFD131A85D6B5ABF9AC00E6A46109` 已正式晋升为唯一权威。
+> C++/header closure manifest `39DDDA154F5632C43089E2D5F1A5755ABBFBFD131A85D6B5ABF9AC00E6A46109` 当时晋升为唯一权威，现只作旧版证据身份。
 > 旧 `1277B70B...DAF75` / `C59BD8D3...2D75` 只保留为历史基线；不得再驱动实现。由于新版改变了
 > core pass 顺序，B0～当前B3受影响结论必须显式重新核验，不能只替换哈希后继承旧证书。
 
@@ -993,15 +997,15 @@
 
 - 根目录：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan`
 - 正式发行 EXE：`NTSD2.8-Logan.exe`
-- EXE SHA-256：`B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`
+- EXE SHA-256：`336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`
 - EXE FileVersion：`2.8.3.3`
 - EXE ProductVersion：`2.8.3.3-development`
 - EXE OriginalFilename：`Ntsd28Playable.exe`
 - 正式启动器：`Start_NTSD2.8-Logan.cmd`
 - 对应源码声明：`source\README_SOURCE.md` 明确说明 `source\` 是当前发行 EXE 对应的 C++ 源代码快照。
-- 当前 playable C++/header closure manifest（82 files）：`39DDDA154F5632C43089E2D5F1A5755ABBFBFD131A85D6B5ABF9AC00E6A46109`。
+- 当前 playable C++/header closure manifest（82 files）：`B97DF3C5BB75058D13FD9CCC7A542536BB956A1F496A9140BD98C06D6F8638AA`。
 - 当前 authority source-capture manifest（75 files，规则相关core/session/scenario子闭包与全部headers）：
-  `07CD47A0623F23D2C439E0E85EABF2ED10F8EAE8FC7D70DDB8396C704B3D778F`。
+  `066A8CDEEBB7A48706111443126E8F6EFCFD140B692E85EF9645149C8868520C`。
 - 先前 drift 审计记录的 `5F2E5B41...5FA9` 是旧workspace捕获脚本遗漏
   `kind_catalog.cpp`、`minibar_catalog.cpp` 后计算出的73-file子集，不能再称为完整capture manifest，更不是
   82-file playable闭包。

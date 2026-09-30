@@ -2186,11 +2186,20 @@ namespace NTSD.Animation
                 }
                 int left = snapshot.centerx - itr.x;
                 left = from.IsFacingLeft ? left - itr.w : -left;
-                left += from.XInt;
-                if (left >= to.XInt || left + itr.w <= to.XInt)
+                BattleSpatialProjection projection = CollisionProjection(source);
+                int sourceX = projection.HorizontalScale == 1.0
+                    ? from.XInt : (int)CollisionSourceX(source, projection);
+                int targetX = projection.HorizontalScale == 1.0
+                    ? to.XInt : (int)CollisionSourceX(target, projection);
+                left += sourceX;
+                if (left >= targetX || left + itr.w <= targetX)
                     continue;
                 int width = itr.zwidth == 0 ? 15 : itr.zwidth;
-                if (Math.Abs((long)from.ZInt + itr.z - to.ZInt) >= width)
+                int sourceZ = projection.DepthScale == 1.0
+                    ? from.ZInt : PlatformRuleZInt(source, projection);
+                int targetZ = projection.DepthScale == 1.0
+                    ? to.ZInt : PlatformRuleZInt(target, projection);
+                if (Math.Abs((long)sourceZ + itr.z - targetZ) >= width)
                     continue;
                 // Source leaves editable-DAT operations31..35 unimplemented; do not invent their tails.
                 if (operation != 30)
@@ -3762,10 +3771,22 @@ namespace NTSD.Animation
                 return false;
 
             bool facingLeft = entity.Runtime.IsFacingLeft;
-            long minX = (long)entityX +
-                        (facingLeft ? template.LeftMinX : template.RightMinX);
-            long maxX = (long)entityX +
-                        (facingLeft ? template.LeftMaxX : template.RightMaxX);
+            long localMinX = facingLeft ? template.LeftMinX : template.RightMinX;
+            long localMaxX = facingLeft ? template.LeftMaxX : template.RightMaxX;
+            BattleSpatialProjection projection = CollisionProjection(entity);
+            long minX;
+            long maxX;
+            if (projection.HorizontalScale == 1.0)
+            {
+                minX = (long)entityX + localMinX;
+                maxX = (long)entityX + localMaxX;
+            }
+            else
+            {
+                double sourceX = CollisionSourceX(entity, projection);
+                minX = ProjectCollisionX(projection, sourceX + localMinX);
+                maxX = ProjectCollisionX(projection, sourceX + localMaxX);
+            }
             if (minX < RectMin ||
                 maxX > RectMax ||
                 minX >= maxX)
@@ -3982,7 +4003,9 @@ namespace NTSD.Animation
 
             participant.CollisionX = entity.Runtime.XInt;
             participant.CollisionY = entity.Runtime.YInt;
-            participant.CollisionZ = CollisionZInt(entity, collisionFrame);
+            participant.CollisionSourceX = CollisionSourceX(
+                entity, CollisionProjection(entity));
+            participant.CollisionZ = CollisionRuleZInt(entity, collisionFrame);
             participant.FacingLeft = entity.Runtime.IsFacingLeft;
             participant.DataObjectType = GetCurrentDataObjectType(entity);
             participant.CurrentDataObjectId =
@@ -5565,8 +5588,8 @@ namespace NTSD.Animation
             }
 
             int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = CollisionZInt(target, targetCollisionFrame) -
-                         CollisionZInt(attacker, attackerCollisionFrame);
+            int zDelta = CollisionRuleZInt(target, targetCollisionFrame) -
+                         CollisionRuleZInt(attacker, attackerCollisionFrame);
             if (zDelta >= zHalf || zDelta <= -zHalf)
                 return;
 
@@ -5689,8 +5712,10 @@ namespace NTSD.Animation
             if (!participant.HasExactCommonCache ||
                 entity.Runtime.XInt != participant.CollisionX ||
                 entity.Runtime.YInt != participant.CollisionY ||
+                CollisionSourceX(entity, CollisionProjection(entity)) !=
+                    participant.CollisionSourceX ||
                 entity.Runtime.IsFacingLeft != participant.FacingLeft ||
-                CollisionZInt(entity, participant.CollisionFrame) !=
+                CollisionRuleZInt(entity, participant.CollisionFrame) !=
                     participant.CollisionZ)
             {
                 return false;
@@ -6992,9 +7017,9 @@ namespace NTSD.Animation
             if (!IsReleaseItrGeometry(itr))
                 return false;
 
-            int attackerZ = CollisionZInt(attacker, attackerCollisionFrame);
+            int attackerZ = CollisionRuleZInt(attacker, attackerCollisionFrame);
             int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
-            int zDelta = CollisionZInt(target, targetCollisionFrame) - attackerZ;
+            int zDelta = CollisionRuleZInt(target, targetCollisionFrame) - attackerZ;
             if (zDelta >= zHalf || zDelta <= -zHalf)
                 return false;
 
@@ -7275,6 +7300,48 @@ namespace NTSD.Animation
             return entity.GetCollisionZInt(frame);
         }
 
+        private static int CollisionRuleZInt(LF2Entity entity, LF2FrameData frame)
+        {
+            BattleSpatialProjection projection = CollisionProjection(entity);
+            if (projection.DepthScale == 1.0)
+                return CollisionZInt(entity, frame);
+            if (entity?.Runtime != null && entity.Runtime.SourceRulePositionInitialized)
+                return entity.Runtime.SourceRuleZInt;
+            return (int)projection.ViewToSourceZ(CollisionZInt(entity, frame));
+        }
+
+        private static int PlatformRuleZInt(
+            LF2Entity entity,
+            BattleSpatialProjection projection)
+        {
+            if (entity.Runtime.SourceRulePositionInitialized)
+                return entity.Runtime.SourceRuleZInt;
+            return (int)projection.ViewToSourceZ(entity.Runtime.ZInt);
+        }
+
+        private static void CollisionDepthRange(
+            LF2Entity entity,
+            LF2FrameData frame,
+            int sourceHalfWidth,
+            out int minZ,
+            out int maxZ)
+        {
+            BattleSpatialProjection projection = CollisionProjection(entity);
+            if (projection.DepthScale == 1.0)
+            {
+                int centerZ = CollisionZInt(entity, frame);
+                minZ = ClampRect((long)centerZ - sourceHalfWidth);
+                maxZ = ClampRect((long)centerZ + sourceHalfWidth);
+                return;
+            }
+
+            int sourceZ = CollisionRuleZInt(entity, frame);
+            minZ = ClampRect(Math.Floor(
+                projection.SourceToViewZ((double)sourceZ - sourceHalfWidth)));
+            maxZ = ClampRect(Math.Ceiling(
+                projection.SourceToViewZ((double)sourceZ + sourceHalfWidth)));
+        }
+
         private static WorldRect ItrWorldRect(LF2Entity entity, LF2FrameData frame, InteractionArea itr)
         {
             if (itr != null && itr.y == int.MinValue)
@@ -7344,11 +7411,13 @@ namespace NTSD.Animation
 
                     WorldRect rect = ItrWorldRect(entity, collisionFrame, itr);
                     int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+                    CollisionDepthRange(entity, collisionFrame, zHalf,
+                        out int itrMinZ, out int itrMaxZ);
                     AddBroadphaseRange(
                         rect.X1,
                         rect.X2,
-                        ClampRect((long)collisionZ - zHalf),
-                        ClampRect((long)collisionZ + zHalf),
+                        itrMinZ,
+                        itrMaxZ,
                         ref found,
                         ref minX,
                         ref maxX,
@@ -7374,13 +7443,13 @@ namespace NTSD.Animation
             if (attacker == null || frame == null || itr == null || !IsReleaseItrGeometry(itr))
                 return false;
             WorldRect rect = ItrWorldRect(attacker, frame, itr);
-            int collisionZ = CollisionZInt(attacker, frame);
             int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            CollisionDepthRange(attacker, frame, zHalf, out int minZ, out int maxZ);
             bounds = new SpatialAabbXZ(
                 Math.Min(rect.X1, rect.X2),
-                ClampRect((long)collisionZ - zHalf),
+                minZ,
                 Math.Max(rect.X1, rect.X2),
-                ClampRect((long)collisionZ + zHalf));
+                maxZ);
             return bounds.IsValid;
         }
 
@@ -7420,13 +7489,13 @@ namespace NTSD.Animation
                 rect.X2,
                 out int minX,
                 out int maxX);
-            int collisionZ = CollisionZInt(attacker, frame);
             int zHalf = itr.zwidth > 0 ? itr.zwidth : 15;
+            CollisionDepthRange(attacker, frame, zHalf, out int minZ, out int maxZ);
             bounds = new SpatialAabbXZ(
                 minX,
-                ClampRect((long)collisionZ - zHalf),
+                minZ,
                 maxX,
-                ClampRect((long)collisionZ + zHalf));
+                maxZ);
             return bounds.IsValid;
         }
 
@@ -7441,13 +7510,13 @@ namespace NTSD.Animation
                 return false;
 
             WorldRect rect = BodyWorldRect(target, frame, body, collectSemantics: true);
-            int collisionZ = CollisionZInt(target, frame);
             int zHalf = BodyIsReleaseFullHeight(body) ? 9999 : 15;
+            CollisionDepthRange(target, frame, zHalf, out int minZ, out int maxZ);
             bounds = new SpatialAabbXZ(
                 Math.Min(rect.X1, rect.X2),
-                ClampRect((long)collisionZ - zHalf),
+                minZ,
                 Math.Max(rect.X1, rect.X2),
-                ClampRect((long)collisionZ + zHalf));
+                maxZ);
             return bounds.IsValid;
         }
 
@@ -7561,6 +7630,8 @@ namespace NTSD.Animation
             WorldRect rect = BodyWorldRect(entity, frame, body, collectSemantics: true);
             int centerZ = CollisionZInt(entity, frame);
             int zHalf = BodyIsReleaseFullHeight(body) ? 9999 : 15;
+            float physicalZHalf = (float)CollisionProjection(entity)
+                .SourceDeltaToViewZ(zHalf);
             volume = new PhysicsState.BattleVolume(
                 rect.X1,
                 rect.Y1,
@@ -7569,7 +7640,7 @@ namespace NTSD.Animation
                 0f,
                 rect.X2 - rect.X1,
                 rect.Y2 - rect.Y1,
-                zHalf);
+                physicalZHalf);
             return true;
         }
 
@@ -7578,10 +7649,20 @@ namespace NTSD.Animation
             int x = entity.Runtime != null ? entity.Runtime.XInt : (int)entity.PS.x;
             int y = entity.Runtime != null ? entity.Runtime.YInt : (int)entity.PS.y;
             bool facingLeft = IsEntityFacingLeft(entity);
+            BattleSpatialProjection projection = CollisionProjection(entity);
 
             int x1;
             int x2;
-            if (!facingLeft)
+            if (projection.HorizontalScale != 1.0)
+            {
+                double sourceX = CollisionSourceX(entity, projection);
+                double sourceX1 = !facingLeft
+                    ? sourceX - frame.centerx + rect.X
+                    : sourceX + frame.centerx - rect.X - rect.W;
+                x1 = ProjectCollisionX(projection, sourceX1);
+                x2 = ProjectCollisionX(projection, sourceX1 + rect.W);
+            }
+            else if (!facingLeft)
             {
                 x1 = ClampRect((long)x - frame.centerx + rect.X);
                 x2 = ClampRect((long)x1 + rect.W);
@@ -7604,10 +7685,21 @@ namespace NTSD.Animation
             int x = entity.Runtime != null ? entity.Runtime.XInt : (int)entity.PS.x;
             int y = entity.Runtime != null ? entity.Runtime.YInt : (int)entity.PS.y;
             bool facingLeft = IsEntityFacingLeft(entity);
+            BattleSpatialProjection projection = CollisionProjection(entity);
 
             int x1;
             int x2;
-            if (!facingLeft)
+            if (projection.HorizontalScale != 1.0)
+            {
+                int sourceX = (int)CollisionSourceX(entity, projection);
+                int sourceX1 = !facingLeft
+                    ? ExeI32Add3(sourceX, -frame.centerx, itr.x)
+                    : unchecked(ExeI32Add3(sourceX, frame.centerx, -itr.x) - itr.w);
+                int sourceX2 = unchecked(sourceX1 + itr.w);
+                x1 = ProjectCollisionX(projection, sourceX1);
+                x2 = ProjectCollisionX(projection, sourceX2);
+            }
+            else if (!facingLeft)
             {
                 x1 = ExeI32Add3(x, -frame.centerx, itr.x);
                 x2 = unchecked(x1 + itr.w);
@@ -7622,6 +7714,27 @@ namespace NTSD.Animation
             int y2 = unchecked(y1 + itr.h);
             return new WorldRect(x1, y1, x2, y2);
         }
+
+        private static BattleSpatialProjection CollisionProjection(LF2Entity entity) =>
+            entity?.RegisteredWorldForSimulation?.SpatialProjection ?? BattleSpatialProjection.Identity;
+
+        private static double CollisionSourceX(
+            LF2Entity entity,
+            BattleSpatialProjection projection)
+        {
+            if (entity?.Runtime != null && entity.Runtime.SourceRulePositionInitialized)
+                return entity.Runtime.SourceRuleXInt;
+
+            int physicalX = entity?.Runtime != null
+                ? entity.Runtime.XInt
+                : (int)entity.PS.x;
+            return projection.ViewToSourceX(physicalX);
+        }
+
+        private static int ProjectCollisionX(
+            BattleSpatialProjection projection,
+            double sourceX) =>
+            ClampRect(projection.SourceToViewX(sourceX));
 
         private static bool IsEntityFacingLeft(LF2Entity entity)
         {
@@ -7709,6 +7822,13 @@ namespace NTSD.Animation
         }
 
         private static int ClampRect(long value)
+        {
+            if (value < RectMin) return RectMin;
+            if (value > RectMax) return RectMax;
+            return (int)value;
+        }
+
+        private static int ClampRect(double value)
         {
             if (value < RectMin) return RectMin;
             if (value > RectMax) return RectMax;
@@ -7858,6 +7978,7 @@ namespace NTSD.Animation
             OrdinaryItrUnionWorld = default;
             CollisionX = 0;
             CollisionY = 0;
+            CollisionSourceX = 0;
             CollisionZ = 0;
             FacingLeft = false;
             DataObjectType = -1;
@@ -7898,6 +8019,7 @@ namespace NTSD.Animation
         public WorldRect OrdinaryItrUnionWorld { get; set; }
         public int CollisionX { get; set; }
         public int CollisionY { get; set; }
+        public double CollisionSourceX { get; set; }
         public int CollisionZ { get; set; }
         public bool FacingLeft { get; set; }
         public int DataObjectType { get; set; }

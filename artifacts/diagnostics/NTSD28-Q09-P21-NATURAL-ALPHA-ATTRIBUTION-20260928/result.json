@@ -1,0 +1,69 @@
+{
+  "schema": "ntsd28-q09-p21-natural-alpha-attribution/1.0",
+  "inputs": {
+    "formalPngSha256": "5BBD5C1AF4061F891FE6CAE1432498E2A7742908DB54CD5BBF5D650B58799654",
+    "stagedPngSha256": "5BBD5C1AF4061F891FE6CAE1432498E2A7742908DB54CD5BBF5D650B58799654",
+    "bodyOnPngSha256": "ACF3F331D381605D7E269385ADBC77D34B286D8F1FA19F44CF5EECEFEB1C8D8C",
+    "bodyOffPngSha256": "973917DA6B493EBD8D76ADF7D977CB52CAA9B8E1C754415612A307D82ACDF81E",
+    "sourceCell": [
+      0,
+      0,
+      79,
+      79
+    ],
+    "cameraSize": [
+      1280,
+      720
+    ]
+  },
+  "maskMatch": {
+    "searchX": [
+      435,
+      484
+    ],
+    "searchY": [
+      445,
+      489
+    ],
+    "orientations": 4,
+    "bestScreenOriginTopLeft": [
+      443,
+      457
+    ],
+    "flipX": false,
+    "flipY": false,
+    "sourceNonzeroAlpha": 1433,
+    "cameraChangedPixels": 1245,
+    "changedBoundingBoxTopLeft": [
+      459,
+      464,
+      514,
+      532
+    ],
+    "intersection": 1180,
+    "union": 1498,
+    "intersectionOverUnion": 0.787716955941255,
+    "changedNotUnderSourceAlpha": 65
+  },
+  "blendComparison": {
+    "sampleCount": 1180,
+    "sourceAlphaMax": 33,
+    "observedMaxChannelDelta": 27.0,
+    "formula": "round(sourceRGB*sourceAlpha/255 + bodyOffRGB*(1-sourceAlpha/255))",
+    "alternatives": {
+      "sourceAlpha": {
+        "meanAbsoluteRgbError": 0.7624293785310734,
+        "maxRgbError": 23.0,
+        "allChannelsExact": 336,
+        "allChannelsWithin2": 995
+      },
+      "binaryNonzeroAlpha": {
+        "meanAbsoluteRgbError": 94.14971751412429,
+        "maxRgbError": 220.0,
+        "allChannelsExact": 0,
+        "allChannelsWithin2": 0
+      }
+    }
+  },
+  "scope": "One natural OID314 Legacy SpriteRenderer offscreen World-camera frame; no formal EXE same-view composite or global rendering parity"
+}

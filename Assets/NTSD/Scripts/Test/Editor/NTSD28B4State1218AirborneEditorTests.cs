@@ -82,9 +82,9 @@ namespace NTSD.Test.Editor
 
             Assert.That(entity.RunNativePhysicsForWorldPass(1), Is.True);
 
-            Assert.That(entity.Frame.N, Is.EqualTo(230));
+            Assert.That(entity.Frame.N, Is.EqualTo(170));
             Assert.That(entity.Runtime.Y, Is.EqualTo(-20.0));
-            Assert.That(entity.AttackingCounter, Is.Zero);
+            Assert.That(entity.AttackingCounter, Is.EqualTo(7));
         }
 
         [Test]

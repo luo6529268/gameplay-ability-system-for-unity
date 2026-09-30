@@ -100,6 +100,32 @@ namespace NTSD.Test
         }
 
         [UnityTest]
+        public IEnumerator SelectedLandingChannel6ClipIsPreparedAfterSeal()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                var playerHost = new GameObject("Q10LandingChannel6PlayerFixture");
+                playerHost.SetActive(false);
+                try
+                {
+                    var player = playerHost.AddComponent<NTSDSoundPlayer>();
+                    await player.PrepareBattleCuesAsync(null);
+
+                    Assert.That(player.BattleCatalogSealedForDiagnostics, Is.True);
+                    Assert.That(player.TryGetPreparedSingleFileWrapperForDiagnostics(
+                        @"data\016.wav", out AudioClip[] clips), Is.True);
+                    Assert.That(clips, Has.Length.EqualTo(1));
+                    Assert.That(clips[0], Is.Not.Null);
+                    Assert.That(clips[0].samples, Is.EqualTo(8158));
+                }
+                finally
+                {
+                    UnityEngine.Object.DestroyImmediate(playerHost);
+                }
+            });
+        }
+
+        [UnityTest]
         public IEnumerator SelectedModeWavsRemainPreparedAfterBattleCatalogSeal()
         {
             return UniTask.ToCoroutine(async () =>

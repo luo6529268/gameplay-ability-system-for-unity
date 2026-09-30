@@ -152,7 +152,7 @@ namespace NTSD.Simulation
     /// </summary>
     internal sealed class BattleLockstepChecksumModule
     {
-        internal const int CurrentSchemaVersion = 35;
+        internal const int CurrentSchemaVersion = 36;
         private BattleChecksum64Builder builder;
 
         public ulong Capture(SimulationWorld world, int tickIndex, FrameInputSet frameInput)
@@ -300,6 +300,7 @@ namespace NTSD.Simulation
             builder.AddInt32(stage?.StageWidthPx ?? 800);
             builder.AddInt32(stage?.ZMin ?? 180);
             builder.AddInt32(stage?.ZMax ?? 350);
+            builder.AddBoolean(world.StageDepthBoundsArePhysical);
             builder.AddInt32(stage?.BoundRight ?? 800);
             builder.AddInt32(stage?.XMaxOverride ?? 0);
             builder.AddInt32(stage?.CameraMaxOverride ?? 0);

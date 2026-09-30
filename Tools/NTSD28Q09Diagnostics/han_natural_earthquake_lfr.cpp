@@ -12,10 +12,16 @@ namespace {
 
 bool run_case(const std::filesystem::path& runtime_root,
               const std::filesystem::path& output_root,
-              int target_x, int jump_tick, bool& passed,
+              int target_x, int jump_tick, int source_z, int background_id,
+              bool& passed,
               std::string& error) {
     const std::string stem = "han-action0-x" + std::to_string(target_x) +
-                             "-jump" + std::to_string(jump_tick);
+                             "-jump" + std::to_string(jump_tick) +
+                             (background_id == 1
+                                  ? "-bg1-z" + std::to_string(source_z)
+                                  : source_z == 650
+                                        ? ""
+                                        : "-z" + std::to_string(source_z));
     const auto csv = output_root / (stem + ".csv");
     const auto lfr = output_root / (stem + ".lfr");
     if (std::filesystem::exists(csv) || std::filesystem::exists(lfr)) {
@@ -27,14 +33,14 @@ bool run_case(const std::filesystem::path& runtime_root,
     config.random_seed = 2833;
     config.character_id = 726;
     config.enemy_id = 7;
-    config.background_id = 23;
+    config.background_id = background_id;
     config.bgm_selection_49f18c = 2;
     config.battle_mode = 0;
     ntsd28_playable::CombatantConfig28 han;
     han.slot = 0;
     han.object_id = 726;
     han.x = 500;
-    han.z = 650;
+    han.z = source_z;
     han.hp = 500;
     han.mp = 500;
     han.team = 1;
@@ -43,7 +49,7 @@ bool run_case(const std::filesystem::path& runtime_root,
     lee.slot = 1;
     lee.object_id = 7;
     lee.x = target_x;
-    lee.z = 650;
+    lee.z = source_z;
     lee.hp = 500;
     lee.mp = 500;
     lee.team = 2;
@@ -153,6 +159,8 @@ bool run_case(const std::filesystem::path& runtime_root,
              first_relation > first_grab_window &&
              first_quake > first_relation && first_reset > first_quake;
     std::cout << "{\"targetX\":" << target_x
+              << ",\"sourceZ\":" << source_z
+              << ",\"backgroundId\":" << background_id
               << ",\"jumpTick\":" << jump_tick
               << ",\"first145\":" << first_145
               << ",\"firstGrabWindow\":" << first_grab_window
@@ -169,24 +177,35 @@ bool run_case(const std::filesystem::path& runtime_root,
 
 int main(int argc, char** argv) {
     if (argc != 3 && argc != 4) {
-        std::cerr << "usage: han_natural_earthquake_lfr <runtime_root> <output_dir> [x520-jump3]\n";
+        std::cerr << "usage: han_natural_earthquake_lfr <runtime_root> <output_dir> [x520-jump3|z400-jump3|san-z400-jump3]\n";
         return 2;
     }
-    if (argc == 4 && std::string(argv[3]) != "x520-jump3") {
+    const std::string selected = argc == 4 ? argv[3] : "";
+    if (!selected.empty() && selected != "x520-jump3" &&
+        selected != "z400-jump3" && selected != "san-z400-jump3") {
         std::cerr << "unsupported selected case\n";
         return 2;
     }
+    const int source_z = selected == "z400-jump3" ||
+                                 selected == "san-z400-jump3"
+                             ? 400 : 650;
+    const int background_id = selected == "san-z400-jump3" ? 1 : 23;
     const std::filesystem::path runtime_root(argv[1]);
     const std::filesystem::path output_root(argv[2]);
     std::filesystem::create_directories(output_root);
     bool any_passed = false;
     for (const int target_x : std::array<int, 2>{520, 580}) {
         for (const int jump_tick : std::array<int, 2>{3, 5}) {
-            if (argc == 4 && (target_x != 520 || jump_tick != 3))
+            if (selected == "x520-jump3" &&
+                (target_x != 520 || jump_tick != 3))
+                continue;
+            if ((selected == "z400-jump3" ||
+                 selected == "san-z400-jump3") && jump_tick != 3)
                 continue;
             bool passed = false;
             std::string error;
             if (!run_case(runtime_root, output_root, target_x, jump_tick,
+                          source_z, background_id,
                           passed, error)) {
                 std::cerr << "case x" << target_x << "/jump" << jump_tick
                           << " failed: " << error << '\n';

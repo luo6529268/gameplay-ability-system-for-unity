@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": false,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-R06-NATURAL-REVIVAL-ENTRY-001\\source-run-01\\natural_revival_source_packets.lfr",
+  "failureCode": 46,
+  "failureStage": "playback_tick_or_checksum",
+  "error": "LFR HP checksum mismatch at source row 150 after 151 playback ticks: expected 503, got 427 | slot=0 oid=11 hp=500 action=1 frameCounter=4 x=500 y=0 z=542 | slot=1 oid=87 hp=-73 action=231 frameCounter=0 x=614 y=0 z=542",
+  "declaredTicks": 365,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": 110, "slot1": -1},
+  "initialFacingOverrides": {"slot0": -1, "slot1": -1},
+  "initialMpOverrides": {"slot0": -1, "slot1": -1},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 150,
+  "scene": {"p1ObjectId": 11, "p2ObjectId": 87, "backgroundId": 23},
+  "winnerGroup": 1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-R06-NATURAL-REVIVAL-ENTRY-001\\root-replay-01.jsonl", "rows": 79, "startTick": 12, "endTick": 90, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

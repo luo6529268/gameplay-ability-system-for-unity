@@ -1,0 +1,13 @@
+# Q08 full SelfCheck gate after high-slot X oracle correction
+
+Result: `PASS / ORIGINAL_EDITOR_FULL_SELFCHECK_ONLY`. This is a fresh 2026-09-29 run in the original Unity Editor PID11944, not the preserved 2026-09-26 result. `NTSD28-Q08-TRANSIENT-X-SELFCHECK-ORACLE-001` owns the one-assertion test correction; no KO event production path was edited.
+
+First run before the correction wrote `FAIL` at `BattleRuntimeSelfCheck.CheckPreFrameXBoundsMatrix`: slot>=20 type-0 X901 at base width800 expected X900. Formal paired playable `BattleWorld28::settle_ordinary_stage_bounds` uses width+10 and Unity `NTSDEntityRuntime.ClampSelectedModeType0StageX` already uses width+10, so the expected value is X810. The original previous PASS file was copied to `prior-selfcheck-result-preserved-20260926.txt` before running the menu; the first-run MCP response and failure remain in the diagnostic folder and `Temp/NTSD_BattleRuntimeSelfCheck.result` was not used as historical evidence afterward.
+
+After editing only the stale assertion/message, original Editor refresh rebuilt `Library/ScriptAssemblies/Assembly-CSharp.dll` at 2026-09-29 03:25:16, later than source 03:24:55. The second `NTSD/验证/运行战斗运行时自检` MCP command returned a 30-second bridge timeout while the menu method continued. At 03:29:39 the result file became `PASS`; its SHA-256 is `2F9ACB02FAA121BB2A3621951F57B4C690655337EDEE2E5AC350BE2B3BE88EA8`. Exact copy: `original-editor-selfcheck-pass-after-oracle-20260929.txt`. The timeout is a transport outcome, not a SelfCheck failure; the fresh file is the test outcome. A subsequent original Editor MCP state read showed idle, non-Play, no compile and no TestRunner job.
+
+Protected SHA-256 remained: Battle Scene `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`, Menu Scene `785F828C4E64182BEA214E4794B198E3C82E3C42002FDADD3932A7E061B81E13`, GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`, ProjectBattleModeConfig `B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82`.
+
+`pwsh -NoProfile -File Tools/Validate-ChangeLedger.ps1 -RepositoryRoot (Get-Location).Path` exited 0 with `Change ledger validation PASSED`, 994 records and 25 governed diff code files; its historical-path warnings did not fail validation. `git -c core.safecrlf=false diff --check` exited 0. No new scene Play or all-character matrix was run for this test-only oracle correction.
+
+This closes the current full SelfCheck gate for the Q08 KO event-state package only. It does not provide a same-initial-state complete formal/Unity KO trace, selected-mode integrated Battle Scene Play and exit/reentry, all KO producers, or Q08/BATCH-04 acceptance. Q07/D-024 collision-domain selection remains independent and open.

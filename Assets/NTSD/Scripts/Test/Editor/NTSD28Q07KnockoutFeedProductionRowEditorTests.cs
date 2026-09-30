@@ -69,6 +69,17 @@ namespace NTSD.Test.Editor
                             BattlePresentationFrame frame =
                                 world.BattlePresentation.PublishedFrame;
                             int eventCount = world.NativeKnockoutEvents.Count;
+                            if (tick == 8)
+                            {
+                                Assert.That(eventCount, Is.EqualTo(1));
+                                NativeKnockoutEvent knockout = world.NativeKnockoutEvents[0];
+                                Assert.That(knockout.BattleTimeTick, Is.EqualTo(7));
+                                Assert.That(knockout.SourceObjectType, Is.Zero);
+                                Assert.That(knockout.FourOwnerSlot, Is.Zero);
+                                Assert.That(knockout.VictimSlot, Is.EqualTo(1));
+                                Assert.That(knockout.SourceSlot, Is.Zero);
+                                Assert.That(knockout.CreditSlot, Is.Zero);
+                            }
                             int rowCount = frame?.KnockoutFeedRowCount ?? -1;
                             observations.Add(new RowObservation(tick,
                                 frame?.TickIndex ?? -1,

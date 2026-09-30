@@ -1,0 +1,21 @@
+{
+  "authorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "indexedCatalogSha256": "3ED7DE4918AA7B5E94FE73A2B7D9B43DED9D10575DD182B9CA2B647EAE29A8F0",
+  "counts": {
+    "datFiles": 405,
+    "standardDatFiles": 402,
+    "specialDatFiles": 3,
+    "standardFrames": 55347,
+    "missingPic": 0,
+    "negativePic": 0,
+    "inRange": 50676,
+    "outOfRange": 4671,
+    "pic999OutOfRange": 4587,
+    "otherOutOfRange": 84,
+    "bmpEffect1Files": 0,
+    "otherOutOfRangeDatFiles": 21,
+    "otherOutOfRangeIndexedDatFiles": 21,
+    "otherOutOfRangeUnindexedDatFiles": 0
+  },
+  "method": "Regex scan of standard <frame> blocks and cumulative max(row*col,0) sheet capacity; special DATs excluded. Read-only inventory, not a parser/runtime certificate."
+}

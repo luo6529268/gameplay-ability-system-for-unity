@@ -8,7 +8,7 @@
 - Unity 实现目录：`Assets/NTSD/Scripts/`
 - 当前工作范围：战斗场景与战斗 runtime
 - 当前权威恢复入口：`docs/ai/CURRENT-AUTHORITY.md`；任何上下文压缩、交接或历史检索后必须先读该文件
-- 唯一战斗规则与逻辑顺序权威：`J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码；该身份由用户于 2026-09-04 确认是其修复 Bug 后的新版，旧 `1277B70B...DAF75` 只保留为历史基线
+- 唯一战斗规则与逻辑顺序权威：用户于 2026-09-30 明确选定 `J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan` 根目录中 SHA-256 为 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 的正式 `NTSD2.8-Logan.exe`，以及 `source\README_SOURCE.md` 声明与其对应且实际进入 playable 构建闭包的 C++ 源码；先前 `B1E13AE1...19033` 与更早 `1277B70B...DAF75` 均只保留为版本化历史证据，不再裁决新规则
 - 当前 DAT 与角色相关图片内容权威：用户已明确改为 NTSD 2.8-Logan 正式 `resources/runtime` 版本（决策 D-023），但用户明确排除原版背景及两类模式 DAT（`b/*/b.dat`、`data/bg_mode.dat`、`data/bg/*.dat`、`data/mode.dat`、`data/mode/ntsd.dat`），项目自己的背景、地图和模式内容保留。Unity 原 138-DAT/图片仅为非排除范围的迁移前基线，不能继续裁决这些目标数值；音频和其他图片不由该决定自动整体替换，既有表现例外保持。2026-09-24 项目已创建独立 `ProjectBattleModeConfig.asset` 接管配置化生产入口，并将上述原版 DAT 移出 Assets 到单一待用户清理文件夹；历史显式诊断读取器不定义生产规则。
 - Unity 是实现目标；NTSD 2.8-Logan 正式 release runtime 用于判定规则、顺序、字段和可观察行为；NTSD 2.4 release、`ntsd_release_C#` 及其旧对齐结论仅保留为历史迁移辅助与交叉检查来源
 
@@ -350,16 +350,18 @@ USER_HOLD
 当前战斗对齐恢复入口：
 
 - `docs/ai/CURRENT-AUTHORITY.md`
-- `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md`
+- `Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md`（当前执行总表）
+- `Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md`（旧 B1E13 对齐历史及证据索引）
 - `Assets/NTSD/Docs/CODEX-CURRENT-HANDOFF.md`
 - `docs/ai/STATE.md`
 - `docs/ai/DECISIONS.md`
 
 旧 C# authority、NTSD 2.4 C++ release 和 R0～R8/U0～U9 对齐 campaign 文档已经用户要求审计
 并由用户从工作树删除，不再是当前恢复入口。不得从 Git 历史恢复旧任务或旧对齐状态。新的
-NTSD 2.8-Logan 新对齐总表已经建立为
-`Assets/NTSD/Docs/ntsd28-logan-vs-unity-battle-alignment.md`；后续新发现差异、用户例外、
-实施状态和关闭证据必须先写入或回链该文档，不得重新创建或继续旧计划正文。
+2026-09-30 用户选定 336B44 新权威后，当前执行总表为
+`Assets/NTSD/Docs/ntsd28-logan-336b44-vs-unity-battle-alignment.md`；后续新发现差异、用户例外、
+实施状态和关闭证据必须先写入或回链该文档。旧 B1E13 总表仅保留版本化历史及证据索引，
+不得将旧版局部 PASS 自动晋升为新版权威结果，也不得恢复更早的旧计划正文。
 
 记录差异时至少写明：
 

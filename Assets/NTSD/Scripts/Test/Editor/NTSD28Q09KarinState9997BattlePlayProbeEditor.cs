@@ -12,6 +12,7 @@ using NTSD.Simulation;
 using NTSD.Simulation.Presentation;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 namespace NTSD.Test.Editor
@@ -25,10 +26,18 @@ namespace NTSD.Test.Editor
             "Assets/NTSD/Config/GameConfig/GameConfig.asset";
         private const string RequestPath =
             "Temp/NTSD28_Q09_Karin9997_20260928_03.request.json";
+        private const string ShadowRequestPath =
+            "Temp/NTSD28_Q09_LegacyShadow_20260929.request.json";
+        private const string ShadowMotionRequestPath =
+            "Temp/NTSD28_Q09_LegacyShadowMotion_20260929.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-Q09-P12-KARIN-UNITY-COMMAND-001";
         private const string PixelResultRoot =
             "artifacts/diagnostics/NTSD28-Q09-P12-KARIN-LEGACY-GPU-PIXEL-001";
+        private const string CentralPixelResultRoot =
+            "artifacts/diagnostics/NTSD28-Q09-P21-NATURAL-CENTRAL-ALPHA-001";
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        private static readonly int MainTexArrayId = Shader.PropertyToID("_MainTexArray");
         private const int FixtureSlot = 8;
         private const int MaxTicks = 8;
 
@@ -43,6 +52,9 @@ namespace NTSD.Test.Editor
             public bool checkLegacy;
             public bool legacyBoot;
             public bool captureLegacyPixels;
+            public bool checkOrdinaryShadow;
+            public bool sampleLegacyShadowMotion;
+            public bool captureCentralPixels;
             public long startedUtcTicks;
         }
 
@@ -60,6 +72,24 @@ namespace NTSD.Test.Editor
             public int publishedTick = -1;
             public bool childPublished;
             public bool bodyCommand;
+        }
+
+        [Serializable]
+        private sealed class ShadowMotionRecord
+        {
+            public int renderFps;
+            public int previousTick;
+            public int publishedTick;
+            public double firstAlpha;
+            public double laterAlpha;
+            public float firstBodyX;
+            public float laterBodyX;
+            public float firstShadowX;
+            public float laterShadowX;
+            public double sourceRuleX;
+            public double viewX;
+            public string firstChecksum;
+            public string laterChecksum;
         }
 
         [Serializable]
@@ -129,6 +159,30 @@ namespace NTSD.Test.Editor
             public bool pixelBodyRestored;
             public string legacyBodyOnPng;
             public string legacyBodyOffPng;
+            public int ordinaryShadowSlot = -1;
+            public bool ordinaryShadowBound;
+            public bool ordinaryShadowEnabled;
+            public bool ordinaryShadowDescriptorMatched;
+            public int ordinaryShadowPixelCount;
+            public int ordinaryShadowTickBefore = -1;
+            public int ordinaryShadowTickAfter = -1;
+            public string ordinaryShadowChecksumBefore;
+            public string ordinaryShadowChecksumAfter;
+            public bool ordinaryShadowCameraRestored;
+            public bool ordinaryShadowRendererRestored;
+            public string ordinaryShadowOnPng;
+            public string ordinaryShadowOffPng;
+            public int centralBodyPixelCount;
+            public int centralCommandCount;
+            public int centralWithoutCommandCount;
+            public int centralResolvedCount;
+            public int centralWithoutResolvedCount;
+            public int centralTickBefore = -1;
+            public int centralTickAfter = -1;
+            public string centralChecksumBefore;
+            public string centralChecksumAfter;
+            public string centralBodyOnPng;
+            public string centralBodyOffPng;
             public float legacyDeltaX;
             public float legacyDeltaY;
             public float fallbackExpectedPivotX;
@@ -145,9 +199,12 @@ namespace NTSD.Test.Editor
             public bool childReleased;
             public bool pauseRestored;
             public List<TickRecord> ticks = new List<TickRecord>();
+            public List<ShadowMotionRecord> shadowMotion =
+                new List<ShadowMotionRecord>();
         }
 
         private static Request request;
+        private static string activeRequestPath;
         private static Report report;
         private static SimulationTickDriver driver;
         private static SimulationWorld world;
@@ -164,6 +221,19 @@ namespace NTSD.Test.Editor
         private static int ActiveFixtureSlot => request?.fixtureSlot == 9 ? 9 : FixtureSlot;
         private static BattlePresentationBackendMode originalBackend;
         private static bool backendSwitched;
+        private static readonly int[] ShadowMotionFps = { 30, 60, 120 };
+        private static LF2Entity shadowMotionActor;
+        private static SpriteRenderer shadowMotionRenderer;
+        private static FieldInfo shadowMotionFpsField;
+        private static int shadowMotionSavedFps;
+        private static int shadowMotionIndex;
+        private static int shadowMotionFixedTick;
+        private static double shadowMotionOriginalSourceX;
+        private static double shadowMotionOriginalSourceZ;
+        private static double shadowMotionOriginalViewX;
+        private static bool shadowMotionActorMoved;
+        private static double shadowMotionDueTime;
+        private static ShadowMotionRecord activeShadowMotion;
 
         static NTSD28Q09KarinState9997BattlePlayProbeEditor()
         {
@@ -173,10 +243,111 @@ namespace NTSD.Test.Editor
             EditorApplication.playModeStateChanged += RestoreProbeConfigAfterPlay;
         }
 
+        [MenuItem("NTSD/Battle Diagnostics/Q09/Inspect Probe GameConfig")]
+        private static void InspectProbeGameConfig()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Probe GameConfig inspection requires EditMode.");
+
+            GameConfig source = AssetDatabase.LoadAssetAtPath<GameConfig>(
+                GameConfigAssetPath);
+            GameConfig current = GameConfig.Instance;
+            string before = current == null ? "null" :
+                $"{current.name}|asset={AssetDatabase.Contains(current)}|" +
+                $"backend={current.BattlePresentationBackendName}";
+            string outcome = "unrecognized; unchanged";
+            if (source == null)
+            {
+                outcome = "saved asset missing; unchanged";
+            }
+            else if (ReferenceEquals(current, source))
+            {
+                outcome = "saved asset already active";
+            }
+            else if (IsProbeConfigClone(current, source))
+            {
+                SetGameConfigInstance(null);
+                GameConfig.Instance = source;
+                UnityEngine.Object.DestroyImmediate(current);
+                outcome = "recognized probe clone restored to saved asset";
+            }
+
+            GameConfig[] loadedConfigs =
+                Resources.FindObjectsOfTypeAll<GameConfig>();
+            var loadedIdentities = new List<string>(loadedConfigs.Length);
+            foreach (GameConfig loaded in loadedConfigs)
+            {
+                loadedIdentities.Add(
+                    $"{loaded.name}|asset={AssetDatabase.Contains(loaded)}|" +
+                    $"backend={loaded.BattlePresentationBackendName}|" +
+                    $"probeClone={IsProbeConfigClone(loaded, source)}");
+            }
+
+            string resultPath = ProjectPath(
+                "artifacts/diagnostics/NTSD28-Q09-LEGACY-PROBE-CONFIG-LIFETIME-001/idle-config-inspection.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
+            File.AppendAllText(resultPath,
+                $"{DateTime.UtcNow:O} before={before} source={(source != null)} " +
+                $"outcome={outcome} afterIsAsset={ReferenceEquals(GameConfig.Instance, source)} " +
+                $"loaded={loadedConfigs.Length} [{string.Join(",", loadedIdentities)}]\n");
+        }
+
+        [MenuItem("NTSD/Battle Diagnostics/Q09/Retire Probe GameConfig Clones")]
+        private static void RetireProbeGameConfigClones()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode)
+                throw new InvalidOperationException("Probe clone retirement requires EditMode.");
+
+            GameConfig source = AssetDatabase.LoadAssetAtPath<GameConfig>(
+                GameConfigAssetPath);
+            Require(source != null && AssetDatabase.Contains(source),
+                "The saved GameConfig Asset is unavailable.");
+            GameConfig current = GameConfig.Instance;
+            Require(current == null || ReferenceEquals(current, source) ||
+                    IsProbeConfigClone(current, source),
+                "An unrelated GameConfig singleton is active.");
+
+            GameConfig[] loaded = Resources.FindObjectsOfTypeAll<GameConfig>();
+            var recognizedClones = new List<GameConfig>();
+            foreach (GameConfig candidate in loaded)
+            {
+                if (AssetDatabase.Contains(candidate))
+                    continue;
+                Require(IsProbeConfigClone(candidate, source),
+                    "An unrecognized loaded GameConfig object is present.");
+                recognizedClones.Add(candidate);
+            }
+
+            if (IsProbeConfigClone(current, source))
+                SetGameConfigInstance(null);
+            foreach (GameConfig clone in recognizedClones)
+                UnityEngine.Object.DestroyImmediate(clone);
+            if (GameConfig.Instance == null)
+                GameConfig.Instance = source;
+            Require(ReferenceEquals(GameConfig.Instance, source),
+                "The saved GameConfig Asset was not rebound.");
+
+            int remainingClones = 0;
+            foreach (GameConfig candidate in Resources.FindObjectsOfTypeAll<GameConfig>())
+            {
+                if (IsProbeConfigClone(candidate, source))
+                    remainingClones++;
+            }
+            string resultPath = ProjectPath(
+                "artifacts/diagnostics/NTSD28-Q09-LEGACY-PROBE-CONFIG-LIFETIME-001/idle-config-retirement.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
+            File.AppendAllText(resultPath,
+                $"{DateTime.UtcNow:O} retired={recognizedClones.Count} " +
+                $"remainingProbeClones={remainingClones} " +
+                $"singletonIsSavedAsset={ReferenceEquals(GameConfig.Instance, source)}\n");
+            Require(remainingClones == 0,
+                "Recognized probe GameConfig clones remain loaded.");
+        }
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void ConfigureOptInLegacyBeforeSceneLoad()
         {
-            string path = ProjectPath(RequestPath);
+            string path = ProjectPath(SelectRequestPath());
             if (!File.Exists(path))
                 return;
             Request pending;
@@ -224,12 +395,45 @@ namespace NTSD.Test.Editor
                 return;
             GameConfig source = AssetDatabase.LoadAssetAtPath<GameConfig>(
                 GameConfigAssetPath);
-            GameConfig current = GameConfig.Instance;
-            if (!IsProbeConfigClone(current, source))
+            if (source == null)
                 return;
-            SetGameConfigInstance(null);
-            GameConfig.Instance = source;
-            UnityEngine.Object.DestroyImmediate(current);
+            GameConfig current = GameConfig.Instance;
+            if (current != null && !ReferenceEquals(current, source) &&
+                !IsProbeConfigClone(current, source))
+                return;
+
+            var clones = new List<GameConfig>();
+            foreach (GameConfig loaded in Resources.FindObjectsOfTypeAll<GameConfig>())
+            {
+                if (AssetDatabase.Contains(loaded))
+                    continue;
+                if (!IsProbeConfigClone(loaded, source))
+                    return;
+                clones.Add(loaded);
+            }
+            if (clones.Count == 0)
+                return;
+
+            if (IsProbeConfigClone(current, source))
+                SetGameConfigInstance(null);
+            foreach (GameConfig clone in clones)
+                UnityEngine.Object.DestroyImmediate(clone);
+            if (GameConfig.Instance == null)
+                GameConfig.Instance = source;
+
+            int remainingClones = 0;
+            foreach (GameConfig loaded in Resources.FindObjectsOfTypeAll<GameConfig>())
+            {
+                if (IsProbeConfigClone(loaded, source))
+                    remainingClones++;
+            }
+            string resultPath = ProjectPath(
+                "artifacts/diagnostics/NTSD28-Q09-LEGACY-PROBE-CONFIG-LIFETIME-001/auto-exit-retirement.txt");
+            Directory.CreateDirectory(Path.GetDirectoryName(resultPath));
+            File.AppendAllText(resultPath,
+                $"{DateTime.UtcNow:O} retired={clones.Count} " +
+                $"remainingProbeClones={remainingClones} " +
+                $"singletonIsSavedAsset={ReferenceEquals(GameConfig.Instance, source)}\n");
         }
 
         private static bool IsProbeConfigClone(GameConfig current,
@@ -254,14 +458,16 @@ namespace NTSD.Test.Editor
 
         private static void Poll()
         {
+            string selectedRequestPath = request != null
+                ? activeRequestPath : SelectRequestPath();
             if (EditorApplication.isCompiling || EditorApplication.isUpdating ||
-                !File.Exists(ProjectPath(RequestPath)))
+                !File.Exists(ProjectPath(selectedRequestPath)))
                 return;
             Request next;
             try
             {
                 next = JsonUtility.FromJson<Request>(
-                    File.ReadAllText(ProjectPath(RequestPath)));
+                    File.ReadAllText(ProjectPath(selectedRequestPath)));
             }
             catch (IOException)
             {
@@ -281,7 +487,8 @@ namespace NTSD.Test.Editor
                 Scene scene = SceneManager.GetActiveScene();
                 if (scene.path != ScenePath || scene.isDirty)
                 {
-                    WriteImmediateFailure(next, "A clean saved Battle Scene is required.");
+                    WriteImmediateFailure(next, selectedRequestPath,
+                        "A clean saved Battle Scene is required.");
                     return;
                 }
                 EditorApplication.EnterPlaymode();
@@ -291,10 +498,11 @@ namespace NTSD.Test.Editor
             if (request == null)
             {
                 request = next;
+                activeRequestPath = selectedRequestPath;
                 request.requested = false;
                 request.running = true;
                 request.startedUtcTicks = DateTime.UtcNow.Ticks;
-                File.WriteAllText(ProjectPath(RequestPath), JsonUtility.ToJson(request));
+                File.WriteAllText(ProjectPath(activeRequestPath), JsonUtility.ToJson(request));
                 report = new Report
                 {
                     runId = request.runId,
@@ -311,6 +519,8 @@ namespace NTSD.Test.Editor
                     Prepare();
                 else if (phase == 1)
                     WaitForPauseAndSpawn();
+                else if (phase == 3)
+                    ObserveShadowMotion();
                 else
                     StepAndObserve();
             }
@@ -348,6 +558,18 @@ namespace NTSD.Test.Editor
             Require(!request.captureLegacyPixels ||
                     (request.checkLegacy && request.legacyBoot),
                 "Legacy GPU capture requires pre-boot LegacyOnly mode.");
+            Require(!request.checkOrdinaryShadow ||
+                    (request.checkLegacy && request.legacyBoot),
+                "Ordinary shadow capture requires pre-boot LegacyOnly mode.");
+            Require(!request.sampleLegacyShadowMotion ||
+                    (request.checkLegacy && request.legacyBoot &&
+                     !request.captureLegacyPixels &&
+                     !request.checkOrdinaryShadow),
+                "Shadow motion sampling requires the Legacy-only motion request.");
+            Require(!request.captureCentralPixels ||
+                    (!request.checkLegacy && !request.legacyBoot &&
+                     !request.captureLegacyPixels),
+                "Central GPU capture requires the ordinary CentralOnly probe path.");
             if (request.legacyBoot)
                 Require(report.configIsRuntimeClone &&
                         !report.logicOnlyMaterialization &&
@@ -573,12 +795,27 @@ namespace NTSD.Test.Editor
             if (request.legacyBoot && child != null && row.childState == 9997)
             {
                 ObserveLegacyBody();
-                Finish();
+                if (request.sampleLegacyShadowMotion)
+                    BeginShadowMotion();
+                else
+                    Finish();
                 return;
             }
             if (row.bodyCommand && report.childState == 9997)
             {
-                if (request.checkLegacy)
+                if (request.captureCentralPixels)
+                {
+                    CaptureCentralBodyPixels();
+                    report.status = report.centralBodyPixelCount > 0 &&
+                                    report.centralResolvedCount ==
+                                    report.centralWithoutResolvedCount + 1 &&
+                                    report.centralTickBefore == report.centralTickAfter &&
+                                    report.centralChecksumBefore ==
+                                    report.centralChecksumAfter
+                        ? "CENTRAL_GPU_BODY_PIXELS_OBSERVED"
+                        : "CENTRAL_GPU_BODY_PIXELS_MISSING";
+                }
+                else if (request.checkLegacy)
                     ObserveLegacyBody();
                 else
                     report.status = report.childOwner != ActiveFixtureSlot
@@ -606,6 +843,8 @@ namespace NTSD.Test.Editor
                 CaptureLegacyBody();
                 if (request.captureLegacyPixels)
                     CaptureLegacyBodyPixels();
+                if (request.checkOrdinaryShadow)
+                    CaptureOrdinaryShadowPixels();
                 if (ActiveFixtureSlot == 9)
                 {
                     report.fallbackObservedPivotX =
@@ -629,6 +868,20 @@ namespace NTSD.Test.Editor
                         ? "LEGACY_GPU_BODY_PIXELS_OBSERVED"
                         : "LEGACY_GPU_BODY_PIXELS_MISSING"
                     : bodyObserved ? "LEGACY_BODY_OBSERVED" : "LEGACY_BODY_DIFFERENCE";
+                if (request.checkOrdinaryShadow)
+                    report.status = bodyObserved &&
+                                    report.ordinaryShadowBound &&
+                                    report.ordinaryShadowEnabled &&
+                                    report.ordinaryShadowDescriptorMatched &&
+                                    report.ordinaryShadowPixelCount > 0 &&
+                                    report.ordinaryShadowTickBefore ==
+                                    report.ordinaryShadowTickAfter &&
+                                    report.ordinaryShadowChecksumBefore ==
+                                    report.ordinaryShadowChecksumAfter &&
+                                    report.ordinaryShadowCameraRestored &&
+                                    report.ordinaryShadowRendererRestored
+                        ? "LEGACY_ORDINARY_SHADOW_PIXELS_OBSERVED"
+                        : "LEGACY_ORDINARY_SHADOW_PIXELS_MISSING";
                 return;
             }
             originalBackend = world.BattlePresentation.Mode;
@@ -652,6 +905,133 @@ namespace NTSD.Test.Editor
             {
                 RestoreBackend();
             }
+        }
+
+        private static void BeginShadowMotion()
+        {
+            Require(report.status == "LEGACY_BODY_OBSERVED",
+                "Natural Legacy child body was not observed before shadow motion.");
+            shadowMotionActor = world.FindEntityByRuntimeSlotForQuery(0);
+            Require(shadowMotionActor?.Runtime != null &&
+                    shadowMotionActor.Renderer != null &&
+                    shadowMotionActor.Runtime.SourceRulePositionInitialized,
+                "Natural ordinary slot 0 lacks a renderer or source-rule position.");
+            shadowMotionRenderer = shadowMotionActor.ShadowRenderer;
+            Require(shadowMotionRenderer != null && shadowMotionRenderer.enabled,
+                "Natural ordinary slot 0 has no enabled Legacy shadow.");
+            shadowMotionFpsField = typeof(SimulationTickDriver).GetField(
+                "battleRenderFps", BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(shadowMotionFpsField != null,
+                "Battle render FPS field is unavailable.");
+            shadowMotionSavedFps = (int)shadowMotionFpsField.GetValue(driver);
+            shadowMotionFixedTick = driver.CurrentTickIndex;
+            shadowMotionOriginalSourceX = shadowMotionActor.Runtime.SourceRuleX;
+            shadowMotionOriginalSourceZ = shadowMotionActor.Runtime.SourceRuleZ;
+            shadowMotionOriginalViewX = shadowMotionActor.Runtime.X;
+            shadowMotionIndex = 0;
+            BeginShadowMotionCase();
+        }
+
+        private static void BeginShadowMotionCase()
+        {
+            int fps = ShadowMotionFps[shadowMotionIndex];
+            shadowMotionFpsField.SetValue(driver, fps);
+            world.ConfigureBattlePresentationDisplayPolicy(
+                fps, SimulationConstants.SIM_DT);
+            BattlePresentationFrame previous = world.BattlePresentation.PublishedFrame;
+            Require(previous != null, "Shadow motion has no preceding publication.");
+            double sourceX = shadowMotionActor.Runtime.SourceRuleX + 20.0;
+            double viewX = shadowMotionActor.Runtime.X +
+                           20.0 * world.FixedViewRunDistanceScale;
+            shadowMotionActorMoved = true;
+            shadowMotionActor.Runtime.SetSourceRulePosition(
+                sourceX, shadowMotionActor.Runtime.SourceRuleZ);
+            shadowMotionActor.Runtime.SyncSourceRuleIntegerPosition();
+            shadowMotionActor.Runtime.X = viewX;
+            shadowMotionActor.Runtime.SyncIntegerPosition();
+            shadowMotionActor.RefreshRuntimeSnapshot();
+            world.BattlePresentation.BeginFrame(world, previous.TickIndex + 1);
+            BattlePresentationFrame published = world.BattlePresentation.PublishedFrame;
+            Require(published.PreviousMotionTickIndex == previous.TickIndex,
+                "Shadow motion publication is not adjacent.");
+
+            world.PresentLatestFrame(shadowMotionFixedTick);
+            activeShadowMotion = new ShadowMotionRecord
+            {
+                renderFps = fps,
+                previousTick = previous.TickIndex,
+                publishedTick = published.TickIndex,
+                firstAlpha =
+                    BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world),
+                firstBodyX = ShadowMotionBodyX(),
+                firstShadowX = shadowMotionRenderer.transform.position.x,
+                sourceRuleX = sourceX,
+                viewX = viewX,
+                firstChecksum = world.CaptureParityFrameSnapshot(
+                    shadowMotionFixedTick).OverallChecksum,
+            };
+            Require(!string.IsNullOrEmpty(activeShadowMotion.firstChecksum),
+                "Shadow motion has no paused World checksum.");
+            shadowMotionDueTime = EditorApplication.timeSinceStartup + 0.05;
+            phase = 3;
+        }
+
+        private static void ObserveShadowMotion()
+        {
+            if (EditorApplication.timeSinceStartup < shadowMotionDueTime)
+                return;
+            world.PresentLatestFrame(shadowMotionFixedTick);
+            activeShadowMotion.laterAlpha =
+                BattleCentralRenderSystem.LastResolvedDisplayAlphaForWorld(world);
+            activeShadowMotion.laterBodyX = ShadowMotionBodyX();
+            activeShadowMotion.laterShadowX =
+                shadowMotionRenderer.transform.position.x;
+            activeShadowMotion.laterChecksum =
+                world.CaptureParityFrameSnapshot(shadowMotionFixedTick).OverallChecksum;
+            report.shadowMotion.Add(activeShadowMotion);
+            Require(driver.IsPaused && driver.CurrentTickIndex == shadowMotionFixedTick &&
+                    ReferenceEquals(world, driver.World),
+                "Logic advanced during Legacy shadow sampling.");
+            Require(activeShadowMotion.firstChecksum ==
+                    activeShadowMotion.laterChecksum &&
+                    Math.Abs(shadowMotionActor.Runtime.SourceRuleX -
+                             activeShadowMotion.sourceRuleX) < 1e-6 &&
+                    Math.Abs(shadowMotionActor.Runtime.X -
+                             activeShadowMotion.viewX) < 1e-6,
+                "Legacy display sampling changed World truth.");
+            if (activeShadowMotion.renderFps == 30)
+            {
+                Require(Math.Abs(activeShadowMotion.laterBodyX -
+                                 activeShadowMotion.firstBodyX) < 1e-5 &&
+                        Math.Abs(activeShadowMotion.laterShadowX -
+                                 activeShadowMotion.firstShadowX) < 1e-5,
+                    "30 FPS Legacy body or shadow moved within one tick.");
+            }
+            else
+            {
+                Require(activeShadowMotion.firstAlpha <
+                        activeShadowMotion.laterAlpha &&
+                        activeShadowMotion.laterBodyX >
+                        activeShadowMotion.firstBodyX &&
+                        activeShadowMotion.laterShadowX >
+                        activeShadowMotion.firstShadowX,
+                    "60/120 FPS Legacy body or shadow did not advance with alpha.");
+            }
+            shadowMotionIndex++;
+            if (shadowMotionIndex < ShadowMotionFps.Length)
+            {
+                BeginShadowMotionCase();
+                return;
+            }
+            report.status = "LEGACY_SHADOW_MOTION_SAMPLED";
+            Finish();
+        }
+
+        private static float ShadowMotionBodyX()
+        {
+            Transform rendererTransform = shadowMotionActor.Renderer.transform;
+            return (rendererTransform.parent != null
+                ? rendererTransform.parent : rendererTransform).position.x;
         }
 
         private static float ComputeOwner9FallbackPivotX(
@@ -693,6 +1073,84 @@ namespace NTSD.Test.Editor
             report.legacyFlipX = body.flipX;
             report.legacyX = root.position.x;
             report.legacyY = root.position.y;
+        }
+
+        private static void CaptureOrdinaryShadowPixels()
+        {
+            LF2Entity ordinary = world.FindEntityByRuntimeSlotForQuery(0);
+            Require(ordinary?.Renderer != null,
+                "The saved Battle Scene has no ordinary slot-0 renderer.");
+            SpriteRenderer shadow = ordinary.ShadowRenderer;
+            report.ordinaryShadowSlot = ordinary.Runtime.SlotIndex;
+            report.ordinaryShadowBound = shadow != null;
+            report.ordinaryShadowEnabled = shadow != null && shadow.enabled;
+            BattleCommonShadowDescriptor descriptor =
+                GameConfig.Instance?.ShadowPrefab?.GetComponent<BattleCommonShadowDescriptor>();
+            report.ordinaryShadowDescriptorMatched = shadow != null &&
+                descriptor != null && shadow.sprite == descriptor.Sprite &&
+                shadow.sharedMaterial == descriptor.Material;
+            Require(report.ordinaryShadowEnabled &&
+                    report.ordinaryShadowDescriptorMatched,
+                "The Legacy-born ordinary actor has no visible configured shadow.");
+
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            Require(camera != null && camera.isActiveAndEnabled,
+                "An active Battle World camera is required for shadow pixels.");
+            const int width = 1280;
+            const int height = 720;
+            RenderTexture originalTarget = camera.targetTexture;
+            RenderTexture originalActive = RenderTexture.active;
+            bool originalEnabled = shadow.enabled;
+            report.ordinaryShadowTickBefore = world.CurrentTickIndex;
+            report.ordinaryShadowChecksumBefore = world.CaptureParityFrameSnapshot(
+                report.ordinaryShadowTickBefore).OverallChecksum;
+            var target = new RenderTexture(width, height, 24,
+                RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            Texture2D readback = null;
+            try
+            {
+                target.Create();
+                readback = new Texture2D(width, height,
+                    TextureFormat.RGBA32, false, true);
+                camera.targetTexture = target;
+                Color32[] withShadow = CaptureLegacyCameraPixels(
+                    camera, target, readback, "ordinary-shadow-on",
+                    out report.ordinaryShadowOnPng);
+                shadow.enabled = false;
+                Color32[] withoutShadow = CaptureLegacyCameraPixels(
+                    camera, target, readback, "ordinary-shadow-off",
+                    out report.ordinaryShadowOffPng);
+                for (int index = 0; index < withShadow.Length; index++)
+                {
+                    Color32 a = withShadow[index];
+                    Color32 b = withoutShadow[index];
+                    if (a.r != b.r || a.g != b.g || a.b != b.b || a.a != b.a)
+                        report.ordinaryShadowPixelCount++;
+                }
+                report.ordinaryShadowTickAfter = world.CurrentTickIndex;
+                report.ordinaryShadowChecksumAfter = world.CaptureParityFrameSnapshot(
+                    report.ordinaryShadowTickAfter).OverallChecksum;
+            }
+            finally
+            {
+                shadow.enabled = originalEnabled;
+                camera.targetTexture = originalTarget;
+                RenderTexture.active = originalActive;
+                report.ordinaryShadowRendererRestored =
+                    shadow.enabled == originalEnabled;
+                report.ordinaryShadowCameraRestored =
+                    camera.targetTexture == originalTarget &&
+                    RenderTexture.active == originalActive;
+                if (readback != null)
+                    UnityEngine.Object.DestroyImmediate(readback);
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+            }
         }
 
         private static void CaptureLegacyBodyPixels()
@@ -774,6 +1232,175 @@ namespace NTSD.Test.Editor
             }
         }
 
+        private static void CaptureCentralBodyPixels()
+        {
+            Camera camera = NTSDRenderSpace.WorldCamera;
+            Require(camera != null && camera.isActiveAndEnabled,
+                "An active Battle World camera is required for central GPU capture.");
+            BattlePixelFramePlan plan = BattleCentralRenderSystem.PrepareFrame(world);
+            BattlePresentationFrame source = plan.CapturedFrame;
+            Require(plan.IsValid && !plan.IsStale && source != null &&
+                    source.CommandsMaterialized && source.TickIndex == world.CurrentTickIndex,
+                "The natural child has no frozen central command frame.");
+
+            report.centralTickBefore = world.CurrentTickIndex;
+            report.centralChecksumBefore = world.CaptureParityFrameSnapshot(
+                report.centralTickBefore).OverallChecksum;
+            int targetIndex = -1;
+            for (int index = 0; index < source.CommandCount; index++)
+            {
+                BattleRenderCommand command = source.GetCommand(index);
+                if (command.RuntimeSlot != child.Runtime.SlotIndex ||
+                    command.Type != BattleRenderCommandType.Entity)
+                    continue;
+                Require(targetIndex < 0,
+                    "The natural child has more than one central body command.");
+                targetIndex = index;
+            }
+            Require(targetIndex >= 0,
+                "The natural child body is missing from the central command frame.");
+
+            MethodInfo addCommand = typeof(BattlePresentationFrame).GetMethod(
+                "AddCommand", BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(addCommand != null,
+                "The temporary central command writer is unavailable.");
+            var all = new BattlePresentationFrame();
+            var withoutBody = new BattlePresentationFrame();
+            for (int index = 0; index < source.CommandCount; index++)
+            {
+                BattleRenderCommand command = source.GetCommand(index);
+                addCommand.Invoke(all, new object[] { command });
+                if (index != targetIndex)
+                    addCommand.Invoke(withoutBody, new object[] { command });
+            }
+            report.centralCommandCount = all.CommandCount;
+            report.centralWithoutCommandCount = withoutBody.CommandCount;
+            Require(report.centralWithoutCommandCount + 1 == report.centralCommandCount,
+                "The temporary central frame did not remove exactly one body.");
+
+            Material material =
+                BattleCentralRenderSystem.RegisteredFeatureMaterialForAcceptance;
+            Material arrayMaterial =
+                BattleCentralRenderSystem.RegisteredFeatureArrayMaterialForAcceptance;
+            Require(material != null && arrayMaterial != null,
+                "The production central materials are unavailable.");
+            var resolver = new BattleCatalogCentralResourceResolver();
+            resolver.Configure(source.BoundCatalogForAcceptance,
+                source.CommonVisualCatalog, material, arrayMaterial);
+            FieldInfo drawModeField = typeof(BattleCentralRenderSystem).GetField(
+                "drawMode", BindingFlags.Static | BindingFlags.NonPublic);
+            Require(drawModeField != null,
+                "The production central draw mode is unavailable.");
+            var drawMode = (BattleCentralDrawMode)drawModeField.GetValue(null);
+            using var allBackend = new BattleDynamicMeshBackend();
+            using var withoutBackend = new BattleDynamicMeshBackend();
+            allBackend.Build(all, resolver, drawMode);
+            withoutBackend.Build(withoutBody, resolver, drawMode);
+            report.centralResolvedCount = allBackend.Diagnostics.ResolvedCommandCount;
+            report.centralWithoutResolvedCount =
+                withoutBackend.Diagnostics.ResolvedCommandCount;
+            Require(report.centralResolvedCount ==
+                    report.centralWithoutResolvedCount + 1 &&
+                    allBackend.SegmentCount > 0,
+                "The natural child body did not resolve to one central quad.");
+
+            const int width = 1280;
+            const int height = 720;
+            Color32[] bodyOn = RenderCentralBodyComparison(camera, allBackend,
+                width, height, "body-on", out report.centralBodyOnPng);
+            Color32[] bodyOff = RenderCentralBodyComparison(camera, withoutBackend,
+                width, height, "body-off", out report.centralBodyOffPng);
+            Require(bodyOn.Length == bodyOff.Length &&
+                    bodyOn.Length == width * height,
+                "Central body GPU images have incompatible dimensions.");
+            for (int index = 0; index < bodyOn.Length; index++)
+            {
+                Color32 a = bodyOn[index];
+                Color32 b = bodyOff[index];
+                if (Math.Abs(a.r - b.r) > 2 || Math.Abs(a.g - b.g) > 2 ||
+                    Math.Abs(a.b - b.b) > 2 || Math.Abs(a.a - b.a) > 2)
+                    report.centralBodyPixelCount++;
+            }
+            report.centralTickAfter = world.CurrentTickIndex;
+            report.centralChecksumAfter = world.CaptureParityFrameSnapshot(
+                report.centralTickAfter).OverallChecksum;
+            Require(report.centralTickBefore == report.centralTickAfter &&
+                    report.centralChecksumBefore == report.centralChecksumAfter,
+                "Central body GPU comparison changed the combat World.");
+        }
+
+        private static Color32[] RenderCentralBodyComparison(Camera camera,
+            BattleDynamicMeshBackend backend, int width, int height,
+            string suffix, out string relativePath)
+        {
+            relativePath = CentralPixelResultRoot + "/" + request.runId +
+                           "-" + suffix + ".png";
+            string output = ProjectPath(relativePath);
+            Require(!File.Exists(output),
+                "Refusing to overwrite a central body GPU image.");
+            var target = new RenderTexture(width, height, 0,
+                RenderTextureFormat.ARGB32, RenderTextureReadWrite.Linear)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp,
+                hideFlags = HideFlags.HideAndDontSave,
+            };
+            var commands = new CommandBuffer
+            {
+                name = "Q09 Karin Central Alpha " + suffix,
+            };
+            RenderTexture previousActive = RenderTexture.active;
+            Texture2D readback = null;
+            try
+            {
+                target.Create();
+                commands.SetRenderTarget(target);
+                commands.SetViewport(new Rect(0, 0, width, height));
+                commands.ClearRenderTarget(false, true, Color.white);
+                commands.SetViewProjectionMatrices(camera.worldToCameraMatrix,
+                    GL.GetGPUProjectionMatrix(camera.projectionMatrix, true));
+                var properties = new MaterialPropertyBlock();
+                for (int index = 0; index < backend.SegmentCount; index++)
+                {
+                    BattleCentralRenderSegment segment = backend.GetSegment(index);
+                    Require(segment.Material != null && segment.Texture != null,
+                        "A central body segment has no material or texture.");
+                    properties.Clear();
+                    properties.SetTexture(
+                        segment.BindingMode ==
+                        BattleSpriteCentralBindingMode.AtlasTextureArray
+                            ? MainTexArrayId : MainTexId,
+                        segment.Texture);
+                    commands.DrawMesh(backend.GetChunkMesh(segment.ChunkIndex),
+                        Matrix4x4.identity, segment.Material,
+                        segment.SubMeshIndex, 0, properties);
+                }
+                Graphics.ExecuteCommandBuffer(commands);
+                RenderTexture.active = target;
+                readback = new Texture2D(width, height,
+                    TextureFormat.RGBA32, false, true);
+                readback.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
+                readback.Apply(false, false);
+                Directory.CreateDirectory(Path.GetDirectoryName(output));
+                using (var stream = new FileStream(output, FileMode.CreateNew,
+                    FileAccess.Write))
+                {
+                    byte[] png = readback.EncodeToPNG();
+                    stream.Write(png, 0, png.Length);
+                }
+                return readback.GetPixels32();
+            }
+            finally
+            {
+                RenderTexture.active = previousActive;
+                commands.Release();
+                if (readback != null)
+                    UnityEngine.Object.DestroyImmediate(readback);
+                target.Release();
+                UnityEngine.Object.DestroyImmediate(target);
+            }
+        }
+
         private static Color32[] CaptureLegacyCameraPixels(
             Camera camera, RenderTexture target, Texture2D readback,
             string suffix, out string relativePath)
@@ -806,6 +1433,22 @@ namespace NTSD.Test.Editor
         {
             try
             {
+                if (shadowMotionActorMoved && shadowMotionActor?.Runtime != null)
+                {
+                    shadowMotionActor.Runtime.SetSourceRulePosition(
+                        shadowMotionOriginalSourceX,
+                        shadowMotionOriginalSourceZ);
+                    shadowMotionActor.Runtime.SyncSourceRuleIntegerPosition();
+                    shadowMotionActor.Runtime.X = shadowMotionOriginalViewX;
+                    shadowMotionActor.Runtime.SyncIntegerPosition();
+                    shadowMotionActor.RefreshRuntimeSnapshot();
+                }
+                if (shadowMotionFpsField != null && driver != null)
+                {
+                    shadowMotionFpsField.SetValue(driver, shadowMotionSavedFps);
+                    world?.ConfigureBattlePresentationDisplayPolicy(
+                        shadowMotionSavedFps, SimulationConstants.SIM_DT);
+                }
                 RestoreBackend();
                 if (child?.Match == world && child.Runtime?.SlotIndex >= 0)
                     child.FreeEntityLikeExe();
@@ -852,8 +1495,9 @@ namespace NTSD.Test.Editor
                     File.WriteAllText(output, JsonUtility.ToJson(report, true));
                 request.requested = false;
                 request.running = false;
-                File.WriteAllText(ProjectPath(RequestPath), JsonUtility.ToJson(request));
+                File.WriteAllText(ProjectPath(activeRequestPath), JsonUtility.ToJson(request));
                 request = null;
+                activeRequestPath = null;
                 report = null;
                 driver = null;
                 world = null;
@@ -866,12 +1510,18 @@ namespace NTSD.Test.Editor
                 stepped = 0;
                 pauseCaptured = false;
                 backendSwitched = false;
+                shadowMotionActor = null;
+                shadowMotionRenderer = null;
+                shadowMotionFpsField = null;
+                shadowMotionActorMoved = false;
+                activeShadowMotion = null;
                 if (EditorApplication.isPlaying)
                     EditorApplication.delayCall += EditorApplication.ExitPlaymode;
             }
         }
 
-        private static void WriteImmediateFailure(Request failed, string error)
+        private static void WriteImmediateFailure(Request failed,
+            string selectedRequestPath, string error)
         {
             string output = ResultPath(failed.runId);
             Directory.CreateDirectory(Path.GetDirectoryName(output));
@@ -884,7 +1534,40 @@ namespace NTSD.Test.Editor
                 }, true));
             failed.requested = false;
             failed.running = false;
-            File.WriteAllText(ProjectPath(RequestPath), JsonUtility.ToJson(failed));
+            File.WriteAllText(ProjectPath(selectedRequestPath), JsonUtility.ToJson(failed));
+        }
+
+        private static string SelectRequestPath()
+        {
+            string motionPath = ProjectPath(ShadowMotionRequestPath);
+            if (File.Exists(motionPath))
+            {
+                try
+                {
+                    Request motion = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(motionPath));
+                    if (motion != null && (motion.requested || motion.running))
+                        return ShadowMotionRequestPath;
+                }
+                catch (Exception)
+                {
+                    // An incomplete optional request must not displace existing jobs.
+                }
+            }
+            string path = ProjectPath(ShadowRequestPath);
+            if (!File.Exists(path))
+                return RequestPath;
+            try
+            {
+                Request pending = JsonUtility.FromJson<Request>(File.ReadAllText(path));
+                if (pending != null && (pending.requested || pending.running))
+                    return ShadowRequestPath;
+            }
+            catch (Exception)
+            {
+                // A partial diagnostic request must not displace the old path.
+            }
+            return RequestPath;
         }
 
         private static bool ValidRunId(string value)

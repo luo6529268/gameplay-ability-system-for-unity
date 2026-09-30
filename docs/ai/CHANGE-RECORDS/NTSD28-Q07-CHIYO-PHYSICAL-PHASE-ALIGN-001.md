@@ -1,0 +1,22 @@
+<!-- CHANGE-RECORD
+id: NTSD28-Q07-CHIYO-PHYSICAL-PHASE-ALIGN-001
+status: ROLLED_BACK
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07ChiyoNaturalBattlePlayProbeEditor.cs
+authority: formal root EXE B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033 and paired playable natural Chiyo phase trace
+evidence: docs/ai/TASKS/NTSD28-Q07-CHIYO-PHYSICAL-PHASE-ALIGN-001.md
+-->
+
+# NTSD28-Q07-CHIYO-PHYSICAL-PHASE-ALIGN-001
+
+Before edit: the original Battle Scene physical P1 probe uses the correct L/W/K/J bindings and passes 120/120 button/press/release checks, but its first measured phase is 0 while the formal and direct-canonical trace first measured phase is 1. The existing direct-canonical probe already runs one neutral full-Driver step when the paused Play World begins at phase1; physical mode skips that step. The proposed one-condition test-only change permits the same neutral pre-measure step for physical mode, followed by the existing actor reinitialization and fixed 120-tick physical input schedule. Expected side effect is a shifted diagnostic tick origin, not a production behavior change. Exact file/symbol: `NTSD28Q07ChiyoNaturalBattlePlayProbeEditor.Poll` `NEUTRAL` branch. No production/DAT/Scene/Input Actions/nonbattle modifications. Acceptance, first-difference policy and rollback are in the Task. Q07/BATCH-04/D-024 and overall goal remain open.
+
+Validation pending: original Editor compile, one physical Play, exact selected-field comparison, ordered exit/zero residue/protected hashes, Change Ledger and diff check. Retain previous physical/canonical reports.
+
+After script edit: only `NTSD28Q07ChiyoNaturalBattlePlayProbeEditor.Poll()` changed its existing `NEUTRAL` branch guard from `report.directCanonical && world.InputPhase != 0` to `world.InputPhase != 0`. Physical and direct-canonical modes now share the already-written neutral full-Driver step before actor reinitialization when the paused Play World begins in phase1. No input schedule, key map, measured loop, candidate logic or production path changed. Current state is CODE_WRITTEN; original Editor compile/Play and source comparison are pending. Risk and rollback remain as declared.
+
+Pre-correction decision after one Play: the original Editor compiled this one-line probe revision and `chiyo-physical-phasealigned-20260928-01.json` finished `OBSERVED_DIFFERENCE`. Its initial measured phase became 1 as intended, but physical P1 canonical buttons remained None for all 120 steps, so no Chiyo/puppet chain ran. Ordered shutdown, zero residue, neutral keyboard, clean Scene and identical before/after Battle Scene SHA passed. This is a failure of the newly combined diagnostic path; no source/Unity battle-rule first difference was observed. The static `StepOneTick` overloads do not by themselves prove why physical callbacks were absent. The earlier correctly mapped physical report without this extra neutral step remains valid. Avoid another slow case without a specific input-action witness; withdraw only this one-line probe change and preserve the negative JSON, Task and Record. No production behavior is implicated.
+
+Actual correction: restored exactly the former `report.directCanonical && world.InputPhase != 0` guard in the Editor-only probe. This Change ID has no retained script hunk and is `ROLLED_BACK`; the earlier verified probe implementation under `NTSD28-Q07-CHIYO-CONTROL-NATURAL-PLAY-001` remains intact. Original Editor recompile after restoration, final protected hashes, Ledger and diff check are the remaining validation. [Negative report](../../../artifacts/diagnostics/NTSD28-Q07-CHIYO-PHYSICAL-PHASE-ALIGN-001/REPORT.md).
+
+Final validation: restored probe source was recompiled by the original Editor (`Assembly-CSharp-Editor.dll` UTC 2026-09-28 15:35:54, newer than source). MCP console filter for this probe returned 0 error entries; active Battle Scene was clean. The negative report SHA and 120/120 None fields were independently checked, all four protected file SHA values matched the pre-run baseline, and the one-line guard equals the former verified source. `Tools/Validate-ChangeLedger.ps1` exit0/PASSED with 984 Records and 18 governed code files in the shared diff; full output saved to `Temp/NTSD28_Q07_ChiyoPhaseAlign_ledger-validation-final.txt`. `git diff --check` exit0. No full SelfCheck or second Play was needed after restoring a test-only condition.

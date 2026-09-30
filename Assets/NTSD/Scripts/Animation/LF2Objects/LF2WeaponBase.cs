@@ -946,6 +946,11 @@ namespace NTSD.Animation.LF2Objects
                                 _gravityToAdd,
                                 RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
                                 RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
+                        int fastWeaponAction =
+                            CharacterMechanics.SelectFastWeaponActionAfterFriction(
+                                currentDataType,
+                                state,
+                                Runtime.Vx);
                         _lastLandingVyBeforeClamp =
                             step.VerticalVelocityBeforeMove;
                         RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
@@ -953,6 +958,7 @@ namespace NTSD.Animation.LF2Objects
                         if (step.Airborne)
                             OnInFlightFrameUpdate();
 
+                        bool landingOverridesFastWeaponAction = false;
                         if (currentDataType == (int)LF2ObjectType.LightWeapon ||
                             currentDataType == (int)LF2ObjectType.HeavyWeapon ||
                             currentDataType == (int)LF2ObjectType.ThrowWeapon ||
@@ -964,6 +970,9 @@ namespace NTSD.Animation.LF2Objects
                                     : currentDataType == (int)LF2ObjectType.HeavyWeapon
                                         ? step.PenetratedEffectiveFloor
                                         : step.Type4Or6LandingPredicate;
+                            landingOverridesFastWeaponAction = resolvesLanding &&
+                                (currentDataType == (int)LF2ObjectType.ThrowWeapon ||
+                                 currentDataType == (int)LF2ObjectType.Drink);
                             if (resolvesLanding)
                                 OnLanded(step.CollisionYReference);
                         }
@@ -974,6 +983,8 @@ namespace NTSD.Animation.LF2Objects
                                 Frame?.D,
                                 step);
                         }
+                        if (fastWeaponAction >= 0 && !landingOverridesFastWeaponAction)
+                            DirectWriteNativeRawFramePreserveWaitCounter(fastWeaponAction);
                     }
                     else
                     {

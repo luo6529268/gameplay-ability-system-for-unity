@@ -20,6 +20,141 @@ namespace NTSD.Test
         private const string Source = "artifacts/diagnostics/NTSD28-Q06-PLATFORM-TRANSACTION-SOURCE-WITNESS-001/source-final/first.jsonl";
         private const string Output = "artifacts/diagnostics/NTSD28-Q06-PLATFORM-TRANSACTION-001/";
 
+        [TestCase(false, false, 525, 650, true, true, 0)]
+        [TestCase(true, false, 525, 650, true, true, 0)]
+        [TestCase(false, true, 475, 650, true, true, 0)]
+        [TestCase(true, true, 475, 650, true, true, 0)]
+        [TestCase(true, false, 527, 650, false, true, 0)]
+        [TestCase(true, true, 473, 650, false, true, 0)]
+        [TestCase(false, false, 510, 664, true, true, 0)]
+        [TestCase(true, false, 510, 664, true, true, 0)]
+        [TestCase(true, false, 510, 665, false, true, 0)]
+        [TestCase(true, false, 525, 650, true, false, 0)]
+        [TestCase(true, false, 510, 666, true, false, 2)]
+        public void D024PlatformPointGateUsesSourceGeometry(
+            bool configuredView,
+            bool facingLeft,
+            int targetSourceX,
+            int targetSourceZ,
+            bool shouldArm,
+            bool useSourceCarrier,
+            int itrOffsetZ)
+        {
+            var world = new SimulationWorld();
+            try
+            {
+                if (configuredView)
+                    world.ConfigureFixedViewRunDistance(2048, 1152);
+
+                var platformFrame = new LF2FrameData
+                {
+                    frameId = 0,
+                    state = 3003,
+                    wait = 100,
+                    next = 0,
+                    centerx = 39,
+                };
+                platformFrame.itrs.Add(new InteractionArea
+                {
+                    kind = 30,
+                    x = 40,
+                    w = 25,
+                    z = itrOffsetZ,
+                    zwidth = 15,
+                    PlatformDvy = 0,
+                });
+                var riderFrame = new LF2FrameData
+                {
+                    frameId = 0,
+                    state = LF2States.Standing,
+                    wait = 100,
+                    next = 0,
+                };
+                var platformData = new LF2CharacterData
+                {
+                    name = "D024Platform",
+                    type_sub = 3,
+                    frames = new List<LF2FrameData> { platformFrame },
+                };
+                var riderData = new LF2CharacterData
+                {
+                    name = "D024Rider",
+                    type_sub = 0,
+                    frames = new List<LF2FrameData> { riderFrame },
+                };
+
+                var platform = new LF2SpecialAttack
+                {
+                    Name = platformData.name,
+                    ObjectId = 31980,
+                };
+                platform.FrameCache.Load(new LF2CharacterDataWrapper(31980, platformData));
+                platform.Frame.D = platform.FrameCache.GetFrameDataById(0);
+                platform.Frame.N = 0;
+                platform.Frame.Prev2 = 0;
+                platform.SetRequiredRuntimeSlot(20);
+                world.Register(platform);
+
+                var rider = new LF2Character
+                {
+                    Name = riderData.name,
+                    ObjectId = 31981,
+                };
+                rider.ModuleInitialize();
+                rider.FrameCache.Load(new LF2CharacterDataWrapper(31981, riderData));
+                rider.Frame.D = rider.FrameCache.GetFrameDataById(0);
+                rider.Frame.N = 0;
+                rider.Frame.Prev2 = 0;
+                rider.Initialize(500, 500);
+                rider.SetRequiredRuntimeSlot(21);
+                world.Register(rider);
+
+                platform.SwitchDir(facingLeft ? "left" : "right");
+                SetProjectedPlatformPosition(world, platform, 500, -20, 650);
+                SetProjectedPlatformPosition(world, rider, targetSourceX, -10, targetSourceZ);
+                if (!useSourceCarrier)
+                {
+                    platform.Runtime.SourceRulePositionInitialized = false;
+                    rider.Runtime.SourceRulePositionInitialized = false;
+                }
+                platform.Runtime.NativePreviousY104 = 0;
+                rider.Runtime.NativePreviousY104 = -10;
+                rider.Runtime.CollisionYReference = 0;
+                rider.Runtime.PlatformSourceSlotF4 = 0;
+                rider.Runtime.RenderShadowOffset10C = 0;
+
+                Assert.That(rider.GetCurrentDataObjectTypeForSimulation(), Is.EqualTo(0));
+                world.CaptureCollisionFrameSnapshotsAll();
+                world.CollectCollisionCandidatesAll();
+                Assert.That(rider.Runtime.CollisionYReference,
+                    Is.EqualTo(shouldArm ? -20 : 0),
+                    $"view={configuredView} left={facingLeft} X={targetSourceX} Z={targetSourceZ}");
+                Assert.That(rider.Runtime.PlatformSourceSlotF4,
+                    Is.EqualTo(shouldArm ? platform.Runtime.SlotIndex : 0));
+                world.EndCollisionCandidateConsumption();
+            }
+            finally
+            {
+                world.BeginBattleShutdown();
+                Assert.That(world.TryShutdownAndClearLogicState(out _, out var failure), Is.True, failure);
+            }
+        }
+
+        private static void SetProjectedPlatformPosition(
+            SimulationWorld world,
+            LF2Entity entity,
+            int sourceX,
+            int y,
+            int sourceZ)
+        {
+            entity.Runtime.SetPosition(
+                world.SpatialProjection.SourceToViewX(sourceX, 0.0), y,
+                world.SpatialProjection.SourceToViewZ(sourceZ, 0.0));
+            entity.Runtime.SyncIntegerPosition();
+            entity.Runtime.SetSourceRulePosition(sourceX, sourceZ);
+            entity.Runtime.SyncSourceRuleIntegerPosition();
+        }
+
         [TestCase(0)]
         [TestCase(1)]
         [TestCase(2)]

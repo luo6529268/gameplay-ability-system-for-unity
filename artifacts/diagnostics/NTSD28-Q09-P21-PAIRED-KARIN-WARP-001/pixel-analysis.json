@@ -1,0 +1,32 @@
+{
+  "dimensions": [
+    1333,
+    730
+  ],
+  "changedPixels": 1433,
+  "changedBboxTopLeft": [
+    475,
+    576,
+    534,
+    649
+  ],
+  "sourceCellNonzeroAlpha": 1433,
+  "sourceCellMaxAlpha": 33,
+  "inputs": {
+    "tick3-full.png": "dd234780825c27212a362d21c38c66804bcf2580216ba9f49f6df2b1dc9e4cc4",
+    "tick3-without-child.png": "c243bb056ff7847318879491346306011dfc763cfc1a5f9399b3827c64f87a01",
+    "cha4.png": "5bbd5c1af4061f891fe6cae1432498e2a7742908db54cd5bbf5d650b58799654"
+  },
+  "spriteOriginTopLeft": [
+    461,
+    571
+  ],
+  "sourceAlphaMaskMatchesChangedPixels": true,
+  "maskOverlap": 1433,
+  "straightAlphaMeanRgbError": 0.0,
+  "straightAlphaMaxRgbError": 0,
+  "straightExactRgbPixels": 1433,
+  "straightRgbWithin2Pixels": 1433,
+  "binaryAlphaMeanRgbError": 122.36031635264015,
+  "binaryRgbWithin2Pixels": 0
+}

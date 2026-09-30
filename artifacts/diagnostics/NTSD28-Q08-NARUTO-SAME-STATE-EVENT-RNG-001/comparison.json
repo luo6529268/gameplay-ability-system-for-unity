@@ -1,0 +1,43 @@
+{
+  "scope": "paired-current-source-vs-original-unity-30-tick-Naruto-ordinary-punch",
+  "sourceCase": {
+    "targetX": 525,
+    "attackTick": 2,
+    "attackLength": 1,
+    "declaredSeed": 682973786
+  },
+  "rows": {
+    "source": 30,
+    "unityRaw": 30,
+    "unityRng": 30,
+    "unityKo": 30
+  },
+  "comparisonCount": 652,
+  "firstDifferences": [],
+  "knockoutBirthTick": 8,
+  "unityEventAtTick8": [
+    {
+      "battleTimeTick": 7,
+      "creditSlot": 0,
+      "fourOwnerSlot": 0,
+      "sourceObjectType": 0,
+      "sourceSlot": 0,
+      "victimSlot": 1
+    }
+  ],
+  "oldRawTickPayloadEqual": 30,
+  "oldRngTickPayloadEqual": 30,
+  "hashes": {
+    "sourceCsv": "6218CBA1AB164D7256B174B8F1F15F8E81621A1FD1309237D76AF5025D637E62",
+    "formalEvent": "D48F06B579B16C87A18BF0604B7E2AC845D603FC4044EF2A0E6D73F1036EB51D",
+    "unityRaw": "04CDE69846B26AFC1E186EFC00857C9E8D37C1182CB660DB0CE767165CEF75CF",
+    "unityInputRng": "E3CC3F55D299F00624AAB0BF839EEBF1CB96C2B3A142EE9C03D346B400145BCD",
+    "unityKo": "B7ED79F284A51C91579BF4307E8EF8D64FB74E51C8B5154D07FB87A69E881015",
+    "result": "F21849025AE980E0042852D56EAC2295CAFC7DFF1A5C0C693192984E240D0CA5"
+  },
+  "limitations": [
+    "paired source CSV has after-tick entity/RNG and new-KO attribution only; formal root event provides native battleTimeTicks",
+    "root LFR playback initializes a different CRT state and is not an all-state same-seed certificate",
+    "this controlled EditMode scenario does not cover other KO producers, modes, or Battle Scene physical input"
+  ]
+}

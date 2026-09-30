@@ -1,0 +1,15 @@
+# NTSD28-Q07-D024-UNIFIED-SPATIAL-PROJECTION-001
+
+Status: `IN_PROGRESS / CONTRACT_FIRST`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / D-024`.
+
+User authority: 2026-09-29 request to apply the formal-view ratio to actual battle distances and DAT-local collision dimensions, then centralize conversions so future ratio changes do not require editing each movement/spawn/collision caller. This is a user-approved Unity adaptation; formal EXE SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` remains the rule source. Source/Unity near/far evidence and the coordinate-domain inventory are in `artifacts/diagnostics/NTSD28-Q07-D024-COLLISION-GEOMETRY-DOMAIN-AUDIT-001/`.
+
+This first package establishes **one immutable projection value** in the existing `SimulationWorld` owner. Exact script paths: add `Assets/NTSD/Scripts/Simulation/Core/BattleSpatialProjection.cs`; edit `Assets/NTSD/Scripts/Simulation/Core/SimulationWorld.cs`; add focused `Assets/NTSD/Scripts/Test/Editor/NTSD28D024UnifiedSpatialProjectionEditorTests.cs` and its `.meta`. Do not rewrite or multiply position writers in this package. The existing `FixedViewRunDistanceScale` and `FixedViewRunVerticalDistanceScale` public read surfaces remain compatible aliases to the new value, so all 18 existing production consumers retain their current numeric behavior. Formal viewport 1333×730, positive reference viewport normalization, X and depth-Z deltas, and source↔physical center mapping around an explicit *shared* anchor live in the new value only. No global/static mutable ratio or per-entity anchor.
+
+Pre-change: `SimulationWorld.ConfigureFixedViewRunDistance` owns both hardcoded formal dimensions and mutable scale properties. The 18 production files using those properties already share the numeric source, but position/birth/collision conversion semantics are not centralized. This package removes duplicated future formula ownership without claiming the Han collision fix.
+
+Acceptance: focused test verifies configured 2048×1152 factors, default/undersized identity, exact X/Z forward/inverse around a common anchor, same-anchor near/far source separation ratio and negative coordinates, and that `SimulationWorld` compatibility properties reflect the projection. Compile in the original project Editor, run only this focused class, run `Tools/Validate-ChangeLedger.ps1` and `git diff --check`, and confirm protected Scene/DAT/Asset hashes unchanged. If compilation fails, fix only this package. No full-case matrix or second Unity project.
+
+Next package (separate Task/Change): route production birth and shared collision query through this projection with a common map anchor, ratio-adjusted original near/far, a non-character and ratio1 control, then original Battle Scene Play. This first package is not the Q07 exit.
+
+Rollback: inverse patch only the declared new core/test files and `SimulationWorld` bridge, preserving all pre-existing dirty work. Deleting generated files requires the repository's explicit deletion approval.

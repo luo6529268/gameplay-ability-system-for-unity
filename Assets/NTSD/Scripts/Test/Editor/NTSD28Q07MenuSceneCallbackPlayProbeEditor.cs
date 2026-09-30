@@ -31,6 +31,7 @@ namespace NTSD.Test.Editor
             public bool restorePending;
             public bool expectEmptyRootReject;
             public bool geometrySelfCheckAudit;
+            public bool menuBirthAudit;
             public string runId;
         }
 
@@ -44,6 +45,23 @@ namespace NTSD.Test.Editor
             public bool expectEmptyRootReject;
             public bool geometrySelfCheckAudit;
             public bool geometrySelfCheckPassed;
+            public bool menuBirthAudit;
+            public string menuBirthPrewarmFingerprint;
+            public int menuBirthObservedTick;
+            public bool menuBirthStagePhysical;
+            public int menuBirthStageZMin;
+            public int menuBirthStageZMax;
+            public bool menuBirthSourceInitialized;
+            public double menuBirthPhysicalX;
+            public double menuBirthPhysicalZ;
+            public double menuBirthSourceX;
+            public double menuBirthSourceZ;
+            public double menuBirthProjectedX;
+            public double menuBirthProjectedZ;
+            public double menuBirthInverseX;
+            public double menuBirthInverseZ;
+            public bool menuBirthWalkableSnapshotAvailable;
+            public bool menuBirthWalkable;
             public string sourceKey;
             public string shutdownStage;
             public int selectedCharacterId;
@@ -102,6 +120,10 @@ namespace NTSD.Test.Editor
             "Temp/NTSD28_Q08_PhysicalAttackRealMenuKo.request.json");
         private static string GeometryRequestPath => Path.Combine(Root,
             "Temp/NTSD28_Q07_FormalGeometryPlay.request.json");
+        private static string MenuBirthRequestPath => Path.Combine(Root,
+            "Temp/NTSD28_Q07_D024_MenuPhysicalBirth.request.json");
+        private static string MenuBirthRetryRequestPath => Path.Combine(Root,
+            "Temp/NTSD28_Q07_D024_MenuPhysicalBirth_02.request.json");
         private static string ResultRoot => Path.Combine(Root,
             "artifacts/diagnostics/NTSD28-Q07-MENU-SCENE-CALLBACK-PLAY-001");
         private static string OrdinaryResultRoot => Path.Combine(Root,
@@ -112,6 +134,8 @@ namespace NTSD.Test.Editor
             "artifacts/diagnostics/NTSD28-Q08-PHYSICAL-ATTACK-REAL-MENU-KO-001");
         private static string GeometryResultRoot => Path.Combine(Root,
             "artifacts/diagnostics/NTSD28-Q07-SELFCHECK-FORMAL-GEOMETRY-001");
+        private static string MenuBirthResultRoot => Path.Combine(Root,
+            "artifacts/diagnostics/NTSD28-Q07-D024-MENU-PHYSICAL-BIRTH-PLAY-001");
 
         [InitializeOnLoadMethod]
         private static void Register()
@@ -185,13 +209,35 @@ namespace NTSD.Test.Editor
                     return;
                 }
             }
+            for (int menuBirthIndex = 0; menuBirthIndex < 2; menuBirthIndex++)
+            {
+                string menuBirthPath = menuBirthIndex == 0
+                    ? MenuBirthRequestPath : MenuBirthRetryRequestPath;
+                if (!File.Exists(menuBirthPath))
+                    continue;
+                try
+                {
+                    Request birthRequest = JsonUtility.FromJson<Request>(
+                        File.ReadAllText(menuBirthPath));
+                    if (birthRequest != null &&
+                        (birthRequest.requested || birthRequest.restorePending))
+                        requestPath = menuBirthPath;
+                }
+                catch (IOException)
+                {
+                    return;
+                }
+            }
             if (!File.Exists(requestPath))
                 return;
             bool ordinaryResultAudit = requestPath == OrdinaryResultRequestPath;
             bool collisionResultAudit = requestPath == CollisionResultRequestPath;
             bool physicalAttackAudit = requestPath == PhysicalAttackRequestPath;
             bool geometryRequestAudit = requestPath == GeometryRequestPath;
-            string resultRoot = geometryRequestAudit ? GeometryResultRoot :
+            bool menuBirthRequestAudit = requestPath == MenuBirthRequestPath ||
+                requestPath == MenuBirthRetryRequestPath;
+            string resultRoot = menuBirthRequestAudit ? MenuBirthResultRoot :
+                geometryRequestAudit ? GeometryResultRoot :
                 physicalAttackAudit ? PhysicalAttackResultRoot :
                 collisionResultAudit ? CollisionResultRoot :
                 ordinaryResultAudit ? OrdinaryResultRoot : ResultRoot;
@@ -227,6 +273,8 @@ namespace NTSD.Test.Editor
                 try
                 {
                     Require(ValidRunId(request.runId), "Invalid run ID.");
+                    Require(!menuBirthRequestAudit || request.menuBirthAudit,
+                        "Menu birth request must opt in to its diagnostic route.");
                     Require(!File.Exists(output), "Result already exists: " + output);
                     Require(SceneManager.GetActiveScene().path == BattleScenePath &&
                         !SceneManager.GetActiveScene().isDirty, "Expected a saved Battle Scene before Menu Play.");
@@ -262,13 +310,14 @@ namespace NTSD.Test.Editor
             running = true;
             Run(request.runId, output, request.expectEmptyRootReject,
                 ordinaryResultAudit, collisionResultAudit, physicalAttackAudit,
-                geometryRequestAudit && request.geometrySelfCheckAudit).Forget();
+                geometryRequestAudit && request.geometrySelfCheckAudit,
+                menuBirthRequestAudit && request.menuBirthAudit).Forget();
         }
 
         private static async UniTask Run(string runId, string output,
             bool expectEmptyRootReject, bool ordinaryResultAudit,
             bool collisionResultAudit, bool physicalAttackAudit,
-            bool geometrySelfCheckAudit)
+            bool geometrySelfCheckAudit, bool menuBirthAudit)
         {
             var report = new Report
             {
@@ -277,6 +326,7 @@ namespace NTSD.Test.Editor
                 phase = "menu",
                 expectEmptyRootReject = expectEmptyRootReject,
                 geometrySelfCheckAudit = geometrySelfCheckAudit,
+                menuBirthAudit = menuBirthAudit,
                 ordinaryResultAudit = ordinaryResultAudit,
                 collisionResultAudit = collisionResultAudit,
                 physicalAttackAudit = physicalAttackAudit
@@ -308,12 +358,21 @@ namespace NTSD.Test.Editor
                 await WaitUntil(() => loading.IsPrewarmed, 240f, "Menu loading prewarm timed out.");
                 report.prewarmed = true;
                 var manager = CharacterAnimtorManager.TryGetInstance();
+                LoganContentIdentity prewarmIdentity = manager?.PublishedLoganContentIdentity;
+                if (menuBirthAudit)
+                    report.menuBirthPrewarmFingerprint = prewarmIdentity?.SemanticFingerprint;
                 if (expectEmptyRootReject)
                     Require(manager != null && manager.PublishedLoganContentIdentity == null &&
                         CharacterAnimtorManager.ConfiguredContentRoot.Length == 0,
                         "Empty-root Menu prewarm did not retain its legacy content branch.");
                 else
-                    Require(manager?.PublishedLoganContentIdentity?.SemanticFingerprint == FormalFingerprint,
+                    Require(menuBirthAudit
+                            ? prewarmIdentity != null &&
+                              prewarmIdentity.DecodeContractTag == LoganContentIdentity.CurrentDecodeContractTag &&
+                              !string.IsNullOrEmpty(prewarmIdentity.ModeInputFingerprint) &&
+                              !string.IsNullOrEmpty(prewarmIdentity.KindInputFingerprint) &&
+                              !string.IsNullOrEmpty(report.menuBirthPrewarmFingerprint)
+                            : prewarmIdentity?.SemanticFingerprint == FormalFingerprint,
                         "Menu loading did not publish the current project-mode formal content identity.");
                 var pendingTexts = (Queue<string>)typeof(LoadingPrewarmController)
                     .GetField("pendingTexts", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -443,9 +502,58 @@ namespace NTSD.Test.Editor
                 report.samePublishedKeys = !string.IsNullOrEmpty(report.sourceKey) &&
                     GameDataManager.TryGetInstance()?.PublishedVisualContentKey == report.sourceKey &&
                     CharacterUIResourceManager.TryGetInstance()?.PublishedVisualContentKey == report.sourceKey;
+                string battleFingerprint = manager.PublishedLoganContentIdentity?.SemanticFingerprint;
                 Require(report.samePublishedKeys &&
-                    manager.PublishedLoganContentIdentity?.SemanticFingerprint == FormalFingerprint,
+                    (menuBirthAudit
+                        ? battleFingerprint == report.menuBirthPrewarmFingerprint
+                        : battleFingerprint == FormalFingerprint),
                     "Menu-started battle does not have three matching formal publication owners.");
+
+                if (menuBirthAudit)
+                {
+                    report.phase = "menu-physical-birth";
+                    SimulationWorld world = driver.World;
+                    LF2Character selected = world.FindEntityByRuntimeSlotForQuery(0) as LF2Character;
+                    Require(selected != null && selected.ObjectId == 2,
+                        "Menu-selected Naruto is absent from the live first runtime slot.");
+                    report.menuBirthObservedTick = driver.CurrentTickIndex;
+                    report.menuBirthStagePhysical = world.StageDepthBoundsArePhysical;
+                    report.menuBirthStageZMin = world.Runtime.Stage.ZMin;
+                    report.menuBirthStageZMax = world.Runtime.Stage.ZMax;
+                    report.menuBirthSourceInitialized =
+                        selected.Runtime.SourceRulePositionInitialized;
+                    report.menuBirthPhysicalX = selected.Runtime.X;
+                    report.menuBirthPhysicalZ = selected.Runtime.Z;
+                    report.menuBirthSourceX = selected.Runtime.SourceRuleX;
+                    report.menuBirthSourceZ = selected.Runtime.SourceRuleZ;
+                    report.menuBirthProjectedX = world.SpatialProjection.SourceToViewX(
+                        report.menuBirthSourceX);
+                    report.menuBirthProjectedZ = world.SpatialProjection.SourceToViewZ(
+                        report.menuBirthSourceZ);
+                    report.menuBirthInverseX = world.SpatialProjection.ViewToSourceX(
+                        report.menuBirthPhysicalX);
+                    report.menuBirthInverseZ = world.SpatialProjection.ViewToSourceZ(
+                        report.menuBirthPhysicalZ);
+                    report.menuBirthWalkableSnapshotAvailable =
+                        world.TryIsGroundPixelWalkable(
+                            report.menuBirthPhysicalX, report.menuBirthPhysicalZ,
+                            out bool walkable);
+                    report.menuBirthWalkable = walkable;
+                    Require(report.menuBirthStagePhysical &&
+                        report.menuBirthStageZMin == 237 &&
+                        report.menuBirthStageZMax == 760,
+                        "The saved project's physical stage was not selected.");
+                    Require(report.menuBirthSourceInitialized,
+                        "Menu-born participant has no source-rule position.");
+                    Require(Math.Abs(report.menuBirthProjectedX - report.menuBirthPhysicalX) < 1e-6 &&
+                        Math.Abs(report.menuBirthProjectedZ - report.menuBirthPhysicalZ) < 1e-6 &&
+                        Math.Abs(report.menuBirthInverseX - report.menuBirthSourceX) < 1e-6 &&
+                        Math.Abs(report.menuBirthInverseZ - report.menuBirthSourceZ) < 1e-6,
+                        "Menu-born source/view positions do not share the World projection.");
+                    Require(report.menuBirthWalkableSnapshotAvailable &&
+                        report.menuBirthWalkable,
+                        "Menu-born physical point is outside the project's walkable area.");
+                }
 
                 if (geometrySelfCheckAudit)
                 {
@@ -541,6 +649,7 @@ namespace NTSD.Test.Editor
                 if (selectedConfig != null && previousRoot != null)
                     selectedConfig.BattleContentRuntimeRoot = previousRoot;
                 Directory.CreateDirectory(
+                    menuBirthAudit ? MenuBirthResultRoot :
                     geometrySelfCheckAudit ? GeometryResultRoot :
                     physicalAttackAudit ? PhysicalAttackResultRoot :
                     collisionResultAudit ? CollisionResultRoot :

@@ -1,0 +1,13 @@
+# NTSD28-Q07-HIDAN-RAW-RNG-INIT-001
+
+Status: `VERIFIED_SCOPED_DIAGNOSTIC_RNG_PARITY`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07`.
+
+Authority and measured trigger: root formal `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`; the selected Hidan X580 natural-input LFR header records explicit BGM2 and synchronized RNG counter/index/calls `0/0/0`. Existing original-Editor `NTSD28UnityRawCaptureEditor` Hidan natural fixture uses `ResetForDirectBattle(seed)`, consuming random-BGM site `0x004021E0` before tick1 and starting `1/1/1`; its 440/440 selected-field comparison therefore is not a same-RNG-initial-state certificate. Formal paired `GameSession28::resolve_native_bgm_selection` draws only for BGM option0. The previously completed Lee fixture corrected this same diagnostic precondition without changing production.
+
+Exact edit: in `Assets/NTSD/Scripts/Test/Editor/NTSD28UnityRawCaptureEditor.cs::ConfigureWorldAndRoster`, add only `Q07HidanNaturalCatchScenarioSchema` to the existing explicit-BGM `ResetFromSeed` diagnostic branch. Do not change production bootstrap/RNG, other schemas, DAT values, Scene, config, input schedule, camera or nonbattle behavior. Preserve all existing raw files.
+
+Acceptance: generated Editor project compiles; original Editor imports the changed assembly, then one unique X580 Hidan natural scenario request emits a 40-tick raw/input-RNG capture. Compare header synchronized counter/index/calls and table hash, tick2 `0x82` result/action, and already selected 11 shared fields against the existing formal root trace; report the first difference, not just PASS. Do not repeat X1200 or all-character cases absent a new first difference. Verify original Editor exits/retains EditMode, protected Battle/Menu/Config SHA, ledger validator and `git diff --check`. If the Editor cannot import/run, keep `RUNTIME_PENDING` and the exact cause.
+
+Risk/rollback: a test-only conditional can affect any future Hidan natural raw capture, so it is restricted to this exact schema. Existing diagnostic results remain historical. Reverting the added condition would restore old diagnostic initialization; no production rollback is needed.
+
+Result: the original Editor compiled and consumed one X580 40-tick request. Initial synchronized RNG, 440 selected battle fields, 200 synchronized RNG fields and 40 input-phase fields match the retained formal root trace; tick2 first `0x82` call returns 1/action65. This is scoped diagnostic parity, not the physical Battle Scene or Q07 exit. [Evidence](../../../artifacts/diagnostics/NTSD28-Q07-HIDAN-RAW-RNG-INIT-001/ACCEPTANCE.md).

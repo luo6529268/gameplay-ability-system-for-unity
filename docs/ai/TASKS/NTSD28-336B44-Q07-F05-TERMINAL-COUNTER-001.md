@@ -1,0 +1,11 @@
+# NTSD28-336B44-Q07-F05-TERMINAL-COUNTER-001
+
+Status: `UNITY_FOCUSED_PASS / RUNTIME_PENDING`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001`, BATCH-04/Q07-Q08, F05/R07. Formal 336B44 playable `BattleWorld28::step_frames_range` holds a slot<20, type0, HP<=0, state14 entity when revive lives<=1 and queued revive HP<=0. It clears frame counter (+0x088) before emitting held and continuing; this side effect occurs on every such frame pass. Multilife/queued or transient type0 follow their own frame path.
+
+Unity `LF2Entity.RunNativeC25FrameBodyForWorldPass` and `RunNativeC25FrameTransaction` both detect this terminal gate and return before changing `AttackingCounter`, Unity's frame counter carrier. Own only `LF2Entity.cs` for a common terminal gate side effect shared by these two early returns, and existing `NTSD28B4RevivalParticipantGateCorrectionEditorTests.cs` for focused production modes. First add RED for terminal dead state14 counter7→0 in DataOriented and Legacy; retain lives/queued/transient controls in that existing class. Then apply minimum shared side effect to the existing gate, run focused class and affected adjacent frame checks. Do not change DAT, resource, Scene, config, UI, framework, or result-page behavior.
+
+Acceptance: terminal eligible frame remains14 with counter0 in both frame modes; ineligible lives/queued/transient paths are not forcibly cleared; existing revival behavior remains. Original Editor compile/focused, ChangeLedger, diff and protected hashes. Formal root EXE paired state and natural Battle Play remain separate pending exits. Rollback exact owned hunks after review.
+
+Original Editor RED job `9b3dc358c1f64b378f17f51e3b66cb1f` ran both production frame modes: action14 remained, but counter expected0/actual7 in each. A single type0 terminal hold helper now clears the counter before either existing early return. The owned test class also checks lives2, queued HP80 and transient slot20 as exclusions. Green class result pending.
+
+Final original Editor job `500453a047254fe5bcfd4cc3ca87f605` compiled and passed the entire affected revival participant class 21/21, including the two positive frame modes, three gate exclusions and existing revival/result handling checks. Formal root EXE paired frame counter, natural Battle Play and Q07/Q08 whole-stage exits remain pending.

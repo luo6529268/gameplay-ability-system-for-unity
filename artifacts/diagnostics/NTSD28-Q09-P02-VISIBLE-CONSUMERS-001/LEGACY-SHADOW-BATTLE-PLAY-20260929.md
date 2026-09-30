@@ -1,0 +1,15 @@
+# Q09/P-02 Legacy-born ordinary shadow, original Battle Play
+
+Change `NTSD28-Q09-LEGACY-SHADOW-PREWARM-001`, run `q09-legacy-ordinary-shadow-20260929-01`, 2026-09-29. This is the original Unity project and original Editor PID 11944, saved `NTSD_Battle.unity`. The dedicated new request `Temp/NTSD28_Q09_LegacyShadow_20260929.request.json` selected `LegacyOnly` before Battle Scene load via a temporary `GameConfig` clone. The old fixed Karin request was not overwritten; its SHA-256 remained `946203CA13247D147581EE855010BC420DFE152411FC6906C79DA942CE78CFBA`.
+
+The probe waited for the normal Battle World, paused at logic tick 8, and selected the scene's naturally present ordinary slot 0. Its `LF2Entity.ShadowRenderer` was bound and enabled, and its sprite/material matched `GameConfig.ShadowPrefab`'s `BattleCommonShadowDescriptor`. With only that renderer toggled off, the same World camera produced 198 changed pixels in two 1280×720 PNGs. An independent Pillow read found the same 198 pixels, entirely within bottom-origin rectangle X=485..518, Y=631..637, directly below the left ordinary character in the inspected image. This is actual Unity camera raster evidence for this one actor/frame, not a formal NTSD same-view pixel equivalence claim.
+
+Raw files:
+
+- [Play report](../NTSD28-Q09-P12-KARIN-UNITY-COMMAND-001/q09-legacy-ordinary-shadow-20260929-01.json), SHA-256 `7A8558DE8EB3B2D45F833029D68C7D7F7E8BA05E896D793DDF7F931A06718CC4`.
+- [Shadow on](../NTSD28-Q09-P12-KARIN-LEGACY-GPU-PIXEL-001/q09-legacy-ordinary-shadow-20260929-01-ordinary-shadow-on.png), SHA-256 `881CE4D770BE549965D16F3471311F0D6B20364A508B687C7FCA7F72E0011198`.
+- [Shadow off](../NTSD28-Q09-P12-KARIN-LEGACY-GPU-PIXEL-001/q09-legacy-ordinary-shadow-20260929-01-ordinary-shadow-off.png), SHA-256 `318FAB436DD2DF4F9E2690EB0FB462C6DCAF8624D79F462CC5D9FEFAAE4B2B07`.
+
+World parity checksum before/after rendering was identical: `6cf32a01907b2ecb12820ebaaccee1cf22ab04489811fb983c5a6b3f19551f9c`; logic tick stayed 8. Camera target/active target and renderer enablement were restored. Probe fixture and child were released, pause was restored, and World object/slot/pool-borrower counts returned 4/2/2 to 4/2/2. After Play, original Editor reported idle/non-Play and `manage_scene get_active` reported saved Battle Scene `isDirty=false`. The Scene's pre/post SHA-256 was `2EE465D83C7169A0589447F437E37CAEFF3CC6F1BA6C3AAA55B8068F2B48B77A`. Menu, `GameConfig.asset` and project mode Asset also retained their prior SHA-256 values. The existing idle GameConfig inspection at 2026-09-28T20:52:35Z (local 2026-09-29 04:52:35) reported the saved `CentralOnly` Asset active and exactly one loaded GameConfig with no probe clone.
+
+This closes the Legacy shadow **materialization and one ordinary actor's visible-pixel subpackage** after the prior selected Editor 4/4 RED→GREEN evidence. It does not establish 30/60/120 Legacy shadow motion, all shadow suppression gates, formal EXE/Unity same-state same-view pixels, P-02 aggregate, Q09 or BATCH-05. Those later display comparison gates remain open. Q07 stays the earliest open Q, independent of this Q09 result.

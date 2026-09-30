@@ -1,5 +1,7 @@
 # Q07/D-024 Han distance control and collision-geometry correction — 2026-09-28
 
+> 2026-09-29 superseding paired-process read: near X520/Jump3 candidate-builder entry directly measured Han X535/Z650 and action snapshot146 at World sequence9, Lee X520/Z650/action snapshot2. Completed tick10 remained candidate1/catch and post-catch Han X547; fresh CSV/LFR hashes equal the old selected outputs. References below to near candidate-phase X535 as **inference** remain the 2026-09-28 evidence boundary, now superseded only for the paired process. The root EXE's internal pre-candidate memory and Unity rejection branch remain unmeasured. [Acceptance](../NTSD28-Q07-D024-HAN-NATIVE-PRECANDIDATE-GDB-001/ACCEPTANCE.md).
+
 Status: `READ_ONLY_CONTROL / ROOT_TRACE_MATCH / REJECTION_STAGE_PENDING`. This narrows the Han OID726 → Lee OID7 candidate first difference; it does not select a collision policy, change production, or close Q07. The formal root EXE SHA-256 was rechecked as `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033`. The previously compiled paired diagnostic `han-natural-candidates-v2.exe` was rechecked as `1217A56268DBB5B4565525AC1A3E6A65D896B9840A8E97E2047E43241BF0CA45` and run unmodified with the current formal `resources/runtime`, seed 2833, Han X500/Z650, Lee X520 or X580/Z650, mode0 and the already declared Attack/Jump schedules. Its four 50-tick cases exited 0 into new no-overwrite `native-distance-control-v2/` files.
 
 | Case | First collision snapshot 146 | Han completed X | Han→Lee candidate | Relation |

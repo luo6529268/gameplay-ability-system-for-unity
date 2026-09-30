@@ -31,7 +31,8 @@ namespace NTSD.Simulation
 
     public readonly struct BattleWorldStageScalarSnapshot
     {
-        internal BattleWorldStageScalarSnapshot(BattleStageRuntimeState state)
+        internal BattleWorldStageScalarSnapshot(
+            BattleStageRuntimeState state, bool physicalDepthBounds)
         {
             BaseStageWidthPx = state?.BaseStageWidthPx ?? 800;
             StageWidthPx = state?.StageWidthPx ?? 800;
@@ -43,6 +44,7 @@ namespace NTSD.Simulation
             BoundRight = state?.BoundRight ?? 800;
             XMaxOverride = state?.XMaxOverride ?? 0;
             CameraMaxOverride = state?.CameraMaxOverride ?? 0;
+            PhysicalDepthBounds = physicalDepthBounds;
         }
 
         public int BaseStageWidthPx { get; }
@@ -55,6 +57,7 @@ namespace NTSD.Simulation
         public int BoundRight { get; }
         public int XMaxOverride { get; }
         public int CameraMaxOverride { get; }
+        public bool PhysicalDepthBounds { get; }
     }
 
     public readonly struct BattleWorldProgressionScalarSnapshot
@@ -286,7 +289,7 @@ namespace NTSD.Simulation
     /// </summary>
     public readonly struct BattleWorldCoreScalarSnapshot
     {
-        public const int CurrentSchemaVersion = 15;
+        public const int CurrentSchemaVersion = 16;
 
         internal BattleWorldCoreScalarSnapshot(
             SimulationWorld world,
@@ -306,7 +309,8 @@ namespace NTSD.Simulation
             ObjectCount = world.ObjectCount;
             ClaimedRuntimeSlotCount = world.ClaimedRuntimeSlotCountForServices;
             Match = new BattleWorldMatchScalarSnapshot(world.Runtime?.Match);
-            Stage = new BattleWorldStageScalarSnapshot(world.Runtime?.Stage);
+            Stage = new BattleWorldStageScalarSnapshot(
+                world.Runtime?.Stage, world.StageDepthBoundsArePhysical);
             Progression = new BattleWorldProgressionScalarSnapshot(world.Runtime);
             Flow = new BattleWorldFlowScalarSnapshot(world.Runtime?.Flow);
             NativeClock = new BattleWorldNativeClockScalarSnapshot(

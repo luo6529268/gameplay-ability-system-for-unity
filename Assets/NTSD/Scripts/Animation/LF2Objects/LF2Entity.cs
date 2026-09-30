@@ -2682,6 +2682,12 @@ namespace NTSD.Animation.LF2Objects
 
         internal virtual void ApplyPreFrameZBounds(float zMin, float zMax)
         {
+            ApplyPreFrameZBounds(zMin, zMax, zMin, zMax);
+        }
+
+        internal virtual void ApplyPreFrameZBounds(
+            double sourceMin, double sourceMax, double viewMin, double viewMax)
+        {
             if (Runtime == null)
                 return;
 
@@ -2689,9 +2695,11 @@ namespace NTSD.Animation.LF2Objects
             double sourceMargin = currentDataType == (int)LF2ObjectType.Character
                 ? 0.0 : 1.0;
             Runtime.ClampStageZ(
-                zMin - sourceMargin,
-                zMax + sourceMargin,
-                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
+                sourceMin - sourceMargin,
+                sourceMax + sourceMargin,
+                RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0,
+                viewMin - (RegisteredWorldForSimulation?.SpatialProjection.SourceDeltaToViewZ(sourceMargin) ?? sourceMargin),
+                viewMax + (RegisteredWorldForSimulation?.SpatialProjection.SourceDeltaToViewZ(sourceMargin) ?? sourceMargin));
         }
 
         // C++ PreFrame keeps the background width separate from the phase-only character override.
@@ -5746,7 +5754,7 @@ namespace NTSD.Animation.LF2Objects
                     context.spriteWidthPx);
             }
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
-            ApplyCurrentDatType0State1218EnvironmentDamage(
+            ApplyCurrentDatType0State1218LandingPrelude(
                 Frame?.D,
                 stepResult);
             bool state1218ContactResolved =
@@ -5770,6 +5778,8 @@ namespace NTSD.Animation.LF2Objects
                 stepResult,
                 tickIndex);
 
+            ApplyCurrentDatType0EnvironmentPhysicsTail();
+
             Runtime.SyncIntegerPosition();
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
@@ -5787,7 +5797,14 @@ namespace NTSD.Animation.LF2Objects
 
         internal bool ShouldResolveCharacterLanding(BattleMechanicsStepResult stepResult)
         {
-            return stepResult.Landed;
+            if (!stepResult.Landed)
+                return false;
+
+            LF2FrameData frame = Frame?.D;
+            return frame == null ||
+                   (frame.state != LF2States.Falling &&
+                    frame.state != LF2States.Burning) ||
+                   stepResult.PenetratedEffectiveFloor;
         }
 
         internal bool ApplyCurrentDatType0OrdinaryLanding(
@@ -5827,7 +5844,7 @@ namespace NTSD.Animation.LF2Objects
             BattleMechanicsStepResult stepResult)
         {
             if (Runtime == null || contactFrame == null ||
-                !stepResult.EffectiveFloorContact ||
+                !stepResult.PenetratedEffectiveFloor ||
                 GetCurrentDataObjectTypeForSimulation() !=
                     (int)LF2ObjectType.Character ||
                 (contactFrame.state != LF2States.Falling &&
@@ -5881,12 +5898,31 @@ namespace NTSD.Animation.LF2Objects
             return true;
         }
 
+        internal void ApplyCurrentDatType0State1218LandingPrelude(
+            LF2FrameData contactFrame,
+            BattleMechanicsStepResult stepResult)
+        {
+            if (Runtime != null && contactFrame != null &&
+                stepResult.PenetratedEffectiveFloor &&
+                GetCurrentDataObjectTypeForSimulation() ==
+                    (int)LF2ObjectType.Character &&
+                (contactFrame.state == LF2States.Falling ||
+                 contactFrame.state == LF2States.Burning))
+            {
+                QueueBattleSound(@"data\016.wav");
+            }
+
+            ApplyCurrentDatType0State1218EnvironmentDamage(
+                contactFrame,
+                stepResult);
+        }
+
         internal bool ApplyCurrentDatType0State1218EnvironmentDamage(
             LF2FrameData contactFrame,
             BattleMechanicsStepResult stepResult)
         {
             if (Runtime == null || contactFrame == null ||
-                !stepResult.EffectiveFloorContact ||
+                !stepResult.PenetratedEffectiveFloor ||
                 GetCurrentDataObjectTypeForSimulation() !=
                     (int)LF2ObjectType.Character ||
                 (contactFrame.state != LF2States.Falling &&
@@ -5947,6 +5983,17 @@ namespace NTSD.Animation.LF2Objects
                 credit.InputScoreTotal348 += damage;
             Runtime.EnvironmentState320 = 1;
             return true;
+        }
+
+        internal void ApplyCurrentDatType0EnvironmentPhysicsTail()
+        {
+            if (Runtime == null || GetCurrentDataObjectTypeForSimulation() !=
+                (int)LF2ObjectType.Character)
+                return;
+
+            LF2FrameData finalFrame = Frame?.D;
+            if (finalFrame == null || finalFrame.state != LF2States.Falling)
+                Runtime.EnvironmentState320 = 0;
         }
 
         private static NTSDEntityRuntime ResolveEnvironmentCreditRuntime(
@@ -6038,14 +6085,6 @@ namespace NTSD.Animation.LF2Objects
                     Runtime.SourceRuleZ += visualZ;
             }
 
-            if ((dataType == (int)LF2ObjectType.ThrowWeapon || dataType == (int)LF2ObjectType.Drink) &&
-                frame.state == 1000 &&
-                System.Math.Abs(Runtime.Vx) > 9.0)
-            {
-                SetFrameTickDirect(40);
-                frame = Frame?.D ?? frame;
-            }
-
             double gravity = ResolveCurrentDatWeaponGravity(dataType, frame.state);
             BattleNonCharacterMechanicsStepResult step =
                 CharacterMechanics.StepNonCharacterBattleLogic(
@@ -6053,7 +6092,12 @@ namespace NTSD.Animation.LF2Objects
                     gravity,
                     RegisteredWorldForSimulation?.FixedViewRunDistanceScale ?? 1.0,
                     RegisteredWorldForSimulation?.FixedViewRunVerticalDistanceScale ?? 1.0);
+            int fastWeaponAction = CharacterMechanics.SelectFastWeaponActionAfterFriction(
+                dataType,
+                frame.state,
+                Runtime.Vx);
             RegisteredWorldForSimulation?.BoundaryWriter.SyncConsumedFlags(Runtime);
+            bool landingOverridesFastWeaponAction = false;
             if (dataType == (int)LF2ObjectType.LightWeapon)
             {
                 ApplyCurrentDatType1Landing(
@@ -6070,6 +6114,9 @@ namespace NTSD.Animation.LF2Objects
                     dataType == (int)LF2ObjectType.HeavyWeapon
                         ? step.PenetratedEffectiveFloor
                         : step.Type4Or6LandingPredicate;
+                landingOverridesFastWeaponAction = resolvesLanding &&
+                    (dataType == (int)LF2ObjectType.ThrowWeapon ||
+                     dataType == (int)LF2ObjectType.Drink);
                 ApplyCurrentDatNonCharacterLanding(
                     dataType,
                     frame,
@@ -6084,6 +6131,8 @@ namespace NTSD.Animation.LF2Objects
                     frame,
                     step);
             }
+            if (fastWeaponAction >= 0 && !landingOverridesFastWeaponAction)
+                DirectWriteNativeRawFramePreserveWaitCounter(fastWeaponAction);
             ResetWeaponCountOutsideState12FrameAdvanceTail();
 
             Runtime.SyncIntegerPosition();
@@ -6523,6 +6572,21 @@ namespace NTSD.Animation.LF2Objects
             return false;
         }
 
+        private bool TryHoldTerminalPrimaryState14Frame(
+            int dataType,
+            LF2FrameData frame)
+        {
+            if (dataType != (int)LF2ObjectType.Character ||
+                Runtime == null || Runtime.SlotIndex < 0 || Runtime.SlotIndex >= 20 ||
+                Health == null || Health.HP > 0 ||
+                frame?.state != LF2States.Lying ||
+                Runtime.HP2Orig > 1 || Runtime.RespawnCount > 0)
+                return false;
+
+            AttackingCounter = 0;
+            return true;
+        }
+
         protected virtual bool RunCommonFrameTick()
         {
             return RunNativeC25FrameBodyForWorldPass();
@@ -6551,13 +6615,7 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             if (nativeC25FrameTickActive &&
-                dataType == (int)LF2ObjectType.Character &&
-                (Runtime?.SlotIndex ?? -1) >= 0 &&
-                Runtime.SlotIndex < 20 &&
-                (Health?.HP ?? 0) <= 0 &&
-                frame.state == LF2States.Lying &&
-                Runtime.HP2Orig <= 1 &&
-                Runtime.RespawnCount <= 0)
+                TryHoldTerminalPrimaryState14Frame(dataType, frame))
             {
                 return false;
             }
@@ -6699,8 +6757,12 @@ namespace NTSD.Animation.LF2Objects
                 return false;
 
             LF2FrameData frame = FrameCache.GetNativeFrameDataById(Frame.N);
-            if (Runtime.SlotIndex >= 0 && Runtime.SlotIndex < 20 && type == 0 &&
-                Health.HP <= 0 && frame?.state == 14 && Runtime.HP2Orig <= 1 && Runtime.RespawnCount <= 0)
+            // Alignment contract: NTSD28-336B44-Q07-C022-KIND2-FRAME-GATE-001.
+            if (frame != null && frame.HasPrimaryCatchPoint &&
+                frame.PrimaryCatchPoint.Kind == 2)
+                return false;
+
+            if (TryHoldTerminalPrimaryState14Frame(type, frame))
                 return false;
 
             if (type == 3 && frame != null &&
@@ -6743,10 +6805,24 @@ namespace NTSD.Animation.LF2Objects
                 Trans.SyncWaitCounterFrame(fromAction);
             }
             AttackingCounter++;
+            // Alignment contract: NTSD28-336B44-Q07-C023-AIRBORNE-IDLE-FRAME-001.
+            if (type >= 0 && frame.state == 0 && Runtime.YInt < 0 &&
+                Runtime.YInt != Runtime.CollisionYReference)
+            {
+                BindNativeC25Action(212, false);
+                frame = FrameCache.GetNativeFrameDataById(Frame.N);
+                if (frame == null || frame.wait < 0)
+                    return false;
+                Trans.SyncWaitCounterFrame(Frame.N);
+            }
+
             int rawNext = 0;
             bool selectedDestination = false;
             if (AttackingCounter > frame.wait)
             {
+                if (frame.next >= 1300 && frame.next < 1400 && frame.state != 80 &&
+                    registeredWorld == null)
+                    return false;
                 AttackingCounter = 0;
                 rawNext = frame.next;
                 if (rawNext == 0)
@@ -6755,30 +6831,43 @@ namespace NTSD.Animation.LF2Objects
                 }
                 else
                 {
-                    int target = rawNext;
-                    if (target < 0)
+                    // Alignment contract: NTSD28-336B44-Q07-C024-RELATIVE-NEXT-001.
+                    if (rawNext >= 1300 && rawNext < 1400 && frame.state != 80)
                     {
-                        target = unchecked(-target);
-                        SwitchDir(Runtime.IsFacingLeft ? "right" : "left");
-                    }
-                    if (target == 999)
-                        target = 0;
-                    if (target >= 1000 || target < 0)
-                    {
-                        BindNativeC25Action(target, false);
+                        int offset = registeredWorld.NativeRandom.SynchronizedNext(
+                            0x00452390u, rawNext - 1300);
+                        int selected = fromAction + 1 + offset;
+                        BindNativeC25Action(selected, true);
+                        selectedDestination = selected >= 0 && selected < 999 &&
+                            Frame.D != null;
                     }
                     else
                     {
-                        BindNativeC25Action(target, true);
-                        if (target == 212 && target != fromAction && rawNext != 999)
-                            ApplyNativeC25JumpInit();
-                        if (rawNext == 999)
+                        int target = rawNext;
+                        if (target < 0)
                         {
-                            int resolved = type == 0 && Runtime.YInt != 0 &&
-                                Runtime.CollisionYReference != Runtime.YInt ? 212 : 0;
-                            BindNativeC25Action(resolved, true);
+                            target = unchecked(-target);
+                            SwitchDir(Runtime.IsFacingLeft ? "right" : "left");
                         }
-                        selectedDestination = true;
+                        if (target == 999)
+                            target = 0;
+                        if (target >= 1000 || target < 0)
+                        {
+                            BindNativeC25Action(target, false);
+                        }
+                        else
+                        {
+                            BindNativeC25Action(target, true);
+                            if (target == 212 && target != fromAction && rawNext != 999)
+                                ApplyNativeC25JumpInit();
+                            if (rawNext == 999)
+                            {
+                                int resolved = type == 0 && Runtime.YInt != 0 &&
+                                    Runtime.CollisionYReference != Runtime.YInt ? 212 : 0;
+                                BindNativeC25Action(resolved, true);
+                            }
+                            selectedDestination = true;
+                        }
                     }
                 }
             }

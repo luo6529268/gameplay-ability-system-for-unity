@@ -1,0 +1,13 @@
+# NTSD28-R06-NATURAL-REVIVAL-ENTRY-001
+
+Status: `FOCUSED_TEST_PASS_SOURCE_ONLY / ROOT_LFR_INITIAL_CONFIG_GAP`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / R06`.
+
+The alignment table's R06 requires a real death-to-revival sequence; `NTSD28-Q07-REVIVAL-PEER-FULL-DRIVER-001` starts from an injected dead state and does not meet that condition. Reuse the already proven formal OID11 Sasuke action110 versus OID87 selected-armor lethal input sequence (seed `0x28A55A5A`, Stage23, X500/X550, D/R/J at completed ticks2/4/6). Change only the diagnostic target's initial revival lives from 1 to 2; do not change DAT, combat rules or the old fixture.
+
+Before code modification, exact ownership is a new `Tools/NTSD28Q07Diagnostics/natural_revival_lfr_probe.cpp` only. It must create a separate LFR and narrow per-tick CSV under `artifacts/diagnostics/NTSD28-R06-NATURAL-REVIVAL-ENTRY-001/`, refuse to overwrite outputs, and record target HP/action/state/lives/render phase plus revival events. Compile against the paired playable build closure, then replay through the unchanged root formal EXE. If the natural route does not reach revival within a bounded 365 ticks, retain that negative result and choose a different formally reachable participant before adding any Unity test.
+
+Acceptance for this first subgate is an exact formal source and root-EXE outcome for natural damage→death→lying→revival, or a documented first failure and new fixture precondition. Only a positive, same-state root gate can justify a separate original-project Unity complete-Driver/Play comparison. The controlled peer-average test remains valid and is not rerun. Q07/R06/BATCH-04 stay open until the cross-engine natural sequence, queued branch and required visual handoff have their own evidence.
+
+No Unity production, Editor script, resource, Scene, ProjectSettings, nonbattle code or approved D-024 collision policy changes are in this diagnostic. Rollback is removal of only the new diagnostic script/output after provenance review under repository deletion rules; all prior dirty work is protected.
+
+Exit disposition: `PAIRED_SOURCE_NATURAL_REACHABILITY_PASS / ROOT_LFR_INITIAL_CONFIG_GAP / UNITY_NOT_RUN`. Source natural hit→lying→revival occurs at ticks16/27/54, but the unchanged root LFR CLI starts slot1 with lives1 and has no life override, so both root replays fail without the same initial condition. This task stops at its declared gate; do not infer a battle-rule first difference or repeat the old controlled test. [Evidence](../../../artifacts/diagnostics/NTSD28-R06-NATURAL-REVIVAL-ENTRY-001/ACCEPTANCE.md).

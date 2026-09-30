@@ -1,0 +1,13 @@
+# NTSD28-Q08-TRANSIENT-X-SELFCHECK-ORACLE-001
+
+Status: `VERIFIED / TEST_ORACLE_ONLY`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q08`; Q07 remains the earliest open group.
+
+Authority: formal root `NTSD2.8-Logan.exe` SHA-256 `B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033` and paired playable `BattleWorld28::settle_ordinary_stage_bounds` in `source/ntsd28_core/src/simulation/battle_world.cpp`: ordinary selected-mode type-0 objects at physical slot >=20 clamp X to `bounds.width + 10`. The existing Unity `NTSDEntityRuntime.ClampSelectedModeType0StageX` implements this +10 endpoint for unprotected mode. No DAT or mode asset value is involved in this correction.
+
+Observed RED: on 2026-09-29 the original project Editor menu `NTSD/验证/运行战斗运行时自检` wrote a fresh `Temp/NTSD_BattleRuntimeSelfCheck.result` with FAIL at `CheckPreFrameXBoundsMatrix`: the assertion expects slot>=20 at width800/X901 to become X900. Actual formal/production endpoint is X810. The prior 2026-09-26 PASS result was copied to the Q08 diagnostic folder before the menu run. MCP menu execution reported success only for invocation; the result file is the test outcome.
+
+Only script path: `Assets/NTSD/Scripts/Test/BattleRuntimeSelfCheck.cs`, one assertion in `CheckPreFrameXBoundsMatrix`. Change its expected X from 900 to 810 and its message from width+100 to width+10. Leave all production, DAT, scene, assets, nonbattle code, other tests and input unchanged. Expected side effect: the SelfCheck can reach subsequent assertions; a later failure must be investigated separately and not silently rewritten.
+
+Acceptance: original Editor recompiles; fresh menu result reaches PASS or reports the next exact failure; if the corrected assertion alone needs a focused test, use the existing Editor route. Record result file, Editor idle/non-Play, protected Battle/Menu/GameConfig/ProjectMode asset hashes, Change Ledger validation and diff check. This task only corrects an obsolete oracle. It cannot close the KO event state, Q08, Q07 or BATCH-04 by itself. Rollback is confined to this assertion and record, preserving all pre-existing dirty work.
+
+2026-09-29 result: original Editor runtime DLL timestamp is later than source; fresh menu result became `PASS` at 03:29:39 despite the MCP invocation timing out at 30 seconds. The exact PASS file, previous-result preservation, Editor idle/non-Play and four protected hashes are documented in [acceptance](../../../artifacts/diagnostics/NTSD28-Q08-NATIVE-KNOCKOUT-EVENT-STATE-001/SELFCHECK-ORACLE-ACCEPTANCE-20260929.md). Only the self-check gate closes, not the Q08 group.

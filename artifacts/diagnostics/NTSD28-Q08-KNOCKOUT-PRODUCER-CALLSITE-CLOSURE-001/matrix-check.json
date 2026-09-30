@@ -1,0 +1,101 @@
+{
+  "status": "VERIFIED_SCOPED_EXISTING_CALLSITE_MATRIX",
+  "formalDirectCallsites": [
+    1898,
+    2262,
+    6133,
+    6688,
+    7123
+  ],
+  "nativePushBackSites": 1,
+  "nonstandard": [
+    {
+      "name": "state12-ground",
+      "formalCallerLine": 1898,
+      "pairs": [
+        {
+          "variant": "positive",
+          "dataRows": 3,
+          "fields": 16,
+          "logicalEqual": true,
+          "formalSha256": "53D4CF5A370438AD9B6B10158B2AD396B86C58831121B31BA8D5F466407725EC",
+          "unitySha256": "F0D21B464EDE7DB4F87AE6AF5BA8881E3E21F293F5836C762A2F1238C4359DC6"
+        },
+        {
+          "variant": "control",
+          "dataRows": 3,
+          "fields": 16,
+          "logicalEqual": true,
+          "formalSha256": "F1CF6162B1EEC32100AEF1EC734A31C6715881B9FFE27521FF34FD567784DB87",
+          "unitySha256": "89C97449EDAA01D36D0423EBF505AFA43B38B7FD63E6906A84815F074ECFCE6E"
+        }
+      ],
+      "firstKoTick": 1,
+      "firstKoTime": 0
+    },
+    {
+      "name": "negative-environment",
+      "formalCallerLine": 2262,
+      "pairs": [
+        {
+          "variant": "positive",
+          "dataRows": 13,
+          "fields": 17,
+          "logicalEqual": true,
+          "formalSha256": "F54912D232E667967F423827C85ED3A918EFDB17938768F5163CFFEA0B7E2248",
+          "unitySha256": "3525B7C14845CF797F8B03C6882A4F17985A24AA57917F2C02D529D668C6F060"
+        },
+        {
+          "variant": "control",
+          "dataRows": 13,
+          "fields": 17,
+          "logicalEqual": true,
+          "formalSha256": "A3B422A003044982430F24DE0ED0DF030BE8482E42727DB535DE88C2ACDBFAC6",
+          "unitySha256": "893D02B284D035101C32B5FA335EDFA83A92B7D58756C47DC41D9B05E6EFFB87"
+        }
+      ],
+      "firstKoTick": 12,
+      "firstKoTime": 12
+    },
+    {
+      "name": "held-cpoint",
+      "formalCallerLine": 6133,
+      "pairs": [
+        {
+          "variant": "positive",
+          "dataRows": 3,
+          "fields": 20,
+          "logicalEqual": true,
+          "formalSha256": "799D835DEB9D8220007739A45B9E3599C7E87C706A7F6E1DF968F2A083BE5CAD",
+          "unitySha256": "DC16A4D4736AD19DF5FEC0252342F7280DC6BEC261A768D778BDE0A60DC1A680"
+        },
+        {
+          "variant": "control",
+          "dataRows": 3,
+          "fields": 20,
+          "logicalEqual": true,
+          "formalSha256": "18E45CA6F55DD4D5848144909CBCA3DCF30DEEEB43281A83C8B0FCECCBE78DF7",
+          "unitySha256": "958903F0BD126E5C803790C181CD1310AA569AF623D3D31DBFB0FC163CF47D9B"
+        }
+      ],
+      "firstKoTick": 1,
+      "firstKoTime": 0
+    }
+  ],
+  "nonstandardLogicalRowsEqual": 38,
+  "ordinary": {
+    "formalCallerLine": 6688,
+    "selectedChecks": 652,
+    "knockoutBirthTick": 8,
+    "knockoutTime": 7,
+    "comparisonSha256": "2F5CC0417752AC0885A1BA14C34B61A621295450FA22983ECE86BDCC9EC9788D"
+  },
+  "selectedArmor": {
+    "formalCallerLine": 7123,
+    "selectedEntityFieldChecks": 1700,
+    "knockoutBirthTick": 16,
+    "knockoutTime": 15,
+    "comparisonSha256": "7C37B1EDA961E67B53449FBBA2EFA8E45A122B9907E4EA8A2044A87554DC3EEA"
+  },
+  "scopeLimit": "one positive and control per nonstandard caller plus selected ordinary and armor cases; not all guards, modes, characters, root same-seed state or UI"
+}

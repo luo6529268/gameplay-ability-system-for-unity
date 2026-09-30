@@ -1,0 +1,16 @@
+# Q07/D-024 mapped Han/Lee original Battle Scene candidate check
+
+Status: `SCOPED_CANDIDATE_MATCH / PROJECT_MAP_Z_BOUNDARY_OPEN`. This is not a Q07 exit.
+
+The formal paired playable control starts Han OID726 at source X500/Z650 and Lee OID7 at source X520 or X580/Z650, mode0, and records first action146 candidate counts 1/0. The original Unity Battle Scene probe was extended with opt-in source-mapped positions using only `SimulationWorld.SpatialProjection` (X `2048/1333`, Z `1152/730`, common anchor 0); historical raw requests and results were retained. Current formal content root, full production `SimulationTickDriver.StepOneTick`, and original Editor Play were used.
+
+| Case | Formal source starts | Unity actual starts X | Unity actual Z | Completed first action146 selected | Shutdown/borrowers |
+|---|---|---:|---:|---:|---|
+| near `q07-han-mapped-near-20260929-a` | Han500, Lee520, Z650 | 768.192048 / 798.919730 | 1025.753425 | 1 | complete / 0 |
+| far `q07-han-mapped-far-20260929-a` | Han500, Lee580, Z650 | 768.192048 / 891.102776 | 1025.753425 | 0 | complete / 0 |
+
+The source carriers at start were exactly 500/520 or 580 and Z650. Both Play runs reached the first action146 at Driver tick14 (relative tick9), exited Play and returned the original Editor to idle. The probe reports `OBSERVED_CACHE_LIMIT` because its optional post-collection predicate re-evaluation cannot identify an in-collector first rejection; the completed `HitCandidateCount` row is the scoped count witness. Do not reinterpret the in-collection callback's 0 as a contradictory candidate count.
+
+**Boundary limitation:** the original project's live stage reports physical Z bounds `237..760`, but mapped Z650 is `1025.753425`. The existing `NTSDEntityRuntime.ClampStageZ` compares `SourceRuleZ` with those stage numbers when its source carrier is initialized, so source650 remains between 237 and760 and physical Z remains outside the project's stage. This is a concrete coordinate-domain mismatch, not authorization to enlarge the map or change DAT. These two Play examples confirm the proportional collision count in an out-of-map diagnostic setup; they do not establish a valid natural project-map match or all Q07 exits. Next Q07 task must separate physical walkable bounds from their inverse-projected source-rule bounds at the existing World stage boundary and prove an in-map same-source native/Unity case.
+
+Validation: generated Editor C# build twice with 0 errors (214 existing warnings); original Editor Tundra compiled 0 errors and ran both Play requests. Scoped `git diff --check` exit0. Five protected SHA-256s before/after: Battle Scene `3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED`, Menu Scene `DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3`, map `F7B5E4A44CAC05480D1CA6F67ABF623531264C1C96725D7FDD23DA50C8E60C08`, GameConfig `0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7`, ProjectBattleModeConfig `B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82`. The two JSON reports are immutable and have SHA-256 `5E05CD81636E71BA1D797D3D551817DF95842198FEABB6DC77B518F086EA1089` and `4ACD1D59C73035E1829A3BC2AC24AB32E6845BA3A9E38245F0263567B8DE2B94` respectively.

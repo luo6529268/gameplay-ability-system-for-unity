@@ -16,7 +16,7 @@ namespace NTSD.Test
     public sealed class NTSD28Q08DirectBattleNaturalKoTwoCyclePlayModeTests
     {
         [UnityTest]
-        [Timeout(240000)]
+        [Timeout(420000)]
         public IEnumerator PhysicalPunchKoDrivesOneRematchThenSameWorldSelection()
         {
             EditorSceneManager.OpenScene("Assets/NTSD/Scene/NTSD_Battle.unity");
@@ -102,6 +102,8 @@ namespace NTSD.Test
                 "Direct Battle victim lacks source-rule birth position.");
             Assert.That(attacker?.ObjectId, Is.EqualTo(2));
             Assert.That(victim?.ObjectId, Is.EqualTo(2));
+            Assert.That(attacker.Runtime.SlotIndex, Is.Zero);
+            Assert.That(victim.Runtime.SlotIndex, Is.EqualTo(1));
             Assert.That(attacker.RelationTeam, Is.EqualTo(1));
             Assert.That(victim.RelationTeam, Is.EqualTo(2));
             Assert.That(input?.AttackAction?.enabled, Is.True);
@@ -111,9 +113,17 @@ namespace NTSD.Test
             Assert.That(world.Runtime.NativeKnockoutFeed.LifetimeTicks, Is.EqualTo(70));
 
             int direction = attacker.Runtime.IsFacingLeft ? -1 : 1;
-            victim.Runtime.SetPosition(attacker.Runtime.XInt + direction * 40,
-                attacker.Runtime.YInt, attacker.Runtime.ZInt);
+            int victimViewX = attacker.Runtime.XInt + direction * 40;
+            int victimViewZ = attacker.Runtime.ZInt;
+            victim.Runtime.SetPosition(victimViewX,
+                attacker.Runtime.YInt, victimViewZ);
             victim.Runtime.SyncIntegerPosition();
+            victim.Runtime.SetSourceRulePosition(
+                world.SpatialProjection.ViewToSourceX(victimViewX),
+                world.SpatialProjection.ViewToSourceZ(victimViewZ));
+            victim.Runtime.SyncSourceRuleIntegerPosition();
+            Assert.That(world.SpatialProjection.SourceToViewX(
+                victim.Runtime.SourceRuleX), Is.EqualTo(victimViewX).Within(0.001));
             victim.Health.HP = 10;
             victim.Health.HPBound = 10;
             victim.Health.HP3 = 10;
@@ -128,6 +138,7 @@ namespace NTSD.Test
             bool authoredPunchSeen = false;
             bool knockoutSeen = false;
             int knockoutBattleTime = -1;
+            NativeKnockoutEvent observedKnockout = default;
             var trace = new StringBuilder(4096);
             trace.Append("mode=").Append(world.BattleGameModeId)
                 .Append(" inputPhase=").Append(world.InputPhase)
@@ -137,7 +148,14 @@ namespace NTSD.Test
                 .Append(attacker.Runtime.IsFacingLeft)
                 .Append(" initialV=").Append(victim.Runtime.XInt).Append(',')
                 .Append(victim.Runtime.YInt).Append(',')
-                .Append(victim.Runtime.ZInt).AppendLine();
+                .Append(victim.Runtime.ZInt)
+                .Append(" sourceA=").Append(attacker.Runtime.SourceRuleXInt)
+                .Append(',').Append(attacker.Runtime.SourceRuleZInt)
+                .Append(" sourceV=").Append(victim.Runtime.SourceRuleXInt)
+                .Append(',').Append(victim.Runtime.SourceRuleZInt)
+                .Append(" scale=").Append(world.SpatialProjection.HorizontalScale)
+                .Append(',').Append(world.SpatialProjection.DepthScale)
+                .AppendLine();
             InputSystem.QueueStateEvent(keyboard, new KeyboardState());
             InputSystem.Update();
             try
@@ -171,11 +189,18 @@ namespace NTSD.Test
                         .Append(" aFrame=").Append(attacker.Frame.N)
                         .Append(" aX=").Append(attacker.Runtime.XInt)
                         .Append(" aZ=").Append(attacker.Runtime.ZInt)
+                        .Append(" aSourceX=").Append(attacker.Runtime.SourceRuleXInt)
+                        .Append(" aSourceZ=").Append(attacker.Runtime.SourceRuleZInt)
                         .Append(" aItr=").Append(attacker.Frame.D?.itrs.Count ?? -1)
+                        .Append(" aCandidates=").Append(attacker.Runtime.HitCandidateCount)
                         .Append(" vFrame=").Append(victim.Frame.N)
                         .Append(" vX=").Append(victim.Runtime.XInt)
                         .Append(" vZ=").Append(victim.Runtime.ZInt)
+                        .Append(" vSourceX=").Append(victim.Runtime.SourceRuleXInt)
+                        .Append(" vSourceZ=").Append(victim.Runtime.SourceRuleZInt)
                         .Append(" vBdy=").Append(victim.Frame.D?.bodies.Count ?? -1)
+                        .Append(" vExempt=").Append(victim.AttackExempt)
+                        .Append(" vStun=").Append(victim.HitStun)
                         .Append(" vHP=").Append(victim.Health.HP)
                         .AppendLine();
                     if (victim.Health.HP > 0)
@@ -191,6 +216,7 @@ namespace NTSD.Test
                         {
                             knockoutSeen = true;
                             knockoutBattleTime = knockout.BattleTimeTick;
+                            observedKnockout = knockout;
                         }
                     }
                     break;
@@ -210,6 +236,13 @@ namespace NTSD.Test
                 "The live Naruto attack did not knock out the opposing participant.\n" + trace);
             Assert.That(knockoutSeen, Is.True);
             Assert.That(knockoutBattleTime, Is.GreaterThan(0));
+            Assert.That(observedKnockout.BattleTimeTick,
+                Is.EqualTo(unchecked((int)(world.NativeFrameSequence - 1UL))));
+            Assert.That(observedKnockout.SourceObjectType, Is.Zero);
+            Assert.That(observedKnockout.FourOwnerSlot, Is.Zero);
+            Assert.That(observedKnockout.VictimSlot, Is.EqualTo(1));
+            Assert.That(observedKnockout.SourceSlot, Is.Zero);
+            Assert.That(observedKnockout.CreditSlot, Is.Zero);
             Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
             Assert.That(driver.StepOneTick(ignorePaused: true,
                 buildPresentation: false), Is.True);
@@ -283,6 +316,19 @@ namespace NTSD.Test
             Assert.That(removedAfterLifetime, Is.True);
             Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(350));
             Assert.That(world.Runtime.Results.NativeResultPhase, Is.EqualTo(3));
+            if (heldContinueAt144)
+            {
+                Assert.That(world.Runtime.Results.NativeResultTimer, Is.EqualTo(350));
+                Assert.That(world.Runtime.Results.NativeTransitionState, Is.Zero);
+                ulong sequenceBeforeExit = world.NativeFrameSequence;
+                Assert.That(driver.StepOneTick(ignorePaused: true,
+                    buildPresentation: false), Is.True);
+                Assert.That(world.NativeFrameSequence, Is.EqualTo(sequenceBeforeExit),
+                    "Result exit must return before the combat World advances.");
+                Assert.That(world.Runtime.Results.NativeResultOutputTimer,
+                    Is.EqualTo(350));
+                Assert.That(world.Runtime.Results.NativeResultTimer, Is.Zero);
+            }
             Assert.That(world.Runtime.Results.NativeTransitionState, Is.EqualTo(2));
         }
     }

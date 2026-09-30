@@ -3427,10 +3427,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Control Settings \uFF08\u63A7\u5236\u8A2D\u5B9A\uFF09"
+  m_text: "\u63A7\u5236\u8BBE\u7F6E"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
-  m_sharedMaterial: {fileID: 4654486576863932756, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
+  m_sharedMaterial: {fileID: -686335870572961169, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3454,8 +3454,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6663,10 +6663,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Network Game \uFF08\u9023\u7DDA\u904A\u6232\uFF09"
+  m_text: "\u8054\u673A\u6E38\u620F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
-  m_sharedMaterial: {fileID: 4654486576863932756, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
+  m_sharedMaterial: {fileID: -686335870572961169, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6690,8 +6690,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -11001,10 +11001,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Game Start \uFF08\u958B\u59CB\u904A\u6232\uFF09"
+  m_text: "\u5F00\u59CB\u6E38\u620F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
-  m_sharedMaterial: {fileID: 4654486576863932756, guid: 3c2cfc7f96dd6724a8b4e50be4557567, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
+  m_sharedMaterial: {fileID: -686335870572961169, guid: 325e772b4b89e0e4191bbf6bf9968e23, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11028,8 +11028,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 50
+  m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

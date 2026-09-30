@@ -188,7 +188,8 @@ namespace NTSD.Animation
             double verticalVelocityBeforeLanding,
             double effectiveFloorY,
             bool airborne,
-            bool effectiveFloorContact)
+            bool effectiveFloorContact,
+            bool penetratedEffectiveFloor)
         {
             BoundaryMode = boundaryMode;
             Landed = landed;
@@ -196,6 +197,7 @@ namespace NTSD.Animation
             EffectiveFloorY = effectiveFloorY;
             Airborne = airborne;
             EffectiveFloorContact = effectiveFloorContact;
+            PenetratedEffectiveFloor = penetratedEffectiveFloor;
         }
 
         internal BoundaryResolveMode BoundaryMode { get; }
@@ -204,6 +206,7 @@ namespace NTSD.Animation
         internal double EffectiveFloorY { get; }
         internal bool Airborne { get; }
         internal bool EffectiveFloorContact { get; }
+        internal bool PenetratedEffectiveFloor { get; }
     }
 
     internal readonly struct BattleNonCharacterMechanicsStepResult
@@ -349,6 +352,7 @@ namespace NTSD.Animation
                     0.0,
                     0.0,
                     false,
+                    false,
                     false);
             }
 
@@ -387,6 +391,7 @@ namespace NTSD.Animation
             runtime.Y += runtime.Vy;
 
             bool reachedFloor = runtime.Y >= effectiveFloorY;
+            bool penetratedEffectiveFloor = runtime.Y > effectiveFloorY;
             bool caughtGroundResolve = reachedFloor &&
                                        ctx.frameData != null &&
                                        ctx.frameData.HasPrimaryCatchPoint &&
@@ -414,7 +419,8 @@ namespace NTSD.Animation
                 vyBeforeVerticalMove,
                 effectiveFloorY,
                 airborne,
-                reachedFloor && !caughtGroundResolve
+                reachedFloor && !caughtGroundResolve,
+                penetratedEffectiveFloor && !caughtGroundResolve
             );
         }
 
@@ -511,6 +517,18 @@ namespace NTSD.Animation
                 collisionYReference,
                 verticalVelocityBeforeMove,
                 airborne);
+        }
+
+        internal static int SelectFastWeaponActionAfterFriction(
+            int dataType,
+            int physicsEntryFrameState,
+            double postFrictionVx)
+        {
+            return (dataType == 4 || dataType == 6) &&
+                   physicsEntryFrameState == 1000 &&
+                   (postFrictionVx < -9.0 || postFrictionVx > 9.0)
+                ? 40
+                : -1;
         }
 
         private static void IntegrateSourceRulePhysicsMotion(NTSDEntityRuntime runtime)

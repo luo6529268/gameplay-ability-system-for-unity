@@ -101,9 +101,9 @@ namespace NTSD.Simulation.Ecs
         {
             int baseStageWidth = world.Runtime?.Stage?.BaseStageWidthPx ?? 800;
             int xMaxOverride = world.Runtime?.Stage?.XMaxOverride ?? 0;
-            int zMin = world.Runtime?.Stage?.ZMin ?? 180;
-            int zMax = world.Runtime?.Stage?.ZMax ?? 350;
-            if (zMax < zMin || baseStageWidth <= 0)
+            if (!world.TryGetStageRuleDepthBounds(out double sourceMin,
+                    out double sourceMax, out double viewMin, out double viewMax) ||
+                baseStageWidth <= 0)
                 return;
 
             for (int slot = 0; slot < runtimeSlots.LogicalCapacity; slot++)
@@ -126,14 +126,16 @@ namespace NTSD.Simulation.Ecs
                         entity,
                         baseStageWidth,
                         xMaxOverride,
-                        zMin,
-                        zMax))
+                        sourceMin,
+                        sourceMax,
+                        viewMin,
+                        viewMax))
                 {
                     exactCharacterWriteCount++;
                     continue;
                 }
 
-                entity.ApplyPreFrameZBounds(zMin, zMax);
+                entity.ApplyPreFrameZBounds(sourceMin, sourceMax, viewMin, viewMax);
                 bool destroyed = entity.ApplyPreFrameXBounds(
                     baseStageWidth,
                     xMaxOverride);
@@ -149,8 +151,10 @@ namespace NTSD.Simulation.Ecs
             LF2Entity entity,
             int baseStageWidth,
             int xMaxOverride,
-            int zMin,
-            int zMax)
+            double sourceMin,
+            double sourceMax,
+            double viewMin,
+            double viewMax)
         {
             if (generation == 0 ||
                 entity.GetType() != typeof(LF2Character) ||
@@ -166,9 +170,11 @@ namespace NTSD.Simulation.Ecs
 
             NTSDEntityRuntime runtime = entity.Runtime;
             runtime.ClampStageZ(
-                zMin,
-                zMax,
-                world.FixedViewRunVerticalDistanceScale);
+                sourceMin,
+                sourceMax,
+                world.FixedViewRunVerticalDistanceScale,
+                viewMin,
+                viewMax);
 
             int selectedModeStageGate50 =
                 world.Runtime?.SelectedModeStageGate50 ?? 0;

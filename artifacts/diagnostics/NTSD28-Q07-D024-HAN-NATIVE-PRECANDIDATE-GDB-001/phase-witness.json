@@ -1,0 +1,30 @@
+{
+  "schema": "ntsd28-q07-han-native-precandidate-gdb/1.0",
+  "status": "PASS_SCOPED_DIRECT_PAIRED_PHASE_READ",
+  "authorityExeSha256": "B1E13AE17C86B77240B61A971AFD4C3374B645705F42B0BBCE304FD1D2819033",
+  "pairedDiagnosticExeSha256": "1217A56268DBB5B4565525AC1A3E6A65D896B9840A8E97E2047E43241BF0CA45",
+  "candidateEntryCount": 50,
+  "entryBeforeCompletedTick10": {
+    "worldSequence": 9,
+    "hanAction": 146,
+    "hanActionSnapshot": 146,
+    "hanX": 535,
+    "hanZ": 650,
+    "leeAction": 2,
+    "leeActionSnapshot": 2,
+    "leeX": 520,
+    "leeZ": 650
+  },
+  "completedTick10": {
+    "hanCollisionAction": 146,
+    "hanLeeCandidateCount": 1,
+    "catchTarget": 1,
+    "catchSource": 0,
+    "postCatchHanX": 547
+  },
+  "newCsvEqualsProtectedOld": true,
+  "newLfrEqualsProtectedOld": true,
+  "gdbLogSha256": "6678FC223EED4236817AA35B2CCD5EDAC841F1656A15C688B5FCAE4243BC5EB6",
+  "csvSha256": "060ACF2D0AA09F7CC1E29F3B20205434852F2B9E36BAF5492EEAAECD616B2624",
+  "lfrSha256": "7954A8DD6C21DE188C40C770B84B92A66F2CA0C9E5B7E7321E4292ABCA7C13CA"
+}

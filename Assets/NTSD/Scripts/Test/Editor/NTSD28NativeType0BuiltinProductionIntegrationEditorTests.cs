@@ -126,7 +126,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void NativeSecondPass_DeadType0StopsBeforeBuiltinRouting()
+        public void NativeSecondPass_ZeroHpStandingStillRoutesAttack()
         {
             var world = new SimulationWorld();
             world.ConfigureAiExecutionProfile(
@@ -138,16 +138,164 @@ namespace NTSD.Test
             world.Register(character);
             character.Runtime.HP = 0;
             character.Health.HP = 0;
+            character.Runtime.KeyJump = 1;
+
+            world.CharacterInputAll(2);
+
+            Assert.That(character.Frame.N == 60 || character.Frame.N == 65,
+                Is.True, "zero-HP standing Attack did not choose an authored action");
+            Assert.That(character.Runtime.KeyJump, Is.EqualTo(1));
+            Assert.That(character.Runtime.CdAttack, Is.EqualTo(5));
+            world.Unregister(character);
+        }
+
+        [Test]
+        public void NativeSecondPass_ZeroHpTerminalStateDoesNotSelectStandingAttack()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            LF2Character character = CreateCharacter(
+                Data(Frame(14, 14), Frame(60, 3), Frame(65, 3)),
+                0,
+                870,
+                14);
+            world.Register(character);
+            character.Runtime.HP = 0;
+            character.Health.HP = 0;
             character.Runtime.AnimSub = 17;
             character.Runtime.KeyJump = 1;
 
             world.CharacterInputAll(2);
 
-            Assert.That(character.Frame.N, Is.Zero);
-            Assert.That(character.Runtime.AnimSub, Is.EqualTo(17));
-            Assert.That(character.Runtime.KeyJump, Is.Zero);
-            Assert.That(character.Runtime.CdAttack, Is.Zero);
+            Assert.That(character.Frame.N, Is.EqualTo(14));
+            Assert.That(character.Runtime.AnimSub, Is.EqualTo(16));
+            Assert.That(character.Runtime.KeyJump, Is.EqualTo(1));
+            Assert.That(character.Runtime.CdAttack, Is.EqualTo(5));
             world.Unregister(character);
+        }
+
+        [TestCase(0, false)]
+        [TestCase(0, true)]
+        [TestCase(500, false)]
+        public void CompleteTick_ZeroHpInputStillUsesCurrentActionGate(
+            int hp,
+            bool terminal)
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            int initialFrame = terminal ? 14 : 0;
+            LF2Character character = CreateCharacter(
+                Data(Frame(initialFrame, initialFrame),
+                    Frame(60, 3), Frame(65, 3)),
+                0,
+                terminal ? 872 : hp == 0 ? 871 : 873,
+                initialFrame);
+            world.Register(character);
+            character.Health.HP = hp;
+            character.Runtime.HP = hp;
+            BattleSlotRuntimeState rosterSlot = world.Runtime.Roster.Slots[0];
+            rosterSlot.Active = true;
+            rosterSlot.IsHuman = true;
+            rosterSlot.CharacterId = character.ObjectId;
+            rosterSlot.Team = character.Team;
+            rosterSlot.InputId = 0;
+            rosterSlot.AiId = -1;
+            rosterSlot.RuntimeSlotIndex = character.Runtime.SlotIndex;
+            rosterSlot.StableId = character.Runtime.StableId;
+            world.Runtime.Roster.ActiveSlotCount = 1;
+            Assert.That(world.TryResolveRosterInputEntity(0, out LF2Entity bound),
+                Is.True, "the synthetic human must resolve before input");
+            Assert.That(bound, Is.SameAs(character));
+            // The existing UI Attack action is the crossed frame-input Jump bit.
+            var input = new FrameInputSet(1, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Jump),
+            });
+            world.ApplyFrameInputSet(input);
+            Assert.That(character.Controller.InputBuffer.BufferedTickCount,
+                Is.GreaterThan(0), "Attack must enter the controller buffer");
+            Assert.That(world.NeedClearInput, Is.False,
+                "the fixture must not enter the battle-entry clear branch");
+
+            new NTSDBattleTickSystem(world).RunReleaseTick(1, false, input);
+            Assert.That(world.InputPhase, Is.EqualTo(1));
+            Assert.That(character.Runtime.NativeInputProxy.Current[4],
+                Is.Zero, "phase 1 defers the current-key sample");
+
+            var heldInput = new FrameInputSet(2, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Jump),
+            });
+            world.ApplyFrameInputSet(heldInput);
+            new NTSDBattleTickSystem(world).RunReleaseTick(2, false, heldInput);
+
+            Assert.That(world.InputPhase, Is.Zero);
+            Assert.That(character.Runtime.NativeInputProxy.Current[4],
+                Is.EqualTo(1),
+                "the sampled Attack must remain available; action=" +
+                character.Frame.N + ", legacyAttack=" +
+                character.Runtime.KeyJump + ", bufferedTicks=" +
+                character.Controller.InputBuffer.BufferedTickCount);
+            if (terminal)
+                Assert.That(character.Frame.N, Is.EqualTo(14));
+            else
+                Assert.That(character.Frame.N == 60 || character.Frame.N == 65,
+                    Is.True, "standing Attack must select an authored action");
+        }
+
+        [Test]
+        public void CompleteTick_PoisonPulseToExactZeroStillRoutesStandingAttack()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureAiExecutionProfile(
+                BattleAiExecutionProfile.DataOrientedCanonical);
+            LF2Character character = CreateCharacter(
+                Data(Frame(0, 0), Frame(60, 3), Frame(65, 3)),
+                0,
+                874);
+            world.Register(character);
+            character.Health.HP = 5;
+            character.Runtime.HP = 5;
+            character.Runtime.PoisonTimer120 = 33;
+            character.Runtime.PoisonType124 = 1;
+            character.Runtime.PoisonStrength128 = 5;
+            BattleSlotRuntimeState rosterSlot = world.Runtime.Roster.Slots[0];
+            rosterSlot.Active = true;
+            rosterSlot.IsHuman = true;
+            rosterSlot.CharacterId = character.ObjectId;
+            rosterSlot.Team = character.Team;
+            rosterSlot.InputId = 0;
+            rosterSlot.AiId = -1;
+            rosterSlot.RuntimeSlotIndex = character.Runtime.SlotIndex;
+            rosterSlot.StableId = character.Runtime.StableId;
+            world.Runtime.Roster.ActiveSlotCount = 1;
+
+            var deferredAttack = new FrameInputSet(1, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Jump),
+            });
+            world.ApplyFrameInputSet(deferredAttack);
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                1, false, deferredAttack);
+            Assert.That(character.Runtime.PoisonTimer120, Is.EqualTo(32));
+            Assert.That(character.Health.HP, Is.Zero);
+            Assert.That(character.Frame.N, Is.Zero);
+            Assert.That(world.InputPhase, Is.EqualTo(1));
+
+            var sampledAttack = new FrameInputSet(2, new[]
+            {
+                new SimulationPlayerInput(0, SimulationInputButtons.Jump),
+            });
+            world.ApplyFrameInputSet(sampledAttack);
+            new NTSDBattleTickSystem(world).RunReleaseTick(
+                2, false, sampledAttack);
+            Assert.That(world.InputPhase, Is.Zero);
+            Assert.That(character.Runtime.NativeInputProxy.Current[4],
+                Is.EqualTo(1));
+            Assert.That(character.Frame.N == 60 || character.Frame.N == 65,
+                Is.True, "the poison pulse must not impose a global HP input gate");
         }
 
         [Test]

@@ -1,0 +1,29 @@
+{
+  "fullSize": [
+    1333,
+    730
+  ],
+  "withoutSize": [
+    1333,
+    730
+  ],
+  "sourceSize": [
+    799,
+    480
+  ],
+  "changedPixels": 6241,
+  "bbox": [
+    460,
+    571,
+    539,
+    650
+  ],
+  "clampRowNonzeroAlpha": 79,
+  "clampRowMaxAlpha": 255,
+  "maxRgbDelta": 211,
+  "sha256": {
+    "full.png": "282c6b394096189820efe38c290e087d5f29297a19e805f86af74b91a0e56f65",
+    "without-body.png": "0b9b4699e2954f0b2a213aba070ab49061b675e93c30fc091963168ebc3a3dec",
+    "hun.png": "f9bb8f40a7d9faa4d516abb2147f640913ac3248efd8693a8a4c485d50db3c9d"
+  }
+}

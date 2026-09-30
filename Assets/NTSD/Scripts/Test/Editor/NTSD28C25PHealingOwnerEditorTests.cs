@@ -72,6 +72,46 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void OrdinaryTimerRetainsExactMaxForLaterInjuryButClearsOvershoot()
+        {
+            int hp = 492;
+            int encoded = 0;
+            int ordinary = 17;
+            BattleNativeHealingKernel.Advance(
+                ref hp, 500, ref encoded, ref ordinary, false);
+            Assert.That((hp, ordinary), Is.EqualTo((500, 16)));
+
+            hp = 490;
+            for (int tick = 0; tick < 8; tick++)
+            {
+                BattleNativeHealingKernel.Advance(
+                    ref hp, 500, ref encoded, ref ordinary, false);
+            }
+            Assert.That((hp, ordinary), Is.EqualTo((498, 8)));
+
+            hp = 493;
+            ordinary = 17;
+            BattleNativeHealingKernel.Advance(
+                ref hp, 500, ref encoded, ref ordinary, false);
+            Assert.That((hp, ordinary), Is.EqualTo((500, 0)));
+        }
+
+        [Test]
+        public void ProductionOwnerRetainsOrdinaryTimerOnExactMax()
+        {
+            var world = new SimulationWorld();
+            LF2Character character = CreateCharacter(world);
+            character.Health.HP = 491;
+            character.Health.HPBound = 500;
+            character.CatchTimer = 17;
+
+            world.LateEntityUpdateAll(1);
+
+            Assert.That(character.Health.HP, Is.EqualTo(500));
+            Assert.That(character.CatchTimer, Is.EqualTo(16));
+        }
+
+        [Test]
         public void ProductionOwnerRunsForLivingTypeZeroAndGlobalTailDoesNotRepeatIt()
         {
             var world = new SimulationWorld();
@@ -83,13 +123,13 @@ namespace NTSD.Test.Editor
 
             world.LateEntityUpdateAll(1);
 
-            Assert.That(character.Health.HP, Is.EqualTo(416));
+            Assert.That(character.Health.HP, Is.EqualTo(417));
             Assert.That(character.HealTimer, Is.EqualTo(1008));
             Assert.That(character.CatchTimer, Is.EqualTo(8));
 
             world.EntityPostFrameTailAll(1);
 
-            Assert.That(character.Health.HP, Is.EqualTo(416));
+            Assert.That(character.Health.HP, Is.EqualTo(417));
             Assert.That(character.HealTimer, Is.EqualTo(1008));
             Assert.That(character.CatchTimer, Is.EqualTo(8));
         }
@@ -135,7 +175,7 @@ namespace NTSD.Test.Editor
 
             world.LateEntityUpdateAll(1);
 
-            Assert.That(character.Health.HP, Is.EqualTo(408));
+            Assert.That(character.Health.HP, Is.EqualTo(409));
             Assert.That(character.HealTimer, Is.EqualTo(1100));
         }
 

@@ -693,7 +693,9 @@ namespace NTSD.Simulation
 
         private void NativeTeleport()
         {
-            world.NativeTeleportAll();
+            // Alignment contract: NTSD28-336B44-Q07-C011-TELEPORT-PHASE-001.
+            if (world.FrameToggle == 0)
+                world.NativeTeleportAll();
         }
 
         private void ResolveCpointAndWeaponSync(int tickIndex)

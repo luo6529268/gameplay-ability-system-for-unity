@@ -145,7 +145,8 @@ namespace NTSD.Simulation.Ecs
         private void CaptureExpected()
         {
             expectedSlots.ClearAll();
-            if (!TryGetStageBounds(out int zMin, out int zMax))
+            if (!TryGetStageBounds(out double sourceMin, out double sourceMax,
+                    out double viewMin, out double viewMax))
                 return;
 
             for (int slot = 0; slot < runtimeSlots.LogicalCapacity; slot++)
@@ -159,9 +160,11 @@ namespace NTSD.Simulation.Ecs
                 double margin = entity.GetCurrentDataObjectTypeForSimulation() ==
                     (int)LF2ObjectType.Character ? 0.0 : 1.0;
                 double z = entity.Runtime.PreviewStageZViewClamp(
-                    zMin - margin,
-                    zMax + margin,
-                    world.FixedViewRunVerticalDistanceScale);
+                    sourceMin - margin,
+                    sourceMax + margin,
+                    world.FixedViewRunVerticalDistanceScale,
+                    viewMin - world.SpatialProjection.SourceDeltaToViewZ(margin),
+                    viewMax + world.SpatialProjection.SourceDeltaToViewZ(margin));
                 expectedSlots.Set(slot);
                 expectedGenerations[slot] = view.Generation;
                 expectedZBits[slot] = BitConverter.DoubleToInt64Bits(z);
@@ -172,7 +175,8 @@ namespace NTSD.Simulation.Ecs
 
         private void ExecuteDataOriented()
         {
-            if (!TryGetStageBounds(out int zMin, out int zMax))
+            if (!TryGetStageBounds(out double sourceMin, out double sourceMax,
+                    out double viewMin, out double viewMax))
                 return;
 
             for (int slot = 0; slot < runtimeSlots.LogicalCapacity; slot++)
@@ -188,9 +192,11 @@ namespace NTSD.Simulation.Ecs
                     (int)LF2ObjectType.Character;
                 double margin = character ? 0.0 : 1.0;
                 runtime.ClampStageZ(
-                    zMin - margin,
-                    zMax + margin,
-                    world.FixedViewRunVerticalDistanceScale);
+                    sourceMin - margin,
+                    sourceMax + margin,
+                    world.FixedViewRunVerticalDistanceScale,
+                    viewMin - world.SpatialProjection.SourceDeltaToViewZ(margin),
+                    viewMax + world.SpatialProjection.SourceDeltaToViewZ(margin));
 
                 // The C# authority pass writes only Z/ZInt. Exact production
                 // characters keep those values directly in Runtime/PhysicsState,
@@ -259,11 +265,12 @@ namespace NTSD.Simulation.Ecs
                    world.IsActiveForCurrentPassInternal(entity);
         }
 
-        private bool TryGetStageBounds(out int zMin, out int zMax)
+        private bool TryGetStageBounds(
+            out double sourceMin, out double sourceMax,
+            out double viewMin, out double viewMax)
         {
-            zMin = world.Runtime?.Stage?.ZMin ?? 180;
-            zMax = world.Runtime?.Stage?.ZMax ?? 350;
-            return zMax >= zMin;
+            return world.TryGetStageRuleDepthBounds(
+                out sourceMin, out sourceMax, out viewMin, out viewMax);
         }
 
         private void RecordMismatch(

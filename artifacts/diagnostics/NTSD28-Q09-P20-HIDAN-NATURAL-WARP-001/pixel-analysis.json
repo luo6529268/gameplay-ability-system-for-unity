@@ -1,0 +1,20 @@
+{
+  "width": 1333,
+  "height": 730,
+  "pixel_format": "RGBA",
+  "changed_pixel_count": 1995,
+  "changed_bbox_xyxy": [
+    471,
+    451,
+    546,
+    520
+  ],
+  "max_rgba_delta": [
+    241,
+    254,
+    246,
+    0
+  ],
+  "body_on_alpha_nonzero": 973090,
+  "body_off_alpha_nonzero": 973090
+}

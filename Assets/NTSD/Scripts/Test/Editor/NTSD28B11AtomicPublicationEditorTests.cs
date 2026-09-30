@@ -80,7 +80,8 @@ namespace NTSD.Test
             typeof(GameConfig).GetField("_instance", BindingFlags.Static | BindingFlags.NonPublic).SetValue(null, previousConfig);
         }
 
-        private LoganVisualContentCandidate Candidate(string name, bool heads = true)
+        private LoganVisualContentCandidate Candidate(string name, bool heads = true,
+            bool bodySheetPresent = true)
         {
             string root = Path.Combine(ProjectRoot, "Temp/NTSD28AtomicPublication", Guid.NewGuid().ToString("N"));
             Directory.CreateDirectory(Path.Combine(root, "decoded_dat"));
@@ -89,7 +90,12 @@ namespace NTSD.Test
             string dat = "<bmp_begin>\nname: " + name + "\n" + (heads ? "head: c/head.png\nsmall: c/small.png\n" : "") + "file(20-19): c/body.png w: 5 h: 1 row: 1 col: 1\n<bmp_end>\n<frame> 0 standing\npic: 0 state: 0 wait: 1 next: 0\n<frame_end>\n";
             File.WriteAllText(Path.Combine(root, "decoded_dat/a.dat"), dat, new UTF8Encoding(false));
             byte[] png = File.ReadAllBytes(Path.Combine(ProjectRoot, "Temp/NTSD28PngAlpha/fixture.dat"));
-            foreach (string image in new[] { "body", "head", "small" }) File.WriteAllBytes(Path.Combine(root, "vfs/c/" + image + ".png"), png);
+            foreach (string image in new[] { "body", "head", "small" })
+            {
+                if (image == "body" && !bodySheetPresent)
+                    continue;
+                File.WriteAllBytes(Path.Combine(root, "vfs/c/" + image + ".png"), png);
+            }
             return LoganVisualContentCandidate.Capture(BattleContentSource.ForLoganRuntime(root));
         }
 
@@ -130,6 +136,31 @@ namespace NTSD.Test
             Assert.That(manager.GetCharacterConfig(56), Is.Not.Null);
             Assert.That(data.GetObjectById(56), Is.Not.Null);
             Assert.That(data.GetObjectsByType(0).Count, Is.EqualTo(1));
+        }
+
+        [UnityTest]
+        public IEnumerator MissingBodySheet_PublishesOtherViewsAndRestoresWhenFileAppears()
+        {
+            return UniTask.ToCoroutine(async () =>
+            {
+                var missing = Candidate("MissingBody", bodySheetPresent: false);
+                string bodyPath = Path.Combine(missing.Catalog.Source.ImageRoot, "c/body.png");
+                Assert.That(File.Exists(bodyPath), Is.False);
+                Assert.That(await Load(missing), Is.True);
+                AssertPublished(missing);
+                Assert.That(manager.SpriteCatalog.TryGet(56, 0, out _), Is.False);
+                Assert.That(ui.GetHeadSprite(56), Is.Not.Null);
+
+                byte[] png = File.ReadAllBytes(Path.Combine(ProjectRoot,
+                    "Temp/NTSD28PngAlpha/fixture.dat"));
+                File.WriteAllBytes(bodyPath, png);
+                Assert.Throws<InvalidDataException>(() => missing.AssertInputsCurrent());
+                var restored = LoganVisualContentCandidate.Capture(
+                    BattleContentSource.ForLoganRuntime(missing.Catalog.Source.RuntimeRoot));
+                Assert.That(await Load(restored), Is.True);
+                AssertPublished(restored);
+                Assert.That(manager.SpriteCatalog.TryGet(56, 0, out _), Is.True);
+            });
         }
 
         [UnityTest]

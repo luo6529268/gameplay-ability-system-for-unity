@@ -75,6 +75,42 @@ namespace NTSD.Test
         }
 
         [Test]
+        public void ActualStageEntryPublishesJoinAsQueuedRevivalHpAndClearsItOnReuse()
+        {
+            var world = CreateWorld();
+            try
+            {
+                var module = typeof(SimulationWorld).GetField("stageWaveModule",
+                    BindingFlags.Instance | BindingFlags.NonPublic).GetValue(world);
+                var method = module.GetType().GetMethod("SpawnStageImmediateEntrySlot",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(method, Is.Not.Null);
+
+                int firstSlot = (int)method.Invoke(module, new object[]
+                {
+                    new BattleStageSpawnValue(id: Oid, act: 0, hp: 137,
+                        times: 1, x: 300, y: 0, ratio: 0.0, join: 80)
+                });
+                Assert.That(firstSlot, Is.EqualTo(20));
+                var first = world.FindEntityByRuntimeSlotForQuery(firstSlot);
+                Assert.That(first, Is.Not.Null);
+                Assert.That(first.RespawnCount, Is.EqualTo(80));
+                first.FreeEntityLikeExe();
+
+                int secondSlot = (int)method.Invoke(module, new object[]
+                {
+                    new BattleStageSpawnValue(id: Oid, act: 0, hp: 137,
+                        times: 1, x: 300, y: 0, ratio: 0.0, join: 0)
+                });
+                Assert.That(secondSlot, Is.EqualTo(20));
+                var second = world.FindEntityByRuntimeSlotForQuery(secondSlot);
+                Assert.That(second, Is.Not.Null);
+                Assert.That(second.RespawnCount, Is.Zero);
+            }
+            finally { Shutdown(world); }
+        }
+
+        [Test]
         public void ResultsReserveBirthUsesItsFinalHp()
         {
             var world = CreateWorld();

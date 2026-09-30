@@ -28,6 +28,22 @@ namespace NTSD.Test
                 Is.EqualTo(new[] { 8, 2, 9, 0, 5 }));
         }
 
+        [Test]
+        public void ZeroHpType0_SamplesAttackWithoutClearingCurrentOrHistory()
+        {
+            var runtime = CreateRuntime();
+            runtime.ObjType = 0;
+            runtime.HP = 0;
+            SetCurrent(runtime, 4);
+
+            uint mask = NTSD28NativeComboStateMachine.ProcessSampledInput(runtime);
+
+            Assert.That(mask, Is.EqualTo(1u << 4));
+            Assert.That(runtime.NativeInputProxy.Current[4], Is.EqualTo(1));
+            Assert.That(runtime.NativeInputProxy.EdgeWindow[0], Is.EqualTo(5));
+            Assert.That(runtime.InputHistory[5], Is.EqualTo(5));
+        }
+
         [TestCase(3, 4, 0, 4)]
         [TestCase(2, 4, 0, 5)]
         [TestCase(3, 5, 1, 4)]

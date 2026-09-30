@@ -10,13 +10,15 @@ namespace NTSD.Simulation
             int zMin,
             int zMax,
             int perspectiveNear,
-            int perspectiveFar)
+            int perspectiveFar,
+            bool physicalDepthBounds = false)
         {
             StageWidth = stageWidth;
             ZMin = zMin;
             ZMax = zMax;
             PerspectiveNear = perspectiveNear;
             PerspectiveFar = perspectiveFar;
+            PhysicalDepthBounds = physicalDepthBounds;
             IsValid = true;
         }
 
@@ -25,10 +27,17 @@ namespace NTSD.Simulation
         internal int ZMax { get; }
         internal int PerspectiveNear { get; }
         internal int PerspectiveFar { get; }
+        internal bool PhysicalDepthBounds { get; }
         internal bool IsValid { get; }
 
         internal static BattleSimulationStageSnapshot Capture(
             BattleStageRuntimeState stage)
+        {
+            return Capture(stage, false);
+        }
+
+        internal static BattleSimulationStageSnapshot Capture(
+            BattleStageRuntimeState stage, bool physicalDepthBounds)
         {
             return stage == null
                 ? default
@@ -37,11 +46,13 @@ namespace NTSD.Simulation
                     stage.ZMin,
                     stage.ZMax,
                     stage.PerspectiveNear,
-                    stage.PerspectiveFar);
+                    stage.PerspectiveFar,
+                    physicalDepthBounds);
         }
 
-        internal void Apply(BattleStageRuntimeState stage)
+        internal void Apply(SimulationWorld world)
         {
+            BattleStageRuntimeState stage = world?.Runtime?.Stage;
             if (!IsValid || stage == null)
                 return;
 
@@ -51,6 +62,7 @@ namespace NTSD.Simulation
                 ZMax,
                 PerspectiveNear,
                 PerspectiveFar);
+            world.SetStageDepthBoundsDomain(PhysicalDepthBounds);
         }
     }
 
@@ -412,7 +424,7 @@ namespace NTSD.Simulation
                 managedMemoryBoundary?.BeginSimulationWorkerTick();
                 try
                 {
-                    request.Stage.Apply(world.Runtime?.Stage);
+                    request.Stage.Apply(world);
                     if (world.Runtime?.Flow != null)
                         world.Runtime.Flow.SparkRenderFrame = tickIndex;
                     world.ApplyFrameInputSet(frameInput);

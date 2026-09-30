@@ -42,18 +42,7 @@ namespace NTSD.Animation.LF2Objects
         // 然后外层才会进入统一的 frame advance / dynamics 流程。
         public void RunWeaponFrameLogicBeforeAdvance()
         {
-            int state = _weapon.GetResolvedWeaponStateForExternalUse();
             int hitFa = _weapon.Frame?.D?.hit_Fa ?? 0;
-            int currentDataType = _weapon.GetCurrentDataObjectTypeForSimulation();
-
-            if ((currentDataType == (int)LF2ObjectType.ThrowWeapon ||
-                 currentDataType == (int)LF2ObjectType.Drink) &&
-                state == LF2States.WeaponInSky &&
-                (_weapon.Runtime.Vx > NTSDGlobal.Gameplay.WeaponBoomerangVxMax ||
-                 _weapon.Runtime.Vx < NTSDGlobal.Gameplay.WeaponBoomerangVxMin))
-            {
-                _weapon.SetFrameLogicRawFramePreserveAttacking(40);
-            }
 
             if (hitFa == 4)
             {
