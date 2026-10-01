@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "ticks": 128,
+  "entityRows": 256,
+  "entityAndRngFieldsCompared": 4480,
+  "fieldDifferenceCount": 0,
+  "firstFieldDifferences": [],
+  "sourceTerminalHoldCount": 63,
+  "rootTerminalHoldCount": 63,
+  "terminalHoldTicksMatch": true,
+  "firstTerminalHold": 66,
+  "rootReportPassed": true,
+  "rootFailureCode": 0,
+  "uncomparedSourceFields": [
+    "revive_next_hp (not in root JSON trace)",
+    "crt_state (independent host seed)"
+  ]
+}

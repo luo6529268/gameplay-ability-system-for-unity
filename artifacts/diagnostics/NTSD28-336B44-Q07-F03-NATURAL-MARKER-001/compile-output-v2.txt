@@ -1,0 +1,3 @@
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\environment_tail_natural_marker_probe.cpp:11:5: warning: 'int {anonymous}::discover_airborne_routes(const std::filesystem::__cxx11::path&, const std::filesystem::__cxx11::path&)' defined but not used [-Wunused-function]
+   11 | int discover_airborne_routes(const std::filesystem::path& root,
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~

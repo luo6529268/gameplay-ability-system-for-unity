@@ -19,7 +19,7 @@ namespace NTSD.Test
 {
     public sealed class NTSD28Q06CpointThrowRawBindingEditorTests
     {
-        internal const string Output = "artifacts/diagnostics/NTSD28-Q06-CPOINT-THROW-NATIVE-RAW-BINDING-001/";
+        internal const string Output = "artifacts/diagnostics/NTSD28-336B44-Q07-C042-THROW-COUNTER-001/";
         private static readonly Dictionary<string, LF2CharacterDataWrapper> wrappers = new();
 
         [TestCase(1333, 730, 148.0, 148, 159)]

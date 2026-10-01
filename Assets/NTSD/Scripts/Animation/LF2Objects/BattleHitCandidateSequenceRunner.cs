@@ -167,14 +167,15 @@ namespace NTSD.Animation.LF2Objects
                 return false;
             }
 
-            // Alignment contract: R4-COL-003. C++ collision.cpp evaluates this only
-            // after its local kind5/4/9 runtime-itr conversions, then aborts the
-            // whole attacker before any disposition or writer observes this pair.
+            // Alignment contract: NTSD28-336B44-Q07-C052-POSITIVE-REST-CONSUMER-001.
+            // The current release terminates effect21 only at zero victim rest.
             int targetCurrentState = target.Frame?.D?.state ?? 0;
             if (runtimeItr.kind == 0 &&
                 runtimeItr.effect == 21 &&
                 (targetCurrentState == LF2States.Burning ||
-                 targetCurrentState == LF2States.FirenSpecific))
+                 targetCurrentState == LF2States.FirenSpecific) &&
+                world.GetRawRestVrest(target.Runtime.SlotIndex,
+                    attacker.Runtime.SlotIndex) == 0)
             {
                 return true;
             }
@@ -260,6 +261,10 @@ namespace NTSD.Animation.LF2Objects
             if ((!nativeOrdinary || prelude.RunUnarmoredPrelude) && !feedbackOnly &&
                 BattleFirstBodyResponseWriter.IsUnarmoredContinuationDisposition(disposition) && runtimeItr.kind == 0)
             {
+                // Alignment contract: NTSD28-336B44-Q07-C048-BDEFEND-EARLY-RETURN-001.
+                // Native writes this after victim-rest and before first-BDY response can return.
+                if (nativeOrdinary)
+                    target.Runtime.Bdefend = 45;
                 // Alignment contract:
                 // NTSD28-B5-FIRST-BDY-RESPONSE-ATOMIC-PRODUCTION-INTEGRATION-001.
                 // Unarmored prelude and selected-armor feedback precede this current-BDY response.

@@ -1,0 +1,33 @@
+{
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "scope": "controlled four-combatant source GameSession versus original Unity Battle Scene production Driver, first 8 relative ticks",
+  "sourceCsv": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-NATURAL-REACH-001\\o702-t700-a620-b620-05a\\source-ticks.csv",
+  "sourceCsvSha256": "27673FFC384195C22807E28796D2587E92F13D784EB9CA314A265C2325D17998",
+  "sourceRng": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-NATURAL-REACH-001\\o702-t700-a620-b620-05a\\source-rng.csv",
+  "sourceRngSha256": "00ED0D2A09C1AF6D1AE17F512E089311D364E99C3F2793C5BF61650A0D61D952",
+  "unityJson": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C053-DOUBLE-UJ-SCENE-001\\o702-t700-a620-b620-scene-01.json",
+  "unityJsonSha256": "3DF00CCCB9B33235E130ED38FD9B7DDA16F381237E243928788C8673973047C4",
+  "ticks": 8,
+  "fieldsPerTick": 13,
+  "comparedFields": 104,
+  "firstDifference": null,
+  "sourceTick7HitSequence": "2:0:2:156;3:0:2:156",
+  "unityTick7VictimRestByAttacker": {
+    "slot2": 10,
+    "slot3": 10
+  },
+  "unityTick6VictimRestByAttacker": {
+    "slot2": 0,
+    "slot3": 0
+  },
+  "unityGlobalTickOffset": 5,
+  "sceneCleanAfter": true,
+  "sceneHashBefore": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+  "sceneHashAfter": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+  "limitations": [
+    "The source root EXE LFR interface only reconstructs two combatants; this is source GameSession versus Unity Scene, not root four-combatant replay parity.",
+    "Unity result does not export a per-hit event sequence or per-hit latch; two victim-rest writes and shared action/RNG trajectory support the scoped result.",
+    "The four initial combatants are controlled formal-content conditions, not player physical-key natural selection.",
+    "Pool borrow count was not captured by this probe."
+  ]
+}

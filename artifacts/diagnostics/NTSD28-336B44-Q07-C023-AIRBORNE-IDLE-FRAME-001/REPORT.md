@@ -1,5 +1,8 @@
 # NTSD28 336B44 Q07/C023 airborne idle frame timing
 
+> **最新状态 VERIFIED_SCOPED（下方历史保留）：** 2026-09-30 C023 限定关闭（覆盖此前自然/Scene待验）：Guren84从地面受控初始388按正式DAT自然生成619/Y-40，tick21由267→268生成85/action0/Y-22，同tick按计数后转212/counter1/Vy0；tick22 counter0/Vy1.7，后续自然重力/落地/AI均纳入32tick。源/336B44正式根1982声明字段相同/exit0/PASS；原Battle Scene唯一airborne-idle-scene-02 PASS/DONE，107活跃实体行×14字段和32tick六RNG标量共1690/1690、首差0/速度差0。原EditorTundra9.30s0错，idle/nonPlay/noncompiling；正常exit/Scene clean/四保护SHA不变。Scene01 local出生PASS但完整1690字段FAIL62保留：先RNGtick24，再实体tick28。Scene02实测World初始difficulty2，与正式root0不同；只在临时诊断World统一0后整段通过，生产AI未修、默认配置未改。这是fixture口径修正，非新增生产缺陷。既有完整tick5/5、相邻C0223/3/C25G4/4和type3控制复用，不重跑无关测试。关闭共享空中state0后计数转212门；不是物理键选388/所有类型自然入口/全World/checksum/画面或整场证书。Q07与总目标继续ACTIVE，下一G1为F02自然高速武器进入state1000的根/原Scene出口。
+
+
 Status: `UNITY_FULL_TICK_PASS / RUNTIME_PENDING`. Parent: BATCH-04/Q07. Formal root EXE same-state and natural Battle Play remain open.
 
 Current authority: root EXE SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`; playable `BattleWorld28::step_frames_range` / `FrameMachine28::step` increments the current action's counter, then selects action212 for state0 with Y<0 and Y different from collision reference, and reads action212's wait/next in the same tick. Current formal indexed OID2 `c/nar/nar.dat` and staged Unity copy share SHA-256 `6BE721524C8CCA0E293BEB8D6BF1DFEE306CCB948181BDAA94545EDB29418ED9`; formal frame0 is state0/wait3, frame212 is wait1/next0. The source's older-path test is not used to infer current DAT identity.

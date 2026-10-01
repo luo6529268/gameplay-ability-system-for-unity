@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-F05-TERMINAL-COUNTER-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B4RevivalParticipantGateCorrectionEditorTests.cs
@@ -19,3 +19,5 @@ Original Editor RED job `9b3dc358c1f64b378f17f51e3b66cb1f` ran both production f
 The shared `TryHoldTerminalPrimaryState14Frame` helper is now written in the declared LF2Entity file and used by both early-return paths. Before the green class run, extend the already-declared revival participant test class with counter nonzero controls for lives2, queued HP80 and transient slot20; these are gate exclusions, not new behavior. Run those with the two positive cases and the existing class.
 
 Original Editor job `500453a047254fe5bcfd4cc3ca87f605` compiled and passed all 21 tests in the affected revival participant class. Both terminal positive frame modes clear counter7→0 while action14 remains; lives2, queued HP80 and transient slot20 controls avoid forced clear, and existing revival/result handling remains green. Formal root EXE same-state counter, natural Battle Play and whole Q07/Q08 exit remain unverified, so this Change is `RUNTIME_PENDING`. Rollback only the shared helper/calls and owned test additions after review.
+
+2026-10-01 VERIFIED scoped: the existing shared terminal state14 counter-clear production correction now has selected source/formal-root natural128tick4480-field/63-held parity and original Unity Battle Scene same-state80tick3040-field parity. Original Editor compile0, Play clean exit and four protected SHA stable; earlier focused21/21 retained. No additional production change in this follow-up. Q07/Q08 other exits remain open. Acceptance: `artifacts/diagnostics/NTSD28-336B44-Q07-F05-NATURAL-SCENE-001/ACCEPTANCE.md`.

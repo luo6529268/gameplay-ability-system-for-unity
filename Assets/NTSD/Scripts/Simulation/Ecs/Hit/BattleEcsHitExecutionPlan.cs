@@ -3243,11 +3243,8 @@ namespace NTSD.Simulation.Ecs
                      attacker.Runtime.LinkState < 0) &&
                     resolvedItr.effect != 2 &&
                     resolvedItr.effect != 20;
-                type3Frame = ordinaryFjPath
-                    ? responseFrame.hit_Fj
-                    : responseFrame.hit_Uj;
-                if (type3Frame == 0)
-                    type3Frame = ordinaryFjPath ? 30 : 20;
+                type3Frame = BattleDamageWriter.ResolveNativeType3TargetResponseAction(
+                    target, ordinaryFjPath);
             }
             if (!kindTransformCandidate &&
                 target.GetFrameDataById(type3Frame) == null)
@@ -3890,18 +3887,14 @@ namespace NTSD.Simulation.Ecs
                 projection.TargetKnockbackVx = 0.0;
                 projection.TargetKnockbackVy = 0.0;
                 projection.TargetKnockbackVz = 0.0;
-                LF2FrameData responseFrame = target.Frame?.D;
                 bool ordinaryFjPath =
                     (attacker.GetCurrentDataObjectTypeForSimulation() ==
                         (int)LF2ObjectType.Character ||
                      attacker.Runtime.LinkState < 0) &&
                     resolvedItr.effect != 2 &&
                     resolvedItr.effect != 20;
-                targetFrame = ordinaryFjPath
-                    ? responseFrame?.hit_Fj ?? 0
-                    : responseFrame?.hit_Uj ?? 0;
-                if (targetFrame == 0)
-                    targetFrame = ordinaryFjPath ? 30 : 20;
+                targetFrame = BattleDamageWriter.ResolveNativeType3TargetResponseAction(
+                    target, ordinaryFjPath);
                 projection.TargetAttackingCounter = 0;
                 int responseState = target.GetFrameDataById(targetFrame)?.state ?? 0;
                 type3PairReset =

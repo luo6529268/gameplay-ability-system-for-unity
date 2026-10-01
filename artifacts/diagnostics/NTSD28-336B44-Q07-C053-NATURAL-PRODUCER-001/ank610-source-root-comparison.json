@@ -1,0 +1,14 @@
+{
+  "schema": "ntsd28-q07-c053-natural-producer-source-root-comparison/1",
+  "source": "source-run-y0/ank610-y0-jira500.csv",
+  "root": "ank610-root-trace.jsonl",
+  "declaredTicks": 40,
+  "selectedFieldsPerTick": 12,
+  "compared": 480,
+  "matched": 480,
+  "firstDifference": null,
+  "differenceCount": 0,
+  "differences": [],
+  "rootTerminalTickExcluded": true,
+  "nativeParityClaim": false
+}

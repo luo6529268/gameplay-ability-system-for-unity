@@ -1,0 +1,36 @@
+{
+  "job_id": "e609510cfff64d98a0a036b4d3298361",
+  "status": "succeeded",
+  "error": null,
+  "progress": {
+    "completed": 1,
+    "total": 8775,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1790861178311,
+    "last_finished_test_full_name": "NTSD.Test.NTSD28Q07StagedPublicationEditorTests.StagedFormalCandidatePublishesAllOwnersAndRecyclesResources",
+    "last_finished_unix_ms": 1790861309123,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [],
+    "failures_capped": false
+  },
+  "result": {
+    "summary": {
+      "total": 1,
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationSeconds": 131.2531368,
+      "resultState": "Passed"
+    },
+    "results": [
+      {
+        "fullName": "NTSD.Test.NTSD28Q07StagedPublicationEditorTests.StagedFormalCandidatePublishesAllOwnersAndRecyclesResources",
+        "state": "Passed",
+        "message": null,
+        "stackTrace": null
+      }
+    ]
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "createdUtc": "2026-10-01T10:43:09.483964+00:00",
+  "cases": [
+    {
+      "case": "a161-x500-x530",
+      "eventTick": 1,
+      "hashes": {
+        "source-ticks.tsv": {
+          "v1": "7FDFB8BA75A1305F0E5ECD153C13771E6FD520D6D37692B10CA60D6BE7C5F5FF",
+          "v2": "7FDFB8BA75A1305F0E5ECD153C13771E6FD520D6D37692B10CA60D6BE7C5F5FF"
+        },
+        "source-hits.tsv": {
+          "v1": "0C8C29A5C35AAB2DDCA0D99324F98AF00698BEA37D27356FF1F95AAC1DFF9D23",
+          "v2": "0C8C29A5C35AAB2DDCA0D99324F98AF00698BEA37D27356FF1F95AAC1DFF9D23"
+        },
+        "source-packets.lfr": {
+          "v1": "B39290AACC8697E3B05E09D6BCFE5A7B6619E7B83C13A3E84E598383BA53EAA8",
+          "v2": "B39290AACC8697E3B05E09D6BCFE5A7B6619E7B83C13A3E84E598383BA53EAA8"
+        }
+      },
+      "byteEqual": true,
+      "candidateOrder": [
+        1,
+        1,
+        2
+      ],
+      "candidateStatuses": [
+        0,
+        1,
+        0
+      ],
+      "terminationFlags": [
+        0,
+        0,
+        0
+      ],
+      "firstTargetActionAfter": 203,
+      "firstTargetRestAfter": 44,
+      "secondTargetHpAfter": 420
+    },
+    {
+      "case": "a160-x500-x530",
+      "eventTick": 3,
+      "hashes": {
+        "source-ticks.tsv": {
+          "v1": "BC825743CE38640B0D88BAB788221845891265C09FB99E639FE9F5539EAB6824",
+          "v2": "BC825743CE38640B0D88BAB788221845891265C09FB99E639FE9F5539EAB6824"
+        },
+        "source-hits.tsv": {
+          "v1": "CD8763F0972F5CE97EF364CB48D4760AA92020155C1C902793591898ADDE10DA",
+          "v2": "CD8763F0972F5CE97EF364CB48D4760AA92020155C1C902793591898ADDE10DA"
+        },
+        "source-packets.lfr": {
+          "v1": "22C6F09BF4E0E528587641495403E7C0AC7ED0E175A79E5B5F7F4BBD34DBB95C",
+          "v2": "22C6F09BF4E0E528587641495403E7C0AC7ED0E175A79E5B5F7F4BBD34DBB95C"
+        }
+      },
+      "byteEqual": true,
+      "candidateOrder": [
+        1,
+        1,
+        2
+      ],
+      "candidateStatuses": [
+        0,
+        1,
+        0
+      ],
+      "terminationFlags": [
+        0,
+        0,
+        0
+      ],
+      "firstTargetActionAfter": 203,
+      "firstTargetRestAfter": 44,
+      "secondTargetHpAfter": 420
+    }
+  ],
+  "control": {
+    "path": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C052-POSITIVE-REST-REACH-001\\a161-x500-x650-control-v1",
+    "secondTargetHpTick1": 500,
+    "hashes": {
+      "source-ticks.tsv": "3F3BCB8475E59631E468D161F63853825D4F908BBC73B2DB472B0D5093A0E2BA",
+      "source-hits.tsv": "DADF6FE19866EAFA9CC2A179D6464421FC19E09849BDA2FA8BE621AF7A925EB1",
+      "source-packets.lfr": "0D8613D186ADF62CD85C6D6BBD55933130B12904BDC128A66E8A614B988274EE"
+    }
+  },
+  "diagnosticSourceSha256": "58D10F4B00017CD7CEBE748F01371396EC31A4E797DDDA2D61EF89DA5498AB5D",
+  "candidateExeSha256": "AA61A79741ACC1744433B1A3CA1DAEF514B48E516FA2E3DE8601E38ACD62A01B"
+}

@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-F03-ENVIRONMENT-TAIL-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Character.cs
@@ -11,6 +11,9 @@ evidence: docs/ai/TASKS/NTSD28-336B44-Q07-F03-ENVIRONMENT-TAIL-001.md
 -->
 
 # NTSD28-336B44-Q07-F03-ENVIRONMENT-TAIL-001
+
+2026-10-01 VERIFIED scoped: the original production final-frame environment-tail correction is now backed by selected source/formal root natural128tick4480-field/54-event parity and original Unity Battle Scene same-state128tick4608-field parity. Editor Play exited clean; protected Scene/Menu/config hashes unchanged; earlier focused21/21 and canonical2/2 reused. No additional production code or DAT changes after the prior local correction. Parent Q07, C031 physical-key and C032 audio exits remain open. Acceptance: `artifacts/diagnostics/NTSD28-336B44-Q07-F03-NATURAL-SCENE-001/ACCEPTANCE.md`.
+
 
 Created before scripts. Formal physics tail tests final selected action's frame state, clearing +0x320 unless that state remains12; frame-suppressed kind2 returns before this tail. Unity direct landing currently leaves the post-damage marker1, and ordinary nonstate12 retains pre-existing marker. Add test-first RED in the existing owned B4 class, then one shared type0 final-frame tail called by the three character physics paths after action selection; preserve C031 equality and C032 cue timing. No DAT/WAV/Scene/config/nonbattle modification. Rollback only the exact declared hunks after review. Full formal EXE same-state and natural Play evidence remains separate.
 

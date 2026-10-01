@@ -1,0 +1,18 @@
+{
+  "status": "PASS",
+  "sourceTicks": 32,
+  "rootCompletedTicks": 33,
+  "sourceRows": 64,
+  "comparedFields": 1056,
+  "differences": 0,
+  "firstDifference": null,
+  "maxVelocityDifference": 0,
+  "rootReportPassed": true,
+  "positiveWitness": {
+    "sourceTick1Action": 230,
+    "rootTick1Action": 230,
+    "sourceTick1Y": 0,
+    "rootTick1Y": 0
+  },
+  "scope": "14 active entity fields + 5 RNG scalars, source ticks1..32; controlled initial character action180/Y1 neutral; LFR CRT seed and EOF tick33 excluded; not natural hit or Unity Scene"
+}

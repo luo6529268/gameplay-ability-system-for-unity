@@ -1,0 +1,118 @@
+{
+  "status": "PASS",
+  "ticks": 128,
+  "entityRows": 256,
+  "entityAndRngFields": 4480,
+  "fieldDifferences": 0,
+  "firstFieldDifferences": [],
+  "sourceRelationEvents": 54,
+  "rootRelationEvents": 54,
+  "relationEventMatch": true,
+  "firstRelationDifference": null,
+  "witnesses": [
+    {
+      "tick": 1,
+      "source": {
+        "action": "182",
+        "state": "12",
+        "y": "-2",
+        "hp": "500",
+        "environment_state_320": "-20"
+      },
+      "root": {
+        "action": 182,
+        "state": 12,
+        "y": -2,
+        "hp": 500,
+        "environmentState320": -20
+      }
+    },
+    {
+      "tick": 59,
+      "source": {
+        "action": "181",
+        "state": "12",
+        "y": "-14",
+        "hp": "464",
+        "environment_state_320": "-20"
+      },
+      "root": {
+        "action": 181,
+        "state": 12,
+        "y": -14,
+        "hp": 464,
+        "environmentState320": -20
+      }
+    },
+    {
+      "tick": 60,
+      "source": {
+        "action": "185",
+        "state": "12",
+        "y": "0",
+        "hp": "444",
+        "environment_state_320": "1"
+      },
+      "root": {
+        "action": 185,
+        "state": 12,
+        "y": 0,
+        "hp": 444,
+        "environmentState320": 1
+      }
+    },
+    {
+      "tick": 65,
+      "source": {
+        "action": "185",
+        "state": "12",
+        "y": "0",
+        "hp": "444",
+        "environment_state_320": "1"
+      },
+      "root": {
+        "action": 185,
+        "state": 12,
+        "y": 0,
+        "hp": 444,
+        "environmentState320": 1
+      }
+    },
+    {
+      "tick": 66,
+      "source": {
+        "action": "230",
+        "state": "14",
+        "y": "0",
+        "hp": "443",
+        "environment_state_320": "0"
+      },
+      "root": {
+        "action": 230,
+        "state": 14,
+        "y": 0,
+        "hp": 443,
+        "environmentState320": 0
+      }
+    },
+    {
+      "tick": 67,
+      "source": {
+        "action": "230",
+        "state": "14",
+        "y": "0",
+        "hp": "443",
+        "environment_state_320": "0"
+      },
+      "root": {
+        "action": 230,
+        "state": 14,
+        "y": 0,
+        "hp": 443,
+        "environmentState320": 0
+      }
+    }
+  ],
+  "rootReportPassed": true,
+  "scope": "Same LFR and formal content; entity15 fields including environment marker + RNG5 per tick, ordered relation events; excludes independent CRT seed and EOF tick129"
+}

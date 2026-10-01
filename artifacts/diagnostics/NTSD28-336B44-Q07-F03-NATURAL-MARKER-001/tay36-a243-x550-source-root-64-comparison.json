@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "ticks": 64,
+  "entityRows": 128,
+  "entityAndRngFields": 2240,
+  "fieldDifferences": 0,
+  "firstFieldDifferences": [],
+  "sourceRelationEvents": 54,
+  "rootRelationEvents": 54,
+  "relationEventMatch": true,
+  "firstRelationDifference": null,
+  "sourceTick1Marker": -20,
+  "rootTick1Marker": -20,
+  "rootReportPassed": true,
+  "scope": "Same LFR and content; entity15 fields including environment marker + RNG5 per tick, excludes independent CRT seed and EOF tick65; 64-tick source still lacks final nonstate12 clear"
+}

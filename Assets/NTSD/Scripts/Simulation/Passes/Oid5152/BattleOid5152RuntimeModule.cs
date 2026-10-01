@@ -146,7 +146,9 @@ namespace NTSD.Simulation
                 primary.Runtime.Unk330 = primary.ObjectId;
                 primary.Runtime.Unk334 = partner.ObjectId;
                 PublishDefinition(primary, fused);
-                SetAction(primary, record.Action);
+                // Alignment contract: NTSD28-336B44-Q07-C056-FUSION-HOLD-COUNTER-001.
+                primary.DirectWriteNativeRawFramePreserveWaitCounter(record.Action);
+                primary.Runtime.NativeSoundActionLatch = -1;
                 primary.Health.PP = record.Mp;
                 world.InvalidateAiUnifiedRowMembershipForModule();
                 partner.Runtime.OidMergeDormant = true;
@@ -181,9 +183,10 @@ namespace NTSD.Simulation
             int bound = record.Chp == 1 ? primary.Health.HPBound : primary.Health.HPBound / 2;
             primary.Health.HP = partner.Health.HP = hp;
             primary.Health.HPBound = partner.Health.HPBound = bound;
-            partner.Runtime.X = primary.Runtime.X;
-            partner.Runtime.Y = primary.Runtime.Y;
-            partner.Runtime.Z = primary.Runtime.Z;
+            // Alignment contract: NTSD28-336B44-Q07-C054-DEFUSION-PRECISE-POSITION-001.
+            partner.Runtime.X = primary.Runtime.XInt;
+            partner.Runtime.Y = primary.Runtime.YInt;
+            partner.Runtime.Z = primary.Runtime.ZInt;
             partner.Runtime.XInt = primary.Runtime.XInt;
             partner.Runtime.YInt = primary.Runtime.YInt;
             partner.Runtime.ZInt = primary.Runtime.ZInt;
@@ -191,8 +194,8 @@ namespace NTSD.Simulation
                 primary.Runtime.SourceRulePositionInitialized;
             if (primary.Runtime.SourceRulePositionInitialized)
             {
-                partner.Runtime.SourceRuleX = primary.Runtime.SourceRuleX;
-                partner.Runtime.SourceRuleZ = primary.Runtime.SourceRuleZ;
+                partner.Runtime.SourceRuleX = primary.Runtime.SourceRuleXInt;
+                partner.Runtime.SourceRuleZ = primary.Runtime.SourceRuleZInt;
                 partner.Runtime.SourceRuleXInt = primary.Runtime.SourceRuleXInt;
                 partner.Runtime.SourceRuleZInt = primary.Runtime.SourceRuleZInt;
             }

@@ -1,0 +1,104 @@
+{
+  "schema": "ntsd28-c032-natural-audio-comparison/1.0",
+  "sourceEventCount": 6,
+  "unityEventCount": 6,
+  "sourceUnityEventFieldsCompared": 30,
+  "differences": [],
+  "allEventsEqual": true,
+  "entityAndRngIdenticalToF03V2": true,
+  "sceneStatus": "PASS",
+  "scenePhase": "DONE",
+  "sceneExitedPlay": true,
+  "sceneCleanAfter": true,
+  "sceneHashStable": true,
+  "startTick": 5,
+  "source": [
+    {
+      "tick": 1,
+      "order": 0,
+      "cue": "data\\102.wav",
+      "x": 500,
+      "nativeTick": 6
+    },
+    {
+      "tick": 13,
+      "order": 0,
+      "cue": "data\\101.wav",
+      "x": 500,
+      "nativeTick": 18
+    },
+    {
+      "tick": 23,
+      "order": 0,
+      "cue": "data\\102.wav",
+      "x": 500,
+      "nativeTick": 28
+    },
+    {
+      "tick": 60,
+      "order": 0,
+      "cue": "data\\016.wav",
+      "x": 373,
+      "nativeTick": 65
+    },
+    {
+      "tick": 66,
+      "order": 0,
+      "cue": "data\\016.wav",
+      "x": 360,
+      "nativeTick": 71
+    },
+    {
+      "tick": 96,
+      "order": 0,
+      "cue": "data\\012.wav",
+      "x": 359,
+      "nativeTick": 101
+    }
+  ],
+  "unity": [
+    {
+      "tick": 1,
+      "order": 0,
+      "cue": "data\\102.wav",
+      "x": 500,
+      "nativeTick": 6
+    },
+    {
+      "tick": 13,
+      "order": 0,
+      "cue": "data\\101.wav",
+      "x": 500,
+      "nativeTick": 18
+    },
+    {
+      "tick": 23,
+      "order": 0,
+      "cue": "data\\102.wav",
+      "x": 500,
+      "nativeTick": 28
+    },
+    {
+      "tick": 60,
+      "order": 0,
+      "cue": "data\\016.wav",
+      "x": 373,
+      "nativeTick": 65
+    },
+    {
+      "tick": 66,
+      "order": 0,
+      "cue": "data\\016.wav",
+      "x": 360,
+      "nativeTick": 71
+    },
+    {
+      "tick": 96,
+      "order": 0,
+      "cue": "data\\012.wav",
+      "x": 359,
+      "nativeTick": 101
+    }
+  ],
+  "formalRootAudioTraceAvailable": false
+}

@@ -116,7 +116,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void NativePrecombatResultLatchesFirstTerminalGroupsAcrossRevival()
+        public void NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn()
         {
             var world = new SimulationWorld();
             world.Runtime.Match.BattleGameModeId = 1;
@@ -137,6 +137,13 @@ namespace NTSD.Test
 
             second.Health.HP = 500;
             tickSystem.RunReleaseTick(3, buildPresentation: false);
+            Assert.That(world.Runtime.Results.NativeResultTimer, Is.EqualTo(1));
+            Assert.That(world.Runtime.Results.NativeResultOutputTimer, Is.EqualTo(1));
+            Assert.That(world.Runtime.Results.NativeLivingGroupMask,
+                Is.EqualTo((1UL << 1) | (1UL << 2)));
+
+            second.Health.HP = 0;
+            tickSystem.RunReleaseTick(4, buildPresentation: false);
             Assert.That(world.Runtime.Results.NativeResultTimer, Is.EqualTo(2));
             Assert.That(world.Runtime.Results.NativeLivingGroupMask, Is.EqualTo(1UL << 1));
         }

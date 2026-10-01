@@ -1,0 +1,25 @@
+--resource-root
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime
+--complete-vfs-root
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime
+--headless-playback-lfr
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C044-KISAME-NATURAL-REACH-001\a314-x1200-v3\source-packets.lfr
+--headless-playback-report
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C044-KISAME-NATURAL-REACH-001\a314-x1200-root-v1-report.json
+--headless-playback-trace
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C044-KISAME-NATURAL-REACH-001\a314-x1200-root-v1-trace.jsonl
+--character
+17
+--enemy
+2
+--background
+1
+--lfr-slot0-action
+314
+--lfr-slot1-action
+0
+--lfr-slot0-mp
+500
+--lfr-slot1-mp
+500
+--p2-human

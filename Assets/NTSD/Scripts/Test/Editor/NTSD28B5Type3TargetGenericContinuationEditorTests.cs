@@ -66,6 +66,49 @@ namespace NTSD.Test.Editor
             Assert.That(target.Frame.N, Is.EqualTo(expectedAction));
         }
 
+        [Test]
+        public void UjResponse_UsesLatchedActionFrameAfterCurrentActionChanges()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(
+                world, 8081, 0, LF2ObjectType.SpecialAttack);
+            TypedCharacter target = CreateEntity(
+                world, 8082, 1, LF2ObjectType.SpecialAttack);
+            PrepareTarget(target, hitFj: 0, hitUj: 0);
+            target.GetFrameDataById(153).hit_Uj = 156;
+            target.ImmediateFrame(156);
+            target.Trans.SyncDirectFrameData(
+                target.Frame.D.wait, target.Frame.D.next, 153);
+
+            Assert.That(target.Frame.N, Is.EqualTo(156));
+            Assert.That(target.Trans.WaitCounter, Is.EqualTo(153));
+            InvokeTail(world, attacker, target, Effect(2));
+
+            Assert.That(target.Frame.N, Is.EqualTo(156));
+            Assert.That(target.Runtime.Frame, Is.EqualTo(156));
+            Assert.That(target.Runtime.SpecialHitLatch0EB, Is.True);
+        }
+
+        [Test]
+        public void FjResponse_KeepsReadingCurrentActionFrame()
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(
+                world, 8083, 0, LF2ObjectType.Character);
+            TypedCharacter target = CreateEntity(
+                world, 8084, 1, LF2ObjectType.SpecialAttack);
+            PrepareTarget(target, hitFj: 0, hitUj: 0);
+            target.GetFrameDataById(153).hit_Fj = 88;
+            target.GetFrameDataById(156).hit_Fj = 77;
+            target.ImmediateFrame(156);
+            target.Trans.SyncDirectFrameData(
+                target.Frame.D.wait, target.Frame.D.next, 153);
+
+            InvokeTail(world, attacker, target, Effect(0));
+
+            Assert.That(target.Frame.N, Is.EqualTo(77));
+        }
+
         [TestCase(LF2ObjectType.Character, 0, 30)]
         [TestCase(LF2ObjectType.SpecialAttack, 0, 20)]
         [TestCase(LF2ObjectType.Character, 2, 20)]

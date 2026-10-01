@@ -1,0 +1,9 @@
+{
+  "scenarioPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-scenario-left-x350.json",
+  "outputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-left-x350-v2.raw.jsonl",
+  "domainOutputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-left-x350-v2.domain.jsonl",
+  "inputRngOutputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-left-x350-v2.input-rng.jsonl",
+  "loganRuntimeRoot": "Assets/NTSD/Content/LoganRuntime",
+  "domainVersion": "v2",
+  "resultPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/unity-left-x350-v2.result.txt"
+}

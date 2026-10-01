@@ -1,0 +1,32 @@
+{
+  "stagedDatCount": 338,
+  "missingInFormal": [],
+  "sha256Mismatched": [
+    "a\\ama\\ama2.dat",
+    "a\\blas\\blas.dat",
+    "a\\ble\\ble.dat",
+    "a\\fir\\fla.dat",
+    "a\\fla\\fla.dat",
+    "a\\gro\\gro2.dat",
+    "a\\pof\\pof.dat",
+    "a\\roc\\roc.dat",
+    "a\\sna\\sna.dat",
+    "a\\spi\\spi.dat",
+    "a\\tra\\tra.dat",
+    "a\\wal\\wal.dat",
+    "a\\zzz\\zzz.dat",
+    "c\\kar\\a\\jug.dat",
+    "c\\kar\\a\\sas.dat",
+    "c\\kar\\kar.dat",
+    "data\\bgm.dat",
+    "data\\fusion.dat",
+    "data\\kind.dat",
+    "data\\resource.dat",
+    "data\\sound.dat",
+    "w\\b.dat",
+    "w\\e.dat",
+    "w\\l.dat",
+    "w\\x.dat"
+  ],
+  "scope": "decoded_dat/*.dat only; no background or mode deployment authorization"
+}

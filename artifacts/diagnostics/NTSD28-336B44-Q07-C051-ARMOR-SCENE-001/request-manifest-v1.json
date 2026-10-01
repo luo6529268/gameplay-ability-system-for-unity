@@ -1,0 +1,33 @@
+{
+  "UnityEditorPid": 105896,
+  "Payloads": [
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ARMOR-SCENE-001\\armor97-x550-scene-v1.request.json",
+      "Bytes": 65,
+      "Result": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ARMOR-SCENE-001\\armor97-x550-scene-v1.json",
+      "TargetOid": 97,
+      "Sha256": "95300545E5AE0203212C4EB9B167D42978B0CE3840E7B511A84313C952D8E588",
+      "Case": "armor97-x550-scene-v1"
+    },
+    {
+      "Path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ARMOR-SCENE-001\\control2-x550-scene-v1.request.json",
+      "Bytes": 65,
+      "Result": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ARMOR-SCENE-001\\control2-x550-scene-v1.json",
+      "TargetOid": 2,
+      "Sha256": "587BE6E8F5A5283AEA21E51BE7B2562A90672A90C7EF156F84AE27507C1893A0",
+      "Case": "control2-x550-scene-v1"
+    }
+  ],
+  "ActiveScene": "Assets/NTSD/Scene/NTSD_Battle.unity",
+  "Observed": "2026-10-01T17:56:19.9918560+08:00",
+  "RequestPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q07_C051ArmorScenePlay.request.json",
+  "SceneDirty": false,
+  "RequestExistedBefore": false,
+  "Protected": {
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3",
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7"
+  },
+  "Schema": "ntsd28-c051-armor-scene-request-pre/1"
+}

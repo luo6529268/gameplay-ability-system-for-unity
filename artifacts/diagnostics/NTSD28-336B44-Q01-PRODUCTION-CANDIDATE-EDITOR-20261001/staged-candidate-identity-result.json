@@ -1,0 +1,24 @@
+{
+  "job_id": "a32b0629f05c4597bbe4e02dde38ba79",
+  "status": "failed",
+  "error": null,
+  "progress": {
+    "completed": 1,
+    "total": 8775,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1790861126062,
+    "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28Q07StagedCandidateIdentityEditorTests.StagedCandidateMatchesFormalRuntime",
+    "last_finished_unix_ms": 1790861148233,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [
+      {
+        "full_name": "NTSD.Test.Editor.NTSD28Q07StagedCandidateIdentityEditorTests.StagedCandidateMatchesFormalRuntime",
+        "message": "  String lengths are both 64. Strings differ at index 0.\r\n  Expected: \"4EFE1D2A6A51C20742EA839CC5EAC2BA0D09EE9E4A5888E77C8AC35D4AA0C58C\"\r\n  But was:  \"23FFA4B6BD7212D58D9C7D8C1E12C6A16CA2D3FA53515EBAB42A3CAE4C6EFB74\"\r\n  -----------^\r\n"
+      }
+    ],
+    "failures_capped": false
+  },
+  "result": null
+}

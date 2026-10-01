@@ -1,0 +1,36 @@
+{
+  "sourceControllerRows": 54,
+  "firstController": {
+    "tick": 12,
+    "slot": 50,
+    "action": 50,
+    "hp": 500,
+    "aiTarget": -1,
+    "x": 501,
+    "y": 4,
+    "z": 651
+  },
+  "sourcePreassignedChildRows": 47,
+  "firstPreassignedChild": {
+    "tick": 14,
+    "slot": 51,
+    "action": 1,
+    "hp": 0,
+    "aiTarget": 0,
+    "x": 501,
+    "y": -6,
+    "z": 651
+  },
+  "childHpValues": [
+    0
+  ],
+  "childTargetValues": [
+    0
+  ],
+  "childAction60Rows": 0,
+  "targetE4PositiveRows": 0,
+  "targetHpValues": [
+    500
+  ],
+  "sourceWindowTicks": 60
+}

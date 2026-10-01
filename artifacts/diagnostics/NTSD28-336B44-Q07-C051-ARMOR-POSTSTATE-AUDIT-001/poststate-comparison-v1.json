@@ -1,0 +1,113 @@
+{
+  "schema": "ntsd28-c051-armor-poststate-audit/1",
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "scope": "saved root formal EXE trace vs saved original Unity full Driver raw; target slot1; no new runtime execution",
+  "fields": [
+    "action",
+    "frameCounter",
+    "state",
+    "facing",
+    "hp",
+    "mp",
+    "effectiveMaxHp",
+    "baseMaxHp",
+    "reviveLives30c",
+    "armorHp",
+    "weaponHp31C",
+    "motionHoldTimerB4",
+    "renderPhase008",
+    "specialHitLatch0eb",
+    "owner",
+    "team"
+  ],
+  "cases": [
+    {
+      "case": "armor97-x550",
+      "targetOid": 97,
+      "ticks": 12,
+      "fieldChecks": 192,
+      "differences": [],
+      "tick3": {
+        "root": {
+          "action": 0,
+          "hp": 495,
+          "mp": 500,
+          "effectiveMaxHp": 499,
+          "armorHp": 0,
+          "motionHoldTimerB4": -5
+        },
+        "unity": {
+          "action": 0,
+          "hp": 495,
+          "mp": 500,
+          "effectiveMaxHp": 499,
+          "armorHp": 0,
+          "motionHoldTimerB4": -5
+        },
+        "rootHitEvents": [
+          {
+            "kind": "hit",
+            "status": "applied",
+            "attacker": 51,
+            "target": 1,
+            "candidate": 0,
+            "hpDamage": 5,
+            "mpDamage": 0
+          }
+        ]
+      },
+      "sourceProbe": {
+        "effect23Candidates": 1,
+        "effect23Applied": 1,
+        "armorApplies": 1
+      },
+      "rootTraceSha256": "2d50a4d7dc08cd04b13a402f64c0decb43e565d89be0267c530b0abf842ee402",
+      "unityRawSha256": "ef17247c890660cdabd6954100f3757bce5bd4288508f0f192eebc90ee6f7523",
+      "sourceProbeSha256": "89428df245226a3c4cf1ae62e2d0889f85782be46877fcf7dd78217a39dcf75a"
+    },
+    {
+      "case": "control2-x550",
+      "targetOid": 2,
+      "ticks": 12,
+      "fieldChecks": 192,
+      "differences": [],
+      "tick3": {
+        "root": {
+          "action": 180,
+          "hp": 450,
+          "mp": 500,
+          "effectiveMaxHp": 484,
+          "armorHp": 0,
+          "motionHoldTimerB4": -3
+        },
+        "unity": {
+          "action": 180,
+          "hp": 450,
+          "mp": 500,
+          "effectiveMaxHp": 484,
+          "armorHp": 0,
+          "motionHoldTimerB4": -3
+        },
+        "rootHitEvents": [
+          {
+            "kind": "hit",
+            "status": "applied",
+            "attacker": 51,
+            "target": 1,
+            "candidate": 0,
+            "hpDamage": 50,
+            "mpDamage": 0
+          }
+        ]
+      },
+      "sourceProbe": {
+        "effect23Candidates": 1,
+        "effect23Applied": 1,
+        "armorApplies": 0
+      },
+      "rootTraceSha256": "4592c3a4b7c2ea8807995e7e664195a6e005f49fd0af56e63505248603973330",
+      "unityRawSha256": "ca71c946618b84711ae52d75a0c590e1acd95c215f922d73f1b5a6b2f27e450b",
+      "sourceProbeSha256": "6cf21e7d195c3fe1effee74c00b3372c2d3f6ecc6211935549a230f81881db13"
+    }
+  ]
+}

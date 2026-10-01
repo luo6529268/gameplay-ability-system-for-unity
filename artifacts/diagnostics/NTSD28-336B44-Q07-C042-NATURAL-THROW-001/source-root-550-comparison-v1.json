@@ -1,0 +1,81 @@
+{
+  "scope": "source csv tick1..80 vs selected formal root trace tick1..80, two slots, declared fields; root mandatory extra tick81 excluded",
+  "ticks": 80,
+  "fields_compared": 1440,
+  "differences": 80,
+  "first_differences": [
+    {
+      "tick": 1,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 2,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 3,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 4,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 5,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 6,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 7,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 8,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 9,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 10,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 11,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    },
+    {
+      "tick": 12,
+      "field": "crt_state",
+      "source": 1758127634,
+      "root": 3374725112
+    }
+  ],
+  "root_replay_passed": true
+}

@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "sceneProbeStatus": "PASS",
+  "phase": "DONE",
+  "ticks": 128,
+  "entityRows": 256,
+  "fieldsCompared": 4608,
+  "differenceCount": 0,
+  "firstDifference": null,
+  "firstDifferences": [],
+  "clockBefore": [
+    5,
+    2,
+    5
+  ],
+  "clockAtStart": [
+    0,
+    0,
+    0
+  ],
+  "sceneCleanAfter": true,
+  "exitedPlay": true
+}

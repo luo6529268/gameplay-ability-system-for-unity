@@ -130,9 +130,6 @@ namespace NTSD.Animation.LF2Objects
             if (attackerState2000 && itr.dvx != 0)
                 return attacker.GetRuntimeXInt() < victim.GetRuntimeXInt() ? itr.dvx : -itr.dvx;
 
-            if (itr.effect == 22 || itr.effect == 23)
-                return victim.GetRuntimeXInt() <= attacker.GetRuntimeXInt() ? itr.dvx : -itr.dvx;
-
             return defaultDvx;
         }
 

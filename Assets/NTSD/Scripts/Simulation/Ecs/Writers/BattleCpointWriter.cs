@@ -94,14 +94,12 @@ namespace NTSD.Simulation.Ecs
                 {
                     attacker.DirectWriteNativeRawFramePreserveWaitCounter(0);
                     victim.DirectWriteNativeRawFramePreserveWaitCounter(181);
-                    attacker.AttackingCounter = 1;
-                    victim.AttackingCounter = 1;
+                    attacker.HitCount = 1;
+                    victim.HitCount = 1;
                     victim.KnockbackVx = attacker.Runtime.XInt > victim.Runtime.XInt
                         ? -4f
                         : 4f;
                     victim.KnockbackVy = -3f;
-                    victim.Runtime.Vx = victim.KnockbackVx;
-                    victim.Runtime.Vy = victim.KnockbackVy;
                     return;
                 }
             }
@@ -342,11 +340,11 @@ namespace NTSD.Simulation.Ecs
             }
 
             attacker.AttackingCounter = 1;
-            if (cpoint.Cover != 3)
+            if (cpoint.Recover != 3)
             {
-                if (cpoint.Cover != 1)
+                if (cpoint.Recover != 1)
                     attacker.FrameDelay = 2;
-                if (cpoint.Cover != 2)
+                if (cpoint.Recover != 2)
                     victim.FrameDelay = -3;
             }
 
@@ -517,7 +515,6 @@ namespace NTSD.Simulation.Ecs
 
             victim.SetCpointRawFramePreserveWait(cpoint.Vaction);
             victim.SetCpointRawPrevFrame2(cpoint.Vaction);
-            victim.AttackingCounter = 0;
         }
 
         private static void ApplyCpointResourceTransfer(

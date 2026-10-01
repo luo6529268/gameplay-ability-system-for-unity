@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "sourceTicks": 32,
+  "rootCompletedTicks": 33,
+  "sourceRows": 64,
+  "comparedFields": 1056,
+  "differences": 0,
+  "firstDifference": null,
+  "maxVelocityDifference": 0,
+  "rootReportPassed": true,
+  "scope": "14 active entity fields + 5 RNG scalars, source ticks1..32; LFR initial CRT seed differs; root EOF tick33 excluded; controlled initial character action180/Y0 and neutral inputs, not natural hit/penetration/Unity parity"
+}

@@ -1,0 +1,35 @@
+[
+  {
+    "case": "a314-x550",
+    "roundingOnlyFields": 5,
+    "firstDifferences": [],
+    "fieldsChecked": 3200,
+    "ticks": 160,
+    "equal": true,
+    "rootCompletedTicks": 161,
+    "rootRows": 162,
+    "rootReportPassed": true
+  },
+  {
+    "case": "a316-x550",
+    "roundingOnlyFields": 5,
+    "firstDifferences": [],
+    "fieldsChecked": 3200,
+    "ticks": 160,
+    "equal": true,
+    "rootCompletedTicks": 161,
+    "rootRows": 162,
+    "rootReportPassed": true
+  },
+  {
+    "case": "a314-x1200",
+    "roundingOnlyFields": 0,
+    "firstDifferences": [],
+    "fieldsChecked": 3200,
+    "ticks": 160,
+    "equal": true,
+    "rootCompletedTicks": 161,
+    "rootRows": 162,
+    "rootReportPassed": true
+  }
+]

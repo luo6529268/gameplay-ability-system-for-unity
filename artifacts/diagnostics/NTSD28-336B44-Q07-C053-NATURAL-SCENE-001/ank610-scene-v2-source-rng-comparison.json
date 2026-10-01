@@ -1,0 +1,17 @@
+{
+  "scope": "8 production ticks; source CSV/root entity fields plus current playable source-seed native RNG recurrence",
+  "sourceSeed": 682973786,
+  "rootLfrSeed": 0,
+  "rootLfrSeedBoundary": "LFR manager does not encode BattleConfig28.random_seed; playback config_={} uses default seed 0 and restores synchronized table only",
+  "entityFieldsCompared": 144,
+  "rngFieldsCompared": 40,
+  "totalFieldsCompared": 184,
+  "differences": [],
+  "firstDifference": null,
+  "unityTick7": {
+    "childHp": 475,
+    "victimRestFromAttacker": 10,
+    "childAction": 156
+  },
+  "formalSourceTick7Hit": "one applied/effect2/Uj156 in source CSV; Unity probe does not export per-hit event"
+}

@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "probeStatus": "PASS",
+  "ticks": 80,
+  "fieldsCompared": 3040,
+  "fieldDifferenceCount": 0,
+  "firstFieldDifferences": [],
+  "witnesses": [
+    {
+      "tick": 24,
+      "source": {
+        "action": "181",
+        "state": "12",
+        "counter": "1",
+        "hp": "0",
+        "revive_lives": "1",
+        "revive_next_hp": "0"
+      },
+      "unity": {
+        "action": 181,
+        "state": 12,
+        "counter": 1,
+        "hp": 0,
+        "reviveLives": 1,
+        "reviveNextHp": 0
+      }
+    },
+    {
+      "tick": 65,
+      "source": {
+        "action": "185",
+        "state": "12",
+        "counter": "2",
+        "hp": "-20",
+        "revive_lives": "1",
+        "revive_next_hp": "0"
+      },
+      "unity": {
+        "action": 185,
+        "state": 12,
+        "counter": 2,
+        "hp": -20,
+        "reviveLives": 1,
+        "reviveNextHp": 0
+      }
+    },
+    {
+      "tick": 66,
+      "source": {
+        "action": "230",
+        "state": "14",
+        "counter": "0",
+        "hp": "-21",
+        "revive_lives": "1",
+        "revive_next_hp": "0"
+      },
+      "unity": {
+        "action": 230,
+        "state": 14,
+        "counter": 0,
+        "hp": -21,
+        "reviveLives": 1,
+        "reviveNextHp": 0
+      }
+    },
+    {
+      "tick": 67,
+      "source": {
+        "action": "230",
+        "state": "14",
+        "counter": "0",
+        "hp": "-21",
+        "revive_lives": "1",
+        "revive_next_hp": "0"
+      },
+      "unity": {
+        "action": 230,
+        "state": 14,
+        "counter": 0,
+        "hp": -21,
+        "reviveLives": 1,
+        "reviveNextHp": 0
+      }
+    },
+    {
+      "tick": 80,
+      "source": {
+        "action": "230",
+        "state": "14",
+        "counter": "0",
+        "hp": "-21",
+        "revive_lives": "1",
+        "revive_next_hp": "0"
+      },
+      "unity": {
+        "action": 230,
+        "state": 14,
+        "counter": 0,
+        "hp": -21,
+        "reviveLives": 1,
+        "reviveNextHp": 0
+      }
+    }
+  ],
+  "clockBefore": [
+    5,
+    2,
+    5
+  ],
+  "clockAtStart": [
+    0,
+    0,
+    0
+  ],
+  "sceneCleanAfter": true,
+  "exitedPlay": true
+}

@@ -1,0 +1,42 @@
+{
+  "differenceCount": 0,
+  "sourceRootAuthority": "formal 336B44 root same-LFR 80-tick declared comparison separately verified",
+  "rngFields": [
+    "crt_state|crtState",
+    "crt_calls|crtCalls",
+    "custom_counter|customCounter",
+    "custom_index|customIndex",
+    "custom_calls|customCalls"
+  ],
+  "sceneCleanAfter": true,
+  "sceneHashBefore": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+  "runId": "bee75-a355-x550-natural-scene-01",
+  "comparedValues": 1200,
+  "comparisonTolerance": 0.001,
+  "entityFields": [
+    "actor_action|action|0",
+    "target_action|action|1",
+    "actor_counter|counter|0",
+    "target_counter|counter|1",
+    "actor_x|x|0",
+    "target_x|x|1",
+    "actor_y|y|0",
+    "target_y|y|1",
+    "actor_vx|vx|0",
+    "target_vx|vx|1",
+    "target_vy|vy|1",
+    "actor_hp|hp|0",
+    "target_hp|hp|1",
+    "catch_target|caughtSlot|0",
+    "catch_timeout|caughtDuration|0"
+  ],
+  "sceneHashAfter": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+  "sourceTicks": 60,
+  "exitedPlay": true,
+  "unityTicks": 60,
+  "schema": "ntsd28-c042-source-unity-scene-comparison-v1",
+  "fieldsPerTick": 20,
+  "firstDifferences": [],
+  "status": "CAPTURED",
+  "phase": "DONE"
+}

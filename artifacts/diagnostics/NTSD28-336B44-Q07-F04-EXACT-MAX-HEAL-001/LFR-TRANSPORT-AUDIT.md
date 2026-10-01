@@ -1,0 +1,23 @@
+# F04 正式根回放初态与自然治疗写入链（只读）
+
+当前权威：根 EXE SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` 及对应 playable source，正式 `resources/runtime` DAT。此审计不执行 F04 的正式根/Unity Play 验收，不晋升 `UNITY_FOCUSED_PASS / RUNTIME_PENDING`。
+
+`GameSessionLfr28::snapshot_entity` 的 13 个物理槽字段是 active/object_id/group/render_phase/X/Y/Z/MP/owner/baseHP/entity_33c/participant_class/damage_scale，不含 `EntityState28::heal_timer_e4`。`GameSessionLfrPlayback28` 从这 13 列重建 `CombatantConfig28`，令当前 HP 等于 baseHP；没有 `E4` 初态恢复。因而 source-only 手设 `heal_timer_e4=9` 的对照不能通过 LFR 给正式根建立同一初态，类似 F03 首轮的风险必须明确排除。精确入口为正式 source 的 `ntsd28_playable/src/game_session_lfr.cpp` 中 `snapshot_entity` 与物理槽解码分支。
+
+当前正式内容有可达的自然生产线索，但尚未作 root/Scene 实测：`resources/runtime/decoded_dat/w/6.dat` 属 OID600/type4，在 action62/71/81 的 OPoint 生成 OID219/action50；`w/e.dat` 属 OID219/type3，action51 的 `hit_Fa:5` 通过 `NativeAi28::step_non_character_hit_fa` 为友方角色生成带目标槽的 OID219/action0，其 action0～3 的 `hit_Fa:4` 在满足同队、相对 X±30、Y-80..Y、Z±10 的目标条件时把 `target->heal_timer_e4=100` 并进入 action60。OID219 的普通 OPoint 实体没有自动具备该预赋目标，因此不能只把它放在目标附近或手填计时，就称自然治疗链。`BattleWorld28::advance_native_healing_slot` 随后每 tick 递减 E4，在余数为8的倍数且 HP<max 时最多加8；严格 overshoot 才清计时。
+
+下一步有界门：找到项目战斗内正式 OID600 的自然生成/投掷入口，并先在源码完整 tick 证明 OID219/action51→预赋目标的子实体→目标 E4=100→恰好回满→再受伤时继续治疗，随后用同 LFR 在 336B44 根上验证；若用户项目地图不产出此武器或条件不可达，记录为条件性出口，按总表允许的可达性顺序先推进 F05。不得修改正式 DAT、原版背景/模式 DAT、非战斗流程或正式根二进制，也不得把源码手设计时器当作正式根证书。
+
+2026-10-01 增量可达性审计：正式暂存 `decoded_dat/data/data.txt` 将 OID600 编到 `w/6.dat`、OID219 编到 `w/e.dat`；逐项搜索这套 decoded DAT 的 `opoint oid: 600` 没有命中，精确 `hit_Fa: 5/4` 仅命中 `w/e.dat`。OID600 的 action62/71/81 确实各生成 OID219/action50，但这只证明 **OID600 已在场时** 的后继内容链。Unity `BattleRandomWeaponDropModule.RunNormalDrop` 所用 `SimulationRandomWeaponDropBuffer` 仅接受 OID100～199；`SpawnMode2RandomWeapons` 也只遍历100～199，所以两条随机武器生产入口均不能生成600。当前正式 playable `SimulationTickDriver28::step` 的锁定 Normal/Casual/Practice mode 随机掉落候选表为空，不能拿 Unity 加载了600的目录事实推断根 EXE 会随机掉出它。尚未排除战斗启动显式配置、其他运行时写者或玩家携带链，故结论是 **自然入口未证**，不是宣称 OID600 全局不可达。
+
+F04 的下一可执行证据分两层：先在受控战斗初态放入正式 OID600，保持其后 action、OPoint、目标槽和 E4 完全由生产完整 tick 自然生成，验证机制及根同 LFR；这仍不能充当普通玩家局自然入口证书。另行找到并复现项目实际战斗中把600放入 World 的入口后，再验同一治疗链的原 Scene Play；若入口确实不存在，则把 F04 标为当前内容条件性可达，并以已有精确回满/超限/再次受伤的聚焦检查保留共用规则保证。两层未完成前保持 `RUNTIME_PENDING`。
+
+2026-10-01 **正式剧情入口补证（更正上文“其它写者未证”的覆盖范围）**：正式 `data/stage.dat` 的 mission1 指向 `s/1/stage1.dat`；该子表 `Stage_1-1` 的 `bound:1326` phase 第35行与 `Stage_1-2` 的 `bound:1326` phase 第103行均有 `id:600 act:0 x:100 y:-250 team:1 #healscroll`。正式 `s/2/stage2.dat` 第38行也有 `id:600 act:0`。当前 playable `GameSession28::begin_native_story_phase` 遍历 phase spawn，`spawn_native_story_instance` 将行 OID/action 写入 `SpawnRequest28` 并在 World 生成。因此正式剧情内容**定义了** OID600 的非随机入场路径；上文关于普通/F8随机武器不能产出600仍成立。此证据只证父/子DAT与 playable 源码的条件链，未证根EXE实际到达相应phase、玩家获取并用出OID600、治疗子体写E4或恰好回满。
+
+Unity生产暂存根当前没有用户暂缓部署的 `data/stage.dat` 与 `s/1/stage1.dat`，本任务不为F04恢复剧情内容。F04仍为 `UNITY_FOCUSED_PASS / RUNTIME_PENDING / STORY_CONTENT_DEFINED_ENTRY / USER_STAGE_ASSET_HOLD`。下一最小可执行出口仍是受控完整tick让正式 OID600 已在场，然后用正式源、根同LFR与Unity原Scene比较治疗链；不得将此受控入口或剧情DAT静态行写作普通玩家战斗自然入场验收。
+
+2026-10-01 **受控根回放槽位门更正（只读）**：现有 `Tools/NTSD28Q07Diagnostics/fast_weapon_oid600_full_tick_source_probe.cpp` 在 `GameSession28::initialize` 后手动把 OID600/action0 放入物理槽50，并手设 Y=-20 与 Vx。正式 `GameSessionLfr28::write_initial_manager` 只序列化物理槽0～19；`GameSessionLfrPlayback28::load` 也只从这些槽重建战斗初态，且每个活跃槽按 `base_hp` 初始化当前 HP、默认动作0及默认速度。正式 CLI 仅提供槽0/1的初始 action/facing/MP 覆盖。因此该既有槽50、手设速度样本 **不能** 直接录成正式根同初态 F04 证书，前段“受控完整tick后用同LFR”仍需额外解决这个运输前置条件。源码层允许 `GameSession28::reset` 从配置在0～19槽生成 catalog 中的 type4 OID600；但把它放槽2/action0是否能在正式根重建并按相同 owner、group、participant class、控制归属完整推进，尚未运行验证。下一步先做最小的槽2/默认动作0可重建性测试；若失败，应保留正式源/Unity受控机制与根不可比的边界，不改正式EXE、DAT或用户暂缓的stage资源。此条不改变 F04 的 `RUNTIME_PENDING` 状态。
+
+2026-10-01 **受控槽2 LFR 运输门已限定通过**：独立Task `NTSD28-336B44-Q07-F04-LFR-SLOT2-001` 配置正式OID600/type4/action0在物理槽2，由 GameSession 初始化，不再沿用槽50/手设速度。源录制12tick，正式源本地LFR回放初始+12tick三槽39/39声明采样无差；同一LFR交正式根336B44 EXE，报告 passed/failure0，独立比较初始+12tick三槽10字段390/390零差。根tick12出现OID219/action50、tick13进入51。此项仅证明受控初态可运输；用户暂缓stage的剧情自然入口、OID219后继目标/E4、精确回满、Unity Play仍待。首次链接漏 -municode 和首轮过早校验终行失败均保留。详[独立报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-F04-LFR-SLOT2-001/REPORT.md)。
+
+2026-10-01 **受控治疗链60tick有界阴性（覆盖“槽2载体通过后继续找E4”）**：正式OID600槽2/source完整tick两次CSV与LFR逐SHA同；源/本地七槽427/427采样无差，336B44根同LFR报告passed/failure0，源/根可比字段2983/2983零差。源OID219/action51于tick14生成aiTarget0子体，HP0；当前正式NativeAi behavior5创建子体HP0、behavior4在HP≤0提前返回，所以源60tick内E4始终0、无action60。根trace直接可见子体HP0和无action60，但不导出E4；Unity现有hitFa5初始HP0/hitFa4 HP≤0门仅静态同向，未跑Unity此链。此结果只排除所检受控初态，非全局不可达；F04精确回满聚焦证书保留但正式根/自然Play仍待。stage用户暂缓不变；G1转其它可达Q07首差。[报告](../../../artifacts/diagnostics/NTSD28-336B44-Q07-F04-HEAL-CHAIN-001/REPORT.md)。

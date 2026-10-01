@@ -1,0 +1,128 @@
+{
+  "sourceRows": 60,
+  "fields": [
+    "actor_action",
+    "first_action",
+    "first_hp",
+    "first_x",
+    "second_action",
+    "second_hp",
+    "second_x",
+    "count417",
+    "first417slot",
+    "first417action",
+    "first417x",
+    "first417y",
+    "first417z",
+    "count211",
+    "first211slot",
+    "first211action",
+    "first211x",
+    "first211y",
+    "first211z"
+  ],
+  "rootV1": {
+    "compared": 1140,
+    "differenceCount": 193,
+    "firstDifferences": [
+      {
+        "tick": 6,
+        "field": "first_action",
+        "source": 615,
+        "root": 1
+      },
+      {
+        "tick": 7,
+        "field": "first417x",
+        "source": 561,
+        "root": 576
+      },
+      {
+        "tick": 7,
+        "field": "first417y",
+        "source": -19,
+        "root": -4
+      },
+      {
+        "tick": 8,
+        "field": "first417x",
+        "source": 561,
+        "root": 576
+      },
+      {
+        "tick": 8,
+        "field": "first417y",
+        "source": -19,
+        "root": -4
+      },
+      {
+        "tick": 9,
+        "field": "first417x",
+        "source": 561,
+        "root": 576
+      },
+      {
+        "tick": 9,
+        "field": "first417y",
+        "source": -19,
+        "root": -4
+      },
+      {
+        "tick": 10,
+        "field": "first_x",
+        "source": 588,
+        "root": 589
+      },
+      {
+        "tick": 10,
+        "field": "first417action",
+        "source": 51,
+        "root": 49
+      },
+      {
+        "tick": 10,
+        "field": "first417y",
+        "source": 0,
+        "root": -4
+      }
+    ],
+    "tick24RootHits": [],
+    "tick24TargetHp": [
+      500,
+      500
+    ]
+  },
+  "rootV2": {
+    "compared": 1140,
+    "differenceCount": 0,
+    "firstDifferences": [],
+    "tick24RootHits": [
+      [
+        "applied",
+        null,
+        null
+      ],
+      [
+        "rejected",
+        null,
+        null
+      ],
+      [
+        "applied",
+        null,
+        null
+      ]
+    ],
+    "tick24TargetHp": [
+      420,
+      420
+    ]
+  },
+  "sha256": {
+    "source-ticks.tsv": "ccee57b5d42882788e2e56a9cf57cf2cc436d7ace1fb5bbfa292c86d1b82f6b6",
+    "source-hits.tsv": "eecde32a9374fd7886f6d59516be3b0aef5827e41ed06caa2688d206beff5219",
+    "source-packets.lfr": "b825098b9a05798afc18a8a3d5a8162c2fa150fefff0837fab460f7ff50822bc",
+    "root-near-v1-trace.jsonl": "0822642c45bec0b5de590209c3ab57ecce77adb3dbf3fc9a020b585087671930",
+    "root-near-v2-trace.jsonl": "f3578208996032e5f1c5fac2aff36ecd4bd3411cb52a627d95b3730502c53190"
+  }
+}

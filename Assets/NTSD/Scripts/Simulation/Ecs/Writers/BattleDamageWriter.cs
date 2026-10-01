@@ -1160,6 +1160,8 @@ namespace NTSD.Simulation.Ecs
                 : null;
             if (brokenArmor != null)
                 victim.Runtime.RuntimeArmorHp118 = -1;
+            bool skipOrdinaryVerticalReaction =
+                BattleNativeOrdinaryHitPrelude.IsSpecialLinkRestGate(victim, itr);
 
             LF2HitResolveRuntimeData.RecordDamageEffectSound(attacker, itr);
             int effectiveInjury = ResolveNativeUnarmoredHpInjury(
@@ -1186,7 +1188,7 @@ namespace NTSD.Simulation.Ecs
                 victim,
                 victimHitCounters,
                 itr,
-                brokenArmor != null);
+                brokenArmor != null || skipOrdinaryVerticalReaction);
 
             if (itr.kind != 9)
             {
@@ -1223,7 +1225,8 @@ namespace NTSD.Simulation.Ecs
 
             CompleteNativeBrokenArmorFallback(victim, brokenArmor);
 
-            if (brokenArmor != null && knockdown)
+            if (brokenArmor != null && knockdown &&
+                !skipOrdinaryVerticalReaction)
             {
                 ApplyStandardVerticalKnockback(
                     victim,
@@ -1237,15 +1240,18 @@ namespace NTSD.Simulation.Ecs
 
             if (knockdown)
             {
-                bool facingRight = victim.Dirh() > 0;
-                int fallFrame = facingRight
-                    ? (victim.KnockbackVx <= 0.0
-                        ? LF2StandardFrames.FallingFront
-                        : LF2StandardFrames.FallingBack)
-                    : (victim.KnockbackVx >= 0.0
-                        ? LF2StandardFrames.FallingFront
-                        : LF2StandardFrames.FallingBack);
-                victim.DirectWriteFramePreserveWaitCounter(fallFrame);
+                if (!skipOrdinaryVerticalReaction)
+                {
+                    bool facingRight = victim.Dirh() > 0;
+                    int fallFrame = facingRight
+                        ? (victim.KnockbackVx <= 0.0
+                            ? LF2StandardFrames.FallingFront
+                            : LF2StandardFrames.FallingBack)
+                        : (victim.KnockbackVx >= 0.0
+                            ? LF2StandardFrames.FallingFront
+                            : LF2StandardFrames.FallingBack);
+                    victim.DirectWriteFramePreserveWaitCounter(fallFrame);
+                }
                 LF2HitResolveRuntimeData.ApplyKnockdownHeldPairVrest(
                     victim,
                     attacker);
@@ -2238,6 +2244,21 @@ namespace NTSD.Simulation.Ecs
                 holdOwner.FrameDelay = -holdOwner.FrameDelay;
         }
 
+        internal static int ResolveNativeType3TargetResponseAction(
+            LF2Entity target,
+            bool ordinaryFjPath)
+        {
+            // Alignment contract: NTSD28-336B44-Q07-C053-TYPE3-LATCHED-UJ-001.
+            LF2FrameData responseFrame = ordinaryFjPath
+                ? target?.Frame?.D
+                : target?.FrameCache?.GetNativeFrameDataById(
+                    target?.Runtime?.WaitCounter ?? 0);
+            int action = ordinaryFjPath
+                ? responseFrame?.hit_Fj ?? 0
+                : responseFrame?.hit_Uj ?? 0;
+            return action != 0 ? action : ordinaryFjPath ? 30 : 20;
+        }
+
         internal static bool ApplyNativeType3TargetGenericContinuation(
             SimulationWorld world,
             LF2Entity attacker,
@@ -2280,11 +2301,8 @@ namespace NTSD.Simulation.Ecs
                  attacker.Runtime.LinkState < 0) &&
                 interaction.effect != 2 &&
                 interaction.effect != 20;
-            int action = ordinaryFjPath
-                ? responseFrame.hit_Fj
-                : responseFrame.hit_Uj;
-            if (action == 0)
-                action = ordinaryFjPath ? 30 : 20;
+            int action = ResolveNativeType3TargetResponseAction(
+                target, ordinaryFjPath);
 
             target.DirectWriteNativeRawFramePreserveWaitCounter(action);
             target.AttackingCounter = 0;

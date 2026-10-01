@@ -1,0 +1,44 @@
+{
+  "operationId": "NTSD28-C050-SCENE-REQUEST-20261001-001",
+  "createdUtc": "2026-10-01T10:22:58.106753+00:00",
+  "projectRoot": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity",
+  "requestAbsolutePath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28_Q07_C050VerticalScenePlay.request.json",
+  "requestBefore": {
+    "exists": false,
+    "gitTracked": false
+  },
+  "editorPid": 105896,
+  "payloads": [
+    {
+      "source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x520-scene-v1-request.json",
+      "bytes": 56,
+      "sha256": "30B7A8278DE6B534E3812BDF687D757D4C1963A9322F13381E4EE8DCF4AFC145",
+      "targetX": 520,
+      "runId": "x520-scene-v1"
+    },
+    {
+      "source": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x1200-scene-v1-request.json",
+      "bytes": 58,
+      "sha256": "AC7A8960E827AAB9930A4C2FA0CB9988E7A4FABC6DE90D6F91B73BC614AE483E",
+      "targetX": 1200,
+      "runId": "x1200-scene-v1"
+    }
+  ],
+  "resultsBefore": {
+    "x520-scene-v1": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x520-scene-v1.json",
+      "exists": false
+    },
+    "x1200-scene-v1": {
+      "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x1200-scene-v1.json",
+      "exists": false
+    }
+  },
+  "protectedBefore": {
+    "Assets/NTSD/Scene/NTSD_Menu.unity": "DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3",
+    "Assets/NTSD/Scene/NTSD_Battle.unity": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60",
+    "Assets/NTSD/Config/GameConfig/GameConfig.asset": "0527D737A1FA38FC56B51D00DC6E96A421D3C67222546368B147C2D074CB8EA7",
+    "Assets/NTSD/Resources/ProjectBattleModeConfig.asset": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+  },
+  "gitStatusRequest": ""
+}

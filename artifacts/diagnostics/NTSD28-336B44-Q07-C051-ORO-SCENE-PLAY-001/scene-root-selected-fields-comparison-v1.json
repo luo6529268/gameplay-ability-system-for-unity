@@ -1,0 +1,30 @@
+{
+  "schema": "ntsd28-c051-scene-root-selected-fields/1",
+  "scope": "Controlled Battle Scene versus current 336B44 root LFR; only exported fields, not whole World parity",
+  "results": [
+    {
+      "side": "right-x550",
+      "sceneReport": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-SCENE-PLAY-001\\right-x550-v1.json",
+      "sceneReportSha256": "389a429fbcab33703557b81d05a407614995bda167bcc05c844448312b0d76d4",
+      "rootTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\right-x550-root-v1-trace.jsonl",
+      "rootTraceSha256": "aa327e22f85000294699ea689795e90b02eff38194954294ce41024d1d415fbe",
+      "ticks": 12,
+      "fieldChecks": 78,
+      "differences": [],
+      "sceneStatus": "SCOPED_PASS",
+      "sceneCleanAfter": true
+    },
+    {
+      "side": "left-x350",
+      "sceneReport": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-SCENE-PLAY-001\\left-x350-v1.json",
+      "sceneReportSha256": "5d151477efa0f7485973b5a34498855791158e733bc334079eecda6bdce371ea",
+      "rootTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\left-x350-root-v2-trace.jsonl",
+      "rootTraceSha256": "cf2701700e543ab7c37b132d1d1a0337db1814c6440846fc8f16c6eaad5bb9b2",
+      "ticks": 12,
+      "fieldChecks": 78,
+      "differences": [],
+      "sceneStatus": "SCOPED_PASS",
+      "sceneCleanAfter": true
+    }
+  ]
+}

@@ -1,0 +1,546 @@
+{
+  "authority_exe_sha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "formal_root": "J:\\QQFile\\NTSD2.8.3.3 zip\\NTSD2.8.3.3\\NTSD 2.8-Logan\\resources\\runtime",
+  "staged_root": "Assets\\NTSD\\Content\\LoganRuntime",
+  "catalog_sha256": {
+    "formal": "0aab4a0ffee70f17d31ddf952254c798dfef185fedd55cacec28c7a66181e6fe",
+    "staged": "0aab4a0ffee70f17d31ddf952254c798dfef185fedd55cacec28c7a66181e6fe"
+  },
+  "data_index_sha256": {
+    "formal": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0",
+    "staged": "3ed7de4918aa7b5e94fe73a2b7d9b43ded9d10575dd182b9ca2b647eae29a8f0"
+  },
+  "items": [
+    {
+      "oid": 2,
+      "source_path": "c/nar/nar.dat",
+      "catalog_row_match": true,
+      "catalog_plain_dat_sha256": "6be721524c8cca0e293beb8d6bf1dfee306ccb948181bdaa94545edb29418ed9",
+      "formal_sha256": "6be721524c8cca0e293beb8d6bf1dfee306ccb948181bdaa94545edb29418ed9",
+      "staged_sha256": "6be721524c8cca0e293beb8d6bf1dfee306ccb948181bdaa94545edb29418ed9",
+      "bytes_match": true,
+      "catalog_hash_match": true,
+      "formal_size": 166928,
+      "staged_size": 166928,
+      "catalog_sprite_ref_count": 5,
+      "distinct_png_ref_count": 5,
+      "png_line_occurrences": 8,
+      "ref_count_match": true
+    },
+    {
+      "oid": 73,
+      "source_path": "c/hay/hay.dat",
+      "catalog_row_match": true,
+      "catalog_plain_dat_sha256": "629c256d94fad3f338d5bc27218d667486f622240e67f23caf8352c0738da315",
+      "formal_sha256": "629c256d94fad3f338d5bc27218d667486f622240e67f23caf8352c0738da315",
+      "staged_sha256": "629c256d94fad3f338d5bc27218d667486f622240e67f23caf8352c0738da315",
+      "bytes_match": true,
+      "catalog_hash_match": true,
+      "formal_size": 120405,
+      "staged_size": 120405,
+      "catalog_sprite_ref_count": 7,
+      "distinct_png_ref_count": 7,
+      "png_line_occurrences": 10,
+      "ref_count_match": true
+    },
+    {
+      "oid": 211,
+      "source_path": "a/fir/fir.dat",
+      "catalog_row_match": true,
+      "catalog_plain_dat_sha256": "3ecd42106333d9391085f04f877d597a6b00b7673720d671f86b62e9408b43f0",
+      "formal_sha256": "3ecd42106333d9391085f04f877d597a6b00b7673720d671f86b62e9408b43f0",
+      "staged_sha256": "3ecd42106333d9391085f04f877d597a6b00b7673720d671f86b62e9408b43f0",
+      "bytes_match": true,
+      "catalog_hash_match": true,
+      "formal_size": 28894,
+      "staged_size": 28894,
+      "catalog_sprite_ref_count": 3,
+      "distinct_png_ref_count": 3,
+      "png_line_occurrences": 3,
+      "ref_count_match": true
+    },
+    {
+      "oid": 417,
+      "source_path": "c/hay/a/sla.dat",
+      "catalog_row_match": true,
+      "catalog_plain_dat_sha256": "2631206d8d62c9d7b38dfdee76c3a7f3d68021f07f3f7012da430f88fa218bd1",
+      "formal_sha256": "2631206d8d62c9d7b38dfdee76c3a7f3d68021f07f3f7012da430f88fa218bd1",
+      "staged_sha256": "2631206d8d62c9d7b38dfdee76c3a7f3d68021f07f3f7012da430f88fa218bd1",
+      "bytes_match": true,
+      "catalog_hash_match": true,
+      "formal_size": 13172,
+      "staged_size": 13172,
+      "catalog_sprite_ref_count": 8,
+      "distinct_png_ref_count": 8,
+      "png_line_occurrences": 8,
+      "ref_count_match": true
+    }
+  ],
+  "images": [
+    {
+      "path": "a/fir/fir.png",
+      "references": [
+        {
+          "oid": 211,
+          "role": "file(0-17)",
+          "dat_line": 2
+        }
+      ],
+      "formal_sha256": "9a441ec2f0496c5116819a6ab040dc840f3678d08b432a245799cc8ac1207caf",
+      "staged_sha256": "9a441ec2f0496c5116819a6ab040dc840f3678d08b432a245799cc8ac1207caf",
+      "bytes_match": true,
+      "formal_size": 12148,
+      "staged_size": 12148,
+      "png_dimensions": [
+        360,
+        192
+      ]
+    },
+    {
+      "path": "a/fir/fir2.png",
+      "references": [
+        {
+          "oid": 211,
+          "role": "file(18-33)",
+          "dat_line": 3
+        }
+      ],
+      "formal_sha256": "fc2228835f4015a65c15c1b6c032b73f8f94ea992b934a9b9ff6ef9814319fbb",
+      "staged_sha256": "fc2228835f4015a65c15c1b6c032b73f8f94ea992b934a9b9ff6ef9814319fbb",
+      "bytes_match": true,
+      "formal_size": 6123,
+      "staged_size": 6123,
+      "png_dimensions": [
+        144,
+        200
+      ]
+    },
+    {
+      "path": "a/fir/fir3.png",
+      "references": [
+        {
+          "oid": 211,
+          "role": "file(34-48)",
+          "dat_line": 4
+        }
+      ],
+      "formal_sha256": "fe24193901ca56bca6107151b0052f0ae414e96e3dbb25d5e05ebe67c543adfa",
+      "staged_sha256": "fe24193901ca56bca6107151b0052f0ae414e96e3dbb25d5e05ebe67c543adfa",
+      "bytes_match": true,
+      "formal_size": 81104,
+      "staged_size": 81104,
+      "png_dimensions": [
+        800,
+        480
+      ]
+    },
+    {
+      "path": "c/0/M.png",
+      "references": [
+        {
+          "oid": 2,
+          "role": "layer:pic",
+          "dat_line": 29
+        },
+        {
+          "oid": 2,
+          "role": "layer:pic",
+          "dat_line": 30
+        },
+        {
+          "oid": 2,
+          "role": "layer:pic",
+          "dat_line": 31
+        },
+        {
+          "oid": 2,
+          "role": "layer:pic",
+          "dat_line": 32
+        },
+        {
+          "oid": 73,
+          "role": "layer:pic",
+          "dat_line": 37
+        },
+        {
+          "oid": 73,
+          "role": "layer:pic",
+          "dat_line": 38
+        },
+        {
+          "oid": 73,
+          "role": "layer:pic",
+          "dat_line": 39
+        },
+        {
+          "oid": 73,
+          "role": "layer:pic",
+          "dat_line": 40
+        }
+      ],
+      "formal_sha256": "3df00a8d69c0f8654f820085d946932c8de256978c9ecb6b34b1da3e0572e6d8",
+      "staged_sha256": "3df00a8d69c0f8654f820085d946932c8de256978c9ecb6b34b1da3e0572e6d8",
+      "bytes_match": true,
+      "formal_size": 197436,
+      "staged_size": 197436,
+      "png_dimensions": [
+        2020,
+        2020
+      ]
+    },
+    {
+      "path": "c/hay/a/sla1.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(0-3)",
+          "dat_line": 2
+        }
+      ],
+      "formal_sha256": "a399514f02a4b76cbd8a9b966e632e4114366984f61687c632210304ac683e41",
+      "staged_sha256": "a399514f02a4b76cbd8a9b966e632e4114366984f61687c632210304ac683e41",
+      "bytes_match": true,
+      "formal_size": 13936,
+      "staged_size": 13936,
+      "png_dimensions": [
+        680,
+        400
+      ]
+    },
+    {
+      "path": "c/hay/a/sla2.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(4-7)",
+          "dat_line": 3
+        }
+      ],
+      "formal_sha256": "f930b5651e1772023b136db1bf9c078e671a8961e31bc72f56c406c145d6c555",
+      "staged_sha256": "f930b5651e1772023b136db1bf9c078e671a8961e31bc72f56c406c145d6c555",
+      "bytes_match": true,
+      "formal_size": 22374,
+      "staged_size": 22374,
+      "png_dimensions": [
+        679,
+        724
+      ]
+    },
+    {
+      "path": "c/hay/a/sla3.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(8-11)",
+          "dat_line": 4
+        }
+      ],
+      "formal_sha256": "23a234df27094f8332bdb1e9f2700f9cd97b97f40f37f87f8cf57d3c4877937c",
+      "staged_sha256": "23a234df27094f8332bdb1e9f2700f9cd97b97f40f37f87f8cf57d3c4877937c",
+      "bytes_match": true,
+      "formal_size": 22221,
+      "staged_size": 22221,
+      "png_dimensions": [
+        679,
+        724
+      ]
+    },
+    {
+      "path": "c/hay/a/sla4.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(12-15)",
+          "dat_line": 5
+        }
+      ],
+      "formal_sha256": "0e024d123abbc2f99cd387495d1d3c8760b4b67d13320ecf0072beac8d607b9d",
+      "staged_sha256": "0e024d123abbc2f99cd387495d1d3c8760b4b67d13320ecf0072beac8d607b9d",
+      "bytes_match": true,
+      "formal_size": 24617,
+      "staged_size": 24617,
+      "png_dimensions": [
+        679,
+        724
+      ]
+    },
+    {
+      "path": "c/hay/a/sla5.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(16-23)",
+          "dat_line": 6
+        }
+      ],
+      "formal_sha256": "9ed153c89a2658ebfed290529fd3696774fb53b122374b9b409e53dfdf3a1fed",
+      "staged_sha256": "9ed153c89a2658ebfed290529fd3696774fb53b122374b9b409e53dfdf3a1fed",
+      "bytes_match": true,
+      "formal_size": 17705,
+      "staged_size": 17705,
+      "png_dimensions": [
+        680,
+        724
+      ]
+    },
+    {
+      "path": "c/hay/a/sla6.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(24)",
+          "dat_line": 7
+        }
+      ],
+      "formal_sha256": "4800373eeb328b947c5504ebe63722bbb81c756820d795f87417479da601c238",
+      "staged_sha256": "4800373eeb328b947c5504ebe63722bbb81c756820d795f87417479da601c238",
+      "bytes_match": true,
+      "formal_size": 4884,
+      "staged_size": 4884,
+      "png_dimensions": [
+        4000,
+        1600
+      ]
+    },
+    {
+      "path": "c/hay/a/sla7.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(25)",
+          "dat_line": 8
+        }
+      ],
+      "formal_sha256": "12f672beef6f2bb0b4d83f3ffdd049bf8127bd1bf6f8772a680d164f80918296",
+      "staged_sha256": "12f672beef6f2bb0b4d83f3ffdd049bf8127bd1bf6f8772a680d164f80918296",
+      "bytes_match": true,
+      "formal_size": 3696,
+      "staged_size": 3696,
+      "png_dimensions": [
+        4000,
+        1600
+      ]
+    },
+    {
+      "path": "c/hay/a/sla8.png",
+      "references": [
+        {
+          "oid": 417,
+          "role": "file(26-27)",
+          "dat_line": 9
+        }
+      ],
+      "formal_sha256": "2616556486461a0384c0230cd4f21d642ce5d4bf5797fe951c7b245abb495988",
+      "staged_sha256": "2616556486461a0384c0230cd4f21d642ce5d4bf5797fe951c7b245abb495988",
+      "bytes_match": true,
+      "formal_size": 460,
+      "staged_size": 460,
+      "png_dimensions": [
+        160,
+        80
+      ]
+    },
+    {
+      "path": "c/hay/hay1.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "file(0-119)",
+          "dat_line": 6
+        }
+      ],
+      "formal_sha256": "32386278de9d514725f59faaf27dd345501dbdbd9030b6b704807c8355bb8e6a",
+      "staged_sha256": "32386278de9d514725f59faaf27dd345501dbdbd9030b6b704807c8355bb8e6a",
+      "bytes_match": true,
+      "formal_size": 65624,
+      "staged_size": 65624,
+      "png_dimensions": [
+        800,
+        960
+      ]
+    },
+    {
+      "path": "c/hay/hay2.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "file(120-125)",
+          "dat_line": 7
+        }
+      ],
+      "formal_sha256": "c82f6a4c8c7b67a799a8cf0c996f1937384fef81e8ba861652013f2bbff4a60f",
+      "staged_sha256": "c82f6a4c8c7b67a799a8cf0c996f1937384fef81e8ba861652013f2bbff4a60f",
+      "bytes_match": true,
+      "formal_size": 7751,
+      "staged_size": 7751,
+      "png_dimensions": [
+        360,
+        240
+      ]
+    },
+    {
+      "path": "c/hay/hay3.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "file(126-145)",
+          "dat_line": 8
+        }
+      ],
+      "formal_sha256": "52a2ccfae6345e8682beaca672c8398dee1348f9fbca3738691863b79414ee15",
+      "staged_sha256": "52a2ccfae6345e8682beaca672c8398dee1348f9fbca3738691863b79414ee15",
+      "bytes_match": true,
+      "formal_size": 7668,
+      "staged_size": 7668,
+      "png_dimensions": [
+        800,
+        160
+      ]
+    },
+    {
+      "path": "c/nar/nar.png",
+      "references": [
+        {
+          "oid": 2,
+          "role": "file(0-199)",
+          "dat_line": 6
+        }
+      ],
+      "formal_sha256": "391e7a17a04a4db5e103656571aa5ea2ce9dadb91e377f1fa917df9920b57fb5",
+      "staged_sha256": "391e7a17a04a4db5e103656571aa5ea2ce9dadb91e377f1fa917df9920b57fb5",
+      "bytes_match": true,
+      "formal_size": 102800,
+      "staged_size": 102800,
+      "png_dimensions": [
+        799,
+        1600
+      ]
+    },
+    {
+      "path": "sprite/face/hayate_f.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "head",
+          "dat_line": 3
+        }
+      ],
+      "formal_sha256": "0d3774ec17fc246db30620756b272fea2c491de86dcd10d58ea1e22b5f8c28b7",
+      "staged_sha256": "0d3774ec17fc246db30620756b272fea2c491de86dcd10d58ea1e22b5f8c28b7",
+      "bytes_match": true,
+      "formal_size": 14706,
+      "staged_size": 14706,
+      "png_dimensions": [
+        145,
+        223
+      ]
+    },
+    {
+      "path": "sprite/face/naruto_f.png",
+      "references": [
+        {
+          "oid": 2,
+          "role": "head",
+          "dat_line": 3
+        }
+      ],
+      "formal_sha256": "18c508fe1016f975253b5968b04bbbb68664fb58128cd937c2b158020b3dd9c4",
+      "staged_sha256": "18c508fe1016f975253b5968b04bbbb68664fb58128cd937c2b158020b3dd9c4",
+      "bytes_match": true,
+      "formal_size": 14258,
+      "staged_size": 14258,
+      "png_dimensions": [
+        145,
+        223
+      ]
+    },
+    {
+      "path": "sprite/small/hay_s.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "small",
+          "dat_line": 4
+        }
+      ],
+      "formal_sha256": "269fd22ec6bab0b79e3ccde284df7b0d91716a3682759c5941e57a022bfc7389",
+      "staged_sha256": "269fd22ec6bab0b79e3ccde284df7b0d91716a3682759c5941e57a022bfc7389",
+      "bytes_match": true,
+      "formal_size": 3426,
+      "staged_size": 3426,
+      "png_dimensions": [
+        60,
+        54
+      ]
+    },
+    {
+      "path": "sprite/small/naruto_s.png",
+      "references": [
+        {
+          "oid": 2,
+          "role": "small",
+          "dat_line": 4
+        }
+      ],
+      "formal_sha256": "c0402cb7f0d94c52d0d2905da3e828d41a9a78f8e0d82c4993c8004f7d966c6f",
+      "staged_sha256": "c0402cb7f0d94c52d0d2905da3e828d41a9a78f8e0d82c4993c8004f7d966c6f",
+      "bytes_match": true,
+      "formal_size": 3287,
+      "staged_size": 3287,
+      "png_dimensions": [
+        60,
+        54
+      ]
+    },
+    {
+      "path": "sprite/smallb/hay_s.png",
+      "references": [
+        {
+          "oid": 73,
+          "role": "smallb",
+          "dat_line": 5
+        }
+      ],
+      "formal_sha256": "6e47406ee5a15320070377eb0db3a30032683491af24676d2f0839b05bc5c8d2",
+      "staged_sha256": "6e47406ee5a15320070377eb0db3a30032683491af24676d2f0839b05bc5c8d2",
+      "bytes_match": true,
+      "formal_size": 2253,
+      "staged_size": 2253,
+      "png_dimensions": [
+        40,
+        55
+      ]
+    },
+    {
+      "path": "sprite/smallb/naruto_s.png",
+      "references": [
+        {
+          "oid": 2,
+          "role": "smallb",
+          "dat_line": 5
+        }
+      ],
+      "formal_sha256": "9c12b2a2b38d2efcddf0986d5ee49f5b02dfc626bc0e9dd08a1c4801c270ad4a",
+      "staged_sha256": "9c12b2a2b38d2efcddf0986d5ee49f5b02dfc626bc0e9dd08a1c4801c270ad4a",
+      "bytes_match": true,
+      "formal_size": 2328,
+      "staged_size": 2328,
+      "png_dimensions": [
+        40,
+        51
+      ]
+    }
+  ],
+  "summary": {
+    "dat_count": 4,
+    "dat_bytes_match": 4,
+    "catalog_rows_match": 4,
+    "catalog_dat_hash_match": 4,
+    "catalog_sprite_ref_count_match": 4,
+    "png_unique_count": 22,
+    "png_bytes_match": 22,
+    "png_object_path_pairs": 23,
+    "png_line_occurrences": 29,
+    "valid_formal_png_headers": 22
+  }
+}

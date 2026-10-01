@@ -1,0 +1,11 @@
+{
+  "source_ticks": 12,
+  "fields_per_tick": 7,
+  "equal_field_comparisons": 84,
+  "first_difference": null,
+  "differences": [],
+  "root_extra_ticks": [
+    13
+  ],
+  "timing_note": "source living_groups is pre-driver BattleFlow outcome; world_living_groups here is post-step entities. At tick 2 source flow groups=1 while child already exists in world."
+}

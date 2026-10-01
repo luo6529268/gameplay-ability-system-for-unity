@@ -408,6 +408,16 @@ must not stop an unrelated Server-only READY package.
 The detailed decision and revocation contract is in the Server repository at
 `docs/ai/DECISIONS/S0-S9-STANDING-CLIENT-AUTHORIZATION-002.md`.
 
+### 13.3 文件删除、移动与覆盖强制留痕
+
+用户于 2026-10-01 明确要求今后所有文件删除处理必须留有记录，避免再次无法追查原因。完整合同与模板见 `docs/ai/file-removal-audit-contract.md`，统一索引为 `docs/ai/FILE-OPERATIONS/INDEX.md`。
+
+- 本任务或受委派代理执行、安排脚本执行的删除、清理、移动、替换、覆盖及可能丢弃内容的 Git 操作，执行前必须建立唯一 Operation ID、写入索引，保存原因、用户授权来源、执行者、逐文件路径清单、操作前 SHA-256/Git 状态、备份或准确 Git 恢复来源及拟执行命令。目录不能代替逐文件清单；HEAD不能作为未提交或未跟踪内容的备份。
+- 执行后立即追加实际命令、开始/结束时间（含时区）、进程/任务标识（能取得时）、退出码、原始输出位置、操作后逐文件状态及范围外变化检查。失败、部分成功和工具审批拒绝同样必须记录；记录及备份放在操作范围之外。
+- 没有操作前记录、精确范围、有效授权或可核恢复来源时不执行。已有授权直接引用，不重复要求批准；记录本身不授予删除权，也不能绕过工具拒绝。
+- 发现未计划缺失时保存现场并建立事件记录，区分事实、时间相关性与未知执行者；不得把 Unity Refresh、Git 删除状态或目录时间戳当作删除原因。缺证时不得补写命令或归因。
+- 历史记录只追加更正，不抹去失败或旧事实；脚本仍遵守13.1。本规则不授权新增清理脚本、Git hook或系统文件监控。
+
 ## 14. Future Mobile Rendering Note
 
 大型移动端渲染重构不属于普通战斗逻辑修复。用户明确要求继续该计划时，再读取项目记忆中的 `Unity NTSD future mobile rendering overhaul plan`。

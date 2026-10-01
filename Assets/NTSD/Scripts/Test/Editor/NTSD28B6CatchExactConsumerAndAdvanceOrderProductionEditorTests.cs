@@ -7,6 +7,7 @@ using System.Text;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Simulation;
+using NTSD.Simulation.Ecs;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -173,8 +174,15 @@ namespace NTSD.Test
             Assert.That(caught.Runtime.Vz, Is.EqualTo(33));
         }
 
-        [Test]
-        public void NegativeDecreaseRelease_UsesFrameCounterCarrierAndIsTerminal()
+        [TestCase(BattleEcsFramePostProcessPassMode.Legacy, 0, 10, 4)]
+        [TestCase(BattleEcsFramePostProcessPassMode.Legacy, 10, 0, -4)]
+        [TestCase(BattleEcsFramePostProcessPassMode.DataOriented, 0, 10, 4)]
+        [TestCase(BattleEcsFramePostProcessPassMode.DataOriented, 10, 0, -4)]
+        public void NegativeDecreaseRelease_DefersImpulseUntilFramePostProcess(
+            BattleEcsFramePostProcessPassMode postMode,
+            int catcherX,
+            int caughtX,
+            int expectedVx)
         {
             SimulationWorld world = CreatePair(
                 0,
@@ -200,10 +208,11 @@ namespace NTSD.Test
             caught.HitCount = 12;
             catcher.Runtime.KeyRight = 1;
             catcher.SwitchDir("left");
-            catcher.Runtime.SetPosition(0, 0, 0);
-            caught.Runtime.SetPosition(10, 0, 0);
+            catcher.Runtime.SetPosition(catcherX, 0, 0);
+            caught.Runtime.SetPosition(caughtX, 0, 0);
             catcher.Runtime.SyncIntegerPosition();
             caught.Runtime.SyncIntegerPosition();
+            world.ConfigureBattleEcsFramePostProcessPassForDiagnostics(postMode);
             ulong rngCalls = world.Rng.CallCount;
 
             catcher.RunCpointCheckStep10();
@@ -211,16 +220,27 @@ namespace NTSD.Test
             Assert.That(catcher.Runtime.CaughtDuration, Is.EqualTo(-4));
             Assert.That(catcher.Frame.N, Is.Zero);
             Assert.That(caught.Frame.N, Is.EqualTo(181));
-            Assert.That(catcher.AttackingCounter, Is.EqualTo(1));
-            Assert.That(caught.AttackingCounter, Is.EqualTo(1));
-            Assert.That(catcher.HitCount, Is.EqualTo(11));
-            Assert.That(caught.HitCount, Is.EqualTo(12));
-            Assert.That(caught.Runtime.Vx, Is.EqualTo(4));
-            Assert.That(caught.Runtime.Vy, Is.EqualTo(-3));
+            Assert.That(catcher.AttackingCounter, Is.EqualTo(2));
+            Assert.That(caught.AttackingCounter, Is.EqualTo(3));
+            Assert.That(catcher.HitCount, Is.EqualTo(1));
+            Assert.That(caught.HitCount, Is.EqualTo(1));
+            Assert.That(caught.KnockbackVx, Is.EqualTo(expectedVx));
+            Assert.That(caught.KnockbackVy, Is.EqualTo(-3));
+            Assert.That(caught.Runtime.Vx, Is.Zero);
+            Assert.That(caught.Runtime.Vy, Is.Zero);
             Assert.That(catcher.Runtime.Dir, Is.EqualTo("left"));
             Assert.That(catcher.Runtime.CaughtSlotIndex, Is.EqualTo(1));
             Assert.That(caught.Runtime.CatchSourceSlot90, Is.Zero);
             Assert.That(world.Rng.CallCount, Is.EqualTo(rngCalls));
+
+            world.RunBattleEcsFramePostProcessPass();
+
+            Assert.That(catcher.HitCount, Is.Zero);
+            Assert.That(caught.HitCount, Is.Zero);
+            Assert.That(caught.KnockbackVx, Is.Zero);
+            Assert.That(caught.KnockbackVy, Is.Zero);
+            Assert.That(caught.Runtime.Vx, Is.EqualTo(expectedVx));
+            Assert.That(caught.Runtime.Vy, Is.EqualTo(-3));
         }
 
         [TestCase(0, 10)]
@@ -557,7 +577,14 @@ namespace NTSD.Test
                 tests.Kind2Validation_DoesNotDecodeAttributionTaggedExactSource();
                 tests.Settlement_UsesExactSourceWhenCompatDisagrees();
                 tests.ReciprocalMismatch_IsTerminalBeforeThrowAndDirControl();
-                tests.NegativeDecreaseRelease_UsesFrameCounterCarrierAndIsTerminal();
+                tests.NegativeDecreaseRelease_DefersImpulseUntilFramePostProcess(
+                    BattleEcsFramePostProcessPassMode.Legacy, 0, 10, 4);
+                tests.NegativeDecreaseRelease_DefersImpulseUntilFramePostProcess(
+                    BattleEcsFramePostProcessPassMode.Legacy, 10, 0, -4);
+                tests.NegativeDecreaseRelease_DefersImpulseUntilFramePostProcess(
+                    BattleEcsFramePostProcessPassMode.DataOriented, 0, 10, 4);
+                tests.NegativeDecreaseRelease_DefersImpulseUntilFramePostProcess(
+                    BattleEcsFramePostProcessPassMode.DataOriented, 10, 0, -4);
                 tests.NonTerminalDecrease_PreservesNormalContinuation(0, 10);
                 tests.NonTerminalDecrease_PreservesNormalContinuation(2, 8);
                 tests.NonTerminalDecrease_PreservesNormalContinuation(-2, 8);
@@ -568,7 +595,7 @@ namespace NTSD.Test
                 tests.WarmedMixedAdvanceAndSettlement_DoNotAllocateManagedMemory();
                 File.WriteAllText(
                     ResultPath,
-                    "state=Passed\ncases=16\n" +
+                    "state=Passed\ncases=19\n" +
                     "mixedSlotPolarity=exact\n" +
                     "exactConsumers=3\n" +
                     "terminalFences=2\n" +

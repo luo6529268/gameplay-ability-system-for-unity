@@ -1,0 +1,44 @@
+{
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "error": null,
+    "data": {
+      "job_id": "9dba91085c074d668bbcf049bc521d95",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790843060124,
+      "finished_unix_ms": 1790843073513,
+      "last_update_unix_ms": 1790843073513,
+      "progress": {
+        "completed": 17,
+        "total": 8775,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790843070295,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5ReducedState2000AwayDampingEditorTests.Predicate_UsesNativeStrictSideAndAwayDirection(10.0d,10.0d,4.0d,False)",
+        "last_finished_unix_ms": 1790843070296,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5ReducedState2000AwayDampingEditorTests.HitPlan_EqualLogicalXDoesNotDampen",
+            "message": "System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5ReducedState2000AwayDampingEditorTests.HitPlan_MovingAwayDampens",
+            "message": "System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number."
+          },
+          {
+            "full_name": "NTSD.Test.Editor.NTSD28B5ReducedState2000AwayDampingEditorTests.HitPlan_MovingTowardDoesNotDampen",
+            "message": "System.Reflection.TargetParameterCountException : Number of parameters specified does not match the expected number."
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    },
+    "hint": null
+  }
+}

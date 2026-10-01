@@ -1,0 +1,94 @@
+[
+  {
+    "fieldsChecked": 3200,
+    "firstDifferences": [
+      {
+        "root": 0.3999999999999999,
+        "field": "target_vy",
+        "tick": 50,
+        "source": "0.39999999999999991"
+      },
+      {
+        "root": 2.0999999999999996,
+        "field": "target_vy",
+        "tick": 51,
+        "source": "2.0999999999999996"
+      },
+      {
+        "root": 3.8,
+        "field": "target_vy",
+        "tick": 52,
+        "source": "3.7999999999999998"
+      },
+      {
+        "root": 7.2,
+        "field": "target_vy",
+        "tick": 54,
+        "source": "7.2000000000000002"
+      },
+      {
+        "root": 8.9,
+        "field": "target_vy",
+        "tick": 55,
+        "source": "8.9000000000000004"
+      }
+    ],
+    "rootRows": 162,
+    "rootReportPassed": true,
+    "sourceTicks": 160,
+    "rootCompletedTicks": 161,
+    "equal": false,
+    "case": "a314-x550"
+  },
+  {
+    "fieldsChecked": 3200,
+    "firstDifferences": [
+      {
+        "root": 0.3999999999999999,
+        "field": "target_vy",
+        "tick": 50,
+        "source": "0.39999999999999991"
+      },
+      {
+        "root": 2.0999999999999996,
+        "field": "target_vy",
+        "tick": 51,
+        "source": "2.0999999999999996"
+      },
+      {
+        "root": 3.8,
+        "field": "target_vy",
+        "tick": 52,
+        "source": "3.7999999999999998"
+      },
+      {
+        "root": 7.2,
+        "field": "target_vy",
+        "tick": 54,
+        "source": "7.2000000000000002"
+      },
+      {
+        "root": 8.9,
+        "field": "target_vy",
+        "tick": 55,
+        "source": "8.9000000000000004"
+      }
+    ],
+    "rootRows": 162,
+    "rootReportPassed": true,
+    "sourceTicks": 160,
+    "rootCompletedTicks": 161,
+    "equal": false,
+    "case": "a316-x550"
+  },
+  {
+    "fieldsChecked": 3200,
+    "firstDifferences": [],
+    "rootRows": 162,
+    "rootReportPassed": true,
+    "sourceTicks": 160,
+    "rootCompletedTicks": 161,
+    "equal": true,
+    "case": "a314-x1200"
+  }
+]

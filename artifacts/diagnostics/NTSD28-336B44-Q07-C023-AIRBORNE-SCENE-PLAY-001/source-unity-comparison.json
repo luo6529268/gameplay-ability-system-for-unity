@@ -1,0 +1,427 @@
+{
+  "status": "FAIL",
+  "ticks": 32,
+  "entityRows": 107,
+  "comparedFields": 1690,
+  "differenceCount": 62,
+  "firstDifference": {
+    "tick": 28,
+    "slot": 51,
+    "field": "action",
+    "source": 213,
+    "unity": 215
+  },
+  "maxVelocityDifference": 14.0,
+  "differences": [
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "action",
+      "source": 213,
+      "unity": 215
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "state",
+      "source": 5,
+      "unity": 15
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "counter",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "x",
+      "source": 757,
+      "unity": 742
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "y",
+      "source": -13,
+      "unity": 0
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "vx",
+      "source": 14.0,
+      "unity": 0.0
+    },
+    {
+      "tick": 28,
+      "slot": 51,
+      "field": "vy",
+      "source": -11.3,
+      "unity": 0.0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "action",
+      "source": 213,
+      "unity": 0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "state",
+      "source": 5,
+      "unity": 0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "counter",
+      "source": 2,
+      "unity": 0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "x",
+      "source": 771,
+      "unity": 742
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "y",
+      "source": -24,
+      "unity": 0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "vx",
+      "source": 14.0,
+      "unity": 0.0
+    },
+    {
+      "tick": 29,
+      "slot": 51,
+      "field": "vy",
+      "source": -9.600000000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "action",
+      "source": 213,
+      "unity": 5
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "state",
+      "source": 5,
+      "unity": 1
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "counter",
+      "source": 3,
+      "unity": 1
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "x",
+      "source": 785,
+      "unity": 746
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "y",
+      "source": -33,
+      "unity": 0
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "vx",
+      "source": 14.0,
+      "unity": 3.0
+    },
+    {
+      "tick": 30,
+      "slot": 51,
+      "field": "vy",
+      "source": -7.900000000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "action",
+      "source": 213,
+      "unity": 5
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "state",
+      "source": 5,
+      "unity": 1
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "counter",
+      "source": 4,
+      "unity": 2
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "x",
+      "source": 799,
+      "unity": 750
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "y",
+      "source": -41,
+      "unity": 0
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "vx",
+      "source": 14.0,
+      "unity": 3.0
+    },
+    {
+      "tick": 31,
+      "slot": 51,
+      "field": "vy",
+      "source": -6.200000000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "action",
+      "source": 213,
+      "unity": 6
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "state",
+      "source": 5,
+      "unity": 1
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "counter",
+      "source": 5,
+      "unity": 1
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "x",
+      "source": 813,
+      "unity": 754
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "y",
+      "source": -48,
+      "unity": 0
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "vx",
+      "source": 14.0,
+      "unity": 3.0
+    },
+    {
+      "tick": 32,
+      "slot": 51,
+      "field": "vy",
+      "source": -4.500000000000001,
+      "unity": 0.0
+    },
+    {
+      "tick": 24,
+      "field": "customCounter",
+      "source": 22,
+      "unity": 21
+    },
+    {
+      "tick": 24,
+      "field": "customIndex",
+      "source": 22,
+      "unity": 21
+    },
+    {
+      "tick": 24,
+      "field": "customCalls",
+      "source": 22,
+      "unity": 21
+    },
+    {
+      "tick": 25,
+      "field": "customCounter",
+      "source": 30,
+      "unity": 28
+    },
+    {
+      "tick": 25,
+      "field": "customIndex",
+      "source": 30,
+      "unity": 28
+    },
+    {
+      "tick": 25,
+      "field": "customCalls",
+      "source": 30,
+      "unity": 28
+    },
+    {
+      "tick": 26,
+      "field": "customCounter",
+      "source": 37,
+      "unity": 35
+    },
+    {
+      "tick": 26,
+      "field": "customIndex",
+      "source": 37,
+      "unity": 35
+    },
+    {
+      "tick": 26,
+      "field": "customCalls",
+      "source": 37,
+      "unity": 35
+    },
+    {
+      "tick": 27,
+      "field": "customCounter",
+      "source": 44,
+      "unity": 43
+    },
+    {
+      "tick": 27,
+      "field": "customIndex",
+      "source": 44,
+      "unity": 43
+    },
+    {
+      "tick": 27,
+      "field": "customCalls",
+      "source": 44,
+      "unity": 43
+    },
+    {
+      "tick": 28,
+      "field": "customCounter",
+      "source": 52,
+      "unity": 50
+    },
+    {
+      "tick": 28,
+      "field": "customIndex",
+      "source": 52,
+      "unity": 50
+    },
+    {
+      "tick": 28,
+      "field": "customCalls",
+      "source": 52,
+      "unity": 50
+    },
+    {
+      "tick": 29,
+      "field": "customCounter",
+      "source": 59,
+      "unity": 57
+    },
+    {
+      "tick": 29,
+      "field": "customIndex",
+      "source": 59,
+      "unity": 57
+    },
+    {
+      "tick": 29,
+      "field": "customCalls",
+      "source": 59,
+      "unity": 57
+    },
+    {
+      "tick": 30,
+      "field": "customCounter",
+      "source": 66,
+      "unity": 64
+    },
+    {
+      "tick": 30,
+      "field": "customIndex",
+      "source": 66,
+      "unity": 64
+    },
+    {
+      "tick": 30,
+      "field": "customCalls",
+      "source": 66,
+      "unity": 64
+    },
+    {
+      "tick": 31,
+      "field": "customCounter",
+      "source": 73,
+      "unity": 71
+    },
+    {
+      "tick": 31,
+      "field": "customIndex",
+      "source": 73,
+      "unity": 71
+    },
+    {
+      "tick": 31,
+      "field": "customCalls",
+      "source": 73,
+      "unity": 71
+    },
+    {
+      "tick": 32,
+      "field": "customCounter",
+      "source": 80,
+      "unity": 78
+    },
+    {
+      "tick": 32,
+      "field": "customIndex",
+      "source": 80,
+      "unity": 78
+    },
+    {
+      "tick": 32,
+      "field": "customCalls",
+      "source": 80,
+      "unity": 78
+    }
+  ],
+  "source": "../NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001/guren388-airborne-child",
+  "unityRun": "airborne-idle-scene-01",
+  "scope": "14 active roster/619/85 entity fields and six RNG scalars; ordinary controlled initial parent388; natural airborne child; not whole World or physical-key selection"
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "ntsd28-c051-armor-scene-root-selected-fields/1",
+  "authority": "336B44 root formal EXE",
+  "scope": "original Battle Scene Play production Driver; 12 ticks; selected fields only",
+  "results": [
+    {
+      "case": "armor97-x550-scene-v1",
+      "targetOid": 97,
+      "ticks": 12,
+      "fieldChecks": 132,
+      "sceneStatus": "SCOPED_PASS",
+      "sceneCleanAfter": true,
+      "differences": [],
+      "sceneSha256": "808b739fb8ae3a2e3540ce373b416c209ce57471549fbbcc21584182af6ed7d3",
+      "rootTraceSha256": "2d50a4d7dc08cd04b13a402f64c0decb43e565d89be0267c530b0abf842ee402"
+    },
+    {
+      "case": "control2-x550-scene-v1",
+      "targetOid": 2,
+      "ticks": 12,
+      "fieldChecks": 132,
+      "sceneStatus": "SCOPED_PASS",
+      "sceneCleanAfter": true,
+      "differences": [],
+      "sceneSha256": "a9a6e732ce9a1d3c88f739a0c8480adb8e36f6b034989ed33a579d2a60878659",
+      "rootTraceSha256": "4592c3a4b7c2ea8807995e7e664195a6e005f49fd0af56e63505248603973330"
+    }
+  ]
+}

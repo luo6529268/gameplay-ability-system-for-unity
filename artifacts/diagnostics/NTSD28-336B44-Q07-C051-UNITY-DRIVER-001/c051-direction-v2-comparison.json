@@ -1,0 +1,117 @@
+[
+  {
+    "side": "right-x550",
+    "ticks": 12,
+    "fieldChecks": 99,
+    "identityChecks": 33,
+    "differences": [],
+    "targetPoints": [
+      {
+        "tick": 9,
+        "unity": {
+          "action": 180,
+          "hp": 435,
+          "vx": 0
+        },
+        "root": {
+          "action": 180,
+          "hp": 435,
+          "vx": 0
+        }
+      },
+      {
+        "tick": 12,
+        "unity": {
+          "action": 180,
+          "hp": 435,
+          "vx": -10
+        },
+        "root": {
+          "action": 180,
+          "hp": 435,
+          "vx": -10
+        }
+      }
+    ],
+    "metadataCertificateEligible": false,
+    "semanticFingerprintEquality": {
+      "fusionSemanticSha256": true,
+      "kindSemanticSha256": true,
+      "modeSemanticSha256": true
+    },
+    "unityRawSha256": "d4d78a4dc0d60d6a6aef3e68a731c7e4dd27e5aeea0422b189d341a1b5519644",
+    "rootRawSha256": "aa327e22f85000294699ea689795e90b02eff38194954294ce41024d1d415fbe"
+  },
+  {
+    "side": "left-x350",
+    "ticks": 12,
+    "fieldChecks": 99,
+    "identityChecks": 33,
+    "differences": [
+      {
+        "tick": 9,
+        "slot": 1,
+        "field": "action",
+        "unity": 180,
+        "root": 186
+      },
+      {
+        "tick": 10,
+        "slot": 1,
+        "field": "action",
+        "unity": 180,
+        "root": 186
+      },
+      {
+        "tick": 11,
+        "slot": 1,
+        "field": "action",
+        "unity": 180,
+        "root": 186
+      },
+      {
+        "tick": 12,
+        "slot": 1,
+        "field": "action",
+        "unity": 180,
+        "root": 186
+      }
+    ],
+    "targetPoints": [
+      {
+        "tick": 9,
+        "unity": {
+          "action": 180,
+          "hp": 435,
+          "vx": 0
+        },
+        "root": {
+          "action": 186,
+          "hp": 435,
+          "vx": 0
+        }
+      },
+      {
+        "tick": 12,
+        "unity": {
+          "action": 180,
+          "hp": 435,
+          "vx": 10
+        },
+        "root": {
+          "action": 186,
+          "hp": 435,
+          "vx": 10
+        }
+      }
+    ],
+    "metadataCertificateEligible": false,
+    "semanticFingerprintEquality": {
+      "fusionSemanticSha256": true,
+      "kindSemanticSha256": true,
+      "modeSemanticSha256": true
+    },
+    "unityRawSha256": "d89d47fb5e08cfad96b995b976308a6cd7028f04d9ecc838a71ed40b2564d92a",
+    "rootRawSha256": "a09f2953953d915b88dc267fea9333187d57bd9ddf8a37a29fb87be3ad019fa8"
+  }
+]

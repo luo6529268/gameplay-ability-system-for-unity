@@ -1,0 +1,26 @@
+{
+  "schema": "ntsd28-c050-scene-root-compare/1",
+  "createdUtc": "2026-10-01T10:28:32.930783+00:00",
+  "cases": [
+    {
+      "targetX": 520,
+      "unityResult": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x520-scene-v1.json",
+      "unitySha256": "09102D8182B417A8B080692F1A58C9594976B352715A71F43574970E9672A9C9",
+      "formalTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-HIDAN-BDY50-REACH-001\\x520-root-v1-trace.jsonl",
+      "formalSha256": "B1330C7F52B853F9285B4DCAF215AA818BDEA5A48C6121D724EB54FEAC1CDB2E",
+      "compared": 24,
+      "differences": [],
+      "pass": true
+    },
+    {
+      "targetX": 1200,
+      "unityResult": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-SCENE-PLAY-001\\x1200-scene-v1.json",
+      "unitySha256": "703461345BFC369927D2E210E009081FE29D2BBA883CF81B7CA7AE751AF86642",
+      "formalTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C050-HIDAN-BDY50-REACH-001\\x1200-root-v1-trace.jsonl",
+      "formalSha256": "706A1657983F582604C5CA15084C26D974A7D08E83C81D31C00D0CE9CD854F51",
+      "compared": 24,
+      "differences": [],
+      "pass": true
+    }
+  ]
+}

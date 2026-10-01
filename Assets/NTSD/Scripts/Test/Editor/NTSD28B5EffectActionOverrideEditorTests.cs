@@ -190,6 +190,78 @@ namespace NTSD.Test.Editor
             Assert.That(target.Frame.N, Is.Not.EqualTo(232));
         }
 
+        [TestCase(50, true)]
+        [TestCase(52, true)]
+        [TestCase(0, false)]
+        public void UnarmoredVerticalReaction_SpecialLatchSkipsFallingAction(
+            int firstBodyKind, bool suppressVertical)
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(world, 8478, 0, LF2ObjectType.Character);
+            TypedCharacter target = CreateEntity(world, 8479, 1, LF2ObjectType.Character);
+            LF2FrameData latch = target.GetFrameDataById(10);
+            latch.primaryBodyKindForEffectSuppression = firstBodyKind;
+            target.ImmediateFrame(10);
+            target.Trans.SyncWaitCounterFrame(10);
+
+            bool applied = ApplyUnarmoredHit(
+                world,
+                attacker,
+                target,
+                new InteractionArea
+                {
+                    kind = 0,
+                    effect = 1,
+                    injury = 35,
+                    fall = 100,
+                    dvy = -5,
+                });
+
+            Assert.That(applied, Is.True);
+            Assert.That(target.Health.HP, Is.EqualTo(465));
+            if (suppressVertical)
+                Assert.That(target.Frame.N, Is.EqualTo(10));
+            else
+                Assert.That(target.Frame.N == LF2StandardFrames.FallingFront ||
+                    target.Frame.N == LF2StandardFrames.FallingBack, Is.True);
+        }
+
+        [TestCase(23, true, 550, -10.0, LF2StandardFrames.FallingFront)]
+        [TestCase(23, false, 350, 10.0, LF2StandardFrames.FallingFront)]
+        [TestCase(22, true, 550, -10.0, 203)]
+        [TestCase(22, false, 350, 10.0, 203)]
+        [TestCase(0, true, 550, -10.0, LF2StandardFrames.FallingFront)]
+        [TestCase(0, false, 350, 10.0, LF2StandardFrames.FallingFront)]
+        public void UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(
+            int effect, bool faceRight, int targetX, double expectedImpulse,
+            int expectedAction)
+        {
+            var world = new SimulationWorld();
+            TypedCharacter attacker = CreateEntity(world, 8486, 0, LF2ObjectType.Character);
+            TypedCharacter target = CreateEntity(world, 8487, 1, LF2ObjectType.Character);
+            attacker.Runtime.X = 500;
+            target.Runtime.X = targetX;
+            target.KnockbackVx = 0.0;
+            attacker.SwitchDir(faceRight ? "right" : "left");
+            target.SwitchDir(faceRight ? "right" : "left");
+
+            bool applied = ApplyUnarmoredHit(world, attacker, target,
+                new InteractionArea
+                {
+                    kind = 0,
+                    effect = effect,
+                    injury = 65,
+                    fall = 100,
+                    dvx = -10,
+                    dvy = -35,
+                });
+
+            Assert.That(applied, Is.True);
+            Assert.That(target.Health.HP, Is.EqualTo(435));
+            Assert.That(target.KnockbackVx, Is.EqualTo(expectedImpulse));
+            Assert.That(target.Frame.N, Is.EqualTo(expectedAction));
+        }
+
         [Test]
         public void Override_DefinitionPropertyAndNegativeCaughtActionSuppressBothActions()
         {

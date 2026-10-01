@@ -1,0 +1,35 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "5fb1070ec9134ac3831b5dc56b0c3698",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790867680986,
+      "finished_unix_ms": 1790867688071,
+      "last_update_unix_ms": 1790867688071,
+      "progress": {
+        "completed": 1,
+        "total": 8775,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790867687548,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+        "last_finished_unix_ms": 1790867687663,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+            "message": "  Expected: 1\r\n  But was:  2\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

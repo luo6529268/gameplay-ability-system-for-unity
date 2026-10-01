@@ -1,0 +1,58 @@
+{
+  "comparisonTolerance": 0.001,
+  "cases": [
+    {
+      "sceneCleanAfter": true,
+      "phase": "DONE",
+      "unityTicks": 35,
+      "sceneHashBefore": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "sceneHashAfter": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "status": "CAPTURED",
+      "differenceCount": 0,
+      "comparedValues": 770,
+      "firstDifferences": [],
+      "fieldsPerTick": 22,
+      "sourceTicks": 35,
+      "runId": "ank65-a348-x550-natural-scene-01",
+      "case": "a348-x550",
+      "exitedPlay": true
+    },
+    {
+      "sceneCleanAfter": true,
+      "phase": "DONE",
+      "unityTicks": 35,
+      "sceneHashBefore": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "sceneHashAfter": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "status": "CAPTURED",
+      "differenceCount": 0,
+      "comparedValues": 770,
+      "firstDifferences": [],
+      "fieldsPerTick": 22,
+      "sourceTicks": 35,
+      "runId": "ank65-a357-x700-natural-scene-01",
+      "case": "a357-x700",
+      "exitedPlay": true
+    },
+    {
+      "sceneCleanAfter": true,
+      "phase": "DONE",
+      "unityTicks": 35,
+      "sceneHashBefore": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "sceneHashAfter": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "status": "CAPTURED",
+      "differenceCount": 0,
+      "comparedValues": 770,
+      "firstDifferences": [],
+      "fieldsPerTick": 22,
+      "sourceTicks": 35,
+      "runId": "ank65-a348-x1200-natural-scene-01",
+      "case": "a348-x1200",
+      "exitedPlay": true
+    }
+  ],
+  "totalComparedValues": 2310,
+  "mapping": "17 entity fields including direct caughtSlot plus 5 RNG fields per tick",
+  "totalDifferences": 0.0,
+  "sourceRootAuthority": "336B44 formal root same-LFR 120-tick declared fields separately verified; this file compares source to Unity for first 35 ticks",
+  "schema": "ntsd28-c045-source-unity-scene-comparison-v1"
+}

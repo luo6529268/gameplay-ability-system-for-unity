@@ -1,0 +1,97 @@
+{
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "error": null,
+    "data": {
+      "job_id": "ef7051f449b34105ac5c1235a0e3256e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790842941769,
+      "finished_unix_ms": 1790842950619,
+      "last_update_unix_ms": 1790842950619,
+      "progress": {
+        "completed": 6,
+        "total": 8775,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790842948600,
+        "last_finished_test_full_name": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(0,False,350,10.0d,180)",
+        "last_finished_unix_ms": 1790842948602,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 6,
+          "passed": 6,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.8839125,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(23,True,550,-10.0d,180)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(23,True,550,-10.0d,180)",
+            "state": "Passed",
+            "durationSeconds": 0.0497189,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(23,False,350,10.0d,180)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(23,False,350,10.0d,180)",
+            "state": "Passed",
+            "durationSeconds": 0.0022666,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(22,True,550,-10.0d,203)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(22,True,550,-10.0d,203)",
+            "state": "Passed",
+            "durationSeconds": 0.0020925,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(22,False,350,10.0d,203)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(22,False,350,10.0d,203)",
+            "state": "Passed",
+            "durationSeconds": 0.0020156,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(0,True,550,-10.0d,180)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(0,True,550,-10.0d,180)",
+            "state": "Passed",
+            "durationSeconds": 0.0018815,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(0,False,350,10.0d,180)",
+            "fullName": "NTSD.Test.Editor.NTSD28B5EffectActionOverrideEditorTests.UnarmoredEffectHorizontalResponse_UsesFacingNotRelativePosition(0,False,350,10.0d,180)",
+            "state": "Passed",
+            "durationSeconds": 0.0019005,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    },
+    "hint": null
+  }
+}

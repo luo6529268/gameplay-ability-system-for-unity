@@ -1,0 +1,17 @@
+{
+  "schema": "ntsd28-336b44-q07-c051-effect23/1.0",
+  "referenceExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "dataSha256": "0AAB4A0FFEE70F17D31DDF952254C798DFEF185FEDD55CACEC28C7A66181E6FE",
+  "mode": "versus",
+  "seed": 682973786,
+  "ticks": 12,
+  "emitInitial": false,
+  "battleMode": 0,
+  "stageId": 23,
+  "difficultyLevel4A0C30": 0,
+  "combatants": [
+    {"slot": 0, "oid": 20, "team": 1, "x": 500, "y": 0, "z": 400, "hp": 500, "baseHp": 500, "mp": 500, "facing": 0, "action": 288, "reviveLives30c": 1},
+    {"slot": 1, "oid": 2, "team": 2, "x": 550, "y": 0, "z": 400, "hp": 500, "baseHp": 500, "mp": 500, "facing": 0, "action": 0, "reviveLives30c": 1}
+  ],
+  "inputs": []
+}

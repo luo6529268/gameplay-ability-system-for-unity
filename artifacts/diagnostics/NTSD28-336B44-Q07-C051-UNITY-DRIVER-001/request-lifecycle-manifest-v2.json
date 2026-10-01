@@ -1,0 +1,22 @@
+[
+  {
+    "Side": "right-x550",
+    "CleanupPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28UnityTrace\\unity-raw-capture.request.json",
+    "BeforeExists": false,
+    "PayloadBackup": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/raw-right-x550-v2.request.json",
+    "Bytes": 677,
+    "SHA256": "7C3ED4360AA66C7E1980B7A3F264A15B8076B994F88F4F3ADF08C45E493567EE",
+    "Executor": "Unity Editor PID105896; NTSD28UnityRawCaptureEditor.PollRequest finally/File.Delete",
+    "OwnerChange": "NTSD28-336B44-Q07-C051-UNARMORED-DIRECTION-001"
+  },
+  {
+    "Side": "left-x350",
+    "CleanupPath": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Temp\\NTSD28UnityTrace\\unity-raw-capture.request.json",
+    "BeforeExists": false,
+    "PayloadBackup": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-UNITY-DRIVER-001/raw-left-x350-v2.request.json",
+    "Bytes": 672,
+    "SHA256": "CFCE34976C40B6BC8005ACF9E198FF07FA7480F6F1F089139A7E07FC20EC6A19",
+    "Executor": "Unity Editor PID105896; NTSD28UnityRawCaptureEditor.PollRequest finally/File.Delete",
+    "OwnerChange": "NTSD28-336B44-Q07-C051-UNARMORED-DIRECTION-001"
+  }
+]

@@ -1,0 +1,7 @@
+initial_timeout,phase,active_relations,timeout_changes,released_relations,thrown_relations,finalized,catcher_action,caught_action,catcher_counter,caught_counter,catch_target,catch_source,timeout_after,catcher_pending_count,caught_pending_count,caught_pending_x,caught_pending_y,caught_motion_x,caught_motion_y
+2,after_catch_pass,1,1,1,0,0,0,181,7,8,1,0,-1,1,1,-4,-3,0,0
+2,after_finalizer,1,1,1,0,2,0,181,7,8,1,0,-1,0,0,0,0,-4,-3
+3,after_catch_pass,1,1,0,1,0,249,180,0,8,1,0,0,0,0,0,0,3,-5
+3,after_finalizer,1,1,0,1,0,249,180,0,8,1,0,0,0,0,0,0,3,-5
+4,after_catch_pass,1,1,0,1,0,249,180,0,8,1,0,1,0,0,0,0,3,-5
+4,after_finalizer,1,1,0,1,0,249,180,0,8,1,0,1,0,0,0,0,3,-5

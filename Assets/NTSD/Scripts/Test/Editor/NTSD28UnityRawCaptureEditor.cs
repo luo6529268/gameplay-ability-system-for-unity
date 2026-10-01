@@ -78,6 +78,10 @@ namespace NTSD.EditorTools
             "ntsd28-q07-hidan-catch/1.0";
         private const string Q07HidanNaturalCatchScenarioSchema =
             "ntsd28-q07-hidan-catch-natural/1.0";
+        private const string Q07C050Bdy50ScenarioSchema =
+            "ntsd28-336b44-q07-c050-bdy50/1.0";
+        private const string Q07C051Effect23ScenarioSchema =
+            "ntsd28-336b44-q07-c051-effect23/1.0";
         private const string Q09HidanFrame430ScenarioSchema =
             "ntsd28-q09-hidan-frame430-natural/1.0";
         private const string Q07LeeJlChildScenarioSchema =
@@ -443,6 +447,8 @@ namespace NTSD.EditorTools
                 scenario.schema == Q08SelectedArmorResultMilestonesScenarioSchema ||
                 scenario.schema == Q07HidanCatchScenarioSchema ||
                 scenario.schema == Q07HidanNaturalCatchScenarioSchema ||
+                scenario.schema == Q07C050Bdy50ScenarioSchema ||
+                scenario.schema == Q07C051Effect23ScenarioSchema ||
                 scenario.schema == Q09HidanFrame430ScenarioSchema ||
                 scenario.schema == Q07LeeJlChildScenarioSchema ||
                 q08NarutoCloneStageGate ||
@@ -868,6 +874,10 @@ namespace NTSD.EditorTools
                 scenario.schema, Q07HidanCatchScenarioSchema, StringComparison.Ordinal);
             bool q07HidanNaturalCatchScenario = string.Equals(
                 scenario.schema, Q07HidanNaturalCatchScenarioSchema, StringComparison.Ordinal);
+            bool q07C050Bdy50Scenario = string.Equals(
+                scenario.schema, Q07C050Bdy50ScenarioSchema, StringComparison.Ordinal);
+            bool q07C051Effect23Scenario = string.Equals(
+                scenario.schema, Q07C051Effect23ScenarioSchema, StringComparison.Ordinal);
             bool q09HidanFrame430Scenario = string.Equals(
                 scenario.schema, Q09HidanFrame430ScenarioSchema, StringComparison.Ordinal);
             bool q07LeeJlChildScenario = string.Equals(
@@ -900,6 +910,8 @@ namespace NTSD.EditorTools
                                      q08SelectedArmorFixture ||
                                      r06NaturalRevivalScenario ||
                                       q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
+                                      q07C050Bdy50Scenario ||
+                                      q07C051Effect23Scenario ||
                                       q09HidanFrame430Scenario ||
                                      q07LeeJlChildScenario ||
                                      q07NarutoPunchScenario || q07HeldWeaponMotionScenario ||
@@ -917,7 +929,9 @@ namespace NTSD.EditorTools
             }
             if (!string.Equals(
                     scenario.referenceExeSha256,
-                    formalReleaseScenario ? FormalAuthorityExeSha256 : LegacyScenarioReferenceSha256,
+                    q07C050Bdy50Scenario || q07C051Effect23Scenario
+                        ? "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3"
+                        : formalReleaseScenario ? FormalAuthorityExeSha256 : LegacyScenarioReferenceSha256,
                     StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidDataException(
@@ -931,6 +945,8 @@ namespace NTSD.EditorTools
                     q07NarutoPunchScenario || q09HidanFrame430Scenario ? 30 :
                     q07HeldWeaponMotionScenario ? 24 : q07HidanCatchScenario ? 24 :
                     q07HidanNaturalCatchScenario ? 40 :
+                    q07C050Bdy50Scenario ? 3 :
+                    q07C051Effect23Scenario ? 12 :
                     q07N30LateInputScenario ? 20 :
                      q07HitFa5FullDriverScenario ? 8 :
                      q07FusionFullDriverScenario ? 3 :
@@ -948,6 +964,8 @@ namespace NTSD.EditorTools
                     (q07LeeJlChildScenario || q07NarutoPunchScenario ||
                      q07HeldWeaponMotionScenario ||
                       q07HidanCatchScenario || q07HidanNaturalCatchScenario ||
+                      q07C050Bdy50Scenario ||
+                      q07C051Effect23Scenario ||
                       q09HidanFrame430Scenario ||
                      q07N30LateInputScenario || q07HitFa5FullDriverScenario ||
                       q07FusionFullDriverScenario ||
@@ -958,9 +976,13 @@ namespace NTSD.EditorTools
                 ((q07LeeJlChildScenario || q07NarutoPunchScenario ||
                   q08NarutoCloneStageGateScenario) &&
                     scenario.seed != Q07LeeJlChildSeed) ||
-                (formalReleaseScenario && !q07LeeJlChildScenario &&
+                (formalReleaseScenario && !q07C050Bdy50Scenario &&
+                    !q07C051Effect23Scenario &&
+                    !q07LeeJlChildScenario &&
                     !q07NarutoPunchScenario && !q08NarutoCloneStageGateScenario &&
-                    scenario.seed != Q07DdjSeed))
+                    scenario.seed != Q07DdjSeed) ||
+                ((q07C050Bdy50Scenario || q07C051Effect23Scenario) &&
+                    scenario.seed != 682973786))
             {
                 throw new InvalidDataException(
                     q07LeeJlChildScenario
@@ -1112,6 +1134,58 @@ namespace NTSD.EditorTools
                 {
                     throw new InvalidDataException(
                         "Q07 Hidan catch participants differ from the controlled formal fixture.");
+                }
+            }
+            if (q07C050Bdy50Scenario)
+            {
+                UnityRawCombatant actor = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant target = scenario.combatants.Single(combatant => combatant.slot == 1);
+                bool HasState(UnityRawCombatant combatant, int oid, int team, int x, int action) =>
+                    combatant.oid == oid && combatant.team == team &&
+                    combatant.x == x && combatant.y == 0 && combatant.z == 400 &&
+                    combatant.hp == 500 && combatant.baseHp == 500 &&
+                    combatant.mp == 500 && combatant.facing == 0 &&
+                    combatant.action == action && combatant.reviveLives30c == 1 &&
+                    !combatant.nativeAi;
+                if (!HasState(actor, 24, 1, 500, 37) ||
+                    (!HasState(target, 56, 2, 520, 259) &&
+                     !HasState(target, 56, 2, 1200, 259)) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                {
+                    throw new InvalidDataException(
+                        "C050 Hidan BDY50 participants differ from the 336B44 fixture.");
+                }
+            }
+
+            if (q07C051Effect23Scenario)
+            {
+                UnityRawCombatant actor = scenario.combatants.Single(combatant => combatant.slot == 0);
+                UnityRawCombatant target = scenario.combatants.Single(combatant => combatant.slot == 1);
+                bool HasState(UnityRawCombatant combatant, int oid, int team, int x,
+                    int action, int facing) =>
+                    combatant.oid == oid && combatant.team == team &&
+                    combatant.x == x && combatant.y == 0 && combatant.z == 400 &&
+                    combatant.hp == 500 && combatant.baseHp == 500 &&
+                    combatant.mp == 500 && combatant.facing == facing &&
+                    combatant.action == action && combatant.reviveLives30c == 1 &&
+                    !combatant.nativeAi;
+                bool right = HasState(actor, 20, 1, 500, 288, 0) &&
+                    HasState(target, 2, 2, 550, 0, 0);
+                bool left = HasState(actor, 20, 1, 500, 288, 1) &&
+                    HasState(target, 2, 2, 350, 0, 1);
+                bool armor = HasState(actor, 78, 1, 500, 466, 0) &&
+                    HasState(target, 97, 2, 550, 0, 1);
+                bool armorControl = HasState(actor, 78, 1, 500, 466, 0) &&
+                    HasState(target, 2, 2, 550, 0, 1);
+                if ((!right && !left && !armor && !armorControl) ||
+                    scenario.fusionFirstFeatureGate4A8428 ||
+                    scenario.fusionSecondFeatureGate4A842C ||
+                    (scenario.inputs != null && scenario.inputs.Length != 0))
+                {
+                    throw new InvalidDataException(
+                        "C051 effect23 participants differ from the 336B44 fixture.");
                 }
             }
 
@@ -1779,7 +1853,10 @@ namespace NTSD.EditorTools
                 ("expectedTickCount", scenario.ticks),
                 ("exporterSourceSha256", ComputeFileSha256(ProjectPath(ExporterSource))),
                 ("firstCompletedTick", 1),
-                ("formalAuthorityExeSha256", FormalAuthorityExeSha256),
+                ("formalAuthorityExeSha256", scenario.schema == Q07C050Bdy50ScenarioSchema ||
+                    scenario.schema == Q07C051Effect23ScenarioSchema
+                    ? scenario.referenceExeSha256.ToUpperInvariant()
+                    : FormalAuthorityExeSha256),
                 ("kind", "header"),
                 ("scenarioDataSha256", scenario.dataSha256.ToUpperInvariant()),
                 ("scenarioFileSha256", ComputeFileSha256(scenarioPath)),

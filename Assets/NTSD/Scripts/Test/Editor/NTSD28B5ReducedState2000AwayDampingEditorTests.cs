@@ -195,6 +195,8 @@ namespace NTSD.Test.Editor
                 interaction,
                 BattleHitCandidateDisposition.Damage,
                 projection,
+                Type.Missing,
+                Type.Missing,
             };
             bool projected = (bool)project.Invoke(null, args);
             Assert.That(projected, Is.True);

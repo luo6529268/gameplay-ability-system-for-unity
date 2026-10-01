@@ -1,0 +1,27 @@
+{
+  "scope": "Complete source GameSession vs selected formal root same LFR, two slots and declared entity/RNG fields; independent host crtState and root extra EOF tick excluded",
+  "cases": [
+    {
+      "case": "action355-x550",
+      "ticks": 80,
+      "compared_fields": 1360,
+      "differences": 0,
+      "first_differences": [],
+      "root_replay_passed": true,
+      "root_failure_code": 0,
+      "excluded_crt_state_different_ticks": 80,
+      "excluded_extra_root_tick": 1
+    },
+    {
+      "case": "action378-x550",
+      "ticks": 160,
+      "compared_fields": 2720,
+      "differences": 0,
+      "first_differences": [],
+      "root_replay_passed": true,
+      "root_failure_code": 0,
+      "excluded_crt_state_different_ticks": 160,
+      "excluded_extra_root_tick": 1
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "formal_exe_sha256_prefix": "336B44",
+  "source_ticks": 12,
+  "unity_scene_rows": 12,
+  "fields_per_tick": 6,
+  "equal_field_comparisons": 72,
+  "first_difference": null,
+  "differences": [],
+  "alignment": "source host tick 1..12 against Unity scene relative tick 1..12, Unity global tick 6..17; group mask computed from formal living group count under known teams 1 and 2",
+  "scene_status": "PASS",
+  "scene_clean_after": true
+}

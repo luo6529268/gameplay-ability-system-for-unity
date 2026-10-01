@@ -1,0 +1,1856 @@
+{
+  "compared": 684,
+  "differenceCount": 308,
+  "differences": [
+    {
+      "tick": 2,
+      "field": "actor_action",
+      "source": 210,
+      "unity": 65
+    },
+    {
+      "tick": 2,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 501
+    },
+    {
+      "tick": 3,
+      "field": "actor_action",
+      "source": 210,
+      "unity": 65
+    },
+    {
+      "tick": 3,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 502
+    },
+    {
+      "tick": 4,
+      "field": "actor_action",
+      "source": 210,
+      "unity": 65
+    },
+    {
+      "tick": 4,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 503
+    },
+    {
+      "tick": 5,
+      "field": "actor_action",
+      "source": 211,
+      "unity": 61
+    },
+    {
+      "tick": 5,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 6,
+      "field": "actor_action",
+      "source": 211,
+      "unity": 61
+    },
+    {
+      "tick": 6,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 7,
+      "field": "actor_action",
+      "source": 212,
+      "unity": 62
+    },
+    {
+      "tick": 7,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 8,
+      "field": "actor_action",
+      "source": 160,
+      "unity": 64
+    },
+    {
+      "tick": 8,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 8,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 9,
+      "field": "actor_action",
+      "source": 161,
+      "unity": 64
+    },
+    {
+      "tick": 9,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 9,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 10,
+      "field": "actor_action",
+      "source": 161,
+      "unity": 64
+    },
+    {
+      "tick": 10,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 10,
+      "field": "actor_y",
+      "source": -4,
+      "unity": 0
+    },
+    {
+      "tick": 10,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 11,
+      "field": "actor_action",
+      "source": 162,
+      "unity": 63
+    },
+    {
+      "tick": 11,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 11,
+      "field": "actor_y",
+      "source": -10,
+      "unity": 0
+    },
+    {
+      "tick": 11,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 11,
+      "field": "count417",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 11,
+      "field": "first417slot",
+      "source": 50,
+      "unity": -1
+    },
+    {
+      "tick": 11,
+      "field": "first417action",
+      "source": 49,
+      "unity": -1
+    },
+    {
+      "tick": 11,
+      "field": "first417x",
+      "source": 531,
+      "unity": 0
+    },
+    {
+      "tick": 12,
+      "field": "actor_action",
+      "source": 162,
+      "unity": 63
+    },
+    {
+      "tick": 12,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 12,
+      "field": "actor_y",
+      "source": -14,
+      "unity": 0
+    },
+    {
+      "tick": 12,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 12,
+      "field": "count417",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 12,
+      "field": "first417slot",
+      "source": 50,
+      "unity": -1
+    },
+    {
+      "tick": 12,
+      "field": "first417action",
+      "source": 49,
+      "unity": -1
+    },
+    {
+      "tick": 12,
+      "field": "first417x",
+      "source": 546,
+      "unity": 0
+    },
+    {
+      "tick": 13,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 63
+    },
+    {
+      "tick": 13,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 13,
+      "field": "actor_y",
+      "source": -17,
+      "unity": 0
+    },
+    {
+      "tick": 13,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 13,
+      "field": "first_action",
+      "source": 615,
+      "unity": 3
+    },
+    {
+      "tick": 13,
+      "field": "count417",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 13,
+      "field": "first417slot",
+      "source": 50,
+      "unity": -1
+    },
+    {
+      "tick": 13,
+      "field": "first417action",
+      "source": 49,
+      "unity": -1
+    },
+    {
+      "tick": 13,
+      "field": "first417x",
+      "source": 561,
+      "unity": 0
+    },
+    {
+      "tick": 14,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 0
+    },
+    {
+      "tick": 14,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 14,
+      "field": "actor_y",
+      "source": -19,
+      "unity": 0
+    },
+    {
+      "tick": 14,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 14,
+      "field": "first_action",
+      "source": 615,
+      "unity": 3
+    },
+    {
+      "tick": 14,
+      "field": "count417",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 14,
+      "field": "first417slot",
+      "source": 50,
+      "unity": -1
+    },
+    {
+      "tick": 14,
+      "field": "first417action",
+      "source": 49,
+      "unity": -1
+    },
+    {
+      "tick": 14,
+      "field": "first417x",
+      "source": 561,
+      "unity": 0
+    },
+    {
+      "tick": 15,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 270
+    },
+    {
+      "tick": 15,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 15,
+      "field": "actor_y",
+      "source": -18,
+      "unity": 0
+    },
+    {
+      "tick": 15,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 15,
+      "field": "first_action",
+      "source": 615,
+      "unity": 3
+    },
+    {
+      "tick": 15,
+      "field": "count417",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 15,
+      "field": "first417slot",
+      "source": 50,
+      "unity": -1
+    },
+    {
+      "tick": 15,
+      "field": "first417action",
+      "source": 49,
+      "unity": -1
+    },
+    {
+      "tick": 15,
+      "field": "first417x",
+      "source": 561,
+      "unity": 0
+    },
+    {
+      "tick": 16,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 401
+    },
+    {
+      "tick": 16,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 16,
+      "field": "actor_y",
+      "source": -16,
+      "unity": 0
+    },
+    {
+      "tick": 16,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 16,
+      "field": "first_action",
+      "source": 615,
+      "unity": 0
+    },
+    {
+      "tick": 16,
+      "field": "first417action",
+      "source": 49,
+      "unity": 380
+    },
+    {
+      "tick": 16,
+      "field": "first417x",
+      "source": 561,
+      "unity": 853
+    },
+    {
+      "tick": 17,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 401
+    },
+    {
+      "tick": 17,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 17,
+      "field": "actor_y",
+      "source": -12,
+      "unity": 0
+    },
+    {
+      "tick": 17,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 17,
+      "field": "first_action",
+      "source": 615,
+      "unity": 0
+    },
+    {
+      "tick": 17,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 17,
+      "field": "first417action",
+      "source": 51,
+      "unity": 381
+    },
+    {
+      "tick": 17,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 18,
+      "field": "actor_action",
+      "source": 163,
+      "unity": 402
+    },
+    {
+      "tick": 18,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 18,
+      "field": "actor_y",
+      "source": -6,
+      "unity": 0
+    },
+    {
+      "tick": 18,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 18,
+      "field": "first_action",
+      "source": 616,
+      "unity": 0
+    },
+    {
+      "tick": 18,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 18,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 18,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 18,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 19,
+      "field": "actor_action",
+      "source": 215,
+      "unity": 402
+    },
+    {
+      "tick": 19,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 19,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 19,
+      "field": "first_action",
+      "source": 616,
+      "unity": 0
+    },
+    {
+      "tick": 19,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 19,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 19,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 19,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 20,
+      "field": "actor_action",
+      "source": 215,
+      "unity": 408
+    },
+    {
+      "tick": 20,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 20,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 20,
+      "field": "first_action",
+      "source": 616,
+      "unity": 1
+    },
+    {
+      "tick": 20,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 20,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 20,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 20,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 21,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 408
+    },
+    {
+      "tick": 21,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 21,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 21,
+      "field": "first_action",
+      "source": 617,
+      "unity": 1
+    },
+    {
+      "tick": 21,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 21,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 21,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 21,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 22,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 278
+    },
+    {
+      "tick": 22,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 22,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 22,
+      "field": "first_action",
+      "source": 617,
+      "unity": 1
+    },
+    {
+      "tick": 22,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 22,
+      "field": "count417",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 22,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 22,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 23,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 278
+    },
+    {
+      "tick": 23,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 23,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 23,
+      "field": "first_action",
+      "source": 617,
+      "unity": 1
+    },
+    {
+      "tick": 23,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 23,
+      "field": "count417",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 23,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 23,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 24,
+      "field": "actor_action",
+      "source": 0,
+      "unity": 271
+    },
+    {
+      "tick": 24,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 504
+    },
+    {
+      "tick": 24,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 24,
+      "field": "first_action",
+      "source": 618,
+      "unity": 2
+    },
+    {
+      "tick": 24,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 24,
+      "field": "count417",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 24,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 24,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 25,
+      "field": "actor_action",
+      "source": 1,
+      "unity": 271
+    },
+    {
+      "tick": 25,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 704
+    },
+    {
+      "tick": 25,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 25,
+      "field": "first_action",
+      "source": 618,
+      "unity": 2
+    },
+    {
+      "tick": 25,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 25,
+      "field": "count417",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 25,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 25,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 26,
+      "field": "actor_action",
+      "source": 1,
+      "unity": 272
+    },
+    {
+      "tick": 26,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 26,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 26,
+      "field": "first_action",
+      "source": 618,
+      "unity": 2
+    },
+    {
+      "tick": 26,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 26,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 26,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 26,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 27,
+      "field": "actor_action",
+      "source": 1,
+      "unity": 273
+    },
+    {
+      "tick": 27,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 27,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 27,
+      "field": "first_action",
+      "source": 0,
+      "unity": 180
+    },
+    {
+      "tick": 27,
+      "field": "first_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 27,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 27,
+      "field": "second_action",
+      "source": 2,
+      "unity": 180
+    },
+    {
+      "tick": 27,
+      "field": "second_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 27,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 27,
+      "field": "first417action",
+      "source": 52,
+      "unity": 382
+    },
+    {
+      "tick": 27,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 28,
+      "field": "actor_action",
+      "source": 1,
+      "unity": 273
+    },
+    {
+      "tick": 28,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 28,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 28,
+      "field": "first_action",
+      "source": 0,
+      "unity": 180
+    },
+    {
+      "tick": 28,
+      "field": "first_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 28,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 28,
+      "field": "second_action",
+      "source": 3,
+      "unity": 180
+    },
+    {
+      "tick": 28,
+      "field": "second_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 28,
+      "field": "count417",
+      "source": 1,
+      "unity": 3
+    },
+    {
+      "tick": 28,
+      "field": "first417action",
+      "source": 10,
+      "unity": 382
+    },
+    {
+      "tick": 28,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 29,
+      "field": "actor_action",
+      "source": 2,
+      "unity": 274
+    },
+    {
+      "tick": 29,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 29,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 29,
+      "field": "first_action",
+      "source": 0,
+      "unity": 180
+    },
+    {
+      "tick": 29,
+      "field": "first_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 29,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 29,
+      "field": "second_action",
+      "source": 3,
+      "unity": 180
+    },
+    {
+      "tick": 29,
+      "field": "second_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 29,
+      "field": "count417",
+      "source": 1,
+      "unity": 2
+    },
+    {
+      "tick": 29,
+      "field": "first417action",
+      "source": 11,
+      "unity": 382
+    },
+    {
+      "tick": 29,
+      "field": "first417x",
+      "source": 576,
+      "unity": 853
+    },
+    {
+      "tick": 29,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 29,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 29,
+      "field": "first211action",
+      "source": 160,
+      "unity": -1
+    },
+    {
+      "tick": 29,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 30,
+      "field": "actor_action",
+      "source": 2,
+      "unity": 274
+    },
+    {
+      "tick": 30,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 30,
+      "field": "actor_mp",
+      "source": 300,
+      "unity": 500
+    },
+    {
+      "tick": 30,
+      "field": "first_action",
+      "source": 0,
+      "unity": 180
+    },
+    {
+      "tick": 30,
+      "field": "first_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 30,
+      "field": "first_x",
+      "source": 588,
+      "unity": 589
+    },
+    {
+      "tick": 30,
+      "field": "second_action",
+      "source": 3,
+      "unity": 180
+    },
+    {
+      "tick": 30,
+      "field": "second_hp",
+      "source": 500,
+      "unity": 430
+    },
+    {
+      "tick": 30,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 30,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 30,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 30,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 30,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 30,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 30,
+      "field": "first211action",
+      "source": 161,
+      "unity": -1
+    },
+    {
+      "tick": 30,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 31,
+      "field": "actor_action",
+      "source": 2,
+      "unity": 274
+    },
+    {
+      "tick": 31,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 31,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 31,
+      "field": "first_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 31,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 31,
+      "field": "first_x",
+      "source": 588,
+      "unity": 591
+    },
+    {
+      "tick": 31,
+      "field": "second_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 31,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 31,
+      "field": "second_x",
+      "source": 619,
+      "unity": 621
+    },
+    {
+      "tick": 31,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 31,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 31,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 31,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 31,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 31,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 31,
+      "field": "first211action",
+      "source": 161,
+      "unity": -1
+    },
+    {
+      "tick": 31,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 32,
+      "field": "actor_action",
+      "source": 2,
+      "unity": 274
+    },
+    {
+      "tick": 32,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 32,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 32,
+      "field": "first_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 32,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 32,
+      "field": "first_x",
+      "source": 588,
+      "unity": 592
+    },
+    {
+      "tick": 32,
+      "field": "second_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 32,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 32,
+      "field": "second_x",
+      "source": 619,
+      "unity": 622
+    },
+    {
+      "tick": 32,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 32,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 32,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 32,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 32,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 32,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 32,
+      "field": "first211action",
+      "source": 162,
+      "unity": -1
+    },
+    {
+      "tick": 32,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 33,
+      "field": "actor_action",
+      "source": 3,
+      "unity": 274
+    },
+    {
+      "tick": 33,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 33,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 33,
+      "field": "first_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 33,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 33,
+      "field": "first_x",
+      "source": 588,
+      "unity": 593
+    },
+    {
+      "tick": 33,
+      "field": "second_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 33,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 33,
+      "field": "second_x",
+      "source": 619,
+      "unity": 623
+    },
+    {
+      "tick": 33,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 33,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 33,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 33,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 33,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 33,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 33,
+      "field": "first211action",
+      "source": 162,
+      "unity": -1
+    },
+    {
+      "tick": 33,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 34,
+      "field": "actor_action",
+      "source": 3,
+      "unity": 274
+    },
+    {
+      "tick": 34,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 34,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 34,
+      "field": "first_action",
+      "source": 204,
+      "unity": 181
+    },
+    {
+      "tick": 34,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 34,
+      "field": "first_x",
+      "source": 588,
+      "unity": 594
+    },
+    {
+      "tick": 34,
+      "field": "second_action",
+      "source": 204,
+      "unity": 181
+    },
+    {
+      "tick": 34,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 34,
+      "field": "second_x",
+      "source": 619,
+      "unity": 624
+    },
+    {
+      "tick": 34,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 34,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 34,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 34,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 34,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 34,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 34,
+      "field": "first211action",
+      "source": 163,
+      "unity": -1
+    },
+    {
+      "tick": 34,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 35,
+      "field": "actor_action",
+      "source": 3,
+      "unity": 274
+    },
+    {
+      "tick": 35,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 35,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 35,
+      "field": "first_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 35,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 35,
+      "field": "first_x",
+      "source": 576,
+      "unity": 595
+    },
+    {
+      "tick": 35,
+      "field": "second_action",
+      "source": 203,
+      "unity": 181
+    },
+    {
+      "tick": 35,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 35,
+      "field": "second_x",
+      "source": 631,
+      "unity": 625
+    },
+    {
+      "tick": 35,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 35,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 35,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 35,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 35,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 35,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 35,
+      "field": "first211action",
+      "source": 163,
+      "unity": -1
+    },
+    {
+      "tick": 35,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    },
+    {
+      "tick": 36,
+      "field": "actor_action",
+      "source": 3,
+      "unity": 274
+    },
+    {
+      "tick": 36,
+      "field": "actor_x",
+      "source": 500,
+      "unity": 904
+    },
+    {
+      "tick": 36,
+      "field": "actor_mp",
+      "source": 420,
+      "unity": 500
+    },
+    {
+      "tick": 36,
+      "field": "first_action",
+      "source": 204,
+      "unity": 182
+    },
+    {
+      "tick": 36,
+      "field": "first_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 36,
+      "field": "first_x",
+      "source": 565,
+      "unity": 596
+    },
+    {
+      "tick": 36,
+      "field": "second_action",
+      "source": 204,
+      "unity": 182
+    },
+    {
+      "tick": 36,
+      "field": "second_hp",
+      "source": 420,
+      "unity": 430
+    },
+    {
+      "tick": 36,
+      "field": "second_x",
+      "source": 642,
+      "unity": 626
+    },
+    {
+      "tick": 36,
+      "field": "count417",
+      "source": 0,
+      "unity": 2
+    },
+    {
+      "tick": 36,
+      "field": "first417slot",
+      "source": -1,
+      "unity": 50
+    },
+    {
+      "tick": 36,
+      "field": "first417action",
+      "source": -1,
+      "unity": 382
+    },
+    {
+      "tick": 36,
+      "field": "first417x",
+      "source": 0,
+      "unity": 853
+    },
+    {
+      "tick": 36,
+      "field": "count211",
+      "source": 1,
+      "unity": 0
+    },
+    {
+      "tick": 36,
+      "field": "first211slot",
+      "source": 51,
+      "unity": -1
+    },
+    {
+      "tick": 36,
+      "field": "first211action",
+      "source": 164,
+      "unity": -1
+    },
+    {
+      "tick": 36,
+      "field": "first211x",
+      "source": 574,
+      "unity": 0
+    }
+  ],
+  "sceneStatus": "MEASURED_COMPARE_PENDING",
+  "sceneCleanAfter": true
+}

@@ -38,6 +38,37 @@ namespace NTSD.Test
             RunImmediate(index, BattleRuntimeProfile.Authority400, false);
         }
 
+        [Test]
+        public void CurrentFusionMergePreservesHeldCounterAndPriorActionSnapshot()
+        {
+            JObject row = File.ReadLines(Source).Select(JObject.Parse)
+                .Single(value => (int)value["index"] == 0);
+            var world = CreateWorld(row);
+            try
+            {
+                LF2Entity primary = world.FindEntityByRuntimeSlotIncludingDormant(0);
+                LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(1);
+                primary.AttackingCounter = 7;
+                primary.FrameDelay = 3;
+                int priorLatch = primary.Trans.WaitCounter;
+                int priorSnapshot = primary.Runtime.PrevFrame2;
+
+                world.Oid5152FusionScanAll(0);
+
+                Assert.That(partner.Runtime.OidMergeDormant, Is.True);
+                Assert.That(primary.Frame.N, Is.EqualTo(290));
+                Assert.That(primary.AttackingCounter, Is.EqualTo(7));
+                Assert.That(primary.Trans.WaitCounter, Is.EqualTo(priorLatch));
+                Assert.That(primary.Runtime.PrevFrame2, Is.EqualTo(priorSnapshot));
+                Assert.That(primary.Frame.Prev2, Is.EqualTo(priorSnapshot));
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
         [TestCase(1333, 320)]
         [TestCase(2048, 325)]
         public void FusionDistanceAfterTwentyPixelMotion_UsesSourceGateAndDualMidpoints(
@@ -134,6 +165,54 @@ namespace NTSD.Test
             }
         }
 
+        [Test]
+        public void ControlledDefusion_RebuildsPartnerPrecisePositionFromEachIntegerDomain()
+        {
+            JObject row = File.ReadLines(Source).Select(JObject.Parse)
+                .Single(value => (int)value["index"] == 0);
+            var world = CreateWorld(row);
+            try
+            {
+                LF2Entity primary = world.FindEntityByRuntimeSlotIncludingDormant(0);
+                LF2Entity partner = world.FindEntityByRuntimeSlotIncludingDormant(1);
+                world.Oid5152FusionScanAll(0);
+                Assert.That(partner.Runtime.OidMergeDormant, Is.True);
+
+                primary.Runtime.SetPosition(321.75, -2.25, 253.5);
+                primary.Runtime.XInt = 321;
+                primary.Runtime.YInt = -2;
+                primary.Runtime.ZInt = 253;
+                primary.Runtime.SetSourceRulePosition(319.75, 251.5);
+                primary.Runtime.SourceRuleXInt = 319;
+                primary.Runtime.SourceRuleZInt = 251;
+                primary.Runtime.Unk338 = 0;
+
+                world.Oid5152FusionScanAll(1);
+
+                Assert.That(partner.Runtime.OidMergeDormant, Is.False);
+                Assert.That(partner.Runtime.XInt, Is.EqualTo(321));
+                Assert.That(partner.Runtime.YInt, Is.EqualTo(-2));
+                Assert.That(partner.Runtime.ZInt, Is.EqualTo(253));
+                Assert.That(partner.Runtime.X, Is.EqualTo(321.0));
+                Assert.That(partner.Runtime.Y, Is.EqualTo(-2.0));
+                Assert.That(partner.Runtime.Z, Is.EqualTo(253.0));
+                Assert.That(partner.Runtime.SourceRuleXInt, Is.EqualTo(319));
+                Assert.That(partner.Runtime.SourceRuleZInt, Is.EqualTo(251));
+                Assert.That(partner.Runtime.SourceRuleX, Is.EqualTo(319.0));
+                Assert.That(partner.Runtime.SourceRuleZ, Is.EqualTo(251.0));
+                Assert.That(primary.Runtime.X, Is.EqualTo(321.75));
+                Assert.That(primary.Runtime.Y, Is.EqualTo(-2.25));
+                Assert.That(primary.Runtime.Z, Is.EqualTo(253.5));
+                Assert.That(primary.Runtime.SourceRuleX, Is.EqualTo(319.75));
+                Assert.That(primary.Runtime.SourceRuleZ, Is.EqualTo(251.5));
+            }
+            finally
+            {
+                NTSD28Q06State18SpawnEditorTests.Shutdown(world);
+                Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
+            }
+        }
+
         internal static void RunImmediate(int index, BattleRuntimeProfile profile, bool renderer)
         {
             JObject row = File.ReadLines(Source).Select(JObject.Parse).Single(value => (int)value["index"] == index);
@@ -151,7 +230,7 @@ namespace NTSD.Test
                 var observer = new Observer();
                 world.NativeRandom.SetDiagnosticCallObserver(observer);
                 world.Oid5152FusionScanAll(0);
-                Compare(world, row["afterMerge"], "afterMerge", mergeDifferences);
+                Compare(world, CurrentFusionExpected(row, "afterMerge"), "afterMerge", mergeDifferences);
                 CompareJson(row["mergeCalls"], observer.Capture(), "mergeCalls", mergeDifferences);
                 if (world.Rng.CallCount != legacyCalls) mergeDifferences.Add("legacy RNG changed");
                 JObject merged = Capture(world);
@@ -167,12 +246,12 @@ namespace NTSD.Test
                     world.FindEntityByRuntimeSlotIncludingDormant(0).Runtime.Unk338 = 0;
                     if (index == 3) Prepare(world, row, true);
                     beforeDefuse = Capture(world);
-                    Compare(world, row["beforeDefuse"], "beforeDefuse", splitBeforeDifferences);
+                    Compare(world, CurrentFusionExpected(row, "beforeDefuse"), "beforeDefuse", splitBeforeDifferences);
                     rejectionBefore = CaptureIncludingDormant(world).ToString(Formatting.None);
                     observer = new Observer();
                     world.NativeRandom.SetDiagnosticCallObserver(observer);
                     world.Oid5152FusionScanAll(0);
-                    Compare(world, row["afterDefuse"], "afterDefuse", splitDifferences);
+                    Compare(world, CurrentFusionExpected(row, "afterDefuse"), "afterDefuse", splitDifferences);
                     CompareJson(row["defuseCalls"], observer.Capture(), "defuseCalls", splitDifferences);
                     if (world.Rng.CallCount != legacyCalls) splitDifferences.Add("legacy RNG changed");
                     afterDefuse = Capture(world);
@@ -202,6 +281,21 @@ namespace NTSD.Test
                 Shutdown(world, renderer);
                 Assert.That(world.LogicReferencePool.ActiveCount, Is.Zero);
             }
+        }
+
+        private static JToken CurrentFusionExpected(JObject row, string stage)
+        {
+            JToken expected = row[stage].DeepClone();
+            if ((int)row["mergeResult"]["fused"] != 1 ||
+                stage == "afterDefuse" && (int)row["defuseResult"]["defused"] == 1)
+                return expected;
+
+            // Source4 JSON is historical; 336B44 preserves these three pre-merge fields.
+            JToken prior = row["beforeMerge"]["entities"][0]["raw"]["frame"];
+            JToken frame = expected["entities"][0]["raw"]["frame"];
+            foreach (string field in new[] { "actionLatch", "tickActionSnapshot", "frameCounter" })
+                frame[field] = prior[field].DeepClone();
+            return expected;
         }
 
         [TestCase(0)]

@@ -276,14 +276,18 @@ namespace NTSD.Test
                 Is.EqualTo(expectedKnockoutDelta));
         }
 
-        [TestCase(0, 2, -3)]
-        [TestCase(1, 7, -3)]
-        [TestCase(2, 2, 8)]
-        [TestCase(3, 7, 8)]
-        [TestCase(10, 2, -3)]
-        [TestCase(11, 2, -3)]
-        public void CoverValue_ExcludesOnlyExactTimerValues(
+        [TestCase(0, 0, 2, -3)]
+        [TestCase(1, 0, 2, -3)]
+        [TestCase(2, 0, 2, -3)]
+        [TestCase(3, 0, 2, -3)]
+        [TestCase(10, 0, 2, -3)]
+        [TestCase(11, 0, 2, -3)]
+        [TestCase(1, 1, 7, -3)]
+        [TestCase(1, 2, 2, 8)]
+        [TestCase(1, 3, 7, 8)]
+        public void RecoverValue_ControlsTimersIndependentlyOfCover(
             int cover,
+            int recover,
             int expectedCatcherDelay,
             int expectedVictimDelay)
         {
@@ -292,7 +296,8 @@ namespace NTSD.Test
                 cover,
                 catcherType: LF2ObjectType.Character,
                 out LF2Character catcher,
-                out LF2Character victim);
+                out LF2Character victim,
+                recover: recover);
             catcher.FrameDelay = 7;
             victim.FrameDelay = 8;
             catcher.AttackingCounter = 0;
@@ -460,7 +465,8 @@ namespace NTSD.Test
             out LF2Character catcher,
             out LF2Character victim,
             int drain = 0,
-            int gain = 0)
+            int gain = 0,
+            int recover = 0)
         {
             var world = new SimulationWorld();
             catcher = CreateEntity(
@@ -486,6 +492,7 @@ namespace NTSD.Test
                             x = 17,
                             y = 23,
                             cover = cover,
+                            recover = recover,
                         }),
                 },
                 343);

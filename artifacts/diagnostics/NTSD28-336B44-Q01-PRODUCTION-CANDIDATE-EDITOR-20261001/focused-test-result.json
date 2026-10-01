@@ -1,0 +1,28 @@
+{
+  "job_id": "b42be490f5084c8f967389ee92acb767",
+  "status": "succeeded",
+  "finished_unix_ms": 1790860462560,
+  "summary": {
+    "total": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "durationSeconds": 19.3622452,
+    "resultState": "Passed"
+  },
+  "results": [
+    {
+      "fullName": "NTSD.Test.NTSD28B11LoganCatalogEditorTests.FormalCandidate_BuildsAll330DefinitionsWithNativeFrames",
+      "state": "Passed",
+      "durationSeconds": 5.7038933,
+      "message": null
+    },
+    {
+      "fullName": "NTSD.Test.NTSD28B11VisualContentCandidateEditorTests.FormalCandidate_Captures330DefinitionsAnd906ReferencedImages",
+      "state": "Passed",
+      "durationSeconds": 13.2140041,
+      "message": null
+    }
+  ],
+  "protected_files_unchanged": true
+}

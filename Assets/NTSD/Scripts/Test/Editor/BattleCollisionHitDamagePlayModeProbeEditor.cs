@@ -20,8 +20,12 @@ namespace NTSD.Test.Editor
     {
         private const string MenuPath =
             "NTSD/验证/R8/运行碰撞命中伤害Abort Play探针";
+        private const string C048MenuPath =
+            "NTSD/验证/Q07/C048首BDY防御累计Play探针";
         private const string ResultRelativePath =
             "Temp/NTSD_R8_WP01C_04_CollisionHitDamage.result.json";
+        private const string C048ResultRelativePath =
+            "Temp/NTSD28_Q07_C048_FirstBody.result.json";
         private const int TickTimeoutEditorUpdates = 1800;
         private const int MaximumBaselineEntities = 64;
         private const int ProbeOidBase = 8200;
@@ -48,6 +52,7 @@ namespace NTSD.Test.Editor
         private static bool pauseRequested;
         private static bool baselineCaptured;
         private static bool running;
+        private static bool c048Only;
         private static int editorUpdates;
 
         [MenuItem(MenuPath)]
@@ -81,6 +86,13 @@ namespace NTSD.Test.Editor
             };
             running = true;
             EditorApplication.update += Observe;
+        }
+
+        [MenuItem(C048MenuPath)]
+        public static void RunC048OnlyFromMenu()
+        {
+            RunFromMenu();
+            c048Only = running;
         }
 
         private static void Observe()
@@ -125,7 +137,7 @@ namespace NTSD.Test.Editor
 
             try
             {
-                result.matrix = ExecuteMatrix();
+                result.matrix = c048Only ? ExecuteC048Only() : ExecuteMatrix();
                 FinishSuccess();
             }
             catch (Exception exception)
@@ -226,8 +238,9 @@ namespace NTSD.Test.Editor
                     fixtures.formalCriminalTarget.RelationTeam == 1 &&
                     fixtures.firstBodyAttacker.FrameDelay == 3 &&
                     fixtures.formalCriminalTarget.FrameDelay == -3 &&
+                    fixtures.formalCriminalTarget.Runtime.Bdefend == 45 &&
                     fixtures.formalCriminalTarget.Health.HP == 100,
-                "formal criminal frame30 first-BDY 1033 response mismatch");
+                "formal criminal frame29 first-BDY 1033 response mismatch");
             Require(
                 world.GetRawRestVrest(
                     fixtures.formalCriminalTarget.Runtime.SlotIndex,
@@ -348,8 +361,8 @@ namespace NTSD.Test.Editor
                 {
                     attackerSlot = fixtures.firstBodyAttacker.Runtime.SlotIndex,
                     targetSlot = fixtures.formalCriminalTarget.Runtime.SlotIndex,
-                    objectId = 300,
-                    sourceFrame = 30,
+                    objectId = 301,
+                    sourceFrame = 29,
                     firstBodyKind = 1033,
                     resultingFrame = fixtures.formalCriminalTarget.Frame.N,
                     resultingGroup = fixtures.formalCriminalTarget.RelationTeam,
@@ -358,6 +371,7 @@ namespace NTSD.Test.Editor
                     frameCounter =
                         fixtures.formalCriminalTarget.Runtime.FrameWaitCounter,
                     hp = fixtures.formalCriminalTarget.Health.HP,
+                    bdefend = fixtures.formalCriminalTarget.Runtime.Bdefend,
                     vrest = world.GetRawRestVrest(
                         fixtures.formalCriminalTarget.Runtime.SlotIndex,
                         fixtures.firstBodyAttacker.Runtime.SlotIndex),
@@ -433,6 +447,77 @@ namespace NTSD.Test.Editor
                         weaponHp = fixtures.weaponTarget.Health.HP,
                         specialHp = fixtures.specialTarget.Health.HP,
                     },
+                },
+            };
+        }
+
+        private static MatrixEvidence ExecuteC048Only()
+        {
+            LF2CharacterDataWrapper criminalConfig =
+                CharacterAnimtorManager.Instance?.GetCharacterConfig(301);
+            Require(criminalConfig?.characterData != null,
+                "formal criminal OID301 config is unavailable in the live manager");
+            LF2FrameData criminalFrame29 =
+                criminalConfig.characterData.frames?.Find(frame => frame.frameId == 29);
+            Require(criminalFrame29 != null &&
+                    criminalFrame29.PrimaryBodyKind == 1033 &&
+                    criminalFrame29.PrimaryBodyRespond == 0,
+                "formal criminal frame29 no longer carries first-BDY kind1033/respond0");
+
+            ProbeCharacter attacker = RegisterOwned(new ProbeCharacter(
+                "Q07C048_FirstBodyAttacker",
+                ProbeOidBase,
+                AttackItr(0, 10, 3, 0),
+                false));
+            ProbeCriminal target = RegisterOwned(new ProbeCriminal(
+                "Q07C048_FormalCriminalTarget",
+                criminalConfig,
+                29));
+            ConfigurePair(attacker, target, 180000);
+            target.Runtime.FrameWaitCounter = 77;
+
+            int tick = driver.CurrentTickIndex + 400;
+            world.CaptureCollisionFrameSnapshotsAll();
+            world.TickCollisionPairVRestAll();
+            world.CollectCollisionCandidatesAll();
+            RequireBaselineHasNoCandidates();
+            Require(RequireCandidateOrder(attacker, target) == 1,
+                "C048 did not collect exactly one first-BDY candidate");
+            world.PostInteractionTickAll(tick);
+
+            int vrest = world.GetRawRestVrest(
+                target.Runtime.SlotIndex,
+                attacker.Runtime.SlotIndex);
+            Require(target.Frame.N == 33 &&
+                    target.Runtime.Frame == 33 &&
+                    target.Runtime.FrameWaitCounter == 77 &&
+                    target.RelationTeam == 1 &&
+                    attacker.FrameDelay == 3 &&
+                    target.FrameDelay == -3 &&
+                    target.Runtime.Bdefend == 45 &&
+                    target.Health.HP == 100 &&
+                    vrest == 0,
+                "C048 formal OID301 first-BDY response or Bdefend45 mismatch");
+
+            return new MatrixEvidence
+            {
+                tick = tick,
+                totalCandidates = 1,
+                formalCriminalFirstBody = new FirstBodyResponseEvidence
+                {
+                    attackerSlot = attacker.Runtime.SlotIndex,
+                    targetSlot = target.Runtime.SlotIndex,
+                    objectId = 301,
+                    sourceFrame = 29,
+                    firstBodyKind = 1033,
+                    resultingFrame = target.Frame.N,
+                    resultingGroup = target.RelationTeam,
+                    attackerHold = attacker.FrameDelay,
+                    targetHold = target.FrameDelay,
+                    frameCounter = target.Runtime.FrameWaitCounter,
+                    hp = target.Health.HP,
+                    bdefend = target.Runtime.Bdefend,
+                    vrest = vrest,
                 },
             };
         }
@@ -561,15 +646,15 @@ namespace NTSD.Test.Editor
             fixtures.specialTarget.Unk344 = 1;
 
             LF2CharacterDataWrapper criminalConfig =
-                CharacterAnimtorManager.Instance?.GetCharacterConfig(300);
+                CharacterAnimtorManager.Instance?.GetCharacterConfig(301);
             Require(criminalConfig?.characterData != null,
-                "formal criminal OID300 config is unavailable in the live manager");
-            LF2FrameData criminalFrame30 =
-                criminalConfig.characterData.frames?.Find(frame => frame.frameId == 30);
-            Require(criminalFrame30 != null &&
-                    criminalFrame30.PrimaryBodyKind == 1033 &&
-                    criminalFrame30.PrimaryBodyRespond == 0,
-                "formal criminal frame30 no longer carries first-BDY kind1033/respond0");
+                "formal criminal OID301 config is unavailable in the live manager");
+            LF2FrameData criminalFrame29 =
+                criminalConfig.characterData.frames?.Find(frame => frame.frameId == 29);
+            Require(criminalFrame29 != null &&
+                    criminalFrame29.PrimaryBodyKind == 1033 &&
+                    criminalFrame29.PrimaryBodyRespond == 0,
+                "formal criminal frame29 no longer carries first-BDY kind1033/respond0");
             fixtures.firstBodyAttacker = RegisterOwned(new ProbeCharacter(
                 "R8C04_FirstBodyAttacker",
                 oid++,
@@ -578,7 +663,7 @@ namespace NTSD.Test.Editor
             fixtures.formalCriminalTarget = RegisterOwned(new ProbeCriminal(
                 "R8C04_FormalCriminalTarget",
                 criminalConfig,
-                30));
+                29));
             ConfigurePair(
                 fixtures.firstBodyAttacker,
                 fixtures.formalCriminalTarget,
@@ -822,9 +907,10 @@ namespace NTSD.Test.Editor
         private static void FinishSuccess()
         {
             result.status = "PASS";
-            result.message =
-                "Live collision collect, ordered hit consumption, damage/stat, " +
-                "durability, vrest and abort matrices passed.";
+            result.message = c048Only
+                ? "Formal OID301 first-BDY response and Bdefend45 passed."
+                : "Live collision collect, ordered hit consumption, damage/stat, " +
+                  "durability, vrest and abort matrices passed.";
             result.endTick = driver.CurrentTickIndex;
             result.producedSoundCount = world.PendingSounds.Count - BaselineSounds.Count;
             result.rngCallsDuringMatrix = world.Rng.CallCount - baselineRngCalls;
@@ -986,7 +1072,7 @@ namespace NTSD.Test.Editor
             string path = Path.GetFullPath(Path.Combine(
                 Application.dataPath,
                 "..",
-                ResultRelativePath));
+                c048Only ? C048ResultRelativePath : ResultRelativePath));
             Directory.CreateDirectory(Path.GetDirectoryName(path) ?? string.Empty);
             File.WriteAllText(path, JsonUtility.ToJson(probeResult, true));
         }
@@ -1014,6 +1100,7 @@ namespace NTSD.Test.Editor
             pauseRequested = false;
             baselineCaptured = false;
             running = false;
+            c048Only = false;
             editorUpdates = 0;
             OwnedEntities.Clear();
             BaselineEntities.Clear();
@@ -1125,7 +1212,7 @@ namespace NTSD.Test.Editor
                 int frameId)
             {
                 Name = name;
-                ObjectId = 300;
+                ObjectId = 301;
                 FrameCache.Load(config);
                 ImmediateFrame(frameId);
                 Runtime.SetPosition(0, 0, 0);
@@ -1363,6 +1450,7 @@ namespace NTSD.Test.Editor
             public int targetHold;
             public int frameCounter;
             public int hp;
+            public int bdefend;
             public int vrest;
         }
 

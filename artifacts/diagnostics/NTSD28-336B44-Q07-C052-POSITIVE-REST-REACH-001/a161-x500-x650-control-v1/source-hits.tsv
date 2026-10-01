@@ -1,0 +1,3 @@
+tick	ordinal	attacker_slot	target_slot	candidate_index	effect	status	terminates	message
+1	0	0	1	0	21	0	0	
+1	1	0	1	1	21	1	0	target relation rest currently blocks this attacker

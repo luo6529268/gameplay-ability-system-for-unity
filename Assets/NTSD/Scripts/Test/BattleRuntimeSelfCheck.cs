@@ -13590,18 +13590,18 @@ namespace NTSD.Test
             outOfRangeWorld.Register(outOfRangeChild);
 
             outOfRangeWorld.HeldObjectProcessAll(1);
-            Expect(outOfRangeChild.Runtime.LinkState == -1 &&
+            Expect(outOfRangeChild.Runtime.LinkState == 0 &&
                    outOfRangeChild.Runtime.HolderStableId == 400 &&
                    outOfRangeWorld.LastHeldInvalidReciprocalFailureCountForDiagnostics == 1 &&
                    outOfRangeWorld.HeldInvalidReciprocalFailureCountForDiagnostics == 1,
-                "NTSD28-B6: out-of-range negative child must preserve its relation while reporting failure");
+                "NTSD28-336B44-C043: out-of-range negative child must clear only its state while reporting failure");
 
             outOfRangeWorld.HeldObjectProcessAll(2);
-            Expect(outOfRangeChild.Runtime.LinkState == -1 &&
+            Expect(outOfRangeChild.Runtime.LinkState == 0 &&
                    outOfRangeChild.Runtime.HolderStableId == 400 &&
-                   outOfRangeWorld.LastHeldInvalidReciprocalFailureCountForDiagnostics == 1 &&
-                   outOfRangeWorld.HeldInvalidReciprocalFailureCountForDiagnostics == 2,
-                "NTSD28-B6: the second held pass must preserve the same invalid relation again");
+                   outOfRangeWorld.LastHeldInvalidReciprocalFailureCountForDiagnostics == 0 &&
+                   outOfRangeWorld.HeldInvalidReciprocalFailureCountForDiagnostics == 1,
+                "NTSD28-336B44-C043: the second held pass must not repeat the cleared invalid relation");
 
             var mismatchWorld = new SimulationWorld();
             FlowSelfCheckEntity mismatchHolder = CreateFlowSelfCheckEntity(
@@ -13627,12 +13627,12 @@ namespace NTSD.Test
             mismatchWorld.Register(mismatchChild);
 
             mismatchWorld.HeldObjectProcessAll(1);
-            Expect(mismatchChild.Runtime.LinkState == -2 &&
+            Expect(mismatchChild.Runtime.LinkState == 0 &&
                    mismatchChild.Runtime.HolderStableId == 30 &&
                    mismatchHolder.Runtime.TargetSlotIndex == 32 &&
                    mismatchWorld.LastHeldInvalidReciprocalFailureCountForDiagnostics == 1 &&
                    mismatchWorld.HeldInvalidReciprocalFailureCountForDiagnostics == 1,
-                "NTSD28-B6: active-holder mismatch must preserve both sides of the observed relation");
+                "NTSD28-336B44-C043: active-holder mismatch must clear only child state");
         }
 
         private static void AdvanceFlowToEvenToggle(SimulationWorld world)

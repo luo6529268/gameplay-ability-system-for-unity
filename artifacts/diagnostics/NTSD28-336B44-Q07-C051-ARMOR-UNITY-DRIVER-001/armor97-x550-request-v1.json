@@ -1,0 +1,9 @@
+{
+  "scenarioPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ARMOR-UNITY-DRIVER-001/armor97-x550-scenario-v1.json",
+  "outputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ARMOR-UNITY-DRIVER-001/armor97-x550-unity-v1.raw.jsonl",
+  "domainOutputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ARMOR-UNITY-DRIVER-001/armor97-x550-unity-v1.domain.jsonl",
+  "inputRngOutputPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ARMOR-UNITY-DRIVER-001/armor97-x550-unity-v1.input-rng.jsonl",
+  "loganRuntimeRoot": "Assets/NTSD/Content/LoganRuntime",
+  "domainVersion": "v2",
+  "resultPath": "artifacts/diagnostics/NTSD28-336B44-Q07-C051-ARMOR-UNITY-DRIVER-001/armor97-x550-unity-v1.result.txt"
+}

@@ -19,7 +19,7 @@ namespace NTSD.Test.Editor
         private const string MenuPath =
             "NTSD/验证/R8/运行抓取CPoint关系Play探针";
         private const string ResultRelativePath =
-            "Temp/NTSD_R8_WP01C_03_GrabCpointLink.result.json";
+            "Temp/NTSD28_336B44_Q07_C045_GrabRecoverCover.result.json";
         private const int TickTimeoutEditorUpdates = 1800;
         private const int ProbeDataIdBase = 7800;
 
@@ -148,7 +148,8 @@ namespace NTSD.Test.Editor
                     decrease: 1,
                     injury: 30,
                     vaction: 130,
-                    cover: 11);
+                    cover: 1);
+                catcherPoint.recover = 0;
                 catcher = new ProbeCharacter(
                     "R8C03_ValidCatcher",
                     ProbeDataIdBase + 1,
@@ -473,6 +474,7 @@ namespace NTSD.Test.Editor
                 victim.CatcherSlotIndex = catcherSlot;
                 catcher.Runtime.CaughtDuration = 2;
                 catcher.AttackingCounter = 2;
+                victim.AttackingCounter = 3;
                 catcher.Runtime.KeyRight = 1;
                 catcher.Runtime.KeyLeft = 0;
                 catcher.Runtime.KeyJump = 1;
@@ -490,11 +492,13 @@ namespace NTSD.Test.Editor
                 Require(catcher.Runtime.CaughtDuration == -3 &&
                         catcher.Runtime.Dir == "left",
                     "negative-duration escape must stop before dircontrol tail");
-                Require(catcher.HitCount == 0 && victim.HitCount == 0 &&
-                        catcher.AttackingCounter == 1 &&
-                        victim.AttackingCounter == 1 &&
+                Require(catcher.HitCount == 1 && victim.HitCount == 1 &&
+                        catcher.AttackingCounter == 2 &&
+                        victim.AttackingCounter == 3 &&
                         Nearly(victim.KnockbackVx, 4.0) &&
-                        Nearly(victim.KnockbackVy, -3.0),
+                        Nearly(victim.KnockbackVy, -3.0) &&
+                        Nearly(victim.Runtime.Vx, 0.0) &&
+                        Nearly(victim.Runtime.Vy, 0.0),
                     "negative-duration escape counter/knockback mismatch");
                 Require(catcher.Frame.N != 120,
                     "negative-duration escape incorrectly ran action selection");
@@ -509,7 +513,7 @@ namespace NTSD.Test.Editor
                 Require(catcher.HitCount == 0 && victim.HitCount == 0 &&
                         Nearly(victim.Runtime.Vx, 4.0) &&
                         Nearly(victim.Runtime.Vy, -3.0),
-                    "FramePostProcess changed terminal escape motion");
+                    "FramePostProcess failed to consume terminal escape impulse");
 
                 return new EscapeDirControlEvidence
                 {

@@ -17,7 +17,7 @@ namespace NTSD.Test
     public sealed class SimulationQueryAndLinkModuleEditorTests
     {
         [Test]
-        public void HeldObjectProcess_OutOfRangeNegativeHolderRetainsHolderSlotAcrossBothPasses()
+        public void HeldObjectProcess_OutOfRangeNegativeHolderClearsOnlyRelationState()
         {
             var world = new SimulationWorld();
             LF2Character child = Register(world, 20, 300);
@@ -25,7 +25,7 @@ namespace NTSD.Test
             child.Runtime.HolderStableId = 400;
 
             world.HeldObjectProcessAll(1);
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.HolderStableId, Is.EqualTo(400));
             Assert.That(
                 world.LastHeldInvalidReciprocalFailureCountForDiagnostics,
@@ -35,18 +35,18 @@ namespace NTSD.Test
                 Is.EqualTo(1));
 
             world.HeldObjectProcessAll(2);
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.HolderStableId, Is.EqualTo(400));
             Assert.That(
                 world.LastHeldInvalidReciprocalFailureCountForDiagnostics,
-                Is.EqualTo(1));
+                Is.Zero);
             Assert.That(
                 world.HeldInvalidReciprocalFailureCountForDiagnostics,
-                Is.EqualTo(2));
+                Is.EqualTo(1));
         }
 
         [Test]
-        public void HeldObjectProcess_ActiveHolderMismatchPreservesBothRelationFields()
+        public void HeldObjectProcess_ActiveHolderMismatchClearsOnlyChildRelationState()
         {
             var world = new SimulationWorld();
             LF2Character holder = Register(world, 30, 301);
@@ -57,7 +57,7 @@ namespace NTSD.Test
 
             world.HeldObjectProcessAll(1);
 
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-2));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.HolderStableId, Is.EqualTo(30));
             Assert.That(holder.Runtime.TargetSlotIndex, Is.EqualTo(32));
             Assert.That(
@@ -66,7 +66,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void SlotZeroMismatch_PreservesBothSidesMotionAndRng()
+        public void SlotZeroMismatch_ClearsChildStateAndPreservesMotionAndRng()
         {
             var world = new SimulationWorld();
             LF2Character holder = Register(world, 0, 303);
@@ -86,7 +86,7 @@ namespace NTSD.Test
 
             world.HeldObjectProcessAll(3);
 
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-5));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.HolderStableId, Is.Zero);
             Assert.That(child.Runtime.HeldWeaponStableId, Is.EqualTo(73));
             Assert.That(child.Runtime.OwnerSlotIndex, Is.EqualTo(74));
@@ -101,7 +101,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void ExtendedHighOutOfRangeParent_PreservesNegativeRelation()
+        public void ExtendedHighOutOfRangeParent_ClearsOnlyRelationState()
         {
             var world = new SimulationWorld(
                 BattleRuntimeProfile.DesktopExtended,
@@ -112,7 +112,7 @@ namespace NTSD.Test
 
             world.HeldObjectProcessAll(4);
 
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-7));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
             Assert.That(child.Runtime.HolderStableId, Is.EqualTo(512));
             Assert.That(
                 world.LastHeldInvalidReciprocalFailureCountForDiagnostics,
@@ -146,7 +146,7 @@ namespace NTSD.Test
         }
 
         [Test]
-        public void InvalidRelations_EmitReasonedPreservedTraceOnlyWithSink()
+        public void InvalidRelations_EmitReasonedClearedTraceOnlyWithSink()
         {
             var world = new SimulationWorld();
             var events = new BattleParityStructuralEventBuffer(400);
@@ -183,8 +183,10 @@ namespace NTSD.Test
                     "reciprocal-mismatch",
                 }));
             Assert.That(invalid.All(value =>
-                value.Outcome == "preserved" &&
-                value.Before == value.After), Is.True);
+                value.Outcome == "cleared" &&
+                value.Before != value.After &&
+                value.BeforeLinkState < 0 &&
+                value.AfterLinkState == 0), Is.True);
             Assert.That(
                 world.LastHeldInvalidReciprocalFailureCountForDiagnostics,
                 Is.EqualTo(3));
@@ -198,6 +200,7 @@ namespace NTSD.Test
             child.Runtime.LinkState = -1;
             child.Runtime.HolderStableId = 400;
             world.HeldObjectProcessAll(7);
+            child.Runtime.LinkState = -1;
 
             _ = GC.GetAllocatedBytesForCurrentThread();
             long before = GC.GetAllocatedBytesForCurrentThread();
@@ -205,7 +208,7 @@ namespace NTSD.Test
             long allocated = GC.GetAllocatedBytesForCurrentThread() - before;
 
             Assert.That(allocated, Is.Zero);
-            Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+            Assert.That(child.Runtime.LinkState, Is.Zero);
         }
 
         private static LF2Character Register(
@@ -223,17 +226,17 @@ namespace NTSD.Test
     }
 
     [InitializeOnLoad]
-    internal static class NTSD28B6HeldInvalidReciprocalPreservePlayRunner
+    internal static class NTSD28Q07C043InvalidHeldTailPlayRunner
     {
         private const string RequestRelativePath =
-            "Temp/NTSD28-B6-HeldInvalidReciprocalPreserve-Play-v1.request";
+            "Temp/NTSD28-Q07-C043-InvalidHeldTail-Play-v1.request";
         private const string ResultRelativePath =
-            "Temp/NTSD28-B6-HeldInvalidReciprocalPreserve-Play-v1.result";
+            "Temp/NTSD28-Q07-C043-InvalidHeldTail-Play-v1.result";
         private static readonly string RequestPath = ProjectPath(RequestRelativePath);
         private static readonly string ResultPath = ProjectPath(ResultRelativePath);
         private static bool running;
 
-        static NTSD28B6HeldInvalidReciprocalPreservePlayRunner()
+        static NTSD28Q07C043InvalidHeldTailPlayRunner()
         {
             EditorApplication.update += PollRequest;
         }
@@ -258,17 +261,17 @@ namespace NTSD.Test
             try
             {
                 var tests = new SimulationQueryAndLinkModuleEditorTests();
-                tests.HeldObjectProcess_OutOfRangeNegativeHolderRetainsHolderSlotAcrossBothPasses();
-                tests.HeldObjectProcess_ActiveHolderMismatchPreservesBothRelationFields();
-                tests.SlotZeroMismatch_PreservesBothSidesMotionAndRng();
-                tests.ExtendedHighOutOfRangeParent_PreservesNegativeRelation();
+                tests.HeldObjectProcess_OutOfRangeNegativeHolderClearsOnlyRelationState();
+                tests.HeldObjectProcess_ActiveHolderMismatchClearsOnlyChildRelationState();
+                tests.SlotZeroMismatch_ClearsChildStateAndPreservesMotionAndRng();
+                tests.ExtendedHighOutOfRangeParent_ClearsOnlyRelationState();
                 tests.LifecycleCleanup_PreventsInvalidFailureAndSameSlotAba();
-                tests.InvalidRelations_EmitReasonedPreservedTraceOnlyWithSink();
+                tests.InvalidRelations_EmitReasonedClearedTraceOnlyWithSink();
                 tests.WarmedSinkOffInvalidPass_DoesNotAllocateManagedMemory();
                 File.WriteAllText(
                     ResultPath,
                     "state=Passed\ncases=7\n" +
-                    "missingMismatchPreserve=exact\n" +
+                    "invalidRelationClear=exact\n" +
                     "slotZeroHighLifecycleTrace=exact\n" +
                     "rngMutation=none\n" +
                     "warmedSinkOffAllocationBytes=0\n" +

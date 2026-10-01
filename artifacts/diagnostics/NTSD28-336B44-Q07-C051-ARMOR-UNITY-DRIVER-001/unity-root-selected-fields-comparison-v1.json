@@ -1,0 +1,42 @@
+{
+  "schema": "ntsd28-c051-armor-unity-root-selected-fields/1",
+  "scope": "Current 336B44 root versus original Unity Editor full Driver; selected fields only; source armor decision is separate evidence",
+  "results": [
+    {
+      "case": "armor97-x550",
+      "targetOid": 97,
+      "ticks": 12,
+      "fieldChecks": 132,
+      "differences": [],
+      "unityRawSha256": "ef17247c890660cdabd6954100f3757bce5bd4288508f0f192eebc90ee6f7523",
+      "rootTraceSha256": "2d50a4d7dc08cd04b13a402f64c0decb43e565d89be0267c530b0abf842ee402",
+      "unityResult": "PASS",
+      "tick3Unity": {
+        "action": 0,
+        "hp": 495
+      },
+      "tick3Root": {
+        "action": 0,
+        "hp": 495
+      }
+    },
+    {
+      "case": "control2-x550",
+      "targetOid": 2,
+      "ticks": 12,
+      "fieldChecks": 132,
+      "differences": [],
+      "unityRawSha256": "ca71c946618b84711ae52d75a0c590e1acd95c215f922d73f1b5a6b2f27e450b",
+      "rootTraceSha256": "4592c3a4b7c2ea8807995e7e664195a6e005f49fd0af56e63505248603973330",
+      "unityResult": "PASS",
+      "tick3Unity": {
+        "action": 180,
+        "hp": 450
+      },
+      "tick3Root": {
+        "action": 180,
+        "hp": 450
+      }
+    }
+  ]
+}

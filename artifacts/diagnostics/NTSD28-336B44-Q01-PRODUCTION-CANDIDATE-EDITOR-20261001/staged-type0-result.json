@@ -1,0 +1,24 @@
+{
+  "job_id": "9ef3c546147844db86b9fef580daea88",
+  "status": "failed",
+  "error": null,
+  "progress": {
+    "completed": 1,
+    "total": 8775,
+    "current_test_full_name": null,
+    "current_test_started_unix_ms": 1790860694448,
+    "last_finished_test_full_name": "NTSD.Test.CharacterAssetDeploymentEditorTests.FormalTypeZeroCharacterDatAndImagesAreDeployed",
+    "last_finished_unix_ms": 1790860706999,
+    "stuck_suspected": false,
+    "editor_is_focused": false,
+    "blocked_reason": null,
+    "failures_so_far": [
+      {
+        "full_name": "NTSD.Test.CharacterAssetDeploymentEditorTests.FormalTypeZeroCharacterDatAndImagesAreDeployed",
+        "message": "  oid 77 DAT bytes\r\n  String lengths are both 64. Strings differ at index 0.\r\n  Expected: \"987696ABE0D2E562C56DC0265E999B7D37443B55324310A7A5D47D15AEAC66FF\"\r\n  But was:  \"A4500E6B40B33667460C11ABE3C47F7F5B8F07C1DCEBF39A74A9AF0E2CE21F62\"\r\n  -----------^\r\n"
+      }
+    ],
+    "failures_capped": false
+  },
+  "result": null
+}

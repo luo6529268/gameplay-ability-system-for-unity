@@ -1,0 +1,51 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "ea3d0eff54aa40d48ced4fb5ab30e45d",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790867837635,
+      "finished_unix_ms": 1790867843786,
+      "last_update_unix_ms": 1790867843786,
+      "progress": {
+        "completed": 1,
+        "total": 8775,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790867843272,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+        "last_finished_unix_ms": 1790867843389,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 1,
+          "passed": 1,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.5788584,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+            "state": "Passed",
+            "durationSeconds": 0.1130298,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

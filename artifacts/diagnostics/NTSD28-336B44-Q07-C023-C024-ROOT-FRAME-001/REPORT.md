@@ -1,5 +1,8 @@
 # C023/C024 新版正式根 EXE 帧推进对照
 
+> **最新状态 VERIFIED_SCOPED（下方历史保留）：** 2026-09-30 C023 限定关闭（覆盖此前自然/Scene待验）：Guren84从地面受控初始388按正式DAT自然生成619/Y-40，tick21由267→268生成85/action0/Y-22，同tick按计数后转212/counter1/Vy0；tick22 counter0/Vy1.7，后续自然重力/落地/AI均纳入32tick。源/336B44正式根1982声明字段相同/exit0/PASS；原Battle Scene唯一airborne-idle-scene-02 PASS/DONE，107活跃实体行×14字段和32tick六RNG标量共1690/1690、首差0/速度差0。原EditorTundra9.30s0错，idle/nonPlay/noncompiling；正常exit/Scene clean/四保护SHA不变。Scene01 local出生PASS但完整1690字段FAIL62保留：先RNGtick24，再实体tick28。Scene02实测World初始difficulty2，与正式root0不同；只在临时诊断World统一0后整段通过，生产AI未修、默认配置未改。这是fixture口径修正，非新增生产缺陷。既有完整tick5/5、相邻C0223/3/C25G4/4和type3控制复用，不重跑无关测试。关闭共享空中state0后计数转212门；不是物理键选388/所有类型自然入口/全World/checksum/画面或整场证书。Q07与总目标继续ACTIVE，下一G1为F02自然高速武器进入state1000的根/原Scene出口。
+
+
 当前状态：`VERIFIED_SCOPED_ROOT_TRACE`。诊断限定出口已取得；父 C023 的自然生产入口与原场景出口、父 C024 的原场景出口分别维护，不能由本报告直接宣称整个 Q07 完成。
 
 唯一正式 EXE 精确 SHA256 为 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`。所有根回放直接调用该文件，未晋升源码诊断 EXE。诊断使用对应 playable GameSession 完整生产 tick；BG1/Z400 仅用于原版诊断，没有向 Unity 导入原版背景或模式 DAT。

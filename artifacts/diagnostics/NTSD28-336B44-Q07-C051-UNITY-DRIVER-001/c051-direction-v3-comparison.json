@@ -1,0 +1,81 @@
+{
+  "correction": "v2 comparison incorrectly selected superseded left root-v1 initial facing; current left root-v2 matches both slot facings. Old comparison retained.",
+  "results": [
+    {
+      "side": "right-x550",
+      "ticks": 12,
+      "fieldChecks": 99,
+      "identityChecks": 33,
+      "differences": [],
+      "targetPoints": [
+        {
+          "tick": 9,
+          "unity": {
+            "action": 180,
+            "hp": 435,
+            "vx": 0
+          },
+          "root": {
+            "action": 180,
+            "hp": 435,
+            "vx": 0
+          }
+        },
+        {
+          "tick": 12,
+          "unity": {
+            "action": 180,
+            "hp": 435,
+            "vx": -10
+          },
+          "root": {
+            "action": 180,
+            "hp": 435,
+            "vx": -10
+          }
+        }
+      ],
+      "rootTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\right-x550-root-v1-trace.jsonl",
+      "rootTraceSha256": "aa327e22f85000294699ea689795e90b02eff38194954294ce41024d1d415fbe",
+      "certificateEligible": false
+    },
+    {
+      "side": "left-x350",
+      "ticks": 12,
+      "fieldChecks": 99,
+      "identityChecks": 33,
+      "differences": [],
+      "targetPoints": [
+        {
+          "tick": 9,
+          "unity": {
+            "action": 180,
+            "hp": 435,
+            "vx": 0
+          },
+          "root": {
+            "action": 180,
+            "hp": 435,
+            "vx": 0
+          }
+        },
+        {
+          "tick": 12,
+          "unity": {
+            "action": 180,
+            "hp": 435,
+            "vx": 10
+          },
+          "root": {
+            "action": 180,
+            "hp": 435,
+            "vx": 10
+          }
+        }
+      ],
+      "rootTrace": "artifacts\\diagnostics\\NTSD28-336B44-Q07-C051-ORO-EFFECT23-REACH-001\\left-x350-root-v2-trace.jsonl",
+      "rootTraceSha256": "cf2701700e543ab7c37b132d1d1a0337db1814c6440846fc8f16c6eaad5bb9b2",
+      "certificateEligible": false
+    }
+  ]
+}

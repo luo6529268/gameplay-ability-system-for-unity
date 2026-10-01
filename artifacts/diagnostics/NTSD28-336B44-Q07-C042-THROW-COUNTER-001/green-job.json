@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "c0a51ece619c4f7fb71b6c0ae1b510ff",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790794530178,
+      "finished_unix_ms": 1790794589772,
+      "last_update_unix_ms": 1790794589772,
+      "progress": {
+        "completed": 2,
+        "total": 8756,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790794583505,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q06CpointThrowRawBindingEditorTests.ImmediateThrowMatchesNativeRawBinding(MobileExtended)",
+        "last_finished_unix_ms": 1790794588865,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 21.1373035,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

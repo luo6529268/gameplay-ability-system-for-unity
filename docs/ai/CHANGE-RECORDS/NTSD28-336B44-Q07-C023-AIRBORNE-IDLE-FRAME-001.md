@@ -1,6 +1,6 @@
 <!-- CHANGE-RECORD
 id: NTSD28-336B44-Q07-C023-AIRBORNE-IDLE-FRAME-001
-status: RUNTIME_PENDING
+status: VERIFIED
 change-kind: CODE
 code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28C023AirborneIdleFrameEditorTests.cs
 code-path: Assets/NTSD/Scripts/Animation/LF2Objects/LF2Entity.cs
@@ -30,3 +30,9 @@ Final original-Editor exact job `e277c78f8a854ac39d91bf17173a62d5` passed 5/5 wi
 
 
 C023根受控补证：正式OID2/action0/Y-20与Y-40/Vy0两例在tick1均0→212，各32tick1248声明字段一致，根exit0/PASS。LFR可携带初始Y；独立CRTseed和EOF33不计入已声明字段。普通jump与唯一Dei-air试验未自然触发；全偏移parser10条子体state0/212候选，父体实际空中前提未证。原Scene/自然生产入口仍待，父门RUNTIME_PENDING；不把受控初态称自然玩家输入。根证据在 NTSD28-336B44-Q07-C023-C024-ROOT-FRAME-001/REPORT.md。
+
+
+2026-09-30 C023 限定关闭（覆盖此前自然/Scene待验）：Guren84从地面受控初始388按正式DAT自然生成619/Y-40，tick21由267→268生成85/action0/Y-22，同tick按计数后转212/counter1/Vy0；tick22 counter0/Vy1.7，后续自然重力/落地/AI均纳入32tick。源/336B44正式根1982声明字段相同/exit0/PASS；原Battle Scene唯一airborne-idle-scene-02 PASS/DONE，107活跃实体行×14字段和32tick六RNG标量共1690/1690、首差0/速度差0。原EditorTundra9.30s0错，idle/nonPlay/noncompiling；正常exit/Scene clean/四保护SHA不变。Scene01 local出生PASS但完整1690字段FAIL62保留：先RNGtick24，再实体tick28。Scene02实测World初始difficulty2，与正式root0不同；只在临时诊断World统一0后整段通过，生产AI未修、默认配置未改。这是fixture口径修正，非新增生产缺陷。既有完整tick5/5、相邻C0223/3/C25G4/4和type3控制复用，不重跑无关测试。关闭共享空中state0后计数转212门；不是物理键选388/所有类型自然入口/全World/checksum/画面或整场证书。Q07与总目标继续ACTIVE，下一G1为F02自然高速武器进入state1000的根/原Scene出口。
+
+
+Final validation: Tools/Validate-ChangeLedger.ps1 -RepositoryRoot current checkout -> PASS1063records,1governedcodefile covered by AIRBORNE-SCENE-PLAY-001; full output ledger-check-final.txt. git -c core.safecrlf=false diff --check -> exit0. OriginalMCPfresh editor-final-state.json confirms originalBattleactive/idle/nonPlay/noncompiling; scene02-protected-hashes.json four SHA equal. Two PNGmeta importer changes observed during Play remain preserved/unattributed; no manual importer edit or rollback, not included in four-protected-asset claim. Existing unrelated untrackedB11files remain untouched. No new production, DAT, Scene or configAsset changes; no unrelated tests rerun.

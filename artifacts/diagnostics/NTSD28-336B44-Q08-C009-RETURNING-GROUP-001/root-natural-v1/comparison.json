@@ -1,0 +1,22 @@
+{
+  "source_ticks": 12,
+  "fields_per_tick": 7,
+  "equal_field_comparisons": 83,
+  "first_difference": {
+    "host": 2,
+    "field": "living_groups",
+    "source": 1,
+    "root": 2
+  },
+  "differences": [
+    {
+      "host": 2,
+      "field": "living_groups",
+      "source": 1,
+      "root": 2
+    }
+  ],
+  "root_extra_ticks": [
+    13
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "status": "DIFFERENCE",
+  "sceneProbeStatus": "DIFFERENCE",
+  "phase": "DONE",
+  "ticks": 128,
+  "entityRows": 256,
+  "fieldsCompared": 4608,
+  "differenceCount": 392,
+  "firstDifference": {
+    "tick": 7,
+    "slot": 1,
+    "field": "hp",
+    "source": 500,
+    "unity": 491
+  },
+  "firstDifferences": [
+    {
+      "tick": 7,
+      "slot": 1,
+      "field": "hp",
+      "source": 500,
+      "unity": 491
+    },
+    {
+      "tick": 8,
+      "slot": 1,
+      "field": "hp",
+      "source": 500,
+      "unity": 491
+    },
+    {
+      "tick": 9,
+      "slot": 1,
+      "field": "hp",
+      "source": 500,
+      "unity": 491
+    },
+    {
+      "tick": 10,
+      "slot": 1,
+      "field": "hp",
+      "source": 500,
+      "unity": 491
+    },
+    {
+      "tick": 11,
+      "slot": 1,
+      "field": "hp",
+      "source": 500,
+      "unity": 491
+    },
+    {
+      "tick": 13,
+      "slot": 1,
+      "field": "action",
+      "source": 181,
+      "unity": 182
+    },
+    {
+      "tick": 13,
+      "slot": 1,
+      "field": "counter",
+      "source": 2,
+      "unity": 1
+    },
+    {
+      "tick": 14,
+      "slot": 1,
+      "field": "action",
+      "source": 181,
+      "unity": 182
+    },
+    {
+      "tick": 14,
+      "slot": 1,
+      "field": "counter",
+      "source": 3,
+      "unity": 2
+    },
+    {
+      "tick": 15,
+      "slot": 1,
+      "field": "action",
+      "source": 181,
+      "unity": 182
+    },
+    {
+      "tick": 15,
+      "slot": 1,
+      "field": "counter",
+      "source": 0,
+      "unity": 3
+    },
+    {
+      "tick": 16,
+      "slot": 1,
+      "field": "action",
+      "source": 181,
+      "unity": 182
+    },
+    {
+      "tick": 16,
+      "slot": 1,
+      "field": "counter",
+      "source": 1,
+      "unity": 4
+    },
+    {
+      "tick": 17,
+      "slot": 1,
+      "field": "action",
+      "source": 181,
+      "unity": 182
+    },
+    {
+      "tick": 17,
+      "slot": 1,
+      "field": "counter",
+      "source": 2,
+      "unity": 5
+    },
+    {
+      "tick": 18,
+      "slot": 1,
+      "field": "counter",
+      "source": 1,
+      "unity": 6
+    },
+    {
+      "tick": 19,
+      "slot": 1,
+      "field": "action",
+      "source": 182,
+      "unity": 181
+    },
+    {
+      "tick": 19,
+      "slot": 1,
+      "field": "counter",
+      "source": 2,
+      "unity": 1
+    },
+    {
+      "tick": 19,
+      "slot": 1,
+      "field": "hp",
+      "source": 491,
+      "unity": 482
+    },
+    {
+      "tick": 20,
+      "slot": 1,
+      "field": "counter",
+      "source": 3,
+      "unity": 1
+    },
+    {
+      "tick": 20,
+      "slot": 1,
+      "field": "vx",
+      "source": -3.0,
+      "unity": -2.4488936306725555
+    },
+    {
+      "tick": 20,
+      "slot": 1,
+      "field": "vy",
+      "source": 8.3,
+      "unity": -0.6999999999999993
+    },
+    {
+      "tick": 20,
+      "slot": 1,
+      "field": "hp",
+      "source": 491,
+      "unity": 482
+    },
+    {
+      "tick": 21,
+      "slot": 1,
+      "field": "counter",
+      "source": 4,
+      "unity": 2
+    },
+    {
+      "tick": 21,
+      "slot": 1,
+      "field": "y",
+      "source": -68,
+      "unity": -77
+    },
+    {
+      "tick": 21,
+      "slot": 1,
+      "field": "vy",
+      "source": 1.0,
+      "unity": -7.999999999999999
+    },
+    {
+      "tick": 21,
+      "slot": 1,
+      "field": "hp",
+      "source": 491,
+      "unity": 482
+    },
+    {
+      "tick": 22,
+      "slot": 1,
+      "field": "action",
+      "source": 182,
+      "unity": 181
+    },
+    {
+      "tick": 22,
+      "slot": 1,
+      "field": "counter",
+      "source": 5,
+      "unity": 1
+    },
+    {
+      "tick": 22,
+      "slot": 1,
+      "field": "y",
+      "source": -67,
+      "unity": -85
+    }
+  ],
+  "differenceCountsByField": {
+    "hp": 94,
+    "action": 40,
+    "counter": 116,
+    "vx": 9,
+    "vy": 20,
+    "y": 42,
+    "environment_state_320": 2,
+    "x": 66,
+    "state": 3
+  },
+  "sceneClean": true,
+  "exitedPlay": true,
+  "sourceTick66": {
+    "tick": "66",
+    "slot": "1",
+    "oid": "2",
+    "type": "0",
+    "action": "230",
+    "state": "14",
+    "counter": "1",
+    "x": "360",
+    "y": "0",
+    "z": "400",
+    "vx": "-0.33333333333333331",
+    "vy": "0",
+    "vz": "0",
+    "hp": "443",
+    "owner": "1",
+    "team": "2",
+    "environment_state_320": "0"
+  },
+  "unityTick66": {
+    "slot": 1,
+    "oid": 2,
+    "type": 0,
+    "action": 185,
+    "state": 12,
+    "counter": 2,
+    "x": 364,
+    "y": 0,
+    "z": 400,
+    "vx": -1.0,
+    "vy": 5.0,
+    "vz": 0.0,
+    "hp": 435,
+    "owner": 1,
+    "team": 2,
+    "environmentState320": 1
+  }
+}

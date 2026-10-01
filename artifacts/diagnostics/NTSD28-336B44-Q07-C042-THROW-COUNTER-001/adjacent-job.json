@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "65bf11da796d4a3380479ff01aec4e81",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790794639311,
+      "finished_unix_ms": 1790794656659,
+      "last_update_unix_ms": 1790794656659,
+      "progress": {
+        "completed": 3,
+        "total": 8756,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790794650136,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q06CpointInputSelectionEditorTests.SelectionPassMatchesSource(MobileExtended)",
+        "last_finished_unix_ms": 1790794655733,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 3,
+          "passed": 3,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 11.2725283,
+          "resultState": "Passed"
+        },
+        "results": []
+      }
+    }
+  }
+}

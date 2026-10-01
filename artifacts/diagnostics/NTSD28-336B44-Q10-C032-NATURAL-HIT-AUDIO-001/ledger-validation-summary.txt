@@ -1,0 +1,5 @@
+Change ledger validation PASSED.
+  Records: 1070
+  Governed code files in diff: 8
+  COVERED: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07F03NaturalMarkerBattlePlayProbeEditor.cs -> NTSD28-336B44-Q07-F03-NATURAL-SCENE-001, NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001
+  COVERED: Tools/NTSD28Q07Diagnostics/environment_tail_natural_marker_probe.cpp -> NTSD28-336B44-Q07-F03-NATURAL-MARKER-001, NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001

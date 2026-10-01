@@ -1,0 +1,31 @@
+{
+  "schema": "ntsd28-c051-armor-source-root-selected-fields/1",
+  "authorityExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "scope": "Declared source versus root fields only; armor_decision is source-only and not in root trace; no whole-World parity claim",
+  "results": [
+    {
+      "case": "armor97-x550-v2",
+      "targetOid": 97,
+      "ticks": 80,
+      "fieldChecks": 880,
+      "differences": [],
+      "sourceCsvSha256": "ecfede1113ddcc745c54b96d5fd789877e016233f9f5acdd36d7f454dfb823cc",
+      "sourceLfrSha256": "fc49d811dbe5b090df90458fa8a75d3cf57207bc5af82baafc6578e3cf2b2351",
+      "rootTraceSha256": "2d50a4d7dc08cd04b13a402f64c0decb43e565d89be0267c530b0abf842ee402",
+      "rootReport": true,
+      "sourceFirstArmorApplyTick": 3
+    },
+    {
+      "case": "control2-x550-v2",
+      "targetOid": 2,
+      "ticks": 80,
+      "fieldChecks": 880,
+      "differences": [],
+      "sourceCsvSha256": "2599d1660de39b0384ecd8e9f2f7d02d376fb192b933227dc266fde278cc9e49",
+      "sourceLfrSha256": "6c17c16bec2c61e77911760860cfe122a6ae64e8eb3f95d1b56edbc7a5b50cd3",
+      "rootTraceSha256": "4592c3a4b7c2ea8807995e7e664195a6e005f49fd0af56e63505248603973330",
+      "rootReport": true,
+      "sourceFirstArmorApplyTick": null
+    }
+  ]
+}

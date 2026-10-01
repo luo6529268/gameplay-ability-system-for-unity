@@ -1,0 +1,79 @@
+{
+  "schema": "ntsd28-c044-kisame-natural-scene-comparison/1",
+  "sourceRoot": "selected 336B44 playable GameSession28 traces validated against formal root LFR",
+  "fields": [
+    "actor_action",
+    "target_action",
+    "actor_counter",
+    "target_counter",
+    "actor_x",
+    "target_x",
+    "actor_y",
+    "target_y",
+    "actor_vx",
+    "target_vx",
+    "target_vy",
+    "actor_hp",
+    "target_hp",
+    "catch_target",
+    "timeout_after",
+    "crt_state",
+    "crt_calls",
+    "custom_counter",
+    "custom_index",
+    "custom_calls"
+  ],
+  "cases": {
+    "a314-x550": {
+      "ticks": 60,
+      "fieldsPerTick": 20,
+      "valuesCompared": 1200,
+      "firstDifference": null,
+      "differenceCount": 0,
+      "sceneCleanAfter": true,
+      "exitedPlay": true,
+      "sceneSha256": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "tick47": {
+        "sourceTimeout": -6,
+        "unityTimeout": -6,
+        "sourceTargetAction": 181,
+        "unityTargetAction": 181,
+        "sourceTargetVx": 0.0,
+        "unityTargetVx": 0.0
+      },
+      "tick48": {
+        "sourceTargetVx": 4.0,
+        "unityTargetVx": 4.0,
+        "sourceTargetVy": -3.0,
+        "unityTargetVy": -3.0
+      }
+    },
+    "a314-x1200": {
+      "ticks": 60,
+      "fieldsPerTick": 20,
+      "valuesCompared": 1200,
+      "firstDifference": null,
+      "differenceCount": 0,
+      "sceneCleanAfter": true,
+      "exitedPlay": true,
+      "sceneSha256": "3A089236328ACAE1510F8A831B77D4895CC34028DDCDEBE542BEF0DA8EC235ED",
+      "tick47": {
+        "sourceTimeout": 0,
+        "unityTimeout": 0,
+        "sourceTargetAction": 3,
+        "unityTargetAction": 3,
+        "sourceTargetVx": 0.0,
+        "unityTargetVx": 0.0
+      },
+      "tick48": {
+        "sourceTargetVx": 0.0,
+        "unityTargetVx": 0.0,
+        "sourceTargetVy": 0.0,
+        "unityTargetVy": 0.0
+      }
+    }
+  },
+  "totalValuesCompared": 2400,
+  "totalDifferences": 0,
+  "scope": "first 60 neutral-input ticks for OID17/action314 at source X500 against OID2 at X550 and X1200"
+}

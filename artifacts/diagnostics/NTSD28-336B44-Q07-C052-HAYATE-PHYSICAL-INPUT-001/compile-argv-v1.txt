@@ -1,0 +1,54 @@
+-O1
+-Wall
+-Wextra
+-Wpedantic
+-finput-charset=UTF-8
+-fexec-charset=UTF-8
+-IJ:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\include
+-IJ:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\include
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\dat_document.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\dat_parser.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\fusion_catalog.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\kind_catalog.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\minibar_catalog.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\data\object_catalog.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\frame_machine.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\frame_motion.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\native_random.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\native_ai.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\input_routing.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\physics_integrator.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\collision_geometry.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\hit_candidates.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\hit_response.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\combat_records.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\damage_resolution.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\defense_resolution.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\armor_resolution.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\object_spawning.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\battle_world.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\battle_flow.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\simulation\simulation_tick_driver.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\render_snapshot.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\background_definition.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_resource_catalog.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_frame_hud.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_core\src\rendering\native_combo_hud.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\game_session.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\selection_flow.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\lfr_recorder.cpp
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\source\ntsd28_playable\src\game_session_lfr.cpp
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\Tools\NTSD28Q07Diagnostics\hayate_physical_input_reach_probe.cpp
+-ld3d11
+-ldxgi
+-ld3dcompiler
+-lwindowscodecs
+-lole32
+-lshell32
+-lgdi32
+-luuid
+-lz
+-static-libgcc
+-static-libstdc++
+-o
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C052-HAYATE-PHYSICAL-INPUT-001\hayate-physical-source-v1.exe

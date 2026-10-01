@@ -1,0 +1,37 @@
+{
+  "observedUtc": "2026-09-30T14:35:41.925464+00:00",
+  "formalEXESHA256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "formalW9SHA256": "BB9FCD5C414FCEC9937EE1A300097962623135F212B13A4A9FC5DAA888D1FC50",
+  "unityStagedW9SHA256": "BB9FCD5C414FCEC9937EE1A300097962623135F212B13A4A9FC5DAA888D1FC50",
+  "sourceProbeSHA256": "B5F30615E3A640FAE3208731D10D84403F8D5460593E8237CEEFE8152C879584",
+  "probeSourceSHA256": "9007142E6C8A840DEB9B6689C63E87A8443BB5A8A97AC9670D720146C08AAF64",
+  "source128": {
+    "scope": "playable source natural Temari19/action247/BG1/mode0/seed682973786/neutral128, currentDAT",
+    "rows124": 125,
+    "firstBirthTick": 4,
+    "lastSeenTick": 128,
+    "state1000Rows": 37,
+    "qualifyingRows": 0,
+    "firstQualifyingRow": null,
+    "sourceExitCode": 0,
+    "formalRootNotYetRun": true
+  },
+  "firstState1000": {
+    "tick": "36",
+    "slot": "50",
+    "oid": "124",
+    "type": "4",
+    "action": "9",
+    "state": "1000",
+    "counter": "0",
+    "x": "1078",
+    "y": "-38",
+    "z": "401",
+    "vx": "-4",
+    "vy": "-4",
+    "vz": "0",
+    "hp": "500",
+    "owner": "0",
+    "team": "1"
+  }
+}

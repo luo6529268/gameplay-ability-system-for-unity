@@ -102,8 +102,9 @@ namespace NTSD.Simulation
                 if (holder == null ||
                     holder.Runtime.TargetSlotIndex != heldSlot)
                 {
-                    // Alignment contract:
-                    // NTSD28-B6-HELD-INVALID-RECIPROCAL-PRESERVE-PRODUCTION-001.
+                    // Alignment contract: NTSD28-336B44-Q07-C043-INVALID-HELD-TAIL-001.
+                    int previousLinkState = held.Runtime.LinkState;
+                    held.Runtime.LinkState = 0;
                     HeldInvalidReciprocalFailureCountForDiagnostics++;
                     LastHeldInvalidReciprocalFailureCountForDiagnostics++;
                     RecordInvalidNegativeHeldRelation(
@@ -112,7 +113,8 @@ namespace NTSD.Simulation
                         holderSlot,
                         holderSlotInRange,
                         held,
-                        holder);
+                        holder,
+                        previousLinkState);
                     continue;
                 }
 
@@ -209,7 +211,8 @@ namespace NTSD.Simulation
             int holderSlot,
             bool holderSlotInRange,
             LF2Entity held,
-            LF2Entity holder)
+            LF2Entity holder,
+            int previousLinkState)
         {
             IBattleParityStructuralEventSink eventSink =
                 world.StructuralEventSinkForServices;
@@ -222,7 +225,9 @@ namespace NTSD.Simulation
             int holderTargetSlot = holder?.Runtime?.TargetSlotIndex ?? -1;
             int linkState = held.Runtime.LinkState;
             int heldWeaponSlot = held.Runtime.HeldWeaponStableId;
-            string relation =
+            string beforeRelation =
+                $"{previousLinkState}/{holderSlot}/{holderTargetSlot}/{heldWeaponSlot}";
+            string afterRelation =
                 $"{linkState}/{holderSlot}/{holderTargetSlot}/{heldWeaponSlot}";
             eventSink.Record(new BattleParityStructuralEvent
             {
@@ -232,12 +237,12 @@ namespace NTSD.Simulation
                 CursorSlot = heldSlot,
                 ActorSlot = heldSlot,
                 Slot = heldSlot,
-                Before = relation,
-                After = relation,
+                Before = beforeRelation,
+                After = afterRelation,
                 LifecycleEpoch = world.RuntimeSlotsForServices
                     .GetAllocationEpoch(heldSlot),
                 SourceKind = "negative-held",
-                BeforeLinkState = linkState,
+                BeforeLinkState = previousLinkState,
                 BeforeTargetSlot = holderSlot,
                 BeforeHeldWeaponSlot = heldWeaponSlot,
                 AfterLinkState = linkState,
@@ -245,7 +250,7 @@ namespace NTSD.Simulation
                 AfterHeldWeaponSlot = heldWeaponSlot,
                 TargetActive = holder != null,
                 ObservedHolderSlot = holderTargetSlot,
-                Outcome = "preserved",
+                Outcome = "cleared",
                 Reason = !holderSlotInRange
                     ? "parent-out-of-range"
                     : holder == null

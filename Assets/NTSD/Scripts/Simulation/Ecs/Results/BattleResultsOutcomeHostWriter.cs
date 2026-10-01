@@ -60,16 +60,14 @@ namespace NTSD.Simulation.Ecs
                     currentGroups |= 1UL << group;
             }
 
-            if (results.NativeResultTimer == 0 &&
-                (currentGroups & (currentGroups - 1UL)) != 0UL)
+            if ((currentGroups & (currentGroups - 1UL)) != 0UL)
             {
                 results.NativeLivingGroupMask = currentGroups;
-                results.NativeResultOutputTimer = 0;
+                results.NativeResultOutputTimer = results.NativeResultTimer;
                 return;
             }
 
-            if (results.NativeResultTimer == 0)
-                results.NativeLivingGroupMask = currentGroups;
+            results.NativeLivingGroupMask = currentGroups;
 
             int timer = ++results.NativeResultTimer;
             // Alignment contract: NTSD28-336B44-Q08-C008-DEFERRED-RESULT-EXIT-001.

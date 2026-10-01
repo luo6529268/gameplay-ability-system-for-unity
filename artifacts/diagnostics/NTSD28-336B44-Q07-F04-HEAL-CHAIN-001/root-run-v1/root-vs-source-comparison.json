@@ -1,0 +1,385 @@
+{
+  "sourceRows": 427,
+  "rootRows": 62,
+  "comparedFields": 4270,
+  "differenceCount": 572,
+  "firstDifferences": [
+    {
+      "tick": 0,
+      "slot": 50,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 50,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 50,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 50,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 51,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 51,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 51,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 51,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 52,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 52,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 52,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 52,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 53,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 53,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 53,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 0,
+      "slot": 53,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 50,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 50,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 50,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 50,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 51,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 51,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 51,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 51,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 52,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 52,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 52,
+      "field": "z",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 52,
+      "field": "hp",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 53,
+      "field": "x",
+      "source": 0,
+      "root": -1
+    },
+    {
+      "tick": 1,
+      "slot": 53,
+      "field": "y",
+      "source": 0,
+      "root": -1
+    }
+  ],
+  "rootChildTimeline": [
+    {
+      "tick": 12,
+      "children": [
+        {
+          "slot": 50,
+          "action": 50,
+          "hp": 500,
+          "x": 501,
+          "y": 4,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 13,
+      "children": [
+        {
+          "slot": 50,
+          "action": 51,
+          "hp": 500,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 14,
+      "children": [
+        {
+          "slot": 51,
+          "action": 1,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 15,
+      "children": [
+        {
+          "slot": 51,
+          "action": 1,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 20,
+      "children": [
+        {
+          "slot": 50,
+          "action": 40,
+          "hp": 500,
+          "x": 504,
+          "y": -6,
+          "z": 652
+        },
+        {
+          "slot": 51,
+          "action": 3,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 30,
+      "children": [
+        {
+          "slot": 50,
+          "action": 43,
+          "hp": 500,
+          "x": 534,
+          "y": -6,
+          "z": 652
+        },
+        {
+          "slot": 51,
+          "action": 3,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        },
+        {
+          "slot": 52,
+          "action": 41,
+          "hp": 500,
+          "x": 507,
+          "y": -6,
+          "z": 652
+        }
+      ]
+    },
+    {
+      "tick": 40,
+      "children": [
+        {
+          "slot": 50,
+          "action": 41,
+          "hp": 500,
+          "x": 510,
+          "y": -6,
+          "z": 652
+        },
+        {
+          "slot": 51,
+          "action": 1,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    },
+    {
+      "tick": 50,
+      "children": [
+        {
+          "slot": 51,
+          "action": 1,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        },
+        {
+          "slot": 52,
+          "action": 41,
+          "hp": 500,
+          "x": 513,
+          "y": -6,
+          "z": 652
+        }
+      ]
+    },
+    {
+      "tick": 60,
+      "children": [
+        {
+          "slot": 50,
+          "action": 41,
+          "hp": 500,
+          "x": 516,
+          "y": -6,
+          "z": 652
+        },
+        {
+          "slot": 51,
+          "action": 1,
+          "hp": 0,
+          "x": 501,
+          "y": -6,
+          "z": 651
+        }
+      ]
+    }
+  ]
+}

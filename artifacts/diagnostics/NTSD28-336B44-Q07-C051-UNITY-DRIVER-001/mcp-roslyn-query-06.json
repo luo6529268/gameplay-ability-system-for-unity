@@ -1,0 +1,5 @@
+{
+  "success": false,
+  "message": "Roslyn (Microsoft.CodeAnalysis) is not available. Install it via NuGet or use compiler='codedom'.",
+  "data": null
+}

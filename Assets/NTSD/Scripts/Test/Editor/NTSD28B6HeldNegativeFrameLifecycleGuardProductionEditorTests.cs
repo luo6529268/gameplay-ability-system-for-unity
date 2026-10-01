@@ -89,7 +89,7 @@ namespace NTSD.Test.Editor
         [TestCase("missing")]
         [TestCase("out-of-range")]
         [TestCase("mismatch")]
-        public void InvalidRelation_StillReportsBothHeldPassesAndPreserves(string kind)
+        public void InvalidRelation_ClearsChildStateOnFirstHeldPass(string kind)
         {
             using (var scope = new Scope(true, 20))
             {
@@ -99,9 +99,9 @@ namespace NTSD.Test.Editor
                 int holderSlot = scope.Child.Runtime.HolderStableId;
                 long before = scope.World.HeldInvalidReciprocalFailureCountForDiagnostics;
                 new NTSDBattleTickSystem(scope.World).RunReleaseTick(41, buildPresentation: false);
-                Assert.That(scope.World.HeldInvalidReciprocalFailureCountForDiagnostics - before, Is.EqualTo(2));
+                Assert.That(scope.World.HeldInvalidReciprocalFailureCountForDiagnostics - before, Is.EqualTo(1));
                 Assert.That(scope.World.TryResolveRuntimeHandleForDiagnostics(scope.Handle, out LF2Entity child), Is.True);
-                Assert.That(child.Runtime.LinkState, Is.EqualTo(-1));
+                Assert.That(child.Runtime.LinkState, Is.Zero);
                 Assert.That(child.Runtime.HolderStableId, Is.EqualTo(holderSlot));
             }
         }

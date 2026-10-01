@@ -1,0 +1,159 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "695d64d38c68427dabca5fb3c8458b65",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790867885870,
+      "finished_unix_ms": 1790867893320,
+      "last_update_unix_ms": 1790867893320,
+      "progress": {
+        "completed": 13,
+        "total": 8775,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790867892833,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive",
+        "last_finished_unix_ms": 1790867892834,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 13,
+          "passed": 13,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 1.4166469,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.FullTickObservesZeroHpWithTwoNativeLivesBeforeCombatTail",
+            "state": "Passed",
+            "durationSeconds": 0.0050716,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ModeFourTransitionStopsCombatWorldOn350AndFollowingTick",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeFourTransitionStopsCombatWorldOn350AndFollowingTick",
+            "state": "Passed",
+            "durationSeconds": 0.4623116,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeOneConfiguredStageWithoutStorySelectorKeepsOrdinaryGuard",
+            "state": "Passed",
+            "durationSeconds": 0.0087318,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ModeOneDirectBattleStillStartsTerminalGuard",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ModeOneDirectBattleStillStartsTerminalGuard",
+            "state": "Passed",
+            "durationSeconds": 0.0043336,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultPausesAndRefreshesGroupsAcrossReturn",
+            "state": "Passed",
+            "durationSeconds": 0.0068515,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativePrecombatResultRetainsThirdGroupAndExcludesInvalidGroups",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativePrecombatResultRetainsThirdGroupAndExcludesInvalidGroups",
+            "state": "Passed",
+            "durationSeconds": 0.0062881,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueAcceptsThirdParticipantButNotInactiveOrPressedOnly",
+            "state": "Passed",
+            "durationSeconds": 0.0079256,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeResultContinueUsesHeldAttackAt144NotEarlier",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultContinueUsesHeldAttackAt144NotEarlier",
+            "state": "Passed",
+            "durationSeconds": 0.0042633,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "NativeResultTimerEmitsSourceMilestonesAndClearsStored350",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.NativeResultTimerEmitsSourceMilestonesAndClearsStored350",
+            "state": "Passed",
+            "durationSeconds": 0.4428975,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.OrdinaryTransitionChangesCommandTwoToOneWithoutAdvancingOldCombatWorld",
+            "state": "Passed",
+            "durationSeconds": 0.0014324,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "TransitionTickDoesNotRunOldResultsSettingsWriter",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.TransitionTickDoesNotRunOldResultsSettingsWriter",
+            "state": "Passed",
+            "durationSeconds": 0.0013541,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithOneNativeLifeStillStartsCurrentTerminalGuard",
+            "state": "Passed",
+            "durationSeconds": 0.00122,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive",
+            "fullName": "NTSD.Test.NTSD28Q08BattleFlowRedProbeEditorTests.ZeroHpWithTwoNativeLivesKeepsTwoGroupsAlive",
+            "state": "Passed",
+            "durationSeconds": 0.001205,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

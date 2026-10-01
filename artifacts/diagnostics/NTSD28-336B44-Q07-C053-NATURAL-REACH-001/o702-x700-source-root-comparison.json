@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "scenario": "o702-x700",
+  "ticks": 120,
+  "comparedFieldsPerTick": 16,
+  "checks": 1920,
+  "firstDifferences": [],
+  "scope": "Selected entity state and RNG counters only; no internal CRT state or full parity claim"
+}

@@ -1,0 +1,23 @@
+{
+  "formal_only_sprite_png": 114,
+  "referenced_by_current_formal_dat": 114,
+  "referenced_by_object_dat": 0,
+  "sprite_owner_groups": {
+    "alternate_hud_only": 2,
+    "global_resource_only_consumer_check": 46,
+    "system_global_consumer_check": 9,
+    "native_minibar_user_exception": 4,
+    "active_and_alternate_hud_radar": 16,
+    "user_excluded_mode_child": 21,
+    "resource_and_excluded_mode_shared": 2,
+    "menu_definition": 14
+  },
+  "nonexcluded_formal_only_dat": 15,
+  "dat_classification_counts": {
+    "alternate_frame_hud_index1_user_hud_exception": 1,
+    "nonbattle_menu_definition": 1,
+    "native_battle_minibar_user_exception": 5,
+    "user_hold_default_stage_parent": 1,
+    "story_child_depends_on_held_stage_parent": 7
+  }
+}

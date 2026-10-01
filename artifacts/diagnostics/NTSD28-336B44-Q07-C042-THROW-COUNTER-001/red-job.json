@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "f003bc8fece64871b9ba5856f6ca2db3",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790794113105,
+      "finished_unix_ms": 1790794159533,
+      "last_update_unix_ms": 1790794159533,
+      "progress": {
+        "completed": 2,
+        "total": 8756,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790794153471,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28Q06CpointThrowRawBindingEditorTests.ImmediateThrowMatchesNativeRawBinding(MobileExtended)",
+        "last_finished_unix_ms": 1790794158819,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.NTSD28Q06CpointThrowRawBindingEditorTests.ImmediateThrowMatchesNativeRawBinding(Authority400)",
+            "message": "  case 0 after slot 1 frame.frameCounter=0 expected 8\ncase 0 after slot 1 counter=0 expected 8\ncase 1 after slot 1 frame.frameCounter=0 expected 8\ncase 1 after slot 1 counter=0 expected 8\ncase 4 after slot 1 frame.frameCounter=0 expected 8\ncase 4 after slot 1 counter=0 expected 8\ncase 5 after slot 1 frame.frameCounter=0 expected 8\ncase 5 after slot 1 counter=0 expected 8\ncase 8 after slot 1 frame.frameCounter=0 expected 8\ncase 8 after slot 1 counter=0 expected 8\ncase 9 after slot 1 frame.frameCounter=0 expected 8\ncase 9 after slot 1 counter=0 expected 8\ncase 12 after slot 1 frame.frameCounter=0 expected 8\ncase 12 after slot 1 counter=0 expected 8\ncase 13 after slot 1 frame.frameCounter=0 expected 8\ncase 13 after slot 1 counter=0 expected 8\ncase 16 after slot 1 frame.frameCounter=0 expected 8\ncase 16 after slot 1 counter=0 expected 8\ncase 17 after slot 1 frame.frameCounter=0 expected 8\ncase 17 after slot 1 counter=0 expected 8\r\n  Expected: <empty>\r\n  But was:  < \"case 0 after slot 1 frame.frameCounter=0 expected 8\", \"case 0 after slot 1 counter=0 expected 8\", \"case 1 after slot 1 frame.frameCounter=0 expected 8\", \"case 1 after slot 1 counter=0 expected 8\", \"case 4 after slot 1 frame.frameCounter=0 expected 8\", \"case 4 after slot 1 counter=0 expected 8\", \"case 5 after slot 1 frame.frameCounter=0 expected 8\", \"case 5 after slot 1 counter=0 expected 8\", \"case 8 after slot 1 frame.frameCounter=0 expected 8\", \"case 8 after slot 1 counter=0 expected 8\"... >\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.NTSD28Q06CpointThrowRawBindingEditorTests.ImmediateThrowMatchesNativeRawBinding(MobileExtended)",
+            "message": "  case 0 after slot 1 frame.frameCounter=0 expected 8\ncase 0 after slot 1 counter=0 expected 8\ncase 1 after slot 1 frame.frameCounter=0 expected 8\ncase 1 after slot 1 counter=0 expected 8\ncase 4 after slot 1 frame.frameCounter=0 expected 8\ncase 4 after slot 1 counter=0 expected 8\ncase 5 after slot 1 frame.frameCounter=0 expected 8\ncase 5 after slot 1 counter=0 expected 8\ncase 8 after slot 1 frame.frameCounter=0 expected 8\ncase 8 after slot 1 counter=0 expected 8\ncase 9 after slot 1 frame.frameCounter=0 expected 8\ncase 9 after slot 1 counter=0 expected 8\ncase 12 after slot 1 frame.frameCounter=0 expected 8\ncase 12 after slot 1 counter=0 expected 8\ncase 13 after slot 1 frame.frameCounter=0 expected 8\ncase 13 after slot 1 counter=0 expected 8\ncase 16 after slot 1 frame.frameCounter=0 expected 8\ncase 16 after slot 1 counter=0 expected 8\ncase 17 after slot 1 frame.frameCounter=0 expected 8\ncase 17 after slot 1 counter=0 expected 8\r\n  Expected: <empty>\r\n  But was:  < \"case 0 after slot 1 frame.frameCounter=0 expected 8\", \"case 0 after slot 1 counter=0 expected 8\", \"case 1 after slot 1 frame.frameCounter=0 expected 8\", \"case 1 after slot 1 counter=0 expected 8\", \"case 4 after slot 1 frame.frameCounter=0 expected 8\", \"case 4 after slot 1 counter=0 expected 8\", \"case 5 after slot 1 frame.frameCounter=0 expected 8\", \"case 5 after slot 1 counter=0 expected 8\", \"case 8 after slot 1 frame.frameCounter=0 expected 8\", \"case 8 after slot 1 counter=0 expected 8\"... >\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}
