@@ -304,6 +304,15 @@ namespace NTSD.Simulation.Ecs
                 attacker.Runtime.SourceRuleX = sourceAttackerX + sourceBlend;
                 victim.Runtime.SourceRuleXInt = (int)victim.Runtime.SourceRuleX;
                 attacker.Runtime.SourceRuleXInt = (int)attacker.Runtime.SourceRuleX;
+
+                // Alignment contract: NTSD28-336B44-Q07-D024-GRAB-VIEW-PROJECTION-001.
+                BattleSpatialProjection projection =
+                    attacker.RegisteredWorldForSimulation?.SpatialProjection ??
+                    BattleSpatialProjection.Identity;
+                victim.Runtime.X = projection.SourceToViewX(victim.Runtime.SourceRuleX);
+                attacker.Runtime.X = projection.SourceToViewX(attacker.Runtime.SourceRuleX);
+                victim.Runtime.XInt = (int)victim.Runtime.X;
+                attacker.Runtime.XInt = (int)attacker.Runtime.X;
             }
         }
     }

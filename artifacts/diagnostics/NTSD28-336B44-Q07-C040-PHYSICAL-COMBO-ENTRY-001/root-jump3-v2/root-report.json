@@ -1,0 +1,21 @@
+{
+  "schema": "ntsd28-playable-headless-lfr-playback/1.0",
+  "passed": true,
+  "nativeParityClaim": false,
+  "lfr": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C040-PHYSICAL-COMBO-ENTRY-001\\v2-run1\\jump-3.lfr",
+  "failureCode": 0,
+  "failureStage": "",
+  "error": "",
+  "declaredTicks": 32,
+  "inputStartRow": 0,
+  "initialActionOverrides": {"slot0": -1, "slot1": -1},
+  "initialFacingOverrides": {"slot0": -1, "slot1": -1},
+  "initialMpOverrides": {"slot0": 500, "slot1": 500},
+  "functionKeyUsage": {"f6": 0, "f7": 0, "f8": 0, "f9": 0},
+  "completedTicks": 33,
+  "scene": {"p1ObjectId": 25, "p2ObjectId": 75, "backgroundId": 1},
+  "winnerGroup": -1,
+  "platformOperation30": {"nonzeroEntityRows": 0, "firstTick": null, "lastTick": null, "uniqueSlots": [], "samples": []},
+  "diagnosticTrace": {"requested": true, "path": "I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\artifacts\\diagnostics\\NTSD28-336B44-Q07-C040-PHYSICAL-COMBO-ENTRY-001/root-jump3-v2\\root-trace.jsonl", "rows": 34, "startTick": 0, "endTick": -1, "writeOk": true},
+  "boundary": "A pass proves independent replay of the encoded manager checks; it is not by itself native same-phase parity."
+}

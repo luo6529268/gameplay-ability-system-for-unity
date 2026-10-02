@@ -1,0 +1,15 @@
+# NTSD28-336B44-Q07-C040-ALL-NATURAL-TRIAD-001
+
+Status: `VERIFIED_SCOPED_FORMAL_SOURCE_ROOT`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`.
+
+Authority: formal root 336B44 executable and matching playable `GameSession28::step`, `SimulationTickDriver28::step`, armor-hit selection, kind3 catch and CPOINT settlement. Formal DAT: Kakuzu OID25, Bee OID75, Guy OID97. Prior certificates prove (a) Kakuzu action0 attack/jump enters the AJ grab, (b) Bee action0 three attack pulses enters70/73 against a far opponent, and (c) Kakuzu ordinary-input grab plus Bee controlled action70 can produce positive hold/CPOINT split. No all-ordinary-input near three-actor sample is yet proved.
+
+Question: with both Kakuzu and Bee at action0 and only discrete player inputs, can near Guy armor contact and delayed Kakuzu catch produce the C040 positive-hold/current-frame versus vaction-CPOINT split in the same complete formal GameSession tick chain? Near contact may alter Bee's earlier punch chain; do not infer timing by shifting a far-target trace.
+
+Ownership: add only `Tools/NTSD28Q07Diagnostics/c040_all_natural_triad_probe.cpp` and unique artifacts under `artifacts/diagnostics/NTSD28-336B44-Q07-C040-ALL-NATURAL-TRIAD-001/`; update this Task, Change Record, Ledger, STATE, handoff and current 336B44 master with results. No formal source, DAT, image, Unity production/test, Scene, Prefab, Menu or noncombat edits. Preserve the dirty workspace and current Editor state; no computer-use or second Unity project.
+
+Method: mode0/seed0, Kakuzu slot0/action0/X500/team1, Bee slot1/action0/team2, Guy slot2/action0/team1, common Y0/Z400/HP-MP500. Sweep the eight previously source/root-supported Bee re-press schedules, bounded delayed Kakuzu attack/jump starts and declared near geometry, plus far control. Run complete GameSession ticks; record per-tick input phase, action, selected-armor applied hit, hold, kind3 relation, current/vaction CPOINT pose, settlement, X/HP and RNG. Do not inject action/relationship/hold/damage/position after initialization. Repeat any source positive and replay its LFR through root 336B44, comparing selected fields. If no positive, preserve first-difference classes and close only this finite matrix.
+
+Exit: zero-error compile; deterministic finite source evidence; formal root check only for LFR-backed positive; scoped/full Ledger and diff checks; exact limitations. Even an all-ordinary-input formal positive does not close C040/Q07 without original Unity Battle Scene full Driver, D-024 ratio and Game View. Rollback by documented forward correction of this one diagnostic, never by deleting prior raw evidence.
+
+Result: 113×40-tick finite matrix, 8 positives; source double run four files byte-identical. Formal root first positive exit0/PASS and 40×16=640 selected values match. Tick25 has selected armor hit, kind3 grab, Bee hold3/action130 versus catcher vaction132 in the same complete tick. [Raw report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-ALL-NATURAL-TRIAD-001/REPORT.md). Unity Battle Scene, D-024 ratio and Game View remain the next gate; C040/Q07/goal stay open.

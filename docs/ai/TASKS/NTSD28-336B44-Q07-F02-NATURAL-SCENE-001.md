@@ -1,6 +1,6 @@
 # NTSD28-336B44-Q07-F02-NATURAL-SCENE-001
 
-Status: `PLANNED / ORIGINAL_EDITOR_AVAILABILITY_PENDING`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / F02`.
+Status: `COMPILE_PASS / ORIGINAL_EDITOR_SCENE_PENDING`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / F02`.
 
 Current Editor observation (2026-10-03): original project PID105896 is open on `NTSD_Menu`, and a fresh window-title check now includes `*` after the Unity version, indicating an unsaved active Scene. `git status` also shows user-owned Menu Scene and menu-image changes. Do not switch to Battle, enter Play, close the Editor or touch those files until the user confirms the Editor is idle and the Scene is clean or otherwise safe to preserve. This is a Scene-gate availability condition, not a reason to call the total alignment goal blocked.
 
@@ -19,3 +19,5 @@ Editor safety: user-owned Menu Scene and images currently have working-tree chan
 Acceptance: generated-project compile zero errors, original Editor import zero errors, one opt-in Play request to completion, compare initial+matching tick slots0/1/2 against the formal root trace for identity, action/state, source-rule X/Y/Z, Vx/Vy, relation and holder/link where available; report first difference with tick/field and cause category. A successful F02 scene subgate must directly observe kind10 target reset and subsequent same-tick action40→41 through the complete Driver, confirm the D-024 source/view projection for the weapon and clean exit. If a first difference occurs earlier, retain the raw result and open a separate minimal production-fix Task only after tracing the common writer. This subgate cannot by itself close Q07, the physical keyboard route, full visual parity or Q12.
 
 Rollback: remove/supersede only this new opt-in diagnostic after reviewing its files and preserving evidence. No existing user file, Scene, DAT or asset may be restored, deleted, overwritten or cleaned as a rollback shortcut.
+
+2026-10-03 progress: only the declared test probe and `.meta` were added. A temporary conditional MSBuild target explicitly included the new Editor file in generated-project compilation; 0 errors/317 warnings. The plain generated build omitted the new file and is not treated as its compile evidence. Original Editor Menu was `isDirty=true` at the first MCP read; the user then replied `已保存且空闲`, requiring a fresh clean check before any Scene switch. Tick-tail sampling cannot itself prove intra-tick kind10 applied, 40→41, GPU pixels or full pool/queue shutdown; these remain explicit exit gaps. See same-ID Change Record.

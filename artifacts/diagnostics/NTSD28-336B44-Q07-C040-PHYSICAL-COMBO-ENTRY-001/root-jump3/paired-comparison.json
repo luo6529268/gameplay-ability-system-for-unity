@@ -1,0 +1,13 @@
+{
+  "sourceRows": 32,
+  "rootRows": 32,
+  "fieldsPerTick": 11,
+  "compared": 352,
+  "firstDifference": {
+    "root": 3374725112,
+    "field": "crt_state",
+    "tick": 1,
+    "source": "1758127634"
+  },
+  "mismatchCount": 32
+}

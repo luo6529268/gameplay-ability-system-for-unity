@@ -1,0 +1,30 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q07-C040-NATURAL-SCENE-001
+status: RUNTIME_PENDING
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28Q07C040NaturalScenePlayProbeEditor.cs
+authority: 336B44 playable and root all-action0 Kakuzu-Bee-Guy C040 positive
+evidence: docs/ai/TASKS/NTSD28-336B44-Q07-C040-NATURAL-SCENE-001.md
+-->
+
+# Q07/C040 自然三人链原 Battle Scene 验证
+
+Created before script modification. Existing controlled C040 Scene probe only starts with a pre-established catch relation and runs one tick; the new formal/root all-action0 40-tick positive has no Unity Scene certificate.
+
+Expected code: one new test-only request-driven Editor probe and `.meta`. It provides read-only Editor preflight and, only on explicit one-shot request while Editor is idle, protected clean Scene switch/Play/restore. Captures complete Driver tick, selected battle fields, RNG and D-024 source-to-physical positions without affecting production code. All protected file SHA and existing dirty work must remain unchanged. The requested run must fail closed on dirty or unexpected Scene and preserve diagnostic output.
+
+Acceptance and rollback are in the Task. No script has yet been changed. Do not treat source/root proof as Unity proof; do not change DAT, production, Scene, Menu or nonbattle behavior. Rollback by forward correction of the new file, preserving historical failures.
+
+2026-10-03 actual code: added the declared probe and `.meta`. It observes original Editor preflight, opens the clean Battle Scene only for a one-shot run, configures the three Play-clone actors, samples 40 complete Driver ticks and D-024 source/view coordinates, exits and restores Menu. After the first run, extended entity samples with legacy/native three-key fields and AI flag; corrected the probe's formal attack/jump schedule to the project's existing crossed `FrameInputSet` contract. No production script was changed. The earlier "No script has yet been changed" sentence above describes the pre-change record, not the present status.
+
+Generated `dotnet build Assembly-CSharp-Editor.csproj --no-restore --nologo -v:q` after the final probe correction: exit 0, 260 warnings, 0 errors. Original Editor imported the initial probe. Preflight `c040-natural-preflight-20261003-01` passed. First Play `kakuzu-bee-guy-natural-scene-20261003-01` captured 40 full ticks, exited to clean Menu, four protected SHA stable, but had tick2 Bee action65 source versus action110 Unity because the probe injected the legacy `Attack` bit, which maps to formal defend; it is not accepted as same-input parity. Second request `...-02` safely refused before Play because Menu became dirty and its disk SHA changed between requests. Both raw JSON reports are retained. See `artifacts/diagnostics/NTSD28-336B44-Q07-C040-NATURAL-SCENE-001/PROGRESS.md`.
+
+Still required: original Editor import of corrected probe, a clean-Scene same-input rerun, source/root/Unity 40×16 first-difference comparison, Game View/physical input if claimed, and shutdown/pool verification. Current status `RUNTIME_PENDING`; C040/Q07 and total objective remain open. Rollback remains a forward correction of only this test probe; do not modify or discard Menu state.
+
+Audit after script changes: scoped `Validate-ChangeLedger.ps1 -StagedOnly -SimulateChangedPath ...NaturalScenePlayProbeEditor.cs` exit0; full validator exit0 after process-scoped `GIT_CONFIG_KEY_0=core.safecrlf`/`GIT_CONFIG_VALUE_0=false` suppressed Git's CRLF warning in Windows PowerShell, with repository config untouched. `git diff --check` on the four edited tracked documentation files exit0. The first full validator invocation without that process setting stopped on Git's warning despite no validator content failure; that failed invocation remains part of the audit. No complete original Editor SelfCheck or corrected Scene run has been performed.
+
+After the rejected second request, corrected probe reporting for a pre-Play refusal: an explicit `enteredPlay` flag now keeps `exitedPlay=false` and does not attach a misleading Battle Scene/restoration error when a preexisting dirty Menu was never left. Existing `...-02.json` is intentionally immutable and retains its original misleading suffix; interpretation is recorded in PROGRESS. Generated Editor C# build rerun after this correction: exit0, 260 warnings, 0 errors. Original Editor refresh and corrected Play remain pending while Menu is dirty.
+
+User saved Menu and explicitly allowed switching. Original Editor `...-03.json` and `...-04.json` each completed 40 full Driver ticks and returned to a clean Menu with four protected disk SHA stable. Run-03 matched formal source/root 40×16=640 selected rule/RNG fields with no first difference, including tick25 Bee action130/hold3 and paired catch relation. Run-04 additionally recorded unrounded source-rule positions and identified D-024 physical X first-difference +3.471117779 px for both grab participants from tick25 onward. The latter is tracked in independent `NTSD28-336B44-Q07-D024-GRAB-VIEW-PROJECTION-001`; no production code belongs to this probe Change. The original Editor local interface timed out after a later refresh, so corrected view Play, Game View and pool/shutdown acceptance remain pending. Full details in PROGRESS.
+
+Subsequent correction: the original Editor did not hang. The import worker occupied port6400 while the original Editor PID105896 listened on port6401. After the independent shared view-projection fix, this probe's `...-05.json` again completed 40 full Battle Scene Driver ticks, with formal source/root/Unity 640/640 selected fields and tick25 catch positive; exited to clean Menu with four protected disk SHA stable. Physical X projection residuals were 0/0.528882221/0 px for the three actors, versus +3.471117779 px for both grab actors in run-04. This is scoped Scene logic/position evidence, not Game View pixels, physical keyboard or pool borrower evidence; Change remains `RUNTIME_PENDING`. See PROGRESS and the D-024 acceptance report.

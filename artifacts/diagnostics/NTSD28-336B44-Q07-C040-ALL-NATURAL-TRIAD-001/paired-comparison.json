@@ -1,0 +1,22 @@
+{
+  "case": "b9-17-k19-x540-g560",
+  "root_report_passed": true,
+  "compared_ticks": 40,
+  "fields_per_tick": 16,
+  "compared_values": 640,
+  "difference_count": 0,
+  "first_difference": null,
+  "run_repeat_hashes_same": true,
+  "tick25": {
+    "source_action": "336",
+    "victim_action": "130",
+    "victim_hold": "3",
+    "armor_applied": "1",
+    "armor_selected": "1",
+    "kind3_applied": "1",
+    "vaction": "132",
+    "pose_diff": "1",
+    "settlement_active": "1",
+    "settlement_sync": "1"
+  }
+}

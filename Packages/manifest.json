@@ -1,8 +1,8 @@
 {
   "dependencies": {
-    "com.ntsd.battle-kernel": "file:../../NTSD_Server/packages/com.ntsd.battle-kernel",
     "com.coplaydev.unity-mcp": "file:../../unity-mcp/MCPForUnity",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.ntsd.battle-kernel": "file:../../NTSD_Server/packages/com.ntsd.battle-kernel",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "4.4.2",
@@ -21,7 +21,6 @@
     "com.unity.purchasing": "4.11.0",
     "com.unity.render-pipelines.universal": "14.0.11",
     "com.unity.test-framework": "1.1.33",
-    "com.unity.textmeshpro": "3.0.6",
     "com.unity.timeline": "1.7.6",
     "com.unity.ugui": "1.0.0",
     "com.unity.visualscripting": "1.9.4",

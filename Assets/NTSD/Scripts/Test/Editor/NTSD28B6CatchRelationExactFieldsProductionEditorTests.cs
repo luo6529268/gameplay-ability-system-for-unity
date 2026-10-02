@@ -20,13 +20,11 @@ namespace NTSD.Test
     [Category("NTSD28_B6_CatchRelation")]
     public sealed class NTSD28B6CatchRelationExactFieldsProductionEditorTests
     {
-        [TestCase(false, 188, 148.0, 140.0)]
-        [TestCase(true, 213, 160.5, 152.5)]
-        public void Kind3GrabAfterTargetMotion_KeepsRawLocalPoseWhileBattleHistoryChanges(
+        [TestCase(false, 188)]
+        [TestCase(true, 213)]
+        public void Kind3GrabAfterTargetMotion_ProjectsFormalPoseIntoConfiguredView(
             bool configuredView,
-            int expectedTargetBeforeGrab,
-            double expectedAttackerX,
-            double expectedTargetX)
+            int expectedTargetBeforeGrab)
         {
             SimulationWorld world = CreateWorld(out TestCharacter attacker,
                 out TestCharacter target);
@@ -54,16 +52,19 @@ namespace NTSD.Test
 
                 Assert.That(world.InteractionWriter.TryApplyGrab(attacker,
                     target, CreateItr(10, 20, 1), 3), Is.True);
+                double expectedAttackerX = world.SpatialProjection.SourceToViewX(148.0);
+                double expectedTargetX = world.SpatialProjection.SourceToViewX(140.0);
                 Assert.That(attacker.Runtime.X,
-                    Is.EqualTo(expectedAttackerX));
+                    Is.EqualTo(expectedAttackerX).Within(1e-6));
                 Assert.That(target.Runtime.X,
-                    Is.EqualTo(expectedTargetX));
+                    Is.EqualTo(expectedTargetX).Within(1e-6));
                 Assert.That(attacker.Runtime.XInt,
                     Is.EqualTo((int)expectedAttackerX));
                 Assert.That(target.Runtime.XInt,
                     Is.EqualTo((int)expectedTargetX));
                 Assert.That(target.Runtime.X - attacker.Runtime.X,
-                    Is.EqualTo(-8.0));
+                    Is.EqualTo(world.SpatialProjection.SourceDeltaToViewX(-8.0))
+                        .Within(1e-6));
                 Assert.That(target.Runtime.SourceRuleX,
                     Is.EqualTo(140.0));
                 Assert.That(attacker.Runtime.SourceRuleX,

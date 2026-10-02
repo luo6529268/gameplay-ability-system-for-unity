@@ -1,0 +1,34 @@
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\NTSD2.8-Logan.exe
+--resource-root
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime
+--complete-vfs-root
+J:\QQFile\NTSD2.8.3.3 zip\NTSD2.8.3.3\NTSD 2.8-Logan\resources\runtime
+--headless-playback-lfr
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C040-PHYSICAL-COMBO-ENTRY-001\v2-run1\jump-3.lfr
+--headless-playback-report
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C040-PHYSICAL-COMBO-ENTRY-001/root-jump3-v2\root-report.json
+--headless-playback-trace
+I:\GitHub\Unity_GAS\gameplay-ability-system-for-unity\artifacts\diagnostics\NTSD28-336B44-Q07-C040-PHYSICAL-COMBO-ENTRY-001/root-jump3-v2\root-trace.jsonl
+--character
+25
+--enemy
+75
+--background
+1
+--p1-x
+500
+--p1-y
+0
+--p1-z
+400
+--p2-x
+1200
+--p2-y
+0
+--p2-z
+400
+--lfr-slot0-mp
+500
+--lfr-slot1-mp
+500
+--p2-human

@@ -58,9 +58,12 @@ namespace TMPro.EditorUtilities
 
         protected override void DoGUI()
         {
-            DoSlider("_AlphaSize", "透明大小");
-            DoSlider("_AlphaRange", "透明范围");
-            DoPopup("_ZTest", "深度测试", s_ZTestLabels);
+            if (m_Material.HasProperty("_AlphaSize"))
+                DoSlider("_AlphaSize", "透明大小");
+            if (m_Material.HasProperty("_AlphaRange"))
+                DoSlider("_AlphaRange", "透明范围");
+            if (m_Material.HasProperty("_ZTest"))
+                DoPopup("_ZTest", "深度测试", s_ZTestLabels);
             s_Face = BeginPanel("Face", s_Face);
             if (s_Face)
             {
