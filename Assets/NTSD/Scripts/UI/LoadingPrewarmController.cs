@@ -8,6 +8,7 @@ using TMPro;
 using System.Collections.Generic;
 using NTSD.Load;
 using NTSD.Simulation;
+using UnityEngine.UI;
 
 namespace NTSD.UI
 {
@@ -15,6 +16,8 @@ namespace NTSD.UI
     {
         [SerializeField] private bool runOnStart = true;
         [SerializeField] private float minTextDisplaySeconds = 0.15f;
+        [SerializeField] private Sprite[] loadingSprites;
+        [SerializeField] private Image RandomImg;
 
         public TextMeshProUGUI LoadingResourceTxt;
 
@@ -42,6 +45,8 @@ namespace NTSD.UI
 
             try
             {
+                RandomImg.sprite = loadingSprites[Random.Range(0, loadingSprites.Length)];
+                RandomImg.gameObject.SetActive(true);
                 WarmupTextureAndSprite();
                 await PrewarmOnceAsync();
                 await UniTask.WaitUntil(() => IsPrewarmed && pendingTexts.Count == 0);
@@ -49,6 +54,7 @@ namespace NTSD.UI
                 if (MenuUIController.Instance != null)
                 {
                     MenuUIController.Instance.ShowSelectGameMode();
+                    RandomImg.gameObject.SetActive(false);
                 }
                 else
                 {

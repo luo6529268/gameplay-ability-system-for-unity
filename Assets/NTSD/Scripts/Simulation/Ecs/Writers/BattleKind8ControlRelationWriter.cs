@@ -56,7 +56,8 @@ namespace NTSD.Simulation.Ecs
                 attacker.Runtime.X = target.Runtime.X;
             if (syncMode != 0)
                 attacker.Runtime.Y = target.Runtime.Y;
-            attacker.Runtime.Z = target.Runtime.Z + 1.0;
+            attacker.Runtime.Z =
+                target.Runtime.Z + world.SpatialProjection.SourceDeltaToViewZ(1.0);
             if (attacker.Runtime.SourceRulePositionInitialized &&
                 target.Runtime.SourceRulePositionInitialized)
             {

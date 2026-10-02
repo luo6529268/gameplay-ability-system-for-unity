@@ -1,0 +1,34 @@
+<!-- CHANGE-RECORD
+id: NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001
+status: FOCUSED_TEST_PASS
+change-kind: CODE
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Writers/BattleKind8ControlRelationWriter.cs
+code-path: Assets/NTSD/Scripts/Simulation/Ecs/Hit/BattleEcsHitExecutionPlan.cs
+code-path: Assets/NTSD/Scripts/Test/Editor/NTSD28B5Kind8AtomicProductionIntegrationEditorTests.cs
+authority: 336B44 formal root kind8 source Z+1 and user D-024 fixed-view battle-entity ratio
+evidence: docs/ai/TASKS/NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001.md
+-->
+
+# NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001
+
+Before change: the canonical and planned ECS kind8 writers both use physical `target.Z + 1.0`, while the canonical source-rule field already uses formal `target.SourceRuleZ + 1.0`. This is invisible to identity-projection tests. The formal Lee/Naruto X480 kind8 tick1 and X1200 negative are backed by the selected root EXE, each source/root 260/260 selected fields, and the D-024 fixed view requires 1152/730 physical depth pixels for one formal source pixel.
+
+Expected: add a focused test for configured 2048×1152 projection and identity controls, then use the existing world projection at both physical kind8 outputs. Source-rule values, conditional X/Y, frame/PP/HP and native mirror timing must remain unchanged. No DAT, Scene, camera, non-battle logic or user-owned file modification. Validate generated C# compile, named original Editor tests when safe, later original Battle Scene complete Driver/Game View, scoped ledger and targeted diff. An unverified Editor/Play gate is reported as pending, not as completion.
+
+Actual edits, commands, outcomes, remaining runtime gates and forward-correction rollback will be recorded after writing.
+
+Test-first edit: added `Kind8_UsesSharedFixedViewDepthProjectionInActualAndHitPlan` to the declared existing Editor test file. It configures 2048×1152, checks planned ECS Z and canonical committed Z against target Z+1152/730, retains source-rule Z+1 and physical integer mirror, and checks the plan does not commit. The two production exits still use +1 at this point, so this test encodes the expected RED. Original Editor execution is pending because the user Menu scene remains open; no RED runtime result is claimed.
+
+Production edit: `BattleKind8ControlRelationWriter.TryApply` now adds `world.SpatialProjection.SourceDeltaToViewZ(1.0)` to target physical Z. `BattleEcsHitExecutionPlan.ProjectWriterEffect` does the same through its already-resolved `kind8World`. Both reuse the existing world projection; identity remains +1, 2048×1152 becomes +1152/730. Formal source-rule Z+1, X/Y conditional sync, frame/PP/HP and integer mirror timing were not edited. Compilation, named test and original Scene results are still pending at this point.
+
+Compile result before a final fixture correction: `dotnet build Assembly-CSharp-Editor.csproj --no-restore -v:q -clp:ErrorsOnly` exit0, 0 errors/287 warnings; `dotnet build Assembly-CSharp.csproj --no-restore -v:q -clp:ErrorsOnly` exit0, 0 errors/22 warnings. Both logs are preserved in the [diagnostic folder](../../../artifacts/diagnostics/NTSD28-336B44-Q07-D024-KIND8-VIEW-DELTA-001/REPORT.md). The generated Editor project explicitly includes the changed focused test file. The live original Editor's `Library/ScriptAssemblies` timestamps remain 2026-10-02 18:47 UTC, older than this edit; do not claim live Unity compile or a GREEN test. `unity status` reports no Pipeline-connected instance even though the original Unity PID105896 is visibly running, so the CLI is not a safe route to an original Editor test. No second Editor, scene switch, Play or computer-use was performed.
+
+Focused fixture correction: the new non-identity test now places both entities' physical Z at `SpatialProjection.SourceToViewZ` of their declared source Z before kind8. This preserves a coherent world-position precondition instead of comparing two unrelated absolute domains; it still checks the same relative +1152/730 result and the ECS plan's no-commit property. Regenerated Editor compile is required after this correction.
+
+Final local validation: regenerated `Assembly-CSharp-Editor.csproj` after fixture correction, exit0/0 errors/256 warnings; `generated-editor-build-final.txt` is the authoritative final compile log. The separate Runtime generated build remains exit0/0 errors/22 warnings; production paths did not change after it. Scoped Change Ledger validation was run independently for all three declared script paths and each exited0. Full validator exited1 on existing user-owned `Assets/NTSD/Scripts/UI/SettingsPanelController.cs` and `Assets/NTSD/Scripts/UI/UIButton.cs` diffs without records; neither was touched. Targeted `git diff --check` for this package's C# and docs exited0. Original Editor test/Play remains unrun.
+
+Original Editor focused tests (superseding only the "test unrun" checkpoint): the existing PID105896 project MCP bridge reported Menu/idle/non-Play/no tests and clean active scene. A scripts-only `refresh_unity` requested compilation; the live `Assembly-CSharp.dll` and Editor DLL refreshed. Exactly one named EditMode method `Kind8_UsesSharedFixedViewDepthProjectionInActualAndHitPlan` ran as job `af026246467347289ef031b9fcf59604`, summary 1/1 Passed. Two adjacent named methods ran as job `6e0abf48479b4d59ad889b6b88f6ee4d`: six parameterized identity/dvy cases plus one ECS plan case, 7/7 Passed. Both final job JSON files and start responses are preserved in the linked report directory; no all-suite run was requested.
+
+Protection observation: before the scripts-only compile and named tests, disk SHA of Menu Scene was `17422BE6...`; afterwards it was `7C5EB6D5...`. Its last-write timestamp is 2026-10-03 03:04:58.621 local, about 0.1 seconds after the second Test Runner job began at 03:04:58.522. This is temporal association, **not proof of writer or causation**; the Editor remained on a clean Menu Scene and the user or another task may have saved it. Battle Scene and `SettingsPanelController.cs`/`UIButton.cs` disk SHA were stable across the protected interval. No test, refresh call or this agent explicitly saved a scene; no revert/restore/overwrite was made. Awaiting user ownership clarification, additional Editor operations are stopped. Battle Scene/Game View remain unverified.
+
+Remaining: wait for a safe original Editor import/test path, run the named kind8 focused test (including its identity-neighbor tests), then original Battle Scene near X480/far X1200 full Driver and physical/source Z/Game View check. If that reveals a first difference, correct within a new scoped record. Q07/Q09/Q12 and the overall goal remain open. Rollback remains a forward correction of these exact assignments/test; no deletion or Git destructive operation.

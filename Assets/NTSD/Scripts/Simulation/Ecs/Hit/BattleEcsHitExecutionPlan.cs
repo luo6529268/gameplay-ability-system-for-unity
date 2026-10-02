@@ -2792,7 +2792,9 @@ namespace NTSD.Simulation.Ecs
                             projection.AttackerX = target.Runtime.X;
                         if (kind8SyncMode != 0)
                             projection.AttackerY = target.Runtime.Y;
-                        projection.AttackerZ = target.Runtime.Z + 1.0;
+                        projection.AttackerZ =
+                            target.Runtime.Z +
+                            kind8World.SpatialProjection.SourceDeltaToViewZ(1.0);
                     }
                     return true;
 

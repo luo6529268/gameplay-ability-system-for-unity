@@ -1,0 +1,37 @@
+{
+  "authority": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "cases": [
+    {
+      "targetX": 480,
+      "sourceRows": 26,
+      "rootComparedTicks": 13,
+      "comparedFields": 260,
+      "diffCount": 0,
+      "firstDiff": null,
+      "sourceKind8Applied": 1,
+      "rootKind8Applied": 1,
+      "sourceHitTicks": [
+        1
+      ],
+      "rootHitTicks": [
+        1
+      ],
+      "rootExit": 0,
+      "rootPassed": true
+    },
+    {
+      "targetX": 1200,
+      "sourceRows": 26,
+      "rootComparedTicks": 13,
+      "comparedFields": 260,
+      "diffCount": 0,
+      "firstDiff": null,
+      "sourceKind8Applied": 0,
+      "rootKind8Applied": 0,
+      "sourceHitTicks": [],
+      "rootHitTicks": [],
+      "rootExit": 0,
+      "rootPassed": true
+    }
+  ]
+}

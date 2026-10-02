@@ -6,6 +6,7 @@ using System;
 using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -21,6 +22,8 @@ namespace BeatEmUpTemplate2D
      */
     public class UIButton : MonoBehaviour, IPointerDownHandler
     {
+        public bool m_OpenSizeAnima = true; // 是否启用按钮大小动画
+
         [Header("选中时改变按钮文本")]
         public TextMeshProUGUI buttonText; // 按钮文本组件
         private Color buttonTextDefaultColor = Color.white; // 默认按钮文本颜色
@@ -59,7 +62,8 @@ namespace BeatEmUpTemplate2D
             // 设置按钮文本颜色
             if (buttonText != null) buttonText.color = selected ? buttonTextSelectedColor : buttonTextDefaultColor;
 
-            if (buttonText != null) buttonText.fontSize = selected ? Mathf.Lerp(buttonText.fontSize, selectFontSize,0.2f) : Mathf.Lerp(buttonText.fontSize, defalutFontSize, 0.2f);
+            if(m_OpenSizeAnima)
+                if (buttonText != null) buttonText.fontSize = selected ? Mathf.Lerp(buttonText.fontSize, selectFontSize, 0.2f) : Mathf.Lerp(buttonText.fontSize, defalutFontSize, 0.2f);
         }
 
         /// <summary>

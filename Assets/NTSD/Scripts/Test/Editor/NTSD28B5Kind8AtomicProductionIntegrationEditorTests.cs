@@ -213,6 +213,38 @@ namespace NTSD.Test.Editor
         }
 
         [Test]
+        public void Kind8_UsesSharedFixedViewDepthProjectionInActualAndHitPlan()
+        {
+            var world = new SimulationWorld();
+            world.ConfigureFixedViewRunDistance(2048, 1152);
+            TypedCharacter attacker = CreateEntity(world, 8754, 0, 0);
+            TypedCharacter target = CreateEntity(world, 8755, 1, 3);
+            ConfigurePositions(attacker, target);
+            attacker.Runtime.SetSourceRulePosition(-10.5, 90.5);
+            target.Runtime.SetSourceRulePosition(150.75, 260.25);
+            attacker.Runtime.Z = world.SpatialProjection.SourceToViewZ(90.5);
+            target.Runtime.Z = world.SpatialProjection.SourceToViewZ(260.25);
+            InteractionArea interaction = Kind8(3, 0);
+            interaction.dvy = 0;
+            double originalPhysicalZ = attacker.Runtime.Z;
+            double expectedPhysicalZ = target.Runtime.Z + 1152.0 / 730.0;
+
+            Assert.That(TryProject(
+                    world, attacker, target, interaction, out object projection),
+                Is.True);
+            Assert.That(ReadDouble(projection, "AttackerZ"),
+                Is.EqualTo(expectedPhysicalZ).Within(0.000000001));
+            Assert.That(attacker.Runtime.Z, Is.EqualTo(originalPhysicalZ),
+                "The ECS plan must not commit the projected value.");
+
+            Assert.That(ApplyActual(world, attacker, target, interaction), Is.True);
+            Assert.That(attacker.Runtime.Z,
+                Is.EqualTo(expectedPhysicalZ).Within(0.000000001));
+            Assert.That(attacker.Runtime.SourceRuleZ, Is.EqualTo(261.25));
+            Assert.That(attacker.Runtime.ZInt, Is.EqualTo(30));
+        }
+
+        [Test]
         public void HitPlan_ProjectsConditionalTransactionWithoutIntegerWrites()
         {
             var world = new SimulationWorld();

@@ -1,0 +1,103 @@
+{
+  "source_ticks": 16,
+  "formal_root_rows": 18,
+  "compared_fields_per_tick": 9,
+  "matched": 144,
+  "total": 144,
+  "first_difference": null,
+  "mismatch_count": 0,
+  "mismatches": [],
+  "root_tick1_events": [
+    {
+      "kind": "hit",
+      "status": "applied",
+      "attacker": 1,
+      "target": 2,
+      "candidate": 0,
+      "hpDamage": 3,
+      "mpDamage": 0
+    },
+    {
+      "kind": "frame",
+      "slot": 0,
+      "status": "held",
+      "from": 415,
+      "to": 415,
+      "rawNext": 0
+    },
+    {
+      "kind": "frame",
+      "slot": 1,
+      "status": "held",
+      "from": 73,
+      "to": 73,
+      "rawNext": 0
+    },
+    {
+      "kind": "frame",
+      "slot": 2,
+      "status": "held",
+      "from": 0,
+      "to": 0,
+      "rawNext": 0
+    }
+  ],
+  "root_tick2_events": [
+    {
+      "kind": "relation_hit",
+      "status": "applied",
+      "attacker": 0,
+      "target": 1,
+      "candidate": 0,
+      "itrKind": 3,
+      "attackerAction": 417,
+      "targetAction": 130
+    },
+    {
+      "kind": "spawn",
+      "status": "spawned",
+      "oid": 414,
+      "slot": 50,
+      "sourceLine": 1718
+    },
+    {
+      "kind": "lifecycle",
+      "status": "despawned",
+      "oid": 414,
+      "slot": 50,
+      "code": 1000
+    },
+    {
+      "kind": "frame",
+      "slot": 0,
+      "status": "advanced",
+      "from": 417,
+      "to": 418,
+      "rawNext": 418
+    },
+    {
+      "kind": "frame",
+      "slot": 1,
+      "status": "held",
+      "from": 130,
+      "to": 130,
+      "rawNext": 0
+    },
+    {
+      "kind": "frame",
+      "slot": 2,
+      "status": "held",
+      "from": 0,
+      "to": 0,
+      "rawNext": 0
+    },
+    {
+      "kind": "frame",
+      "slot": 50,
+      "status": "terminal_code",
+      "from": 704,
+      "to": 1000,
+      "rawNext": 1000
+    }
+  ]
+}

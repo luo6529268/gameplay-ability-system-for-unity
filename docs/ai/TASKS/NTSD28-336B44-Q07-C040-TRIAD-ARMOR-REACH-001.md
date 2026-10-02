@@ -1,0 +1,15 @@
+# NTSD28-336B44-Q07-C040-TRIAD-ARMOR-REACH-001
+
+Status: `VERIFIED_SCOPED_FORMAL_SOURCE_ROOT_CONTROLLED_ACTION`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`.
+
+Authority: formal 336B44 playable `SimulationTickDriver28::step`, `BattleWorld28::resolve_special_relation_hit`, `apply_reduced_hit_rest`, and `settle_catch_relations`; formal decoded `data/data.txt`, Jiraiya OID21, Bee OID75, and Guy OID97 DAT. The formal EXE remains the release identity; this diagnostic's linked source executable is not that EXE.
+
+Question: can a kind-3 catch at an earlier type-0 slot leave the caught actor's frozen attack candidate available later in the same hit pass, so its hit against a third armored actor gives it positive motion hold before catch settlement? Jiraiya action415 catches into action417/vaction132 while Bee's caughtact130 and vaction132 have different center/CPOINT offsets. This is a source-and-DAT candidate, not a proven natural event.
+
+Ownership: add only `Tools/NTSD28Q07Diagnostics/c040_triad_armor_natural_probe.cpp` and unique outputs under `artifacts/diagnostics/NTSD28-336B44-Q07-C040-TRIAD-ARMOR-REACH-001/`; update this Task, its Change Record, Ledger, STATE, handoff, and current master with actual evidence. No formal source, Unity production/test, DAT, image, Scene, Prefab, menu, or noncombat edits. Preserve all existing dirty files and prior negative probe outputs.
+
+Method: use full `GameSession28::step` with formal runtime content, seed682973786/mode0, distinct teams, Jiraiya slot0/action415/X500, Bee slot1/action73, Guy slot2/action0. Sweep a small declared position matrix around the grab and Bee attack range. Record each tick's kind3 and armor hit status, attacker/target action, hold, catch relation, current/vaction positional CPOINT offsets, RNG, and LFR. Keep a far control. Do not initialize relation or hold manually. If a real positive survives correct settlement-phase inspection, replay that exact LFR through the root 336B44 EXE; later Unity Scene evidence belongs to a separate package.
+
+Exit: zero-error source compile, bounded positive or honest negative with repeatable CSV/RNG/LFR hashes, exact first-difference/phase audit, scoped Ledger validation and `git diff --check`. A negative only closes this matrix. A positive only proves formal source/root reachability and does not close C040/Q07 without original Battle Scene and Game View evidence. Rollback is a forward correction to the new diagnostic and records; no deletion or reset is authorized.
+
+Result: Bee620/Guy640 positive at tick2 after tick1 selected-armor hit; source independent CSV/RNG/LFR repeats equal; formal root exit0/PASS and selected 144/144 fields agree. Bee620/Guy670 catch without early armor and Bee1200/Guy1220 armor without catch are negative controls, each root exit0/PASS and 144/144 selected fields agree. V1's same-tick conjunction false negative and all raw files remain; v2 correction is recorded. This is a controlled initial-action route, not physical-key natural selection or Unity Scene acceptance. See [report](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-TRIAD-ARMOR-REACH-001/REPORT.md).
