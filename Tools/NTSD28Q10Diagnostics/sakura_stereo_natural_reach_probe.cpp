@@ -32,6 +32,7 @@ struct Result {
 bool run_case(const std::filesystem::path& decoded_dat,
               const std::filesystem::path& vfs,
               const Case& selected,
+              int source_z,
               const std::filesystem::path& output,
               bool record,
               Result& result,
@@ -46,7 +47,7 @@ bool run_case(const std::filesystem::path& decoded_dat,
     sakura.slot = 0;
     sakura.object_id = 1;
     sakura.x = 500;
-    sakura.z = 650;
+    sakura.z = source_z;
     // Formal state 1150145 redirects the requested 240 to 145 above 150 HP.
     sakura.hp = 100;
     sakura.mp = 500;
@@ -56,7 +57,7 @@ bool run_case(const std::filesystem::path& decoded_dat,
     lee.slot = 1;
     lee.object_id = 7;
     lee.x = 1200;
-    lee.z = 650;
+    lee.z = source_z;
     lee.hp = 500;
     lee.mp = 500;
     lee.team = 2;
@@ -169,9 +170,21 @@ bool run_case(const std::filesystem::path& decoded_dat,
 }  // namespace
 
 int main(int argc, char** argv) {
-    if (argc != 4) {
-        std::cerr << "usage: sakura_stereo_natural_reach_probe <decoded_dat> <vfs> <new_output_dir>\n";
+    if (argc != 4 && argc != 5) {
+        std::cerr << "usage: sakura_stereo_natural_reach_probe <decoded_dat> <vfs> <new_output_dir> [source_z]\n";
         return 2;
+    }
+    int source_z = 650;
+    if (argc == 5) {
+        try {
+            std::size_t parsed = 0;
+            const std::string value(argv[4]);
+            source_z = std::stoi(value, &parsed);
+            if (parsed != value.size() || source_z < 0 || source_z > 1000)
+                return 2;
+        } catch (...) {
+            return 2;
+        }
     }
     const std::filesystem::path output(argv[3]);
     if (std::filesystem::exists(output)) {
@@ -192,7 +205,7 @@ int main(int argc, char** argv) {
                                         hold_defend};
                     Result result;
                     std::string error;
-                    if (!run_case(argv[1], argv[2], selected, output, false,
+                    if (!run_case(argv[1], argv[2], selected, source_z, output, false,
                                   result, error)) {
                         std::cerr << "source case failed: " << error << '\n';
                         return 5;
@@ -223,7 +236,7 @@ int main(int argc, char** argv) {
         const Case control{2, 2, 2, false};
         Result control_result;
         std::string control_error;
-        if (!run_case(argv[1], argv[2], control, output, true,
+        if (!run_case(argv[1], argv[2], control, source_z, output, true,
                       control_result, control_error)) {
             std::cerr << "negative control capture failed: " << control_error << '\n';
             return 9;
@@ -234,7 +247,7 @@ int main(int argc, char** argv) {
     }
     Result recorded;
     std::string error;
-    if (!run_case(argv[1], argv[2], winner, output, true, recorded, error)) {
+    if (!run_case(argv[1], argv[2], winner, source_z, output, true, recorded, error)) {
         std::cerr << "recorded source case failed: " << error << '\n';
         return 7;
     }

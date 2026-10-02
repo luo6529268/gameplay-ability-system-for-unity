@@ -1,0 +1,5 @@
+hold_before,catcher_action,caught_action_before,caught_action_after,current_center_x,current_center_y,current_cpoint_x,current_cpoint_y,vaction_cpoint_x,vaction_cpoint_y,expected_x,expected_y,expected_z,actual_x,actual_y,actual_z,active_relations,synchronized_targets,success
+5,125,132,132,39,79,58,47,41,39,529,1,399,529,1,399,1,1,1
+0,125,132,130,39,79,58,47,41,39,529,1,399,529,1,399,1,1,1
+5,125,137,137,39,71,33,68,41,39,529,-7,399,529,-7,399,1,1,1
+0,125,137,130,39,79,33,68,41,39,529,1,399,529,1,399,1,1,1

@@ -1,0 +1,40 @@
+{
+    "runId": "20261002-133121-846",
+    "status": "FAIL",
+    "error": "System.InvalidOperationException: Physical P1 key mapping differs at tick 1: expected bits 16, applied 0.\r\n  at NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q10SakuraNaturalStereoPlayModeTests.cs:334 \r\n  at NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests.RunInPlayAsync (NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests+Report report) [0x009f4] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q10SakuraNaturalStereoPlayModeTests.cs:241 ",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "inputControllerType": "NTSD.Game.CharacterInputModule",
+    "sceneRestored": true,
+    "initialTick": 34,
+    "neutralPreparationTicks": 32,
+    "inputPhase": 0,
+    "action172Tick": 0,
+    "cue": "",
+    "eventTick": 0,
+    "callbackTick": 0,
+    "actionAtEvent": 0,
+    "worldPendingMatched": false,
+    "poolBefore": 0,
+    "poolAfter": 0,
+    "clipChannels": 0,
+    "clipSamples": 0,
+    "voiceAssigned": false,
+    "voicePlaying": false,
+    "voicePan": 0.0,
+    "voiceVolume": 0.0,
+    "ticks": [
+        {
+            "relativeTick": 1,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0,
+            "keyboardLBeforeStep": true,
+            "defendActionBeforeStep": false,
+            "heldButtonsBeforeStep": 0,
+            "heldButtonsAfterStep": 0
+        }
+    ]
+}

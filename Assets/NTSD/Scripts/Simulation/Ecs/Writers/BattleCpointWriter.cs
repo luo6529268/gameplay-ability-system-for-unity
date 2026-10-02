@@ -395,6 +395,20 @@ namespace NTSD.Simulation.Ecs
             int victimCpointY = victimFrame?.PrimaryCatchPoint.Y ?? 0;
             int victimCenterX = victimFrame?.centerx ?? 0;
             int victimCenterY = victimFrame?.centery ?? 0;
+            int positionAction = cpoint.Vaction < 0
+                ? -cpoint.Vaction
+                : cpoint.Vaction;
+            LF2FrameData positionFrame = victim.FrameCache?.GetNativeFrameDataById(
+                positionAction);
+            if (positionFrame != null &&
+                positionFrame.TryGetPrimaryCatchPoint(
+                    out BattleCatchPointValue positionCpoint) &&
+                positionCpoint.Kind == 2)
+            {
+                // Alignment contract: NTSD28-336B44-Q07-C040-HELD-POSE-UNITY-001.
+                victimCpointX = positionCpoint.X;
+                victimCpointY = positionCpoint.Y;
+            }
 
             bool victimFacesRightForPose = victim.Runtime.Dir == "right";
             victim.Runtime.X = victimFacesRightForPose

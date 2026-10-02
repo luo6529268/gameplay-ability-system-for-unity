@@ -1,0 +1,1 @@
+2026-10-03 initial run-01 and run-02 invocations each returned 4 before creating output directories because the argument was the release root. ObjectDefinitionCatalog28::load_extracted_root requires resources/runtime/catalog.csv. No official or Unity content was changed. The corrected runs use resources/runtime.

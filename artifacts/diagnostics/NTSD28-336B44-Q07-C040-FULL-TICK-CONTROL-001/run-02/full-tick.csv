@@ -1,0 +1,5 @@
+initial_action,initial_hold,catcher_action_before,caught_action_before,caught_hold_before,catcher_x_before,caught_x_before,caught_y_before,catcher_action_after,caught_action_after,caught_hold_after,catcher_x_after,caught_x_after,caught_y_after,caught_z_after,catch_target_after,catch_source_after,settlement_active,settlement_synchronized,current_center_y,vaction_center_y,current_cpoint_x,vaction_cpoint_x,split_reached
+132,5,125,132,5,500,550,0,125,132,4,500,529,1,399,1,0,1,1,79,79,58,41,1
+132,0,125,132,0,500,550,0,125,130,0,500,529,1,399,1,0,1,1,79,79,41,41,0
+137,5,125,137,5,500,550,0,125,137,4,500,529,-7,399,1,0,1,1,71,79,33,41,1
+137,0,125,137,0,500,550,0,125,130,0,500,529,1,399,1,0,1,1,79,79,41,41,0

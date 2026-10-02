@@ -1,0 +1,39 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "1ddd8f985c9d447e81ac9836e3d255b0",
+      "status": "failed",
+      "mode": "EditMode",
+      "started_unix_ms": 1790946838792,
+      "finished_unix_ms": 1790946845314,
+      "last_update_unix_ms": 1790946845314,
+      "progress": {
+        "completed": 2,
+        "total": 8782,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790946844835,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_UsesCurrentCenterAndVactionCpointInBothPositionDomains(0,130)",
+        "last_finished_unix_ms": 1790946844838,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [
+          {
+            "full_name": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_UsesCurrentCenterAndVactionCpointInBothPositionDomains(5,132)",
+            "message": "  Expected: 111\r\n  But was:  11\r\n"
+          },
+          {
+            "full_name": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_UsesCurrentCenterAndVactionCpointInBothPositionDomains(0,130)",
+            "message": "  Expected: 111\r\n  But was:  11\r\n"
+          }
+        ],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": null
+    }
+  }
+}

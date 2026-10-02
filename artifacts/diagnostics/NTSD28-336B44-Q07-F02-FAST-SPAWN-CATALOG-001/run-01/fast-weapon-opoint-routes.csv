@@ -1,0 +1,14 @@
+parent_oid,parent_type,parent_path,frame,frame_state,predecessor_count,point_kind,child_oid,child_type,child_path,child_action,child_state,dvx,dvy,dvz,encoded_facing,spawn_count,max_initial_abs_vx_bound
+230,3,c\kan\a\kar.dat,135,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,30,3,5
+230,3,c\kan\a\kar.dat,136,3005,1,1,422,4,w\x.dat,0,1000,0,-3,0,30,3,5
+230,3,c\kan\a\kar.dat,137,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,40,4,5
+230,3,c\kan\a\kar.dat,138,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,30,3,5
+230,3,c\kan\a\kar.dat,139,3005,1,1,422,4,w\x.dat,0,1000,0,-2,0,50,5,5
+230,3,c\kan\a\kar.dat,140,3005,1,1,422,4,w\x.dat,0,1000,0,-5,0,50,5,5
+230,3,c\kan\a\kar.dat,345,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,70,7,5
+230,3,c\kan\a\kar.dat,346,3005,1,1,422,4,w\x.dat,0,1000,0,-3,0,70,7,5
+230,3,c\kan\a\kar.dat,347,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,70,7,5
+230,3,c\kan\a\kar.dat,338,3005,1,1,422,4,w\x.dat,0,1000,0,-1,0,70,7,5
+230,3,c\kan\a\kar.dat,339,3005,1,1,422,4,w\x.dat,0,1000,0,-2,0,70,7,5
+230,3,c\kan\a\kar.dat,340,3005,1,1,422,4,w\x.dat,0,1000,0,-5,0,70,7,5
+22,0,c\shik\shik.dat,128,9,1,1,422,4,w\x.dat,0,1000,5,-7,0,0,1,5

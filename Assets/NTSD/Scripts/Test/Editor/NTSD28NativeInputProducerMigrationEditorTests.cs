@@ -1,6 +1,7 @@
 #if UNITY_EDITOR && UNITY_INCLUDE_TESTS
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using NTSD.Animation;
 using NTSD.Animation.LF2Objects;
 using NTSD.Input;
@@ -11,6 +12,54 @@ namespace NTSD.Test
 {
     public sealed class NTSD28NativeInputProducerMigrationEditorTests
     {
+        [Test]
+        public void NativeProducerFreeze_ProjectsLegacyThreeButtonFieldsIntoFormalOrderInBothBanks()
+        {
+            var world = CreateDataOrientedWorld();
+            LF2Character character = RegisterCharacter(world, 0, 809);
+            FieldInfo moduleField = typeof(SimulationWorld).GetField(
+                "ntsd28InputTwoPassModule",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(moduleField, Is.Not.Null);
+            object module = moduleField.GetValue(world);
+            MethodInfo freeze = module.GetType().GetMethod(
+                "FreezeProducerState",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Assert.That(freeze, Is.Not.Null);
+
+            int[,] cases =
+            {
+                { 1, 0, 0, 0, 1, 0 },
+                { 0, 1, 0, 0, 0, 1 },
+                { 0, 0, 1, 1, 0, 0 },
+            };
+            for (int row = 0; row < cases.GetLength(0); row++)
+            {
+                NTSDEntityRuntime runtime = character.Runtime;
+                runtime.KeyAttack = (byte)cases[row, 0];
+                runtime.KeyJump = (byte)cases[row, 1];
+                runtime.KeyDefend = (byte)cases[row, 2];
+                runtime.PrevAttack = (byte)cases[row, 3];
+                runtime.PrevJump = (byte)cases[row, 4];
+                runtime.PrevDefend = (byte)cases[row, 5];
+
+                freeze.Invoke(module, new object[] { character });
+
+                Assert.That(runtime.NativeInputProxy.Current[4],
+                    Is.EqualTo(cases[row, 1]), $"case {row} current attack");
+                Assert.That(runtime.NativeInputProxy.Current[5],
+                    Is.EqualTo(cases[row, 2]), $"case {row} current jump");
+                Assert.That(runtime.NativeInputProxy.Current[6],
+                    Is.EqualTo(cases[row, 0]), $"case {row} current defend");
+                Assert.That(runtime.NativeInputProxy.Previous[4],
+                    Is.EqualTo(cases[row, 4]), $"case {row} previous attack");
+                Assert.That(runtime.NativeInputProxy.Previous[5],
+                    Is.EqualTo(cases[row, 5]), $"case {row} previous jump");
+                Assert.That(runtime.NativeInputProxy.Previous[6],
+                    Is.EqualTo(cases[row, 3]), $"case {row} previous defend");
+            }
+        }
+
         [Test]
         public void DataOrientedRegistrationAndBattleEntryClear_UseNativeHistoryInitialState()
         {

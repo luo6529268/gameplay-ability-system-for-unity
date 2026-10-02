@@ -1,0 +1,16 @@
+# Q10/C032 natural landing channel6 to pooled battle voice
+
+Status: `VERIFIED_SCOPED_NATURAL_EVENT_TO_VOICE`; parent C032/Q10/Q12 remain open. Authority is the selected formal root `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` and its corresponding playable landing sound event. The previously established same-state source/Unity event comparison is in `NTSD28-336B44-Q10-C032-NATURAL-HIT-AUDIO-001/ACCEPTANCE.md`.
+
+The original Editor ran the saved Battle Scene Play clone with formal staged content, mode0/seed682973786, Tayuya OID36/action243 at X500 and Naruto OID2/action0 at X550 for 128 complete production Driver ticks. The unique raw report `tay36-a243-x550-c032-voice-01.json` is `PASS/DONE`, startTick5/endTick133, `exitedPlay=true`, and reports Battle Scene clean with identical before/after disk SHA. Its 128 `samples` objects are exactly equal to the prior same-state original Scene result `NTSD28-336B44-Q07-F03-NATURAL-SCENE-001/tay36-a243-x550-natural-scene-03.json`; this includes every captured entity, RNG and pending-sound field. The matching initial content root, input phase, native clock reset, difficulty, mode and AI gate were separately checked. Thus the added audio inspection did not change the established 128-tick battle trace.
+
+| Relative tick | Formal/Unity pending cue | Source-rule X | Pooled play count | Playing clip |
+| ---: | --- | ---: | ---: | --- |
+| 60 | `data/016.wav` | 373 | 3→4 | assigned, playing, mono 22,100 Hz / 8,158 samples |
+| 66 | `data/016.wav` | 360 | 4→5 | assigned, playing, mono 22,100 Hz / 8,158 samples |
+
+The original Editor imported the test-only probe after generated `Assembly-CSharp-Editor.csproj` build passed with 0 errors/253 warnings. The first generated build failed with two CS0266 diagnostics because the new probe declared the sound-player's `long` play counter as `int`; only those new carrier declarations were corrected, then the build passed. No production sound-player behavior was changed.
+
+The request file `Temp/NTSD28_Q07_F03NaturalMarkerBattlePlay.request.json` was created for this unique run and remains present with `requested:false`; it was not deleted. The Play report recorded a clean Battle Scene at its completion. A later live Editor query found a sole clean Menu Scene; the cause or intervening actor was not established. The original pre-run Battle Scene was then reopened through the Editor scene API without saving either Scene. The final Editor is idle/non-Play, with the sole active Battle Scene clean. Protected disk SHA-256 values remained unchanged: Battle `93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60`, Menu `DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3`, project mode asset `B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82`.
+
+This proves only the selected natural Unity event→prepared clip→playing pooled voice path. The formal root EXE trace does not export individual audio events or speaker PCM. Device output, stereo/pan/volume, other landing conditions and full Q10/Q12 integration remain unverified. No production, DAT, WAV, Scene, camera, UI or non-battle file was changed by this package.

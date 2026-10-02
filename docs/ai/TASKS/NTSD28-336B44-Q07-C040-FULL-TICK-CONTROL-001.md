@@ -1,0 +1,13 @@
+# NTSD28-336B44-Q07-C040-FULL-TICK-CONTROL-001
+
+Status: `VERIFIED_SCOPED_SOURCE_FULL_TICK`. Parent: `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`. [Evidence](../../../artifacts/diagnostics/NTSD28-336B44-Q07-C040-FULL-TICK-CONTROL-001/REPORT.md).
+
+Authority: selected formal root `NTSD2.8-Logan.exe` SHA-256 `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3` and its corresponding playable `GameSession28::step` and `BattleWorld28::settle_catch_relations`. The existing controlled pass showed Bee action137/hold5 uses current center Y71 and vaction130 CPOINT, while hold0 transitions to action130/center Y79. Existing natural Hinata/Bee inputs reached no positive-hold split after the earlier physics pass; do not promote them to this case.
+
+Ownership: add only `Tools/NTSD28Q07Diagnostics/c040_held_pose_full_tick_control.cpp`, a standalone diagnostic compiled against the current playable closure. Use formal DAT, two roster entities, mode0/seed682973786 and explicit reciprocal catch relation. Run Bee initial action132/137 with hold5/0 for one complete production `GameSession28::step` and capture before/after action, hold, XYZ, relation and settlement counters. Keep all existing diagnostic files and outputs. Do not edit formal source, DAT, Unity production, Scene, Prefab, assets, camera or non-battle code.
+
+Exit: compile with zero errors from the current playable closure, run twice to separate output directories, retain both raw CSVs and compare SHA. Classify whether the full tick actually reaches the center/CPOINT split; if it does not, preserve the negative evidence and do not request a Unity Scene test based on a non-equivalent initial state. If it does, establish an independent original Battle Scene same-state task rather than equating the source diagnostic binary with the formal root EXE. Run Change Ledger validation and `git diff --check` after any script edit.
+
+Risk: frame/physics/input passes may change action or hold before settlement, so a standalone settlement PASS is not a full-tick PASS. Do not assert expected coordinates from initialization alone. Rollback is a forward correction to this new diagnostic only; no deletion or reset is authorized.
+
+Observed exit: current playable-closure C++ compile exit0; two independent four-row full-tick runs exited0 and their CSV SHA-256 matched. Positive hold5 survived as hold4 and retained action132/137 with active/synchronized settlement; zero hold selected vaction130. Bee137 hold5 settled at source Y-7, zero hold at Y1. This is a controlled source full-tick certificate only; original Scene, formal root internal-state equivalence, natural physical key and pixels remain open.

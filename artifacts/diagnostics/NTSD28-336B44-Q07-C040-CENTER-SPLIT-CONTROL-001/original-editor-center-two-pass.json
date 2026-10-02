@@ -1,0 +1,60 @@
+{
+  "status": "success",
+  "result": {
+    "success": true,
+    "message": "Test job status retrieved.",
+    "data": {
+      "job_id": "b43caddb2f2449c69e5db151233aaa8e",
+      "status": "succeeded",
+      "mode": "EditMode",
+      "started_unix_ms": 1790952410717,
+      "finished_unix_ms": 1790952417872,
+      "last_update_unix_ms": 1790952417872,
+      "progress": {
+        "completed": 2,
+        "total": 8784,
+        "current_test_full_name": null,
+        "current_test_started_unix_ms": 1790952417403,
+        "last_finished_test_full_name": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(0,130,214)",
+        "last_finished_unix_ms": 1790952417405,
+        "stuck_suspected": false,
+        "editor_is_focused": false,
+        "blocked_reason": null,
+        "failures_so_far": [],
+        "failures_capped": false
+      },
+      "error": null,
+      "result": {
+        "mode": "EditMode",
+        "summary": {
+          "total": 2,
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0,
+          "durationSeconds": 0.7405989,
+          "resultState": "Passed"
+        },
+        "results": [
+          {
+            "name": "HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(5,132,206)",
+            "fullName": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(5,132,206)",
+            "state": "Passed",
+            "durationSeconds": 0.1712458,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          },
+          {
+            "name": "HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(0,130,214)",
+            "fullName": "NTSD.Test.NTSD28B6CatchSettlementVactionPreflightProductionEditorTests.HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(0,130,214)",
+            "state": "Passed",
+            "durationSeconds": 0.0020941,
+            "message": null,
+            "stackTrace": null,
+            "output": ""
+          }
+        ]
+      }
+    }
+  }
+}

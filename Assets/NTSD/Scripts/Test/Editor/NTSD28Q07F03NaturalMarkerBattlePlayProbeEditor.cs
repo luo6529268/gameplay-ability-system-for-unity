@@ -10,6 +10,7 @@ using NTSD.Animation.LF2Objects;
 using NTSD.App;
 using NTSD.Game;
 using NTSD.Simulation;
+using NTSD.UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -22,12 +23,16 @@ namespace NTSD.Test.Editor
         private const string RequestPath = "Temp/NTSD28_Q07_F03NaturalMarkerBattlePlay.request.json";
         private const string ResultRoot =
             "artifacts/diagnostics/NTSD28-336B44-Q07-F03-NATURAL-SCENE-001/";
+        private const string AudioResultRoot =
+            "artifacts/diagnostics/NTSD28-336B44-Q10-C032-NATURAL-VOICE-001/";
+        private const string AudioRunId = "tay36-a243-x550-c032-voice-01";
         private const string SessionKey = "NTSD.Q07.F03NaturalMarkerBattlePlay";
         private static Report report;
         private static SimulationTickDriver driver;
         private static SimulationWorld world;
         private static LF2Character actor;
         private static LF2Character target;
+        private static NTSDSoundPlayer soundPlayer;
         private static int stableTick = -1;
         private static int stableUpdates;
 
@@ -83,6 +88,21 @@ namespace NTSD.Test.Editor
         }
 
         [Serializable]
+        private sealed class VoiceSample
+        {
+            public int relativeTick;
+            public string cue;
+            public int worldX;
+            public long poolBefore;
+            public long poolAfter;
+            public int channels;
+            public int frequency;
+            public int samples;
+            public bool assigned;
+            public bool playing;
+        }
+
+        [Serializable]
         private sealed class Report
         {
             public string runId;
@@ -111,9 +131,11 @@ namespace NTSD.Test.Editor
             public int firstBirthRelativeTick = -1;
             public int initialY;
             public bool configuredBeforeStart;
+            public bool audioVoiceProbe;
             public bool sceneCleanAfter;
             public bool exitedPlay;
             public List<Sample> samples = new List<Sample>();
+            public List<VoiceSample> voices = new List<VoiceSample>();
         }
 
         [InitializeOnLoadMethod]
@@ -140,10 +162,13 @@ namespace NTSD.Test.Editor
         private static void Save()
         {
             SessionState.SetString(SessionKey, JsonUtility.ToJson(report));
-            string path = PathInProject(ResultRoot + report.runId + ".json");
+            string path = PathInProject(ResultRootForRunId(report.runId) + report.runId + ".json");
             Directory.CreateDirectory(Path.GetDirectoryName(path));
             File.WriteAllText(path, JsonUtility.ToJson(report, true));
         }
+
+        private static string ResultRootForRunId(string runId) =>
+            runId == AudioRunId ? AudioResultRoot : ResultRoot;
 
         private static void Restore()
         {
@@ -222,9 +247,11 @@ namespace NTSD.Test.Editor
             File.WriteAllText(requestFile, JsonUtility.ToJson(request, true));
             Require(!string.IsNullOrEmpty(request.runId) && request.runId.Length <= 80 &&
                 request.runId.All(c => char.IsLetterOrDigit(c) || c == '-'), "Invalid runId.");
-            Require(request.runId == "tay36-a243-x550-natural-scene-03",
+            Require(request.runId == "tay36-a243-x550-natural-scene-03" ||
+                request.runId == AudioRunId,
                 "Unexpected controlled C032 runId.");
-            Require(!File.Exists(PathInProject(ResultRoot + request.runId + ".json")),
+            Require(!File.Exists(PathInProject(ResultRootForRunId(request.runId) +
+                request.runId + ".json")),
                 "Refusing to overwrite an existing result.");
             Require(!EditorApplication.isPlayingOrWillChangePlaymode, "Editor must be in Edit Mode.");
             Require(string.Equals(Path.GetFullPath(Application.dataPath).Replace('\\', '/'),
@@ -235,7 +262,7 @@ namespace NTSD.Test.Editor
                 "Requires sole clean saved NTSD_Battle Scene.");
             report = new Report { runId = request.runId, phase = "STARTUP", status = "RUNNING",
                 startedUtc = DateTime.UtcNow.ToString("O"), sceneHashBefore = HashScene(),
-                initialY = 0 };
+                initialY = 0, audioVoiceProbe = request.runId == AudioRunId };
             Save();
             EditorApplication.EnterPlaymode();
         }
@@ -261,11 +288,15 @@ namespace NTSD.Test.Editor
                 second is LF2Character, "Second Naruto roster entity is missing.");
             actor = (LF2Character)first;
             target = (LF2Character)second;
+            soundPlayer = AppManager.Instance?.SoundPlayer;
             Require(actor.ObjectId == 36 && target.ObjectId == 2,
                 "Play clone roster is not formal OID36/2 pair.");
             report.contentRoot = GameConfig.Instance?.BattleContentRuntimeRoot;
             Require(report.contentRoot == "Assets/NTSD/Content/LoganRuntime",
                 "Play World did not use staged formal content.");
+            if (report.audioVoiceProbe)
+                Require(soundPlayer != null && soundPlayer.BattleCatalogSealedForDiagnostics,
+                    "Production battle sound player or sealed catalog is unavailable.");
             SetInitialActor(actor, 243, 500, 500, 0);
             SetInitialActor(target, 0, 550, 500, 0);
             actor.RelationTeam = 1;
@@ -353,6 +384,8 @@ namespace NTSD.Test.Editor
                 new SimulationPlayerInput(0, SimulationInputButtons.None),
                 new SimulationPlayerInput(1, SimulationInputButtons.None)
             });
+            long poolBefore = report.audioVoiceProbe
+                ? soundPlayer.PooledOneShotPlayCountForDiagnostics : 0;
             Require(driver.StepOneTick(input, ignorePaused: true, buildPresentation: true),
                 "Production Driver rejected complete tick " + next);
             NTSD28NativeRandomScalarState rng = world.NativeRandom.CaptureScalarState();
@@ -383,9 +416,46 @@ namespace NTSD.Test.Editor
                     tick = sound.Tick
                 });
             }
+            if (report.audioVoiceProbe)
+                CaptureLandingVoice(sample, poolBefore);
             report.samples.Add(sample);
             report.endTick = driver.CurrentTickIndex;
             Save();
+        }
+
+        private static void CaptureLandingVoice(Sample sample, long poolBefore)
+        {
+            SoundSample landing = sample.sounds.FirstOrDefault(value =>
+                string.Equals(value.cue?.Replace('\\', '/'), "data/016.wav",
+                    StringComparison.OrdinalIgnoreCase));
+            if (landing == null) return;
+            MethodInfo getCue = typeof(NTSDSoundPlayer).GetMethod("GetOrPrepareCue",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            Require(getCue != null, "Production battle cue resolver is unavailable.");
+            object prepared = getCue.Invoke(soundPlayer, new object[] { landing.cue, true });
+            FieldInfo clipsField = prepared?.GetType().GetField("Clips");
+            AudioClip[] clips = clipsField?.GetValue(prepared) as AudioClip[];
+            AudioClip clip = clips != null && clips.Length > 0 ? clips[0] : null;
+            Require(clip != null, "Formal landing channel6 clip is unavailable after event.");
+            var voice = new VoiceSample
+            {
+                relativeTick = sample.relativeTick,
+                cue = landing.cue,
+                worldX = landing.worldX,
+                poolBefore = poolBefore,
+                poolAfter = soundPlayer.PooledOneShotPlayCountForDiagnostics,
+                channels = clip.channels,
+                frequency = clip.frequency,
+                samples = clip.samples
+            };
+            foreach (AudioSource source in soundPlayer.GetComponentsInChildren<AudioSource>(true))
+            {
+                if (source == null || source.clip != clip) continue;
+                voice.assigned = true;
+                voice.playing = source.isPlaying;
+                break;
+            }
+            report.voices.Add(voice);
         }
 
         private static void CompleteMeasurement()
@@ -394,7 +464,15 @@ namespace NTSD.Test.Editor
             EntitySample at60 = report.samples[59].entities.FirstOrDefault(value => value.slot == 1);
             EntitySample at65 = report.samples[64].entities.FirstOrDefault(value => value.slot == 1);
             EntitySample at66 = report.samples[65].entities.FirstOrDefault(value => value.slot == 1);
-            report.status = at1 != null && at1.oid == 2 && at1.action == 182 &&
+            bool voicePass = !report.audioVoiceProbe ||
+                (report.voices.Count == 2 &&
+                 report.voices[0].relativeTick == 60 && report.voices[0].worldX == 373 &&
+                 report.voices[1].relativeTick == 66 && report.voices[1].worldX == 360 &&
+                 report.voices.All(value => value.poolAfter > value.poolBefore &&
+                     value.channels == 1 && value.frequency == 22100 &&
+                     value.samples == 8158 && value.assigned && value.playing));
+            report.status = voicePass &&
+                at1 != null && at1.oid == 2 && at1.action == 182 &&
                 at1.state == 12 && at1.environmentState320 == -20 &&
                 at60 != null && at60.action == 185 && at60.state == 12 &&
                 at60.environmentState320 == 1 && at65 != null && at65.state == 12 &&
@@ -441,6 +519,7 @@ namespace NTSD.Test.Editor
             world = null;
             actor = null;
             target = null;
+            soundPlayer = null;
             stableTick = -1;
             stableUpdates = 0;
         }

@@ -45,6 +45,67 @@ int discover_airborne_routes(const std::filesystem::path& root,
     std::cout << "catalog_entries=" << catalog.size() << " airborne_routes=" << count << '\n';
     return 0;
 }
+
+int discover_fast_spawn_routes(const std::filesystem::path& root,
+                               const std::filesystem::path& output) {
+    if (std::filesystem::exists(output)) return 3;
+    ntsd28::ObjectDefinitionCatalog28 catalog;
+    if (!catalog.load_extracted_root(root).success) return 4;
+    std::filesystem::create_directories(output);
+    std::ofstream csv(output / "fast-weapon-opoint-routes.csv", std::ios::binary);
+    if (!csv) return 6;
+    csv << "parent_oid,parent_type,parent_path,frame,frame_state,predecessor_count,"
+           "point_kind,child_oid,child_type,child_path,child_action,child_state,"
+           "dvx,dvy,dvz,encoded_facing,spawn_count,max_initial_abs_vx_bound\n";
+    int count = 0;
+    int declared_fast = 0;
+    for (const auto& item : catalog.entries()) {
+        const auto& parent = item.second;
+        if (!parent.definition) continue;
+        for (const auto& frame : parent.definition->frames) {
+            for (const auto* block : frame.blocks("opoint")) {
+                const int child_oid = block->values.integer("oid").value_or(0);
+                if (child_oid <= 0) continue;
+                const auto* child = catalog.find(child_oid);
+                if (!child || !child->definition ||
+                    (child->object_type != 4 && child->object_type != 6)) continue;
+                const int child_action = block->values.integer("action").value_or(0);
+                const auto* initial = child->definition->frame(child_action);
+                if (!initial || initial->values.integer("state").value_or(0) != 1000)
+                    continue;
+                const int dvx = block->values.integer("dvx").value_or(0);
+                const int dvy = block->values.integer("dvy").value_or(0);
+                const int dvz = block->values.integer("dvz").value_or(0);
+                const int encoded_facing = block->values.integer("facing").value_or(0);
+                const int spawn_count = encoded_facing > 10 ? encoded_facing / 10 : 1;
+                int predecessor_count = 0;
+                for (const auto& predecessor : parent.definition->frames) {
+                    if (predecessor.values.integer("next").value_or(0) == frame.id)
+                        ++predecessor_count;
+                }
+                const long long speed = dvx < 0 ? -(long long)dvx : dvx;
+                const long long bound = speed + (spawn_count > 1 ? 5 : 0);
+                csv << parent.object_id << ',' << parent.object_type << ','
+                    << parent.source_path << ',' << frame.id << ','
+                    << frame.values.integer("state").value_or(0) << ','
+                    << predecessor_count << ','
+                    << block->values.integer("kind").value_or(0) << ','
+                    << child->object_id << ',' << child->object_type << ','
+                    << child->source_path << ',' << child_action << ",1000,"
+                    << dvx << ',' << dvy << ',' << dvz << ','
+                    << encoded_facing << ',' << spawn_count << ',' << bound << '\n';
+                ++count;
+                if (bound > 9) ++declared_fast;
+            }
+        }
+    }
+    csv.close();
+    if (!csv) return 6;
+    std::cout << "catalog_entries=" << catalog.size()
+              << " state1000_type46_opoints=" << count
+              << " initial_abs_vx_bound_gt9=" << declared_fast << '\n';
+    return 0;
+}
 }
 
 int main(int argc, char** argv) {
@@ -53,6 +114,8 @@ int main(int argc, char** argv) {
     const std::filesystem::path output(argv[2]);
     const std::string mode(argv[3]);
     if (argc == 4 && mode == "discover") return discover_airborne_routes(root, output);
+    if (argc == 4 && mode == "discover-fast")
+        return discover_fast_spawn_routes(root, output);
     const bool airborne = mode == "jump";
     const bool grounded = mode == "ground";
     const bool controlled_airborne = mode == "air20" || mode == "air40";

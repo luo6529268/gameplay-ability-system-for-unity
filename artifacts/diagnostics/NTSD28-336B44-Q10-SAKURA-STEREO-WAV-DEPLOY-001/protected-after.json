@@ -1,0 +1,33 @@
+{
+  "formalExeSha256": "336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3",
+  "formalWavSha256": "A6D36A499DBEAB218690BC3FDEE5071E5B97165D5DB34427116A3CDE8660EBC7",
+  "deployedWavSha256": "A6D36A499DBEAB218690BC3FDEE5071E5B97165D5DB34427116A3CDE8660EBC7",
+  "newFolderMetaExists": true,
+  "newWavMetaExists": true,
+  "protected": [
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Battle.unity",
+      "sha256": "93448372834A1BEAF2C9ACD90E2EF17E2EA487E19F601B9815A907A974D7BF60"
+    },
+    {
+      "path": "Assets/NTSD/Scene/NTSD_Menu.unity",
+      "sha256": "DD6A48A37FB8CEA9CD8A1F7738964A719E007A42F0FBB54FB48BBD0B723B9DC3"
+    },
+    {
+      "path": "Assets/NTSD/Resources/GameConfig.asset",
+      "sha256": null
+    },
+    {
+      "path": "Assets/NTSD/Resources/ProjectBattleModeConfig.asset",
+      "sha256": "B57CFEF32CC3ECE37AC98A4A1EF04FEB2FEE4EB3CC08466A4BFD32C1EDD85B82"
+    },
+    {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/data/020.wav",
+      "sha256": "4872410C3601F31931CCD2EB5335093ACC132AC73C0BAE7FB15AEB118A482E73"
+    },
+    {
+      "path": "Assets/NTSD/Content/LoganRuntime/vfs/data/067.wav",
+      "sha256": "D8D7B12EE94AE2EC26AEC9A93A44B65540FC69194E53E21AB44655E89451C757"
+    }
+  ]
+}

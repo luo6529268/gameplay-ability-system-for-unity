@@ -1,0 +1,13 @@
+# NTSD28-336B44-Q07-C040-NEJI-FAST-CHAIN-001
+
+Status: `VERIFIED_SCOPED_NEGATIVE`. Parent `NTSD28-UNITY-BATTLE-REALIGNMENT-001 / BATCH-04 / Q07 / C040`.
+
+Authority: current formal 336B44 playable `GameSession28::step` and `BattleWorld28::settle_catch_relations`, plus formal OID18 `c/nej/nej.dat` and OID75 `c/bee/bee.dat`. The Neji kind-3 action286 route can enter catch action120. Its later catch frames include injury and a short-wait change of vaction, a more discriminating condition than the already negative Hinata/Bee X sweep. The DAT observation is a candidate, not proof of natural runtime reachability.
+
+Ownership: add only `Tools/NTSD28Q07Diagnostics/neji_bee_c040_natural_probe.cpp` by adapting the existing bounded full-`GameSession28` LFR diagnostic; create unique outputs under `artifacts/diagnostics/NTSD28-336B44-Q07-C040-NEJI-FAST-CHAIN-001/`. Use formal staged content, OID18/action286/X500 and OID75/action0 at a bounded set of X positions, seed682973786, mode0, neutral input, at most 120 ticks per position. Keep source per-tick action/hold/pose/relationship, RNG and LFR, explicitly detect post-settlement C040 positive conditions. Do not modify existing probe, outputs, formal source, Unity production, DAT, resources, Scene or non-battle code.
+
+Exit: compile the new diagnostic against the current playable source closure with 0 diagnostics; run near/edge/far bounded cases and rerun any positive or boundary case once for deterministic SHA. If positive, verify actual relation and vaction/current CPOINT difference at the same tick before a separate formal-root/Unity package. If negative, report the exact tested conditions and proceed to another formally reachable difference without broadening this sweep by guesswork. Record formal EXE/DAT identity, source build closure, run command, raw results, first difference or bounded negative, validator and `git diff --check`.
+
+Risk: a static fast-wait transition may not be entered naturally or may be delayed by hit-stop/physics. It cannot authorize calling C040 closed. Rollback is forward correction of this new diagnostic only; deleting existing files is not authorized.
+
+Result (2026-10-03): the first probe falsely labeled a post-frame action difference as a settlement difference; raw v1 outputs are retained. The phase-corrected v2 full-tick screen found 0 C040 positives across all four positions, while X550/580/670 naturally grabbed and injured the target. X550 and X1200 independent repeats matched CSV/RNG/LFR SHA. Exact identities and phase sequence are in `artifacts/diagnostics/NTSD28-336B44-Q07-C040-NEJI-FAST-CHAIN-001/REPORT.md`. This closes only the bounded screen, not C040/Q07.

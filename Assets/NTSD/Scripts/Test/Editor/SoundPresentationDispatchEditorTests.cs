@@ -349,11 +349,13 @@ namespace NTSD.Test
 
                 foreach (var entry in new[]
                 {
-                    (Id: "020", Samples: 16413),
-                    (Id: "067", Samples: 31170),
+                    (RelativePath: @"data\020.wav", Samples: 16413, Channels: 1),
+                    (RelativePath: @"data\067.wav", Samples: 31170, Channels: 1),
+                    (RelativePath: @"c\saku\w\tra.wav", Samples: 123466, Channels: 2),
+                    (RelativePath: @"c\kim\w\j1.wav", Samples: 80454, Channels: 2),
                 })
                 {
-                    string soundId = $@"data\{entry.Id}.wav";
+                    string soundId = entry.RelativePath;
                     object generic = getCue.Invoke(player, new object[] { soundId, false });
                     object battle = getCue.Invoke(player, new object[] { soundId, true });
                     Assert.That(generic, Is.Not.Null);
@@ -365,24 +367,29 @@ namespace NTSD.Test
                     string genericPath = (string)sourcePath.GetValue(generic);
                     string battlePath = (string)sourcePath.GetValue(battle);
                     Assert.That(Path.GetFullPath(genericPath), Is.EqualTo(Path.GetFullPath(
-                        Path.Combine(Application.dataPath, "NTSD/Sound/data", $"{entry.Id}.wav"))));
+                        Path.Combine(Application.dataPath, "NTSD/Sound", entry.RelativePath))));
                     Assert.That(Path.GetFullPath(battlePath), Is.EqualTo(Path.GetFullPath(
                         Path.Combine(Application.dataPath,
-                            "NTSD/Content/LoganRuntime/vfs/data", $"{entry.Id}.wav"))));
+                            "NTSD/Content/LoganRuntime/vfs", entry.RelativePath))));
 
                     AudioClip imported = AssetDatabase.LoadAssetAtPath<AudioClip>(
-                        $"Assets/NTSD/Content/LoganRuntime/vfs/data/{entry.Id}.wav");
+                        "Assets/NTSD/Content/LoganRuntime/vfs/" +
+                        entry.RelativePath.Replace('\\', '/'));
                     Assert.That(imported, Is.Not.Null);
                     Assert.That(imported.samples, Is.EqualTo(entry.Samples));
+                    Assert.That(imported.channels, Is.EqualTo(entry.Channels));
                 }
 
                 FieldInfo seal = typeof(NTSDSoundPlayer).GetField(
                     "battleCatalogSealed", BindingFlags.Instance | BindingFlags.NonPublic);
                 Assert.That(seal, Is.Not.Null);
                 seal.SetValue(player, true);
-                foreach (string id in new[] { "020", "067" })
+                foreach (string soundId in new[]
                 {
-                    string soundId = $@"data\{id}.wav";
+                    @"data\020.wav", @"data\067.wav", @"c\saku\w\tra.wav",
+                    @"c\kim\w\j1.wav",
+                })
+                {
                     Assert.That(getCue.Invoke(player, new object[] { soundId, true }),
                         Is.Not.Null);
                     Assert.That(getCue.Invoke(player, new object[] { soundId, false }),
@@ -420,11 +427,13 @@ namespace NTSD.Test
 
                     foreach (var entry in new[]
                     {
-                        (Id: "020", Samples: 16413),
-                        (Id: "067", Samples: 31170),
+                        (RelativePath: @"data\020.wav", Samples: 16413, Channels: 1),
+                        (RelativePath: @"data\067.wav", Samples: 31170, Channels: 1),
+                        (RelativePath: @"c\saku\w\tra.wav", Samples: 123466, Channels: 2),
+                        (RelativePath: @"c\kim\w\j1.wav", Samples: 80454, Channels: 2),
                     })
                     {
-                        string soundId = $@"data\{entry.Id}.wav";
+                        string soundId = entry.RelativePath;
                         object battle = getCue.Invoke(player, new object[] { soundId, true });
                         Assert.That(battle, Is.Not.Null);
                         Type cueType = battle.GetType();
@@ -435,6 +444,7 @@ namespace NTSD.Test
                         Assert.That(clips, Has.Length.EqualTo(1));
                         Assert.That(clips[0], Is.Not.Null);
                         Assert.That(clips[0].samples, Is.EqualTo(entry.Samples));
+                        Assert.That(clips[0].channels, Is.EqualTo(entry.Channels));
                         loadedClips.Add(clips[0]);
 
                         long playedBefore = player.PooledOneShotPlayCountForDiagnostics;

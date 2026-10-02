@@ -21,39 +21,34 @@ namespace BeatEmUpTemplate2D
      */
     public class UIButton : MonoBehaviour, IPointerDownHandler
     {
-        public bool SelectOnStart; // 是否在开始时自动选择此按钮
-
         [Header("选中时改变按钮文本")]
         public TextMeshProUGUI buttonText; // 按钮文本组件
         private Color buttonTextDefaultColor = Color.white; // 默认按钮文本颜色
         public Color buttonTextSelectedColor = Color.black; // 按钮选中时的文本颜色
 
-        [Header("选中时显示/隐藏图像（可选）")]
-        public Image imageTarget; // 目标图像组件
-
         [Header("按钮音效")]
         [SerializeField] private AudioClip sfxOnClickClip;
+        [SerializeField] private int defalutFontSize = 50;
+        [SerializeField] private int selectFontSize = 80;
+
 
         public Action onClickCallback; // 按钮点击时的回调函数
 
         private RectTransform rectTransform; // 矩形变换组件
         private MMSoundManagerPlayOptions mMSoundManagerPlayOptions; // 音效播放选项
 
-        void OnEnable()
+        void Awake()
         {
-            mMSoundManagerPlayOptions = MMSoundManagerPlayOptions.Default;
-            mMSoundManagerPlayOptions.MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.UI;
-        }
-
-        void Start()
-        {
-            // 如果设置了在开始时选中，且按钮组件存在，则选中此按钮
-            if (SelectOnStart && GetComponent<Button>() != null) GetComponent<Button>().Select();
-
             rectTransform = GetComponent<RectTransform>(); // 获取矩形变换组件
 
             // 保存默认文本颜色
             if (buttonText != null) buttonTextDefaultColor = buttonText.color;
+        }
+
+        void OnEnable()
+        {
+            mMSoundManagerPlayOptions = MMSoundManagerPlayOptions.Default;
+            mMSoundManagerPlayOptions.MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.UI;
         }
 
         void Update()
@@ -64,8 +59,7 @@ namespace BeatEmUpTemplate2D
             // 设置按钮文本颜色
             if (buttonText != null) buttonText.color = selected ? buttonTextSelectedColor : buttonTextDefaultColor;
 
-            // 显示/隐藏图像
-            if (imageTarget != null) imageTarget.enabled = selected;
+            if (buttonText != null) buttonText.fontSize = selected ? Mathf.Lerp(buttonText.fontSize, selectFontSize,0.2f) : Mathf.Lerp(buttonText.fontSize, defalutFontSize, 0.2f);
         }
 
         /// <summary>

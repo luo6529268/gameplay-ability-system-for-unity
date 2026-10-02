@@ -1,0 +1,655 @@
+{
+    "runId": "20261002-065025-507",
+    "status": "FAIL",
+    "error": "System.InvalidOperationException: Physical K/W/L sequence did not reach Sakura action172.\r\n  at NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests.Require (System.Boolean condition, System.String message) [0x00009] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q10SakuraNaturalStereoPlayModeTests.cs:286 \r\n  at NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests.RunInPlayAsync (NTSD.Test.NTSD28Q10SakuraNaturalStereoPlayModeTests+Report report) [0x00896] in I:\\GitHub\\Unity_GAS\\gameplay-ability-system-for-unity\\Assets\\NTSD\\Scripts\\Test\\Editor\\NTSD28Q10SakuraNaturalStereoPlayModeTests.cs:202 ",
+    "contentRoot": "Assets/NTSD/Content/LoganRuntime",
+    "sceneRestored": true,
+    "initialTick": 2,
+    "inputPhase": 0,
+    "action172Tick": 0,
+    "cue": "",
+    "eventTick": 0,
+    "callbackTick": 0,
+    "actionAtEvent": 0,
+    "worldPendingMatched": false,
+    "poolBefore": 0,
+    "poolAfter": 0,
+    "clipChannels": 0,
+    "clipSamples": 0,
+    "voiceAssigned": false,
+    "voicePlaying": false,
+    "voicePan": 0.0,
+    "voiceVolume": 0.0,
+    "ticks": [
+        {
+            "relativeTick": 1,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 64
+        },
+        {
+            "relativeTick": 2,
+            "action": 210,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 64
+        },
+        {
+            "relativeTick": 3,
+            "action": 210,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 4
+        },
+        {
+            "relativeTick": 4,
+            "action": 210,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 4
+        },
+        {
+            "relativeTick": 5,
+            "action": 211,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 16
+        },
+        {
+            "relativeTick": 6,
+            "action": 211,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 16
+        },
+        {
+            "relativeTick": 7,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 8,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 9,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 10,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 11,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 12,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 13,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 14,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 15,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 16,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 17,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 18,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 19,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 20,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 21,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 22,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 23,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 24,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 25,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 26,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 27,
+            "action": 212,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 28,
+            "action": 215,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 29,
+            "action": 215,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 30,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 31,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 32,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 33,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 34,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 35,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 36,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 37,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 38,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 39,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 40,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 41,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 42,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 43,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 44,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 45,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 46,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 47,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 48,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 49,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 50,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 51,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 52,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 53,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 54,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 55,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 56,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 57,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 58,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 59,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 60,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 61,
+            "action": 3,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 62,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 63,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 64,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 65,
+            "action": 0,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 66,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 67,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 68,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 69,
+            "action": 1,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        },
+        {
+            "relativeTick": 70,
+            "action": 2,
+            "hp": 100,
+            "mp": 500,
+            "sourceX": 500,
+            "sourceZ": 481,
+            "appliedButtons": 0
+        }
+    ]
+}

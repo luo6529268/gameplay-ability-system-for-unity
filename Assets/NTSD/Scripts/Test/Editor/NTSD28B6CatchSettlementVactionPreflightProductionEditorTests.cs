@@ -120,6 +120,66 @@ namespace NTSD.Test
             Assert.That(caught.Runtime.Z, Is.Not.EqualTo(902));
         }
 
+        [TestCase(5, 132)]
+        [TestCase(0, 130)]
+        public void HeldPose_UsesCurrentCenterAndVactionCpointInBothPositionDomains(
+            int hold,
+            int expectedAction)
+        {
+            SimulationWorld world = CreatePair(
+                130,
+                hurtable: 1,
+                injury: 0,
+                targetVariant: 3,
+                out LF2Character catcher,
+                out LF2Character caught);
+            catcher.Runtime.SetSourceRulePosition(100, 300);
+            caught.Runtime.SetSourceRulePosition(110, 300);
+            catcher.Runtime.SyncSourceRuleIntegerPosition();
+            caught.Runtime.SyncSourceRuleIntegerPosition();
+            caught.FrameDelay = hold;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Assert.That(caught.Frame.N, Is.EqualTo(expectedAction));
+            Assert.That(caught.Runtime.SourceRuleXInt, Is.EqualTo(111));
+            Assert.That(caught.Runtime.SourceRuleZInt, Is.EqualTo(299));
+            Assert.That(caught.Runtime.XInt, Is.EqualTo(111));
+            Assert.That(caught.Runtime.YInt, Is.EqualTo(214));
+            Assert.That(caught.Runtime.ZInt, Is.EqualTo(299));
+        }
+
+        [TestCase(5, 132, 206)]
+        [TestCase(0, 130, 214)]
+        public void HeldPose_RetainedActionUsesItsOwnCenterDespiteVactionPose(
+            int hold,
+            int expectedAction,
+            int expectedY)
+        {
+            SimulationWorld world = CreatePair(
+                130,
+                hurtable: 1,
+                injury: 0,
+                targetVariant: 3,
+                out LF2Character catcher,
+                out LF2Character caught);
+            catcher.Runtime.SetSourceRulePosition(100, 300);
+            caught.Runtime.SetSourceRulePosition(110, 300);
+            catcher.Runtime.SyncSourceRuleIntegerPosition();
+            caught.Runtime.SyncSourceRuleIntegerPosition();
+            caught.Frame.D.centery = 71;
+            caught.FrameDelay = hold;
+
+            catcher.RunWeaponSyncHeldStep10();
+
+            Assert.That(caught.Frame.N, Is.EqualTo(expectedAction));
+            Assert.That(caught.Runtime.SourceRuleXInt, Is.EqualTo(111));
+            Assert.That(caught.Runtime.SourceRuleZInt, Is.EqualTo(299));
+            Assert.That(caught.Runtime.XInt, Is.EqualTo(111));
+            Assert.That(caught.Runtime.YInt, Is.EqualTo(expectedY));
+            Assert.That(caught.Runtime.ZInt, Is.EqualTo(299));
+        }
+
         [Test]
         public void HurtableGateNotTaken_DoesNotPreflightUnusedInvalidVaction()
         {

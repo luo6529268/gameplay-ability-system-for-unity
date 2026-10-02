@@ -1,0 +1,22 @@
+# Q07/C040 Neji fast-chain natural reachability screen
+
+Status: `VERIFIED_SCOPED_NEGATIVE / C040_OPEN`. This report covers only formal OID18/action286 at X500 versus OID75/action0 at X550, X580, X670 and X1200, neutral input, seed682973786, mode0, 120 complete `GameSession28::step` ticks per case. The formal root EXE SHA-256 was rechecked as `336B44E58BEA637246B65204AFC50FD8734C9AA38969B82836FA685497EB7BD3`; decoded formal `c/nej/nej.dat` SHA-256 is `789248298018F10B334EF4FA3D09EC101E720308C4876A6F951B543CDAEFDB4B`, and `c/bee/bee.dat` is `0E52DFBE044178D654C3E5D1694B9A733AC3D15AE1E8BBFE8E0E33169ACA7A4F`. The new diagnostic links the current playable source closure; its own EXE is not the formal release.
+
+The candidate came from formal Neji DAT: kind-3 action286 can enter catching action120; later injury frames and short waits change `cpoint.vaction`. The first diagnostic compile returned exit0/zero output, but its `c040_candidate` mixed the target's post-settlement state with the catcher's **end-of-tick** frame. In current `SimulationTickDriver28::step`, `settle_catch_relations` precedes `step_frame_slot`. Thus the first run's apparent tick11 split used end-of-tick catcher action127/vaction131 even though settlement used action126/vaction132. All initial `a286-x*` outputs and the first positive/negative repeats are retained as phase-mixed v1 artifacts, not positive evidence.
+
+The corrected v2 diagnostic uses the catcher's pre-frame vaction and current/vaction pose difference only when the catch-relation pass made no input action, throw or release transition; the victim's nonzero hold, action and reciprocal relation are checked after the full tick. End-of-tick catcher frame fields are labeled `end_tick_*` and are not used to adjudicate C040. The v2 compile returned exit0/zero output.
+
+| Target X | First natural kind-3 catch | First hold injury | Near-gate entry rows | Corrected C040 positive ticks |
+| --- | ---: | ---: | ---: | ---: |
+| 550 | 1 | 9 | 15 | 0 |
+| 580 | 1 | 9 | 15 | 0 |
+| 670 | 7 | 15 | 15 | 0 |
+| 1200 | none | none | 0 | 0 |
+
+At X550, tick9 injury changes the target to action132 and sets hold -3. Tick11 enters with catcher action126/vaction132 and target132/hold-2; settlement retains action132/hold-1, so the current/vaction pose is still the same. Tick12 enters with catcher action127/vaction131 and target132/hold-1, a pose difference; physics first advances hold to zero, settlement then changes the target to action131, so no retained-frame split occurs. The corresponding sequence is in `v2-a286-x550/source-ticks.csv`.
+
+Each v2 run retains `source-ticks.csv`, `source-rng.csv` and `source-packets.lfr` in its own `v2-a286-x*/` directory. Independent v2 repeats at X550 and X1200 matched all three files byte-for-byte; X550 CSV SHA-256 `915BE5B55AAD071688C898123A8464D64D8587FE42DE2F6B9753CEA7804DD067`, RNG `61A603F2A1389A634A10E42D598B2FB8FADCD9124D03DA94E468E09AB5D5120F`, LFR `501A4658FE008EF58EDC97F80C246609984611897E212A1336E8460FDDFE0A71`. X1200 CSV SHA-256 `B315BD82EEA8F868133410879B7BDF8B74C741438D5352BE6CA53CF5BB8B8FC0`, RNG the same, LFR `D742A2BCD93E3E39D83815EE432BDA29D65CEC2CB7A7F84D2BEA5DA950B1F6FE`. V1/v2 LFR and RNG hashes are also identical in all four cases; the correction changed only diagnostic adjudication and fields, not the GameSession run.
+
+Boundary: these four exact configurations are negative. They do not prove C040 cannot occur elsewhere. No formal-root replay or Unity Scene run was performed for a nonexistent positive condition, and neither formal nor Unity gameplay was modified. The next C040 attempt must change the hold/action timing mechanism or actor/input path, not merely repeat Neji action286 stand-off distances. The broader Q07 alignment remains open.
+
+Final checks (2026-10-03): `git diff --check` exited 0 with Git line-ending warnings only. The standard whole-worktree `Tools/Validate-ChangeLedger.ps1` exited 1 because an unrelated concurrently modified `Assets/NTSD/Scripts/UI/UIButton.cs` has no Change Record; this package did not edit that file or the concurrently modified Menu Scene. The validator's `-StagedOnly -SimulateChangedPath Tools/NTSD28Q07Diagnostics/neji_bee_c040_natural_probe.cpp` scoped coverage check exited 0 and reported this exact new probe as covered by `NTSD28-336B44-Q07-C040-NEJI-FAST-CHAIN-001`. The global validation failure remains an unresolved worktree-level audit condition, so this report does not claim an all-worktree clean handoff.

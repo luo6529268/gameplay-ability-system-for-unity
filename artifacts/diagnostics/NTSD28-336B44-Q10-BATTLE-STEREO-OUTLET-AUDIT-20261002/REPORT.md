@@ -21,6 +21,8 @@
 
 用户保留完整背景和固定画面。正式版的战斗相机可移动，因此后续声像需明确选用**Unity 完整画面的可见位置**，或**正式规则 X 加独立音频虚拟相机**。本次所选 C053 相机 X=0，两种策略在按同一视口比例换算时可能给出相同目标；不能凭这一例代替移动相机条件的选择。用户选择正在请求中；生产映射不在本包猜定。
 
+2026-10-03 补充源码核对：正式 `GameSession28::step()` 调用 `NativeStageCamera28::step(*world_, background_.width)`，后者按最多八个存活参战槽的 X/朝向/状态求目标，用整数速度平滑并受 `stage_width-1333` 限制；`GameSession28::camera_x()` 返回这套状态。音频 host 把该值交给 `locked_local_battle_stereo_layout28`，再以 `event.world_x-camera_x` 算左右矩阵。Unity 当前固定世界相机状态在 World 中维持 `ReleaseCameraX=0`，`NTSDSoundPlayer.PresentSounds` 的接口只接事件列表，没有正式音频相机 X。举例说明两套策略的分叉：若某 tick 声源规则 X=700、正式相机 X=400，按正式整数矩阵是左100/右0；若音频仍以固定画面 X=0 为基准，则是左45/右55。这只是公式反例，不是已观察到的自然事件或设备 PCM。若选择正式声像，不能直接读取当前 Unity `ReleaseCameraX` 充当已实现的正式移动相机；须另证完整 tick 的音频相机状态、重置和关闭边界。若选择画面声像，则应明确记录这一用户表现例外，不把它称为正式版移动相机声像对齐。
+
 确定策略后，应先登记独立 Task/Change/Ledger/STATE/handoff，再针对战斗写入坐标、0/满声道/交叉段整数边界、mono 与 stereo clip、已配置 `AudioItem` 的音量和 range、重叠/暂停/F5/池复用建立聚焦 RED 及邻近控制；随后只改战斗播放出口，在原 Battle Scene 以自然 cue 核事件、voice 参数、AudioRenderer 左右 PCM 与关闭回收，并单列正式 EXE 实际设备音频不可观测的边界。正式整场、所有可达 cue、Q10 与 Q12 均保持开放。
 
 验证：本轮重新读取正式及 Unity 入口、复核根 EXE SHA，并从既有正式声像 CSV 生成 10 行候选参数。未运行编译、Unity Editor 或声音设备测试；本包无脚本改动，不把旧校准或本轮代数换算写成新版运行时通过。
